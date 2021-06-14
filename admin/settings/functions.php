@@ -28,11 +28,11 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'variables';
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $lang_global['mod_settings']
-);
+];
 
 unset($page_title, $select_options);
 
@@ -61,10 +61,10 @@ function nv_admin_add_theme($contents)
     $xtpl = new XTemplate('cronjobs_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
-    $my_head .= "<link type=\"text/css\" href=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.css\" rel=\"stylesheet\" />\n";
+    $my_head .= '<link type="text/css" href="' . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.css\" rel=\"stylesheet\" />\n";
 
-    $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
-    $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+    $my_footer .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
+    $my_footer .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/language/jquery.ui.datepicker-' . NV_LANG_INTERFACE . ".js\"></script>\n";
 
     if ($contents['is_error']) {
         $xtpl->parse('main.error');
@@ -73,17 +73,17 @@ function nv_admin_add_theme($contents)
     $xtpl->assign('DATA', $contents);
 
     foreach ($contents['run_file'][2] as $run) {
-        $xtpl->assign('RUN_FILE', array( 'key' => $run, 'selected' => $contents['run_file'][3] == $run ? ' selected="selected"' : '' ));
+        $xtpl->assign('RUN_FILE', ['key' => $run, 'selected' => $contents['run_file'][3] == $run ? ' selected="selected"' : '']);
         $xtpl->parse('main.run_file');
     }
 
     for ($i = 0; $i < 24; ++$i) {
-        $xtpl->assign('HOUR', array( 'key' => $i, 'selected' => $i == $contents['hour'][1] ? ' selected="selected"' : '' ));
+        $xtpl->assign('HOUR', ['key' => $i, 'selected' => $i == $contents['hour'][1] ? ' selected="selected"' : '']);
         $xtpl->parse('main.hour');
     }
 
     for ($i = 0; $i < 60; ++$i) {
-        $xtpl->assign('MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected="selected"' : '' ));
+        $xtpl->assign('MIN', ['key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected="selected"' : '']);
         $xtpl->parse('main.min');
     }
 
@@ -119,13 +119,13 @@ function main_theme($contents)
     $xtpl = new XTemplate('cronjobs_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
     foreach ($contents as $id => $values) {
-        $xtpl->assign('DATA', array(
+        $xtpl->assign('DATA', [
             'caption' => $values['caption'],
-            'edit' => empty($values['edit']) ? array() : $values['edit'],
-            'disable' => empty($values['disable']) ? array() : $values['disable'],
-            'delete' => empty($values['delete']) ? array() : $values['delete'],
+            'edit' => empty($values['edit']) ? [] : $values['edit'],
+            'disable' => empty($values['disable']) ? [] : $values['disable'],
+            'delete' => empty($values['delete']) ? [] : $values['delete'],
             'id' => $id
-        ));
+        ]);
 
         if (!empty($values['edit'][0])) {
             $xtpl->parse('main.edit');
@@ -138,10 +138,10 @@ function main_theme($contents)
         }
 
         foreach ($values['detail'] as $key => $value) {
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'key' => $key,
                 'value' => $value
-            ));
+            ]);
 
             $xtpl->parse('main.loop');
         }
@@ -171,7 +171,7 @@ function update_cronjob_next_time()
 
     // Xác định thời điểm chạy tiếp theo
     $cronjobs_next_time = 0;
-    $sql = "SELECT start_time, inter_val, inter_val_type, last_time FROM " . NV_CRONJOBS_GLOBALTABLE . " WHERE act=1";
+    $sql = 'SELECT start_time, inter_val, inter_val_type, last_time FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE act=1';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         if (empty($row['last_time'])) {
@@ -184,7 +184,7 @@ function update_cronjob_next_time()
         }
     }
 
-    if ($cronjobs_next_time > 0 and $db->exec("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) <= " . NV_CURRENTTIME . " OR CAST(config_value AS UNSIGNED) >= " . $cronjobs_next_time . ")")) {
+    if ($cronjobs_next_time > 0 and $db->exec('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) <= " . NV_CURRENTTIME . ' OR CAST(config_value AS UNSIGNED) >= ' . $cronjobs_next_time . ')')) {
         $nv_Cache->delMod('settings');
     }
 

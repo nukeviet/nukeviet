@@ -20,21 +20,21 @@ if (!defined('NV_IS_MOD_NEWS')) {
  */
 function nv_src_href_callback($matches)
 {
-    if (!empty($matches[2]) and !preg_match("/^http\:\/\//", $matches[2]) and !preg_match("/^https\:\/\//", $matches[2]) and !preg_match("/^mailto\:/", $matches[2]) and !preg_match("/^tel\:/", $matches[2]) and !preg_match("/^javascript/", $matches[2])) {
+    if (!empty($matches[2]) and !preg_match("/^http\:\/\//", $matches[2]) and !preg_match("/^https\:\/\//", $matches[2]) and !preg_match("/^mailto\:/", $matches[2]) and !preg_match("/^tel\:/", $matches[2]) and !preg_match('/^javascript/', $matches[2])) {
         if (preg_match("/^\//", $matches[2])) {
             $_url = NV_MY_DOMAIN;
         } else {
-            $_url = NV_MY_DOMAIN . "/";
+            $_url = NV_MY_DOMAIN . '/';
         }
         $matches[2] = $_url . $matches[2];
     }
-    return $matches[1] . "=\"" . $matches[2] . "\"";
+    return $matches[1] . '="' . $matches[2] . '"';
 }
 
 $id = $catid = 0;
 if (isset($array_op[2])) {
     $alias_cat_url = $array_op[1];
-    $array_page = explode("-", $array_op[2]);
+    $array_page = explode('-', $array_op[2]);
     $id = intval(end($array_page));
 }
 foreach ($global_array_cat as $catid_i => $array_cat_i) {
@@ -65,7 +65,7 @@ if ($id > 0 and $catid > 0) {
             $meta_tags = nv_html_meta_tags();
             $content['bodytext'] = $db_slave->query('SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $content['id'])->fetchColumn();
 
-            $result = array(
+            $result = [
                 'url' => $global_config['site_url'],
                 'meta_tags' => $meta_tags,
                 'sitename' => $global_config['site_name'],
@@ -79,17 +79,17 @@ if ($id > 0 and $catid > 0) {
                 'bodytext' => $content['bodytext'],
                 'copyright' => $content['copyright'],
                 'copyvalue' => $module_config[$module_name]['copyright'],
-                'link' => "<a href=\"" . $canonicalUrl . "\" title=\"" . $content['title'] . "\">" . $canonicalUrl . "</a>\n",
+                'link' => '<a href="' . $canonicalUrl . '" title="' . $content['title'] . '">' . $canonicalUrl . "</a>\n",
                 'contact' => $global_config['site_email'],
                 'author' => $content['author'],
                 'source' => $sourcetext
-            );
+            ];
 
             $authors = [];
             $db->sqlreset()
                 ->select('l.alias,l.pseudonym')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
-                ->where("l.id = " . $id . " AND a.active=1");
+                ->where('l.id = ' . $id . ' AND a.active=1');
             $author_result = $db->query($db->sql());
             while ($row = $author_result->fetch()) {
                 $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
@@ -116,20 +116,20 @@ if ($id > 0 and $catid > 0) {
                 }
                 $alt = (empty($content['homeimgalt'])) ? $content['title'] : $content['homeimgalt'];
 
-                $result['image'] = array(
+                $result['image'] = [
                     'src' => $src,
                     'width' => $width,
                     'alt' => $alt,
                     'note' => $content['homeimgalt'],
                     'position' => $content['imgposition']
-                );
+                ];
             }
             $contents = call_user_func('news_print', $result);
-            header("Content-Type: text/x-delimtext; name=\"" . $result['alias'] . ".html\"");
-            header("Content-disposition: attachment; filename=" . $result['alias'] . ".html");
+            header('Content-Type: text/x-delimtext; name="' . $result['alias'] . '.html"');
+            header('Content-disposition: attachment; filename=' . $result['alias'] . '.html');
 
             include NV_ROOTDIR . '/includes/header.php';
-            echo preg_replace_callback("/(src|href)\=\"([^\"]+)\"/", "nv_src_href_callback", nv_url_rewrite(nv_site_theme($contents, false)));
+            echo preg_replace_callback("/(src|href)\=\"([^\"]+)\"/", 'nv_src_href_callback', nv_url_rewrite(nv_site_theme($contents, false)));
             include NV_ROOTDIR . '/includes/footer.php';
         }
     }

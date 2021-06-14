@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 21:51
  */
 
-if (! defined('NV_IS_FILE_DATABASE')) {
+if (!defined('NV_IS_FILE_DATABASE')) {
     die('Stop!!!');
 }
 
@@ -21,7 +21,7 @@ $xtpl = new XTemplate('files.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 
-$array_content = $array_time = array();
+$array_content = $array_time = [];
 $files = scandir($log_dir);
 
 foreach ($files as $file) {
@@ -30,11 +30,11 @@ foreach ($files as $file) {
         $filetime = intval(filemtime($log_dir . '/' . $file));
         $array_time[] = $filetime;
 
-        $array_content[$filetime] = array(
+        $array_content[$filetime] = [
             'file' => $file,
             'mc' => $mc,
             'filesize' => $filesize
-        );
+        ];
     }
 }
 sort($array_time);
@@ -50,14 +50,14 @@ for ($index = $count; $index >= 0; --$index) {
     $link_getfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file . '&amp;checkss=' . md5($file . NV_CHECK_SESSION);
     $link_delete = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=delfile&amp;filename=' . $file . '&amp;checkss=' . md5($file . NV_CHECK_SESSION);
 
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'stt' => ++$a,
         'name' => $mc[2] . '.' . $mc[3],
         'filesize' => nv_convertfromBytes($value['filesize']),
         'filetime' => nv_date('l d/m/Y h:i:s A', $filetime),
         'link_getfile' => $link_getfile,
         'link_delete' => $link_delete
-    ));
+    ]);
 
     $xtpl->parse('main.loop');
 }

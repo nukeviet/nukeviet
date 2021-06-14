@@ -8,21 +8,21 @@
  * @Createdate 2-1-2010 21:49
  */
 
-if (! defined('NV_IS_FILE_DATABASE')) {
+if (!defined('NV_IS_FILE_DATABASE')) {
     die('Stop!!!');
 }
 
-$tables = $nv_Request->get_array('tables', 'post', array());
+$tables = $nv_Request->get_array('tables', 'post', []);
 $type = $nv_Request->get_title('type', 'post', '');
 $ext = $nv_Request->get_title('ext', 'post', '');
 
 if (empty($tables)) {
-    $tables = array();
-} elseif (! is_array($tables)) {
-    $tables = array( $tables );
+    $tables = [];
+} elseif (!is_array($tables)) {
+    $tables = [$tables];
 }
 
-$tab_list = array();
+$tab_list = [];
 
 $result = $db->query("SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'");
 while ($item = $result->fetch(3)) {
@@ -30,7 +30,7 @@ while ($item = $result->fetch(3)) {
 }
 $result->closeCursor();
 
-$contents = array();
+$contents = [];
 $contents['tables'] = (empty($tables)) ? $tab_list : array_values(array_intersect($tab_list, $tables));
 $contents['type'] = ($type != 'str') ? 'all' : 'str';
 $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
@@ -44,7 +44,7 @@ if ($global_config['idsite']) {
 }
 $contents['filename'] = $log_dir . '/' . $file_name;
 
-include NV_ROOTDIR . '/includes/core/dump.php' ;
+include NV_ROOTDIR . '/includes/core/dump.php';
 $result = nv_dump_save($contents);
 
 $xtpl = new XTemplate('save.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

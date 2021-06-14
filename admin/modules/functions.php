@@ -108,7 +108,7 @@ function nv_setup_block_module($mod, $func_id = 0)
     $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 AND in_module= :module ORDER BY subweight ASC');
     $sth->bindParam(':module', $mod, PDO::PARAM_STR);
     $sth->execute();
-    while (list ($func_id_i) = $sth->fetch(3)) {
+    while (list($func_id_i) = $sth->fetch(3)) {
         if ($func_id == 0 or $func_id == $func_id_i) {
             $array_funcid[] = $func_id_i;
         }
@@ -154,7 +154,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
     $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
     $sth->execute();
 
-    list ($module_file, $module_data, $module_upload, $module_theme) = $sth->fetch(3);
+    list($module_file, $module_data, $module_upload, $module_theme) = $sth->fetch(3);
 
     if (!empty($module_file)) {
         $module_version = [];
@@ -167,7 +167,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         $arr_modfuncs = (isset($module_version['modfuncs']) and !empty($module_version['modfuncs'])) ? array_map('trim', explode(',', $module_version['modfuncs'])) : [];
 
         // Delete config value in prefix_config table
-        $sth = $db->prepare("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module");
+        $sth = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module");
         $sth->bindParam(':module', $module_name, PDO::PARAM_STR);
         $sth->execute();
 
@@ -242,7 +242,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             if (!empty($_layoutdefault)) {
                 $_layout_mod = explode(';', $_layoutdefault);
                 foreach ($_layout_mod as $_layout_fun) {
-                    list ($layout_name, $_func) = explode(':', trim($_layout_fun));
+                    list($layout_name, $_func) = explode(':', trim($_layout_fun));
                     $arr_f = explode(',', trim($_func));
                     foreach ($arr_f as $f) {
                         if (!isset($array_layout_func_default[$module_name][$f])) {
@@ -280,9 +280,9 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                     $data['func_custom_name'] = ucfirst($func);
                     $data['in_module'] = $module_name;
 
-                    $arr_func_id[$func] = $db->insert_id("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
+                    $arr_func_id[$func] = $db->insert_id('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modfuncs
 						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", " . $in_submenu . ", " . $weight . ", '')", "func_id", $data);
+					 	(:func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ', ' . $in_submenu . ', ' . $weight . ", '')", 'func_id', $data);
                     if ($arr_func_id[$func]) {
                         $layout = $layoutdefault;
                         if (isset($array_layout_func_default[$module_name][$func])) {

@@ -8,11 +8,12 @@
  * @Createdate Sun, 08 Jan 2017 01:38:17 GMT
  */
 
-if (!defined('NV_IS_FILE_ADMIN'))
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
+}
 
-$row = array();
-$error = array();
+$row = [];
+$error = [];
 
 $row['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
@@ -122,8 +123,8 @@ if (!empty($array_department)) {
 }
 
 if (empty($row['others'])) {
-    $row['others'] = array();
-    $row['others'][] = array('name' => '', 'value' => '');
+    $row['others'] = [];
+    $row['others'][] = ['name' => '', 'value' => ''];
 } else {
     $row['others'] = unserialize($row['others']);
 }

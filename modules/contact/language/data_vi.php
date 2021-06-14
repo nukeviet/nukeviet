@@ -18,7 +18,7 @@ if (!defined('NV_ADMIN')) {
  * 	- Accept global var: $db, $db_config, $global_config
  */
 
-$sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)");
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)");
 
 $full_name = 'Phòng Chăm sóc khách hàng';
 $alias = 'Cham-soc-khach-hang';
@@ -26,11 +26,11 @@ $phone = '(08) 38.000.000[+84838000000]';
 $fax = '08 38.000.001';
 $email = 'customer@mysite.com';
 $note = 'Bộ phận tiếp nhận và giải quyết các yêu cầu, đề nghị, ý kiến liên quan đến hoạt động chính của doanh nghiệp';
-$others = json_encode(array(
+$others = json_encode([
     'viber' => 'myViber',
     'skype' => 'mySkype',
     'yahoo' => 'myYahoo'
-));
+]);
 $cats = 'Tư vấn|Khiếu nại, phản ánh|Đề nghị hợp tác';
 $weight = 1;
 $is_default = 1;
@@ -52,11 +52,11 @@ $phone = '(08) 38.000.002[+84838000002]';
 $fax = '08 38.000.003';
 $email = 'technical@mysite.com';
 $note = 'Bộ phận tiếp nhận và giải quyết các câu hỏi liên quan đến kỹ thuật';
-$others = json_encode(array(
+$others = json_encode([
     'viber' => 'myViber2',
     'skype' => 'mySkype2',
     'yahoo' => 'myYahoo2'
-));
+]);
 $cats = 'Thông báo lỗi|Góp ý cải tiến';
 $weight = 2;
 $is_default = 0;
@@ -73,6 +73,6 @@ $sth->bindValue(':is_default', $is_default, PDO::PARAM_INT);
 $sth->execute();
 
 $bodytext = 'Để không ngừng nâng cao chất lượng dịch vụ và đáp ứng tốt hơn nữa các yêu cầu của Quý khách, chúng tôi mong muốn nhận được các thông tin phản hồi. Nếu Quý khách có bất kỳ thắc mắc hoặc đóng góp nào, xin vui lòng liên hệ với chúng tôi theo thông tin dưới đây. Chúng tôi sẽ phản hồi lại Quý khách trong thời gian sớm nhất.';
-$sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='" . $lang . "' AND module='" . $module_name . "' AND config_name='bodytext'");
+$sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='" . $lang . "' AND module='" . $module_name . "' AND config_name='bodytext'");
 $sth->bindParam(':config_value', $bodytext, PDO::PARAM_STR, strlen($bodytext));
 $sth->execute();

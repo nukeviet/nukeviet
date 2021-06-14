@@ -58,7 +58,7 @@ if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
 $html_headers['Permissions-Policy'] = 'interest-cohort=()';
 
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
-$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
 $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
 $html_headers['Expires'] = '-1'; // Proxies.
@@ -88,7 +88,7 @@ foreach ($html_headers as $key => $value) {
     $_key = strtolower($key);
     if (!isset($sys_info['server_headers'][$_key])) {
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
 
         foreach ($value as $val) {

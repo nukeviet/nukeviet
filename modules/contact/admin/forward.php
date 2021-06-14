@@ -55,7 +55,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $mail->setSubject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
-            $content = sprintf($lang_module['forward'], $forward_to)  . '</br>' . $mess_content;
+            $content = sprintf($lang_module['forward'], $forward_to) . '</br>' . $mess_content;
             $sth->bindParam(':reply_content', $content, PDO::PARAM_STR, strlen($content));
             $sth->execute();
 
@@ -66,7 +66,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $error = $lang_global['error_sendmail_admin'];
         }
     }
-
 } else {
     $mess_content .= '-----------------------' . $lang_module['forwarded'] . '-------------------------<br />';
     $mess_content .= '<strong>From:</strong> ' . $row['sender_name'] . ' [mailto:' . $row['sender_email'] . ']<br />';

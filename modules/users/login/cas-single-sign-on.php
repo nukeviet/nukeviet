@@ -58,13 +58,13 @@ if (!empty($username)) {
             $result = ldap_search($ldapconn, $_cas_config['user_contexts'], '(uid=' . $username . ')');
             $data = ldap_get_entries($ldapconn, $result);
 
-            $attribs = array(
+            $attribs = [
                 'identity' => md5($username . '@' . $cas_host),
                 'result' => 'is_res',
                 'id' => $username,
                 'server' => $server,
                 'current_mode' => 4
-            );
+            ];
 
             foreach ($_cas_config['config_field'] as $key => $ckey) {
                 if (!empty($ckey) and isset($data[0][$ckey])) {
@@ -93,9 +93,9 @@ if (!empty($username)) {
         ldap_close($ldapconn);
     }
 } else {
-    $attribs = array(
+    $attribs = [
         'result' => 'notlogin'
-    );
+    ];
 }
 
 $nv_Request->set_Session('openid_attribs', serialize($attribs));

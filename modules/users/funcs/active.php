@@ -59,7 +59,7 @@ if ($checknum == $row['checknum']) {
             $check_update_user = true;
         }
     } elseif (!defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
-        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name,
             gender, photo, birthday, regdate, question, answer,
             passlostkey, view_mail, remember, in_groups,
@@ -69,11 +69,11 @@ if ($checknum == $row['checknum']) {
             :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
             :gender, '', :birthday, :regdate, :question, :answer,
             '', 0, 1, :in_groups,
-            1, '', 0, '', '', '', " . $global_config['idsite'] . ", " . NV_CURRENTTIME . ",
+            1, '', 0, '', '', '', " . $global_config['idsite'] . ', ' . NV_CURRENTTIME . ",
             'EMAIL'
         )";
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
         $data_insert['username'] = $row['username'];
         $data_insert['md5_username'] = nv_md5safe($row['username']);
@@ -91,7 +91,7 @@ if ($checknum == $row['checknum']) {
         $userid = $db->insert_id($sql, 'userid', $data_insert);
         if ($userid) {
             $users_info = unserialize(nv_base64_decode($row['users_info']));
-            $query_field = array();
+            $query_field = [];
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
             while ($row_f = $result_field->fetch()) {
@@ -156,11 +156,11 @@ if (defined('SSO_REGISTER_SECRET')) {
     $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
 }
 
-$info .= "<img border=\"0\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
-$info .= "[<a href=\"" . $nv_redirect . "\">" . $lang_module['redirect_to_login'] . "</a>]";
+$info .= '<img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
+$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
 
 $contents = user_info_exit($info);
-$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . $nv_redirect . "\" />";
+$contents .= '<meta http-equiv="refresh" content="5;url=' . $nv_redirect . '" />';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

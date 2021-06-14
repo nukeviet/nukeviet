@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
@@ -17,7 +17,7 @@ $page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_
 
 if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CHECK_SESSION)) {
     if (preg_match('/^([a-z]{2})$/', $dirlang)) {
-        $allowfolder = array();
+        $allowfolder = [];
         $dirs = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
         $err = 0;
 
@@ -61,7 +61,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
         $pattern_lang_js = '/[a-zA-Z0-9\-\_\.]+\-' . $dirlang . '\.js$/';
         $array_lang_js = nv_scandir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language', $pattern_lang_js);
 
-        if (! empty($array_lang_js)) {
+        if (!empty($array_lang_js)) {
             foreach ($array_lang_js as $fjs) {
                 $allowfolder[] = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language/' . $fjs;
             }

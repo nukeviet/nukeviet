@@ -43,12 +43,12 @@ function nv_check_username_change($login, $edit_userid)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = "SELECT userid FROM " . NV_MOD_TABLE . " WHERE userid!=" . $edit_userid . " AND (LOWER(username)=" . $db->quote(nv_strtolower($login)) . " OR md5username=" . $db->quote(nv_md5safe($login)) . ")";
+    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND (LOWER(username)=' . $db->quote(nv_strtolower($login)) . ' OR md5username=' . $db->quote(nv_md5safe($login)) . ')';
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $sql = "SELECT userid FROM " . NV_MOD_TABLE . "_reg WHERE LOWER(username)=" . $db->quote(nv_strtolower($login)) . " OR md5username=" . $db->quote(nv_md5safe($login));
+    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=' . $db->quote(nv_strtolower($login)) . ' OR md5username=' . $db->quote(nv_md5safe($login));
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
@@ -72,7 +72,7 @@ function nv_check_email_change(&$email, $edit_userid)
     }
     $email = $error[1];
 
-    if (!empty($global_users_config['deny_email']) and preg_match("/" . $global_users_config['deny_email'] . "/i", $email)) {
+    if (!empty($global_users_config['deny_email']) and preg_match('/' . $global_users_config['deny_email'] . '/i', $email)) {
         return sprintf($lang_module['email_deny_name'], $email);
     }
 
@@ -212,13 +212,13 @@ function nv_groups_list_pub2($edit_userid)
         'all' => [],
         'share' => []
     ];
-    $resul = $db->query("SELECT g.*, d.*, u.userid, u.is_leader, u.approved FROM " . NV_MOD_TABLE . "_groups AS g 
-        LEFT JOIN " . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) 
-        LEFT JOIN " . NV_MOD_TABLE . "_groups_users u ON ( g.group_id = u.group_id AND u.userid=" . $edit_userid . " ) 
-        WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . " OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight");
+    $resul = $db->query('SELECT g.*, d.*, u.userid, u.is_leader, u.approved FROM ' . NV_MOD_TABLE . '_groups AS g 
+        LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) 
+        LEFT JOIN " . NV_MOD_TABLE . '_groups_users u ON ( g.group_id = u.group_id AND u.userid=' . $edit_userid . ' ) 
+        WHERE g.act=1 AND (g.idsite = ' . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
     while ($row = $resul->fetch()) {
         if ($row['group_id'] < 10) {
-            $row['title'] =  $lang_global['level' . $row['group_id']];
+            $row['title'] = $lang_global['level' . $row['group_id']];
         }
         if ($row['group_type'] == 0 and $row['userid']) {
             $groups_list['all'][$row['group_id']] = $row;
@@ -323,7 +323,7 @@ if ((int) $row['safemode'] > 0) {
             ]);
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET safemode=0, safekey='', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $edit_userid);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET safemode=0, safekey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
         $stmt->execute();
 
         nv_jsonOutput([
@@ -948,7 +948,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         }
     }
 
-    $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $edit_userid);
+    $db->query('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
     nv_jsonOutput([
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/group', true),
@@ -1121,13 +1121,13 @@ $array_data['last_name'] = $row['last_name'];
 $array_data['gender'] = $row['gender'];
 $array_data['birthday'] = !empty($row['birthday']) ? date('d/m/Y', $row['birthday']) : '';
 $array_data['view_mail'] = $row['view_mail'] ? ' checked="checked"' : '';
-$array_data['photo'] = (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) ? NV_BASE_SITEURL . $row['photo'] : "";
+$array_data['photo'] = (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) ? NV_BASE_SITEURL . $row['photo'] : '';
 
 if (empty($array_data['photo'])) {
     $array_data['photo'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
     $array_data['photoWidth'] = 80;
     $array_data['photoHeight'] = 80;
-    $array_data['imgDisabled'] = " disabled=\"disabled\"";
+    $array_data['imgDisabled'] = ' disabled="disabled"';
 } else {
     $size = @getimagesize(NV_ROOTDIR . '/' . $row['photo']);
     $array_data['photoWidth'] = $size[0];
@@ -1136,7 +1136,7 @@ if (empty($array_data['photo'])) {
 }
 
 $data_questions = [];
-$sql = "SELECT qid, title FROM " . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+$sql = 'SELECT qid, title FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 $result = $db->query($sql);
 while ($row2 = $result->fetch()) {
     $data_questions[$row2['qid']] = [
@@ -1169,7 +1169,7 @@ if (in_array('group', $types)) {
         $groups[$gid]['checked'] = '';
         $groups[$gid]['status'] = 0;
         if ($gvalues['userid'] == $edit_userid) {
-            $groups[$gid]['checked'] = " checked=\"checked\"";
+            $groups[$gid]['checked'] = ' checked="checked"';
             $groups[$gid]['status'] = 1;
             if ($gvalues['group_type']) {
                 $array_data['old_in_groups'][] = $gid;

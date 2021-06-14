@@ -12,8 +12,8 @@ if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$default_config_theme = array(
-    'body' => array(
+$default_config_theme = [
+    'body' => [
         'color' => '',
         'font_size' => '',
         'font_family' => '',
@@ -34,18 +34,18 @@ $default_config_theme = array(
         'padding_left' => '',
         'padding_right' => '',
         'customcss' => ''
-    ),
-    'a_link' => array(
+    ],
+    'a_link' => [
         'color' => '',
         'font_weight' => '',
         'font_style' => ''
-    ),
-    'a_link_hover' => array(
+    ],
+    'a_link_hover' => [
         'color' => '',
         'font_weight' => '',
         'font_style' => ''
-    ),
-    'content' => array(
+    ],
+    'content' => [
         'margin' => '',
         'margin_top' => '',
         'margin_bottom' => '',
@@ -59,8 +59,8 @@ $default_config_theme = array(
         'width' => '',
         'height' => '',
         'customcss' => ''
-    ),
-    'header' => array(
+    ],
+    'header' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
@@ -78,8 +78,8 @@ $default_config_theme = array(
         'width' => '',
         'height' => '',
         'customcss' => ''
-    ),
-    'footer' => array(
+    ],
+    'footer' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
@@ -97,8 +97,8 @@ $default_config_theme = array(
         'width' => '',
         'height' => '',
         'customcss' => ''
-    ),
-    'block' => array(
+    ],
+    'block' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
@@ -118,17 +118,17 @@ $default_config_theme = array(
         'border_width' => '',
         'border_radius' => '',
         'customcss' => ''
-    ),
-    'block_heading' => array(
+    ],
+    'block_heading' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
         'background_position' => ''
-    ),
+    ],
     'generalcss' => '',
-    'gfont' => array(
+    'gfont' => [
         'family' => '',
         'styles' => '',
         'subset' => ''
-    )
-);
+    ]
+];

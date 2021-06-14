@@ -45,9 +45,9 @@ if (!nv_function_exists('nv_page_list')) {
     function nv_block_config_page_list_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 5);
         return $return;

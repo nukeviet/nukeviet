@@ -91,7 +91,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         if ($array_config['user_check_pass_time'] < 120) {
             $array_config['user_check_pass_time'] = 120;
         }
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
         foreach ($array_config as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -99,21 +99,21 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         }
 
         $array_config['name_show'] = $nv_Request->get_int('name_show', 'post', 0);
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name");
         $sth->bindValue(':config_name', 'name_show', PDO::PARAM_STR);
         $sth->bindParam(':config_value', $array_config['name_show'], PDO::PARAM_INT);
         $sth->execute();
 
         // Tự động gán oauth vào tài khoản đã tồn tại
         $array_config['auto_assign_oauthuser'] = (int) $nv_Request->get_bool('auto_assign_oauthuser', 'post', false);
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='auto_assign_oauthuser'");
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='auto_assign_oauthuser'");
         $stmt->bindParam(':content', $array_config['auto_assign_oauthuser'], PDO::PARAM_STR);
         $stmt->execute();
 
         if (defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
             // Cau hinh kich thuoc avatar
             $array_config['avatar_width'] = $nv_Request->get_int('avatar_width', 'post', 120);
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='avatar_width'");
             $stmt->bindParam(':content', $array_config['avatar_width'], PDO::PARAM_STR);
             $stmt->execute();
 
@@ -121,30 +121,30 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             if ($array_config['min_old_user'] < 0) {
                 $array_config['min_old_user'] = 0;
             }
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='min_old_user'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='min_old_user'");
             $stmt->bindParam(':content', $array_config['min_old_user'], PDO::PARAM_STR);
             $stmt->execute();
 
             // Cấu hình số tuổi nhỏ nhất để thành viên có thể tham gia
             $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 16);
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='avatar_height'");
             $stmt->bindParam(':content', $array_config['avatar_height'], PDO::PARAM_STR);
             $stmt->execute();
 
             // Kich hoat chuc nang xet duyet thanh vien moi dang ky
             $array_config['active_group_newusers'] = ($nv_Request->get_int('active_group_newusers', 'post', 0) ? 1 : 0);
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_group_newusers'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='active_group_newusers'");
             $stmt->bindParam(':content', $array_config['active_group_newusers'], PDO::PARAM_STR);
             $stmt->execute();
 
             // Chức năng kiểm duyệt chỉnh sửa
             $array_config['active_editinfo_censor'] = ($nv_Request->get_int('active_editinfo_censor', 'post', 0) ? 1 : 0);
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_editinfo_censor'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='active_editinfo_censor'");
             $stmt->bindParam(':content', $array_config['active_editinfo_censor'], PDO::PARAM_STR);
             $stmt->execute();
 
             $array_config['active_user_logs'] = ($nv_Request->get_int('active_user_logs', 'post', 0) ? 1 : 0);
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_user_logs'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='active_user_logs'");
             $stmt->bindParam(':content', $array_config['active_user_logs'], PDO::PARAM_STR);
             $stmt->execute();
 
@@ -155,7 +155,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 $array_config['deny_email'] = implode('|', $array_config['deny_email']);
             }
 
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='deny_email'");
             $stmt->bindParam(':content', $array_config['deny_email'], PDO::PARAM_STR, strlen($array_config['deny_email']));
             $stmt->execute();
 
@@ -164,7 +164,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 $array_config['deny_name'] = valid_name_config(explode(',', $array_config['deny_name']));
                 $array_config['deny_name'] = implode('|', $array_config['deny_name']);
             }
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='deny_name'");
             $stmt->bindParam(':content', $array_config['deny_name'], PDO::PARAM_STR, strlen($array_config['deny_name']));
             $stmt->execute();
 
@@ -175,7 +175,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 asort($array_config['password_simple']);
                 $array_config['password_simple'] = implode('|', $array_config['password_simple']);
             }
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'");
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_config SET content= :content, edit_time=' . NV_CURRENTTIME . " WHERE config='password_simple'");
             $stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen($array_config['password_simple']));
             $stmt->execute();
 
@@ -188,7 +188,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $access_admin['access_delus'] = $nv_Request->get_typed_array('access_delus', 'post', 'bool');
             $access_admin['access_passus'] = $nv_Request->get_typed_array('access_passus', 'post', 'bool');
             $access_admin['access_groups'] = $nv_Request->get_typed_array('access_groups', 'post', 'bool');
-            $sql = "UPDATE " . NV_MOD_TABLE . "_config SET content='" . serialize($access_admin) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
+            $sql = 'UPDATE ' . NV_MOD_TABLE . "_config SET content='" . serialize($access_admin) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
             $db->query($sql);
             nv_save_file_config_global();
         }
@@ -208,7 +208,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['is_user_forum'] = !empty($array_config['is_user_forum']) ? ' checked="checked"' : '';
     $array_config['auto_login_after_reg'] = !empty($array_config['auto_login_after_reg']) ? ' checked="checked"' : '';
 
-    $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE
+    $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . "_config WHERE
         config='deny_email' OR config='deny_name' OR config='password_simple' OR
         config='avatar_width' OR config='avatar_height' OR config='active_group_newusers' OR
         config='active_editinfo_censor' OR config='active_user_logs' OR config='min_old_user' OR

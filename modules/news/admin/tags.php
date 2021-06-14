@@ -130,7 +130,7 @@ if ($nv_Request->isset_request('del_tid', 'get')) {
 $error = '';
 $savecat = 0;
 $incomplete = $nv_Request->get_bool('incomplete', 'get,post', false);
-list($tid, $title, $alias, $description, $image, $keywords) = array(0, '', '', '', '', '');
+list($tid, $title, $alias, $description, $image, $keywords) = [0, '', '', '', '', ''];
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savetag = $nv_Request->get_int('savetag', 'post', 0);
@@ -159,7 +159,7 @@ if (!empty($savecat)) {
 
     $keywords = explode(',', $keywords);
     $keywords = array_map('trim', $keywords);
-    $keywords = array_diff($keywords, array(''));
+    $keywords = array_diff($keywords, ['']);
     $keywords = array_unique($keywords);
     $keywords = implode(',', $keywords);
     $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($alias) : change_alias_tags($alias);

@@ -14,7 +14,7 @@ if (!defined('NV_MAINFILE')) {
 
 function plural($number, $word)
 {
-    $wordObj = array_map("trim", explode(",", $word));
+    $wordObj = array_map('trim', explode(',', $word));
     $word = $number > 1 ? $wordObj[1] : $wordObj[0];
-    return $number . " " . $word;
+    return $number . ' ' . $word;
 }

@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -41,7 +41,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
 				(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
 				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, :all_func, :weight, :config )';
 
-            $data = array();
+            $data = [];
             $data['theme'] = $theme2;
             $data['module'] = $row['module'];
             $data['file_name'] = $row['file_name'];

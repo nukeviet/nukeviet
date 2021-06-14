@@ -22,7 +22,7 @@ if (file_exists($cache_file)) {
 } else {
     $createTime = gmmktime(0, 0, 0, date('m'), 1, date('Y'));
 
-    $robots_data = array();
+    $robots_data = [];
     $robots_data['/' . NV_DATADIR . '/'] = 0;
     $robots_data['/includes/'] = 0;
     $robots_data['/install/'] = 0;
@@ -30,10 +30,10 @@ if (file_exists($cache_file)) {
     $robots_data['/robots.php'] = 0;
     $robots_data['/web.config'] = 0;
 
-    $robots_other = array();
+    $robots_other = [];
 }
 
-$host = (isset($_GET['action']) and ! empty($_GET['action'])) ? $_GET['action'] : $_SERVER['HTTP_HOST'];
+$host = (isset($_GET['action']) and !empty($_GET['action'])) ? $_GET['action'] : $_SERVER['HTTP_HOST'];
 
 $maxAge = 2592000;
 $expTme = $createTime + $maxAge;
@@ -51,19 +51,19 @@ $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
 if ($base_siteurl == '\\' or $base_siteurl == '/') {
     $base_siteurl = '';
 }
-if (! empty($base_siteurl)) {
+if (!empty($base_siteurl)) {
     $base_siteurl = str_replace('\\', '/', $base_siteurl);
 }
-if (! empty($base_siteurl)) {
+if (!empty($base_siteurl)) {
     $base_siteurl = preg_replace('/[\/]+$/', '', $base_siteurl);
 }
-if (! empty($base_siteurl)) {
+if (!empty($base_siteurl)) {
     $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
     $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
 }
 $base_siteurl .= '/';
 
-$contents = array();
+$contents = [];
 $contents[] = 'User-agent: *';
 foreach ($robots_data as $key => $value) {
     if ($value == 0) {

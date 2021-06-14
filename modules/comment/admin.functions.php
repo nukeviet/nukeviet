@@ -12,19 +12,19 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$allow_func = array(
+$allow_func = [
     'main',
     'edit',
     'active',
     'del',
     'change_active'
-);
+];
 if (defined('NV_IS_SPADMIN')) {
     $submenu['config'] = $lang_module['config'];
     $allow_func[] = 'config';
 }
 
-$site_mod_comm = array();
+$site_mod_comm = [];
 $result = $db->query('SELECT title, module_file, module_data, custom_title, admin_title, admins FROM ' . NV_MODULES_TABLE . ' ORDER BY weight');
 while ($row = $result->fetch()) {
     $module_i = $row['title'];

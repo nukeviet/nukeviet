@@ -199,7 +199,7 @@ if (empty($vid)) {
                 $db->query($sql);
 
                 $userlist .= !empty($userlist) ? ',' . $user_info['userid'] : $user_info['userid'];
-                $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_voted (vid, voted) VALUES (" . $vid . ", '" . $userlist . "') ON DUPLICATE KEY UPDATE voted = VALUES(voted)";
+                $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_voted (vid, voted) VALUES (' . $vid . ", '" . $userlist . "') ON DUPLICATE KEY UPDATE voted = VALUES(voted)";
                 $db->query($sql);
 
                 $note = $lang_module['okmsg'];

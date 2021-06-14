@@ -8,10 +8,10 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     die('Wrong URL');
 }
 
@@ -32,8 +32,8 @@ if ($sourceid > 0) {
     $result->closeCursor();
     $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid=' . $sourceid);
 
-    if (! empty($logo_old)) {
-        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid .' AND logo =' . $db->quote(basename($logo_old)))->fetchColumn();
+    if (!empty($logo_old)) {
+        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid . ' AND logo =' . $db->quote(basename($logo_old)))->fetchColumn();
         if (empty($_count)) {
             @unlink(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old);
             @unlink(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old);

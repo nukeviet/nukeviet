@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 
 $id = $nv_Request->get_int('id', 'get', 0);
 $res = false;
-$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' .$id);
+$checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $id);
 if ($checkss == $nv_Request->get_string('checkss', 'get') and !empty($id)) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_del', 'id ' . $id, $admin_info['userid']);
 

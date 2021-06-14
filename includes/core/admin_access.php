@@ -166,7 +166,7 @@ function nv_admin_checkdata($adm_session_value)
     }
 
     // Thêm tự động nhóm của hệ thống
-    $manual_groups = array(3);
+    $manual_groups = [3];
     if ($admin_info['level'] == 1 or $admin_info['level'] == 2) {
         $manual_groups[] = 2;
     }

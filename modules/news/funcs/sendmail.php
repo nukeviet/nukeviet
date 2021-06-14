@@ -72,7 +72,7 @@ if ($id > 0 and $catid > 0) {
                     }
 
                     $your_name = $nv_Request->get_title('your_name', 'post', '');
-                    $_t = str_replace("&#039;", "'", $your_name);
+                    $_t = str_replace('&#039;', "'", $your_name);
                     if (!preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $_t)) {
                         nv_jsonOutput([
                             'status' => 'error',
@@ -119,7 +119,7 @@ if ($id > 0 and $catid > 0) {
 
                     if (empty($hometext)) {
                         $hometext = $db_slave->query('SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id =' . $id)->fetchColumn();
-                        $hometext = nv_clean60(strip_tags(str_replace(["\r\n", "\r", "\n"], " ", $hometext)), 300);
+                        $hometext = nv_clean60(strip_tags(str_replace(["\r\n", "\r", "\n"], ' ', $hometext)), 300);
                     }
 
                     $subject = sprintf($lang_module['sendmail_subject'], $your_name);

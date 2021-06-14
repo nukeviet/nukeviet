@@ -23,18 +23,18 @@ $smtp_encrypted_array[2] = 'TLS';
 $array_config = [];
 $errormess = '';
 $cert_list = nv_scandir(NV_ROOTDIR . '/' . NV_CERTS_DIR, '/^(.+)[\_]{2}(.+)\.crt/', 1);
-!empty($cert_list) && $cert_list = array_map(function($email) {
-    return substr(str_replace('__', '@', $email),0,-4);
+!empty($cert_list) && $cert_list = array_map(function ($email) {
+    return substr(str_replace('__', '@', $email), 0, -4);
 }, $cert_list);
 
 $dkim_list = nv_scandir(NV_ROOTDIR . '/' . NV_CERTS_DIR, '/^nv\_dkim\.(.+)\.public\.pem/', 1);
-!empty($dkim_list) && $dkim_list = array_map(function($domain) {
-    return substr($domain,8,-11);
+!empty($dkim_list) && $dkim_list = array_map(function ($domain) {
+    return substr($domain, 8, -11);
 }, $dkim_list);
 
 $dkim_verified_list = nv_scandir(NV_ROOTDIR . '/' . NV_CERTS_DIR, '/^nv\_dkim\.(.+)\.verified/', 1);
-!empty($dkim_verified_list) && $dkim_verified_list = array_map(function($domain) {
-    return substr($domain,8,-9);
+!empty($dkim_verified_list) && $dkim_verified_list = array_map(function ($domain) {
+    return substr($domain, 8, -9);
 }, $dkim_verified_list);
 
 // Doc public key cua DKIM
@@ -54,7 +54,7 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
     $publickey = preg_replace('/^-+.*?-+$/m', '', $publickey);
     $publickey = str_replace(["\r", "\n"], '', $publickey);
     $publickey = str_split($publickey, 253);
-    $publickey = "v=DKIM1; h=sha256; t=s; p=" . implode('', $publickey);
+    $publickey = 'v=DKIM1; h=sha256; t=s; p=' . implode('', $publickey);
     $xtpl->assign('DNSVALUE', $publickey);
     $is_verified = (!empty($dkim_verified_list) and in_array($domain, $dkim_verified_list));
 
@@ -63,7 +63,7 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
     } else {
         $xtpl->parse('dkimread.unverified');
     }
-    
+
     $xtpl->parse('dkimread');
     $contents = $xtpl->text('dkimread');
     include NV_ROOTDIR . '/includes/header.php';
@@ -78,7 +78,7 @@ if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
     if (!in_array($domain, $dkim_list)) {
         exit(0);
     }
-    
+
     $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
     $verified = DKIM_verify($domain, 'nv');
     if (!$verified) {
@@ -107,7 +107,7 @@ if ($nv_Request->isset_request('dkimdel, domain', 'post')) {
     $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';
     $publickeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.public.pem';
     $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
-    
+
     if (file_exists($privatekeyfile)) {
         nv_deletefile($privatekeyfile);
     }
@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('dkimdel, domain', 'post')) {
     if (file_exists($verifiedkey)) {
         nv_deletefile($verifiedkey);
     }
-    echo "OK";
+    echo 'OK';
     exit(0);
 }
 
@@ -170,13 +170,13 @@ if ($nv_Request->isset_request('smimeread, email', 'post')) {
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('EMAIL', $email);
 
-    $email_name = str_replace("@", "__", $email);
+    $email_name = str_replace('@', '__', $email);
     $cert_crt = file_get_contents(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt');
-    $certPriv   = openssl_x509_parse(openssl_x509_read($cert_crt));
+    $certPriv = openssl_x509_parse(openssl_x509_read($cert_crt));
     $certPriv['validFrom_format'] = date('d/m/Y', $certPriv['validFrom_time_t']);
     $certPriv['validTo_format'] = date('d/m/Y', $certPriv['validTo_time_t']);
     $certPriv['purposes_list'] = [];
-    foreach($certPriv['purposes'] as $purpose) {
+    foreach ($certPriv['purposes'] as $purpose) {
         if ($purpose[0]) {
             $val = $purpose[2];
             if ($purpose[1]) {
@@ -186,7 +186,7 @@ if ($nv_Request->isset_request('smimeread, email', 'post')) {
         }
     }
     $certPriv['purposes_list'] = !empty($certPriv['purposes_list']) ? implode(', ', $certPriv['purposes_list']) : '';
-    
+
     $xtpl->assign('SMIMEREAD', $certPriv);
     $xtpl->parse('smimeread');
     $contents = $xtpl->text('smimeread');
@@ -201,7 +201,7 @@ if ($nv_Request->isset_request('smimedel, email', 'post')) {
     if (!in_array($email, $cert_list)) {
         exit(0);
     }
-    $email_name = str_replace("@", "__", $email);
+    $email_name = str_replace('@', '__', $email);
     if (file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt')) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt');
     }
@@ -211,7 +211,7 @@ if ($nv_Request->isset_request('smimedel, email', 'post')) {
     if (file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem')) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem');
     }
-    echo "OK";
+    echo 'OK';
     exit(0);
 }
 
@@ -249,9 +249,9 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
         ]);
     }
 
-    $certPriv   = openssl_x509_parse(openssl_x509_read($results['cert']));
+    $certPriv = openssl_x509_parse(openssl_x509_read($results['cert']));
     $smimesign = false;
-    foreach($certPriv['purposes'] as $purpose) {
+    foreach ($certPriv['purposes'] as $purpose) {
         if ($purpose[0] == '1' and $purpose[2] == 'smimesign') {
             $smimesign = true;
             break;
@@ -265,7 +265,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
     }
 
     $email = trim($certPriv['subject']['CN']);
-    $email_name = str_replace("@", "__", $email);
+    $email_name = str_replace('@', '__', $email);
     $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
     $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
     $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';
@@ -278,19 +278,19 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
             'mess' => $lang_module['smime_pkcs12_overwrite']
         ]);
     }
-    
+
     file_put_contents($cert_key, $results['pkey'], LOCK_EX);
     file_put_contents($cert_crt, $results['cert'], LOCK_EX);
     if (!empty($results['extracerts'])) {
-        $extracerts = implode('',$results['extracerts']);
+        $extracerts = implode('', $results['extracerts']);
         file_put_contents($certchain_pem, $extracerts, LOCK_EX);
     }
 
     @unlink($upload_info['name']);
 
     nv_jsonOutput([
-            'status' => 'ok',
-            'mess' => 'OK'
+        'status' => 'ok',
+        'mess' => 'OK'
     ]);
 }
 
@@ -306,11 +306,11 @@ if ($nv_Request->isset_request('smimedownload, email, passphrase', 'get')) {
         exit(0);
     }
 
-    $email_name = str_replace("@", "__", $email);
+    $email_name = str_replace('@', '__', $email);
     $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
     $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
     $certchain_pem = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem';
-    
+
     $cerificate_out = null;
     $signed_csr = file_get_contents($cert_crt);
     $private_key_resource = file_get_contents($cert_key);
@@ -369,7 +369,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $array_config['dkim_included'] = !empty($array_config['dkim_included']) ? implode(',', $array_config['dkim_included']) : '';
     $array_config['smime_included'] = !empty($array_config['smime_included']) ? implode(',', $array_config['smime_included']) : '';
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -494,7 +494,7 @@ if (!empty($global_config['smtp_host']) and !empty($global_config['smtp_username
 }
 
 if (!empty($dkim_list)) {
-    foreach($dkim_list as $num => $domain) {
+    foreach ($dkim_list as $num => $domain) {
         if ($domain == $d) {
             $did = $num;
         }
@@ -504,7 +504,7 @@ if (!empty($dkim_list)) {
             'num' => $num,
             'title' => $is_verified ? $lang_module['DKIM_verified'] : $lang_module['DKIM_unverified']
         ]);
-        
+
         if ($is_verified) {
             $xtpl->parse('smtp.dkim_list.loop.if_verified');
         } else {
@@ -516,7 +516,7 @@ if (!empty($dkim_list)) {
 }
 
 if (!empty($cert_list)) {
-    foreach($cert_list as $num => $email) {
+    foreach ($cert_list as $num => $email) {
         $xtpl->assign('CERT', [
             'email' => $email,
             'num' => $num

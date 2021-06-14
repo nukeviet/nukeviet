@@ -297,7 +297,7 @@ define('NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs');
 define('NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys');
 define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
-$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND (module='site' OR module='banners')) ORDER BY module ASC";
+$sql = 'SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND (module='site' OR module='banners')) ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
 
 foreach ($list as $row) {

@@ -16,14 +16,14 @@ $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
 
-$array_mod_title[] = array(
+$array_mod_title[] = [
     'catid' => 0,
     'title' => $module_info['funcs'][$op]['func_custom_name'],
     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']
-);
+];
 
 $alias = isset($array_op[1]) ? trim($array_op[1]) : '';
-$topic_array = array();
+$topic_array = [];
 
 $topicid = 0;
 if (!empty($alias)) {
@@ -48,11 +48,11 @@ if (!empty($alias)) {
 
     $canonicalUrl = getCanonicalUrl($page_url, true);
 
-    $array_mod_title[] = array(
+    $array_mod_title[] = [
         'catid' => 0,
         'title' => $page_title,
         'link' => $base_url
-    );
+    ];
 
     $db_slave->sqlreset()
         ->select('COUNT(*)')
@@ -99,7 +99,7 @@ if (!empty($alias)) {
     $result->closeCursor();
     unset($result, $row);
 
-    $topic_other_array = array();
+    $topic_other_array = [];
     if ($st_links > 0) {
         $db_slave->sqlreset()
             ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
@@ -153,7 +153,7 @@ if (!empty($alias)) {
     $result->closeCursor();
     unset($result, $row);
 
-    $topic_other_array = array();
+    $topic_other_array = [];
     $contents = topic_theme($topic_array, $topic_other_array, '', $page_title, $description, '');
 }
 include NV_ROOTDIR . '/includes/header.php';

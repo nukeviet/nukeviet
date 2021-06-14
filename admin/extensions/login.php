@@ -43,13 +43,13 @@ if (!empty($request['username']) and !empty($request['password']) and $checksess
     $stored_cookies = nv_get_cookies();
 
     // Debug
-    $args = array(
-        'headers' => array(
+    $args = [
+        'headers' => [
             'Referer' => NUKEVIET_STORE_APIURL
-        ),
+        ],
         'cookies' => $stored_cookies,
         'body' => $request
-    );
+    ];
 
     $cookies = [];
     $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);

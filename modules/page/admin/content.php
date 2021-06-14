@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
-$copy = $nv_Request->get_int('copy', 'get,post',0);
+$copy = $nv_Request->get_int('copy', 'get,post', 0);
 
 if ($id) {
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
@@ -74,11 +74,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     $row['hot_post'] = $nv_Request->get_int('hot_post', 'post', 0);
 
-    $_groups_post = $nv_Request->get_array('activecomm', 'post', array());
+    $_groups_post = $nv_Request->get_array('activecomm', 'post', []);
     $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     // Kiểm tra trùng
-    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote($row['alias']);
+    $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->quote($row['alias']);
     if ($id and !$copy) {
         $sql .= ' AND id!=' . $id;
     }
@@ -114,7 +114,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             if ($page_config['news_first']) {
                 $weight = 1;
             } else {
-                $weight = $db->query("SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data)->fetchColumn();
+                $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
                 $weight = intval($weight) + 1;
             }
 
@@ -209,20 +209,20 @@ $xtpl->assign('ISCOPY', $copy);
 
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-    $xtpl->assign('LAYOUT_FUNC', array(
+    $xtpl->assign('LAYOUT_FUNC', [
         'key' => $value,
         'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.layout_func');
 }
 
 $activecomm = explode(',', $row['activecomm']);
 foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ACTIVECOMM', array(
+    $xtpl->assign('ACTIVECOMM', [
         'value' => $_group_id,
         'checked' => in_array($_group_id, $activecomm) ? ' checked="checked"' : '',
         'title' => $_title
-    ));
+    ]);
     $xtpl->parse('main.activecomm');
 }
 
@@ -231,11 +231,11 @@ if (empty($row['alias'])) {
 }
 
 // position images
-$array_imgposition = array(
+$array_imgposition = [
     0 => $lang_module['imgposition_0'],
     1 => $lang_module['imgposition_1'],
     2 => $lang_module['imgposition_2']
-);
+];
 foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';
     $xtpl->assign('id_imgposition', $id_imgposition);

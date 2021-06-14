@@ -13,7 +13,6 @@ if (!defined('NV_ADMIN')) {
 }
 
 if (!function_exists('nv_news_array_cat_admin')) {
-
     /**
      * nv_news_array_cat_admin()
      *

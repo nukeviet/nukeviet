@@ -912,7 +912,7 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
             $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=' . $db->quote($username) . ' ORDER BY username ASC LIMIT 0,10';
         } else {
             $dbkey = $db->dblikeescape($username);
-            $sql = "SELECT username, first_name, last_name, photo FROM " . NV_USERS_GLOBALTABLE . " WHERE active=1 AND (
+            $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . " WHERE active=1 AND (
                 username LIKE '%" . $dbkey . "%' OR CONCAT(first_name,' ',last_name) LIKE '%" . $dbkey . "%'
             ) ORDER BY username ASC LIMIT 0,10";
         }

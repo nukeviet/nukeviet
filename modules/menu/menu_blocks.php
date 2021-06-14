@@ -24,7 +24,7 @@ function nv_menu_blocks($block_config)
 {
     global $nv_Cache, $global_config, $lang_global;
 
-    $list_cats = array();
+    $list_cats = [];
     $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
     $list = $nv_Cache->db($sql, '', $block_config['module']);
 
@@ -51,7 +51,7 @@ function nv_menu_blocks($block_config)
             } else {
                 $row['icon'] = '';
             }
-            $list_cats[$row['id']] = array(
+            $list_cats[$row['id']] = [
                 'id' => $row['id'],
                 'parentid' => $row['parentid'],
                 'subcats' => $row['subitem'],
@@ -63,7 +63,7 @@ function nv_menu_blocks($block_config)
                 'icon' => $row['icon'],
                 'html_class' => $row['css'],
                 'current' => nv_menu_check_current($row['link'], $row['active_type'])
-            );
+            ];
         }
     }
 
@@ -86,7 +86,7 @@ function nv_menu_blocks($block_config)
         foreach ($list_cats as $cat) {
             if (empty($cat['parentid'])) {
                 if (!empty($cat['subcats'])) {
-                    $submenu_active = array();
+                    $submenu_active = [];
                     $html_content = nv_smenu_blocks($block_config['block_name'], $list_cats, $cat['subcats'], $submenu_active, $block_theme);
                     $xtpl->assign('HTML_CONTENT', $html_content);
                     if ($html_content != '') {

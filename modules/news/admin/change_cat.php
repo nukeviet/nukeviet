@@ -39,7 +39,7 @@ if ($catid > 0) {
         nv_fix_cat_order();
         $content = 'OK_' . $parentid;
     } elseif (defined('NV_IS_ADMIN_MODULE') or (isset($array_cat_admin[$admin_id][$catid]) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1)) {
-        if ($mod == 'status' and in_array($new_vid, array(0, 1, 2)) and in_array($curr_status, array(0, 1, 2)) and !(nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS and ($new_vid == 0 or $curr_status == 0))) {
+        if ($mod == 'status' and in_array($new_vid, [0, 1, 2]) and in_array($curr_status, [0, 1, 2]) and !(nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS and ($new_vid == 0 or $curr_status == 0))) {
             // Đối với các chuyên mục bị khóa bởi chuyên mục cha thì không thay đổi gì
             // Đối với hệ thống lớn thì không thể đình chỉ
             if (($new_vid == 0 or $curr_status == 0) and $new_vid != $curr_status) {
@@ -54,7 +54,7 @@ if ($catid > 0) {
                     $query_update_row = 'status=status-' . ($global_code_defined['row_locked_status'] + 1);
 
                     // Tìm ra các chuyên mục vẫn còn bị khóa sau khi mở khóa chuyên mục này
-                    $array_cat_locked = array();
+                    $array_cat_locked = [];
                     foreach ($global_array_cat as $_catid_i => $_cat_value) {
                         if ($_catid_i != $catid) {
                             if (in_array($_catid_i, $sudcatids)) {
@@ -104,7 +104,7 @@ if ($catid > 0) {
                         while ($row = $result->fetch()) {
                             $row['listcatid'] = explode(',', $row['listcatid']);
                             // Xem thử bài viết này còn thuộc chuyên mục nào bị khóa không
-                            if (array_intersect($array_cat_locked, $row['listcatid']) == array() and $row['status'] > $global_code_defined['row_locked_status']) {
+                            if (array_intersect($array_cat_locked, $row['listcatid']) == [] and $row['status'] > $global_code_defined['row_locked_status']) {
                                 // Mở khóa ở bảng rows
                                 try {
                                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET ' . $query_update_row . ' WHERE id=' . $row['id']);

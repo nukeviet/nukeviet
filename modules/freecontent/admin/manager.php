@@ -8,7 +8,7 @@
  * @Createdate 24-06-2011 10:35
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ $page_title = $lang_module['mng'];
 if ($nv_Request->isset_request('getinfo', 'post')) {
     $id = $nv_Request->get_int('id', 'post', '0');
 
-    $array = array();
+    $array = [];
 
     if ($id) {
         $sth = $db->prepare('SELECT title, description, link, target, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
@@ -26,9 +26,9 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
         $sth->execute();
         $array = $sth->fetch();
 
-        if (! empty($array)) {
+        if (!empty($array)) {
             // Check image exists
-            if (! empty($array['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array['image'])) {
+            if (!empty($array['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array['image'])) {
                 $array['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $array['image'];
             } else {
                 $array['image'] = '';
@@ -47,11 +47,11 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
     $message = $array ? '' : 'Invalid post data';
 
-    nv_jsonOutput(array(
-        'status' => ! empty($array) ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !empty($array) ? 'success' : 'error',
         'message' => $message,
         'data' => $array
-    ));
+    ]);
 }
 
 // Delete content
@@ -74,10 +74,10 @@ if ($nv_Request->isset_request('del', 'post')) {
         $message = 'Invalid post data';
     }
 
-    nv_jsonOutput(array(
-        'status' => ! $message ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !$message ? 'success' : 'error',
         'message' => $message,
-    ));
+    ]);
 }
 
 // Change content status
@@ -107,9 +107,9 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
                 $start_time = 0;
                 $end_time = 0;
 
-                if (empty($row['start_time']) or (! empty($row['end_time']) and $row['end_time'] <= NV_CURRENTTIME)) {
+                if (empty($row['start_time']) or (!empty($row['end_time']) and $row['end_time'] <= NV_CURRENTTIME)) {
                     $start_time = NV_CURRENTTIME;
-                    $end_time = ! empty($row['end_time']) ? (($row['end_time'] - $row['start_time']) + $start_time) : 0;
+                    $end_time = !empty($row['end_time']) ? (($row['end_time'] - $row['start_time']) + $start_time) : 0;
                 } else {
                     $start_time = $row['start_time'];
                     $end_time = $row['end_time'];
@@ -127,7 +127,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
             $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
             $result = $db->query($sql);
             $next_execute = intval($result->fetchColumn());
-            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
             $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
             $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
             $sth->execute();
@@ -141,33 +141,33 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
         $message = 'Invalid post data';
     }
 
-    nv_jsonOutput(array(
-        'status' => ! $message ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !$message ? 'success' : 'error',
         'message' => $message,
         'responCode' => $status,
         'responText' => $lang_module['content_status_' . $status]
-    ));
+    ]);
 }
 
 $bid = $nv_Request->get_int('bid', 'post', '');
-$block = array();
+$block = [];
 
 if ($bid) {
     $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
 }
 
 if (empty($block)) {
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'error',
         'message' => 'Invalid data',
-        'data' => array(),
-        'error' => array(),
-    ));
+        'data' => [],
+        'error' => [],
+    ]);
 }
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
-    $data = $error = array();
+    $data = $error = [];
     $message = '';
 
     $data['id'] = $nv_Request->get_int('id', 'post', 0);
@@ -180,10 +180,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $data['exptime'] = $nv_Request->get_int('exptime', 'post', 0);
 
     if (empty($data['title'])) {
-        $error[] = array(
+        $error[] = [
             'name' => 'title',
             'value' => $lang_module['content_title_error']
-        );
+        ];
     }
 
     // Prosess image
@@ -225,7 +225,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
                 $result = $db->query($sql);
                 $next_execute = intval($result->fetchColumn());
-                $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
+                $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
                 $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
                 $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
                 $sth->execute();
@@ -240,24 +240,24 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $nv_Cache->delMod($module_name);
                 $message = $lang_module['save_success'];
             } else {
-                $error[] = array(
+                $error[] = [
                     'name' => '',
                     'value' => $lang_module['error_save']
-                );
+                ];
             }
         } catch (PDOException $e) {
-            $error[] = array(
+            $error[] = [
                 'name' => '',
                 'value' => $lang_module['error_save']
-            );
+            ];
         }
     }
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => empty($error) ? 'success' : 'error',
         'message' => $message,
         'error' => $error
-    ));
+    ]);
 }
 
 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

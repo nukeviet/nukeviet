@@ -53,9 +53,9 @@ $maxday = mktime(24, 60, 60, $data_month, $day_max, $current_year);
 $minday = mktime(0, 0, 0, $data_month, $day_min, $current_year);
 $sum = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday)->fetchColumn();
 
-$cts = array();
+$cts = [];
 
-$ext = in_array($nv_Request->get_string('ext', 'get', 'no'), array('country', 'browse', 'os')) ? $nv_Request->get_string('ext', 'get') : 'day';
+$ext = in_array($nv_Request->get_string('ext', 'get', 'no'), ['country', 'browse', 'os']) ? $nv_Request->get_string('ext', 'get') : 'day';
 
 if ($ext == 'country') {
     $sql = 'SELECT click_country FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
@@ -64,7 +64,7 @@ if ($ext == 'country') {
 
     if (!empty($result)) {
         $result = $db->query($sql);
-        $bd = array();
+        $bd = [];
         if (!empty($result)) {
             while ($row = $result->fetch()) {
                 if (!isset($bd[$row['click_country']])) {
@@ -76,7 +76,7 @@ if ($ext == 'country') {
         foreach ($bd as $shortname => $click_count) {
             $country = $shortname;
             if (preg_match('/^[A-Z]{2}$/', $country)) {
-                $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','" . $country . "','statistic',0);";
+                $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $country . "','statistic',0);";
                 $cts[$key][0] = isset($countries[$country]) ? $countries[$country][1] : $country;
                 $cts[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
                 $cts[$key][2] = $click_count;
@@ -86,7 +86,7 @@ if ($ext == 'country') {
         }
 
         if (!empty($unknown)) {
-            $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
+            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
             $cts[$key][0] = $lang_module['unknown'];
             $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
             $cts[$key][2] = $unknown;
@@ -97,7 +97,7 @@ if ($ext == 'country') {
     $sql = 'SELECT click_browse_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
 
     $result = $db->query($sql);
-    $bd = array();
+    $bd = [];
     if (!empty($result)) {
         while ($row = $result->fetch()) {
             if (!isset($bd[$row['click_browse_name']])) {
@@ -109,7 +109,7 @@ if ($ext == 'country') {
     $unknown = 0;
     foreach ($bd as $shortname => $click_count) {
         if (trim($shortname) != 'Unknown') {
-            $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','" . $shortname . "','statistic',0);";
+            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $shortname . "','statistic',0);";
             $cts[$key][0] = $shortname;
             $cts[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
             $cts[$key][2] = $click_count;
@@ -118,7 +118,7 @@ if ($ext == 'country') {
         }
     }
     if (!empty($unknown)) {
-        $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
+        $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
         $cts[$key][0] = $lang_module['unknown'];
         $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
         $cts[$key][2] = $unknown;
@@ -128,7 +128,7 @@ if ($ext == 'country') {
 } elseif ($ext == 'os') {
     $sql = 'SELECT click_os_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_os_name DESC';
     $result = $db->query($sql);
-    $bd = array();
+    $bd = [];
 
     if (!empty($result)) {
         while ($row = $result->fetch()) {
@@ -144,12 +144,12 @@ if ($ext == 'country') {
         $os_key = $os_name = $shortname;
 
         if (preg_match('/^Robot\:/', $os_name)) {
-            $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
+            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
             $robots[$key][0] = $os_name;
             $robots[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
             $robots[$key][2] = $click_count;
         } elseif ($os_key != 'Unknown') {
-            $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
+            $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
             $cts[$key][0] = $os_name;
             $cts[$key][1] = ($sum > 0) ? round($click_count * 100 / $sum, 1) : 0;
             $cts[$key][2] = $click_count;
@@ -163,7 +163,7 @@ if ($ext == 'country') {
     }
 
     if (!empty($unknown)) {
-        $key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
+        $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
         $cts[$key][0] = $lang_module['unknown'];
         $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
         $cts[$key][2] = $unknown;
@@ -173,7 +173,7 @@ if ($ext == 'country') {
 } else {
     $sql = 'SELECT click_time FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_time DESC';
     $result = $db->query($sql);
-    $bd = array();
+    $bd = [];
 
     if (!empty($result)) {
         while ($row = $result->fetch()) {
@@ -186,7 +186,7 @@ if ($ext == 'country') {
 
     for ($i = $day_max; $i >= $day_min; --$i) {
         $c = isset($bd[$i]) ? $bd[$i] : 0;
-        $key = isset($bd[$i]) ? "nv_show_list_stat(" . $id . "," . $data_month . ",'day','" . $i . "','statistic',0);" : $i;
+        $key = isset($bd[$i]) ? 'nv_show_list_stat(' . $id . ',' . $data_month . ",'day','" . $i . "','statistic',0);" : $i;
         $cts[$key][0] = str_pad($i, 2, '0', STR_PAD_LEFT) . ' ' . nv_date('F Y', $time);
         $cts[$key][1] = ($sum > 0) ? round(($c * 100) / $sum, 1) : 0;
         $cts[$key][2] = $c;
@@ -195,7 +195,7 @@ if ($ext == 'country') {
     $caption = sprintf($lang_module['info_stat_byday_caption'], nv_monthname($data_month), $current_year);
 }
 
-$contents = nv_show_stat_theme(array($caption, $sum, $cts));
+$contents = nv_show_stat_theme([$caption, $sum, $cts]);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;

@@ -570,9 +570,9 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         if ($stype == 'bodytext') {
             $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
             $where = " c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'";
-        } elseif ($stype == "title") {
+        } elseif ($stype == 'title') {
             $where = " r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'";
-        } elseif ($stype == "author") {
+        } elseif ($stype == 'author') {
             $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.alias LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
@@ -582,14 +582,14 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
-            $where = " r.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($q) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')";
+            $where = ' r.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($q) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')";
         } elseif ($stype == 'admin_id') {
             $where = " (u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%' OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
         } elseif (!empty($q)) {
             $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
             $arr_from = [];
             foreach ($array_in_rows as $key => $val) {
-                $arr_from[] = "(r." . $val . " LIKE '%" . $db_slave->dblikeescape($q) . "%')";
+                $arr_from[] = '(r.' . $val . " LIKE '%" . $db_slave->dblikeescape($q) . "%')";
             }
             $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
@@ -830,7 +830,7 @@ if (!empty($array_ids)) {
     $db_slave->sqlreset()
         ->select('*')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-        ->where("id IN (" . implode(',', $array_ids) . ")");
+        ->where('id IN (' . implode(',', $array_ids) . ')');
     $result = $db_slave->query($db_slave->sql());
     while ($_row = $result->fetch()) {
         !isset($internal_authors[$_row['id']]) && $internal_authors[$_row['id']] = [];

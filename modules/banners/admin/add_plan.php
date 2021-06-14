@@ -29,7 +29,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $title = nv_htmlspecialchars(strip_tags($nv_Request->get_string('title', 'post', '')));
     $description = defined('NV_EDITOR') ? $nv_Request->get_string('description', 'post', '') : strip_tags($nv_Request->get_string('description', 'post', ''));
     $form = $nv_Request->get_string('form', 'post', 'sequential');
-	$require_image = $nv_Request->get_int('require_image', 'post', 0);
+    $require_image = $nv_Request->get_int('require_image', 'post', 0);
     if (!in_array($form, $forms)) {
         $form = 'sequential';
     }
@@ -37,10 +37,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $width = $nv_Request->get_int('width', 'post', 0);
     $height = $nv_Request->get_int('height', 'post', 0);
 
-    $uploadtype = $nv_Request->get_typed_array('uploadtype', 'post', 'title', array());
+    $uploadtype = $nv_Request->get_typed_array('uploadtype', 'post', 'title', []);
     $uploadtype = implode(',', $uploadtype);
 
-    $uploadgroup = $nv_Request->get_array('uploadgroup', 'post', array());
+    $uploadgroup = $nv_Request->get_array('uploadgroup', 'post', []);
     $uploadgroup = !empty($uploadgroup) ? implode(',', nv_groups_post(array_intersect($uploadgroup, array_keys($groups_list)))) : '';
 
     $exp_time = $nv_Request->get_int('exp_time', 'post', 0);
@@ -65,20 +65,20 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $description = defined('NV_EDITOR') ? nv_nl2br($description, '') : nv_nl2br(nv_htmlspecialchars($description), '<br />');
         }
 
-        $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE. '_plans (
+        $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_plans (
             blang, title, description, form, width, height, act, require_image, uploadtype, uploadgroup, exp_time
         ) VALUES (
             :blang, :title, :description, :form, ' . $width . ', ' . $height . ', 1, :require_image, :uploadtype, :uploadgroup, :exp_time
         )';
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['blang'] = $blang;
         $data_insert['title'] = $title;
         $data_insert['description'] = $description;
         $data_insert['form'] = $form;
-		$data_insert['require_image'] = $require_image;
-		$data_insert['uploadtype'] = $uploadtype;
-		$data_insert['uploadgroup'] = $uploadgroup;
-		$data_insert['exp_time'] = $exp_time_value;
+        $data_insert['require_image'] = $require_image;
+        $data_insert['uploadtype'] = $uploadtype;
+        $data_insert['uploadgroup'] = $uploadgroup;
+        $data_insert['exp_time'] = $exp_time_value;
         $id = $db->insert_id($_sql, 'id', $data_insert);
 
         $nv_Cache->delMod($module_name);
@@ -112,19 +112,19 @@ $is_error = (!empty($error)) ? 1 : 0;
 $allow_langs = array_flip($global_config['allow_sitelangs']);
 $allow_langs = array_intersect_key($language_array, $allow_langs);
 
-$contents = array();
+$contents = [];
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['add_plan'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_plan';
-$contents['title'] = array($lang_module['title'], 'title', $title, 255);
-$contents['blang'] = array($lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang);
-$contents['form'] = array($lang_module['form'], 'form', $forms, $form);
+$contents['title'] = [$lang_module['title'], 'title', $title, 255];
+$contents['blang'] = [$lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang];
+$contents['form'] = [$lang_module['form'], 'form', $forms, $form];
 $contents['size'] = $lang_module['size'];
 $contents['require_image'] = $require_image;
-$contents['width'] = array($lang_module['width'], 'width', $width, 4);
-$contents['height'] = array($lang_module['height'], 'height', $height, 4);
-$contents['description'] = array($lang_module['description'], 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false);
+$contents['width'] = [$lang_module['width'], 'width', $width, 4];
+$contents['height'] = [$lang_module['height'], 'height', $height, 4];
+$contents['description'] = [$lang_module['description'], 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false];
 $contents['exp_time'] = $exp_time;
 $contents['exp_time_custom'] = $exp_time_custom ? $exp_time_custom : '';
 $contents['uploadgroup'] = $uploadgroup;

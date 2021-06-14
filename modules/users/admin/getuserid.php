@@ -120,7 +120,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
         $base_url .= '&amp;full_name=' . rawurlencode($array['full_name']);
 
         $where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
-        $array_where[] = "(" . $where_fullname . " LIKE '%" . $db->dblikeescape($array['full_name']) . "%' )";
+        $array_where[] = '(' . $where_fullname . " LIKE '%" . $db->dblikeescape($array['full_name']) . "%' )";
     }
 
     if (!empty($array['email'])) {

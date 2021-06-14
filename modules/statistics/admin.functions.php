@@ -12,7 +12,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$module_info['alias'] = array();
+$module_info['alias'] = [];
 $module_info['alias']['allbots'] = 'allbots';
 $module_info['alias']['allbrowsers'] = 'allbrowsers';
 $module_info['alias']['allcountries'] = 'allcountries';
@@ -33,7 +33,7 @@ define('NV_BASE_MOD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '
 
 $module_info['template'] = 'default';
 if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
-    $my_head = "<link rel=\"StyleSheet\" href=\"" . NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />\n";
+    $my_head = '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_file . ".css\" type=\"text/css\" />\n";
 }
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';

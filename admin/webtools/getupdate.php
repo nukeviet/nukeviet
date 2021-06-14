@@ -8,7 +8,7 @@
  * @Createdate 9/9/2010, 6:38
  */
 
-if (! defined('NV_IS_FILE_WEBTOOLS')) {
+if (!defined('NV_IS_FILE_WEBTOOLS')) {
     die('Stop!!!');
 }
 
@@ -30,9 +30,9 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
 
         $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
 
-        $no_extract = array();
-        $error_create_folder = array();
-        $error_move_folder = array();
+        $no_extract = [];
+        $error_create_folder = [];
+        $error_move_folder = [];
 
         if (is_dir(NV_ROOTDIR . '/' . $temp_extract_dir)) {
             nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir, true);
@@ -51,7 +51,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             // login with username and password
             $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
 
-            if ((! $conn_id) or (! $login_result)) {
+            if ((!$conn_id) or (!$login_result)) {
                 $ftp_check_login = 3;
             } elseif (ftp_chdir($conn_id, $ftp_path)) {
                 $ftp_check_login = 1;
@@ -68,12 +68,12 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             }
 
             foreach ($ziplistContent as $array_file) {
-                if (! empty($array_file['folder']) and ! file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                if (!empty($array_file['folder']) and !file_exists(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
                     $cp = '';
                     $e = explode('/', $array_file['filename']);
 
                     foreach ($e as $p) {
-                        if (! empty($p) and ! is_dir(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p)) {
+                        if (!empty($p) and !is_dir(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p)) {
                             ftp_mkdir($conn_id, $temp_extract_dir . '/' . $cp . $p);
                             if (substr($sys_info['os'], 0, 3) != 'WIN') {
                                 ftp_chmod($conn_id, 0777, $temp_extract_dir . '/' . $cp . $p);
@@ -100,22 +100,22 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             foreach ($ziplistContent as $array_file) {
                 $dir_name = '';
 
-                if (! empty($array_file['folder']) and ! file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
+                if (!empty($array_file['folder']) and !file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
                     $dir_name = $array_file['filename'];
-                } elseif (! file_exists(NV_ROOTDIR . '/' . dirname($array_file['filename']))) {
+                } elseif (!file_exists(NV_ROOTDIR . '/' . dirname($array_file['filename']))) {
                     $dir_name = dirname($array_file['filename']);
                 }
 
-                if (! empty($dir_name)) {
+                if (!empty($dir_name)) {
                     $cp = '';
                     $e = explode('/', $dir_name);
 
                     foreach ($e as $p) {
-                        if (! empty($p) and ! is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
-                            if (! ($ftp_check_login == 1 and ftp_mkdir($conn_id, $cp . $p))) {
+                        if (!empty($p) and !is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
+                            if (!($ftp_check_login == 1 and ftp_mkdir($conn_id, $cp . $p))) {
                                 @mkdir(NV_ROOTDIR . '/' . $cp . $p);
                             }
-                            if (! is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
+                            if (!is_dir(NV_ROOTDIR . '/' . $cp . $p)) {
                                 $error_create_folder[] = $cp . $p;
                                 break;
                             }
@@ -132,12 +132,12 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
                 foreach ($ziplistContent as $array_file) {
                     if (empty($array_file['folder'])) {
                         if (file_exists(NV_ROOTDIR . '/' . $array_file['filename'])) {
-                            if (! ($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
+                            if (!($ftp_check_login == 1 and ftp_delete($conn_id, $array_file['filename']))) {
                                 nv_deletefile(NV_ROOTDIR . '/' . $array_file['filename']);
                             }
                         }
 
-                        if (! ($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
+                        if (!($ftp_check_login == 1 and ftp_rename($conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename']))) {
                             @rename(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], NV_ROOTDIR . '/' . $array_file['filename']);
                         }
 
@@ -158,7 +158,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             }
         }
 
-        if (! empty($no_extract)) {
+        if (!empty($no_extract)) {
             $i = 0;
             foreach ($no_extract as $tmp) {
                 $xtpl->assign('FILENAME', $tmp);
@@ -167,7 +167,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             }
 
             $xtpl->parse('complete.no_extract');
-        } elseif (! empty($error_create_folder)) {
+        } elseif (!empty($error_create_folder)) {
             $i = 0;
             asort($error_create_folder);
 
@@ -178,7 +178,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
             }
 
             $xtpl->parse('complete.error_create_folder');
-        } elseif (! empty($error_move_folder)) {
+        } elseif (!empty($error_move_folder)) {
             $i = 0;
             asort($error_move_folder);
 
@@ -210,21 +210,21 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
     $filename = NV_TEMPNAM_PREFIX . 'sysupd_' . NV_CHECK_SESSION . '.zip';
 
     // Debug
-    $args = array(
-        'headers' => array(
+    $args = [
+        'headers' => [
             'Referer' => NUKEVIET_STORE_APIURL,
-        ),
+        ],
         'stream' => true,
         'filename' => NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename,
-        'body' => array(
+        'body' => [
             'lang' => NV_LANG_INTERFACE,
             'basever' => $global_config['version'],
             'mode' => 'getsysupd',
             'version' => $version,
             'package' => $package
-        ),
+        ],
         'timeout' => 0
-    );
+    ];
 
     // Delete temp file if exists
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
@@ -233,13 +233,13 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
 
     $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
-    if (! empty(NukeViet\Http\Http::$error)) {
+    if (!empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-    } elseif (empty($apidata['filename']) or ! file_exists($apidata['filename'])) {
+    } elseif (empty($apidata['filename']) or !file_exists($apidata['filename'])) {
         $error = $lang_module['get_update_error_file_download'];
     }
 
-    if (! empty($error)) {
+    if (!empty($error)) {
         $xtpl->assign('ERROR', $error);
 
         $xtpl->parse('error');

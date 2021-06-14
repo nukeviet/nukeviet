@@ -235,7 +235,7 @@ $authors = [];
 $db->sqlreset()
     ->select('l.alias,l.pseudonym')
     ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
-    ->where("l.id = " . $id . " AND a.active=1");
+    ->where('l.id = ' . $id . ' AND a.active=1');
 $result = $db->query($db->sql());
 while ($row = $result->fetch()) {
     $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
@@ -453,7 +453,7 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
 }
 
 // Xu ly Layout tuy chinh (khong ap dung cho theme mobile_default)
-$module_info['layout_funcs'][$op_file] = (!empty($news_contents['layout_func']) and "mobile_default" != $global_config['module_theme']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
+$module_info['layout_funcs'][$op_file] = (!empty($news_contents['layout_func']) and 'mobile_default' != $global_config['module_theme']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
 
 $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
 

@@ -49,9 +49,9 @@ if ($nv_Request->isset_request('q', 'get')) {
                 "/^([\S]{1})\s/uis",
                 "/\s([\S]{1})\s/uis",
                 "/\s([\S]{1})$/uis"
-            ], " ", $search['key']);
+            ], ' ', $search['key']);
         }
-        $search['key'] = str_replace(["'", '"', '<', '>', "&#039;", "&quot;", "&lt;", "&gt;"], '', $search['key']);
+        $search['key'] = str_replace(["'", '"', '<', '>', '&#039;', '&quot;', '&lt;', '&gt;'], '', $search['key']);
         $search['key'] = trim($search['key']);
         $search['len_key'] = nv_strlen($search['key']);
     }

@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -16,7 +16,7 @@ $contents = '';
 
 $file_name = $nv_Request->get_string('file_name', 'get');
 
-if (! empty($file_name)) {
+if (!empty($file_name)) {
     $module = $nv_Request->get_string('module', 'get', '');
     $selectthemes = $nv_Request->get_string('selectthemes', 'get', '');
 
@@ -62,14 +62,14 @@ if (! empty($file_name)) {
         die();
     }
 
-    if (! empty($path_file_php) and ! empty($path_file_ini)) {
+    if (!empty($path_file_php) and !empty($path_file_ini)) {
         // Neu ton tai file config cua block
         $xml = simplexml_load_file($path_file_ini);
 
         if ($xml !== false) {
             $function_name = trim($xml->datafunction);
 
-            if (! empty($function_name)) {
+            if (!empty($function_name)) {
                 // neu ton tai function de xay dung cau truc cau hinh block
                 include_once $path_file_php;
 
@@ -77,7 +77,7 @@ if (! empty($file_name)) {
                     //load cau hinh mac dinh cua block
                     $xmlconfig = $xml->xpath('config');
                     $config = ( array )$xmlconfig[0];
-                    $array_config = array();
+                    $array_config = [];
 
                     foreach ($config as $key => $value) {
                         $array_config[$key] = trim($value);
@@ -94,14 +94,14 @@ if (! empty($file_name)) {
                         }
                     }
 
-                    $lang_block = array();
+                    $lang_block = [];
                     // Ngon ngu cua block
 
-                    if (! empty($path_file_lang)) {
+                    if (!empty($path_file_lang)) {
                         require $path_file_lang;
                     } else {
                         $xmllanguage = $xml->xpath('language');
-                        $language = (empty($xmllanguage)) ? array() : ( array )$xmllanguage[0];
+                        $language = (empty($xmllanguage)) ? [] : ( array )$xmllanguage[0];
 
                         if (isset($language[NV_LANG_INTERFACE])) {
                             $lang_block = ( array )$language[NV_LANG_INTERFACE];

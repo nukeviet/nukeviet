@@ -119,7 +119,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
                 }
             } else {
                 $autologomod = explode(',', $global_config['autologomod']);
-                $dir = str_replace("\\", '/', $path);
+                $dir = str_replace('\\', '/', $path);
                 $dir = rtrim($dir, '/');
                 $arr_dir = explode('/', $dir);
 
@@ -151,16 +151,16 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
                     $config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
 
                     // Logo vertical
-                    if (preg_match("/^top/", $global_config['upload_logo_pos'])) {
+                    if (preg_match('/^top/', $global_config['upload_logo_pos'])) {
                         $config_logo['y'] = 5;
-                    } elseif (preg_match("/^center/", $global_config['upload_logo_pos'])) {
+                    } elseif (preg_match('/^center/', $global_config['upload_logo_pos'])) {
                         $config_logo['y'] = round(($file_size[1] / 2) - ($h / 2));
                     }
 
                     // Logo horizontal
-                    if (preg_match("/Left$/", $global_config['upload_logo_pos'])) {
+                    if (preg_match('/Left$/', $global_config['upload_logo_pos'])) {
                         $config_logo['x'] = 5;
-                    } elseif (preg_match("/Center$/", $global_config['upload_logo_pos'])) {
+                    } elseif (preg_match('/Center$/', $global_config['upload_logo_pos'])) {
                         $config_logo['x'] = round(($file_size[0] / 2) - ($w / 2));
                     }
 
@@ -227,12 +227,12 @@ if (!empty($error)) {
             $newalt = str_replace('-', ' ', change_alias($newalt));
         }
 
-        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (
+        $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
             name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
         ) VALUES (
             '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ",
-            '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "',
-            " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt
+            '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "',
+            " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $upload_info['basename'] . "', :newalt
         )");
 
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
@@ -253,7 +253,7 @@ if (!empty($error)) {
             nv_jsonOutput([
                 'uploaded' => 1,
                 'fileName' => $upload_info['basename'],
-                'url' => NV_BASE_SITEURL . $path . "/" . $upload_info['basename']
+                'url' => NV_BASE_SITEURL . $path . '/' . $upload_info['basename']
             ]);
         }
     } else {

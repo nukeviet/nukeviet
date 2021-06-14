@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_SEOTOOLS')) {
+if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
@@ -17,7 +17,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
     if ($nv_Request->isset_request('submitprcservice', 'post')) {
         $prcservice = $nv_Request->get_array('prcservice', 'post');
         $prcservice = implode(',', $prcservice);
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'prcservice'");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'prcservice'");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
         $sth->bindParam(':config_value', $prcservice, PDO::PARAM_STR);
         $sth->execute();
@@ -26,7 +26,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
     $prcservice = (isset($module_config[$module_name]['prcservice'])) ? $module_config[$module_name]['prcservice'] : '';
-    $prcservice = (! empty($prcservice)) ? explode(',', $prcservice) : array();
+    $prcservice = (!empty($prcservice)) ? explode(',', $prcservice) : [];
 
     $xtpl = new XTemplate('rpc_setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -43,13 +43,13 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
     foreach ($services as $key => $service) {
         $a++;
-        $xtpl->assign('SERVICE', array(
+        $xtpl->assign('SERVICE', [
             'id' => $key,
             'title' => $service[1],
-            'checked' => (! isset($module_config[$module_name]['prcservice']) or in_array($service[1], $prcservice)) ? 'checked="checked"' : '',
+            'checked' => (!isset($module_config[$module_name]['prcservice']) or in_array($service[1], $prcservice)) ? 'checked="checked"' : '',
             'icon' => (isset($service[3]) ? $service[3] : '')
-        ));
-        if (isset($service[3]) and ! empty($service[3])) {
+        ]);
+        if (isset($service[3]) and !empty($service[3])) {
             $xtpl->parse('main.service.icon');
         } else {
             $xtpl->parse('main.service.noticon');

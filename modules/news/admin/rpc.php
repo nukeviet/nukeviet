@@ -31,12 +31,12 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         $nv_redirect2 = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&rand=' . nv_genpass();
 
         $prcservice = (isset($module_config['seotools']['prcservice'])) ? $module_config['seotools']['prcservice'] : '';
-        $prcservice = (!empty($prcservice)) ? explode(',', $prcservice) : array();
+        $prcservice = (!empty($prcservice)) ? explode(',', $prcservice) : [];
 
         if ($news_contents['id'] > 0 and !empty($prcservice)) {
             if ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME + 1 and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME + 1)) {
                 if ($nv_Request->get_string('checkss', 'post,get', '') == md5($id . NV_CHECK_SESSION)) {
-                    $services_active = array();
+                    $services_active = [];
                     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
                     foreach ($services as $key => $service) {
                         if (in_array($service[1], $prcservice)) {
@@ -58,11 +58,11 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
 
                         $xtpl->assign('HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                         foreach ($services_active as $key => $service) {
-                            $xtpl->assign('SERVICE', array(
+                            $xtpl->assign('SERVICE', [
                                 'id' => $key,
                                 'title' => $service[1],
                                 'icon' => (isset($service[3]) ? $service[3] : '')
-                            ));
+                            ]);
 
                             if (isset($service[3]) and !empty($service[3])) {
                                 $xtpl->parse('main.service.icon');
@@ -166,19 +166,19 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                     $msg1 = $lang_module['content_saveok'];
                     $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
 
-                    $contents .= "<div align=\"center\">";
-                    $contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
-                    $contents .= "<img border=\"0\" src=\"" . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
-                    $contents .= "<strong><a href=\"" . $nv_redirect2 . "\">" . $lang_module['rpc_ping_page'] . "</a></strong>";
-                    $contents .= " - <strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
-                    $contents .= "</div>";
-                    $contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . $nv_redirect2 . "\" />";
+                    $contents .= '<div align="center">';
+                    $contents .= '<strong>' . $msg1 . "</strong><br /><br />\n";
+                    $contents .= '<img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
+                    $contents .= '<strong><a href="' . $nv_redirect2 . '">' . $lang_module['rpc_ping_page'] . '</a></strong>';
+                    $contents .= ' - <strong><a href="' . $nv_redirect . '">' . $msg2 . '</a></strong>';
+                    $contents .= '</div>';
+                    $contents .= '<meta http-equiv="refresh" content="3;url=' . $nv_redirect2 . '" />';
                 }
             } else {
-                $contents = "<meta http-equiv=\"refresh\" content=\"1;url=" . $nv_redirect . "\" />";
+                $contents = '<meta http-equiv="refresh" content="1;url=' . $nv_redirect . '" />';
             }
         } else {
-            $contents = "<meta http-equiv=\"refresh\" content=\"1;url=" . $nv_redirect . "\" />";
+            $contents = '<meta http-equiv="refresh" content="1;url=' . $nv_redirect . '" />';
         }
     }
 } else {

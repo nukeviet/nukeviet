@@ -20,7 +20,7 @@ $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lan
 $sql_create_module = $sql_drop_module;
 
 // Menu trong các bộ menu
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_rows (
  id mediumint(5) NOT NULL AUTO_INCREMENT,
  parentid mediumint(5) unsigned NOT NULL,
  mid smallint(5) NOT NULL DEFAULT '0',
@@ -45,9 +45,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 ) ENGINE=MyISAM";
 
 // Các bộ menu
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ' (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  title varchar(50) NOT NULL,
  PRIMARY KEY (id),
  UNIQUE KEY title (title)
-) ENGINE=MyISAM";
+) ENGINE=MyISAM';

@@ -84,7 +84,7 @@ function deleteAvatar()
             nv_deletefile(NV_ROOTDIR . '/' . $oldAvatar);
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET photo='', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $user_info['userid']);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET photo='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $user_info['userid']);
         $stmt->execute();
     }
 }
@@ -93,7 +93,7 @@ $page_title = $lang_module['avatar_pagetitle'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 $canonicalUrl = getCanonicalUrl($page_url);
 
-$array = array();
+$array = [];
 $array['success'] = 0;
 $array['error'] = '';
 $array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
@@ -112,11 +112,11 @@ if (defined('SSO_CLIENT_DOMAIN')) {
 //Xoa avatar
 if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post')) {
     deleteAvatar();
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'input' => 'ok',
         'mess' => $lang_module['editinfo_ok']
-    ));
+    ]);
 }
 
 $global_config['avatar_width'] = $global_users_config['avatar_width'];
@@ -132,9 +132,9 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
     if ($array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
         $array['error'] = $lang_module['avatar_error_data'];
     } else {
-        $upload = new NukeViet\Files\Upload(array(
+        $upload = new NukeViet\Files\Upload([
             'images'
-        ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE);
+        ], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE);
         $upload->setLanguage($lang_global);
 
         // Storage in temp dir

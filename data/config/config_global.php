@@ -5,7 +5,7 @@
  * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2021 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Tue, 11 May 2021 14:38:58 GMT
+ * @Createdate Mon, 14 Jun 2021 03:29:18 GMT
  */
 
 if (!defined('NV_MAINFILE')) {
@@ -31,7 +31,7 @@ $global_config['admin_2step_default']='code';
 $global_config['admin_2step_opt']='code';
 $global_config['admin_check_pass_time']=1800;
 $global_config['allow_null_origin']=0;
-$global_config['allow_sitelangs']=['vi'];
+$global_config['allow_sitelangs']=['vi','en'];
 $global_config['authors_detail_main']=0;
 $global_config['autocheckupdate']=1;
 $global_config['autoupdatetime']=24;
@@ -42,7 +42,7 @@ $global_config['cookie_httponly']=1;
 $global_config['cookie_notice_popup']=0;
 $global_config['cookie_prefix']='nv4c_z0FZ1';
 $global_config['cookie_SameSite']='Lax';
-$global_config['cookie_secure']=0;
+$global_config['cookie_secure']=1;
 $global_config['crossadmin_restrict']=1;
 $global_config['crossadmin_valid_domains']=[];
 $global_config['crossadmin_valid_ips']=[];
@@ -66,19 +66,19 @@ $global_config['ftp_path']='/';
 $global_config['ftp_port']=21;
 $global_config['ftp_server']='localhost';
 $global_config['ftp_user_name']='';
-$global_config['ftp_user_pass']='';
+$global_config['ftp_user_pass']='DnOMFS3f4w0VWz_lVANhZQ,,';
 $global_config['gzip_method']=1;
 $global_config['ip_allow_null_origin']=[];
 $global_config['is_flood_blocker']=1;
 $global_config['is_login_blocker']=1;
 $global_config['lang_geo']=0;
-$global_config['lang_multi']=0;
+$global_config['lang_multi']=1;
 $global_config['login_number_tracking']=5;
 $global_config['login_time_ban']=30;
 $global_config['login_time_tracking']=5;
 $global_config['max_requests_300']=150;
 $global_config['max_requests_60']=40;
-$global_config['my_domains']='nukeviet.vn';
+$global_config['my_domains']='nukeviet.site,nukeviet.tk';
 $global_config['notification_active']=1;
 $global_config['notification_autodel']=15;
 $global_config['nv_auto_resize']=1;
@@ -88,8 +88,8 @@ $global_config['nv_overflow_size']=0;
 $global_config['nv_static_url']='';
 $global_config['proxy_blocker']=0;
 $global_config['read_type']=0;
-$global_config['recaptcha_secretkey']='';
-$global_config['recaptcha_sitekey']='';
+$global_config['recaptcha_secretkey']='k6UPRnOJa_aL4yAXFnpjrRR-t9B5MwFIdFqOZO5c43nisaSO0JG8cr--omV8dJnt';
+$global_config['recaptcha_sitekey']='6LexZnAUAAAAAD7QnyLgy_B-70sjosv-P9JEnKea';
 $global_config['recaptcha_type']='image';
 $global_config['recaptcha_ver']=2;
 $global_config['remote_api_access']=0;
@@ -97,8 +97,8 @@ $global_config['remote_api_log']=1;
 $global_config['rewrite_enable']=1;
 $global_config['rewrite_endurl']='/';
 $global_config['rewrite_exturl']='.html';
-$global_config['rewrite_op_mod']='news';
-$global_config['rewrite_optional']=1;
+$global_config['rewrite_op_mod']='';
+$global_config['rewrite_optional']=0;
 $global_config['session_prefix']='nv4s_l73T0K';
 $global_config['site_keywords']='NukeViet, portal, mysql, php';
 $global_config['site_lang']='vi';
@@ -106,7 +106,7 @@ $global_config['site_reopening_time']=0;
 $global_config['site_timezone']='byCountry';
 $global_config['spadmin_add_admin']=1;
 $global_config['str_referer_blocker']=0;
-$global_config['timestamp']=0;
+$global_config['timestamp']=1623506896;
 $global_config['two_step_verification']=0;
 $global_config['upload_alt_require']=1;
 $global_config['upload_auto_alt']=1;
@@ -123,7 +123,7 @@ $global_config['send_errors_list']=256;
 $global_config['error_log_path']='data/logs/error_logs';
 $global_config['error_log_filename']='error_log';
 $global_config['error_log_fileext']='log';
-$global_config['setup_langs']=['vi'];
+$global_config['setup_langs']=['vi','en'];
 $global_config['allowed_html_tags']=['embed','object','param','a','b','blockquote','br','caption','col','colgroup','div','em','h1','h2','h3','h4','h5','h6','hr','i','img','li','p','span','strong','s','sub','sup','table','tbody','td','th','tr','u','ul','ol','iframe','figure','figcaption','video','audio','source','track','code','pre'];
 $global_config['engine_allowed']=array('Google'=>array('host_pattern'=>'google.', 'query_param'=>'q'), 'Yahoo'=>array('host_pattern'=>'yahoo.', 'query_param'=>'p'), 'MSN'=>array('host_pattern'=>'search.msn', 'query_param'=>'q'), 'Localhost'=>array('host_pattern'=>'localhost', 'query_param'=>'q'));
 

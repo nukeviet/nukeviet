@@ -102,7 +102,7 @@ $page_title = $lang_module['nv_admin_edit'] . ': ' . $language_array[$dirlang]['
 if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_string('checksess', 'get') == md5($nv_Request->get_int('idfile', 'get') . NV_CHECK_SESSION)) {
     $idfile = $nv_Request->get_int('idfile', 'get');
 
-    list ($idfile, $module, $admin_file, $langtype, $author_lang) = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3);
+    list($idfile, $module, $admin_file, $langtype, $author_lang) = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3);
 
     if (!empty($dirlang) and !empty($module)) {
         if (empty($author_lang)) {
@@ -128,10 +128,10 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
         $i = 1;
         foreach ($array_translator as $lang_key => $lang_value) {
             if ($lang_key != 'langtype') {
-                $xtpl->assign('ARRAY_TRANSLATOR', array(
+                $xtpl->assign('ARRAY_TRANSLATOR', [
                     'lang_key' => $lang_key,
                     'value' => nv_htmlspecialchars($lang_value)
-                ));
+                ]);
 
                 $xtpl->parse('main.array_translator');
             }
@@ -145,13 +145,13 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
 
         $sql = 'SELECT id, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY id ASC';
         $result = $db->query($sql);
-        while (list ($id, $lang_key, $lang_value) = $result->fetch(3)) {
-            $xtpl->assign('ARRAY_DATA', array(
+        while (list($id, $lang_key, $lang_value) = $result->fetch(3)) {
+            $xtpl->assign('ARRAY_DATA', [
                 'key' => $a++,
                 'lang_key' => $lang_key,
                 'value' => nv_htmlspecialchars($lang_value),
                 'id' => $id
-            ));
+            ]);
 
             $xtpl->parse('main.array_data');
         }

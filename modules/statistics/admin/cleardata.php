@@ -24,7 +24,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $alllang = $nv_Request->get_int('alllang', 'post', 0);
     $clearmode = '';
 
-    $query_update = array();
+    $query_update = [];
     $query_update[] = 'last_update=0';
     foreach ($global_config['allow_sitelangs'] as $lang) {
         if ($alllang or $lang == NV_LANG_DATA) {
@@ -39,22 +39,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
     // Xóa máy chủ tìm kiếm
     if ($clearall or $nv_Request->isset_request('bot', 'post')) {
         $clearmode = 'Bot';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='bot'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='bot'");
     }
     // Xóa thống kê theo trình duyệt
     if ($clearall or $nv_Request->isset_request('browser', 'post')) {
         $clearmode = 'Browser';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='browser'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='browser'");
     }
     // Xóa thống kê quốc gia truy cập
     if ($clearall or $nv_Request->isset_request('country', 'post')) {
         $clearmode = 'Country';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='country'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='country'");
     }
     // Xóa thống kê máy chủ tìm kiếm
     if ($clearall or $nv_Request->isset_request('os', 'post')) {
         $clearmode = 'OS';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='os'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='os'");
     }
     // Xóa đường dẫn đến site
     if ($clearall or $nv_Request->isset_request('referer', 'post')) {
@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
     // Xóa bộ đếm lượt truy cập
     if ($clearall or $nv_Request->isset_request('hit', 'post')) {
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type IN('hour', 'dayofweek', 'day', 'month', 'year', 'total', 'c_time')");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type IN('hour', 'dayofweek', 'day', 'month', 'year', 'total', 'c_time')");
     }
 
     $clearmode = $clearall ? 'All' : $clearmode;

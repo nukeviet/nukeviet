@@ -22,18 +22,18 @@ if (!empty($listcid)) {
     // Duyệt các bình luận từ sau ra trước theo thứ tự pid
     $sql = 'SELECT cid, module, area, id, pid, attach FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ') ORDER BY pid DESC';
     $comments = $db->query($sql)->fetchAll();
-    $array_row_id = array();
+    $array_row_id = [];
 
     foreach ($comments as $row) {
         // Xác định các bài viết của các module tương ứng cần cập nhật lại sau khi xóa
         if (!isset($array_row_id[$row['module']])) {
-            $array_row_id[$row['module']] = array();
+            $array_row_id[$row['module']] = [];
         }
-        $array_row_id[$row['module']][$row['id']] = array(
+        $array_row_id[$row['module']][$row['id']] = [
             'module' => $row['module'],
             'area' => $row['area'],
             'id' => $row['id']
-        );
+        ];
 
         // Xóa đính kèm
         if (!empty($row['attach'])) {
@@ -44,7 +44,7 @@ if (!empty($listcid)) {
             $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $row['cid']);
             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET pid=' . $row['pid'] . ' WHERE pid=' . $row['cid']);
         } elseif (!empty($site_mod_comm)) {
-            $array_mod_name = array();
+            $array_mod_name = [];
             foreach ($site_mod_comm as $module_i => $row) {
                 $array_mod_name[] = "'" . $module_i . "'";
             }

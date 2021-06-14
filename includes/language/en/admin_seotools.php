@@ -21,7 +21,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['pagetitle'] = 'Configuration tag "title"';
 $lang_module['metaTagsConfig'] = 'Meta-Tags Configuration';
-$lang_module['linkTagsConfig'] = "Link-Tags Configuration";
+$lang_module['linkTagsConfig'] = 'Link-Tags Configuration';
 $lang_module['sitemapPing'] = 'Sitemap Ping';
 $lang_module['searchEngine'] = 'search Engine';
 $lang_module['searchEngineConfig'] = 'Search Engines Management';
@@ -81,7 +81,7 @@ $lang_module['rpc_ping'] = 'PING when updating data';
 $lang_module['rpc_ping_page'] = 'PING article';
 $lang_module['rpc_finish'] = 'Complete PING process, you may want to transfer the management page article?';
 $lang_module['private_site'] = 'Discourage search engines from indexing this site';
-$lang_module['ogp_image'] = "Default image for Open Graph tags<br/>(best size: 1080px x 1080px)";
+$lang_module['ogp_image'] = 'Default image for Open Graph tags<br/>(best size: 1080px x 1080px)';
 
 $lang_module['linkTags_attribute'] = 'Attribute';
 $lang_module['linkTags_value'] = 'Value';

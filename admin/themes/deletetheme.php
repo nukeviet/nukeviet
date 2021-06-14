@@ -24,9 +24,9 @@ try {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['theme_delete'], 'theme ' . $theme, $admin_info['userid']);
 
         if (preg_match($global_config['check_theme_mobile'], $theme)) {
-            $sth = $db->prepare("UPDATE " . NV_MODULES_TABLE . " SET mobile='' WHERE mobile = :theme");
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . " SET mobile='' WHERE mobile = :theme");
         } else {
-            $sth = $db->prepare("UPDATE " . NV_MODULES_TABLE . " SET theme='' WHERE theme = :theme");
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . " SET theme='' WHERE theme = :theme");
         }
         $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();

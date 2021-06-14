@@ -145,7 +145,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $femail = nv_substr($nv_Request->get_title('femail', 'post', '', 1), 0, 100);
     }
 
-    $_fname = str_replace("&#039;", "'", $fname);
+    $_fname = str_replace('&#039;', "'", $fname);
     if (empty($fname) or !preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $_fname)) {
         nv_jsonOutput([
             'status' => 'error',

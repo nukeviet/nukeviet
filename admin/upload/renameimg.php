@@ -8,21 +8,21 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
-if (! isset($check_allow_upload_dir['rename_file'])) {
+if (!isset($check_allow_upload_dir['rename_file'])) {
     die('ERROR_' . $lang_module['notlevel']);
 }
 
 $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES);
 $file = basename($file);
 
-if (empty($file) or ! nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
+if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
     die('ERROR_' . $lang_module['errorNotSelectFile']);
 }
 
@@ -47,7 +47,7 @@ if ($file != $newname) {
     }
 
     $newname = $newname2;
-    if (! @rename(NV_ROOTDIR . '/' . $path . '/' . $file, NV_ROOTDIR . '/' . $path . '/' . $newname)) {
+    if (!@rename(NV_ROOTDIR . '/' . $path . '/' . $file, NV_ROOTDIR . '/' . $path . '/' . $newname)) {
         die('ERROR_' . $lang_module['errorNotRenameFile']);
     }
 
@@ -58,13 +58,13 @@ if ($file != $newname) {
     if (isset($array_dirname[$path])) {
         $info = nv_getFileInfo($path, $newname);
 
-        $sth = $db->prepare("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET name = '" . $info['name'] . "', src = '" . $info['src'] . "', title = '" . $newname . "', alt = :newalt WHERE did = " . $array_dirname[$path] . " AND title = '" . $file . "'");
+        $sth = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_file SET name = '" . $info['name'] . "', src = '" . $info['src'] . "', title = '" . $newname . "', alt = :newalt WHERE did = " . $array_dirname[$path] . " AND title = '" . $file . "'");
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
         $sth->execute();
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['rename'], $path . '/' . $file . ' -> ' . $path . '/' . $newname, $admin_info['userid']);
 } else {
-    $sth = $db->prepare("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET alt = :newalt WHERE did = " . $array_dirname[$path] . " AND title = '" . $file . "'");
+    $sth = $db->prepare('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET alt = :newalt WHERE did = ' . $array_dirname[$path] . " AND title = '" . $file . "'");
     $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
     $sth->execute();
 

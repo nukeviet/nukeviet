@@ -8,17 +8,17 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $set_layout_site = false;
-$select_options = array();
-$theme_array = nv_scandir(NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ));
+$select_options = [];
+$theme_array = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);
 
 if ($global_config['idsite']) {
     $theme = $db->query('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
-    if (! empty($theme)) {
+    if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
 
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
@@ -38,7 +38,7 @@ foreach ($theme_array as $themes_i) {
 $selectthemes_old = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 $selectthemes = $nv_Request->get_string('selectthemes', 'get', $selectthemes_old);
 
-if (! in_array($selectthemes, $theme_array)) {
+if (!in_array($selectthemes, $theme_array)) {
     $selectthemes = 'default';
 }
 
@@ -48,10 +48,10 @@ if ($selectthemes_old != $selectthemes) {
 
 $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
 
-if (! empty($layout_array)) {
+if (!empty($layout_array)) {
     $layout_array = preg_replace($global_config['check_op_layout'], '\\1', $layout_array);
 }
-$array_layout_func_default = array();
+$array_layout_func_default = [];
 
 if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
@@ -132,7 +132,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         }
     }
 
-    $array_layout_func_data = array();
+    $array_layout_func_data = [];
     $sth = $db->prepare('SELECT func_id, layout FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme');
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
@@ -140,7 +140,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         $array_layout_func_data[$func_id] = $layout;
     }
 
-    if (! isset($array_layout_func_data[0])) {
+    if (!isset($array_layout_func_data[0])) {
         $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes
 			(func_id, layout, theme) VALUES
 			(0, :layout, :theme)');
@@ -158,13 +158,13 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         $set_layout_site = true;
     }
 
-    $array_layout_func = array();
+    $array_layout_func = [];
     $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
     while (list($func_id, $func_name, $func_custom_name, $in_module) = $fnresult->fetch(3)) {
-        if (isset($array_layout_func_data[$func_id]) and ! empty($array_layout_func_data[$func_id])) {
+        if (isset($array_layout_func_data[$func_id]) and !empty($array_layout_func_data[$func_id])) {
             $layout_name = $array_layout_func_data[$func_id];
 
-            if (! in_array($layout_name, $layout_array)) {
+            if (!in_array($layout_name, $layout_array)) {
                 $layout_name = $layoutdefault;
 
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id= :func_id AND theme= :theme');
@@ -186,7 +186,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
             $set_layout_site = true;
         }
 
-        $array_layout_func[$in_module][$func_name] = array( $func_id, $func_custom_name, $layout_name );
+        $array_layout_func[$in_module][$func_name] = [$func_id, $func_custom_name, $layout_name];
     }
 
     if ($set_layout_site) {
@@ -212,7 +212,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
 
             foreach ($array_layout_func_mod as $func_name => $func_arr_val) {
                 foreach ($layout_array as $value) {
-                    $xtpl->assign('OPTION', array( 'key' => $value, 'selected' => ($func_arr_val[2] == $value) ? ' selected="selected"' : '' ));
+                    $xtpl->assign('OPTION', ['key' => $value, 'selected' => ($func_arr_val[2] == $value) ? ' selected="selected"' : '']);
                     $xtpl->parse('main.loop.func.option');
                 }
 

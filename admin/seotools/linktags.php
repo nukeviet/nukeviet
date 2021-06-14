@@ -93,7 +93,7 @@ if ($nv_Request->isset_request('del,key', 'post') and $checkss == $nv_Request->g
             $array2XML->saveXML($linktags, 'link', $file_linktags, $global_config['site_charset']);
         }
     }
-    echo "OK";
+    echo 'OK';
     exit();
 }
 

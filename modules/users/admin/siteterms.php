@@ -8,19 +8,19 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 if (defined('NV_EDITOR')) {
-    require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
+    require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 $page_title = $lang_module['siteterms'];
 
 $error = $content = '';
 
-$sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
+$sql = 'SELECT content FROM ' . NV_MOD_TABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
     $mode = 'add';
@@ -37,7 +37,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $error = $lang_module['error_content'];
     } elseif ($checkss == $nv_Request->get_string('checkss', 'post')) {
         if ($mode == 'edit') {
-            $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . "_config SET
 				content= :content,
 				edit_time='" . NV_CURRENTTIME . "'
 				WHERE config ='siteterms_" . NV_LANG_DATA . "'");
@@ -45,8 +45,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen($content));
             $stmt->execute();
         } else {
-            $stmt = $db->prepare("INSERT INTO " . NV_MOD_TABLE . "_config VALUES (
-				'siteterms_" . NV_LANG_DATA . "', :content, " . NV_CURRENTTIME . ")");
+            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_config VALUES (
+				'siteterms_" . NV_LANG_DATA . "', :content, " . NV_CURRENTTIME . ')');
         }
 
         $stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen($content));
@@ -67,7 +67,7 @@ $xtpl->assign('CHECKSS', $checkss);
 
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }

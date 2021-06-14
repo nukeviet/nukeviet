@@ -65,7 +65,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $position = $nv_Request->get_title('position', 'post', '', 1);
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    $admin_theme =  (!empty($admin_theme) and in_array($admin_theme, $adminThemes))? $admin_theme : '';
+    $admin_theme = (!empty($admin_theme) and in_array($admin_theme, $adminThemes)) ? $admin_theme : '';
 
     $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
@@ -73,7 +73,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     } else {
         $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
     }
-    list ($userid, $username, $active, $_group_id, $_in_groups) = $db->query($sql)->fetch(3);
+    list($userid, $username, $active, $_group_id, $_in_groups) = $db->query($sql)->fetch(3);
     if (empty($userid)) {
         nv_htmlOutput($lang_module['add_error_choose']);
     }
@@ -123,9 +123,9 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
     $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-    $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "
+    $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '
         (admin_id, editor, lev, files_level, position, admin_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
-        ( " . $userid . ", :editor, " . $lev . ", :files_level, :position, :admin_theme, 0,'', '', 0, '', ''	)");
+        ( ' . $userid . ', :editor, ' . $lev . ", :files_level, :position, :admin_theme, 0,'', '', 0, '', ''	)");
     $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
     $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
@@ -159,7 +159,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
             $_in_groups = array_filter(array_unique(array_map('trim', $_in_groups)));
             $_in_groups = empty($_in_groups) ? '' : implode(',', $_in_groups);
 
-            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET group_id=" . $lev . ", in_groups=" . $db->quote($_in_groups) . " WHERE userid=" . $userid;
+            $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $lev . ', in_groups=' . $db->quote($_in_groups) . ' WHERE userid=' . $userid;
             $db->query($sql);
         }
 
@@ -185,7 +185,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
 } else {
     $position = '';
-    $admin_theme =  '';
+    $admin_theme = '';
     $userid = $nv_Request->get_title('userid', 'get');
     $editor = 'ckeditor';
     $lev = 3;
@@ -324,7 +324,7 @@ $xtpl->assign('STYLE_MODS', $contents['lev'][1] == 3 ? 'visibility:visible;displ
 
 $xtpl->assign('USERID', $userid ? $userid : '');
 
-if (defined("NV_IS_GODADMIN")) {
+if (defined('NV_IS_GODADMIN')) {
     $xtpl->parse('add.show_lev_2');
 }
 

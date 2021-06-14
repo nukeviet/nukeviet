@@ -65,7 +65,7 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
     $adminscomm = array_intersect($adminscomm, $admins_module_name);
     $array_config['adminscomm'] = implode(',', $adminscomm);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' and module = :module_name and config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' and module = :module_name and config_name = :config_name");
     $sth->bindParam(':module_name', $mod_name, PDO::PARAM_STR);
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);

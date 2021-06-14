@@ -8,15 +8,15 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
-    $thumb_type = $nv_Request->get_typed_array('thumb_type', 'post', 'int', array());
-    $thumb_width = $nv_Request->get_typed_array('thumb_width', 'post', 'int', array());
-    $thumb_height = $nv_Request->get_typed_array('thumb_height', 'post', 'int', array());
-    $thumb_quality = $nv_Request->get_typed_array('thumb_quality', 'post', 'int', array());
+    $thumb_type = $nv_Request->get_typed_array('thumb_type', 'post', 'int', []);
+    $thumb_width = $nv_Request->get_typed_array('thumb_width', 'post', 'int', []);
+    $thumb_height = $nv_Request->get_typed_array('thumb_height', 'post', 'int', []);
+    $thumb_quality = $nv_Request->get_typed_array('thumb_quality', 'post', 'int', []);
 
     $did = $nv_Request->get_int('other_dir', 'post', 0);
     $other_type = $nv_Request->get_int('other_type', 'post', 0);
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 }
 
 if ($nv_Request->isset_request('getexample', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
+    if (!defined('NV_IS_AJAX')) {
         die('Wrong URL');
     }
 
@@ -64,16 +64,16 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     $thumb_quality = $nv_Request->get_int('q', 'post', 0);
 
     if ((!empty($thumb_dir) and !in_array($thumb_dir, $array_dirname)) or $thumb_type <= 0 or $thumb_width <= 0 or $thumb_height <= 0 or $thumb_quality <= 0 or $thumb_quality > 100) {
-        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($lang_module['prViewExampleError1'], $lang_module['prViewExampleError'])));
+        nv_jsonOutput(['status' => 'error', 'message' => nv_theme_alert($lang_module['prViewExampleError1'], $lang_module['prViewExampleError'])]);
     }
 
-    $return = array('status' => 'error');
+    $return = ['status' => 'error'];
 
     // T?m ra c�i ?nh demo
-    $image_demo = array();
+    $image_demo = [];
 
     if ($thumb_dir) {
-        $select_dir = array_intersect($array_dirname, array($thumb_dir));
+        $select_dir = array_intersect($array_dirname, [$thumb_dir]);
         $select_dir = key($select_dir);
 
         foreach ($array_dirname as $dirname => $did) {
@@ -91,11 +91,11 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     }
 
     if (empty($image_demo)) {
-        nv_jsonOutput(array('status' => 'error', 'message' => nv_theme_alert($lang_module['file_no_exists'], $lang_module['prViewExampleError2'])));
+        nv_jsonOutput(['status' => 'error', 'message' => nv_theme_alert($lang_module['file_no_exists'], $lang_module['prViewExampleError2'])]);
     }
 
     $image_demo['sizes'] = explode('|', $image_demo['sizes']);
-    $result = array();
+    $result = [];
     $result['status'] = 'success';
     $result['src'] = NV_BASE_SITEURL . $image_demo['dirname'] . '/' . $image_demo['title'];
     $result['width'] = $image_demo['sizes'][0];
@@ -149,7 +149,7 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
 
-$thumb_type = array();
+$thumb_type = [];
 $i = 0;
 $lang_module['thumb_type_0'] = '';
 
@@ -164,11 +164,11 @@ while ($data = $result->fetch()) {
     }
     if ($data['thumb_type']) {
         for ($id = $forid; $id < 6; $id++) {
-            $type = array(
+            $type = [
                 'id' => $id,
                 'selected' => ($id == $data['thumb_type']) ? ' selected="selected"' : '',
                 'name' => $lang_module['thumb_type_' . $id]
-            );
+            ];
             $xtpl->assign('TYPE', $type);
             $xtpl->parse('main.loop.thumb_type');
         }
@@ -181,7 +181,7 @@ while ($data = $result->fetch()) {
 }
 
 for ($id = 0; $id < 5; $id++) {
-    $type = array( 'id' => $id, 'name' => $lang_module['thumb_type_' . $id] );
+    $type = ['id' => $id, 'name' => $lang_module['thumb_type_' . $id]];
     $xtpl->assign('TYPE', $type);
     $xtpl->parse('main.other_type');
 }

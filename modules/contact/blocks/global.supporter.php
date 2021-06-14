@@ -13,15 +13,13 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_contact_supporter')) {
-
     function nv_contact_supporter($module)
     {
         global $db, $nv_Cache, $site_mods, $global_config, $lang_global;
 
         if (isset($site_mods[$module])) {
-
             $cache_file = NV_LANG_DATA . '_block_contact_supporter' . NV_CACHE_PREFIX . '.cache';
-            $array_data = array();
+            $array_data = [];
 
             $sql = 'SELECT id, full_name, alias, phone, email, others, image FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight';
             $_array_department = $nv_Cache->db($sql, 'id', $module);
@@ -30,7 +28,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
                 $array_data = unserialize($cache);
             } else {
                 foreach ($_array_department as $array_department) {
-
                     $db->sqlreset()
                         ->select('*')
                         ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_supporter')
@@ -67,7 +64,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
             $xtpl->assign('MODULE', $module);
 
             foreach ($array_data as $departmentid => $supporter) {
-
                 if (!empty($supporter)) {
                     $row = $_array_department[$departmentid];
                     if (!empty($row['image'])) {
@@ -94,18 +90,18 @@ if (!nv_function_exists('nv_contact_supporter')) {
                             foreach ($nums as $k => $num) {
                                 unset($m);
                                 if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
-                                    $phone = array(
+                                    $phone = [
                                         'number' => nv_htmlspecialchars($m[1]),
                                         'href' => $m[2]
-                                    );
+                                    ];
                                     $xtpl->assign('PHONE', $phone);
                                     $xtpl->parse('main.loop.supporter.phone.item.href');
                                     $xtpl->parse('main.loop.supporter.phone.item.href2');
                                 } else {
                                     $num = preg_replace("/\[[^\]]*\]/", '', $num);
-                                    $phone = array(
+                                    $phone = [
                                         'number' => nv_htmlspecialchars($num)
-                                    );
+                                    ];
                                     $xtpl->assign('PHONE', $phone);
                                 }
                                 if ($k) {
@@ -141,10 +137,10 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                         if (strtolower($key) == 'yahoo') {
                                             $ys = array_map('trim', explode(',', $value));
                                             foreach ($ys as $k => $y) {
-                                                $xtpl->assign('YAHOO', array(
+                                                $xtpl->assign('YAHOO', [
                                                     'name' => $key,
                                                     'value' => $y
-                                                ));
+                                                ]);
                                                 if ($k) {
                                                     $xtpl->parse('main.loop.supporter.yahoo.item.comma');
                                                 }
@@ -154,10 +150,10 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                         } elseif (strtolower($key) == 'skype') {
                                             $ss = array_map('trim', explode(',', $value));
                                             foreach ($ss as $k => $s) {
-                                                $xtpl->assign('SKYPE', array(
+                                                $xtpl->assign('SKYPE', [
                                                     'name' => $key,
                                                     'value' => $s
-                                                ));
+                                                ]);
                                                 if ($k) {
                                                     $xtpl->parse('main.loop.supporter.skype.item.comma');
                                                 }
@@ -167,10 +163,10 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                         } elseif (strtolower($key) == 'viber') {
                                             $ss = array_map('trim', explode(',', $value));
                                             foreach ($ss as $k => $s) {
-                                                $xtpl->assign('VIBER', array(
+                                                $xtpl->assign('VIBER', [
                                                     'name' => $key,
                                                     'value' => $s
-                                                ));
+                                                ]);
                                                 if ($k) {
                                                     $xtpl->parse('main.loop.supporter.viber.item.comma');
                                                 }
@@ -180,10 +176,10 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                         } elseif (strtolower($key) == 'icq') {
                                             $ss = array_map('trim', explode(',', $value));
                                             foreach ($ss as $k => $s) {
-                                                $xtpl->assign('ICQ', array(
+                                                $xtpl->assign('ICQ', [
                                                     'name' => $key,
                                                     'value' => $s
-                                                ));
+                                                ]);
                                                 if ($k) {
                                                     $xtpl->parse('main.loop.supporter.icq.item.comma');
                                                 }
@@ -193,10 +189,10 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                         } elseif (strtolower($key) == 'whatsapp') {
                                             $ss = array_map('trim', explode(',', $value));
                                             foreach ($ss as $k => $s) {
-                                                $xtpl->assign('WHATSAPP', array(
+                                                $xtpl->assign('WHATSAPP', [
                                                     'name' => $key,
                                                     'value' => $s
-                                                ));
+                                                ]);
                                                 if ($k) {
                                                     $xtpl->parse('main.loop.supporter.whatsapp.item.comma');
                                                 }
@@ -204,10 +200,10 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                             }
                                             $xtpl->parse('main.loop.supporter.whatsapp');
                                         } else {
-                                            $xtpl->assign('OTHER', array(
+                                            $xtpl->assign('OTHER', [
                                                 'name' => $key,
                                                 'value' => $value
-                                            ));
+                                            ]);
                                             $xtpl->parse('main.loop.supporter.other');
                                         }
                                     }

@@ -326,25 +326,25 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $email_verification_time = $row['email_verification_time'];
     }
 
-    $db->query("UPDATE " . NV_MOD_TABLE . " SET
-        group_id=" . $_user['in_groups_default'] . ",
-        username=" . $db->quote($_user['username']) . ",
+    $db->query('UPDATE ' . NV_MOD_TABLE . ' SET
+        group_id=' . $_user['in_groups_default'] . ',
+        username=' . $db->quote($_user['username']) . ",
         md5username='" . nv_md5safe($_user['username']) . "',
-        password=" . $db->quote($password) . ",
-        email=" . $db->quote($_user['email']) . ",
-        first_name=" . $db->quote($_user['first_name']) . ",
-        last_name=" . $db->quote($_user['last_name']) . ",
-        gender=" . $db->quote($_user['gender']) . ",
-        photo=" . $db->quote(nv_unhtmlspecialchars($_user['photo'])) . ",
-        birthday=" . intval($_user['birthday']) . ",
-        sig=" . $db->quote($_user['sig']) . ",
-        question=" . $db->quote($_user['question']) . ",
-        answer=" . $db->quote($_user['answer']) . ",
-        view_mail=" . $_user['view_mail'] . ",
+        password=" . $db->quote($password) . ',
+        email=' . $db->quote($_user['email']) . ',
+        first_name=' . $db->quote($_user['first_name']) . ',
+        last_name=' . $db->quote($_user['last_name']) . ',
+        gender=' . $db->quote($_user['gender']) . ',
+        photo=' . $db->quote(nv_unhtmlspecialchars($_user['photo'])) . ',
+        birthday=' . intval($_user['birthday']) . ',
+        sig=' . $db->quote($_user['sig']) . ',
+        question=' . $db->quote($_user['question']) . ',
+        answer=' . $db->quote($_user['answer']) . ',
+        view_mail=' . $_user['view_mail'] . ",
         in_groups='" . implode(',', $in_groups) . "',
-        email_verification_time=" . $email_verification_time . ",
-        last_update=" . NV_CURRENTTIME . "
-    WHERE userid=" . $userid);
+        email_verification_time=" . $email_verification_time . ',
+        last_update=' . NV_CURRENTTIME . '
+    WHERE userid=' . $userid);
 
     if (!empty($query_field)) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);

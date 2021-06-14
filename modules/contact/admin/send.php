@@ -19,7 +19,7 @@ if (defined('NV_EDITOR')) {
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
-$post = array();
+$post = [];
 $post['title'] = $nv_Request->get_title('title', 'post');
 $post['email'] = $nv_Request->get_title('email', 'post');
 
@@ -53,7 +53,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $error = $lang_global['error_sendmail_admin'] . ': ' . $mail->ErrorInfo;
         }
     }
-
 } else {
     require_once NV_ROOTDIR . '/modules/contact/sign.php';
     $mess_content .= $sign_content;

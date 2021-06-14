@@ -25,12 +25,12 @@ if (!nv_function_exists('nv_block_news_cat')) {
     {
         global $nv_Cache, $site_mods;
 
-        $tooltip_position = array(
+        $tooltip_position = [
             'top' => $lang_block['tooltip_position_top'],
             'bottom' => $lang_block['tooltip_position_bottom'],
             'left' => $lang_block['tooltip_position_left'],
             'right' => $lang_block['tooltip_position_right']
-        );
+        ];
 
         $html = '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $lang_block['catid'] . ':</label>';
@@ -38,7 +38,7 @@ if (!nv_function_exists('nv_block_news_cat')) {
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
         if (!is_array($data_block['catid'])) {
-            $data_block['catid'] = array($data_block['catid']);
+            $data_block['catid'] = [$data_block['catid']];
         }
 
         $html .= '<div class="col-sm-18">';
@@ -107,10 +107,10 @@ if (!nv_function_exists('nv_block_news_cat')) {
     function nv_block_config_news_cat_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
-        $return['config']['catid'] = $nv_Request->get_array('config_catid', 'post', array());
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
+        $return['config']['catid'] = $nv_Request->get_array('config_catid', 'post', []);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 20);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
@@ -212,7 +212,7 @@ if (defined('NV_SYSTEM')) {
             $module_array_cat = $global_array_cat;
             unset($module_array_cat[0]);
         } else {
-            $module_array_cat = array();
+            $module_array_cat = [];
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
             if (!empty($list)) {

@@ -8,10 +8,9 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
-
 
 $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post');
 if (empty($global_config['lang_multi'])) {
@@ -67,8 +66,8 @@ if (empty($global_config['lang_multi'])) {
         $site_lang = $global_config['site_lang'];
 
         if ($global_config['lang_geo']) {
-            $config_geo = array();
-            include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php' ;
+            $config_geo = [];
+            include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php';
             if (isset($config_geo[$client_info['country']])) {
                 $cookie = $config_geo[$client_info['country']];
                 if (preg_match('/^[a-z]{2}$/', $cookie) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie . '/global.php')) {

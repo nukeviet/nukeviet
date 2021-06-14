@@ -30,7 +30,7 @@ if (!$author_info['id']) {
 if (!empty($author_info['image'])) {
     $author_info['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $author_info['image'];
 }
-$author_info['add_time_format'] = nv_date("d/m/Y", $author_info['add_time']);
+$author_info['add_time_format'] = nv_date('d/m/Y', $author_info['add_time']);
 
 $page_title = $author_info['pseudonym'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $author_info['alias'];

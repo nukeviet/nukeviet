@@ -22,14 +22,14 @@ if (empty($topictitle)) {
 
 $page_title = $lang_module['topic_page'] . ': ' . $topictitle;
 
-$global_array_cat = array();
+$global_array_cat = [];
 
 $sql = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $result = $db_slave->query($sql);
-while (list ($catid_i, $alias_i) = $result->fetch(3)) {
-    $global_array_cat[$catid_i] = array(
+while (list($catid_i, $alias_i) = $result->fetch(3)) {
+    $global_array_cat[$catid_i] = [
         'alias' => $alias_i
-    );
+    ];
 }
 $per_page = 50;
 

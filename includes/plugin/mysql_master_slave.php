@@ -8,7 +8,7 @@
  * @Createdate Sat, 07 Mar 2015 03:43:56 GMT
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 

@@ -28,7 +28,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
     $array['captcha_type'] = $nv_Request->get_string('captcha_type', 'post', '');
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE config_name=:config_name AND lang = '" . NV_LANG_DATA . "' AND module='" . $module_name . "'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE config_name=:config_name AND lang = '" . NV_LANG_DATA . "' AND module='" . $module_name . "'");
     foreach ($array as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR, strlen($config_value));
@@ -51,7 +51,7 @@ $array['bodytext'] = nv_htmlspecialchars(nv_editor_br2nl($array['bodytext']));
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $array['bodytext'] = nv_aleditor('bodytext', '100%', '300px', $array['bodytext']);
 } else {
-    $array['bodytext'] = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"8\" class=\"form-control\">" . $array['bodytext'] . "</textarea>";
+    $array['bodytext'] = '<textarea style="width: 100%" name="bodytext" id="bodytext" cols="20" rows="8" class="form-control">' . $array['bodytext'] . '</textarea>';
 }
 
 $xtpl->assign('DATA', $array);

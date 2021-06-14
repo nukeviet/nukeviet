@@ -472,26 +472,26 @@ $installMods['two-step-verification'] = [
 $company = [];
 $company['company_name'] = $install_lang['vinades_fullname'];
 $company['company_address'] = $install_lang['vinades_address'];
-$company['company_sortname'] = "VINADES.,JSC";
-$company['company_regcode'] = "";
-$company['company_regplace'] = "";
-$company['company_licensenumber'] = "";
-$company['company_responsibility'] = "";
+$company['company_sortname'] = 'VINADES.,JSC';
+$company['company_regcode'] = '';
+$company['company_regplace'] = '';
+$company['company_licensenumber'] = '';
+$company['company_responsibility'] = '';
 $company['company_showmap'] = 1;
 $company['company_mapurl'] = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2634.116366996857!2d105.79399620326203!3d20.9844946314258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac93055e2f2f%3A0x91f4b423089193dd!2zQ8O0bmcgdHkgQ-G7lSBwaOG6p24gUGjDoXQgdHJp4buDbiBOZ3Xhu5NuIG3hu58gVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1558315703646!5m2!1svi!2s';
-$company['company_phone'] = "+84-24-85872007[+842485872007]|+84-904762534[+84904762534]";
-$company['company_fax'] = "+84-24-35500914";
-$company['company_email'] = "contact@vinades.vn";
-$company['company_website'] = "http://vinades.vn";
+$company['company_phone'] = '+84-24-85872007[+842485872007]|+84-904762534[+84904762534]';
+$company['company_fax'] = '+84-24-35500914';
+$company['company_email'] = 'contact@vinades.vn';
+$company['company_website'] = 'http://vinades.vn';
 $company = serialize($company);
 
 /**
  * Social
  */
 $social = [];
-$social['facebook'] = "http://www.facebook.com/nukeviet";
-$social['youtube'] = "https://www.youtube.com/user/nukeviet";
-$social['twitter'] = "https://twitter.com/nukeviet";
+$social['facebook'] = 'http://www.facebook.com/nukeviet';
+$social['youtube'] = 'https://www.youtube.com/user/nukeviet';
+$social['twitter'] = 'https://twitter.com/nukeviet';
 $social = serialize($social);
 
 /**
@@ -1059,9 +1059,9 @@ foreach ($blocks_weight as $block_weight) {
     $sth->execute($block_weight);
 }
 
-$db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['nukeviet_description']) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='" . $lang_data . "'");
-$db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['disable_site_content']) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'");
-file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/disable_site_content." . $lang_data . ".txt", $install_lang['disable_site_content'], LOCK_EX);
+$db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $db->quote($install_lang['nukeviet_description']) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='" . $lang_data . "'");
+$db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $db->quote($install_lang['disable_site_content']) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'");
+file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $lang_data . '.txt', $install_lang['disable_site_content'], LOCK_EX);
 
 $result = $db->query('SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC');
 while (list($id, $run_func) = $result->fetch(3)) {
@@ -1069,11 +1069,11 @@ while (list($id, $run_func) = $result->fetch(3)) {
     $db->query('UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote($cron_name) . ' WHERE id=' . $id);
 }
 
-$db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = '" . $lang_data . "' AND module = 'global' AND config_name = 'site_theme'");
+$db->query('UPDATE ' . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = '" . $lang_data . "' AND module = 'global' AND config_name = 'site_theme'");
 
-$result = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='" . $global_config['site_home_module'] . "'");
+$result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules where title='" . $global_config['site_home_module'] . "'");
 if ($result->fetchColumn()) {
-    $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'");
+    $db->query('UPDATE ' . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'");
 }
 
 if (!empty($menu_rows_lev0)) {
@@ -1084,7 +1084,7 @@ if (!empty($menu_rows_lev0)) {
         return isset($installMods[$k]);
     }, ARRAY_FILTER_USE_KEY);
 
-    $result = $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
+    $result = $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
 
     $is_yes_sub = !empty($menu_rows_lev1) ? array_unique(array_keys($menu_rows_lev1)) : [];
     $menu_y_sub = [];
@@ -1095,7 +1095,7 @@ if (!empty($menu_rows_lev0)) {
         }
     }
 
-    $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows (id, parentid, mid, title, link, weight, sort, lev, subitem, groups_view, module_name, op, target, status) VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)");
+    $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_menu_rows (id, parentid, mid, title, link, weight, sort, lev, subitem, groups_view, module_name, op, target, status) VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)');
 
     $a = 1;
     $b = 1;
@@ -1120,7 +1120,9 @@ if (!empty($menu_rows_lev0)) {
 
     ksort($executes);
     foreach ($executes as $id => $execute) {
-        if (!empty($subitem[$id])) $execute[7] = implode(",", $subitem[$id]);
+        if (!empty($subitem[$id])) {
+            $execute[7] = implode(',', $subitem[$id]);
+        }
         $sth->execute($execute);
     }
 }

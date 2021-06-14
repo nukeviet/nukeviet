@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 22:2
  */
 
-if (! defined('NV_IS_FILE_SITEINFO')) {
+if (!defined('NV_IS_FILE_SITEINFO')) {
     die('Stop!!!');
 }
 
@@ -20,9 +20,9 @@ $xtpl = new XTemplate('environment_php.tpl', NV_ROOTDIR . '/themes/' . $global_c
 
 $array = phpinfo_array(16, 1);
 $caption = $lang_module['environment_php'];
-$thead = array( $lang_module['variable'], $lang_module['value'] );
+$thead = [$lang_module['variable'], $lang_module['value']];
 
-if (! empty($array['Environment'])) {
+if (!empty($array['Environment'])) {
     $xtpl->assign('CAPTION', $caption);
     $xtpl->assign('THEAD0', $thead[0]);
     $xtpl->assign('THEAD1', $thead[1]);

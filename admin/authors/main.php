@@ -61,15 +61,15 @@ if ($numrows) {
         $last_agent = $row['last_agent'];
 
         $_browser = new NukeViet\Client\Browser($last_agent);
-        $browser = array( 'key' => $_browser->getBrowserKey(), 'name' => $_browser->getBrowser() );
-        $os = array( 'key' => $_browser->getPlatformKey(), 'name' => $_browser->getPlatform() );
+        $browser = ['key' => $_browser->getBrowserKey(), 'name' => $_browser->getBrowser()];
+        $os = ['key' => $_browser->getPlatformKey(), 'name' => $_browser->getPlatform()];
 
         $is_suspend = intval($row['is_suspend']);
         if (!empty($is_suspend)) {
             $last_reason = unserialize($row['susp_reason']);
             $last_reason = array_shift($last_reason);
             list($susp_admin_id, $susp_admin_name) = $db->query('SELECT userid,first_name,last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval($last_reason['start_admin']))->fetch(3);
-            $susp_admin_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id . "\">" . $susp_admin_name . "</a>";
+            $susp_admin_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $susp_admin_id . '">' . $susp_admin_name . '</a>';
             $is_suspend = sprintf($lang_module['is_suspend1'], nv_date('d/m/Y H:i', $last_reason['starttime']), $susp_admin_name, $last_reason['info']);
         } elseif (empty($row['active'])) {
             $is_suspend = $lang_module['is_suspend2'];
@@ -133,13 +133,13 @@ if ($numrows) {
             ];
         }
         if (!empty($thead['edit'])) {
-            $thead['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $row['admin_id'], $lang_global['edit'] );
+            $thead['edit'] = [NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $row['admin_id'], $lang_global['edit']];
         }
         if (!empty($thead['chg_is_suspend'])) {
-            $thead['chg_is_suspend'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=suspend&amp;admin_id=' . $row['admin_id'], $lang_module['chg_is_suspend2'] );
+            $thead['chg_is_suspend'] = [NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=suspend&amp;admin_id=' . $row['admin_id'], $lang_module['chg_is_suspend2']];
         }
         if (!empty($thead['del'])) {
-            $thead['del'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $row['admin_id'], $lang_global['delete'] );
+            $thead['del'] = [NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $row['admin_id'], $lang_global['delete']];
         }
 
         if (empty($row['files_level'])) {
@@ -158,27 +158,27 @@ if ($numrows) {
         $admins[$row['admin_id']]['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['admin_id'];
         $admins[$row['admin_id']]['thead'] = $thead;
         $admins[$row['admin_id']]['options'] = [];
-        $admins[$row['admin_id']]['options']['login'] = array( $lang_module['login'], $login );
-        $admins[$row['admin_id']]['options']['email'] = array( $lang_module['email'], $email );
-        $admins[$row['admin_id']]['options']['full_name'] = array( $lang_module['name'], $row['full_name'] );
-        $admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
-        $admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
-        $admins[$row['admin_id']]['options']['position'] = array( $lang_module['position'], $row['position'] );
-        $admins[$row['admin_id']]['options']['admin_theme'] = array( $lang_module['themeadmin'], (empty($row['admin_theme'])) ? $lang_module['theme_default']: $row['admin_theme'] );
-        $admins[$row['admin_id']]['options']['is_suspend'] = array( $lang_module['is_suspend'], $is_suspend, $row['is_suspend'] );
+        $admins[$row['admin_id']]['options']['login'] = [$lang_module['login'], $login];
+        $admins[$row['admin_id']]['options']['email'] = [$lang_module['email'], $email];
+        $admins[$row['admin_id']]['options']['full_name'] = [$lang_module['name'], $row['full_name']];
+        $admins[$row['admin_id']]['options']['lev'] = [$lang_module['lev'], $level_txt];
+        $admins[$row['admin_id']]['options']['lev'] = [$lang_module['lev'], $level_txt];
+        $admins[$row['admin_id']]['options']['position'] = [$lang_module['position'], $row['position']];
+        $admins[$row['admin_id']]['options']['admin_theme'] = [$lang_module['themeadmin'], (empty($row['admin_theme'])) ? $lang_module['theme_default'] : $row['admin_theme']];
+        $admins[$row['admin_id']]['options']['is_suspend'] = [$lang_module['is_suspend'], $is_suspend, $row['is_suspend']];
 
         if (defined('NV_IS_SPADMIN')) {
-            $admins[$row['admin_id']]['options']['editor'] = array( $lang_module['editor'], !empty($row['editor']) ? $row['editor'] : $lang_module['not_use'] );
-            $admins[$row['admin_id']]['options']['allow_files_type'] = array( $lang_module['allow_files_type'], !empty($allow_files_type) ? implode(', ', $allow_files_type) : $lang_global['no'] );
-            $admins[$row['admin_id']]['options']['allow_modify_files'] = array( $lang_module['allow_modify_files'], !empty($allow_modify_files) ? $lang_global['yes'] : $lang_global['no'] );
-            $admins[$row['admin_id']]['options']['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], !empty($allow_create_subdirectories) ? $lang_global['yes'] : $lang_global['no'] );
-            $admins[$row['admin_id']]['options']['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], !empty($allow_modify_subdirectories) ? $lang_global['yes'] : $lang_global['no'] );
+            $admins[$row['admin_id']]['options']['editor'] = [$lang_module['editor'], !empty($row['editor']) ? $row['editor'] : $lang_module['not_use']];
+            $admins[$row['admin_id']]['options']['allow_files_type'] = [$lang_module['allow_files_type'], !empty($allow_files_type) ? implode(', ', $allow_files_type) : $lang_global['no']];
+            $admins[$row['admin_id']]['options']['allow_modify_files'] = [$lang_module['allow_modify_files'], !empty($allow_modify_files) ? $lang_global['yes'] : $lang_global['no']];
+            $admins[$row['admin_id']]['options']['allow_create_subdirectories'] = [$lang_module['allow_create_subdirectories'], !empty($allow_create_subdirectories) ? $lang_global['yes'] : $lang_global['no']];
+            $admins[$row['admin_id']]['options']['allow_modify_subdirectories'] = [$lang_module['allow_modify_subdirectories'], !empty($allow_modify_subdirectories) ? $lang_global['yes'] : $lang_global['no']];
 
-            $admins[$row['admin_id']]['options']['regtime'] = array( $lang_module['regtime'], nv_date('l, d/m/Y H:i', $row['regdate']) );
-            $admins[$row['admin_id']]['options']['last_login'] = array( $lang_module['last_login'], $last_login );
-            $admins[$row['admin_id']]['options']['last_ip'] = array( $lang_module['last_ip'], $row['last_ip'] );
-            $admins[$row['admin_id']]['options']['browser'] = array( $lang_module['browser'], $browser['name'] );
-            $admins[$row['admin_id']]['options']['os'] = array( $lang_module['os'], $os['name'] );
+            $admins[$row['admin_id']]['options']['regtime'] = [$lang_module['regtime'], nv_date('l, d/m/Y H:i', $row['regdate'])];
+            $admins[$row['admin_id']]['options']['last_login'] = [$lang_module['last_login'], $last_login];
+            $admins[$row['admin_id']]['options']['last_ip'] = [$lang_module['last_ip'], $row['last_ip']];
+            $admins[$row['admin_id']]['options']['browser'] = [$lang_module['browser'], $browser['name']];
+            $admins[$row['admin_id']]['options']['os'] = [$lang_module['os'], $os['name']];
         }
     }
 }

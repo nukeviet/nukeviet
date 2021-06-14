@@ -8,7 +8,7 @@
  * @Createdate 11/6/2010, 20:9
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -24,7 +24,7 @@ function nv_referer_update()
         $host = strtolower($host);
 
         $log_path = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ref_logs';
-        if (! is_dir($log_path)) {
+        if (!is_dir($log_path)) {
             @nv_mkdir(NV_ROOTDIR . '/' . NV_LOGS_DIR, 'ref_logs', true);
         }
 
@@ -38,12 +38,12 @@ function nv_referer_update()
 
         $is_save = true;
 
-        $referer_blocker = array();
+        $referer_blocker = [];
         if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/referer_blocker.php')) {
-            include NV_ROOTDIR . '/' . NV_DATADIR . '/referer_blocker.php' ;
+            include NV_ROOTDIR . '/' . NV_DATADIR . '/referer_blocker.php';
         }
 
-        if (! empty($referer_blocker)) {
+        if (!empty($referer_blocker)) {
             foreach ($referer_blocker as $blocker) {
                 if (preg_match('/' . preg_quote($blocker) . '/i', $host)) {
                     $is_save = false;
@@ -57,7 +57,7 @@ function nv_referer_update()
             $tmp = $log_path . '/tmp.' . NV_LOGS_EXT;
             if (file_exists($tmp)) {
                 $ct = file_get_contents($tmp);
-                if (! empty($ct)) {
+                if (!empty($ct)) {
                     $ct = trim($ct);
                     $ct = explode('|', $ct);
                     $p = NV_CURRENTTIME - 60;
@@ -90,17 +90,17 @@ function nv_referer_update()
             }
             unset($_numrow);
 
-            if (! empty($nv_Request->search_engine)) {
-                if (isset($global_config['engine_allowed'][$nv_Request->search_engine]['query_param']) and ! empty($global_config['engine_allowed'][$nv_Request->search_engine]['query_param'])) {
+            if (!empty($nv_Request->search_engine)) {
+                if (isset($global_config['engine_allowed'][$nv_Request->search_engine]['query_param']) and !empty($global_config['engine_allowed'][$nv_Request->search_engine]['query_param'])) {
                     $key = $global_config['engine_allowed'][$nv_Request->search_engine]['query_param'];
-                    $key = ! empty($nv_Request->referer_queries[$key]) ? $nv_Request->referer_queries[$key] : '';
+                    $key = !empty($nv_Request->referer_queries[$key]) ? $nv_Request->referer_queries[$key] : '';
                     $key = str_replace('+', ' ', $key);
                     $key = nv_strtolower($key);
                     $key = nv_substr($key, 0, 100);
                     $key = trim($key);
                     $id = md5($key);
 
-                    if (! empty($key)) {
+                    if (!empty($key)) {
                         $sth = $db->prepare('UPDATE ' . NV_SEARCHKEYS_TABLE . ' SET total=total+1 WHERE id= :id AND search_engine= :search_engine');
                         $sth->bindParam(':id', $id, PDO::PARAM_STR);
                         $sth->bindParam(':search_engine', $nv_Request->search_engine, PDO::PARAM_STR);

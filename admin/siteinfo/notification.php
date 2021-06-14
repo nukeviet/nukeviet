@@ -94,8 +94,8 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $id = $nv_Request->get_int('id', 'post', 0);
 
     if ($id) {
-        $sql = "DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . "
-        WHERE id=" . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND (area = 1 OR area = 2) AND language=\'' . NV_LANG_DATA . '\' AND ' . $sql_lev_admin;
+        $sql = 'DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . '
+        WHERE id=' . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND (area = 1 OR area = 2) AND language=\'' . NV_LANG_DATA . '\' AND ' . $sql_lev_admin;
         $db->query($sql);
         nv_htmlOutput('OK');
     }

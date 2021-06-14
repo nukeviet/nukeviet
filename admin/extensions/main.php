@@ -8,13 +8,13 @@
  * @Createdate 2-1-2010 22:5
  */
 
-if (! defined('NV_IS_FILE_EXTENSIONS')) {
+if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_global['mod_extensions'];
 
-$request = array();
+$request = [];
 $request['page'] = $nv_Request->get_int('page', 'get', 1);
 $request['mode'] = $nv_Request->get_title('mode', 'get', '');
 $request['q'] = nv_substr($nv_Request->get_title('q', 'get', ''), 0, 64);
@@ -25,7 +25,7 @@ $request['lang'] = NV_LANG_INTERFACE;
 $request['basever'] = $global_config['version'];
 
 // Mode filter
-if (! in_array($request['mode'], array( 'search', 'newest', 'popular', 'featured', 'downloaded', 'favorites' ))) {
+if (!in_array($request['mode'], ['search', 'newest', 'popular', 'featured', 'downloaded', 'favorites'])) {
     header('Location:' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=manage');
     die();
 }
@@ -47,33 +47,33 @@ $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 $stored_cookies = nv_get_cookies();
 
 // Debug
-$args = array(
-    'headers' => array(
+$args = [
+    'headers' => [
         'Referer' => NUKEVIET_STORE_APIURL,
-    ),
+    ],
     'cookies' => $stored_cookies,
     'body' => $request
-);
+];
 
 $cookies = [];
 $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
 if (is_array($array)) {
     $cookies = $array['cookies'];
-    $array = ! empty($array['body']) ? (is_serialized_string($array['body']) ? unserialize($array['body']) : array()) : array();
+    $array = !empty($array['body']) ? (is_serialized_string($array['body']) ? unserialize($array['body']) : []) : [];
 }
 
 $error = '';
-if (! empty(NukeViet\Http\Http::$error)) {
+if (!empty(NukeViet\Http\Http::$error)) {
     $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-} elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
+} elseif (empty($array['status']) or !isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
     $error = $lang_global['error_valid_response'];
-} elseif (! empty($array['error']['message'])) {
+} elseif (!empty($array['error']['message'])) {
     $error = $array['error']['message'];
 }
 
 // Show error
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 } elseif ($array['status'] == 'notlogin') {
@@ -102,24 +102,24 @@ if (! empty($error)) {
         $xtpl->assign('ROW', $row);
 
         // Parse rating
-        for ($i = 1; $i <= 5; $i ++) {
-            $xtpl->assign('STAR', $row['rating_avg'] == $i ? " active" : "");
+        for ($i = 1; $i <= 5; $i++) {
+            $xtpl->assign('STAR', $row['rating_avg'] == $i ? ' active' : '');
             $xtpl->parse('main.data.loop.star');
         }
 
         // Tuong thich moi cho cai dat
-        if (! empty($row['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
+        if (!empty($row['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
             $xtpl->parse('main.data.loop.install');
         }
 
         $xtpl->parse('main.data.loop');
     }
 
-    if (! empty($array['pagination']['all_page'])) {
+    if (!empty($array['pagination']['all_page'])) {
         $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;mode=' . $request['mode'] . '&amp;q=' . urlencode($request['q']);
         $generate_page = nv_generate_page($base_url, intval($array['pagination']['all_page']), $request['per_page'], $request['page']);
 
-        if (! empty($generate_page)) {
+        if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.data.generate_page');
         }
