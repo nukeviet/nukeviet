@@ -1,6 +1,7 @@
 /* ==========================================================================
  Chrome Frame prompt
  ========================================================================== */
+
 .chromeframe {
     position: fixed;
     top: 0;
@@ -37,6 +38,7 @@
  ========================================================================== */
 
 /* Global */
+
 html, body {
     height: 100%;
     background: #f1f1f1;
@@ -162,6 +164,7 @@ a.link:hover {
 
 /* Heading
  -----------------------------------------------------------------------------*/
+
 h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
     margin-bottom: 10px;
@@ -174,6 +177,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Header
  -----------------------------------------------------------------------------*/
+
 #header {
     height: 52px;
     background: #101010;
@@ -188,7 +192,7 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
 }
 
-@media ( max-width : 550px) {
+@media ( max-width: 550px) {
     #header div.logo .logo-xs {
         display: block;
     }
@@ -241,7 +245,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #header .menu>li>a em.logout {
-    zoom: 0.85;
+    transform: scale(0.85, 0.85);
 }
 
 #header .menu>li>a>img {
@@ -272,7 +276,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #999;
 }
 
-@media ( max-width : 350px) {
+@media ( max-width: 350px) {
     #header .dropdown-menu a {
         text-align: right;
     }
@@ -288,7 +292,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-@media ( max-width : 270px) {
+@media ( max-width: 270px) {
     #header .menu>li.admin-info {
         display: none;
     }
@@ -296,21 +300,22 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Menu Horizontal
  -----------------------------------------------------------------------------*/
-@media ( max-width : 1070px) and (min-width: 768px) {
+
+@media ( max-width: 1070px) and (min-width: 768px) {
     #menu-horizontal>ul>li>a {
         padding-left: 10px;
         padding-right: 10px;
     }
 }
 
-@media ( max-width : 970px) and (min-width: 768px) {
+@media ( max-width: 970px) and (min-width: 768px) {
     #menu-horizontal>ul>li>a {
         padding-left: 5px;
         padding-right: 5px;
     }
 }
 
-@media ( max-width : 865px) and (min-width: 768px) {
+@media ( max-width: 865px) and (min-width: 768px) {
     #menu-horizontal>ul>li>a .caret {
         display: none;
     }
@@ -318,6 +323,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Middle
  -----------------------------------------------------------------------------*/
+
 #middle {
     position: relative;
 }
@@ -390,6 +396,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Left Menu
  -----------------------------------------------------------------------------*/
+
 #left-menu-bg {
     background: url("../images/bg_left.png") repeat-y scroll right center rgba(0, 0, 0, 0);
     bottom: 0;
@@ -497,6 +504,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Footer
  -----------------------------------------------------------------------------*/
+
 #footer {
     position: absolute;
     left: 5px;
@@ -545,6 +553,7 @@ sup.required {
 
 /* Content Size
  -----------------------------------------------------------------------------*/
+
 .w20 {
     width: 20px !important
 }
@@ -591,7 +600,8 @@ sup.required {
 
 /* Responsive theme
  -----------------------------------------------------------------------------*/
-@media ( max-width : 768px) {
+
+@media ( max-width: 768px) {
     #left-menu {
         display: none;
     }
@@ -657,13 +667,13 @@ sup.required {
     }
 }
 
-@media ( max-width : 370px) {
+@media ( max-width: 370px) {
     #footer div.imgstat {
         display: none;
     }
 }
 
-@media ( min-width : 1200px) {
+@media ( min-width: 1200px) {
     .table-responsive {
         overflow-x: visible !important;
     }
@@ -671,6 +681,7 @@ sup.required {
 
 /* Form Element
  -----------------------------------------------------------------------------*/
+
 input[type="checkbox"], input[type="radio"] {
     border-width: 1px;
     border-style: solid;
@@ -750,6 +761,7 @@ label {
 
 /* Breadcrumb
  -----------------------------------------------------------------------------*/
+
 .breadcrumb {
     padding: 0;
     margin: 0;
@@ -769,6 +781,7 @@ label {
 /* ==========================================================================
  Fixed Jquery UI Style
  ========================================================================== */
+
 .ui-widget {
     font-size: 13px !important;
     font-weight: 400 !important;
@@ -789,6 +802,7 @@ label {
 
 /* DIV Listing
  -----------------------------------------------------------------------------*/
+
 .nv-listing .listing-title {
     font-weight: 700;
     border-bottom: 2px #ddd solid;
@@ -813,6 +827,7 @@ label {
 /* =====================================================
  Add more style left menu admin css
  =====================================================*/
+
 #bg-left-menu {
     background: url("../images/bg_left.png") right repeat-y !important;
     width: 30px;
@@ -862,6 +877,7 @@ label {
 }
 
 /* Notification */
+
 #notification {
     position: absolute;
     top: 4px;
@@ -909,7 +925,7 @@ label {
     margin: 0 5px 5px 0
 }
 
-@media ( min-width : 360px) {
+@media ( min-width: 360px) {
     #header .menu>li {
         float: left;
         line-height: 52px;
@@ -927,7 +943,7 @@ label {
     margin: -5px 0;
 }
 
-@media ( max-width : 430px) {
+@media ( max-width: 430px) {
     #notification-area .dropdown-menu {
         _width: 100%;
     }
@@ -955,6 +971,7 @@ label {
 }
 
 /* Site Modal */
+
 .modal-header .close {
     margin-top: -2px;
 }
@@ -1015,7 +1032,7 @@ button.close {
     opacity: 1;
 }
 
-@media ( max-width : 619px) {
+@media ( max-width: 619px) {
     #sitemodal .modal-dialog {
         margin-left: 10px;
         margin-right: 10px;
