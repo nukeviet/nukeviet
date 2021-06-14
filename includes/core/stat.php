@@ -8,7 +8,7 @@
  * @Createdate 12/29/2009 20:7
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -16,7 +16,7 @@ function nv_stat_update()
 {
     global $db, $client_info, $global_config;
 
-    $last_update = $db->query("SELECT c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'c_time' AND c_val= 'last'")->fetchColumn();
+    $last_update = $db->query('SELECT c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'c_time' AND c_val= 'last'")->fetchColumn();
 
     if (NV_SITE_TIMEZONE_NAME == $global_config['statistics_timezone']) {
         $last_year = date('Y', $last_update);
@@ -43,14 +43,14 @@ function nv_stat_update()
     }
 
     if ($last_year != $current_year) {
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET c_count= 0, " . NV_LANG_DATA . "_count= 0 WHERE (c_type='month' OR c_type='day' OR c_type='hour')");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET c_count= 0, ' . NV_LANG_DATA . "_count= 0 WHERE (c_type='month' OR c_type='day' OR c_type='hour')");
     } elseif ($last_month != $current_month) {
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET c_count= 0, " . NV_LANG_DATA . "_count= 0 WHERE (c_type='day' OR c_type='hour')");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET c_count= 0, ' . NV_LANG_DATA . "_count= 0 WHERE (c_type='day' OR c_type='hour')");
     } elseif ($last_day != $current_day) {
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET c_count= 0, " . NV_LANG_DATA . "_count= 0 WHERE c_type='hour'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET c_count= 0, ' . NV_LANG_DATA . "_count= 0 WHERE c_type='hour'");
     }
 
-    $bot_name = ($client_info['is_bot'] and ! empty($client_info['browser']['name'])) ? $client_info['browser']['name'] : '';
+    $bot_name = ($client_info['is_bot'] and !empty($client_info['browser']['name'])) ? $client_info['browser']['name'] : '';
     $browser = $client_info['browser']['key'];
     if ($browser == 'Unknown') {
         if ($client_info['is_mobile']) {
@@ -60,7 +60,8 @@ function nv_stat_update()
         }
     }
 
-    $sth = $db->prepare("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET last_update=" . NV_CURRENTTIME . ", c_count=c_count + 1, " . NV_LANG_DATA . "_count= " . NV_LANG_DATA . "_count + 1 WHERE
+    $sth = $db->prepare(
+        'UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET last_update=' . NV_CURRENTTIME . ', c_count=c_count + 1, ' . NV_LANG_DATA . '_count= ' . NV_LANG_DATA . "_count + 1 WHERE
 		(c_type='total' AND c_val='hits') OR
 		(c_type='year' AND c_val='" . $current_year . "') OR
 		(c_type='month' AND c_val='" . $current_month . "') OR
@@ -78,7 +79,7 @@ function nv_stat_update()
     $sth->bindParam(':country', $client_info['country'], PDO::PARAM_STR);
     $sth->execute();
 
-    $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET c_count= " . NV_CURRENTTIME . " WHERE c_type='c_time' AND c_val= 'last'");
+    $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET c_count= ' . NV_CURRENTTIME . " WHERE c_type='c_time' AND c_val= 'last'");
 }
 
 nv_stat_update();

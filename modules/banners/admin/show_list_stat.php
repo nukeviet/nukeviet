@@ -8,7 +8,7 @@
  * @Createdate 3/19/2010 12:19
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ if (empty($bid)) {
     die('Stop!!!');
 }
 
-$row = $db->query('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $bid)->fetch();
+$row = $db->query('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $bid)->fetch();
 
 if (empty($row)) {
     die('Stop!!!');
@@ -56,7 +56,7 @@ $caption = sprintf($lang_module['show_list_stat1'], nv_monthname($data_month), $
 
 $data_ext = $data_val = '';
 
-if (in_array($nv_Request->get_string('ext', 'get', 'no'), array( 'day', 'country', 'browse', 'os' ))) {
+if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'browse', 'os'])) {
     switch ($nv_Request->get_string('ext', 'get')) {
         case 'day':
             if ($nv_Request->isset_request('val', 'get') and preg_match('/^[0-9]+$/', $nv_Request->get_string('val', 'get')) and $nv_Request->get_int('val', 'get', 0) <= $day_max and $nv_Request->get_int('val', 'get', 0) >= $day_min) {
@@ -103,7 +103,7 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), array( 'day', 'country
 }
 
 $db->sqlreset()
-    ->select('COUNT(*)')->from(NV_BANNERS_GLOBALTABLE. '_click')
+    ->select('COUNT(*)')->from(NV_BANNERS_GLOBALTABLE . '_click')
     ->where($where);
 
 $stmt = $db->prepare($db->sql()) ;
@@ -125,7 +125,7 @@ $db->where('*')
 
 $result = $db->query($db->sql());
 
-$contents = array();
+$contents = [];
 $replacement = '';
 
 $a = 0;
@@ -135,7 +135,7 @@ while ($row = $result->fetch()) {
     $contents['rows'][$a][] = isset($countries[$row['click_country']]) ? $countries[$row['click_country']][1] : $row['click_country'];
     $contents['rows'][$a][] = $row['click_browse_name'];
     $contents['rows'][$a][] = $row['click_os_name'];
-    $contents['rows'][$a][] = ! empty($row['click_ref']) ? "<a href=\"" . $row['click_ref'] . "\">" . $lang_module['select'] . "</a>" : "";
+    $contents['rows'][$a][] = !empty($row['click_ref']) ? '<a href="' . $row['click_ref'] . '">' . $lang_module['select'] . '</a>' : '';
 
     if ($data_ext == 'browse' and empty($replacement)) {
         $replacement = $row['click_browse_name'];
@@ -146,12 +146,12 @@ while ($row = $result->fetch()) {
     ++$a;
 }
 
-if (! empty($replacement)) {
+if (!empty($replacement)) {
     $caption = preg_replace('/\{pattern\}/', $replacement, $caption);
 }
 
 $contents['caption'] = $caption;
-$contents['thead'] = array( $lang_module['click_date'], $lang_module['click_ip'], $lang_module['click_country'], $lang_module['click_browse'], $lang_module['click_os'], $lang_module['click_ref'] );
+$contents['thead'] = [$lang_module['click_date'], $lang_module['click_ip'], $lang_module['click_country'], $lang_module['click_browse'], $lang_module['click_os'], $lang_module['click_ref']];
 $contents['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'statistic');
 
 $contents = nv_show_list_stat_theme($contents);

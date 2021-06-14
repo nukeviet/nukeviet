@@ -8,25 +8,25 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_module['countries'];
 
-$array_lang_setup = array();
-$array_lang_setup[] = array( '', $lang_module['site_lang'] );
+$array_lang_setup = [];
+$array_lang_setup[] = ['', $lang_module['site_lang']];
 
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $result = $db->query($sql);
 while (list($lang_i) = $result->fetch(3)) {
     if (in_array($lang_i, $global_config['allow_sitelangs'])) {
-        $array_lang_setup[$lang_i] = array( $lang_i, $language_array[$lang_i]['name'] );
+        $array_lang_setup[$lang_i] = [$lang_i, $language_array[$lang_i]['name']];
     }
 }
 
 if ($nv_Request->isset_request('countries', 'post') == 1) {
-    $post = $nv_Request->get_typed_array('countries', 'post', 'string', array());
+    $post = $nv_Request->get_typed_array('countries', 'post', 'string', []);
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('countries', 'post') == 1) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
-include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php' ;
+include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php';
 
 $xtpl = new XTemplate('countries.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);

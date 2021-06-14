@@ -30,7 +30,7 @@ if ($nv_Request->get_title('checksess', 'post') == md5('siteinfo_' . NV_CHECK_SE
     if ($id > 0) {
         if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_logs WHERE id=' . $id)) {
             $contents = 'OK_' . $lang_module['log_del_ok'];
-            ++ $number_del;
+            ++$number_del;
         }
     } else {
         $listall = $nv_Request->get_string('listall', 'post,get');
@@ -39,7 +39,7 @@ if ($nv_Request->get_title('checksess', 'post') == md5('siteinfo_' . NV_CHECK_SE
         foreach ($array_id as $id) {
             if ($id > 0) {
                 $db->query('DELETE FROM ' . $db_config['prefix'] . '_logs WHERE id=' . $id);
-                ++ $number_del;
+                ++$number_del;
             }
         }
         $contents = 'OK_' . $lang_module['log_del_ok'];

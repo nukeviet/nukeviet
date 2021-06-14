@@ -23,11 +23,11 @@ if (!nv_user_in_groups($global_config['whoviewuser'])) {
 }
 
 // Them vao tieu de
-$array_mod_title[] = array(
+$array_mod_title[] = [
     'catid' => 0,
     'title' => $lang_module['listusers'],
     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op
-);
+];
 
 // Xem chi tiet thanh vien
 if (isset($array_op[1]) and !empty($array_op[1])) {
@@ -52,11 +52,11 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
             }
 
             // Them vao tieu de
-            $array_mod_title[] = array(
+            $array_mod_title[] = [
                 'catid' => 0,
                 'title' => $item['username'],
                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . change_alias($item['username']) . '-' . $item['md5username']
-            );
+            ];
 
             // Lay cac du lieu tuy bien
             $array_field_config = nv_get_users_field_config();
@@ -108,25 +108,25 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
     $page_url .= '&orderby=' . $orderby . '&sortby=' . $sortby;
 
     // Kiem tra du lieu hop chuan
-    if ((!empty($orderby) and !in_array($orderby, array(
+    if ((!empty($orderby) and !in_array($orderby, [
         'username',
         'gender',
         'regdate'
-    ))) or (!empty($sortby) and !in_array($sortby, array(
+    ])) or (!empty($sortby) and !in_array($sortby, [
         'DESC',
         'ASC'
-    )))) {
+    ]))) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
     $base_url = $page_url;
 
     $per_page = 25;
-    $array_order = array(
+    $array_order = [
         'username' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&orderby=username&sortby=' . $sortby,
         'gender' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&orderby=gender&sortby=' . $sortby,
         'regdate' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&orderby=regdate&sortby=' . $sortby
-    );
+    ];
 
     foreach ($array_order as $key => $link) {
         if ($orderby == $key) {
@@ -152,7 +152,7 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
 
     $result = $db->query($db->sql());
 
-    $users_array = array();
+    $users_array = [];
 
     while ($item = $result->fetch()) {
         $item['full_name'] = nv_show_name_user($item['first_name'], $item['last_name']);

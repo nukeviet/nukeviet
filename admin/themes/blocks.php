@@ -8,15 +8,15 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
-$select_options = array();
-$theme_array = nv_scandir(NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ));
+$select_options = [];
+$theme_array = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);
 if ($global_config['idsite']) {
     $theme = $db->query('SELECT t1.theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
-    if (! empty($theme)) {
+    if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
         while (list($theme) = $result->fetch(3)) {
@@ -35,7 +35,7 @@ foreach ($theme_array as $themes_i) {
 $selectthemes_old = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 $selectthemes = $nv_Request->get_string('selectthemes', 'get', $selectthemes_old);
 
-if (! in_array($selectthemes, $theme_array)) {
+if (!in_array($selectthemes, $theme_array)) {
     $selectthemes = $global_config['site_theme'];
 }
 if ($selectthemes_old != $selectthemes) {
@@ -69,7 +69,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
 
     $result = $db->query('SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC');
     while (list($m_title, $m_custom_title) = $result->fetch(3)) {
-        $xtpl->assign('MODULE', array( 'key' => $m_title, 'title' => $m_custom_title ));
+        $xtpl->assign('MODULE', ['key' => $m_title, 'title' => $m_custom_title]);
         $xtpl->parse('main.module');
     }
 
@@ -79,7 +79,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $content = $xml->xpath('positions');
     $positions = $content[0]->position;
 
-    $blocks_positions = array();
+    $blocks_positions = [];
     $sth = $db->prepare('SELECT position, COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme GROUP BY position');
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
@@ -91,27 +91,27 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
     while ($row = $sth->fetch()) {
-        $xtpl->assign('ROW', array(
+        $xtpl->assign('ROW', [
             'bid' => $row['bid'],
             'title' => $row['title'],
             'module' => $row['module'],
             'file_name' => $row['file_name'],
             'active' => $row['active'] ? 'checked="checked"' : ''
-        ));
+        ]);
 
         $numposition = $blocks_positions[$row['position']];
 
         for ($i = 1; $i <= $numposition; ++$i) {
-            $xtpl->assign('WEIGHT', array( 'key' => $i, 'selected' => ($row['weight'] == $i) ? ' selected="selected"' : '' ));
+            $xtpl->assign('WEIGHT', ['key' => $i, 'selected' => ($row['weight'] == $i) ? ' selected="selected"' : '']);
             $xtpl->parse('main.loop.weight');
         }
 
         for ($i = 0, $count = sizeof($positions); $i < $count; ++$i) {
-            $xtpl->assign('POSITION', array(
+            $xtpl->assign('POSITION', [
                 'key' => ( string )$positions[$i]->tag,
                 'selected' => ($row['position'] == $positions[$i]->tag) ? ' selected="selected"' : '',
                 'title' => ( string )$positions[$i]->name
-            ));
+            ]);
             $xtpl->parse('main.loop.position');
         }
 
@@ -134,13 +134,13 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xtpl->assign('BLOCKREDIRECT', '');
     $xtpl->assign('CHECKSS', md5($selectthemes . NV_CHECK_SESSION));
 
-    $active_device = array( 1 );
+    $active_device = [1];
     for ($i = 1; $i <= 4; ++$i) {
-        $xtpl->assign('ACTIVE_DEVICE', array(
+        $xtpl->assign('ACTIVE_DEVICE', [
             'key' => $i,
             'checked' => (in_array($i, $active_device)) ? ' checked="checked"' : '',
             'title' => $lang_module['show_device_' . $i]
-        ));
+        ]);
         $xtpl->parse('main.active_device');
     }
 

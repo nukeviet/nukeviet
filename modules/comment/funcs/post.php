@@ -142,7 +142,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
         if ($mk[0] > 0) {
             try {
-                $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $dir . "', 0)");
+                $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir . "', 0)");
             } catch (PDOException $e) {
                 trigger_error($e->getMessage());
             }

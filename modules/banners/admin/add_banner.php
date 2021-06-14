@@ -14,9 +14,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['add_banner'];
 
-$contents = array();
+$contents = [];
 $contents['upload_blocked'] = '';
-$contents['file_allowed_ext'] = array();
+$contents['file_allowed_ext'] = [];
 
 if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
     $contents['file_allowed_ext'][] = 'images';
@@ -30,7 +30,7 @@ if (empty($contents['file_allowed_ext'])) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$plans = $require_image = $plans_form = $plans_exp = array();
+$plans = $require_image = $plans_form = $plans_exp = [];
 $sql = 'SELECT id, title, blang, form, require_image, exp_time FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
@@ -174,16 +174,16 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $file_mime = 'no_image';
                 $width = 0;
                 $height = 0;
-                $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+                $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
                     title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml,
                     add_time, publ_time, exp_time, hits_total, act, weight
                 ) VALUES (
-                    :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
-                    " . $width . ", " . $height . ", :file_alt, :imageforswf, :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
-                    0, " . $act . ", " . $_weight . "
-                )";
+                    :title, ' . $pid . ', ' . $assign_user_id . ', :file_name, :file_ext, :file_mime,
+                    ' . $width . ', ' . $height . ', :file_alt, :imageforswf, :click_url, :target, :bannerhtml, ' . NV_CURRENTTIME . ', ' . $publtime . ', ' . $exptime . ',
+                    0, ' . $act . ', ' . $_weight . '
+                )';
 
-                $data_insert = array();
+                $data_insert = [];
                 $data_insert['title'] = $title;
                 $data_insert['file_name'] = $file_name;
                 $data_insert['file_ext'] = $file_ext;
@@ -210,16 +210,16 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     $width = $upload_info['img_info'][0];
                     $height = $upload_info['img_info'][1];
 
-                    $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+                    $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
                         title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf,
                         click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
                     ) VALUES (
-                        :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
-                        " . $width . ", " . $height . ", :file_alt, :imageforswf, :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
-                        0, " . $act . ", " . $_weight . "
-                    )";
+                        :title, ' . $pid . ', ' . $assign_user_id . ', :file_name, :file_ext, :file_mime,
+                        ' . $width . ', ' . $height . ', :file_alt, :imageforswf, :click_url, :target, :bannerhtml, ' . NV_CURRENTTIME . ', ' . $publtime . ', ' . $exptime . ',
+                        0, ' . $act . ', ' . $_weight . '
+                    )';
 
-                    $data_insert = array();
+                    $data_insert = [];
                     $data_insert['title'] = $title;
                     $data_insert['file_name'] = $file_name;
                     $data_insert['file_ext'] = $file_ext;
@@ -265,13 +265,13 @@ $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);
 $contents['submit'] = $lang_module['add_banner'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner';
-$contents['title'] = array(
+$contents['title'] = [
     $lang_module['title'],
     'title',
     $title,
     255
-);
-$contents['plan'] = array(
+];
+$contents['plan'] = [
     $lang_module['in_plan'],
     'pid',
     $plans,
@@ -279,45 +279,45 @@ $contents['plan'] = array(
     $row,
     $require_image,
     $plans_exp
-);
-$contents['upload'] = array(
+];
+$contents['upload'] = [
     sprintf($lang_module['upload'], $contents['file_allowed_ext']),
     'banner',
     $lang_module['imageforswf'],
     'imageforswf'
-);
-$contents['file_alt'] = array(
+];
+$contents['file_alt'] = [
     $lang_module['file_alt'],
     'file_alt',
     $file_alt,
     255
-);
-$contents['click_url'] = array(
+];
+$contents['click_url'] = [
     $lang_module['click_url'],
     'click_url',
     $click_url,
     255
-);
-$contents['target'] = array(
+];
+$contents['target'] = [
     $lang_module['target'],
     'target',
     $targets,
     $target
-);
-$contents['publ_date'] = array(
+];
+$contents['publ_date'] = [
     $lang_module['publ_date'],
     'publ_date',
     $publ_date,
     $publ_date_h,
     $publ_date_m
-);
-$contents['exp_date'] = array(
+];
+$contents['exp_date'] = [
     $lang_module['exp_date'],
     'exp_date',
     $exp_date,
     $exp_date_h,
     $exp_date_m
-);
+];
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
 $contents['assign_user'] = $assign_user;
 
@@ -330,10 +330,10 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 } else {
     $contents['bannerhtml'] = '<textarea style="width:100%;height:300px" name="bannerhtml">' . $contents['bannerhtml'] . '</textarea>';
 }
-$contents['bannerhtml'] = array(
+$contents['bannerhtml'] = [
     $lang_module['bannerhtml'],
     $contents['bannerhtml']
-);
+];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme(nv_add_banner_theme($contents));

@@ -16,11 +16,11 @@ if ($admin_info['level'] == 1) {
     $allow_func[] = 'logs_del';
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $lang_global['mod_siteinfo']
-);
+];
 
 //Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo';
@@ -43,7 +43,7 @@ function nv_siteinfo_getlang()
     global $db_config, $nv_Cache;
     $sql = 'SELECT DISTINCT lang FROM ' . $db_config['prefix'] . '_logs';
     $result = $nv_Cache->db($sql, 'lang', 'siteinfo');
-    $array_lang = array();
+    $array_lang = [];
 
     if (!empty($result)) {
         foreach ($result as $row) {
@@ -64,14 +64,14 @@ function nv_siteinfo_getuser()
     global $db_config, $nv_Cache;
     $sql = 'SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT DISTINCT userid FROM ' . $db_config['prefix'] . '_logs WHERE userid!=0 ) ORDER BY username ASC';
     $result = $nv_Cache->db($sql, 'userid', 'siteinfo');
-    $array_user = array();
+    $array_user = [];
 
     if (!empty($result)) {
         foreach ($result as $row) {
-            $array_user[] = array(
+            $array_user[] = [
                 'userid' => $row['userid'],
                 'username' => $row['username']
-            );
+            ];
         }
     }
 
@@ -88,7 +88,7 @@ function nv_siteinfo_getmodules()
     global $db_config, $nv_Cache;
     $sql = 'SELECT DISTINCT module_name FROM ' . $db_config['prefix'] . '_logs';
     $result = $nv_Cache->db($sql, 'module_name', 'siteinfo');
-    $array_modules = array();
+    $array_modules = [];
 
     if (!empty($result)) {
         foreach ($result as $row) {
@@ -109,7 +109,7 @@ function nv_get_lang_module($mod)
 {
     global $site_mods;
 
-    $lang_module = array();
+    $lang_module = [];
 
     if (isset($site_mods[$mod])) {
         if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {

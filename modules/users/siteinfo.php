@@ -33,7 +33,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
     $_arr_siteinfo['number_user_reg'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_reg' . $site_condition)->fetchColumn();
     $_arr_siteinfo['number_user_edit'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_edit')->fetchColumn();
 
-    $access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
+    $access_admin = $db->query('SELECT content FROM ' . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
     $access_admin = unserialize($access_admin);
     $_arr_siteinfo['access_admin'] = $access_admin;
 
@@ -80,7 +80,7 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     }
 
     if (!empty($group_ids)) {
-        $sql = "SELECT g.group_id, d.title FROM " . $_mod_table . "_groups AS g LEFT JOIN " . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.group_id > 9 AND g.group_id IN(" . implode(',', $group_ids) . ")";
+        $sql = 'SELECT g.group_id, d.title FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.group_id > 9 AND g.group_id IN(" . implode(',', $group_ids) . ')';
         $result = $db->query($sql);
 
         while ($row = $result->fetch()) {

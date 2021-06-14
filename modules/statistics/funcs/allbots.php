@@ -15,10 +15,10 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 $page_title = $lang_module['bot'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['bot'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
-$result = $db->query("SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='bot' AND c_count!=0");
+$result = $db->query('SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='bot' AND c_count!=0");
 list($num_items, $max) = $result->fetch(3);
 
 if ($num_items) {
@@ -36,15 +36,15 @@ if ($num_items) {
 
     $result = $db->query($db->sql());
 
-    $bot_list = array();
+    $bot_list = [];
     while (list($bot, $count, $last_visit) = $result->fetch(3)) {
         $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-        $bot_list[$bot] = array($count, $last_visit);
+        $bot_list[$bot] = [$count, $last_visit];
     }
 
     if (!empty($bot_list)) {
-        $cts = array();
-        $cts['thead'] = array($lang_module['bot'], $lang_module['hits'], $lang_module['last_visit']);
+        $cts = [];
+        $cts['thead'] = [$lang_module['bot'], $lang_module['hits'], $lang_module['last_visit']];
         $cts['rows'] = $bot_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);

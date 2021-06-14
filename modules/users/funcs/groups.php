@@ -19,11 +19,11 @@ $canonicalUrl = getCanonicalUrl($page_url);
 $contents = '';
 
 // Lay danh sach nhom
-$sql = "SELECT g.*, d.* FROM " . NV_MOD_TABLE . "_groups AS g 
-    LEFT JOIN " . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) 
-    LEFT JOIN " . NV_MOD_TABLE . "_groups_users u ON ( g.group_id = u.group_id ) 
-    WHERE (g.idsite = " . $global_config['idsite'] . " OR (g.idsite =0 AND g.group_id > 3 AND g.siteus = 1)) AND (u.userid = " . $user_info['userid'] . " AND u.is_leader = 1) 
-    ORDER BY g.idsite, g.weight";
+$sql = 'SELECT g.*, d.* FROM ' . NV_MOD_TABLE . '_groups AS g 
+    LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) 
+    LEFT JOIN " . NV_MOD_TABLE . '_groups_users u ON ( g.group_id = u.group_id ) 
+    WHERE (g.idsite = ' . $global_config['idsite'] . ' OR (g.idsite =0 AND g.group_id > 3 AND g.siteus = 1)) AND (u.userid = ' . $user_info['userid'] . ' AND u.is_leader = 1) 
+    ORDER BY g.idsite, g.weight';
 $result = $db->query($sql);
 $groupsList = [];
 while ($row = $result->fetch()) {
@@ -99,7 +99,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         }
 
-        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . " (
             username, md5username, password, email, first_name, last_name, gender, photo, birthday,
             regdate, question,
             answer, passlostkey, view_mail, remember, in_groups, active, checknum,
@@ -114,7 +114,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             '', '', 0, " . $row['regdate'] . ",
             :question,
             :answer,
-            '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+            '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ')';
 
         $data_insert = [];
         $data_insert['username'] = $row['username'];
@@ -233,7 +233,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             $base_url .= '&amp;full_name=' . rawurlencode($array['full_name']);
 
             $where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
-            $array_where[] = "(" . $where_fullname . " LIKE '%" . $db->dblikeescape($array['full_name']) . "%' )";
+            $array_where[] = '(' . $where_fullname . " LIKE '%" . $db->dblikeescape($array['full_name']) . "%' )";
         }
 
         if (!empty($array['email'])) {
@@ -383,7 +383,7 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
     while ($row_gru = $result_gru->fetch()) {
         $in_groups[] = $row_gru['group_id'];
     }
-    $db->exec("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $uid);
+    $db->exec('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addMemberToGroup'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $user_info['userid']);
@@ -439,7 +439,7 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
     while ($row_gru = $result_gru->fetch()) {
         $in_groups[] = $row_gru['group_id'];
     }
-    $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $uid);
+    $db->query('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['exclude_user2'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $user_info['userid']);
@@ -578,7 +578,7 @@ if (sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $ar
             global $module_data;
             $return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
             $return .= "<script type=\"text/javascript\">
-            CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
+            CKEDITOR.replace( '" . $module_data . '_' . $textareaname . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
             </script>";
             return $return;
         }
@@ -598,9 +598,9 @@ if (sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $ar
         $group_content = $nv_Request->get_string('group_content', 'post', '');
         $rowcontent['group_content'] = defined('NV_EDITOR') ? nv_nl2br($group_content, '') : nv_nl2br(nv_htmlspecialchars(strip_tags($group_content)), '<br />');
 
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups_detail 
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups_detail 
             SET title = :title, description = :description, content = :content 
-            WHERE group_id = " . $group_id . " AND lang='" . NV_LANG_DATA . "'");
+            WHERE group_id = ' . $group_id . " AND lang='" . NV_LANG_DATA . "'");
         $stmt->bindParam(':title', $rowcontent['group_title'], PDO::PARAM_STR);
         $stmt->bindParam(':description', $rowcontent['group_desc'], PDO::PARAM_STR);
         $stmt->bindParam(':content', $rowcontent['group_content'], PDO::PARAM_STR, strlen($rowcontent['group_content']));
@@ -620,7 +620,7 @@ if (sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $ar
     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
         $htmlbodyhtml = nv_aleditor('group_content', '100%', '300px', $htmlbodyhtml, 'Basic');
     } else {
-        $htmlbodyhtml = "<textarea class=\"textareaform\" name=\"group_content\" id=\"group_content\" cols=\"60\" rows=\"15\">" . $htmlbodyhtml . "</textarea>";
+        $htmlbodyhtml = '<textarea class="textareaform" name="group_content" id="group_content" cols="60" rows="15">' . $htmlbodyhtml . '</textarea>';
     }
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
@@ -825,7 +825,6 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
             $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
             $stt = 1;
             foreach ($arr_userids as $_userid) {
-
                 $row = $array_userid[$_userid];
                 $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
                 $row['stt'] = $stt;

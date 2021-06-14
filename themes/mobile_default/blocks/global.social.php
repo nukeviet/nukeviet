@@ -48,8 +48,8 @@ if (!nv_function_exists('nv_menu_theme_social')) {
     function nv_menu_theme_social_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
+        $return = [];
+        $return['error'] = [];
         $return['config']['facebook'] = $nv_Request->get_title('config_facebook', 'post');
         $return['config']['youtube'] = $nv_Request->get_title('config_youtube', 'post');
         $return['config']['twitter'] = $nv_Request->get_title('config_twitter', 'post');

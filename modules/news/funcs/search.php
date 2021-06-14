@@ -61,7 +61,7 @@ function BoldKeywordInStr($str, $keyword)
 }
 
 $key = $nv_Request->get_title('q', 'get', '');
-$key = str_replace(["'", '"', '<', '>', "&#039;", "&quot;", "&lt;", "&gt;"], '', $key);
+$key = str_replace(["'", '"', '<', '>', '&#039;', '&quot;', '&lt;', '&gt;'], '', $key);
 $key = str_replace('+', ' ', urldecode($key));
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
@@ -146,7 +146,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     ]
                 ]
             ];
-        } else if ($choose == 2) {
+        } elseif ($choose == 2) {
             // match:tim kiem theo 1 truong
             $search_elastic = [
                 'should' => [
@@ -188,7 +188,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             }
             $search_elastic_user['filter']['or'] = $match;
             $search_elastic = array_merge($search_elastic, $search_elastic_user);
-        } else if ($choose == 3) {
+        } elseif ($choose == 3) {
             $qurl = $key;
             $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
@@ -202,7 +202,6 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         } else {
-
             $search_elastic = [
                 'should' => [
                     'multi_match' => [ // dung multi_match:tim kiem theo nhieu truong
@@ -363,7 +362,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
-            $where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%'))";
+            $where = 'AND (tb1.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%'))";
         } else {
             $qurl = $key;
             $url_info = parse_url($qurl);
@@ -379,7 +378,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     OR tb2.bodyhtml REGEXP '" . $_dbkey . "'
                     OR a.alias REGEXP '" . $_dbkeyhtml . "'
                     OR a.pseudonym REGEXP '" . $_dbkeyhtml . "') 
-                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
             } else {
                 $_dbkey = '%' . $dbkey . '%';
                 $_dbkeyhtml = '%' . $dbkeyhtml . '%';
@@ -389,7 +388,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     OR tb2.bodyhtml LIKE '" . $_dbkey . "'
                     OR a.alias LIKE '" . $_dbkeyhtml . "'
                     OR a.pseudonym LIKE '" . $_dbkeyhtml . "') 
-                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
             }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id )';
             $tbl_src .= ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON (tb1.id = a.id)';
@@ -465,7 +464,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $db->sqlreset()
             ->select('*')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-            ->where("id IN (" . $internal_authors . ")");
+            ->where('id IN (' . $internal_authors . ')');
         $result = $db->query($db->sql());
         $internal_authors = [];
         while ($row = $result->fetch()) {

@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_block_voting_select')) {
-
     /**
      * nv_block_voting_select_config()
      *
@@ -34,7 +33,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
         $list = $nv_Cache->db($sql, 'vid', $module);
         foreach ($list as $l) {
             $sel = ($data_block['vid'] == $l['vid']) ? ' selected' : '';
-            $html .= "<option value=\"" . $l['vid'] . "\" " . $sel . ">" . $l['question'] . "</option>";
+            $html .= '<option value="' . $l['vid'] . '" ' . $sel . '>' . $l['question'] . '</option>';
         }
         $html .= '</select></div>';
         $html .= '</div>';
@@ -73,12 +72,12 @@ if (!nv_function_exists('nv_block_voting_select')) {
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
 
-        $sql = "SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " WHERE act=1";
+        $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
         $list = $nv_Cache->db($sql, 'vid', 'voting');
         if (isset($list[$block_config['vid']])) {
             $current_voting = $list[$block_config['vid']];
             if ($current_voting['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups($current_voting['groups_view'])) {
-                $sql = "SELECT id, vid, title, url FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows WHERE vid = " . $block_config['vid'] . " ORDER BY id ASC";
+                $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $block_config['vid'] . ' ORDER BY id ASC';
                 $list = $nv_Cache->db($sql, '', 'voting');
 
                 if (empty($list)) {
@@ -96,10 +95,10 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/voting.js')) {
-                    $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_STATIC_URL . "themes/" . $block_theme . "/js/voting.js\"></script>\n";
+                    $my_footer .= '<script type="text/javascript" src="' . NV_STATIC_URL . 'themes/' . $block_theme . "/js/voting.js\"></script>\n";
                 }
 
-                $action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
+                $action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
 
                 $voting_array = [
                     'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),

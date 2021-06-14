@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -29,7 +29,7 @@ $sth->bindValue(':title', '%' . $q . '%', PDO::PARAM_STR);
 $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
-$array_data = array();
+$array_data = [];
 while (list($title) = $sth->fetch(3)) {
     $array_data[] = $title;
 }

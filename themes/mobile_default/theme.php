@@ -93,11 +93,11 @@ function nv_site_theme($contents, $full = true)
 
     // Meta-tags
     $metatags = nv_html_meta_tags(false);
-    $metatags[] = array(
+    $metatags[] = [
         'name' => 'name',
         'value' => 'viewport',
         'content' => 'width=device-width, initial-scale=1'
-    );
+    ];
 
     foreach ($metatags as $meta) {
         $xtpl->assign('THEME_META_TAGS', $meta);
@@ -105,13 +105,13 @@ function nv_site_theme($contents, $full = true)
     }
 
     //Links
-    $html_links = array();
-    $html_links[] = array('rel' => 'StyleSheet', 'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/font-awesome.min.css');
-    $html_links[] = array('rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css');
-    $html_links[] = array('rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/style.css');
+    $html_links = [];
+    $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/font-awesome.min.css'];
+    $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css'];
+    $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/style.css'];
 
     if (defined('NV_IS_ADMIN') and $full) {
-        $html_links[] = array('rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/admin.css');
+        $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/admin.css'];
     }
 
     $html_links = array_merge_recursive($html_links, nv_html_links(false));
@@ -124,7 +124,7 @@ function nv_site_theme($contents, $full = true)
             $customFileName = $global_config['module_theme'] . '.' . NV_LANG_DATA . '.' . $global_config['idsite'];
 
             if (!file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $customFileName . '.css')) {
-                $replace = array(
+                $replace = [
                     '[body]' => 'body',
                     '[a_link]' => 'a, a:link, a:active, a:visited',
                     '[a_link_hover]' => 'a:hover',
@@ -133,21 +133,21 @@ function nv_site_theme($contents, $full = true)
                     '[footer]' => '#footer',
                     '[block]' => '.panel, .well, .nv-block-banners',
                     '[block_heading]' => '.panel-default > .panel-heading'
-                );
+                ];
 
                 $css_content = str_replace(array_keys($replace), array_values($replace), $config_theme['css_content']);
 
                 file_put_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $customFileName . '.css', $css_content);
             }
 
-            $html_links[] = array('rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css?t=' . $global_config['timestamp']);
+            $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css?t=' . $global_config['timestamp']];
         }
 
         if (isset($config_theme['gfont']) and !empty($config_theme['gfont']) and isset($config_theme['gfont']['family']) and !empty($config_theme['gfont']['family'])) {
             $subset = isset($config_theme['gfont']['subset']) ? $config_theme['gfont']['subset'] : '';
-            $gf = new NukeViet\Client\Gfonts(array('fonts' => array($config_theme['gfont']), 'subset' => $subset), $client_info);
+            $gf = new NukeViet\Client\Gfonts(['fonts' => [$config_theme['gfont']], 'subset' => $subset], $client_info);
             $webFontFile = $gf->getUrlCss();
-            array_unshift($html_links, array('rel' => 'StyleSheet', 'href' => $webFontFile));
+            array_unshift($html_links, ['rel' => 'StyleSheet', 'href' => $webFontFile]);
         }
 
         unset($config_theme, $css_content, $webFontFile, $font, $subset, $gf);
@@ -155,7 +155,7 @@ function nv_site_theme($contents, $full = true)
 
     foreach ($html_links as $links) {
         foreach ($links as $key => $value) {
-            $xtpl->assign('LINKS', array('key' => $key, 'value' => $value));
+            $xtpl->assign('LINKS', ['key' => $key, 'value' => $value]);
             if (!empty($value)) {
                 $xtpl->parse('main.links.attr.val');
             }
@@ -165,7 +165,7 @@ function nv_site_theme($contents, $full = true)
     }
 
     $html_js = nv_html_site_js(false);
-    $html_js[] = array('ext' => 1, 'content' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/js/main.js');
+    $html_js[] = ['ext' => 1, 'content' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/js/main.js'];
 
     foreach ($html_js as $js) {
         if ($js['ext']) {
@@ -204,11 +204,11 @@ function nv_site_theme($contents, $full = true)
         // Breadcrumbs
         if ($home != 1) {
             if ($global_config['rewrite_op_mod'] != $module_name) {
-                $arr_cat_title_i = array(
+                $arr_cat_title_i = [
                     'catid' => 0,
                     'title' => $module_info['custom_title'],
                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
-                );
+                ];
                 array_unshift($array_mod_title, $arr_cat_title_i);
             }
             if (!empty($array_mod_title)) {
@@ -225,7 +225,7 @@ function nv_site_theme($contents, $full = true)
         // Statistics image
         $theme_stat_img = '';
         if ($global_config['statistic'] and isset($site_mods['statistics'])) {
-            $theme_stat_img .= "<a title=\"" . $lang_global['viewstats'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $lang_global['viewstats'] . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
+            $theme_stat_img .= '<a title="' . $lang_global['viewstats'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=statistics"><img alt="' . $lang_global['viewstats'] . '" src="' . NV_BASE_SITEURL . 'index.php?second=statimg&amp;p=' . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
         }
 
         $xtpl->assign('THEME_STAT_IMG', $theme_stat_img);

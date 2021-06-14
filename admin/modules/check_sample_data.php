@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 9:32
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
@@ -16,17 +16,17 @@ if ($nv_Request->isset_request('module', 'post')) {
     $modname = $nv_Request->get_title('module', 'post');
     $is_setup = $nv_Request->get_int('setup', 'post', 0);
 
-    $contents = array(
+    $contents = [
         'status' => 'error',
         'module' => $modname,
-        'message' => array(
+        'message' => [
             0 => 'Module not exists'
-        ),
+        ],
         'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_setup_mod_' . $modname),
         'code' => 0
-    );
+    ];
 
-    if (! empty($modname) and preg_match($global_config['check_module'], $modname)) {
+    if (!empty($modname) and preg_match($global_config['check_module'], $modname)) {
         $sth = $db->prepare('SELECT module_file FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title= :title');
         $sth->bindParam(':title', $modname, PDO::PARAM_STR);
         $sth->execute();
@@ -43,7 +43,7 @@ if ($nv_Request->isset_request('module', 'post')) {
             }
         }
 
-        if (! empty($modfile)) {
+        if (!empty($modfile)) {
             $contents['status'] = 'success';
             $contents['message'][0] = $lang_module['reinstall_note1'];
 

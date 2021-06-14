@@ -8,7 +8,7 @@
  * @Createdate 5/12/2010, 1:34
  */
 
-if (! defined('NV_IS_FILE_SEOTOOLS')) {
+if (!defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
@@ -43,14 +43,14 @@ function nv_sitemapPing($module, $link)
         $c = curl_init();
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
         $open_basedir = @ini_get('open_basedir') ? true : false;
-        if (! $open_basedir) {
+        if (!$open_basedir) {
             curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($c, CURLOPT_MAXREDIRS, 20);
         }
         curl_setopt($c, CURLOPT_TIMEOUT, 30);
         curl_setopt($c, CURLOPT_URL, $link);
         curl_exec($c);
-        if (! curl_errno($c)) {
+        if (!curl_errno($c)) {
             $response = curl_getinfo($c);
 
             if ($response['http_code'] == 200) {
@@ -60,36 +60,36 @@ function nv_sitemapPing($module, $link)
         curl_close($c);
     }
 
-    if (! $result and nv_function_exists('fsockopen')) {
+    if (!$result and nv_function_exists('fsockopen')) {
         $url_parts = parse_url($link);
-        if (! $url_parts) {
+        if (!$url_parts) {
             return $lang_module['searchEngineFailed'];
         }
-        if (! isset($url_parts['host'])) {
+        if (!isset($url_parts['host'])) {
             return $lang_module['searchEngineFailed'];
         }
-        if (! isset($url_parts['path'])) {
+        if (!isset($url_parts['path'])) {
             $url_parts['path'] = '/';
         }
 
         $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? ( int )$url_parts['port'] : 80), $errno, $errstr, 3);
-        if (! $sock) {
+        if (!$sock) {
             return $lang_module['PingNotSupported'];
         }
 
-        $request = "GET " . $url_parts['path'] . (isset($url_parts['query']) ? '?' . $url_parts['query'] : '') . " HTTP/1.1\r\n";
+        $request = 'GET ' . $url_parts['path'] . (isset($url_parts['query']) ? '?' . $url_parts['query'] : '') . " HTTP/1.1\r\n";
         $request .= 'Host: ' . $url_parts['host'] . "\r\n";
         $request .= "Connection: Close\r\n\r\n";
         fwrite($sock, $request);
         $response = '';
-        while (! feof($sock)) {
+        while (!feof($sock)) {
             $response .= @fgets($sock, 4096);
         }
         fclose($sock);
         list($header, $result) = preg_split("/\r?\n\r?\n/", $response, 2);
         unset($matches);
         preg_match("/^HTTP\/[0-9\.]+\s+(\d+)\s+/", $header, $matches);
-        if ($matches == array()) {
+        if ($matches == []) {
             return $lang_module['searchEngineFailed'];
         }
         if ($matches[1] != 200) {
@@ -107,12 +107,12 @@ function nv_sitemapPing($module, $link)
 
 $file_searchEngines = NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine_ping.xml';
 $searchEngine = $module = '';
-$searchEngines = array();
-$searchEngines['searchEngine'] = array();
+$searchEngines = [];
+$searchEngines['searchEngine'] = [];
 $info = '';
 
-$sitemapFiles = array();
-$sql = "SELECT f.in_module as name, m.custom_title as title FROM " . NV_MODFUNCS_TABLE . " f, " . NV_MODULES_TABLE . " m WHERE m.act = 1 AND f.func_name='sitemap' AND f.in_module = m.title";
+$sitemapFiles = [];
+$sql = 'SELECT f.in_module as name, m.custom_title as title FROM ' . NV_MODFUNCS_TABLE . ' f, ' . NV_MODULES_TABLE . " m WHERE m.act = 1 AND f.func_name='sitemap' AND f.in_module = m.title";
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $sitemapFiles[$row['name']] = $row['title'];
@@ -129,7 +129,7 @@ $xtpl = new XTemplate('sitemap.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('URL_SITEMAP', $url_sitemap);
-$xtpl->assign('ACTION_FORM', NV_BASE_ADMINURL. 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '='.$op);
+$xtpl->assign('ACTION_FORM', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('CHECKSS', $checkss);
 if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_config['idsite'])) {
     $searchEngineName = $nv_Request->get_array('searchEngineName', 'post');
@@ -141,12 +141,12 @@ if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_co
         $value = trim(strip_tags($searchEngineValue[$key]));
         $active = intval($searchEngineActive[$key]);
 
-        if (! empty($name) and ! empty($value)) {
-            $searchEngines['searchEngine'][] = array(
+        if (!empty($name) and !empty($value)) {
+            $searchEngines['searchEngine'][] = [
                 'name' => $name,
                 'value' => $value,
                 'active' => $active
-            );
+            ];
         }
     }
 
@@ -154,7 +154,7 @@ if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_co
         nv_deletefile($file_searchEngines);
     }
 
-    if (! empty($searchEngines['searchEngine'])) {
+    if (!empty($searchEngines['searchEngine'])) {
         $array2XML = new NukeViet\Xml\Array2XML();
         $array2XML->saveXML($searchEngines, 'searchEngines', $file_searchEngines, $global_config['site_charset']);
     }
@@ -179,7 +179,7 @@ if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_co
         $b = false;
         foreach ($searchEngines['searchEngine'] as $value) {
             if ($value['name'] == $searchEngine and $value['active']) {
-                if (! empty($sitemapFiles) and isset($sitemapFiles[$module])) {
+                if (!empty($sitemapFiles) and isset($sitemapFiles[$module])) {
                     $info = nv_sitemapPing($module, $value['value']);
                     $b = true;
                 }
@@ -190,16 +190,16 @@ if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_co
             }
         }
 
-        if (! $a) {
+        if (!$a) {
             $info = $lang_module['searchEngineSelect'];
-        } elseif (! $b) {
+        } elseif (!$b) {
             $info = $lang_module['sitemapModule'];
         }
     }
 }
 
-if (! empty($searchEngines['searchEngine'])) {
-    if (! empty($sitemapFiles)) {
+if (!empty($searchEngines['searchEngine'])) {
+    if (!empty($sitemapFiles)) {
         foreach ($searchEngines['searchEngine'] as $value) {
             if ($value['active']) {
                 $value['selected'] = $value['name'] == $searchEngine ? ' selected="selected"' : '';
@@ -215,7 +215,7 @@ if (! empty($searchEngines['searchEngine'])) {
             $xtpl->parse('main.is_ping.Module');
         }
 
-        if (! empty($info)) {
+        if (!empty($info)) {
             $xtpl->assign('INFO', $info);
             $xtpl->parse('main.is_ping.info');
         }
@@ -232,11 +232,11 @@ if (! empty($searchEngines['searchEngine'])) {
 
 if (empty($global_config['idsite'])) {
     for ($i = 0; $i < 2; ++$i) {
-        $data = array(
+        $data = [
             'name' => '',
             'value' => '',
             'checked' => ''
-        );
+        ];
         $xtpl->assign('DATA', $data);
         $xtpl->parse('main.searchEngineList.loop');
     }

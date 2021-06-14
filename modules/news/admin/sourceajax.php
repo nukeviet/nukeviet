@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -29,9 +29,9 @@ $sth->bindValue(':title', '%' . $q . '%', PDO::PARAM_STR);
 $sth->bindValue(':link', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
-$array_data = array();
+$array_data = [];
 while (list($title, $link) = $sth->fetch(3)) {
-    $array_data[] = array( 'label' => $title . ': ' . $link, 'value' => $link );
+    $array_data[] = ['label' => $title . ': ' . $link, 'value' => $link];
 }
 
 nv_jsonOutput($array_data);

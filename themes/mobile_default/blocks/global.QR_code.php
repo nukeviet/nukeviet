@@ -30,12 +30,12 @@ if (!nv_function_exists('nv_block_qr_code')) {
             include NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php';
         }
 
-        $array_levels = array(
+        $array_levels = [
             'L',
             'M',
             'Q',
             'H'
-        );
+        ];
 
         $html = '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_level']) ? 'qr_level' : $lang_block['qr_level']) . ':</label>';
@@ -89,8 +89,8 @@ if (!nv_function_exists('nv_block_qr_code')) {
     function nv_block_qr_code_config_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
+        $return = [];
+        $return['error'] = [];
         $return['config']['level'] = $nv_Request->get_title('config_level', 'post');
         $return['config']['pixel_per_point'] = $nv_Request->get_int('config_pixel_per_point', 'post', 4);
         $return['config']['outer_frame'] = $nv_Request->get_int('config_outer_frame', 'post', 1);
@@ -133,7 +133,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         }
 
         $block_config['selfurl'] = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
-        $block_config['title'] = "QR-Code: " . str_replace('"', "&quot;", ($page_title ? $page_title : $global_config['site_name']));
+        $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ? $page_title : $global_config['site_name']));
         $xtpl->assign('QRCODE', $block_config);
 
         $xtpl->parse('main');

@@ -8,15 +8,15 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
-$array_site_cat_module = array();
+$array_site_cat_module = [];
 if ($global_config['idsite']) {
     $_module = $db->query('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
 
-    if (! empty($_module)) {
+    if (!empty($_module)) {
         $array_site_cat_module = explode(',', $_module);
     }
 }
@@ -32,7 +32,7 @@ if ($nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
     $modules_admin = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module']);
     $error = $lang_module['vmodule_exit'];
 
-    if (! empty($title) and ! empty($modfile) and ! in_array($title, $modules_site) and ! in_array($title, $modules_admin) and preg_match($global_config['check_module'], $title) and preg_match($global_config['check_module'], $modfile)) {
+    if (!empty($title) and !empty($modfile) and !in_array($title, $modules_site) and !in_array($title, $modules_admin) and preg_match($global_config['check_module'], $title) and preg_match($global_config['check_module'], $modfile)) {
         $version = '';
         $author = '';
         $note = nv_nl2br($note, '<br />');
@@ -80,10 +80,10 @@ $result = $db->query($sql);
 
 while (list($modfile_i) = $result->fetch(3)) {
     if (in_array($modfile_i, $modules_site)) {
-        if (! empty($array_site_cat_module) and ! in_array($modfile_i, $array_site_cat_module)) {
+        if (!empty($array_site_cat_module) and !in_array($modfile_i, $array_site_cat_module)) {
             continue;
         }
-        $xtpl->assign('MODFILE', array( 'key' => $modfile_i, 'selected' => ($modfile_i == $modfile) ? ' selected="selected"' : '' ));
+        $xtpl->assign('MODFILE', ['key' => $modfile_i, 'selected' => ($modfile_i == $modfile) ? ' selected="selected"' : '']);
         $xtpl->parse('main.modfile');
     }
 }

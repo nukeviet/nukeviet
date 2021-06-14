@@ -8,7 +8,7 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if (! defined('NV_IS_MOD_COMMENT')) {
+if (!defined('NV_IS_MOD_COMMENT')) {
     die('Stop!!!');
 }
 
@@ -45,8 +45,8 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
 
             $mod_info = $site_mods[$module];
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
-                $row = array();
-                $row['module'] =  $module;
+                $row = [];
+                $row['module'] = $module;
                 $row['id'] = $id;
                 include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
             }

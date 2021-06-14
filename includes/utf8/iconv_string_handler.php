@@ -8,7 +8,7 @@
  * @Createdate 22/8/2010, 19:33
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ iconv_set_encoding('output_encoding', $global_config['site_charset']);
 
 /**
  * nv_internal_encoding()
- * 
+ *
  * @param mixed $encoding
  * @return
  */
@@ -29,7 +29,7 @@ function nv_internal_encoding($encoding)
 
 /**
  * nv_strlen()
- * 
+ *
  * @param mixed $string
  * @return
  */
@@ -42,7 +42,7 @@ function nv_strlen($string)
 
 /**
  * nv_substr()
- * 
+ *
  * @param mixed $string
  * @param mixed $start
  * @param mixed $length
@@ -57,7 +57,7 @@ function nv_substr($string, $start, $length)
 
 /**
  * nv_substr_count()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
  * @return
@@ -71,7 +71,7 @@ function nv_substr_count($haystack, $needle)
 
 /**
  * nv_strpos()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
  * @param integer $offset
@@ -86,7 +86,7 @@ function nv_strpos($haystack, $needle, $offset = 0)
 
 /**
  * nv_strrpos()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
  * @param integer $offset
@@ -101,26 +101,26 @@ function nv_strrpos($haystack, $needle, $offset = 0)
 
 /**
  * nv_strtolower()
- * 
+ *
  * @param mixed $string
  * @return
  */
 function nv_strtolower($string)
 {
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup['strtolower']);
 }
 
 /**
  * nv_strtoupper()
- * 
+ *
  * @param mixed $string
  * @return
  */
 function nv_strtoupper($string)
 {
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup['strtoupper']);
 }

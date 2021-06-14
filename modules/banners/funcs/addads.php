@@ -13,7 +13,7 @@ if (!defined('NV_IS_MOD_BANNERS')) {
 }
 
 $page_title = $module_info['site_title'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 if (!defined('NV_IS_BANNER_CLIENT')) {
@@ -107,12 +107,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $endtime = $begintime + $global_array_uplans[$array['blockid']]['exp_time'];
         }
 
-        $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+        $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
             title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
-            :title, " . $array['blockid'] . ", " . $user_info['userid'] . ", :file_name, :file_ext, :file_mime, " . $width . ", " . $height . ", :description, '',
-            :url, '', " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, 0
-        )";
+            :title, ' . $array['blockid'] . ', ' . $user_info['userid'] . ', :file_name, :file_ext, :file_mime, ' . $width . ', ' . $height . ", :description, '',
+            :url, '', " . NV_CURRENTTIME . ', ' . $begintime . ', ' . $endtime . ', 0, 4, 0
+        )';
 
         $data_insert = [];
         $data_insert['title'] = $array['title'];
@@ -142,7 +142,7 @@ if (!empty($error)) {
     $xtpl->parse('main.info');
 }
 
-$result = $db->query("SELECT id,title, blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC");
+$result = $db->query('SELECT id,title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC');
 
 foreach ($global_array_uplans as $row) {
     $row['title'] .= ' (' . (empty($row['blang']) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']]) . ')';

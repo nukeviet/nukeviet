@@ -8,11 +8,11 @@
  * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_company_info')) {
+if (!nv_function_exists('nv_company_info')) {
     function nv_company_info_config($module, $data_block, $lang_block)
     {
         global $lang_global, $selectthemes;
@@ -152,8 +152,8 @@ if (! nv_function_exists('nv_company_info')) {
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('DATA', $block_config);
 
-        if (! empty($block_config['company_name'])) {
-            if (! empty($block_config['company_sortname'])) {
+        if (!empty($block_config['company_name'])) {
+            if (!empty($block_config['company_sortname'])) {
                 $xtpl->parse('main.company_name.company_sortname');
             }
             $xtpl->parse('main.company_name');
@@ -161,14 +161,14 @@ if (! nv_function_exists('nv_company_info')) {
 
         $key = [];
         $i = 0;
-        if (! empty($block_config['company_regcode'])) {
+        if (!empty($block_config['company_regcode'])) {
             $key[$i] = $lang_global['company_regcode2'] . ': ' . $block_config['company_regcode'];
-            if (! empty($block_config['company_regplace'])) {
+            if (!empty($block_config['company_regplace'])) {
                 $key[$i] .= ', ' . $lang_global['company_regplace'] . ' ' . $block_config['company_regplace'];
             }
             ++$i;
         }
-        if (! empty($block_config['company_licensenumber'])) {
+        if (!empty($block_config['company_licensenumber'])) {
             $key[$i] = $lang_global['company_licensenumber'] . ': ' . $block_config['company_licensenumber'];
             ++$i;
         }
@@ -179,12 +179,12 @@ if (! nv_function_exists('nv_company_info')) {
             $xtpl->parse('main.company_regcode');
         }
 
-        if (! empty($block_config['company_responsibility'])) {
+        if (!empty($block_config['company_responsibility'])) {
             $xtpl->parse('main.company_responsibility');
         }
 
-        if (! empty($block_config['company_address'])) {
-            if (! empty($block_config['company_showmap'])) {
+        if (!empty($block_config['company_address'])) {
+            if (!empty($block_config['company_showmap'])) {
                 $xtpl->parse('main.company_map_modal');
                 $xtpl->parse('main.company_address.company_map_triger');
             }
@@ -192,7 +192,7 @@ if (! nv_function_exists('nv_company_info')) {
             $xtpl->parse('main.company_address');
         }
 
-        if (! empty($block_config['company_phone'])) {
+        if (!empty($block_config['company_phone'])) {
             $nums = array_map('trim', explode('|', nv_unhtmlspecialchars($block_config['company_phone'])));
             foreach ($nums as $k => $num) {
                 unset($m);
@@ -201,7 +201,7 @@ if (! nv_function_exists('nv_company_info')) {
                     $xtpl->parse('main.company_phone.item.href');
                     $xtpl->parse('main.company_phone.item.href2');
                 } else {
-                    $num = preg_replace("/\[[^\]]*\]/", "", $num);
+                    $num = preg_replace("/\[[^\]]*\]/", '', $num);
                     $xtpl->assign('PHONE', ['number' => nv_htmlspecialchars($num)]);
                 }
                 if ($k) {
@@ -212,10 +212,10 @@ if (! nv_function_exists('nv_company_info')) {
 
             $xtpl->parse('main.company_phone');
         }
-        if (! empty($block_config['company_fax'])) {
+        if (!empty($block_config['company_fax'])) {
             $xtpl->parse('main.company_fax');
         }
-        if (! empty($block_config['company_email'])) {
+        if (!empty($block_config['company_email'])) {
             $emails = array_map('trim', explode(',', $block_config['company_email']));
             foreach ($emails as $k => $email) {
                 $xtpl->assign('EMAIL', $email);
@@ -226,10 +226,10 @@ if (! nv_function_exists('nv_company_info')) {
             }
             $xtpl->parse('main.company_email');
         }
-        if (! empty($block_config['company_website'])) {
+        if (!empty($block_config['company_website'])) {
             $webs = array_map('trim', explode(',', $block_config['company_website']));
             foreach ($webs as $k => $web) {
-                if (! preg_match("/^https?\:\/\//", $web)) {
+                if (!preg_match("/^https?\:\/\//", $web)) {
                     $web = 'http://' . $web;
                 }
                 $xtpl->assign('WEBSITE', $web);

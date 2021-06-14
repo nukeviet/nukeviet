@@ -73,8 +73,8 @@ if (empty($row['active2step'])) {
 
     // Tắt xác thực hai bước
     if ($nv_Request->isset_request('turnoff2step', 'post')) {
-        $db->query("DELETE FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid']);
-        $db->query("UPDATE " . NV_MOD_TABLE . " SET active2step=0, secretkey='' WHERE userid=" . $row['userid']);
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
+        $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='' WHERE userid=" . $row['userid']);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_turnoff_user2step', 'userid ' . $row['userid'], $admin_info['userid']);
         $nv_Cache->delMod($module_name);
@@ -87,7 +87,7 @@ if (empty($row['active2step'])) {
     if ($nv_Request->isset_request('resetbackupcodes', 'post')) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
 
-        $new_code = array();
+        $new_code = [];
         while (sizeof($new_code) < 10) {
             $code = nv_strtolower(nv_genpass(8, 0));
             if (!in_array($code, $new_code)) {
@@ -114,7 +114,7 @@ if (empty($row['active2step'])) {
         die();
     }
 
-    $sql = "SELECT * FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid'];
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid'];
     $result = $db->query($sql);
     while ($code = $result->fetch()) {
         $code['status'] = $lang_module['user_2step_codes_s' . $code['is_used']];

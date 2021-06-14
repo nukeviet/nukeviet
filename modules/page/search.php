@@ -8,7 +8,7 @@
  * @Createdate 03-05-2010
  */
 
-if (! defined('NV_IS_MOD_SEARCH')) {
+if (!defined('NV_IS_MOD_SEARCH')) {
     die('Stop!!!');
 }
 
@@ -26,10 +26,10 @@ if ($num_items) {
         ->offset(($page - 1) * $limit);
     $result = $db_slave->query($db_slave->sql());
     while (list($id, $tilterow, $alias, $description, $content) = $result->fetch(3)) {
-        $result_array[] = array(
+        $result_array[] = [
             'link' => $link . $alias . $global_config['rewrite_exturl'],
             'title' => BoldKeywordInStr($tilterow, $key, $logic),
             'content' => BoldKeywordInStr($description . ' ' . $content, $key, $logic)
-        );
+        ];
     }
 }

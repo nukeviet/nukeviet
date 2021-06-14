@@ -93,11 +93,11 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config['private_site'] = (int)$nv_Request->get_bool('private_site', 'post', false);
     $array_config['ogp_image'] = '';
     $ogp_image = $nv_Request->get_title('ogp_image', 'post', '');
-    if (!empty($ogp_image) and ! nv_is_url($ogp_image) and nv_is_file($ogp_image) === true) {
+    if (!empty($ogp_image) and !nv_is_url($ogp_image) and nv_is_file($ogp_image) === true) {
         $array_config['ogp_image'] = substr($ogp_image, strlen(NV_BASE_SITEURL));
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='site'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='site'");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -171,7 +171,7 @@ $xtpl->assign('METATAGSOGPCHECKED', $global_config['metaTagsOgp'] ? ' checked="c
 $xtpl->assign('PRIVATE_SITE', $global_config['private_site'] ? ' checked="checked" ' : '');
 $xtpl->assign('DESCRIPTION_LENGTH', $global_config['description_length']);
 $ogp_image = '';
-if (! empty($global_config['ogp_image']) and ! nv_is_url($global_config['ogp_image']) and file_exists(NV_ROOTDIR . '/' . $global_config['ogp_image'])) {
+if (!empty($global_config['ogp_image']) and !nv_is_url($global_config['ogp_image']) and file_exists(NV_ROOTDIR . '/' . $global_config['ogp_image'])) {
     $ogp_image = NV_BASE_SITEURL . $global_config['ogp_image'];
 }
 $xtpl->assign('OGP_IMAGE', $ogp_image);

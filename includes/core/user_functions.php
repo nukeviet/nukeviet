@@ -87,10 +87,10 @@ function nv_blocks_content($sitecontent)
             }
         }
 
-        $_result = $db->query("SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups t1
-             INNER JOIN " . NV_BLOCKS_TABLE . "_weight t2
+        $_result = $db->query('SELECT t1.*, t2.func_id FROM ' . NV_BLOCKS_TABLE . '_groups t1
+             INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2
              ON t1.bid = t2.bid
-             WHERE t2.func_id IN (" . implode(',', $in) . ")
+             WHERE t2.func_id IN (' . implode(',', $in) . ")
              AND t1.theme ='" . $global_config['module_theme'] . "'
              AND t1.active!=''
              ORDER BY t2.weight ASC");
@@ -104,7 +104,7 @@ function nv_blocks_content($sitecontent)
             $block_config['block_name'] = substr($_row['file_name'], 0, -4);
 
             // Tieu de block
-            $blockTitle = (!empty($_row['title']) and !empty($_row['link'])) ? "<a href=\"" . $_row['link'] . "\">" . $_row['title'] . "</a>" : $_row['title'];
+            $blockTitle = (!empty($_row['title']) and !empty($_row['link'])) ? '<a href="' . $_row['link'] . '">' . $_row['title'] . '</a>' : $_row['title'];
 
             if (!isset($cache[$_row['func_id']])) {
                 $cache[$_row['func_id']] = [];
@@ -339,8 +339,8 @@ function nv_html_meta_tags($html = true)
             "/[ ]*\,[ ]+/",
             "/[\,]+/"
         ], [
-            ", ",
-            ", "
+            ', ',
+            ', '
         ], $key_words);
         $key_words = nv_strtolower(strip_tags($key_words));
         $return[] = [
@@ -506,7 +506,7 @@ function nv_html_meta_tags($html = true)
 
     $res = '';
     foreach ($return as $link) {
-        $res .= "<meta " . $link['name'] . "=\"" . $link['value'] . "\" content=\"" . $link['content'] . "\" />" . PHP_EOL;
+        $res .= '<meta ' . $link['name'] . '="' . $link['value'] . '" content="' . $link['content'] . '" />' . PHP_EOL;
     }
     return $res;
 }
@@ -613,9 +613,9 @@ function nv_html_links($html = true)
     foreach ($return as $link) {
         $res .= '<link ';
         foreach ($link as $key => $val) {
-            $res .= $key . "=\"" . $val . "\" ";
+            $res .= $key . '="' . $val . '" ';
         }
-        $res .= "/>" . PHP_EOL;
+        $res .= '/>' . PHP_EOL;
     }
     return $res;
 }
@@ -672,23 +672,23 @@ function nv_html_css($html = true)
 
     if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css')) {
         if ($html) {
-            return "<link rel=\"StyleSheet\" href=\"" . NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css\" type=\"text/css\" />" . PHP_EOL;
+            return '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css" type="text/css" />' . PHP_EOL;
         } else {
             return [
                 [
                     'rel' => 'StyleSheet',
-                    'href' => NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css"
+                    'href' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css'
                 ]
             ];
         }
     } elseif (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
         if ($html) {
-            return "<link rel=\"StyleSheet\" href=\"" . NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />" . PHP_EOL;
+            return '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_file . '.css" type="text/css" />' . PHP_EOL;
         } else {
             return [
                 [
                     'rel' => 'StyleSheet',
-                    'href' => NV_STATIC_URL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css"
+                    'href' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_file . '.css'
                 ]
             ];
         }
@@ -710,9 +710,9 @@ function nv_html_site_rss($html = true)
     $return = $html ? '' : [];
     if (!empty($rss)) {
         foreach ($rss as $rss_item) {
-            $href = $rss_item['src'] . "\" title=\"" . strip_tags($rss_item['title']);
+            $href = $rss_item['src'] . '" title="' . strip_tags($rss_item['title']);
             if ($html) {
-                $return .= "<link rel=\"alternate\" href=\"" . $href . "\" type=\"application/rss+xml\" />" . PHP_EOL;
+                $return .= '<link rel="alternate" href="' . $href . '" type="application/rss+xml" />' . PHP_EOL;
             } else {
                 $return[] = [
                     'rel' => 'alternate',
@@ -732,21 +732,21 @@ function nv_html_site_rss($html = true)
  * @param bool $html
  *            Xuất ra dạng string (html) hay để nguyên dạng array
  *            Mặc định true
- *            
+ *
  * @param array $other_js
  *            Thêm js vào ngay sau global.js
  *            Mặc định rỗng
- *            
+ *
  * @param bool $language_js
  *            Có kết nối với file ngôn ngữ JS hay không
- *            
+ *
  * @param bool $global_js
  *            Có kết nối với file global.js hay không
- *            
+ *
  * @param bool $default_js
  *            Có kết nối với file JS của theme Default hay không
  *            Khi thiếu file tương ứng ở theme đang sử dụng
- *            
+ *
  * @return string | array
  */
 function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
@@ -754,7 +754,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info, $user_info;
 
     $safemode = defined('NV_IS_USER') ? $user_info['safemode'] : 0;
-    $jsDef = "var nv_base_siteurl=\"" . NV_BASE_SITEURL . "\",nv_lang_data=\"" . NV_LANG_INTERFACE . "\",nv_lang_interface=\"" . NV_LANG_INTERFACE . "\",nv_name_variable=\"" . NV_NAME_VARIABLE . "\",nv_fc_variable=\"" . NV_OP_VARIABLE . "\",nv_lang_variable=\"" . NV_LANG_VARIABLE . "\",nv_module_name=\"" . $module_name . "\",nv_func_name=\"" . $op . "\",nv_is_user=" . ((int) defined("NV_IS_USER")) . ", nv_my_ofs=" . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ",nv_my_abbr=\"" . nv_date("T", NV_CURRENTTIME) . "\",nv_cookie_prefix=\"" . $global_config['cookie_prefix'] . "\",nv_check_pass_mstime=" . ((intval($global_config['user_check_pass_time']) - 62) * 1000) . ",nv_area_admin=0,nv_safemode=" . $safemode . ",theme_responsive=" . ((int) ($global_config['current_theme_type'] == 'r'));
+    $jsDef = 'var nv_base_siteurl="' . NV_BASE_SITEURL . '",nv_lang_data="' . NV_LANG_INTERFACE . '",nv_lang_interface="' . NV_LANG_INTERFACE . '",nv_name_variable="' . NV_NAME_VARIABLE . '",nv_fc_variable="' . NV_OP_VARIABLE . '",nv_lang_variable="' . NV_LANG_VARIABLE . '",nv_module_name="' . $module_name . '",nv_func_name="' . $op . '",nv_is_user=' . ((int) defined('NV_IS_USER')) . ', nv_my_ofs=' . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ',nv_my_abbr="' . nv_date('T', NV_CURRENTTIME) . '",nv_cookie_prefix="' . $global_config['cookie_prefix'] . '",nv_check_pass_mstime=' . ((intval($global_config['user_check_pass_time']) - 62) * 1000) . ',nv_area_admin=0,nv_safemode=' . $safemode . ',theme_responsive=' . ((int) ($global_config['current_theme_type'] == 'r'));
 
     if (defined('NV_IS_DRAG_BLOCK')) {
         $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
@@ -836,11 +836,11 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     $res = '';
     foreach ($return as $js) {
         if ($js['ext'] == 1) {
-            $res .= "<script src=\"" . $js['content'] . "\"></script>" . PHP_EOL;
+            $res .= '<script src="' . $js['content'] . '"></script>' . PHP_EOL;
         } else {
-            $res .= "<script>" . PHP_EOL;
+            $res .= '<script>' . PHP_EOL;
             $res .= $js['content'] . PHP_EOL;
-            $res .= "</script>" . PHP_EOL;
+            $res .= '</script>' . PHP_EOL;
         }
     }
     return $res;
@@ -902,7 +902,7 @@ function nv_groups_list_pub($mod_data = 'users')
 
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
 
-    $query = "SELECT g.group_id, d.title, g.group_type, g.exp_time FROM " . $_mod_table . "_groups AS g LEFT JOIN " . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . " OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight";
+    $query = 'SELECT g.group_id, d.title, g.group_type, g.exp_time FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.act=1 AND (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight';
     $list = $nv_Cache->db($query, '', $mod_data);
 
     if (empty($list)) {

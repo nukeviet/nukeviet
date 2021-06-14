@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['sources'];
 
-list($sourceid, $title, $link, $logo, $error) = array( 0, '', 'http://', '', '' );
+list($sourceid, $title, $link, $logo, $error) = [0, '', 'http://', '', ''];
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
@@ -43,7 +43,7 @@ if (!empty($savecat)) {
     }
 
     if (($logo != $logo_old) and !empty($logo_old)) {
-        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid .' AND logo =' . $db->quote(basename($logo_old)))->fetchColumn();
+        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid . ' AND logo =' . $db->quote(basename($logo_old)))->fetchColumn();
         if (empty($_count)) {
             @unlink(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old);
             @unlink(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old);
@@ -58,7 +58,7 @@ if (!empty($savecat)) {
         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
         $weight = intval($weight) + 1;
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, :link, :logo, :weight, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['title'] = $title;
         $data_insert['link'] = $link;
         $data_insert['logo'] = $logo;

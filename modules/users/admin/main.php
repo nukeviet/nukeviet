@@ -90,13 +90,12 @@ if (!empty($methodvalue)) {
         }
         $_arr_where[] = '(' . implode(' OR ', $array_like) . ')';
     } else {
-        $_arr_where[] = " (" . $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%')";
+        $_arr_where[] = ' (' . $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%')";
         $methods[$method]['selected'] = ' selected="selected"';
     }
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
     $table_caption = $lang_module['search_page_title'];
 }
-
 
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
@@ -153,12 +152,12 @@ while ($row = $result2->fetch()) {
     }
 
     $users_list[$row['userid']] = [
-        'userid' =>  $row['userid'],
-        'username' =>  $row['username'],
-        'full_name' =>  nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
-        'email' =>  $row['email'],
+        'userid' => $row['userid'],
+        'username' => $row['username'],
+        'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
+        'email' => $row['email'],
         'regdate' => date('d/m/Y H:i', $row['regdate']),
-        'checked' =>  $row['active'] ? ' checked="checked"' : '',
+        'checked' => $row['active'] ? ' checked="checked"' : '',
         'disabled' => ($is_setactive) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,

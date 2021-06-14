@@ -157,7 +157,7 @@ function nv_show_funcs()
                 $data['func_custom_name'] = ucfirst($func);
                 $data['in_module'] = $mod;
 
-                $_sql = "INSERT INTO " . NV_MODFUNCS_TABLE . " (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, 0, '')";
+                $_sql = 'INSERT INTO ' . NV_MODFUNCS_TABLE . ' (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ", 0, 0, '')";
                 $func_id = $db->insert_id($_sql, 'func_id', $data);
                 if ($show_func) {
                     $sth2->bindParam(':func_id', $func_id, PDO::PARAM_INT);
@@ -219,10 +219,10 @@ function nv_show_funcs()
             $xtpl->assign('ROW', $values);
 
             foreach ($weight_list as $new_weight) {
-                $xtpl->assign('WEIGHT', array(
+                $xtpl->assign('WEIGHT', [
                     'key' => $new_weight,
                     'selected' => $new_weight == $values['subweight'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.weight');
             }
 
@@ -276,7 +276,7 @@ $contents['div_id'][0] = 'show_funcs';
 $contents['div_id'][1] = 'action';
 
 $contents['ajax'][0] = "nv_show_funcs('show_funcs');";
-$contents['ajax'][1] = $nv_Request->isset_request('func_id,pos', 'get') ? "nv_bl_list(" . $nv_Request->get_int('func_id', 'get') . ",'" . $nv_Request->get_title('pos', 'get') . "','action');" : "";
+$contents['ajax'][1] = $nv_Request->isset_request('func_id,pos', 'get') ? 'nv_bl_list(' . $nv_Request->get_int('func_id', 'get') . ",'" . $nv_Request->get_title('pos', 'get') . "','action');" : '';
 
 $contents = show_funcs_theme($contents);
 

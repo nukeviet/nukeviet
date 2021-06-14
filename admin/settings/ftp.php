@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -26,7 +26,7 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
 if ($sys_info['ftp_support']) {
-    $array_config = array();
+    $array_config = [];
 
     $array_config['ftp_server'] = $nv_Request->get_title('ftp_server', 'post', $global_config['ftp_server'], 1);
     $array_config['ftp_port'] = $nv_Request->get_title('ftp_port', 'post', $global_config['ftp_port'], 1);
@@ -43,17 +43,17 @@ if ($sys_info['ftp_support']) {
         $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
         $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
 
-        if (! $ftp_server or ! $ftp_user_name or ! $ftp_user_pass) {
+        if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
             die('ERROR|' . $lang_module['ftp_error_full']);
         }
 
-        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, ['timeout' => 10], $ftp_port);
 
-        if (! empty($ftp->error)) {
+        if (!empty($ftp->error)) {
             $ftp->close();
             die('ERROR|' . ( string )$ftp->error);
         } else {
-            $list_valid = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
+            $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
             $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
             if ($ftp_root === false) {
@@ -72,27 +72,27 @@ if ($sys_info['ftp_support']) {
     if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config['ftp_check_login'] = 0;
 
-        if (! empty($array_config['ftp_server']) and ! empty($array_config['ftp_user_name']) and ! empty($array_config['ftp_user_pass'])) {
+        if (!empty($array_config['ftp_server']) and !empty($array_config['ftp_user_name']) and !empty($array_config['ftp_user_pass'])) {
             $ftp_server = nv_unhtmlspecialchars($array_config['ftp_server']);
             $ftp_port = intval($array_config['ftp_port']);
             $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($array_config['ftp_path']);
 
-            $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+            $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, ['timeout' => 10], $ftp_port);
 
-            if (! empty($ftp->error)) {
+            if (!empty($ftp->error)) {
                 $array_config['ftp_check_login'] = 3;
                 $error = ( string )$ftp->error;
             } elseif ($ftp->chdir($ftp_path) === false) {
                 $array_config['ftp_check_login'] = 2;
                 $error = $lang_global['ftp_error_path'];
             } else {
-                $check_files = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
+                $check_files = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
                 $list_files = $ftp->listDetail($ftp_path, 'all');
 
                 $a = 0;
-                if (! empty($list_files)) {
+                if (!empty($list_files)) {
                     foreach ($list_files as $filename) {
                         if (in_array($filename['name'], $check_files)) {
                             ++$a;
@@ -110,11 +110,10 @@ if ($sys_info['ftp_support']) {
             $ftp->close();
         }
 
-
         if (empty($error)) {
             $array_config['ftp_user_pass'] = $crypt->encrypt($ftp_user_pass);
 
-            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'");
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'");
             foreach ($array_config as $config_name => $config_value) {
                 $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
                 $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -130,7 +129,7 @@ if ($sys_info['ftp_support']) {
     $xtpl->assign('VALUE', $array_config);
     $xtpl->assign('DETECT_FTP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 
-    if (! empty($error)) {
+    if (!empty($error)) {
         $xtpl->assign('ERROR', $error);
         $xtpl->parse('main.error');
     }

@@ -28,13 +28,13 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
 
         $return = '';
 
-        $html = "<input class=\"form-control\" name=\"config_url\" type=\"text\" value=\"" . $data_block['url'] . "\"/>";
+        $html = '<input class="form-control" name="config_url" type="text" value="' . $data_block['url'] . '"/>';
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['url'] . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
         $html = "<select class=\"form-control\" name=\"config_number\">\n";
         for ($index = 1; $index <= 50; ++$index) {
             $sel = ($index == $data_block['number']) ? ' selected' : '';
-            $html .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
+            $html .= '<option value="' . $index . '" ' . $sel . '>' . $index . "</option>\n";
         }
         $html .= "</select>\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['number'] . ':</label><div class="col-sm-18">' . $html . '</div></div>';
@@ -43,25 +43,25 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         $html = "<select class=\"form-control\" name=\"config_title_length\">\n";
         for ($index = 0; $index <= 255; ++$index) {
             $sel = ($index == $data_block['title_length']) ? ' selected' : '';
-            $html .= "<option value=\"" . $index . "\" " . $sel . ">" . $index . "</option>\n";
+            $html .= '<option value="' . $index . '" ' . $sel . '>' . $index . "</option>\n";
         }
         $html .= "</select>\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
-        $sel = (intval($data_block['isdescription']) == 1) ? "checked=\"checked\"" : "";
-        $html = "<input type=\"checkbox\" name=\"config_isdescription\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "\n";
+        $sel = (intval($data_block['isdescription']) == 1) ? 'checked="checked"' : '';
+        $html = '<input type="checkbox" name="config_isdescription" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['isdescription'] . '</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
-        $sel = (intval($data_block['ishtml']) == 1) ? "checked=\"checked\"" : "";
-        $html = "<input type=\"checkbox\" name=\"config_ishtml\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "\n";
+        $sel = (intval($data_block['ishtml']) == 1) ? 'checked="checked"' : '';
+        $html = '<input type="checkbox" name="config_ishtml" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['ishtml'] . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
-        $sel = (intval($data_block['ispubdate']) == 1) ? "checked=\"checked\"" : "";
-        $html = "<input type=\"checkbox\" name=\"config_ispubdate\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "\n";
+        $sel = (intval($data_block['ispubdate']) == 1) ? 'checked="checked"' : '';
+        $html = '<input type="checkbox" name="config_ispubdate" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['ispubdate'] . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
-        $sel = (intval($data_block['istarget']) == 1) ? "checked=\"checked\"" : "";
-        $html = "<input type=\"checkbox\" name=\"config_istarget\" value=\"1\" " . $sel . " /> " . $lang_module['block_yes'] . "\n";
+        $sel = (intval($data_block['istarget']) == 1) ? 'checked="checked"' : '';
+        $html = '<input type="checkbox" name="config_istarget" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
 
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['istarget'] . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
@@ -79,9 +79,9 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
     function nv_block_data_config_rss_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['url'] = $nv_Request->get_title('config_url', 'post', '', 0);
         $return['config']['number'] = $nv_Request->get_int('config_number', 'post', 0);
         $return['config']['isdescription'] = $nv_Request->get_int('config_isdescription', 'post', 0);
@@ -105,7 +105,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
     function nv_get_rss($url)
     {
         global $global_config, $nv_Cache;
-        $array_data = array();
+        $array_data = [];
         $cache_file = NV_LANG_DATA . '_' . md5($url) . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem('rss', $cache_file, 3600)) != false) {
             $array_data = unserialize($cache);
@@ -168,7 +168,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         foreach ($array_rrs as $item) {
             if ($a <= $block_config['number']) {
                 $item['description'] = ($block_config['ishtml']) ? $item['description'] : strip_tags($item['description']);
-                $item['target'] = ($block_config['istarget']) ? " onclick=\"this.target='_blank'\" " : "";
+                $item['target'] = ($block_config['istarget']) ? " onclick=\"this.target='_blank'\" " : '';
                 $item['class'] = ($a % 2 == 0) ? 'second' : '';
                 if ($title_length > 0) {
                     $item['text'] = nv_clean60($item['title'], $title_length);

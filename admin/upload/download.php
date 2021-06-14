@@ -16,17 +16,17 @@ $data = $nv_Request->get_string('data', 'post', '');
 
 if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_info['allow_files_type']) and preg_match_all('/<\s*img [^\>]*src\s*=\s*([\""\']?)([^\""\'>]*)([\""\']?)/i', $data, $matches_all)) {
     $imageMatch = array_unique($matches_all[2]);
-    
+
     $pathsave = $nv_Request->get_title('pathsave', 'post', '');
     $upload_real_dir_page = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_upload;
-    $pathsave = preg_replace("#^" . NV_UPLOADS_DIR . '/' . $mod_upload . "#", '', $pathsave);
+    $pathsave = preg_replace('#^' . NV_UPLOADS_DIR . '/' . $mod_upload . '#', '', $pathsave);
     $pathsave = trim($pathsave, '/');
     if (!empty($pathsave)) {
         if (!preg_match('/^[a-z0-9\-\_]+$/i', $module_name)) {
             $pathsave = change_alias($pathsave);
         }
         $pathsave = $mod_upload . '/' . $pathsave;
-        
+
         $e = explode('/', $pathsave);
         if (!empty($e)) {
             $cp = '';
@@ -43,7 +43,7 @@ if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_
             }
         }
     }
-    
+
     foreach ($imageMatch as $imageSrc) {
         if (nv_check_url($imageSrc)) {
             $_image = new NukeViet\Files\Image($imageSrc);
@@ -51,22 +51,22 @@ if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_
                 if ($_image->fileinfo['width'] > NV_MAX_WIDTH) {
                     $_image->resizeXY(NV_MAX_WIDTH, NV_MAX_HEIGHT);
                 }
-                
-                $basename = explode(".", basename($imageSrc));
+
+                $basename = explode('.', basename($imageSrc));
                 array_pop($basename);
-                $basename = implode("-", $basename);
+                $basename = implode('-', $basename);
                 $basename = preg_replace('/^\W+|\W+$/', '', $basename);
                 $basename = preg_replace('/[ ]+/', '_', $basename);
                 $basename = strtolower(preg_replace('/\W-/', '', $basename));
                 $basename .= '.' . $_image->fileinfo['ext'];
-                
+
                 $thumb_basename = $basename;
                 $i = 1;
                 while (file_exists($upload_real_dir_page . '/' . $thumb_basename)) {
                     $thumb_basename = preg_replace('/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename);
                     $i++;
                 }
-                
+
                 $_image->save($upload_real_dir_page, $thumb_basename);
                 $image_path = $_image->create_Image_info['src'];
                 if (!empty($image_path) and file_exists($image_path)) {

@@ -26,7 +26,7 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
         global $site_mods;
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
-            $data_block['module_in_menu'] = array();
+            $data_block['module_in_menu'] = [];
         }
 
         $html = '<div class="form-group">';
@@ -52,8 +52,8 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
     function nv_menu_theme_default_footer_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
+        $return = [];
+        $return['error'] = [];
         $return['config']['module_in_menu'] = $nv_Request->get_typed_array('module_in_menu', 'post', 'string');
         return $return;
     }
@@ -86,7 +86,7 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
         $a = 0;
         foreach ($site_mods as $modname => $modvalues) {
             if (in_array($modname, $block_config['module_in_menu']) and !empty($modvalues['funcs'])) {
-                $_array_menu = array('title' => $modvalues['custom_title'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname);
+                $_array_menu = ['title' => $modvalues['custom_title'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname];
                 $xtpl->assign('FOOTER_MENU', $_array_menu);
                 $xtpl->parse('main.footer_menu');
                 ++$a;

@@ -8,7 +8,7 @@
  * @Createdate Apr 22, 2010 3:00:20 PM
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -22,33 +22,33 @@ $array_department = $db->query($sql)->fetchAll();
 $count_department = sizeof($array_department);
 foreach ($array_department as $row) {
     ++$a;
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'full_name' => $row['full_name'],
         'email' => $row['email'],
-        'phone' => preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", "", $row['phone']),
+        'phone' => preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", '', $row['phone']),
         'fax' => $row['fax'],
         'id' => $row['id'],
         'url_department' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'],
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['id']
-    ));
+    ]);
 
     for ($i = 1; $i <= $count_department; $i++) {
-        $opt = array(
+        $opt = [
             'value' => $i,
-            'selected' => $i == $row['weight'] ? " selected=\"selected\"" : ""
-        );
+            'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
+        ];
         $xtpl->assign('WEIGHT', $opt);
         $xtpl->parse('main.row.option');
     }
 
-    $array = array( $lang_global['disable'], $lang_global['active'], $lang_module['department_no_home'] );
+    $array = [$lang_global['disable'], $lang_global['active'], $lang_module['department_no_home']];
 
     foreach ($array as $key => $val) {
-        $xtpl->assign('STATUS', array(
+        $xtpl->assign('STATUS', [
             'key' => $key,
             'selected' => $key == $row['act'] ? ' selected="selected"' : '',
             'title' => $val
-        ));
+        ]);
 
         $xtpl->parse('main.row.status');
     }

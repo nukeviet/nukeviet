@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['config'];
 
-$array_config = array();
+$array_config = [];
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -65,34 +65,34 @@ $xtpl->assign('NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' :
 $xtpl->assign('COPY_PAGE', $array_config['copy_page'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $array_config['alias_lower'] ? ' checked="checked"' : '');
 
-$view_array = array(
+$view_array = [
     $lang_module['config_view_type_0'],
     $lang_module['config_view_type_1'],
     $lang_module['config_view_type_2']
-);
+];
 foreach ($view_array as $key => $title) {
-    $xtpl->assign('VIEWTYPE', array(
+    $xtpl->assign('VIEWTYPE', [
         'id' => $key,
         'title' => $title,
         'selected' => $array_config['viewtype'] == $key ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.loop');
 }
 for ($i = 5; $i <= 30; ++$i) {
-    $xtpl->assign('PER_PAGE', array(
+    $xtpl->assign('PER_PAGE', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $array_config['per_page'] ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.per_page');
 }
 
 for ($i = 0; $i <= 30; ++$i) {
-    $xtpl->assign('RELATED_ARTICLES', array(
+    $xtpl->assign('RELATED_ARTICLES', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $array_config['related_articles'] ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.related_articles');
 }
 

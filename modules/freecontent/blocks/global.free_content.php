@@ -69,9 +69,9 @@ if (!nv_function_exists('nv_block_freecontent')) {
     function nv_block_config_freecontent_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['blockid'] = $nv_Request->get_int('config_blockid', 'post', 0);
         $return['config']['numrows'] = $nv_Request->get_int('config_numrows', 'post', 2);
         return $return;
@@ -97,7 +97,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
             $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE end_time > 0 AND status = 1';
             $result = $db->query($sql);
             $next_execute = intval($result->fetchColumn());
-            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
             $sth->bindParam(':module_name', $module, PDO::PARAM_STR);
             $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
             $sth->execute();

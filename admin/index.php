@@ -66,7 +66,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     }
 
     if (empty($site_mods) and $module_name != 'language') {
-        $sql = "SELECT setup FROM " . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
+        $sql = 'SELECT setup FROM ' . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
         $setup = $db->query($sql)->fetchColumn();
         if (empty($setup)) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');

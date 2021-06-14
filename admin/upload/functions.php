@@ -31,7 +31,6 @@ $allow_func = [
     'dlimg', 'renameimg', 'moveimg', 'folderlist',
     'delfolder', 'renamefolder', 'createfolder',
     'upload', 'addlogo', 'cropimg', 'rotateimg', 'download'
-
 ];
 
 if (defined('NV_IS_SPADMIN')) {
@@ -59,14 +58,14 @@ function nv_check_allow_upload_dir($dir)
         return [];
     }
 
-    $dir = str_replace("\\", '/', $dir);
+    $dir = str_replace('\\', '/', $dir);
     $dir = rtrim($dir, '/');
     $arr_dir = explode('/', $dir);
     $level = [];
     $autologomod = explode(',', $global_config['autologomod']);
 
     if (defined('NV_CONFIG_DIR')) {
-        if (NV_UPLOADS_DIR == $arr_dir[0]. '/' . $arr_dir[1]) {
+        if (NV_UPLOADS_DIR == $arr_dir[0] . '/' . $arr_dir[1]) {
             $_dir_mod = isset($arr_dir[2]) ? $arr_dir[2] : '';
             $_dir_mod_sub = isset($arr_dir[3]) ? $arr_dir[3] : '';
         } else {
@@ -102,7 +101,7 @@ function nv_check_allow_upload_dir($dir)
             $level['delete_dir'] = true;
 
             // Khong doi ten, xoa thu muc upload cua module
-            if (isset($site_mods[$mod_name]) and $dir == NV_UPLOADS_DIR.'/'.$mod_name) {
+            if (isset($site_mods[$mod_name]) and $dir == NV_UPLOADS_DIR . '/' . $mod_name) {
                 unset($level['rename_dir'], $level['delete_dir']);
             }
         }
@@ -181,7 +180,7 @@ function nv_check_path_upload($path)
         return '';
     }
 
-    $path = str_replace("\\", '/', $path);
+    $path = str_replace('\\', '/', $path);
     $path = str_replace(NV_ROOTDIR . '/', '', $path);
     if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '/', $path) or $path = NV_UPLOADS_DIR) {
         return $path;
@@ -191,7 +190,7 @@ function nv_check_path_upload($path)
 
 /**
  * nv_create_mobileModeImage()
- * 
+ *
  * @param mixed $fileName
  * @param bool $replace
  * @return
@@ -259,7 +258,7 @@ function nv_get_viewImage($fileName, $refresh = 0)
         if (defined('NV_MOBILE_MODE_IMG') and NV_MOBILE_MODE_IMG > 150) {
             nv_create_mobileModeImage($fileName, $refresh);
         }
-        
+
         $viewFile = NV_FILES_DIR . '/' . $m[1];
 
         if (file_exists(NV_ROOTDIR . '/' . $viewFile)) {
@@ -357,7 +356,6 @@ function nv_get_viewImage($fileName, $refresh = 0)
         } else {
             return false;
         }
-
     } else {
         $size = @getimagesize(NV_ROOTDIR . '/' . $fileName);
         return [
@@ -458,7 +456,7 @@ function nv_getFileInfo($pathimg, $file)
 
             if (isset($attr['viewBox'])) {
                 $viewBox = explode(' ', (string)$attr['viewBox']);
-                if (isset($viewBox[3]))  {
+                if (isset($viewBox[3])) {
                     $maxWidth = intval($viewBox[2]);
                     $maxHeight = intval($viewBox[3]);
                 }
@@ -533,7 +531,7 @@ function nv_filesListRefresh($pathimg)
                         $dif = array_diff_assoc($info, $results[$title]);
                         if (!empty($dif)) {
                             // Cập nhật CSDL file thay đổi
-                            $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . intval($info['filesize']) . ", src='" . $info['src'] . "', srcwidth=" . intval($info['srcwidth']) . ", srcheight=" . intval($info['srcheight']) . ", sizes='" . $info['sizes'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = " . $db->quote($title));
+                            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize=' . intval($info['filesize']) . ", src='" . $info['src'] . "', srcwidth=" . intval($info['srcwidth']) . ', srcheight=' . intval($info['srcheight']) . ", sizes='" . $info['sizes'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . ' AND title = ' . $db->quote($title));
                         }
                         unset($results[$title]);
                     } else {
@@ -542,9 +540,9 @@ function nv_filesListRefresh($pathimg)
                         $newalt = str_replace('-', ' ', change_alias($newalt));
 
                         // Thêm file mới
-                        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+                        $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file
                             (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
-                            VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "', " . intval($info['srcwidth']) . ", " . intval($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt)");
+                            VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "', " . intval($info['srcwidth']) . ', ' . intval($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ', :title, :newalt)');
                         $sth->bindParam(':name', $info['name'], PDO::PARAM_STR);
                         $sth->bindParam(':title', $title, PDO::PARAM_STR);
                         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
@@ -557,7 +555,7 @@ function nv_filesListRefresh($pathimg)
             if (!empty($results)) {
                 // Xóa CSDL file không còn tồn tại
                 foreach ($results as $_row) {
-                    $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title=" . $db->quote($_row['title']));
+                    $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . ' AND title=' . $db->quote($_row['title']));
                 }
             }
             $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did);
@@ -635,7 +633,7 @@ if ($nv_Request->isset_request('dirListRefresh', 'get')) {
     $result_new = array_diff($real_dirlist, $dirlist);
     foreach ($result_new as $dirname) {
         try {
-            $array_dirname[$dirname] = $db->insert_id("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", "did");
+            $array_dirname[$dirname] = $db->insert_id('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", 'did');
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
         }

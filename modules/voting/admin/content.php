@@ -24,7 +24,7 @@ if (!empty($submit)) {
     $link = $nv_Request->get_title('link', 'post', '', 1);
 
     $vote_one = $nv_Request->get_int('vote_one', 'post', 0) ? 1 : 0;
-    $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
+    $_groups_post = $nv_Request->get_array('groups_view', 'post', []);
     $_groups_post = !empty($_groups_post) ? nv_groups_post(array_intersect($_groups_post, array_keys($groups_list))) : [];
 
     if (!empty($_groups_post) and (in_array(5, $_groups_post) or in_array(6, $_groups_post))) {

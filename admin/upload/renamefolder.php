@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -17,7 +17,7 @@ $newname = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('
 
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
-if (! isset($check_allow_upload_dir['rename_dir']) or $check_allow_upload_dir['rename_dir'] !== true) {
+if (!isset($check_allow_upload_dir['rename_dir']) or $check_allow_upload_dir['rename_dir'] !== true) {
     die('ERROR_' . $lang_module['notlevel']);
 }
 
@@ -31,7 +31,7 @@ if (empty($newname)) {
 
 unset($matches);
 preg_match('/(.*)\/([a-z0-9\-\_]+)$/i', $path, $matches);
-if (! isset($matches) or empty($matches)) {
+if (!isset($matches) or empty($matches)) {
     die('ERROR_' . $lang_module['notlevel']);
 }
 
@@ -50,19 +50,19 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
         $dir_replace2 = NV_FILES_DIR . '/' . $m2[1] . '/';
     }
 
-    $result = $db->query("SELECT did, dirname FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
+    $result = $db->query('SELECT did, dirname FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
     while (list($did, $dirname) = $result->fetch(3)) {
         $dirname2 = str_replace(NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname);
-        $result_file = $db->query("SELECT src, title FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did=" . $did . " AND type = 'image'");
+        $result_file = $db->query('SELECT src, title FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did=' . $did . " AND type = 'image'");
         while (list($src, $title) = $result_file->fetch(3)) {
             if ($action) {
                 $src2 = preg_replace('/^' . nv_preg_quote($dir_replace1) . '/', $dir_replace2, $src);
             } else {
                 $src2 = preg_replace('/^' . nv_preg_quote($dirname) . '/', $dirname2, $src);
             }
-            $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET src = '" . $src2 . "' WHERE did = " . $did . " AND title='" . $title . "'");
+            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_file SET src = '" . $src2 . "' WHERE did = " . $did . " AND title='" . $title . "'");
         }
-        $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did);
+        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did);
     }
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path . ' -> ' . $newpath, $admin_info['userid']);
     echo $newpath;

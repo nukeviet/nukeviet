@@ -193,7 +193,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
                             // Change site_home_module
                             if ($mod == $global_config['site_home_module']) {
-                                $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'site_home_module' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+                                $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'site_home_module' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
                                 $sth->bindParam(':config_value', $mod_name, PDO::PARAM_STR);
                                 $sth->execute();
                             }
@@ -205,19 +205,19 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                             $sth->execute();
 
                             // Change config
-                            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET module= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module= :mod_old");
+                            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET module= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module= :mod_old");
                             $sth->bindParam(':mod_name', $mod_name, PDO::PARAM_STR);
                             $sth->bindParam(':mod_old', $mod, PDO::PARAM_STR);
                             $sth->execute();
 
                             // Change comment
-                            $sth = $db->prepare("UPDATE " . NV_PREFIXLANG . "_comment SET module= :mod_name WHERE module= :mod_old");
+                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_comment SET module= :mod_name WHERE module= :mod_old');
                             $sth->bindParam(':mod_name', $mod_name, PDO::PARAM_STR);
                             $sth->bindParam(':mod_old', $mod, PDO::PARAM_STR);
                             $sth->execute();
 
                             // Change logs
-                            $sth = $db->prepare("UPDATE " . $db_config['prefix'] . "_logs SET module_name= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module_name= :mod_old");
+                            $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . "_logs SET module_name= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module_name= :mod_old");
                             $sth->bindParam(':mod_name', $mod_name, PDO::PARAM_STR);
                             $sth->bindParam(':mod_old', $mod, PDO::PARAM_STR);
                             $sth->execute();

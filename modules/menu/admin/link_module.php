@@ -28,7 +28,7 @@ if (empty($mod_name)) {
     die($lang_module['add_error_module']);
 }
 
-$array_item = array();
+$array_item = [];
 if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php')) {
     include NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php';
 }
@@ -37,11 +37,11 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php')) {
 $funcs_item = $site_mods[$mod_name]['funcs'];
 foreach ($funcs_item as $key => $sub_item) {
     if ($sub_item['in_submenu'] == 1) {
-        $array_item[] = array(
+        $array_item[] = [
             'key' => $key,
             'title' => $sub_item['func_custom_name'],
             'alias' => $key
-        );
+        ];
     }
 }
 
@@ -57,7 +57,7 @@ if (!empty($array_item)) {
             $xtpl->assign('item', $item1);
             $xtpl->parse('main.link.item');
 
-            $array_submenu = array();
+            $array_submenu = [];
             nv_menu_get_submenu($key, '', $array_item, $sp);
             foreach ($array_submenu as $item2) {
                 $xtpl->assign('item', $item2);

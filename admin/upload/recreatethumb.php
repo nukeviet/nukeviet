@@ -24,7 +24,7 @@ if (empty($path)) {
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['recreatethumb'], $path, $admin_info['userid']);
-$_array_filename = array();
+$_array_filename = [];
 $idf = $nv_Request->get_int('idf', 'post', -1);
 if ($idf < 0) {
     //Đọc tất cả các thư mục, thư mục con của thư mục.
@@ -32,7 +32,7 @@ if ($idf < 0) {
         set_time_limit(0);
     }
 
-    $_dirlist = array();
+    $_dirlist = [];
     $_dirlist = nv_listUploadDir($path, $_dirlist);
 
     // Tìm tất cả các file ảnh có thể tạp ảnh thum để tạo lại
@@ -48,10 +48,10 @@ if ($idf < 0) {
     }
     $number_file = sizeof($_array_filename);
     if ($number_file > 0) {
-        $content_config = "<?php" . "\n\n";
+        $content_config = '<?php' . "\n\n";
         $content_config .= NV_FILEHEAD . "\n\n";
         $content_config .= "if (!defined('NV_IS_FILE_ADMIN'))\n    die('Stop!!!');\n\n";
-        $content_config .= "\$_array_filename=" . var_export($_array_filename, true) . ";\n";
+        $content_config .= '$_array_filename=' . var_export($_array_filename, true) . ";\n";
         $listfile = file_put_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/recreatethumb_' . md5($path . '_' . NV_CHECK_SESSION) . '.php', trim($content_config), LOCK_EX);
         nv_htmlOutput('OK_0_' . $number_file);
     } else {

@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$arr = array();
+$arr = [];
 $arr['title'] = '';
 $arr['id'] = $nv_Request->get_int('id', 'post,get', 0);
 $error = '';
@@ -23,8 +23,8 @@ if ($nv_Request->get_int('save', 'post')) {
     if (empty($arr['title'])) {
         $error = $lang_module['error_menu_block'];
     } elseif ($arr['id'] == 0) {
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (title) VALUES ( :title )";
-        $data_insert = array();
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title) VALUES ( :title )';
+        $data_insert = [];
         $data_insert['title'] = $arr['title'];
         $arr['id'] = $db->insert_id($sql, 'id', $data_insert);
         if (empty($arr['id'])) {
@@ -58,9 +58,9 @@ if ($nv_Request->get_int('save', 'post')) {
                 if ($parentid and $action_menu == 'sys_mod_sub') {
                     // Thêm menu từ các chủ đề của module
                     $subweight = 0;
-                    $array_sub_id = array();
+                    $array_sub_id = [];
                     if (file_exists(NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php')) {
-                        $array_item = array();
+                        $array_item = [];
                         $mod_data = $modvalues['module_data'];
                         include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
                         foreach ($array_item as $key => $item) {
@@ -86,7 +86,7 @@ if ($nv_Request->get_int('save', 'post')) {
                         }
                     }
                     if (!empty($array_sub_id)) {
-                        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $parentid);
+                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $parentid);
                     }
                 }
             }
@@ -98,7 +98,7 @@ if ($nv_Request->get_int('save', 'post')) {
             if (file_exists(NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php')) {
                 $mod_data = $modvalues['module_data'];
 
-                $array_item = array();
+                $array_item = [];
                 include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
                 foreach ($array_item as $key => $item) {
                     $pid = (isset($item['parentid'])) ? $item['parentid'] : 0;

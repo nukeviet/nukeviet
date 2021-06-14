@@ -121,9 +121,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
         if (file_exists($include_file)) {
             if (empty($global_config['switch_mobi_des'])) {
-                $global_config['array_theme_type'] = array_diff($global_config['array_theme_type'], array(
+                $global_config['array_theme_type'] = array_diff($global_config['array_theme_type'], [
                     'm'
-                ));
+                ]);
             }
             // Tùy chọn kiểu giao diện
             if ($nv_Request->isset_request('nv' . NV_LANG_DATA . 'themever', 'get')) {
@@ -141,7 +141,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
 
             // Xac dinh cac $op, $array_op
-            $array_op = array();
+            $array_op = [];
 
             if (!preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
                 nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -228,7 +228,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
                         ($client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'])
                             and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des'])))
                         // Giao diện mobile lấy từ chuyển đổi giao diện
-                        or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des'])))
+                        or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))
+                    )
                     and !empty($_theme_mobile) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_mobile . '/theme.php')
                 ) {
                     $global_config['module_theme'] = $_theme_mobile;
@@ -270,7 +271,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                 $module_info['layout_funcs'] = unserialize($cache);
             } else {
-                $module_info['layout_funcs'] = array();
+                $module_info['layout_funcs'] = [];
                 $sth = $db->prepare('SELECT f.func_name, t.layout FROM ' . NV_MODFUNCS_TABLE . ' f
                     INNER JOIN ' . NV_PREFIXLANG . '_modthemes t ON f.func_id=t.func_id
                     WHERE f.in_module = :module AND t.theme= :theme');
@@ -293,20 +294,20 @@ if (preg_match($global_config['check_module'], $module_name)) {
             } else {
                 $_themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini'));
                 if (isset($_themeConfig['positions']['position']['name'])) {
-                    $theme_config_positions = array(
+                    $theme_config_positions = [
                         $_themeConfig['positions']['position']
-                    );
+                    ];
                 } elseif (isset($_themeConfig['positions']['position'])) {
                     $theme_config_positions = $_themeConfig['positions']['position'];
                 } else {
-                    $theme_config_positions = array();
+                    $theme_config_positions = [];
                     $_ini_file = file_get_contents(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini');
                     if (preg_match_all('/<position>[\t\n\s]+<name>(.*?)<\/name>[\t\n\s]+<tag>(\[[a-zA-Z0-9_]+\])<\/tag>[\t\n\s]+<\/position>/s', $_ini_file, $_m)) {
                         foreach ($_m[1] as $_key => $value) {
-                            $theme_config_positions[] = array(
+                            $theme_config_positions[] = [
                                 'name' => $value,
                                 'tag' => $_m[2][$_key]
-                            );
+                            ];
                         }
                     }
                 }
@@ -362,9 +363,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
             $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
             $sth->execute();
 
-            nv_insert_notification('modules', 'auto_deactive_module', array(
+            nv_insert_notification('modules', 'auto_deactive_module', [
                 'custom_title' => $site_mods[$module_name]['custom_title']
-            ));
+            ]);
             $nv_Cache->delMod('modules');
         }
     } elseif (isset($sys_mods[$module_name])) {

@@ -12,13 +12,13 @@ if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
-$config_theme = array();
-$propety = array();
+$config_theme = [];
+$propety = [];
 
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
 
 if ($nv_Request->isset_request('submit', 'post')) {
-    $css = "";
+    $css = '';
 
     // Css property for body
     $property['color'] = $nv_Request->get_title('body_color', 'post', '');
@@ -45,9 +45,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['customcss'] = $nv_Request->get_textarea('body_customcss', 'post', '');
     $config_theme['body'] = array_filter($property);
     if (!empty($config_theme['body'])) {
-        $css .= nv_css_setproperties("[body]", $config_theme['body']);
+        $css .= nv_css_setproperties('[body]', $config_theme['body']);
     }
-    $property = array();
+    $property = [];
 
     // Css property for link
     $property['color'] = $nv_Request->get_title('link_a_color', 'post', '');
@@ -57,9 +57,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['font_style'] = $property['font_style'] ? 'italic' : '';
     $config_theme['a_link'] = array_filter($property);
     if (!empty($config_theme['a_link'])) {
-        $css .= nv_css_setproperties("[a_link]", $config_theme['a_link']);
+        $css .= nv_css_setproperties('[a_link]', $config_theme['a_link']);
     }
-    $property = array();
+    $property = [];
 
     // Css property for link (hover)
     $property['color'] = $nv_Request->get_title('link_a_hover_color', 'post', '');
@@ -69,9 +69,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['font_style'] = $property['font_style'] ? 'italic' : '';
     $config_theme['a_link_hover'] = array_filter($property);
     if (!empty($config_theme['a_link_hover'])) {
-        $css .= nv_css_setproperties("[a_link_hover]", $config_theme['a_link_hover']);
+        $css .= nv_css_setproperties('[a_link_hover]', $config_theme['a_link_hover']);
     }
-    $property = array();
+    $property = [];
 
     // Css property for content
     $property['margin'] = $nv_Request->get_title('content_margin', 'post', '');
@@ -89,9 +89,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['customcss'] = $nv_Request->get_textarea('content_customcss', 'post', '');
     $config_theme['content'] = array_filter($property);
     if (!empty($config_theme['content'])) {
-        $css .= nv_css_setproperties("[content]", $config_theme['content']);
+        $css .= nv_css_setproperties('[content]', $config_theme['content']);
     }
-    $property = array();
+    $property = [];
 
     // Css property for header
     $property['background_color'] = $nv_Request->get_title('header_background_color', 'post', '');
@@ -113,9 +113,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['customcss'] = $nv_Request->get_textarea('header_customcss', 'post', '');
     $config_theme['header'] = array_filter($property);
     if (!empty($config_theme['header'])) {
-        $css .= nv_css_setproperties("[header]", $config_theme['header']);
+        $css .= nv_css_setproperties('[header]', $config_theme['header']);
     }
-    $property = array();
+    $property = [];
 
     // Css property for footer
     $property['background_color'] = $nv_Request->get_title('footer_background_color', 'post', '');
@@ -137,9 +137,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['customcss'] = $nv_Request->get_textarea('footer_customcss', 'post', '');
     $config_theme['footer'] = array_filter($property);
     if (!empty($config_theme['footer'])) {
-        $css .= nv_css_setproperties("[footer]", $config_theme['footer']);
+        $css .= nv_css_setproperties('[footer]', $config_theme['footer']);
     }
-    $property = array();
+    $property = [];
 
     // Css property for footer
     $property['background_color'] = $nv_Request->get_title('block_background_color', 'post', '');
@@ -163,9 +163,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['customcss'] = $nv_Request->get_textarea('block_customcss', 'post', '');
     $config_theme['block'] = array_filter($property);
     if (!empty($config_theme['block'])) {
-        $css .= nv_css_setproperties("[block]", $config_theme['block']);
+        $css .= nv_css_setproperties('[block]', $config_theme['block']);
     }
-    $property = array();
+    $property = [];
 
     $property['background_color'] = $nv_Request->get_title('block_heading_background_color', 'post', '');
     $property['background_image'] = $nv_Request->get_title('block_heading_background_image', 'post', '');
@@ -173,20 +173,20 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['background_position'] = $nv_Request->get_title('block_heading_background_position', 'post', '');
     $config_theme['block_heading'] = array_filter($property);
     if (!empty($config_theme['block_heading'])) {
-        $css .= nv_css_setproperties("[block_heading]", $config_theme['block_heading']);
+        $css .= nv_css_setproperties('[block_heading]', $config_theme['block_heading']);
     }
-    $property = array();
+    $property = [];
 
     $property['family'] = $nv_Request->get_title('gfont_family', 'post', '');
     $property['styles'] = $nv_Request->get_title('gfont_styles', 'post', '');
     $property['subset'] = $nv_Request->get_title('gfont_subset', 'post', '');
-    empty($property['family']) and ($property['styles'] = $property['subset'] = "");
+    empty($property['family']) and ($property['styles'] = $property['subset'] = '');
     $config_theme['gfont'] = array_filter($property);
 
     // General css
-    if (($generalcss = nv_unhtmlspecialchars($nv_Request->get_textarea('generalcss', 'post', ''))) != "") {
+    if (($generalcss = nv_unhtmlspecialchars($nv_Request->get_textarea('generalcss', 'post', ''))) != '') {
         $config_theme['generalcss'] = $generalcss;
-        $css .= nv_css_setproperties("[generalcss]", $config_theme['generalcss']);
+        $css .= nv_css_setproperties('[generalcss]', $config_theme['generalcss']);
     }
 
     $config_value = array_filter($config_theme);
@@ -195,9 +195,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $config_value = serialize($config_value);
 
     if (isset($module_config['themes'][$selectthemes])) {
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='themes'");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='themes'");
     } else {
-        $sth = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'themes', :config_name, :config_value)");
+        $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'themes', :config_name, :config_value)");
     }
 
     $sth->bindParam(':config_name', $selectthemes, PDO::PARAM_STR);
@@ -206,10 +206,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     if (isset($global_config['sitetimestamp'])) {
         $sitetimestamp = intval($global_config['sitetimestamp']) + 1;
-        $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $sitetimestamp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'sitetimestamp'");
+        $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $sitetimestamp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'sitetimestamp'");
     } else {
         try {
-            $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'sitetimestamp', '1')");
+            $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'sitetimestamp', '1')");
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
@@ -219,13 +219,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $gfonts = new NukeViet\Client\Gfonts();
     $gfonts->destroyAll();
 
-    if (file_exists(NV_ROOTDIR . "/" . NV_ASSETS_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css")) {
-        nv_deletefile(NV_ROOTDIR . "/" . NV_ASSETS_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css");
+    if (file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $selectthemes . '.' . NV_LANG_DATA . '.' . $global_config['idsite'] . '.css')) {
+        nv_deletefile(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $selectthemes . '.' . NV_LANG_DATA . '.' . $global_config['idsite'] . '.css');
     }
 
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectthemes=' . $selectthemes . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
 } else {
-    $default_config_theme = "";
+    $default_config_theme = '';
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config_default.php';
     if (isset($module_config['themes'][$selectthemes])) {
         $config_theme = unserialize($module_config['themes'][$selectthemes]);
@@ -254,7 +254,7 @@ for ($i = 0; $i <= 6; ++$i) {
 }
 
 // List style border
-$boder_style = array(
+$boder_style = [
     'none' => 'None',
     'solid' => 'Solid',
     'dotted' => 'Dotted',
@@ -265,14 +265,16 @@ $boder_style = array(
     'inset' => 'Inset',
     'outset' => 'Outset',
     'hidden' => 'Hidden'
-);
+];
 
 if (isset($module_config['themes'][$selectthemes])) {
     foreach ($boder_style as $key => $value) {
-        $xtpl->assign('BLOCK_BORDER_STYLE', array(
-            'key' => $key,
-            'value' => $value,
-            'selected' => (isset($config_theme['block']['border_style']) and $config_theme['block']['border_style'] == $key) ? ' selected="selected"' : '')
+        $xtpl->assign(
+            'BLOCK_BORDER_STYLE',
+            [
+                'key' => $key,
+                'value' => $value,
+                'selected' => (isset($config_theme['block']['border_style']) and $config_theme['block']['border_style'] == $key) ? ' selected="selected"' : '']
         );
         $xtpl->parse('main.block_border_style');
     }

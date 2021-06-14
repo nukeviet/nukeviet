@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -21,7 +21,7 @@ if (intval($bid) > 0 and md5(NV_CHECK_SESSION . '_' . $bid) == $nv_Request->get_
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET act=' . $act . ' WHERE bid=' . $bid);
     $nv_Cache->delMod('themes');
 
-    nv_jsonOutput(array( 'status' => 'ok', 'act' => $act ? 'act' : 'deact' ));
+    nv_jsonOutput(['status' => 'ok', 'act' => $act ? 'act' : 'deact']);
 } else {
-    nv_jsonOutput(array( 'status' => 'error' ));
+    nv_jsonOutput(['status' => 'error']);
 }

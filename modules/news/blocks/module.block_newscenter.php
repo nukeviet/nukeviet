@@ -25,12 +25,12 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
     {
         global $nv_Cache, $site_mods;
 
-        $tooltip_position = array(
+        $tooltip_position = [
             'top' => $lang_block['tooltip_position_top'],
             'bottom' => $lang_block['tooltip_position_bottom'],
             'left' => $lang_block['tooltip_position_left'],
             'right' => $lang_block['tooltip_position_right']
-        );
+        ];
 
         $html = '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
@@ -118,7 +118,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                         $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                     }
                 }
-                $data_block['nocatid'] = !empty($data_block['nocatid']) ? $data_block['nocatid'] : array();
+                $data_block['nocatid'] = !empty($data_block['nocatid']) ? $data_block['nocatid'] : [];
                 $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
         }
@@ -138,9 +138,9 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
     function nv_block_config_news_newscenter_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
         $return['config']['tooltip_position'] = $nv_Request->get_title('config_tooltip_position', 'post', 0);
@@ -150,7 +150,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $return['config']['length_othertitle'] = $nv_Request->get_int('config_length_othertitle', 'post', 0);
         $return['config']['width'] = $nv_Request->get_int('config_width', 'post', '');
         $return['config']['height'] = $nv_Request->get_int('config_height', 'post', '');
-        $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', array());
+        $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', []);
         return $return;
     }
 
@@ -196,7 +196,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                     $width = isset($block_config['width']) ? $block_config['width'] : 400;
                     $height = isset($block_config['height']) ? $block_config['height'] : 268;
 
-                    if ($row['homeimgfile'] != '' and ($imginfo = nv_is_image(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'])) != array()) {
+                    if ($row['homeimgfile'] != '' and ($imginfo = nv_is_image(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'])) != []) {
                         $image = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
 
                         if ($imginfo['width'] <= $width and $imginfo['height'] <= $height) {

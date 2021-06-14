@@ -18,7 +18,7 @@ if (!empty($user_info['active2step'])) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
@@ -63,11 +63,11 @@ if ($checkss == NV_CHECK_SESSION) {
     $opt = $nv_Request->get_title('opt', 'post', 6);
 
     if (!$GoogleAuthenticator->verifyOpt($secretkey, $opt)) {
-        nv_json_result(array(
+        nv_json_result([
             'status' => 'error',
             'input' => 'opt',
             'mess' => $lang_module['wrong_confirm']
-        ));
+        ]);
     }
 
     try {
@@ -84,11 +84,11 @@ if ($checkss == NV_CHECK_SESSION) {
 
     nv_creat_backupcodes();
 
-    nv_json_result(array(
+    nv_json_result([
         'status' => 'ok',
         'input' => '',
         'mess' => ''
-    ));
+    ]);
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);

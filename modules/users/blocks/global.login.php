@@ -13,7 +13,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 if (!nv_function_exists('nv_block_login')) {
-
     /**
      * nv_block_config_login()
      *
@@ -269,10 +268,10 @@ if (!nv_function_exists('nv_block_login')) {
                     if (empty($block_config['popup_register'])) {
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg_link') : $xtpl->parse('main.' . $display_layout . '.allowuserreg_linkform');
                     } else {
-                        $_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
+                        $_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $site_mods[$block_config['module']]['module_data'];
 
                         $data_questions = [];
-                        $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+                        $sql = 'SELECT qid, title FROM ' . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
                         $result = $db->query($sql);
                         while ($row = $result->fetch()) {
                             $data_questions[$row['qid']] = [

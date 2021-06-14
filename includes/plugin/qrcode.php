@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/29/2009 20:7
  */
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -17,13 +17,13 @@ if ($nv_Request->get_string('second', 'get') == 'qr') {
     $ModuleSize = $nv_Request->get_int('ppp', 'get', 4);
     $outer_frame = $nv_Request->get_int('of', 'get', 1);
 
-    $_ErrorCorrection = array(
+    $_ErrorCorrection = [
         'L' => 'low',
         'M' => 'medium',
         'Q' => 'quartile',
         'H' => 'high'
-    );
-    if (! empty($url) and isset($_ErrorCorrection[$level]) and ($ModuleSize > 0 and $ModuleSize < 13) and ($outer_frame > 0 and $outer_frame < 6)) {
+    ];
+    if (!empty($url) and isset($_ErrorCorrection[$level]) and ($ModuleSize > 0 and $ModuleSize < 13) and ($outer_frame > 0 and $outer_frame < 6)) {
         // Readmore: https://github.com/endroid/QrCode and http://www.qrcode.com/en/about/version.html
         $qrCode = new Endroid\QrCode\QrCode();
 

@@ -15,19 +15,19 @@ if (!defined('NV_IS_FILE_DATABASE')) {
 $checkss = $nv_Request->get_title('checkss', 'post,get');
 
 if ($checkss == NV_CHECK_SESSION) {
-    $tables = $nv_Request->get_array('tables', 'post', array());
+    $tables = $nv_Request->get_array('tables', 'post', []);
     $type = $nv_Request->get_title('type', 'post', '');
     $ext = $nv_Request->get_title('ext', 'post', $global_config['dump_backup_ext']);
 
     if (empty($tables)) {
-        $tables = array();
+        $tables = [];
     } elseif (!is_array($tables)) {
-        $tables = array(
+        $tables = [
             $tables
-        );
+        ];
     }
 
-    $tab_list = array();
+    $tab_list = [];
 
     $result = $db->query("SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'");
     while ($item = $result->fetch(3)) {
@@ -35,7 +35,7 @@ if ($checkss == NV_CHECK_SESSION) {
     }
     $result->closeCursor();
 
-    $contents = array();
+    $contents = [];
     $contents['tables'] = (empty($tables)) ? $tab_list : array_values(array_intersect($tab_list, $tables));
     $contents['type'] = ($type != 'str') ? 'all' : 'str';
     $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';

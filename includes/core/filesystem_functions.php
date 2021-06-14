@@ -28,7 +28,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
     }
 
     $data = file($filename);
-    $ini = array();
+    $ini = [];
     $section = '';
     foreach ($data as $line) {
         $line = trim($line);
@@ -45,7 +45,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
         list($key, $value) = explode('=', $line);
         $key = trim($key);
         $value = trim($value);
-        $value = str_replace(array('"', "'"), array('', ''), $value);
+        $value = str_replace(['"', "'"], ['', ''], $value);
 
         if ($process_sections and !empty($section)) {
             if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
@@ -74,7 +74,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
  */
 function nv_scandir($directory, $pattern, $sorting_order = 0)
 {
-    $return = array();
+    $return = [];
 
     if (is_dir($directory)) {
         if ($dh = opendir($directory)) {
@@ -196,7 +196,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
     }
 
     if (empty($mime) or $mime == 'application/octet-stream') {
-        $img_exts = array('png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd');
+        $img_exts = ['png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd'];
         if (in_array($ext, $img_exts)) {
             if (($img_info = @getimagesize($filename)) !== false) {
                 if (isset($img_info['mime']) and !empty($img_info['mime'])) {
@@ -294,9 +294,9 @@ function nv_get_allowed_ext($allowed_filetypes, $forbid_extensions, $forbid_mime
         return '*';
     }
     $ini = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
-    $allowmimes = array();
+    $allowmimes = [];
     if (!is_array($allowed_filetypes)) {
-        $allowed_filetypes = array($allowed_filetypes);
+        $allowed_filetypes = [$allowed_filetypes];
     }
     if (!empty($allowed_filetypes)) {
         foreach ($allowed_filetypes as $type) {
@@ -370,7 +370,7 @@ function nv_mkdir($path, $dir_name)
     global $lang_global, $global_config, $sys_info;
     $dir_name = nv_string_to_filename(trim(basename($dir_name)));
     if (!preg_match('/^[a-zA-Z0-9-_.]+$/', $dir_name)) {
-        return array(0, sprintf($lang_global['error_create_directories_name_invalid'], $dir_name));
+        return [0, sprintf($lang_global['error_create_directories_name_invalid'], $dir_name)];
     }
     $path = @realpath($path);
     if (!preg_match('/\/$/', $path)) {
@@ -378,11 +378,11 @@ function nv_mkdir($path, $dir_name)
     }
 
     if (file_exists($path . $dir_name)) {
-        return array(2, sprintf($lang_global['error_create_directories_name_used'], $dir_name), $path . $dir_name);
+        return [2, sprintf($lang_global['error_create_directories_name_used'], $dir_name), $path . $dir_name];
     }
 
     if (!is_dir($path)) {
-        return array(0, sprintf($lang_global['error_directory_does_not_exist'], $path));
+        return [0, sprintf($lang_global['error_directory_does_not_exist'], $path)];
     }
 
     $ftp_check_login = 0;
@@ -418,7 +418,7 @@ function nv_mkdir($path, $dir_name)
             @chmod($path, 0777);
         }
         if (!is_writable($path)) {
-            return array(0, sprintf($lang_global['error_directory_can_not_write'], $path));
+            return [0, sprintf($lang_global['error_directory_can_not_write'], $path)];
         }
 
         $oldumask = umask(0);
@@ -426,12 +426,12 @@ function nv_mkdir($path, $dir_name)
         umask($oldumask);
     }
     if (!$res) {
-        return array(0, sprintf($lang_global['error_create_directories_failed'], $dir_name));
+        return [0, sprintf($lang_global['error_create_directories_failed'], $dir_name)];
     }
 
     file_put_contents($path . $dir_name . '/index.html', '');
 
-    return array(1, sprintf($lang_global['directory_was_created'], $dir_name), $path . $dir_name);
+    return [1, sprintf($lang_global['directory_was_created'], $dir_name), $path . $dir_name];
 }
 
 /**
@@ -448,13 +448,13 @@ function nv_deletefile($file, $delsub = false)
     // Kiem tra ten file
     $realpath = realpath($file);
     if (empty($realpath)) {
-        return array(0, sprintf($lang_global['error_non_existent_file'], $file));
+        return [0, sprintf($lang_global['error_non_existent_file'], $file)];
     }
     $realpath = str_replace('\\', '/', $realpath);
     $realpath = rtrim($realpath, '\\/');
     $preg_match = preg_match('/^(' . nv_preg_quote(NV_ROOTDIR) . ')(\/[\S]+)/', $realpath, $path);
     if (empty($preg_match)) {
-        return array(0, sprintf($lang_global['error_delete_forbidden'], $file));
+        return [0, sprintf($lang_global['error_delete_forbidden'], $file)];
     }
 
     $ftp_check_login = 0;
@@ -466,7 +466,7 @@ function nv_deletefile($file, $delsub = false)
         $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
 
         // Ket noi, dang nhap
-        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array('timeout' => 10), $ftp_port);
+        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, ['timeout' => 10], $ftp_port);
 
         // Chuyen thu muc
         if ($ftp->chdir($ftp_path) === true) {
@@ -484,7 +484,7 @@ function nv_deletefile($file, $delsub = false)
             // Xoa thu muc
             $check = nv_ftp_del_dir($ftp, $filename, $delsub);
             if ($check !== true) {
-                return array(0, $check);
+                return [0, $check];
             }
         } elseif ($ftp->unlink($filename) === false) {
             // Xoa file bang FTP khong duoc thi xoa theo cach thong thuong
@@ -496,24 +496,24 @@ function nv_deletefile($file, $delsub = false)
         // Khong dung FTP
 
         $files = scandir($realpath);
-        $files2 = array_diff($files, array('.', '..', '.htaccess', 'index.html'));
+        $files2 = array_diff($files, ['.', '..', '.htaccess', 'index.html']);
         if (sizeof($files2) and !$delsub) {
-            return array(0, sprintf($lang_global['error_delete_subdirectories_not_empty'], $path[2]));
+            return [0, sprintf($lang_global['error_delete_subdirectories_not_empty'], $path[2])];
         } else {
-            $files = array_diff($files, array('.', '..'));
+            $files = array_diff($files, ['.', '..']);
             if (sizeof($files)) {
                 foreach ($files as $f) {
                     $unlink = nv_deletefile($realpath . '/' . $f, true);
                     if (empty($unlink[0])) {
                         $filename = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $realpath . '/' . $f));
-                        return array(0, sprintf($lang_global['error_delete_failed'], $filename));
+                        return [0, sprintf($lang_global['error_delete_failed'], $filename)];
                     }
                 }
             }
             if (!@rmdir($realpath)) {
-                return array(0, sprintf($lang_global['error_delete_subdirectories_failed'], $path[2]));
+                return [0, sprintf($lang_global['error_delete_subdirectories_failed'], $path[2])];
             } else {
-                return array(1, sprintf($lang_global['directory_deleted'], $path[2]));
+                return [1, sprintf($lang_global['directory_deleted'], $path[2])];
             }
         }
     } else {
@@ -521,9 +521,9 @@ function nv_deletefile($file, $delsub = false)
     }
 
     if (file_exists($realpath)) {
-        return array(0, sprintf($lang_global['error_delete_failed'], $filename));
+        return [0, sprintf($lang_global['error_delete_failed'], $filename)];
     } else {
-        return array(1, sprintf($lang_global['file_deleted'], $filename));
+        return [1, sprintf($lang_global['file_deleted'], $filename)];
     }
 }
 
@@ -625,36 +625,36 @@ function nv_renamefile($file, $newname)
 
     $realpath = realpath($file);
     if (empty($realpath)) {
-        return array(0, sprintf($lang_global['error_non_existent_file'], $file));
+        return [0, sprintf($lang_global['error_non_existent_file'], $file)];
     }
     $realpath = str_replace('\\', '/', $realpath);
     $realpath = rtrim($realpath, '\\/');
     $preg_match = preg_match('/^(' . nv_preg_quote(NV_ROOTDIR) . ')(\/[\S]+)/', $realpath, $path);
     if (empty($preg_match)) {
-        return array(0, sprintf($lang_global['error_rename_forbidden'], $file));
+        return [0, sprintf($lang_global['error_rename_forbidden'], $file)];
     }
     $newname = basename(trim($newname));
     $pathinfo = pathinfo($realpath);
     if (file_exists($pathinfo['dirname'] . '/' . $newname)) {
-        return array(0, sprintf($lang_global['error_rename_file_exists'], $newname));
+        return [0, sprintf($lang_global['error_rename_file_exists'], $newname)];
     }
     if (is_dir($realpath) and !preg_match('/^[a-zA-Z0-9-_]+$/', $newname)) {
-        return array(0, sprintf($lang_global['error_rename_directories_invalid'], $newname));
+        return [0, sprintf($lang_global['error_rename_directories_invalid'], $newname)];
     }
     if (!is_dir($realpath) and !preg_match('/^[a-zA-Z0-9-_.]+$/', $newname)) {
-        return array(0, sprintf($lang_global['error_rename_file_invalid'], $newname));
+        return [0, sprintf($lang_global['error_rename_file_invalid'], $newname)];
     }
     if (!is_dir($realpath) and $pathinfo['extension'] != nv_getextension($newname)) {
-        return array(0, sprintf($lang_global['error_rename_extension_changed'], $newname, $pathinfo['basename']));
+        return [0, sprintf($lang_global['error_rename_extension_changed'], $newname, $pathinfo['basename'])];
     }
     if (!@rename($realpath, $pathinfo['dirname'] . '/' . $newname)) {
         if (!@nv_copyfile($realpath, $pathinfo['dirname'] . '/' . $newname)) {
-            return array(0, sprintf($lang_global['error_rename_failed'], $pathinfo['basename'], $newname));
+            return [0, sprintf($lang_global['error_rename_failed'], $pathinfo['basename'], $newname)];
         } else {
             @nv_deletefile($realpath);
         }
     }
-    return array(1, sprintf($lang_global['file_has_been_renamed'], $pathinfo['basename'], $newname));
+    return [1, sprintf($lang_global['file_has_been_renamed'], $pathinfo['basename'], $newname)];
 }
 
 /**
@@ -668,7 +668,7 @@ function nv_renamefile($file, $newname)
 function nv_chmod_dir($conn_id, $dir, $subdir = false)
 {
     global $sys_info, $array_cmd_dir;
-    $no_file = array('.', '..', '.htaccess', 'index.html');
+    $no_file = ['.', '..', '.htaccess', 'index.html'];
     if (substr($sys_info['os'], 0, 3) != 'WIN' and ftp_chmod($conn_id, 0777, $dir) !== false) {
         $array_cmd_dir[] = $dir;
         if ($subdir and is_dir(NV_ROOTDIR . '/' . $dir)) {
@@ -699,27 +699,27 @@ function nv_chmod_dir($conn_id, $dir, $subdir = false)
  */
 function nv_is_image($img)
 {
-    $imageinfo = array();
+    $imageinfo = [];
     if (is_file($img)) {
         $file = @getimagesize($img);
         if ($file) {
-            $typeflag = array();
-            $typeflag[1] = array('type' => IMAGETYPE_GIF, 'ext' => 'gif');
-            $typeflag[2] = array('type' => IMAGETYPE_JPEG, 'ext' => 'jpg');
-            $typeflag[3] = array('type' => IMAGETYPE_PNG, 'ext' => 'png');
-            $typeflag[4] = array('type' => IMAGETYPE_SWF, 'ext' => 'swf');
-            $typeflag[5] = array('type' => IMAGETYPE_PSD, 'ext' => 'psd');
-            $typeflag[6] = array('type' => IMAGETYPE_BMP, 'ext' => 'bmp');
-            $typeflag[7] = array('type' => IMAGETYPE_TIFF_II, 'ext' => 'tiff');
-            $typeflag[8] = array('type' => IMAGETYPE_TIFF_MM, 'ext' => 'tiff');
-            $typeflag[9] = array('type' => IMAGETYPE_JPC, 'ext' => 'jpc');
-            $typeflag[10] = array('type' => IMAGETYPE_JP2, 'ext' => 'jp2');
-            $typeflag[11] = array('type' => IMAGETYPE_JPX, 'ext' => 'jpf');
-            $typeflag[12] = array('type' => IMAGETYPE_JB2, 'ext' => 'jb2');
-            $typeflag[13] = array('type' => IMAGETYPE_SWC, 'ext' => 'swc');
-            $typeflag[14] = array('type' => IMAGETYPE_IFF, 'ext' => 'aiff');
-            $typeflag[15] = array('type' => IMAGETYPE_WBMP, 'ext' => 'wbmp');
-            $typeflag[16] = array('type' => IMAGETYPE_XBM, 'ext' => 'xbm');
+            $typeflag = [];
+            $typeflag[1] = ['type' => IMAGETYPE_GIF, 'ext' => 'gif'];
+            $typeflag[2] = ['type' => IMAGETYPE_JPEG, 'ext' => 'jpg'];
+            $typeflag[3] = ['type' => IMAGETYPE_PNG, 'ext' => 'png'];
+            $typeflag[4] = ['type' => IMAGETYPE_SWF, 'ext' => 'swf'];
+            $typeflag[5] = ['type' => IMAGETYPE_PSD, 'ext' => 'psd'];
+            $typeflag[6] = ['type' => IMAGETYPE_BMP, 'ext' => 'bmp'];
+            $typeflag[7] = ['type' => IMAGETYPE_TIFF_II, 'ext' => 'tiff'];
+            $typeflag[8] = ['type' => IMAGETYPE_TIFF_MM, 'ext' => 'tiff'];
+            $typeflag[9] = ['type' => IMAGETYPE_JPC, 'ext' => 'jpc'];
+            $typeflag[10] = ['type' => IMAGETYPE_JP2, 'ext' => 'jp2'];
+            $typeflag[11] = ['type' => IMAGETYPE_JPX, 'ext' => 'jpf'];
+            $typeflag[12] = ['type' => IMAGETYPE_JB2, 'ext' => 'jb2'];
+            $typeflag[13] = ['type' => IMAGETYPE_SWC, 'ext' => 'swc'];
+            $typeflag[14] = ['type' => IMAGETYPE_IFF, 'ext' => 'aiff'];
+            $typeflag[15] = ['type' => IMAGETYPE_WBMP, 'ext' => 'wbmp'];
+            $typeflag[16] = ['type' => IMAGETYPE_XBM, 'ext' => 'xbm'];
 
             $imageinfo['src'] = $img;
             $imageinfo['width'] = $file[0];
@@ -762,7 +762,7 @@ function nv_ImageInfo($original_name, $width = 0, $is_create_thumb = false, $thu
         return false;
     }
 
-    $imageinfo = array();
+    $imageinfo = [];
 
     $size = @getimagesize($original_name);
     if (!$size or !isset($size[0]) or !isset($size[1]) or !$size[0] or !$size[1]) {
@@ -844,7 +844,7 @@ function nv_ImageInfo($original_name, $width = 0, $is_create_thumb = false, $thu
  */
 function nv_imageResize($origX, $origY, $maxX, $maxY)
 {
-    $return = array('width' => $origX, 'height' => $origY);
+    $return = ['width' => $origX, 'height' => $origY];
     if ($origX > $maxX or $origY > $maxY) {
         if ($origX >= $origY) {
             $return['width'] = $maxX;
@@ -874,12 +874,12 @@ function nv_imageResize($origX, $origY, $maxX, $maxY)
  * @param mixed $folders
  * @return
  */
-function nv_is_file($filepath, $folders = array())
+function nv_is_file($filepath, $folders = [])
 {
     if (empty($folders)) {
-        $folders = array(NV_UPLOADS_DIR, NV_ASSETS_DIR . '/images');
+        $folders = [NV_UPLOADS_DIR, NV_ASSETS_DIR . '/images'];
     } elseif (!is_array($folders)) {
-        $folders = array($folders);
+        $folders = [$folders];
     }
 
     $filepath = htmlspecialchars(trim(NV_DOCUMENT_ROOT . $filepath), ENT_QUOTES);
@@ -892,7 +892,7 @@ function nv_is_file($filepath, $folders = array())
         return false;
     }
 
-    $filepath = str_replace("\\", '/', $filepath);
+    $filepath = str_replace('\\', '/', $filepath);
 
     $file_exists = 0;
     foreach ($folders as $folder) {

@@ -38,20 +38,20 @@ foreach ($array_field_config as $row_f) {
             $pattern = ($number_type == 1) ? '/^[0-9]+$/' : '/^[0-9\.]+$/';
 
             if (!preg_match($pattern, $value)) {
-                nv_jsonOutput(array(
+                nv_jsonOutput([
                     'status' => 'error',
                     'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                ));
+                ]);
             } else {
                 $value = ($number_type == 1) ? intval($value) : floatval($value);
 
                 if ($value < $row_f['min_length'] or $value > $row_f['max_length']) {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                    ));
+                    ]);
                 }
             }
         } elseif ($row_f['field_type'] == 'date') {
@@ -62,96 +62,96 @@ foreach ($array_field_config as $row_f) {
                 $value = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
 
                 if ($row_f['min_length'] > 0 and ($value < $row_f['min_length'] or $value > $row_f['max_length'])) {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
-                    ));
+                    ]);
                 } elseif ($row_f['field'] == 'birthday' and !empty($global_users_config['min_old_user']) and ($m[3] > (date('Y') - $global_users_config['min_old_user']) or ($m[3] == (date('Y') - $global_users_config['min_old_user']) and ($m[2] > date('n') or ($m[2] == date('n') and $m[1] > date('j')))))) {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
-                    ));
+                    ]);
                 }
             } else {
-                nv_jsonOutput(array(
+                nv_jsonOutput([
                     'status' => 'error',
                     'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                ));
+                ]);
             }
         } elseif ($row_f['field_type'] == 'textbox') {
             if ($row_f['match_type'] == 'alphanumeric') {
                 if (!preg_match('/^[a-zA-Z0-9\_]+$/', $value)) {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                    ));
+                    ]);
                 }
             } elseif ($row_f['match_type'] == 'unicodename') {
-                $value_t = str_replace("&#039;", "'", $value);
+                $value_t = str_replace('&#039;', "'", $value);
                 if (!preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $value_t)) {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                    ));
+                    ]);
                 }
             } elseif ($row_f['match_type'] == 'email') {
                 $error = nv_check_valid_email($value, true);
                 if ($error[0] != '') {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => $error[0]
-                    ));
+                    ]);
                 }
                 $value = $error[1];
                 $error = '';
             } elseif ($row_f['match_type'] == 'url') {
                 if (!nv_is_url($value)) {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                    ));
+                    ]);
                 }
             } elseif ($row_f['match_type'] == 'regex') {
-                $value_t = str_replace(["&#039;", "&quot;", "&lt;", "&gt;"], ["'", '"', '<', '>'], $value);
+                $value_t = str_replace(['&#039;', '&quot;', '&lt;', '&gt;'], ["'", '"', '<', '>'], $value);
                 if (@preg_match($row_f['match_regex'], '') !== false) {
                     if (!preg_match($row_f['match_regex'], $value_t)) {
-                        nv_jsonOutput(array(
+                        nv_jsonOutput([
                             'status' => 'error',
                             'input' => $field_input_name,
                             'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        ));
+                        ]);
                     }
                 } else {
                     if (!preg_match('/' . $row_f['match_regex'] . '/', $value_t)) {
-                        nv_jsonOutput(array(
+                        nv_jsonOutput([
                             'status' => 'error',
                             'input' => $field_input_name,
                             'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        ));
+                        ]);
                     }
                 }
             } elseif ($row_f['match_type'] == 'callback') {
                 if (function_exists($row_f['func_callback'])) {
                     if (!call_user_func($row_f['func_callback'], $value)) {
-                        nv_jsonOutput(array(
+                        nv_jsonOutput([
                             'status' => 'error',
                             'input' => $field_input_name,
                             'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        ));
+                        ]);
                     }
                 } else {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => 'error function not exists ' . $row_f['func_callback']
-                    ));
+                    ]);
                 }
             } else {
                 $value = nv_htmlspecialchars($value);
@@ -160,11 +160,11 @@ foreach ($array_field_config as $row_f) {
             $strlen = nv_strlen($value);
 
             if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
-                nv_jsonOutput(array(
+                nv_jsonOutput([
                     'status' => 'error',
                     'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                ));
+                ]);
             }
         } elseif ($row_f['field_type'] == 'textarea' or $row_f['field_type'] == 'editor') {
             $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
@@ -172,27 +172,27 @@ foreach ($array_field_config as $row_f) {
             $value = strip_tags($value, $allowed_html_tags);
             if ($row_f['match_type'] == 'regex') {
                 if (!preg_match('/' . $row_f['match_regex'] . '/', $value)) {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                    ));
+                    ]);
                 }
             } elseif ($row_f['match_type'] == 'callback') {
                 if (function_exists($row_f['func_callback'])) {
                     if (!call_user_func($row_f['func_callback'], $value)) {
-                        nv_jsonOutput(array(
+                        nv_jsonOutput([
                             'status' => 'error',
                             'input' => $field_input_name,
                             'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                        ));
+                        ]);
                     }
                 } else {
-                    nv_jsonOutput(array(
+                    nv_jsonOutput([
                         'status' => 'error',
                         'input' => $field_input_name,
                         'mess' => 'error function not exists ' . $row_f['func_callback']
-                    ));
+                    ]);
                 }
             }
 
@@ -200,11 +200,11 @@ foreach ($array_field_config as $row_f) {
             $strlen = nv_strlen($value);
 
             if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
-                nv_jsonOutput(array(
+                nv_jsonOutput([
                     'status' => 'error',
                     'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
-                ));
+                ]);
             }
         } elseif ($row_f['field_type'] == 'checkbox' or $row_f['field_type'] == 'multiselect') {
             $temp_value = [];
@@ -217,11 +217,11 @@ foreach ($array_field_config as $row_f) {
             $value = implode(',', $temp_value);
         } elseif ($row_f['field_type'] == 'select' or $row_f['field_type'] == 'radio') {
             if (!isset($row_f['field_choices'][$value])) {
-                nv_jsonOutput(array(
+                nv_jsonOutput([
                     'status' => 'error',
                     'input' => $field_input_name,
                     'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
-                ));
+                ]);
             }
         }
 
@@ -229,11 +229,11 @@ foreach ($array_field_config as $row_f) {
     }
 
     if (empty($value) and $row_f['required']) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => $field_input_name,
             'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title'])
-        ));
+        ]);
     }
 
     if (empty($row_f['system'])) {

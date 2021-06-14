@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    $allow_func = array(
+    $allow_func = [
         'main',
         'reply',
         'send',
@@ -30,16 +30,16 @@ if (defined('NV_IS_SPADMIN')) {
         'supporter',
         'supporter-content',
         'forward'
-    );
+    ];
 } else {
-    $allow_func = array(
+    $allow_func = [
         'main',
         'reply',
         'del',
         'view',
         'send',
         'forward'
-    );
+    ];
 }
 
 //Tài liệu hướng dẫn
@@ -60,11 +60,11 @@ function nv_getAllowed()
 {
     global $module_data, $db, $admin_info, $lang_module;
 
-    $contact_allowed = array(
-        'view' => array(),
-        'reply' => array(),
-        'obt' => array()
-    );
+    $contact_allowed = [
+        'view' => [],
+        'reply' => [],
+        'obt' => []
+    ];
 
     if (defined('NV_IS_SPADMIN')) {
         $contact_allowed['view'][0] = $lang_module['is_default'];

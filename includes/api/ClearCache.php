@@ -7,18 +7,19 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jun 20, 2010 8:59:32 PM
  */
+
 namespace NukeViet\Api;
 
 use NukeViet\Api\Api;
 use NukeViet\Api\ApiResult;
 use NukeViet\Api\IApi;
+
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 class ClearCache implements IApi
 {
-
     private $result;
 
     /**
@@ -68,7 +69,7 @@ class ClearCache implements IApi
         }
         $nv_Cache->delAll();
 
-        $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
+        $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
         nv_save_file_config_global();
 
         $this->result->setSuccess();
@@ -77,10 +78,10 @@ class ClearCache implements IApi
 
     private function nv_clear_files($dir, $base)
     {
-        $dels = array();
+        $dels = [];
         if ($dh = opendir($dir)) {
             while (($file = readdir($dh)) !== false) {
-                if (!preg_match("/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file) and $file != "index.html" and is_file($dir . '/' . $file)) {
+                if (!preg_match("/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file) and $file != 'index.html' and is_file($dir . '/' . $file)) {
                     if (unlink($dir . '/' . $file)) {
                         $dels[] = $base . '/' . $file;
                     }

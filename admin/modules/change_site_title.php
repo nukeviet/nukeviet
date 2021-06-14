@@ -8,11 +8,11 @@
  * @Createdate 3/7/2010 2:23
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
-if (! $nv_Request->isset_request('id', 'post,get')) {
+if (!$nv_Request->isset_request('id', 'post,get')) {
     die('Stop!!!');
 }
 
@@ -27,11 +27,11 @@ if (empty($row)) {
 
 if ($nv_Request->get_int('save', 'post') == '1') {
     $func_site_title = $nv_Request->get_title('func_site_title', 'post', '');
-    
+
     $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_site_title= :func_site_title WHERE func_id=' . $id);
     $sth->bindParam(':func_site_title', $func_site_title, PDO::PARAM_STR);
     $sth->execute();
-    
+
     $nv_Cache->delMod('modules');
 
     die('OK|show_funcs|action');
@@ -39,11 +39,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $func_site_title = $row['func_site_title'];
 }
 
-$contents = array();
+$contents = [];
 $contents['caption'] = sprintf($lang_module['change_func_sitetitle'], $row['func_title'], $row['mod_custom_title']);
-$contents['func_site_title'] = array( $lang_module['site_title'], $func_site_title, 255, 'func_site_title' );
-$contents['submit'] = array( $lang_global['submit'], "nv_change_site_title_submit( " . $id . ",'func_site_title' );" );
-$contents['cancel'] = array( $lang_global['cancel'], "nv_action_cancel('action');" );
+$contents['func_site_title'] = [$lang_module['site_title'], $func_site_title, 255, 'func_site_title'];
+$contents['submit'] = [$lang_global['submit'], 'nv_change_site_title_submit( ' . $id . ",'func_site_title' );"];
+$contents['cancel'] = [$lang_global['cancel'], "nv_action_cancel('action');"];
 
 $contents = call_user_func('change_site_title_theme', $contents);
 

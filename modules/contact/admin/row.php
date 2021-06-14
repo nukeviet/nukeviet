@@ -276,7 +276,7 @@ if (!empty($image) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' 
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
 }
 
-$xtpl->assign('DATA', array(
+$xtpl->assign('DATA', [
     'full_name' => $full_name,
     'alias' => $alias,
     'image' => $image,
@@ -285,14 +285,14 @@ $xtpl->assign('DATA', array(
     'email' => $email,
     'address' => $address,
     'note' => $note
-));
+]);
 
 if (!empty($others)) {
     foreach ($others as $var => $val) {
-        $xtpl->assign('OTHER', array(
+        $xtpl->assign('OTHER', [
             'var' => $var,
             'val' => $val
-        ));
+        ]);
         $xtpl->parse('main.other');
     }
 }
@@ -307,7 +307,7 @@ if (!empty($cats)) {
 // list danh sách bộ phận liên hệ
 $a = 0;
 foreach ($adms as $admid => $values) {
-    $xtpl->assign('ADMIN', array(
+    $xtpl->assign('ADMIN', [
         'suspend' => ($values['is_suspend']) ? 'class="warning" title="' . $lang_global['admin_suspend'] . '"' : '',
         'username' => $values['username'],
         'full_name' => nv_show_name_user($values['first_name'], $values['last_name'], $values['username']),
@@ -319,7 +319,7 @@ foreach ($adms as $admid => $values) {
         'reply_level' => ($values['level'] === 1 or (!empty($reply_level) and in_array($admid, $reply_level))) ? ' checked="checked"' : '',
         'obt_level' => (!empty($obt_level) and in_array($admid, $obt_level)) ? ' checked="checked"' : '',
         'disabled' => $values['level'] === 1 ? ' disabled="disabled"' : ''
-    ));
+    ]);
 
     $xtpl->parse('main.admin');
 }

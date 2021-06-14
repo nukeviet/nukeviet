@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 9:32
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ if (sizeof($site_mods) < 1) {
 
 $page_title = $lang_module['main'];
 
-$contents = array();
+$contents = [];
 $contents['div_id'] = 'list_mods';
 $contents['ajax'] = 'nv_show_list_mods();';
 

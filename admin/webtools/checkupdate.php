@@ -24,7 +24,7 @@ if ($nv_Request->isset_request('i', 'get')) {
     $i = $nv_Request->get_string('i', 'get');
 
     if ($i == 'sysUpd' or $i == 'sysUpdRef') {
-        $values = array();
+        $values = [];
         $values['userVersion'] = $global_config['version'];
         $new_version = ($i == 'sysUpd') ? nv_geVersion(28800) : nv_geVersion(120);
 
@@ -85,7 +85,7 @@ if ($nv_Request->isset_request('i', 'get')) {
             clearstatcache();
             $extUpdDate = filemtime(NV_ROOTDIR . '/' . NV_CACHEDIR . '/extensions.version.' . NV_LANG_INTERFACE . '.xml');
             $exts = $exts->xpath('extension');
-            $static_exts = (isset($global_config['static_exts']) and is_array($global_config['static_exts'])) ? $global_config['static_exts'] : array();
+            $static_exts = (isset($global_config['static_exts']) and is_array($global_config['static_exts'])) ? $global_config['static_exts'] : [];
             $a = 1;
 
             foreach ($exts as $extname => $values) {
@@ -93,7 +93,7 @@ if ($nv_Request->isset_request('i', 'get')) {
                 $ext_name = (string)$values->name;
 
                 if (!isset($static_exts[$ext_type]) or !in_array($ext_name, $static_exts[$ext_type])) {
-                    $value = array(
+                    $value = [
                         'id' => (int)$values->id,
                         'type' => $ext_type,
                         'name' => $ext_name,
@@ -107,20 +107,20 @@ if ($nv_Request->isset_request('i', 'get')) {
                         'message' => (string)$values->message,
                         'link' => (string)$values->link,
                         'support' => (string)$values->support,
-                        'updateable' => array(),
+                        'updateable' => [],
                         'origin' => ((string)$values->origin) == 'true' ? true : false,
-                    );
+                    ];
 
                     // Xu ly update
                     $updateables = $values->xpath('updateable/upds/upd');
 
                     if (!empty($updateables)) {
                         foreach ($updateables as $updateable) {
-                            $value['updateable'][] = array(
+                            $value['updateable'][] = [
                                 'fid' => (string)$updateable->upd_fid,
                                 'old' => explode(',', (string)$updateable->upd_old),
                                 'new' => (string)$updateable->upd_new,
-                            );
+                            ];
                         }
                     }
                     unset($updateables, $updateable);
@@ -130,28 +130,28 @@ if ($nv_Request->isset_request('i', 'get')) {
                     $info .= '; ' . $lang_module['onlineVersion'] . ': ';
                     $info .= !empty($value['new_version']) ? $value['new_version'] : ((!empty($value['version']) and $value['origin']) ? $value['version'] : 'n/a');
 
-                    $tooltip = array();
-                    $tooltip[] = array('title' => $lang_module['userVersion'], 'content' => (!empty($value['version']) ? $value['version'] : 'n/a') . (!empty($value['date']) ? ' (' . nv_date('d/m/Y H:i', strtotime($value['date'])) . ')' : ''));
-                    $tooltip[] = array('title' => $lang_module['onlineVersion'], 'content' => (!empty($value['new_version']) ? $value['new_version'] : ((!empty($value['version']) and $value['origin']) ? $value['version'] : 'n/a')) . (!empty($value['new_date']) ? ' (' . nv_date('d/m/Y H:i', strtotime($value['new_date'])) . ')' : ''));
+                    $tooltip = [];
+                    $tooltip[] = ['title' => $lang_module['userVersion'], 'content' => (!empty($value['version']) ? $value['version'] : 'n/a') . (!empty($value['date']) ? ' (' . nv_date('d/m/Y H:i', strtotime($value['date'])) . ')' : '')];
+                    $tooltip[] = ['title' => $lang_module['onlineVersion'], 'content' => (!empty($value['new_version']) ? $value['new_version'] : ((!empty($value['version']) and $value['origin']) ? $value['version'] : 'n/a')) . (!empty($value['new_date']) ? ' (' . nv_date('d/m/Y H:i', strtotime($value['new_date'])) . ')' : '')];
 
                     if (!empty($value['author'])) {
-                        $tooltip[] = array('title' => $lang_module['extAuthor'], 'content' => $value['author']);
+                        $tooltip[] = ['title' => $lang_module['extAuthor'], 'content' => $value['author']];
                     }
 
                     if (!empty($value['license'])) {
-                        $tooltip[] = array('title' => $lang_module['extLicense'], 'content' => $value['license']);
+                        $tooltip[] = ['title' => $lang_module['extLicense'], 'content' => $value['license']];
                     }
 
                     if (!empty($value['mode'])) {
-                        $tooltip[] = array('title' => $lang_module['extMode'], 'content' => $value['mode'] == 'sys' ? $lang_module['extModeSys'] : $lang_module['extModeOther']);
+                        $tooltip[] = ['title' => $lang_module['extMode'], 'content' => $value['mode'] == 'sys' ? $lang_module['extModeSys'] : $lang_module['extModeOther']];
                     }
 
                     if (!empty($value['link'])) {
-                        $tooltip[] = array('title' => $lang_module['extLink'], 'content' => "<a href=\"" . $value['link'] . "\">" . $value['link'] . "</a>");
+                        $tooltip[] = ['title' => $lang_module['extLink'], 'content' => '<a href="' . $value['link'] . '">' . $value['link'] . '</a>'];
                     }
 
                     if (!empty($value['support'])) {
-                        $tooltip[] = array('title' => $lang_module['extSupport'], 'content' => "<a href=\"" . $value['support'] . "\">" . $value['support'] . "</a>");
+                        $tooltip[] = ['title' => $lang_module['extSupport'], 'content' => '<a href="' . $value['support'] . '">' . $value['support'] . '</a>'];
                     }
 
                     $xtpl->assign('EXTNAME', $value['name']);
@@ -173,7 +173,7 @@ if ($nv_Request->isset_request('i', 'get')) {
                         $note = $lang_module['extNote4'];
                         $icon = 'fa-bolt text-warning';
 
-                        $updateVersion = array();
+                        $updateVersion = [];
 
                         foreach ($value['updateable'] as $updateable) {
                             if (in_array($value['version'], $updateable['old'])) {

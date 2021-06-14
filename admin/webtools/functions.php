@@ -12,21 +12,21 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$allow_func = array(
+$allow_func = [
     'main',
     'statistics',
     'clearsystem'
-);
+];
 if (empty($global_config['idsite'])) {
     $allow_func[] = 'checkupdate';
     $allow_func[] = 'config';
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $lang_global['mod_webtools']
-);
+];
 
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'deleteupdate';

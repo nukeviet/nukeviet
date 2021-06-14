@@ -22,7 +22,7 @@ function cron_auto_del_temp_download()
             if (preg_match('/^(' . nv_preg_quote(NV_TEMPNAM_PREFIX) . ')[a-zA-Z0-9\_\.]+$/', $file)) {
                 if ((filemtime($dir . '/' . $file) + 600) < NV_CURRENTTIME) {
                     if (is_file($dir . '/' . $file)) {
-                        if (! @unlink($dir . '/' . $file)) {
+                        if (!@unlink($dir . '/' . $file)) {
                             $result = false;
                         }
                     } else {

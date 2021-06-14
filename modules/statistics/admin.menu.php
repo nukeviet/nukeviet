@@ -21,7 +21,7 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG
     require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
 }
 
-$allow_func = array(
+$allow_func = [
     'main',
     'allbots',
     'allbrowsers',
@@ -29,7 +29,7 @@ $allow_func = array(
     'allos',
     'allreferers',
     'referer'
-);
+];
 
 $submenu['allbots'] = $lang_module['bot'];
 $submenu['allbrowsers'] = $lang_module['browser'];

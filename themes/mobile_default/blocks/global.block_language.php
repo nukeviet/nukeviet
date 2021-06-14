@@ -8,11 +8,11 @@
  * @Createdate Sun, 04 May 2014 12:41:32 GMT
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_language')) {
+if (!nv_function_exists('nv_block_language')) {
     function nv_block_language($block_config)
     {
         global $global_config, $lang_global, $language_array;

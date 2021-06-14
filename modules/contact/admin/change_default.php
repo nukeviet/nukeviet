@@ -8,11 +8,11 @@
  * @Createdate 10/07/2015, 01:12
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     die('Wrong URL');
 }
 

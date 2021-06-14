@@ -8,14 +8,14 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $status = $nv_Request->get_int('active', 'post');
 $listcid = $nv_Request->get_string('list', 'post');
 
-if (! empty($listcid)) {
+if (!empty($listcid)) {
     $status = ($status == 1) ? 1 : 0;
     $cid_array = explode(',', $listcid);
     $cid_array = array_map('intval', $cid_array);
@@ -23,8 +23,8 @@ if (! empty($listcid)) {
 
     if (defined('NV_IS_SPADMIN')) {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE cid IN (' . $listcid . ')');
-    } elseif (! empty($site_mod_comm)) {
-        $array_mod_name = array();
+    } elseif (!empty($site_mod_comm)) {
+        $array_mod_name = [];
         foreach ($site_mod_comm as $module_i => $row) {
             $array_mod_name[] = "'" . $module_i . "'";
         }

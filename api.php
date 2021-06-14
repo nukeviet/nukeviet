@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jul 2, 2017 2:06:56 PM
  */
+
 define('NV_SYSTEM', true);
 define('NV_REMOTE_API', true);
 

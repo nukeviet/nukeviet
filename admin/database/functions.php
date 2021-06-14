@@ -12,13 +12,13 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $lang_global['mod_database']
-);
+];
 
-$allow_func = array(
+$allow_func = [
     'main',
     'savefile',
     'download',
@@ -26,7 +26,7 @@ $allow_func = array(
     'file',
     'getfile',
     'delfile'
-);
+];
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'setting';
     $allow_func[] = 'sampledata';
@@ -50,13 +50,13 @@ function nv_show_tables()
 {
     global $db, $db_config, $lang_module, $module_name;
 
-    $tables = array();
+    $tables = [];
 
     $db_size = 0;
     $db_totalfree = 0;
     $db_tables_count = 0;
 
-    $tables = array();
+    $tables = [];
 
     $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
     while ($item = $result->fetch()) {
@@ -64,7 +64,7 @@ function nv_show_tables()
 
         if ($item['engine'] != 'MyISAM') {
             if ($item['rows'] < 100000) {
-                $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+                $item['rows'] = $db->query('SELECT COUNT(*) FROM ' . $item['name'])->fetchColumn();
                 $item['rows'] = number_format($item['rows']);
             } else {
                 $item['rows'] = '~' . number_format($item['rows']);
@@ -90,30 +90,30 @@ function nv_show_tables()
     $db_size = !empty($db_size) ? nv_convertfromBytes($db_size) : 0;
     $db_totalfree = !empty($db_totalfree) ? nv_convertfromBytes($db_totalfree) : 0;
 
-    $contents = array();
+    $contents = [];
     $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
-    $contents['op'] = array(
+    $contents['op'] = [
         'download' => $lang_module['download'],
         'savefile' => $lang_module['savefile'],
         'optimize' => $lang_module['optimize']
-    );
+    ];
 
     $contents['op_name'] = NV_OP_VARIABLE;
-    $contents['type'] = array(
+    $contents['type'] = [
         'all' => $lang_module['download_all'],
         'str' => $lang_module['download_str']
-    );
+    ];
     $contents['type_name'] = 'type';
-    $contents['ext'] = array(
+    $contents['ext'] = [
         'sql' => $lang_module['ext_sql'],
         'gz' => $lang_module['ext_gz']
-    );
+    ];
     $contents['ext_name'] = 'ext';
     $contents['submit'] = $lang_module['submit'];
     $contents['captions']['tables_info'] = sprintf($lang_module['tables_info'], $db->dbname);
 
-    $contents['columns'] = array(
+    $contents['columns'] = [
         $lang_module['table_name'],
         $lang_module['table_size'],
         $lang_module['table_max_size'],
@@ -124,7 +124,7 @@ function nv_show_tables()
         $lang_module['table_auto_increment'],
         $lang_module['table_create_time'],
         $lang_module['table_update_time']
-    );
+    ];
 
     foreach ($tables as $key => $values) {
         $table_name = substr($key, strlen($db_config['prefix']) + 1);
@@ -184,10 +184,10 @@ function nv_show_tab()
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
-    if (in_array($nv_Request->get_title('show_highlight', 'post'), array(
+    if (in_array($nv_Request->get_title('show_highlight', 'post'), [
         'php',
         'sql'
-    ))) {
+    ])) {
         $content = nv_highlight_string($tab, $nv_Request->get_title('show_highlight', 'post'));
         include NV_ROOTDIR . '/includes/header.php';
         echo $content;
@@ -195,78 +195,78 @@ function nv_show_tab()
     }
 
     if ($item['engine'] != 'MyISAM') {
-        $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+        $item['rows'] = $db->query('SELECT COUNT(*) FROM ' . $item['name'])->fetchColumn();
     }
 
     $tablename = substr($item['name'], strlen($db_config['prefix']) + 1);
-    $contents = array();
+    $contents = [];
     $contents['table']['caption'] = sprintf($lang_module['table_caption'], $tablename);
-    $contents['table']['info']['name'] = array(
+    $contents['table']['info']['name'] = [
         $lang_module['table_name'],
         $tablename
-    );
-    $contents['table']['info']['engine'] = array(
+    ];
+    $contents['table']['info']['engine'] = [
         $lang_module['table_type'],
         ((isset($item['engine'])) ? $item['engine'] : $item['type'])
-    );
-    $contents['table']['info']['row_format'] = array(
+    ];
+    $contents['table']['info']['row_format'] = [
         $lang_module['row_format'],
         $item['row_format']
-    );
-    $contents['table']['info']['data_length'] = array(
+    ];
+    $contents['table']['info']['data_length'] = [
         $lang_module['table_size'],
         nv_convertfromBytes(intval($item['data_length']) + intval($item['index_length']))
-    );
-    $contents['table']['info']['max_data_length'] = array(
+    ];
+    $contents['table']['info']['max_data_length'] = [
         $lang_module['table_max_size'],
         (!empty($item['max_data_length']) ? nv_convertfromBytes(floatval($item['max_data_length'])) : 'n/a')
-    );
-    $contents['table']['info']['data_free'] = array(
+    ];
+    $contents['table']['info']['data_free'] = [
         $lang_module['table_datafree'],
         (!empty($item['data_free']) ? nv_convertfromBytes(intval($item['data_free'])) : 0)
-    );
-    $contents['table']['info']['rows'] = array(
+    ];
+    $contents['table']['info']['rows'] = [
         $lang_module['table_numrow'],
         $item['rows']
-    );
-    $contents['table']['info']['auto_increment'] = array(
+    ];
+    $contents['table']['info']['auto_increment'] = [
         $lang_module['table_auto_increment'],
         ((isset($item['auto_increment'])) ? intval($item['auto_increment']) : 'n/a')
-    );
-    $contents['table']['info']['create_time'] = array(
+    ];
+    $contents['table']['info']['create_time'] = [
         $lang_module['table_create_time'],
         (!empty($item['create_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['create_time'])) : 'n/a')
-    );
-    $contents['table']['info']['update_time'] = array(
+    ];
+    $contents['table']['info']['update_time'] = [
         $lang_module['table_update_time'],
         (!empty($item['update_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['update_time'])) : 'n/a')
-    );
-    $contents['table']['info']['check_time'] = array(
+    ];
+    $contents['table']['info']['check_time'] = [
         $lang_module['table_check_time'],
         (!empty($item['check_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['check_time'])) : 'n/a')
-    );
-    $contents['table']['info']['collation'] = array(
+    ];
+    $contents['table']['info']['collation'] = [
         $lang_module['table_charset'],
         ((!empty($item['collation']) and preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '')
-    );
+    ];
 
     $contents['table']['show'] = nv_highlight_string($tab, 'php');
-    $contents['table']['show_lang'] = array(
+    $contents['table']['show_lang'] = [
         $lang_module['php_code'],
         $lang_module['sql_code']
-    );
+    ];
 
     $contents['table']['row']['caption'] = sprintf($lang_module['table_row_caption'], $tablename);
-    $contents['table']['row']['columns'] = array(
+    $contents['table']['row']['columns'] = [
         $lang_module['field_name'],
         $lang_module['field_type'],
         $lang_module['field_null'],
         $lang_module['field_key'],
         $lang_module['field_default'],
         $lang_module['field_extra']
-    );
+    ];
 
-    $contents['table']['row']['detail'] = array();
+    $contents['table']['row']['detail'] = [];
     $columns_array = $db->columns_array($tab);
     foreach ($columns_array as $row) {
         $row['null'] = ($row['null'] == 'NO') ? 'NOT NULL' : 'NULL';
@@ -297,10 +297,10 @@ function main_theme($contents)
     $xtpl->assign('CAPTION', $contents['captions']['database_info']);
 
     foreach ($contents['database'] as $key => $value) {
-        $xtpl->assign('ROW', array(
+        $xtpl->assign('ROW', [
             'key' => $key,
             'value' => $value
-        ));
+        ]);
         $xtpl->parse('main.loop');
     }
 
@@ -356,10 +356,10 @@ function nv_show_tables_theme($contents)
     $xtpl->assign('SUBMIT', $contents['submit']);
 
     foreach ($contents['rows'] as $key => $values) {
-        $xtpl->assign('ROW', array(
+        $xtpl->assign('ROW', [
             'tag' => (empty($values[3])) ? 'td' : 'th',
             'key' => $key
-        ));
+        ]);
 
         foreach ($values as $value) {
             $xtpl->assign('VALUE', $value);

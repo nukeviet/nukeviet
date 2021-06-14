@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -16,7 +16,7 @@ $check_permission = false;
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
 if ($rowcontent['id'] > 0) {
     $rowcontent = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'])->fetch();
-    if (! empty($rowcontent['id'])) {
+    if (!empty($rowcontent['id'])) {
         $arr_catid = explode(',', $rowcontent['listcatid']);
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission = true;
