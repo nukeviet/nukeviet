@@ -8,12 +8,15 @@
  * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=3bfd5fe10c20f708addec737975a5145)
  * Config saved to config.json and https://gist.github.com/3bfd5fe10c20f708addec737975a5145
  */
+
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+
 html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
@@ -200,7 +203,9 @@ table {
 td, th {
     padding: 0;
 }
+
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+
 @media print {
     *, *:before, *:after {
         background: transparent !important;
@@ -747,8 +752,7 @@ pre code {
     margin-right: -5px;
 }
 
-.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, .col-xs-13, .col-sm-13, .col-md-13, .col-lg-13, .col-xs-14, .col-sm-14, .col-md-14, .col-lg-14, .col-xs-15, .col-sm-15, .col-md-15, .col-lg-15, .col-xs-16, .col-sm-16, .col-md-16, .col-lg-16, .col-xs-17, .col-sm-17, .col-md-17, .col-lg-17, .col-xs-18, .col-sm-18, .col-md-18, .col-lg-18, .col-xs-19, .col-sm-19, .col-md-19, .col-lg-19, .col-xs-20, .col-sm-20, .col-md-20, .col-lg-20, .col-xs-21, .col-sm-21, .col-md-21, .col-lg-21, .col-xs-22, .col-sm-22,
-    .col-md-22, .col-lg-22, .col-xs-23, .col-sm-23, .col-md-23, .col-lg-23, .col-xs-24, .col-sm-24, .col-md-24, .col-lg-24 {
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, .col-xs-13, .col-sm-13, .col-md-13, .col-lg-13, .col-xs-14, .col-sm-14, .col-md-14, .col-lg-14, .col-xs-15, .col-sm-15, .col-md-15, .col-lg-15, .col-xs-16, .col-sm-16, .col-md-16, .col-lg-16, .col-xs-17, .col-sm-17, .col-md-17, .col-lg-17, .col-xs-18, .col-sm-18, .col-md-18, .col-lg-18, .col-xs-19, .col-sm-19, .col-md-19, .col-lg-19, .col-xs-20, .col-sm-20, .col-md-20, .col-lg-20, .col-xs-21, .col-sm-21, .col-md-21, .col-lg-21, .col-xs-22, .col-sm-22, .col-md-22, .col-lg-22, .col-xs-23, .col-sm-23, .col-md-23, .col-lg-23, .col-xs-24, .col-sm-24, .col-md-24, .col-lg-24 {
     position: relative;
     min-height: 1px;
     padding-left: 5px;
@@ -2069,11 +2073,11 @@ textarea.input-lg, select[multiple].input-lg {
     color: #a94442;
 }
 
-.has-feedback label ~ .form-control-feedback {
+.has-feedback label~.form-control-feedback {
     top: 23px;
 }
 
-.has-feedback label.sr-only ~ .form-control-feedback {
+.has-feedback label.sr-only~.form-control-feedback {
     top: 0;
 }
 
@@ -2145,7 +2149,7 @@ textarea.input-lg, select[multiple].input-lg {
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
     cursor: not-allowed;
     opacity: 0.65;
-    filter: alpha(opacity = 65);
+    filter: alpha(opacity=65);
     -webkit-box-shadow: none;
     box-shadow: none;
 }
@@ -2607,7 +2611,7 @@ tbody.collapse.in {
     text-decoration: none;
     background-color: transparent;
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled= false);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     cursor: not-allowed;
 }
 
@@ -3816,36 +3820,33 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
     color: #843534;
 }
 
-@
--webkit-keyframes progress-bar-stripes {from { background-position:40px0;
-    
+@ -webkit-keyframes progress-bar-stripes {
+    from {
+        background-position: 40px0;
+    }
+    to {
+        background-position: 0 0;
+    }
 }
 
-to {
-    background-position: 0 0;
+@ -o-keyframes progress-bar-stripes {
+    from {
+        background-position: 40px0;
+    }
+    to {
+        background-position: 0 0;
+    }
 }
 
-}
-@
--o-keyframes progress-bar-stripes {from { background-position:40px0;
-    
-}
-
-to {
-    background-position: 0 0;
-}
-
-}
-@
-keyframes progress-bar-stripes {from { background-position:40px0;
-    
+@ keyframes progress-bar-stripes {
+    from {
+        background-position: 40px0;
+    }
+    to {
+        background-position: 0 0;
+    }
 }
 
-to {
-    background-position: 0 0;
-}
-
-}
 .progress {
     overflow: hidden;
     height: 18px;
@@ -3935,7 +3936,8 @@ to {
 }
 
 .media, .media-body {
-    zoom: 1;
+    transform: scale(1);
+    transform-origin: 0 0;
     overflow: hidden;
 }
 
@@ -4619,12 +4621,12 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
 
 .modal-backdrop.fade {
     opacity: 0;
-    filter: alpha(opacity = 0);
+    filter: alpha(opacity=0);
 }
 
 .modal-backdrop.in {
     opacity: 0.5;
-    filter: alpha(opacity = 50);
+    filter: alpha(opacity=50);
 }
 
 .modal-header {
@@ -4694,12 +4696,12 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
     word-wrap: normal;
     font-size: 12px;
     opacity: 0;
-    filter: alpha(opacity = 0);
+    filter: alpha(opacity=0);
 }
 
 .tooltip.in {
     opacity: 0.9;
-    filter: alpha(opacity = 90);
+    filter: alpha(opacity=90);
 }
 
 .tooltip.top {
@@ -4974,7 +4976,7 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
     line-height: 1;
 }
 
-@media all and (transform-3d) , ( -webkit-transform-3d ) {
+@media all and (transform-3d), ( -webkit-transform-3d) {
     .carousel-inner>.item {
         -webkit-transition: -webkit-transform 0.6s ease-in-out;
         -o-transition: -o-transform 0.6s ease-in-out;
@@ -5042,7 +5044,7 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
     bottom: 0;
     width: 15%;
     opacity: 0.5;
-    filter: alpha(opacity = 50);
+    filter: alpha(opacity=50);
     font-size: 20px;
     color: #ffffff;
     text-align: center;
@@ -5075,7 +5077,7 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
     color: #ffffff;
     text-decoration: none;
     opacity: 0.9;
-    filter: alpha(opacity = 90);
+    filter: alpha(opacity=90);
 }
 
 .carousel-control .icon-prev, .carousel-control .icon-next, .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right {
@@ -5235,11 +5237,13 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
 }
 
 /* Always float the navbar header */
+
 .navbar-header {
     float: left;
 }
 
 /* Undo the collapsing navbar */
+
 .navbar-collapse {
     display: block !important;
     height: auto !important;
@@ -5261,6 +5265,7 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
 }
 
 /* Always apply the floated nav */
+
 .navbar-nav {
     float: left;
     margin: 0;
@@ -5275,11 +5280,13 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
 }
 
 /* Redeclare since we override the float above */
+
 .navbar-nav.navbar-right {
     float: right;
 }
 
 /* Undo custom dropdowns */
+
 .navbar .navbar-nav .open .dropdown-menu {
     position: absolute;
     float: left;
@@ -5307,6 +5314,7 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
 }
 
 /* Undo form expansion */
+
 .navbar-form {
     float: left;
     width: auto;
@@ -5320,6 +5328,7 @@ a.list-group-item-danger.active, button.list-group-item-danger.active, a.list-gr
 }
 
 /* Copy-pasted from forms.less since we mixin the .form-inline styles. */
+
 .navbar-form .form-group {
     display: inline-block;
     margin-bottom: 0;

@@ -23,8 +23,7 @@
     box-shadow: 0 1px 1px #777, 0 1px 0 #666 inset;
 }
 
-#navbar_menu:before,
-#navbar_menu:after {
+#navbar_menu:before, #navbar_menu:after {
     content: "";
     display: table;
 }
@@ -34,7 +33,8 @@
 }
 
 #navbar_menu {
-    zoom:1;
+    transform: scale(1);
+    transform-origin: 0 0;
 }
 
 #navbar_menu li {
@@ -56,7 +56,7 @@
     text-shadow: 0 1px 0 #000;
 }
 
-#navbar_menu li:hover > a {
+#navbar_menu li:hover>a {
     color: #fafafa;
 }
 
@@ -66,7 +66,8 @@
 
 #navbar_menu ul {
     margin: 20px 0 0 0;
-    _margin: 0; /*IE6 only*/
+    _margin: 0;
+    /*IE6 only*/
     opacity: 0;
     visibility: hidden;
     position: absolute;
@@ -80,9 +81,9 @@
     background: -o-linear-gradient(#444, #111);
     background: -ms-linear-gradient(#444, #111);
     background: linear-gradient(#444, #111);
-    -moz-box-shadow: 0 -1px rgba(255,255,255,.3);
-    -webkit-box-shadow: 0 -1px 0 rgba(255,255,255,.3);
-    box-shadow: 0 -1px 0 rgba(255,255,255,.3);
+    -moz-box-shadow: 0 -1px rgba(255, 255, 255, .3);
+    -webkit-box-shadow: 0 -1px 0 rgba(255, 255, 255, .3);
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, .3);
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
@@ -96,7 +97,7 @@
     transition: all .2s ease-in-out;
 }
 
-#navbar_menu li:hover > ul {
+#navbar_menu li:hover>ul {
     opacity: 1;
     visibility: visible;
     margin: 0;
@@ -106,17 +107,19 @@
     top: 0;
     left: 150px;
     margin: 0 0 0 20px;
-    _margin: 0; /*IE6 only*/
-    -moz-box-shadow: -1px 0 0 rgba(255,255,255,.3);
-    -webkit-box-shadow: -1px 0 0 rgba(255,255,255,.3);
-    box-shadow: -1px 0 0 rgba(255,255,255,.3);
+    _margin: 0;
+    /*IE6 only*/
+    -moz-box-shadow: -1px 0 0 rgba(255, 255, 255, .3);
+    -webkit-box-shadow: -1px 0 0 rgba(255, 255, 255, .3);
+    box-shadow: -1px 0 0 rgba(255, 255, 255, .3);
 }
 
 #navbar_menu ul li {
     float: none;
     display: block;
     border: 0;
-    _line-height: 0; /*IE6 only*/
+    _line-height: 0;
+    /*IE6 only*/
     -moz-box-shadow: 0 1px 0 #111, 0 2px 0 #666;
     -webkit-box-shadow: 0 1px 0 #111, 0 2px 0 #666;
     box-shadow: 0 1px 0 #111, 0 2px 0 #666;
@@ -131,7 +134,8 @@
 #navbar_menu ul a {
     padding: 10px;
     width: 150px;
-    _height: 10px; /*IE6 only*/
+    _height: 10px;
+    /*IE6 only*/
     display: block;
     white-space: nowrap;
     float: none;
@@ -140,7 +144,7 @@
 
 #navbar_menu ul a:hover {
     background-color: #0186ba;
-    background-image: -moz-linear-gradient(#04acec,  #0186ba);
+    background-image: -moz-linear-gradient(#04acec, #0186ba);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#04acec), to(#0186ba));
     background-image: -webkit-linear-gradient(#04acec, #0186ba);
     background-image: -o-linear-gradient(#04acec, #0186ba);
@@ -148,13 +152,13 @@
     background-image: linear-gradient(#04acec, #0186ba);
 }
 
-#navbar_menu ul li:first-child > a {
+#navbar_menu ul li:first-child>a {
     -moz-border-radius: 3px 3px 0 0;
     -webkit-border-radius: 3px 3px 0 0;
     border-radius: 3px 3px 0 0;
 }
 
-#navbar_menu ul li:first-child > a:after {
+#navbar_menu ul li:first-child>a:after {
     content: '';
     position: absolute;
     left: 40px;
@@ -183,33 +187,32 @@
     border-bottom-color: transparent;
 }
 
-#navbar_menu ul li:last-child > a {
+#navbar_menu ul li:last-child>a {
     -moz-border-radius: 0 0 3px 3px;
     -webkit-border-radius: 0 0 3px 3px;
     border-radius: 0 0 3px 3px;
 }
 
 /* Mobile */
+
 #menu-trigger {
     display: none;
 }
 
 @media screen and (max-width: 600px) {
-
     /* nav-wrap */
     #menu-wrap {
         position: relative;
     }
-
     #menu-wrap * {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
-
     /* menu icon */
     #menu-trigger {
-        display: block; /* show menu icon */
+        display: block;
+        /* show menu icon */
         height: 40px;
         line-height: 40px;
         cursor: pointer;
@@ -225,10 +228,10 @@
         -webkit-box-shadow: 0 1px 1px #777, 0 1px 0 #666 inset;
         box-shadow: 0 1px 1px #777, 0 1px 0 #666 inset;
     }
-
     /* main nav */
     #navbar_menu {
-        margin: 0; padding: 10px;
+        margin: 0;
+        padding: 10px;
         position: absolute;
         top: 40px;
         width: 100%;
@@ -239,7 +242,6 @@
         -webkit-box-shadow: none;
         box-shadow: none;
     }
-
     #navbar_menu:after {
         content: '';
         position: absolute;
@@ -249,7 +251,6 @@
         border-right: 8px solid transparent;
         border-bottom: 8px solid #444;
     }
-
     #navbar_menu ul {
         position: static;
         visibility: visible;
@@ -260,14 +261,12 @@
         -webkit-box-shadow: none;
         box-shadow: none;
     }
-
     #navbar_menu ul ul {
         margin: 0 0 0 20px !important;
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
     }
-
     #navbar_menu li {
         position: static;
         display: block;
@@ -278,39 +277,31 @@
         -webkit-box-shadow: none;
         box-shadow: none;
     }
-
-    #navbar_menu ul li{
+    #navbar_menu ul li {
         margin-left: 20px;
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
     }
-
-    #navbar_menu a{
+    #navbar_menu a {
         display: block;
         float: none;
         padding: 0;
         color: #999;
     }
-
-    #navbar_menu a:hover{
+    #navbar_menu a:hover {
         color: #fafafa;
     }
-
-    #navbar_menu ul a{
+    #navbar_menu ul a {
         padding: 0;
         width: auto;
     }
-
-    #navbar_menu ul a:hover{
+    #navbar_menu ul a:hover {
         background: none;
     }
-
-    #navbar_menu ul li:first-child a:after,
-    #navbar_menu ul ul li:first-child a:after {
+    #navbar_menu ul li:first-child a:after, #navbar_menu ul ul li:first-child a:after {
         border: 0;
     }
-
 }
 
 @media screen and (min-width: 600px) {
@@ -320,6 +311,7 @@
 }
 
 /* iPad */
+
 .no-transition {
     -webkit-transition: none;
     -moz-transition: none;
@@ -331,6 +323,6 @@
     display: none;
 }
 
-#navbar_menu li:hover > .no-transition {
+#navbar_menu li:hover>.no-transition {
     display: block;
 }
