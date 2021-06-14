@@ -407,12 +407,12 @@ function nv_html_meta_tags($html = true)
     /**
      * Đọc kỹ giấy phép trước khi thay đổi giá trị này
      *
-     * @link https://github.com/nukeviet/nukeviet/blob/nukeviet4.4/LICENSE
+     * @link https://github.com/nukeviet/nukeviet/blob/nukeviet4.5/LICENSE
      */
     $return[] = [
         'name' => 'name',
         'value' => 'generator',
-        'content' => 'NukeViet v4.4'
+        'content' => 'NukeViet v4.5'
     ];
 
     if (defined('NV_IS_ADMIN')) {
