@@ -81,12 +81,12 @@ if (!empty($admin_pre_data)) {
     }
     if (in_array('facebook', $_2step_opt) and !empty($global_config['facebook_client_id']) and !empty($global_config['facebook_client_secret'])) {
         $cfg_2step['opts'][] = 'facebook';
-        $sql = "SELECT COUNT(oauth_uid) FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=" . $admin_pre_data['admin_id'] . " AND oauth_server='facebook'";
+        $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='facebook'";
         $cfg_2step['active_facebook'] = boolval($db->query($sql)->fetchColumn());
     }
     if (in_array('google', $_2step_opt) and !empty($global_config['google_client_id']) and !empty($global_config['google_client_secret'])) {
         $cfg_2step['opts'][] = 'google';
-        $sql = "SELECT COUNT(oauth_uid) FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=" . $admin_pre_data['admin_id'] . " AND oauth_server='google'";
+        $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='google'";
         $cfg_2step['active_google'] = boolval($db->query($sql)->fetchColumn());
     }
     if (empty($cfg_2step['default']) or !in_array($cfg_2step['default'], $cfg_2step['opts'])) {
@@ -129,9 +129,9 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
             'current_openid' => ''
         ];
 
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET
+        $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET
             checknum = :checknum,
-            last_login = " . NV_CURRENTTIME . ",
+            last_login = ' . NV_CURRENTTIME . ",
             last_ip = :last_ip,
             last_agent = :last_agent,
             last_openid = '',
@@ -164,12 +164,12 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
             $error = $lang_global['admin_oauth_error_getdata'];
         } elseif (!$cfg_2step['active_' . $opt]) {
             // Nếu chưa kích hoạt phương thức này (chưa có gì trong CSDL) thì lưu vào CSDL và xác thực đăng nhập phiên này
-            $sql = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_oauth (
+            $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_oauth (
                 admin_id, oauth_server, oauth_uid, oauth_email, addtime
             ) VALUES (
-                " . $admin_pre_data['admin_id'] . ", " . $db->quote($opt) . ", " . $db->quote($attribs['full_identity']) . ",
-                " . $db->quote($attribs['email']) . ", " . NV_CURRENTTIME . "
-            )";
+                ' . $admin_pre_data['admin_id'] . ', ' . $db->quote($opt) . ', ' . $db->quote($attribs['full_identity']) . ',
+                ' . $db->quote($attribs['email']) . ', ' . NV_CURRENTTIME . '
+            )';
             if ($db->insert_id($sql, 'id')) {
                 $row = $admin_pre_data;
                 $admin_login_success = true;
@@ -178,8 +178,8 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
             }
         } else {
             // Nếu đã kích hoạt rồi thì tìm xem trong CSDL khớp với thông tin xác thực này không!
-            $sql = "SELECT * FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=" . $admin_pre_data['admin_id'] . "
-            AND oauth_server=" . $db->quote($opt) . " AND oauth_uid=" . $db->quote($attribs['full_identity']);
+            $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . '
+            AND oauth_server=' . $db->quote($opt) . ' AND oauth_uid=' . $db->quote($attribs['full_identity']);
             $oauth = $db->query($sql)->fetch();
             if (empty($oauth)) {
                 $error = $lang_global['admin_oauth_error'];
@@ -217,7 +217,7 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
             $error = $lang_global['2teplogin_error_backup'];
         } else {
             $code = $sth->fetchColumn();
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . "_backupcodes SET is_used=1, time_used=" . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $admin_pre_data['userid']);
+            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $admin_pre_data['userid']);
             $step2_isvalid = true;
         }
     }
@@ -235,9 +235,13 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 
-    if ($global_config['ucaptcha_type'] == 'recaptcha') {
+    unset($nv_seccode);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } else {
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($global_config['ucaptcha_type'] == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
@@ -247,7 +251,9 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         $error = sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
     } elseif (empty($nv_password)) {
         $error = $lang_global['password_empty'];
-    } elseif ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type'])) {
+    }
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    elseif ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type'])) {
         $error = ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } else {
         // Đăng nhập khi kích hoạt diễn đàn
@@ -419,7 +425,7 @@ if ($admin_login_success === true) {
     }
 
     $nv_Request->unset_request('admin_pre', 'session');
-    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />");
+    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . '" />');
     die();
 }
 
@@ -468,7 +474,7 @@ if (empty($admin_pre_data)) {
             if (file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php') and file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/admin_global.php')) {
                 $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i);
                 $xtpl->assign('LANGTITLE', $lang_global['langinterface']);
-                $xtpl->assign('SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : "");
+                $xtpl->assign('SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : '');
                 $xtpl->assign('LANGVALUE', $language_array[$lang_i]['name']);
                 $xtpl->parse('main.pre_form.lang_multi.option');
             }

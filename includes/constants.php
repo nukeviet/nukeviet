@@ -36,6 +36,9 @@ define('NV_CACHEDIR', 'data/cache');
 //Thu muc chua IP
 define('NV_IP_DIR', 'data/ip');
 
+//Thu muc chua certificates SMIME
+define('NV_CERTS_DIR', 'data/certs');
+
 //Thu muc assets
 define('NV_ASSETS_DIR', 'assets');
 
@@ -111,7 +114,7 @@ define('NV_SEND_ERRORS_LIST', E_USER_ERROR);
 //Danh sach cac loi se gui den email
 
 //Phan dau cua trang
-define('NV_FILEHEAD', "/**\n * @Project NUKEVIET 4.x\n * @Author VINADES.,JSC <contact@vinades.vn>\n * @Copyright (C) " . gmdate("Y") . " VINADES.,JSC. All rights reserved\n * @License GNU/GPL version 2 or any later version\n * @Createdate " . gmdate("D, d M Y H:i:s") . " GMT\n */");
+define('NV_FILEHEAD', "/**\n * @Project NUKEVIET 4.x\n * @Author VINADES.,JSC <contact@vinades.vn>\n * @Copyright (C) " . gmdate('Y') . " VINADES.,JSC. All rights reserved\n * @License GNU/GPL version 2 or any later version\n * @Createdate " . gmdate('D, d M Y H:i:s') . " GMT\n */");
 
 // Vui long khong thay doi gia tri nay
 define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');
@@ -128,6 +131,8 @@ define('BROWSER_ICAB', 'iCab');
 define('BROWSER_OMNIWEB', 'OmniWeb');
 define('BROWSER_FIREBIRD', 'Firebird');
 define('BROWSER_FIREFOX', 'Firefox');
+define('BROWSER_BRAVE', 'Brave');
+define('BROWSER_PALEMOON', 'Palemoon');
 define('BROWSER_ICEWEASEL', 'Iceweasel');
 define('BROWSER_SHIRETOKO', 'Shiretoko');
 define('BROWSER_MOZILLA', 'Mozilla');
@@ -141,6 +146,21 @@ define('BROWSER_CHROME', 'Chrome');
 define('BROWSER_COCCOC', 'Coc Coc');
 define('BROWSER_ANDROID', 'Android');
 define('BROWSER_GOOGLEBOT', 'GoogleBot');
+define('BROWSER_CURL', 'cURL');
+define('BROWSER_WGET', 'Wget');
+define('BROWSER_UCBROWSER', 'UCBrowser');
+define('BROWSER_YANDEXBOT', 'YandexBot');
+define('BROWSER_YANDEXIMAGERESIZER_BOT', 'YandexImageResizer');
+define('BROWSER_YANDEXIMAGES_BOT', 'YandexImages');
+define('BROWSER_YANDEXVIDEO_BOT', 'YandexVideo');
+define('BROWSER_YANDEXMEDIA_BOT', 'YandexMedia');
+define('BROWSER_YANDEXBLOGS_BOT', 'YandexBlogs');
+define('BROWSER_YANDEXFAVICONS_BOT', 'YandexFavicons');
+define('BROWSER_YANDEXWEBMASTER_BOT', 'YandexWebmaster');
+define('BROWSER_YANDEXDIRECT_BOT', 'YandexDirect');
+define('BROWSER_YANDEXMETRIKA_BOT', 'YandexMetrika');
+define('BROWSER_YANDEXNEWS_BOT', 'YandexNews');
+define('BROWSER_YANDEXCATALOG_BOT', 'YandexCatalog');
 define('BROWSER_YAHOOSLURP', 'Yahoo! Slurp');
 define('BROWSER_W3CVALIDATOR', 'W3C Validator');
 define('BROWSER_BLACKBERRY', 'BlackBerry');
@@ -150,6 +170,13 @@ define('BROWSER_NOKIA', 'Nokia Browser');
 define('BROWSER_MSN', 'MSN Browser');
 define('BROWSER_MSNBOT', 'MSN Bot');
 define('BROWSER_BINGBOT', 'Bing Bot');
+define('BROWSER_VIVALDI', 'Vivaldi');
+define('BROWSER_YANDEX', 'Yandex');
+define('BROWSER_PLAYSTATION', 'PlayStation');
+define('BROWSER_SAMSUNG', 'SamsungBrowser');
+define('BROWSER_SILK', 'Silk');
+define('BROWSER_I_FRAME', 'Iframely');
+define('BROWSER_COCOA', 'CocoaRestClient');
 
 //Platform Names
 define('PLATFORM_WIN', 'Windows');
@@ -178,6 +205,16 @@ define('PLATFORM_OPENSOLARIS', 'OpenSolaris');
 define('PLATFORM_ANDROID', 'Android');
 define('PLATFORM_IRIX', 'Irix');
 define('PLATFORM_PALM', 'Palm');
+define('PLATFORM_PLAYSTATION', 'Sony PlayStation');
+define('PLATFORM_ROKU', 'Roku');
+define('PLATFORM_APPLE_TV', 'Apple TV');
+define('PLATFORM_TERMINAL', 'Terminal');
+define('PLATFORM_FIRE_OS', 'Fire OS');
+define('PLATFORM_SMART_TV', 'SMART-TV');
+define('PLATFORM_CHROME_OS', 'Chrome OS');
+define('PLATFORM_JAVA_ANDROID', 'Java/Android');
+define('PLATFORM_POSTMAN', 'Postman');
+define('PLATFORM_I_FRAME', 'Iframely');
 
 // Memcached
 define('NV_MEMCACHED_HOST', '127.0.0.1');
@@ -205,4 +242,18 @@ $global_config['check_cron'] = '/^(cron)\_[a-zA-Z0-9\_]+$/';
 $global_config['check_op_layout'] = '/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/';
 $global_config['check_version'] = '/^([0-9]{1})\.([0-9]{1})\.([0-9]{2})$/';
 
-$global_config['others_headers'] = array('X-Content-Type-Options'=>'nosniff','X-XSS-Protection'=>'1; mode=block','Strict-Transport-Security'=>'max-age=31536000; preload');
+$global_config['others_headers'] = ['X-Content-Type-Options' => 'nosniff', 'X-XSS-Protection' => '1; mode=block', 'Strict-Transport-Security' => 'max-age=31536000; preload'];
+
+// Meta Property
+$meta_property = [
+    'og:title' => '',
+    'og:type' => '',
+    'og:description' => '',
+    'og:site_name' => '',
+    'og:image' => '',
+    'og:image:url' => '',
+    'og:image:type' => '',
+    'og:image:width' => '',
+    'og:image:height' => '',
+    'og:url' => ''
+];

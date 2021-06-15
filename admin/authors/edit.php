@@ -61,7 +61,7 @@ if (empty($row['files_level'])) {
     $old_allow_files_type = [];
     $old_allow_modify_files = $old_allow_create_subdirectories = $old_allow_modify_subdirectories = 0;
 } else {
-    list ($old_allow_files_type, $old_allow_modify_files, $old_allow_create_subdirectories, $old_allow_modify_subdirectories) = explode('|', $row['files_level']);
+    list($old_allow_files_type, $old_allow_modify_files, $old_allow_create_subdirectories, $old_allow_modify_subdirectories) = explode('|', $row['files_level']);
     $old_allow_files_type = !empty($old_allow_files_type) ? explode(',', $old_allow_files_type) : [];
 }
 
@@ -144,7 +144,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
         $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-        $admin_theme =  (! empty($admin_theme) and in_array($admin_theme, $adminThemes))? $admin_theme : '';
+        $admin_theme = (!empty($admin_theme) and in_array($admin_theme, $adminThemes)) ? $admin_theme : '';
 
         $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position, main_module = :main_module, admin_theme = :admin_theme WHERE admin_id=' . $admin_id);
         $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
@@ -278,7 +278,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $modules = $old_modules;
     $position = $row['position'];
     $editor = $row['editor'];
-    $admin_theme =  $row['admin_theme'];
+    $admin_theme = $row['admin_theme'];
     $allow_files_type = $old_allow_files_type;
     $allow_modify_files = $old_allow_modify_files;
     $allow_create_subdirectories = $old_allow_create_subdirectories;

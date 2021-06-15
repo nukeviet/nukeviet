@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -62,9 +62,9 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
         $check_like = true;
 
         $_where = "(t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
-        $_where .= " AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)";
+        $_where .= ' AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)';
 
-        if ($type == "image" or $type == "flash") {
+        if ($type == 'image' or $type == 'flash') {
             $_where .= " AND t1.type='" . $type . "'";
         }
         if ($nv_Request->isset_request('author', 'get')) {
@@ -131,7 +131,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
             $xtpl->parse('main.loopimg');
         }
 
-        if (! empty($selectfile)) {
+        if (!empty($selectfile)) {
             $xtpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
             $xtpl->parse('main.imgsel');
         }

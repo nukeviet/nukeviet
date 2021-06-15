@@ -7,12 +7,13 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$array_menu_type = array();
-$arr = array();
+$array_menu_type = [];
+$arr = [];
 
 $arr['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
@@ -52,18 +53,18 @@ $db->sqlreset()
 
 $query2 = $db->query($db->sql());
 
-$array = array();
+$array = [];
 $a = 0;
 while ($row = $query2->fetch()) {
-    $arr_items = array();
+    $arr_items = [];
     $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $row['id'] . ' ORDER BY sort ASC';
     $result = $db->query($sql);
-    while (list ($title_i) = $result->fetch(3)) {
+    while (list($title_i) = $result->fetch(3)) {
         $arr_items[] = $title_i;
     }
 
     ++$a;
-    $array[$row['id']] = array(
+    $array[$row['id']] = [
         'id' => $row['id'],
         'nb' => $a,
         'title' => $row['title'],
@@ -71,7 +72,7 @@ while ($row = $query2->fetch()) {
         'num' => sizeof($arr_items),
         'link_view' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $row['id'],
         'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=menu&amp;id=' . $row['id']
-    );
+    ];
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

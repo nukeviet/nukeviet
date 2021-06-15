@@ -8,7 +8,7 @@
  * @Createdate 12/31/2009 0:51
  */
 
-if (! defined('NV_IS_MOD_VOTING')) {
+if (!defined('NV_IS_MOD_VOTING')) {
     die('Stop!!!');
 }
 
@@ -27,7 +27,7 @@ function voting_result($voting)
     $xtpl->assign('LANG', $voting['lang']);
     $xtpl->assign('VOTINGQUESTION', $voting['question']);
 
-    if (! empty($voting['note'])) {
+    if (!empty($voting['note'])) {
         $xtpl->assign('VOTINGNOTE', $voting['note']);
         $xtpl->parse('main.note');
     }

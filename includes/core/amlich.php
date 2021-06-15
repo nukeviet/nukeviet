@@ -8,7 +8,7 @@
  * @Createdate 18/10/2011, 9:45
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -55,7 +55,7 @@ function jdToDate($jd)
     $month = $m + 3 - 12 * floor($m / 10);
     $year = $b * 100 + $d - 4800 + floor($m / 10);
 
-    return array( $day, $month, $year );
+    return [$day, $month, $year];
 }
 
 /**
@@ -88,12 +88,11 @@ function getNewMoonDay($k, $timeZone)
     $C1 = $C1 - 0.0074 * sin($dr * ($M - $Mpr)) + 0.0004 * sin($dr * (2 * $F + $M));
     $C1 = $C1 - 0.0004 * sin($dr * (2 * $F - $M)) - 0.0006 * sin($dr * (2 * $F + $Mpr));
     $C1 = $C1 + 0.0010 * sin($dr * (2 * $F - $Mpr)) + 0.0005 * sin($dr * (2 * $Mpr + $M));
-    if ($T < - 11) {
+    if ($T < -11) {
         $deltat = 0.001 + 0.000839 * $T + 0.0002261 * $T2 - 0.00000845 * $T3 - 0.000000081 * $T * $T3;
     } else {
-        $deltat = - 0.000278 + 0.000265 * $T + 0.000262 * $T2;
-    }
-    ;
+        $deltat = -0.000278 + 0.000265 * $T + 0.000262 * $T2;
+    };
     $JdNew = $Jd1 + $C1 - $deltat;
 
     return floor($JdNew + 0.5 + $timeZone / 24);
@@ -214,7 +213,7 @@ function convertSolar2Lunar($dd, $mm, $yy, $timeZone)
     if ($lunarMonth >= 11 and $diff < 4) {
         $lunarYear -= 1;
     }
-    return array( $lunarDay, $lunarMonth, $lunarYear, $lunarLeap );
+    return [$lunarDay, $lunarMonth, $lunarYear, $lunarLeap];
 }
 
 /**
@@ -248,7 +247,7 @@ function convertLunar2Solar($lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $tim
             $leapMonth += 12;
         }
         if ($lunarLeap != 0 and $lunarMonth != $leapMonth) {
-            return array( 0, 0, 0 );
+            return [0, 0, 0];
         } elseif ($lunarLeap != 0 or $off >= $leapOff) {
             $off += 1;
         }
@@ -264,8 +263,8 @@ function convertLunar2Solar($lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $tim
  */
 function alhn()
 {
-    $CAN = array( 'Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý' );
-    $CHI = array( 'Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi' );
+    $CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
+    $CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
     $arr = array_slice(convertSolar2Lunar(date('d'), date('m'), date('Y'), 7), 0, 3);
     $arr[0] = str_pad($arr[0], 2, '0', STR_PAD_LEFT);
     $arr[1] = str_pad($arr[1], 2, '0', STR_PAD_LEFT);

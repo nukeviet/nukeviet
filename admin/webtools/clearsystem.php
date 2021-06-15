@@ -23,10 +23,10 @@ $page_title = $lang_module['clearsystem'];
  */
 function nv_clear_files($dir, $base)
 {
-    $dels = array();
+    $dels = [];
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
-            if (!preg_match("/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file) and $file != "index.html" and is_file($dir . '/' . $file)) {
+            if (!preg_match("/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file) and $file != 'index.html' and is_file($dir . '/' . $file)) {
                 if (unlink($dir . '/' . $file)) {
                     $dels[] = $base . '/' . $file;
                 }
@@ -55,17 +55,17 @@ if (defined('NV_IS_GODADMIN')) {
 }
 
 if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isset_request('deltype', 'post')) {
-    $deltype = $nv_Request->get_typed_array('deltype', 'post', 'string', array());
+    $deltype = $nv_Request->get_typed_array('deltype', 'post', 'string', []);
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['clearsystem'], implode(", ", $deltype), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['clearsystem'], implode(', ', $deltype), $admin_info['userid']);
     clearstatcache();
 
     if (defined('NV_IS_GODADMIN')) {
         if (in_array('clearfiletemp', $deltype)) {
-            $dir = NV_ROOTDIR . "/" . NV_TEMP_DIR;
+            $dir = NV_ROOTDIR . '/' . NV_TEMP_DIR;
             if ($dh = opendir($dir)) {
                 while (($file = readdir($dh)) !== false) {
-                    if (preg_match("/^(" . nv_preg_quote(NV_TEMPNAM_PREFIX) . ")[a-zA-Z0-9\-\_\.]+$/", $file)) {
+                    if (preg_match('/^(' . nv_preg_quote(NV_TEMPNAM_PREFIX) . ")[a-zA-Z0-9\-\_\.]+$/", $file)) {
                         if (is_file($dir . '/' . $file)) {
                             if (@unlink($dir . '/' . $file)) {
                                 $xtpl->assign('DELFILE', NV_TEMP_DIR . '/' . $file);
@@ -140,7 +140,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
         }
         $nv_Cache->delAll();
         if (defined('NV_IS_GODADMIN')) {
-            $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
+            $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'");
             nv_save_file_config_global();
         }
     }

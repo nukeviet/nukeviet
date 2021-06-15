@@ -22,6 +22,9 @@ ob_end_clean();
 $contents = nv_url_rewrite($contents);
 if (!defined('NV_IS_AJAX')) {
     $contents = nv_change_buffer($contents);
+    $optimizer = new NukeViet\Core\Optimizer($contents, NV_BASE_SITEURL);
+    $contents = $optimizer->process();
+    $optimizer->headerPreload($headers);
     if (defined('NV_IS_SPADMIN')) {
         $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($lang_global['memory_time_usage'], nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
     }
@@ -41,8 +44,21 @@ $html_headers = $global_config['others_headers'];
 if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
     $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
 }
+
+if (!empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
+    $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
+}
+
+if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
+    $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
+}
+
+// Chặn Google FLoC (thu thập dữ liệu người dùng mà không cần cookie của Google)
+// https://github.com/WICG/floc/blob/main/README.md
+$html_headers['Permissions-Policy'] = 'interest-cohort=()';
+
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
-$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
 $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
 $html_headers['Expires'] = '-1'; // Proxies.
@@ -72,7 +88,7 @@ foreach ($html_headers as $key => $value) {
     $_key = strtolower($key);
     if (!isset($sys_info['server_headers'][$_key])) {
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
 
         foreach ($value as $val) {

@@ -8,14 +8,14 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
 $theme1 = $nv_Request->get_title('theme1', 'get');
 $theme2 = $nv_Request->get_title('theme2', 'get');
 
-$position1 = $position2 = array();
+$position1 = $position2 = [];
 
 if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_config['check_theme'], $theme2) and $theme1 != $theme2 and file_exists(NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini') and file_exists(NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini')) {
     // theme 1

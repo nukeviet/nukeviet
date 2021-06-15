@@ -14,48 +14,48 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['banners_list'];
 
-$sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC";
+$sql = 'SELECT id,title,blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
 
-$contents = array();
+$contents = [];
 $contents['searchform'] = true;
-$contents['plans'] = array();
+$contents['plans'] = [];
 $contents['keyword'] = $nv_Request->get_title('q', 'get', '');
 $contents['pid'] = $nv_Request->get_int('pid', 'get', 0);
 $contents['clid'] = $nv_Request->get_int('clid', 'get', 0);
 
-$plans = array();
+$plans = [];
 while ($row = $result->fetch()) {
     $contents['plans'][] = $row;
-    $plans[$row['id']] = $row['title'] . " (" . (!empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ")";
+    $plans[$row['id']] = $row['title'] . ' (' . (!empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ')';
 }
 
-$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE ";
-if (in_array($nv_Request->get_int('act', 'get', 1), array(0, 2, 3, 4))) {
-    $sql .= "act=" . $nv_Request->get_int('act', 'get');
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE ';
+if (in_array($nv_Request->get_int('act', 'get', 1), [0, 2, 3, 4])) {
+    $sql .= 'act=' . $nv_Request->get_int('act', 'get');
     $contents['caption'] = $lang_module['banners_list' . $nv_Request->get_int('act', 'get')];
 } else {
-    $sql .= "act=1";
+    $sql .= 'act=1';
     $contents['caption'] = $lang_module['banners_list1'];
 }
 
 if (isset($clients[$contents['clid']])) {
-    $sql .= " AND clid=" . $contents['clid'];
-    $contents['caption'] .= " " . sprintf($lang_module['banners_list_cl'], $clients[$contents['clid']]);
+    $sql .= ' AND clid=' . $contents['clid'];
+    $contents['caption'] .= ' ' . sprintf($lang_module['banners_list_cl'], $clients[$contents['clid']]);
 } elseif (isset($plans[$contents['pid']])) {
-    $sql .= " AND pid=" . $contents['pid'];
-    $contents['caption'] .= " " . sprintf($lang_module['banners_list_pl'], $plans[$contents['pid']]);
+    $sql .= ' AND pid=' . $contents['pid'];
+    $contents['caption'] .= ' ' . sprintf($lang_module['banners_list_pl'], $plans[$contents['pid']]);
 }
 if (!empty($contents['keyword'])) {
     $keyword = $db->dblikeescape($contents['keyword']);
     $sql .= " AND (title LIKE '%" . $keyword . "%' OR file_alt LIKE '%" . $keyword . "%' OR click_url LIKE '%" . $keyword . "%' OR bannerhtml LIKE '%" . $keyword . "%')";
 }
 
-$sql .= " ORDER BY id DESC";
+$sql .= ' ORDER BY id DESC';
 
 $result = $db->query($sql);
 
-$contents['thead'] = array(
+$contents['thead'] = [
     $lang_module['title'],
     $lang_module['in_plan'],
     $lang_module['of_user'],
@@ -63,13 +63,13 @@ $contents['thead'] = array(
     $lang_module['exp_date'],
     $lang_module['is_act'],
     $lang_global['actions']
-);
+];
 $contents['view'] = $lang_global['detail'];
 $contents['edit'] = $lang_global['edit'];
 $contents['del'] = $lang_global['delete'];
-$contents['rows'] = array();
+$contents['rows'] = [];
 
-$array_userids = $array_users = array();
+$array_userids = $array_users = [];
 
 while ($row = $result->fetch()) {
     if ($row['exp_time'] != 0 and $row['exp_time'] <= NV_CURRENTTIME) {
@@ -77,18 +77,18 @@ while ($row = $result->fetch()) {
         $row['act'] = 0;
     }
     $contents['rows'][$row['id']]['title'] = $row['title'];
-    $contents['rows'][$row['id']]['pid'] = array(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'], $plans[$row['pid']]);
+    $contents['rows'][$row['id']]['pid'] = [NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $row['pid'], $plans[$row['pid']]];
     $contents['rows'][$row['id']]['clid'] = $row['clid'];
-    $contents['rows'][$row['id']]['publ_date'] = date("d/m/Y", $row['publ_time']);
-    $contents['rows'][$row['id']]['exp_date'] = !empty($row['exp_time']) ? date("d/m/Y", $row['exp_time']) : $lang_module['unlimited'];
-    $contents['rows'][$row['id']]['act'] = array(
+    $contents['rows'][$row['id']]['publ_date'] = date('d/m/Y', $row['publ_time']);
+    $contents['rows'][$row['id']]['exp_date'] = !empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : $lang_module['unlimited'];
+    $contents['rows'][$row['id']]['act'] = [
         'act_' . $row['id'],
         $row['act'],
-        "nv_b_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');"
-    );
-    $contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_banner&amp;id=" . $row['id'];
-    $contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_banner&amp;id=" . $row['id'];
-    $contents['rows'][$row['id']]['del'] = "nv_b_del(" . $row['id'] . ");";
+        'nv_b_chang_act(' . $row['id'] . ",'act_" . $row['id'] . "');"
+    ];
+    $contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_banner&amp;id=' . $row['id'];
+    $contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $row['id'];
+    $contents['rows'][$row['id']]['del'] = 'nv_b_del(' . $row['id'] . ');';
 
     if (!empty($row['clid'])) {
         $array_userids[$row['clid']] = $row['clid'];
@@ -100,12 +100,11 @@ if (!empty($array_userids)) {
     $sql = 'SELECT userid, username, md5username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN(' . implode(',', $array_userids) . ')';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
-
         $array_users[$row['userid']] = $row;
     }
 }
 
-$content = call_user_func("nv_b_list_theme", $contents, $array_users);
+$content = call_user_func('nv_b_list_theme', $contents, $array_users);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($content);

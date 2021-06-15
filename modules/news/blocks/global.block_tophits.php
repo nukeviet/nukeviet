@@ -24,12 +24,12 @@ if (!nv_function_exists('nv_news_block_tophits')) {
     function nv_block_config_tophits_blocks($module, $data_block, $lang_block)
     {
         global $nv_Cache, $site_mods;
-        $tooltip_position = array(
+        $tooltip_position = [
             'top' => $lang_block['tooltip_position_top'],
             'bottom' => $lang_block['tooltip_position_bottom'],
             'left' => $lang_block['tooltip_position_left'],
             'right' => $lang_block['tooltip_position_right']
-        );
+        ];
         $html = '';
         $html .= '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . $lang_block['number_day'] . ':</label>';
@@ -107,15 +107,15 @@ if (!nv_function_exists('nv_news_block_tophits')) {
     function nv_block_config_tophits_blocks_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['number_day'] = $nv_Request->get_int('config_number_day', 'post', 0);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
         $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
         $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
-        $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', array());
+        $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', []);
         return $return;
     }
 
@@ -137,7 +137,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $show_no_image = $module_config[$module]['show_no_image'];
         $publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
-        $array_block_news = array();
+        $array_block_news = [];
         $db_slave->sqlreset()
             ->select('id, catid, publtime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
@@ -150,7 +150,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         }
 
         $result = $db_slave->query($db_slave->sql());
-        while (list ($id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
+        while (list($id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 $imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
@@ -168,7 +168,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
             }
             $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
 
-            $array_block_news[] = array(
+            $array_block_news[] = [
                 'id' => $id,
                 'title' => $title,
                 'link' => $link,
@@ -176,7 +176,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
                 'width' => $blockwidth,
                 'hometext' => $hometext,
                 'external_link' => $external_link
-            );
+            ];
         }
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $mod_file . '/block_tophits.tpl')) {
@@ -229,11 +229,10 @@ if (defined('NV_SYSTEM')) {
             $module_array_cat = $global_array_cat;
             unset($module_array_cat[0]);
         } else {
-            $module_array_cat = array();
+            $module_array_cat = [];
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
-            if(!empty($list))
-            {
+            if (!empty($list)) {
                 foreach ($list as $l) {
                     $module_array_cat[$l['catid']] = $l;
                     $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];

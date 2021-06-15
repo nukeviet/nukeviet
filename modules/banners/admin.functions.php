@@ -203,7 +203,7 @@ function nv_CreateXML_bannerPlan()
 function nv_fix_banner_weight($pid)
 {
     global $db;
-    list ($pid, $form) = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . intval($pid))->fetch(3);
+    list($pid, $form) = $db->query('SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . intval($pid))->fetch(3);
     if ($pid > 0 and $form == 'sequential') {
         $query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $pid . ' AND act IN(0,1,3) ORDER BY weight ASC, id DESC';
         $result = $db->query($query_weight);
@@ -912,7 +912,7 @@ if ($nv_Request->isset_request('ajaxqueryusername', 'post')) {
             $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE active=1 AND username=' . $db->quote($username) . ' ORDER BY username ASC LIMIT 0,10';
         } else {
             $dbkey = $db->dblikeescape($username);
-            $sql = "SELECT username, first_name, last_name, photo FROM " . NV_USERS_GLOBALTABLE . " WHERE active=1 AND (
+            $sql = 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . " WHERE active=1 AND (
                 username LIKE '%" . $dbkey . "%' OR CONCAT(first_name,' ',last_name) LIKE '%" . $dbkey . "%'
             ) ORDER BY username ASC LIMIT 0,10";
         }

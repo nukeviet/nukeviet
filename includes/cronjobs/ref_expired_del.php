@@ -29,7 +29,7 @@ function cron_ref_expired_del()
             if (preg_match('/^([0-9]{10,12})\.' . preg_quote(NV_LOGS_EXT) . '$/', $logfile, $matches)) {
                 $d = ( int )$matches[1];
                 if ($d < $log_start) {
-                    if (! @unlink($log_path . '/' . $logfile)) {
+                    if (!@unlink($log_path . '/' . $logfile)) {
                         $result = false;
                     }
                 }

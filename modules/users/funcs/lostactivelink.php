@@ -25,9 +25,10 @@ if ($global_config['allowuserreg'] != 2) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url);
 
 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
 $gfx_chk = (!empty($array_gfx_chk) and in_array('m', $array_gfx_chk)) ? 1 : 0;
@@ -52,10 +53,7 @@ $step = 1;
 $error = $question = '';
 
 if ($checkss == $data['checkss']) {
-    $check_seccode = true;
-    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
-        $check_seccode = ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $global_config['ucaptcha_type']));
-    }
+    $check_seccode = ($gfx_chk and isset($data['nv_seccode'])) ? ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $global_config['ucaptcha_type'])) : true;
     if ($check_seccode) {
         if (!empty($data['userField'])) {
             $check_email = nv_check_valid_email($data['userField'], true);

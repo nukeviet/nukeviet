@@ -7,11 +7,11 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/28/2009 23:50
  */
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-mt_srand((double) microtime() * 1000000);
+mt_srand((float) microtime() * 1000000);
 $maxran = 1000000;
 $random_num = mt_rand(1, $maxran);
 
@@ -27,7 +27,7 @@ imagefilledrectangle($image, 0, 0, NV_GFX_WIDTH, NV_GFX_HEIGHT, $bgc);
 
 $text_color = ImageColorAllocate($image, 50, 50, 50);
 /* output each character */
-for ($l = 0; $l < 5; ++ $l) {
+for ($l = 0; $l < 5; ++$l) {
     $r = mt_rand(120, 255);
     $g = mt_rand(120, 255);
     $b = mt_rand(120, 255);

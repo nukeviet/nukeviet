@@ -42,10 +42,13 @@ $metatags = [];
 $metatags['meta'] = [];
 $ignore = ['content-type', 'generator', 'description', 'keywords'];
 $vas = [
-    '{CONTENT-LANGUAGE} (' . $lang_global['Content_Language'] . ')',
-    '{LANGUAGE} (' . $lang_global['LanguageName'] . ')',
-    '{SITE_NAME} (' . $global_config['site_name'] . ')',
-    '{SITE_EMAIL} (' . $global_config['site_email'] . ')'
+    '<code>{BASE_SITEURL}</code> (' . NV_BASE_SITEURL . ')',
+    '<code>{UPLOADS_DIR}</code> (' . NV_UPLOADS_DIR . ')',
+    '<code>{ASSETS_DIR}</code> (' . NV_ASSETS_DIR . ')',
+    '<code>{CONTENT-LANGUAGE}</code> (' . $lang_global['Content_Language'] . ')',
+    '<code>{LANGUAGE}</code> (' . $lang_global['LanguageName'] . ')',
+    '<code>{SITE_NAME}</code> (' . $global_config['site_name'] . ')',
+    '<code>{SITE_EMAIL}</code> (' . $global_config['site_email'] . ')'
 ];
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
@@ -84,13 +87,22 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array2XML->saveXML($metatags, 'metatags', $file_metatags, $global_config['site_charset']);
     }
 
-    $metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post', false);
-    $description_length = $nv_Request->get_absint('description_length', 'post', 0);
-    $private_site = (int)$nv_Request->get_bool('private_site', 'post', false);
+    $array_config = [];
+    $array_config['metaTagsOgp'] = (int)$nv_Request->get_bool('metaTagsOgp', 'post', false);
+    $array_config['description_length'] = $nv_Request->get_absint('description_length', 'post', 0);
+    $array_config['private_site'] = (int)$nv_Request->get_bool('private_site', 'post', false);
+    $array_config['ogp_image'] = '';
+    $ogp_image = $nv_Request->get_title('ogp_image', 'post', '');
+    if (!empty($ogp_image) and !nv_is_url($ogp_image) and nv_is_file($ogp_image) === true) {
+        $array_config['ogp_image'] = substr($ogp_image, strlen(NV_BASE_SITEURL));
+    }
 
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $metaTagsOgp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'metaTagsOgp'");
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $description_length . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'description_length'");
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $private_site . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'private_site'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='site'");
+    foreach ($array_config as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
 
     $nv_Cache->delAll(false);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
@@ -158,6 +170,11 @@ for ($i = 0; $i < 2; ++$i) {
 $xtpl->assign('METATAGSOGPCHECKED', $global_config['metaTagsOgp'] ? ' checked="checked" ' : '');
 $xtpl->assign('PRIVATE_SITE', $global_config['private_site'] ? ' checked="checked" ' : '');
 $xtpl->assign('DESCRIPTION_LENGTH', $global_config['description_length']);
+$ogp_image = '';
+if (!empty($global_config['ogp_image']) and !nv_is_url($global_config['ogp_image']) and file_exists(NV_ROOTDIR . '/' . $global_config['ogp_image'])) {
+    $ogp_image = NV_BASE_SITEURL . $global_config['ogp_image'];
+}
+$xtpl->assign('OGP_IMAGE', $ogp_image);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

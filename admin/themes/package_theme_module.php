@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -24,8 +24,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
     $themename = $nv_Request->get_string('themename', 'post');
 
     if (preg_match($global_config['check_theme'], $themename) or preg_match($global_config['check_theme_mobile'], $themename)) {
-        $allowfolder = array();
-        $modulearray = array();
+        $allowfolder = [];
+        $modulearray = [];
         $all_module_file = $nv_Request->get_title('module_file', 'post');
         $module_file_array = explode(',', $all_module_file);
         array_unique($module_file_array);
@@ -49,7 +49,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
                 }
             }
         }
-        if (! empty($allowfolder)) {
+        if (!empty($allowfolder)) {
             $all_module_file = implode('_', $modulearray);
             $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $all_module_file . '_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.zip';
 
@@ -77,7 +77,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
     $op = $nv_Request->get_title(NV_OP_VARIABLE, 'get', '');
-    $theme_list = nv_scandir(NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ));
+    $theme_list = nv_scandir(NV_ROOTDIR . '/themes', [$global_config['check_theme'], $global_config['check_theme_mobile']]);
     foreach ($theme_list as $themes_i) {
         if (file_exists(NV_ROOTDIR . '/themes/' . $themes_i . '/config.ini')) {
             $xtpl->assign('THEME', $themes_i);
@@ -86,18 +86,18 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
     }
 
     $result = $db->query('SELECT title, module_file, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC');
-    $array_module_seup = array();
+    $array_module_seup = [];
     while ($row = $result->fetch()) {
         if ($row['module_file'] == $row['module_file']) {
-            $xtpl->assign('MODULE', array( 'module_file' => $row['module_file'], 'custom_title' => $row['custom_title'] ));
+            $xtpl->assign('MODULE', ['module_file' => $row['module_file'], 'custom_title' => $row['custom_title']]);
             $xtpl->parse('main.module');
             $array_module_seup[] = $row['module_file'];
         }
     }
     $modules_list = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
     foreach ($modules_list as $module_i) {
-        if (! in_array($module_i, $array_module_seup)) {
-            $xtpl->assign('MODULE', array( 'module_file' => $module_i, 'custom_title' => $module_i ));
+        if (!in_array($module_i, $array_module_seup)) {
+            $xtpl->assign('MODULE', ['module_file' => $module_i, 'custom_title' => $module_i]);
             $xtpl->parse('main.module');
         }
     }

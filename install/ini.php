@@ -16,7 +16,7 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
-$nv_resquest_serverext_key = array('php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support');
+$nv_resquest_serverext_key = ['php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support', 'json_support'];
 
 if ($sys_info['ini_set_support']) {
     ini_set('session.use_trans_sid', 0);
@@ -34,7 +34,7 @@ if ($sys_info['ini_set_support']) {
     ini_set('user_agent', 'NV4');
     ini_set('default_charset', $global_config['site_charset']);
 
-    $memoryLimitMB = ( integer )ini_get('memory_limit');
+    $memoryLimitMB = (int)ini_get('memory_limit');
 
     if ($memoryLimitMB < 64) {
         ini_set('memory_limit', '64M');
@@ -45,7 +45,7 @@ if ($sys_info['ini_set_support']) {
 }
 
 $sys_info['php_required_min'] = '5.6.0';
-$sys_info['php_allowed_max'] = '8.0.5';
+$sys_info['php_allowed_max'] = '8.1.0';
 $sys_info['php_version'] = PHP_VERSION;
 $sys_info['php_support'] = (version_compare($sys_info['php_version'], $sys_info['php_required_min']) >= 0 and version_compare($sys_info['php_version'], $sys_info['php_allowed_max']) <= 0) ? 1 : 0;
 $sys_info['opendir_support'] = (function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;

@@ -25,7 +25,7 @@ $search = [
     'content' => ''
 ];
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 if ($nv_Request->isset_request('q', 'get')) {
     $is_search = true;
@@ -43,37 +43,33 @@ if ($nv_Request->isset_request('q', 'get')) {
         $search['mod'] = 'all';
     }
 
-    $base_url .= '&q=' . urlencode($search['key']);
-    if ($search['mod'] != 'all') {
-        $base_url .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
-    }
-    if ($search['logic'] != 1) {
-        $base_url .= '&l=' . $search['logic'];
-    }
-    
-    $base_url_rewrite = $base_url;
-    if ($search['page'] > 1) {
-        $base_url_rewrite .= '&page=' . $search['page'];
-    }
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = $_SERVER['REQUEST_URI'];
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-
     if (!empty($search['key'])) {
         if (!$search['logic']) {
             $search['key'] = preg_replace([
                 "/^([\S]{1})\s/uis",
                 "/\s([\S]{1})\s/uis",
                 "/\s([\S]{1})$/uis"
-            ], " ", $search['key']);
+            ], ' ', $search['key']);
         }
+        $search['key'] = str_replace(["'", '"', '<', '>', '&#039;', '&quot;', '&lt;', '&gt;'], '', $search['key']);
         $search['key'] = trim($search['key']);
         $search['len_key'] = nv_strlen($search['key']);
     }
+
+    $page_url .= '&q=' . urlencode($search['key']);
+    if ($search['mod'] != 'all') {
+        $page_url .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
+    }
+    if ($search['logic'] != 1) {
+        $page_url .= '&l=' . $search['logic'];
+    }
+
+    $base_url = $page_url;
+    if ($search['page'] > 1) {
+        $page_url .= '&page=' . $search['page'];
+    }
+
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 
     if ($search['len_key'] < NV_MIN_SEARCH_LENGTH) {
         $search['is_error'] = true;
@@ -112,8 +108,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
 
         if ($is_generate_page) {
-            $total = ceil($num_items/$limit);
-            betweenURLs($page, $total, $base_url, '&page=', $prevPage, $nextPage);
+            betweenURLs($page, ceil($num_items / $limit), $base_url, '&page=', $prevPage, $nextPage);
         }
 
         if (empty($search['content'])) {
@@ -121,13 +116,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
     }
 } else {
-    $base_url_rewrite = nv_url_rewrite($base_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 }
 
 $contents = search_main_theme($is_search, $search, $array_mod);

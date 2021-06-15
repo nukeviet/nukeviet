@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -139,7 +139,7 @@ $lang_module['uploadconfig_ban_mime'] = 'Forbidden Mimes';
 $lang_module['uploadconfig_types'] = 'Allowed file types';
 $lang_module['sys_max_size'] = 'Your server only allows upload maximum';
 $lang_module['nv_max_size'] = 'Maximum size of uploaded file';
-$lang_module['nv_max_width_height'] = 'Maximum size file upload';
+$lang_module['nv_max_width_height'] = 'The maximum size of the loaded image';
 $lang_module['nv_auto_resize'] = 'Automatically resize larger image';
 $lang_module['upload_checking_mode'] = 'Upload Checking Mode';
 $lang_module['strong_mode'] = 'Hight';
@@ -189,3 +189,5 @@ $lang_module['upload_chunk'] = 'Chunk Upload';
 $lang_module['upload_chunk_help'] = 'This function supports splitting the upload file into several small packages, support to upload large files to the server. If you do not intend to allow large files to upload, please leave blank above';
 $lang_module['upload_overflow'] = 'Overflow file size';
 $lang_module['upload_overflow_help'] = 'Allows uploading files larger than the maximum file size. Note: Only works when uploading files directly from your computer in the file manager, the Chunk Upload section above is set. The value configured here must not be less than the maximum size of the uploaded file set above';
+$lang_module['nv_mobile_mode_img'] = 'Create image for mobile mode';
+$lang_module['nv_mobile_mode_img_note'] = 'Image width (0 = no creation)';

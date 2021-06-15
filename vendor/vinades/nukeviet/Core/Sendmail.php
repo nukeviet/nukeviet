@@ -185,44 +185,43 @@ class Sendmail extends PHPMailer
      */
     private function _setFrom()
     {
-        $sender_mail = !empty($this->configs['sender_mail']) ? $this->configs['sender_mail'] : '';
+        $sender_email = !empty($this->configs['sender_email']) ? $this->configs['sender_email'] : '';
         $sender_name = !empty($this->configs['sender_name']) ? $this->configs['sender_name'] : '';
 
-        $force_sender = !empty($this->configs['force_sender']) && !empty($this->configs['sender_mail']);
+        $force_sender = !empty($this->configs['force_sender']) && !empty($this->configs['sender_email']);
 
         if (!$force_sender) {
             if ($this->Mailer == 'smtp') {
-                if (empty($sender_mail)) {
+                if (empty($sender_email)) {
                     if (filter_var($this->configs['smtp_username'], FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $this->configs['smtp_username'];
+                        $sender_email = $this->configs['smtp_username'];
                     }
                 }
             } elseif ($this->Mailer == 'sendmail') {
-                if (empty($sender_mail)) {
+                if (empty($sender_email)) {
                     if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $_SERVER['SERVER_ADMIN'];
+                        $sender_email = $_SERVER['SERVER_ADMIN'];
                     } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                        $sender_mail = "webmaster@" . $_SERVER['SERVER_NAME'];
+                        $sender_email = "webmaster@" . $_SERVER['SERVER_NAME'];
                     }
                 }
             } elseif ($this->Mailer == 'mail') {
-                if (empty($sender_mail)) {
+                if (empty($sender_email)) {
                     if (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $php_email;
+                        $sender_email = $php_email;
                     } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get("sendmail_path"), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $matches[0];
+                        $sender_email = $matches[0];
                     } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                        $sender_mail = "webmaster@" . $_SERVER['SERVER_NAME'];
+                        $sender_email = "webmaster@" . $_SERVER['SERVER_NAME'];
                     }
                 }
             }
         }
 
-        empty($sender_mail) && $sender_mail = $this->configs['site_email'];
+        empty($sender_email) && $sender_email = $this->configs['site_email'];
         empty($sender_name) && $sender_name = $this->configs['site_name'];
 
-        $this->From = $sender_mail;
-        $this->FromName = nv_unhtmlspecialchars($sender_name);
+        $this->setFrom($sender_email, nv_unhtmlspecialchars($sender_name));
     }
 
     /**
@@ -248,6 +247,72 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * Sendmail::_addDKIM()
+     * 
+     * @return void
+     */
+    private function _addDKIM()
+    {
+        $dkim_included = !empty($this->configs['dkim_included']) ? array_map('trim', explode(',', $this->configs['dkim_included'])) : [];
+        if (!empty($dkim_included) and in_array($this->Mailer, $dkim_included)) {
+            // https://github.com/PHPMailer/PHPMailer/blob/master/examples/DKIM_sign.phps
+            $domain = substr(strstr($this->From, '@'), 1);
+            $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';
+            $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
+            if (file_exists($verifiedkey)) {
+                $verifiedTime = file_get_contents($verifiedkey);
+                $verifiedTime = (int)$verifiedTime + 604800;
+                if (NV_CURRENTTIME > $verifiedTime) {
+                    $verified = DKIM_verify($domain, 'nv');
+                    if (!$verified) {
+                        @unlink($verifiedkey);
+                    } else {
+                        $verifiedTime = NV_CURRENTTIME;
+                        file_put_contents($verifiedkey, $verifiedTime, LOCK_EX);
+                    }
+                }
+                if (NV_CURRENTTIME <= $verifiedTime and file_exists($privatekeyfile)) {
+                    $this->DKIM_domain = $domain;
+                    $this->DKIM_private = $privatekeyfile;
+                    $this->DKIM_selector = 'nv';
+                    $this->DKIM_passphrase = '';
+                    $this->DKIM_identity = $this->From;
+                    $this->DKIM_copyHeaderFields = false;
+                    $this->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
+                }
+            }
+        }
+    }
+
+    /**
+     * Sendmail::_addSMIME()
+     * 
+     * @return void
+     */
+    private function _addSMIME()
+    {
+        $smime_included = !empty($this->configs['smime_included']) ? array_map('trim', explode(',', $this->configs['smime_included'])) : [];
+        if (!empty($smime_included) and in_array($this->Mailer, $smime_included)) {
+            // This PHPMailer example shows S/MIME signing a message and then sending.
+            // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
+            $email_name = str_replace("@", "__", $this->From);
+            $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
+            $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
+            $certchain_pem = file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem') ? NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem' : '';
+            if (file_exists($cert_key) and file_exists($cert_crt)) {
+                $this->sign(
+                    $cert_crt, // The location of your certificate file
+                    $cert_key, // The location of your private key file
+                    // The password you protected your private key with (not the Import Password!
+                    // May be empty but the parameter must not be omitted!
+                    '',
+                    $certchain_pem // The location of your chain file
+                );
+            }
+        }
+    }
+
+    /**
      *
      * @return boolean
      */
@@ -258,8 +323,11 @@ class Sendmail extends PHPMailer
         } else {
             $this->_setReply();
 
-            $this->WordWrap = 120;
+            // https://www.php.net/manual/en/function.mail.php
+            // Lines should not be larger than 70 characters. 
+            $this->WordWrap = 70;
             $this->IsHTML(true);
+            $this->XMailer = 'NukeViet CMS with PHPMailer';
 
             $this->AltBody = strip_tags($this->Body);
 
@@ -274,6 +342,9 @@ class Sendmail extends PHPMailer
             if ($this->logo) {
                 $this->AddEmbeddedImage(NV_ROOTDIR . '/' . $this->configs['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $this->configs['site_logo']));
             }
+
+            $this->_addSMIME();
+            $this->_addDKIM();
 
             try {
                 if (!$this->preSend()) {

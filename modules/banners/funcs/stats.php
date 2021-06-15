@@ -12,8 +12,9 @@ if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $lang_module['stats_views'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 if (!defined('NV_IS_BANNER_CLIENT')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -27,7 +28,7 @@ $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('MANAGEMENT', $manament);
 $xtpl->parse('main.management');
 
-$sql = "SELECT id,title FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act='1' AND clid=" . $user_info['userid'] . " ORDER BY id ASC";
+$sql = 'SELECT id,title FROM ' . NV_BANNERS_GLOBALTABLE . "_rows WHERE act='1' AND clid=" . $user_info['userid'] . ' ORDER BY id ASC';
 $result = $db->query($sql);
 
 while ($row = $result->fetch()) {

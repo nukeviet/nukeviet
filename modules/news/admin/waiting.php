@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -16,7 +16,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
     $listid = $nv_Request->get_string('listid', 'get');
     $id_array = array_map('intval', explode(',', $listid));
 
-    $exp_array = array();
+    $exp_array = [];
     $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode(',', $id_array) . ')';
     $result = $db->query($sql);
     while (list($id, $listcatid, $publtime, $exptime, $status) = $result->fetch(3)) {
@@ -59,7 +59,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
         }
     }
 
-    if (! empty($exp_array)) {
+    if (!empty($exp_array)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_wait_content', 'listid: ' . implode(', ', $exp_array), $admin_info['userid']);
     }
     nv_set_status_module();

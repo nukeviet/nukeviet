@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -36,7 +36,7 @@ $lang_module['voting_allowcm'] = 'Allow comment';
 $lang_module['voting_timeout'] = 'End time';
 $lang_module['voting_time'] = 'Start Time';
 $lang_module['voting_option'] = 'Order';
-$lang_module['voting_maxoption'] = 'How many option can i select to vote?';
+$lang_module['voting_maxoption'] = 'Maximum number of options per vote';
 $lang_module['voting_confirm'] = 'Confirm';
 $lang_module['voting_error'] = 'Error:Data handling';
 $lang_module['voting_question'] = 'Voting content';
@@ -66,3 +66,5 @@ $lang_module['captcha_type'] = 'Captcha type';
 $lang_module['captcha_type_captcha'] = 'Captcha-image';
 $lang_module['captcha_type_recaptcha'] = 'reCaptcha';
 $lang_module['captcha_type_recaptcha_note'] = 'Captcha won\'t run until you <a href="%s">configure reCaptcha</a>';
+$lang_module['difftimeout'] = 'Timeout for re-voting';
+$lang_module['hours'] = 'hours';

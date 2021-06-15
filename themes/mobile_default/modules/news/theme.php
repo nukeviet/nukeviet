@@ -49,7 +49,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
         ++$a;
         if ($a == 1) {
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . " " . nv_link_delete_page($array_row_i['id']));
+                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . ' ' . nv_link_delete_page($array_row_i['id']));
                 $xtpl->parse('main.featuredloop.adminlink');
             }
 
@@ -67,7 +67,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
             $xtpl->parse('main.featuredloop');
         } else {
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . " " . nv_link_delete_page($array_row_i['id']));
+                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . ' ' . nv_link_delete_page($array_row_i['id']));
                 $xtpl->parse('main.viewcatloop.adminlink');
             }
 
@@ -130,7 +130,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
         $xtpl->assign('CONTENT', $array_row_i);
 
         if (defined('NV_IS_MODADMIN')) {
-            $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . " " . nv_link_delete_page($array_row_i['id']));
+            $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . ' ' . nv_link_delete_page($array_row_i['id']));
             $xtpl->parse('main.viewcatloop.adminlink');
         }
 
@@ -190,7 +190,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
         foreach ($array_row_i['listcatid'] as $listcatid) {
             $listcat = [
                 'title' => $global_array_cat[$listcatid]['title'],
-                "link" => $global_array_cat[$listcatid]['link']
+                'link' => $global_array_cat[$listcatid]['link']
             ];
             $xtpl->assign('CAT', $listcat);
             (($n < $num_cat) ? $xtpl->parse('main.viewcatloop.cat.comma') : '');
@@ -202,7 +202,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
             $xtpl->assign('CONTENT', $array_row_i);
 
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . " " . nv_link_delete_page($array_row_i['id']));
+                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . ' ' . nv_link_delete_page($array_row_i['id']));
                 $xtpl->parse('main.viewcatloop.featured.adminlink');
             }
 
@@ -222,7 +222,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
             $xtpl->assign('CONTENT', $array_row_i);
 
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . " " . nv_link_delete_page($array_row_i['id']));
+                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . ' ' . nv_link_delete_page($array_row_i['id']));
                 $xtpl->parse('main.viewcatloop.news.adminlink');
             }
 
@@ -247,7 +247,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 
         foreach ($array_cat_other as $array_row_i) {
             $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
-            $array_row_i['publtime'] = nv_date("d/m/Y", $array_row_i['publtime']);
+            $array_row_i['publtime'] = nv_date('d/m/Y', $array_row_i['publtime']);
             $xtpl->assign('RELATED', $array_row_i);
             if ($newday >= NV_CURRENTTIME) {
                 $xtpl->parse('main.related.loop.newday');
@@ -306,7 +306,7 @@ function viewcat_top($array_catcontent, $generate_page)
                 }
 
                 if (defined('NV_IS_MODADMIN')) {
-                    $xtpl->assign('ADMINLINK', nv_link_edit_page($array_catcontent_i['id']) . " " . nv_link_delete_page($array_catcontent_i['id']));
+                    $xtpl->assign('ADMINLINK', nv_link_edit_page($array_catcontent_i['id']) . ' ' . nv_link_delete_page($array_catcontent_i['id']));
                     $xtpl->parse('main.catcontent.adminlink');
                 }
                 if ($newday >= NV_CURRENTTIME) {
@@ -349,7 +349,7 @@ function viewsubcat_main($viewcat, $array_cat)
     // Hien thi cac chu de con
     foreach ($array_cat as $key => $array_row_i) {
         if (isset($array_cat[$key]['content'])) {
-            $array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_row_i['alias'];
+            $array_row_i['rss'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_row_i['alias'];
             $xtpl->assign('CAT', $array_row_i);
             $catid = intval($array_row_i['catid']);
 
@@ -377,14 +377,14 @@ function viewsubcat_main($viewcat, $array_cat)
                     }
                     $xtpl->assign('CONTENT', $array_row_i);
 
-                    if ($array_row_i['imghome'] != "") {
+                    if ($array_row_i['imghome'] != '') {
                         $xtpl->assign('HOMEIMG', $array_row_i['imghome']);
                         $xtpl->assign('HOMEIMGALT', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
                         $xtpl->parse('main.listcat.image');
                     }
 
                     if (defined('NV_IS_MODADMIN')) {
-                        $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . " " . nv_link_delete_page($array_row_i['id']));
+                        $xtpl->assign('ADMINLINK', nv_link_edit_page($array_row_i['id']) . ' ' . nv_link_delete_page($array_row_i['id']));
                         $xtpl->parse('main.listcat.adminlink');
                     }
                 } else {
@@ -448,14 +448,14 @@ function viewcat_two_column($array_content, $array_catpage)
             $xtpl->assign('NEWSTOP', $array_content_i);
 
             if ($key == 0) {
-                if ($array_content_i['imghome'] != "") {
+                if ($array_content_i['imghome'] != '') {
                     $xtpl->assign('HOMEIMG0', $array_content_i['imghome']);
                     $xtpl->assign('HOMEIMGALT0', $array_content_i['homeimgalt']);
                     $xtpl->parse('main.catcontent.content.image');
                 }
 
                 if (defined('NV_IS_MODADMIN')) {
-                    $xtpl->assign('ADMINLINK', nv_link_edit_page($array_content_i['id']) . " " . nv_link_delete_page($array_content_i['id']));
+                    $xtpl->assign('ADMINLINK', nv_link_edit_page($array_content_i['id']) . ' ' . nv_link_delete_page($array_content_i['id']));
                     $xtpl->parse('main.catcontent.content.adminlink');
                 }
 
@@ -481,7 +481,7 @@ function viewcat_two_column($array_content, $array_catpage)
         $number_content = isset($array_catpage[$key]['content']) ? sizeof($array_catpage[$key]['content']) : 0;
 
         if ($number_content > 0) {
-            $array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_catpage_i['alias'];
+            $array_catpage_i['rss'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_catpage_i['alias'];
 
             $xtpl->assign('CAT', $array_catpage_i);
             $xtpl->assign('ID', ($a + 1));
@@ -500,7 +500,7 @@ function viewcat_two_column($array_content, $array_catpage)
             }
 
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_content_i['id']) . " " . nv_link_delete_page($array_content_i['id']));
+                $xtpl->assign('ADMINLINK', nv_link_edit_page($array_content_i['id']) . ' ' . nv_link_delete_page($array_content_i['id']));
                 $xtpl->parse('main.loopcat.content.adminlink');
             }
 
@@ -611,9 +611,9 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('NEWSID', $news_contents['id']);
     $xtpl->assign('NEWSCHECKSS', $news_contents['newscheckss']);
     $xtpl->assign('DETAIL', $news_contents);
-    $xtpl->assign('SELFURL', $client_info['selfurl']);
 
     if ($news_contents['allowed_send'] == 1) {
+        $xtpl->assign('CHECKSESSION', md5($news_contents['id'] . NV_CHECK_SESSION));
         $xtpl->assign('URL_SENDMAIL', $news_contents['url_sendmail']);
         $xtpl->parse('main.allowed_send');
     }
@@ -958,15 +958,24 @@ function sendmail_themme($sendmail)
     $xtpl = new XTemplate('sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('SENDMAIL', $sendmail);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
+    if (defined('NV_IS_USER')) {
+        $xtpl->parse('main.sender_is_user');
+    }
+
+    // Xác định có áp dụng reCaptcha hay không
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+    // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
-        $xtpl->parse('main.content.recaptcha3');
-    } elseif ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        $xtpl->parse('main.recaptcha3');
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
-        $xtpl->parse('main.content.recaptcha');
+        $xtpl->parse('main.recaptcha');
     } elseif ($module_config[$module_name]['scaptcha_type'] == 'captcha') {
         $xtpl->assign('GFX_NUM', NV_GFX_NUM);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
@@ -974,18 +983,7 @@ function sendmail_themme($sendmail)
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->parse('main.content.captcha');
-    }
-
-    $xtpl->parse('main.content');
-
-    if (!empty($sendmail['result'])) {
-        $xtpl->assign('RESULT', $sendmail['result']);
-        $xtpl->parse('main.result');
-
-        if ($sendmail['result']['check'] == true) {
-            $xtpl->parse('main.close');
-        }
+        $xtpl->parse('main.captcha');
     }
 
     $xtpl->parse('main');
@@ -1124,7 +1122,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
             }
             $authors = !empty($authors) ? implode(', ', $authors) : '';
 
-            $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl']);
+            $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . '-' . $value['id'] . $global_config['rewrite_exturl']);
             $xtpl->assign('TITLEROW', BoldKeywordInStr(strip_tags($value['title']), $key));
             $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key));
             $xtpl->assign('TIME', date('d/m/Y h:i:s A', $value['publtime']));

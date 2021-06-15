@@ -8,12 +8,12 @@
  * @Createdate 24-06-2011 10:35
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $bid = $nv_Request->get_int('bid', 'get', '');
-$block = array();
+$block = [];
 
 if ($bid) {
     $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
@@ -32,7 +32,7 @@ if (defined('NV_EDITOR')) {
 
 $allow_editor = (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) ? true : false;
 
-if (! defined('CKEDITOR') and $allow_editor) {
+if (!defined('CKEDITOR') and $allow_editor) {
     define('CKEDITOR', true);
     $my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
 }
@@ -49,9 +49,9 @@ if ($num_rows < 1) {
     $xtpl->parse('main.empty');
 } else {
     $xtpl->assign('NUM_ROWS', $num_rows);
-    
+
     foreach ($array as $row) {
-        if (! empty($row['image'])) {
+        if (!empty($row['image'])) {
             if (file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $row['image'])) {
                 $row['image'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['image'];
             } elseif (file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'])) {
@@ -60,26 +60,26 @@ if ($num_rows < 1) {
                 $row['image'] = '';
             }
         }
-        
+
         $row['status_text'] = $lang_module['content_status_' . $row['status']];
-        
+
         if ($row['start_time'] > 0) {
             $row['status_text'] .= '. ' . $lang_module['content_status_note0'] . ' ' . nv_date('H:i:s d/m/Y', $row['start_time']);
-            
+
             if ($row['end_time'] > 0) {
-                $row['status_text'] .= '. ' .  sprintf($row['status'] == 2 ? $lang_module['content_status_note2'] : $lang_module['content_status_note1'], nv_date('H:i:s d/m/Y', $row['end_time']));
+                $row['status_text'] .= '. ' . sprintf($row['status'] == 2 ? $lang_module['content_status_note2'] : $lang_module['content_status_note1'], nv_date('H:i:s d/m/Y', $row['end_time']));
             }
         }
-        
+
         $xtpl->assign('ROW', $row);
-        
-        if (! empty($row['image'])) {
+
+        if (!empty($row['image'])) {
             $xtpl->parse('main.rows.loop.image');
         }
-        
+
         $xtpl->parse('main.rows.loop');
     }
-    
+
     $xtpl->parse('main.rows');
 }
 

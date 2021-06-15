@@ -17,8 +17,8 @@ $page_title = $lang_module['block'];
 $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db_slave->query($sql);
 
-$array_block = array();
-while (list ($bid_i, $title_i) = $result->fetch(3)) {
+$array_block = [];
+while (list($bid_i, $title_i) = $result->fetch(3)) {
     $array_block[$bid_i] = $title_i;
 }
 if (empty($array_block)) {
@@ -44,8 +44,8 @@ $page_title = $array_block[$bid];
 if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION) {
     $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid;
     $result = $db_slave->query($sql);
-    $_id_array_exit = array();
-    while (list ($_id) = $result->fetch(3)) {
+    $_id_array_exit = [];
+    while (list($_id) = $result->fetch(3)) {
         $_id_array_exit[] = $_id;
     }
 
@@ -77,7 +77,7 @@ if ($bid > 0 and defined('NV_IS_SPADMIN') and $nv_Request->get_string('order_pub
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&bid=' . $bid);
 }
 
-$select_options = array();
+$select_options = [];
 foreach ($array_block as $xbid => $blockname) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;bid=' . $xbid] = $blockname;
 }
@@ -106,22 +106,22 @@ if ($listid == '' and $bid) {
 
     $result = $db_slave->query($db_slave->sql());
 
-    while (list ($id, $title) = $result->fetch(3)) {
-        $xtpl->assign('ROW', array(
+    while (list($id, $title) = $result->fetch(3)) {
+        $xtpl->assign('ROW', [
             'checked' => in_array($id, $id_array) ? ' checked="checked"' : '',
             'title' => $title,
             'id' => $id
-        ));
+        ]);
 
         $xtpl->parse('main.news.loop');
     }
 
     foreach ($array_block as $xbid => $blockname) {
-        $xtpl->assign('BID', array(
+        $xtpl->assign('BID', [
             'key' => $xbid,
             'title' => $blockname,
             'selected' => $xbid == $bid ? ' selected="selected"' : ''
-        ));
+        ]);
         $xtpl->parse('main.news.bid');
     }
 

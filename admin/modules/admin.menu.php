@@ -15,7 +15,7 @@ if (!defined('NV_ADMIN')) {
 $submenu['setup'] = $lang_module['modules'];
 $submenu['vmodule'] = $lang_module['vmodule_add'];
 
-$allow_func = array(
+$allow_func = [
     'main',
     'list',
     'setup',
@@ -34,4 +34,4 @@ $allow_func = array(
     'change_site_title',
     'change_block_weight',
     'check_sample_data'
-);
+];

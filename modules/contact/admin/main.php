@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -15,12 +16,12 @@ $mark = $nv_Request->get_title('mark', 'post', '');
 
 if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
-    $sends = $nv_Request->get_array('sends', 'post', array());
+    $sends = $nv_Request->get_array('sends', 'post', []);
     if (empty($sends)) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'mess' => $lang_module['please_choose']
-        ));
+        ]);
     }
 
     foreach ($sends as $id) {
@@ -33,11 +34,11 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     } else {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0, is_processed=0, processed_by=0, processed_time=0 WHERE id IN (' . $sends . ')');
     }
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'mess' => ''
-    ));
-} else if (!empty($mark) and ($mark == 'processed' or $mark == 'unprocess')) {
+    ]);
+} elseif (!empty($mark) and ($mark == 'processed' or $mark == 'unprocess')) {
     $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
     $mark = $mark == 'processed' ? 1 : 0;
     if (empty($sends)) {
@@ -60,10 +61,10 @@ if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=' . $mark . ', processed_by= 0, processed_time=0 WHERE id IN (' . $sends . ')');
     }
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'mess' => ''
-    ));
+    ]);
 }
 
 $page_title = $module_info['site_title'];
@@ -104,62 +105,67 @@ if (!empty($contact_allowed['view'])) {
         $result = $db->query($db->sql());
 
         while ($row = $result->fetch()) {
-            $image = array(
-                NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_new.gif',
-                12,
-                9
-            );
-            $status = 'New';
-            $style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
-
-            if ($row['is_read'] == 1) {
-                $style = " style=\"cursor:pointer;white-space:nowrap;\"";
-                if ($row['is_reply'] == 1) {
-                    $image = array(
-                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_reply.gif',
-                        13,
-                        14
-                    );
-                    $status = $lang_module['tt2_row_title'];
-                } elseif ($row['is_reply'] == 2) {
-                    $image = array(
-                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_forward.gif',
-                        13,
-                        14
-                    );
-                    $status = $lang_module['tt2_row_title'];
-                } elseif ($row['is_processed']) {
-                    $image = array(
-                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/processed.png',
-                        13,
-                        14
-                    );
-                    $status = $lang_module['tt3_row_title'];
+            if ($row['is_processed']) {
+                $status = $lang_module['tt3_row_title'];
+            } else {
+                if ($row['is_read'] != 1) {
+                    $status = $lang_module['row_new'];
                 } else {
-                    $image = array(
-                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_old.gif',
-                        12,
-                        11
-                    );
-                    $status = $lang_module['tt1_row_title'];
+                    if ($row['is_reply']) {
+                        $status = $lang_module['tt2_row_title'];
+                    } else {
+                        $status = $lang_module['tt1_row_title'];
+                    }
                 }
             }
 
-            $onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
+            $image = [
+                NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_new.gif',
+                12,
+                9
+            ];
 
-            $xtpl->assign('ROW', array(
+            if ($row['is_read'] == 1) {
+                if ($row['is_reply'] == 1) {
+                    $image = [
+                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_reply.gif',
+                        13,
+                        14
+                    ];
+                } elseif ($row['is_reply'] == 2) {
+                    $image = [
+                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_forward.gif',
+                        13,
+                        14
+                    ];
+                } else {
+                    $image = [
+                        NV_STATIC_URL . NV_ASSETS_DIR . '/images/mail_old.gif',
+                        12,
+                        11
+                    ];
+                }
+            }
+
+            $xtpl->assign('ROW', [
                 'id' => $row['id'],
                 'sender_name' => $row['sender_name'],
                 'path' => $contact_allowed['view'][$row['cid']],
                 'cat' => $row['cat'],
                 'title' => nv_clean60($row['title'], 60),
                 'time' => $row['send_time'] >= $currday ? nv_date('H:i d/m/Y', $row['send_time']) : nv_date('d/m/Y', $row['send_time']),
-                'style' => $style,
-                'processed' => $processed,
-                'onclick' => $onclick,
+                'style' => !$row['is_read'] ? 'font-weight:bold;' : '',
+                'onclick' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=view&amp;id=' . $row['id'],
                 'status' => $status,
                 'image' => $image
-            ));
+            ]);
+
+            if ($row['is_processed']) {
+                $xtpl->parse('main.data.row.is_processed');
+                $xtpl->parse('main.data.row.processed');
+            } else {
+                $xtpl->parse('main.data.row.process');
+            }
 
             $xtpl->parse('main.data.row');
         }

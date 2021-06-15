@@ -55,8 +55,8 @@ if (!nv_function_exists('nv_copyright_info')) {
     {
         global $nv_Request;
 
-        $return = array();
-        $return['error'] = array();
+        $return = [];
+        $return['error'] = [];
         $return['config']['copyright_by'] = $nv_Request->get_title('copyright_by', 'post');
         $return['config']['copyright_url'] = $nv_Request->get_title('copyright_url', 'post');
         $return['config']['design_by'] = $nv_Request->get_title('design_by', 'post');
@@ -90,7 +90,7 @@ if (!nv_function_exists('nv_copyright_info')) {
             $block_config['copyright_by'] = $global_config['site_name'];
         }
         if (empty($block_config['copyright_url'])) {
-            $block_config['copyright_url'] = "http://" . $global_config['my_domains'][0];
+            $block_config['copyright_url'] = 'http://' . $global_config['my_domains'][0];
         }
 
         $xtpl->assign('DATA', $block_config);

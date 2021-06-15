@@ -23,7 +23,7 @@
         <!-- BEGIN: socialbutton -->
         <div class="margin-bottom">
             <div style="display:flex;align-items:flex-start;">
-                <!-- BEGIN: facebook --><div class="margin-right"><div class="fb-like" style="float:left!important;margin-right:0!important" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div></div><!-- END: facebook -->
+                <!-- BEGIN: facebook --><div class="margin-right"><div class="fb-like" style="float:left!important;margin-right:0!important" data-href="{CONTENT.link}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div></div><!-- END: facebook -->
                 <!-- BEGIN: twitter --><div class="margin-right"><a href="http://twitter.com/share" class="twitter-share-button">Tweet</a></div><!-- END: twitter -->
                 <!-- BEGIN: zalo --><div><div class="zalo-share-button" data-href="" data-oaid="{ZALO_OAID}" data-layout="1" data-color="blue" data-customize=false></div></div><!-- END: zalo -->
             </div>
@@ -31,10 +31,15 @@
         <!-- END: socialbutton -->
 
         <!-- BEGIN: imageleft -->
-        <figure class="article left noncaption pointer" style="width:100px" onclick="modalShow('', '<img src={CONTENT.image} />');">
-            <img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" />
-            <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+        <figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
+            <div style="width:{CONTENT.thumb.width}px;">
+                <img alt="{CONTENT.title}" src="{CONTENT.thumb.src}" class="img-thumbnail" />
+                <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+            </div>
         </figure>
+        <div id="imgpreview" style="display:none">
+            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.img.src}" srcset="{CONTENT.img.srcset}" alt="{CONTENT.title}" class="img-thumbnail"/></p>
+        </div>
         <!-- END: imageleft -->
 
         <!-- BEGIN: description -->
@@ -43,7 +48,7 @@
 
         <!-- BEGIN: imagecenter -->
         <figure class="article center pointer" onclick="modalShowByObj(this);">
-            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
+            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.img.src}" srcset="{CONTENT.img.srcset}" width="{CONTENT.img.width}" class="img-thumbnail" /></p>
             <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
         </figure>
         <!-- END: imagecenter -->

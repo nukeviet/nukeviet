@@ -8,7 +8,7 @@
  * @Createdate 12/31/2009 2:29
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -28,13 +28,13 @@ $array_url_instruction['editcensor'] = 'https://wiki.nukeviet.vn/nukeviet4:admin
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
 
 // Xác định cấu hình module
-$global_users_config = array();
+$global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 3600;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
     $global_users_config = unserialize($cache);
 } else {
-    $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config";
+    $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . '_config';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $global_users_config[$row['config']] = $row['content'];
@@ -45,10 +45,10 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
-$array_systemfield_cfg = array(
-    'first_name' => array(0, 100),
-    'last_name' => array(0, 100),
-    'question' => array(3, 255),
-    'answer' => array(3, 255),
-    'sig' => array(0, 1000)
-);
+$array_systemfield_cfg = [
+    'first_name' => [0, 100],
+    'last_name' => [0, 100],
+    'question' => [3, 255],
+    'answer' => [3, 255],
+    'sig' => [0, 1000]
+];

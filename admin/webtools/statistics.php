@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
 
 $timezone_array = array_keys($nv_parse_ini_timezone);
 
-$array_config_global = array();
+$array_config_global = [];
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
@@ -40,7 +40,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_global['googleAnalytics4ID'] = '';
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);

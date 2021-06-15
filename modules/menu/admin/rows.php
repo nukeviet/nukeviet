@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -14,7 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 if ($nv_Request->isset_request('reload', 'post,get')) {
     $id = $nv_Request->get_int('id', 'post,get', 0);
     $mid = $nv_Request->get_int('mid', 'post,get', 0);
-    $array_sub_id = array();
+    $array_sub_id = [];
 
     $rows = $db->query('SELECT id, parentid, module_name, lev, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id)->fetch();
 
@@ -32,7 +33,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
         foreach ($rows['subitem'] as $subid) {
             $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
 
-            list ($parentid) = $db->query($sql)->fetch(3);
+            list($parentid) = $db->query($sql)->fetch(3);
             nv_menu_del_sub($subid, $parentid);
         }
     }
@@ -40,7 +41,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
     if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php')) {
         include NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php';
 
-        list ($sort, $weight) = $db->query('SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'])->fetch(3);
+        list($sort, $weight) = $db->query('SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'])->fetch(3);
 
         // Nap lai menu moi
         foreach ($array_item as $key => $item) {
@@ -68,7 +69,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
     }
 
     if (!empty($array_sub_id)) {
-        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $id);
+        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $id);
         menu_fix_order($mid, $id);
         $nv_Cache->delMod($module_name);
     }
@@ -79,10 +80,10 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
 $error = '';
 $post['active_type'] = 0;
 $post['type_menu'] = $post['target'] = $post['module_name'] = $post['css'] = '';
-$post['groups_view'] = array(
+$post['groups_view'] = [
     6
-);
-$arr_item = array();
+];
+$arr_item = [];
 $sp = '&nbsp;&nbsp;&nbsp;';
 $sp_title = '';
 
@@ -114,13 +115,13 @@ if ($post['id'] != 0) {
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' ORDER BY sort';
 $result = $db->query($sql);
 
-$arr_item[0] = array(
+$arr_item[0] = [
     'key' => 0,
     'parentid' => 0,
     'title' => $lang_module['cat0'],
     'selected' => ($post['parentid'] == 0) ? ' selected="selected"' : ''
-);
-$array_all_item = array();
+];
+$array_all_item = [];
 while ($row = $result->fetch()) {
     $sp_title = '';
     if ($row['lev'] > 0) {
@@ -129,49 +130,49 @@ while ($row = $result->fetch()) {
         }
     }
 
-    $arr_item[$row['id']] = array(
+    $arr_item[$row['id']] = [
         'key' => $row['id'],
         'parentid' => $row['parentid'],
         'title' => $sp_title . $row['title'],
         'selected' => ($post['parentid'] == $row['parentid']) ? ' selected="selected"' : ''
-    );
+    ];
     $array_all_item[$row['id']] = $row;
 }
 
-$list_module = array();
+$list_module = [];
 unset($site_mods['menu'], $site_mods['comment']);
 foreach ($site_mods as $key => $title) {
-    $list_module[] = array(
+    $list_module[] = [
         'key' => $key,
         'title' => $title['custom_title'],
         'selected' => ($key == $post['module_name']) ? ' selected="selected"' : ''
-    );
+    ];
 }
 
-$list_target = array();
+$list_target = [];
 foreach ($type_target as $key => $target) {
-    $list_target[] = array(
+    $list_target[] = [
         'key' => $key,
         'title' => $target,
         'selected' => ($key == $post['target']) ? ' selected="selected"' : ''
-    );
+    ];
 }
 
 $groups_view = $post['groups_view'];
-$array['groups_view'] = array();
+$array['groups_view'] = [];
 foreach ($groups_list as $key => $title) {
     if (!empty($groups_view)) {
-        $array['groups_view'][] = array(
+        $array['groups_view'][] = [
             'key' => $key,
             'title' => $title,
             'checked' => in_array($key, $groups_view) ? ' checked="checked"' : ''
-        );
+        ];
     } else {
-        $array['groups_view'][] = array(
+        $array['groups_view'][] = [
             'key' => $key,
             'title' => $title,
             'checked' => ''
-        );
+        ];
     }
 }
 
@@ -179,9 +180,9 @@ $arr_menu = nv_list_menu();
 
 // Tao menu/Sua menu
 if ($nv_Request->isset_request('submit1', 'post')) {
-    $post = array();
+    $post = [];
 
-    $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
+    $_groups_post = $nv_Request->get_array('groups_view', 'post', []);
     $post['groups_view'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $post['id'] = $nv_Request->get_int('id', 'post', 0);
@@ -235,14 +236,14 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     } elseif ($post['id'] == 0) {
         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
         $weight = intval($weight) + 1;
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
             (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view,
             module_name, op, target, css, active_type, status) VALUES
-            (" . intval($post['parentid']) . ", " . intval($post['mid']) . ", :title, :link, :icon, :image, :note, " . intval($weight) . ", 0, 0, '',
-            :groups_view, :module_name, :op, " . intval($post['target']) . ", :css, " . intval($post['active_type']) . ", 1
-        )";
+            (' . intval($post['parentid']) . ', ' . intval($post['mid']) . ', :title, :link, :icon, :image, :note, ' . intval($weight) . ", 0, 0, '',
+            :groups_view, :module_name, :op, " . intval($post['target']) . ', :css, ' . intval($post['active_type']) . ', 1
+        )';
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['title'] = $post['title'];
         $data_insert['link'] = $post['link'];
         $data_insert['icon'] = $post['icon'];
@@ -258,7 +259,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             menu_fix_order($post['mid']);
 
             if ($post['parentid'] != 0) {
-                $arr_item_menu = array();
+                $arr_item_menu = [];
                 $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $post['mid'] . ' AND parentid=' . $post['parentid'];
                 $result = $db->query($sql);
 
@@ -266,7 +267,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                     $arr_item_menu[] = $row['id'];
                 }
 
-                $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid= " . $post['mid'] . " AND id=" . $post['parentid'];
+                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid= " . $post['mid'] . ' AND id=' . $post['parentid'];
                 $db->query($sql);
             }
 
@@ -278,9 +279,9 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             $error = $sql;
         }
     } else {
-        $stmt = $db->prepare("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
-            parentid=" . intval($post['parentid']) . ",
-            mid=" . intval($post['mid']) . ",
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
+            parentid=' . intval($post['parentid']) . ',
+            mid=' . intval($post['mid']) . ',
             title= :title,
             link= :link,
             icon= :icon,
@@ -289,10 +290,10 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             groups_view= :groups_view,
             module_name= :module_name,
             op= :op,
-            target=" . intval($post['target']) . ",
+            target=' . intval($post['target']) . ',
             css= :css,
-            active_type=" . intval($post['active_type']) . "
-        WHERE id=" . intval($post['id']));
+            active_type=' . intval($post['active_type']) . '
+        WHERE id=' . intval($post['id']));
 
         $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
         $stmt->bindParam(':link', $post['link'], PDO::PARAM_STR);
@@ -306,10 +307,10 @@ if ($nv_Request->isset_request('submit1', 'post')) {
 
         if ($stmt->execute()) {
             if ($pa_old != $post['parentid']) {
-                $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid=" . intval($post['mid']) . " AND parentid=" . intval($post['parentid'] . " "))->fetchColumn();
+                $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' '))->fetchColumn();
                 $weight = intval($weight) + 1;
 
-                $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . intval($weight) . " WHERE id=" . intval($post['id']);
+                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . intval($weight) . ' WHERE id=' . intval($post['id']);
                 $db->query($sql);
             }
 
@@ -320,25 +321,25 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             }
 
             if ($post['parentid'] != 0) {
-                $arr_item_menu = array();
+                $arr_item_menu = [];
                 $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $post['mid'] . ' AND parentid=' . $post['parentid'];
                 $result = $db->query($sql);
                 while ($row = $result->fetch()) {
                     $arr_item_menu[] = $row['id'];
                 }
 
-                $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $arr_item_menu) . "' WHERE mid=" . $post['mid'] . " AND id=" . $post['parentid']);
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $arr_item_menu) . "' WHERE mid=" . $post['mid'] . ' AND id=' . $post['parentid']);
             }
 
             if ($pa_old != 0) {
-                $arr_item_menu = array();
+                $arr_item_menu = [];
                 $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $mid_old . ' AND parentid=' . $pa_old;
                 $result = $db->query($sql);
                 while ($row = $result->fetch()) {
                     $arr_item_menu[] = $row['id'];
                 }
 
-                $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old);
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . ' AND id=' . $pa_old);
             }
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit row menu', 'Row menu id: ' . $post['id'], $admin_info['userid']);
@@ -363,7 +364,7 @@ if ($nv_Request->get_title('action', 'post') == 'delete' and $nv_Request->isset_
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' AND parentid=' . $post['parentid'] . ' ORDER BY weight';
 $result = $db->query($sql);
 
-$arr_table = array();
+$arr_table = [];
 $num = 0;
 
 while ($row = $result->fetch()) {
@@ -373,7 +374,7 @@ while ($row = $result->fetch()) {
 
     $row['sub'] = sizeof(array_filter(explode(',', $row['subitem'])));
 
-    $groups_view = array();
+    $groups_view = [];
     $array_groups_view = explode(',', $row['groups_view']);
     foreach ($array_groups_view as $_group_id) {
         if (isset($groups_list[$_group_id])) {
@@ -390,7 +391,7 @@ while ($row = $result->fetch()) {
     } else {
         $row['image'] = '';
     }
-    $arr_table[$row['id']] = array(
+    $arr_table[$row['id']] = [
         'id' => $row['id'],
         'mid' => $row['mid'],
         'nu' => $nu,
@@ -407,27 +408,27 @@ while ($row = $result->fetch()) {
         'active' => $row['status'] ? 'checked="checked"' : '',
         'url_title' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=' . $row['id'],
         'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;id=' . $row['id'] . '#edit'
-    );
+    ];
 }
 
-$array_mod_title = array();
+$array_mod_title = [];
 $parentid = $post['parentid'];
 while ($parentid > 0) {
     $array_item_i = $array_all_item[$parentid];
-    $array_mod_title[] = array(
+    $array_mod_title[] = [
         'title' => $array_item_i['title'],
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=' . $parentid
-    );
+    ];
     $parentid = $array_item_i['parentid'];
 }
-$array_mod_title[] = array(
+$array_mod_title[] = [
     'title' => $arr_menu[$post['mid']]['title'],
     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid']
-);
-$array_mod_title[] = array(
+];
+$array_mod_title[] = [
     'title' => $lang_module['menu_manager'],
     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
-);
+];
 krsort($array_mod_title, SORT_NUMERIC);
 
 // Active last item
@@ -503,7 +504,7 @@ if ($post['id'] != 0) {
         $mod_name = $post['module_name'];
         $mod_file = $site_mods[$mod_name]['module_file'];
         $mod_data = $site_mods[$mod_name]['module_data'];
-        $array_item = array();
+        $array_item = [];
         if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php')) {
             include NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php';
         }
@@ -511,11 +512,11 @@ if ($post['id'] != 0) {
         $funcs_item = $site_mods[$mod_name]['funcs'];
         foreach ($funcs_item as $key => $sub_item) {
             if ($sub_item['in_submenu'] == 1) {
-                $array_item[$key] = array(
+                $array_item[$key] = [
                     'key' => $key,
                     'title' => $sub_item['func_custom_name'],
                     'alias' => $key
-                );
+                ];
             }
         }
 
@@ -528,7 +529,7 @@ if ($post['id'] != 0) {
                     $xtpl->assign('item', $item);
                     $xtpl->parse('main.link.item');
                     if (isset($item['parentid'])) {
-                        $array_submenu = array();
+                        $array_submenu = [];
                         nv_menu_get_submenu($key, $post['op'], $array_item, $sp);
                         foreach ($array_submenu as $item2) {
                             $xtpl->assign('item', $item2);
@@ -585,11 +586,11 @@ if (!empty($error)) {
 
 // Xuat kieu active menu
 for ($i = 0; $i <= 2; ++$i) {
-    $xtpl->assign('ACTIVE_TYPE', array(
+    $xtpl->assign('ACTIVE_TYPE', [
         'key' => $i,
         'title' => $lang_module['add_type_active_' . $i],
         'selected' => $post['active_type'] == $i ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.active_type');
 }
 $xtpl->assign('FORM_CAPTION', ($post['id']) ? $lang_module['edit_menu'] : $lang_module['add_item']);

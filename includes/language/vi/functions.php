@@ -19,8 +19,8 @@ if (!defined('NV_MAINFILE')) {
  */
 function plural($number, $word)
 {
-    $wordObj = array_map("trim", explode(",", $word));
-    return $number . " " . $wordObj[0];
+    $wordObj = array_map('trim', explode(',', $word));
+    return $number . ' ' . $wordObj[0];
 }
 
 /**

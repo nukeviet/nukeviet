@@ -26,7 +26,7 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
         $sth->execute();
         $row = $sth->fetch(3);
         if (!empty($row)) {
-            list ($bid, $theme, $pos_old) = $row;
+            list($bid, $theme, $pos_old) = $row;
 
             $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=8388607 WHERE bid=' . $bid);
             $sth->bindParam(':position', $pos_new, PDO::PARAM_STR);
@@ -41,7 +41,7 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
             $sth->execute();
 
             $weight = 0;
-            while (list ($bid_i) = $sth->fetch(3)) {
+            while (list($bid_i) = $sth->fetch(3)) {
                 ++$weight;
                 $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
             }
@@ -55,7 +55,7 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
                 $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
                 $sth->bindParam(':position', $pos_old, PDO::PARAM_STR);
                 $sth->execute();
-                while (list ($bid_i, $func_id_i) = $sth->fetch(3)) {
+                while (list($bid_i, $func_id_i) = $sth->fetch(3)) {
                     if ($func_id_i == $func_id_old) {
                         ++$weight;
                     } else {
@@ -75,7 +75,7 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
             $sth->execute();
 
             $weight = 0;
-            while (list ($bid_i) = $sth->fetch(3)) {
+            while (list($bid_i) = $sth->fetch(3)) {
                 ++$weight;
                 $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
             }
@@ -88,7 +88,7 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
             $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
             $sth->bindParam(':position', $pos_new, PDO::PARAM_STR);
             $sth->execute();
-            while (list ($bid_i, $func_id_i) = $sth->fetch(3)) {
+            while (list($bid_i, $func_id_i) = $sth->fetch(3)) {
                 if ($func_id_i == $func_id_old) {
                     ++$weight;
                 } else {

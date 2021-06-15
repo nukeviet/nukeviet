@@ -28,7 +28,6 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-
 if ($row['lev'] == 1 or (!defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -46,7 +45,7 @@ function nv_checkAdmpass($adminpass)
     return $crypt->validate_password($adminpass, $pass);
 }
 
-$access_admin = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
+$access_admin = $db->query('SELECT content FROM ' . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
 $access_admin = unserialize($access_admin);
 $level = $admin_info['level'];
 
@@ -136,7 +135,7 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             $row_user['in_groups'] = array_filter(array_unique(array_map('trim', $row_user['in_groups'])));
             $row_user['in_groups'] = empty($row_user['in_groups']) ? '' : implode(',', $row_user['in_groups']);
 
-            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET group_id=" . $row_user['group_id'] . ", in_groups=" . $db->quote($row_user['in_groups']) . " WHERE userid=" . $admin_id;
+            $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $row_user['group_id'] . ', in_groups=' . $db->quote($row_user['in_groups']) . ' WHERE userid=' . $admin_id;
             $db->query($sql);
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_admin_del'], 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);

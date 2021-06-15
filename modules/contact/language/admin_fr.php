@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -117,3 +117,4 @@ $lang_module['captcha_type_'] = 'Ne pas utiliser';
 $lang_module['captcha_type_captcha'] = 'Captcha-image';
 $lang_module['captcha_type_recaptcha'] = 'reCaptcha';
 $lang_module['captcha_type_recaptcha_note'] = 'Captcha ne fonctionnera pas tant que vous n\'aurez pas <a href="%s">configuré reCaptcha</a>';
+$lang_module['row_new'] = 'Nouveau courrier';

@@ -208,7 +208,9 @@ if (!in_array($stype, array_keys($array_search))) {
 if ($sstatus < 0 or ($sstatus > 10 and $sstatus != ($global_code_defined['row_locked_status'] + 1))) {
     $sstatus = -1;
 }
-if (!in_array($ordername, array_keys($array_in_ordername))) {
+// Fix error https://github.com/nukeviet/nukeviet/issues/3135
+// Tu php 8.x doi so $strict cua function in_array co gi tri la TRUE
+if (!in_array($ordername, $array_in_ordername)) {
     $ordername = 'id';
 }
 if ($catid == 0) {
@@ -478,7 +480,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             $value['_source']['admin_id'],
             $value['_source']['author']
         ];
-        list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $array_list_elastic_search;
+        list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $array_list_elastic_search;
         $publtime = nv_date('H:i d/m/y', $publtime);
         $title = nv_clean60($title);
         if ($catid > 0) {
@@ -568,9 +570,9 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         if ($stype == 'bodytext') {
             $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
             $where = " c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'";
-        } elseif ($stype == "title") {
+        } elseif ($stype == 'title') {
             $where = " r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'";
-        } elseif ($stype == "author") {
+        } elseif ($stype == 'author') {
             $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.alias LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
@@ -580,14 +582,14 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
-            $where = " r.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($q) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')";
+            $where = ' r.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($q) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')";
         } elseif ($stype == 'admin_id') {
             $where = " (u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%' OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
         } elseif (!empty($q)) {
             $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
             $arr_from = [];
             foreach ($array_in_rows as $key => $val) {
-                $arr_from[] = "(r." . $val . " LIKE '%" . $db_slave->dblikeescape($q) . "%')";
+                $arr_from[] = '(r.' . $val . " LIKE '%" . $db_slave->dblikeescape($q) . "%')";
             }
             $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
@@ -668,7 +670,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     $result = $db_slave->query($db_slave->sql());
 
     $data = $array_ids = $array_userid = [];
-    while (list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $result->fetch(3)) {
+    while (list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $result->fetch(3)) {
         $publtime = nv_date('H:i d/m/y', $publtime);
 
         if ($catid > 0) {
@@ -809,7 +811,7 @@ if (!empty($array_ids)) {
         ->where('id IN( ' . implode(',', $array_ids) . ' )')
         ->group('id');
     $result = $db_slave->query($db_slave->sql());
-    while (list ($numtags, $id) = $result->fetch(3)) {
+    while (list($numtags, $id) = $result->fetch(3)) {
         $data[$id]['numtags'] = $numtags;
     }
 
@@ -823,20 +825,20 @@ if (!empty($array_ids)) {
         $array_editdata[$_row['id']] = $_row;
         $array_userid[$_row['admin_id']] = $_row['admin_id'];
     }
-    
+
     // Tim cac author noi bo
     $db_slave->sqlreset()
         ->select('*')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-        ->where("id IN (" . implode(',', $array_ids) . ")");
-        $result = $db_slave->query($db_slave->sql());
-        while ($_row = $result->fetch()) {
-            !isset($internal_authors[$_row['id']]) && $internal_authors[$_row['id']] = [];
-            $internal_authors[$_row['id']][] = [
-                'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
-                'pseudonym' => $_row['pseudonym']
-            ];
-        }
+        ->where('id IN (' . implode(',', $array_ids) . ')');
+    $result = $db_slave->query($db_slave->sql());
+    while ($_row = $result->fetch()) {
+        !isset($internal_authors[$_row['id']]) && $internal_authors[$_row['id']] = [];
+        $internal_authors[$_row['id']][] = [
+            'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
+            'pseudonym' => $_row['pseudonym']
+        ];
+    }
 }
 
 if (!empty($array_userid)) {
@@ -847,7 +849,7 @@ if (!empty($array_userid)) {
         ->where('tb1.userid IN( ' . implode(',', $array_userid) . ' )');
     $array_userid = [];
     $result = $db_slave->query($db_slave->sql());
-    while (list ($_userid, $_username, $admin_lev) = $result->fetch(3)) {
+    while (list($_userid, $_username, $admin_lev) = $result->fetch(3)) {
         $array_userid[$_userid] = [
             'username' => $_username,
             'admin_lev' => $admin_lev
@@ -942,10 +944,10 @@ foreach ($data as $row) {
         $row['title'] = $lang_module['no_name'];
     }
     $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']]['username'] : '';
-    
+
     $authors = [];
     if (isset($internal_authors[$row['id']]) and !empty($internal_authors[$row['id']])) {
-        foreach($internal_authors[$row['id']] as $internal_author) {
+        foreach ($internal_authors[$row['id']] as $internal_author) {
             $authors[] = '<a href="' . $internal_author['href'] . '">' . $internal_author['pseudonym'] . '</a>';
         }
     }
@@ -953,7 +955,7 @@ foreach ($data as $row) {
         $authors[] = $row['author'];
     }
     $row['author'] = !empty($authors) ? implode(', ', $authors) : '';
-            
+
     $xtpl->assign('ROW', $row);
 
     if ($is_excdata) {

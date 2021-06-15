@@ -28,7 +28,7 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
     $sth->execute();
 
     $array_data = [];
-    while (list ($topicid, $title) = $sth->fetch(3)) {
+    while (list($topicid, $title) = $sth->fetch(3)) {
         $array_data[] = [
             'id' => $topicid,
             'title' => $title
@@ -97,7 +97,7 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
                 if ($mk[0] > 0) {
                     $upload_real_dir_page = $mk[2];
                     try {
-                        $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $cp . $p . "', 0)");
+                        $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $cp . $p . "', 0)");
                     } catch (PDOException $e) {
                         trigger_error($e->getMessage());
                     }
@@ -125,7 +125,7 @@ $array_block_cat_module = [];
 $id_block_content = [];
 $sql = 'SELECT bid, adddefault, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query($sql);
-while (list ($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
+while (list($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
     $array_block_cat_module[$bid_i] = $title_i;
     if ($adddefault_i) {
         $id_block_content[] = $bid_i;
@@ -267,7 +267,7 @@ if ($rowcontent['id'] == 0) {
 
     // Lấy các file đính kèm
     $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $rowcontent['id'])->fetch();
-    $body_contents['files'] = !empty($body_contents['files']) ? explode(",", $body_contents['files']) : [];
+    $body_contents['files'] = !empty($body_contents['files']) ? explode(',', $body_contents['files']) : [];
     $rowcontent = array_merge($rowcontent, $body_contents);
     unset($body_contents);
 
@@ -298,7 +298,7 @@ if ($rowcontent['id'] == 0) {
     $id_block_content = [];
     $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
     $result = $db->query($sql);
-    while (list ($bid_i) = $result->fetch(3)) {
+    while (list($bid_i) = $result->fetch(3)) {
         $id_block_content[] = $bid_i;
     }
 
@@ -534,21 +534,21 @@ if ($is_submit_form) {
     $rowcontent['files'] = [];
     $fileupload = $nv_Request->get_array('files', 'post');
     if (!empty($fileupload)) {
-        $fileupload = array_map("trim", $fileupload);
+        $fileupload = array_map('trim', $fileupload);
         $fileupload = array_unique($fileupload);
         foreach ($fileupload as $_file) {
-            if (preg_match("/^" . str_replace("/", "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR) . "\//", $_file)) {
+            if (preg_match('/^' . str_replace('/', "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR) . "\//", $_file)) {
                 $_file = substr($_file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
 
                 if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $_file)) {
                     $rowcontent['files'][] = $_file;
                 }
-            } elseif (preg_match("/^http*/", $_file)) {
+            } elseif (preg_match('/^http*/', $_file)) {
                 $rowcontent['files'][] = $_file;
             }
         }
     }
-    $rowcontent['files'] = !empty($rowcontent['files']) ? implode(",", $rowcontent['files']) : "";
+    $rowcontent['files'] = !empty($rowcontent['files']) ? implode(',', $rowcontent['files']) : '';
 
     // Xử lý liên kết tĩnh
     $alias = $nv_Request->get_title('alias', 'post', '');
@@ -682,7 +682,7 @@ if ($is_submit_form) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
             $weightopic = intval($weightopic) + 1;
             $aliastopic = get_mod_alias($rowcontent['topictext'], 'topics');
-            $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+            $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
             $data_insert = [];
             $data_insert['title'] = $rowcontent['topictext'];
             $data_insert['alias'] = $aliastopic;
@@ -705,7 +705,7 @@ if ($is_submit_form) {
                 if (empty($rowcontent['sourceid'])) {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
                     $weight = intval($weight) + 1;
-                    $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title ,:sourceid_link, '', :weight, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+                    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title ,:sourceid_link, '', :weight, " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
 
                     $data_insert = [];
                     $data_insert['title'] = $url_info['host'];
@@ -725,7 +725,7 @@ if ($is_submit_form) {
                 if (empty($rowcontent['sourceid'])) {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
                     $weight = intval($weight) + 1;
-                    $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, '', '', " . $weight . " , " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+                    $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, '', '', " . $weight . ' , ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
                     $data_insert = [];
                     $data_insert['title'] = $rowcontent['sourcetext'];
 
@@ -1052,13 +1052,13 @@ if ($is_submit_form) {
                         $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                         $sth->execute();
 
-                        list ($tid, $alias, $tag_i) = $sth->fetch(3);
+                        list($tid, $alias, $tag_i) = $sth->fetch(3);
                         if (empty($tid)) {
                             $array_insert = [];
                             $array_insert['alias'] = $alias_i;
                             $array_insert['keyword'] = $_tag;
 
-                            $tid = $db->insert_id("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert);
+                            $tid = $db->insert_id('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", 'tid', $array_insert);
                         } else {
                             if ($alias != $alias_i) {
                                 if (!empty($tag_i)) {
@@ -1104,7 +1104,7 @@ if ($is_submit_form) {
             $internal_authors_del = $rowcontent['mode'] == 'edit' ? array_diff($rowcontent['internal_authors_old'], $rowcontent['internal_authors']) : [];
 
             if (!empty($internal_authors_new)) {
-                $internal_authors_new = implode(",", $internal_authors_new);
+                $internal_authors_new = implode(',', $internal_authors_new);
                 $_query = $db->query('SELECT id, alias, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id IN (' . $internal_authors_new . ')');
                 $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist (id, aid, alias, pseudonym) VALUES (' . $rowcontent['id'] . ', :aid, :alias, :pseudonym)');
                 while ($row = $_query->fetch()) {
@@ -1116,7 +1116,7 @@ if ($is_submit_form) {
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews+1 WHERE id IN (' . $internal_authors_new . ')');
             }
             if (!empty($internal_authors_del)) {
-                $internal_authors_del = implode(",", $internal_authors_del);
+                $internal_authors_del = implode(',', $internal_authors_del);
                 $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid IN (' . $internal_authors_del . ') AND id = ' . $rowcontent['id']);
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews-1 WHERE id IN (' . $internal_authors_del . ')');
             }
@@ -1130,7 +1130,6 @@ if ($is_submit_form) {
                 if (isset($module_config['seotools']['prcservice']) and !empty($module_config['seotools']['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1)) {
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 } else {
-
                     $referer = $crypt->decrypt($rowcontent['referer']);
                     if (!empty($referer)) {
                         nv_redirect_location($referer);
@@ -1177,7 +1176,7 @@ if (!empty($rowcontent['topicid'])) {
         ->where('topicid=' . $rowcontent['topicid']);
     $result = $db->query($db->sql());
 
-    while (list ($topicid_i, $title_i) = $result->fetch(3)) {
+    while (list($topicid_i, $title_i) = $result->fetch(3)) {
         $array_topic_module[$topicid_i] = $title_i;
     }
 }
@@ -1186,20 +1185,20 @@ $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_s
 $result = $db->query($sql);
 $array_source_module = [];
 $array_source_module[0] = $lang_module['sources_sl'];
-while (list ($sourceid_i, $title_i) = $result->fetch(3)) {
+while (list($sourceid_i, $title_i) = $result->fetch(3)) {
     $array_source_module[$sourceid_i] = $title_i;
 }
 
 $tdate = date('H|i', $rowcontent['publtime']);
 $publ_date = date('d/m/Y', $rowcontent['publtime']);
-list ($phour, $pmin) = explode('|', $tdate);
+list($phour, $pmin) = explode('|', $tdate);
 if ($rowcontent['exptime'] == 0) {
     $emin = $ehour = 0;
     $exp_date = '';
 } else {
     $exp_date = date('d/m/Y', $rowcontent['exptime']);
     $tdate = date('H|i', $rowcontent['exptime']);
-    list ($ehour, $emin) = explode('|', $tdate);
+    list($ehour, $emin) = explode('|', $tdate);
 }
 
 if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
@@ -1287,7 +1286,7 @@ if (!empty($rowcontent['files'])) {
         if (!empty($_file)) {
             $xtpl->assign('FILEUPL', [
                 'id' => $_id,
-                'value' => (!preg_match("/^http*/", $_file)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $_file : $_file
+                'value' => (!preg_match('/^http*/', $_file)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $_file : $_file
             ]);
             $xtpl->parse('main.files');
         }
@@ -1326,12 +1325,12 @@ foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
 $xtpl->assign('publ_date', $publ_date);
 $select = '';
 for ($i = 0; $i <= 23; ++$i) {
-    $select .= "<option value=\"" . $i . "\"" . (($i == $phour) ? ' selected="selected"' : '') . ">" . str_pad($i, 2, "0", STR_PAD_LEFT) . "</option>\n";
+    $select .= '<option value="' . $i . '"' . (($i == $phour) ? ' selected="selected"' : '') . '>' . str_pad($i, 2, '0', STR_PAD_LEFT) . "</option>\n";
 }
 $xtpl->assign('phour', $select);
 $select = '';
 for ($i = 0; $i < 60; ++$i) {
-    $select .= "<option value=\"" . $i . "\"" . (($i == $pmin) ? ' selected="selected"' : '') . ">" . str_pad($i, 2, "0", STR_PAD_LEFT) . "</option>\n";
+    $select .= '<option value="' . $i . '"' . (($i == $pmin) ? ' selected="selected"' : '') . '>' . str_pad($i, 2, '0', STR_PAD_LEFT) . "</option>\n";
 }
 $xtpl->assign('pmin', $select);
 
@@ -1339,12 +1338,12 @@ $xtpl->assign('pmin', $select);
 $xtpl->assign('exp_date', $exp_date);
 $select = '';
 for ($i = 0; $i <= 23; ++$i) {
-    $select .= "<option value=\"" . $i . "\"" . (($i == $ehour) ? ' selected="selected"' : '') . ">" . str_pad($i, 2, "0", STR_PAD_LEFT) . "</option>\n";
+    $select .= '<option value="' . $i . '"' . (($i == $ehour) ? ' selected="selected"' : '') . '>' . str_pad($i, 2, '0', STR_PAD_LEFT) . "</option>\n";
 }
 $xtpl->assign('ehour', $select);
 $select = '';
 for ($i = 0; $i < 60; ++$i) {
-    $select .= "<option value=\"" . $i . "\"" . (($i == $emin) ? ' selected="selected"' : '') . ">" . str_pad($i, 2, "0", STR_PAD_LEFT) . "</option>\n";
+    $select .= '<option value="' . $i . '"' . (($i == $emin) ? ' selected="selected"' : '') . '>' . str_pad($i, 2, '0', STR_PAD_LEFT) . "</option>\n";
 }
 $xtpl->assign('emin', $select);
 
@@ -1376,7 +1375,7 @@ foreach ($layout_array as $value) {
 $select = '';
 foreach ($array_source_module as $sourceid_i => $source_title_i) {
     $source_sl = ($sourceid_i == $rowcontent['sourceid']) ? ' selected="selected"' : '';
-    $select .= "<option value=\"" . $sourceid_i . "\" " . $source_sl . ">" . $source_title_i . "</option>\n";
+    $select .= '<option value="' . $sourceid_i . '" ' . $source_sl . '>' . $source_title_i . "</option>\n";
 }
 $xtpl->assign('sourceid', $select);
 
@@ -1388,12 +1387,12 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 if (!empty($module_config[$module_name]['htmlhometext']) and $has_editor) {
     $editshometext = nv_aleditor('hometext', '100%', '200px', $rowcontent['hometext'], '', $uploads_dir_user, $currentpath);
 } else {
-    $editshometext = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"hometext\" id=\"" . $module_name . "_hometext\" rows=\"5\">" . $rowcontent['hometext'] . "</textarea>";
+    $editshometext = '<textarea class="form-control" style="width: 100%" name="hometext" id="' . $module_name . '_hometext" rows="5">' . $rowcontent['hometext'] . '</textarea>';
 }
 if ($has_editor) {
     $edits = nv_aleditor('bodyhtml', '100%', '400px', $rowcontent['bodyhtml'], '', $uploads_dir_user, $currentpath);
 } else {
-    $edits = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"bodyhtml\" id=\"' . $module_data . '_bodyhtml\" rows=\"15\">" . $rowcontent['bodyhtml'] . "</textarea>";
+    $edits = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"bodyhtml\" id=\"' . $module_data . '_bodyhtml\" rows=\"15\">" . $rowcontent['bodyhtml'] . '</textarea>';
 }
 
 $shtm = '';
@@ -1498,6 +1497,12 @@ if (!empty($module_config[$module_name]['instant_articles_active'])) {
 
 if ($rowcontent['mode'] == 'edit') {
     $xtpl->parse('main.holdon_edit');
+}
+
+if (!empty($module_config[$module_name]['allowed_rating'])) {
+    $xtpl->parse('main.allowed_rating');
+} else {
+    $xtpl->parse('main.not_allowed_rating');
 }
 
 $xtpl->parse('main');

@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -26,7 +26,7 @@ $lang_global['site_info'] = 'Information du site';
 $lang_global['welcome'] = 'Bienvenu sur le site %s';
 $lang_global['disable_site_title'] = 'Site en maintenance';
 $lang_global['disable_site_content'] = 'Notre site est fermé temporairement pour la maintenance. Veuillez revenir plus tard. Merci!';
-$lang_module['closed_site_reopening_time'] = 'Temps de réopération prévu';
+$lang_global['closed_site_reopening_time'] = 'Temps de réopération prévu';
 $lang_global['Home'] = 'Accueil';
 $lang_global['go_homepage'] = 'Retour à l\'Accueil';
 $lang_global['error_404_title'] = 'Erreur de connexion 404';

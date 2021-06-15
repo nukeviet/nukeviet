@@ -5,7 +5,7 @@
  * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2021 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 03 May 2021 14:07:45 GMT
+ * @Createdate Tue, 11 May 2021 14:38:58 GMT
  */
 
 if (!defined('NV_MAINFILE')) {
@@ -15,6 +15,7 @@ if (!defined('NV_MAINFILE')) {
 define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, s, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
 define('NV_ANTI_AGENT', 0);
 define('NV_ANTI_IFRAME', 1);
+define('NV_DEBUG', 0);
 define('NV_GFX_HEIGHT', 40);
 define('NV_GFX_NUM', 6);
 define('NV_GFX_WIDTH', 150);
@@ -22,6 +23,7 @@ define('NV_LIVE_COOKIE_TIME', 31104000);
 define('NV_LIVE_SESSION_TIME', 0);
 define('NV_MAX_HEIGHT', 1500);
 define('NV_MAX_WIDTH', 1500);
+define('NV_MOBILE_MODE_IMG', 480);
 define('NV_EOL', "\r\n");
 define('NV_UPLOAD_MAX_FILESIZE', 2097152);
 $global_config['admfirewall']=0;
@@ -35,9 +37,11 @@ $global_config['autocheckupdate']=1;
 $global_config['autoupdatetime']=24;
 $global_config['block_admin_ip']=0;
 $global_config['cdn_url']='';
+$global_config['closed_site']=0;
 $global_config['cookie_httponly']=1;
-$global_config['cookie_prefix']='nv4c_z0FZ1';
 $global_config['cookie_notice_popup']=0;
+$global_config['cookie_prefix']='nv4c_z0FZ1';
+$global_config['cookie_SameSite']='Lax';
 $global_config['cookie_secure']=0;
 $global_config['crossadmin_restrict']=1;
 $global_config['crossadmin_valid_domains']=[];
@@ -98,6 +102,7 @@ $global_config['rewrite_optional']=1;
 $global_config['session_prefix']='nv4s_l73T0K';
 $global_config['site_keywords']='NukeViet, portal, mysql, php';
 $global_config['site_lang']='vi';
+$global_config['site_reopening_time']=0;
 $global_config['site_timezone']='byCountry';
 $global_config['spadmin_add_admin']=1;
 $global_config['str_referer_blocker']=0;

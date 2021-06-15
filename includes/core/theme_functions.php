@@ -169,22 +169,25 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
 
     // Get theme
     $template = '';
-    if (defined('NV_ADMIN') and isset($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl')) {
+    if (defined('NV_ADMIN') and !empty($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
         $template = $global_config['admin_theme'];
     } elseif (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/admin_default/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
         $template = 'admin_default';
-    } elseif (isset($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl')) {
+    } elseif (!empty($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system';
         $template = $global_config['module_theme'];
-    } elseif (isset($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl')) {
+    } elseif (!empty($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl')) {
         $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
         $template = $global_config['site_theme'];
     } else {
         $tpl_path = NV_ROOTDIR . '/themes/default/system';
         $template = 'default';
     }
+
+    empty($global_config['site_url']) && $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
+    empty($global_config['site_logo']) && $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
 
     $xtpl = new XTemplate('info_die.tpl', $tpl_path);
     $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
@@ -241,12 +244,18 @@ function nv_htmlOutput($html, $type = 'html')
     if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
         $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
     }
+    if (!empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
+        $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
+    }
+    if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
+        $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
+    }
     if ($type == 'json') {
         $html_headers['Content-Type'] = 'application/json';
     } else {
         $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
     }
-    $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+    $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';
     $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
     $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
     $html_headers['Expires'] = '-1'; // Proxies.
@@ -366,13 +375,16 @@ function nv_xmlOutput($content, $lastModified)
 }
 
 /**
+ * nv_rss_generate()
  *
- * @param array $channel
- * @param array $items
+ * @param mixed $channel
+ * @param mixed $items
+ * @param mixed $atomlink
  * @param string $timemode
- * @param boolean $noindex
+ * @param bool $noindex
+ * @return void
  */
-function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
+function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noindex = true)
 {
     global $global_config, $client_info;
 
@@ -384,7 +396,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 
     $channel['generator'] = 'NukeViet v4.0';
     $channel['title'] = nv_htmlspecialchars($channel['title']);
-    $channel['atomlink'] = str_replace('&', '&amp;', $client_info['selfurl']);
+    $channel['atomlink'] = NV_MY_DOMAIN . nv_url_rewrite($atomlink, true);
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
 
@@ -399,14 +411,6 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
     $channel['link'] = nv_url_rewrite($channel['link'], true);
     if (!str_starts_with($channel['link'], NV_MY_DOMAIN)) {
         $channel['link'] = NV_MY_DOMAIN . $channel['link'];
-    }
-
-    if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['atomlink'], $matches)) {
-        $channel['atomlink'] = NV_BASE_SITEURL . $matches[1];
-    }
-    $channel['atomlink'] = nv_url_rewrite($channel['atomlink'], true);
-    if (!str_starts_with($channel['atomlink'], NV_MY_DOMAIN)) {
-        $channel['atomlink'] = NV_MY_DOMAIN . $channel['atomlink'];
     }
 
     $channel['pubDate'] = 0;
@@ -601,11 +605,11 @@ function nv_xmlSitemapCat_generate($url)
 
     if ($global_config['rewrite_enable']) {
         if ($global_config['check_rewrite_file']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "sitemap-\\1.\\2.\\3.xml", $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'sitemap-\\1.\\2.\\3.xml', $contents);
         } elseif ($global_config['rewrite_optional']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
         } else {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\1/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\1/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
         }
     }
 
@@ -628,9 +632,9 @@ function nv_xmlSitemapIndex_generate()
 
     if ($global_config['lang_multi']) {
         foreach ($global_config['allow_sitelangs'] as $lang) {
-            $sql = "SELECT m.title, m.module_file FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
+            $sql = 'SELECT m.title, m.module_file FROM ' . $db_config['prefix'] . '_' . $lang . '_modules m LEFT JOIN ' . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
-            while (list ($modname, $modfile) = $result->fetch(3)) {
+            while (list($modname, $modfile) = $result->fetch(3)) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
                 foreach ($sitemaps as $filename) {
                     if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
@@ -671,15 +675,15 @@ function nv_xmlSitemapIndex_generate()
 
     if ($global_config['rewrite_enable']) {
         if ($global_config['check_rewrite_file']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "sitemap-\\1.xml", $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "sitemap-\\1.\\2.\\3.xml", $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "sitemap-\\1.\\2.xml", $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", 'sitemap-\\1.xml', $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'sitemap-\\1.\\2.\\3.xml', $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", 'sitemap-\\1.\\2.xml', $contents);
         } elseif ($global_config['rewrite_optional']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", 'index.php/\\2/sitemap' . $global_config['rewrite_endurl'], $contents);
         } else {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\1/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\1/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\1/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", 'index.php/\\1/\\2/sitemap' . $global_config['rewrite_endurl'], $contents);
         }
     }
 
@@ -785,4 +789,33 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
 
     $xtpl->parse('main');
     return $xtpl->text('main');
+}
+
+// Disable site
+/**
+ * nv_disable_site()
+ *
+ * @return void
+ */
+function nv_disable_site()
+{
+    global $global_config, $lang_global;
+
+    $disable_site_content = $lang_global['disable_site_content'];
+    $disable_site_headers = [];
+    $disable_site_code = 200;
+
+    if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . NV_LANG_DATA . '.txt')) {
+        $disable_site_content = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . NV_LANG_DATA . '.txt');
+    }
+
+    if (!empty($global_config['site_reopening_time']) and $global_config['site_reopening_time'] > NV_CURRENTTIME) {
+        $disable_site_content .= '<br/><br/>' . $lang_global['closed_site_reopening_time'] . ': ' . nv_date('d/m/Y H:i', $global_config['site_reopening_time']);
+        $disable_site_headers = [
+            'Retry-After: ' . gmdate('D, d M Y H:i:s', $global_config['site_reopening_time']) . ' GMT'
+        ];
+        $disable_site_code = 503;
+    }
+
+    nv_info_die($lang_global['disable_site_title'], $lang_global['disable_site_title'], $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
 }

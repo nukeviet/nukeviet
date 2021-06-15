@@ -12,7 +12,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$module_version = array(
+$module_version = [
     'name' => 'Statistics',
     'modfuncs' => 'main,allreferers,allcountries,allbrowsers,allos,allbots,referer',
     'change_alias' => 'allreferers,allcountries,allbrowsers,allos,allbots,referer',
@@ -20,8 +20,8 @@ $module_version = array(
     'layoutdefault' => 'body:main,allreferers,allcountries,allbrowsers,allos,allbots',
     'is_sysmod' => 0,
     'virtual' => 2,
-    'version' => '4.4.02',
-    'date' => 'Monday, June 22, 2020 16:00:00 GMT+07:00',
+    'version' => '4.5.00',
+    'date' => 'Tuesday, June 22, 2021 16:00:00 GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => ''
-);
+];

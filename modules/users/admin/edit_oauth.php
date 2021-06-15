@@ -63,7 +63,7 @@ $xtpl = new XTemplate('user_oauth.tpl', NV_ROOTDIR . '/themes/' . $global_config
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('USERID', $row['userid']);
 
-$sql = "SELECT openid, opid, email FROM " . NV_MOD_TABLE . "_openid WHERE userid=" . $row['userid'];
+$sql = 'SELECT openid, opid, email FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'];
 $array_oauth = $db->query($sql)->fetchAll();
 
 if (empty($array_oauth)) {
@@ -72,7 +72,7 @@ if (empty($array_oauth)) {
 } else {
     // Xóa OpenID của thành viên
     if ($nv_Request->isset_request('del', 'post')) {
-        if (! defined('NV_IS_AJAX')) {
+        if (!defined('NV_IS_AJAX')) {
             die('Wrong URL');
         }
 
@@ -91,11 +91,11 @@ if (empty($array_oauth)) {
 
     // Xóa tất cả các OpenID của thành viên
     if ($nv_Request->isset_request('delall', 'post')) {
-        if (! defined('NV_IS_AJAX')) {
+        if (!defined('NV_IS_AJAX')) {
             die('Wrong URL');
         }
 
-        if ($db->exec("DELETE FROM " . NV_MOD_TABLE . "_openid WHERE userid=" . $row['userid'])) {
+        if ($db->exec('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'])) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_delete_all_openid', 'userid ' . $row['userid'], $admin_info['userid']);
             $nv_Cache->delMod($module_name);
             die('OK');

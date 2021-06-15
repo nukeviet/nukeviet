@@ -8,11 +8,11 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-if (! defined('NV_IS_AJAX')) {
+if (!defined('NV_IS_AJAX')) {
     die('Wrong URL');
 }
 
@@ -21,10 +21,11 @@ $vid = $nv_Request->get_int('vid', 'post', 0);
 $contents = '';
 
 if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_vote', "votingid " . $vid, $admin_info['userid']);
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE vid=" . $vid;
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_vote', 'votingid ' . $vid, $admin_info['userid']);
+    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid;
     if ($db->exec($sql)) {
-        $db->query("DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid=" . $vid);
+        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $vid);
+        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voted WHERE vid=' . $vid);
         $nv_Cache->delMod($module_name);
 
         $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
@@ -36,9 +37,9 @@ if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
             }
         }
 
-        $contents = "OK_" . $vid;
+        $contents = 'OK_' . $vid;
     } else {
-        $contents = "ERR_" . $lang_module['voting_delete_unsuccess'];
+        $contents = 'ERR_' . $lang_module['voting_delete_unsuccess'];
     }
 }
 

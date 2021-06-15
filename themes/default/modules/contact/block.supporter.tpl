@@ -4,7 +4,7 @@
 
 	<!-- BEGIN: image -->
 	<div class="text-center m-bottom">
-		<img src="{DEPARTMENT.image}" class="img-thumbnail" alt="{DEPARTMENT.full_name}" />
+		<img src="{DEPARTMENT.image}" srcset="{DEPARTMENT.srcset}" class="img-thumbnail" alt="{DEPARTMENT.full_name}" />
 	</div>
 	<!-- END: image -->
 	

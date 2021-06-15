@@ -12,8 +12,14 @@
 					</tr>
 				</tfoot>
 				<tbody>
+                    <tr>
+                        <th>{LANG.difftimeout}</th>
+                        <td>
+                            <input type="text" class="form-control w50" name="difftimeout" value="{DATA.difftimeout}" /><span class="m-left">{LANG.hours}</span>
+                        </td>
+                    </tr>
 					<tr>
-                        <td>{LANG.captcha_type}</td>
+                        <th>{LANG.captcha_type}</th>
                         <td>
                             <select class="form-control w200" name="captcha_type" data-recaptcha-note="{IS_RECAPTCHA_NOTE}">
                                 <!-- BEGIN: captcha_type -->

@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['config'];
 
-$array_config = array();
+$array_config = [];
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -54,7 +54,7 @@ $array_config['alias_lower'] = 1;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query($sql);
-while (list ($c_config_name, $c_config_value) = $result->fetch(3)) {
+while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;
 }
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -65,40 +65,40 @@ $xtpl->assign('NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' :
 $xtpl->assign('COPY_PAGE', $array_config['copy_page'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $array_config['alias_lower'] ? ' checked="checked"' : '');
 
-$view_array = array(
+$view_array = [
     $lang_module['config_view_type_0'],
     $lang_module['config_view_type_1'],
     $lang_module['config_view_type_2']
-);
+];
 foreach ($view_array as $key => $title) {
-    $xtpl->assign('VIEWTYPE', array(
+    $xtpl->assign('VIEWTYPE', [
         'id' => $key,
         'title' => $title,
         'selected' => $array_config['viewtype'] == $key ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.loop');
 }
 for ($i = 5; $i <= 30; ++$i) {
-    $xtpl->assign('PER_PAGE', array(
+    $xtpl->assign('PER_PAGE', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $array_config['per_page'] ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.per_page');
 }
 
 for ($i = 0; $i <= 30; ++$i) {
-    $xtpl->assign('RELATED_ARTICLES', array(
+    $xtpl->assign('RELATED_ARTICLES', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $array_config['related_articles'] ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.related_articles');
 }
 
 // Social_buttons
 $my_socialbuttons = !empty($array_config['socialbutton']) ? array_map('trim', explode(',', $array_config['socialbutton'])) : [];
-foreach($socialbuttons as $socialbutton) {
+foreach ($socialbuttons as $socialbutton) {
     $array = [
         'key' => $socialbutton,
         'title' => ucfirst($socialbutton),

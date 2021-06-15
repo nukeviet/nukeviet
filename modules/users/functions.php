@@ -49,14 +49,14 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
         'current_openid' => $opid
     ];
 
-    $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET
         checknum = :checknum,
-        last_login = " . NV_CURRENTTIME . ",
+        last_login = ' . NV_CURRENTTIME . ',
         last_ip = :last_ip,
         last_agent = :last_agent,
         last_openid = :opid,
-        remember = " . $remember . "
-        WHERE userid=" . $array_user['userid']);
+        remember = ' . $remember . '
+        WHERE userid=' . $array_user['userid']);
 
     $stmt->bindValue(':checknum', $checknum, PDO::PARAM_STR);
     $stmt->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
@@ -173,7 +173,7 @@ $cacheTTL = 3600;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
     $global_users_config = unserialize($cache);
 } else {
-    $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config";
+    $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . '_config';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $global_users_config[$row['config']] = $row['content'];
@@ -184,9 +184,9 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false)
 
 $group_id = 0;
 if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($array_op[0] == 'register' or $array_op[0] == 'editinfo')) {
-    $sql = "SELECT g.group_id, d.title, g.config FROM " . NV_MOD_TABLE . "_groups AS g LEFT JOIN " . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' )";
+    $sql = 'SELECT g.group_id, d.title, g.config FROM ' . NV_MOD_TABLE . '_groups AS g LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' )";
     $_query = $db->query($sql);
-    $group_lists = array();
+    $group_lists = [];
     while ($_row = $_query->fetch()) {
         $group_lists[$_row['group_id']] = $_row;
     }
@@ -205,22 +205,21 @@ if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($
                 $module_info['funcs'][$op] = $sys_mods[$module_name]['funcs'][$op];
                 $group_id = $row['group_id'];
                 define('ACCESS_ADDUS', $group['config']['access_addus']);
-            } else
-                if ($group['config']['access_editus'] and $array_op[0] == 'editinfo') { // sửa thông tin
-                    $group_id = $row['group_id'];
+            } elseif ($group['config']['access_editus'] and $array_op[0] == 'editinfo') { // sửa thông tin
+                $group_id = $row['group_id'];
 
-                    $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
+                $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
                         WHERE group_id = ' . $group_id . ' and userid = ' . $array_op[2] . ' and is_leader = 0');
 
-                    if ($row = $result->fetch()) { // nếu tài khoản nằm trong nhóm đó thì được quyền sửa
-                        $userid = $array_op[2];
+                if ($row = $result->fetch()) { // nếu tài khoản nằm trong nhóm đó thì được quyền sửa
+                    $userid = $array_op[2];
 
-                        if ($group['config']['access_passus']) {
-                            define('ACCESS_PASSUS', $group['config']['access_passus']);
-                        }
-                        define('ACCESS_EDITUS', $group['config']['access_editus']);
+                    if ($group['config']['access_passus']) {
+                        define('ACCESS_PASSUS', $group['config']['access_passus']);
                     }
+                    define('ACCESS_EDITUS', $group['config']['access_editus']);
                 }
+            }
         }
     }
 }

@@ -8,13 +8,13 @@
  * @Createdate 2-1-2010 22:5
  */
 
-if (! defined('NV_IS_FILE_EXTENSIONS')) {
+if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_global['mod_extensions'];
 
-$request = array();
+$request = [];
 $request['id'] = $nv_Request->get_int('id', 'get', 0);
 $request['fid'] = $nv_Request->get_int('fid', 'get', 0);
 
@@ -48,20 +48,20 @@ else {
 }
 
 if (empty($error) and empty($message)) {
-    $args = array(
-        'headers' => array(
+    $args = [
+        'headers' => [
             'Referer' => NUKEVIET_STORE_APIURL,
-        ),
+        ],
         'cookies' => $stored_cookies,
         'body' => $request
-    );
+    ];
 
     $cookies = [];
     $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
     if (is_array($array)) {
         $cookies = $array['cookies'];
-        $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
+        $array = !empty($array['body']) ? @unserialize($array['body']) : [];
     } else {
         // Do post có thể trả về object
         $array = [];
@@ -83,7 +83,7 @@ if (empty($error) and empty($message)) {
 }
 
 // Show error
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 } else {
@@ -116,7 +116,7 @@ if (! empty($error)) {
 
             // Check require plugin
             $allow_continue = true;
-            if (! empty($array['require'])) {
+            if (!empty($array['require'])) {
                 $require_installed = nv_extensions_is_installed($array['require']['tid'], $array['require']['name'], '');
 
                 if ($require_installed === 0) {
@@ -133,7 +133,7 @@ if (! empty($error)) {
 
             if ($allow_continue === true) {
                 // Check auto install
-                if ($array['compatible']['type'] != 1 or ! in_array($array['tid'], array( 1, 2, 3, 4 ))) {
+                if ($array['compatible']['type'] != 1 or !in_array($array['tid'], [1, 2, 3, 4])) {
                     $xtpl->assign('MANUAL_MESSAGE', $array['documentation'] ? $lang_module['install_manual_install'] : $lang_module['install_manual_install_danger']);
                     $xtpl->parse('main.install.manual');
                 } else {

@@ -89,7 +89,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
         'reload' => false
     ];
 
-    $array_request =  [];
+    $array_request = [];
     $array_request['sample_name'] = nv_strtolower(nv_substr($nv_Request->get_title('sample_name', 'post', ''), 0, 50));
     $array_request['delifexists'] = $nv_Request->get_int('delifexists', 'post', 0);
     $array_request['offsettable'] = $nv_Request->get_int('offsettable', 'post', 0);
@@ -114,7 +114,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
             while ($row = $result->fetch()) {
                 if (!in_array($row['name'], $array_ignore_save)) {
                     if ($row['engine'] != 'MyISAM') {
-                        $row['rows'] = $db->query("SELECT COUNT(*) FROM " . $row['name'])->fetchColumn();
+                        $row['rows'] = $db->query('SELECT COUNT(*) FROM ' . $row['name'])->fetchColumn();
                     }
                     $array_tables[$a] = [];
                     $array_tables[$a]['name'] = $row['name'];

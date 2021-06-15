@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -19,17 +19,23 @@ $vid = $nv_Request->get_int('vid', 'post,get');
 $submit = $nv_Request->get_string('submit', 'post');
 $groups_list = nv_groups_list();
 
-if (! empty($submit)) {
+if (!empty($submit)) {
     $question = $nv_Request->get_title('question', 'post', '', 1);
     $link = $nv_Request->get_title('link', 'post', '', 1);
 
-    $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
-    $groups_view = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    $vote_one = $nv_Request->get_int('vote_one', 'post', 0) ? 1 : 0;
+    $_groups_post = $nv_Request->get_array('groups_view', 'post', []);
+    $_groups_post = !empty($_groups_post) ? nv_groups_post(array_intersect($_groups_post, array_keys($groups_list))) : [];
+
+    if (!empty($_groups_post) and (in_array(5, $_groups_post) or in_array(6, $_groups_post))) {
+        $vote_one = 0;
+    }
+
+    $groups_view = !empty($_groups_post) ? implode(',', $_groups_post) : '';
 
     $publ_date = $nv_Request->get_title('publ_date', 'post', '');
     $exp_date = $nv_Request->get_title('exp_date', 'post', '');
     $maxoption = $nv_Request->get_int('maxoption', 'post', 1);
-    $vote_one = $nv_Request->get_int('vote_one', 'post', 0) ? 1 : 0;
 
     $array_answervote = $nv_Request->get_array('answervote', 'post');
     $array_urlvote = $nv_Request->get_array('urlvote', 'post');
@@ -68,18 +74,18 @@ if (! empty($submit)) {
             ++$number_answer;
         }
     }
-    $rowvote = array(
+    $rowvote = [
         'groups_view' => '6',
         'publ_time' => $begindate,
         'exp_time' => $enddate,
         'acceptcm' => $maxoption,
         'question' => $question,
         'link' => $link
-    );
+    ];
 
     $active_captcha = $nv_Request->get_int('active_captcha', 'post', 0) ? 1 : 0;
 
-    if (! empty($question) and $number_answer > 1) {
+    if (!empty($question) and $number_answer > 1) {
         $error = $lang_module['voting_error'];
 
         if (empty($vid)) {
@@ -155,8 +161,8 @@ if (! empty($submit)) {
     }
 } else {
     $maxoption = 1;
-    $array_answervote = array();
-    $array_urlvote = array();
+    $array_answervote = [];
+    $array_urlvote = [];
 
     if ($vid > 0) {
         $queryvote = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid;
@@ -176,7 +182,7 @@ if (! empty($submit)) {
 
         $active_captcha = $rowvote['active_captcha'];
     } else {
-        $rowvote = array(
+        $rowvote = [
             'groups_view' => '6',
             'publ_time' => NV_CURRENTTIME,
             'exp_time' => '',
@@ -185,7 +191,7 @@ if (! empty($submit)) {
             'question' => '',
             'link' => '',
             'vote_one' => 0
-        );
+        ];
         $active_captcha = 1;
     }
 }
@@ -198,7 +204,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $rowvote['link'] = nv_htmlspecialchars($rowvote['link']);
 $rowvote['active_captcha'] = $active_captcha ? ' checked="checked"' : '';
 $rowvote['question_maxlength'] = ($db_config['charset'] == 'utf8') ? 333 : 250;
-$rowvote['vote_one'] = $rowvote['vote_one']  ? ' checked="checked"' : '';
+$rowvote['vote_one'] = $rowvote['vote_one'] ? ' checked="checked"' : '';
 
 $xtpl->assign('DATA', $rowvote);
 
@@ -218,19 +224,19 @@ list($phour, $pmin) = explode('|', $tdate);
 // Thoi gian dang
 $xtpl->assign('PUBL_DATE', $publ_date);
 for ($i = 0; $i <= 23; ++$i) {
-    $xtpl->assign('PHOUR', array(
+    $xtpl->assign('PHOUR', [
         'key' => $i,
         'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
         'selected' => $i == $phour ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.phour');
 }
 for ($i = 0; $i < 60; ++$i) {
-    $xtpl->assign('PMIN', array(
+    $xtpl->assign('PMIN', [
         'key' => $i,
         'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
         'selected' => $i == $pmin ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.pmin');
 }
 
@@ -245,30 +251,30 @@ if ($rowvote['exp_time'] > 0) {
 }
 $xtpl->assign('EXP_DATE', $exp_date);
 for ($i = 0; $i <= 23; ++$i) {
-    $xtpl->assign('EHOUR', array(
+    $xtpl->assign('EHOUR', [
         'key' => $i,
         'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
         'selected' => $i == $ehour ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.ehour');
 }
 for ($i = 0; $i < 60; ++$i) {
-    $xtpl->assign('EMIN', array(
+    $xtpl->assign('EMIN', [
         'key' => $i,
         'title' => str_pad($i, 2, '0', STR_PAD_LEFT),
         'selected' => $i == $emin ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.emin');
 }
 
 $items = 0;
 foreach ($array_answervote as $id => $title) {
-    $xtpl->assign('ITEM', array(
+    $xtpl->assign('ITEM', [
         'stt' => ++$items,
         'id' => $id,
         'title' => $title,
         'link' => nv_htmlspecialchars($array_urlvote[$id])
-    ));
+    ]);
 
     $xtpl->parse('main.item');
 }
@@ -278,11 +284,11 @@ $xtpl->assign('NEW_ITEM_NUM', $items);
 
 $groups_view = explode(',', $rowvote['groups_view']);
 foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('GROUPS_VIEW', array(
+    $xtpl->assign('GROUPS_VIEW', [
         'value' => $_group_id,
         'checked' => in_array($_group_id, $groups_view) ? ' checked="checked"' : '',
         'title' => $_title
-    ));
+    ]);
     $xtpl->parse('main.groups_view');
 }
 

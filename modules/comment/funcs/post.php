@@ -66,8 +66,18 @@ if ($captcha == 0) {
 
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
-$code = ($module_config[$module]['captcha_type_comm'] == 'recaptcha') ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('code', 'post', '');
-if ($show_captcha and ($module_config[$module]['captcha_type_comm'] == 'captcha' or ($module_config[$module]['captcha_type_comm'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($code, $module_config[$module]['captcha_type_comm'])) {
+unset($code);
+// Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+if ($show_captcha and $reCaptchaPass and $module_config[$module]['captcha_type_comm'] == 'recaptcha') {
+    $code = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+}
+// Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+elseif ($show_captcha and $module_config[$module]['captcha_type_comm'] == 'captcha') {
+    $code = $nv_Request->get_title('code', 'post', '');
+}
+
+// Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+if (isset($code) and !nv_capcha_txt($code, $module_config[$module]['captcha_type_comm'])) {
     _loadContents('ERR_code_' . $lang_global['securitycodeincorrect']);
 }
 
@@ -132,7 +142,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
         if ($mk[0] > 0) {
             try {
-                $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $dir . "', 0)");
+                $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir . "', 0)");
             } catch (PDOException $e) {
                 trigger_error($e->getMessage());
             }
@@ -148,7 +158,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         _loadContents('ERR__' . $upload_info['error']);
     }
 
-    mt_srand((double) microtime() * 1000000);
+    mt_srand((float) microtime() * 1000000);
     $maxran = 1000000;
     $random_num = mt_rand(0, $maxran);
     $random_num = md5($random_num);

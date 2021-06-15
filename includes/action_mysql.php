@@ -36,7 +36,7 @@ function nv_delete_table_sys($lang)
 {
     global $db_config;
 
-    $sql_drop_table = array();
+    $sql_drop_table = [];
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modules';
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups';
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_weight';
@@ -61,8 +61,8 @@ function nv_create_table_sys($lang)
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini');
     $layoutdefault = (string) $xml->layoutdefault;
 
-    $sql_create_table = array();
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modules (
+    $sql_create_table = [];
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_modules (
          title varchar(50) NOT NULL,
          module_file varchar(50) NOT NULL DEFAULT '',
          module_data varchar(50) NOT NULL DEFAULT '',
@@ -87,7 +87,7 @@ function nv_create_table_sys($lang)
          PRIMARY KEY (title)
     ) ENGINE=MyISAM";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_blocks_groups (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_blocks_groups (
          bid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
          theme varchar(55) NOT NULL,
          module varchar(55) NOT NULL,
@@ -110,14 +110,14 @@ function nv_create_table_sys($lang)
          KEY exp_time (exp_time)
     ) ENGINE=MyISAM";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_blocks_weight (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_blocks_weight (
          bid mediumint(8) NOT NULL DEFAULT '0',
          func_id mediumint(8) NOT NULL DEFAULT '0',
          weight mediumint(8) NOT NULL DEFAULT '0',
          UNIQUE KEY bid (bid,func_id)
     ) ENGINE=MyISAM";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modfuncs (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_modfuncs (
          func_id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
          func_name varchar(55) NOT NULL,
          alias varchar(55) NOT NULL DEFAULT '',
@@ -133,7 +133,7 @@ function nv_create_table_sys($lang)
          UNIQUE KEY alias (alias,in_module)
     ) ENGINE=MyISAM";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_searchkeys (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_searchkeys (
          id varchar(32) NOT NULL DEFAULT '',
          skey varchar(250) NOT NULL,
          total int(11) NOT NULL DEFAULT '0',
@@ -143,7 +143,7 @@ function nv_create_table_sys($lang)
          KEY search_engine (search_engine)
     ) ENGINE=MyISAM";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_referer_stats (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_referer_stats (
          host varchar(250) NOT NULL,
          total int(11) NOT NULL DEFAULT '0',
          month01 int(11) NOT NULL DEFAULT '0',
@@ -163,34 +163,34 @@ function nv_create_table_sys($lang)
          KEY total (total)
     ) ENGINE=MyISAM";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modthemes (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_modthemes (
          func_id mediumint(8) DEFAULT NULL,
          layout varchar(100) DEFAULT NULL,
          theme varchar(100) DEFAULT NULL,
          UNIQUE KEY func_id (func_id,layout,theme)
-     ) ENGINE=MyISAM";
+     ) ENGINE=MyISAM';
 
-    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (
+    $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . "_modules (
         title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file,
         theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap
     ) VALUES
-         ('about', 'page', 'about', 'about', 'page', 'About', '', 1592816400, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 1),
-         ('news', 'news', 'news', 'news', 'news', 'News', '', 1592816400, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 1),
-         ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1592816400, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 1),
-         ('contact', 'contact', 'contact', 'contact', 'contact', 'Contact', '', 1592816400, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1),
-         ('statistics', 'statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1592816400, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 1),
-         ('voting', 'voting', 'voting', 'voting', 'voting', 'Voting', '', 1592816400, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 1),
-         ('banners', 'banners', 'banners', 'banners', 'banners', 'Banners', '', 1592816400, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 1),
-         ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1592816400, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 1),
-         ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1592816400, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 1),
-         ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1592816400, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 1),
-         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1592816400, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
-         ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1592816400, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1),
-         ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1592816400, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 1),
-         ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1592816400, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 1),
-         ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1592816400, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 1)";
+         ('about', 'page', 'about', 'about', 'page', 'About', '', 1624352400, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 1),
+         ('news', 'news', 'news', 'news', 'news', 'News', '', 1624352400, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 1),
+         ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1624352400, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 1),
+         ('contact', 'contact', 'contact', 'contact', 'contact', 'Contact', '', 1624352400, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1),
+         ('statistics', 'statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1624352400, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 1),
+         ('voting', 'voting', 'voting', 'voting', 'voting', 'Voting', '', 1624352400, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 1),
+         ('banners', 'banners', 'banners', 'banners', 'banners', 'Banners', '', 1624352400, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 1),
+         ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1624352400, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 1),
+         ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1624352400, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 1),
+         ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1624352400, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 1),
+         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1624352400, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
+         ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1624352400, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1),
+         ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1624352400, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 1),
+         ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1624352400, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 1),
+         ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1624352400, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 1)";
 
-    $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+    $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
          ('" . $lang . "', 'global', 'site_domain', ''),
          ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x'),
          ('" . $lang . "', 'global', 'site_logo', ''),
@@ -218,10 +218,10 @@ function nv_create_table_sys($lang)
 
     $lang_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_setup_language')->fetchColumn() + 1;
 
-    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup, weight) VALUES('" . $lang . "', 1, " . $lang_weight . ")";
+    $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_language (lang, setup, weight) VALUES('" . $lang . "', 1, " . $lang_weight . ')';
 
-    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modthemes (func_id, layout, theme) VALUES ('0', '" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
-    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_cronjobs ADD " . $lang . "_cron_name VARCHAR( 255 ) NOT NULL DEFAULT ''";
+    $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . "_modthemes (func_id, layout, theme) VALUES ('0', '" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
+    $sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_cronjobs ADD ' . $lang . "_cron_name VARCHAR( 255 ) NOT NULL DEFAULT ''";
 
     return $sql_create_table;
 }

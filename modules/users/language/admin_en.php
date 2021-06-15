@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate May 30, 2010, 05:07:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2019 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate May 30, 2010, 05:07:00 PM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -303,6 +303,7 @@ $lang_module['field_options_text'] = 'Options for Text Fields';
 $lang_module['field_match_type'] = 'Value Match Requirements:<br>Empty values are always allowed.';
 $lang_module['field_match_type_none'] = 'none';
 $lang_module['field_match_type_alphanumeric'] = 'A-Z, 0-9, and _ only';
+$lang_module['field_match_type_unicodename'] = 'Human name (Unicode letters, dash, apostrophe and space)';
 $lang_module['field_match_type_date'] = 'Enter the date in the format dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Regular expression';

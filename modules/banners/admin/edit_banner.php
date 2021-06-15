@@ -28,9 +28,9 @@ $height = $row['height'];
 $imageforswf = $row['imageforswf'];
 $page_title = $lang_module['edit_banner'];
 
-$contents = array();
+$contents = [];
 $contents['upload_blocked'] = '';
-$contents['file_allowed_ext'] = array();
+$contents['file_allowed_ext'] = [];
 
 if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
     $contents['file_allowed_ext'][] = 'images';
@@ -47,7 +47,7 @@ if (empty($contents['file_allowed_ext'])) {
 $sql = 'SELECT id, title, blang, require_image, exp_time FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
 
-$plans = $require_image = $plans_exp = array();
+$plans = $require_image = $plans_exp = [];
 while ($pl_row = $result->fetch()) {
     $plans[$pl_row['id']] = $pl_row['title'] . ' (' . (!empty($pl_row['blang']) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all']) . ')';
     $require_image[$pl_row['id']] = $pl_row['require_image'];
@@ -166,7 +166,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     } elseif (empty($error)) {
         if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
             $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
-            // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
+        // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
             //if ($publtime < $row['add_time']) {
             //    $publtime = $row['add_time'];
             //}
@@ -299,80 +299,80 @@ $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);
 $contents['submit'] = $lang_module['edit_banner'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id;
-$contents['title'] = array(
+$contents['title'] = [
     $lang_module['title'],
     'title',
     $title,
     255
-);
-$contents['plan'] = array(
+];
+$contents['plan'] = [
     $lang_module['in_plan'],
     'pid',
     $plans,
     $pid,
     $require_image,
     $plans_exp
-);
+];
 $contents['assign_user'] = $assign_user;
 
 $imageforswf = (!empty($imageforswf)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
 if ($file_ext != 'no_image') {
-    $contents['file_name'] = array(
+    $contents['file_name'] = [
         $lang_module['file_name'],
         NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name,
-        "class=\"open_modal_image\"",
-        NV_STATIC_URL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif",
+        'class="open_modal_image"',
+        NV_STATIC_URL . NV_ASSETS_DIR . '/images/ico_' . $file_ext . '.gif',
         $lang_global['show_picture'],
-    );
+    ];
 } else {
-    $contents['file_name'] = array($lang_module['file_name'], '');
+    $contents['file_name'] = [$lang_module['file_name'], ''];
 }
 $contents['imageforswf'] = [
     $imageforswf,
-    NV_STATIC_URL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif"
+    NV_STATIC_URL . NV_ASSETS_DIR . '/images/ico_' . substr($imageforswf, -3) . '.gif'
 ];
 
-$contents['upload'] = array(
+$contents['upload'] = [
     sprintf($lang_module['re_upload'], $contents['file_allowed_ext']),
     'banner',
     $lang_module['imageforswf'],
     'imageforswf'
-);
-$contents['file_alt'] = array(
+];
+$contents['file_alt'] = [
     $lang_module['file_alt'],
     'file_alt',
     $file_alt,
     255
-);
-$contents['click_url'] = array(
+];
+$contents['click_url'] = [
     $lang_module['click_url'],
     'click_url',
     $click_url,
     255
-);
+];
 
-$contents['target'] = array(
+$contents['target'] = [
     $lang_module['target'],
     'target',
     $targets,
     $target
-);
+];
 
-$contents['publ_date'] = array(
+$contents['publ_date'] = [
     $lang_module['publ_date'],
     'publ_date',
     $publ_date,
     $publ_date_h,
     $publ_date_m
-);
-$contents['exp_date'] = array(
+];
+$contents['exp_date'] = [
     $lang_module['exp_date'],
     'exp_date',
     $exp_date,
     $exp_date_h,
     $exp_date_m
-);
+];
 
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
 $contents['remove_banner'] = $remove_banner;

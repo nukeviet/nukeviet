@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -35,10 +36,10 @@ if ($mark == 'unread') {
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     }
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
-    ));
+    ]);
 } elseif ($mark == 'toogle_process') {
     if ($processed) {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=0, processed_by=0, processed_time=0 WHERE id=' . $id);
@@ -47,10 +48,10 @@ if ($mark == 'unread') {
         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_processed=1, processed_by=' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME . ' WHERE id=' . $id);
         nv_status_notification(NV_LANG_DATA, $module_name, 'contact_new', $id, 0);
     }
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
-    ));
+    ]);
 }
 
 if (!$is_read) {

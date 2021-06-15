@@ -32,6 +32,10 @@
                     <td><input type="checkbox" value="1" name="metaTagsOgp" {METATAGSOGPCHECKED}/></td>
                 </tr>
                 <tr>
+    				<td colspan="2" class="text-right">{LANG.ogp_image}</td>
+    				<td><input type="text" class="w300 form-control pull-left" name="ogp_image" id="ogp_image" value="{OGP_IMAGE}" style="margin-right: 10px" /><button data-name="ogp_image" name="ogp_image_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{GLANG.browse_image}</button></td>
+    			</tr>
+                <tr>
                     <td colspan="2" class="text-right">{LANG.private_site}</td>
                     <td><input type="checkbox" value="1" name="private_site"{PRIVATE_SITE}></td>
                 </tr>

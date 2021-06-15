@@ -18,6 +18,7 @@ $items = [];
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
+$atomlink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'];
 
 $catid = 0;
 if (isset($array_op[1])) {
@@ -40,6 +41,7 @@ if (!empty($catid)) {
     $channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
     $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
     $channel['description'] = $global_array_cat[$catid]['description'];
+    $atomlink .= '/' . $alias_cat_url;
 
     $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->where('status=1');
 } else {
@@ -47,7 +49,7 @@ if (!empty($catid)) {
 }
 if ($module_info['rss']) {
     $result = $db_slave->query($db_slave->sql());
-    while (list ($id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile) = $result->fetch(3)) {
+    while (list($id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile) = $result->fetch(3)) {
         $catalias = $global_array_cat[$catid_i]['alias'];
 
         if ($homeimgthumb == 1) {
@@ -74,5 +76,5 @@ if ($module_info['rss']) {
         ];
     }
 }
-nv_rss_generate($channel, $items);
+nv_rss_generate($channel, $items, $atomlink);
 die();

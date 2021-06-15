@@ -23,7 +23,7 @@ define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIM
 
 // Khong cho xac dinh tu do cac variables
 $db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = [];
-$page_title = $key_words = $canonicalUrl = $prevPage = $nextPage = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
+$page_title = $key_words = $page_url = $canonicalUrl = $prevPage = $nextPage = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
 // Ket noi voi cac file constants, config
@@ -73,6 +73,7 @@ define('NV_CLIENT_IP', $ips->remote_ip);
 
 define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
 define('NV_FILES_DIR', NV_ASSETS_DIR);
+define('NV_MOBILE_FILES_DIR', NV_ASSETS_DIR . '/mobile');
 define('SYSTEM_CACHEDIR', NV_CACHEDIR);
 define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
 define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
@@ -94,7 +95,7 @@ if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
 } elseif (isset($_SERVER['HTTP_GEOIP_COUNTRY_CODE'])) {
     // proxy_set_header GEOIP_COUNTRY_CODE
     $client_info['country'] = $_SERVER['HTTP_GEOIP_COUNTRY_CODE'];
-}  elseif (isset($_SERVER['COUNTRY_CODE'])) {
+} elseif (isset($_SERVER['COUNTRY_CODE'])) {
     // fastcgi_param COUNTRY_CODE
     $client_info['country'] = $_SERVER['COUNTRY_CODE'];
 } else {
@@ -137,7 +138,7 @@ if (defined('NV_SYSTEM')) {
 }
 
 // Ket noi voi class xu ly request
-$nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP, $nv_Server);
+$nv_Request = new NukeViet\Core\Request($global_config + ['https_only' => !empty($sys_info['https_only'])], NV_CLIENT_IP, $nv_Server);
 
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
@@ -162,8 +163,6 @@ require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 if (!in_array(NV_SERVER_NAME, $global_config['my_domains'])) {
-    $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
-    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
 }
 // Ket noi Cache
@@ -248,8 +247,10 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
 // Ket noi voi class chong flood
-if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
-(!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))) {
+if (
+    $global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
+    (!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))
+) {
     require NV_ROOTDIR . '/includes/core/flood_blocker.php';
 }
 
@@ -265,7 +266,11 @@ if (isset($nv_plugin_area[1])) {
 // Bat dau phien lam viec cua Database
 $db = $db_slave = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
-    trigger_error('Sorry! Could not connect to data server', 256);
+    if (!empty($global_config['closed_site'])) {
+        nv_disable_site();
+    } else {
+        trigger_error('Sorry! Could not connect to data server', 256);
+    }
 }
 unset($db_config['dbpass']);
 $nv_Cache->SetDb($db);
@@ -292,7 +297,7 @@ define('NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs');
 define('NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys');
 define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
-$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND (module='site' OR module='banners')) ORDER BY module ASC";
+$sql = 'SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND (module='site' OR module='banners')) ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
 
 foreach ($list as $row) {
@@ -304,7 +309,7 @@ foreach ($list as $row) {
 }
 
 // Check https
-if (($global_config['ssl_https'] == 1 or $global_config['ssl_https'] == 2 and defined('NV_ADMIN')) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off')) {
+if (empty($sys_info['http_only']) and (($global_config['ssl_https'] == 1 or ($global_config['ssl_https'] == 2 and defined('NV_ADMIN'))) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off'))) {
     nv_redirect_location('https://' . NV_SERVER_NAME . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);
 }
 
@@ -362,6 +367,9 @@ if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
     require NV_ROOTDIR . '/includes/core/cronjobs.php';
 }
 
+// Quản lý thẻ meta, header các máy chủ tìm kiếm
+$nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
+
 // Kiem tra tu cach admin
 if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
     trigger_error('Hacking attempt', 256);
@@ -387,28 +395,16 @@ if (!defined('NV_IS_ADMIN')) {
 if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     // Dinh chi neu khong la admin toi cao
     if (!defined('NV_ADMIN') and !defined('NV_IS_GODADMIN')) {
-        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
+        nv_disable_site();
     }
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
     if (!empty($global_config['closed_site'])) {
-        $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        $http_headers = [];
-        if ($global_config['site_reopening_time'] > NV_CURRENTTIME) {
-            $disable_site_content .= "<br/><br/>" . $lang_module['closed_site_reopening_time'] . ": " . nv_date('d/m/Y H:i', $global_config['site_reopening_time']);
-            $http_headers = [
-                'Retry-After: ' . gmdate('D, d M Y H:i:s', $global_config['site_reopening_time']) . ' GMT'
-            ];
-        }
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 503, '', '', '', '', $http_headers);
+        nv_disable_site();
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
         nv_redirect_location(NV_BASE_SITEURL);
     }
 }
 unset($nv_check_update);
-
-// Quản lý thẻ meta, header các máy chủ tìm kiếm
-$nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
 
 $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {

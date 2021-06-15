@@ -27,7 +27,7 @@ if (defined('NV_IS_ADMIN')) {
 }
 
 $url_redirect = !empty($client_info['referer']) ? $client_info['referer'] : (isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
 } else {
     $nv_Request->unset_request('nvloginhash', 'cookie');
@@ -49,6 +49,8 @@ if ($nv_ajax_login) {
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url);
 
 $info = $lang_module['logout_ok'] . '<br /><br />';
 $info .= '<img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />';

@@ -58,9 +58,9 @@ if (!nv_function_exists('nv_news_category')) {
         $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
         $html .= '<div class="col-sm-9">';
         $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
-        $html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
+        $html .= '<option value="">' . $lang_block['title_length'] . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
-            $html .= "<option value=\"" . $i . "\" " . (($data_block['title_length'] == $i) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
+            $html .= '<option value="' . $i . '" ' . (($data_block['title_length'] == $i) ? ' selected="selected"' : '') . '>' . $i . "</option>\n";
         }
         $html .= "</select>\n";
         $html .= '</div>';
@@ -78,9 +78,9 @@ if (!nv_function_exists('nv_news_category')) {
     function nv_block_config_news_category_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['catid'] = $nv_Request->get_int('config_catid', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 0);
         return $return;
@@ -110,7 +110,7 @@ if (!nv_function_exists('nv_news_category')) {
             $xtpl->assign('BLOCK_ID', $block_config['bid']);
             $xtpl->assign('TEMPLATE', $block_theme);
             foreach ($module_array_cat as $cat) {
-                if (in_array($cat['status'], array(1, 2)) and ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid']))) {
+                if (in_array($cat['status'], [1, 2]) and ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid']))) {
                     $cat['title0'] = nv_clean60($cat['title'], $title_length);
 
                     $xtpl->assign('CAT', $cat);
@@ -142,7 +142,7 @@ if (!nv_function_exists('nv_news_category')) {
         global $module_array_cat;
 
         if (empty($list_sub)) {
-            return "";
+            return '';
         } else {
             $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
 
@@ -173,13 +173,13 @@ if (defined('NV_SYSTEM')) {
             $module_array_cat = $global_array_cat;
             unset($module_array_cat[0]);
         } else {
-            $module_array_cat = array();
-            $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat ORDER BY sort ASC";
+            $module_array_cat = [];
+            $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
             if (!empty($list)) {
                 foreach ($list as $l) {
                     $module_array_cat[$l['catid']] = $l;
-                    $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+                    $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
                 }
             }
         }

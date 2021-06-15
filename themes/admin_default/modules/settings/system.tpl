@@ -15,6 +15,7 @@
         <table class="table table-striped table-bordered table-hover">
             <col class="w400" />
             <tbody>
+                <!-- BEGIN: closed_site -->
                 <tr>
                     <td><strong>{LANG.closed_site}</strong></td>
                     <td><select name="closed_site" class="form-control w300" onchange="reopeningTimeShow(this);">
@@ -39,6 +40,7 @@
                         </div>
                     </td>
                 </tr>
+                <!-- END: closed_site -->
                 <tr>
                     <td><strong>{LANG.site_email}</strong></td>
                     <td><input type="email" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>

@@ -307,6 +307,7 @@ $lang_module['field_options_text'] = 'Các tùy chọn cho khác';
 $lang_module['field_match_type'] = 'Yêu cầu kiểm tra với giá trị:';
 $lang_module['field_match_type_none'] = 'Không kiểm tra';
 $lang_module['field_match_type_alphanumeric'] = 'Chỉ được dùng các ký tự A-Z, 0-9 và gạch dưới';
+$lang_module['field_match_type_unicodename'] = 'Tên người (Các chữ cái unicode, dấu gạch ngang, dấu nháy đơn và dấu cách)';
 $lang_module['field_match_type_date'] = 'Ngày tháng cần nhập theo định dạng dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Biểu thức quy tắc';

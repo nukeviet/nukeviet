@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
+if (!defined('NV_IS_FILE_LANG')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHEC
     if (preg_match('/^([a-z]{2})$/', $dirlang)) {
         $dirs = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
         $err = 0;
-        $array_filename = array();
+        $array_filename = [];
 
         foreach ($dirs as $module) {
             if (file_exists(NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php')) {
@@ -98,7 +98,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHEC
         $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting');
         $xtpl->assign('INFO', $contents);
 
-        if (! empty($array_filename)) {
+        if (!empty($array_filename)) {
             $i = 0;
             foreach ($array_filename as $name) {
                 if (empty($name)) {

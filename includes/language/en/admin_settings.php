@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -138,6 +138,16 @@ $lang_module['live_session_time'] = 'The lifetime of the session';
 $lang_module['live_session_time0'] = '=0 exist when closing the browser';
 $lang_module['cookie_secure'] = 'Cookie secure';
 $lang_module['cookie_httponly'] = 'Cookie httponly';
+$lang_module['cookie_SameSite'] = 'cookie SameSite';
+$lang_module['cookie_secure_note'] = 'Cookie is only sent to the server when a request is made with the https: scheme or in the localhost environment';
+$lang_module['cookie_httponly_note'] = 'Forbids JavaScript from accessing the cookie, for example, through the Document.cookie property';
+$lang_module['cookie_SameSite_note'] = 'Controls whether a cookie is sent with cross-origin requests';
+$lang_module['cookie_SameSite_note2'] = 'This attribute only takes effect when server\'s php version >= 7.3';
+$lang_module['cookie_SameSite_Empty'] = 'Depends on browser';
+$lang_module['cookie_SameSite_Lax'] = 'Cookies are not sent on normal cross-site subrequests (for example to load images), but are sent when a user is navigating to the origin site';
+$lang_module['cookie_SameSite_Strict'] = 'Cookies will only be sent in a first-party context and not be sent along with requests initiated by third party websites';
+$lang_module['cookie_SameSite_None'] = 'Cookies will be sent in all contexts (The cookie Secure attribute must be set)';
+
 $lang_module['is_user_forum'] = 'Switch users management to forum';
 $lang_module['banip'] = 'Ban IP Management';
 $lang_module['banip_ip'] = 'Ip address';
@@ -217,11 +227,11 @@ $lang_module['closed_site_1'] = 'Closing of the site only has access to the Supr
 $lang_module['closed_site_2'] = 'Moderator\'s closing general site access';
 $lang_module['closed_site_3'] = 'Close all of the site admin access';
 $lang_module['closed_site_reopening_time'] = 'Expected reopening time';
-$lang_module['ssl_https'] = 'Enable the use of SSL';
+$lang_module['ssl_https'] = 'Redirect HTTP-requests to HTTPS';
 $lang_module['ssl_https_module'] = 'These modules enable SSL';
-$lang_module['ssl_https_0'] = 'Turn off SSL';
-$lang_module['ssl_https_1'] = 'Activate whole site';
-$lang_module['ssl_https_2'] = 'Activate the admin area';
+$lang_module['ssl_https_0'] = 'Off';
+$lang_module['ssl_https_1'] = 'Apply on the entire site';
+$lang_module['ssl_https_2'] = 'Apply in admin area';
 $lang_module['note_ssl'] = 'Are you sure your site support https does not? If not supported site will be inaccessible after saving?';
 $lang_module['timezoneAuto'] = 'By computer of visitor';
 $lang_module['timezoneByCountry'] = 'By country of visitor';
@@ -290,3 +300,76 @@ $lang_module['admin_2step_default'] = 'The default two-step verification method 
 $lang_module['admin_2step_appconfig'] = 'Set up the application here';
 $lang_module['zalo_official_account_id'] = 'Zalo Official Account ID';
 $lang_module['cookie_notice_popup'] = 'Enable pop-up cookie notification when a user first visits a website';
+$lang_module['smime_certificate'] = 'Email Signing certificate S/MIME';
+$lang_module['smime_cn'] = 'Certificate common name';
+$lang_module['smime_issuer_cn'] = 'Certificate issuer';
+$lang_module['smime_subjectAltName'] = 'Certify';
+$lang_module['smime_validFrom'] = 'Certificate valid from';
+$lang_module['smime_validTo'] = 'Certificate valid to';
+$lang_module['smime_signatureTypeSN'] = 'Signature type';
+$lang_module['smime_purposes'] = 'Purposes';
+$lang_module['smime_del'] = 'Delete';
+$lang_module['smime_del_confirm'] = 'Do you really want to delete this certificate?';
+$lang_module['smime_add'] = 'Add certificate';
+$lang_module['smime_download'] = 'Download';
+$lang_module['smime_add_button'] = 'Execute';
+$lang_module['smime_pkcs12'] = 'Certificate file (.pfx/.p12)';
+$lang_module['smime_passphrase'] = 'Password for unlocking the certificate file';
+$lang_module['smime_download_passphrase'] = 'Generate a new password for unlocking the certificate file';
+$lang_module['smime_pkcs12_ext_error'] = 'The certificate file must have a pfx or p12 extension';
+$lang_module['smime_pkcs12_cannot_be_read'] = 'The certificate cannot be read';
+$lang_module['smime_pkcs12_smimesign_error'] = 'Certificate does not support S/MIME email signature';
+$lang_module['smime_pkcs12_overwrite'] = 'The certificate is already on the server. Do you want to overwrite it with this new certificate file?';
+$lang_module['smime_note'] = 'The S/MIME digital signature will be sent along with the message if the sender\'s email has a certificate file stored on the server.';
+$lang_module['DKIM_signature'] = 'Domain Keys Identified Mail DKIM';
+$lang_module['DKIM_note'] = 'The DKIM-signature will be sent with the message if it is validated and stored on the server.';
+$lang_module['DKIM_verified'] = 'DKIM verified';
+$lang_module['DKIM_unverified'] = 'DKIM unverified';
+$lang_module['DKIM_TXT_host'] = 'TXT Host/Name';
+$lang_module['DKIM_TXT_value'] = 'TXT Value';
+$lang_module['dkim_verify'] = 'Verify';
+$lang_module['dkim_reverify'] = 'Verify again';
+$lang_module['dkim_del'] = 'Delete';
+$lang_module['dkim_del_confirm'] = 'Do you really want to delete this DKIM-signature?';
+$lang_module['DKIM_verify_note'] = 'To verify your DKIM digital signature, go to the domain\'s DNS management page, add a TXT record with the above parameters, then click the Confirm button (You may have to wait a bit).';
+$lang_module['DKIM_add'] = 'Add new DKIM-signature';
+$lang_module['DKIM_add_button'] = 'Execute';
+$lang_module['DKIM_domain'] = 'Mailing domain';
+$lang_module['DKIM_domain_error'] = 'Error: Mailing domain is malformed';
+$lang_module['DKIM_domain_exists'] = 'This mailing domain is already on the server';
+$lang_module['DKIM_created'] = 'DKIM-signature for mail domain %s has been created. You need to verify this DKIM-signature according to the instructions on the next page.';
+$lang_module['dkim_included'] = 'Include DKIM digital signature (if any) when using method';
+$lang_module['smime_included'] = 'Include S/MIME certificate (if any) when using method';
+
+$lang_module['csp'] = 'CSP setting';
+$lang_module['csp_desc'] = 'Content-Security-Policy (CSP) is the name of a HTTP response header that modern browsers use to enhance the security of the web page. The CSP allows you to restrict how resources such as JavaScript, CSS, or pretty much anything that the browser loads.';
+$lang_module['csp_details'] = 'Details';
+$lang_module['csp_note'] = 'Enter one value per line. If the value is not a URL, enclose it in single quotes (ex: &#039;self&#039;)';
+$lang_module['csp_default_src'] = 'Default policy, used in any case except if overridden by a more precise directive.';
+$lang_module['csp_script_src'] = 'Policy dedicated to scripts';
+$lang_module['csp_object_src'] = 'Policy dedicated to plugins (object, embed or applet)';
+$lang_module['csp_style_src'] = 'Policy dedicated to styles (CSS)';
+$lang_module['csp_img_src'] = 'Policy dedicated to images (img, but also url() or image() from CSS, or link element related to an image type (ex: rel=&quot;icon&quot;)';
+$lang_module['csp_media_src'] = 'Policy dedicated to media (video, audio, source or track)';
+$lang_module['csp_frame_src'] = 'Policy dedicated to frames (iframe or frame)';
+$lang_module['csp_font_src'] = 'Policy dedicated to fonts';
+$lang_module['csp_connect_src'] = 'Policy dedicated to connections from a XMLHttpRequest object or a WebSocket';
+$lang_module['csp_form_action'] = 'Defines valid sources that can be used as a form action.';
+$lang_module['csp_base_uri'] = 'Security policy restricting the possible values of a &lt;base&gt; element.';
+$lang_module['csp_act'] = 'Enable CSP';
+
+$lang_module['rp'] = 'RP setting';
+$lang_module['rp_desc'] = 'Referrer-Policy (RP) is the name of a HTTP header that modern browsers use to control how much referrer information (sent via the Referer header).';
+$lang_module['rp_desc2'] = 'Types of referrer information (can be sent via the Referer header):<ul><li>Origin: includes scheme (ex: http, https), host (ex: nukeviet.vn) and port (ex: 80, 443)</li><li>Path (absolute path on the server,ex: thumuc1/index.php)</li><li>Querystring (ex: ?name=ferret&color=purple)</li></ul>';
+$lang_module['rp_details'] = 'Details';
+$lang_module['rp_act'] = 'Enable RP';
+$lang_module['rp_no_referrer'] = 'The Referer header will be omitted entirely. No referrer information is sent along with requests.<br/>NukeViet system does not support this directive!';
+$lang_module['rp_no_referrer_when_downgrade'] = 'Send the origin, path, and querystring in Referer when the protocol security level stays the same or improves (HTTP?HTTP, HTTP?HTTPS, HTTPS?HTTPS). Don\'t send the Referer header for requests to less secure destinations (HTTPS?HTTP, HTTPS?file).';
+$lang_module['rp_origin'] = 'Send the origin (only) in the Referer header. For example, a document at https://example.com/page.html will send the referrer https://example.com/.';
+$lang_module['rp_origin_when_cross_origin'] = 'Send the origin, path, and query string when performing a same-origin request to the same protocol level. Send origin (only) for cross origin requests and requests to less secure destinations.';
+$lang_module['rp_same_origin'] = 'Send the origin, path, and query string for same-origin requests. Don\'t send the Referer header for cross-origin requests.';
+$lang_module['rp_strict_origin'] = 'Send the origin (only) when the protocol security level stays the same (HTTPS?HTTPS). Don\'t send the Referer header to less secure destinations (HTTPS?HTTP).';
+$lang_module['rp_strict_origin_when_cross_origin'] = 'Send the origin, path, and querystring when performing a same-origin request. For cross-origin requests send the origin (only) when the protocol security level stays same (HTTPS?HTTPS). Don\'t send the Referer header to less secure destinations (HTTPS?HTTP). This is the default policy if no policy is specified, or if the provided value is invalid.';
+$lang_module['rp_unsafe_url'] = 'Send the origin, path, and query string when performing any request, regardless of security. Warning: This policy will leak potentially-private information from HTTPS resource URLs to insecure origins. Carefully consider the impact of this setting.';
+$lang_module['rp_note'] = 'If you want to specify a fallback policy in any case the desired policy hasn\'t got wide enough browser support, use a comma-separated list with the desired policy specified last. For example, Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. In the above scenario, no-referrer-when-downgrade will only be used if strict-origin-when-cross-origin is not supported by the browser.';
+$lang_module['rp_directives'] = 'Referrer-Policy directives';

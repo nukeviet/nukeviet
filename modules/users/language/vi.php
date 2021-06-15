@@ -152,7 +152,7 @@ $lang_module['email_active_error_mail'] = 'Tài khoản của bạn vừa đư�
 $lang_module['st_login'] = 'Đăng nhập theo kiểu thông thường';
 $lang_module['st_login2'] = 'Khả năng đăng nhập thông thường';
 $lang_module['admin_login'] = 'Đăng nhập nhờ tài khoản Admin';
-$lang_module['mode_login_1'] = "Đăng nhập theo kiểu thông thường";
+$lang_module['mode_login_1'] = 'Đăng nhập theo kiểu thông thường';
 $lang_module['mode_login_2'] = 'Đăng nhập bằng OpenID';
 $lang_module['mode_login_3'] = 'Đăng nhập bằng Oauth';
 $lang_module['mode_login_4'] = 'Đăng nhập bằng CAS Server';
@@ -235,6 +235,8 @@ $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['errorMessage'] = 'Thông báo từ hệ thống';
 $lang_module['login_info'] = 'Hãy đăng nhập thành viên để trải nghiệm đầy đủ các tiện ích trên site';
 $lang_module['old_min_user_error'] = 'Tuổi của bạn dưới %s nên chưa đủ tuổi đăng ký';
+$lang_module['field_uname_error'] = 'Vui lòng để trống hoặc nhập giá trị không có ký tự đặc biệt';
+$lang_module['field_req_uname_error'] = 'Vui lòng nhập một giá trị không có các ký tự đặc biệt';
 
 $lang_module['edit_basic'] = 'Cơ bản';
 $lang_module['edit_others'] = 'Khác';

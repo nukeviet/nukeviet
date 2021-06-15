@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_DATABASE')) {
+if (!defined('NV_IS_FILE_DATABASE')) {
     die('Stop!!!');
 }
 

@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2019 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -234,6 +234,9 @@ $lang_module['field_match_type_required'] = '%s require press';
 $lang_module['errorMessage'] = 'Notifications from website';
 $lang_module['login_info'] = 'Please complete this form';
 $lang_module['old_min_user_error'] = 'Your age is under% s so it is not old enough to register';
+$lang_module['field_uname_error'] = 'Please leave it blank or enter a value without special characters';
+$lang_module['field_req_uname_error'] = 'Please enter a value without special characters';
+
 $lang_module['edit_basic'] = 'Basic';
 $lang_module['edit_others'] = 'Other';
 $lang_module['edit_avatar'] = 'Avatar';

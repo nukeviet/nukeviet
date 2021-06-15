@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 22:5
  */
 
-if (! defined('NV_IS_FILE_EXTENSIONS')) {
+if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 

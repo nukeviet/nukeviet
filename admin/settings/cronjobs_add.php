@@ -75,7 +75,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             if ($id) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_add', 'id ' . $id, $admin_info['userid']);
 
-                $sql = "SELECT lang FROM " . $db_config['prefix'] . "_setup_language where lang!='" . NV_LANG_INTERFACE . "'";
+                $sql = 'SELECT lang FROM ' . $db_config['prefix'] . "_setup_language where lang!='" . NV_LANG_INTERFACE . "'";
                 $result = $db->query($sql);
                 while (list($lang_i) = $result->fetch(3)) {
                     $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name= :run_func WHERE id=' . $id);
@@ -101,18 +101,18 @@ $contents = [];
 $contents['is_error'] = !empty($error) ? 1 : 0;
 $contents['title'] = !empty($error) ? $error : $lang_module['nv_admin_add_title'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add';
-$contents['cron_name'] = array( $lang_module['cron_name'], $cron_name, 100 );
+$contents['cron_name'] = [$lang_module['cron_name'], $cron_name, 100];
 
 $filelist = nv_scandir(NV_ROOTDIR . '/includes/cronjobs', '/^([a-zA-Z0-9\_\.]+)\.php$/');
 
-$contents['run_file'] = array( $lang_module['run_file'], $lang_module['file_none'], $filelist, $run_file, $lang_module['run_file_info'] );
-$contents['run_func'] = array( $lang_module['run_func'], $run_func, 255, $lang_module['run_func_info'] );
-$contents['params'] = array( $lang_module['params'], $params, 255, $lang_module['params_info'] );
-$contents['start_time'] = array( $lang_module['start_time'], $lang_module['day'], date('d/m/Y', $start_time) );
-$contents['min'] = array( $lang_module['min'], $min );
-$contents['hour'] = array( $lang_module['hour'], $hour );
-$contents['interval'] = array( $lang_module['interval'], $interval, 11, $lang_module['min'], $lang_module['interval_info'] );
-$contents['del'] = array( $lang_module['is_del'], $del );
+$contents['run_file'] = [$lang_module['run_file'], $lang_module['file_none'], $filelist, $run_file, $lang_module['run_file_info']];
+$contents['run_func'] = [$lang_module['run_func'], $run_func, 255, $lang_module['run_func_info']];
+$contents['params'] = [$lang_module['params'], $params, 255, $lang_module['params_info']];
+$contents['start_time'] = [$lang_module['start_time'], $lang_module['day'], date('d/m/Y', $start_time)];
+$contents['min'] = [$lang_module['min'], $min];
+$contents['hour'] = [$lang_module['hour'], $hour];
+$contents['interval'] = [$lang_module['interval'], $interval, 11, $lang_module['min'], $lang_module['interval_info']];
+$contents['del'] = [$lang_module['is_del'], $del];
 $contents['inter_val_type'] = $inter_val_type;
 $contents['submit'] = $lang_global['submit'];
 $contents['checkss'] = $checkss;

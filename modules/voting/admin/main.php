@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -23,14 +23,14 @@ while ($row = $result->fetch()) {
     $sql1 = 'SELECT SUM(hitstotal) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $row['vid'];
     $totalvote = $db->query($sql1)->fetchColumn();
     ++$i;
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'status' => $row['act'] == 1 ? $lang_module['voting_yes'] : $lang_module['voting_no'],
         'vid' => $row['vid'],
         'question' => $row['question'],
         'totalvote' => $totalvote,
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;vid=' . $row['vid'],
         'checksess' => md5($row['vid'] . NV_CHECK_SESSION)
-    ));
+    ]);
 
     $xtpl->parse('main.loop');
 }

@@ -21,14 +21,13 @@ if ($nv_Request->isset_request('searchAjax', 'get')) {
         return;
     }
     $aids = $nv_Request->get_title('aids', 'get', '');
-    $aids = preg_replace("/[^0-9\,]/", "", $aids);
-    
+    $aids = preg_replace("/[^0-9\,]/", '', $aids);
+
     $where = '(alias LIKE :alias OR pseudonym LIKE :pseudonym)';
     if (!empty($aids)) {
         $where .= ' AND id NOT IN (' . $aids . ')';
     }
-    
-    
+
     $db_slave->sqlreset()
         ->select('id,pseudonym')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_author')
@@ -39,12 +38,12 @@ if ($nv_Request->isset_request('searchAjax', 'get')) {
     $sth->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
     $sth->bindValue(':pseudonym', '%' . $q . '%', PDO::PARAM_STR);
     $sth->execute();
-    
+
     $array_data = [];
     while (list($id, $pseudonym) = $sth->fetch(3)) {
         $array_data[$id] = $pseudonym;
     }
-    
+
     nv_jsonOutput($array_data);
 }
 
@@ -57,7 +56,7 @@ if ($nv_Request->isset_request('authordel', 'post')) {
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist');
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_author');
     }
-    echo "OK";
+    echo 'OK';
     exit(0);
 }
 
@@ -67,7 +66,7 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     $status = $db->query('SELECT active FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE id =' . $aid)->fetchColumn();
     $status = $status ? 0 : 1;
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET active=' . $status . ', edit_time=' . NV_CURRENTTIME . ' WHERE id=' . $aid);
-    echo "OK";
+    echo 'OK';
     exit(0);
 }
 
@@ -80,9 +79,8 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
 
     $page = $nv_Request->get_int('page', 'post, get', 1);
     $array_data = [];
-    
-    $where = "(username LIKE '%" . $dbkeyhtml . "%' OR email LIKE '%" . $dbkeyhtml . "%' OR first_name like '%" . $dbkeyhtml . "%' OR last_name like '%" . $dbkeyhtml . "%') AND userid NOT IN (SELECT uid FROM " . NV_PREFIXLANG . "_" . $module_data . "_author)";
-    
+
+    $where = "(username LIKE '%" . $dbkeyhtml . "%' OR email LIKE '%" . $dbkeyhtml . "%' OR first_name like '%" . $dbkeyhtml . "%' OR last_name like '%" . $dbkeyhtml . "%') AND userid NOT IN (SELECT uid FROM " . NV_PREFIXLANG . '_' . $module_data . '_author)';
 
     $db->sqlreset()
         ->select('COUNT(*)')
@@ -97,7 +95,7 @@ if ($nv_Request->isset_request('get_account_json', 'post, get')) {
         ->offset(($page - 1) * 30);
     $result = $db->query($db->sql());
     $array_data['results'] = [];
-    while (list ($userid, $username) = $result->fetch(3)) {
+    while (list($userid, $username) = $result->fetch(3)) {
         $array_data['results'][] = [
             'id' => $userid,
             'title' => $username
@@ -250,14 +248,14 @@ if ($num) {
 }
 
 if (!empty($uids)) {
-    $uids = implode(",", $uids);
+    $uids = implode(',', $uids);
     $db_slave->sqlreset()
         ->select('userid, username, email, md5username')
         ->from(NV_USERS_GLOBALTABLE)
-        ->where("userid IN (" . $uids . ")");
+        ->where('userid IN (' . $uids . ')');
     $result = $db_slave->query($db_slave->sql());
     $uids = [];
-    while (list ($userid, $username, $email, $md5username) = $result->fetch(3)) {
+    while (list($userid, $username, $email, $md5username) = $result->fetch(3)) {
         $uids[$userid] = [
             'username' => $username,
             'email' => $email,
@@ -279,7 +277,7 @@ $data = [
 if ($nv_Request->isset_request('aid', 'get')) {
     $data['aid'] = $nv_Request->get_int('aid', 'get', 0);
     if ($data['aid']) {
-        list ($data['uid'], $data['pseudonym'], $data['image'], $data['description']) = $db->query("SELECT uid, pseudonym, image, description FROM " . NV_PREFIXLANG . "_" . $module_data . "_author where id=" . $data['aid'])->fetch(3);
+        list($data['uid'], $data['pseudonym'], $data['image'], $data['description']) = $db->query('SELECT uid, pseudonym, image, description FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author where id=' . $data['aid'])->fetch(3);
         if (empty($data['uid'])) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         }
@@ -311,11 +309,11 @@ if (!empty($authors)) {
         $row['account'] = $uids[$row['uid']]['username'];
         $row['email'] = $uids[$row['uid']]['email'];
         $row['account_link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($uids[$row['uid']]['username']) . '-' . $uids[$row['uid']]['md5username'];
-        $row['add_time_format'] = nv_date("d/m/Y", $row['add_time']);
+        $row['add_time_format'] = nv_date('d/m/Y', $row['add_time']);
         $row['status_sel'] = $row['active'] ? ' selected="selected"' : '';
         $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;aid=' . $row['id'];
         $xtpl->assign('ROW', $row);
-        
+
         if ($row['numnews']) {
             $xtpl->parse('main.authorlist.loop.newslist_link');
         } else {

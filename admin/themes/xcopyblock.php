@@ -8,7 +8,7 @@
  * @Createdate 08-19-2010 12:55
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
+if (!defined('NV_IS_FILE_THEMES')) {
     die('Stop!!!');
 }
 
@@ -37,7 +37,7 @@ while (list($theme) = $result->fetch(3)) {
         $xtpl->assign('THEME_FROM', $theme);
         $xtpl->parse('main.theme_from');
 
-        $xtpl->assign('THEME_TO', array( 'key' => $theme, 'selected' => ($selectthemes == $theme and $selectthemes != 'default') ? ' selected="selected"' : '' ));
+        $xtpl->assign('THEME_TO', ['key' => $theme, 'selected' => ($selectthemes == $theme and $selectthemes != 'default') ? ' selected="selected"' : '']);
         $xtpl->parse('main.theme_to');
     }
 }

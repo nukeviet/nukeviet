@@ -41,11 +41,11 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
             $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
 
-            $no_extract = array();
-            $error_create_folder = array();
-            $error_move_folder = array();
-            $extConfig = array();
-            $fileConfig = array();
+            $no_extract = [];
+            $error_create_folder = [];
+            $error_move_folder = [];
+            $extConfig = [];
+            $fileConfig = [];
 
             if (NV_ROOTDIR . '/' . $temp_extract_dir) {
                 nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir, true);
@@ -112,7 +112,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
 
                 // Xac dinh ung dung he thong hoac module
                 if (preg_match("/^modules\/[a-zA-Z0-9\-]+\/version\.php$/", $extract_i['stored_filename'])) {
-                    $module_version = array();
+                    $module_version = [];
                     include $extract_i['filename'];
 
                     if (isset($module_version['is_sysmod'])) {
@@ -149,15 +149,15 @@ if ($nv_Request->isset_request('extract', 'get')) {
                 $xtpl->assign('ERROR', $lang_module['autoinstall_error_downloaded']);
                 $xtpl->parse('extract.error');
             } elseif (empty($no_extract)) {
-                $array_error_mine = array();
+                $array_error_mine = [];
                 $error_create_folder = array_unique($error_create_folder);
-                $array_cute_files = array();
-                $array_exists_files = array();
+                $array_cute_files = [];
+                $array_exists_files = [];
                 $dimiss_mime = $nv_Request->get_title('dismiss', 'get', '') == md5('dismiss' . $filename . NV_CHECK_SESSION) ? true : false;
 
                 // Kiem tra mime
                 if (!$dimiss_mime) {
-                    $all_ini = array();
+                    $all_ini = [];
 
                     $data = file(NV_ROOTDIR . '/includes/ini/mime.ini');
                     $section = '';
@@ -179,7 +179,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                         list($key, $value) = explode('=', $line);
                         $key = trim($key);
                         $value = trim($value);
-                        $value = str_replace(array('"', "'"), array('', ''), $value);
+                        $value = str_replace(['"', "'"], ['', ''], $value);
 
                         if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
                             $all_ini[$section][$match[1]][] = $value;
@@ -188,7 +188,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                         }
                     }
 
-                    $ini = array();
+                    $ini = [];
                     foreach ($all_ini as $section => $line) {
                         $ini = array_merge($ini, $line);
                     }
@@ -211,7 +211,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                                         continue;
                                     }
                                 }
-                                $array_error_mine[] = array('mime' => $mime_real, 'filename' => $array_file['stored_filename']);
+                                $array_error_mine[] = ['mime' => $mime_real, 'filename' => $array_file['stored_filename']];
                             }
                         }
                     }
@@ -421,8 +421,8 @@ if ($nv_Request->isset_request('extract', 'get')) {
     die('Error Access!!!');
 }
 
-$error = "";
-$info = array();
+$error = '';
+$info = [];
 
 if ($nv_Request->isset_request('uploaded', 'get')) {
     if (!file_exists($filename)) {
@@ -456,36 +456,36 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
 
 // Lay thong tin file tai len
 if (empty($error)) {
-    $arraySysOption = array(
-        'allowfolder' => array(
+    $arraySysOption = [
+        'allowfolder' => [
             'assets',
             'themes',
             'modules',
             'uploads',
             'includes/plugin',
             'vendor'
-        ),
-        'forbidExt' => array(
+        ],
+        'forbidExt' => [
             'php',
             'php3',
             'php4',
             'php5',
             'phtml',
             'inc'
-        ),
-        'allowExtType' => array(
+        ],
+        'allowExtType' => [
             'module',
             'block',
             'theme',
             'cron'
-        ),
-        'checkName' => array(
+        ],
+        'checkName' => [
             'module' => $global_config['check_module'],
-            'block' => array($global_config['check_block_module'], $global_config['check_block_theme']),
+            'block' => [$global_config['check_block_module'], $global_config['check_block_theme']],
             'theme' => $global_config['check_theme'],
             'cron' => $global_config['check_cron'],
-        ),
-    );
+        ],
+    ];
 
     $zip = new PclZip($filename);
     $status = $zip->properties();
@@ -548,7 +548,7 @@ if (empty($error)) {
 
         // Duyet danh sach file lay thong tin va kiem tra
         if (empty($error)) {
-            $info['classcfg'] = array('invaild' => 'fa-exclamation-triangle', 'exists' => 'fa-info');
+            $info['classcfg'] = ['invaild' => 'fa-exclamation-triangle', 'exists' => 'fa-info'];
             $info['extname'] = $extConfig['extension']['name'];
             $info['exttype'] = $extConfig['extension']['type'];
             $info['extversion'] = $extConfig['extension']['version'];
@@ -557,7 +557,7 @@ if (empty($error)) {
             $info['filenum'] = $status['nb'];
             $info['existsnum'] = 0; // So file trung lap
             $info['invaildnum'] = 0; // So file khong hop chuan
-            $info['filelist'] = array(); // Danh sach cac file
+            $info['filelist'] = []; // Danh sach cac file
             $info['checkresult'] = 'success'; // success - warning - fail
 
             for ($i = 0, $j = 1; $i < $sizeLists; ++$i, ++$j) {
@@ -568,10 +568,10 @@ if (empty($error)) {
                     $bytes = '';
                 }
 
-                $info['filelist'][$j] = array(
+                $info['filelist'][$j] = [
                     'title' => '[' . $j . '] ' . ($info['exttype'] == 'theme' ? 'themes/' : '') . $listFiles[$i]['filename'] . ' ' . $bytes,
-                    'class' => array(),
-                );
+                    'class' => [],
+                ];
 
                 // Kiem tra file ton tai tren he thong
                 if (empty($listFiles[$i]['folder']) and (($info['exttype'] == 'theme' and file_exists(NV_ROOTDIR . '/themes/' . trim($listFiles[$i]['filename']))) or ($info['exttype'] != 'theme' and file_exists(NV_ROOTDIR . '/' . trim($listFiles[$i]['filename']))))) {

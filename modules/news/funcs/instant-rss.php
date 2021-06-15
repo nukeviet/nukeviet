@@ -29,13 +29,14 @@ if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
     }
 }
 
-$channel = array();
-$items = array();
+$channel = [];
+$items = [];
 $gettime = empty($module_config[$module_name]['instant_articles_gettime']) ? 0 : (NV_CURRENTTIME - ($module_config[$module_name]['instant_articles_gettime'] * 60));
 
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
+$atomlink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'];
 
 $catid = 0;
 if (isset($array_op[1])) {
@@ -58,6 +59,7 @@ if (!empty($catid)) {
     $channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
     $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
     $channel['description'] = $global_array_cat[$catid]['description'];
+    $atomlink .= '/' . $alias_cat_url;
 
     $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->where('status=1 AND instant_active=1' . ($gettime ? ' AND (publtime>= ' . $gettime . ' OR edittime >= ' . $gettime . ')' : ''));
 } else {
@@ -77,7 +79,7 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
     while ($row = $result->fetch()) {
         $row['catalias'] = $global_array_cat[$row['catid']]['alias'];
         $row['hometext'] = strip_tags($row['hometext']);
-        $items[$row['id']] = array(
+        $items[$row['id']] = [
             'title' => $row['title'],
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['catalias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'],
             'guid' => md5($module_name . '_' . $row['id']),
@@ -90,15 +92,15 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
             'cattitle' => $global_array_cat[$row['catid']]['title'],
             'instant_template' => $row['instant_template'],
             'instant_creatauto' => $row['instant_creatauto']
-        );
+        ];
     }
 
     if (!empty($items)) {
-        $sql = "SELECT id, bodyhtml FROM " . NV_PREFIXLANG . "_" . $module_data . "_detail WHERE id IN(" . implode(',', array_keys($items)) . ")";
+        $sql = 'SELECT id, bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id IN(' . implode(',', array_keys($items)) . ')';
         $result = $db->query($sql);
 
         while ($row = $result->fetch()) {
-            $content = array();
+            $content = [];
             $FBIA->setArticle($row['bodyhtml']);
             if ($items[$row['id']]['instant_creatauto']) {
                 $content['html'] = $FBIA->hardProcces();
@@ -132,5 +134,5 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
     }
 }
 
-nv_rss_generate($channel, $items, 'ISO8601');
+nv_rss_generate($channel, $items, $atomlink, 'ISO8601');
 die();

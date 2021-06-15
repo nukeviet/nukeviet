@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
+
 if (!defined('NV_IS_MOD_COMMENT')) {
     die('Stop!!!');
 }

@@ -1,18 +1,18 @@
 <!-- BEGIN: smtp -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
-<!-- BEGIN: testmail_fail -->
-<div class="alert alert-danger">
-    <strong>{LANG.smtp_test_fail}: </strong> {TEST_MESSAGE}
-</div>
-<!-- END: testmail_fail -->
-<!-- BEGIN: testmail_success -->
-<div class="alert alert-success">{LANG.smtp_test_success}</div>
-<!-- END: testmail_success -->
-<div class="panel panel-default">
+<div class="panel panel-primary">
     <div class="panel-body">
-        <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" class="form-horizontal">
+        <!-- BEGIN: error -->
+        <div class="alert alert-danger">{ERROR}</div>
+        <!-- END: error -->
+        <!-- BEGIN: testmail_fail -->
+        <div class="alert alert-danger">
+            <strong>{LANG.smtp_test_fail}: </strong> {TEST_MESSAGE}
+        </div>
+        <!-- END: testmail_fail -->
+        <!-- BEGIN: testmail_success -->
+        <div class="alert alert-success">{LANG.smtp_test_success}</div>
+        <!-- END: testmail_success -->
+        <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" class="form-horizontal m-bottom">
             <div class="form-group">
                 <label for="sender_name" class="col-sm-6 control-label">{LANG.mail_sender_name}:</label>
                 <div class="col-sm-18 col-md-14 col-lg-10">
@@ -65,6 +65,42 @@
                         <label>
                             <input type="checkbox" name="notify_email_error" value="1"{DATA.notify_email_error}> {LANG.notify_email_error}
                         </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.dkim_included}:</label>
+                <div class="col-sm-18">
+                    <div class="checkbox">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="dkim_included[]" value="smtp"{DATA.smtp_dkim_included}/> {LANG.type_smtp}
+                        </label>
+                        <!-- BEGIN: mailhost2 -->
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="dkim_included[]" value="sendmail"{DATA.sendmail_dkim_included}/> {LANG.type_linux}
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="dkim_included[]" value="mail"{DATA.mail_dkim_included}/> {LANG.type_phpmail}
+                        </label>
+                        <!-- END: mailhost2 -->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.smime_included}:</label>
+                <div class="col-sm-18">
+                    <div class="checkbox">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="smime_included[]" value="smtp"{DATA.smtp_smime_included}/> {LANG.type_smtp}
+                        </label>
+                        <!-- BEGIN: mailhost3 -->
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="smime_included[]" value="sendmail"{DATA.sendmail_smime_included}/> {LANG.type_linux}
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="smime_included[]" value="mail"{DATA.mail_smime_included}/> {LANG.type_phpmail}
+                        </label>
+                        <!-- END: mailhost3 -->
                     </div>
                 </div>
             </div>
@@ -175,9 +211,336 @@
                 </div>
             </div>
         </form>
+        <!-- BEGIN: testmail1 -->
+        <div class="alert alert-info m-bottom-none">{LANG.smtp_test_note}</div>
+        <!-- END: testmail1 -->
     </div>
 </div>
-<!-- BEGIN: testmail1 -->
-<div class="alert alert-info">{LANG.smtp_test_note}</div>
-<!-- END: testmail1 -->
+
+<a id="dkim"></a>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="m-bottom-none"><strong>{LANG.DKIM_signature}</strong></h3> 
+    </div>
+    <div class="panel-body">
+        <div class="m-bottom">{LANG.DKIM_note}</div>
+        <!-- BEGIN: dkim_list -->
+        <div class="panel-group" id="dkim-accordion" role="tablist" aria-multiselectable="true">
+            <!-- BEGIN: loop -->
+            <div class="loop panel panel-default">
+                <a title="{DKIM.title}" class="panel-heading btn-block" role="button" id="dkim{DKIM.num}" data-toggle="collapse" data-parent="#dkim-accordion" href="#dkim-collapse{DKIM.num}" aria-expanded="false" aria-controls="dkim-collapse{DKIM.num}">
+                    <span>
+                        <!-- BEGIN: if_verified -->
+                        <i class="fa fa-check"></i>
+                        <!-- END: if_verified -->
+                        <!-- BEGIN: if_unverified -->
+                        <i class="fa fa-question-circle"></i>
+                        <!-- END: if_unverified -->
+                    </span>
+                    {DKIM.domain}
+                </a>
+                <div id="dkim-collapse{DKIM.num}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="dkim{DKIM.num}" data-domain="{DKIM.domain}" data-loaded="false">
+                    <div class="panel-body dkim-content"></div>
+                </div>
+            </div>
+            <!-- END: loop -->
+        </div>
+<script>
+function dkimverify(domain) {
+    $.ajax({
+        url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp",
+        type: 'POST',
+        data: {'dkimverify':1,'domain':domain},
+        cache: false,
+        dataType: "json"
+    }).done(function(a) {
+        alert(a.mess);
+        if ('OK' == a.status) {
+            window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp&s=dkim&d=" + domain
+        }
+    });
+}
+function dkimdel(domain) {
+    if (confirm('{LANG.dkim_del_confirm}') == true) {
+        $.ajax({
+            type: 'POST',
+            url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp",
+            data: {'dkimdel':1,'domain':domain},
+            success: function() {
+                window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp&s=dkim"
+            }
+        })
+    }
+}
+$(function() {
+    $('[id*=dkim-collapse]').on('show.bs.collapse', function () {
+        $(this).parent().toggleClass('panel-default panel-info');
+        if ($(this).attr('data-loaded') === 'false') {
+            var t = $(this);
+            $.ajax({
+                type: 'POST',
+                url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp",
+                data: {'dkimread':1,'domain':t.data('domain')},
+                success: function(data) {
+    				$('.dkim-content', t).html(data);
+                    $(t).attr('data-loaded', 'true')
+                }
+            });
+        }
+    }).on('hidden.bs.collapse', function () {
+        $(this).parent().toggleClass('panel-default panel-info')
+    })
+})
+</script>
+        <!-- END: dkim_list -->
+        <form class="form-horizontal" id="dkimaddForm" action="{DKIMADD_ACTION}" method="post">
+            <div class="form-group">
+                <div class="col-sm-18 col-sm-push-6 col-md-14 col-md-push-6 col-lg-10 col-lg-push-6">
+                    <strong>{LANG.DKIM_add}</strong>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.DKIM_domain}:</label>
+                <div class="col-sm-18 col-md-14 col-lg-10">
+                    <input type="text" name="domain" class="form-control" maxlength="255"/>
+                </div>
+            </div>
+            <div class="form-group m-bottom-none">
+                <div class="col-sm-18 col-sm-push-6 col-md-14 col-md-push-6 col-lg-10 col-lg-push-6">
+                    <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                    <input type="hidden" name="dkimadd" value="1" />
+                    <input type="submit" name="submitsave" value="{LANG.DKIM_add_button}" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<a id="dkim"></a>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="m-bottom-none"><strong>{LANG.smime_certificate}</strong></h3> 
+    </div>
+    <div class="panel-body">
+        <div class="m-bottom">{LANG.smime_note}</div>
+        <!-- BEGIN: cert_list -->
+        <div class="panel-group" id="cert-accordion" role="tablist" aria-multiselectable="true">
+            <!-- BEGIN: loop -->
+            <div class="loop panel panel-default">
+                <a class="panel-heading btn-block" role="button" id="certificate{CERT.num}" data-toggle="collapse" data-parent="#cert-accordion" href="#cert-collapse{CERT.num}" aria-expanded="false" aria-controls="cert-collapse{CERT.num}">
+                    <i class="fa fa-certificate"></i> {CERT.email}
+                </a>
+                <div id="cert-collapse{CERT.num}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="certificate{CERT.num}" data-email="{CERT.email}" data-loaded="false">
+                    <div class="panel-body cert-content"></div>
+                </div>
+            </div>
+            <!-- END: loop -->
+        </div>
+<script>
+function smimedownload(email) {
+    var person = prompt("{LANG.smime_download_passphrase}", "");
+    if (person != null && person != '') {
+        window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp&smimedownload=1&email=" + email + "&passphrase=" + encodeURIComponent(person);
+    }
+}
+function smimedel(email) {
+    if (confirm('{LANG.smime_del_confirm}') == true) {
+        $.ajax({
+            type: 'POST',
+            url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp",
+            data: {'smimedel':1,'email':email},
+            success: function() {
+                window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp&s=smime"
+            }
+        })
+    }
+}
+$(function() {
+    $('[id*=cert-collapse]').on('show.bs.collapse', function () {
+        $(this).parent().toggleClass('panel-default panel-info');
+        if ($(this).attr('data-loaded') === 'false') {
+            var t = $(this);
+            $.ajax({
+                type: 'POST',
+                url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp",
+                data: {'smimeread':1,'email':t.data('email')},
+                success: function(data) {
+    				$('.cert-content', t).html(data);
+                    $(t).attr('data-loaded', 'true')
+                }
+            });
+        }
+    }).on('hidden.bs.collapse', function () {
+        $(this).parent().toggleClass('panel-default panel-info')
+    })
+})
+</script>
+        <!-- END: cert_list -->
+        <form class="form-horizontal" id="certaddForm" action="{SMIMEADD_ACTION}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="col-sm-18 col-sm-push-6 col-md-14 col-md-push-6 col-lg-10 col-lg-push-6">
+                    <strong>{LANG.smime_add}</strong>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.smime_pkcs12}:</label>
+                <div class="col-sm-18 col-md-14 col-lg-10">
+                    <input type="file" name="pkcs12" class="form-control" accept=".p12, .pfx"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.smime_passphrase}:</label>
+                <div class="col-sm-18 col-md-14 col-lg-10">
+                    <input type="password" name="passphrase" class="form-control" maxlength="100"/>
+                </div>
+            </div>
+            <div class="form-group m-bottom-none">
+                <div class="col-sm-18 col-sm-push-6 col-md-14 col-md-push-6 col-lg-10 col-lg-push-6">
+                    <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                    <input type="hidden" name="smimeadd" value="1" />
+                    <input type="hidden" name="overwrite" value="0" />
+                    <input type="submit" name="submitsave" value="{LANG.smime_add_button}" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+$(function() {
+    $("#dkimaddForm").submit(function(e) {
+		e.preventDefault();
+        var domain = $('[name=domain]', this).val(),
+            data = $(this).serialize(),
+            th = this;
+        if ('' == domain) {
+            return false
+        }
+        $('input, button', this).prop('disabled', true);
+		$.ajax({
+			url: $(this).attr('action'),
+			type: 'POST',
+			data: data,
+			cache: false,
+			dataType: "json"
+		}).done(function(a) {
+            alert(a.mess);
+			if ('error' == a.status) {
+                $('input, button', th).prop('disabled', false);
+			} else {
+                window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp&s=dkim&d=" + domain
+			}
+		});
+	});
+	$("#certaddForm").submit(function(e) {
+		e.preventDefault();
+        var data = new FormData(this),
+            th = this;
+        if ('' == $('[name=pkcs12]', this).val()) {
+            return false
+        }
+        $('input, button', this).prop('disabled', true);
+		$.ajax({
+			url: $(this).attr('action'),
+			type: 'POST',
+			data: data,
+			cache: false,
+			processData: false,
+			contentType: false,
+			dataType: "json"
+		}).done(function(a) {
+			if ('error' == a.status) {
+                alert(a.mess);
+                $('input, button', th).prop('disabled', false);
+			} else if ('overwrite' == a.status) {
+                $('input, button', th).prop('disabled', false);
+                if (confirm(a.mess) == true) {
+                    $('[name=overwrite]', th).val('1');
+                    $(th).submit()
+                }
+			} else {
+                window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=smtp&s=smime"
+			}
+		});
+	});
+    <!-- BEGIN: scroll -->
+    $("html, body").animate({
+	   scrollTop: $("#{S}").offset().top
+	}, 800)
+    <!-- END: scroll -->
+    <!-- BEGIN: dcl -->
+    $("html, body").animate({
+	   scrollTop: $("#dkim{DID}").offset().top
+	}, 800, null, function() {
+	   $("#dkim-collapse{DID}").collapse('show')
+	})
+    <!-- END: dcl -->
+})
+</script>
 <!-- END: smtp -->
+<!-- BEGIN: smimeread -->
+<table class="table table-condensed table-bordered m-bottom-none">
+    <tbody>
+        <tr>
+            <td>{LANG.smime_cn}:</td>
+            <td>{SMIMEREAD.subject.CN}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_issuer_cn}:</td>
+            <td>{SMIMEREAD.issuer.O}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_subjectAltName}:</td>
+            <td>{SMIMEREAD.extensions.subjectAltName}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_validFrom}:</td>
+            <td>{SMIMEREAD.validFrom_format}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_validTo}:</td>
+            <td>{SMIMEREAD.validTo_format}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_signatureTypeSN}:</td>
+            <td>{SMIMEREAD.signatureTypeSN}</td>
+        </tr>
+        <tr>
+            <td>{LANG.smime_purposes}:</td>
+            <td>{SMIMEREAD.purposes_list}</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">
+                <button type="button" class="btn btn-info btn-xs" onclick="smimedownload('{EMAIL}');">{LANG.smime_download}</button>
+                <button type="button" class="btn btn-danger btn-xs" onclick="smimedel('{EMAIL}');">{LANG.smime_del}</button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<!-- END: smimeread -->
+<!-- BEGIN: dkimread -->
+<div style="position: relative;">
+    <div class="m-bottom">
+        <label>{LANG.DKIM_TXT_host}:</label>
+        <input type="text" class="form-control" readonly="readonly" value="nv._domainkey"  onclick="this.focus();this.select();"/>
+    </div>
+    <div class="m-bottom">
+        <label>{LANG.DKIM_TXT_value}:</label>
+        <textarea class="form-control" readonly="readonly" id="pubkeyvalue" style="overflow:auto;word-wrap: break-word;width:100%;min-height:40px;resize: none;" onclick="this.focus();this.select();">{DNSVALUE}</textarea>
+    </div>
+    <!-- BEGIN: unverified -->
+    <div class="m-bottom">{LANG.DKIM_verify_note}</div>
+    <div class="text-center">
+        <button type="button" class="btn btn-info active btn-xs" onclick="dkimverify('{DOMAIN}');">{LANG.dkim_verify}</button>
+        <button type="button" class="btn btn-danger btn-xs" onclick="dkimdel('{DOMAIN}');">{LANG.dkim_del}</button>
+    </div>
+    <!-- END: unverified -->
+    <!-- BEGIN: verified -->
+    <div>
+        <button type="button" class="btn btn-info btn-xs" onclick="dkimverify('{DOMAIN}');">{LANG.dkim_reverify}</button>
+        <button type="button" class="btn btn-danger btn-xs" onclick="dkimdel('{DOMAIN}');">{LANG.dkim_del}</button>
+    </div>
+    <!-- END: verified -->
+</div>
+<!-- END: dkimread -->

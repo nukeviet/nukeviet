@@ -35,6 +35,9 @@ $theme_config = [
 function nv_mailHTML($title, $content, $footer = '')
 {
     global $global_config, $lang_global;
+
+    $title = nv_autoLinkDisable($title);
+
     $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
     $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
     $xtpl->assign('GCONFIG', $global_config);
@@ -42,6 +45,11 @@ function nv_mailHTML($title, $content, $footer = '')
     $xtpl->assign('MESSAGE_TITLE', $title);
     $xtpl->assign('MESSAGE_CONTENT', $content);
     $xtpl->assign('MESSAGE_FOOTER', $footer);
+
+    if (!empty($global_config['phonenumber'])) {
+        $xtpl->parse('main.phonenumber');
+    }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
@@ -307,7 +315,7 @@ function nv_site_theme($contents, $full = true)
         // Statistics image
         $theme_stat_img = '';
         if ($global_config['statistic'] and isset($site_mods['statistics'])) {
-            $theme_stat_img .= "<a title=\"" . $lang_global['viewstats'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $lang_global['viewstats'] . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
+            $theme_stat_img .= '<a title="' . $lang_global['viewstats'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=statistics"><img alt="' . $lang_global['viewstats'] . '" src="' . NV_BASE_SITEURL . 'index.php?second=statimg&amp;p=' . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
         }
 
         $xtpl->assign('THEME_STAT_IMG', $theme_stat_img);

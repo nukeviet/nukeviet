@@ -31,7 +31,7 @@
             <!-- BEGIN: imgthumb -->
             <div class="imghome text-center">
                 <a href="#" id="pop" title="{DETAIL.image.alt}">
-                    <img id="imageresource" alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" >
+                    <img id="imageresource" alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail"/>
                 </a>
                 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -41,7 +41,7 @@
                                 <h4 class="modal-title" id="myModalLabel">{DETAIL.image.alt}</h4>
                             </div>
                             <div class="modal-body">
-                                <img src="" id="imagepreview" class="img-thumbnail" >
+                                <img src="{DETAIL.homeimgfile}" srcset="{DETAIL.srcset}" id="imagepreview" class="img-thumbnail" >
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
         </div>
         <!-- BEGIN: imgfull -->
         <div style="max-width:{DETAIL.image.width}px;margin: 10px auto 10px auto">
-            <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
+            <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" srcset="{DETAIL.srcset}" width="{DETAIL.image.width}" class="img-thumbnail" />
             <p class="imgalt">
                 <em>{DETAIL.image.note}</em>
             </p>
@@ -82,7 +82,7 @@
                 <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
                     <div style="height:10px"></div>
                     <div class="well">
-                        <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+                        <iframe height="600" scrolling="yes" src="" width="100%"></iframe>
                     </div>
                 </div>
                 <!-- END: content_quick_viewpdf -->
@@ -118,7 +118,7 @@
         <hr />
         <!-- BEGIN: socialbutton -->
         <div style="display:flex;align-items:flex-start;">
-            <!-- BEGIN: facebook --><div class="margin-right"><div class="fb-like" style="float:left!important;margin-right:0!important;margin-bottom:0!important;top:0!important" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div></div><!-- END: facebook -->
+            <!-- BEGIN: facebook --><div class="margin-right"><div class="fb-like" style="float:left!important;margin-right:0!important;margin-bottom:0!important;top:0!important" data-href="{DETAIL.link}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div></div><!-- END: facebook -->
             <!-- BEGIN: twitter --><div class="margin-right"><a href="http://twitter.com/share" class="twitter-share-button">Tweet</a></div><!-- END: twitter -->
             <!-- BEGIN: zalo --><div><div class="zalo-share-button" data-href="" data-oaid="{ZALO_OAID}" data-layout="1" data-color="blue" data-customize=false></div></div><!-- END: zalo -->
         </div>
@@ -263,8 +263,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
+        $('#imagemodal').modal('show');
     });
     $(".bodytext img").toggleClass('img-thumbnail');
 });

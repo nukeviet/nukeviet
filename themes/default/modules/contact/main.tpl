@@ -12,7 +12,7 @@
                 </div>
                 <div class="panel-body">
                     <!-- BEGIN: image -->
-                    <div class="margin-bottom"><img src="{DEP.image}" class="img-thumbnail" alt="{DEP.full_name}" /></div>
+                    <div class="margin-bottom"><img src="{DEP.image}" srcset="{DEP.srcset}" class="img-thumbnail" alt="{DEP.full_name}" /></div>
                     <!-- END: image -->
                     <!-- BEGIN: note -->
                     <div class="margin-bottom">{DEP.note}</div>

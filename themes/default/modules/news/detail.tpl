@@ -26,7 +26,20 @@
             <div class="col-md-12">
                 <ul class="list-inline text-right">
                     <!-- BEGIN: allowed_send -->
-                    <li><a class="dimgray" rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="nv_open_browse('{URL_SENDMAIL}','{TITLE}',650,500,'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+                    <li><a class="dimgray" title="{LANG.sendmail}" href="javascript:void(0);" onclick="newsSendMailModal('#newsSendMailModal', '{URL_SENDMAIL}', '{CHECKSESSION}');"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+                    <!-- START FORFOOTER -->
+<div class="modal fade" id="newsSendMailModal" tabindex="-1" role="dialog" data-loaded="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{LANG.sendmail}</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+                    <!-- END FORFOOTER -->
                     <!-- END: allowed_send -->
                     <!-- BEGIN: allowed_print -->
                     <li><a class="dimgray" rel="nofollow" title="{LANG.print}" href="javascript: void(0)" onclick="nv_open_browse('{URL_PRINT}','{TITLE}',840,500,'resizable=yes,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
@@ -47,16 +60,23 @@
             <!-- BEGIN: imgthumb -->
             <!-- BEGIN: note -->
             <figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
-                <div id="imgpreview" style="width:{DETAIL.image.width}px;">
-                    <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+                <div style="width:{DETAIL.image.width}px;">
+                    <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
                     <figcaption>{DETAIL.image.note}</figcaption>
                 </div>
             </figure>
+            <div id="imgpreview" style="display:none">
+                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" srcset="{DETAIL.srcset}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+                <figcaption>{DETAIL.image.note}</figcaption>
+            </div>
             <!-- END: note -->
             <!-- BEGIN: empty -->
-            <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj(this);">
-                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+            <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj('#imgpreview');">
+                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
+            <div id="imgpreview" style="display:none">
+                <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" srcset="{DETAIL.srcset}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
+            </div>
             <!-- END: empty -->
             <!-- END: imgthumb -->
 
@@ -64,7 +84,7 @@
 
             <!-- BEGIN: imgfull -->
             <figure class="article center">
-                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail"/>
+                <img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" srcset="{DETAIL.srcset}" width="{DETAIL.image.width}" class="img-thumbnail"/>
                 <!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->
             </figure>
             <!-- END: imgfull -->
@@ -100,7 +120,7 @@
                     <div class="clearfix"></div>
                     <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
                         <div class="well margin-top">
-                            <iframe frameborder="0" height="600" scrolling="yes" src="" width="100%"></iframe>
+                            <iframe height="600" scrolling="yes" src="" width="100%"></iframe>
                         </div>
                     </div>
                     <!-- END: content_quick_viewpdf -->
@@ -209,7 +229,7 @@
 <div class="news_column panel panel-default">
     <div class="panel-body" style="margin-bottom:0">
         <div style="display:flex;align-items:flex-start;">
-            <!-- BEGIN: facebook --><div class="margin-right"><div class="fb-like" style="float:left!important;margin-right:0!important" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div></div><!-- END: facebook -->
+            <!-- BEGIN: facebook --><div class="margin-right"><div class="fb-like" style="float:left!important;margin-right:0!important" data-href="{DETAIL.link}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div></div><!-- END: facebook -->
             <!-- BEGIN: twitter --><div class="margin-right"><a href="http://twitter.com/share" class="twitter-share-button">Tweet</a></div><!-- END: twitter -->
             <!-- BEGIN: zalo --><div><div class="zalo-share-button" data-href="" data-oaid="{ZALO_OAID}" data-layout="1" data-color="blue" data-customize=false></div></div><!-- END: zalo -->
         </div>

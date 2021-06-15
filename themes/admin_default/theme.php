@@ -23,6 +23,11 @@ function nv_mailHTML($title, $content, $footer = '')
     $xtpl->assign('MESSAGE_TITLE', $title);
     $xtpl->assign('MESSAGE_CONTENT', $content);
     $xtpl->assign('MESSAGE_FOOTER', $footer);
+
+    if (!empty($global_config['phonenumber'])) {
+        $xtpl->parse('main.phonenumber');
+    }
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
@@ -37,7 +42,7 @@ function nv_get_submenu($mod)
 {
     global $module_name, $global_config, $admin_mods, $lang_global;
 
-    $submenu = array();
+    $submenu = [];
 
     if (file_exists(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php')) {
         // ket noi voi file ngon ngu cua module
@@ -66,7 +71,7 @@ function nv_get_submenu_mod($module_name)
 {
     global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
 
-    $submenu = array();
+    $submenu = [];
     if (isset($site_mods[$module_name])) {
         $module_info = $site_mods[$module_name];
         $module_file = $module_info['module_file'];
@@ -188,11 +193,11 @@ function nv_admin_theme($contents, $head_site = 1)
             $xtpl->assign('NV_LANGINTERFACE_CURRENT', $array_lang_admin[NV_LANG_INTERFACE]);
             foreach ($array_lang_admin as $lang_i => $lang_name) {
                 $xtpl->assign('LANGVALUE', $lang_name);
-                $xtpl->assign('DATA_DISABLED', ($lang_i == NV_LANG_DATA) ? " class=\"disabled\"" : "");
+                $xtpl->assign('DATA_DISABLED', ($lang_i == NV_LANG_DATA) ? ' class="disabled"' : '');
                 $xtpl->assign('DATA_LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . NV_LANG_INTERFACE . '&' . NV_LANG_VARIABLE . '=' . $lang_i);
                 $xtpl->parse('main.lang.data');
 
-                $xtpl->assign('INTERFACE_DISABLED', ($lang_i == NV_LANG_INTERFACE) ? " class=\"disabled\"" : "");
+                $xtpl->assign('INTERFACE_DISABLED', ($lang_i == NV_LANG_INTERFACE) ? ' class="disabled"' : '');
                 $xtpl->assign('INTERFACE_LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i . '&' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
                 $xtpl->parse('main.lang.interface');
             }
@@ -347,13 +352,13 @@ function nv_admin_theme($contents, $head_site = 1)
      * By default, breadcrumbs is $page_title
      */
     if (empty($array_mod_title) and !empty($page_title)) {
-        $array_mod_title = array(
-            0 => array(
+        $array_mod_title = [
+            0 => [
                 'title' => $page_title,
                 'link' => '',
                 'active' => true
-            )
-        );
+            ]
+        ];
     }
 
     if (!empty($array_mod_title)) {
@@ -394,10 +399,10 @@ function nv_admin_theme($contents, $head_site = 1)
     $sitecontent = $xtpl->text('main');
 
     if (!empty($my_head)) {
-        $sitecontent = preg_replace('/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1);
+        $sitecontent = preg_replace('/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1);
     }
     if (!empty($my_footer)) {
-        $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1);
+        $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1);
     }
 
     return $sitecontent;

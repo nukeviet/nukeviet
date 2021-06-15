@@ -3,14 +3,14 @@
 <div class="news_column">
     <div class="panel panel-default clearfix">
         <div class="panel-heading">
+            <!-- BEGIN: subcatmore -->
+            <a class="dimgray pull-right hidden-xs" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a>
+            <!-- END: subcatmore -->
             <ul class="list-inline sub-list-icon" style="margin: 0">
                 <li><h4><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h4></li>
                 <!-- BEGIN: subcatloop -->
                 <li class="hidden-xs"><h4><a class="dimgray" title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h4></li>
                 <!-- END: subcatloop -->
-                <!-- BEGIN: subcatmore -->
-                <a class="dimgray pull-right hidden-xs" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a>
-                <!-- END: subcatmore -->
             </ul>
         </div>
         <!-- BEGIN: block_topcat -->

@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
 
 $lang_siteinfo = nv_get_lang_module($mod);
 
-$_arr_siteinfo = array();
+$_arr_siteinfo = [];
 $cacheFile = NV_LANG_DATA . '_siteinfo_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false) {
     $_arr_siteinfo = unserialize($cache);
@@ -26,7 +26,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false) {
     if (!empty($site_mods[$mod]['admins'])) {
         $admins_module = explode(',', $site_mods[$mod]['admins']);
     } else {
-        $admins_module = array();
+        $admins_module = [];
     }
     $result = $db_slave->query('SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE lev=1 OR lev=2');
     while ($row = $result->fetch()) {
@@ -54,56 +54,56 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false) {
 }
 
 // Tong so bai viet
-$siteinfo[] = array(
+$siteinfo[] = [
     'key' => $lang_siteinfo['siteinfo_publtime'],
     'value' => number_format($_arr_siteinfo['number_publtime'])
-);
+];
 
 //So bai viet thanh vien gui toi
 if ($_arr_siteinfo['number_users_send'] > 0) {
-    $siteinfo[] = array(
+    $siteinfo[] = [
         'key' => $lang_siteinfo['siteinfo_users_send'],
         'value' => number_format($_arr_siteinfo['number_users_send'])
-    );
+    ];
 }
 
 // So bai viet cho dang tu dong
 if ($_arr_siteinfo['number_pending'] > 0) {
-    $siteinfo[] = array(
+    $siteinfo[] = [
         'key' => $lang_siteinfo['siteinfo_pending'],
         'value' => number_format($_arr_siteinfo['number_pending'])
-    );
+    ];
 }
 
 // So bai viet da het han
 if ($_arr_siteinfo['number_expired'] > 0) {
-    $siteinfo[] = array(
+    $siteinfo[] = [
         'key' => $lang_siteinfo['siteinfo_expired'],
         'value' => number_format($_arr_siteinfo['number_expired'])
-    );
+    ];
 }
 
 // So bai viet sap het han
 if ($_arr_siteinfo['number_exptime'] > 0) {
-    $siteinfo[] = array(
+    $siteinfo[] = [
         'key' => $lang_siteinfo['siteinfo_exptime'],
         'value' => number_format($_arr_siteinfo['number_exptime'])
-    );
+    ];
 }
 
 // Tong so binh luan duoc dang
 if ($_arr_siteinfo['number_comment'] > 0) {
-    $siteinfo[] = array(
+    $siteinfo[] = [
         'key' => $lang_siteinfo['siteinfo_comment'],
         'value' => number_format($_arr_siteinfo['number_comment'])
-    );
+    ];
 }
 
 // Nhac nho cac tu khoa chua co mo ta
 if (!empty($module_config[$mod]['tags_remind']) and $_arr_siteinfo['number_incomplete'] > 0) {
-    $pendinginfo[] = array(
+    $pendinginfo[] = [
         'key' => $lang_siteinfo['siteinfo_tags_incomplete'],
         'value' => number_format($_arr_siteinfo['number_incomplete']),
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=tags&amp;incomplete=1'
-    );
+    ];
 }

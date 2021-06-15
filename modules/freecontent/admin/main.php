@@ -8,7 +8,7 @@
  * @Createdate 24-06-2011 10:35
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -18,7 +18,7 @@ $page_title = $lang_module['block_list'];
 if ($nv_Request->isset_request('getinfo', 'post')) {
     $bid = $nv_Request->get_int('bid', 'post', '0');
 
-    $array = array();
+    $array = [];
 
     if ($bid) {
         $sth = $db->prepare('SELECT title, description FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
@@ -29,11 +29,11 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
     $message = $array ? '' : 'Invalid post data';
 
-    nv_jsonOutput(array(
-        'status' => ! empty($array) ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !empty($array) ? 'success' : 'error',
         'message' => $message,
         'data' => $array
-    ));
+    ]);
 }
 
 // Delete block
@@ -60,15 +60,15 @@ if ($nv_Request->isset_request('del', 'post')) {
         $message = 'Invalid post data';
     }
 
-    nv_jsonOutput(array(
-        'status' => ! $message ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !$message ? 'success' : 'error',
         'message' => $message,
-    ));
+    ]);
 }
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
-    $data = $error = array();
+    $data = $error = [];
     $message = '';
 
     $data['bid'] = $nv_Request->get_int('bid', 'post', 0);
@@ -76,10 +76,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $data['description'] = $nv_Request->get_title('description', 'post', '');
 
     if (empty($data['title'])) {
-        $error[] = array(
+        $error[] = [
             'name' => 'title',
             'value' => $lang_module['block_title_error']
-        );
+        ];
     } else {
         if ($data['bid']) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_blocks SET title = :title, description = :description WHERE bid = ' . $data['bid'];
@@ -103,24 +103,24 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $nv_Cache->delMod($module_name);
                 $message = $lang_module['save_success'];
             } else {
-                $error[] = array(
+                $error[] = [
                     'name' => '',
                     'value' => $lang_module['error_save']
-                );
+                ];
             }
         } catch (PDOException $e) {
-            $error[] = array(
+            $error[] = [
                 'name' => '',
                 'value' => $lang_module['error_save']
-            );
+            ];
         }
     }
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => empty($error) ? 'success' : 'error',
         'message' => $message,
         'error' => $error
-    ));
+    ]);
 }
 
 // Write row

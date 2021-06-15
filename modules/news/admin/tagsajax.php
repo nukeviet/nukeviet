@@ -29,7 +29,7 @@ $sth->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
 $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
-$array_data = array();
+$array_data = [];
 while (list($keywords) = $sth->fetch(3)) {
     $keywords = explode(',', $keywords);
     foreach ($keywords as $_keyword) {

@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2019 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2019 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -303,6 +303,7 @@ $lang_module['field_options_text'] = 'Les autres options';
 $lang_module['field_match_type'] = 'Demande de vérifier avec valeur:';
 $lang_module['field_match_type_none'] = 'Ne vérifie pas';
 $lang_module['field_match_type_alphanumeric'] = 'N\'utilise que les caractère A-Z, 0-9 et underscore';
+$lang_module['field_match_type_unicodename'] = 'Nom humain (Lettres Unicode, tiret, apostrophe et espace)';
 $lang_module['field_match_type_date'] = 'Entrez la date dans le format dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'URL';
 $lang_module['field_match_type_regex'] = 'Formulaire';

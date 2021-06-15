@@ -43,7 +43,17 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
             }
 
             // Hiển thị hình
-            !empty($dep['image']) && $dep['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'];
+            if (!empty($dep['image'])) {
+                $dep['srcset'] = '';
+                if (!nv_is_url($dep['image'])) {
+                    if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'])) {
+                        $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image']);
+                        $dep['srcset'] = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'] . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
+                        $dep['srcset'] .= NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'] . ' ' . $imagesize[0] . 'w';
+                    }
+                    $dep['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $dep['image'];
+                }
+            }
 
             $xtpl->assign('DEP', $dep);
 
@@ -227,10 +237,15 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
         $xtpl->parse('main.sendcopy');
     }
 
+    // Xác định có áp dụng reCaptcha hay không
     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
+    // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
@@ -302,6 +317,17 @@ function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, 
             $xtpl->parse('main.sendinfo.phone');
         }
         $xtpl->parse('main.sendinfo');
+    } else {
+        if (!empty($fcat)) {
+            $xtpl->assign('CAT', $fcat);
+            $xtpl->parse('main.mysendinfo.cat');
+        }
+
+        if (!empty($fphone)) {
+            $xtpl->assign('PHONE', $fphone);
+            $xtpl->parse('main.mysendinfo.phone');
+        }
+        $xtpl->parse('main.mysendinfo');
     }
 
     $xtpl->parse('main');

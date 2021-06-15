@@ -8,12 +8,11 @@
  * @Createdate 3/25/2010 18:6
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_message_page')) {
-
+if (!nv_function_exists('nv_message_page')) {
     /**
      * nv_message_page()
      *
@@ -24,7 +23,7 @@ if (! nv_function_exists('nv_message_page')) {
         global $nv_Cache, $global_config, $site_mods, $db_slave, $module_name;
         $module = $block_config['module'];
 
-        if (! isset($site_mods[$module])) {
+        if (!isset($site_mods[$module])) {
             return '';
         }
 
@@ -52,7 +51,7 @@ if (! nv_function_exists('nv_message_page')) {
                 $is_show = true;
             }
         }
-        if (! $is_show) {
+        if (!$is_show) {
             $sql = 'SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . ' WHERE status=1 ORDER BY rand() DESC';
 
             if (($query = $db_slave->query($sql)) !== false) {

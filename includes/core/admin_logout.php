@@ -8,7 +8,7 @@
  * @Createdate 12/30/2009 0:51
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -33,8 +33,8 @@ if ($ok) {
 } else {
     $url = ($client_info['referer'] != '') ? $client_info['referer'] : (isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : '');
     $info = $lang_global['admin_logout_question'] . " ?<br /><br />\n";
-    $info .= "<a href=\"" . NV_BASE_SITEURL . "index.php?second=admin_logout&amp;ok=1\">" . $lang_global['ok'] . "</a> | \n";
-    $info .= "<a href=\"" . $url . "\">" . $lang_global['cancel'] . "</a>\n";
+    $info .= '<a href="' . NV_BASE_SITEURL . 'index.php?second=admin_logout&amp;ok=1">' . $lang_global['ok'] . "</a> | \n";
+    $info .= '<a href="' . $url . '">' . $lang_global['cancel'] . "</a>\n";
 }
 
 nv_info_die($global_config['site_description'], $lang_global['admin_logout_title'], $info);

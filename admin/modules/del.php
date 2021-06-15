@@ -8,7 +8,7 @@
  * @Createdate 2-17-2010 0:5
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
@@ -35,11 +35,11 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
             $module_data = $sth->fetchColumn();
 
             $lang = NV_LANG_DATA;
-            $sql_drop_module = array();
+            $sql_drop_module = [];
 
             require_once NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php';
 
-            if (! empty($sql_drop_module)) {
+            if (!empty($sql_drop_module)) {
                 foreach ($sql_drop_module as $sql) {
                     try {
                         $db->query($sql);
@@ -55,39 +55,39 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
         // Xoa du lieu tai bang nvx_vi_blocks
         $sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module)');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
-        if (! $sth->execute()) {
+        if (!$sth->execute()) {
             die('NO_' . $modname);
         }
 
         $sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
-        if (! $sth->execute()) {
+        if (!$sth->execute()) {
             die('NO_' . $modname);
         }
 
         $nv_Cache->delMod('themes');
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module)');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
-        if (! $sth->execute()) {
+        if (!$sth->execute()) {
             die('NO_' . $modname);
         }
 
         // Xoa du lieu tai bang nvx_vi_modfuncs
         $sth = $db->prepare('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
-        if (! $sth->execute()) {
+        if (!$sth->execute()) {
             die('NO_' . $modname);
         }
 
         // Xoa du lieu tai bang nvx_vi_modules
         $sth = $db->prepare('DELETE FROM ' . NV_MODULES_TABLE . ' WHERE title= :module');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
-        if (! $sth->execute()) {
+        if (!$sth->execute()) {
             die('NO_' . $modname);
         }
 
         // Xoa du lieu tai bang nvx_config
-        $sth = $db->prepare("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' AND module= :module");
+        $sth = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' AND module= :module");
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         $sth->execute();
 
@@ -105,7 +105,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
             }
         }
 
-        if (! $check_exit_mod) {
+        if (!$check_exit_mod) {
             if ($module_file != $modname) {
                 $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :module AND type=\'module\'');
                 $sth->bindParam(':module', $modname, PDO::PARAM_STR);
@@ -114,6 +114,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
 
             nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $modname, true);
             nv_deletefile(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $modname, true);
+            nv_deletefile(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $modname, true);
             nv_deletefile(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname, true);
 
             $sth = $db->prepare('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname= :dirname OR dirname LIKE :dirnamelike');

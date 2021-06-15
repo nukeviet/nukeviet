@@ -2,6 +2,10 @@
 <form class="form-inline" action="{FORM_ACTION}" method="post">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
+            <colgroup>
+                <col style="width:30%" />
+                <col style="width:70%" />
+            </colgroup>
             <tfoot>
                 <tr>
                     <td colspan="2" class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
@@ -17,7 +21,7 @@
                     </select></td>
                 </tr>
                 <tr>
-                    <td>{LANG.captcha_type}</td>
+                    <th class="text-right">{LANG.captcha_type}</th>
                     <td>
                         <select class="form-control w200" name="captcha_type" data-recaptcha-note="{IS_RECAPTCHA_NOTE}">
                             <!-- BEGIN: captcha_type -->

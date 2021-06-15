@@ -113,56 +113,64 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         exit($form);
     }
 
+    unset($fcaptcha);
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
+        $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+        $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
+    }
+
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? '' : 'fcode',
+            'mess' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+        ]);
+    }
+
+    if (($ftitle = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255)) == '') {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'ftitle',
+            'mess' => $lang_module['error_title']
+        ]);
+    }
+
     if (!defined('NV_IS_USER')) {
-        $fname = nv_substr($nv_Request->get_title('fname', 'post', '', 1), 0, 100);
+        $fname = nv_substr($nv_Request->get_title('fname', 'post', ''), 0, 100);
         $femail = nv_substr($nv_Request->get_title('femail', 'post', '', 1), 0, 100);
     }
 
-    if (empty($fname)) {
-        nv_jsonOutput(array(
+    $_fname = str_replace('&#039;', "'", $fname);
+    if (empty($fname) or !preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $_fname)) {
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'fname',
             'mess' => $lang_module['error_fullname']
-        ));
+        ]);
     }
 
     $check_valid_email = nv_check_valid_email($femail, true);
     $femail = $check_valid_email[1];
 
     if ($check_valid_email[0] != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'femail',
             'mess' => $check_valid_email[0]
-        ));
+        ]);
     }
 
-    if (($ftitle = nv_substr($nv_Request->get_title('ftitle', 'post', '', 1), 0, 255)) == '') {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => 'ftitle',
-            'mess' => $lang_module['error_title']
-        ));
-    }
     if (($fcon = $nv_Request->get_editor('fcon', '', NV_ALLOWED_HTML_TAGS)) == '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'fcon',
             'mess' => $lang_module['error_content']
-        ));
-    }
-
-    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
-        $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
-        $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
-    }
-    if (($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
-        nv_jsonOutput(array(
-            'status' => 'error',
-            'input' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? '' : 'fcode',
-            'mess' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
-        ));
+        ]);
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
@@ -199,7 +207,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {
-        $fcon_mail = contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart);
+        $_ftitle = nv_autoLinkDisable($ftitle);
+        $_fcon = nv_autoLinkDisable($fcon);
+        $_fphone = nv_autoLinkDisable($fphone);
+        $fcon_mail = contact_sendcontact($row_id, $fcat, $_ftitle, $fname, $femail, $_fphone, $_fcon, $fpart);
 
         $email_list = [];
         if (!empty($array_department[$fpart]['email'])) {
@@ -247,7 +258,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $global_config['site_name'],
                 $global_config['site_email']
             ];
-            $fcon_mail = contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, false);
+            $fcon_mail = contact_sendcontact($row_id, $fcat, $_ftitle, $fname, $femail, $_fphone, $_fcon, $fpart, false);
             @nv_sendmail($from, $femail, $ftitle, $fcon_mail);
         }
 
@@ -274,26 +285,16 @@ $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 $full_theme = true;
-$canonicalUrl = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 if (!empty($alias_department)) {
-    $base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
-    $canonicalUrl = $base_url;
-    if (isset($array_op[1]) and $array_op[1] == '0') {
-        $base_url .= '/0';
+    $page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
+    if (isset($array_op[1]) and $array_op[1] === '0') {
+        $page_url .= '/0';
         $full_theme = false;
     }
 }
 
-$base_url_rewrite = nv_url_rewrite($base_url, true);
-$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-$request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-if (str_starts_with($request_uri, $base_url_check)) {
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($canonicalUrl, true);
-} elseif (str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-    $canonicalUrl = nv_url_rewrite($canonicalUrl, true);
-} else {
-    nv_redirect_location($base_url_check);
-}
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $array_content = [
     'fname' => $fname,
@@ -303,7 +304,7 @@ $array_content = [
     'bodytext' => $module_config[$module_name]['bodytext']
 ];
 
-$contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, NV_CHECK_SESSION);
+$contents = contact_main_theme($array_content, $array_department, $catsName, $page_url, NV_CHECK_SESSION);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents, $full_theme);

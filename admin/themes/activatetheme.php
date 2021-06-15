@@ -22,7 +22,7 @@ $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColumn()) {
     // Kích hoạt sử dụng nếu đã có thiết lập
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :theme WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :theme WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'");
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
 
@@ -78,7 +78,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         }
 
         // Thiết lập Block
-        $array_all_funcid = array();
+        $array_all_funcid = [];
         $func_result = $db->query('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
         while (list($func_id_i) = $func_result->fetch(3)) {
             $array_all_funcid[] = $func_id_i;
@@ -123,9 +123,9 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
             $all_func = ($row['all_func'] == 1 and preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name)) ? 1 : 0;
 
-            $_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
+            $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
 			( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";
-            $data = array();
+            $data = [];
             $data['selectthemes'] = $selectthemes;
             $data['module'] = $row['module'];
             $data['file_name'] = $file_name;
@@ -139,9 +139,9 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             if ($all_func) {
                 $array_funcid = $array_all_funcid;
             } else {
-                $array_funcid = array();
+                $array_funcid = [];
                 if (!is_array($row['funcs'])) {
-                    $row['funcs'] = array( $row['funcs'] );
+                    $row['funcs'] = [$row['funcs']];
                 }
                 foreach ($row['funcs'] as $_funcs_list) {
                     list($mod, $func_list) = explode(':', $_funcs_list);

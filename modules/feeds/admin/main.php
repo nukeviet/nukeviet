@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_RSS_ADMIN')) {
+if (!defined('NV_IS_RSS_ADMIN')) {
     die('Stop!!!');
 }
 

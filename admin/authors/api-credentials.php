@@ -55,7 +55,6 @@ while ($row = $result->fetch()) {
     $array[$row['credential_ident']] = $row;
 }
 
-
 // Xóa API Credential
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {

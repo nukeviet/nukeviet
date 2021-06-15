@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('tab', 'get') and preg_match('/^(' . $db_config['
     exit();
 }
 
-$database = array();
+$database = [];
 
 $database['db_host_info'] = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
 $database['db_sql_version'] = $db->getAttribute(PDO::ATTR_SERVER_VERSION);
@@ -38,7 +38,7 @@ if ($db->dbtype == 'mysql') {
     $database['db_time_zone'] = $row['db_time_zone'];
 }
 
-$contents = array();
+$contents = [];
 $contents['captions']['database_info'] = sprintf($lang_module['database_info'], $database['db_dbname']);
 
 foreach ($database as $key => $values) {

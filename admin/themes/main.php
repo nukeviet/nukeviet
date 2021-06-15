@@ -30,9 +30,9 @@ $theme_list = array_merge($theme_list, $theme_mobile_list);
 
 $number_theme = sizeof($theme_list);
 
-$errorconfig = array();
-$array_site_theme = array();
-$array_site_cat_theme = array();
+$errorconfig = [];
+$array_site_theme = [];
+$array_site_cat_theme = [];
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
 while (list($theme) = $result->fetch(3)) {
     $array_site_theme[] = $theme;
@@ -49,10 +49,10 @@ $array_allow_preview = explode(',', $global_config['preview_theme']);
 
 // Bật/Tắt cho phép xem trước giao diện
 if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
-    $array = array(
+    $array = [
         'status' => 'ERROR',
         'message' => ''
-    );
+    ];
     $theme = $nv_Request->get_title('theme', 'post', '');
     if (in_array($theme, $theme_list)) {
         $array['status'] = 'SUCCESS';
@@ -96,7 +96,7 @@ foreach ($theme_list as $value) {
         $xtpl->assign('BTN_ACTIVE', 'primary');
     }
 
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'name' => (string)$info[0]->name,
         'website' => (string)$info[0]->website,
         'author' => (string)$info[0]->author,
@@ -104,11 +104,11 @@ foreach ($theme_list as $value) {
         'description' => (string)$info[0]->description,
         'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'] . '_' . $value),
         'value' => $value
-    ));
+    ]);
 
     $position = $xml->xpath('positions');
     $positions = $position[0]->position;
-    $pos = array();
+    $pos = [];
 
     for ($j = 0, $count = sizeof($positions); $j < $count; ++$j) {
         $pos[] = $positions[$j]->name;
@@ -133,7 +133,6 @@ foreach ($theme_list as $value) {
             $xtpl->parse('main.loop.actions.link_setting');
             $actions++;
         }
-
 
         if ($allow_preview) {
             if (in_array($value, $array_allow_preview)) {

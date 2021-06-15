@@ -45,11 +45,10 @@ $mess_content = $error = '';
 if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
     if (strip_tags($mess_content) != '') {
-
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
         $mail->addTo($row['sender_email']);
 
-        $_array_email = array();
+        $_array_email = [];
         $frow = $db->query('SELECT full_name, email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $row['cid'])->fetch();
         if (!empty($frow)) {
             $_arr_mail = explode(',', $frow['email']);
@@ -61,7 +60,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
 
             // Gửi cho các quản trị trong bộ phận
-            $obt_level = array();
+            $obt_level = [];
             $admins_list = $frow['admins'];
             $admins_list = !empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : [];
             foreach ($admins_list as $l) {

@@ -27,7 +27,7 @@ if (empty($id)) {
 
 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_plan', 'planid ' . $id, $admin_info['userid']);
 
-$banners_id = array();
+$banners_id = [];
 $sql = 'SELECT id, file_name, imageforswf FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $id;
 $result = $db->query($sql);
 while ($row = $result->fetch()) {

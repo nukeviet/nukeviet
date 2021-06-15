@@ -35,6 +35,7 @@ if (!empty($savesetting)) {
     $array_config['blockheight'] = $nv_Request->get_int('blockheight', 'post', 0);
     $array_config['imagefull'] = $nv_Request->get_int('imagefull', 'post', 0);
 
+    $array_config['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post', false);
     $array_config['allowed_rating_point'] = $nv_Request->get_int('allowed_rating_point', 'post', 0);
     $array_config['copyright'] = $nv_Request->get_editor('copyright', '', NV_ALLOWED_HTML_TAGS);
     $array_config['showtooltip'] = $nv_Request->get_int('showtooltip', 'post', 0);
@@ -103,7 +104,7 @@ if (!empty($savesetting)) {
     $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
 
     if (empty($error)) {
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
         foreach ($array_config as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
@@ -206,7 +207,7 @@ for ($i = 0; $i <= 6; ++$i) {
     $xtpl->assign('RATING_POINT', [
         'key' => $i,
         'title' => ($i == 6) ? $lang_module['no_allowed_rating'] : $i,
-        "selected" => $i == $module_config[$module_name]['allowed_rating_point'] ? " selected=\"selected\"" : ""
+        'selected' => $i == $module_config[$module_name]['allowed_rating_point'] ? ' selected="selected"' : ''
     ]);
     $xtpl->parse('main.allowed_rating_point');
 }
@@ -227,6 +228,7 @@ $xtpl->assign('INSTANT_ARTICLES_ACTIVE', $module_config[$module_name]['instant_a
 $xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant_articles_httpauth'] ? ' checked="checked"' : '');
 $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
 $xtpl->assign('IDENTIFY_CAT_CHANGE', $module_config[$module_name]['identify_cat_change'] ? ' checked="checked"' : '');
+$xtpl->assign('ALLOWED_RATING', $module_config[$module_name]['allowed_rating'] ? ' checked="checked"' : '');
 
 $xtpl->assign('FRONTEND_EDIT_ALIAS', $module_config[$module_name]['frontend_edit_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('FRONTEND_EDIT_LAYOUT', $module_config[$module_name]['frontend_edit_layout'] ? ' checked="checked"' : '');
@@ -275,7 +277,7 @@ $array_structure_image['username_Y_m'] = NV_UPLOADS_DIR . '/' . $module_upload .
 $array_structure_image['username_Ym_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y_m/d');
 $array_structure_image['username_Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y/m/d');
 
-$structure_image_upload = isset($module_config[$module_name]['structure_upload']) ? $module_config[$module_name]['structure_upload'] : "Ym";
+$structure_image_upload = isset($module_config[$module_name]['structure_upload']) ? $module_config[$module_name]['structure_upload'] : 'Ym';
 
 // Thu muc uploads
 foreach ($array_structure_image as $type => $dir) {
@@ -332,12 +334,12 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;
     $copyright = nv_aleditor('copyright', '100%', '100px', $copyright, 'Basic', $_uploads_dir, $_uploads_dir);
 } else {
-    $copyright = "<textarea style=\"width: 100%\" name=\"copyright\" id=\"copyright\" cols=\"20\" rows=\"15\">" . $copyright . "</textarea>";
+    $copyright = '<textarea style="width: 100%" name="copyright" id="copyright" cols="20" rows="15">' . $copyright . '</textarea>';
 }
 $xtpl->assign('COPYRIGHTHTML', $copyright);
 
-$xtpl->assign('PATH', defined('NV_IS_SPADMIN') ? "" : NV_UPLOADS_DIR . '/' . $module_upload);
-$xtpl->assign('CURRENTPATH', defined('NV_IS_SPADMIN') ? "images" : NV_UPLOADS_DIR . '/' . $module_upload);
+$xtpl->assign('PATH', defined('NV_IS_SPADMIN') ? '' : NV_UPLOADS_DIR . '/' . $module_upload);
+$xtpl->assign('CURRENTPATH', defined('NV_IS_SPADMIN') ? 'images' : NV_UPLOADS_DIR . '/' . $module_upload);
 
 if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
     $groups_list = nv_groups_list();
@@ -356,7 +358,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
         $array_config['frontend_edit_layout'] = $nv_Request->get_int('frontend_edit_layout', 'post', 0);
         $array_config['ucaptcha_type'] = $nv_Request->get_string('ucaptcha_type', 'post', '');
 
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
         foreach ($array_config as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
@@ -375,7 +377,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
                     $editcontent = 0;
                     $delcontent = 0;
                 }
-                $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE group_id =" . $group_id);
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE group_id =" . $group_id);
             }
         }
 
@@ -386,9 +388,9 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
 
     $array_post_data = [];
 
-    $sql = "SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post ORDER BY group_id ASC";
+    $sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post ORDER BY group_id ASC';
     $result = $db->query($sql);
-    while (list ($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
+    while (list($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
         if (isset($groups_list[$group_id])) {
             $array_post_data[$group_id] = [
                 'group_id' => $group_id,
@@ -412,7 +414,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
             $delcontent = $array_post_data[$group_id]['delcontent'];
         } else {
             $addcontent = $postcontent = $editcontent = $delcontent = 0;
-            $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )");
+            $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_config_post (group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )");
         }
 
         $xtpl->assign('ROW', [

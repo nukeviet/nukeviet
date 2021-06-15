@@ -22,7 +22,7 @@ $page = (isset($array_op[2]) and preg_match('/^page\-([0-9]+)$/', $array_op[2], 
 $stmt = $db_slave->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
 $stmt->bindParam(':alias', $author_info['alias'], PDO::PARAM_STR);
 $stmt->execute();
-list ($author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']) = $stmt->fetch(3);
+list($author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']) = $stmt->fetch(3);
 if (!$author_info['id']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 }
@@ -30,22 +30,16 @@ if (!$author_info['id']) {
 if (!empty($author_info['image'])) {
     $author_info['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $author_info['image'];
 }
-$author_info['add_time_format'] = nv_date("d/m/Y", $author_info['add_time']);
+$author_info['add_time_format'] = nv_date('d/m/Y', $author_info['add_time']);
 
 $page_title = $author_info['pseudonym'];
-$base_url = $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $author_info['alias'];
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $author_info['alias'];
 if ($page > 1) {
-    $base_url_rewrite .= '/page-' . $page;
+    $page_url .= '/page-' . $page;
     $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
 }
 
-$base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-$request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-    nv_redirect_location($base_url_check);
-}
-$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+$canonicalUrl = getCanonicalUrl($page_url, true);
 
 $array_mod_title[] = [
     'catid' => 0,
@@ -65,8 +59,7 @@ $num_items = $db_slave->query($db_slave->sql())
     ->fetchColumn();
 
 // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-$total = ceil($num_items / $per_page);
-betweenURLs($page, $total, $base_url, '/page-', $prevPage, $nextPage);
+betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
 $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
     ->order($order_articles_by . ' DESC')

@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -472,26 +472,26 @@ $installMods['two-step-verification'] = [
 $company = [];
 $company['company_name'] = $install_lang['vinades_fullname'];
 $company['company_address'] = $install_lang['vinades_address'];
-$company['company_sortname'] = "VINADES.,JSC";
-$company['company_regcode'] = "";
-$company['company_regplace'] = "";
-$company['company_licensenumber'] = "";
-$company['company_responsibility'] = "";
+$company['company_sortname'] = 'VINADES.,JSC';
+$company['company_regcode'] = '';
+$company['company_regplace'] = '';
+$company['company_licensenumber'] = '';
+$company['company_responsibility'] = '';
 $company['company_showmap'] = 1;
 $company['company_mapurl'] = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2634.116366996857!2d105.79399620326203!3d20.9844946314258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac93055e2f2f%3A0x91f4b423089193dd!2zQ8O0bmcgdHkgQ-G7lSBwaOG6p24gUGjDoXQgdHJp4buDbiBOZ3Xhu5NuIG3hu58gVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1558315703646!5m2!1svi!2s';
-$company['company_phone'] = "+84-24-85872007[+842485872007]|+84-904762534[+84904762534]";
-$company['company_fax'] = "+84-24-35500914";
-$company['company_email'] = "contact@vinades.vn";
-$company['company_website'] = "http://vinades.vn";
+$company['company_phone'] = '+84-24-85872007[+842485872007]|+84-904762534[+84904762534]';
+$company['company_fax'] = '+84-24-35500914';
+$company['company_email'] = 'contact@vinades.vn';
+$company['company_website'] = 'http://vinades.vn';
 $company = serialize($company);
 
 /**
  * Social
  */
 $social = [];
-$social['facebook'] = "http://www.facebook.com/nukeviet";
-$social['youtube'] = "https://www.youtube.com/user/nukeviet";
-$social['twitter'] = "https://twitter.com/nukeviet";
+$social['facebook'] = 'http://www.facebook.com/nukeviet';
+$social['youtube'] = 'https://www.youtube.com/user/nukeviet';
+$social['twitter'] = 'https://twitter.com/nukeviet';
 $social = serialize($social);
 
 /**
@@ -889,28 +889,28 @@ $blockGroups = [
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 $weight = 0;
-foreach($installMods as $mod_name => $vals) {
+foreach ($installMods as $mod_name => $vals) {
     $weight++;
     $_vals = [
-        $mod_name, 
-        isset($vals['module_file']) ? $vals['module_file'] : $mod_name, 
-        isset($vals['module_data']) ? $vals['module_data'] : $mod_name, 
-        isset($vals['module_upload']) ? $vals['module_upload'] : $mod_name, 
-        isset($vals['module_theme']) ? $vals['module_theme'] : $mod_name, 
-        isset($vals['custom_title']) ? $vals['custom_title'] : ucwords($mod_name), 
-        isset($vals['admin_title']) ? $vals['admin_title'] : '', 
-        NV_CURRENTTIME, 
-        !empty($vals['main_file']) ? 1 : 0, 
-        !empty($vals['admin_file']) ? 1 : 0, 
-        '', 
-        '', 
-        '', 
-        isset($vals['keywords']) ? $vals['keywords'] : '', 
-        $vals['groups_view'], 
-        $weight, 
-        1, 
-        '', 
-        !empty($vals['rss']) ? 1 : 0, 
+        $mod_name,
+        isset($vals['module_file']) ? $vals['module_file'] : $mod_name,
+        isset($vals['module_data']) ? $vals['module_data'] : $mod_name,
+        isset($vals['module_upload']) ? $vals['module_upload'] : $mod_name,
+        isset($vals['module_theme']) ? $vals['module_theme'] : $mod_name,
+        isset($vals['custom_title']) ? $vals['custom_title'] : ucwords($mod_name),
+        isset($vals['admin_title']) ? $vals['admin_title'] : '',
+        NV_CURRENTTIME,
+        !empty($vals['main_file']) ? 1 : 0,
+        !empty($vals['admin_file']) ? 1 : 0,
+        '',
+        '',
+        '',
+        isset($vals['keywords']) ? $vals['keywords'] : '',
+        $vals['groups_view'],
+        $weight,
+        1,
+        '',
+        !empty($vals['rss']) ? 1 : 0,
         !empty($vals['sitemap']) ? 1 : 0
     ];
     $sth->execute($_vals);
@@ -927,35 +927,35 @@ $array_funcid = [];
 $array_funcid_mod = [];
 $theme_default = [];
 $theme_mobile = [];
-foreach($installMods as $mod_name => $vals) {
-    if(isset($vals['funcs'])) {
+foreach ($installMods as $mod_name => $vals) {
+    if (isset($vals['funcs'])) {
         $subweight = 0;
-        foreach($vals['funcs'] as $func_name => $func_vals) {
+        foreach ($vals['funcs'] as $func_name => $func_vals) {
             $func_id++;
             $array_funcid[] = $func_id;
             !isset($array_funcid_mod[$mod_name]) && $array_funcid_mod[$mod_name] = [];
             $array_funcid_mod[$mod_name][$func_name] = $func_id;
-            if(!empty($func_vals['theme_default'])) {
+            if (!empty($func_vals['theme_default'])) {
                 $theme_default[$func_id] = $func_vals['theme_default'];
             }
-            if(!empty($func_vals['theme_mobile'])) {
+            if (!empty($func_vals['theme_mobile'])) {
                 $theme_mobile[$func_id] = $func_vals['theme_mobile'];
             }
-            
+
             $show_func = !empty($func_vals['show_func']) ? 1 : 0;
-            if($show_func) {
+            if ($show_func) {
                 $subweight++;
             }
-            
+
             $_vals = [
-                $func_id, 
-                $func_name, 
-                isset($func_vals['alias']) ? $func_vals['alias'] : $func_name, 
-                isset($func_vals['func_custom_name']) ? $func_vals['func_custom_name'] : ucwords($func_name), 
-                $mod_name, 
-                $show_func, 
-                !empty($func_vals['in_submenu']) ? 1 : 0, 
-                $show_func ? $subweight : 0, 
+                $func_id,
+                $func_name,
+                isset($func_vals['alias']) ? $func_vals['alias'] : $func_name,
+                isset($func_vals['func_custom_name']) ? $func_vals['func_custom_name'] : ucwords($func_name),
+                $mod_name,
+                $show_func,
+                !empty($func_vals['in_submenu']) ? 1 : 0,
+                $show_func ? $subweight : 0,
                 ''
             ];
             $sth->execute($_vals);
@@ -971,13 +971,13 @@ $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '
 $sth->execute([0, 'left-main-right', 'default']);
 $sth->execute([0, 'main', 'mobile_default']);
 
-if(!empty($theme_default)) {
+if (!empty($theme_default)) {
     foreach ($theme_default as $funcid => $_key) {
         $sth->execute([$funcid, $_key, 'default']);
     }
 }
 
-if(!empty($theme_mobile)) {
+if (!empty($theme_mobile)) {
     foreach ($theme_mobile as $funcid => $_key) {
         $sth->execute([$funcid, $_key, 'mobile_default']);
     }
@@ -992,58 +992,58 @@ $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '
 $_bid = 0;
 $array_weight_block = [];
 $blocks_weight = [];
-foreach($blockGroups as $theme => $vals) {
-    foreach($vals as $pos => $bls) {
+foreach ($blockGroups as $theme => $vals) {
+    foreach ($vals as $pos => $bls) {
         $weight = 0;
-        foreach($bls as $bl) {
+        foreach ($bls as $bl) {
             if ($bl['module'] == 'theme' or isset($installMods[$bl['module']])) {
                 $_bid++;
                 $weight++;
                 $_bl = [
                     $_bid,
-                    $theme, 
-                    $bl['module'], 
-                    $bl['file_name'], 
-                    $bl['title'], 
-                    !empty($bl['link']) ? $bl['link'] : '', 
-                    $bl['template'], 
-                    '[' . $pos . ']', 
-                    0, 
-                    $bl['active'], 
-                    $bl['groups_view'], 
-                    !empty($bl['all_func']) ? 1 : 0, 
-                    $weight, 
+                    $theme,
+                    $bl['module'],
+                    $bl['file_name'],
+                    $bl['title'],
+                    !empty($bl['link']) ? $bl['link'] : '',
+                    $bl['template'],
+                    '[' . $pos . ']',
+                    0,
+                    $bl['active'],
+                    $bl['groups_view'],
+                    !empty($bl['all_func']) ? 1 : 0,
+                    $weight,
                     !empty($bl['config']) ? $bl['config'] : ''
                 ];
-                
+
                 $array_funcid_i = [];
-                if(!empty($bl['all_func'])) {
+                if (!empty($bl['all_func'])) {
                     $array_funcid_i = $array_funcid;
-                } elseif(!empty($bl['funcs'])) {
-                    foreach($bl['funcs'] as $mod => $fns) {
-                        foreach($fns as $fn) {
+                } elseif (!empty($bl['funcs'])) {
+                    foreach ($bl['funcs'] as $mod => $fns) {
+                        foreach ($fns as $fn) {
                             if (isset($array_funcid_mod[$mod][$fn])) {
                                 $array_funcid_i[] = $array_funcid_mod[$mod][$fn];
                             }
                         }
                     }
-                } elseif(isset($array_funcid_mod[$bl['module']])) {
+                } elseif (isset($array_funcid_mod[$bl['module']])) {
                     $array_funcid_i = $array_funcid_mod[$bl['module']];
                 }
-                
-                if(!empty($array_funcid_i)) {
-                    foreach($array_funcid_i as $func_id) {
+
+                if (!empty($array_funcid_i)) {
+                    foreach ($array_funcid_i as $func_id) {
                         if (isset($array_weight_block[$theme][$pos][$func_id])) {
                             $_weight = $array_weight_block[$theme][$pos][$func_id] + 1;
                         } else {
                             $_weight = 1;
                         }
                         $array_weight_block[$theme][$pos][$func_id] = $_weight;
-                        
+
                         $blocks_weight[] = [$_bid, $func_id, $_weight];
                     }
                 }
-    
+
                 $sth->execute($_bl);
             }
         }
@@ -1055,12 +1055,13 @@ foreach($blockGroups as $theme => $vals) {
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight (bid, func_id, weight) VALUES (?, ?, ?)');
-foreach($blocks_weight as $block_weight) {
+foreach ($blocks_weight as $block_weight) {
     $sth->execute($block_weight);
 }
 
-$db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['nukeviet_description']) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='" . $lang_data . "'");
-$db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($install_lang['disable_site_content']) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'");
+$db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $db->quote($install_lang['nukeviet_description']) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='" . $lang_data . "'");
+$db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $db->quote($install_lang['disable_site_content']) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'");
+file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $lang_data . '.txt', $install_lang['disable_site_content'], LOCK_EX);
 
 $result = $db->query('SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC');
 while (list($id, $run_func) = $result->fetch(3)) {
@@ -1068,48 +1069,44 @@ while (list($id, $run_func) = $result->fetch(3)) {
     $db->query('UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote($cron_name) . ' WHERE id=' . $id);
 }
 
-$db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = '" . $lang_data . "' AND module = 'global' AND config_name = 'site_theme'");
+$db->query('UPDATE ' . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = '" . $lang_data . "' AND module = 'global' AND config_name = 'site_theme'");
 
-$result = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='" . $global_config['site_home_module'] . "'");
+$result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules where title='" . $global_config['site_home_module'] . "'");
 if ($result->fetchColumn()) {
-    $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'");
+    $db->query('UPDATE ' . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'");
 }
 
-if(!empty($menu_rows_lev0))
-{
-    $menu_rows_lev0 = array_filter($menu_rows_lev0, function($k) use ($installMods) {
+if (!empty($menu_rows_lev0)) {
+    $menu_rows_lev0 = array_filter($menu_rows_lev0, function ($k) use ($installMods) {
         return isset($installMods[$k]);
     }, ARRAY_FILTER_USE_KEY);
-    $menu_rows_lev1 = array_filter($menu_rows_lev1, function($k) use ($installMods) {
+    $menu_rows_lev1 = array_filter($menu_rows_lev1, function ($k) use ($installMods) {
         return isset($installMods[$k]);
     }, ARRAY_FILTER_USE_KEY);
 
-    $result = $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
+    $result = $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
 
     $is_yes_sub = !empty($menu_rows_lev1) ? array_unique(array_keys($menu_rows_lev1)) : [];
     $menu_y_sub = [];
-    if(!empty($is_yes_sub))
-    {
-        foreach($is_yes_sub as $mys){
+    if (!empty($is_yes_sub)) {
+        foreach ($is_yes_sub as $mys) {
             $menu_y_sub[$mys] = [];
             $menu_y_sub[$mys]['subsize'] = sizeof($menu_rows_lev1[$mys]);
         }
     }
 
-    $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows (id, parentid, mid, title, link, weight, sort, lev, subitem, groups_view, module_name, op, target, status) VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)");
+    $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_menu_rows (id, parentid, mid, title, link, weight, sort, lev, subitem, groups_view, module_name, op, target, status) VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)');
 
     $a = 1;
     $b = 1;
     $d = sizeof($menu_rows_lev0);
     $executes = [];
     $subitem = [];
-    foreach($menu_rows_lev0 as $m => $item)
-    {
+    foreach ($menu_rows_lev0 as $m => $item) {
         $executes[$a] = [$a, 0, $item['title'], $item['link'], $a, $b, 0, '', $item['groups_view'], $m, $item['op']];
         $subitem[$a] = [];
-        if(isset($menu_y_sub[$m])) {
-            for($c = 1; $c <= $menu_y_sub[$m]['subsize']; ++$c)
-            {
+        if (isset($menu_y_sub[$m])) {
+            for ($c = 1; $c <= $menu_y_sub[$m]['subsize']; ++$c) {
                 ++$b;
                 ++$d;
                 $e = $c - 1;
@@ -1122,9 +1119,10 @@ if(!empty($menu_rows_lev0))
     }
 
     ksort($executes);
-    foreach($executes as $id => $execute)
-    {
-        if(!empty($subitem[$id])) $execute[7] = implode(",",$subitem[$id]);
+    foreach ($executes as $id => $execute) {
+        if (!empty($subitem[$id])) {
+            $execute[7] = implode(',', $subitem[$id]);
+        }
         $sth->execute($execute);
     }
 }

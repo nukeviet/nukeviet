@@ -17,7 +17,7 @@ $array_config = [];
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['captcha_type'] = $nv_Request->get_string('captcha_type', 'post', '');
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = '" . $module_name . "' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = '" . $module_name . "' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);

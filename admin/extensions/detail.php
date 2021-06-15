@@ -8,13 +8,13 @@
  * @Createdate 2-1-2010 22:5
  */
 
-if (! defined('NV_IS_FILE_EXTENSIONS')) {
+if (!defined('NV_IS_FILE_EXTENSIONS')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_global['mod_extensions'];
 
-$request = array();
+$request = [];
 
 // Fixed request
 $request['lang'] = NV_LANG_DATA;
@@ -29,27 +29,27 @@ $request['id'] = $nv_Request->get_int('id', 'get', 0);
 $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
 // Debug
-$args = array(
-    'headers' => array(
+$args = [
+    'headers' => [
         'Referer' => NUKEVIET_STORE_APIURL,
-    ),
+    ],
     'body' => $request
-);
+];
 
 $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-$array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : array();
+$array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : [];
 
 $error = '';
-if (! empty(NukeViet\Http\Http::$error)) {
+if (!empty(NukeViet\Http\Http::$error)) {
     $error = nv_http_get_lang(NukeViet\Http\Http::$error);
-} elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
+} elseif (empty($array['status']) or !isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
     $error = $lang_global['error_valid_response'];
-} elseif (! empty($array['error']['message'])) {
+} elseif (!empty($array['error']['message'])) {
     $error = $array['error']['message'];
 }
 
 // Show error
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 } else {
@@ -59,7 +59,7 @@ if (! empty($error)) {
     unset($array['files'], $array['image_demo']);
 
     // Change some variable to display value
-    $array['updatetime'] = nv_date("H:i d/m/Y", $array['updatetime']);
+    $array['updatetime'] = nv_date('H:i d/m/Y', $array['updatetime']);
     $array['view_hits'] = number_format($array['view_hits'], 0, '.', '.');
     $array['download_hits'] = number_format($array['download_hits'], 0, '.', '.');
     $array['rating_text'] = sprintf($lang_module['rating_text_detail'], number_format($array['rating_totals'], 0, '.', '.'), number_format($array['rating_hits'], 0, '.', '.'));
@@ -74,7 +74,7 @@ if (! empty($error)) {
         $xtpl->parse('main.data.empty_documentation');
     }
 
-    if (! empty($array_images)) {
+    if (!empty($array_images)) {
         foreach ($array_images as $image) {
             $xtpl->assign('IMAGE', $image);
             $xtpl->parse('main.data.demo_images.loop');
@@ -85,7 +85,7 @@ if (! empty($error)) {
         $xtpl->parse('main.data.empty_images');
     }
 
-    if (! empty($array['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
+    if (!empty($array['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
         $xtpl->parse('main.data.install');
     }
 
@@ -97,7 +97,7 @@ if (! empty($error)) {
 
         $xtpl->assign('FILE', $file);
 
-        if ($file['type'] == 1 and ! empty($file['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
+        if ($file['type'] == 1 and !empty($file['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
             $xtpl->parse('main.data.file.install');
         } else {
             $xtpl->parse('main.data.file.download');

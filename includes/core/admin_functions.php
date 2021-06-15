@@ -26,9 +26,9 @@ function nv_groups_list($mod_data = 'users')
     } else {
         global $db, $db_config, $global_config, $lang_global;
 
-        $groups = array();
+        $groups = [];
         $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-        $result = $db->query("SELECT g.group_id, d.title, g.idsite FROM " . $_mod_table . "_groups AS g LEFT JOIN " . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE (g.idsite = " . $global_config['idsite'] . " OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight");
+        $result = $db->query('SELECT g.group_id, d.title, g.idsite FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
         while ($row = $result->fetch()) {
             if ($row['group_id'] < 9) {
                 $row['title'] = $lang_global['level' . $row['group_id']];
@@ -50,19 +50,19 @@ function nv_groups_list($mod_data = 'users')
 function nv_groups_post($groups_view)
 {
     if (in_array(6, $groups_view)) {
-        return array( 6 );
+        return [6];
     }
     if (in_array(4, $groups_view)) {
-        return array_intersect($groups_view, array( 4, 5, 7 ));
+        return array_intersect($groups_view, [4, 5, 7]);
     }
     if (in_array(3, $groups_view)) {
-        return array_diff($groups_view, array( 1, 2 ));
+        return array_diff($groups_view, [1, 2]);
     }
     if (in_array(2, $groups_view)) {
-        return array_diff($groups_view, array( 1 ));
+        return array_diff($groups_view, [1]);
     }
     if (empty($groups_view)) {
-        return array( 1 );
+        return [1];
     }
     return array_map('intval', $groups_view);
 }
@@ -98,13 +98,13 @@ function nv_save_file_config_global()
         return false;
     }
 
-    $content_config = "<?php" . "\n\n";
+    $content_config = '<?php' . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
 
     $config_variable = [];
     $allowed_html_tags = '';
-    $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
+    $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
     $result = $db->query($sql);
 
     while (list($c_module, $c_config_name, $c_config_value) = $result->fetch(3)) {
@@ -133,7 +133,7 @@ function nv_save_file_config_global()
     $config_variable['my_domains'] = implode(',', array_unique($my_domains));
 
     $config_variable['check_rewrite_file'] = nv_check_rewrite_file();
-    $config_variable['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? NV_ALLOW_REQUEST_MODS : "request";
+    $config_variable['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? NV_ALLOW_REQUEST_MODS : 'request';
     $config_variable['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV_REQUEST_DEFAULT_MODE) : 'request';
 
     $config_variable['log_errors_list'] = NV_LOG_ERRORS_LIST;
@@ -180,7 +180,7 @@ function nv_save_file_config_global()
     $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1 ORDER BY weight ASC';
     $result = $db->query($sql);
 
-    $c_config_value = array();
+    $c_config_value = [];
     while ($row = $result->fetch()) {
         $c_config_value[] = $row['lang'];
     }
@@ -195,21 +195,21 @@ function nv_save_file_config_global()
     $content_config .= "\$global_config['allowed_html_tags']=[" . $allowed_html_tags . "];\n";
 
     //Xac dinh cac search_engine
-    $engine_allowed = (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) ? nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) : array();
+    $engine_allowed = (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) ? nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) : [];
     $content_config .= "\$global_config['engine_allowed']=" . nv_var_export($engine_allowed) . ";\n";
     $content_config .= "\n";
 
     $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
-    $tmp_array = array();
-    $lang_array_exit = nv_scandir(NV_ROOTDIR . '/includes/language', "/^[a-z]{2}+$/");
+    $tmp_array = [];
+    $lang_array_exit = nv_scandir(NV_ROOTDIR . '/includes/language', '/^[a-z]{2}+$/');
     foreach ($lang_array_exit as $lang) {
         $tmp_array[$lang] = $language_array[$lang];
     }
     unset($language_array);
-    $content_config .= "\$language_array=" . nv_var_export($tmp_array) . ";\n";
+    $content_config .= '$language_array=' . nv_var_export($tmp_array) . ";\n";
 
     $tmp_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/timezone.ini', true);
-    $content_config .= "\$nv_parse_ini_timezone=" . nv_var_export($tmp_array) . ";\n";
+    $content_config .= '$nv_parse_ini_timezone=' . nv_var_export($tmp_array) . ";\n";
 
     $global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
     $global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
@@ -219,15 +219,15 @@ function nv_save_file_config_global()
 
     $content_config .= "\n";
 
-    $nv_plugin_area = array();
+    $nv_plugin_area = [];
     $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
     $_query = $db->query($_sql);
     while ($row = $_query->fetch()) {
         $nv_plugin_area[$row['plugin_area']][] = $row['plugin_file'];
     }
-    $content_config .= "\$nv_plugin_area=" . nv_var_export($nv_plugin_area) . ";\n\n";
+    $content_config .= '$nv_plugin_area=' . nv_var_export($nv_plugin_area) . ";\n\n";
 
-    $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config) . "\n", LOCK_EX);
+    $return = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php', trim($content_config) . "\n", LOCK_EX);
     $nv_Cache->delAll();
 
     //Resets the contents of the opcode cache
@@ -258,19 +258,19 @@ function nv_geVersion($updatetime = 3600)
     } else {
         $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
-        $args = array(
-            'headers' => array(
+        $args = [
+            'headers' => [
                 'Referer' => NV_MY_DOMAIN,
-            ),
-            'body' => array(
+            ],
+            'body' => [
                 'lang' > NV_LANG_INTERFACE,
                 'basever' => $global_config['version'],
                 'mode' => 'getsysver'
-            )
-        );
+            ]
+        ];
 
         $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : array();
+        $array = (is_array($array) and !empty($array['body'])) ? @unserialize($array['body']) : [];
 
         $error = '';
         if (!empty(NukeViet\Http\Http::$error)) {
@@ -316,7 +316,7 @@ function nv_version_compare($version1, $version2)
     }
 
     if ($v1[0] < $v2[0]) {
-        return - 1;
+        return -1;
     }
 
     if ($v1[1] > $v2[1]) {
@@ -324,7 +324,7 @@ function nv_version_compare($version1, $version2)
     }
 
     if ($v1[1] < $v2[1]) {
-        return - 1;
+        return -1;
     }
 
     if ($v1[2] > $v2[2]) {
@@ -332,7 +332,7 @@ function nv_version_compare($version1, $version2)
     }
 
     if ($v1[2] < $v2[2]) {
-        return - 1;
+        return -1;
     }
 
     return 0;
@@ -348,8 +348,7 @@ function nv_check_rewrite_file()
     global $sys_info;
     if ($sys_info['supports_rewrite'] == 'nginx') {
         return true;
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
             return false;
         }
@@ -357,8 +356,7 @@ function nv_check_rewrite_file()
         $htaccess = @file_get_contents(NV_ROOTDIR . '/.htaccess');
 
         return (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s', $htaccess));
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
         }
@@ -384,13 +382,12 @@ function nv_rewrite_change($array_config_global)
     $endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote($array_config_global['rewrite_endurl']) : nv_preg_quote($array_config_global['rewrite_endurl']) . '|' . nv_preg_quote($array_config_global['rewrite_exturl']);
 
     if ($sys_info['supports_rewrite'] == 'nginx') {
-        return array(true, true);
-    }
-    elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+        return [true, true];
+    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         $filename = NV_ROOTDIR . '/web.config';
         $rulename = 0;
         $rewrite_rule .= "\n";
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
         $rewrite_rule .= " <match url=\"^\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " <conditions>\n";
         $rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" pattern=\"/robots.txt$\" />\n";
@@ -398,28 +395,28 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " <action type=\"Rewrite\" url=\"robots.php?action={HTTP_HOST}\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
         $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\.xml$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
         $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.xml$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
+        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
         $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap\" appendQueryString=\"false\" />\n";
+        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . '={R:3}&amp;' . NV_OP_VARIABLE . "=sitemap\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++$rulename . "\">\n";
+        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
         $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap/{R:4}\" appendQueryString=\"false\" />\n";
+        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . '={R:3}&amp;' . NV_OP_VARIABLE . "=sitemap/{R:4}\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
         $rewrite_rule .= " <rule name=\"nv_rule_rewrite\">\n";
-        $rewrite_rule .= " 	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= ' 	<match url="(.*)(' . $endurl . ")$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " 	<conditions logicalGrouping=\"MatchAll\">\n";
         $rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsFile\" ignoreCase=\"false\" negate=\"true\" />\n";
         $rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsDirectory\" ignoreCase=\"false\" negate=\"true\" />\n";
@@ -432,12 +429,12 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
+        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
+        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/\" />\n";
         $rewrite_rule .= " </rule>\n";
@@ -453,7 +450,7 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "#Options +FollowSymLinks\n\n";
         $rewrite_rule .= "<IfModule mod_rewrite.c>\n";
         $rewrite_rule .= "RewriteEngine On\n";
-        $rewrite_rule .= "#RewriteBase " . NV_BASE_SITEURL . "\n";
+        $rewrite_rule .= '#RewriteBase ' . NV_BASE_SITEURL . "\n";
 
         $rewrite_rule .= "RewriteCond %{REQUEST_METHOD} !^(POST) [NC]\n";
         $rewrite_rule .= "RewriteRule ^api\.php(.*?)$ - [F]\n";
@@ -461,18 +458,18 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]\n";
         $rewrite_rule .= "RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
+        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
+        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap [L]\n";
+        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
 
         // Rewrite for other module's rule
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-        $rewrite_rule .= "RewriteRule (.*)(" . $endurl . ")\$ index.php\n";
+        $rewrite_rule .= 'RewriteRule (.*)(' . $endurl . ")\$ index.php\n";
         $rewrite_rule .= "RewriteRule (.*)tag\/([^?]+)$ index.php\n";
 
         $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/$2/ [L,R=301]\n";
-        $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/ [L,R=301]\n";
+        $rewrite_rule .= 'RewriteRule ^([a-zA-Z0-9-]+)$ ' . NV_BASE_SITEURL . "$1/ [L,R=301]\n";
         $rewrite_rule .= "</IfModule>\n\n";
         $rewrite_rule .= "#nukeviet_rewrite_end\n";
         $rewrite_rule .= "##################################################################################\n\n";
@@ -498,7 +495,7 @@ function nv_rewrite_change($array_config_global)
             $return = false;
         }
     }
-    return array($return, NV_BASE_SITEURL . basename($filename));
+    return [$return, NV_BASE_SITEURL . basename($filename)];
 }
 
 /**
@@ -519,7 +516,8 @@ function nv_server_config_change($array_config)
         $config_contents .= "##################################################################################\n";
         $config_contents .= "#nukeviet_config_start //Please do not change the contents of the following lines\n";
         $config_contents .= "##################################################################################\n\n";
-        $config_contents .= "RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$\n\n";
+        $config_contents .= "RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$\n";
+        $config_contents .= "RedirectMatch 404 ^.*\/composer\.json$\n\n";
         $config_contents .= "ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1\n";
         $config_contents .= "ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1\n";
         $config_contents .= "ErrorDocument 404 /error.php?code=404&nvDisableRewriteCheck=1\n";
@@ -587,7 +585,7 @@ function nv_server_config_change($array_config)
             $return = false;
         }
     }
-    return array($return, basename($filename));
+    return [$return, basename($filename)];
 }
 
 /**
@@ -686,11 +684,11 @@ function nv_getExtVersion($updatetime = 3600)
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename ORDER BY title ASC';
         $result = $db->query($sql);
 
-        $array = $array_ext_ids = array();
+        $array = $array_ext_ids = [];
         while ($row = $result->fetch()) {
             $row['version'] = explode(' ', $row['version']);
 
-            $array[$row['title']] = array(
+            $array[$row['title']] = [
                 'id' => $row['id'],
                 'type' => $row['type'],
                 'name' => $row['title'],
@@ -698,7 +696,7 @@ function nv_getExtVersion($updatetime = 3600)
                 'current_release' => trim($row['version'][1]),
                 'remote_version' => '',
                 'remote_release' => 0,
-                'updateable' => array(), // Thong tin cac phien ban co the update
+                'updateable' => [], // Thong tin cac phien ban co the update
                 'author' => $row['author'],
                 'license' => '',
                 'mode' => $row['is_sys'] ? 'sys' : 'other',
@@ -706,7 +704,7 @@ function nv_getExtVersion($updatetime = 3600)
                 'link' => '',
                 'support' => '',
                 'origin' => false,
-            );
+            ];
 
             if (!empty($row['id'])) {
                 $array_ext_ids[] = $row['id'];
@@ -716,20 +714,20 @@ function nv_getExtVersion($updatetime = 3600)
         if (!empty($array_ext_ids)) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
-            $args = array(
-                'headers' => array(
+            $args = [
+                'headers' => [
                     'Referer' => NV_MY_DOMAIN,
-                ),
-                'body' => array(
+                ],
+                'body' => [
                     'lang' > NV_LANG_INTERFACE,
                     'basever' => $global_config['version'],
                     'mode' => 'checkextver',
                     'ids' => implode(',', $array_ext_ids),
-                )
-            );
+                ]
+            ];
 
             $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
-            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body']) : array();
+            $apidata = (is_array($apidata) and !empty($apidata['body'])) ? @unserialize($apidata['body']) : [];
 
             $error = '';
             if (!empty(NukeViet\Http\Http::$error)) {
@@ -771,9 +769,9 @@ function nv_getExtVersion($updatetime = 3600)
             $content .= "\t\t<type><![CDATA[" . $row['type'] . "]]></type>\n";
             $content .= "\t\t<name><![CDATA[" . $row['name'] . "]]></name>\n";
             $content .= "\t\t<version><![CDATA[" . $row['current_version'] . "]]></version>\n";
-            $content .= "\t\t<date><![CDATA[" . gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT]]></date>\n";
+            $content .= "\t\t<date><![CDATA[" . gmdate('D, d M Y H:i:s', $row['current_release']) . " GMT]]></date>\n";
             $content .= "\t\t<new_version><![CDATA[" . $row['remote_version'] . "]]></new_version>\n";
-            $content .= "\t\t<new_date><![CDATA[" . ($row['remote_release'] ? gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT" : "") . "]]></new_date>\n";
+            $content .= "\t\t<new_date><![CDATA[" . ($row['remote_release'] ? gmdate('D, d M Y H:i:s', $row['current_release']) . ' GMT' : '') . "]]></new_date>\n";
             $content .= "\t\t<author><![CDATA[" . $row['author'] . "]]></author>\n";
             $content .= "\t\t<license><![CDATA[" . $row['license'] . "]]></license>\n";
             $content .= "\t\t<mode><![CDATA[" . $row['mode'] . "]]></mode>\n";
@@ -802,7 +800,7 @@ function nv_getExtVersion($updatetime = 3600)
             $content .= "\t</extension>\n";
         }
 
-        $content .= "</cms>";
+        $content .= '</cms>';
 
         $xmlcontent = simplexml_load_string($content);
 
@@ -889,11 +887,11 @@ function nv_save_file_ips($type = 0)
             }
 
             if ($dbarea == 1 or $dbarea == 3) {
-                $content_config_site .= "\$array_" . $variable_name . "_site['" . $dbip . "'] = ['ip6' => " . $ip6 . ", 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
+                $content_config_site .= '$array_' . $variable_name . "_site['" . $dbip . "'] = ['ip6' => " . $ip6 . ", 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
             }
 
             if ($dbarea == 2 or $dbarea == 3) {
-                $content_config_admin .= "\$array_" . $variable_name . "_admin['" . $dbip . "'] = ['ip6' => " . $ip6 . ", 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
+                $content_config_admin .= '$array_' . $variable_name . "_admin['" . $dbip . "'] = ['ip6' => " . $ip6 . ", 'mask' => \"" . $ip_mask . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
             }
         }
     }
@@ -906,10 +904,10 @@ function nv_save_file_ips($type = 0)
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
     $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
-    $content_config .= "\$array_" . $variable_name . "_site = [];\n";
+    $content_config .= '$array_' . $variable_name . "_site = [];\n";
     $content_config .= $content_config_site;
     $content_config .= "\n";
-    $content_config .= "\$array_" . $variable_name . "_admin = [];\n";
+    $content_config .= '$array_' . $variable_name . "_admin = [];\n";
     $content_config .= $content_config_admin;
 
     $write = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php', $content_config, LOCK_EX);

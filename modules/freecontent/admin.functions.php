@@ -12,11 +12,11 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-$allow_func = array(
+$allow_func = [
     'main',
     'list',
     'manager'
-);
+];
 
 define('NV_IS_FILE_ADMIN', true);
 

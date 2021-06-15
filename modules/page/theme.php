@@ -40,7 +40,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     } elseif (nv_is_url($row['image'])) {
         $xtpl->assign('SCHEMA_IMAGE', $row['image']);
     } else {
-        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL. 'themes/' . $module_info['template'] . '/images/no_image.gif');
+        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/no_image.gif');
     }
 
     if (!empty($row['description'])) {
@@ -53,7 +53,7 @@ function nv_page_main($row, $ab_links, $content_comment)
                 $meta_property['fb:app_id'] = $page_config['facebookapi'];
                 $meta_property['og:locale'] = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
             }
-            $xtpl->assign('SELFURL', $client_info['selfurl']);
+
             $xtpl->parse('main.socialbutton.facebook');
         }
         if (str_contains($page_config['socialbutton'], 'twitter')) {
@@ -69,7 +69,7 @@ function nv_page_main($row, $ab_links, $content_comment)
 
     if (!empty($row['image'])) {
         if ($row['imageposition'] > 0) {
-            if ($row['imageposition'] == 1) {
+            if ($row['imageposition'] == 1 and !empty($row['description'])) {
                 if (!empty($row['imagealt'])) {
                     $xtpl->parse('main.imageleft.alt');
                 }

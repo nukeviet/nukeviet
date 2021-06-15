@@ -35,7 +35,7 @@ if (!empty($row)) {
     if ($row['group_id'] == 7) {
         $row['group_id'] = 4;
     }
-    $row['in_groups'] = array_diff($row['in_groups'], array(7));
+    $row['in_groups'] = array_diff($row['in_groups'], [7]);
 
     $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = ' . $row['group_id'] . ", in_groups='" . implode(',', $row['in_groups']) . "' WHERE userid = " . $userid);
     try {

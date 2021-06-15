@@ -76,7 +76,7 @@ function nv_set_status_module()
         $timecheckstatus = max($time_publtime, $time_exptime);
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'timecheckstatus'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'timecheckstatus'");
     $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
     $sth->bindValue(':config_value', intval($timecheckstatus), PDO::PARAM_STR);
     $sth->execute();
@@ -207,7 +207,7 @@ function nv_archive_content_module($id, $listcatid)
 function nv_link_edit_page($id)
 {
     global $lang_global, $module_name;
-    $link = "<a class=\"btn btn-primary btn-xs btn_edit\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\"><em class=\"fa fa-edit margin-right\"></em> " . $lang_global['edit'] . "</a>";
+    $link = '<a class="btn btn-primary btn-xs btn_edit" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $id . '"><em class="fa fa-edit margin-right"></em> ' . $lang_global['edit'] . '</a>';
     return $link;
 }
 
@@ -220,7 +220,7 @@ function nv_link_edit_page($id)
 function nv_link_delete_page($id, $detail = 0)
 {
     global $lang_global;
-    $link = "<a class=\"btn btn-danger btn-xs\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5($id . NV_CHECK_SESSION) . "','" . NV_BASE_ADMINURL . "', " . $detail . ")\"><em class=\"fa fa-trash-o margin-right\"></em> " . $lang_global['delete'] . "</a>";
+    $link = '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="nv_del_content(' . $id . ", '" . md5($id . NV_CHECK_SESSION) . "','" . NV_BASE_ADMINURL . "', " . $detail . ')"><em class="fa fa-trash-o margin-right"></em> ' . $lang_global['delete'] . '</a>';
     return $link;
 }
 
@@ -247,7 +247,6 @@ function nv_get_firstimage($contents)
  */
 function nv_check_block_topcat_news($catid)
 {
-
     global $global_config, $module_info, $module_name;
 
     if (!empty($module_info['theme'])) {
@@ -257,8 +256,8 @@ function nv_check_block_topcat_news($catid)
     }
     $contents = file_get_contents($ini_file);
 
-    $find1 = "/<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "<\/name>/";
-    $find2 = "/<tag>\[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "\]<\/tag>/";
+    $find1 = '/<name>' . strtoupper($module_name) . '_TOPCAT_' . $catid . "<\/name>/";
+    $find2 = "/<tag>\[" . strtoupper($module_name) . '_TOPCAT_' . $catid . "\]<\/tag>/";
     if (preg_match($find1, $contents) and preg_match($find2, $contents)) {
         return true;
     } else {
@@ -274,7 +273,6 @@ function nv_check_block_topcat_news($catid)
  */
 function nv_check_block_block_botcat_news($catid)
 {
-
     global $global_config, $module_info, $module_name;
 
     if (!empty($module_info['theme'])) {
@@ -284,8 +282,8 @@ function nv_check_block_block_botcat_news($catid)
     }
     $contents = file_get_contents($ini_file);
 
-    $find1 = "/<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "<\/name>/";
-    $find2 = "/<tag>\[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "\]<\/tag>/";
+    $find1 = '/<name>' . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . "<\/name>/";
+    $find2 = "/<tag>\[" . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . "\]<\/tag>/";
     if (preg_match($find1, $contents) and preg_match($find2, $contents)) {
         return true;
     } else {
@@ -301,7 +299,6 @@ function nv_check_block_block_botcat_news($catid)
  */
 function nv_add_block_topcat_news($catid)
 {
-
     global $global_config, $module_info, $module_name, $nv_Cache;
 
     if (!empty($module_info['theme'])) {
@@ -312,17 +309,17 @@ function nv_add_block_topcat_news($catid)
     $contents = file_get_contents($ini_file);
 
     if (!nv_check_block_topcat_news($catid) and !empty($contents)) {
-        $find = "/<positions>/";
-        $pos = "
+        $find = '/<positions>/';
+        $pos = '
         <position>
-            <name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "</name>
-            <tag>[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "]</tag>
+            <name>' . strtoupper($module_name) . '_TOPCAT_' . $catid . '</name>
+            <tag>[' . strtoupper($module_name) . '_TOPCAT_' . $catid . ']</tag>
         </position>
-            ";
-        $_replace = "<positions>" . $pos;
+            ';
+        $_replace = '<positions>' . $pos;
         $contents = preg_replace($find, $_replace, $contents);
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-        $contents = preg_replace("/\\t\\t\\n/", "", $contents);
+        $contents = preg_replace('/\\t\\t\\n/', '', $contents);
 
         $doc = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput = true;
@@ -330,7 +327,7 @@ function nv_add_block_topcat_news($catid)
         $contents = $doc->saveXML();
 
         $fname = $ini_file;
-        $fhandle = fopen($fname, "w");
+        $fhandle = fopen($fname, 'w');
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
@@ -350,7 +347,6 @@ function nv_add_block_topcat_news($catid)
  */
 function nv_add_block_botcat_news($catid)
 {
-
     global $global_config, $module_info, $module_name, $nv_Cache;
 
     if (!empty($module_info['theme'])) {
@@ -361,17 +357,17 @@ function nv_add_block_botcat_news($catid)
     $contents = file_get_contents($ini_file);
 
     if (!nv_check_block_block_botcat_news($catid) and !empty($contents)) {
-        $find = "/<positions>/";
-        $pos = "
+        $find = '/<positions>/';
+        $pos = '
         <position>
-            <name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "</name>
-            <tag>[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "]</tag>
+            <name>' . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . '</name>
+            <tag>[' . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . ']</tag>
         </position>
-            ";
-        $_replace = "<positions>" . $pos;
+            ';
+        $_replace = '<positions>' . $pos;
         $contents = preg_replace($find, $_replace, $contents);
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-        $contents = preg_replace("/\\t\\t\\n/", "", $contents);
+        $contents = preg_replace('/\\t\\t\\n/', '', $contents);
 
         $doc = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput = true;
@@ -379,7 +375,7 @@ function nv_add_block_botcat_news($catid)
         $contents = $doc->saveXML();
 
         $fname = $ini_file;
-        $fhandle = fopen($fname, "w");
+        $fhandle = fopen($fname, 'w');
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
@@ -399,7 +395,6 @@ function nv_add_block_botcat_news($catid)
  */
 function nv_remove_block_topcat_news($catid)
 {
-
     global $global_config, $module_info, $module_name, $nv_Cache;
 
     if (!empty($module_info['theme'])) {
@@ -410,9 +405,8 @@ function nv_remove_block_topcat_news($catid)
     $contents = file_get_contents($ini_file);
 
     if (nv_check_block_topcat_news($catid)) {
-
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-        $contents = preg_replace("/\\t\\t\\n/", "", $contents);
+        $contents = preg_replace('/\\t\\t\\n/', '', $contents);
 
         $doc = new DOMDocument('1.0');
         $doc->formatOutput = true;
@@ -424,7 +418,7 @@ function nv_remove_block_topcat_news($catid)
         }
         $contents = $doc->saveXML();
         $fname = $ini_file;
-        $fhandle = fopen($fname, "w");
+        $fhandle = fopen($fname, 'w');
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
@@ -444,7 +438,6 @@ function nv_remove_block_topcat_news($catid)
  */
 function nv_remove_block_botcat_news($catid)
 {
-
     global $global_config, $module_info, $module_name, $nv_Cache;
 
     if (!empty($module_info['theme'])) {
@@ -455,9 +448,8 @@ function nv_remove_block_botcat_news($catid)
     $contents = file_get_contents($ini_file);
 
     if (nv_check_block_block_botcat_news($catid)) {
-
         $contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-        $contents = preg_replace("/\\t\\t\\n/", "", $contents);
+        $contents = preg_replace('/\\t\\t\\n/', '', $contents);
 
         $doc = new DOMDocument('1.0');
         $doc->formatOutput = true;
@@ -469,7 +461,7 @@ function nv_remove_block_botcat_news($catid)
         }
         $contents = $doc->saveXML();
         $fname = $ini_file;
-        $fhandle = fopen($fname, "w");
+        $fhandle = fopen($fname, 'w');
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
@@ -508,14 +500,14 @@ function get_pseudonym_alias($pseudonym, $aid)
 
 /**
  * my_author_detail()
- * 
+ *
  * @param int $userid
  * @return array
  */
 function my_author_detail($userid)
 {
     global $db, $module_data;
-    
+
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE uid =' . $userid;
     $result = $db->query($sql);
     $detail = $result->fetch();
@@ -533,13 +525,13 @@ function my_author_detail($userid)
         if (empty($pseudonym)) {
             $pseudonym = $row['username'];
         }
-        
+
         $alias = get_pseudonym_alias($pseudonym, 0);
         if (!$alias) {
             $alias = change_alias($pseudonym) . '-' . $userid;
         }
-        
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_author (uid, alias, pseudonym, image, description, add_time) VALUES ( " . $userid . ", :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ")";
+
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_author (uid, alias, pseudonym, image, description, add_time) VALUES ( ' . $userid . ", :alias, :pseudonym, '', '', " . NV_CURRENTTIME . ')';
         $data_insert = [];
         $data_insert['alias'] = $alias;
         $data_insert['pseudonym'] = $pseudonym;
@@ -558,6 +550,6 @@ function my_author_detail($userid)
             'numnews' => 0
         ];
     }
-    
+
     return $detail;
 }

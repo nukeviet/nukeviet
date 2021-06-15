@@ -8,11 +8,11 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_counter')) {
+if (!nv_function_exists('nv_block_counter')) {
     function nv_block_counter()
     {
         global $global_config, $db, $lang_global;
@@ -30,7 +30,7 @@ if (! nv_function_exists('nv_block_counter')) {
         $xtpl->assign('LANG', $lang_global);
         $xtpl->assign('IMG_PATH', NV_STATIC_URL . 'themes/' . $block_theme . '/');
 
-        $sql = "SELECT c_type, c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
+        $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
         while (list($c_type, $c_count) = $query->fetch(3)) {
             if ($c_type == 'day') {

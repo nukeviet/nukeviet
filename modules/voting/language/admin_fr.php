@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -36,7 +36,7 @@ $lang_module['voting_allowcm'] = 'Autoriser les commentaires';
 $lang_module['voting_timeout'] = 'Date d\'expiration';
 $lang_module['voting_time'] = 'Date de commencement';
 $lang_module['voting_option'] = 'Nombre d\'options';
-$lang_module['voting_maxoption'] = 'Nombre de réponses possibles pour un sondage?';
+$lang_module['voting_maxoption'] = 'Nombre maximum d\'options par vote';
 $lang_module['voting_confirm'] = 'Confirmer';
 $lang_module['voting_error'] = 'Erreur dans le processus d\'ajouter des données';
 $lang_module['voting_question'] = 'Contenu de sondage';
@@ -66,3 +66,5 @@ $lang_module['captcha_type'] = 'Type de captcha';
 $lang_module['captcha_type_captcha'] = 'Captcha-image';
 $lang_module['captcha_type_recaptcha'] = 'reCaptcha';
 $lang_module['captcha_type_recaptcha_note'] = 'Captcha ne fonctionnera pas tant que vous n\'aurez pas <a href="%s">configuré reCaptcha</a>';
+$lang_module['difftimeout'] = 'Délai de re-vote';
+$lang_module['hours'] = 'heures';

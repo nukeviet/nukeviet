@@ -26,7 +26,7 @@ function GetSourceNews($sourceid)
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
 
-        if (list ($title) = $re->fetch(3)) {
+        if (list($title) = $re->fetch(3)) {
             return $title;
         }
     }
@@ -61,51 +61,44 @@ function BoldKeywordInStr($str, $keyword)
 }
 
 $key = $nv_Request->get_title('q', 'get', '');
+$key = str_replace(["'", '"', '<', '>', '&#039;', '&quot;', '&lt;', '&gt;'], '', $key);
 $key = str_replace('+', ' ', urldecode($key));
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 if (!empty($key)) {
-    $base_url .= '&q=' . urlencode($key);
+    $page_url .= '&q=' . urlencode($key);
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
 if (!empty($choose)) {
-    $base_url .= '&choose=' . $choose;
+    $page_url .= '&choose=' . $choose;
 }
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 if (!empty($catid)) {
-    $base_url .= '&catid=' . $catid;
+    $page_url .= '&catid=' . $catid;
 }
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
 $date_array['from_date'] = preg_replace('/[^0-9]/', '.', urldecode($from_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'])) {
-    $base_url .= '&from_date=' . $date_array['from_date'];
+    $page_url .= '&from_date=' . $date_array['from_date'];
 }
 
 $to_date = $nv_Request->get_title('to_date', 'get', '', 0);
 $date_array['to_date'] = preg_replace('/[^0-9]/', '.', urldecode($to_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'])) {
-    $base_url .= '&to_date=' . $date_array['to_date'];
+    $page_url .= '&to_date=' . $date_array['to_date'];
 }
 
-$base_url_rewrite = $base_url;
+$base_url = $page_url;
 $page = $nv_Request->get_int('page', 'get', 1);
 if ($page > 1) {
-    $base_url_rewrite .= '&page=' . $page;
+    $page_url .= '&page=' . $page;
 }
-$base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-$request_uri = $_SERVER['REQUEST_URI'];
-if (str_starts_with($request_uri, $base_url_check)) {
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-} elseif (str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-    $canonicalUrl = $base_url_rewrite;
-} else {
-    nv_redirect_location($base_url_check);
-}
+
+$canonicalUrl = getCanonicalUrl($page_url, true);
 
 $array_cat_search = [];
 $array_cat_search[0]['title'] = $lang_module['search_all'];
@@ -153,7 +146,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     ]
                 ]
             ];
-        } else if ($choose == 2) {
+        } elseif ($choose == 2) {
             // match:tim kiem theo 1 truong
             $search_elastic = [
                 'should' => [
@@ -195,7 +188,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             }
             $search_elastic_user['filter']['or'] = $match;
             $search_elastic = array_merge($search_elastic, $search_elastic_user);
-        } else if ($choose == 3) {
+        } elseif ($choose == 3) {
             $qurl = $key;
             $url_info = parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
@@ -209,7 +202,6 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         } else {
-
             $search_elastic = [
                 'should' => [
                     'multi_match' => [ // dung multi_match:tim kiem theo nhieu truong
@@ -306,8 +298,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         }
         $numRecord = $response['hits']['total'];
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        $total = ceil($numRecord / $per_page);
-        betweenURLs($page, $total, $base_url, '&page-', $prevPage, $nextPage);
+        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page-', $prevPage, $nextPage);
 
         foreach ($response['hits']['hits'] as $key => $value) {
             $homeimgthumb = $value['_source']['homeimgthumb'];
@@ -352,7 +343,6 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 $where = "AND ( tb1.title LIKE '" . $_dbkeyhtml . "' OR tb1.hometext LIKE '" . $_dbkey . "' OR tb2.bodyhtml LIKE '" . $_dbkey . "' ) ";
             }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id ) ';
-            
         } elseif ($choose == 2) {
             if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
                 $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
@@ -372,7 +362,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
-            $where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%'))";
+            $where = 'AND (tb1.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%'))";
         } else {
             $qurl = $key;
             $url_info = parse_url($qurl);
@@ -388,7 +378,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     OR tb2.bodyhtml REGEXP '" . $_dbkey . "'
                     OR a.alias REGEXP '" . $_dbkeyhtml . "'
                     OR a.pseudonym REGEXP '" . $_dbkeyhtml . "') 
-                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
             } else {
                 $_dbkey = '%' . $dbkey . '%';
                 $_dbkeyhtml = '%' . $dbkeyhtml . '%';
@@ -398,7 +388,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     OR tb2.bodyhtml LIKE '" . $_dbkey . "'
                     OR a.alias LIKE '" . $_dbkeyhtml . "'
                     OR a.pseudonym LIKE '" . $_dbkeyhtml . "') 
-                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
+                    OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
             }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id )';
             $tbl_src .= ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON (tb1.id = a.id)';
@@ -425,8 +415,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $numRecord = $db_slave->query($db_slave->sql())
             ->fetchColumn();
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        $total = ceil($numRecord / $per_page);
-        betweenURLs($page, $total, $base_url, '&page=', $prevPage, $nextPage);
+        betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page=', $prevPage, $nextPage);
 
         $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.' . $order_articles_by . ' DESC')
@@ -438,7 +427,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $array_content = [];
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
-        while (list ($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
+        while (list($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -475,7 +464,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $db->sqlreset()
             ->select('*')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-            ->where("id IN (" . $internal_authors . ")");
+            ->where('id IN (' . $internal_authors . ')');
         $result = $db->query($db->sql());
         $internal_authors = [];
         while ($row = $result->fetch()) {

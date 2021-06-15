@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -37,14 +37,8 @@ if ($id > 0 and $catid > 0) {
     unset($sql, $result, $body_contents);
 
     if ($content['allowed_print'] == 1 and (defined('NV_IS_MODADMIN') or ($content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ($content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME)))) {
-        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
-        $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-        $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-        if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-            nv_redirect_location($base_url_check);
-        }
-        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+        $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'];
+        $canonicalUrl = getCanonicalUrl($page_url, true);
 
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $content['sourceid'];
         $result = $db_slave->query($sql);
@@ -53,7 +47,7 @@ if ($id > 0 and $catid > 0) {
 
         $meta_tags = nv_html_meta_tags();
 
-        $result = array(
+        $result = [
             'url' => $global_config['site_url'],
             'meta_tags' => $meta_tags,
             'sitename' => $global_config['site_name'],
@@ -67,17 +61,17 @@ if ($id > 0 and $catid > 0) {
             'bodytext' => $content['bodytext'],
             'copyright' => $content['copyright'],
             'copyvalue' => $module_config[$module_name]['copyright'],
-            'link' => NV_MY_DOMAIN . $base_url_rewrite,
+            'link' => $canonicalUrl,
             'contact' => $global_config['site_email'],
             'author' => $content['author'],
             'source' => $sourcetext
-        );
-        
+        ];
+
         $authors = [];
         $db->sqlreset()
             ->select('l.alias,l.pseudonym')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist l LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_author a ON l.aid=a.id')
-            ->where("l.id = " . $id . " AND a.active=1");
+            ->where('l.id = ' . $id . ' AND a.active=1');
         $author_result = $db->query($db->sql());
         while ($row = $author_result->fetch()) {
             $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/' . $row['alias'] . '">' . $row['pseudonym'] . '</a>';
@@ -87,7 +81,7 @@ if ($id > 0 and $catid > 0) {
         }
         $result['author'] = !empty($authors) ? implode(', ', $authors) : '';
 
-        if (! empty($content['homeimgfile']) and $content['imgposition'] > 0) {
+        if (!empty($content['homeimgfile']) and $content['imgposition'] > 0) {
             $src = $alt = $note = '';
             $width = $height = 0;
             if ($content['homeimgthumb'] == 1 and $content['imgposition'] == 1) {
@@ -102,13 +96,13 @@ if ($id > 0 and $catid > 0) {
             }
             $alt = (empty($content['homeimgalt'])) ? $content['title'] : $content['homeimgalt'];
 
-            $result['image'] = array(
+            $result['image'] = [
                 'src' => $src,
                 'width' => $width,
                 'alt' => $alt,
                 'note' => $content['homeimgalt'],
                 'position' => $content['imgposition']
-            );
+            ];
         }
 
         // Chặn lập chỉ mục tìm kiếm

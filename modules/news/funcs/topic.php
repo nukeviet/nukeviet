@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
@@ -11,18 +12,18 @@ if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'];
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
 
-$array_mod_title[] = array(
+$array_mod_title[] = [
     'catid' => 0,
     'title' => $module_info['funcs'][$op]['func_custom_name'],
     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']
-);
+];
 
 $alias = isset($array_op[1]) ? trim($array_op[1]) : '';
-$topic_array = array();
+$topic_array = [];
 
 $topicid = 0;
 if (!empty($alias)) {
@@ -32,31 +33,26 @@ if (!empty($alias)) {
     $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
     $sth->execute();
 
-    list ($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $sth->fetch(3);
+    list($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $sth->fetch(3);
 
     if (!$topicid) {
         nv_redirect_location($base_url);
     }
 
-    $base_url .= '/' . $alias;
-    $base_url_rewrite = $base_url;
+    $page_url .= '/' . $alias;
+    $base_url = $page_url;
     if ($page > 1) {
         $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
-        $base_url_rewrite .= '/page-' . $page;
+        $page_url .= '/page-' . $page;
     }
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
-    $array_mod_title[] = array(
+    $canonicalUrl = getCanonicalUrl($page_url, true);
+
+    $array_mod_title[] = [
         'catid' => 0,
         'title' => $page_title,
         'link' => $base_url
-    );
+    ];
 
     $db_slave->sqlreset()
         ->select('COUNT(*)')
@@ -66,8 +62,7 @@ if (!empty($alias)) {
     $num_items = $db_slave->query($db_slave->sql())
         ->fetchColumn();
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-    $total = ceil($num_items/$per_page);
-    betweenURLs($page, $total, $base_url, '/page-', $prevPage, $nextPage);
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
     $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by . ' DESC')
@@ -104,7 +99,7 @@ if (!empty($alias)) {
     $result->closeCursor();
     unset($result, $row);
 
-    $topic_other_array = array();
+    $topic_other_array = [];
     if ($st_links > 0) {
         $db_slave->sqlreset()
             ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
@@ -130,7 +125,7 @@ if (!empty($alias)) {
 
     $contents = topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image);
 } else {
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url, true);
+    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
 
     $page_title = $module_info['funcs'][$op]['func_site_title'];
     $key_words = $module_info['keywords'];
@@ -158,7 +153,7 @@ if (!empty($alias)) {
     $result->closeCursor();
     unset($result, $row);
 
-    $topic_other_array = array();
+    $topic_other_array = [];
     $contents = topic_theme($topic_array, $topic_other_array, '', $page_title, $description, '');
 }
 include NV_ROOTDIR . '/includes/header.php';

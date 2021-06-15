@@ -64,9 +64,9 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
     function nv_block_config_facebook_comment_box_blocks_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['facebookappid'] = $nv_Request->get_title('config_facebookappid', 'post', 0);
         $return['config']['width'] = $nv_Request->get_string('config_width', 'post', 0);
         $return['config']['numpost'] = $nv_Request->get_int('config_numpost', 'post', 0);
@@ -83,25 +83,26 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
      */
     function nv_facebook_comment_box_blocks($block_config)
     {
-        global $client_info, $module_name;
+        global $page_url, $module_name;
         $content = '';
         if (!defined('FACEBOOK_JSSDK')) {
             $lang = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
             $facebookappid = (isset($module_config[$module_name]['facebookappid'])) ? $module_config[$module_name]['facebookappid'] : $block_config['facebookappid'];
 
-            $content .= "<div id=\"fb-root\"></div>
-			<script type=\"text/javascript\">
+            $content .= '<div id="fb-root"></div>
+			<script type="text/javascript">
 			 (function(d, s, id) {
 			 var js, fjs = d.getElementsByTagName(s)[0];
 			 if (d.getElementById(id)) return;
 			 js = d.createElement(s); js.id = id;
-			 js.src = \"//connect.facebook.net/" . $lang . "/all.js#xfbml=1&appId=" . $facebookappid . "\";
+			 js.src = "//connect.facebook.net/' . $lang . '/all.js#xfbml=1&appId=' . $facebookappid . "\";
 			 fjs.parentNode.insertBefore(js, fjs);
 			 }(document, 'script', 'facebook-jssdk'));
 			</script>";
             define('FACEBOOK_JSSDK', true);
         }
-        $content .= '<div class="fb-comments" data-href="' . $client_info['selfurl'] . '" data-num-posts="' . $block_config['numpost'] . '" data-width="' . $block_config['width'] . '" data-colorscheme="' . $block_config['scheme'] . '"></div>';
+        $href = !empty($page_url) ? NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true) : '';
+        $content .= '<div class="fb-comments" data-href="' . $href . '" data-num-posts="' . $block_config['numpost'] . '" data-width="' . $block_config['width'] . '" data-colorscheme="' . $block_config['scheme'] . '"></div>';
 
         return $content;
     }

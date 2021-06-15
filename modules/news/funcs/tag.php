@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
+
 if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
@@ -26,26 +27,20 @@ if (isset($array_op[1])) {
 $stmt = $db_slave->prepare('SELECT tid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
 $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
 $stmt->execute();
-list ($tid, $page_title, $image_tag, $description, $key_words) = $stmt->fetch(3);
+list($tid, $page_title, $image_tag, $description, $key_words) = $stmt->fetch(3);
 
 if ($tid > 0) {
     if (empty($page_title)) {
         $page_title = nv_ucfirst(trim(str_replace('-', ' ', $alias)));
     }
 
-    $base_url = $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
+    $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;
     if ($page > 1) {
-        $base_url_rewrite .= '/page-' . $page;
+        $page_url .= '/page-' . $page;
         $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
     }
 
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 
     $array_mod_title[] = [
         'catid' => 0,
@@ -65,8 +60,7 @@ if ($tid > 0) {
     $num_items = $db_slave->query($db_slave->sql())
         ->fetchColumn();
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-    $total = ceil($num_items / $per_page);
-    betweenURLs($page, $total, $base_url, '/page-', $prevPage, $nextPage);
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
     $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by . ' DESC')

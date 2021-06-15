@@ -25,11 +25,11 @@ $editor = false;
 // Xac dinh thu muc goc cua site
 define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
 
-$sys_info['disable_classes'] = (($disable_classes = ini_get("disable_classes")) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : [];
-$sys_info['disable_functions'] = (($disable_functions = ini_get("disable_functions")) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
+$sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : [];
+$sys_info['disable_functions'] = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
 
 if (extension_loaded('suhosin')) {
-    $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
+    $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
 }
 
 $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
@@ -37,6 +37,7 @@ $sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_se
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
 define('NV_FILES_DIR', NV_ASSETS_DIR);
+define('NV_MOBILE_FILES_DIR', NV_ASSETS_DIR . '/mobile');
 
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
@@ -54,7 +55,7 @@ $global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_
 // Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
 $client_info['ip'] = $ips->remote_ip;
-if ($client_info['ip'] == "none") {
+if ($client_info['ip'] == 'none') {
     die('Error: Your IP address is not correct');
 }
 
@@ -90,7 +91,7 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
-$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map('trim', explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
+$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map('trim', explode(',', NV_ALLOW_REQUEST_MODS)) : 'request';
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV_REQUEST_DEFAULT_MODE) : 'request';
 
 $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
@@ -155,7 +156,7 @@ $client_info['agent'] = $nv_Request->user_agent;
 $global_config['sitekey'] = md5($_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_info['session_id']);
 
 // Chan truy cap neu HTTP_USER_AGENT == 'none'
-if (NV_USER_AGENT == "none") {
+if (NV_USER_AGENT == 'none') {
     trigger_error('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256);
 }
 

@@ -8,11 +8,11 @@
  * @Createdate Sat, 10 Dec 2011 06:46:54 GMT
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_news_groups')) {
+if (!nv_function_exists('nv_block_news_groups')) {
     /**
      * nv_block_config_news_groups()
      *
@@ -25,12 +25,12 @@ if (! nv_function_exists('nv_block_news_groups')) {
     {
         global $nv_Cache, $site_mods;
 
-        $tooltip_position = array(
+        $tooltip_position = [
             'top' => $lang_block['tooltip_position_top'],
             'bottom' => $lang_block['tooltip_position_bottom'],
             'left' => $lang_block['tooltip_position_left'],
             'right' => $lang_block['tooltip_position_right']
-        );
+        ];
         $html_input = '';
 
         $html = '';
@@ -104,9 +104,9 @@ if (! nv_function_exists('nv_block_news_groups')) {
     function nv_block_config_news_groups_submit($module, $lang_block)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['blockid'] = $nv_Request->get_int('config_blockid', 'post', 0);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 20);
@@ -138,7 +138,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
             ->limit($block_config['numrow']);
         $list = $nv_Cache->db($db->sql(), '', $module);
 
-        if (! empty($list)) {
+        if (!empty($list)) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_groups.tpl')) {
                 $block_theme = $global_config['module_theme'];
             } else {
@@ -156,7 +156,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
                     $l['thumb'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $l['homeimgfile'];
                 } elseif ($l['homeimgthumb'] == 3) {
                     $l['thumb'] = $l['homeimgfile'];
-                } elseif (! empty($show_no_image)) {
+                } elseif (!empty($show_no_image)) {
                     $l['thumb'] = NV_BASE_SITEURL . $show_no_image;
                 } else {
                     $l['thumb'] = '';
@@ -167,7 +167,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
                 $l['hometext_clean'] = strip_tags($l['hometext']);
                 $l['hometext_clean'] = nv_clean60($l['hometext_clean'], $block_config['tooltip_length'], true);
 
-                if (! $block_config['showtooltip']) {
+                if (!$block_config['showtooltip']) {
                     $xtpl->assign('TITLE', 'title="' . $l['title'] . '"');
                 }
 
@@ -178,7 +178,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
                 }
 
                 $xtpl->assign('ROW', $l);
-                if (! empty($l['thumb'])) {
+                if (!empty($l['thumb'])) {
                     $xtpl->parse('main.loop.img');
                 }
                 $xtpl->parse('main.loop');
@@ -202,11 +202,10 @@ if (defined('NV_SYSTEM')) {
             $module_array_cat = $global_array_cat;
             unset($module_array_cat[0]);
         } else {
-            $module_array_cat = array();
+            $module_array_cat = [];
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, keywords, groups_view, status FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
-            if(!empty($list))
-            {
+            if (!empty($list)) {
                 foreach ($list as $l) {
                     $module_array_cat[$l['catid']] = $l;
                     $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];

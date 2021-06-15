@@ -34,8 +34,8 @@ function timeoutsessrun() {
             clearInterval(myTimersecField);
             $("#timeoutsess").hide();
             $.getJSON(nv_base_siteurl + "index.php", {
-                second : "time_login",
-                nocache : (new Date).getTime()
+                second: "time_login",
+                nocache: (new Date).getTime()
             }).done(function(json) {
                 if (json.showtimeoutsess == 1) {
                     $.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&system=1&nocache=" + (new Date).getTime(), function(re) {
@@ -43,7 +43,7 @@ function timeoutsessrun() {
                     });
                 }
                 else {
-                    myTimerPage = setTimeout(function() {timeoutsessrun();}, json.check_pass_time);
+                    myTimerPage = setTimeout(function() { timeoutsessrun(); }, json.check_pass_time);
                 }
             });
         }
@@ -106,6 +106,10 @@ $(document).ready(function() {
         NV.fixContentHeight();
     });
 
+    // Add rel="noopener noreferrer nofollow" to all external links
+    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({ target: "_blank", rel: "noopener noreferrer nofollow" });
+
+
     // Show submenu
     $('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function() {
         NV.openMenu(this);
@@ -166,5 +170,5 @@ $(document).ready(function() {
     });
 
     // Bootstrap tooltip
-    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+    $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
 });

@@ -106,7 +106,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $nv_overflow_size = 0;
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     $sth->bindValue(':config_name', 'file_allowed_ext', PDO::PARAM_STR);
     $sth->bindValue(':config_value', $type, PDO::PARAM_STR);
     $sth->execute();
@@ -154,8 +154,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config_define = [];
     $array_config_define['nv_max_width'] = $nv_Request->get_int('nv_max_width', 'post');
     $array_config_define['nv_max_height'] = $nv_Request->get_int('nv_max_height', 'post');
+    $array_config_define['nv_mobile_mode_img'] = $nv_Request->get_int('nv_mobile_mode_img', 'post', 0);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($array_config_define as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -178,6 +179,7 @@ $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_MAX_WIDTH', NV_MAX_WIDTH);
 $xtpl->assign('NV_MAX_HEIGHT', NV_MAX_HEIGHT);
+$xtpl->assign('NV_MOBILE_MODE_IMG', NV_MOBILE_MODE_IMG);
 
 $sys_max_size = min(nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
 $p_size = $sys_max_size / 100;

@@ -27,7 +27,7 @@ function cron_del_ip_logs()
             if (preg_match("/^([0-9\-]+)\.log$/", $file) and (filemtime($dir . '/' . $file) + 7200) < NV_CURRENTTIME) {
                 //2 gio
 
-                if (! @unlink($dir . '/' . $file)) {
+                if (!@unlink($dir . '/' . $file)) {
                     $result = false;
                 }
             }

@@ -57,15 +57,15 @@ function lost_pass_sendMail($row)
             $global_config['site_name'],
             $global_config['site_email']
         ], $row['email'], $lang_module['lostpass_email_subject'], $message)) {
-            nv_jsonOutput(array(
+            nv_jsonOutput([
                 'status' => 'error',
                 'input' => '',
                 'step' => 'step1',
                 'mess' => $lang_module['lostpass_sendmail_error']
-            ));
+            ]);
         }
 
-        $sql = "UPDATE " . NV_MOD_TABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
+        $sql = 'UPDATE ' . NV_MOD_TABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
         $db->query($sql);
     }
 }
@@ -104,23 +104,23 @@ if ($checkss == $data['checkss']) {
 
     if (!$check_seccode) {
         $nv_Request->set_Session('lostpass_seccode', '');
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => ($global_config['ucaptcha_type'] == 'recaptcha') ? '' : 'nv_seccode',
             'step' => 'step1',
             'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
-        ));
+        ]);
     }
 
     $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
     if (empty($data['userField'])) {
         $nv_Request->set_Session('lostpass_seccode', '');
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'userField',
             'step' => 'step1',
             'mess' => $lang_module['lostpass_no_info1']
-        ));
+        ]);
     }
 
     $check_email = nv_check_valid_email($data['userField'], true);
@@ -137,12 +137,12 @@ if ($checkss == $data['checkss']) {
     $row = $stmt->fetch();
     if (empty($row)) {
         $nv_Request->set_Session('lostpass_seccode', '');
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'userField',
             'step' => 'step1',
             'mess' => $lang_module['lostpass_no_info2']
-        ));
+        ]);
     }
 
     $email_hint = empty($check_email[0]) ? $row['email'] : (substr($row['email'], 0, 3) . '***' . substr($row['email'], -6));
@@ -155,12 +155,12 @@ if ($checkss == $data['checkss']) {
             $url .= '&nv_redirect=' . $nv_redirect;
         }
 
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'ok',
             'input' => nv_url_rewrite($url, true),
             'step' => '',
             'mess' => $lang_module['openid_lostpass_info']
-        ));
+        ]);
     }
 
     if ($global_config['allowquestion'] and (empty($row['question']) or empty($row['answer']))) {
@@ -171,58 +171,58 @@ if ($checkss == $data['checkss']) {
             $url .= '&nv_redirect=' . $nv_redirect;
         }
 
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'ok',
             'input' => nv_url_rewrite($url, true),
             'step' => '',
             'mess' => $lang_module['lostpass_question_empty']
-        ));
+        ]);
     }
 
     $nv_Request->set_Session('lostpass_seccode', md5($data['nv_seccode']));
 
     if ($data['step'] == 'step1') {
         if ($global_config['allowquestion']) {
-            nv_jsonOutput(array(
+            nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'answer',
                 'step' => 'step2',
                 'info' => $row['question'],
                 'mess' => $row['question']
-            ));
+            ]);
         } else {
             lost_pass_sendMail($row);
-            nv_jsonOutput(array(
+            nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'verifykey',
                 'step' => 'step3',
                 'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
                 'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint)
-            ));
+            ]);
         }
     }
 
     if ($global_config['allowquestion']) {
         $data['answer'] = $nv_Request->get_title('answer', 'post', '', 1);
         if ($data['answer'] != $row['answer']) {
-            nv_jsonOutput(array(
+            nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'answer',
                 'step' => 'step2',
                 'info' => $row['question'],
                 'mess' => $lang_module['answer_failed']
-            ));
+            ]);
         }
 
         if ($data['step'] == 'step2') {
             lost_pass_sendMail($row);
-            nv_jsonOutput(array(
+            nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'verifykey',
                 'step' => 'step3',
                 'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
                 'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint)
-            ));
+            ]);
         }
     }
 
@@ -236,61 +236,61 @@ if ($checkss == $data['checkss']) {
 
     if (!isset($passlostkey[0]) or !isset($passlostkey[1]) or (int) $passlostkey[0] < NV_CURRENTTIME) {
         lost_pass_sendMail($row);
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
             'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
             'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint)
-        ));
+        ]);
     }
 
     if (empty($data['verifykey']) or $passlostkey[1] != md5($row['userid'] . $data['verifykey'] . $global_config['sitekey'])) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
             'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
             'mess' => $lang_module['lostpass_active_error']
-        ));
+        ]);
     }
 
     if ($data['step'] == 'step3') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'new_password',
             'step' => 'step4',
             'info' => $lang_module['lostpass_newpass_mess'],
             'mess' => $lang_module['lostpass_newpass_mess']
-        ));
+        ]);
     }
 
     $new_password = $nv_Request->get_title('new_password', 'post', '');
     $re_password = $nv_Request->get_title('re_password', 'post', '');
 
     if (($check_new_password = nv_check_valid_pass($new_password, $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 'new_password',
             'step' => 'step4',
             'info' => $lang_module['lostpass_newpass_mess'],
             'mess' => $check_new_password
-        ));
+        ]);
     }
 
     if ($new_password != $re_password) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'input' => 're_password',
             'step' => 'step4',
             'info' => $lang_module['lostpass_newpass_mess'],
             'mess' => $lang_global['passwordsincorrect']
-        ));
+        ]);
     }
 
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
 
-    $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET password= :password, passlostkey='' WHERE userid=" . $row['userid']);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET password= :password, passlostkey='' WHERE userid=" . $row['userid']);
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -312,12 +312,12 @@ if ($checkss == $data['checkss']) {
 
     $redirect = nv_redirect_decrypt($nv_redirect, true);
     $url = !empty($redirect) ? $redirect : nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'ok',
         'input' => $url,
         'step' => '',
         'mess' => $lang_module['editinfo_ok']
-    ));
+    ]);
 }
 
 $mailer_mode = strtolower($global_config['mailer_mode']);
@@ -326,9 +326,10 @@ if ($mailer_mode != 'smtp' and defined('NV_REGISTER_DOMAIN') and $global_config[
     nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = user_lostpass($data);
 

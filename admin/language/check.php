@@ -18,7 +18,7 @@ $xtpl = new XTemplate('check.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 
-$array_lang_exit = array();
+$array_lang_exit = [];
 
 $columns_array = $db->columns_array(NV_LANGUAGE_GLOBALTABLE . '_file');
 
@@ -40,13 +40,13 @@ if (empty($array_lang_exit)) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$language_array_source = array( 'vi', 'en' );
+$language_array_source = ['vi', 'en'];
 
-$language_check_type = array(
+$language_check_type = [
     0 => $lang_module['nv_check_type_0'],
     1 => $lang_module['nv_check_type_1'],
     2 => $lang_module['nv_check_type_2']
-);
+];
 
 $typelang = $nv_Request->get_title('typelang', 'post,get', '');
 $sourcelang = $nv_Request->get_title('sourcelang', 'post,get', '');
@@ -55,7 +55,7 @@ $idfile = $nv_Request->get_int('idfile', 'post,get', 0);
 $check_type = $nv_Request->get_int('check_type', 'post,get', 0);
 
 if ($nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_string('savedata', 'post') == NV_CHECK_SESSION) {
-    $pozlang = $nv_Request->get_array('pozlang', 'post', array());
+    $pozlang = $nv_Request->get_array('pozlang', 'post', []);
 
     if (!empty($pozlang) and isset($language_array[$typelang])) {
         foreach ($pozlang as $id => $lang_value) {
@@ -69,7 +69,7 @@ if ($nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_s
         }
     }
 }
-$array_files = array();
+$array_files = [];
 
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -80,11 +80,11 @@ $xtpl->assign('OP', $op);
 
 foreach ($language_array as $key => $value) {
     if (in_array($key, $array_lang_exit)) {
-        $xtpl->assign('LANGUAGE', array(
+        $xtpl->assign('LANGUAGE', [
             'key' => $key,
             'selected' => ($key == $typelang) ? ' selected="selected"' : '',
             'title' => $value['name']
-        ));
+        ]);
 
         $xtpl->parse('main.language');
     }
@@ -92,11 +92,11 @@ foreach ($language_array as $key => $value) {
 
 foreach ($language_array_source as $key) {
     if (in_array($key, $array_lang_exit)) {
-        $xtpl->assign('LANGUAGE_SOURCE', array(
+        $xtpl->assign('LANGUAGE_SOURCE', [
             'key' => $key,
             'selected' => ($key == $sourcelang) ? ' selected="selected"' : '',
             'title' => $language_array[$key]['name']
-        ));
+        ]);
 
         $xtpl->parse('main.language_source');
     }
@@ -118,22 +118,22 @@ while (list($idfile_i, $module, $admin_file, ) = $result->fetch(3)) {
             break;
     }
 
-    $xtpl->assign('LANGUAGE_AREA', array(
+    $xtpl->assign('LANGUAGE_AREA', [
         'key' => $idfile_i,
         'selected' => ($idfile_i == $idfile) ? ' selected="selected"' : '',
-        'title' => $module . " " . $langsitename
-    ));
+        'title' => $module . ' ' . $langsitename
+    ]);
 
     $xtpl->parse('main.language_area');
-    $array_files[$idfile_i] = $module . " " . $langsitename;
+    $array_files[$idfile_i] = $module . ' ' . $langsitename;
 }
 
 foreach ($language_check_type as $key => $value) {
-    $xtpl->assign('LANGUAGE_CHECK_TYPE', array(
+    $xtpl->assign('LANGUAGE_CHECK_TYPE', [
         'key' => $key,
         'selected' => ($key == $check_type) ? ' selected="selected"' : '',
         'title' => $value
-    ));
+    ]);
 
     $xtpl->parse('main.language_check_type');
 }
@@ -141,15 +141,15 @@ foreach ($language_check_type as $key => $value) {
 $submit = $nv_Request->get_int('submit', 'post,get', 0);
 
 if ($submit > 0 and in_array($sourcelang, $array_lang_exit) and in_array($typelang, $array_lang_exit)) {
-    $array_where = array();
+    $array_where = [];
     if ($idfile > 0) {
         $array_where[] = 'idfile=' . $idfile;
     }
 
     if ($check_type == 0) {
-        $array_where[] = "update_" . $typelang . "=0";
+        $array_where[] = 'update_' . $typelang . '=0';
     } elseif ($check_type == 1) {
-        $array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang;
+        $array_where[] = 'lang_' . $typelang . '=lang_' . $sourcelang;
     }
 
     if (empty($array_where)) {
@@ -159,37 +159,37 @@ if ($submit > 0 and in_array($sourcelang, $array_lang_exit) and in_array($typela
     }
     $result = $db->query($query);
 
-    $array_lang_data = array();
+    $array_lang_data = [];
 
     while (list($id, $idfile_i, $lang_key, $datalang, $datasourcelang) = $result->fetch(3)) {
-        $array_lang_data[$idfile_i][$id] = array(
+        $array_lang_data[$idfile_i][$id] = [
             'lang_key' => $lang_key,
             'datalang' => $datalang,
             'sourcelang' => $datasourcelang
-        );
+        ];
     }
 
     if (!empty($array_lang_data)) {
-        $xtpl->assign('DATA', array(
+        $xtpl->assign('DATA', [
             'typelang' => $typelang,
             'sourcelang' => $sourcelang,
             'check_type' => $check_type,
             'idfile' => $idfile,
             'savedata' => NV_CHECK_SESSION
-        ));
+        ]);
 
         $i = 0;
         foreach ($array_lang_data as $idfile_i => $array_lang_file) {
             $xtpl->assign('CAPTION', $array_files[$idfile_i]);
 
             foreach ($array_lang_file as $id => $row) {
-                $xtpl->assign('ROW', array(
+                $xtpl->assign('ROW', [
                     'stt' => ++$i,
                     'lang_key' => $row['lang_key'],
                     'datalang' => nv_htmlspecialchars($row['datalang']),
                     'id' => $id,
                     'sourcelang' => nv_htmlspecialchars($row['sourcelang'])
-                ));
+                ]);
 
                 $xtpl->parse('main.data.lang.loop');
             }

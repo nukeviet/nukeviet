@@ -12,20 +12,14 @@ if (!defined('NV_IS_MOD_VOTING')) {
     die('Stop!!!');
 }
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 if (empty($vid)) {
-    $base_url_rewrite = nv_url_rewrite($base_url, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (!str_starts_with($request_uri, $base_url_check) and !str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        nv_redirect_location($base_url_check);
-    }
-    $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
@@ -121,8 +115,6 @@ if (empty($vid)) {
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . '&amp;vid=' . $vid, true);
-
     $sql = 'SELECT vid, question, acceptcm, active_captcha, groups_view, publ_time, exp_time, vote_one FROM ' . NV_PREFIXLANG . '_' . $module_data;
     if (!defined('NV_IS_MODADMIN')) {
         $sql .= ' WHERE act=1';
@@ -130,33 +122,36 @@ if (empty($vid)) {
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
     if (empty($list) or !isset($list[$vid])) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     $row = $list[$vid];
     if (((int) $row['exp_time'] < 0 or ((int) $row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME)) and !defined('NV_IS_MODADMIN')) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
     if (!nv_user_in_groups($row['groups_view'])) {
-        header('location:' . $global_config['site_url']);
-        exit();
+        nv_redirect_location(nv_url_rewrite($page_url, true));
     }
 
-    $difftimeout = 3600;
-    $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
-    $log_fileext = preg_match('/[a-z]+/i', NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';
-    $pattern = '/^(.*)\.' . $log_fileext . '$/i';
-    $logs = nv_scandir($dir, $pattern);
+    if ($row['groups_view'] == '5' or $row['groups_view'] == '6') {
+        $row['vote_one'] = '0';
+    }
 
-    if (!empty($logs)) {
-        foreach ($logs as $file) {
-            $vtime = filemtime($dir . '/' . $file);
+    if (empty($row['vote_one'])) {
+        $difftimeout = !empty($module_config[$module_name]['difftimeout']) ? $module_config[$module_name]['difftimeout'] : 3600;
+        $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
+        $log_fileext = preg_match('/[a-z]+/i', NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';
+        $pattern = '/^(.*)\.' . $log_fileext . '$/i';
+        $logs = nv_scandir($dir, $pattern);
 
-            if (!$vtime or $vtime <= NV_CURRENTTIME - $difftimeout) {
-                @unlink($dir . '/' . $file);
+        if (!empty($logs)) {
+            foreach ($logs as $file) {
+                $vtime = filemtime($dir . '/' . $file);
+
+                if (!$vtime or $vtime <= NV_CURRENTTIME - $difftimeout) {
+                    @unlink($dir . '/' . $file);
+                }
             }
         }
     }
@@ -177,8 +172,7 @@ if (empty($vid)) {
         $captcha = $nv_Request->get_title('captcha', 'get', '');
 
         if ($checkss != md5($vid . NV_CHECK_SESSION)) {
-            header('location:' . $global_config['site_url']);
-            exit();
+            nv_redirect_location(nv_url_rewrite($page_url, true));
         }
 
         if ($row['active_captcha'] and ($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($captcha, $module_config[$module_name]['captcha_type'])) {
@@ -186,33 +180,45 @@ if (empty($vid)) {
         }
 
         $acceptcm = (int) $row['acceptcm'];
-        $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $client_info['ip'] . $vid) . '.' . $log_fileext;
-        if (defined('NV_IS_USER') and !empty($row['vote_one'])) {
-            $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $user_info['userid'] . $vid) . '.' . $log_fileext;
-            if (file_exists($dir . '/' . $logfile)) {
+        if (!empty($row['vote_one'])) {
+            $is_voted = false;
+            $userlist = $db->query('SELECT voted FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voted WHERE vid=' . $vid)->fetchColumn();
+            if (!empty($userlist)) {
+                if (preg_match('/\,\s*' . $user_info['userid'] . '\s*\,/', ',' . $userlist . ',')) {
+                    $is_voted = true;
+                }
+            }
+
+            if ($is_voted) {
                 $note = $lang_module['limit_vote_msg'];
-            } elseif ($count <= $acceptcm) {
+            } elseif ($count > $acceptcm) {
+                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
+            } else {
                 $in = implode(',', $array_id);
                 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
                 $db->query($sql);
-                file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
+
+                $userlist .= !empty($userlist) ? ',' . $user_info['userid'] : $user_info['userid'];
+                $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_voted (vid, voted) VALUES (' . $vid . ", '" . $userlist . "') ON DUPLICATE KEY UPDATE voted = VALUES(voted)";
+                $db->query($sql);
+
                 $note = $lang_module['okmsg'];
-            } else {
-                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
             }
         } else {
+            $logfile = 'vo' . $vid . '_' . md5(NV_LANG_DATA . $global_config['sitekey'] . $client_info['ip'] . $vid) . '.' . $log_fileext;
             if (file_exists($dir . '/' . $logfile)) {
                 $timeout = filemtime($dir . '/' . $logfile);
                 $timeout = ceil(($difftimeout - NV_CURRENTTIME + $timeout) / 60);
                 $note = sprintf($lang_module['timeoutmsg'], $timeout);
-            } elseif ($count <= $acceptcm) {
+            } elseif ($count > $acceptcm) {
+                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
+            } else {
                 $in = implode(',', $array_id);
                 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
                 $db->query($sql);
+
                 file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
                 $note = $lang_module['okmsg'];
-            } else {
-                $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
             }
         }
     }
@@ -243,8 +249,11 @@ if (empty($vid)) {
         'note' => $note
     ];
 
-    $page_title = $row['question'];
     $contents = voting_result($voting);
+
+    $page_title = $row['question'];
+    $page_url .= '&amp;vid=' . $vid;
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');

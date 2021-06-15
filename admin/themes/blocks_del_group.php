@@ -18,10 +18,10 @@ $array_bid = explode(',', $list);
 $array_bid = array_map('intval', $array_bid);
 
 if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request->get_string('checkss', 'post,get')) {
-    $array_expression = array();
+    $array_expression = [];
     $result = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . implode(',', $array_bid) . ')');
 
-    while (list ($bid_i, $theme_i, $position_i) = $result->fetch(3)) {
+    while (list($bid_i, $theme_i, $position_i) = $result->fetch(3)) {
         $array_expression[$theme_i][$position_i][] = $bid_i;
     }
 
@@ -36,8 +36,8 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
                 $sth->bindParam(':theme', $theme_i, PDO::PARAM_STR);
                 $sth->bindParam(':position', $position, PDO::PARAM_STR);
                 $sth->execute();
-                while (list ($bid_i) = $sth->fetch(3)) {
-                    ++ $weight;
+                while (list($bid_i) = $sth->fetch(3)) {
+                    ++$weight;
                     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
                 }
 
@@ -48,9 +48,9 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
                 $sth->bindParam(':theme', $theme_i, PDO::PARAM_STR);
                 $sth->bindParam(':position', $position, PDO::PARAM_STR);
                 $sth->execute();
-                while (list ($bid_i, $func_id_i) = $sth->fetch(3)) {
+                while (list($bid_i, $func_id_i) = $sth->fetch(3)) {
                     if ($func_id_i == $func_id_old) {
-                        ++ $weight;
+                        ++$weight;
                     } else {
                         $weight = 1;
                         $func_id_old = $func_id_i;

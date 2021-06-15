@@ -200,10 +200,15 @@
 									<input type="checkbox" value="1" name="inhome" {inhome_checked}/>
 									<label> {LANG.content_inhome} </label>
 								</div>
+                                <!-- BEGIN: allowed_rating -->
 								<div style="margin-bottom: 2px;">
 									<input type="checkbox" value="1" name="allowed_rating" {allowed_rating_checked}/>
 									<label> {LANG.content_allowed_rating} </label>
 								</div>
+                                <!-- END: allowed_rating -->
+                                <!-- BEGIN: not_allowed_rating -->
+                                <input type="hidden" name="allowed_rating" value="{rowcontent.allowed_rating}" />
+                                <!-- END: not_allowed_rating -->
 								<div style="margin-bottom: 2px;">
 									<input type="checkbox" value="1" name="allowed_send" {allowed_send_checked}/>
 									<label> {LANG.content_allowed_send} </label>

@@ -18,7 +18,7 @@ $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_
 
 $plugin_file = $nv_Request->get_title('plugin_file', 'post,get');
 if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isset_request('plugin_file', 'post')) {
-    $config_plugin = array();
+    $config_plugin = [];
     if (preg_match($pattern_plugin, $plugin_file) and nv_is_file(NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin')) {
         $plugin_area = $nv_Request->get_int('plugin_area', 'post');
         if ($nv_Request->isset_request('delete', 'post')) {
@@ -57,7 +57,7 @@ if ($nv_Request->isset_request('dpid', 'get')) {
         if (!empty($row) and $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $dpid)) {
             $weight = intval($row['weight']);
             $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND weight > ' . $weight . ' ORDER BY weight ASC');
-            while (list ($pid) = $_query->fetch(3)) {
+            while (list($pid) = $_query->fetch(3)) {
                 $db->query('UPDATE ' . $db_config['prefix'] . '_plugin SET weight = ' . $weight++ . ' WHERE pid=' . $pid);
             }
 
@@ -73,7 +73,7 @@ if ($nv_Request->isset_request('dpid', 'get')) {
 
         $weight = 0;
         $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND pid != ' . $pid . ' ORDER BY weight ASC');
-        while (list ($pid_i) = $_query->fetch(3)) {
+        while (list($pid_i) = $_query->fetch(3)) {
             ++$weight;
             if ($weight == $new) {
                 ++$weight;
@@ -96,11 +96,11 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('CHECKSS', $checkss);
 
-$plugin_new = array();
+$plugin_new = [];
 $plugin_all = nv_scandir(NV_ROOTDIR . '/includes/plugin', $pattern_plugin);
 
-$nv_plugin_array = array();
-$_nv_plugin_area = array();
+$nv_plugin_array = [];
+$_nv_plugin_area = [];
 $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
 $_query = $db->query($_sql);
 while ($row = $_query->fetch()) {
@@ -141,7 +141,7 @@ if (!empty($plugin_new)) {
         $xtpl->parse('main.add.file');
     }
 
-    $array_plugin_position = array();
+    $array_plugin_position = [];
     if (preg_match($pattern_plugin, $plugin_file, $_m) and nv_is_file(NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin')) {
         if (file_exists(NV_ROOTDIR . '/includes/plugin/' . $_m[1] . '.ini')) {
             if ($xml = @simplexml_load_file(NV_ROOTDIR . '/includes/plugin/' . $_m[1] . '.ini')) {

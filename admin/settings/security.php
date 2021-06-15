@@ -19,7 +19,7 @@ $proxy_blocker_array = [
     3 => $lang_module['proxy_blocker_3']
 ];
 
-$recaptcha_vers = [2,3];
+$recaptcha_vers = [2, 3];
 
 $recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
 $admin_2step_array = ['code', 'facebook', 'google'];
@@ -30,7 +30,7 @@ $array_iptypes = [
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
-if ($selectedtab < 0 or $selectedtab > 4) {
+if ($selectedtab < 0 or $selectedtab > 6) {
     $selectedtab = 0;
 }
 
@@ -95,7 +95,7 @@ if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Reques
     }
     $array_config_global['admin_2step_opt'] = empty($array_config_global['admin_2step_opt']) ? '' : implode(',', $array_config_global['admin_2step_opt']);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -116,7 +116,7 @@ if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Reques
     }
     $array_config_define['nv_allowed_html_tags'] = implode(', ', $nv_allowed_html_tags);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($array_config_define as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -156,7 +156,7 @@ if ($nv_Request->isset_request('submitflood', 'post') and $checkss == $nv_Reques
     } elseif ($array_config_flood['max_requests_300'] <= 0) {
         $errormess = $lang_module['max_requests_error'];
     } else {
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_flood as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -195,14 +195,14 @@ if ($nv_Request->isset_request('submitcaptcha', 'post') and $checkss == $nv_Requ
     $array_define_captcha['nv_gfx_width'] = $nv_Request->get_int('nv_gfx_width', 'post');
     $array_define_captcha['nv_gfx_height'] = $nv_Request->get_int('nv_gfx_height', 'post');
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_captcha as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($array_define_captcha as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -273,7 +273,7 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
 
     $array_config_cross['allow_null_origin'] = (int) $nv_Request->get_bool('allow_null_origin', 'post', false);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='sys' AND module='global' AND config_name=:config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='sys' AND module='global' AND config_name=:config_name");
     foreach ($array_config_cross as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -295,6 +295,85 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
     $array_config_cross['ip_allow_null_origin'] = empty($global_config['ip_allow_null_origin']) ? '' : implode("\n", $global_config['ip_allow_null_origin']);
 }
 
+// Xử lý thiết lập CSP
+if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $directives = $nv_Request->get_typed_array('directives', 'post', 'textarea');
+    $array_config_csp = [];
+    $array_config_csp['nv_csp'] = '';
+    foreach ($directives as $key => $directive) {
+        $directive = trim(strip_tags($directive));
+        if (!empty($directive)) {
+            $directive = str_replace(["\r\n", "\r", "\n"], ' ', $directive);
+            $array_config_csp['nv_csp'] .= $key . ' ' . preg_replace('/[ ]+/', ' ', $directive) . ';';
+        }
+    }
+    $array_config_csp['nv_csp_act'] = (int) $nv_Request->get_bool('nv_csp_act', 'post', false);
+
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($array_config_csp as $config_name => $config_value) {
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->execute();
+    }
+
+    $nv_Cache->delMod('settings');
+
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+} else {
+    $directives = !empty($global_config['nv_csp']) ? nv_unhtmlspecialchars($global_config['nv_csp']) : '';
+    if (!empty($directives)) {
+        $matches = [];
+        preg_match_all("/([a-zA-Z0-9\-]+)[\s]+([^\;]+)/i", $directives, $matches);
+        $directives = [];
+        foreach ($matches[1] as $key => $name) {
+            $directives[$name] = trim($matches[2][$key]);
+        }
+    } else {
+        $directives = [];
+    }
+}
+
+// Xử lý thiết lập RP
+//rp_directive
+$_rp_directives = [
+    'no-referrer' => $lang_module['rp_no_referrer'],
+    'no-referrer-when-downgrade' => $lang_module['rp_no_referrer_when_downgrade'],
+    'origin' => $lang_module['rp_origin'],
+    'origin-when-cross-origin' => $lang_module['rp_origin_when_cross_origin'],
+    'same-origin' => $lang_module['rp_same_origin'],
+    'strict-origin' => $lang_module['rp_strict_origin'],
+    'strict-origin-when-cross-origin' => $lang_module['rp_strict_origin_when_cross_origin'],
+    'unsafe-url' => $lang_module['rp_unsafe_url']
+];
+if ($nv_Request->isset_request('submitrp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $array_config_rp = [];
+    $array_config_rp['nv_rp'] = [];
+    $nv_rp = $nv_Request->get_title('nv_rp', 'post', '');
+    if (!empty($nv_rp)) {
+        $nv_rp = preg_replace("/[^a-zA-Z\-]/", ' ', $nv_rp);
+        $nv_rp = preg_replace("/[\s]+/", ' ', $nv_rp);
+    }
+    $nv_rp = !empty($nv_rp) ? array_map('trim', explode(' ', $nv_rp)) : [];
+    foreach ($nv_rp as $rp) {
+        if (!empty($rp) and isset($_rp_directives[$rp]) and $rp != 'no-referrer') {
+            $array_config_rp['nv_rp'][] = $rp;
+        }
+    }
+    $array_config_rp['nv_rp'] = !empty($array_config_rp['nv_rp']) ? implode(', ', $array_config_rp['nv_rp']) : '';
+    $array_config_rp['nv_rp_act'] = (int) $nv_Request->get_bool('nv_rp_act', 'post', false);
+
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($array_config_rp as $config_name => $config_value) {
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->execute();
+    }
+
+    $nv_Cache->delMod('settings');
+
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+}
+
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -307,7 +386,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('SELECTEDTAB', $selectedtab);
 $xtpl->assign('CHECKSS', $checkss);
 
-for ($i = 0; $i <= 4; ++$i) {
+for ($i = 0; $i <= 6; ++$i) {
     $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
 }
 
@@ -384,7 +463,7 @@ if ($nv_Request->isset_request('submit', 'post') and $checkss == $nv_Request->ge
 
         if ($save !== true) {
             $xtpl->assign('MESSAGE', sprintf($lang_module['banip_error_write'], NV_DATADIR, NV_DATADIR));
-            $xtpl->assign('CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
+            $xtpl->assign('CODE', str_replace(['\n', '\t'], ['<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'], nv_htmlspecialchars($save)));
             $xtpl->parse('main.manual_save');
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
@@ -418,7 +497,7 @@ $flid = $nv_Request->get_int('flid', 'get,post', 0);
 $fldel = $nv_Request->get_int('fldel', 'get,post', 0);
 $array_flip = [];
 
-if (!empty($fldel) and !empty($flid) and  $checkss == $nv_Request->get_string('checkss', 'get,post')) {
+if (!empty($fldel) and !empty($flid) and $checkss == $nv_Request->get_string('checkss', 'get,post')) {
     $db->query('DELETE FROM ' . $db_config['prefix'] . '_ips WHERE type=1 AND id=' . $flid);
     nv_save_file_ips(1);
     nv_htmlOutput('OK');
@@ -494,7 +573,7 @@ if ($nv_Request->isset_request('submitfloodip', 'post') and $checkss == $nv_Requ
 
         if ($save !== true) {
             $xtpl->assign('MESSAGE', sprintf($lang_module['banip_error_write'], NV_DATADIR, NV_DATADIR));
-            $xtpl->assign('CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
+            $xtpl->assign('CODE', str_replace(['\n', '\t'], ['<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'], nv_htmlspecialchars($save)));
             $xtpl->parse('main.manual_save');
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
@@ -573,16 +652,16 @@ $xtpl->assign('RECAPTCHA_SITEKEY', $array_config_captcha['recaptcha_sitekey']);
 $xtpl->assign('RECAPTCHA_SECRETKEY', $array_config_captcha['recaptcha_secretkey'] ? $crypt->decrypt($array_config_captcha['recaptcha_secretkey']) : '');
 
 foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) {
-    $array = array(
+    $array = [
         'value' => $recaptcha_type_key,
         'select' => ($array_config_captcha['recaptcha_type'] == $recaptcha_type_key) ? ' selected="selected"' : '',
         'text' => $recaptcha_type_title
-    );
+    ];
     $xtpl->assign('RECAPTCHA_TYPE', $array);
     $xtpl->parse('main.recaptcha_type');
 }
 
-foreach($recaptcha_vers as $ver) {
+foreach ($recaptcha_vers as $ver) {
     $array = [
         'value' => $ver,
         'select' => ($ver == $array_config_captcha['recaptcha_ver']) ? ' selected="selected"' : ''
@@ -592,11 +671,11 @@ foreach($recaptcha_vers as $ver) {
 }
 
 for ($i = 2; $i < 10; $i++) {
-    $array = array(
+    $array = [
         'value' => $i,
         'select' => ($i == $array_define_captcha['nv_gfx_num']) ? ' selected="selected"' : '',
         'text' => $i
-    );
+    ];
     $xtpl->assign('OPTION', $array);
     $xtpl->parse('main.nv_gfx_num');
 }
@@ -664,7 +743,7 @@ $result = $db->query($sql);
 $i = 0;
 while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
     ++$i;
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'dbip' => $dbip,
         'dbmask' => $ips->isIp4($dbip) ? $mask_text_array[$dbmask] : ('/' . $dbmask),
         'dbarea' => $banip_area_array[$dbarea],
@@ -672,7 +751,7 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;id=' . $dbid,
         'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=3&amp;del=1&amp;id=' . $dbid . '&checkss=' . $checkss
-    ));
+    ]);
 
     $xtpl->parse('main.listip.loop');
 }
@@ -681,7 +760,7 @@ if ($i) {
 }
 
 $xtpl->assign('BANIP_TITLE', ($cid) ? $lang_module['banip_title_edit'] : $lang_module['banip_title_add']);
-$xtpl->assign('DATA', array(
+$xtpl->assign('DATA', [
     'cid' => $cid,
     'ip' => $ip,
     'selected3' => ($mask == 3) ? ' selected="selected"' : '',
@@ -693,7 +772,7 @@ $xtpl->assign('DATA', array(
     'begintime' => !empty($begintime) ? date('d/m/Y', $begintime) : '',
     'endtime' => !empty($endtime) ? date('d/m/Y', $endtime) : '',
     'notice' => $notice
-));
+]);
 
 // Danh sách các IP không bị kiểm tra Flood
 $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=1 ORDER BY ip DESC';
@@ -701,7 +780,7 @@ $result = $db->query($sql);
 $i = 0;
 while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
     ++$i;
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'dbip' => $dbip,
         'dbmask' => $ips->isIp4($dbip) ? $mask_text_array[$dbmask] : ('/' . $dbmask),
         'dbarea' => $banip_area_array[$dbarea],
@@ -709,7 +788,7 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
         'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;flid=' . $dbid,
         'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=1&amp;fldel=1&amp;flid=' . $dbid . '&amp;checkss=' . $checkss
-    ));
+    ]);
 
     $xtpl->parse('main.noflips.loop');
 }
@@ -718,7 +797,7 @@ if ($i) {
 }
 
 $xtpl->assign('NOFLOODIP_TITLE', !empty($flcid) ? $lang_module['noflood_ip_edit'] : $lang_module['noflood_ip_add']);
-$xtpl->assign('FLDATA', array(
+$xtpl->assign('FLDATA', [
     'flid' => $flid,
     'flip' => $array_flip['flip'],
     'selected3' => ($array_flip['flmask'] == 3) ? ' selected="selected"' : '',
@@ -730,14 +809,14 @@ $xtpl->assign('FLDATA', array(
     'begintime' => !empty($array_flip['flbegintime']) ? date('d/m/Y', $array_flip['flbegintime']) : '',
     'endtime' => !empty($array_flip['flendtime']) ? date('d/m/Y', $array_flip['flendtime']) : '',
     'notice' => $array_flip['flnotice']
-));
+]);
 
 for ($i = 0; $i <= 3; $i++) {
-    $two_step_verification = array(
+    $two_step_verification = [
         'key' => $i,
         'title' => $lang_module['two_step_verification' . $i],
         'selected' => $i == $array_config_global['two_step_verification'] ? ' selected="selected"' : ''
-    );
+    ];
     $xtpl->assign('TWO_STEP_VERIFICATION', $two_step_verification);
     $xtpl->parse('main.two_step_verification');
 }
@@ -750,7 +829,7 @@ foreach ($admin_2step_array as $admin_2step) {
     ];
     $xtpl->assign('ADMIN_2STEP_OPT', $admin_2step_opt);
 
-    if ($admin_2step  == 'facebook' or $admin_2step == 'google') {
+    if ($admin_2step == 'facebook' or $admin_2step == 'google') {
         $xtpl->assign('LINK_CONFIG', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=config&amp;oauth_config=' . $admin_2step);
         $xtpl->parse('main.admin_2step_opt.link_config');
     }
@@ -764,6 +843,42 @@ foreach ($admin_2step_array as $admin_2step) {
     ];
     $xtpl->assign('ADMIN_2STEP_DEFAULT', $admin_2step_default);
     $xtpl->parse('main.admin_2step_default');
+}
+
+//csp_directive
+$csp_directives = [
+    'default-src' => $lang_module['csp_default_src'],
+    'script-src' => $lang_module['csp_script_src'],
+    'object-src' => $lang_module['csp_object_src'],
+    'style-src' => $lang_module['csp_style_src'],
+    'img-src' => $lang_module['csp_img_src'],
+    'media-src' => $lang_module['csp_media_src'],
+    'frame-src' => $lang_module['csp_frame_src'],
+    'font-src' => $lang_module['csp_font_src'],
+    'connect-src' => $lang_module['csp_connect_src'],
+    'form-action' => $lang_module['csp_form_action'],
+    'base-uri' => $lang_module['csp_base_uri']
+];
+foreach ($csp_directives as $name => $desc) {
+    $direct = [
+        'name' => $name,
+        'desc' => $desc,
+        'value' => !empty($directives[$name]) ? preg_replace("/[\s]+/", "\n", $directives[$name]) : ''
+    ];
+    $xtpl->assign('DIRECTIVE', $direct);
+    $xtpl->assign('CSP_ACT', $global_config['nv_csp_act'] ? ' checked="checked"' : '');
+    $xtpl->parse('main.csp_directive');
+}
+
+$xtpl->assign('RP', $global_config['nv_rp']);
+$xtpl->assign('RP_ACT', $global_config['nv_rp_act'] ? ' checked="checked"' : '');
+foreach ($_rp_directives as $name => $desc) {
+    $rp_direct = [
+        'name' => $name,
+        'desc' => $desc
+    ];
+    $xtpl->assign('RP_DIRECTIVE', $rp_direct);
+    $xtpl->parse('main.rp_directive');
 }
 
 $xtpl->parse('main');

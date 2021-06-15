@@ -8,7 +8,7 @@
  * @Createdate Sun, 26 Oct 2014 08:34:25 GMT
  */
 
-if (! defined('NV_IS_MOD_USER')) {
+if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
@@ -24,10 +24,10 @@ $serviceFactory = new \OAuth\ServiceFactory();
 $credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=google');
 
 // Instantiate the Google service using the credentials, http client and storage mechanism for the token
-$googleService = $serviceFactory->createService('google', $credentials, $storage, array(
+$googleService = $serviceFactory->createService('google', $credentials, $storage, [
     'userinfo_email',
     'userinfo_profile'
-));
+]);
 
 if (!empty($_GET['code'])) {
     // This was a callback request from google, get the token
@@ -37,7 +37,7 @@ if (!empty($_GET['code'])) {
     $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
 
     if (isset($result['email'])) {
-        $attribs = array(
+        $attribs = [
             'identity' => empty($result['link']) ? $result['id'] : $result['link'],
             'result' => 'is_res',
             'id' => $result['id'],
@@ -50,9 +50,9 @@ if (!empty($_GET['code'])) {
             'picture_url' => $result['picture'],
             'picture_mode' => 0, // 0: Remote picture
             'current_mode' => 3
-        );
+        ];
     } else {
-        $attribs = array( 'result' => 'notlogin' );
+        $attribs = ['result' => 'notlogin'];
     }
     $nv_Request->set_Session('openid_attribs', serialize($attribs));
 

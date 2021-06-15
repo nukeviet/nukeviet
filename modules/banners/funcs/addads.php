@@ -12,8 +12,9 @@ if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
-$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true);
 $page_title = $module_info['site_title'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 if (!defined('NV_IS_BANNER_CLIENT')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -40,9 +41,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $array['description'] = $nv_Request->get_title('description', 'post', '', 1);
     $array['url'] = $nv_Request->get_title('url', 'post', '', 0);
 
+    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
         $array['captcha'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+    }
+    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
         $array['captcha'] = $nv_Request->get_title('captcha', 'post', '');
     }
 
@@ -50,7 +54,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $array['url'] = '';
     }
 
-    if (($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($array['captcha'], $module_config[$module_name]['captcha_type'])) {
+    // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+    if (isset($array['captcha']) and !nv_capcha_txt($array['captcha'], $module_config[$module_name]['captcha_type'])) {
         $error[] = ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } elseif (empty($array['title'])) {
         $error[] = $lang_module['title_empty'];
@@ -102,12 +107,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $endtime = $begintime + $global_array_uplans[$array['blockid']]['exp_time'];
         }
 
-        $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+        $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
             title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
-            :title, " . $array['blockid'] . ", " . $user_info['userid'] . ", :file_name, :file_ext, :file_mime, " . $width . ", " . $height . ", :description, '',
-            :url, '', " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, 0
-        )";
+            :title, ' . $array['blockid'] . ', ' . $user_info['userid'] . ', :file_name, :file_ext, :file_mime, ' . $width . ', ' . $height . ", :description, '',
+            :url, '', " . NV_CURRENTTIME . ', ' . $begintime . ', ' . $endtime . ', 0, 4, 0
+        )';
 
         $data_insert = [];
         $data_insert['title'] = $array['title'];
@@ -137,7 +142,7 @@ if (!empty($error)) {
     $xtpl->parse('main.info');
 }
 
-$result = $db->query("SELECT id,title, blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC");
+$result = $db->query('SELECT id,title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC');
 
 foreach ($global_array_uplans as $row) {
     $row['title'] .= ' (' . (empty($row['blang']) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']]) . ')';
@@ -150,9 +155,12 @@ foreach ($global_array_uplans as $row) {
 
 $xtpl->assign('DATA', $array);
 if (!empty($module_config[$module_name]['captcha_type'])) {
+    // Nếu dùng reCaptcha v3
     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');

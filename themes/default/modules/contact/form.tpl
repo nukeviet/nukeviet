@@ -31,7 +31,7 @@
 		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon"><em class="fa fa-user fa-lg fa-horizon"></em></span>
-				<input type="text" maxlength="100" value="" name="fname" class="form-control required" placeholder="{LANG.fullname}" data-pattern="/^(.){3,}$/" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_fullname}" />
+				<input type="text" maxlength="100" value="" name="fname" class="form-control required" placeholder="{LANG.fullname}" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_fullname}" data-callback="nv_uname_check" />
                 <span class="input-group-addon pointer" title="{GLANG.loginsubmit}" onclick="return loginForm('');"><em class="fa fa-sign-in fa-lg"></em></span>
             </div>
 		</div>

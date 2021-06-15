@@ -8,7 +8,7 @@
  * @Createdate 2-1-2010 21:39
  */
 
-if (! defined('NV_IS_FILE_SETTINGS')) {
+if (!defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
@@ -20,9 +20,9 @@ if (!empty($id) and md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' 
     $sql = 'SELECT act FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND (is_sys=0 OR act=0)';
     $row = $db->query($sql)->fetch();
 
-    if (! empty($row)) {
+    if (!empty($row)) {
         $act = intval($row['act']);
-        $new_act = (! empty($act)) ? 0 : 1;
+        $new_act = (!empty($act)) ? 0 : 1;
         $db->query('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET act=' . $new_act . ' WHERE id=' . $id);
     }
 }

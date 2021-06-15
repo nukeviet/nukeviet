@@ -19,21 +19,21 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['move'];
 
-$id_array = array();
+$id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
-$catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
+$catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', []));
 $catid = $nv_Request->get_int('catid', 'get,post', 0);
 
 if ($nv_Request->isset_request('idcheck', 'post')) {
     // Kiểm tra ID các chuyên mục phải hợp lệ
-    $array_catid_allowed = array();
+    $array_catid_allowed = [];
     foreach ($global_array_cat as $catid_i => $array_value) {
         if (in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
             $array_catid_allowed[$catid_i] = $catid_i;
         }
     }
     $catids = array_intersect($catids, $array_catid_allowed);
-    $id_array = array_unique($nv_Request->get_typed_array('idcheck', 'post', 'int', array()));
+    $id_array = array_unique($nv_Request->get_typed_array('idcheck', 'post', 'int', []));
 
     if (!empty($id_array) and !empty($catids)) {
         $listcatid = implode(',', $catids);
@@ -88,11 +88,11 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
 while (list($id, $title) = $result->fetch(3)) {
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'id' => $id,
         'title' => $title,
         'checked' => in_array($id, $id_array) ? ' checked="checked"' : ''
-    ));
+    ]);
 
     $xtpl->parse('main.loop');
 }
@@ -101,14 +101,14 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     if (in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
         $space = intval($array_value['lev']) * 30;
         $catiddisplay = (sizeof($catids) > 1 and (in_array($catid_i, $catids))) ? '' : ' display: none;';
-        $temp = array(
+        $temp = [
             'catid' => $catid_i,
             'space' => $space,
             'title' => $array_value['title'],
             'checked' => (in_array($catid_i, $catids)) ? ' checked="checked"' : '',
             'catidchecked' => ($catid_i == $catid) ? ' checked="checked"' : '',
             'catiddisplay' => $catiddisplay
-        );
+        ];
         $xtpl->assign('CATS', $temp);
         $xtpl->parse('main.catid');
     }

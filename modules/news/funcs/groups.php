@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
@@ -6,49 +7,43 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
+
 if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
 
 if (isset($array_op[1])) {
     $alias = trim($array_op[1]);
     $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? intval(substr($array_op[2], 5)) : 1;
+    $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
 
     $stmt = $db_slave->prepare('SELECT bid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
-    list ($bid, $page_title, $alias, $image_group, $description, $key_words) = $stmt->fetch(3);
+    list($bid, $page_title, $alias, $image_group, $description, $key_words) = $stmt->fetch(3);
     if (!$bid) {
-        nv_redirect_location($base_url);
+        nv_redirect_location($page_url);
     }
-    $base_url .= '/' . $alias;
-    $base_url_rewrite = $base_url;
+
+    $page_url .= '/' . $alias;
+    $base_url = $page_url;
+
     if ($page > 1) {
         $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
-        $base_url_rewrite .= '/page-' . $page;
+        $page_url .= '/page-' . $page;
     }
 
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
-    if (str_starts_with($request_uri, $base_url_check)) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (str_starts_with(NV_MY_DOMAIN . $request_uri, $base_url_check)) {
-        $canonicalUrl = $base_url_rewrite;
-    } else {
-        nv_redirect_location($base_url_check);
-    }
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
-    $array_mod_title[] = array(
+    $array_mod_title[] = [
         'catid' => 0,
         'title' => $page_title,
         'link' => $base_url
-    );
+    ];
 
-    $item_array = array();
+    $item_array = [];
     $end_weight = 0;
 
     $db_slave->sqlreset()
@@ -61,8 +56,7 @@ if (isset($array_op[1])) {
         ->fetchColumn();
 
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-    $total = ceil($num_items / $per_page);
-    betweenURLs($page, $total, $base_url, '/page-', $prevPage, $nextPage);
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
     $db_slave->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight')
         ->order('t2.weight ASC')
@@ -98,7 +92,7 @@ if (isset($array_op[1])) {
     $result->closeCursor();
     unset($query, $row);
 
-    $item_array_other = array();
+    $item_array_other = [];
     if ($st_links > 0) {
         $db_slave->sqlreset()
             ->select('t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal, t1.external_link')
@@ -121,21 +115,24 @@ if (isset($array_op[1])) {
     }
     $contents = topic_theme($item_array, $item_array_other, $generate_page, $page_title, $description, $image_group);
 } else {
-    $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite($base_url, true);
-    
-    $array_cat = array();
+    $page_title = $module_info['funcs']['groups']['func_site_title'];
+    $key_words = $module_info['keywords'];
+    $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'];
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+
+    $array_cat = [];
     $key = 0;
 
     $query_cat = $db_slave->query('SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC');
 
-    while (list ($bid, $numberlink, $btitle, $balias) = $query_cat->fetch(3)) {
-        $array_cat[$key] = array(
+    while (list($bid, $numberlink, $btitle, $balias) = $query_cat->fetch(3)) {
+        $array_cat[$key] = [
             'catid' => $bid,
             'alias' => '',
             'subcatid' => '',
             'title' => $btitle,
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $balias
-        );
+        ];
 
         $db_slave->sqlreset()
             ->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating')
@@ -178,9 +175,6 @@ if (isset($array_op[1])) {
     }
 
     $contents = viewsubcat_main($viewcat, $array_cat);
-
-    $page_title = $module_info['funcs']['groups']['func_site_title'];
-    $key_words = $module_info['keywords'];
 }
 
 include NV_ROOTDIR . '/includes/header.php';

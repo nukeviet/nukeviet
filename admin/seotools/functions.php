@@ -18,6 +18,7 @@ $allow_func = [
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'pagetitle';
     $allow_func[] = 'metatags';
+    $allow_func[] = 'linktags';
     $allow_func[] = 'sitemapPing';
     $allow_func[] = 'robots';
     if (empty($global_config['idsite'])) {
@@ -25,6 +26,7 @@ if (defined('NV_IS_GODADMIN')) {
     }
 } elseif (defined('NV_IS_SPADMIN') and $global_config['idsite']) {
     $allow_func[] = 'metatags';
+    $allow_func[] = 'linktags';
 }
 
 $menu_top = [

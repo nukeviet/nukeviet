@@ -16,7 +16,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $robots_data = $nv_Request->get_array('filename', 'post');
     $fileother = $nv_Request->get_array('fileother', 'post');
     $optionother = $nv_Request->get_array('optionother', 'post');
-    $robots_other = array();
+    $robots_other = [];
     foreach ($fileother as $key => $value) {
         if (!empty($value)) {
             $robots_other[$value] = intval($optionother[$key]);
@@ -33,7 +33,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     $redirect = false;
     if (!$global_config['check_rewrite_file'] or !$global_config['rewrite_enable']) {
-        $rbcontents = array();
+        $rbcontents = [];
         $rbcontents[] = 'User-agent: *';
 
         foreach ($robots_data as $key => $value) {
@@ -53,13 +53,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $redirect = true;
         } else {
             $xtpl->assign('TITLE', $lang_module['robots_error_writable']);
-            $xtpl->assign('CONTENT', str_replace(array(
+            $xtpl->assign('CONTENT', str_replace([
                 "\n",
                 "\t"
-            ), array(
+            ], [
                 '<br />',
                 '&nbsp;&nbsp;&nbsp;&nbsp;'
-            ), nv_htmlspecialchars($rbcontents)));
+            ], nv_htmlspecialchars($rbcontents)));
             $xtpl->parse('main.nowrite');
         }
     }
@@ -76,8 +76,8 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('CHECKSS', $checkss);
 
-$robots_data = array();
-$robots_other = array();
+$robots_data = [];
+$robots_other = [];
 
 if (file_exists($cache_file)) {
     include $cache_file;
@@ -104,7 +104,7 @@ if ($global_config['rewrite_enable']) {
 }
 $files = scandir(NV_ROOTDIR, true);
 sort($files);
-$contents = array();
+$contents = [];
 $contents[] = 'User-agent: *';
 $number = 0;
 foreach ($files as $file) {
@@ -115,19 +115,19 @@ foreach ($files as $file) {
             $file = '/' . $file;
         }
 
-        $data = array(
-            'number' => ++ $number,
+        $data = [
+            'number' => ++$number,
             'filename' => $file
-        );
+        ];
 
         $type = isset($robots_data[$file]) ? $robots_data[$file] : 1;
 
-        for ($i = 0; $i <= 2; $i ++) {
-            $option = array(
+        for ($i = 0; $i <= 2; $i++) {
+            $option = [
                 'value' => $i,
                 'title' => $lang_module['robots_type_' . $i],
                 'selected' => ($type == $i) ? ' selected="selected"' : ''
-            );
+            ];
 
             $xtpl->assign('OPTION', $option);
             $xtpl->parse('main.loop.option');
@@ -138,18 +138,18 @@ foreach ($files as $file) {
     }
 }
 foreach ($robots_other as $file => $value) {
-    $data = array(
-        'number' => ++ $number,
+    $data = [
+        'number' => ++$number,
         'filename' => $file
-    );
+    ];
     $xtpl->assign('DATA', $data);
 
-    for ($i = 0; $i <= 2; $i ++) {
-        $option = array(
+    for ($i = 0; $i <= 2; $i++) {
+        $option = [
             'value' => $i,
             'title' => $lang_module['robots_type_' . $i],
             'selected' => ($value == $i) ? ' selected="selected"' : ''
-        );
+        ];
 
         $xtpl->assign('OPTION', $option);
         $xtpl->parse('main.other.option');

@@ -8,7 +8,7 @@
  * @Createdate Apr 21, 2010 4:22:24 PM
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -24,9 +24,9 @@ if ($t == 3) {
     $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send');
     $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_reply');
 } elseif ($t == 2) {
-    $sends = $nv_Request->get_typed_array('sends', 'post', 'int', array());
+    $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
 
-    if (! empty($sends)) {
+    if (!empty($sends)) {
         $in = implode(',', $sends);
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id IN (' . $in . ')');
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id IN (' . $in . ')');

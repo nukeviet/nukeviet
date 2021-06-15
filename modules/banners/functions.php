@@ -12,18 +12,18 @@ if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
-$lang_array = array(
+$lang_array = [
     'vi' => $lang_module['addads_block_lang_vi'],
     'en' => $lang_module['addads_block_lang_en'],
     'ru' => $lang_module['addads_block_lang_ru'],
     'zz' => $lang_module['addads_block_lang_zz']
-);
+];
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE act=1 ORDER BY blang ASC';
 $global_array_plans = $nv_Cache->db($sql, 'id', $module_name);
 
-$manament = array();
-$global_array_uplans = array();
+$manament = [];
+$global_array_uplans = [];
 // Kiểm tra quyền đăng quảng cáo
 if (defined('NV_IS_USER')) {
     foreach ($global_array_plans as $plan) {
