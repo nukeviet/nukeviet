@@ -1846,15 +1846,16 @@ function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = fals
 
     if ($request_uri_check) {
         $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
-        $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+        $url_rewrite_check = urldecode($url_rewrite_check);
+        $request_uri = urldecode($_SERVER['REQUEST_URI']);
         if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
             $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
         }
 
         if ($abs_comp and strcmp($request_uri, $url_rewrite_check) !== 0) {
-            nv_redirect_location($url_rewrite_check);
+            nv_redirect_location($page_url);
         } elseif (!str_starts_with($request_uri, $url_rewrite_check)) {
-            nv_redirect_location($url_rewrite_check);
+            nv_redirect_location($page_url);
         }
     }
 
