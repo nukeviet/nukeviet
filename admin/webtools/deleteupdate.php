@@ -17,11 +17,21 @@ $contents = 'Error Access!!!';
 $checksess = $nv_Request->get_title('checksess', 'get', '');
 if ($checksess == NV_CHECK_SESSION and file_exists(NV_ROOTDIR . '/install/update_data.php')) {
     $contents = '';
-    $list_file_docs = nv_scandir(NV_ROOTDIR . '/install', '/^update_docs_([a-z]{2})\.html$/');
 
     // Xoa cac file docs
-    foreach ($list_file_docs as $docsfile) {
-        $check_del = nv_deletefile(NV_ROOTDIR . '/install/' . $docsfile);
+    $_list_file = nv_scandir(NV_ROOTDIR . '/install', '/^update_docs_([a-z]{2})\.html$/');
+    foreach ($_list_file as $_file) {
+        $check_del = nv_deletefile(NV_ROOTDIR . '/install/' . $_file);
+
+        if ($check_del[0] == 0) {
+            $contents .= $check_del[1] . ' ' . $lang_module['update_manual_delete'];
+        }
+    }
+
+    // Xoa cac file update step
+    $_list_file = nv_scandir(NV_ROOTDIR . '/install', '/^update_step_([a-z0-9\-\_\.]+)\.php$/');
+    foreach ($_list_file as $_file) {
+        $check_del = nv_deletefile(NV_ROOTDIR . '/install/' . $_file);
 
         if ($check_del[0] == 0) {
             $contents .= $check_del[1] . ' ' . $lang_module['update_manual_delete'];
