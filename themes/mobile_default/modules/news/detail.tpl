@@ -69,27 +69,27 @@
         <div class="list-group news-download-file">
             <!-- BEGIN: loop -->
             <div class="list-group-item">
-                <!-- BEGIN: show_quick_viewpdf -->
+                <!-- BEGIN: show_quick_viewfile -->
                 <span class="badge">
-                    <a role="button" data-toggle="collapse" href="#pdf{FILE.key}" aria-expanded="false" aria-controls="pdf{FILE.key}">
-                        <i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i>
+                    <a role="button" data-toggle="collapse" href="#file-{FILE.key}" aria-expanded="false" aria-controls="file-{FILE.key}">
+                        <i class="fa fa-eye" data-rel="tooltip" data-content="{LANG.preview}"></i>
                     </a>
                 </span>
-                <!-- END: show_quick_viewpdf -->
-                <a href="{FILE.url}" title="{FILE.titledown}{FILE.title}">{FILE.titledown}: <strong>{FILE.title}</strong></a>
-                <!-- BEGIN: content_quick_viewpdf -->
+                <!-- END: show_quick_viewfile -->
+                <a href="{FILE.url}" title="{FILE.titledown} {FILE.title}">{FILE.titledown}: <strong>{FILE.title}</strong></a>
+                <!-- BEGIN: content_quick_viewfile -->
                 <div class="clearfix"></div>
-                <div class="collapse" id="pdf{FILE.key}" data-src="{FILE.urlpdf}" data-toggle="collapsepdf">
+                <div class="collapse" id="file-{FILE.key}" data-src="{FILE.urlfile}" data-toggle="collapsefile" data-loaded="false">
                     <div style="height:10px"></div>
                     <div class="well">
                         <iframe height="600" scrolling="yes" src="" width="100%"></iframe>
                     </div>
                 </div>
-                <!-- END: content_quick_viewpdf -->
+                <!-- END: content_quick_viewfile -->
                 <!-- BEGIN: show_quick_viewimg -->
                 <span class="badge">
-                    <a href="javascript:void(0)" data-src="{FILE.src}" id="open_modal_image" data-width="100%">
-                        <i class="fa fa-file-pdf-o" data-rel="tooltip" data-content="{LANG.quick_view_pdf}"></i>
+                    <a href="javascript:void(0)" data-src="{FILE.src}" data-toggle="newsattachimage">
+                        <i class="fa fa-eye" data-rel="tooltip" data-content="{LANG.preview}"></i>
                     </a>
                 </span>
                 <!-- END: show_quick_viewimg -->

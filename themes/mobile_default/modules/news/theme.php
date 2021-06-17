@@ -664,9 +664,9 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
             $xtpl->assign('FILE', $file);
 
             // Hỗ trợ xem trực tuyến PDF và ảnh, các định dạng khác tải về để xem
-            if ($file['ext'] == 'pdf') {
-                $xtpl->parse('main.files.loop.show_quick_viewpdf');
-                $xtpl->parse('main.files.loop.content_quick_viewpdf');
+            if (!empty($file['urlfile'])) {
+                $xtpl->parse('main.files.loop.show_quick_viewfile');
+                $xtpl->parse('main.files.loop.content_quick_viewfile');
             } elseif (preg_match('/^png|jpe|jpeg|jpg|gif|bmp|ico|tiff|tif|svg|svgz$/', $file['ext'])) {
                 $xtpl->parse('main.files.loop.show_quick_viewimg');
             }

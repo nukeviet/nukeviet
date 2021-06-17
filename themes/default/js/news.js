@@ -6,16 +6,19 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-$(document).ready(function() {
-    // Xem PDF đính kèm
-    $('[data-toggle="collapsepdf"]').each(function() {
-        $('#' + $(this).attr('id')).on('shown.bs.collapse', function() {
-            $(this).find('iframe').attr('src', $(this).data('src'));
-        });
-    });
+$(document).ready(function () {
+    // Xem file đính kèm
+    $('[data-toggle="collapsefile"]').each(function () {
+        $('#' + $(this).attr('id')).on('show.bs.collapse', function () {
+            if ('false' == $(this).attr('data-loaded')) {
+                $(this).attr('data-loaded', 'true')
+                $(this).find('iframe').attr('src', $(this).data('src'))
+            }
+        })
+    })
 
     // Xem ảnh đính kèm
-    $('[data-toggle="newsattachimage"]').click(function(e) {
+    $('[data-toggle="newsattachimage"]').click(function (e) {
         e.preventDefault();
         modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width: 100%; height: auto;"/></div>');
     });
@@ -23,7 +26,7 @@ $(document).ready(function() {
 
 function sendrating(id, point, newscheckss) {
     if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
-        $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
+        $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function (res) {
             res = res.split('|');
             $('#stringrating').html(res[0]);
             if (typeof res[1] != 'undefined' && res[1] != '0') {
@@ -38,7 +41,7 @@ function sendrating(id, point, newscheckss) {
 
 function nv_del_content(id, checkss, base_adminurl, detail) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
+        $.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function (res) {
             var r_split = res.split('_');
             if (r_split[0] == 'OK') {
                 if (detail) {
@@ -59,7 +62,7 @@ function nv_del_content(id, checkss, base_adminurl, detail) {
 function get_alias(op) {
     var title = strip_tags(document.getElementById('idtitle').value);
     if (title != '') {
-        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + op + '&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title), function(res) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + op + '&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title), function (res) {
             if (res != "") {
                 document.getElementById('idalias').value = res;
             } else {
@@ -74,7 +77,7 @@ function fix_news_image() {
     var news = $('#news-bodyhtml'), newsW, w, h;
     if (news.length) {
         var newsW = news.innerWidth();
-        $.each($('img', news), function() {
+        $.each($('img', news), function () {
             if (typeof $(this).data('width') == "undefined") {
                 w = $(this).innerWidth();
                 h = $(this).innerHeight();
@@ -101,7 +104,7 @@ function newsSendMailModal(fm, url, sess) {
             cache: !1,
             url: url,
             data: 'checkss=' + sess,
-            success: function(e) {
+            success: function (e) {
                 $('.modal-body', $(fm)).html(e);
                 if ($('[data-toggle=recaptcha]', $(fm)).length) {
                     reCaptcha2Recreate($(fm));
@@ -138,7 +141,7 @@ function newsSendMail(event, form) {
         url: $(form).prop("action"),
         data: a,
         dataType: "json",
-        success: function(b) {
+        success: function (b) {
             $("input,button,textarea", form).prop("disabled", !1);
             var c = $("[onclick*='change_captcha']", form);
             c && c.click();
@@ -148,10 +151,10 @@ function newsSendMail(event, form) {
     })
 }
 
-$(window).on('load', function() {
+$(window).on('load', function () {
     fix_news_image();
 });
 
-$(window).on("resize", function() {
+$(window).on("resize", function () {
     fix_news_image();
 });
