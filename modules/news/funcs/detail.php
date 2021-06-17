@@ -179,17 +179,31 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
 
         foreach ($files as $file_id => $file) {
             $is_localfile = (!nv_is_url($file));
-            $file_title = $is_localfile ? basename($file) : $lang_module['click_to_download'];
-            $news_contents['files'][] = [
+            $basename = basename($file);
+            $file_title = $is_localfile ? $basename : $lang_module['click_to_download'];
+            $news_contents['files'][$file_id] = [
+                'is_localfile' => $is_localfile,
                 'title' => $file_title,
                 'key' => md5($file_id . $file_title),
-                'ext' => nv_getextension($file_title),
+                'ext' => nv_getextension($basename),
                 'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                 'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
-                'url' => $is_localfile ? ($page_url . '&amp;download=1&amp;id=' . $file_id) : $file,
-                'urlpdf' => $page_url . '&amp;pdf=1&amp;id=' . $file_id,
-                'urldoc' => $is_localfile ? $file : ('https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file)
+                'url' => $is_localfile ? ($page_url . '&amp;download=1&amp;id=' . $file_id) : $file
             ];
+            if ($news_contents['files'][$file_id]['ext'] == 'pdf') {
+                if ($is_localfile) {
+                    $news_contents['files'][$file_id]['urlfile'] = $page_url . '&amp;pdf=1&amp;id=' . $file_id;
+                } else {
+                    $news_contents['files'][$file_id]['urlfile'] = 'https://docs.google.com/viewerng/viewer?embedded=true&url=' . urlencode($file);
+                }
+            } elseif (in_array($news_contents['files'][$file_id]['ext'], ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'])) {
+                if (!$is_localfile) {
+                    $news_contents['files'][$file_id]['urlfile'] = 'https://view.officeapps.live.com/op/embed.aspx?src=' . urlencode($file);
+                } elseif (!$ips->is_localhost()) {
+                    $url = NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file;
+                    $news_contents['files'][$file_id]['urlfile'] = 'https://view.officeapps.live.com/op/embed.aspx?src=' . urlencode($url);
+                }
+            }
         }
     }
 

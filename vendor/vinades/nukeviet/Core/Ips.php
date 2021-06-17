@@ -229,7 +229,8 @@ class Ips
      * @param string $ip
      * @return integer|boolean -1 false true
      */
-    public function checkIp6($requestIp, $ip) {
+    public function checkIp6($requestIp, $ip)
+    {
         if (!$this->ip6_support) {
             // Không hỗ trợ xử lý IPv6 trả về -1
             return -1;
@@ -267,5 +268,17 @@ class Ips
         }
 
         return true;
+    }
+
+    /**
+     * @param string $ip 
+     * @return bool 
+     */
+    public function is_localhost($ip = '')
+    {
+        if (empty($ip)) {
+            $ip = $this->remote_ip;
+        }
+        return (substr($ip, 0, 4) == '127.' or $ip == '::1');
     }
 }
