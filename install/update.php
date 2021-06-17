@@ -1901,6 +1901,11 @@ if ($nv_update_config['step'] == 1) {
             die('&nbsp;');
         }
     } else {
+        // Gọi thêm các công việc khác sau khi update xong.
+        if (file_exists(NV_ROOTDIR . '/install/update_step_3.php')) {
+            require NV_ROOTDIR . '/install/update_step_3.php';
+        }
+
         // Xoa toan bo cache
         $nv_Cache->delAll();
 
