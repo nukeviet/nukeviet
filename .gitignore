@@ -10,6 +10,7 @@
 /data/config/efloodip.php
 /data/config/banip.php
 /data/config/admin_config.php
+/data/config/disable_site_content.*.txt
 /data/logs/data_logs/
 /data/logs/dump_backup/
 /data/logs/error_logs/
