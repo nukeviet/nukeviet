@@ -1842,6 +1842,12 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
  */
 function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false)
 {
+    global $home;
+
+    if ($home) {
+        $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+    }
+
     $url_rewrite = nv_url_rewrite($page_url, true);
 
     if ($request_uri_check) {
