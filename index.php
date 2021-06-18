@@ -70,7 +70,7 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') or $nv_Request->isset_re
         if ($tokend === NV_CHECK_SESSION and in_array($theme, $global_config['array_user_allowed_theme'])) {
             $nv_Request->set_Cookie('nv_u_theme_' . NV_LANG_DATA, $theme, NV_LIVE_COOKIE_TIME);
         }
-        $nv_BotManager->setNoIndex()->printToHeaders();
+        $nv_BotManager->setPrivate();
         nv_htmlOutput('OK');
     }
 } else {

@@ -12,6 +12,8 @@ if (!defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
+$nv_BotManager->setPrivate();
+
 $links = NV_MY_DOMAIN;
 $id = $nv_Request->get_int('id', 'get', 0);
 if ($id > 0) {
