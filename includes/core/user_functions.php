@@ -53,7 +53,7 @@ function nv_blocks_content($sitecontent)
     $_posAllowed = [];
 
     foreach ($theme_config_positions as $_pos) {
-        $_pos = trim(( string )$_pos['tag']);
+        $_pos = trim((string)$_pos['tag']);
         unset($matches);
         if (preg_match('/^\[([^\]]+)\]$/is', $_pos, $matches)) {
             $_posAllowed[] = $matches[1];
@@ -264,9 +264,25 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property, $nv_BotManager;
+    global $global_config, $lang_global, $key_words, $description, $module_name, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
 
     $return = [];
+
+    if (empty($site_description) or ($global_config['metaTagsOgp'] and empty($meta_property['og:url']))) {
+        if (empty($page_url)) {
+            if ($home) {
+                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+            } else {
+                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+                if ($op != 'main') {
+                    $current_page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $op;
+                }
+            }
+        } else {
+            $current_page_url = $page_url;
+        }
+        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
+    }
 
     // Tại trang chủ lấy mô tả của site thay vì mô tả của module chọn làm trang chủ
     $site_description = $home ? $global_config['site_description'] : (!empty($description) ? $description : (empty($module_info['description']) ? '' : $module_info['description']));
@@ -280,7 +296,7 @@ function nv_html_meta_tags($html = true)
             $ds[] = $module_info['funcs'][$op]['func_custom_name'];
         }
         $ds[] = $module_info['custom_title'];
-        $ds[] = $client_info['selfurl'];
+        $ds[] = $current_page_url;
         $site_description = implode(' - ', $ds);
     } elseif ($site_description == 'no') {
         $site_description = '';
@@ -362,7 +378,7 @@ function nv_html_meta_tags($html = true)
                 $metatags[] = $mt['meta_item'];
             }
             foreach ($metatags as $meta) {
-                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and preg_match("/^([^\'\"]+)$/", ( string )$meta['content'])) {
+                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and preg_match("/^([^\'\"]+)$/", (string)$meta['content'])) {
                     $return[] = [
                         'name' => $meta['group'],
                         'value' => $meta['value'],
@@ -378,7 +394,8 @@ function nv_html_meta_tags($html = true)
 
     /**
      * Đọc kỹ giấy phép trước khi thay đổi giá trị này
-     * @link https://github.com/nukeviet/nukeviet/blob/nukeviet4.4/LICENSE
+     *
+     * @link https://github.com/nukeviet/nukeviet/blob/nukeviet4.5/LICENSE
      */
     $return[] = [
         'name' => 'name',
@@ -402,20 +419,6 @@ function nv_html_meta_tags($html = true)
         ];
     }
 
-    if (empty($canonicalUrl)) {
-        if ($home) {
-            $canonicalUrl = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
-        } else {
-            $canonicalUrl = str_replace(NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $client_info['selfurl']);
-        }
-    }
-    if (substr($canonicalUrl, 0, 4) != 'http') {
-        if (substr($canonicalUrl, 0, 1) != '/') {
-            $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
-        }
-        $canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;
-    }
-
     // Open Graph protocol http://ogp.me
     if ($global_config['metaTagsOgp']) {
         if (empty($meta_property['og:title'])) {
@@ -428,7 +431,7 @@ function nv_html_meta_tags($html = true)
             $meta_property['og:type'] = 'website';
         }
         if (empty($meta_property['og:url'])) {
-            $meta_property['og:url'] = $canonicalUrl;
+            $meta_property['og:url'] = $current_page_url;
         }
         $meta_property['og:site_name'] = $global_config['site_name'];
 
@@ -494,11 +497,44 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $canonicalUrl, $module_info, $db_config, $nv_Cache;
+    global $canonicalUrl, $prevPage, $nextPage, $module_info, $db_config, $nv_Cache, $global_config, $lang_global;
 
     $return = [];
     if (!empty($canonicalUrl)) {
-        $return[] = ['rel' => 'canonical', 'href' => $canonicalUrl];
+        if (substr($canonicalUrl, 0, 4) != 'http') {
+            if (substr($canonicalUrl, 0, 1) != '/') {
+                $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
+            }
+            $canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;
+        }
+        $return[] = [
+            'rel' => 'canonical',
+            'href' => $canonicalUrl
+        ];
+    }
+    if (!empty($prevPage)) {
+        if (substr($prevPage, 0, 4) != 'http') {
+            if (substr($prevPage, 0, 1) != '/') {
+                $prevPage = NV_BASE_SITEURL . $prevPage;
+            }
+            $prevPage = NV_MAIN_DOMAIN . $prevPage;
+        }
+        $return[] = [
+            'rel' => 'prev',
+            'href' => $prevPage
+        ];
+    }
+    if (!empty($nextPage)) {
+        if (substr($nextPage, 0, 4) != 'http') {
+            if (substr($nextPage, 0, 1) != '/') {
+                $nextPage = NV_BASE_SITEURL . $nextPage;
+            }
+            $nextPage = NV_MAIN_DOMAIN . $nextPage;
+        }
+        $return[] = [
+            'rel' => 'next',
+            'href' => $nextPage
+        ];
     }
 
     $nv_html_site_rss = nv_html_site_rss(false);
@@ -550,11 +586,13 @@ function nv_html_page_title($html = true)
                 '/pagetitle/i',
                 '/funcname/i',
                 '/modulename/i',
-                '/sitename/i'], [
-                    $page_title,
-                    $module_info['funcs'][$op]['func_custom_name'],
-                    $module_info['custom_title'],
-                    $global_config['site_name']], $global_config['pageTitleMode']);
+                '/sitename/i'
+            ], [
+                $page_title,
+                $module_info['funcs'][$op]['func_custom_name'],
+                $module_info['custom_title'],
+                $global_config['site_name']
+            ], $global_config['pageTitleMode']);
         }
     }
     $_title = nv_htmlspecialchars(strip_tags($_title));
@@ -611,7 +649,8 @@ function nv_html_site_rss($html = true)
                 $return[] = [
                     'rel' => 'alternate',
                     'href' => $href,
-                    'type' => 'application/rss+xml'];
+                    'type' => 'application/rss+xml'
+                ];
             }
         }
     }

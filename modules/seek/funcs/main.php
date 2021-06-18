@@ -8,22 +8,24 @@
  * @Createdate 24/8/2010, 2:0
  */
 
-if (! defined('NV_IS_MOD_SEARCH')) {
+if (!defined('NV_IS_MOD_SEARCH')) {
     die('Stop!!!');
 }
 
 $array_mod = LoadModulesSearch();
 $is_search = false;
-$search = array(
+$search = [
     'key' => '',
     'len_key' => 0,
     'mod' => 'all',
-    'logic' => 1, //OR
+    'logic' => 1, // OR
     'page' => 1,
     'is_error' => false,
     'errorInfo' => '',
     'content' => ''
-);
+];
+
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 if ($nv_Request->isset_request('q', 'get')) {
     $is_search = true;
@@ -37,40 +39,46 @@ if ($nv_Request->isset_request('q', 'get')) {
     if ($search['logic'] != 1) {
         $search['logic'] = 0;
     }
-    if (! isset($array_mod[$search['mod']])) {
+    if (!isset($array_mod[$search['mod']])) {
         $search['mod'] = 'all';
     }
 
-    $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode($search['key']);
-    if ($search['mod'] != 'all') {
-        $base_url_rewrite .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
-    }
-    if ($search['logic'] != 1) {
-        $base_url_rewrite .= '&l=' . $search['logic'];
-    }
-    if ($search['page'] > 1) {
-        $base_url_rewrite .= '&page=' . $search['page'];
-    }
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-    $request_uri = $_SERVER['REQUEST_URI'];
-    if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-        nv_redirect_location($base_url_rewrite);
-    }
-
-    if (! empty($search['key'])) {
-        if (! $search['logic']) {
-            $search['key'] = preg_replace(array( "/^([\S]{1})\s/uis", "/\s([\S]{1})\s/uis", "/\s([\S]{1})$/uis" ), " ", $search['key']);
+    if (!empty($search['key'])) {
+        if (!$search['logic']) {
+            $search['key'] = preg_replace([
+                "/^([\S]{1})\s/uis",
+                "/\s([\S]{1})\s/uis",
+                "/\s([\S]{1})$/uis"
+            ], ' ', $search['key']);
         }
+        $search['key'] = str_replace(["'", '"', '<', '>', '&#039;', '&quot;', '&lt;', '&gt;'], '', $search['key']);
         $search['key'] = trim($search['key']);
         $search['len_key'] = nv_strlen($search['key']);
     }
+
+    $page_url .= '&q=' . urlencode($search['key']);
+    if ($search['mod'] != 'all') {
+        $page_url .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
+    }
+    if ($search['logic'] != 1) {
+        $page_url .= '&l=' . $search['logic'];
+    }
+
+    $base_url = $page_url;
+    if ($search['page'] > 1) {
+        $page_url .= '&page=' . $search['page'];
+    }
+
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 
     if ($search['len_key'] < NV_MIN_SEARCH_LENGTH) {
         $search['is_error'] = true;
         $search['errorInfo'] = sprintf($lang_module['searchQueryError'], NV_MIN_SEARCH_LENGTH);
     } else {
-        if (! empty($search['mod']) and isset($array_mod[$search['mod']])) {
-            $mods = array( $search['mod'] => $array_mod[$search['mod']] );
+        if (!empty($search['mod']) and isset($array_mod[$search['mod']])) {
+            $mods = [
+                $search['mod'] => $array_mod[$search['mod']]
+            ];
             $limit = 10;
             $is_generate_page = true;
         } else {
@@ -87,25 +95,35 @@ if ($nv_Request->isset_request('q', 'get')) {
         foreach ($mods as $m_name => $m_values) {
             $page = $search['page'];
             $num_items = 0;
-            $result_array = array();
-            include NV_ROOTDIR . '/modules/' . $m_values['module_file'] . '/search.php' ;
+            $result_array = [];
+            include NV_ROOTDIR . '/modules/' . $m_values['module_file'] . '/search.php';
 
-            if (! empty($num_items) and ! empty($result_array)) {
+            if (!empty($num_items) and !empty($result_array)) {
                 $search['content'] .= search_result_theme($result_array, $m_name, $m_values['custom_title'], $search, $is_generate_page, $limit, $num_items);
             }
+        }
+
+        if ($search['page'] > 1 and (empty($search['content']) or !$is_generate_page)) {
+            nv_redirect_location($base_url);
+        }
+
+        if ($is_generate_page) {
+            betweenURLs($page, ceil($num_items / $limit), $base_url, '&page=', $prevPage, $nextPage);
         }
 
         if (empty($search['content'])) {
             $search['content'] = $lang_module['search_none'] . ' &quot;' . $search['key'] . '&quot;';
         }
     }
+} else {
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 }
 
 $contents = search_main_theme($is_search, $search, $array_mod);
 
 $page_title = $module_info['site_title'];
 
-if (! empty($search['key'])) {
+if (!empty($search['key'])) {
     $page_title .= NV_TITLEBAR_DEFIS . $search['key'];
 
     if ($search['page'] > 1) {

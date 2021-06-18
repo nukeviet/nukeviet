@@ -16,6 +16,8 @@ $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 $set_view_page = ($page > 1 and substr($viewcat, 0, 13) == 'viewcat_main_') ? true : false;
+$page_url = $base_url = $global_array_cat[$catid]['link'];
+$no_generate = ['viewcat_two_column'];
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     if ($set_view_page) {
@@ -28,11 +30,19 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
     }
 }
 
-// Kiểm tra và chặn đánh tùy ý các op
-if (($page < 2 and isset($array_op[1])) or isset($array_op[2])) {
-    $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
-    nv_redirect_location($url);
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+
+    /**
+     * @link https://github.com/nukeviet/nukeviet/issues/2990
+     * Một số kiểu hiển thị không được đánh page
+     */
+    if (in_array($viewcat, $no_generate)) {
+        nv_redirect_location($base_url);
+    }
 }
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $page_title = (!empty($global_array_cat[$catid]['titlesite'])) ? $global_array_cat[$catid]['titlesite'] : $global_array_cat[$catid]['title'];
 $key_words = $global_array_cat[$catid]['keywords'];
@@ -43,9 +53,8 @@ if (!empty($global_array_cat[$catid]['image'])) {
 }
 
 if (empty($contents)) {
-    $array_catpage = array();
-    $array_cat_other = array();
-    $base_url = $global_array_cat[$catid]['link'];
+    $array_catpage = [];
+    $array_cat_other = [];
     $show_no_image = $module_config[$module_name]['show_no_image'];
 
     if ($viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' or $set_view_page) {
@@ -58,6 +67,9 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
@@ -115,6 +127,7 @@ if (empty($contents)) {
             $array_catpage[] = $item;
             $weight_publtime = ($order_articles) ? $item['weight'] : $item['publtime'];
         }
+
         if ($st_links > 0) {
             $db_slave->sqlreset()
                 ->select('id, listcatid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
@@ -136,8 +149,8 @@ if (empty($contents)) {
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
         $contents = viewcat_page_new($array_catpage, $array_cat_other, $generate_page);
     } elseif ($viewcat == 'viewcat_main_left' or $viewcat == 'viewcat_main_right' or $viewcat == 'viewcat_main_bottom') {
-        $array_catcontent = array();
-        $array_subcatpage = array();
+        $array_catcontent = [];
+        $array_subcatpage = [];
 
         $db_slave->sqlreset()
             ->select('COUNT(*)')
@@ -146,6 +159,9 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
@@ -206,7 +222,7 @@ if (empty($contents)) {
         }
         unset($sql, $result);
 
-        $array_cat_other = array();
+        $array_cat_other = [];
 
         if ($global_array_cat[$catid]['subcatid'] != '') {
             $key = 0;
@@ -286,7 +302,7 @@ if (empty($contents)) {
         $contents .= call_user_func('viewsubcat_main', $viewcat, $array_cat_other);
     } elseif ($viewcat == 'viewcat_two_column') {
         // Cac bai viet phan dau
-        $array_catcontent = array();
+        $array_catcontent = [];
 
         $db_slave->sqlreset()
             ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
@@ -440,6 +456,9 @@ if (empty($contents)) {
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
 
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
+
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
@@ -474,7 +493,6 @@ if (empty($contents)) {
         $contents = call_user_func($viewcat, $array_catpage, $catid, $generate_page);
     } elseif ($viewcat == 'viewcat_list_new' or $viewcat == 'viewcat_list_old') {
         // Xem theo tieu de
-
         $order_by = ($viewcat == 'viewcat_list_new') ? $order_articles_by . ' DESC, addtime DESC' : $order_articles_by . ' ASC, addtime ASC';
 
         $db_slave->sqlreset()
@@ -484,6 +502,10 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
+
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {
             $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')->where('id=' . $global_array_cat[$catid]['featured']);

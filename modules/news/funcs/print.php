@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -37,23 +37,17 @@ if ($id > 0 and $catid > 0) {
     unset($sql, $result, $body_contents);
 
     if ($content['allowed_print'] == 1 and (defined('NV_IS_MODADMIN') or ($content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ($content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME)))) {
-        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
-        if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-            nv_redirect_location($base_url_rewrite);
-        }
+        $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'];
+        $canonicalUrl = getCanonicalUrl($page_url, true);
 
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $content['sourceid'];
         $result = $db_slave->query($sql);
         $sourcetext = $result->fetchColumn();
         unset($sql, $result);
 
-        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true);
-
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-
         $meta_tags = nv_html_meta_tags();
 
-        $result = array(
+        $result = [
             'url' => $global_config['site_url'],
             'meta_tags' => $meta_tags,
             'sitename' => $global_config['site_name'],
@@ -67,13 +61,13 @@ if ($id > 0 and $catid > 0) {
             'bodytext' => $content['bodytext'],
             'copyright' => $content['copyright'],
             'copyvalue' => $module_config[$module_name]['copyright'],
-            'link' => "<a href=\"" . NV_MY_DOMAIN . $base_url_rewrite . "\" title=\"" . $content['title'] . "\">" . NV_MY_DOMAIN . $base_url_rewrite . "</a>\n",
+            'link' => '<a href="' . $canonicalUrl . '" title="' . $content['title'] . '">' . $canonicalUrl . "</a>\n",
             'contact' => $global_config['site_email'],
             'author' => $content['author'],
             'source' => $sourcetext
-        );
+        ];
 
-        if (! empty($content['homeimgfile']) and $content['imgposition'] > 0) {
+        if (!empty($content['homeimgfile']) and $content['imgposition'] > 0) {
             $src = $alt = $note = '';
             $width = $height = 0;
             if ($content['homeimgthumb'] == 1 and $content['imgposition'] == 1) {
@@ -88,13 +82,13 @@ if ($id > 0 and $catid > 0) {
             }
             $alt = (empty($content['homeimgalt'])) ? $content['title'] : $content['homeimgalt'];
 
-            $result['image'] = array(
+            $result['image'] = [
                 'src' => $src,
                 'width' => $width,
                 'alt' => $alt,
                 'note' => $content['homeimgalt'],
                 'position' => $content['imgposition']
-            );
+            ];
         }
 
         // Chặn lập chỉ mục tìm kiếm

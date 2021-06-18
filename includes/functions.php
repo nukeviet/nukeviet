@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 23:48
  */
+
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -1348,8 +1349,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     if (!empty($global_config['reply_email']) and (empty($sm_parameters['reply_address']) or $global_config['force_reply'])) {
         $sm_parameters['reply_address'] = $global_config['reply_email'];
     }
-    if (!empty($global_config['sender_mail']) and $global_config['force_sender']) {
-        $sm_parameters['from_address'] = $global_config['sender_mail'];
+    if (!empty($global_config['sender_email']) and $global_config['force_sender']) {
+        $sm_parameters['from_address'] = $global_config['sender_email'];
     }
 
     $sm_parameters['reply'] = [];
@@ -1514,6 +1515,33 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     } catch (PHPMailer\PHPMailer\Exception $e) {
         trigger_error($e->errorMessage(), E_USER_WARNING);
         return ($testmode ? $e->errorMessage() : false);
+    }
+}
+
+/**
+ * betweenURLs()
+ *
+ * @param integer $page
+ * @param integer $total
+ * @param string $base_url
+ * @param string $urlappend
+ * @param string $prevPage
+ * @param string $nextPage
+ */
+function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPage)
+{
+    if ($page > 1 and $page > $total) {
+        nv_redirect_location($base_url);
+    }
+
+    if ($page > 1) {
+        $prev = $page - 1;
+        $prevPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($prev > 1 ? ($urlappend . $prev) : ''), true);
+    }
+
+    if ($page >= 1 and $page < $total) {
+        $next = $page + 1;
+        $nextPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . $urlappend . $next, true);
     }
 }
 
@@ -1723,6 +1751,45 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
     }
 
     return '<ul class="pagination">' . $page_string . '</ul>';
+}
+
+/**
+ * getCanonicalUrl()
+ *
+ * $page_url: Đường dẫn tuyệt đối từ thư mục gốc đến trang
+ * $request_uri_check: Có so sánh đường dẫn này với request_uri hay không
+ * $abs_comp: So sánh tuyệt đối (true) hoặc chỉ cần có chứa (false)
+ * @param string $page_url
+ * @param bool $request_uri_check
+ * @param bool $abs_comp
+ * @return
+ */
+function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false)
+{
+    global $home;
+
+    if ($home) {
+        $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+    }
+
+    $url_rewrite = nv_url_rewrite($page_url, true);
+
+    if ($request_uri_check) {
+        $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
+        $url_rewrite_check = urldecode($url_rewrite_check);
+        $request_uri = urldecode($_SERVER['REQUEST_URI']);
+        if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
+            $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
+        }
+
+        if ($abs_comp and strcmp($request_uri, $url_rewrite_check) !== 0) {
+            nv_redirect_location($page_url);
+        } elseif (!str_starts_with($request_uri, $url_rewrite_check)) {
+            nv_redirect_location($page_url);
+        }
+    }
+
+    return NV_MAIN_DOMAIN . $url_rewrite;
 }
 
 /**

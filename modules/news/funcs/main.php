@@ -14,14 +14,27 @@ if (!defined('NV_IS_MOD_NEWS')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $contents = '';
 $cache_file = '';
+$viewcat = $module_config[$module_name]['indexfile'];
+$no_generate = ['viewcat_none', 'viewcat_main_left', 'viewcat_main_right', 'viewcat_main_bottom', 'viewcat_two_column'];
 
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-if (($page < 2 and isset($array_op[0])) or isset($array_op[1])) {
-    nv_redirect_location($base_url);
+if ($page > 1) {
+    $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
+
+    /**
+     * @link https://github.com/nukeviet/nukeviet/issues/2990
+     * Một số kiểu hiển thị không được đánh page
+     */
+    if (in_array($viewcat, $no_generate)) {
+        nv_redirect_location($base_url);
+    }
 }
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
+
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
@@ -30,7 +43,6 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
 }
 
 if (empty($contents)) {
-    $viewcat = $module_config[$module_name]['indexfile'];
     $show_no_image = $module_config[$module_name]['show_no_image'];
     $array_catpage = [];
     $array_cat_other = [];
@@ -46,6 +58,9 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
 
         $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
@@ -254,6 +269,9 @@ if (empty($contents)) {
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
 
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
+
         $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
@@ -292,6 +310,9 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;' . NV_OP_VARIABLE . '=page-', $prevPage, $nextPage);
 
         $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
