@@ -14,21 +14,21 @@ if (!defined('NV_IS_FILE_EXTENSIONS')) {
 
 $page_title = $lang_module['manage'];
 
-$theme_config = array(
+$theme_config = [
     'sys_icon' => 'fa-cubes',
     'admin_icon' => 'fa-cube'
-);
+];
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('THEME_CONFIG', $theme_config);
 
-$request = array(
+$request = [
     'type' => $nv_Request->get_title('type', 'get', ''),
     'title' => $nv_Request->get_title('title', 'get', ''),
     'checksess' => $nv_Request->get_title('checksess', 'get', '')
-);
+];
 
 // Cac module trong admin
 $array_module_admin = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module']);
@@ -40,8 +40,8 @@ $array_theme_admin = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_th
 if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_SESSION) == $request['checksess']) {
     // Kiem tra ung dung ton tai
     if (($request['type'] == 'module' and in_array($request['title'], $array_module_admin)) or ($request['type'] == 'theme' and in_array($request['title'], $array_theme_admin))) {
-        $row = array(
-            0 => array(
+        $row = [
+            0 => [
                 'id' => 0,
                 'type' => $request['type'],
                 'basename' => $request['title'],
@@ -50,8 +50,8 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                 'is_sys' => 1,
                 'virtual' => 0,
                 'note' => ''
-            )
-        );
+            ]
+        ];
     } else {
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
         $sth = $db->prepare($sql);
@@ -79,7 +79,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
         }
 
         $tempfolder = NV_ROOTDIR . '/' . NV_TEMP_DIR;
-        $files_folders = array();
+        $files_folders = [];
 
         // Lay danh sach file
         $sql = 'SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
@@ -151,14 +151,14 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             }
         } elseif ($row['type'] == 'theme') {
             $list = scandir(NV_ROOTDIR . '/themes/' . $row['basename']);
-            $array_no_zip = in_array($row['basename'], $array_theme_admin) ? array(
+            $array_no_zip = in_array($row['basename'], $array_theme_admin) ? [
                 '.',
                 '..'
-            ) : array(
+            ] : [
                 '.',
                 '..',
                 'config.ini'
-            );
+            ];
 
             foreach ($list as $file_i) {
                 if (!in_array($file_i, $array_no_zip)) {
@@ -170,7 +170,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                 if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $row['basename'] . '/config.ini')) {
                     $info = $xml->xpath('info');
                     $layoutdefault = (string) $xml->layoutdefault;
-                    $config_ini = "<?xml version='1.0'?>\n<theme>\n\t<info>\n\t\t<name>" . (string) $info[0]->name . "</name>\n\t\t<author>" . (string) $info[0]->author . "</author>\n\t\t<website>" . (string) $info[0]->website . "</website>\n\t\t<description>" . (string) $info[0]->description . "</description>\n\t\t<thumbnail>" . (string) $info[0]->thumbnail . "</thumbnail>\n\t</info>\n\n\t<layoutdefault>" . $layoutdefault . "</layoutdefault>\n\n\t<positions>";
+                    $config_ini = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<theme>\n\t<info>\n\t\t<name>" . (string) $info[0]->name . "</name>\n\t\t<author>" . (string) $info[0]->author . "</author>\n\t\t<website>" . (string) $info[0]->website . "</website>\n\t\t<description>" . (string) $info[0]->description . "</description>\n\t\t<thumbnail>" . (string) $info[0]->thumbnail . "</thumbnail>\n\t</info>\n\n\t<layoutdefault>" . $layoutdefault . "</layoutdefault>\n\n\t<positions>";
 
                     $position = $xml->xpath('positions');
                     $positions = $position[0]->position;
@@ -180,25 +180,25 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
 
                     $config_ini .= "\t</positions>";
 
-                    $array_layout_other = array();
+                    $array_layout_other = [];
                     $result = $db->query('SELECT layout, in_module, func_name FROM ' . NV_PREFIXLANG . '_modthemes t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.theme=' . $db->quote($row['basename']) . ' AND t1.func_id=t2.func_id AND t1.layout!=' . $db->quote($layoutdefault));
-                    while (list ($layout, $in_module, $func_name) = $result->fetch(3)) {
+                    while (list($layout, $in_module, $func_name) = $result->fetch(3)) {
                         $array_layout_other[$layout][$in_module][] = $func_name;
                     }
                     if (!empty($array_layout_other)) {
                         $config_ini .= "\n\n\t<setlayout>";
                         foreach ($array_layout_other as $layout => $array_layout_i) {
-                            $config_ini .= "\n\t\t<layout>\n\t\t\t<name>" . $layout . "</name>";
+                            $config_ini .= "\n\t\t<layout>\n\t\t\t<name>" . $layout . '</name>';
                             foreach ($array_layout_i as $in_module => $arr_func_name) {
-                                $config_ini .= "\n\t\t\t<funcs>" . $in_module . ":" . implode(",", $arr_func_name) . "</funcs>";
+                                $config_ini .= "\n\t\t\t<funcs>" . $in_module . ':' . implode(',', $arr_func_name) . '</funcs>';
                             }
                             $config_ini .= "\n\t\t</layout>\n";
                         }
                         $config_ini .= "\t</setlayout>";
                     }
 
-                    $array_layout_block = array();
-                    $array_not_all_func = array();
+                    $array_layout_block = [];
+                    $array_not_all_func = [];
                     $result = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme=' . $db->quote($row['basename']) . ' ORDER BY position ASC, weight ASC');
 
                     while ($_row = $result->fetch()) {
@@ -209,10 +209,10 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                     }
 
                     if (!empty($array_layout_block)) {
-                        $array_block_func = array();
+                        $array_block_func = [];
                         if (!empty($array_not_all_func)) {
                             $result = $db->query('SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . implode(',', $array_not_all_func) . ') AND t1.func_id=t2.func_id');
-                            while (list ($bid, $func_name, $in_module) = $result->fetch(3)) {
+                            while (list($bid, $func_name, $in_module) = $result->fetch(3)) {
                                 $array_block_func[$bid][$in_module][] = $func_name;
                             }
                         }
@@ -224,17 +224,17 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
                             }
 
                             $config_ini .= "\n\t\t<block>";
-                            $config_ini .= "\n\t\t\t<module>" . $_row['module'] . "</module>";
-                            $config_ini .= "\n\t\t\t<file_name>" . $_row['file_name'] . "</file_name>";
-                            $config_ini .= "\n\t\t\t<title>" . $_row['title'] . "</title>";
-                            $config_ini .= "\n\t\t\t<template>" . $_row['template'] . "</template>";
-                            $config_ini .= "\n\t\t\t<position>" . $_row['position'] . "</position>";
-                            $config_ini .= "\n\t\t\t<all_func>" . $_row['all_func'] . "</all_func>";
-                            $config_ini .= "\n\t\t\t<config>" . $_row['config'] . "</config>";
+                            $config_ini .= "\n\t\t\t<module>" . $_row['module'] . '</module>';
+                            $config_ini .= "\n\t\t\t<file_name>" . $_row['file_name'] . '</file_name>';
+                            $config_ini .= "\n\t\t\t<title>" . $_row['title'] . '</title>';
+                            $config_ini .= "\n\t\t\t<template>" . $_row['template'] . '</template>';
+                            $config_ini .= "\n\t\t\t<position>" . $_row['position'] . '</position>';
+                            $config_ini .= "\n\t\t\t<all_func>" . $_row['all_func'] . '</all_func>';
+                            $config_ini .= "\n\t\t\t<config>" . $_row['config'] . '</config>';
 
                             if (empty($_row['all_func'])) {
                                 foreach ($array_block_func[$_row['bid']] as $in_module => $arr_func_name) {
-                                    $config_ini .= "\n\t\t\t<funcs>" . $in_module . ":" . implode(",", $arr_func_name) . "</funcs>";
+                                    $config_ini .= "\n\t\t\t<funcs>" . $in_module . ':' . implode(',', $arr_func_name) . '</funcs>';
                                 }
                             }
                             $config_ini .= "\n\t\t</block>\n";
@@ -279,34 +279,34 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             $zip->add($files_folders, PCLZIP_OPT_REMOVE_PATH, $row['type'] == 'theme' ? (NV_ROOTDIR . '/themes') : NV_ROOTDIR);
 
             if (!empty($config_ini)) {
-                $zip->add(array(
-                    array(
+                $zip->add([
+                    [
                         PCLZIP_ATT_FILE_NAME => 'config.ini',
                         PCLZIP_ATT_FILE_CONTENT => $config_ini,
                         PCLZIP_ATT_FILE_NEW_FULL_NAME => $row['basename'] . '/config.ini'
-                    )
-                ));
+                    ]
+                ]);
             }
 
             // Them file cau hinh ung ung
             $extension_ini = "[extension]\n";
-            $extension_ini .= "id=\"" . $row['id'] . "\"\n";
-            $extension_ini .= "type=\"" . $row['type'] . "\"\n";
-            $extension_ini .= "name=\"" . $row['basename'] . "\"\n";
-            $extension_ini .= "version=\"" . $row['version'] . "\"\n";
+            $extension_ini .= 'id="' . $row['id'] . "\"\n";
+            $extension_ini .= 'type="' . $row['type'] . "\"\n";
+            $extension_ini .= 'name="' . $row['basename'] . "\"\n";
+            $extension_ini .= 'version="' . $row['version'] . "\"\n";
             $extension_ini .= "\n[author]\n";
-            $extension_ini .= "name=\"" . $row['author'] . "\"\n";
-            $extension_ini .= "email=\"" . $row['email'] . "\"\n";
+            $extension_ini .= 'name="' . $row['author'] . "\"\n";
+            $extension_ini .= 'email="' . $row['email'] . "\"\n";
             $extension_ini .= "\n[note]\n";
-            $extension_ini .= "text=\"" . $row['note'] . "\"\n";
+            $extension_ini .= 'text="' . $row['note'] . "\"\n";
 
-            $zip->add(array(
-                array(
+            $zip->add([
+                [
                     PCLZIP_ATT_FILE_NAME => 'config.ini',
                     PCLZIP_ATT_FILE_CONTENT => $extension_ini,
                     PCLZIP_ATT_FILE_NEW_FULL_NAME => 'config.ini'
-                )
-            ));
+                ]
+            ]);
 
             $filesize = @filesize($file_src);
 
@@ -342,10 +342,10 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
         $files = $sth->fetchAll();
 
         if ($row['type'] == 'module') {
-            $module_exit = array();
+            $module_exit = [];
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-            while (list ($lang_i) = $result->fetch(3)) {
+            while (list($lang_i) = $result->fetch(3)) {
                 $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
                 $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
@@ -371,7 +371,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                 while ($row = $result->fetch()) {
                     try {
                         $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-                        while (list ($lang_i) = $result2->fetch(3)) {
+                        while (list($lang_i) = $result2->fetch(3)) {
                             $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
                             $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
                             $sth->execute();
@@ -417,13 +417,13 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
             }
         } elseif ($row['type'] == 'theme') {
             $check_exit_mod = false;
-            $lang_module_array = array();
+            $lang_module_array = [];
 
             $sql_theme = (preg_match($global_config['check_theme_mobile'], $request['title'])) ? 'mobile' : 'theme';
 
             $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup = 1');
-            while (list ($lang_i) = $result->fetch(3)) {
-                $module_array = array();
+            while (list($lang_i) = $result->fetch(3)) {
+                $module_array = [];
 
                 $sth = $db->prepare('SELECT title, custom_title
                     FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules
@@ -431,7 +431,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                     ORDER BY weight ASC');
                 $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
                 $sth->execute();
-                while (list ($title, $custom_title) = $sth->fetch(3)) {
+                while (list($title, $custom_title) = $sth->fetch(3)) {
                     $module_array[] = $custom_title;
                 }
 
@@ -448,7 +448,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
 
                 if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
                     $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-                    while (list ($_lang) = $result->fetch(3)) {
+                    while (list($_lang) = $result->fetch(3)) {
                         $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
                         $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
                         $sth->execute();
@@ -521,10 +521,10 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
         die('OK_' . $lang_module['delele_ext_success']);
     }
 
-    die("ERROR_" . $lang_module['delele_ext_unsuccess']);
+    die('ERROR_' . $lang_module['delele_ext_unsuccess']);
 }
 
-$array_extType = array(
+$array_extType = [
     'module',
     'block',
     'theme',
@@ -532,7 +532,7 @@ $array_extType = array(
     'other',
     'sys',
     'admin'
-);
+];
 $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype='] = $lang_module['manage'];
 foreach ($array_extType as $_type) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype=' . $_type] = $lang_module['extType_' . $_type];
@@ -572,13 +572,13 @@ if ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] 
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $result = $db->query($sql);
 
-$array_langs = array();
+$array_langs = [];
 while ($row = $result->fetch()) {
     $array_langs[$row['lang']] = $row['lang'];
 }
 
 // Array modules exists
-$array_modules_exists = array();
+$array_modules_exists = [];
 
 foreach ($array_langs as $lang) {
     $sql = 'SELECT module_file FROM ' . $db_config['prefix'] . '_' . $lang . '_modules';
@@ -590,10 +590,10 @@ foreach ($array_langs as $lang) {
 }
 
 // Array themes exists
-$array_themes_indb = array();
+$array_themes_indb = [];
 
 // Array blocks exists
-$array_blocks_exists = array();
+$array_blocks_exists = [];
 
 foreach ($array_langs as $lang) {
     $sql = 'SELECT DISTINCT file_name FROM ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups';
@@ -605,7 +605,7 @@ foreach ($array_langs as $lang) {
 }
 
 // Array crons exists
-$array_crons_exists = array();
+$array_crons_exists = [];
 
 foreach ($array_langs as $lang) {
     $sql = 'SELECT DISTINCT run_file FROM ' . NV_CRONJOBS_GLOBALTABLE;
@@ -625,15 +625,15 @@ if (in_array($selecttype, $array_extType)) {
 $sql .= ' ORDER BY addtime DESC';
 $result = $db->query($sql);
 
-$array_parse = array();
+$array_parse = [];
 while ($row = $result->fetch()) {
     if ($row['type'] == 'theme') {
         $array_themes_indb[] = $row['basename'];
     }
 
-    $row['icon'] = $row['is_sys'] ? array(
+    $row['icon'] = $row['is_sys'] ? [
         $theme_config['sys_icon']
-    ) : array();
+    ] : [];
     $row['is_admin'] = false;
     $row['delete_allowed'] = $row['is_sys'] == 0 ? true : false;
 
@@ -650,7 +650,7 @@ while ($row = $result->fetch()) {
     $row['url_package'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('package_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
     $row['url_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('delete_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
     $row['type'] = isset($lang_module['extType_' . $row['type']]) ? $lang_module['extType_' . $row['type']] : $lang_module['extType_other'];
-    $row['version'] = array_filter(explode(" ", $row['version']));
+    $row['version'] = array_filter(explode(' ', $row['version']));
 
     if (sizeof($row['version']) == 2) {
         $row['version'] = $row['version'][0] . '-' . nv_date('d/m/Y', $row['version'][1]);
@@ -664,19 +664,19 @@ while ($row = $result->fetch()) {
 // Them cac module admin
 if ($selecttype == '' or $selecttype == 'admin') {
     foreach ($array_module_admin as $row) {
-        $array_parse[] = array(
+        $array_parse[] = [
             'type' => $lang_module['extType_module'],
             'basename' => $row,
             'author' => 'VINADES <contact@vinades.vn>',
             'version' => $global_config['version'],
             'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=module&amp;title=' . $row . '&amp;checksess=' . md5('package_module_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
-            'icon' => array(
+            'icon' => [
                 $theme_config['admin_icon'],
                 $theme_config['sys_icon']
-            ),
+            ],
             'delete_allowed' => false
-        );
+        ];
     }
 }
 
@@ -695,16 +695,16 @@ if ($selecttype == '' or $selecttype == 'theme') {
                 $note = (string) $info[0]->description;
                 $author = (string) $info[0]->author;
 
-                $array_parse[] = array(
+                $array_parse[] = [
                     'type' => $lang_module['extType_theme'],
                     'basename' => $_theme,
                     'author' => $author,
                     'version' => '',
                     'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $_theme . '&amp;checksess=' . md5('package_theme_' . $_theme . '_' . NV_CHECK_SESSION),
                     'is_admin' => false,
-                    'icon' => array(),
+                    'icon' => [],
                     'delete_allowed' => true
-                );
+                ];
 
                 // Save to database
                 $sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( 0, \'theme\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
@@ -723,19 +723,19 @@ if ($selecttype == '' or $selecttype == 'theme') {
     }
 
     foreach ($array_theme_admin as $row) {
-        $array_parse[] = array(
+        $array_parse[] = [
             'type' => $lang_module['extType_theme'],
             'basename' => $row,
             'author' => 'VINADES <contact@vinades.vn>',
             'version' => $global_config['version'],
             'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $row . '&amp;checksess=' . md5('package_theme_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
-            'icon' => array(
+            'icon' => [
                 $theme_config['admin_icon'],
                 $theme_config['sys_icon']
-            ),
+            ],
             'delete_allowed' => false
-        );
+        ];
     }
 }
 
