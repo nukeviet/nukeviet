@@ -20,7 +20,7 @@ use OAuth\Common\Consumer\Credentials;
 
 $storage = new Session();
 $serviceFactory = new ServiceFactory();
-$credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MAIN_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=google');
+$credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=google');
 $googleService = $serviceFactory->createService('google', $credentials, $storage, ['userinfo_email', 'userinfo_profile']);
 
 if (!empty($_GET['code'])) {
