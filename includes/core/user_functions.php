@@ -36,7 +36,7 @@ function nv_create_submenu()
             $func_custom_name = trim(!empty($values['func_custom_name']) ? $values['func_custom_name'] : $key);
             $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . ($key != 'main' ? '&amp;' . NV_OP_VARIABLE . '=' . $key : '');
             $act = $key == $op ? 1 : 0;
-            $nv_vertical_menu[] = array( $func_custom_name, $link, $act );
+            $nv_vertical_menu[] = [$func_custom_name, $link, $act];
         }
     }
 }
@@ -93,10 +93,10 @@ function nv_blocks_content($sitecontent)
             }
         }
 
-        $_result = $db->query("SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups t1
-             INNER JOIN " . NV_BLOCKS_TABLE . "_weight t2
+        $_result = $db->query('SELECT t1.*, t2.func_id FROM ' . NV_BLOCKS_TABLE . '_groups t1
+             INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2
              ON t1.bid = t2.bid
-             WHERE t2.func_id IN (" . implode(',', $in) . ")
+             WHERE t2.func_id IN (' . implode(',', $in) . ")
              AND t1.theme ='" . $global_config['module_theme'] . "'
              AND t1.active!=''
              ORDER BY t2.weight ASC");
@@ -110,12 +110,12 @@ function nv_blocks_content($sitecontent)
             $block_config['block_name'] = substr($_row['file_name'], 0, -4);
 
             // Tieu de block
-            $blockTitle = (!empty($_row['title']) and !empty($_row['link'])) ? "<a href=\"" . $_row['link'] . "\">" . $_row['title'] . "</a>" : $_row['title'];
+            $blockTitle = (!empty($_row['title']) and !empty($_row['link'])) ? '<a href="' . $_row['link'] . '">' . $_row['title'] . '</a>' : $_row['title'];
 
             if (!isset($cache[$_row['func_id']])) {
                 $cache[$_row['func_id']] = [];
             }
-            $cache[$_row['func_id']][] = array(
+            $cache[$_row['func_id']][] = [
                 'bid' => $_row['bid'],
                 'position' => $_row['position'],
                 'module' => $_row['module'],
@@ -128,7 +128,7 @@ function nv_blocks_content($sitecontent)
                 'groups_view' => $_row['groups_view'],
                 'all_func' => $_row['all_func'],
                 'block_config' => $block_config
-            );
+            ];
         }
         $_result->closeCursor();
 
@@ -244,7 +244,7 @@ function nv_blocks_content($sitecontent)
     if (defined('NV_IS_DRAG_BLOCK')) {
         $array_keys = array_keys($_posReal);
         foreach ($array_keys as $__pos) {
-            $__pos_name = str_replace(array( '[', ']' ), array('', ''), $__pos);
+            $__pos_name = str_replace(['[', ']'], ['', ''], $__pos);
             $_posReal[$__pos] = '<div class="column" data-id="' . $__pos_name . '" data-checkss="' . md5(NV_CHECK_SESSION . '_' . $__pos_name) . '">' . $_posReal[$__pos];
             $_posReal[$__pos] .= '<a href="javascript:void(0);" class="add block_content" id="' . $__pos . '" title="' . $lang_global['add_block'] . ' ' . $__pos_name . '" alt="' . $lang_global['add_block'] . '"><em class="fa fa-plus"></em></a>';
             $_posReal[$__pos] .= '</div>';
@@ -316,7 +316,7 @@ function nv_html_meta_tags($html = true)
     if (!empty($kw)) {
         $kw = array_unique($kw);
         $key_words = implode(',', $kw);
-        $key_words = preg_replace(["/[ ]*\,[ ]+/", "/[\,]+/"], [", ", ", "], $key_words);
+        $key_words = preg_replace(["/[ ]*\,[ ]+/", "/[\,]+/"], [', ', ', '], $key_words);
         $key_words = nv_strtolower(strip_tags($key_words));
         $return[] = [
             'name' => 'name',
@@ -481,7 +481,7 @@ function nv_html_meta_tags($html = true)
 
     $res = '';
     foreach ($return as $link) {
-        $res .= "<meta " . $link['name'] . "=\"" . $link['value'] . "\" content=\"" . $link['content'] . "\" />" . PHP_EOL;
+        $res .= '<meta ' . $link['name'] . '="' . $link['value'] . '" content="' . $link['content'] . '" />' . PHP_EOL;
     }
     return $res;
 }
@@ -498,7 +498,7 @@ function nv_html_links($html = true)
 
     $return = [];
     if (!empty($canonicalUrl)) {
-        $return[] = array( 'rel' => 'canonical', 'href' => $canonicalUrl );
+        $return[] = ['rel' => 'canonical', 'href' => $canonicalUrl];
     }
 
     $nv_html_site_rss = nv_html_site_rss(false);
@@ -519,13 +519,12 @@ function nv_html_links($html = true)
     foreach ($return as $link) {
         $res .= '<link ';
         foreach ($link as $key => $val) {
-            $res .= $key . "=\"" . $val . "\" ";
+            $res .= $key . '="' . $val . '" ';
         }
-        $res .= "/>" . PHP_EOL;
+        $res .= '/>' . PHP_EOL;
     }
     return $res;
 }
-
 
 /**
  * nv_html_page_title()
@@ -547,15 +546,15 @@ function nv_html_page_title($html = true)
         if (empty($page_title) and !preg_match('/(funcname|modulename|sitename)/i', $global_config['pageTitleMode'])) {
             $_title = $module_info['funcs'][$op]['func_custom_name'] . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
         } else {
-            $_title = preg_replace(array(
+            $_title = preg_replace([
                 '/pagetitle/i',
                 '/funcname/i',
                 '/modulename/i',
-                '/sitename/i' ), array(
-                $page_title,
-                $module_info['funcs'][$op]['func_custom_name'],
-                $module_info['custom_title'],
-                $global_config['site_name'] ), $global_config['pageTitleMode']);
+                '/sitename/i'], [
+                    $page_title,
+                    $module_info['funcs'][$op]['func_custom_name'],
+                    $module_info['custom_title'],
+                    $global_config['site_name']], $global_config['pageTitleMode']);
         }
     }
     $_title = nv_htmlspecialchars(strip_tags($_title));
@@ -564,7 +563,6 @@ function nv_html_page_title($html = true)
     }
     return $_title;
 }
-
 
 /**
  * nv_html_css()
@@ -578,16 +576,15 @@ function nv_html_css($html = true)
 
     if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css')) {
         if ($html) {
-            return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css\" type=\"text/css\" />" . PHP_EOL;
+            return '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css" type="text/css" />' . PHP_EOL;
         } else {
-            return array( array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_info['module_theme'] . ".css" ) );
+            return [['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css']];
         }
-    }
-    elseif (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
         if ($html) {
-            return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />" . PHP_EOL;
+            return '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/css/' . $module_file . '.css" type="text/css" />' . PHP_EOL;
         } else {
-            return array( array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css" ) );
+            return [['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/css/' . $module_file . '.css']];
         }
     }
 
@@ -607,14 +604,14 @@ function nv_html_site_rss($html = true)
     $return = $html ? '' : [];
     if (!empty($rss)) {
         foreach ($rss as $rss_item) {
-            $href = $rss_item['src'] . "\" title=\"" . strip_tags($rss_item['title']);
+            $href = $rss_item['src'] . '" title="' . strip_tags($rss_item['title']);
             if ($html) {
-                $return .= "<link rel=\"alternate\" href=\"" . $href . "\" type=\"application/rss+xml\" />" . PHP_EOL;
+                $return .= '<link rel="alternate" href="' . $href . '" type="application/rss+xml" />' . PHP_EOL;
             } else {
-                $return[] = array(
+                $return[] = [
                     'rel' => 'alternate',
                     'href' => $href,
-                    'type' => 'application/rss+xml' );
+                    'type' => 'application/rss+xml'];
             }
         }
     }
@@ -624,23 +621,33 @@ function nv_html_site_rss($html = true)
 
 /**
  * nv_html_site_js()
- * 
+ *
  * @param bool $html
  * Xuất ra dạng string (html) hay để nguyên dạng array
  * Mặc định true
- * 
+ *
  * @param array $other_js
  * Thêm js vào ngay sau global.js
  * Mặc định rỗng
- * 
+ *
+ * @param bool $language_js
+ * Có kết nối với file ngôn ngữ JS hay không
+ *
+ * @param bool $global_js
+ * Có kết nối với file global.js hay không
+ *
+ * @param bool $default_js
+ * Có kết nối với file JS của theme Default hay không
+ * Khi thiếu file tương ứng ở theme đang sử dụng
+ *
  * @return string | array
  */
-function nv_html_site_js($html = true, $other_js = [])
+function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
 {
     global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info, $user_info;
 
     $safemode = defined('NV_IS_USER') ? $user_info['safemode'] : 0;
-    $jsDef = "var nv_base_siteurl=\"" . NV_BASE_SITEURL . "\",nv_lang_data=\"" . NV_LANG_INTERFACE . "\",nv_lang_interface=\"" . NV_LANG_INTERFACE . "\",nv_name_variable=\"" . NV_NAME_VARIABLE . "\",nv_fc_variable=\"" . NV_OP_VARIABLE . "\",nv_lang_variable=\"" . NV_LANG_VARIABLE . "\",nv_module_name=\"" . $module_name . "\",nv_func_name=\"" . $op . "\",nv_is_user=" . ((int) defined("NV_IS_USER")) . ", nv_my_ofs=" . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ",nv_my_abbr=\"" . nv_date("T", NV_CURRENTTIME) . "\",nv_cookie_prefix=\"" . $global_config['cookie_prefix'] . "\",nv_check_pass_mstime=" . ((intval($global_config['user_check_pass_time']) - 62) * 1000) . ",nv_area_admin=0,nv_safemode=" . $safemode . ",theme_responsive=" . ((int) ($global_config['current_theme_type'] == 'r'));
+    $jsDef = 'var nv_base_siteurl="' . NV_BASE_SITEURL . '",nv_lang_data="' . NV_LANG_INTERFACE . '",nv_lang_interface="' . NV_LANG_INTERFACE . '",nv_name_variable="' . NV_NAME_VARIABLE . '",nv_fc_variable="' . NV_OP_VARIABLE . '",nv_lang_variable="' . NV_LANG_VARIABLE . '",nv_module_name="' . $module_name . '",nv_func_name="' . $op . '",nv_is_user=' . ((int) defined('NV_IS_USER')) . ', nv_my_ofs=' . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ',nv_my_abbr="' . nv_date('T', NV_CURRENTTIME) . '",nv_cookie_prefix="' . $global_config['cookie_prefix'] . '",nv_check_pass_mstime=' . ((intval($global_config['user_check_pass_time']) - 62) * 1000) . ',nv_area_admin=0,nv_safemode=' . $safemode . ',theme_responsive=' . ((int) ($global_config['current_theme_type'] == 'r'));
 
     if (defined('NV_IS_DRAG_BLOCK')) {
         $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
@@ -652,63 +659,69 @@ function nv_html_site_js($html = true, $other_js = [])
     $jsDef .= ';';
 
     $return = [];
-    $return[] = array(
+    $return[] = [
         'ext' => 0,
         'content' => $jsDef
-    );
-    $return[] = array(
+    ];
+    $return[] = [
         'ext' => 1,
         'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'
-    );
-    $return[] = array(
-        'ext' => 1,
-        'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
-    );
-    $return[] = array(
-        'ext' => 1,
-        'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/global.js'
-    );
+    ];
+
+    if ($language_js) {
+        $return[] = [
+            'ext' => 1,
+            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
+        ];
+    }
+
+    if ($global_js) {
+        $return[] = [
+            'ext' => 1,
+            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/global.js'
+        ];
+    }
 
     if (!empty($other_js)) {
         foreach ($other_js as $other) {
             if (isset($other['ext']) and ($other['ext'] == '0' or $other['ext'] == '1') and !empty($other['content'])) {
-                $return[] = array(
+                $return[] = [
                     'ext' => (int) $other['ext'],
                     'content' => $other['content']
-                );
+                ];
             }
         }
     }
     if (defined('NV_IS_ADMIN')) {
-        $return[] = array(
+        $return[] = [
             'ext' => 1,
             'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/admin.js'
-        );
+        ];
     }
 
     // module js
     if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js')) {
-        $return[] = array(
+        $return[] = [
             'ext' => 1,
             'content' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js'
-        );
+        ];
     } elseif (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js')) {
-        $return[] = array(
+        $return[] = [
             'ext' => 1,
             'content' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
-        );
-    } elseif (file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
-        $return[] = array(
+        ];
+    } elseif ($default_js and file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
+        $return[] = [
             'ext' => 1,
             'content' => NV_BASE_SITEURL . 'themes/default/js/' . $module_file . '.js'
-        );
+        ];
     }
 
     if (defined('NV_IS_DRAG_BLOCK')) {
-        $return[] = array(
+        $return[] = [
             'ext' => 1,
             'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery-ui/jquery-ui.min.js'
-        );
+        ];
     }
 
     if (!$html) {
@@ -717,11 +730,11 @@ function nv_html_site_js($html = true, $other_js = [])
     $res = '';
     foreach ($return as $js) {
         if ($js['ext'] == 1) {
-            $res .= "<script src=\"" . $js['content'] . "\"></script>" . PHP_EOL;
+            $res .= '<script src="' . $js['content'] . '"></script>' . PHP_EOL;
         } else {
-            $res .= "<script>" . PHP_EOL;
+            $res .= '<script>' . PHP_EOL;
             $res .= $js['content'] . PHP_EOL;
-            $res .= "</script>" . PHP_EOL;
+            $res .= '</script>' . PHP_EOL;
         }
     }
     return $res;
@@ -751,7 +764,7 @@ function nv_admin_menu()
 
     if (defined('NV_IS_SPADMIN')) {
         $row = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'')->fetch();
-        if(!empty($row)){
+        if (!empty($row)) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
             $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
 
