@@ -743,7 +743,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password']) and !defined('ACCESS_PASSUS')) {
         nv_jsonOutput([
             'status' => 'error',
-            'input' => 'password',
+            'input' => 'nv_password',
             'mess' => $lang_global['incorrect_password']
         ]);
     }
