@@ -195,13 +195,13 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         }
 
         $todate_elastic = [];
-        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
+        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'], $m)) {
             $todate_elastic = [
                 'lte' => mktime(23, 59, 59, $m[2], $m[1], $m[3])
             ];
         }
         $fromdate_elastic = [];
-        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m)) {
+        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'], $m)) {
             $fromdate_elastic = [
                 'gte' => mktime(0, 0, 0, $m[2], $m[1], $m[3])
             ];
@@ -279,15 +279,15 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id )';
-            $where = " AND ( tb1.title LIKE '%" . $dbkeyhtml . "%' OR tb1.hometext LIKE '%" . $dbkey . "%' ";
-            $where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
+            $where = " AND (( tb1.title LIKE '%" . $dbkeyhtml . "%' OR tb1.hometext LIKE '%" . $dbkey . "%' ";
+            $where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')))";
         }
 
-        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
-            $where .= ' AND publtime <=' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'], $m)) {
+            $where .= ' AND tb1.publtime <=' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
         }
-        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m)) {
-            $where .= ' AND publtime >=' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+        if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'], $m)) {
+            $where .= ' AND tb1.publtime >=' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
         }
 
         if ($catid > 0) {

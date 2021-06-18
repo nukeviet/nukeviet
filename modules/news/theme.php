@@ -1106,7 +1106,7 @@ function news_print($result)
 
             $xtpl->parse('main.image');
         } elseif ($result['image']['position'] == 2) {
-            if ($result['image']['note'] > 0) {
+            if (!empty($result['image']['note'])) {
                 $xtpl->parse('main.imagefull.note');
             }
 
