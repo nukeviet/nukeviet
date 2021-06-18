@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<meta>
+  <meta_item>
+    <group>name</group>
+    <value>author</value>
+    <content>{SITE_NAME}</content>
+  </meta_item>
+  <meta_item>
+    <group>name</group>
+    <value>copyright</value>
+    <content>{SITE_NAME} [{SITE_EMAIL}]</content>
+  </meta_item>
+</meta>

@@ -1,0 +1,24 @@
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 31/05/2010, 00:36
+ */
+
+.statistics-responsive{
+	width: 100%;
+	overflow-x: auto;
+}
+.statistics .data{
+	vertical-align: bottom;
+	text-align: center;
+}
+.statistics caption{
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.statistics .w250{
+	width: 250px;
+}

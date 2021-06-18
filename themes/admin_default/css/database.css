@@ -1,0 +1,16 @@
+.alert-inline,
+.form-group-end {
+    margin-bottom: 0;
+}
+
+button[name="submit"] .lo {
+    display: none;
+}
+
+#spdresult, #spdresulttop {
+    display: none;
+}
+
+#spdresult {
+    padding-top: 20px;
+}

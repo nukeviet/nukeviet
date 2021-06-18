@@ -1,0 +1,20 @@
+<Files default.htaccess.txt>
+  order allow,deny
+  deny from all
+</Files>
+
+<Files default.web.config.txt>
+  order allow,deny
+  deny from all
+</Files>
+
+<Files default.php>
+  order allow,deny
+  deny from all
+</Files>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule (.*)(\.rewrite)$ rewrite.php
+</IfModule>

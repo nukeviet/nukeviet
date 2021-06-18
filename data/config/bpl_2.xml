@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plan>
+  <id>2</id>
+  <lang></lang>
+  <title>Quang cao trai</title>
+  <form>sequential</form>
+  <width>212</width>
+  <height>800</height>
+  <banners>
+    <banners_item>
+      <id>2</id>
+      <title>vinades</title>
+      <clid>0</clid>
+      <file_name>vinades.jpg</file_name>
+      <imageforswf></imageforswf>
+      <file_ext>jpg</file_ext>
+      <file_mime>image/jpeg</file_mime>
+      <file_width>212</file_width>
+      <file_height>400</file_height>
+      <file_alt></file_alt>
+      <file_click>http://vinades.vn</file_click>
+      <target>_blank</target>
+      <bannerhtml></bannerhtml>
+      <publ_time>1453191549</publ_time>
+      <exp_time>0</exp_time>
+    </banners_item>
+  </banners>
+</plan>

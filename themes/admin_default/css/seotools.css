@@ -1,0 +1,26 @@
+#rankForm {
+	margin: 10px 0
+}
+
+#rankForm h2 {
+	font: 800 13px Arial, Tahoma, Verdana, sans-serif
+}
+
+#rankForm input[type="text"] {
+	width: 200px
+}
+
+#rankForm dd, #rankForm dt {
+	float: left;
+	line-height: 20px;
+	height: 20px
+}
+
+#rankForm dt {
+	width: 80px
+}
+
+.error {
+	color: #EF3805;
+	font: 800 12px Tahoma, Arial, Verdana, sans-serif
+}

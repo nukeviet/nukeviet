@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /cache/
+Disallow: /data/
+Disallow: /includes/
+Disallow: /install/
+Disallow: /language/
+Disallow: /logs/
+Disallow: /modules/
+Disallow: /robots.php
+Disallow: /sess/
+Disallow: /tmp/
+Disallow: /web.config

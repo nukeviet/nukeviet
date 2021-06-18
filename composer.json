@@ -1,0 +1,44 @@
+{
+    "name": "nukeviet/nukeviet",
+    "version": "4.4.01",
+    "type": "project",
+    "description": "NukeViet is the first opensource CMS in Vietnam.",
+    "keywords": ["cms","nukeviet", "nukeviet4", "portal"],
+    "homepage": "https://github.com/nukeviet/nukeviet",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "VINADES.,JSC",
+            "email": "contact@vinades.vn",
+            "homepage": "http://vinades.vn",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "admin@nukeviet.vn",
+        "issues": "https://github.com/nukeviet/nukeviet/issues",
+        "forum": "http://forum.nukeviet.vn",
+        "wiki": "http://wiki.nukeviet.vn",
+        "source": "https://github.com/nukeviet/nukeviet/releases"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "NukeViet\\" : "vendor/vinades/nukeviet"
+        },
+        "classmap" : [
+            "vendor/vinades/pclzip/pclzip.lib.php"
+        ]
+    },
+    "require": {
+        "php": ">=5.6.0",
+        "ext-mbstring": "*",
+        "ext-gd": "*",
+        "ext-json": "*",
+        "ext-xml": "*",
+        "ext-session": "*",
+        "and/oauth": "^0.7-dev",
+        "endroid/qrcode": "^1.9.1",
+        "true/punycode": "^2.1",
+        "phpmailer/phpmailer": "^6.1"
+    }
+}

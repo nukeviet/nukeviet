@@ -1,0 +1,23 @@
+<div class="row">
+	<div class="col-sm-12 col-md-9"></div>
+	<div class="col-sm-12 col-md-3">
+		<div class="row">
+			<div class="col-sm-6 col-md-12">
+				<div class="form-group">
+					<label>{GLANG.voting_maxoption}:</label>
+					<input class="form-control w100" type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt" required pattern="^([0-9])+$" oninvalid="this.setCustomValidity(nv_digits)" oninput="this.setCustomValidity('')"/>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-12">
+				<div class="form-group">
+					<label>{GLANG.groups_view}:</label>
+					<!-- BEGIN: groups_views -->
+					<div class="row">
+						<label><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEWS.value}" {GROUPS_VIEWS.checked} />{GROUPS_VIEWS.title}</label>
+					</div>
+					<!-- END: groups_views -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,33 @@
+All NukeViet code is Copyright by the original authors. See: http://code.nukeviet.vn
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program as the file LICENSE.txt; if not, please see http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+
+NukeViet is a registered trademark of Vietnam Open Source Development Joint Stock Company (VINADES.,JSC).
+
+NukeViet includes works under other copyright notices and distributed according to the terms of the GNU General Public License or a compatible license, including:
+
+Name                     Version        License            Description                                                      Url
+Bootstrap                3.3.6          MIT                HTML, CSS, and JavaScript framework for developing responsive    http://getbootstrap.com
+XTemplate                0.4.0          MIT                Templating engine for PHP                                        http://www.phpxtemplate.org
+jQuery                   2.2.3          MIT                jQuery JavaScript Library                                        http://jquery.com/
+Ckeditor                 4.5.9          GPL, LGPL          JavaScript WYSIWYG web text editor                               http://ckeditor.com/
+jasig/phpcas             1.3.4          Apache             Jasig PHP CAS Client                                             https://github.com/Jasig/phpCAS
+Browser-Detect           1.0.0          MIT                Class to detect a user's Browser                                 https://github.com/cbschuld/Browser.php
+composer                 1.1.0          MIT                Dependency Manager for PHP                                       https://github.com/composer/composer
+phpmailer/phpmailer      6.0.0          LGPL-2.1           The classic email sending library for PHP                        https://github.com/phpmailer/phpmailer
+pclzip/pclzip            2.8.2          LGPL-2.1           Compression and extraction functions for Zip                     https://github.com/ivanlanin/pclzip
+league/url               3.3.5          MIT                Lightweight PHP Url manipulating library                         https://github.com/thephpleague/url
+gregwar/captcha          1.1.1          MIT                PHP Captcha library                                              https://github.com/Gregwar/Captcha
+gregwar/cache            1.0.10         MIT                A lightweight filesystem caching system                          https://github.com/Gregwar/Cache
+gregwar/image            2.0.20         MIT                A PHP library to handle images                                   https://github.com/Gregwar/Image
+and/oauth                dev-master     MIT                Support for authenticating users using OAuth                     https://github.com/logical-and/php-oauth
+endroid/qrcode           1.6.5          MIT                QR Code Generator                                                https://github.com/endroid/QrCode
+kriswallsmith/buzz       0.15           MIT                PHP's lightweight HTTP client                                    https://github.com/kriswallsmith/Buzz
+true/punycode            2.0.2          MIT                Encoding of Unicode for IDNA                                     https://github.com/true/php-punycode
+IP databases             2              CC BY-SA 4.0       IP geolocation databases                                         https://dev.maxmind.com/geoip/geoip2/geolite2/
+Plupload                 2.3.6          AGPL-3.0           Multi-runtime File-Uploader                                      https://www.plupload.com/
+.. see copyright information at the header of source code file.

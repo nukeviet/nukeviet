@@ -1,0 +1,40 @@
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 31/05/2010, 00:36
+ */
+
+/* Login-box */
+.login-box{
+    width:400px
+}
+
+@media (max-width:399px) {
+.login-box{
+    width:100%;
+}
+}
+
+.twostep-qrimg{
+    max-width: 100%;
+}
+
+.twostep-manualsecretkey{
+    width: 400px;
+}
+
+@media (max-width:399px) {
+.twostep-manualsecretkey{
+    width:100%;
+}
+}
+
+.recovery-code {
+    padding: 7px 0;
+}
+
+.recovery-code span {
+    font-family: "Courier New";
+}

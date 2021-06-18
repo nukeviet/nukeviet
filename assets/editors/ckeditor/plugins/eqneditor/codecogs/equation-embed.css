@@ -1,0 +1,38 @@
+/* The default text style used on every page */
+#hover { padding:2px; position:absolute; display:none; z-index:50; background-color:#FFFFCC; border:1px solid #999999; }
+
+#EqnEditor { margin:0 auto; text-align:center; }
+#EqnEditor .top { margin:0 auto; padding:2px 0; }
+#EqnEditor .bottom { border-bottom:1px solid #9a9a9a; }
+#EqnEditor .toolbar_wrapper { margin:0 auto; }
+#EqnEditor .toolbar {	position:relative; padding-top:2px; }
+#EqnEditor .toolbar_space { height:38px; margin:0 auto; }
+#EqnEditor .panel { display:inline-block; padding:0px 3px; overflow:hidden; vertical-align:top; }
+#toolbar_example { clear:left; }
+
+#intro { position:absolute; left:30px; color:#FF6600; font-size:16px; }
+
+.panel select { border:1px solid #8FB6BD; font-size:12px; }
+
+/* ------- Button formating ------ */
+	
+.bluebutton, .lightbluebutton, .greybutton {
+  border-style: solid;
+	border-width:1px;
+  border-top-color: #D9DFEA;
+  border-left-color: #D9DFEA;
+  border-bottom-color: #0e1f5b;
+  border-right-color: #0e1f5b;
+  color: #FFFFFF;
+  font-size: 11px;
+  /*font-family: "lucida grande", tahoma, verdana, arial, sans-serif; */
+  text-align: center; 
+	cursor:pointer;
+	/*cursor:hand;*/
+	padding:1px 4px;
+	margin:0;
+}
+
+.lightbluebutton { background-color:#4068AE; }
+.bluebutton { background-color:#003794; }
+.greybutton { background-color:#888888; }

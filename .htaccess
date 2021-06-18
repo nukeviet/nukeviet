@@ -1,0 +1,74 @@
+#nukeviet
+
+<Files ~ "\.(htm|html|css|js|php)$">
+  AddDefaultCharset UTF-8
+</Files>
+
+##################################################################################
+#nukeviet_config_start //Please do not change the contents of the following lines
+##################################################################################
+
+RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$
+
+ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1
+ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1
+ErrorDocument 404 /error.php?code=404&nvDisableRewriteCheck=1
+ErrorDocument 405 /error.php?code=405&nvDisableRewriteCheck=1
+ErrorDocument 408 /error.php?code=408&nvDisableRewriteCheck=1
+ErrorDocument 500 /error.php?code=500&nvDisableRewriteCheck=1
+ErrorDocument 502 /error.php?code=502&nvDisableRewriteCheck=1
+ErrorDocument 503 /error.php?code=503&nvDisableRewriteCheck=1
+ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
+
+<IfModule mod_deflate.c>
+  <FilesMatch "\.(css|js|xml|ttf)$">
+    SetOutputFilter DEFLATE
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|xml|ttf)$">
+    Header append Vary Accept-Encoding
+    Header set Access-Control-Allow-Origin "*"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+  </FilesMatch>
+
+  <FilesMatch "\.(doc|pdf|swf)$">
+    Header set X-Robots-Tag "noarchive, nosnippet"
+  </FilesMatch>
+
+  <FilesMatch "\.(js|css|jpe?g|png|gif|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$">
+	Header set Cache-Control "max-age=2592000, public"
+  </FilesMatch>
+</IfModule>
+
+#nukeviet_config_end
+##################################################################################
+
+##################################################################################
+#nukeviet_rewrite_start //Please do not change the contents of the following lines
+##################################################################################
+
+#Options +FollowSymLinks
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+#RewriteBase /
+RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
+RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]
+RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
+RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
+RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
+RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*)(\/|\.html)$ index.php
+RewriteRule (.*)tag\/([^?]+)$ index.php
+RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /$1/$2/ [L,R=301]
+RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]
+</IfModule>
+
+#nukeviet_rewrite_end
+##################################################################################

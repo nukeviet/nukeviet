@@ -1,0 +1,1026 @@
+CHANGE LOG: NUKEVIET CMS
+http://nukeviet.vn
+
+NUKEVIET 4.4.02
+
+- Fix drag block (#2964)
+- Module contact: fix send mail
+- Fixe bug with some proxy systems and load balancers (#2966)
+
+NUKEVIET 4.4.01
+
+- Jquery Validate 1.19.2
+- PHPMailer v6.1.6
+- Fix class PclZip on php 7.1
+- Fix rewrite check on PHP CGI (#2955)
+- Fix bug XSS (thanks Trung Thanh Le from baomatcoban.info)
+- Optimize anti-CSRF function
+- Update SendMail class
+- Function nv_sendmail: add parameters cc and bcc
+- Module users: add config view members list for admin
+- Jquery 3.5.1 (#2950)
+
+NUKEVIET 4.4.00
+
+- Ckeditor 4.14.0, PHPMailer 6.1.5, Jquery 3.5.0, Select2 4.0.13, clipboard js 2.0.6
+- Fix delete author (#2944)
+- Add option of not sending email at the function of sending email configuration
+- Module users: General operator customized data
+- Module contact: fix insert multiple email
+- Support IPv6 in the configuration function to access the admin area (#2899)
+- Support IPv6 in the functions: Ban IP, Flood Blocker (#2899)
+- Module banner, site logo: Stop supporting Flash files
+- Module comment: ctrl + enter to post reply (#2648)
+- Improve user group management function (#2931)
+- User login: Only show logo at login popup (#2663)
+- Fix user register theme (#2756)
+- Fix rewrite module news (#2919)
+- Fix the website title in the module page (#2928)
+- Add some security alert emails: Two-factor authentication change, re-creat backup code, change user email
+- Add notification when email failed (#2905)
+- Change email configuration
+- Fix nv_html_meta_tags (#2915)
+- Add config: Upload file exceeds size limit
+- Fix function nv_blocks_content (#2890)
+- Module page: Fix copy article (#2888)
+- Expand field to support IPv6 (#2889, #2899)
+- Fix comment on mobile theme, change link load comment (#2908, #2891)
+- Upload: Change external link checking type (#2921)
+- Module news: Add notes for public post operations (#2924)
+- Change Timezone Asia/Saigon > Asia/Ho_Chi_Minh
+- Manage two-step verification of admin accounts
+- Use google and facebook accounts to verify 2-step in admin
+- Notification function: Support programming to send notifications to each group and each recipient (#2879)
+- Remove Review-aggregate module news (#2886), add CreativeWorkSeries AggregateRating for module news
+- Change Breadcrumb from vocabulary to schema.org
+
+NUKEVIET 4.3.08
+
+- Support php 7.4
+- Ckeditor v4.13.1, PHPMailer v6.1.4, Select2 v4.0.12, Chart.js v2.9.3
+- Fix delete item in module page #2851
+- Save changes when editing admin information
+- Allowed users to switch site theme
+- Fix bug addtotopics module news from #1517 WhiteHub (thanks for @unfairattaccs Ha Anh Hoang from Viettel)
+- Supported unicode email address (fix #2863)
+- Update jquery Validate v1.19.1 (fix #2877)
+- Fix check admin main module #2842
+- Module users: Save last edit time
+- Fix generate page tag #2866
+- Turn of sitemap module page by default
+- Add robot meta tag management function
+- Add get_absint function for class Request
+- Fix block language theme mobile
+- Add logo JSON-LD code for theme default, mobile_default
+- Add structured-data for module news, page
+- Module user: function user_add: add param showheader, set initdata, add url_back
+- Fix view and download pdf module news
+
+NUKEVIET 4.3.07
+
+- Update Ckeditor 4.12.1, Select2 4.0.10
+- Fix module users on MySQL 8.0.17
+- Module banners: Fix on mysql cluster
+- Fix check admin main module
+- Change module view permissions
+- Fix function nv_site_mods
+- Manager blocks: Only show deactive module when debug mode on
+- Change logging when admin logout
+- Fix user custom fields
+- Fix class Database
+- Module news: show new news icon in block module.block_news.php
+- Module users: Save registration time and time approved to group
+- Fix delete module users
+- Fix Oauth Google
+- Error class: Trade error files
+- Fix function nv_check_domain
+- Fix plugin/mysql_master_slave.php
+- Block bot index on comment link
+- Fix show function if module active for config block
+- Fix sitemap index not displayed
+- Add configuration for turn on/off refer checker utility
+
+NUKEVIET 4.3.06
+
+- Add SMTP configuration check function
+- Support upload SVG files
+- Chart.js v2.8.0
+- Select2 v4.0.7
+- Jquery v3.4.1
+- Ckeditor v4.11.4
+- Display the child sitemap at the "sitemapindex"
+- Add the function to debug SQL statements
+- Add an optional configuration to insert a logo with each post
+- Use ReCaptcha to confirm if Flood blocked
+- Block external requests into the admin area
+- Support CORS setting
+- Change timestamp to UNIX timestamp
+- Module news: Support redirect to new article url when changing categories
+- Module banners: Add display type "Random One"
+- Fix bug comment XSS. Thanks dalatsubnet at WhiteHub#640
+- Remove Google MAP API and fix block global.company_info.php
+- Module users: Save the information of the object that has activated user account. Add the function to resend the account activation email.
+- Fix the issue of adding news with very long keywords
+- Fix add, detete admin
+- Fix user add, user edit in admin.
+- Fix send mail
+- User lostactivelink: Skip step two if security question and answer not required
+- Module contact: Automatically detects links of other information
+
+NUKEVIET 4.3.05
+- Add repeat type configuration of cronjobs
+- Fix user registration error on mobile theme
+- Chart.js v2.7.3
+- Clipboard v2.0.4
+- PHPMailer v6.0.7
+- Module voting: Fix error showing the results of the poll does not activate
+- Fix captcha not show
+- Remove googleplus
+- CKEditor 4.11.3
+- Add Support PHP 7.3
+- Module users: Add user edit censor, allowed to select a field to sort at the user custom fields, fix custom field with editor, fix group counter errors when deleting user
+- Remove googleplus
+
+NUKEVIET 4.3.04
+
+- Fix admin can not login
+- Add user register callback
+- Sitemap: Can split module sitemap
+- Remove gregwar/captcha
+- Fixed RSS image height
+- Fix upload file from ckeditor
+- Fix function nv_redirect_location
+- Fix upload and auto resize image
+- Fix security bug (CVE-2019-7725, CVE-2019-7726). Thanks hungnguyenmz and Zepto Team
+
+NUKEVIET 4.3.03
+
+- Fix tag contains special characters
+- Clipboard.js v2.0.1
+- gregwar/captcha v1.1.6
+- Module banners: allows to enter links freely
+- Module news: fixed bug when attaching file
+- Module comment: fix quote comment when post name is empty
+- Fix save file ini
+- Fix search system logs
+- Fix check server support rewrite
+- Turn off error messages when debug mode off
+- Module users: Fix update group statistics when delete user, fix user custom field, fix user safe mode
+
+NUKEVIET 4.3.02
+- Fix save google analytics id
+- Update gregwar/captcha v1.1.5, PHPMailer v6.0.5, ClipboardJS v2.0.0, Chart.js v2.7.2, Plupload 3.1.2, Ckeditor 4.9.2
+- Fix delete site logs
+- Fix set up with sample data
+- Module banners: Added search features in Admin
+- Module statistic: Added statistical deletion function
+- Browse to file location from ckeditor
+- Module contact: Config who allowed to sendcopy
+- Remove Facebook SDK
+- Module voting: Allowed to view result in admin
+- Config static extensions for ignore check update
+- Fix search extension
+- Module language: Edit multi-language activation notification
+- Add config for debug mode
+- Config theme for admin
+- Fix anti iframe
+- Added features to manage the ip exclusion for anti-flood
+- Change the security settings interface
+- Module users: Fix user active, save email verification time
+- Module comment: Fix delete comment
+- Module news: Fix meta og:image, fix error add news with error data input, hide social sharing buttons when administrators view unpublished articles
+- Update menu lang interface for theme admin
+- Module upload: Fix resize and crop image, browse to the previously selected file
+- Allow preview theme
+
+NUKEVIET 4.3.01
+
+- Fix install if db password has special character
+- Fix meta tag og:url and canonical on homepage
+- Module news: Config keyword for article
+- Module language: Allowed to manage lang interface
+- Update config for file robots.txt
+- Module banner: Fix delete banner.
+- Module freecontent: Free field link
+- Module users: Fix edit group, add notification when new account wating for active, group description is not required
+- Fix PDF.js
+- Fix check theme mobile
+- Update theme configuration
+- Extensions: Fix auto invalid theme version
+- Change the extension package upload error message
+- Fixed menu changes when editing admin
+- Fix function nv_user_groups
+- Fix qrcodeLoad theme mobile_default
+- Limited PHP version to install
+- Theme config: Update google fonts
+- Fix bug HTTP class: access to a source that has a redirect
+- Update theme block headline
+- PHPMailer v6.0.3
+- Jquery v3.3.1
+- Ckeditor v4.8.0
+
+NUKEVIET 4.3.00
+
+- Module Upload: Add file path copy function, config chunk upload
+- Module users: Allowed to delete and change status multiple account, fix block login, update Openid icon, fix sort groups, fix delete group
+- Fix cache config theme
+- Fix check rewrite
+- Fix class Files cache: Delete all cache
+- Plugin: add "After run the module" position
+- Update class NukeViet\Core\Error
+- Module contact: Update email send
+- Fix function nv_check_domain
+- Remove aes_encrypt, aes_decrypt in class Encryption
+- Module page: Config alias auto lower string
+- Module comment: Allow attachments to comments, Allowed to use the editor
+- Module news: Allow deactive category, allow search for locked posts, Allows attaching files to posts
+- Config module display on admin index for authors
+- Config SSL for SMTP
+- Update Ckeditor 4.7.3, PDF.js v1.9.426, PHPMailer v6.0.1, Select2 4.0.5
+- Module banners: Fix error delete banner
+- Function nv_is_url: Accept the sign "+" in the URL
+- Change theme manager block
+
+NUKEVIET 4.2.03
+
+- Module news: Config layout for detail
+- Module users: Fix user register
+- Fix Breadcrumbs for PHP 7
+
+NUKEVIET 4.2.02
+- Add feature: Export and install sample data.
+- News: Added sorting feature.
+- Upload: Resize and crop top photos by size
+- Page: add no-dipsplay view type
+- Fix some other bugs
+
+NUKEVIET 4.2.01
+- Module banners: Change upload dir, editor dir; move clients to users, banner plans: add config for group users, upload types, expiration date
+- Cache for load config theme
+- Check system support json, xml during operation
+- Fix lang for class Upload
+- Fix style of blockquote in ckeditor for Vietnamese
+- Module upload: Fix recreatthumb
+- Module users: Fix bug save registration information when validating by email
+- Add link to document page in admin
+
+NUKEVIET 4.2.00 (Beta)
+- Fix code as recommended by codacy: https://www.codacy.com/app/nukeviet/nukeviet/dashboard
+- CKEditor 4.7.1
+- Update Error Document
+- Fix error when turn off rewrite
+- Module news: Fix undefined index external_link. Fix weight topics. Fix rssdata
+- Module users: Config show, hide, required for system fields. Add config age limit. Add config require 2 step for group users
+- Module banner: change link click
+- Add notification when installing the beta versions
+- Fix error logs
+- Save update/upgrade logs to db
+- Add feature: Turn on / turn off sitemap for module
+- Fix class Blocker
+- Fix class Optimizer
+- Fix check IP when using proxy
+- Add "link rel=preload as=script" for all js files
+- Update Header file for js|css|xml|ttf
+- Theme: fix config blocks_func
+- Add function nv_htmlOutput
+
+NUKEVIET 4.1.02 Final Releases Apr 23, 2017
+- Jquery 3.2.1
+- Module News: Add feature copy article
+- Module Page: Add feature copy article
+- Fix creat alias module news
+- Language: Add go back link for read, write lang
+- Fix auto resize image (fix bug of plupload 2.3.1)
+- Module News: Fix image Facebook Instant Articles
+- Fix error link from function nv_alias_page
+
+NUKEVIET 4.1.01 Beta 2 Releases Apr 9, 2017
+- Jquery 3.2.0, Plupload 2.3.1
+- Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File
+- Add function nv_jsonOutput
+- Change encrypt data use Openssl
+- Change rewrite rule
+- SPADMIN can access module seotools
+- Module Upload: Crop image and save original image
+- Mail filter: Allow uppercase
+- Module users: Admin can manage OpenID, Oauth, 2-Step of user.
+- Add ReCAPTCHA
+- Update Browser class: Support all Blackberry devices
+- Module voting: Add fields address, bannerhtml, require_image
+- Module users: Add option to send user's info to mail when admin add user
+- Module News: Controlling multiple people edit post
+- Add Elasticseach for module News
+- Theme mobile: Fix send contact
+- Module news: Support Facebook Instant Articles
+- Update theme copy blocks
+- Replace watermarker and Jcrop with cropper
+- Module users: Fix Oauth with redirect
+- Fix checkupdate for system and extensions
+- Fix create virtual module
+- Fix function nv_is_url, check_domain
+- Fix Assign variable syntax error
+- Module news: Update block news cat
+- Module news: config external link
+- Module menu: add image field
+- Fix googleAnalytics
+- Fix IIS rewrite
+- Module news: Fix setup step 5, Field 'description' doesn't have a default value
+- theme: fixes interface Set default configuration
+- Module users: fix list customization data, active users
+- Fix class GoogleAuthenticator
+
+NUKEVIET 4.1.00 Beta 1
+- Change system rewrite rule (Optimize for NginX)
+- Update system notification
+- Support redis cache and session_handler
+- Update error_handler class: Log fatal error for development
+- Fix mobile theme on iOS
+- Fix Omtimize Class for ADS
+- Add block login feature
+- Add two-step-verification feature for Admin area and site area
+- Add sorting language feature
+- Module Database: Optimize for Large database
+- Module News: Update topic content, Fix edit groups
+- Module Users: Update block login, add link view userdetail, link edit user, link delete user for admin, fix user_waiting, support Oauth login redirect
+- Module Comment: Add config timeout and comment perpage
+- Module Upload: Fix UI dialog position
+- Module Voting: Add config for active captcha
+- Module Upload: Fix for Microsoft Edge
+- Module Freecontent: Suport virtual module
+- Theme default: Fix google map on block company_info
+
+NUKEVIET 4.0.29 Final Releases May 19, 2016
+- Requires PHP 5.5 or later
+- PHPMailer v6.0
+- Endroid/qrcode v1.6.5
+- CKEditor v4.5.9
+- Config allow theme type
+- Update theme default
+- Update theme admin default
+- Update Memcache class
+- Update Request class
+- Update DB class
+- Module upload: fix download image
+- Fix update, upgrade system and extentions
+- Fix check update, auto update
+- Module users:
+    Add feature for group's leader (creat user, delete user, accept user, delete user, change password),
+    Update theme redirect login,
+    Update facebook login
+    Change rule for view list users
+    Remove Admin Relogin
+- Module extensions: Fix download file
+- Add more options for module's theme mobile
+- Support statisics for CocCoc browser
+- Module news: Optimize database, fix sample data
+
+NUKEVIET 4.0.28
+- Fix set tollower meta-tag name
+- Update javascript to lastest version: lazyload 1.9.7, Jcop 2.0.4, Select2 4.0.2, jquery-treeview v1.4.2, jquery.imgpreload 1.6.2, jquery.flash v1.3.3, jquery.flash v1.3.3, jquery-ui v1.12.0, jQuery v2.2.3
+- update CKEditor 4.5.8
+- Module Seotools: Remove site Diagnostic
+- Module Users: Allow virtual, fix user custom fields, fix block login, fix users login, fix search user waiting
+- Module Upload: Fix error on quickly refresh dir, fix error on refresh large dir
+- Module News: Fix check image exists, fix change alias op content, fix function and cat, add block by category
+- Module Contact: Delete link in contact mail containing admin path
+- Update theme mobile_nukeviet
+- Fix comment on mobile theme
+- Fix function nv_xmlOutput
+- Fix class Memcacheds
+- Fix dump database
+- Fix plugin rewrite_obsolute
+- Fix backup MySQL Engine InnoDB
+- Update Font Awesome Version 4.6.1
+- Fix function nv_clean60
+- Theme default: fix block company_info
+
+NUKEVIET 4.0.27
+- update class Punycode
+- update class phpmailer
+- Module Users: add Group new users
+- Module users: add function groups manage for leader
+- Theme mobile: file layout not exit
+- nv_info_die function: send http status code
+- Module authors: remove module siteinfo in grant system
+- Module news: update block newscenter, fix edit content
+- update sample data
+- Fix module Extensions
+- Module page: add image position config, add og:image
+- Update ckeditor 4.5.7, fix when editor maximize
+- Blocks: fix variables $blockID
+- Database: fix setting backup database
+
+NUKEVIET 4.0.26
+- Add management: leaders, avatar, color, default for groups
+- Contact: update show department
+- Add simple mode for generate pages
+- Fix check extension version
+- Fix and update something...
+
+NUKEVIET 4.0.25
+- Update Data demo
+- Update jQuery v2.2.0
+- Update jQuery Validation Plugin - v1.14.0
+- Optimizer class XTemplate for NukeViet
+- Update utf8 lookup: fix check email
+- Block: drag and drop blocks
+- Fix setup module
+- Update code getCountry
+- news: fix article url when change alias
+- Fix utf8mb4 for vertrigo v2.38
+
+NUKEVIET 4.0.24 (Open beta 10)
+- Add Composer, Move class to vendor dir
+- http://www.php-fig.org/psr/ standard code formats
+- Support Memcached, mysql master slave
+- Update Data demo
+- Module users: update login email, search users, update generate password, fix rules register, get profile picture automatic, auto login after register
+- Module contact: support virtual module, update list admin
+- Module news: fix content no public, fix print post
+- Module menu: add reload menu function, fix error add menu, fix check link in module.
+- Module contact: add address field department, update block global department
+- Module upload: fix language upload, save thumb image quality follow, add viewmode, config upload logo position
+- Module comment: add note for config admin module
+- Fix change suspend admin
+- Check rule pass when install
+- Update lang
+- Add plugin cdn for js, css, image
+- Theme default: Fix breadcrumbs
+- Theme mobile: Fix user login, user register, breadcrumbs
+- Improving system security
+- Up to CKEditor 4.5.6
+- Update Bootstrap v3.3.6
+- Fix some sys function
+- Update rule in file constants
+- Update statistics
+- Add notification for modules: news, comment
+- Support full Unicode in MySQL databases
+- Remove class LightOpenID, remove PHPoAuthLib
+
+NUKEVIET 4.0.23 (Open beta 9)
+- Update module Contact
+- Update module Users.
+- Change Admin-toolbar
+- Update variables for javascript:
+     nv_siteroot -> nv_base_siteurl
+     nv_sitelang -> nv_lang_data
+- Update Language Français, thank Nguyễn Phú Thành.
+- Update CKEditor 4.5.3
+- Class resquest: Fix block tag
+- Update notification
+- Class image:  support image bmp
+- Module siteinfo: fix check chmod dir
+- Seotools: Sorts siteDiagnostic
+- Fix error "ASSETS_DIR"
+- Fix sample data English
+- Add variable $blockID
+- Theme mobile: fix comment
+- Theme admin: update font size
+- Module news: Fix news detail, Fix rpc ping
+- Add function nv_redirect_encrypt, nv_redirect_decrypt
+- Update config CDN: support js, css, jpg, png, gif
+- Remove font Roboto
+- Fix and update something...
+
+NUKEVIET 4.0.22 (Open beta 8)
+- Restructuring of NukeViet directory
+- Add Language Français, thank Nguyễn Phú Thành.
+- Add module free_content
+- Update theme default, mobile_default
+- Change the sample data into the module
+- Add a management area for google fonts
+- Update SSL setting
+- Optimize in-line javascript in tpl
+- Optime social sharing
+- Move config statistics to module webtools
+- Move javascript from module to theme
+- Remove code zip file css, javascript.
+- config: Recorded of system error
+- Install: check collation database
+- fix rewrite for XAMPP 5.6.8 (PHP 5.6.8)
+- Add QR-code block
+- Remove shadowbox library
+- Update CKEditor 4.5.2
+- Update oAuthLib
+- Update FontAwesome 4.4.0
+
+NUKEVIET 4.0.21 (Open beta 7)
+- Add data-show for javascript
+- Fix module comment
+- Update block global.slimmenu for default menu
+- Update getbootstrap v3.3.5
+- Remove module Download
+- fix Redirect link
+- theme default: resize the left column
+- module users: Rewrite for function changequestion
+- Fix and update something...
+
+NUKEVIET 4.0.20 (No release)
+- Add class Browser-Detect
+- remove function: nv_check_bot, nv_getBrowser, nv_getOs
+- Add Autoload Class
+- Update PHPMailer 5.2.10
+- update class optimezer.class
+- Remove do not use file
+- Add data-show="after" for <script type="text/javascript"  ...
+- Fix and update something...
+
+NUKEVIET 4.0.19 (No release)
+- Add class Mobile-Detect
+- Add instruction url function
+- ckeditor: change plugins googledocs, remove addon magicline
+- Fix and update something...
+
+NUKEVIET 4.0.18 (Open beta 6)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.18 (101 commits: from commit/6372e19 to commit/8c0c5be)
+- Add plugin for admin module
+- Add no responsive for theme default
+- Add tool language interface
+- Change database module comment
+- Fix change module_name (Add variable $module_upload)
+- Fix package extension
+- Module users: remove password in mail
+- update jQuery 2.1.4
+- Fix and update something...
+
+NUKEVIET 4.0.17 (Open beta 5)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.17 (190 commits: from commit/0e46061 to commit/36e1704)
+- Remove theme modern
+- Remove theme mobile_nukeviet
+- Add theme mobile_default
+- add Modals for getbootstrap (replacement for shadowbox)
+- Fix and update something...
+
+NUKEVIET 4.0.16 (Open beta 4)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.16 (27 commits: from commit/477c6e1 to commit/7b30b9c)
+- Add feature: Select "news focus" for Category of news module
+- Fix and update something...
+
+NUKEVIET 4.0.15 (Open beta 3)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.15 (37 commits: from commit/fc6ee3f to commit/477c6e1)
+- Add function nv_show_name_user
+- Module menu: add funtion delete multi menu, add facebook share button
+- Fix and update something...
+
+NUKEVIET 4.0.13 (Open beta 1)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.13 (88 commits: from commit/7143a90 to commit/fc6ee3f)
+- CKeditor: add plugin switchbar
+- Update Font Awesome 4.3.0, jQuery 2.1.3, PHPMailer 5.2.9
+- Fix and update something...
+
+NUKEVIET 4.0.11 (Close beta 11)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commit/f73da99 to commit/7143a90)
+- System
+    + Use PDO class to replace MySQL class which used in Nukeviet 3 to use many different database. Curently Nukeviet support MySQL, MariaDB, Oracle database
+    + Nukeviet 4.0 be optimize to save web server resource and running on web server installed PHP 5.3, 5.4, 5.5
+    + Fixed setup mutillanguage mode. If the website on single language is turn on eliminating language characters in url. Remove module name in the url.
+    + Add notification system to admin control panel.
+    + Rename modules search =>seek, rss =>feeds
+
+    + Add furture module Comment to manage comment in another module.
+    + Change method cache storeage, each module cache will be store in a folder. Cache be store by domain.
+    + Support Vietnamese domain name.
+    + Hosting CDN for javascript, css
+    + Configue Vietnamese Keyboard (If site installed Vietnamese language.
+    + Encrypt passwords of FTP account, Account mail SMTP.
+    + Many values at file /includes/constants.php will be configue in admin control panel.
+
+    + Add IPV6 library to detected coutry by IPV6.
+    + Fix erro when use flash logo.
+    + Change the system check for update
+    + Fixed rewirte on IIS7 with Unicode Permalinks.
+    + Change method management block, use popup to manage block.
+    + Add optional feature when website use https protocol
+    + Add plugin rewirte_absolute to change links into obsolute links.
+    + Add feature warning by javascript when turning pages editing without save unfinished.
+    + Additional display warning almost time expried login (automatical timeout).
+
+    + Add configuration check and block computers to if does not agent to don’t have edit code.
+    + Remove sitemap ping of Yahoo, Ask
+    + Manage files put into database, support search file.
+
+- Module extensions
+    + Add module extensions: Manage and install applications from Nukeviet Store.
+    + Move method installation themes, modules to manage by module module extensions.
+
+- Module upload
+    + Database of module upload is put into site database, support search file.
+    + Configue thumbnail for each module, size, and quanlity.
+    + The modules use illustration as module News will creat only one thumb image for each image upload to reduce number of files
+    + Additional automatical resize image which uploaded to host to the configued size
+    + Module uploads allows select and work on mutil file, operation with mouse and shortkey common
+    + Fixed upload image from URL if the link contain blank space.
+    + Features fill ALT tag for image: After image file uploade completed, the program will ask rename and describe photo to SEO image.
+
+- The editor
+    + Use the ckeditor 4.4.7
+    + Integrate mathematical formulas
+    + The feature show a script code in the post, highlight code.
+
+- Themes
+    + Redesign theme of admin control panel base on bootstrap, responsive.
+    + Use bootstrap framework html, css. Support customizable theme on many devices.
+    + Additional breadcrumbs in admin control panel theme for the necessary features.
+    + Add features configue by theme (customizable theme at ACP).
+    + Remove module name on breakcrumb
+    + Add two fix blocks on screen to advertising on the sides.
+
+- Module News
+    + Decentralization management to each topic.
+    + Add “New” icon for new articles of the topic.
+    + Add features enable to moving articles from a categories to another.
+
+    + Fixed the features of filter by keywords, the keywords in tags instead the keywords from dictionary.
+    + Additional colors to the article status in admin control panel. Additional the article status: Draft, Deny, re-published (Re-publish the old articles).
+    + Add the features report the status of articles not published and only be viewed by admin outside (To avoid link of those article send by admin are unavailable with others).
+
+    + Add the feature show illustrate image of categorise.
+    + Allows linebreak in short introduction
+    + Add default configuration show illustrate image in detail page.
+
+    + Additional show tooltip in list articles, blocks.
+    + Show numbers article view in admin control panel.
+
+- Integrate the feature ping article.
+    + Optimize html tags for SEO.
+    + Add feature Tags for the article: Confige site name – keywords - description for each Tag as groups management.
+    + Add social network tools: Like facebook, G	+ , twitter button, comment of facebook (Block in module comment).
+
+- Replace module about by module page
+    + Have illustrate image, note, description (support for SEO).
+    + Config show tools of Like facebook, G	+ , Twitter
+    + Config comment facebook feature in use.
+    + Config  Google 	+  authentication (Copyright, similar module news)
+    + Config each article use a layout, it mean each article has one theme.
+    + Add RSS for module page.
+    + Configuration alternatives shown the article in the main page.
+    + Add list article block.
+
+- Module user
+    + Replace OpenID by OAuth 1.x and Oauth 2.0 to login via google, facebook.
+    + Add phpCAS library to login SSO via CAS server, and get information via LDAP.
+    + Add feature customizable user fields data.
+    + Add feature config decentralization use module Users.
+    + Add configuration to allows control username character when registering.
+    + Add configuration  to allows control passwords complexity.
+    + Fixed passwords recovery mechanism
+    + Add feature forbiden use simply passwords.
+    + Add feature lock account, delete account when delete website admin account.
+    + Add feature creat random passwords for admin.
+    + Use username or e-mail to log in.
+    + Change decentralization of features according to user groups.
+    + Add feature allows account under admin in the administrator log in and add configuration of it.
+    + Split field full_name to first_name and last_name, configure display names (full name – surename).
+
+- Module download
+    +  Fixed the navigation of links
+    +  Fixed description when show detail.
+
+- Add module SEO tool.
+    + Gather configurations and web SEO tool to this moudle.
+    + Add feature remove module name in url when disable mutillanguage mode.
+    + Add feature change the path of the module for easy SEO url.
+    + Add feature authentication Google +  (copyright).
+    + Add feature Ping to search engine.
+    + Support Meta OG of facebook. Add new meta ogp, add data for $meta_property array.
+    + Support insert Meta GEO via Meta- Tags configuration.
+
+- Module staticts
+    + Change the mechanism calculating the number of hits the site. Recount after visitor don’t active in 30 minutes.
+    + Only admin can see default configure.
+
+- Module banner
+    +  Add feature of display banner: banner flash is replacing by photo on mobile browsers (Because adobe flash don’t run on some browsers).
+    + Add feature for ad: when click ad, choose open: In new windows, in current windows…
+    + Add global.department.php block (display department contact information).
+    + Admin can answer customer more times, the system log all the replies.
+
+- Module menu
+    + Change menu management more visually.
+    + Split menu types  into block menu distinct.
+
+NUKEVIET 3.4.02 (3.4.02.r1929) Releases Jan 9, 2014
+CODE: http://code.google.com/p/nuke-viet/source/list (r1759 to r1929)
+- Fix for system core, captcha, function delete theme, install, module news, download, weblinks
+- Delete block_blocknews (exit with block_groups) in module news.
+- Opmtimize module weblinks, news, voting, users, download
+- jQuery v1.8.2, jQuery UI 1.8.24
+- Jwplayer 5.10.2295
+- CKEditor 3.6.5
+- Add Bing site diagnostic, Remove yahoo diagnostic.
+- Fix check Google PageRank, Google BackLink and Google Indexed.
+- Add new feature for module users (list member)
+- Update Shop to Shop Pro and remove module Shop from default NukeViet (To release from NukeViet Store).
+- Understanding the Windows 8 ISO, ODP file
+- Support IPv6
+- Format code for standard and a few small changes...
+
+NUKEVIET 3.4.01 (3.4.01.r1758)
+CODE: http://code.google.com/p/nuke-viet/source/list (r1723 to r1758)
+- Add Alert when the browser disable JavaScript (Features appear in NukeViet3 closebeta).
+- Update Ajax search for the article source.
+- Fix Optimize CSS and something...
+
+NUKEVIET 3.4 RC1 (3.4.00.r1722)
+CODE: http://code.google.com/p/nuke-viet/source/list (r1501 to r1722)
+- Fix database birthday users.
+- Fix Statistics module.
+- Module contact: fix send mail with phone. Add features selected by ID
+- Module news: add image for topics.
+- Add Google Custom Search.
+- Upgrade module voting 3.1, add block fixed votes and display home module.
+- Fix SEO: Add ALT content for IMG tag, fix breadcrumbs (css class) for google search.
+- Active current menu to top of menu.
+- Add module name at Admin Control Panel.
+- Module download: add global.new_files.php
+- Add cool php captcha 0.3.
+- Update module menu.
+- Add feature switching mobile and desktop interface.
+- New mobile interface and full support.
+- Module upload: add function automatically insert logo on the picture.
+- CKEditor 3.6.3 revision 7365
+- jQuery v1.7.1, jQuery UI 1.8.18
+- Auto detect FTP remove path.
+- Module banner: Add link click for SWF file
+- Add Quick access pending work from module siteinfo (admin control panel).
+- Security fix.
+- Add function Upgrade and Update
+- Fix features, Optimize code, update many module and add more features...
+
+NUKEVIET 3.3.06.r1500
+CODE: http://code.google.com/p/nuke-viet/source/list (r1476 to r1500)
+- Fix Statistics module.
+- Require PHP 5.2.
+- Fix some features.
+
+NUKEVIET 3.3 Official (3.3.05.r1475)
+CODE: http://code.google.com/p/nuke-viet/source/list (r1204 to r1475)
+Add features:
+- Additional functions to find and insert member ID (Admin Control Panel).
+- Add cron auto delete cache
+- Support OpenID from http://nukeviet.vn
+- Support mobile theme & config theme for mobile
+- Add management feature tag "TITLE", and more features for SEO
+- Module webtools: add manager file robots.txt
+- Auto replace iframe youtube (by jwplayer)
+- Add Lunar Calendar function.
+- Support Detect language by cookie, IP
+- Add timezone name to countries.php
+- Add option to delete all site logs
+- Add option "site timezone by timezone of visitor's country"
+- Add option "site timezone by user's PC timezone"
+- Add features: insert logo into the image
+- Add features: change logo from the admin control panel (config site)
+Fix bug:
+- Module Shop: RSS link, check unit,  fix exchange money
+- Module menu: Fix error can not delete menu, edit menu
+- Fix install tool.
+- fix clear system
+- Fix delete module.
+- fix setup layout.
+- fix robots.txt multi-domain site
+- Module Upload: fix upload file .jpeg
+Optimize:
+- Optimize and Compress file code NukeViet
+- Module News and block of module.
+- Optimize PHP Code.
+- Optimize site for SEO (site description, site keywords ...)
+- Optimize module upload
+- Set collation for mysql
+- Optimize process of determining the country name
+- Optimize theme
+Upgrades, updates:
+- Language: Việt Nam, English, Français
+- CKEditor Build r7328
+- function nv_checkmobile
+- jQuery v1.7, jQuery UI 1.8.16
+- Module Shop V3.0.02
+- Fix get Google PageRank, Google BackLink and Google Indexed
+Other changes:
+- Module News: Sort comment DESC
+- Add sitemap xml for module Shop.
+- Update admin toolbar
+- Change module search
+- Change page function
+Remove features:
+- Remove function update revision
+- Remove IP Library
+
+NUKEVIET 3.2 Official (3.2.00.r1203)
+CODE: http://code.google.com/p/nuke-viet/source/list (r931 to r1203)
+- SYSTEM
+    + Fix Duplicate title tags and meta descriptions.
+    + Fix update by revision feature
+    + Config domain allows use localhost
+    + Config method update language pack by revision.
+    + Fixed 404 erro when url contain special character.
+    + Update editor, fixed quick upload in the editor.
+    + Update JW Player 5.5. Add feature select image illustration for plugin JW Player of the editor.
+    + Check server status, if CPU use >80 % will report “Server too busy. Please try again later”.
+    + Edit to customizable tool bar of admin control panel.
+    + Redefine theme is using at time configure.
+    + Fix not detected theme when install new module.
+    + Fix module rss, and modules relation with module rss.
+    + Delete caches of modules when changing configuration block.
+    + Fixed erro at file image.class.php.
+    + Fixed chmod in used FTP.
+    + Fixed install module: Allows modules don’t have outside function.
+    + Fixed system for functions outside of module is not obligatory.
+    + Fixed block menu when theme by module.
+    + Update jQuery and plugins: jQuery v1.5.2, jQuery UI.
+    + Use class phpsvnclient: In case commit file use Replace.
+    + Upgrade openid.class.php
+    + Fixed function check mimetype when upload file.
+    + Add feature delete module has not used (Delete files of the modules).
+    + Rewrite for servers which are not supported.
+    + Fixed XML Sitemap index on hosting which not support full rewrite.
+    + Fixed file Sitemap.xml to Google Webmaster Tools detect easier.
+    + Fixed erro misindentified module while enable rewrite feature.
+    + Improve to can rewrite single url.
+    + Rewrite links while sending mail.
+    + Add rewriteBase into file .htaccess
+    + Fixed rewrite in case the hosting does not support zlib lead to not loaded css, js.
+    + Fixed rewrite on IIS7 to not lose configuration at file web.config. Fixed check rewrite on IIS7.
+
+- Theme
+    + Devide language of block to single file.
+    + Theme default: fixed erro not rewrite link of statisticts.
+    + Fixed erro undisplay content of block html which contain special character.
+    + Fixed theme management: Delete block when delete theme.
+
+- Web tools
+    + Add feature delete IP logs
+    + Add select all works in cleanup system.
+    + Config check Nukeviet version feature.
+    + Update upgrade function via Revision. Only get the updates in the directory /trunk/nukeviet 3.2
+    + Fixed Revision update function in system folder is renamed.
+    + Update by Revision. On the hostings need FTP to creat folder and move file.
+
+- System log
+    + Record system log in these important events.
+    + Add tool filter system log, change type of arrangement system log default.
+    + Update module users
+    + Allows user register in public group.
+    + Add configuration for users retrieve passwords without be ask secret questions.
+    + Fixed error not add, edit users when mechanism forum.
+    + Fixed error GodAdmin unable to delete admin.
+    + Fixed error active user account.
+    + Disable autocomplete function at edit user accounts.
+    + Fixed error can not change e-mail while loging in.
+    + Remove dots befor @ character while check valid of e-mail (uname@gmail.com =u.name@gmail.com)
+    + Block login: Fixed path of avata, OpenID image.
+
+- Module News
+    + Fixed time post article. Time post article must  after time creat article.
+    + Delete cache of module when users delete article.
+    + Fixed incorrect image display of the article in block headline.
+    + Fixed error show titles of articles that have not posted in sitemap.
+    + Fixed page breaking error while config module “By title, the new up”.
+    + Fixed rss links of News vitualization module at theme modern.
+    + Fixed error can not edit information resource.
+    + Fixed delete thumb when delete article.
+    + Fixed form comment for theme modern.
+    + Fixed show comment, fixed page breaking at comment management.
+    + Devide HTML and PHP
+
+- Module menu
+    + Add feature management menus.
+    + Fixed error functions be shown in menu of module User (customizable via login status).
+    + Fixed function name of menus to use many type menu at the same time.
+    + Block menu smooth_navigational don’t show sub menu of module weblinks.
+    + Module Language
+    + Manage block language
+
+- Module FAQ:
+    + Fixed module to not obligatory enter question to topic and add presentation.
+    + Module download: Fixed path avata of user.
+
+- Module about:
+    + Fixed error show inactive article.
+
+- Merge Module Shop project to Nukeviet 3.2
+    CODE: http://code.google.com/p/nuke-viet/source/list (r2)
+    + Organize shop presentation by criteria: Product type, product group, new update product…
+    + The feature to see and select product: Categorise product type, the same product, sample product, product most viewed..
+    + Shop cart: Add  allows order product to shop cart.
+    + Pay online by ATM card throught payment system of Nganluong.vn
+    + Send order: Member website submit order.
+    + Deal history: Show deal historys of members.
+    + The system administrator functions include:
+    + Currency management: Allows add, edit, delete currency.
+    + Manage payment gateways mecharnismed: Config payment gateways  if use 1 or more onlien payment gateways.
+    + Configuration: Set parameters for the sales system.
+    + Management product units: Add, edit, delete product unit.
+    + Manage product categorise: Add, edit, delete
+    + Managet product group (by criteria): add, edit, delete.
+    + Manage blocks (product group).
+    + Manage list of manufacturers.
+    + Manage list products: add, edit, delete, search..
+    + Manage of orders and print invoices.
+    + Fixed Module shop error
+    + Fixed error paging
+    + Auto cut introduction shorter when it shown.
+    + Trim introduction shorter if too length be allows to avoid undefined error.
+    + Fixed comment product error.
+
+NUKEVIET 3.1 Official version (3.1.03.r930)
+CODE: http://code.google.com/p/nuke-viet/source/list (r784 to r930)
+- Fix features.
+- jQuery v1.4.4
+- And more...
+
+NUKEVIET 3.1.0 (beta)
+CODE: http://code.google.com/p/nuke-viet/source/list (r469 to r783)
+
+- Fixed bugs and optimize old features
+- Module News:
+    + Allows display illustration outside of the site.
+    + Add feature post/edit/delete article for members.
+    + Additional configure represented as a grid, by list article.
+    + Increase system cache, compress CSS, JavaScript.. to speed up loading page.
+    + Add feature “Delete all temp file” for God Admin.
+    + Add Google Analytics tracking code at http://code.google.com/p/nuke-viet/source/detail?r=556
+
+- Add feature for SEO
+    + Add feature meta-tags management.
+    + Auto creat sitemap file for search engine.
+    + Add sitemap Ping Services (Send sitemap files to search engine by PING).
+    + Rating according to the index site.
+    + Check SEO by keywords.
+
+- The feature of upgrade, check version.
+    + Add  upgrade information from Nukeviet project.
+    + Auto report new version in Admin control panel.
+    + Add feature check module version
+    + Add feature system upgrade by upgrade package.
+    + Add feature upgrade via revision.
+    + Increase ability auto install for block, module even when be overwriting or non-standard.
+- Restructuring block, allows global block located block of module, allows add more parameters for the block.
+- Add Admin full theme and use this theme for admin control panel.
+- Fixed upload feature, add  the feature allows each admin upload to each folder of module news.
+- Manage admin login rights.
+- Add  more log system, full record administrative operator.
+- And many other small change….
+
+NUKEVIET 3.0.12 (Official version - online publishing)
+CODE: http://code.google.com/p/nuke-viet/source/list (r362 to r468)
+- Change logo.
+- Add module log.
+- Add modern theme.
+- Fix features.
+- Security fix.
+- And more features ...
+
+NUKEVIET 3.0.11 (RC3)
+CODE: http://code.google.com/p/nuke-viet/source/list (r303 to r361)
+- Enable/disable RSS modules
+- Update lang, CKEditor 3.4.1
+- Fix module RSS, Download, Banner...
+- Fix many functions.
+- Fix and edit cache system.
+- Security fix.
+- And more features ...
+
+NUKEVIET 3.0.10 (RC2)
+CODE: http://code.google.com/p/nuke-viet/source/list (r211 to r303)
+- Fix module rss
+- Fix module banner
+- Fix config smtp
+- fix module search
+- Update lang cz,fr
+- Add cache system
+- Add module faq
+- And more features ...
+
+NUKEVIET 3.0.09 (RC1)
+CODE: http://code.google.com/p/nuke-viet/source/list (r140 to r211)
+- Update module search
+- fix module users
+- Update function support UTF-8
+- Add firewall for admin
+- Add block ip for admin
+- Add banip for site
+- And more features ...
+
+NUKEVIET 3.0.08 (Openbeta 3 - 21/08/2010)
+CODE: http://code.google.com/p/nuke-viet/source/list (r74 to r140)
+- Fix bug NukeViet 3.0.07
+- Replace Module: Download
+- Upgrade Editor: CKeditor 3.4
+- Replace CKfinder by Upload module.
+- Module Download
+- Add features Config: IP, upload...
+- Add features copy block forom theme A to theme B
+- Add features Check the directory chmod
+- Add block module.block_tophits.php for modules News
+- And more features ...
+
+NUKEVIET 3.0.05 (Openbeta 1) TO NUKEVIET 3.0.07 (Openbeta 2 - 14/08/2010)
+CODE: http://code.google.com/p/nuke-viet/source/list (r02 to r73)
+What's New NukeViet 3.0.06:
+- Fix bug NukeViet 3.0.05
+- Add language: Czech
+- Allows members to use the username with special characters.
+- Fix bug NukeViet 3.0.06
+
+NUKEVIET 3.0 main features: http://nukeviet.vn/vi/about/tinh-nang-chinh-nukeviet-3-0-5/

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<searchEngine>
+  <searchEngine_item>
+    <name>Google</name>
+    <value>http://www.google.com/webmasters/tools/ping?sitemap=</value>
+    <active>1</active>
+  </searchEngine_item>
+</searchEngine>

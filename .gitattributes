@@ -1,0 +1,53 @@
+# NukeViet git normalization
+# @see https://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
+
+# Define text file attributes.
+# - Treat them as text.
+# - Ensure no CRLF line-endings, neither on checkout nor on checkin.
+# - Detect whitespace errors.
+#   - Exposed by default in `git diff --color` on the CLI.
+#   - Validate with `git diff --check`.
+#   - Deny applying with `git apply --whitespace=error-all`.
+#   - Fix automatically with `git apply --whitespace=fix`.
+
+# Auto-detect text files, ensure they use LF.
+*         text=auto eol=lf
+
+*.css     text eol=lf 
+*.tpl	  text eol=lf  diff=html
+*.html    text eol=lf  diff=html
+*.js      text eol=lf 
+*.json    text eol=lf 
+*.md      text eol=lf 
+*.php     text eol=lf  diff=php
+*.sql     text eol=lf 
+*.txt     text eol=lf 
+*.xml     text eol=lf 
+*.ini     text eol=lf  diff=xml
+
+# Define binary file attributes.
+# - Do not treat them as text.
+# - Include binary diff in patches instead of "binary files differ."
+*.gif     -text diff
+*.ico     -text diff
+*.jpg     -text diff
+*.jpeg    -text diff
+*.png     -text diff
+*.ttf     -text diff
+*.otf     -text diff
+*.eot     -text diff
+*.woff2   -text diff
+*.woff    -text diff
+*.bcmap   -text diff
+*.swf     -text diff
+*.rar     -text diff
+*.bmp     -text diff
+*.odt     -text diff
+*.doc     -text diff
+*.docx    -text diff
+*.xls     -text diff
+*.xlsx    -text diff
+*.dat     -text diff
+*.z       -text diff
+*.sh      -text diff
+*.zip     -text diff
