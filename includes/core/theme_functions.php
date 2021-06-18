@@ -164,9 +164,10 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
  */
 function nv_htmlOutput($html, $type = 'html')
 {
-    global $global_config, $headers, $sys_info, $nv_BotManager;
+    global $global_config, $headers, $nv_BotManager;
 
     // Xuất cấu hình robot vào header
+    $sys_info = [];
     $nv_BotManager->outputToHeaders($headers, $sys_info);
 
     $html_headers = $global_config['others_headers'];
@@ -200,15 +201,13 @@ function nv_htmlOutput($html, $type = 'html')
 
     foreach ($html_headers as $key => $value) {
         $_key = strtolower($key);
-        if (!isset($sys_info['server_headers'][$_key])) {
-            if (!is_array($value)) {
-                $value = [$value];
-            }
+        if (!is_array($value)) {
+            $value = [$value];
+        }
 
-            foreach ($value as $val) {
-                $replace = ($key != 'link') ? true : false;
-                Header($key . ': ' . $val, $replace);
-            }
+        foreach ($value as $val) {
+            $replace = ($key != 'link') ? true : false;
+            Header($key . ': ' . $val, $replace);
         }
     }
 
