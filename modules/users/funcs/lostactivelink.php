@@ -37,8 +37,9 @@ $data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 
 $data['send'] = $nv_Request->get_bool('send', 'post', false);
 if ($global_config['captcha_type'] == 2) {
     $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
 } else {
-    $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
+    $data['nv_seccode'] = $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
 }
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
@@ -48,7 +49,7 @@ $step = 1;
 $error = $question = '';
 
 if ($checkss == $data['checkss']) {
-    if ((!empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'])) {
+    if ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'])) {
         if (!empty($data['userField'])) {
             $check_email = nv_check_valid_email($data['userField'], true);
             $check_login = nv_check_valid_login($data['userField'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
@@ -138,6 +139,8 @@ if ($checkss == $data['checkss']) {
                             include NV_ROOTDIR . '/includes/footer.php';
                         } else {
                             $step = 2;
+                            // Pass bước 1 thì lưu mã xác nhận lại thành 1 dạng để kiểm tra session
+                            $data['nv_seccode'] = $data['nv_seccode2'];
                             $error = $lang_module['answer_failed'];
                         }
                     }
