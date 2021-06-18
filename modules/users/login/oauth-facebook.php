@@ -24,7 +24,7 @@ $serviceFactory = new \OAuth\ServiceFactory();
 $credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=facebook');
 
 // Instantiate the Facebook service using the credentials, http client and storage mechanism for the token
-$facebookService = $serviceFactory->createService('facebook', $credentials, $storage, ['email', 'user_photos']);
+$facebookService = $serviceFactory->createService('facebook', $credentials, $storage, ['email']);
 
 if (!empty($_GET['code'])) {
     // This was a callback request from facebook, get the token
