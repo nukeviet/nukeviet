@@ -733,7 +733,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('NEWSID', $news_contents['id']);
     $xtpl->assign('NEWSCHECKSS', $news_contents['newscheckss']);
     $xtpl->assign('DETAIL', $news_contents);
-    $xtpl->assign('SELFURL', $client_info['selfurl']);
+    $xtpl->assign('SELFURL', $news_contents['link']);
 
     if ($news_contents['allowed_send'] == 1) {
         $xtpl->assign('URL_SENDMAIL', $news_contents['url_sendmail']);
