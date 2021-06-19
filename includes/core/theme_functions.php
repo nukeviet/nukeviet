@@ -29,21 +29,66 @@ function nv_error_info()
     }
 
     $errortype = [
-        E_ERROR => [$lang_global['error_error'], 'bad.png'],
-        E_WARNING => [$lang_global['error_warning'], 'warning.png'],
-        E_PARSE => [$lang_global['error_error'], 'bad.png'],
-        E_NOTICE => [$lang_global['error_notice'], 'comment.png'],
-        E_CORE_ERROR => [$lang_global['error_error'], 'bad.png'],
-        E_CORE_WARNING => [$lang_global['error_warning'], 'warning.png'],
-        E_COMPILE_ERROR => [$lang_global['error_error'], 'bad.png'],
-        E_COMPILE_WARNING => [$lang_global['error_warning'], 'warning.png'],
-        E_USER_ERROR => [$lang_global['error_error'], 'bad.png'],
-        E_USER_WARNING => [$lang_global['error_warning'], 'warning.png'],
-        E_USER_NOTICE => [$lang_global['error_notice'], 'comment.png'],
-        E_STRICT => [$lang_global['error_notice'], 'comment.png'],
-        E_RECOVERABLE_ERROR => [$lang_global['error_error'], 'bad.png'],
-        E_DEPRECATED => [$lang_global['error_notice'], 'comment.png'],
-        E_USER_DEPRECATED => [$lang_global['error_warning'], 'warning.png']
+        E_ERROR => [
+            $lang_global['error_error'],
+            'bad.png'
+        ],
+        E_WARNING => [
+            $lang_global['error_warning'],
+            'warning.png'
+        ],
+        E_PARSE => [
+            $lang_global['error_error'],
+            'bad.png'
+        ],
+        E_NOTICE => [
+            $lang_global['error_notice'],
+            'comment.png'
+        ],
+        E_CORE_ERROR => [
+            $lang_global['error_error'],
+            'bad.png'
+        ],
+        E_CORE_WARNING => [
+            $lang_global['error_warning'],
+            'warning.png'
+        ],
+        E_COMPILE_ERROR => [
+            $lang_global['error_error'],
+            'bad.png'
+        ],
+        E_COMPILE_WARNING => [
+            $lang_global['error_warning'],
+            'warning.png'
+        ],
+        E_USER_ERROR => [
+            $lang_global['error_error'],
+            'bad.png'
+        ],
+        E_USER_WARNING => [
+            $lang_global['error_warning'],
+            'warning.png'
+        ],
+        E_USER_NOTICE => [
+            $lang_global['error_notice'],
+            'comment.png'
+        ],
+        E_STRICT => [
+            $lang_global['error_notice'],
+            'comment.png'
+        ],
+        E_RECOVERABLE_ERROR => [
+            $lang_global['error_error'],
+            'bad.png'
+        ],
+        E_DEPRECATED => [
+            $lang_global['error_notice'],
+            'comment.png'
+        ],
+        E_USER_DEPRECATED => [
+            $lang_global['error_warning'],
+            'warning.png'
+        ]
     ];
 
     if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/error_info.tpl')) {
@@ -159,6 +204,7 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 }
 
 /**
+ *
  * @param string $html
  * @param string $type
  */
@@ -179,14 +225,14 @@ function nv_htmlOutput($html, $type = 'html')
     } else {
         $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
     }
-    $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+    $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';
     $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
     $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
     $html_headers['Expires'] = '-1'; // Proxies.
     $html_headers['X-Content-Type-Options'] = 'nosniff';
     $html_headers['X-XSS-Protection'] = '1; mode=block';
 
-    if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
+    if (str_contains(NV_USER_AGENT, 'MSIE')) {
         $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
     }
 
@@ -202,7 +248,9 @@ function nv_htmlOutput($html, $type = 'html')
     foreach ($html_headers as $key => $value) {
         $_key = strtolower($key);
         if (!is_array($value)) {
-            $value = [$value];
+            $value = [
+                $value
+            ];
         }
 
         foreach ($value as $val) {
@@ -217,6 +265,7 @@ function nv_htmlOutput($html, $type = 'html')
 }
 
 /**
+ *
  * @param array $array_data
  */
 function nv_jsonOutput($array_data)
@@ -244,7 +293,7 @@ function nv_xmlOutput($content, $lastModified)
         $tidy = new tidy();
         $tidy->parseString($content, $tidy_options, 'utf8');
         $tidy->cleanRepair();
-        $content = (string)$tidy;
+        $content = (string) $tidy;
     } else {
         $content = trim($content);
     }
@@ -296,6 +345,7 @@ function nv_xmlOutput($content, $lastModified)
 }
 
 /**
+ *
  * @param array $channel
  * @param array $items
  * @param string $timemode
@@ -306,7 +356,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
     global $global_config, $client_info;
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
-    //Chi co tac dung voi IE6 va Chrome
+    // Chi co tac dung voi IE6 va Chrome
     $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
     $xtpl->assign('CHARSET', $global_config['site_charset']);
     $xtpl->assign('SITELANG', $global_config['site_lang']);
@@ -318,7 +368,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
     $channel['copyright'] = $global_config['site_name'];
 
     $channel['docs'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true);
-    if (strpos($channel['docs'], NV_MY_DOMAIN) !== 0) {
+    if (!str_starts_with($channel['docs'], NV_MY_DOMAIN)) {
         $channel['docs'] = NV_MY_DOMAIN . $channel['docs'];
     }
 
@@ -326,7 +376,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
         $channel['link'] = NV_BASE_SITEURL . $matches[1];
     }
     $channel['link'] = nv_url_rewrite($channel['link'], true);
-    if (strpos($channel['link'], NV_MY_DOMAIN) !== 0) {
+    if (!str_starts_with($channel['link'], NV_MY_DOMAIN)) {
         $channel['link'] = NV_MY_DOMAIN . $channel['link'];
     }
 
@@ -334,7 +384,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
         $channel['atomlink'] = NV_BASE_SITEURL . $matches[1];
     }
     $channel['atomlink'] = nv_url_rewrite($channel['atomlink'], true);
-    if (strpos($channel['atomlink'], NV_MY_DOMAIN) !== 0) {
+    if (!str_starts_with($channel['atomlink'], NV_MY_DOMAIN)) {
         $channel['atomlink'] = NV_MY_DOMAIN . $channel['atomlink'];
     }
 
@@ -363,7 +413,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
                     $item['link'] = NV_BASE_SITEURL . $matches[1];
                 }
                 $item['link'] = nv_url_rewrite($item['link'], true);
-                if (strpos($item['link'], NV_MY_DOMAIN) !== 0) {
+                if (!str_starts_with($item['link'], NV_MY_DOMAIN)) {
                     $item['link'] = NV_MY_DOMAIN . $item['link'];
                 }
 
@@ -450,7 +500,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
         $image['link'] = $channel['link'];
 
         $image['src'] = nv_url_rewrite($image['src'], true);
-        if (strpos($image['src'], NV_MY_DOMAIN) !== 0) {
+        if (!str_starts_with($image['src'], NV_MY_DOMAIN)) {
             $image['src'] = NV_MY_DOMAIN . $image['src'];
         }
 
@@ -463,13 +513,16 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 
     if ($noindex) {
         global $nv_BotManager;
-        $nv_BotManager->setNoIndex()->setFollow()->printToHeaders();
+        $nv_BotManager->setNoIndex()
+            ->setFollow()
+            ->printToHeaders();
     }
 
     nv_xmlOutput($content, $lastModified);
 }
 
 /**
+ *
  * @param array $url
  * @param string $changefreq
  * @param string $priority
@@ -482,7 +535,7 @@ function nv_xmlSitemap_generate($url, $changefreq = 'daily', $priority = '0.8')
     if (!empty($url)) {
         foreach ($url as $key => $values) {
             $values['link'] = nv_url_rewrite($values['link'], true);
-            if (strpos($values['link'], NV_MY_DOMAIN) !== 0) {
+            if (!str_starts_with($values['link'], NV_MY_DOMAIN)) {
                 $values['link'] = NV_MY_DOMAIN . $values['link'];
             }
             $row = $xml->addChild('url');
@@ -504,6 +557,7 @@ function nv_xmlSitemap_generate($url, $changefreq = 'daily', $priority = '0.8')
 }
 
 /**
+ *
  * @param array $url
  */
 function nv_xmlSitemapCat_generate($url)
@@ -515,7 +569,7 @@ function nv_xmlSitemapCat_generate($url)
     $lastModified = NV_CURRENTTIME - 86400;
 
     foreach ($url as $link) {
-        if (strpos($link, NV_MY_DOMAIN) !== 0) {
+        if (!str_starts_with($link, NV_MY_DOMAIN)) {
             $link = NV_MY_DOMAIN . $link;
         }
         $row = $xml->addChild('sitemap');

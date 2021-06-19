@@ -46,7 +46,7 @@ if ($id > 0 and $catid > 0) {
             $to_mail = $content = '';
             if ($checkss == md5($id . NV_CHECK_SESSION) and $allowed_send == 1) {
                 $link = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
-                if (strpos($link, NV_MY_DOMAIN) !== 0) {
+                if (!str_starts_with($link, NV_MY_DOMAIN)) {
                     $link = NV_MY_DOMAIN . $link;
                 }
                 $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";

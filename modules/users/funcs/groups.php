@@ -141,7 +141,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
                 $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
                 $subject = $lang_module['adduser_register'];
                 $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-                if (strpos($_url, NV_MY_DOMAIN) !== 0) {
+                if (!str_starts_with($_url, NV_MY_DOMAIN)) {
                     $_url = NV_MY_DOMAIN . $_url;
                 }
                 $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
@@ -279,9 +279,9 @@ if ($nv_Request->isset_request('gid,del', 'post')) {
         $array_groups_user[$_row['group_id']] = $_row;
     }
 
-    if (!isset($array_groups_user[$gid])) {// không nằm trong danh sách nhóm dc quản lí
+    if (!isset($array_groups_user[$gid])) { // không nằm trong danh sách nhóm dc quản lí
         die($lang_module['del_user_err']);
-    } else {// nằm ở 2 nhóm khác
+    } else { // nằm ở 2 nhóm khác
         die($lang_module['not_del_user']);
     }
 

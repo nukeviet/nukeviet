@@ -39,12 +39,12 @@ if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
     $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
 }
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
-$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
 $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
 $html_headers['Expires'] = '-1'; // Proxies.
 
-if (strpos(NV_USER_AGENT, 'MSIE') !== false) {
+if (str_contains(NV_USER_AGENT, 'MSIE')) {
     $html_headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
 }
 
@@ -69,7 +69,7 @@ foreach ($html_headers as $key => $value) {
     $_key = strtolower($key);
     if (!isset($sys_info['server_headers'][$_key])) {
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
 
         foreach ($value as $val) {

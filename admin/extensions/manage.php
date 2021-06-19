@@ -256,7 +256,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
 
                 $_exitfolder = false;
                 foreach ($files_folders as $_folder) {
-                    if (strpos($file, $_folder) !== false) {
+                    if (str_contains($file, $_folder)) {
                         $_exitfolder = true;
                         break;
                     }
