@@ -83,6 +83,7 @@ $news_contents['link'] = $canonicalUrl = getCanonicalUrl($page_url, true);
      * bên trên đã được chuyển hướng
      */
 if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
+    $nv_BotManager->setPrivate();
     $contents = no_permission($global_array_cat[$catid]['groups_view']);
 
     include NV_ROOTDIR . '/includes/header.php';
