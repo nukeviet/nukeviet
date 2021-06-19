@@ -1,5 +1,24 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.00 (System only)
+- Update Browser class to v1.9.6
+- System package updates: polyfill-mbstring (v1.3.0 => v1.23.0), gregwar/cache (v1.0.12 => v1.0.13), gregwar/image (v2.0.21 => v2.0.28), and/oauth (dev-master 48fa6e7 => dev-master 700b769), symfony/options-resolver (v3.2.6 => v3.4.47), endroid/qrcode (1.9.1 => 1.9.3), phpmailer/phpmailer (v6.1.6 => v6.5.0)
+- System: Disable email engines from automatically hyperlinking a URL
+- System: Fix error "Email Hyperlink Injection". Thanks mcsoon at WhiteHub#1610
+- System: Hide file composer.json
+- System: Fix potential Cross-site Scripting (XSS) Errors
+- System: Add SameSite attribute to cookie
+- System: Add Referrer-Policy
+- System: Add Content-Security-Policy
+- System: Support for php 8, add functions str_contains, str_starts_with, str_ends_with
+- System: Block indexing of robots in some areas, regardless of site configuration (ACP, users, banners (click func), comment, freecontent, menu, statistics, two-step-verification)
+- Module Users: Fix login facebook
+- System: Fix XML encoding
+- Module Users: Fix error when retrieving activation link
+- System: Define canonical URL; Add Prev and Next link-tags; Manage page numbering
+- Module Users: Fix logging error when users login with OpenID (x#2996)
+- System: Fix error of not recognizing the Edge browser
+- System: Request class, Allow request with NULL Origin
 
 NUKEVIET 4.4.02
 
