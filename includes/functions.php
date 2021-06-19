@@ -1459,8 +1459,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             return ($testmode ? 'No mail mode' : false);
         }
 
-        $mail->From = $sm_parameters['from_address'];
-        $mail->FromName = nv_unhtmlspecialchars($sm_parameters['from_name']);
+        $mail->setFrom($sm_parameters['from_address'], nv_unhtmlspecialchars($sm_parameters['from_name']));
 
         if (!empty($sm_parameters['reply'])) {
             foreach ($sm_parameters['reply'] as $_m => $_n) {
@@ -1485,7 +1484,9 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         $mail->Subject = nv_unhtmlspecialchars($sm_parameters['subject']);
-        $mail->WordWrap = 120;
+        // https://www.php.net/manual/en/function.mail.php
+        // Lines should not be larger than 70 characters. 
+        $mail->WordWrap = 70;
         $mail->Body = $sm_parameters['message'];
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
