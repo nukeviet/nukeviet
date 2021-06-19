@@ -9,6 +9,11 @@
  */
 
 if (isset($_GET['response_headers_detect'])) {
+    if ((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443) {
+        Header('x-is-https: 1');
+    } else {
+        Header('x-is-http: 1');
+    }
     exit(0);
 }
 
@@ -210,10 +215,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 if (
                     (
                         // Giao diện mobile tự động nhận diện dựa vào client
-                        (
-                            $client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'])
-                            and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des']))
-                        )
+                        ($client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'])
+                            and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des'])))
                         // Giao diện mobile lấy từ chuyển đổi giao diện
                         or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))
                     )

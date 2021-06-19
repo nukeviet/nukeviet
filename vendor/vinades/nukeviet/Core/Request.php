@@ -291,8 +291,7 @@ class Request
         $this->Initialize($nv_Server);
         $this->get_cookie_save_path();
 
-        $_ssl_https = (isset($config['ssl_https'])) ? $config['ssl_https'] : 0;
-        $this->sessionStart($_ssl_https);
+        $this->sessionStart(!empty($config['https_only']));
         $_REQUEST = array_merge($_POST, array_diff_key($_GET, $_POST));
     }
 
@@ -574,13 +573,13 @@ class Request
      *
      * @return
      */
-    private function sessionStart($_ssl_https)
+    private function sessionStart($https_only)
     {
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
             trigger_error(Request::IS_HEADERS_SENT, 256);
         }
 
-        $_secure = ($this->server_protocol == 'https' and $_ssl_https == 1) ? 1 : 0;
+        $_secure = ($this->server_protocol == 'https' and $https_only) ? 1 : 0;
         session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, $_secure, 1);
 
         session_name($this->cookie_prefix . '_sess');

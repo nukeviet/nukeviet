@@ -183,6 +183,39 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $_temp = implode(',', $_temp);
     $content_config .= "\$sys_info['server_headers'] = [" . $_temp . "];\n";
 
+    // https_only and http_only
+    if ((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443) {
+        stream_context_set_default([
+            'http' => [
+                'method' => 'GET',
+                'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
+            ]
+        ]);
+        $host = $nv_Server->getOriginalHost();
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+            $host = '[' . $host . ']';
+        }
+        $server_headers = get_headers('http://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
+        $sys_info['https_only'] = !empty($server_headers['x-is-http']) ? false : true;
+        $sys_info['http_only'] = false;
+    } else {
+        stream_context_set_default([
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false
+            ]
+        ]);
+        $host = $nv_Server->getOriginalHost();
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+            $host = '[' . $host . ']';
+        }
+        $server_headers = get_headers('https://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
+        $sys_info['http_only'] = !empty($server_headers['x-is-https']) ? false : true;
+        $sys_info['https_only'] = false;
+    }
+    $content_config .= "\$sys_info['http_only'] = " . ($sys_info['http_only'] ? 'true' : 'false') . ";\n";
+    $content_config .= "\$sys_info['https_only'] = " . ($sys_info['https_only'] ? 'true' : 'false') . ";\n";
+
     // Kiểm tra PHP hỗ trợ xử lý IPv6
     if (!((extension_loaded('sockets') and defined('AF_INET6')) or @inet_pton('::1'))) {
         $sys_info['ip6_support'] = false;
