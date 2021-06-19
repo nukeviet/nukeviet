@@ -71,7 +71,7 @@ function nv_iChars_Remove(str) {
 	return str.replace(nv_specialchars, "");
 }
 
-function nv_setCookie(name, value, expiredays) {
+function nv_setCookie(name, value, expiredays, secure) {
 	if (expiredays) {
 		var exdate = new Date();
 		exdate.setDate(exdate.getDate() + expiredays);
@@ -81,7 +81,8 @@ function nv_setCookie(name, value, expiredays) {
 	var domainName = document.domain;
 	domainName = domainName.replace(/www\./g, '');
 	domainName = is_url.test(domainName) ? '.' + domainName : '';
-	document.cookie = name + "=" + escape(value) + ((expiredays) ? "; expires=" + expires : "") + ((domainName) ? "; domain=" + domainName : "") + "; path=" + nv_base_siteurl;
+	secure = ("undefined" != typeof secure && secure) ? "; secure" : "";
+	document.cookie = name + "=" + escape(value) + ((expiredays) ? "; expires=" + expires : "") + ((domainName) ? "; domain=" + domainName : "") + "; path=" + nv_base_siteurl + secure;
 }
 
 function nv_getCookie(name) {
@@ -119,7 +120,8 @@ function nv_check_timezone() {
 	new_value += '|' + domainName;
 
 	if (rawurldecode(cookie_timezone) != new_value) {
-		nv_setCookie(nv_cookie_prefix + '_cltz', rawurlencode(new_value), 365);
+		var secure = (location.protocol === 'https:') ? true : false;
+		nv_setCookie(nv_cookie_prefix + '_cltz', rawurlencode(new_value), 365, secure)
 	}
 }
 
