@@ -341,6 +341,9 @@ if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
     require NV_ROOTDIR . '/includes/core/cronjobs.php';
 }
 
+// Quản lý thẻ meta, header các máy chủ tìm kiếm
+$nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
+
 // Kiem tra tu cach admin
 if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
     trigger_error('Hacking attempt', 256);
@@ -378,9 +381,6 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     }
 }
 unset($nv_check_update);
-
-// Quản lý thẻ meta, header các máy chủ tìm kiếm
-$nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
 
 $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
