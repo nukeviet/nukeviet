@@ -19,6 +19,7 @@
         <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab">{LANG.captcha}</a></li>
         <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab">{LANG.banip}</a></li>
         <li role="presentation" class="{TAB4_ACTIVE}"><a href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-toggle="tab">{LANG.cors}</a></li>
+        <li role="presentation" class="{TAB5_ACTIVE}"><a href="#settingCSP" aria-controls="settingCSP" aria-offsets="5" role="tab" data-toggle="tab">{LANG.csp}</a></li>
     </ul>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
@@ -585,6 +586,43 @@
                         </table>
                     </div>
                     <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane{TAB5_ACTIVE}" id="settingCSP">
+            <div class="setting-tabcontent clearfix">
+                <form action="{FORM_ACTION}" method="post">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover table-first">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">{LANG.csp_desc} <a href="https://content-security-policy.com/" target="_blank">{LANG.csp_details}</a></td>
+                                </tr>
+                                <!-- BEGIN: csp_directive -->
+                                <tr>
+                                    <td><strong>{DIRECTIVE.name}</strong><br />{DIRECTIVE.desc}</td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="directives[{DIRECTIVE.name}]">{DIRECTIVE.value}</textarea>
+                                        <div class="form-text text-muted">{LANG.csp_note}</div>
+                                    </td>
+                                </tr>
+                                <!-- END: csp_directive -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
+                                        <input type="submit" value="{GLANG.submit}" name="submitcsp" class="btn btn-primary w100" />
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}" />
                 </form>
             </div>
         </div>

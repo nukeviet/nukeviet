@@ -307,3 +307,18 @@ $lang_module['cors_valid_ips_help'] = 'Nhập mỗi IP một dòng, truy vấn t
 $lang_module['allow_null_origin'] = 'Cho phép truy vấn POST với Origin NULL';
 $lang_module['ip_allow_null_origin'] = 'IP được truy vấn POST với Origin NULL';
 $lang_module['ip_allow_null_origin_help'] = 'Nhập mỗi IP một dòng, nếu để trống thì tất cả các IP đều được phép';
+
+$lang_module['csp'] = 'Thiết lập CSP';
+$lang_module['csp_desc'] = 'Content-Security-Policy (CSP) là tên của tiêu đề phản hồi HTTP mà các trình duyệt hiện đại sử dụng để nâng cao tính bảo mật trang web. CSP cho phép bạn hạn chế việc sử dụng các tài nguyên như JavaScript, CSS hoặc bất kỳ thứ gì mà trình duyệt tải.';
+$lang_module['csp_details'] = 'Thông tin chi tiết';
+$lang_module['csp_note'] = 'Nhập mỗi giá trị một dòng. Nếu giá trị không phải là URL, hãy đặt nó trong dấu nháy đơn (ví dụ: &#039;self&#039;).';
+$lang_module['csp_default_src'] = 'Chính sách mặc định, được sử dụng trong mọi trường hợp ngoại trừ trường hợp bị ghi đè bởi một chỉ thị chính xác hơn.';
+$lang_module['csp_script_src'] = 'Chính sách dành riêng cho tập lệnh script';
+$lang_module['csp_object_src'] = 'Chính sách dành riêng cho các plugin (object, embed hoặc applet)';
+$lang_module['csp_style_src'] = 'Chính sách dành riêng cho tập css';
+$lang_module['csp_img_src'] = 'Chính sách dành riêng cho hình ảnh (img, nhưng cũng có url() hoặc image() từ CSS, hoặc phần tử liên kết liên quan đến loại hình ảnh (ví dụ: rel = ”icon”)';
+$lang_module['csp_media_src'] = 'Chính sách dành riêng cho các tập media (video, audio, source, hoặc track)';
+$lang_module['csp_frame_src'] = 'Chính sách dành riêng cho thẻ frame (iframe hoặc frame)';
+$lang_module['csp_font_src'] = 'Chính sách dành riêng cho tập phông chữ';
+$lang_module['csp_connect_src'] = 'Chính sách dành riêng cho các kết nối từ đối tượng XMLHttpRequest hoặc WebSocket';
+$lang_module['csp_form_action'] = 'Xác định các nguồn hợp lệ có thể được sử dụng như một hành động thực thi của biểu mẫu.';

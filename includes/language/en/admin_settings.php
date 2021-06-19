@@ -293,3 +293,18 @@ $lang_module['ip_allow_null_origin_help'] = 'Enter one IP per line, if left blan
 $lang_module['admin_2step_opt'] = 'Two-step verification methods are allowed in administration';
 $lang_module['admin_2step_default'] = 'The default two-step verification method in administration';
 $lang_module['admin_2step_appconfig'] = 'Set up the application here';
+
+$lang_module['csp'] = 'CSP setting';
+$lang_module['csp_desc'] = 'Content-Security-Policy (CSP) is the name of a HTTP response header that modern browsers use to enhance the security of the web page. The CSP allows you to restrict how resources such as JavaScript, CSS, or pretty much anything that the browser loads.';
+$lang_module['csp_details'] = 'Details';
+$lang_module['csp_note'] = 'Enter one value per line. If the value is not a URL, enclose it in single quotes (ex: &#039;self&#039;)';
+$lang_module['csp_default_src'] = 'Default policy, used in any case except if overridden by a more precise directive.';
+$lang_module['csp_script_src'] = 'Policy dedicated to scripts';
+$lang_module['csp_object_src'] = 'Policy dedicated to plugins (object, embed or applet)';
+$lang_module['csp_style_src'] = 'Policy dedicated to styles (CSS)';
+$lang_module['csp_img_src'] = 'Policy dedicated to images (img, but also url() or image() from CSS, or link element related to an image type (ex: rel=icon)';
+$lang_module['csp_media_src'] = 'Policy dedicated to media (video, audio, source or track)';
+$lang_module['csp_frame_src'] = 'Policy dedicated to frames (iframe or frame)';
+$lang_module['csp_font_src'] = 'Policy dedicated to fonts';
+$lang_module['csp_connect_src'] = 'Policy dedicated to connections from a XMLHttpRequest object or a WebSocket';
+$lang_module['csp_form_action'] = 'Defines valid sources that can be used as a form action.';
