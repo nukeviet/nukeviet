@@ -304,3 +304,4 @@ $lang_module['cors_admin_valid_domains'] = 'Tên miền hợp lệ trong quản 
 $lang_module['cors_admin_valid_ips'] = 'IP hợp lệ trong quản trị';
 $lang_module['cors_valid_domains_help'] = 'Nhập mỗi tên miền một dòng (vui lòng nhập đầy đủ dạng http://yourdomain.com), truy vấn từ các tên miền này được phép thực hiện';
 $lang_module['cors_valid_ips_help'] = 'Nhập mỗi IP một dòng, truy vấn từ các IP này được phép thực hiện';
+$lang_module['allow_null_origin'] = 'Cho phép truy vấn POST với Origin NULL';
