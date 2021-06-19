@@ -208,7 +208,9 @@ if (!in_array($stype, array_keys($array_search))) {
 if ($sstatus < 0 or ($sstatus > 10 and $sstatus != ($global_code_defined['row_locked_status'] + 1))) {
     $sstatus = -1;
 }
-if (!in_array($ordername, array_keys($array_in_ordername))) {
+// Fix error https://github.com/nukeviet/nukeviet/issues/3135
+// Tu php 8.x doi so $strict cua function in_array co gi tri la TRUE
+if (!in_array($ordername, $array_in_ordername)) {
     $ordername = 'id';
 }
 if ($catid == 0) {
