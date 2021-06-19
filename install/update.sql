@@ -4,3 +4,4 @@ INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUE
 INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'nv_csp_act', '1');
 INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'nv_rp', 'no-referrer-when-downgrade, strict-origin-when-cross-origin');
 INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'nv_rp_act', '1');
+INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'cookie_SameSite', 'Lax');

@@ -149,6 +149,16 @@ $lang_module['live_session_time'] = 'The lifetime of the session';
 $lang_module['live_session_time0'] = '=0 exist when closing the browser';
 $lang_module['cookie_secure'] = 'Cookie secure';
 $lang_module['cookie_httponly'] = 'Cookie httponly';
+$lang_module['cookie_SameSite'] = 'cookie SameSite';
+$lang_module['cookie_secure_note'] = 'Cookie is only sent to the server when a request is made with the https: scheme or in the localhost environment';
+$lang_module['cookie_httponly_note'] = 'Forbids JavaScript from accessing the cookie, for example, through the Document.cookie property';
+$lang_module['cookie_SameSite_note'] = 'Controls whether a cookie is sent with cross-origin requests';
+$lang_module['cookie_SameSite_note2'] = 'This attribute only takes effect when server\'s php version >= 7.3';
+$lang_module['cookie_SameSite_Empty'] = 'Depends on browser';
+$lang_module['cookie_SameSite_Lax'] = 'Cookies are not sent on normal cross-site subrequests (for example to load images), but are sent when a user is navigating to the origin site';
+$lang_module['cookie_SameSite_Strict'] = 'Cookies will only be sent in a first-party context and not be sent along with requests initiated by third party websites';
+$lang_module['cookie_SameSite_None'] = 'Cookies will be sent in all contexts (The cookie Secure attribute must be set)';
+
 $lang_module['is_user_forum'] = 'Switch users management to forum';
 $lang_module['banip'] = 'Ban IP Management';
 $lang_module['banip_ip'] = 'Ip address';

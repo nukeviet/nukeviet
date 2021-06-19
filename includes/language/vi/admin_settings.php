@@ -154,6 +154,15 @@ $lang_module['live_session_time'] = 'Thời gian tồn tại session';
 $lang_module['live_session_time0'] = '=0 Tồn tại đến khi đóng trình duyệt';
 $lang_module['cookie_secure'] = 'cookie secure';
 $lang_module['cookie_httponly'] = 'cookie httponly';
+$lang_module['cookie_SameSite'] = 'cookie SameSite';
+$lang_module['cookie_secure_note'] = 'Cookie chỉ được gửi đến máy chủ khi một yêu cầu được thực hiện với giao thức https hoặc ở môi trường localhost';
+$lang_module['cookie_httponly_note'] = 'Cấm JavaScript truy cập vào cookie, ví dụ thông qua thuộc tính Document.cookie';
+$lang_module['cookie_SameSite_note'] = 'Cho phép kiểm soát việc trình duyệt gửi cookie khi trang gửi yêu cầu đến một miền khác';
+$lang_module['cookie_SameSite_note2'] = 'Thuộc tính này chỉ có hiệu lực khi phiên bản php của máy chủ >= 7.3';
+$lang_module['cookie_SameSite_Empty'] = 'Phụ thuộc vào trình duyệt';
+$lang_module['cookie_SameSite_Lax'] = 'Cookie không được gửi theo các yêu cầu phụ đến trang web khác (ví dụ: tải hình ảnh), nhưng được gửi theo các yêu cầu đến trang web gốc';
+$lang_module['cookie_SameSite_Strict'] = 'Cookie sẽ chỉ được gửi theo yêu cầu được thực hiện trên cùng một miền và sẽ không được gửi theo yêu cầu đến các trang web của bên thứ ba';
+$lang_module['cookie_SameSite_None'] = 'Cookie sẽ được gửi trong tất cả các ngữ cảnh (Chỉ có tác dụng khi thuộc tính secure bật)';
 
 $lang_module['is_user_forum'] = 'Chuyển quản lý thành viên cho diễn đàn';
 $lang_module['banip'] = 'Quản lý IP cấm';
