@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2020 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2021 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 08 Jun 2020 09:32:56 GMT
+ * @Createdate Sat, 19 Jun 2021 09:22:33 GMT
  */
 
 if (!defined('NV_MAINFILE')) {
@@ -15,6 +15,7 @@ if (!defined('NV_MAINFILE')) {
 define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, s, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
 define('NV_ANTI_AGENT', 0);
 define('NV_ANTI_IFRAME', 1);
+define('NV_DEBUG', 0);
 define('NV_GFX_HEIGHT', 40);
 define('NV_GFX_NUM', 6);
 define('NV_GFX_WIDTH', 150);
@@ -28,6 +29,7 @@ $global_config['admfirewall']=0;
 $global_config['admin_2step_default']='code';
 $global_config['admin_2step_opt']='code';
 $global_config['admin_check_pass_time']=1800;
+$global_config['allow_null_origin']=1;
 $global_config['allow_sitelangs']=['vi'];
 $global_config['authors_detail_main']=0;
 $global_config['autocheckupdate']=1;
@@ -37,6 +39,7 @@ $global_config['captcha_type']=0;
 $global_config['cdn_url']='';
 $global_config['cookie_httponly']=1;
 $global_config['cookie_prefix']='nv4c_z0FZ1';
+$global_config['cookie_SameSite']='Lax';
 $global_config['cookie_secure']=0;
 $global_config['crossadmin_restrict']=1;
 $global_config['crossadmin_valid_domains']=[];
@@ -64,6 +67,7 @@ $global_config['ftp_user_name']='';
 $global_config['ftp_user_pass']='';
 $global_config['gfx_chk']=3;
 $global_config['gzip_method']=1;
+$global_config['ip_allow_null_origin']=[];
 $global_config['is_flood_blocker']=1;
 $global_config['is_login_blocker']=1;
 $global_config['lang_geo']=0;
@@ -104,7 +108,7 @@ $global_config['upload_checking_mode']='strong';
 $global_config['upload_chunk_size']=0;
 $global_config['useactivate']=2;
 $global_config['users_special']=0;
-$global_config['version']='4.4.01';
+$global_config['version']='4.4.02';
 $global_config['check_rewrite_file']=1;
 $global_config['allow_request_mods']=['get','post','cookie','session','request','env','server'];
 $global_config['request_default_mode']='request';
