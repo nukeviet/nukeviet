@@ -513,7 +513,8 @@ function nv_server_config_change($array_config)
         $config_contents .= "##################################################################################\n";
         $config_contents .= "#nukeviet_config_start //Please do not change the contents of the following lines\n";
         $config_contents .= "##################################################################################\n\n";
-        $config_contents .= "RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$\n\n";
+        $config_contents .= "RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$\n";
+        $config_contents .= "RedirectMatch 404 ^.*\/composer\.json$\n\n";
         $config_contents .= "ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1\n";
         $config_contents .= "ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1\n";
         $config_contents .= "ErrorDocument 404 /error.php?code=404&nvDisableRewriteCheck=1\n";
