@@ -280,7 +280,7 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
     }
 
     // Lấy các request IPs
-    $cfg_keys = ['crosssite_valid_ips', 'crossadmin_valid_ips'];
+    $cfg_keys = ['crosssite_valid_ips', 'crossadmin_valid_ips', 'ip_allow_null_origin'];
     foreach ($cfg_keys as $cfg_key) {
         $str_ips = $nv_Request->get_textarea($cfg_key, '', NV_ALLOWED_HTML_TAGS, true);
         $str_ips = explode('<br />', strip_tags($str_ips, '<br>'));
@@ -315,6 +315,7 @@ if ($nv_Request->isset_request('submitcors', 'post') and $checkss == $nv_Request
     $array_config_cross['crossadmin_valid_domains'] = empty($global_config['crossadmin_valid_domains']) ? '' : implode("\n", $global_config['crossadmin_valid_domains']);
     $array_config_cross['crossadmin_valid_ips'] = empty($global_config['crossadmin_valid_ips']) ? '' : implode("\n", $global_config['crossadmin_valid_ips']);
     $array_config_cross['allow_null_origin'] = !empty($global_config['allow_null_origin']) ? 1 : 0;
+    $array_config_cross['ip_allow_null_origin'] = empty($global_config['ip_allow_null_origin']) ? '' : implode("\n", $global_config['ip_allow_null_origin']);
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

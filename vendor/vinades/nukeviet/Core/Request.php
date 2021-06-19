@@ -204,6 +204,7 @@ class Request
      * @since 4.5.00
      */
     private $allowNullOrigin = false;
+    private $allowNullOriginIps = [];
 
     /**
      * @param array $config
@@ -261,6 +262,7 @@ class Request
         $this->isRestrictDomain = !empty($config['domains_restrict']) ? true : false;
         $this->validDomains = !empty($config['domains_whitelist']) ? ((array) $config['domains_whitelist']) : [];
         $this->allowNullOrigin = !empty($config['allow_null_origin']) ? true : false;
+        $this->allowNullOriginIps = !empty($config['ip_allow_null_origin']) ? ((array) $config['ip_allow_null_origin']) : [];
 
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
@@ -1569,7 +1571,7 @@ class Request
         if (
             !$this->restrictCrossDomain or
             $this->origin_key === 1 or
-            ($this->origin === 'null' and $this->allowNullOrigin) or
+            ($this->origin === 'null' and $this->allowNullOrigin and (empty($this->allowNullOriginIps) or in_array($this->remote_ip, $this->allowNullOriginIps))) or
             in_array($this->origin, $this->validCrossDomains)
         ) {
             $this->isOriginValid = true;
