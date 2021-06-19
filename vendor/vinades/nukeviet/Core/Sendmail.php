@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
  */
+
 namespace NukeViet\Core;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -16,7 +17,6 @@ use PHPMailer\PHPMailer\PHPMailer;
  */
 class Sendmail extends PHPMailer
 {
-
     private $configs = [];
 
     private $myFrom = [];
@@ -69,7 +69,7 @@ class Sendmail extends PHPMailer
             $this->IsSendmail();
         } elseif ($mailer_mode == 'mail') {
             // disable_functions
-            $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
+            $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
 
             if (extension_loaded('suhosin')) {
                 $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
@@ -185,44 +185,43 @@ class Sendmail extends PHPMailer
      */
     private function _setFrom()
     {
-        $sender_mail = !empty($this->configs['sender_mail']) ? $this->configs['sender_mail'] : '';
+        $sender_email = !empty($this->configs['sender_email']) ? $this->configs['sender_email'] : '';
         $sender_name = !empty($this->configs['sender_name']) ? $this->configs['sender_name'] : '';
 
-        $force_sender = !empty($this->configs['force_sender']) && !empty($this->configs['sender_mail']);
+        $force_sender = !empty($this->configs['force_sender']) && !empty($this->configs['sender_email']);
 
         if (!$force_sender) {
             if ($this->Mailer == 'smtp') {
-                if (empty($sender_mail)) {
+                if (empty($sender_email)) {
                     if (filter_var($this->configs['smtp_username'], FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $this->configs['smtp_username'];
+                        $sender_email = $this->configs['smtp_username'];
                     }
                 }
             } elseif ($this->Mailer == 'sendmail') {
-                if (empty($sender_mail)) {
+                if (empty($sender_email)) {
                     if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $_SERVER['SERVER_ADMIN'];
-                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                        $sender_mail = "webmaster@" . $_SERVER['SERVER_NAME'];
+                        $sender_email = $_SERVER['SERVER_ADMIN'];
+                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], 'MX') || checkdnsrr($_SERVER['SERVER_NAME'], 'A')) {
+                        $sender_email = 'webmaster@' . $_SERVER['SERVER_NAME'];
                     }
                 }
             } elseif ($this->Mailer == 'mail') {
-                if (empty($sender_mail)) {
-                    if (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $php_email;
-                    } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get("sendmail_path"), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
-                        $sender_mail = $matches[0];
-                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                        $sender_mail = "webmaster@" . $_SERVER['SERVER_NAME'];
+                if (empty($sender_email)) {
+                    if (($php_email = @ini_get('sendmail_from')) != '' and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
+                        $sender_email = $php_email;
+                    } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get('sendmail_path'), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
+                        $sender_email = $matches[0];
+                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], 'MX') || checkdnsrr($_SERVER['SERVER_NAME'], 'A')) {
+                        $sender_email = 'webmaster@' . $_SERVER['SERVER_NAME'];
                     }
                 }
             }
         }
 
-        empty($sender_mail) && $sender_mail = $this->configs['site_email'];
+        empty($sender_email) && $sender_email = $this->configs['site_email'];
         empty($sender_name) && $sender_name = $this->configs['site_name'];
 
-        $this->From = $sender_mail;
-        $this->FromName = nv_unhtmlspecialchars($sender_name);
+        $this->setFrom($sender_email, nv_unhtmlspecialchars($sender_name));
     }
 
     /**
@@ -258,12 +257,15 @@ class Sendmail extends PHPMailer
         } else {
             $this->_setReply();
 
-            $this->WordWrap = 120;
+            // https://www.php.net/manual/en/function.mail.php
+            // Lines should not be larger than 70 characters.
+            $this->WordWrap = 70;
             $this->IsHTML(true);
+            $this->XMailer = 'NukeViet CMS with PHPMailer';
 
             $this->AltBody = strip_tags($this->Body);
 
-            if (function_exists("nv_mailHTML")) {
+            if (function_exists('nv_mailHTML')) {
                 $this->Body = nv_mailHTML($this->Subject, $this->Body);
                 $this->logo = true;
             }
