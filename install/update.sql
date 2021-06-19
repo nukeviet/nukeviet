@@ -5,3 +5,5 @@ INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUE
 INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'nv_rp', 'no-referrer-when-downgrade, strict-origin-when-cross-origin');
 INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'nv_rp_act', '1');
 INSERT INTO `nv4_config` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'cookie_SameSite', 'Lax');
+ALTER TABLE `nv4_users_field` CHANGE COLUMN `match_type` `match_type` ENUM('none','alphanumeric','unicodename','email','url','regex','callback') NOT NULL DEFAULT 'none' AFTER `sql_choices`;
+UPDATE `nv4_users_field` SET `match_type`='unicodename' WHERE  `field` IN ('first_name','last_name');

@@ -104,7 +104,21 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     // Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE md5username= :md5username');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE LOWER(username)=:username OR md5username= :md5username');
+    $stmt->bindParam(':username', nv_strtolower($_user['username']), PDO::PARAM_STR);
+    $stmt->bindParam(':md5username', $md5username, PDO::PARAM_STR);
+    $stmt->execute();
+    $query_error_username = $stmt->fetchColumn();
+    if ($query_error_username) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'username',
+            'mess' => $lang_module['edit_error_username_exist']
+        ]);
+    }
+
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=:username OR md5username= :md5username');
+    $stmt->bindParam(':username', nv_strtolower($_user['username']), PDO::PARAM_STR);
     $stmt->bindParam(':md5username', $md5username, PDO::PARAM_STR);
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
@@ -212,13 +226,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $_user['in_groups'][] = 4;
     }
 
-    $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+    $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
         group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
         question, answer, passlostkey, view_mail,
         remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time,
         active_obj
     ) VALUES (
-        " . $_user['in_groups_default'] . ",
+        ' . $_user['in_groups_default'] . ',
         :username,
         :md5_username,
         :password,
@@ -226,16 +240,16 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         :first_name,
         :last_name,
         :gender,
-        " . intval($_user['birthday']) . ",
+        ' . intval($_user['birthday']) . ',
         :sig,
-        " . NV_CURRENTTIME . ",
+        ' . NV_CURRENTTIME . ",
         :question,
         :answer,
         '',
         " . $_user['view_mail'] . ",
         1,
-        '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ",
-        " . ($_user['is_email_verified'] ? '-1' : '0') . ",
+        '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ',
+        ' . ($_user['is_email_verified'] ? '-1' : '0') . ",
         'SYSTEM'
     )";
 
