@@ -1490,6 +1490,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->Body = $sm_parameters['message'];
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
+        $mail->XMailer = 'NukeViet CMS with PHPMailer';
 
         if ($sm_parameters['logo_add']) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
