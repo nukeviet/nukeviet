@@ -19,7 +19,7 @@ while ($item = $result->fetch()) {
     $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
 }
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . " (
   admin_id int(11) unsigned NOT NULL,
   editor varchar(100) DEFAULT '',
   lev tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -42,7 +42,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   PRIMARY KEY (admin_id)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_config (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   keyname varchar(39) NOT NULL DEFAULT '',
   mask tinyint(4) unsigned NOT NULL DEFAULT '0',
@@ -53,7 +53,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
   UNIQUE KEY keyname (keyname)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_module (
   mid mediumint(8) NOT NULL AUTO_INCREMENT,
   module varchar(50) NOT NULL,
   lang_key varchar(50) NOT NULL DEFAULT '',
@@ -66,7 +66,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
   UNIQUE KEY module (module)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_oauth (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_oauth (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   admin_id int(11) unsigned NOT NULL COMMENT 'ID của quản trị',
   oauth_server varchar(50) NOT NULL COMMENT 'Eg: facebook, google...',
@@ -78,7 +78,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_oauth (
   KEY oauth_email (oauth_email)
 ) ENGINE=MyISAM COMMENT 'Bảng lưu xác thực 2 bước từ oauth của admin'";
 
-$sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_CONFIG_GLOBALTABLE . " (
   lang varchar(3) NOT NULL DEFAULT 'sys',
   module varchar(50) NOT NULL DEFAULT 'global',
   config_name varchar(30) NOT NULL DEFAULT '',
@@ -86,7 +86,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
   UNIQUE KEY lang (lang,module,config_name)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_CRONJOBS_GLOBALTABLE . " (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   start_time int(11) unsigned NOT NULL DEFAULT '0',
   inter_val int(11) unsigned NOT NULL DEFAULT '0',
@@ -103,7 +103,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
   KEY is_sys (is_sys)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_LANGUAGE_GLOBALTABLE . " (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   idfile mediumint(8) unsigned NOT NULL DEFAULT '0',
   langtype varchar(50) NOT NULL DEFAULT 'lang_module',
@@ -112,7 +112,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
   UNIQUE KEY filelang (idfile,lang_key,langtype)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
+$sql_create_table[] = 'CREATE TABLE ' . NV_LANGUAGE_GLOBALTABLE . "_file (
   idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   module varchar(50) NOT NULL,
   admin_file varchar(200) NOT NULL DEFAULT '0',
@@ -121,7 +121,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
   UNIQUE KEY module (module,admin_file)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_SESSIONS_GLOBALTABLE . " (
   session_id varchar(50) DEFAULT NULL,
   userid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username varchar(100) NOT NULL,
@@ -130,7 +130,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
   KEY onl_time (onl_time)
 ) ENGINE=MEMORY";
 
-$sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_COOKIES_GLOBALTABLE . " (
   name varchar(50) NOT NULL DEFAULT '',
   value mediumtext NOT NULL,
   domain varchar(100) NOT NULL DEFAULT '',
@@ -141,14 +141,14 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
   KEY name (name)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_setup_language (
   lang char(2) NOT NULL,
   setup tinyint(1) NOT NULL DEFAULT '0',
   weight smallint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (lang)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extensions (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_setup_extensions (
   id int(11) NOT NULL DEFAULT '0',
   type varchar(10) NOT NULL DEFAULT 'other',
   title varchar(55) NOT NULL,
@@ -165,7 +165,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
   KEY type (type)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_extension_files (
   idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   type varchar(10) NOT NULL DEFAULT 'other',
   title varchar(55) NOT NULL DEFAULT '',
@@ -175,71 +175,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files
   PRIMARY KEY (idfile)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
-  id int(11) unsigned NOT NULL AUTO_INCREMENT,
-  bid mediumint(8) NOT NULL DEFAULT '0',
-  click_time int(11) unsigned NOT NULL DEFAULT '0',
-  click_day int(2) NOT NULL,
-  click_ip varchar(46) NOT NULL,
-  click_country varchar(10) NOT NULL,
-  click_browse_key varchar(100) NOT NULL,
-  click_browse_name varchar(100) NOT NULL,
-  click_os_key varchar(100) NOT NULL,
-  click_os_name varchar(100) NOT NULL,
-  click_ref varchar(255) NOT NULL,
-  KEY bid (bid),
-  KEY click_day (click_day),
-  KEY click_ip (click_ip),
-  KEY click_country (click_country),
-  KEY click_browse_key (click_browse_key),
-  KEY click_os_key (click_os_key),
-  PRIMARY KEY (id)
-) ENGINE=MyISAM";
-
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
-  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  blang char(2) DEFAULT '',
-  title varchar(250) NOT NULL,
-  description text,
-  form varchar(100) NOT NULL,
-  width smallint(4) unsigned NOT NULL DEFAULT '0',
-  height smallint(4) unsigned NOT NULL DEFAULT '0',
-  act tinyint(1) unsigned NOT NULL DEFAULT '0',
-  require_image tinyint(1) unsigned NOT NULL DEFAULT '1',
-  uploadtype varchar(255) NOT NULL DEFAULT '',
-  uploadgroup varchar(255) NOT NULL DEFAULT '',
-  exp_time int(11) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (id),
-  KEY title (title)
-) ENGINE=MyISAM";
-
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
-  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  title varchar(255) NOT NULL,
-  pid smallint(5) unsigned NOT NULL DEFAULT '0',
-  clid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  file_name varchar(255) NOT NULL,
-  file_ext varchar(100) NOT NULL,
-  file_mime varchar(100) NOT NULL,
-  width int(4) unsigned NOT NULL DEFAULT '0',
-  height int(4) unsigned NOT NULL DEFAULT '0',
-  file_alt varchar(255) DEFAULT '',
-  imageforswf varchar(255) DEFAULT '',
-  click_url varchar(255) DEFAULT '',
-  target varchar(10) NOT NULL DEFAULT '_blank',
-  bannerhtml mediumtext NOT NULL,
-  add_time int(11) unsigned NOT NULL DEFAULT '0',
-  publ_time int(11) unsigned NOT NULL DEFAULT '0',
-  exp_time int(11) unsigned NOT NULL DEFAULT '0',
-  hits_total mediumint(8) unsigned NOT NULL DEFAULT '0',
-  act tinyint(1) unsigned NOT NULL DEFAULT '0',
-  weight int(11) NOT NULL default '0',
-  PRIMARY KEY (id),
-  KEY pid (pid),
-  KEY clid (clid)
-) ENGINE=MyISAM";
-
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ips (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_ips (
   id mediumint(8) NOT NULL AUTO_INCREMENT,
   type tinyint(4) unsigned NOT NULL DEFAULT '0',
   ip varchar(32) DEFAULT NULL,
@@ -252,7 +188,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ips (
   UNIQUE KEY ip (ip, type)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_logs (
   id int(11) NOT NULL AUTO_INCREMENT,
   lang varchar(10) NOT NULL,
   module_name varchar(50) NOT NULL,
@@ -264,7 +200,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_dir (
   did mediumint(8) NOT NULL AUTO_INCREMENT,
   dirname varchar(250) DEFAULT NULL,
   time int(11) NOT NULL DEFAULT '0',
@@ -276,7 +212,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
   UNIQUE KEY name (dirname)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_file (
   name varchar(245) NOT NULL,
   ext varchar(10) NOT NULL DEFAULT '',
   type varchar(5) NOT NULL DEFAULT '',
@@ -295,16 +231,16 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
   KEY type (type)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_plugin (
   pid tinyint(4) NOT NULL AUTO_INCREMENT,
   plugin_file varchar(50) NOT NULL,
   plugin_area tinyint(4) NOT NULL,
   weight tinyint(4) NOT NULL,
   PRIMARY KEY (pid),
   UNIQUE KEY plugin_file (plugin_file)
-) ENGINE=MyISAM";
+) ENGINE=MyISAM';
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_counter (
    c_type varchar(100) NOT NULL,
    c_val varchar(100) NOT NULL,
    last_update int(11) NOT NULL DEFAULT '0',
@@ -313,7 +249,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
    UNIQUE KEY c_type (c_type,c_val)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_notification (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   admin_view_allowed tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Cấp quản trị được xem: 0,1,2',
   logic_mode tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Cấp trên xem được cấp dưới, 1: chỉ cấp hoặc người được chỉ định',
