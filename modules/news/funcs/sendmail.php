@@ -34,10 +34,10 @@ if ($id > 0 and $catid > 0) {
             $check = false;
             $checkss = $nv_Request->get_string('checkss', 'post', '');
             if (defined('NV_IS_ADMIN')) {
-                $name = $admin_info['username'];
+                $name = !empty($admin_info['full_name']) ? $admin_info['full_name'] : $admin_info['username'];
                 $youremail = $admin_info['email'];
             } elseif (defined('NV_IS_USER')) {
-                $name = $user_info['username'];
+                $name = !empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
                 $youremail = $user_info['email'];
             } else {
                 $name = $nv_Request->get_title('name', 'post', '', 1);
@@ -59,6 +59,8 @@ if ($id > 0 and $catid > 0) {
 
                 $to_mail = $nv_Request->get_title('email', 'post', '');
                 $content = $nv_Request->get_title('content', 'post', '', 1);
+                // Disable email engines from automatically hyperlinking a URL
+                !empty($content) && $content = nv_autoLinkDisable($content);
                 $err_email = nv_check_valid_email($to_mail, true);
                 $err_youremail = nv_check_valid_email($youremail, true);
                 $to_mail = $err_email[1];
@@ -66,9 +68,10 @@ if ($id > 0 and $catid > 0) {
                 $err_name = '';
                 $message = '';
                 $success = '';
+                $_t = str_replace('&#039;', "'", $name);
                 if ($global_config['gfx_chk'] > 0 and !nv_capcha_txt($nv_seccode)) {
                     $err_name = $lang_global['securitycodeincorrect'];
-                } elseif (empty($name)) {
+                } elseif (empty($name) or !preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $_t)) {
                     $err_name = $lang_module['sendmail_err_name'];
                 } elseif (empty($err_email[0]) and empty($err_youremail[0])) {
                     $subject = $lang_module['sendmail_subject'] . $name;

@@ -2489,3 +2489,16 @@ function nv_set_authorization()
         'auth_pw' => $auth_pw
     ];
 }
+
+/**
+ * nv_autoLinkDisable()
+ * Disable email engines from automatically hyperlinking a URL
+ * 
+ * @param string $text
+ * @return string
+ */
+function nv_autoLinkDisable($text)
+{
+    $text = str_replace('&#x3A;', '<span>&#58;</span>', $text);
+    return str_replace(['@', '.', ':'], ['<span>&#64;</span>', '<span>&#46;</span>', '<span>&#58;</span>'], $text);
+}
