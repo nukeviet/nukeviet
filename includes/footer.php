@@ -46,6 +46,10 @@ if (!empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
     $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
 }
 
+if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
+    $html_headers['Referrer-Policy'] = $global_config['nv_rp'];
+}
+
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
 $html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.

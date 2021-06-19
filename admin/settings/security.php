@@ -50,7 +50,7 @@ $array_iptypes = [
 
 $errormess = '';
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
-if ($selectedtab < 0 or $selectedtab > 5) {
+if ($selectedtab < 0 or $selectedtab > 6) {
     $selectedtab = 0;
 }
 
@@ -376,6 +376,47 @@ if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request-
     }
 }
 
+// Xử lý thiết lập RP
+//rp_directive
+$_rp_directives = [
+    'no-referrer' => $lang_module['rp_no_referrer'],
+    'no-referrer-when-downgrade' => $lang_module['rp_no_referrer_when_downgrade'],
+    'origin' => $lang_module['rp_origin'],
+    'origin-when-cross-origin' => $lang_module['rp_origin_when_cross_origin'],
+    'same-origin' => $lang_module['rp_same_origin'],
+    'strict-origin' => $lang_module['rp_strict_origin'],
+    'strict-origin-when-cross-origin' => $lang_module['rp_strict_origin_when_cross_origin'],
+    'unsafe-url' => $lang_module['rp_unsafe_url']
+];
+if ($nv_Request->isset_request('submitrp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $array_config_rp = [];
+    $array_config_rp['nv_rp'] = [];
+    $nv_rp = $nv_Request->get_title('nv_rp', 'post', '');
+    if (!empty($nv_rp)) {
+        $nv_rp = preg_replace("/[^a-zA-Z\-]/", ' ', $nv_rp);
+        $nv_rp = preg_replace("/[\s]+/", " ", $nv_rp);
+    }
+    $nv_rp = !empty($nv_rp) ? array_map('trim', explode(' ', $nv_rp)) : [];
+    foreach ($nv_rp as $rp) {
+        if (!empty($rp) and isset($_rp_directives[$rp]) and $rp != 'no-referrer') {
+            $array_config_rp['nv_rp'][] = $rp;
+        }
+    }
+    $array_config_rp['nv_rp'] = !empty($array_config_rp['nv_rp']) ? implode(', ', $array_config_rp['nv_rp']) : '';
+    $array_config_rp['nv_rp_act'] = (int) $nv_Request->get_bool('nv_rp_act', 'post', false);
+
+    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($array_config_rp as $config_name => $config_value) {
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->execute();
+    }
+
+    $nv_Cache->delMod('settings');
+
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+}
+
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -388,7 +429,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('SELECTEDTAB', $selectedtab);
 $xtpl->assign('CHECKSS', $checkss);
 
-for ($i = 0; $i <= 5; ++$i) {
+for ($i = 0; $i <= 6; ++$i) {
     $xtpl->assign('TAB' . $i . '_ACTIVE', $i == $selectedtab ? ' active' : '');
 }
 
@@ -892,6 +933,17 @@ foreach ($csp_directives as $name => $desc) {
     $xtpl->assign('DIRECTIVE', $direct);
     $xtpl->assign('CSP_ACT', $global_config['nv_csp_act'] ? ' checked="checked"' : '');
     $xtpl->parse('main.csp_directive');
+}
+
+$xtpl->assign('RP', $global_config['nv_rp']);
+$xtpl->assign('RP_ACT', $global_config['nv_rp_act'] ? ' checked="checked"' : '');
+foreach ($_rp_directives as $name => $desc) {
+    $rp_direct = [
+        'name' => $name,
+        'desc' => $desc
+    ];
+    $xtpl->assign('RP_DIRECTIVE', $rp_direct);
+    $xtpl->parse('main.rp_directive');
 }
 
 $xtpl->parse('main');

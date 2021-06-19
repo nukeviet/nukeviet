@@ -309,7 +309,7 @@ $lang_module['ip_allow_null_origin'] = 'IP được truy vấn POST với Origin
 $lang_module['ip_allow_null_origin_help'] = 'Nhập mỗi IP một dòng, nếu để trống thì tất cả các IP đều được phép';
 
 $lang_module['csp'] = 'Thiết lập CSP';
-$lang_module['csp_desc'] = 'Content-Security-Policy (CSP) là tên của tiêu đề phản hồi HTTP mà các trình duyệt hiện đại sử dụng để nâng cao tính bảo mật trang web. CSP cho phép bạn hạn chế việc sử dụng các tài nguyên như JavaScript, CSS hoặc bất kỳ thứ gì mà trình duyệt tải.';
+$lang_module['csp_desc'] = 'Content-Security-Policy (CSP) là tên của tiêu đề phản hồi HTTP (HTTP response header) mà các trình duyệt hiện đại sử dụng để nâng cao tính bảo mật trang web. CSP cho phép bạn hạn chế việc sử dụng các tài nguyên như JavaScript, CSS hoặc bất kỳ thứ gì mà trình duyệt tải.';
 $lang_module['csp_details'] = 'Thông tin chi tiết';
 $lang_module['csp_note'] = 'Nhập mỗi giá trị một dòng. Nếu giá trị không phải là URL, hãy đặt nó trong dấu nháy đơn (ví dụ: &#039;self&#039;).';
 $lang_module['csp_default_src'] = 'Chính sách mặc định, được sử dụng trong mọi trường hợp ngoại trừ trường hợp bị ghi đè bởi một chỉ thị chính xác hơn.';
@@ -324,3 +324,19 @@ $lang_module['csp_connect_src'] = 'Chính sách dành riêng cho các kết nố
 $lang_module['csp_form_action'] = 'Xác định các nguồn hợp lệ có thể được sử dụng như một hành động thực thi của biểu mẫu.';
 $lang_module['csp_base_uri'] = 'Chính sách bảo mật hạn chế các giá trị có thể có của phần tử &lt;base&gt;.';
 $lang_module['csp_act'] = 'Kích hoạt CSP';
+
+$lang_module['rp'] = 'Thiết lập RP';
+$lang_module['rp_desc'] = 'Referrer-Policy (RP) là tên của tiêu đề HTTP (HTTP response header) mà các trình duyệt hiện đại sử dụng để kiểm soát lượng thông tin liên kết nguồn (được gửi qua header &quot;Referer&quot; đến trang đích).';
+$lang_module['rp_desc2'] = 'Các thông tin liên kết nguồn có thể được gửi:<ul><li>Origin: bao gồm scheme (ví dụ: http, https), host (ví dụ: nukeviet.vn) và port (ví dụ: 80, 443)</li><li>Path (đường dẫn tuyệt đối trên máy phục vụ, ví dụ: thumuc1/index.php)</li><li>Querystring (chuỗi truy vấn, ví dụ: ?name=ferret&color=purple)</li></ul>';
+$lang_module['rp_details'] = 'Thông tin chi tiết';
+$lang_module['rp_act'] = 'Kích hoạt RP';
+$lang_module['rp_no_referrer'] = 'Header &quot;Referer&quot; sẽ bị bỏ qua hoàn toàn. Không có thông tin về liên kết nguồn được gửi cùng với các yêu cầu.<br/>Chú ý: NukeViet không hỗ trợ chỉ thị này!';
+$lang_module['rp_no_referrer_when_downgrade'] = 'Gửi origin, path và querystring của liên kết nguồn trong header &quot;Referer&quot; khi giao thức của trang đích giống hoặc bảo mật hơn trang nguồn (HTTP→HTTP, HTTP→HTTPS, HTTPS→HTTPS). Không gửi header &quot;Referer&quot; cho các yêu cầu đến các trang đích kém an toàn hơn (HTTPS→HTTP, HTTPS→file).';
+$lang_module['rp_origin'] = 'Chỉ gửi origin của liên kết nguồn trong header &quot;Referer&quot;. Ví dụ: với liên kết nguồn là https://example.com/page.html sẽ gửi header &quot;Referer&quot; là https://example.com/.';
+$lang_module['rp_origin_when_cross_origin'] = 'Gửi origin, path và querystring khi trang đích có cùng origin. Chỉ gửi origin đối với các trường hợp khác.';
+$lang_module['rp_same_origin'] = 'Gửi origin, path và querystring khi trang đích có cùng origin. Không gửi header &quot;Referer&quot; đối với các trường hợp khác.';
+$lang_module['rp_strict_origin'] = 'Chỉ gửi origin khi giao thức của trang đích giống trang nguồn (HTTPS→HTTPS). Không gửi header &quot;Referer&quot; đến các đích kém an toàn hơn (HTTPS→HTTP).';
+$lang_module['rp_strict_origin_when_cross_origin'] = 'Gửi origin, path và querystring khi trang đích có cùng origin. Chỉ gửi origin khi trang đích không cùng origin nhưng cùng giao thức (HTTPS→HTTPS). Không gửi header &quot;Referer&quot; đến các đích không cùng origin và giao thức kém an toàn hơn (HTTPS→HTTP). Đây là chính sách mặc định nếu không có chính sách nào được chỉ định hoặc nếu giá trị đã cung cấp không hợp lệ.';
+$lang_module['rp_unsafe_url'] = 'Gửi origin, path và querystring trong mọi trường hợp. Cảnh báo: Chính sách này sẽ làm rò rỉ thông tin có khả năng riêng tư từ các URL dạng HTTPS đến các nguồn không an toàn. Hãy xem xét cẩn thận tác động của cài đặt này.';
+$lang_module['rp_note'] = 'Để đề phòng trường hợp trình duyệt không hỗ trợ chỉ thị mong muốn, bạn có thể liệt kê nhiều chỉ thị được phân cách bằng dấu phẩy với trật tự: chỉ thị mong muốn được chỉ định sau cùng. Ví dụ: Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. Ở ví dụ trên, chính sách no-referrer-when-downgrade sẽ được áp dụng nếu trình duyệt không hỗ trợ strict-origin-when-cross-origin.';
+$lang_module['rp_directives'] = 'Các chỉ thị RP';

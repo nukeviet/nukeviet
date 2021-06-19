@@ -310,3 +310,19 @@ $lang_module['csp_connect_src'] = 'Policy dedicated to connections from a XMLHtt
 $lang_module['csp_form_action'] = 'Defines valid sources that can be used as a form action.';
 $lang_module['csp_base_uri'] = 'Security policy restricting the possible values of a &lt;base&gt; element.';
 $lang_module['csp_act'] = 'Enable CSP';
+
+$lang_module['rp'] = 'RP setting';
+$lang_module['rp_desc'] = 'Referrer-Policy (RP) is the name of a HTTP header that modern browsers use to control how much referrer information (sent via the Referer header).';
+$lang_module['rp_desc2'] = 'Types of referrer information (can be sent via the Referer header):<ul><li>Origin: includes scheme (ex: http, https), host (ex: nukeviet.vn) and port (ex: 80, 443)</li><li>Path (absolute path on the server,ex: thumuc1/index.php)</li><li>Querystring (ex: ?name=ferret&color=purple)</li></ul>';
+$lang_module['rp_details'] = 'Details';
+$lang_module['rp_act'] = 'Enable RP';
+$lang_module['rp_no_referrer'] = 'The Referer header will be omitted entirely. No referrer information is sent along with requests.<br/>NukeViet system does not support this directive!';
+$lang_module['rp_no_referrer_when_downgrade'] = 'Send the origin, path, and querystring in Referer when the protocol security level stays the same or improves (HTTP?HTTP, HTTP?HTTPS, HTTPS?HTTPS). Don\'t send the Referer header for requests to less secure destinations (HTTPS?HTTP, HTTPS?file).';
+$lang_module['rp_origin'] = 'Send the origin (only) in the Referer header. For example, a document at https://example.com/page.html will send the referrer https://example.com/.';
+$lang_module['rp_origin_when_cross_origin'] = 'Send the origin, path, and query string when performing a same-origin request to the same protocol level. Send origin (only) for cross origin requests and requests to less secure destinations.';
+$lang_module['rp_same_origin'] = 'Send the origin, path, and query string for same-origin requests. Don\'t send the Referer header for cross-origin requests.';
+$lang_module['rp_strict_origin'] = 'Send the origin (only) when the protocol security level stays the same (HTTPS?HTTPS). Don\'t send the Referer header to less secure destinations (HTTPS?HTTP).';
+$lang_module['rp_strict_origin_when_cross_origin'] = 'Send the origin, path, and querystring when performing a same-origin request. For cross-origin requests send the origin (only) when the protocol security level stays same (HTTPS?HTTPS). Don\'t send the Referer header to less secure destinations (HTTPS?HTTP). This is the default policy if no policy is specified, or if the provided value is invalid.';
+$lang_module['rp_unsafe_url'] = 'Send the origin, path, and query string when performing any request, regardless of security. Warning: This policy will leak potentially-private information from HTTPS resource URLs to insecure origins. Carefully consider the impact of this setting.';
+$lang_module['rp_note'] = 'If you want to specify a fallback policy in any case the desired policy hasn\'t got wide enough browser support, use a comma-separated list with the desired policy specified last. For example, Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. In the above scenario, no-referrer-when-downgrade will only be used if strict-origin-when-cross-origin is not supported by the browser.';
+$lang_module['rp_directives'] = 'Referrer-Policy directives';
