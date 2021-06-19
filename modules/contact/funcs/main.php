@@ -116,7 +116,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $femail = nv_substr($nv_Request->get_title('femail', 'post', '', 1), 0, 100);
     }
 
-    if (empty($fname)) {
+    $_fname = str_replace('&#039;', "'", $fname);
+    if (empty($fname) or !preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $_fname)) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fname',
@@ -191,7 +192,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {
-        $fcon_mail = contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart);
+        $_ftitle = nv_autoLinkDisable($ftitle);
+        $_fcon = nv_autoLinkDisable($fcon);
+        $_fphone = nv_autoLinkDisable($fphone);
+        $fcon_mail = contact_sendcontact($row_id, $fcat, $_ftitle, $fname, $femail, $_fphone, $_fcon, $fpart);
 
         $email_list = [];
         if (!empty($array_department[$fpart]['email'])) {
@@ -239,7 +243,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $global_config['site_name'],
                 $global_config['site_email']
             ];
-            $fcon_mail = contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, false);
+            $fcon_mail = contact_sendcontact($row_id, $fcat, $_ftitle, $fname, $femail, $_fphone, $_fcon, $fpart, false);
             @nv_sendmail($from, $femail, $ftitle, $fcon_mail);
         }
 
