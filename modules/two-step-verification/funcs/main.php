@@ -14,6 +14,7 @@ if (!defined('NV_MOD_2STEP_VERIFICATION')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 // Tự động chuyển đến trang thiết lập nếu hệ thống bắt buộc xác thực ở quản trị, hoặc tất cả các khu vực
 if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], [1, 3])) {
@@ -69,6 +70,8 @@ if ($nv_Request->isset_request('showcode_' . $module_data, 'session')) {
     $autoshowcode = true;
     $nv_Request->unset_request('showcode_' . $module_data, 'session');
 }
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $contents = nv_theme_info_2step($backupcodes, $autoshowcode);
 

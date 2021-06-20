@@ -12,23 +12,19 @@ if (!defined('NV_IS_MOD_PAGE')) {
     die('Stop!!!');
 }
 
+$page_url = $base_url;
+
 if ($page_config['viewtype'] == 2) {
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
     $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $contents = '';
-
-    // Không cho đánh op khi không hiển thị nội dung
-    if (isset($array_op[0])) {
-        nv_redirect_location($base_url);
-    }
 } elseif ($id) {
     // Xem theo bài viết
-    $base_url_rewrite = nv_url_rewrite($base_url . '&amp;' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
-    $base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
-    if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
-        nv_redirect_location($base_url_rewrite);
-    }
+    $page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'];
+    $canonicalUrl = getCanonicalUrl($page_url, true);
 
     if (!empty($rowdetail['image']) and !nv_is_url($rowdetail['image'])) {
         $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image']);
@@ -36,12 +32,11 @@ if ($page_config['viewtype'] == 2) {
         $rowdetail['imageWidth'] = $imagesize[0] > 500 ? 500 : $imagesize[0];
         $meta_property['og:image'] = NV_MY_DOMAIN . $rowdetail['image'];
     }
-
     $rowdetail['number_add_time'] = $rowdetail['add_time'];
     $rowdetail['number_edit_time'] = $rowdetail['edit_time'] ? $rowdetail['edit_time'] : $rowdetail['add_time'];
     $rowdetail['add_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['add_time']);
     $rowdetail['edit_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['edit_time']);
-    $rowdetail['link'] = $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+    $rowdetail['link'] = $canonicalUrl;
 
     $module_info['layout_funcs'][$op_file] = !empty($rowdetail['layout_func']) ? $rowdetail['layout_func'] : $module_info['layout_funcs'][$op_file];
 
@@ -106,15 +101,16 @@ if ($page_config['viewtype'] == 2) {
     $contents = nv_page_main($rowdetail, $other_links, $content_comment);
 } else {
     // Xem theo danh sách
+    if ($page > 1) {
+        $page_url .= '&amp;' . NV_OP_VARIABLE . '=page-' . $page;
+    }
+
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
     $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $per_page = $page_config['per_page'];
-
-    // Không tùy ý đánh op
-    if (isset($array_op[1])) {
-        nv_redirect_location($base_url);
-    }
 
     $array_data = [];
     $db_slave->sqlreset()
@@ -123,6 +119,9 @@ if ($page_config['viewtype'] == 2) {
         ->where('status=1');
     $num_items = $db_slave->query($db_slave->sql())
         ->fetchColumn();
+
+    // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
     $db_slave->select('*')
         ->order('weight')
@@ -133,11 +132,6 @@ if ($page_config['viewtype'] == 2) {
     while ($row = $result->fetch()) {
         $row['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
         $array_data[$row['id']] = $row;
-    }
-
-    // Không tùy ý đánh số page
-    if ($page > 1 and empty($array_data)) {
-        nv_redirect_location($base_url);
     }
 
     $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);

@@ -300,6 +300,7 @@ $lang_module['field_options_text'] = 'Les autres options';
 $lang_module['field_match_type'] = 'Demande de vérifier avec valeur:';
 $lang_module['field_match_type_none'] = 'Ne vérifie pas';
 $lang_module['field_match_type_alphanumeric'] = 'N\'utilise que les caractère A-Z, 0-9 et underscore';
+$lang_module['field_match_type_unicodename'] = 'Nom humain (Lettres Unicode, tiret, apostrophe et espace)';
 $lang_module['field_match_type_date'] = 'Entrez la date dans le format dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'URL';
 $lang_module['field_match_type_regex'] = 'Formulaire';

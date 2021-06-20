@@ -8,8 +8,10 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
 define('NV_IS_MOD_MENU', true);
+
+$nv_BotManager->setPrivate();

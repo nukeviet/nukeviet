@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
+if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
@@ -34,10 +34,10 @@ if ($id > 0 and $catid > 0) {
             $check = false;
             $checkss = $nv_Request->get_string('checkss', 'post', '');
             if (defined('NV_IS_ADMIN')) {
-                $name = $admin_info['username'];
+                $name = !empty($admin_info['full_name']) ? $admin_info['full_name'] : $admin_info['username'];
                 $youremail = $admin_info['email'];
             } elseif (defined('NV_IS_USER')) {
-                $name = $user_info['username'];
+                $name = !empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
                 $youremail = $user_info['email'];
             } else {
                 $name = $nv_Request->get_title('name', 'post', '', 1);
@@ -46,7 +46,7 @@ if ($id > 0 and $catid > 0) {
             $to_mail = $content = '';
             if ($checkss == md5($id . NV_CHECK_SESSION) and $allowed_send == 1) {
                 $link = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
-                if (strpos($link, NV_MY_DOMAIN) !== 0) {
+                if (!str_starts_with($link, NV_MY_DOMAIN)) {
                     $link = NV_MY_DOMAIN . $link;
                 }
                 $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
@@ -59,6 +59,8 @@ if ($id > 0 and $catid > 0) {
 
                 $to_mail = $nv_Request->get_title('email', 'post', '');
                 $content = $nv_Request->get_title('content', 'post', '', 1);
+                // Disable email engines from automatically hyperlinking a URL
+                !empty($content) && $content = nv_autoLinkDisable($content);
                 $err_email = nv_check_valid_email($to_mail, true);
                 $err_youremail = nv_check_valid_email($youremail, true);
                 $to_mail = $err_email[1];
@@ -66,14 +68,15 @@ if ($id > 0 and $catid > 0) {
                 $err_name = '';
                 $message = '';
                 $success = '';
-                if ($global_config['gfx_chk'] > 0 and ! nv_capcha_txt($nv_seccode)) {
+                $_t = str_replace('&#039;', "'", $name);
+                if ($global_config['gfx_chk'] > 0 and !nv_capcha_txt($nv_seccode)) {
                     $err_name = $lang_global['securitycodeincorrect'];
-                } elseif (empty($name)) {
+                } elseif (empty($name) or !preg_match('/^([\p{L}\p{Mn}\p{Pd}\'][\p{L}\p{Mn}\p{Pd}\',\s]*)*$/u', $_t)) {
                     $err_name = $lang_module['sendmail_err_name'];
                 } elseif (empty($err_email[0]) and empty($err_youremail[0])) {
                     $subject = $lang_module['sendmail_subject'] . $name;
                     $message .= $lang_module['sendmail_welcome'] . ' <strong>' . $global_config['site_name'] . '</strong> ' . $lang_module['sendmail_welcome1'] . '<br /><br />' . $content . '<br /><br />' . $hometext . ' <br/><br /><strong>' . $lang_module['sendmail_welcome2'] . '</strong><br />' . $link;
-                    $from = array( $name, $youremail );
+                    $from = [$name, $youremail];
                     $check = nv_sendmail($from, $to_mail, $subject, $message);
                     if ($check) {
                         $success = $lang_module['sendmail_success'] . '<strong> ' . $to_mail . '</strong>';
@@ -81,15 +84,15 @@ if ($id > 0 and $catid > 0) {
                         $err_name = $lang_module['sendmail_success_err'];
                     }
                 }
-                $result = array(
+                $result = [
                     'err_name' => $err_name,
                     'err_email' => $err_email[0],
                     'err_yourmail' => $err_youremail[0],
                     'send_success' => $success,
                     'check' => $check
-                );
+                ];
             }
-            $sendmail = array(
+            $sendmail = [
                 'id' => $id,
                 'catid' => $catid,
                 'checkss' => md5($id . NV_CHECK_SESSION),
@@ -99,7 +102,7 @@ if ($id > 0 and $catid > 0) {
                 'content' => $content,
                 'result' => $result,
                 'action' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'] //
-            );
+            ];
 
             $page_title = $title;
             $contents = sendmail_themme($sendmail);

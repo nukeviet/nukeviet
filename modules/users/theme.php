@@ -270,7 +270,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
  */
 function user_login($is_ajax = false)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_header, $nv_redirect;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_header, $nv_redirect, $canonicalUrl;
 
     if ($is_ajax) {
         $xtpl = new XTemplate('ajax_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
@@ -330,10 +330,13 @@ function user_login($is_ajax = false)
             'google' => 'google-plus',
             'facebook' => 'facebook'
         );
+        $default_redirect = nv_redirect_encrypt($canonicalUrl);
         foreach ($global_config['openid_servers'] as $server) {
             $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
             if (!empty($nv_redirect)) {
                 $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
+            } else {
+                $assigns['href'] .= '&nv_redirect=' . $default_redirect;
             }
             $assigns['server'] = $server;
             $assigns['title'] = ucfirst($server);
@@ -970,9 +973,14 @@ function user_welcome()
         $xtpl->parse('main.crossdomain_listener');
     }
 
-    if (!empty($user_info['avata'])) {
+    if (isset($user_info['avata']) and !empty($user_info['avata'])) {
         $xtpl->assign('IMG', array(
             'src' => $user_info['avata'],
+            'title' => $lang_module['img_size_title']
+        ));
+    } elseif (!empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
+        $xtpl->assign('IMG', array(
+            'src' => NV_BASE_SITEURL . $user_info['photo'],
             'title' => $lang_module['img_size_title']
         ));
     } else {

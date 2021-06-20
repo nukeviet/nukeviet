@@ -8,7 +8,7 @@
  * @Createdate 23/8/2010, 0:13
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -20,8 +20,8 @@ if (! defined('NV_MAINFILE')) {
  */
 function utf8_to_unicode($str)
 {
-    $unicode = array();
-    $values = array();
+    $unicode = [];
+    $values = [];
     $lookingFor = 1;
     $strlen = strlen($str);
 
@@ -41,7 +41,7 @@ function utf8_to_unicode($str)
                 $number = ($lookingFor == 3) ? (($values[0] % 16) * 4096) + (($values[1] % 64) * 64) + ($values[2] % 64) : (($values[0] % 32) * 64) + ($values[1] % 64);
 
                 $unicode[] = $number;
-                $values = array();
+                $values = [];
                 $lookingFor = 1;
             }
         }
@@ -118,13 +118,13 @@ function unicode_to_utf8($str)
  */
 function nv_str_split($str, $split_len = 1)
 {
-    if (! is_int($split_len) or $split_len < 1) {
+    if (!is_int($split_len) or $split_len < 1) {
         return false;
     }
 
     $len = nv_strlen($str);
     if ($len <= $split_len) {
-        return array( $str );
+        return [$str];
     }
 
     preg_match_all('/.{' . $split_len . '}|[^\x00]{1,' . $split_len . '}$/us', $str, $ar);
@@ -240,11 +240,11 @@ function nv_trim($str, $charlist = false)
 function nv_EncString($string)
 {
     if (file_exists(NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php')) {
-        include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ;
+        include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php';
         $string = strtr($string, $utf8_lookup_lang);
     }
 
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
     return strtr($string, $utf8_lookup['romanize']);
 }
 
@@ -256,8 +256,8 @@ function nv_EncString($string)
 function change_alias($alias)
 {
     $alias = preg_replace('/[\x{0300}\x{0301}\x{0303}\x{0309}\x{0323}]/u', '', $alias); // fix unicode consortium for Vietnamese
-    $search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
-    $alias = preg_replace(array( '/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/' ), array( ' ', '-', '', '' ), str_replace($search, ' ', nv_EncString($alias)));
+    $search = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
+    $alias = preg_replace(['/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/'], [' ', '-', '', ''], str_replace($search, ' ', nv_EncString($alias)));
     return $alias;
 }
 
@@ -302,4 +302,47 @@ function nv_clean60($string, $num = 60, $specialchars = true)
     }
 
     return $string;
+}
+
+if (!function_exists('str_contains')) {
+    /**
+     * str_contains()
+     *
+     * @param mixed $haystack
+     * @param mixed $needle
+     * @return
+     */
+    function str_contains($haystack, $needle)
+    {
+        return $needle === '' or nv_strpos($haystack, $needle) !== false;
+    }
+}
+
+if (!function_exists('str_starts_with')) {
+    /**
+     * str_starts_with()
+     *
+     * @param mixed $haystack
+     * @param mixed $needle
+     * @return
+     */
+    function str_starts_with($haystack, $needle)
+    {
+        return $needle === '' or nv_strpos($haystack, $needle) === 0;
+    }
+}
+
+if (!function_exists('str_ends_with')) {
+    /**
+     * str_ends_with()
+     *
+     * @param mixed $haystack
+     * @param mixed $needle
+     * @return
+     */
+    function str_ends_with($haystack, $needle)
+    {
+        $length = nv_strlen($needle);
+        return $length > 0 ? nv_substr($haystack, -$length, $length) === $needle : true;
+    }
 }

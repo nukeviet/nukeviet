@@ -8,11 +8,17 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-//Xac dinh ten mui gio
+// Xac dinh ten mui gio
+/**
+ * nv_getTimezoneName_from_cookie()
+ *
+ * @param mixed $cookie
+ * @return
+ */
 function nv_getTimezoneName_from_cookie($cookie)
 {
     global $nv_parse_ini_timezone;
@@ -36,18 +42,18 @@ if (isset($_COOKIE[$global_config['cookie_prefix'] . '_cltn'])) {
         define('NV_CLIENT_TIMEZONE_OFFSET', $matches[2]);
         define('NV_CLIENT_TIMEZONE_DST', $matches[3]);
     } else {
-        setcookie($global_config['cookie_prefix'] . '_cltn', false, time() - 86400);
+        setcookie($global_config['cookie_prefix'] . '_cltn', false, NV_CURRENTTIME - 86400);
     }
 }
 
-if (! defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cookie_prefix'] . '_cltz']) and preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|([^\|]*)\|(.*)$/', rawurldecode($_COOKIE[$global_config['cookie_prefix'] . '_cltz']), $matches2)) {
+if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cookie_prefix'] . '_cltz']) and preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|([^\|]*)\|(.*)$/', rawurldecode($_COOKIE[$global_config['cookie_prefix'] . '_cltz']), $matches2)) {
     $client_timezone_name = nv_getTimezoneName_from_cookie($_COOKIE[$global_config['cookie_prefix'] . '_cltz']);
 
-    if (! empty($client_timezone_name)) {
+    if (!empty($client_timezone_name)) {
         define('NV_CLIENT_TIMEZONE_NAME', $client_timezone_name);
         define('NV_CLIENT_TIMEZONE_OFFSET', $matches2[3] * 60);
     } else {
-        $sd = floor($matches2[2] >= 0 ? $matches2[2] / 60 : - $matches2[2] / 60);
+        $sd = floor($matches2[2] >= 0 ? $matches2[2] / 60 : -$matches2[2] / 60);
 
         define('NV_CLIENT_TIMEZONE_NAME', ($matches2[2] >= 0 ? '+' : '-') . str_pad($sd, 2, '0', STR_PAD_LEFT) . ':00');
         define('NV_CLIENT_TIMEZONE_OFFSET', floor($matches2[3] / 60) * 3600);
@@ -57,7 +63,22 @@ if (! defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cook
 
     $client_timezone_name = base64_encode(NV_CLIENT_TIMEZONE_NAME . '.' . NV_CLIENT_TIMEZONE_OFFSET . '.' . NV_CLIENT_TIMEZONE_DST);
 
-    setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $matches2[5], 0);
+    $secure = NV_SERVER_PROTOCOL == 'https' ? true : false;
+    if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
+        $options = [
+            'expires' => 0,
+            'path' => $matches2[4],
+            'domain' => $matches2[5],
+            'secure' => $secure,
+            'httponly' => true
+        ];
+        if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $secure))) {
+            $options['samesite'] = $global_config['cookie_SameSite'];
+        }
+        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, $options);
+    } else {
+        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $matches2[5], $secure, true);
+    }
 
     unset($client_timezone_name, $sd);
 }
