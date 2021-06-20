@@ -34,29 +34,85 @@ function GetSourceNews($sourceid)
 }
 
 /**
+ * nv_substr_clean()
+ *
+ * @param string $string
+ * @param string $mode
+ * @return string
+ */
+function nv_substr_clean($string, $mode = 'lr')
+{
+    $strlen = nv_strlen($string);
+    $pos_bg = nv_strpos($string, ' ') + 1;
+    $pos_en = nv_strrpos($string, ' ');
+    if ($mode == 'l') {
+        $string = '...' . nv_substr($string, $pos_bg, $strlen - $pos_bg);
+    } elseif ($mode == 'r') {
+        $string = nv_substr($string, 0, $strlen - $pos_en) . '...';
+    } elseif ($mode == 'lr') {
+        $string = '...' . nv_substr($string, $pos_bg, $pos_en - $pos_bg) . '...';
+    }
+
+    return $string;
+}
+
+/**
  * BoldKeywordInStr()
  *
- * @param mixed $str
- * @param mixed $keyword
- * @return
+ * @param string $str
+ * @param string $keyword
+ * @return string
  */
 function BoldKeywordInStr($str, $keyword)
 {
     $str = nv_br2nl($str);
     $str = nv_nl2br($str, ' ');
     $str = nv_unhtmlspecialchars(strip_tags(trim($str)));
-    $str = nv_clean60($str, 300);
 
-    if (!empty($keyword)) {
-        $patterns = [
-            nv_preg_quote($keyword)
-        ];
-        $patterns[] = function_exists('searchPatternByLang') ? searchPatternByLang(nv_preg_quote(nv_EncString($keyword))) : nv_preg_quote(nv_EncString($keyword));
-        $patterns = array_unique($patterns);
-        $patterns = '/(' . implode('|', $patterns) . ')/uis';
+    $array_keyword = [
+        $keyword,
+        nv_EncString($keyword)
+    ];
+    $array_keyword = array_unique($array_keyword);
 
-        $str = preg_replace($patterns, '<span class="keyword">$1</span>', $str);
+    $pos = false;
+    $pattern = [];
+    foreach ($array_keyword as $k) {
+        $_k = function_exists('searchPatternByLang') ? searchPatternByLang(nv_preg_quote($k)) : nv_preg_quote($k);
+        $pattern[] = $_k;
+        if (!$pos and preg_match('/^(.*?)' . $_k . '/uis', $str, $matches)) {
+            $strlen = nv_strlen($str);
+            $kstrlen = nv_strlen($k);
+            $residual = $strlen - 300;
+            if ($residual > 0) {
+                $lstrlen = nv_strlen($matches[1]);
+                $rstrlen = $strlen - $lstrlen - $kstrlen;
+
+                $medium = round((300 - $kstrlen) / 2);
+                if ($lstrlen <= $medium) {
+                    $str = nv_clean60($str, 300);
+                } elseif ($rstrlen <= $medium) {
+                    $str = nv_substr($str, $residual, 300);
+                    $str = nv_substr_clean($str, 'l');
+                } else {
+                    $str = nv_substr($str, $lstrlen - $medium, $strlen - $lstrlen + $medium);
+                    $str = nv_substr($str, 0, 300);
+                    $str = nv_substr_clean($str, 'lr');
+                }
+            }
+
+            $pos = true;
+        }
     }
+
+    if (!$pos) {
+        return nv_clean60($str, 300);
+    }
+
+    $pattern = '/(' . implode('|', $pattern) . ')/uis';
+
+    $str = preg_replace($pattern, '<span class="keyword">$1</span>', $str);
+
     return $str;
 }
 
@@ -123,23 +179,26 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $internal_authors = [];
 
     if ($module_config[$module_name]['elas_use'] == 1) {
-        // ket noi den csdl elastic
+        // Kết nối đến CSDL elastic
         $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
 
         $dbkeyhtml = nv_EncString($dbkeyhtml);
         if ($choose == 1) {
             $search_elastic = [
                 'should' => [
-                    'multi_match' => [ // dung multi_match:tim kiem theo nhieu truong
-                        'query' => $dbkeyhtml, // tim kiem theo t? kh�a
+                    // dùng multi_match: tìm kiếm theo nhiều trường
+                    'multi_match' => [
+                        // tìm kiếm theo từ khóa
+                        'query' => $dbkeyhtml,
                         'type' => [
                             'cross_fields'
                         ],
+                        // Tìm kiếm theo 3 trường mặc định
                         'fields' => [
                             'unsigned_title',
                             'unsigned_hometext',
                             'unsigned_bodyhtml'
-                        ], // tim kiem theo 3 truong m?c d?nh l� ho?c
+                        ],
                         'minimum_should_match' => [
                             '50%'
                         ]
@@ -147,7 +206,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         } elseif ($choose == 2) {
-            // match:tim kiem theo 1 truong
+            // match: Tìm kiếm theo 1 trường
             $search_elastic = [
                 'should' => [
                     'match' => [
@@ -155,7 +214,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     ]
                 ]
             ];
-            // Tim bai viet co internal author trung voi ket qua tim kiem
+            // Tìm bài viết có internal author trùng với kết quả tìm kiếm
             if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
                 $where = 'alias REGEXP :q_alias OR pseudonym REGEXP :q_pseudonym';
                 $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
@@ -204,8 +263,10 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         } else {
             $search_elastic = [
                 'should' => [
-                    'multi_match' => [ // dung multi_match:tim kiem theo nhieu truong
-                        'query' => $dbkeyhtml, // tim kiem theo tu khoa
+                    // Dùng multi_match: Tìm kiếm theo nhiều trường
+                    'multi_match' => [
+                        // Tìm kiếm theo từ khóa
+                        'query' => $dbkeyhtml,
                         'type' => [
                             'cross_fields'
                         ],
@@ -215,14 +276,14 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                             'unsigned_bodyhtml',
                             'sourcetext',
                             'unsigned_author'
-                        ], // tim kiem theo 3 truong m?c d?nh l� ho?c
+                        ],
                         'minimum_should_match' => [
                             '50%'
                         ]
                     ]
                 ]
             ];
-            // Tim bai viet co internal author trung voi ket qua tim kiem
+            // Tìm bài viết có internal author trùng với kết quả tìm kiếm
             if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
                 $where = 'alias REGEXP :q_alias OR pseudonym REGEXP :q_pseudonym';
                 $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
@@ -322,7 +383,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'title' => $value['_source']['title'],
                 'alias' => $value['_source']['alias'],
                 'catid' => $value['_source']['catid'],
-                'hometext' => $value['_source']['hometext'],
+                'hometext' => $value['_source']['hometext'] . strip_tags($value['_source']['bodyhtml']),
                 'author' => $value['_source']['author'],
                 'publtime' => $value['_source']['publtime'],
                 'homeimgfile' => $img_src,
@@ -417,7 +478,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         // Không cho tùy ý đánh số page + xác định trang trước, trang sau
         betweenURLs($page, ceil($numRecord / $per_page), $base_url, '&page=', $prevPage, $nextPage);
 
-        $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
+        $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb2.bodyhtml,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.' . $order_articles_by . ' DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -427,7 +488,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $array_content = [];
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
-        while (list($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
+        while (list($id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -448,7 +509,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'title' => $title,
                 'alias' => $alias,
                 'catid' => $catid,
-                'hometext' => $hometext,
+                'hometext' => $hometext . strip_tags($bodyhtml),
                 'author' => $author,
                 'publtime' => $publtime,
                 'homeimgfile' => $img_src,
