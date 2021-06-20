@@ -23,7 +23,6 @@ NUKEVIET 4.4.03
 - System: Don't use CDN for admin area
 
 NUKEVIET 4.4.02
-
 - Fix drag block (#2964)
 - Module contact: fix send mail
 - Fixe bug with some proxy systems and load balancers (#2966)
