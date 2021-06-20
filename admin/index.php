@@ -41,9 +41,13 @@ while ($row = $result->fetch()) {
     $row['custom_title'] = isset($lang_global[$row['lang_key']]) ? $lang_global[$row['lang_key']] : $row['module'];
     $admin_mods[$row['module']] = $row;
 }
+
 if (!defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
     unset($admin_mods['seotools']);
 }
+
+// Chặn BOT index và follow khu vực quản trị
+$nv_BotManager->setNoIndex()->setNoFollow();
 
 $site_mods = nv_site_mods();
 if (!isset($admin_mods[$admin_info['main_module']]) and !isset($site_mods[$admin_info['main_module']])) {
@@ -63,7 +67,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     }
 
     if (empty($site_mods) and $module_name != 'language') {
-        $sql = "SELECT setup FROM " . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
+        $sql = 'SELECT setup FROM ' . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
         $setup = $db->query($sql)->fetchColumn();
         if (empty($setup)) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language');

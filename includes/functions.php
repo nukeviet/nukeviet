@@ -7,6 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 23:48
  */
+
 if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
@@ -35,9 +36,9 @@ function nv_object2array($a)
 function nv_getenv($a)
 {
     if (!is_array($a)) {
-        $a = array(
+        $a = [
             $a
-        );
+        ];
     }
 
     foreach ($a as $b) {
@@ -184,7 +185,7 @@ function nv_convertfromBytes($size)
     }
 
     $i = 0;
-    $iec = array(
+    $iec = [
         'bytes',
         'KB',
         'MB',
@@ -194,7 +195,7 @@ function nv_convertfromBytes($size)
         'EB',
         'ZB',
         'YB'
-    );
+    ];
 
     while (($size / 1024) > 1) {
         $size = $size / 1024;
@@ -252,7 +253,7 @@ function nv_converttoBytes($string)
             return $matches[1];
         }
 
-        $suffixes = array(
+        $suffixes = [
             'B' => 0,
             'K' => 1,
             'M' => 2,
@@ -262,7 +263,7 @@ function nv_converttoBytes($string)
             'E' => 6,
             'Z' => 7,
             'Y' => 8
-        );
+        ];
 
         if (isset($suffixes[strtoupper($matches[2])])) {
             return round($matches[1] * pow(1024, $suffixes[strtoupper($matches[2])]));
@@ -423,7 +424,7 @@ function nv_check_valid_pass($pass, $max, $min)
         }
     }
 
-    $password_simple = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='password_simple'")->fetchColumn();
+    $password_simple = $db->query('SELECT content FROM ' . NV_USERS_GLOBALTABLE . "_config WHERE config='password_simple'")->fetchColumn();
     $password_simple = explode('|', $password_simple);
     if (in_array($pass, $password_simple)) {
         return $lang_global['upass_type_simple'];
@@ -518,17 +519,17 @@ function nv_capcha_txt($seccode)
     if ($global_config['captcha_type'] == 2) {
         if (!empty($global_config['recaptcha_secretkey'])) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
-            $request = array(
+            $request = [
                 'secret' => $crypt->decrypt($global_config['recaptcha_secretkey']),
                 'response' => $seccode,
                 'remoteip' => $client_info['ip']
-            );
-            $args = array(
-                'headers' => array(
+            ];
+            $args = [
+                'headers' => [
                     'Referer' => NV_MY_DOMAIN
-                ),
+                ],
                 'body' => $request
-            );
+            ];
             $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
             if (is_array($array) and !empty($array['body'])) {
                 $jsonRes = (array) json_decode($array['body'], true);
@@ -539,7 +540,7 @@ function nv_capcha_txt($seccode)
         }
         return false;
     } else {
-        mt_srand((double) microtime() * 1000000);
+        mt_srand((float) microtime() * 1000000);
         $maxran = 1000000;
         $random = mt_rand(0, $maxran);
 
@@ -561,13 +562,13 @@ function nv_capcha_txt($seccode)
  */
 function nv_genpass($length = 8, $type = 0)
 {
-    $array_chars = array();
+    $array_chars = [];
     $array_chars[0] = 'abcdefghijklmnopqrstuvwxyz';
     $array_chars[1] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $array_chars[2] = '0123456789';
     $array_chars[3] = '-=~!@#$%^&*()_+,./<>?;:[]{}\|';
 
-    $_arr_m = array();
+    $_arr_m = [];
     $_arr_m[] = 0; // Chữ
     $_arr_m[] = 2; // 1. Số
     $_arr_m[] = ($type == 2 or $type == 4) ? 3 : mt_rand(0, 2); // 2. Đặc biệt
@@ -623,18 +624,18 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
  * @param array $manual_groups
  * @return
  */
-function nv_user_groups($in_groups, $res_2step = false, $manual_groups = array())
+function nv_user_groups($in_groups, $res_2step = false, $manual_groups = [])
 {
     global $nv_Cache, $db, $global_config;
 
-    $_groups = array();
+    $_groups = [];
     $_2step_require = false;
 
     if (!empty($in_groups) or !empty($manual_groups)) {
         $query = 'SELECT group_id, title, require_2step_admin, require_2step_site, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
         $list = $nv_Cache->db($query, '', 'users');
         if (!empty($list)) {
-            $reload = array();
+            $reload = [];
             $in_groups = explode(',', $in_groups);
             if (!empty($manual_groups)) {
                 $in_groups = array_unique(array_merge_recursive($in_groups, $manual_groups));
@@ -662,10 +663,10 @@ function nv_user_groups($in_groups, $res_2step = false, $manual_groups = array()
     }
 
     if ($res_2step) {
-        return array(
+        return [
             $_groups,
             $_2step_require
-        );
+        ];
     }
 
     return $_groups;
@@ -696,7 +697,7 @@ function nv_user_in_groups($groups_view)
             if (empty($in_groups)) {
                 return false;
             }
-            return (array_intersect($in_groups, $groups_view) != array());
+            return (array_intersect($in_groups, $groups_view) != []);
         }
     } elseif (in_array(5, $groups_view)) {
         // Guest
@@ -719,12 +720,12 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
     $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
     if ($query->fetchColumn()) {
         try {
-            $db->query("INSERT INTO " . $_mod_table . "_groups_users (
+            $db->query('INSERT INTO ' . $_mod_table . '_groups_users (
                 group_id, userid, approved, data, time_requested, time_approved
             ) VALUES (
-                " . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "',
-                " . NV_CURRENTTIME . ", " . ($approved ? NV_CURRENTTIME : 0) . "
-            )");
+                ' . $group_id . ', ' . $userid . ', ' . $approved . ", '" . $global_config['idsite'] . "',
+                " . NV_CURRENTTIME . ', ' . ($approved ? NV_CURRENTTIME : 0) . '
+            )');
             $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
             return true;
         } catch (PDOException $e) {
@@ -733,7 +734,7 @@ function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'user
                 $data = ($data != '') ? explode(',', $data) : [];
                 $data[] = $global_config['idsite'];
                 $data = implode(',', array_unique(array_map('intval', $data)));
-                $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
+                $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
                 return true;
             }
         }
@@ -764,7 +765,7 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
             if ($data == '') {
                 $set_number = true;
             } else {
-                $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
+                $db->query('UPDATE ' . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . ' AND userid=' . $userid);
             }
         }
 
@@ -812,56 +813,56 @@ function nv_date($format, $time = 0)
     if (!$time) {
         $time = NV_CURRENTTIME;
     }
-    $format = str_replace("r", "D, d M Y H:i:s O", $format);
-    $format = str_replace(array(
-        "D",
-        "M"
-    ), array(
-        "[D]",
-        "[M]"
-    ), $format);
+    $format = str_replace('r', 'D, d M Y H:i:s O', $format);
+    $format = str_replace([
+        'D',
+        'M'
+    ], [
+        '[D]',
+        '[M]'
+    ], $format);
     $return = date($format, $time);
 
-    $replaces = array(
-        '/\[Sun\](\W|$)/' => $lang_global['sun'] . "$1",
-        '/\[Mon\](\W|$)/' => $lang_global['mon'] . "$1",
-        '/\[Tue\](\W|$)/' => $lang_global['tue'] . "$1",
-        '/\[Wed\](\W|$)/' => $lang_global['wed'] . "$1",
-        '/\[Thu\](\W|$)/' => $lang_global['thu'] . "$1",
-        '/\[Fri\](\W|$)/' => $lang_global['fri'] . "$1",
-        '/\[Sat\](\W|$)/' => $lang_global['sat'] . "$1",
-        '/\[Jan\](\W|$)/' => $lang_global['jan'] . "$1",
-        '/\[Feb\](\W|$)/' => $lang_global['feb'] . "$1",
-        '/\[Mar\](\W|$)/' => $lang_global['mar'] . "$1",
-        '/\[Apr\](\W|$)/' => $lang_global['apr'] . "$1",
-        '/\[May\](\W|$)/' => $lang_global['may2'] . "$1",
-        '/\[Jun\](\W|$)/' => $lang_global['jun'] . "$1",
-        '/\[Jul\](\W|$)/' => $lang_global['jul'] . "$1",
-        '/\[Aug\](\W|$)/' => $lang_global['aug'] . "$1",
-        '/\[Sep\](\W|$)/' => $lang_global['sep'] . "$1",
-        '/\[Oct\](\W|$)/' => $lang_global['oct'] . "$1",
-        '/\[Nov\](\W|$)/' => $lang_global['nov'] . "$1",
-        '/\[Dec\](\W|$)/' => $lang_global['dec'] . "$1",
-        '/Sunday(\W|$)/' => $lang_global['sunday'] . "$1",
-        '/Monday(\W|$)/' => $lang_global['monday'] . "$1",
-        '/Tuesday(\W|$)/' => $lang_global['tuesday'] . "$1",
-        '/Wednesday(\W|$)/' => $lang_global['wednesday'] . "$1",
-        '/Thursday(\W|$)/' => $lang_global['thursday'] . "$1",
-        '/Friday(\W|$)/' => $lang_global['friday'] . "$1",
-        '/Saturday(\W|$)/' => $lang_global['saturday'] . "$1",
-        '/January(\W|$)/' => $lang_global['january'] . "$1",
-        '/February(\W|$)/' => $lang_global['february'] . "$1",
-        '/March(\W|$)/' => $lang_global['march'] . "$1",
-        '/April(\W|$)/' => $lang_global['april'] . "$1",
-        '/May(\W|$)/' => $lang_global['may'] . "$1",
-        '/June(\W|$)/' => $lang_global['june'] . "$1",
-        '/July(\W|$)/' => $lang_global['july'] . "$1",
-        '/August(\W|$)/' => $lang_global['august'] . "$1",
-        '/September(\W|$)/' => $lang_global['september'] . "$1",
-        '/October(\W|$)/' => $lang_global['october'] . "$1",
-        '/November(\W|$)/' => $lang_global['november'] . "$1",
-        '/December(\W|$)/' => $lang_global['december'] . "$1"
-    );
+    $replaces = [
+        '/\[Sun\](\W|$)/' => $lang_global['sun'] . '$1',
+        '/\[Mon\](\W|$)/' => $lang_global['mon'] . '$1',
+        '/\[Tue\](\W|$)/' => $lang_global['tue'] . '$1',
+        '/\[Wed\](\W|$)/' => $lang_global['wed'] . '$1',
+        '/\[Thu\](\W|$)/' => $lang_global['thu'] . '$1',
+        '/\[Fri\](\W|$)/' => $lang_global['fri'] . '$1',
+        '/\[Sat\](\W|$)/' => $lang_global['sat'] . '$1',
+        '/\[Jan\](\W|$)/' => $lang_global['jan'] . '$1',
+        '/\[Feb\](\W|$)/' => $lang_global['feb'] . '$1',
+        '/\[Mar\](\W|$)/' => $lang_global['mar'] . '$1',
+        '/\[Apr\](\W|$)/' => $lang_global['apr'] . '$1',
+        '/\[May\](\W|$)/' => $lang_global['may2'] . '$1',
+        '/\[Jun\](\W|$)/' => $lang_global['jun'] . '$1',
+        '/\[Jul\](\W|$)/' => $lang_global['jul'] . '$1',
+        '/\[Aug\](\W|$)/' => $lang_global['aug'] . '$1',
+        '/\[Sep\](\W|$)/' => $lang_global['sep'] . '$1',
+        '/\[Oct\](\W|$)/' => $lang_global['oct'] . '$1',
+        '/\[Nov\](\W|$)/' => $lang_global['nov'] . '$1',
+        '/\[Dec\](\W|$)/' => $lang_global['dec'] . '$1',
+        '/Sunday(\W|$)/' => $lang_global['sunday'] . '$1',
+        '/Monday(\W|$)/' => $lang_global['monday'] . '$1',
+        '/Tuesday(\W|$)/' => $lang_global['tuesday'] . '$1',
+        '/Wednesday(\W|$)/' => $lang_global['wednesday'] . '$1',
+        '/Thursday(\W|$)/' => $lang_global['thursday'] . '$1',
+        '/Friday(\W|$)/' => $lang_global['friday'] . '$1',
+        '/Saturday(\W|$)/' => $lang_global['saturday'] . '$1',
+        '/January(\W|$)/' => $lang_global['january'] . '$1',
+        '/February(\W|$)/' => $lang_global['february'] . '$1',
+        '/March(\W|$)/' => $lang_global['march'] . '$1',
+        '/April(\W|$)/' => $lang_global['april'] . '$1',
+        '/May(\W|$)/' => $lang_global['may'] . '$1',
+        '/June(\W|$)/' => $lang_global['june'] . '$1',
+        '/July(\W|$)/' => $lang_global['july'] . '$1',
+        '/August(\W|$)/' => $lang_global['august'] . '$1',
+        '/September(\W|$)/' => $lang_global['september'] . '$1',
+        '/October(\W|$)/' => $lang_global['october'] . '$1',
+        '/November(\W|$)/' => $lang_global['november'] . '$1',
+        '/December(\W|$)/' => $lang_global['december'] . '$1'
+    ];
 
     return preg_replace(array_keys($replaces), array_values($replaces), $return);
 }
@@ -877,7 +878,7 @@ function nv_monthname($i)
     global $lang_global;
 
     --$i;
-    $month_names = array(
+    $month_names = [
         $lang_global['january'],
         $lang_global['february'],
         $lang_global['march'],
@@ -890,7 +891,7 @@ function nv_monthname($i)
         $lang_global['october'],
         $lang_global['november'],
         $lang_global['december']
-    );
+    ];
 
     return (isset($month_names[$i]) ? $month_names[$i] : '');
 }
@@ -914,7 +915,7 @@ function nv_unhtmlspecialchars($string)
             $string[$key] = nv_unhtmlspecialchars($string[$key]);
         }
     } else {
-        $search = array(
+        $search = [
             '&amp;',
             '&#039;',
             '&quot;',
@@ -937,8 +938,8 @@ function nv_unhtmlspecialchars($string)
             '&#x7D;',
             '&#x60;',
             '&#x7E;'
-        );
-        $replace = array(
+        ];
+        $replace = [
             '&',
             '\'',
             '"',
@@ -961,7 +962,7 @@ function nv_unhtmlspecialchars($string)
             '}',
             '`',
             '~'
-        );
+        ];
 
         $string = str_replace($search, $replace, $string);
     }
@@ -988,7 +989,7 @@ function nv_htmlspecialchars($string)
             $string[$key] = nv_htmlspecialchars($string[$key]);
         }
     } else {
-        $search = array(
+        $search = [
             '&',
             '\'',
             '"',
@@ -1010,8 +1011,8 @@ function nv_htmlspecialchars($string)
             '}',
             '`',
             '~'
-        );
-        $replace = array(
+        ];
+        $replace = [
             '&amp;',
             '&#039;',
             '&quot;',
@@ -1033,7 +1034,7 @@ function nv_htmlspecialchars($string)
             '&#x7D;',
             '&#x60;',
             '&#x7E;'
-        );
+        ];
 
         $string = str_replace($replace, $search, $string);
         $string = str_replace('&#x23;', '#', $string);
@@ -1069,7 +1070,7 @@ function strip_punctuation($text)
     $prime = '\x{2032}\x{2033}\x{2034}\x{2057}';
     $nummodifiers = $numbersign . $percent . $prime;
 
-    return preg_replace(array( // Remove separator, control, formatting, surrogate, open/close quotes.
+    return preg_replace([ // Remove separator, control, formatting, surrogate, open/close quotes.
         '/[\p{Z}\p{Cc}\p{Cf}\p{Cs}\p{Pi}\p{Pf}]/u', // Remove other punctuation except special cases
         '/\p{Po}(?<![' . $specialquotes . $numseparators . $urlall . $nummodifiers . '])/u', // Remove non-URL open/close brackets, except URL brackets.
         '/[\p{Ps}\p{Pe}](?<![' . $urlbrackets . '])/u', // Remove special quotes, dashes, connectors, number separators, and URL characters followed by a space
@@ -1077,7 +1078,7 @@ function strip_punctuation($text)
         '/((?<= )|^)[' . $specialquotes . $urlspacebefore . '\p{Pc}]+/u', // Remove dashes preceded by a space, but not followed by a number
         '/((?<= )|^)\p{Pd}+(?![\p{N}\p{Sc}])/u', // Remove consecutive spaces
         '/ +/'
-    ), ' ', $text);
+    ], ' ', $text);
 }
 
 /**
@@ -1093,11 +1094,11 @@ function nv_nl2br($text, $replacement = '<br />')
         return '';
     }
 
-    return strtr($text, array(
+    return strtr($text, [
         "\r\n" => $replacement,
         "\r" => $replacement,
         "\n" => $replacement
-    ));
+    ]);
 }
 
 /**
@@ -1164,9 +1165,9 @@ function nv_get_keywords($content, $keyword_limit = 20)
     $content = nv_strtolower($content);
 
     $content = ' ' . $content . ' ';
-    $keywords_return = array();
+    $keywords_return = [];
 
-    $memoryLimitMB = (integer) ini_get('memory_limit');
+    $memoryLimitMB = (int) ini_get('memory_limit');
 
     if ($memoryLimitMB > 60 and file_exists(NV_ROOTDIR . '/includes/keywords/' . NV_LANG_DATA . '.php')) {
         require NV_ROOTDIR . '/includes/keywords/' . NV_LANG_DATA . '.php';
@@ -1192,7 +1193,7 @@ function nv_get_keywords($content, $keyword_limit = 20)
             }
         }
     } else {
-        $pattern_word = array();
+        $pattern_word = [];
 
         if (NV_SITEWORDS_MIN_3WORDS_LENGTH > 0 and NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR > 0) {
             $pattern_word[] = "/[\s]+([\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",}\s[\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",}\s[\S]{" . NV_SITEWORDS_MIN_3WORDS_LENGTH . ",})[\s]+/uis";
@@ -1348,8 +1349,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     if (!empty($global_config['reply_email']) and (empty($sm_parameters['reply_address']) or $global_config['force_reply'])) {
         $sm_parameters['reply_address'] = $global_config['reply_email'];
     }
-    if (!empty($global_config['sender_mail']) and $global_config['force_sender']) {
-        $sm_parameters['from_address'] = $global_config['sender_mail'];
+    if (!empty($global_config['sender_email']) and $global_config['force_sender']) {
+        $sm_parameters['from_address'] = $global_config['sender_email'];
     }
 
     $sm_parameters['reply'] = [];
@@ -1369,7 +1370,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     $sm_parameters['subject'] = $subject;
     $sm_parameters['message'] = $message;
     $sm_parameters['logo_add'] = $AddEmbeddedImage;
-    if (function_exists("nv_mailHTML")) {
+    if (function_exists('nv_mailHTML')) {
         $sm_parameters['message'] = nv_mailHTML($sm_parameters['subject'], $sm_parameters['message']);
         $sm_parameters['logo_add'] = true;
     }
@@ -1433,8 +1434,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             if (empty($sm_parameters['from_address'])) {
                 if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
                     $sm_parameters['from_address'] = $_SERVER['SERVER_ADMIN'];
-                } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                    $sm_parameters['from_address'] = "webmaster@" . $_SERVER['SERVER_NAME'];
+                } elseif (checkdnsrr($_SERVER['SERVER_NAME'], 'MX') || checkdnsrr($_SERVER['SERVER_NAME'], 'A')) {
+                    $sm_parameters['from_address'] = 'webmaster@' . $_SERVER['SERVER_NAME'];
                 } else {
                     $sm_parameters['from_address'] = $global_config['site_email'];
                 }
@@ -1444,12 +1445,12 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             $mail->IsMail();
 
             if (empty($sm_parameters['from_address'])) {
-                if (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
+                if (($php_email = @ini_get('sendmail_from')) != '' and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
                     $sm_parameters['from_address'] = $php_email;
-                } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get("sendmail_path"), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
+                } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get('sendmail_path'), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
                     $sm_parameters['from_address'] = $matches[0];
-                } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                    $sm_parameters['from_address'] = "webmaster@" . $_SERVER['SERVER_NAME'];
+                } elseif (checkdnsrr($_SERVER['SERVER_NAME'], 'MX') || checkdnsrr($_SERVER['SERVER_NAME'], 'A')) {
+                    $sm_parameters['from_address'] = 'webmaster@' . $_SERVER['SERVER_NAME'];
                 } else {
                     $sm_parameters['from_address'] = $global_config['site_email'];
                 }
@@ -1458,8 +1459,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             return ($testmode ? 'No mail mode' : false);
         }
 
-        $mail->From = $sm_parameters['from_address'];
-        $mail->FromName = nv_unhtmlspecialchars($sm_parameters['from_name']);
+        $mail->setFrom($sm_parameters['from_address'], nv_unhtmlspecialchars($sm_parameters['from_name']));
 
         if (!empty($sm_parameters['reply'])) {
             foreach ($sm_parameters['reply'] as $_m => $_n) {
@@ -1484,10 +1484,13 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         }
 
         $mail->Subject = nv_unhtmlspecialchars($sm_parameters['subject']);
-        $mail->WordWrap = 120;
+        // https://www.php.net/manual/en/function.mail.php
+        // Lines should not be larger than 70 characters. 
+        $mail->WordWrap = 70;
         $mail->Body = $sm_parameters['message'];
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
+        $mail->XMailer = 'NukeViet CMS with PHPMailer';
 
         if ($sm_parameters['logo_add']) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
@@ -1514,6 +1517,33 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     } catch (PHPMailer\PHPMailer\Exception $e) {
         trigger_error($e->errorMessage(), E_USER_WARNING);
         return ($testmode ? $e->errorMessage() : false);
+    }
+}
+
+/**
+ * betweenURLs()
+ *
+ * @param integer $page
+ * @param integer $total
+ * @param string $base_url
+ * @param string $urlappend
+ * @param string $prevPage
+ * @param string $nextPage
+ */
+function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPage)
+{
+    if ($page > 1 and $page > $total) {
+        nv_redirect_location($base_url);
+    }
+
+    if ($page > 1) {
+        $prev = $page - 1;
+        $prevPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($prev > 1 ? ($urlappend . $prev) : ''), true);
+    }
+
+    if ($page >= 1 and $page < $total) {
+        $next = $page + 1;
+        $nextPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . $urlappend . $next, true);
     }
 }
 
@@ -1557,7 +1587,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 
         for ($i = 1; $i <= $init_page_max; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $href = !$onclick ? 'href="' . $href . '"' : 'href="javascript:void(0)" onclick="' . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
         }
 
@@ -1572,7 +1602,7 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 
                 for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
                     $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-                    $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+                    $href = !$onclick ? 'href="' . $href . '"' : 'href="javascript:void(0)" onclick="' . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
                     $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
                 }
 
@@ -1585,14 +1615,14 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 
             for ($i = $total_pages - 2; $i < $total_pages + 1; ++$i) {
                 $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-                $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+                $href = !$onclick ? 'href="' . $href . '"' : 'href="javascript:void(0)" onclick="' . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
                 $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
             }
         }
     } else {
         for ($i = 1; $i < $total_pages + 1; ++$i) {
             $href = ($i > 1) ? $base_url . $amp . $i : $base_url;
-            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $href = !$onclick ? 'href="' . $href . '"' : 'href="javascript:void(0)" onclick="' . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string .= '<li' . ($i == $on_page ? ' class="active"' : '') . '><a' . ($i == $on_page ? ' href="#"' : ' ' . $href) . '>' . $i . '</a></li>';
         }
     }
@@ -1600,15 +1630,15 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
     if ($add_prevnext_text) {
         if ($on_page > 1) {
             $href = ($on_page > 2) ? $base_url . $amp . ($on_page - 1) : $base_url;
-            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
-            $page_string = "<li><a " . $href . " title=\"" . $lang_global['pageprev'] . "\">&laquo;</a></li>" . $page_string;
+            $href = !$onclick ? 'href="' . $href . '"' : 'href="javascript:void(0)" onclick="' . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $page_string = '<li><a ' . $href . ' title="' . $lang_global['pageprev'] . '">&laquo;</a></li>' . $page_string;
         } else {
             $page_string = '<li class="disabled"><a href="#">&laquo;</a></li>' . $page_string;
         }
 
         if ($on_page < $total_pages) {
             $href = ($on_page) ? $base_url . $amp . ($on_page + 1) : $base_url;
-            $href = !$onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
+            $href = !$onclick ? 'href="' . $href . '"' : 'href="javascript:void(0)" onclick="' . $js_func_name . "('" . rawurlencode(nv_unhtmlspecialchars($href)) . "','" . $containerid . "')\"";
             $page_string .= '<li><a ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
         } else {
             $page_string .= '<li class="disabled"><a href="#">&raquo;</a></li>';
@@ -1726,6 +1756,45 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 }
 
 /**
+ * getCanonicalUrl()
+ *
+ * $page_url: Đường dẫn tuyệt đối từ thư mục gốc đến trang
+ * $request_uri_check: Có so sánh đường dẫn này với request_uri hay không
+ * $abs_comp: So sánh tuyệt đối (true) hoặc chỉ cần có chứa (false)
+ * @param string $page_url
+ * @param bool $request_uri_check
+ * @param bool $abs_comp
+ * @return
+ */
+function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false)
+{
+    global $home;
+
+    if ($home) {
+        $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+    }
+
+    $url_rewrite = nv_url_rewrite($page_url, true);
+
+    if ($request_uri_check) {
+        $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
+        $url_rewrite_check = urldecode($url_rewrite_check);
+        $request_uri = urldecode($_SERVER['REQUEST_URI']);
+        if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
+            $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
+        }
+
+        if ($abs_comp and strcmp($request_uri, $url_rewrite_check) !== 0) {
+            nv_redirect_location($page_url);
+        } elseif (!str_starts_with($request_uri, $url_rewrite_check)) {
+            nv_redirect_location($page_url);
+        }
+    }
+
+    return NV_MAIN_DOMAIN . $url_rewrite;
+}
+
+/**
  * nv_check_domain()
  *
  * @param string $domain
@@ -1740,7 +1809,11 @@ function nv_check_domain($domain)
             $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $Punycode = new TrueBV\Punycode();
-            $domain_ascii = $Punycode->encode($domain);
+            try {
+                $domain_ascii = $Punycode->encode($domain);
+            } catch (\Exception $e) {
+                $domain_ascii = '';
+            }
         }
         if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain_ascii)) {
             return $domain_ascii;
@@ -1815,13 +1888,13 @@ function nv_check_url($url, $is_200 = 0)
         $url_info = parse_url($url);
         $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
 
-        $userAgents = array(
+        $userAgents = [
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
             'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
             'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
             'Mozilla/4.8 [en] (Windows NT 6.0; U)',
             'Opera/9.25 (Windows NT 6.0; U; en)'
-        );
+        ];
 
         $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
@@ -1853,7 +1926,7 @@ function nv_check_url($url, $is_200 = 0)
             $res = explode('\n', $response);
         }
     } elseif (nv_function_exists('fsockopen') and nv_function_exists('fgets')) {
-        $res = array();
+        $res = [];
         $url_info = parse_url($url);
         $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
         $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
@@ -1866,8 +1939,8 @@ function nv_check_url($url, $is_200 = 0)
         $path = !empty($url_info['path']) ? $url_info['path'] : '/';
         $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
 
-        fputs($fp, "HEAD " . $path . " HTTP/1.0\r\n");
-        fputs($fp, "Host: " . $url_info['host'] . ":" . $port . "\r\n");
+        fputs($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
+        fputs($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
         fputs($fp, "Connection: close\r\n\r\n");
 
         while (!feof($fp)) {
@@ -1920,7 +1993,7 @@ function nv_url_rewrite($buffer, $is_url = false)
 
     if ($global_config['rewrite_enable']) {
         if ($is_url) {
-            $buffer = "\"" . $buffer . "\"";
+            $buffer = '"' . $buffer . '"';
         }
 
         $buffer = preg_replace_callback('#"(' . preg_quote(NV_BASE_SITEURL, '#') . ')index.php\\?' . preg_quote(NV_LANG_VARIABLE, '#') . '=([^"]+)"#', 'nv_url_rewrite_callback', $buffer);
@@ -1944,12 +2017,12 @@ function nv_url_rewrite_callback($matches)
     global $global_config;
 
     $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
-    $query_array = array();
-    $is_amp = (strpos($query_string, '&amp;') !== false);
+    $query_array = [];
+    $is_amp = str_contains($query_string, '&amp;');
     parse_str(str_replace('&amp;', '&', $query_string), $query_array);
 
     if (!empty($query_array)) {
-        $op_rewrite = array();
+        $op_rewrite = [];
         $op_rewrite_count = 0;
         $query_array_keys = array_keys($query_array);
         if (defined('NV_IS_GODADMIN') or defined('NV_IS_SPADMIN')) {
@@ -1966,7 +2039,7 @@ function nv_url_rewrite_callback($matches)
         }
         unset($query_array[NV_LANG_VARIABLE]);
         if (isset($query_array[NV_NAME_VARIABLE])) {
-            if (strpos($query_array[NV_NAME_VARIABLE], '/') !== false) {
+            if (str_contains($query_array[NV_NAME_VARIABLE], '/')) {
                 if (isset($query_array[NV_OP_VARIABLE])) {
                     return $matches[0];
                 }
@@ -1984,7 +2057,7 @@ function nv_url_rewrite_callback($matches)
         $rewrite_end = $global_config['rewrite_endurl'];
         if (isset($query_array[NV_OP_VARIABLE])) {
             if (preg_match('/^tag\/(.*)$/', $query_array[NV_OP_VARIABLE], $m)) {
-                if (strpos($m[1], '/') !== false and !preg_match('/page\-[0-9]+$/', $m[1])) {
+                if (str_contains($m[1], '/') and !preg_match('/page\-[0-9]+$/', $m[1])) {
                     return $matches[0];
                 }
                 $rewrite_end = '';
@@ -2024,8 +2097,8 @@ function nv_change_buffer($buffer)
 
     if (defined('NV_SYSTEM') and (defined('GOOGLE_ANALYTICS_SYSTEM') or (isset($global_config['googleAnalyticsID']) and preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'])))) {
         $_google_analytics = "<script data-show=\"inline\">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
-        $_google_analytics .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
-        $_google_analytics .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
+        $_google_analytics .= '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),' . PHP_EOL;
+        $_google_analytics .= 'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)' . PHP_EOL;
         $_google_analytics .= "})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
         if (isset($global_config['googleAnalyticsID']) and preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'])) {
             $_google_analytics .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
@@ -2034,16 +2107,16 @@ function nv_change_buffer($buffer)
             $_google_analytics .= "ga('create', '" . GOOGLE_ANALYTICS_SYSTEM . "', 'auto');" . PHP_EOL;
         }
         $_google_analytics .= "ga('send', 'pageview');" . PHP_EOL;
-        $_google_analytics .= "</script>" . PHP_EOL;
-        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . "$1", $buffer, 1);
+        $_google_analytics .= '</script>' . PHP_EOL;
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . '$1', $buffer, 1);
     }
 
     if (NV_ANTI_IFRAME and empty($client_info['is_myreferer'])) {
-        $buffer = preg_replace('/(<body[^>]*>)/', "$1" . PHP_EOL . "<script>if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1);
+        $buffer = preg_replace('/(<body[^>]*>)/', '$1' . PHP_EOL . '<script>if(window.top!==window.self){document.write="";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=""},1);window.self.onload=function(){document.body.innerHTML=""}};</script>', $buffer, 1);
     }
 
     if (isset($global_config['cronjobs_next_time']) and NV_CURRENTTIME > $global_config['cronjobs_next_time']) {
-        $_body_cronjobs = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
+        $_body_cronjobs = '<div id="run_cronjobs" style="visibility:hidden;display:none;"><img alt="" src="' . NV_BASE_SITEURL . 'index.php?second=cronjobs&amp;p=' . nv_genpass() . '" width="1" height="1" /></div>' . PHP_EOL;
         $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $_body_cronjobs . '</body>', $buffer, 1);
     }
 
@@ -2406,13 +2479,26 @@ function nv_set_authorization()
 
     if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
         $usr_pass = base64_decode(substr($auth_user, 6));
-        if (!empty($usr_pass) and strpos($usr_pass, ':') !== false) {
-            list ($auth_user, $auth_pw) = explode(':', $usr_pass);
+        if (!empty($usr_pass) and str_contains($usr_pass, ':')) {
+            list($auth_user, $auth_pw) = explode(':', $usr_pass);
         }
         unset($usr_pass);
     }
-    return array(
+    return [
         'auth_user' => $auth_user,
         'auth_pw' => $auth_pw
-    );
+    ];
+}
+
+/**
+ * nv_autoLinkDisable()
+ * Disable email engines from automatically hyperlinking a URL
+ * 
+ * @param string $text
+ * @return string
+ */
+function nv_autoLinkDisable($text)
+{
+    $text = str_replace('&#x3A;', '<span>&#58;</span>', $text);
+    return str_replace(['@', '.', ':'], ['<span>&#64;</span>', '<span>&#46;</span>', '<span>&#58;</span>'], $text);
 }

@@ -8,7 +8,7 @@
  * @Createdate 3-5-2010 8:49
  */
 
-if (! defined('NV_IS_FILE_MODULES')) {
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
 }
 
@@ -23,7 +23,7 @@ function nv_show_funcs()
 
     $mod = $nv_Request->get_title('mod', 'get', '');
 
-    if (empty($mod) or ! preg_match($global_config['check_module'], $mod)) {
+    if (empty($mod) or !preg_match($global_config['check_module'], $mod)) {
         exit(0);
     }
 
@@ -50,12 +50,12 @@ function nv_show_funcs()
 
     $local_funcs = nv_scandir(NV_ROOTDIR . '/modules/' . $mod_file . '/funcs', $global_config['check_op_file']);
 
-    if (! empty($local_funcs)) {
+    if (!empty($local_funcs)) {
         $local_funcs = preg_replace($global_config['check_op_file'], '\\1', $local_funcs);
         $local_funcs = array_flip($local_funcs);
     }
 
-    $module_version = array();
+    $module_version = [];
     $version_file = NV_ROOTDIR . '/modules/' . $mod_file . '/version.php';
 
     if (file_exists($version_file)) {
@@ -66,7 +66,7 @@ function nv_show_funcs()
 
     if (empty($module_version)) {
         $timestamp = NV_CURRENTTIME - date('Z', NV_CURRENTTIME);
-        $module_version = array(
+        $module_version = [
             'name' => $mod,
             'modfuncs' => 'main',
             'is_sysmod' => 0,
@@ -75,15 +75,15 @@ function nv_show_funcs()
             'date' => date('D, j M Y H:i:s', $timestamp) . ' GMT',
             'author' => '',
             'note' => ''
-        );
+        ];
     }
 
     $module_version['submenu'] = isset($module_version['submenu']) ? trim($module_version['submenu']) : '';
     $modfuncs = array_map('trim', explode(',', $module_version['modfuncs']));
     $arr_in_submenu = array_map('trim', explode(',', $module_version['submenu']));
 
-    $data_funcs = array();
-    $weight_list = array();
+    $data_funcs = [];
+    $weight_list = [];
 
     $sth = $db->prepare('SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module ORDER BY subweight ASC');
     $sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
@@ -118,7 +118,7 @@ function nv_show_funcs()
     $new_funcs = array_diff_key($local_funcs, $data_funcs);
 
     $is_refresh = false;
-    if (! empty($old_funcs)) {
+    if (!empty($old_funcs)) {
         foreach ($old_funcs as $func => $values) {
             $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = ' . $values['func_id']);
             $db->query('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = ' . $values['func_id']);
@@ -132,17 +132,17 @@ function nv_show_funcs()
         $is_refresh = true;
     }
 
-    if (! empty($new_funcs)) {
+    if (!empty($new_funcs)) {
         $mod_theme = 'default';
 
-        if (! empty($site_mods[$mod]['theme']) and file_exists(NV_ROOTDIR . '/themes/' . $site_mods[$mod]['theme'] . '/config.ini')) {
+        if (!empty($site_mods[$mod]['theme']) and file_exists(NV_ROOTDIR . '/themes/' . $site_mods[$mod]['theme'] . '/config.ini')) {
             $mod_theme = $site_mods[$mod]['theme'];
-        } elseif (! empty($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini')) {
+        } elseif (!empty($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini')) {
             $mod_theme = $global_config['site_theme'];
         }
 
         $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $mod_theme . '/config.ini');
-        $layoutdefault = ( string )$xml->layoutdefault;
+        $layoutdefault = (string) $xml->layoutdefault;
 
         $array_keys = array_keys($new_funcs);
 
@@ -151,13 +151,13 @@ function nv_show_funcs()
         foreach ($array_keys as $func) {
             $show_func = in_array($func, $modfuncs) ? 1 : 0;
             try {
-                $data = array();
+                $data = [];
                 $data['func_name'] = $func;
                 $data['alias'] = $func;
                 $data['func_custom_name'] = ucfirst($func);
                 $data['in_module'] = $mod;
 
-                $_sql = "INSERT INTO " . NV_MODFUNCS_TABLE . " (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, 0, '')";
+                $_sql = 'INSERT INTO ' . NV_MODFUNCS_TABLE . ' (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ", 0, 0, '')";
                 $func_id = $db->insert_id($_sql, 'func_id', $data);
                 if ($show_func) {
                     $sth2->bindParam(':func_id', $func_id, PDO::PARAM_INT);
@@ -177,8 +177,8 @@ function nv_show_funcs()
     if ($is_refresh) {
         nv_fix_subweight($mod);
 
-        $act_funcs = array();
-        $weight_list = array();
+        $act_funcs = [];
+        $weight_list = [];
 
         $sth = $db->prepare('SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC');
         $sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
@@ -204,7 +204,7 @@ function nv_show_funcs()
         $nv_Cache->delMod('themes');
     }
 
-    $fun_change_alias = (isset($module_version['change_alias'])) ? explode(',', $module_version['change_alias']) : array();
+    $fun_change_alias = (isset($module_version['change_alias'])) ? array_map('trim', explode(',', $module_version['change_alias'])) : [];
     if (empty($fun_change_alias)) {
         $module_version['virtual'] = 0;
     }
@@ -219,10 +219,10 @@ function nv_show_funcs()
             $xtpl->assign('ROW', $values);
 
             foreach ($weight_list as $new_weight) {
-                $xtpl->assign('WEIGHT', array(
+                $xtpl->assign('WEIGHT', [
                     'key' => $new_weight,
                     'selected' => $new_weight == $values['subweight'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.weight');
             }
 
@@ -255,7 +255,7 @@ if ($nv_Request->isset_request('aj', 'get')) {
 
 $mod = $nv_Request->get_title('mod', 'get', '');
 
-if (empty($mod) or ! preg_match($global_config['check_module'], $mod)) {
+if (empty($mod) or !preg_match($global_config['check_module'], $mod)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
@@ -270,13 +270,13 @@ if (empty($row)) {
 
 $page_title = sprintf($lang_module['funcs_list'], $row['custom_title']);
 
-$contents = array();
+$contents = [];
 
 $contents['div_id'][0] = 'show_funcs';
 $contents['div_id'][1] = 'action';
 
 $contents['ajax'][0] = "nv_show_funcs('show_funcs');";
-$contents['ajax'][1] = $nv_Request->isset_request('func_id,pos', 'get') ? "nv_bl_list(" . $nv_Request->get_int('func_id', 'get') . ",'" . $nv_Request->get_title('pos', 'get') . "','action');" : "";
+$contents['ajax'][1] = $nv_Request->isset_request('func_id,pos', 'get') ? 'nv_bl_list(' . $nv_Request->get_int('func_id', 'get') . ",'" . $nv_Request->get_title('pos', 'get') . "','action');" : '';
 
 $contents = show_funcs_theme($contents);
 

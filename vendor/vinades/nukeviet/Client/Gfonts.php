@@ -28,7 +28,9 @@ class Gfonts
     private $fontdir = 'assets/fonts';
     private $relfontdir = '../fonts';
     private $fontsLang = '';
-    private $fonts, $cssRealFile, $cssUrlFile;
+    private $fonts;
+    private $cssRealFile;
+    private $cssUrlFile;
 
     /**
      * Gfonts::__construct()
@@ -37,18 +39,18 @@ class Gfonts
      * @param mixed $client_info
      * @return void
      */
-    public function __construct($gfonts = array(), $client_info = array())
+    public function __construct($gfonts = [], $client_info = [])
     {
         $this->cssdir = NV_ASSETS_DIR . '/css';
         $this->fontdir = NV_ASSETS_DIR . '/fonts';
         $stringFonts = '';
 
         if (!empty($gfonts)) {
-            $this->fontsLang = ! empty($gfonts['subset']) ? preg_replace('/[^a-z0-9\,\-]/i', '', strtolower($gfonts['subset'])) : '';
+            $this->fontsLang = !empty($gfonts['subset']) ? preg_replace('/[^a-z0-9\,\-]/i', '', strtolower($gfonts['subset'])) : '';
             $stringFonts = $this->stringFonts($gfonts['fonts']);
             $this->fonts = 'family=' . $stringFonts;
             $stringFonts = str_replace(':', '.', $stringFonts);
-            if (! empty($this->fontsLang)) {
+            if (!empty($this->fontsLang)) {
                 $this->fonts .= '&subset=' . $this->fontsLang;
                 $stringFonts .= '.' . $this->fontsLang;
             }
@@ -109,15 +111,15 @@ class Gfonts
         global $global_config, $client_info;
 
         $NV_Http = new Http($global_config, NV_TEMP_DIR);
-        $args = array(
-            'headers' => array(
+        $args = [
+            'headers' => [
                 'Referer' => $client_info['selfurl'],
                 'User-Agent' => NV_USER_AGENT,
-            ),
+            ],
             'stream' => true,
             'filename' => $dir . '/' . $filename,
             'timeout' => 0
-        );
+        ];
         $result = $NV_Http->get($url, $args);
 
         if (!empty(Http::$error) or $result['response']['code'] != 200 or empty($result['filename']) or !file_exists($result['filename']) or filesize($result['filename']) <= 0) {
@@ -155,12 +157,12 @@ class Gfonts
         global $global_config, $client_info;
 
         $NV_Http = new Http($global_config, NV_TEMP_DIR);
-        $args = array(
-            'headers' => array(
+        $args = [
+            'headers' => [
                 'Referer' => $client_info['selfurl'],
                 'User-Agent' => NV_USER_AGENT,
-            )
-        );
+            ]
+        ];
 
         $result = $NV_Http->get($this->fonts, $args);
         if (!empty(Http::$error) or $result['response']['code'] != 200) {
@@ -171,7 +173,7 @@ class Gfonts
         $Regex = '/http\:\/\/[^\) ]+\/([^\.\) ]+\.[^\) ]+)/';
 
         if (preg_match_all($Regex, $result, $matches)) {
-            $result = preg_replace_callback($Regex, array($this, 'download_Callback'), $result);
+            $result = preg_replace_callback($Regex, [$this, 'download_Callback'], $result);
         }
 
         @file_put_contents($this->cssRealFile, $result);
@@ -190,10 +192,10 @@ class Gfonts
         if (empty($fonts)) {
             return '';
         }
-        $_fonts = array();
+        $_fonts = [];
         foreach ($fonts as $k => $font) {
             $_fonts[$k] = urlencode($font['family']);
-            if (isset($font['styles']) and ! empty($font['styles'])) {
+            if (isset($font['styles']) and !empty($font['styles'])) {
                 $_fonts[$k] .= ':' . $font['styles'];
             }
         }

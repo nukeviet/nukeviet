@@ -13,13 +13,13 @@ namespace NukeViet\Core;
  */
 class Request
 {
-    const IS_HEADERS_SENT = 'Warning: Headers already sent';
+    public const IS_HEADERS_SENT = 'Warning: Headers already sent';
 
-    const INCORRECT_IP = 'Incorrect IP address specified';
+    public const INCORRECT_IP = 'Incorrect IP address specified';
 
-    const INCORRECT_ORIGIN = 'Incorrect Origin specified';
+    public const INCORRECT_ORIGIN = 'Incorrect Origin specified';
 
-    const REQUEST_BLOCKED = 'Your request is blocked';
+    public const REQUEST_BLOCKED = 'Your request is blocked';
 
     public $session_id;
 
@@ -102,6 +102,10 @@ class Request
     private $secure = false;
 
     private $httponly = true;
+
+    private $SameSite = '';
+
+    private $set_cookie_by_options = false;
 
     private $ip_addr;
 
@@ -201,6 +205,12 @@ class Request
     protected $validDomains = [];
 
     /**
+     * @since 4.5.00
+     */
+    private $allowNullOrigin = false;
+    private $allowNullOriginIps = [];
+
+    /**
      * @param array $config
      * @param string $ip Client IP
      * @param \NukeViet\Core\Server|boolean $nv_Server
@@ -225,6 +235,14 @@ class Request
         if (!empty($config['cookie_httponly'])) {
             $this->httponly = true;
         }
+        if (!empty($config['cookie_SameSite']) and in_array($config['cookie_SameSite'], [
+            'Lax',
+            'Strict',
+            'None'
+        ])) {
+            $this->SameSite = $config['cookie_SameSite'];
+        }
+        $this->set_cookie_by_options = version_compare(PHP_VERSION, '7.3.0', '>=');
         if (!empty($config['cookie_prefix'])) {
             $this->cookie_prefix = preg_replace('/[^a-zA-Z0-9\_]+/', '', $config['cookie_prefix']);
         }
@@ -255,6 +273,8 @@ class Request
 
         $this->isRestrictDomain = !empty($config['domains_restrict']) ? true : false;
         $this->validDomains = !empty($config['domains_whitelist']) ? ((array) $config['domains_whitelist']) : [];
+        $this->allowNullOrigin = !empty($config['allow_null_origin']) ? true : false;
+        $this->allowNullOriginIps = !empty($config['ip_allow_null_origin']) ? ((array) $config['ip_allow_null_origin']) : [];
 
         if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
             $ip2long = ip2long($ip);
@@ -270,7 +290,7 @@ class Request
             $ip2long = base_convert($r_ip, 2, 10);
         }
 
-        if ($ip2long == - 1 or $ip2long === false) {
+        if ($ip2long == -1 or $ip2long === false) {
             trigger_error(Request::INCORRECT_IP, 256);
         }
         $this->ip_addr = $ip2long;
@@ -283,8 +303,7 @@ class Request
         $this->Initialize($nv_Server);
         $this->get_cookie_save_path();
 
-        $_ssl_https = (isset($config['ssl_https'])) ? $config['ssl_https'] : 0;
-        $this->sessionStart($_ssl_https);
+        $this->sessionStart(!empty($config['https_only']));
         $_REQUEST = array_merge($_POST, array_diff_key($_GET, $_POST));
     }
 
@@ -441,10 +460,12 @@ class Request
         // Cross-Site handle
         if (sizeof($_POST) or $this->method == 'POST') {
             if ($this->origin_key == 0 or $this->referer_key !== 1) {
+                // Post cross hoặc không same referer
                 if (!$this->restrictCrossDomain or in_array($this->remote_ip, $this->validCrossIPs)) {
                     $this->isIpValid = true;
                 }
             } else {
+                // Same referer hoặc không cross
                 $this->isIpValid = true;
             }
             if (!(($this->isRefererValid and (empty($this->origin) or $this->isOriginValid)) or $this->isIpValid)) {
@@ -564,14 +585,28 @@ class Request
      *
      * @return
      */
-    private function sessionStart($_ssl_https)
+    private function sessionStart($https_only)
     {
         if (headers_sent() or connection_status() != 0 or connection_aborted()) {
             trigger_error(Request::IS_HEADERS_SENT, 256);
         }
 
-        $_secure = ($this->server_protocol == 'https' and $_ssl_https == 1) ? 1 : 0;
-        session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, $_secure, 1);
+        $_secure = ($this->server_protocol == 'https' and $https_only) ? 1 : 0;
+        if ($this->set_cookie_by_options) {
+            $options = [
+                'lifetime' => NV_LIVE_SESSION_TIME,
+                'path' => $this->cookie_path,
+                'domain' => $this->cookie_domain,
+                'secure' => $_secure,
+                'httponly' => 1
+            ];
+            if ($this->SameSite == 'Lax' or $this->SameSite == 'Strict') {
+                $options['samesite'] = $this->SameSite;
+            }
+            session_set_cookie_params($options);
+        } else {
+            session_set_cookie_params(NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, $_secure, 1);
+        }
 
         session_name($this->cookie_prefix . '_sess');
         session_start();
@@ -639,10 +674,10 @@ class Request
      */
     private function unhtmlentities($value)
     {
-        $value = preg_replace("/%3A%2F%2F/", '', $value); // :// to empty
+        $value = preg_replace('/%3A%2F%2F/', '', $value); // :// to empty
         $value = preg_replace('/([\x00-\x08][\x0b-\x0c][\x0e-\x20])/', '', $value);
-        $value = preg_replace("/%u0([a-z0-9]{3})/i", "&#x\\1;", $value);
-        $value = preg_replace("/%([a-z0-9]{2})/i", "&#x\\1;", $value);
+        $value = preg_replace('/%u0([a-z0-9]{3})/i', '&#x\\1;', $value);
+        $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\\1;', $value);
         $value = str_ireplace(['&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ''], '', $value);
 
         $search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
@@ -680,8 +715,8 @@ class Request
 
             if (!empty($attrSubSet[1])) {
                 $attrSubSet[1] = preg_replace('/[ ]+/', ' ', $attrSubSet[1]);
-                $attrSubSet[1] = preg_replace("/^\"(.*)\"$/", "\\1", $attrSubSet[1]);
-                $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", "\\1", $attrSubSet[1]);
+                $attrSubSet[1] = preg_replace('/^"(.*)"$/', '\\1', $attrSubSet[1]);
+                $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", '\\1', $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
                 // Security check Data URLs
@@ -739,7 +774,9 @@ class Request
                     continue;
                 }
 
-                $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', [$this, 'color_hex2rgb_callback'], $attrSubSet[1]);
+                if ('href' != $attrSubSet[0]) {
+                    $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', [$this, 'color_hex2rgb_callback'], $attrSubSet[1]);
+                }
             } elseif ($attrSubSet[1] !== '0') {
                 $attrSubSet[1] = $attrSubSet[0];
             }
@@ -861,7 +898,7 @@ class Request
                         } else {
                             $space = "\n    ";
                         }
-                        $preTag .= $space . "{@[param name=[@{allowscriptaccess}@] value=[@{never}@] /]@}" . $space . "{@[param name=[@{allownetworking}@] value=[@{internal}@] /]@}\n";
+                        $preTag .= $space . '{@[param name=[@{allowscriptaccess}@] value=[@{never}@] /]@}' . $space . "{@[param name=[@{allownetworking}@] value=[@{internal}@] /]@}\n";
                     }
                 }
             } else {
@@ -873,8 +910,8 @@ class Request
         }
 
         $preTag .= $postTag;
-        $preTag = str_replace(["'", '"', '<', '>'], ["&#039;", "&quot;", "&lt;", "&gt;"], $preTag);
-        return trim(str_replace(["[@{", "}@]", "{@[", "]@}"], ['"', '"', "<", '>'], $preTag));
+        $preTag = str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $preTag);
+        return trim(str_replace(['[@{', '}@]', '{@[', ']@}'], ['"', '"', '<', '>'], $preTag));
     }
 
     /**
@@ -896,14 +933,14 @@ class Request
                     $value = urldecode($value);
                 }
 
-                $value = str_replace(["\t", "\r", "\n", "../"], "", $value);
+                $value = str_replace(["\t", "\r", "\n", '../'], '', $value);
                 $value = $this->unhtmlentities($value);
                 unset($matches);
                 preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $value, $matches);
                 $value = str_replace($matches[0], $matches[1], $value);
                 $value = strip_tags($value);
-                $value = preg_replace('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', "", $value);
-                $value = str_replace(["'", '"', '<', '>'], ["&#039;", "&quot;", "&lt;", "&gt;"], $value);
+                $value = preg_replace('#(' . implode('|', $this->disablecomannds) . ')(\s*)\((.*?)\)#si', '', $value);
+                $value = str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $value);
                 $value = trim($value);
             }
         }
@@ -1119,7 +1156,25 @@ class Request
             $expire += NV_CURRENTTIME;
         }
 
-        return setcookie($name, $value, $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
+        if ($this->set_cookie_by_options) {
+            $options = [
+                'expires' => $expire,
+                'path' => $this->cookie_path,
+                'domain' => $this->cookie_domain,
+                'secure' => $this->secure,
+                'httponly' => $this->httponly
+            ];
+            if (!empty($this->SameSite) and (in_array($this->SameSite, [
+                'Lax',
+                'Strict'
+            ]) or ($this->SameSite == 'None' and !empty($this->secure)))) {
+                $options['samesite'] = $this->SameSite;
+            }
+
+            return setcookie($name, $value, $options);
+        } else {
+            return setcookie($name, $value, $expire, $this->cookie_path, $this->cookie_domain, $this->secure, $this->httponly);
+        }
     }
 
     /**
@@ -1384,14 +1439,14 @@ class Request
     private function _get_title($value, $specialchars, $preg_replace)
     {
         $value = strip_tags($value);
-        if (( bool )$specialchars == true) {
+        if ((bool)$specialchars == true) {
             $search = ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~'];
             $replace = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
 
             $value = str_replace($replace, $search, $value);
-            $value = str_replace("&#x23;", "#", $value);
+            $value = str_replace('&#x23;', '#', $value);
             $value = str_replace($search, $replace, $value);
-            $value = preg_replace("/([^\&]+)\#/", "\\1&#x23;", $value);
+            $value = preg_replace("/([^\&]+)\#/", '\\1&#x23;', $value);
         }
 
         if (!empty($preg_replace)) {
@@ -1448,7 +1503,7 @@ class Request
      */
     public function get_editor($name, $default = '', $allowed_html_tags = '', $filter = true)
     {
-        $value = ( string )$this->get_value($name, 'post', $default, true, $filter);
+        $value = (string)$this->get_value($name, 'post', $default, true, $filter);
         return $this->_get_editor($value, $allowed_html_tags);
     }
 
@@ -1557,8 +1612,13 @@ class Request
      */
     private function getAllowOriginHeaderValue()
     {
-        // Không block hoặc domain hợp lệ (domain trong danh sách hoặc là self)
-        if (!$this->restrictCrossDomain or $this->origin_key === 1 or in_array($this->origin, $this->validCrossDomains)) {
+        // Không block hoặc domain hợp lệ (domain trong danh sách hoặc là self) hoặc null và
+        if (
+            !$this->restrictCrossDomain or
+            $this->origin_key === 1 or
+            ($this->origin === 'null' and $this->allowNullOrigin and (empty($this->allowNullOriginIps) or in_array($this->remote_ip, $this->allowNullOriginIps))) or
+            in_array($this->origin, $this->validCrossDomains)
+        ) {
             $this->isOriginValid = true;
             return $this->origin;
         }

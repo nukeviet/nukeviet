@@ -8,7 +8,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if (! defined('NV_IS_MOD_RSS')) {
+if (!defined('NV_IS_MOD_RSS')) {
     die('Stop!!!');
 }
 
@@ -27,25 +27,25 @@ function nv_get_rss_link()
             $mod_data = $mod_info['module_data'];
             $mod_file = $mod_info['module_file'];
 
-            $contentrss .= "<li><span><i class=\"fa fa-rss text-warning\"></i> <a rel=\"nofollow\" title=\"" . $mod_info['custom_title'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\"><strong> " . $mod_info['custom_title'] . "</strong></span></a>";
+            $contentrss .= '<li><span><i class="fa fa-rss text-warning"></i> <a rel="nofollow" title="' . $mod_info['custom_title'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'] . '"><strong> ' . $mod_info['custom_title'] . '</strong></a></span>';
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php')) {
-                $rssarray = array();
-                include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
+                $rssarray = [];
+                include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php';
 
-                $contentrss .= "<ul>";
+                $contentrss .= '<ul>';
                 foreach ($rssarray as $key => $value) {
                     $parentid = (isset($value['parentid'])) ? $value['parentid'] : 0;
                     if ($parentid == 0) {
-                        $contentrss .= "<li><span><i class=\"fa fa-rss text-warning\"></i> <a rel=\"nofollow\" title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
+                        $contentrss .= '<li><span><i class="fa fa-rss text-warning"></i> <a rel="nofollow" title="' . $value['title'] . '" href="' . $value['link'] . '">' . $value['title'] . '</a></span>';
                         $catid = (isset($value['catid'])) ? $value['catid'] : 0;
                         if ($catid > 0) {
                             $contentrss .= nv_get_sub_rss_link($rssarray, $catid);
                         }
-                        $contentrss .= "</li>";
+                        $contentrss .= '</li>';
                     }
                 }
-                $contentrss .= "</ul>";
-                $contentrss .= "</li>";
+                $contentrss .= '</ul>';
+                $contentrss .= '</li>';
             }
         }
     }
@@ -66,12 +66,12 @@ function nv_get_sub_rss_link($rssarray, $id)
     $content .= '<ul>';
     foreach ($rssarray as $value) {
         if (isset($value['parentid']) and $value['parentid'] == $id) {
-            $content .= "<li><span><i class=\"fa fa-rss text-warning\"></i> <a rel=\"nofollow\" title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
+            $content .= '<li><span><i class="fa fa-rss text-warning"></i> <a rel="nofollow" title="' . $value['title'] . '" href="' . $value['link'] . '">' . $value['title'] . '</a></span>';
             $catid = (isset($value['catid'])) ? $value['catid'] : 0;
             if ($catid > 0) {
                 $content .= nv_get_sub_rss_link($rssarray, $catid);
             }
-            $content .= "</li>";
+            $content .= '</li>';
         }
     }
     $content .= '</ul>';
@@ -79,9 +79,8 @@ function nv_get_sub_rss_link($rssarray, $id)
 }
 
 $page_title = $module_info['site_title'];
-if (isset($array_op[0])) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-}
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $array = '';
 $content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';

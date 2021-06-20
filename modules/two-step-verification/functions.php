@@ -8,7 +8,7 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_SYSTEM')) {
+if (!defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
@@ -22,6 +22,7 @@ if (!isset($site_mods[NV_BRIDGE_USER_MODULE]) or (!defined('NV_IS_USER') and !de
 }
 
 $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
+$nv_BotManager->setPrivate();
 
 /**
  * nv_get_user_secretkey()
@@ -65,7 +66,7 @@ function nv_creat_backupcodes()
     $module_data = $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'];
     $db->query('DELETE FROM ' . $module_data . '_backupcodes WHERE userid=' . $user_info['userid']);
 
-    $new_code = array();
+    $new_code = [];
     while (sizeof($new_code) < 10) {
         $code = nv_strtolower(nv_genpass(8, 0));
         if (!in_array($code, $new_code)) {

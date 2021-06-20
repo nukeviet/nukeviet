@@ -99,6 +99,7 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PclZip' => __DIR__ . '/..' . '/vinades/pclzip/pclzip.lib.php',
     );
 

@@ -98,6 +98,14 @@
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.4.03</h5>            
+                    VINADES.,JSC (48 commits),
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a> (7 commits),
+                    <a target="_blank" href="https://github.com/zzvipro47zz">zzvipro47zz</a> (5 commits),
+                    <a target="_blank" href="https://github.com/dat.huynh@infodation.vn">dat.huynh@infodation.vn</a> (3 commits),
+                    <a target="_blank" href="https://github.com/hiidemo">hiidemo</a> (1 commits),
+                    <a target="_blank" href="https://github.com/anhtunguyen71@gmail.com">anhtunguyen71@gmail.com</a> (1 commits),
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.4.02</h5>
                     VINADES.,JSC (3 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (2 commits)</a>,

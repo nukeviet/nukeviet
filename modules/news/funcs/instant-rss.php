@@ -36,6 +36,7 @@ $gettime = empty($module_config[$module_name]['instant_articles_gettime']) ? 0 :
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
+$atomlink = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'];
 
 $catid = 0;
 if (isset($array_op[1])) {
@@ -58,6 +59,7 @@ if (!empty($catid)) {
     $channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
     $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
     $channel['description'] = $global_array_cat[$catid]['description'];
+    $atomlink .= '/' . $alias_cat_url;
 
     $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->where('status=1 AND instant_active=1' . ($gettime ? ' AND (publtime>= ' . $gettime . ' OR edittime >= ' . $gettime . ')' : ''));
 } else {
@@ -132,5 +134,5 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
     }
 }
 
-nv_rss_generate($channel, $items, 'ISO8601');
+nv_rss_generate($channel, $items, $atomlink, 'ISO8601');
 die();

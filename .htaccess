@@ -9,6 +9,7 @@
 ##################################################################################
 
 RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$
+RedirectMatch 404 ^.*\/composer\.json$
 
 ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1
 ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1
