@@ -172,8 +172,8 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
                 'ext' => nv_getextension($file_title),
                 'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                 'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
-                'url' => $is_localfile ? ($base_url . '&amp;download=1&amp;id=' . $file_id) : $file,
-                'urlpdf' => $base_url . '&amp;pdf=1&amp;id=' . $file_id,
+                'url' => $is_localfile ? ($page_url . '&amp;download=1&amp;id=' . $file_id) : $file,
+                'urlpdf' => $page_url . '&amp;pdf=1&amp;id=' . $file_id,
                 'urldoc' => $is_localfile ? $file : ('https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file)
             ];
         }
