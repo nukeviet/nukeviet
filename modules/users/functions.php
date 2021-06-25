@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_IS_MOD_USER', true);
@@ -22,16 +23,19 @@ require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 $nv_BotManager->setPrivate();
 
 /**
+ * validUserLog()
+ *
  * @param array $array_user
- * @param number $remember
- * @param array|string $oauth_data
- * @param number $current_mode
+ * @param int   $remember
+ * @param array $oauth_data
+ * @param int   $current_mode
+ * @throws PDOException
  */
 function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 {
     global $db, $global_config, $nv_Request, $lang_module, $global_users_config, $module_name, $client_info;
 
-    $remember = intval($remember);
+    $remember = (int) $remember;
     $checknum = md5(nv_genpass(10));
     $opid = empty($oauth_data) ? '' : $oauth_data['id'];
     $user = [
@@ -44,7 +48,7 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
         'current_ip' => NV_CLIENT_IP,
         'last_ip' => $array_user['last_ip'],
         'current_login' => NV_CURRENTTIME,
-        'last_login' => intval($array_user['last_login']),
+        'last_login' => (int) ($array_user['last_login']),
         'last_openid' => $array_user['last_openid'],
         'current_openid' => $opid
     ];
@@ -76,8 +80,9 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 /**
  * nv_del_user()
  *
- * @param mixed $userid
- * @return
+ * @param int $userid
+ * @return int
+ * @throws PDOException
  */
 function nv_del_user($userid)
 {
@@ -98,41 +103,40 @@ function nv_del_user($userid)
     $query = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id IN (1,2,3) AND userid=' . $userid);
     if ($query->fetchColumn()) {
         return 0;
-    } else {
-        $userdelete = (!empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
-
-        $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
-        if (!$result) {
-            return 0;
-        }
-
-        $in_groups = explode(',', $in_groups);
-
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups)) ? 7 : 4));
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
-
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
-
-        if (!empty($photo) and is_file(NV_ROOTDIR . '/' . $photo)) {
-            @nv_deletefile(NV_ROOTDIR . '/' . $photo);
-        }
-
-        $subject = $lang_module['delconfirm_email_title'];
-        $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
-        $message = nl2br($message);
-        nv_sendmail([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
-        return $userid;
     }
+    $userdelete = (!empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
+
+    $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
+    if (!$result) {
+        return 0;
+    }
+
+    $in_groups = array_map('intval', explode(',', $in_groups));
+
+    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
+    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups, true)) ? 7 : 4));
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
+
+    if (!empty($photo) and is_file(NV_ROOTDIR . '/' . $photo)) {
+        @nv_deletefile(NV_ROOTDIR . '/' . $photo);
+    }
+
+    $subject = $lang_module['delconfirm_email_title'];
+    $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
+    $message = nl2br($message);
+    nv_sendmail([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
+
+    return $userid;
 }
 
 /**
  * opidr_login()
  *
- * @param mixed $openid_info
- * @return void
+ * @param array $openid_info
  */
 function opidr_login($openid_info)
 {

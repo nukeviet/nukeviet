@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_set_dir_class()
  *
- * @param mixed $array
- * @return void
+ * @param array $array
+ * @return string
  */
 function nv_set_dir_class($array)
 {
@@ -52,9 +53,9 @@ function nv_set_dir_class($array)
 /**
  * viewdirtree()
  *
- * @param mixed $dir
- * @param mixed $currentpath
- * @return
+ * @param string $dir
+ * @param string $currentpath
+ * @return string
  */
 function viewdirtree($dir, $currentpath)
 {

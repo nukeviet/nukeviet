@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 11-10-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SITEINFO')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Eg: $id = nv_insert_logs('lang','module name','name key','note',1, 'link acess');
@@ -87,7 +88,7 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
     }
 
     if (!empty($data_search['lang'])) {
-        if (in_array($data_search['lang'], array_keys($language_array))) {
+        if (in_array($data_search['lang'], array_keys($language_array), true)) {
             $array_where[] = 'lang=' . $db->quote($data_search['lang']);
             $base_url .= '&amp;lang=' . $data_search['lang'];
         }
@@ -99,7 +100,7 @@ if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('
     }
 
     if (!empty($data_search['user'])) {
-        $user_tmp = ($data_search['user'] == 'system') ? 0 : ( int )$data_search['user'];
+        $user_tmp = ($data_search['user'] == 'system') ? 0 : (int) $data_search['user'];
 
         $array_where[] = 'userid=' . $user_tmp;
         $base_url .= '&amp;user=' . $data_search['user'];
@@ -132,7 +133,7 @@ $order['module']['order'] = $nv_Request->get_title('order_module', 'get', 'NO');
 $order['time']['order'] = $nv_Request->get_title('order_time', 'get', 'NO');
 
 foreach ($order as $key => $check) {
-    if (!in_array($check['order'], $check_order)) {
+    if (!in_array($check['order'], $check_order, true)) {
         $order[$key]['order'] = 'NO';
     }
 
@@ -183,7 +184,7 @@ $sth->execute();
 
 while ($data_i = $sth->fetch()) {
     if ($data_i['userid'] != 0) {
-        if (!in_array($data_i['userid'], $array_userid)) {
+        if (!in_array((int) $data_i['userid'], array_map('intval', $array_userid), true)) {
             $array_userid[] = $data_i['userid'];
         }
     }
@@ -252,11 +253,11 @@ foreach ($list_user as $user) {
     $array_user[] = [
         'key' => $user['userid'],
         'title' => $user['username'],
-        'selected' => (( int )$data_search['user'] == $user['userid']) ? ' selected="selected"' : ''
+        'selected' => ((int) $data_search['user'] == $user['userid']) ? ' selected="selected"' : ''
     ];
 }
 
-$logs_del = in_array('logs_del', $allow_func) ? true : false;
+$logs_del = in_array('logs_del', $allow_func, true) ? true : false;
 
 $xtpl = new XTemplate('logs.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);

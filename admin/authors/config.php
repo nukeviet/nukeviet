@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_save_file_admin_config()
  *
- * @return
+ * @return false|int
  */
 function nv_save_file_admin_config()
 {
@@ -26,7 +27,7 @@ function nv_save_file_admin_config()
     $sql = 'SELECT keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . '_config';
     $result = $db->query($sql);
     while (list($keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice) = $result->fetch(3)) {
-        $dbendtime = intval($dbendtime);
+        $dbendtime = (int) $dbendtime;
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
             if ($dbmask == -1) {
                 // Cấu hình tài khoản truy cập
@@ -58,7 +59,7 @@ function nv_save_file_admin_config()
     }
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
     $content_config .= "\$array_adminip = [];\n";
     $content_config .= $content_config_ip . "\n";
     $content_config .= "\$adv_admins = [];\n";
@@ -385,7 +386,7 @@ if ($ip_version == 4) {
 }
 
 // Xuất mask IPv6
-for ($i = 1; $i <= 128; $i++) {
+for ($i = 1; $i <= 128; ++$i) {
     $xtpl->assign('IPMASK', [
         'key' => $i,
         'title' => '/' . $i,

@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/15/2010 3:35
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+    exit('Wrong URL');
 }
 
 $act = $nv_Request->get_int('act', 'get', 0);
@@ -59,13 +60,13 @@ $aray_act = [
 
 if ($pid > 0 and isset($plans[$pid])) {
     $contents['thead'][1] = $lang_module['click_url'];
-    if ($plans_form[$pid] == 'sequential' and in_array($act, [0, 1, 3]) and empty($keyword)) {
+    if ($plans_form[$pid] == 'sequential' and in_array($act, [0, 1, 3], true) and empty($keyword)) {
         array_unshift($contents['thead'], $lang_module['weight']);
         define('NV_BANNER_WEIGHT', true);
     }
 }
 
-if (in_array($act, $aray_act)) {
+if (in_array($act, $aray_act, true)) {
     $where[] = 'act=' . $nv_Request->get_int('act', 'get');
     $contents['caption'] = $lang_module['banners_list' . $act];
 } else {

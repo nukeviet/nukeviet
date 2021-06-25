@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 10, 2011 6:04:30 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_data_config_banners')) {
     /**
      * nv_block_data_config_banners()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_data_config_banners($module, $data_block, $lang_block)
     {
@@ -42,15 +43,16 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
         }
 
         $html .= "</select>\n";
+
         return '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['idplanbanner'] . ':</label><div class="col-sm-9">' . $html . '</div></div>';
     }
 
     /**
      * nv_block_data_config_banners_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_data_config_banners_submit($module, $lang_block)
     {
@@ -70,8 +72,8 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
     /**
      * nv_block_global_banners()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string
      */
     function nv_block_global_banners($block_config)
     {
@@ -93,8 +95,8 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
             return '';
         }
 
-        $width_banners = intval($xml->width);
-        $height_banners = intval($xml->height);
+        $width_banners = (int) ($xml->width);
+        $height_banners = (int) ($xml->height);
         $array_banners = $xml->banners->banners_item;
 
         $array_banners_content = [];
@@ -154,6 +156,7 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
                 $xtpl->parse('main.loop');
             }
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }

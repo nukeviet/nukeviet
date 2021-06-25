@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $theme_config = [
@@ -27,11 +28,12 @@ $theme_config = [
 ];
 
 /**
- *  nv_mailHTML()
+ * nv_mailHTML()
  *
  * @param string $title
  * @param string $content
  * @param string $footer
+ * @return string
  */
 function nv_mailHTML($title, $content, $footer = '')
 {
@@ -52,14 +54,16 @@ function nv_mailHTML($title, $content, $footer = '')
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
- *  nv_site_theme()
+ * nv_site_theme()
  *
  * @param string $contents
- * @param bool $full
+ * @param bool   $full
+ * @return string
  */
 function nv_site_theme($contents, $full = true)
 {
@@ -289,11 +293,11 @@ function nv_site_theme($contents, $full = true)
 }
 
 /**
- *  nv_error_theme()
+ * nv_error_theme()
  *
  * @param string $title
  * @param string $content
- * @param integer $code
+ * @param int    $code
  */
 function nv_error_theme($title, $content, $code)
 {

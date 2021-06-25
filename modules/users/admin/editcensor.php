@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $table_caption = $lang_module['editcensor'];
@@ -129,7 +130,7 @@ if ($nv_Request->isset_request('approved', 'post')) {
             first_name=' . $db->quote($custom_fields['first_name']) . ',
             last_name=' . $db->quote($custom_fields['last_name']) . ',
             gender=' . $db->quote($custom_fields['gender']) . ',
-            birthday=' . intval($custom_fields['birthday']) . ',
+            birthday=' . (int) ($custom_fields['birthday']) . ',
             sig=' . $db->quote($custom_fields['sig']) . ',
             view_mail=' . $custom_fields['view_mail'] . ',
             last_update=' . NV_CURRENTTIME . '
@@ -241,7 +242,7 @@ if (!empty($reviewuid)) {
                 first_name=' . $db->quote($_user['first_name']) . ',
                 last_name=' . $db->quote($_user['last_name']) . ',
                 gender=' . $db->quote($_user['gender']) . ',
-                birthday=' . intval($_user['birthday']) . ',
+                birthday=' . (int) ($_user['birthday']) . ',
                 sig=' . $db->quote($_user['sig']) . ',
                 view_mail=' . $_user['view_mail'] . ',
                 last_update=' . NV_CURRENTTIME . '
@@ -377,11 +378,11 @@ if (!empty($reviewuid)) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
-                        'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
+                        'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                         'value' => $value
                     ]);
                     $xtpl->parse('main.custom.loop.checkbox');
-                    if (in_array($key, $valueold)) {
+                    if (in_array($key, $valueold, true)) {
                         $row['valueold'][] = $value;
                     }
                 }
@@ -394,11 +395,11 @@ if (!empty($reviewuid)) {
                 foreach ($row['field_choices'] as $key => $value) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
-                        'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
+                        'selected' => (in_array($key, $valueselect, true)) ? ' selected="selected"' : '',
                         'value' => $value
                     ]);
                     $xtpl->parse('main.custom.loop.multiselect.loop');
-                    if (in_array($key, $valueold)) {
+                    if (in_array($key, $valueold, true)) {
                         $row['valueold'][] = $value;
                     }
                 }
@@ -501,7 +502,7 @@ $db->select('tb1.userid, tb1.lastedit, tb2.username, tb2.first_name, tb2.last_na
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
 
-if (!empty($orderby) and in_array($orderby, $orders)) {
+if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? (($orderby != 'lastedit' ? 'tb2.' : 'tb1.') . $orderby) : ($global_config['name_show'] == 0 ? "concat(tb2.first_name,' ',tb2.last_name)" : "concat(tb2.last_name,' ',tb2.first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;

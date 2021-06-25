@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24/1/2011, 1:33
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get', NV_UPLOADS_DIR));
@@ -40,11 +41,11 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 } else {
     $type = $nv_Request->get_string('type', 'post,get');
 
-    if ($type == 'image' and in_array('images', $admin_info['allow_files_type'])) {
+    if ($type == 'image' and in_array('images', $admin_info['allow_files_type'], true)) {
         $allow_files_type = [
             'images'
         ];
-    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'])) {
+    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'], true)) {
         $allow_files_type = [
             'flash'
         ];
@@ -259,6 +260,5 @@ if (!empty($error)) {
     } else {
         echo $upload_info['basename'];
     }
-} else {
-    // Upload chunk hoàn thành
 }
+    // Upload chunk hoàn thành

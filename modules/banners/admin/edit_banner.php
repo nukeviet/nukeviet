@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/14/2010 0:50
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -78,8 +79,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $bannerhtml = $nv_Request->get_editor('bannerhtml', '', NV_ALLOWED_HTML_TAGS);
     $assign_user = $nv_Request->get_title('assign_user', 'post', '');
     $assign_user_id = $admin_info['userid'];
-    $remove_banner = intval($nv_Request->get_bool('remove_banner', 'post', false));
-    $remove_imageforswf = intval($nv_Request->get_bool('remove_imageforswf', 'post', false));
+    $remove_banner = (int) ($nv_Request->get_bool('remove_banner', 'post', false));
+    $remove_imageforswf = (int) ($nv_Request->get_bool('remove_imageforswf', 'post', false));
 
     if (!empty($publ_date) and !preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date)) {
         $publ_date = '';
@@ -203,7 +204,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $act = ($act != 3 and $act != 4) ? 2 : $act;
         }
 
-        $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . intval($id))->fetchColumn();
+        $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . (int) $id)->fetchColumn();
 
         $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET
             title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
@@ -268,7 +269,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     if (!empty($row['publ_time'])) {
         $publ_date = date('d/m/Y', $row['publ_time']);
         $publ_date_h = date('G', $row['publ_time']);
-        $publ_date_m = intval(date('i', $row['publ_time']));
+        $publ_date_m = (int) (date('i', $row['publ_time']));
     } else {
         $publ_date = '';
         $publ_date_h = 0;
@@ -278,7 +279,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     if (!empty($row['exp_time'])) {
         $exp_date = date('d/m/Y', $row['exp_time']);
         $exp_date_h = date('G', $row['exp_time']);
-        $exp_date_m = intval(date('i', $row['exp_time']));
+        $exp_date_m = (int) (date('i', $row['exp_time']));
     } else {
         $exp_date = '';
         $exp_date_h = 23;

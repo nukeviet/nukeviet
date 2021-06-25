@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
@@ -96,7 +97,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
     }
     $modules_list = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
     foreach ($modules_list as $module_i) {
-        if (!in_array($module_i, $array_module_seup)) {
+        if (!in_array($module_i, $array_module_seup, true)) {
             $xtpl->assign('MODULE', ['module_file' => $module_i, 'custom_title' => $module_i]);
             $xtpl->parse('main.module');
         }

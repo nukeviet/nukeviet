@@ -1,17 +1,28 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 9:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Http;
 
 use NukeViet\Core\Server;
+use ValueError;
 
+/**
+ * NukeViet\Http\Http
+ *
+ * @package NukeViet\Http
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Http extends Server
 {
     /**
@@ -23,24 +34,24 @@ class Http extends Server
     /**
      * All site config
      */
-    private static $site_config = array(
+    private static $site_config = [
         'version' => '4.x',
         'sitekey' => 'default',
         'site_charset' => 'utf-8',
-    );
+    ];
 
     /**
      * Error message and error code
      * Error code help user to show error message with optional language
      * Error message is default by english.
      */
-    public static $error = array();
+    public static $error = [];
 
     /**
+     * __construct()
      *
-     * @param mixed $config
+     * @param mixed  $config
      * @param string $tmp_dir
-     * @return
      */
     public function __construct($config, $tmp_dir = 'tmp')
     {
@@ -50,7 +61,7 @@ class Http extends Server
          * If you store this file on other folder, you must change $store_dir below
          */
         $store_dir = '/../../../../';
-        $this->root_dir = preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__file__) . $store_dir)));
+        $this->root_dir = preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__) . $store_dir)));
 
         // Custom some config
         if (!empty($config['version'])) {
@@ -78,14 +89,16 @@ class Http extends Server
     }
 
     /**
+     * request()
      *
      * @param mixed $url
      * @param mixed $args
-     * @return
+     * @return mixed
+     * @throws ValueError
      */
     private function request($url, $args)
     {
-        $defaults = array(
+        $defaults = [
             'method' => 'GET',
             'timeout' => 10,
             'redirection' => 5,
@@ -95,8 +108,8 @@ class Http extends Server
             'referer' => null,
             'reject_unsafe_urls' => false,
             'blocking' => true,
-            'headers' => array(),
-            'cookies' => array(),
+            'headers' => [],
+            'cookies' => [],
             'body' => null,
             'compress' => false,
             'decompress' => true,
@@ -105,7 +118,7 @@ class Http extends Server
             'stream' => false,
             'filename' => null,
             'limit_response_size' => null,
-        );
+        ];
 
         // Get full args
         $args = $this->build_args($args, $defaults);
@@ -116,6 +129,7 @@ class Http extends Server
         // Check valid url
         if (empty($url) or empty($infoURL['scheme'])) {
             $this->set_error(1);
+
             return false;
         }
 
@@ -147,13 +161,14 @@ class Http extends Server
             $args['blocking'] = true;
             if (!@is_writable(dirname($args['filename']))) {
                 $this->set_error(3);
+
                 return false;
             }
         }
 
         // Default header is an empty array
         if (is_null($args['headers'])) {
-            $args['headers'] = array();
+            $args['headers'] = [];
         }
 
         if (!is_array($args['headers'])) {
@@ -223,7 +238,7 @@ class Http extends Server
 
         // Append cookies that were used in this request to the response
         if (!empty($args['cookies']) and is_array($response)) {
-            $cookies_set = array();
+            $cookies_set = [];
             foreach ($response['cookies'] as $key => $value) {
                 if (is_object($value)) {
                     $cookies_set[$key] = $value->name;
@@ -233,7 +248,7 @@ class Http extends Server
             }
 
             foreach ($args['cookies'] as $cookie) {
-                if (!in_array($cookie->name, $cookies_set) and $cookie->test($url)) {
+                if (!in_array($cookie->name, $cookies_set, true) and $cookie->test($url)) {
                     $response['cookies'][] = $cookie;
                 }
             }
@@ -243,24 +258,28 @@ class Http extends Server
     }
 
     /**
+     * get_Env()
      *
-     * @param mixed $key
-     * @return
+     * @param string $key
+     * @return string
      */
     private function get_Env($key)
     {
         if (!is_array($key)) {
-            $key = array( $key );
+            $key = [$key];
         }
 
         foreach ($key as $k) {
             if (isset($_SERVER[$k])) {
                 return $_SERVER[$k];
-            } elseif (isset($_ENV[$k])) {
+            }
+            if (isset($_ENV[$k])) {
                 return $_ENV[$k];
-            } elseif (@getenv($k)) {
+            }
+            if (@getenv($k)) {
                 return @getenv($k);
-            } elseif (function_exists('apache_getenv') and apache_getenv($k, true)) {
+            }
+            if (function_exists('apache_getenv') and apache_getenv($k, true)) {
                 return apache_getenv($k, true);
             }
         }
@@ -269,26 +288,27 @@ class Http extends Server
     }
 
     /**
+     * parse_str()
      *
      * @param mixed $str
-     * @return
+     * @return array
      */
     private function parse_str($str)
     {
-        $r = array();
+        $r = [];
         parse_str($str, $r);
 
         return $r;
     }
 
     /**
+     * set_error()
      *
      * @param mixed $code
-     * @return
      */
     public static function set_error($code)
     {
-        $code = intval($code);
+        $code = (int) $code;
         $message = '';
 
         switch ($code) {
@@ -311,25 +331,27 @@ class Http extends Server
     }
 
     /**
+     * _dispatch_request()
      *
      * @param mixed $url
      * @param mixed $args
-     * @return
+     * @return mixed
      */
     private function _dispatch_request($url, $args)
     {
-        static $transports = array();
+        static $transports = [];
 
         $class = $this->_get_first_available_transport($args, $url);
 
         if (!$class) {
             $this->set_error(4);
+
             return false;
         }
 
         // Transport claims to support request, instantiate it and give it a whirl.
         if (empty($transports[$class])) {
-            $transports[$class] = new $class;
+            $transports[$class] = new $class();
         }
 
         $response = $transports[$class]->request($url, $args);
@@ -338,13 +360,14 @@ class Http extends Server
     }
 
     /**
+     * mbstring_binary_safe_encoding()
      *
      * @param bool $reset
-     * @return
+     * @throws ValueError
      */
     public static function mbstring_binary_safe_encoding($reset = false)
     {
-        static $encodings = array();
+        static $encodings = [];
         static $overloaded = null;
 
         if (is_null($overloaded)) {
@@ -368,8 +391,9 @@ class Http extends Server
     }
 
     /**
+     * reset_mbstring_encoding()
      *
-     * @return
+     * @throws ValueError
      */
     public static function reset_mbstring_encoding()
     {
@@ -377,11 +401,13 @@ class Http extends Server
     }
 
     /**
+     * handle_redirects()
      *
      * @param mixed $url
      * @param mixed $args
      * @param mixed $response
-     * @return
+     * @return mixed
+     * @throws ValueError
      */
     public static function handle_redirects($url, $args, $response)
     {
@@ -396,8 +422,9 @@ class Http extends Server
         }
 
         // Don't redirect if we've run out of redirects
-        if ($args['redirection'] -- <= 0) {
+        if ($args['redirection']-- <= 0) {
             $this->set_error(5);
+
             return false;
         }
 
@@ -412,7 +439,7 @@ class Http extends Server
 
         // POST requests should not POST to a redirected location
         if ($args['method'] == 'POST') {
-            if (in_array($response['response']['code'], array(302, 303))) {
+            if (in_array((int) $response['response']['code'], [302, 303], true)) {
                 $args['method'] = 'GET';
             }
         }
@@ -426,15 +453,17 @@ class Http extends Server
             }
         }
 
-        $http = new Http(array(), null);
+        $http = new Http([], null);
+
         return $http->request($redirect_location, $args);
     }
 
     /**
+     * make_absolute_url()
      *
      * @param mixed $maybe_relative_path
      * @param mixed $url
-     * @return
+     * @return mixed
      */
     public static function make_absolute_url($maybe_relative_path, $url)
     {
@@ -494,18 +523,18 @@ class Http extends Server
     }
 
     /**
-     *
-     * @return
+     * reset()
      */
     public function reset()
     {
-        $this->error = array();
+        $this->error = [];
     }
 
     /**
+     * is_error()
      *
      * @param mixed $resources
-     * @return
+     * @return bool
      */
     public function is_error($resources)
     {
@@ -517,21 +546,22 @@ class Http extends Server
     }
 
     /**
+     * _get_first_available_transport()
      *
-     * @param mixed $args
-     * @param mixed $url
-     * @return
+     * @param mixed      $args
+     * @param mixed|null $url
+     * @return false|string
      */
     public function _get_first_available_transport($args, $url = null)
     {
-        $request_order = array('Curl', 'Streams');
+        $request_order = ['Curl', 'Streams'];
 
         // Loop over each transport on each HTTP request looking for one which will serve this request's needs
         foreach ($request_order as $transport) {
             $class = 'NukeViet\\Http\\' . $transport;
 
             // Check to see if this transport is a possibility, calls the transport statically
-            if (!call_user_func(array( $class, 'test' ), $args, $url)) {
+            if (!call_user_func([$class, 'test'], $args, $url)) {
                 continue;
             }
 
@@ -542,10 +572,11 @@ class Http extends Server
     }
 
     /**
+     * build_args()
      *
      * @param mixed $args
      * @param mixed $defaults
-     * @return
+     * @return mixed
      */
     public static function build_args($args, $defaults)
     {
@@ -559,22 +590,24 @@ class Http extends Server
     }
 
     /**
+     * processResponse()
      *
      * @param mixed $strResponse
-     * @return
+     * @return string[]
      */
     public static function processResponse($strResponse)
     {
         $res = explode("\r\n\r\n", $strResponse, 2);
 
-        return array( 'headers' => $res[0], 'body' => isset($res[1]) ? $res[1] : '' );
+        return ['headers' => $res[0], 'body' => isset($res[1]) ? $res[1] : ''];
     }
 
     /**
+     * processHeaders()
      *
-     * @param mixed $headers
+     * @param mixed  $headers
      * @param string $url
-     * @return
+     * @return array
      */
     public static function processHeaders($headers, $url = '')
     {
@@ -585,23 +618,23 @@ class Http extends Server
             $headers = explode("\n", $headers);
         }
 
-        $response = array(
+        $response = [
             'code' => 0,
             'message' => ''
-        );
+        ];
 
         // If a redirection has taken place, The headers for each page request may have been passed.
         // In this case, determine the final HTTP header and parse from there.
-        for ($i = sizeof($headers) - 1; $i >= 0; $i --) {
+        for ($i = sizeof($headers) - 1; $i >= 0; --$i) {
             if (!empty($headers[$i]) and strpos($headers[$i], ':') === false) {
                 $headers = array_splice($headers, $i);
                 break;
             }
         }
 
-        $cookies = array();
-        $newheaders = array();
-        foreach (( array ) $headers as $tempheader) {
+        $cookies = [];
+        $newheaders = [];
+        foreach ((array) $headers as $tempheader) {
             if (empty($tempheader)) {
                 continue;
             }
@@ -620,7 +653,7 @@ class Http extends Server
 
             if (isset($newheaders[$key])) {
                 if (!is_array($newheaders[$key])) {
-                    $newheaders[$key] = array( $newheaders[$key] );
+                    $newheaders[$key] = [$newheaders[$key]];
                 }
 
                 $newheaders[$key][] = $value;
@@ -633,17 +666,17 @@ class Http extends Server
             }
         }
 
-        return array(
+        return [
             'response' => $response,
             'headers' => $newheaders,
             'cookies' => $cookies
-        );
+        ];
     }
 
     /**
+     * buildCookieHeader()
      *
      * @param mixed $args
-     * @return
      */
     public static function buildCookieHeader(&$args)
     {
@@ -651,12 +684,12 @@ class Http extends Server
             // Upgrade any name => value cookie pairs to NukeViet\Http\Cookie instances
             foreach ($args['cookies'] as $name => $value) {
                 if (!is_object($value)) {
-                    $args['cookies'][$name] = new Cookie(array( 'name' => $name, 'value' => $value ));
+                    $args['cookies'][$name] = new Cookie(['name' => $name, 'value' => $value]);
                 }
             }
 
             $cookies_header = '';
-            foreach (( array ) $args['cookies'] as $cookie) {
+            foreach ((array) $args['cookies'] as $cookie) {
                 $cookies_header .= $cookie->getHeaderValue() . '; ';
             }
 
@@ -666,9 +699,10 @@ class Http extends Server
     }
 
     /**
+     * is_ip_address()
      *
      * @param mixed $maybe_ip
-     * @return
+     * @return false|int
      */
     public static function is_ip_address($maybe_ip)
     {
@@ -684,41 +718,50 @@ class Http extends Server
     }
 
     /**
+     * post()
      *
      * @param mixed $url
-     * @param mixed $args
-     * @return
+     * @param array $args
+     * @return mixed
+     * @throws ValueError
      */
-    public function post($url, $args = array())
+    public function post($url, $args = [])
     {
-        $defaults = array( 'method' => 'POST' );
+        $defaults = ['method' => 'POST'];
         $args = $this->build_args($args, $defaults);
+
         return $this->request($url, $args);
     }
 
     /**
+     * get()
      *
      * @param mixed $url
-     * @param mixed $args
-     * @return
+     * @param array $args
+     * @return mixed
+     * @throws ValueError
      */
-    public function get($url, $args = array())
+    public function get($url, $args = [])
     {
-        $defaults = array( 'method' => 'GET' );
+        $defaults = ['method' => 'GET'];
         $args = $this->build_args($args, $defaults);
+
         return $this->request($url, $args);
     }
 
     /**
+     * head()
      *
      * @param mixed $url
-     * @param mixed $args
-     * @return
+     * @param array $args
+     * @return mixed
+     * @throws ValueError
      */
-    public function head($url, $args = array())
+    public function head($url, $args = [])
     {
-        $defaults = array('method' => 'HEAD');
+        $defaults = ['method' => 'HEAD'];
         $args = $this->build_args($args, $defaults);
+
         return $this->request($url, $args);
     }
 }

@@ -1,22 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 23/8/2010, 0:13
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * utf8_to_unicode()
- * Vie^.t Nam => Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 )
+ * Vie^.t Nam => Array ([0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109)
+ *
  * @param mixed $str
- * @return
+ * @return array
  */
 function utf8_to_unicode($str)
 {
@@ -52,10 +54,11 @@ function utf8_to_unicode($str)
 
 /**
  * unicode_to_entities()
- * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 ) => &#86;&#105;&#7879;&#116;&#32;&#78;&#97;&#109;
+ * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 )
+ * => &#86;&#105;&#7879;&#116;&#32;&#78;&#97;&#109;
  *
- * @param mixed $unicode
- * @return
+ * @param array $unicode
+ * @return string
  */
 function unicode_to_entities($unicode)
 {
@@ -63,15 +66,17 @@ function unicode_to_entities($unicode)
     foreach ($unicode as $value) {
         $entities .= '&#' . $value . ';';
     }
+
     return $entities;
 }
 
 /**
  * unicode_to_entities_preserving_ascii()
- * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 ) => Vi&#7879;t Nam
+ * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 )
+ * => Vi&#7879;t Nam
  *
- * @param mixed $unicode
- * @return
+ * @param array $unicode
+ * @return string
  */
 function unicode_to_entities_preserving_ascii($unicode)
 {
@@ -79,15 +84,17 @@ function unicode_to_entities_preserving_ascii($unicode)
     foreach ($unicode as $value) {
         $entities .= ($value > 127) ? '&#' . $value . ';' : chr($value);
     }
+
     return $entities;
 }
 
 /**
  * unicode_to_utf8()
- * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 ) => Vie^.t Nam
+ * Array ( [0] => 86 [1] => 105 [2] => 7879 [3] => 116 [4] => 32 [5] => 78 [6] => 97 [7] => 109 )
+ * => Vie^.t Nam
  *
- * @param mixed $str
- * @return
+ * @param array $str
+ * @return string
  */
 function unicode_to_utf8($str)
 {
@@ -112,9 +119,9 @@ function unicode_to_utf8($str)
 /**
  * nv_str_split()
  *
- * @param mixed $str
- * @param integer $split_len
- * @return
+ * @param string $str
+ * @param int    $split_len
+ * @return array|false
  */
 function nv_str_split($str, $split_len = 1)
 {
@@ -128,17 +135,18 @@ function nv_str_split($str, $split_len = 1)
     }
 
     preg_match_all('/.{' . $split_len . '}|[^\x00]{1,' . $split_len . '}$/us', $str, $ar);
+
     return $ar[0];
 }
 
 /**
  * nv_strspn()
  *
- * @param mixed $str
- * @param mixed $mask
- * @param mixed $start
- * @param mixed $length
- * @return
+ * @param string   $str
+ * @param string   $mask
+ * @param int|null $start
+ * @param int|null $length
+ * @return false|int|null
  */
 function nv_strspn($str, $mask, $start = null, $length = null)
 {
@@ -158,8 +166,8 @@ function nv_strspn($str, $mask, $start = null, $length = null)
 /**
  * nv_ucfirst()
  *
- * @param mixed $str
- * @return
+ * @param string $str
+ * @return false|string|null
  */
 function nv_ucfirst($str)
 {
@@ -167,13 +175,12 @@ function nv_ucfirst($str)
         case 0:
             return '';
             break;
-
         case 1:
             return nv_strtoupper($str);
             break;
-
         default:
             preg_match('/^(.{1})(.*)$/us', $str, $matches);
+
             return nv_strtoupper($matches[1]) . $matches[2];
             break;
     }
@@ -182,9 +189,9 @@ function nv_ucfirst($str)
 /**
  * nv_ltrim()
  *
- * @param mixed $str
- * @param bool $charlist
- * @return
+ * @param string $str
+ * @param bool   $charlist
+ * @return string|null
  */
 function nv_ltrim($str, $charlist = false)
 {
@@ -200,9 +207,9 @@ function nv_ltrim($str, $charlist = false)
 /**
  * nv_rtrim()
  *
- * @param mixed $str
- * @param bool $charlist
- * @return
+ * @param string $str
+ * @param bool   $charlist
+ * @return string|null
  */
 function nv_rtrim($str, $charlist = false)
 {
@@ -218,9 +225,9 @@ function nv_rtrim($str, $charlist = false)
 /**
  * nv_trim()
  *
- * @param mixed $str
- * @param bool $charlist
- * @return
+ * @param string $str
+ * @param bool   $charlist
+ * @return string|null
  */
 function nv_trim($str, $charlist = false)
 {
@@ -234,8 +241,8 @@ function nv_trim($str, $charlist = false)
 /**
  * nv_EncString()
  *
- * @param mixed $str
- * @return
+ * @param string $string
+ * @return string
  */
 function nv_EncString($string)
 {
@@ -245,41 +252,45 @@ function nv_EncString($string)
     }
 
     include NV_ROOTDIR . '/includes/utf8/lookup.php';
+
     return strtr($string, $utf8_lookup['romanize']);
 }
 
 /**
  * change_alias()
  *
- * @return
+ * @param string $alias
+ * @return string|null
  */
 function change_alias($alias)
 {
     $alias = preg_replace('/[\x{0300}\x{0301}\x{0303}\x{0309}\x{0323}]/u', '', $alias); // fix unicode consortium for Vietnamese
     $search = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
-    $alias = preg_replace(['/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/'], [' ', '-', '', ''], str_replace($search, ' ', nv_EncString($alias)));
-    return $alias;
+
+    return preg_replace(['/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/'], [' ', '-', '', ''], str_replace($search, ' ', nv_EncString($alias)));
 }
 
 /**
  * change_alias_tags()
  *
- * @return
+ * @param string $alias
+ * @return string|null
  */
 function change_alias_tags($alias)
 {
     // Pho phép dấu .
     $search = ['&lt;lt;', '&gt;gt;', '&#039;', '&quot;', '&lt;', '&gt;', '!', '*', '\'', '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '#', '[', ']', '"', '%', '-', '_', '<', '>', '\\', '^', '`', '{', '|', '}', '~'];
-    $alias = preg_replace(['/[ ]+/u', '/^[\-]+/u', '/[\-]+$/u'], ['-', '', ''], str_replace($search, ' ', $alias));
-    return $alias;
+
+    return preg_replace(['/[ ]+/u', '/^[\-]+/u', '/[\-]+$/u'], ['-', '', ''], str_replace($search, ' ', $alias));
 }
 
 /**
  * nv_clean60()
  *
- * @param mixed $string
- * @param integer $num
- * @return
+ * @param string $string
+ * @param int    $num
+ * @param bool   $specialchars
+ * @return false|string
  */
 function nv_clean60($string, $num = 60, $specialchars = true)
 {
@@ -308,9 +319,9 @@ if (!function_exists('str_contains')) {
     /**
      * str_contains()
      *
-     * @param mixed $haystack
-     * @param mixed $needle
-     * @return
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
      */
     function str_contains($haystack, $needle)
     {
@@ -322,9 +333,9 @@ if (!function_exists('str_starts_with')) {
     /**
      * str_starts_with()
      *
-     * @param mixed $haystack
-     * @param mixed $needle
-     * @return
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
      */
     function str_starts_with($haystack, $needle)
     {
@@ -336,13 +347,14 @@ if (!function_exists('str_ends_with')) {
     /**
      * str_ends_with()
      *
-     * @param mixed $haystack
-     * @param mixed $needle
-     * @return
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
      */
     function str_ends_with($haystack, $needle)
     {
         $length = nv_strlen($needle);
+
         return $length > 0 ? nv_substr($haystack, -$length, $length) === $needle : true;
     }
 }

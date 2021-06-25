@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:37
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -89,9 +90,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $run_file = $row['run_file'];
     $run_func = $row['run_func'];
     $params = !empty($row['params']) ? implode(', ', explode(',', $row['params'])) : '';
-    $interval = intval($row['inter_val']);
-    $del = intval($row['del']);
-    $inter_val_type = intval($row['inter_val_type']);
+    $interval = (int) ($row['inter_val']);
+    $del = (int) ($row['del']);
+    $inter_val_type = (int) ($row['inter_val_type']);
     $start_time = $row['start_time'];
     list($min, $hour) = array_map('trim', explode(',', date('i,G', $row['start_time'])));
 }

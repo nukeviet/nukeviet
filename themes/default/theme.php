@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $theme_config = [
@@ -27,6 +28,8 @@ $theme_config = [
 ];
 
 /**
+ * nv_mailHTML()
+ *
  * @param string $title
  * @param string $content
  * @param string $footer
@@ -51,13 +54,16 @@ function nv_mailHTML($title, $content, $footer = '')
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
+ * nv_site_theme()
+ *
  * @param string $contents
- * @param boolean $full
- * @return mixed|string
+ * @param bool   $full
+ * @return string
  */
 function nv_site_theme($contents, $full = true)
 {
@@ -95,7 +101,7 @@ function nv_site_theme($contents, $full = true)
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
     $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . NV_TITLEBAR_DEFIS . $lang_global['admin_page'] . NV_TITLEBAR_DEFIS . $module_info['custom_title']);
     $xtpl->assign('SITE_DESCRIPTION', $global_config['site_description']);
-    $xtpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['user_check_pass_time']) - 62) * 1000);
+    $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['user_check_pass_time']) - 62) * 1000);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
@@ -335,7 +341,7 @@ function nv_site_theme($contents, $full = true)
                 'd' => 'desktop',
                 'm' => 'mobile'
             ];
-            $current_theme_type = (isset($global_config['current_theme_type']) and !empty($global_config['current_theme_type']) and in_array($global_config['current_theme_type'], array_keys($icons))) ? $global_config['current_theme_type'] : 'd';
+            $current_theme_type = (isset($global_config['current_theme_type']) and !empty($global_config['current_theme_type']) and in_array($global_config['current_theme_type'], array_keys($icons), true)) ? $global_config['current_theme_type'] : 'd';
             foreach ($array_theme_type as $theme_type) {
                 $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
                 $xtpl->assign('STHEME_TITLE', $lang_global['theme_type_' . $theme_type]);
@@ -388,9 +394,11 @@ function nv_site_theme($contents, $full = true)
 }
 
 /**
+ * nv_error_theme()
+ *
  * @param string $title
  * @param string $content
- * @param integer $code
+ * @param int    $code
  */
 function nv_error_theme($title, $content, $code)
 {

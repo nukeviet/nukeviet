@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 18:49
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $catid = $nv_Request->get_int('catid', 'post', 0);
@@ -20,11 +21,11 @@ if ($catid > 0) {
     if ((defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1))) {
         $delallcheckss = $nv_Request->get_string('delallcheckss', 'post', '');
         $check_parentid = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $catid)->fetchColumn();
-        if (intval($check_parentid) > 0) {
+        if ((int) $check_parentid > 0) {
             $contents = 'ERR_CAT_' . sprintf($lang_module['delcat_msg_cat'], $check_parentid);
         } else {
             $check_rows = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->fetchColumn();
-            if (intval($check_rows) > 0) {
+            if ((int) $check_rows > 0) {
                 if ($delallcheckss == md5($catid . NV_CHECK_SESSION)) {
                     $delcatandrows = $nv_Request->get_string('delcatandrows', 'post', '');
                     $movecat = $nv_Request->get_string('movecat', 'post', '');
@@ -105,7 +106,7 @@ if ($catid > 0) {
                         $nv_Cache->delMod($module_name);
                         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid);
                     } elseif (!empty($movecat) and $catidnews > 0 and $catidnews != $catid) {
-                        /**
+                        /*
                          * Khi xóa chuyên mục và di chuyển bài viết sang chuyên mục khác thì
                          * vẫn có trường hợp bài viết này còn trong các chuyên mục khác mà chuyên mục đó
                          * vẫn đang bị đình chỉ, do đó phải kiểm tra sau khi di chuyển có còn ở trong
@@ -117,7 +118,7 @@ if ($catid > 0) {
 
                             $array_cat_locked = [];
                             foreach ($global_array_cat as $catid_i => $array_value) {
-                                if ($catid_i != $catid and !in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
+                                if ($catid_i != $catid and !in_array((int) $array_value['status'], array_map('intval', $global_code_defined['cat_visible_status']), true)) {
                                     $array_cat_locked[] = $catid_i;
                                 }
                             }
@@ -131,7 +132,7 @@ if ($catid > 0) {
                                 ];
                                 $arr_catid_news = array_diff($arr_catid_old, $arr_catid_i);
                                 // Chép vào bảng catid nếu tin này trước đó chưa thuộc chuyên mục được chuyển tới
-                                if (!in_array($catidnews, $arr_catid_news)) {
+                                if (!in_array((int) $catidnews, array_map('intval', $arr_catid_news), true)) {
                                     try {
                                         $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catidnews . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $row['id']);
                                         $arr_catid_news[] = $catidnews;

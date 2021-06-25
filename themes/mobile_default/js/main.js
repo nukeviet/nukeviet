@@ -1,9 +1,10 @@
-/* *
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var gEInterval,
@@ -74,9 +75,9 @@ function contentScrt() {
 }
 
 function checkAll(a) {
-    $(".checkAll", a).is(":checked") ? $(".checkSingle", a).not(":disabled").each(function() {
+    $(".checkAll", a).is(":checked") ? $(".checkSingle", a).not(":disabled").each(function () {
         $(this).prop("checked", !0)
-    }) : $(".checkSingle", a).not(":disabled").each(function() {
+    }) : $(".checkSingle", a).not(":disabled").each(function () {
         $(this).prop("checked", !1)
     });
     return !1
@@ -85,7 +86,7 @@ function checkAll(a) {
 function checkSingle(a) {
     var b = 0,
         c = 0;
-    $(".checkSingle", a).each(function() {
+    $(".checkSingle", a).each(function () {
         $(this).is(":checked") ? b++ : c++
     });
     0 != b && 0 == c ? $(".checkAll", a).prop("checked", !0) : $(".checkAll", a).prop("checked", !1);
@@ -123,7 +124,7 @@ function tipShow(a, b, callback) {
     $("[data-toggle=tip]").removeClass("active");
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
-        $("#tip").attr("data-content", b).show("fast", function() {
+        $("#tip").attr("data-content", b).show("fast", function () {
             if (callback == "recaptchareset") {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
@@ -154,7 +155,7 @@ function ftipShow(a, b, callback) {
     $("[data-toggle=ftip]").removeClass("active");
     $(a).attr("data-click", "n").addClass("active");
     if (typeof callback != "undefined") {
-        $("#ftip").attr("data-content", b).show("fast", function() {
+        $("#ftip").attr("data-content", b).show("fast", function () {
             if (callback == "recaptchareset") {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
@@ -181,7 +182,7 @@ function ctbtLoad(a) {
         url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + a.attr("data-module"),
         data: "loadForm=1&checkss=" + a.attr("data-cs"),
         dataType: "html",
-        success: function(c) {
+        success: function (c) {
             b.html(c);
             change_captcha();
             a.attr("data-load", "yes").click()
@@ -200,7 +201,7 @@ function openID_load(a) {
 function openID_result() {
     var a = $("#openidResult");
     a.fadeIn();
-    setTimeout(function() {
+    setTimeout(function () {
         "" != a.data("redirect") ? window.location.href = a.data("redirect") : "success" == a.data("result") ? location.reload() : a.hide(0).html("").data("result", "").data("redirect", "")
     }, 5E3)
 }
@@ -209,7 +210,7 @@ function openID_result() {
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
-    $(b).on("load", function() {
+    $(b).on("load", function () {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
@@ -236,7 +237,7 @@ function loginForm() {
         cache: !1,
         data: "&nv_ajax=1",
         dataType: "html"
-    }).done(function(a) {
+    }).done(function (a) {
         modalShow("", a)
     });
     return !1
@@ -251,7 +252,7 @@ function modalShow(a, b, callback) {
     if (typeof callback != "undefined") {
         if (callback == "recaptchareset") {
             scrollTop = $(window).scrollTop();
-            $('#sitemodal').on('show.bs.modal', function() {
+            $('#sitemodal').on('show.bs.modal', function () {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
@@ -264,12 +265,12 @@ function modalShow(a, b, callback) {
     if (scrollTop) {
         $("html,body").animate({
             scrollTop: 0
-        }, 200, function() {
+        }, 200, function () {
             $("#sitemodal").modal({
                 backdrop: "static"
             });
         });
-        $('#sitemodal').on('hide.bs.modal', function() {
+        $('#sitemodal').on('hide.bs.modal', function () {
             $("html,body").animate({
                 scrollTop: scrollTop
             }, 200);
@@ -279,7 +280,7 @@ function modalShow(a, b, callback) {
             backdrop: "static"
         });
     }
-    $('#sitemodal').on('hidden.bs.modal', function() {
+    $('#sitemodal').on('hidden.bs.modal', function () {
         $("#sitemodal .modal-content").find(".modal-header").remove();
     });
 }
@@ -312,7 +313,7 @@ function showSubBreadcrumbs(a, b) {
     b.stopPropagation();
     $("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
     subbreadcrumbs.toggleClass("open");
-    $(document).on("click", function() {
+    $(document).on("click", function () {
         $("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), subbreadcrumbs.removeClass("open"))
     })
 }
@@ -324,9 +325,9 @@ function nvbreadcrumbs() {
         d = [],
         e = !1,
         f;
-    if (a.length && subbreadcrumbs.length && tempbreadcrumbs.length) for (a.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
+    if (a.length && subbreadcrumbs.length && tempbreadcrumbs.length) for (a.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function () {
         d.push([$(this).attr("title"), $(this).attr("href")])
-    }), i = d.length - 1; 0 <= i; i--) e || (f = 0, a.prepend('<li id="brcr_' + i + '"><a href="' + d[i][1] + '"><span>' + d[i][0] + "</span></a></li>"), a.find("li").each(function() {
+    }), i = d.length - 1; 0 <= i; i--) e || (f = 0, a.prepend('<li id="brcr_' + i + '"><a href="' + d[i][1] + '"><span>' + d[i][0] + "</span></a></li>"), a.find("li").each(function () {
         f += $(this).outerWidth(!0)
     }), f > c && ($("#brcr_" + i, a).remove(), e = !0)), e ? (b.show(), subbreadcrumbs.append('<li><a href="' + d[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + d[i][0] + "</span></a></li>")) : b.hide()
 }
@@ -353,7 +354,7 @@ function isRecaptchaCheck() {
 }
 
 function reCaptcha2Recreate(a) {
-    $("[data-toggle=recaptcha]", $(a)).each(function() {
+    $("[data-toggle=recaptcha]", $(a)).each(function () {
         var b = $(this).data("pnum"),
             c = $(this).data("btnselector"),
             d = $(this).data("size") && "compact" == $(this).data("size") ? "compact" : "",
@@ -362,8 +363,8 @@ function reCaptcha2Recreate(a) {
     })
 }
 
-var reCaptcha2OnLoad = function() {
-    $("[data-toggle=recaptcha]").each(function() {
+var reCaptcha2OnLoad = function () {
+    $("[data-toggle=recaptcha]").each(function () {
         var id = $(this).attr("id"),
             pnum = parseInt($(this).data("pnum")),
             btnselector = $(this).data("btnselector"),
@@ -377,13 +378,13 @@ var reCaptcha2OnLoad = function() {
             "sitekey": nv_recaptcha_sitekey,
             "type": nv_recaptcha_type,
             "size": size,
-            "callback": function() {
+            "callback": function () {
                 reCaptcha2Callback(id, false)
             },
-            "expired-callback": function() {
+            "expired-callback": function () {
                 reCaptcha2Callback(id, true)
             },
-            "error-callback": function() {
+            "error-callback": function () {
                 reCaptcha2Callback(id, true)
             }
         });
@@ -392,7 +393,7 @@ var reCaptcha2OnLoad = function() {
 }
 
 // reCaptcha v2 callback
-var reCaptcha2Callback = function(id, val) {
+var reCaptcha2Callback = function (id, val) {
     var btn = $("#" + id),
         pnum = parseInt(btn.data("pnum")),
         btnselector = btn.data("btnselector"),
@@ -403,7 +404,7 @@ var reCaptcha2Callback = function(id, val) {
 }
 
 // reCaptcha v2 load
-reCaptcha2ApiLoad = function() {
+reCaptcha2ApiLoad = function () {
     if (2 == isRecaptchaCheck()) {
         var a = document.createElement("script");
         a.type = "text/javascript";
@@ -413,26 +414,26 @@ reCaptcha2ApiLoad = function() {
 }
 
 // reCaptcha v3: reCaptcha3OnLoad
-var reCaptcha3OnLoad = function() {
-    grecaptcha.ready(function() {
+var reCaptcha3OnLoad = function () {
+    grecaptcha.ready(function () {
         $("[data-recaptcha3]").length && (clearInterval(gEInterval), grecaptcha.execute(nv_recaptcha_sitekey, {
             action: "formSubmit"
-        }).then(function(a) {
-            $("[data-recaptcha3]").each(function() {
+        }).then(function (a) {
+            $("[data-recaptcha3]").each(function () {
                 if ($("[name=g-recaptcha-response]", this).length) $("[name=g-recaptcha-response]", this).val(a);
                 else {
                     var b = $('<input type="hidden" name="g-recaptcha-response" value="' + a + '"/>');
                     $(this).append(b)
                 }
             })
-        }), gEInterval = setTimeout(function() {
+        }), gEInterval = setTimeout(function () {
             reCaptcha3OnLoad()
         }, 12E4))
     })
 }
 
 // reCaptcha v3 API load
-var reCaptcha3ApiLoad = function() {
+var reCaptcha3ApiLoad = function () {
     if (isRecaptchaCheck() == 3) {
         var a = document.createElement("script");
         a.type = "text/javascript";
@@ -442,7 +443,7 @@ var reCaptcha3ApiLoad = function() {
 }
 
 // NukeViet Default Custom JS
-$(function() {
+$(function () {
     winResize();
     // Modify all empty link
     $('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
@@ -451,7 +452,7 @@ $(function() {
     $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({ target: "_blank", rel: "noopener noreferrer nofollow" });
 
     // Smooth scroll to top
-    $(".bttop").click(function() {
+    $(".bttop").click(function () {
         if ($(this).find("em").is(".fa-chevron-up")) {
             $('html,body').animate({ scrollTop: 0 }, 200);
         } else if ($(this).find("em").is(".fa-refresh")) {
@@ -459,20 +460,20 @@ $(function() {
         }
         return !1
     });
-    $(document).on("keydown", function(a) {
+    $(document).on("keydown", function (a) {
         27 === a.keyCode && (tip_active && tip_autoclose && tipHide(), ftip_active && ftip_autoclose && ftipHide(), winHelp && winHelpHide())
     });
-    $("#tip, #ftip, #winHelp .winHelp").bind("click touchstart", function(a) {
+    $("#tip, #ftip, #winHelp .winHelp").bind("click touchstart", function (a) {
         a.stopPropagation();
     });
-    $(document).bind("click touchstart", function(e) {
+    $(document).bind("click touchstart", function (e) {
         tip_active && tip_autoclose && tipHide();
         ftip_active && ftip_autoclose && ftipHide();
         if (!$(e.target).is('.modal') && $(e.target).closest('.modal').length <= 0 && $(e.target).closest('[data-toggle=winHelp]').length <= 0) {
             winHelp && winHelpHide();
         }
     });
-    $("[data-toggle=tip], [data-toggle=ftip]").click(function() {
+    $("[data-toggle=tip], [data-toggle=ftip]").click(function () {
         var a = $(this).attr("data-target"),
             c = $(a).html(),
             d = $(this).attr("data-toggle"),
@@ -483,12 +484,12 @@ $(function() {
         }), tipShow(this, a, callback)) : ($("#ftip").html(c), ftipShow(this, a, callback))) : "n" == $(this).attr("data-click") ? "tip" == d ? tipHide() : ftipHide() : "tip" == d ? tipShow(this, a) : ftipShow(this, a);
         return !1
     });
-    $("[data-toggle=winHelp]").click(function() {
+    $("[data-toggle=winHelp]").click(function () {
         winHelpShow();
         return !1
     });
     //Search form
-    $(".headerSearch button").on("click", function() {
+    $(".headerSearch button").on("click", function () {
         if ("n" == $(this).attr("data-click")) {
             return !1;
         }
@@ -501,13 +502,13 @@ $(function() {
         "" == b || b.length < d || b.length > c ? (a.parent().addClass("has-error"), a.val(b).focus(), $(this).attr("data-click", "y")) : window.location.href = $(this).attr("data-url") + rawurlencode(b);
         return !1
     });
-    $(".headerSearch input").on("keypress", function(a) {
+    $(".headerSearch input").on("keypress", function (a) {
         13 != a.which || a.shiftKey || (a.preventDefault(), $(".headerSearch button").trigger("click"))
     });
-    $(window).scroll(function() {
+    $(window).scroll(function () {
         didScroll = true;
     });
-    setInterval(function() {
+    setInterval(function () {
         if (didScroll) {
             winResize();
             contentScrt();
@@ -520,12 +521,12 @@ $(function() {
         $("body").append(script)
     }
     // Change site lang
-    $(".nv_change_site_lang").change(function() {
+    $(".nv_change_site_lang").change(function () {
         document.location = $(this).val();
     });
     // Google map
     if ($('.company-address').length) {
-        $('.company-map-modal').on('shown.bs.modal', function() {
+        $('.company-map-modal').on('shown.bs.modal', function () {
             var iframe = $(this).find('iframe');
             if (!iframe.data('loaded')) {
                 iframe.attr('src', iframe.data('src'));
@@ -534,7 +535,7 @@ $(function() {
         });
     }
     // maxLength for textarea
-    $("textarea").on("input propertychange", function() {
+    $("textarea").on("input propertychange", function () {
         var a = $(this).prop("maxLength");
         if (!a || "number" != typeof a) {
             var a = $(this).attr("maxlength"),
@@ -543,61 +544,61 @@ $(function() {
         }
     });
     //Alerts
-    $("[data-dismiss=alert]").on("click", function() {
+    $("[data-dismiss=alert]").on("click", function () {
         $(this).is(".close") && $(this).parent().remove()
     });
     //OpenID
-    $("#openidBt").on("click", function() {
+    $("#openidBt").on("click", function () {
         openID_result();
         return !1
     });
     //Change Localtion
-    $("[data-location]").on("click", function() {
+    $("[data-location]").on("click", function () {
         locationReplace($(this).data("location"))
     });
 });
 
 // Fix bootstrap multiple modal
 $(document).on({
-    'show.bs.modal': function() {
+    'show.bs.modal': function () {
         var zIndex = 1040 + (10 * $('.modal:visible').length);
         $(this).css('z-index', zIndex);
-        setTimeout(function() {
+        setTimeout(function () {
             $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
         }, 0);
     },
-    'hidden.bs.modal': function() {
+    'hidden.bs.modal': function () {
         if ($('.modal:visible').length > 0) {
-            setTimeout(function() {
+            setTimeout(function () {
                 $(document.body).addClass('modal-open');
             }, 0);
         }
     }
 }, '.modal');
 
-$(window).on("resize", function() {
+$(window).on("resize", function () {
     winResize();
     nvbreadcrumbs();
     //if (150 < cRangeX || 150 < cRangeY) tip_active && tipHide(), winHelp && winHelpHide()
 });
 
 // Load Social script - lasest
-$(window).on('load', function() {
+$(window).on('load', function () {
     nvbreadcrumbs();
-    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function (a, b, c) {
         var d = a.getElementsByTagName(b)[0];
         var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
         var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
         a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
     }(document, "script", "facebook-jssdk"));
-    0 < $(".twitter-share-button").length && function() {
+    0 < $(".twitter-share-button").length && function () {
         var a = document.createElement("script");
         a.type = "text/javascript";
         a.src = "//platform.twitter.com/widgets.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }();
-    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
+    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function () {
         var a = document.createElement("script");
         a.type = "text/javascript";
         a.src = "//sp.zalo.me/plugins/sdk.js";

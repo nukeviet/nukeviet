@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 19/3/2010 22:58
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var seccodecheck = /^([a-zA-Z0-9])+$/;
@@ -68,9 +69,9 @@ function login2step_change(ele) {
     return false;
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Submit form
-    $('#admin-login-form').submit(function(e) {
+    $('#admin-login-form').submit(function (e) {
         var validForm = true;
 
         if ($('.loginStep1', $(this)).is(':visible')) {
@@ -113,7 +114,7 @@ $(document).ready(function() {
     }
 
     // Mở popup (chưa sử dụng nhưng để đây phòng về sau)
-    $('[data-toggle="popup-oauth"]').on('click', function(e) {
+    $('[data-toggle="popup-oauth"]').on('click', function (e) {
         nv_open_browse($(this)[0], "NVADMINOAUTH", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
         e.preventDefault();
     });

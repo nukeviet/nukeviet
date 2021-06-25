@@ -1,17 +1,18 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/30/2009 6:18
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_ADMIN', true);
 
 //Xac dinh thu muc goc cua site
-define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
+define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__FILE__, PATHINFO_DIRNAME) . '/../')));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
@@ -166,7 +167,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
         }
 
-        if (in_array($op, $allow_func)) {
+        if (in_array($op, $allow_func, true)) {
             $admin_menu_mods = [];
             if (!empty($menu_top) and !empty($submenu)) {
                 $admin_menu_mods[$module_name] = $menu_top['custom_title'];
@@ -180,9 +181,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
             require $include_file;
             exit();
-        } else {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func'], 404);
         }
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func'], 404);
     } elseif (isset($site_mods[$module_name]) and $op == 'main') {
         $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=0 WHERE title= :module_name');
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);

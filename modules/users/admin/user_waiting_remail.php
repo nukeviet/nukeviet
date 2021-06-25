@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['userwait_resend_email'];
@@ -20,6 +21,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
     $offset = $nv_Request->get_int('offset', 'post', 0);
     $tokend = $nv_Request->get_title('tokend', 'post', '');
     $useriddel = array_unique(array_filter(array_map('trim', explode(',', $nv_Request->get_title('useriddel', 'post', '')))));
+    $useriddel = array_map('intval', $useriddel);
 
     $respon = [
         'continue' => false,
@@ -40,7 +42,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                 // Kiểm tra xem email đã tồn tại chưa nếu có xóa đi
                 if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email=' . $db->quote($row['email']))->fetchColumn()) {
                     $respon['messages'][] = $row['email'] . ': ' . $lang_module['userwait_resend_delete'];
-                    if (!in_array($row['userid'], $useriddel)) {
+                    if (!in_array((int) $row['userid'], $useriddel, true)) {
                         $useriddel[] = $row['userid'];
                     }
                 } else {

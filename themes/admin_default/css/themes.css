@@ -1,44 +1,56 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 .margin-bottom {
     margin-bottom: 10px;
 }
 
 .exp_time {
-	line-height: 20px
+    line-height: 20px;
 }
 
 .exp_time input {
-	float: left
+    float: left;
 }
 
 .exp_time img {
-	float: left;
-	margin: 2px
+    float: left;
+    margin: 2px;
 }
 
-.content{
-	padding: 5px;
+.content {
+    padding: 5px;
 }
 
-.bg-gainsboro{
-    background-color:#C0C0C0
+.bg-gainsboro {
+    background-color: #c0c0c0;
 }
 
 .hr {
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-bottom-color: #dadada;
-	margin: 5px 0
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #dadada;
+    margin: 5px 0;
 }
 
 .requie {
-	color: red
+    color: red;
 }
 
 #shows_all_func td {
-	background-color: #f9f9f9
+    background-color: #f9f9f9;
 }
 
-.container {width: 100%; margin: 10px auto;}
+.container {
+    width: 100%;
+    margin: 10px auto;
+}
 ul.tabs {
     margin: 0;
     padding: 0;
@@ -58,7 +70,7 @@ ul.tabs li {
     border: 1px solid #999;
     border-left: none;
     margin-bottom: -1px;
-    background: #F0F0F0;
+    background: #f0f0f0;
     overflow: hidden;
     position: relative;
 }
@@ -74,7 +86,8 @@ ul.tabs li a {
 ul.tabs li a:hover {
     background: #ccc;
 }
-html ul.tabs li.active, html ul.tabs li.active a:hover  {
+html ul.tabs li.active,
+html ul.tabs li.active a:hover {
     background: #fff;
     border-bottom: 1px solid #fff;
 }
@@ -104,11 +117,11 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
     margin-bottom: 0;
 }
 
-.checkbox > div > label [type="checkbox"] {
+.checkbox > div > label [type='checkbox'] {
     margin-top: 0;
 }
 
-.radio > label [type="radio"] {
+.radio > label [type='radio'] {
     margin-top: 0;
 }
 
@@ -132,9 +145,9 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 }
 
 @media (max-width: 767px) {
-.margin-bottom-sm {
-    margin-bottom: 15px;
-}
+    .margin-bottom-sm {
+        margin-bottom: 15px;
+    }
 }
 
 /*
@@ -212,20 +225,20 @@ div.colpick {
 .nv-themelist:hover,
 .nv-themelist.active {
     border-color: #0074a2;
-    box-shadow: 0 0 2px rgba(0,116,162,.8);
+    box-shadow: 0 0 2px rgba(0, 116, 162, 0.8);
 }
 
 .nv-themelist .themelistthumb {
     display: block;
     overflow: hidden;
     position: relative;
-    transition: opacity .2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
     border-bottom: #ddd 1px solid;
     background-color: #fff;
 }
 
 .nv-themelist .themelistthumb:after {
-    content: "";
+    content: '';
     display: block;
     padding-top: 66.66666%;
 }
@@ -236,7 +249,7 @@ div.colpick {
     left: 0;
     top: 0;
     width: 100%;
-    transition: opacity .2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .nv-themelist:hover .themelistthumb img {
@@ -251,18 +264,18 @@ div.colpick {
     transform: translateY(-50%);
     padding: 0 20px;
     display: none;
-    transition: opacity .1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
 }
 
 .nv-themelist:hover .themelistthumb .actions {
     display: block;
-    transition: opacity .1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
 }
 
 .nv-themelist .themelistthumb .actions .ctn .btn {
     background: #23282d;
-    background: rgba(0,0,0,.7);
-    transition: opacity .1s ease-in-out;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 0.1s ease-in-out;
     margin-bottom: 10px;
     color: #fff;
     border-color: transparent;
@@ -284,12 +297,12 @@ div.colpick {
 
 .nv-themelist .themedetail {
     display: none;
-    transition: opacity .2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .nv-themelist:hover .themedetail {
     display: block;
-    transition: opacity .2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 /* THÔNG TIN CHI TIẾT GIAO DIỆN */

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 18:49
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
@@ -30,7 +31,7 @@ if ($bid > 0) {
         nv_news_fix_block($bid);
         $content = 'OK_' . $bid;
     } elseif ($id > 0) {
-        list($bid, $id) = $db->query('SELECT bid, id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . intval($bid) . ' AND id=' . intval($id))->fetch(3);
+        list($bid, $id) = $db->query('SELECT bid, id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . (int) $bid . ' AND id=' . (int) $id)->fetch(3);
         if ($bid > 0 and $id > 0) {
             if ($mod == 'weight' and $new_vid > 0) {
                 $query = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id!=' . $id . ' ORDER BY weight ASC';
@@ -42,17 +43,17 @@ if ($bid > 0) {
                     if ($weight == $new_vid) {
                         ++$weight;
                     }
-                    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . intval($row['id']);
+                    $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . (int) ($row['id']);
                     $db->query($sql);
                 }
 
                 $result->closeCursor();
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $new_vid . ' WHERE bid=' . $bid . ' AND id=' . intval($id);
+                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $new_vid . ' WHERE bid=' . $bid . ' AND id=' . (int) $id;
                 $db->query($sql);
 
                 $content = 'OK_' . $bid;
             } elseif ($mod == 'delete') {
-                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . intval($id));
+                $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . (int) $id);
                 $content = 'OK_' . $bid;
             }
         }

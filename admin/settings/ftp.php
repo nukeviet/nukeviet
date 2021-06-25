@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $error = '';
@@ -39,34 +40,33 @@ if ($sys_info['ftp_support']) {
     // Tu dong nhan dang Remove Path
     if ($nv_Request->isset_request('tetectftp', 'post')) {
         $ftp_server = nv_unhtmlspecialchars($array_config['ftp_server']);
-        $ftp_port = intval($array_config['ftp_port']);
+        $ftp_port = (int) ($array_config['ftp_port']);
         $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
         $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
 
         if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
-            die('ERROR|' . $lang_module['ftp_error_full']);
+            exit('ERROR|' . $lang_module['ftp_error_full']);
         }
 
         $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, ['timeout' => 10], $ftp_port);
 
         if (!empty($ftp->error)) {
             $ftp->close();
-            die('ERROR|' . ( string )$ftp->error);
-        } else {
-            $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
-            $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
+            exit('ERROR|' . (string) $ftp->error);
+        }
+        $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
+        $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
-            if ($ftp_root === false) {
-                $ftp->close();
-                die('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : ( string )$ftp->error));
-            }
-
+        if ($ftp_root === false) {
             $ftp->close();
-            die('OK|' . $ftp_root);
+            exit('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : (string) $ftp->error));
         }
 
         $ftp->close();
-        die('ERROR|' . $lang_module['ftp_error_detect_root']);
+        exit('OK|' . $ftp_root);
+
+        $ftp->close();
+        exit('ERROR|' . $lang_module['ftp_error_detect_root']);
     }
 
     if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
@@ -74,7 +74,7 @@ if ($sys_info['ftp_support']) {
 
         if (!empty($array_config['ftp_server']) and !empty($array_config['ftp_user_name']) and !empty($array_config['ftp_user_pass'])) {
             $ftp_server = nv_unhtmlspecialchars($array_config['ftp_server']);
-            $ftp_port = intval($array_config['ftp_port']);
+            $ftp_port = (int) ($array_config['ftp_port']);
             $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($array_config['ftp_path']);
@@ -83,7 +83,7 @@ if ($sys_info['ftp_support']) {
 
             if (!empty($ftp->error)) {
                 $array_config['ftp_check_login'] = 3;
-                $error = ( string )$ftp->error;
+                $error = (string) $ftp->error;
             } elseif ($ftp->chdir($ftp_path) === false) {
                 $array_config['ftp_check_login'] = 2;
                 $error = $lang_global['ftp_error_path'];
@@ -94,7 +94,7 @@ if ($sys_info['ftp_support']) {
                 $a = 0;
                 if (!empty($list_files)) {
                     foreach ($list_files as $filename) {
-                        if (in_array($filename['name'], $check_files)) {
+                        if (in_array($filename['name'], $check_files, true)) {
                             ++$a;
                         }
                     }

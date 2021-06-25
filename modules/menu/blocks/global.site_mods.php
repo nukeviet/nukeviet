@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_menu_site_mods')) {
     /**
      * nv_menu_site_mods_config()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_menu_site_mods_config($module, $data_block, $lang_block)
     {
@@ -44,21 +45,22 @@ if (!nv_function_exists('nv_menu_site_mods')) {
 
         $array_no_show = ['comment', 'menu'];
         foreach ($site_mods as $modname => $modvalues) {
-            if (!in_array($modname, $array_no_show)) {
-                $checked = in_array($modname, $data_block['module_in_menu']) ? ' checked="checked"' : '';
+            if (!in_array($modname, $array_no_show, true)) {
+                $checked = in_array($modname, $data_block['module_in_menu'], true) ? ' checked="checked"' : '';
                 $html .= '<div class="w150 pull-left"><div class="ellipsis"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div></div>';
             }
         }
         $html .= '</div></div>';
+
         return $html;
     }
 
     /**
      * nv_menu_site_mods_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_menu_site_mods_submit($module, $lang_block)
     {
@@ -67,15 +69,15 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         $return['error'] = [];
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
         $return['config']['module_in_menu'] = $nv_Request->get_typed_array('module_in_menu', 'post', 'string');
+
         return $return;
     }
 
     /**
      * nv_menu_site_mods()
      *
-     * @param mixed $block_config
-     * @return
-     *
+     * @param array $block_config
+     * @return string
      */
     function nv_menu_site_mods($block_config)
     {
@@ -96,7 +98,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 
         foreach ($site_mods as $modname => $modvalues) {
-            if (in_array($modname, $block_config['module_in_menu']) and !empty($modvalues['funcs'])) {
+            if (in_array($modname, $block_config['module_in_menu'], true) and !empty($modvalues['funcs'])) {
                 $array_menu = [
                     'title' => $modvalues['custom_title'],
                     'title_trim' => nv_clean60($modvalues['custom_title'], $block_config['title_length']),
@@ -202,15 +204,16 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
     /**
      * nv_menu_site_mods_submenu()
      *
-     * @param mixed $sub_nav_item
-     * @param mixed $block_theme
-     * @return
+     * @param array  $sub_nav_item
+     * @param string $block_theme
+     * @return string
      */
     function nv_menu_site_mods_submenu($sub_nav_item, $block_theme)
     {
@@ -221,6 +224,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
             $xtpl->parse('submenu.loop');
         }
         $xtpl->parse('submenu');
+
         return $xtpl->text('submenu');
     }
 }

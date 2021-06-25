@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sat, 10 Dec 2011 06:46:54 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_news_groups')) {
     /**
      * nv_block_config_news_groups()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_news_groups($module, $data_block, $lang_block)
     {
@@ -32,7 +33,6 @@ if (!nv_function_exists('nv_block_news_groups')) {
             'right' => $lang_block['tooltip_position_right']
         ];
         $html_input = '';
-
         $html = '';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $lang_block['blockid'] . ':</label>';
@@ -91,15 +91,16 @@ if (!nv_function_exists('nv_block_news_groups')) {
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * nv_block_config_news_groups_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_config_news_groups_submit($module, $lang_block)
     {
@@ -113,14 +114,15 @@ if (!nv_function_exists('nv_block_news_groups')) {
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
         $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
         $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
+
         return $return;
     }
 
     /**
      * nv_block_news_groups()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string|void
      */
     function nv_block_news_groups($block_config)
     {
@@ -190,6 +192,7 @@ if (!nv_function_exists('nv_block_news_groups')) {
             }
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }

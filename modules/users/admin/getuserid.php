@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 26/5/2011, 23:28
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $area = $nv_Request->get_title('area', 'get', '');
@@ -222,7 +223,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
     $select_return = 'userid, username, email, regdate';
     $_array_f_return = explode(',', $select_return);
     $_array_f_return = array_map('trim', $_array_f_return);
-    $return = (in_array($return, $_array_f_return)) ? $return : 'userid';
+    $return = (in_array($return, $_array_f_return, true)) ? $return : 'userid';
 
     if ($access_viewlist) {
         $db->select($select_return)

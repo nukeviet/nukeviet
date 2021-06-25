@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 1:58
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $allow_func = ['main', 'language', 'smtp'];
@@ -99,6 +100,7 @@ function nv_admin_add_theme($contents)
     $xtpl->assign('DELETE', !empty($contents['del'][1]) ? ' checked="checked"' : '');
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -154,7 +156,7 @@ function main_theme($contents)
 
 /**
  * Cập nhật lại thời điểm thực hiện tiếp theo của Cronjob
- * @return boolean
+ * @return bool
  */
 function update_cronjob_next_time()
 {

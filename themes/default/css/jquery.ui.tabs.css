@@ -17,7 +17,7 @@
 
 #topnews .ui-tabs .ui-tabs-nav {
     margin: 0;
-    width: 100%
+    width: 100%;
 }
 
 #topnews .ui-tabs .ui-tabs-nav li {
@@ -40,7 +40,7 @@
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active {
-    margin-bottom: 0
+    margin-bottom: 0;
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
@@ -48,27 +48,30 @@
     color: #fff;
     display: block;
     float: left;
-    height: 23px
+    height: 23px;
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a span {
     background: #fff url(../images/tabs_l.png) no-repeat top left;
     float: left;
     height: 18px;
-    padding: 0 0 0 4px
+    padding: 0 0 0 4px;
 }
 
 #topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a span span {
     background: url(../images/tabs_r.png) no-repeat top right;
-    padding: 0 4px 0 0
+    padding: 0 4px 0 0;
 }
 
-#topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a {
-    cursor: text
+#topnews .ui-tabs .ui-tabs-nav li.ui-tabs-active a,
+.ui-tabs .ui-tabs-nav li.ui-state-disabled a,
+.ui-tabs .ui-tabs-nav li.ui-state-processing a {
+    cursor: text;
 }
 
-#topnews .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a {
-    cursor: pointer
+#topnews .ui-tabs .ui-tabs-nav li a,
+.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a {
+    cursor: pointer;
 }
 
 #topnews .ui-tabs .ui-tabs-panel {
@@ -82,5 +85,5 @@
 }
 
 #topnews .ui-tabs .ui-tabs-hide {
-    display: none !important
+    display: none !important;
 }

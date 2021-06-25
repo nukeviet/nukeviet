@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['edit_title'];
@@ -75,7 +76,9 @@ while ($row_gru = $result_gru->fetch()) {
 $row['in_groups'] = empty($row['in_groups']) ? [] : explode(',', $row['in_groups']);
 $array_old_groups[] = $row['group_id'];
 $array_old_groups_all = array_unique(array_filter(array_map('trim', array_merge_recursive($array_old_groups, $row['in_groups']))));
+$array_old_groups_all = array_map('intval', $array_old_groups_all);
 $array_old_groups = array_diff($array_old_groups_all, [4, 7]);
+$array_old_groups = array_map('intval', $array_old_groups);
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
@@ -215,12 +218,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     $in_groups = [];
     // Khi là thành viên mới thì không thể chọn thuộc các nhóm khác
-    if (!in_array(7, $array_old_groups_all) or $_user['is_official']) {
+    if (!in_array(7, $array_old_groups_all, true) or $_user['is_official']) {
         foreach (array_keys($groups_list) as $_group_id) {
-            if (!empty($rowlev) and $_group_id < 4 and in_array($_group_id, $array_old_groups)) {
+            if (!empty($rowlev) and $_group_id < 4 and in_array((int) $_group_id, $array_old_groups, true)) {
                 // Thêm vào các nhóm quản trị khi tài khoản này là quản trị
                 $in_groups[] = $_group_id;
-            } elseif ($_group_id > 9 and in_array($_group_id, $_user['in_groups'])) {
+            } elseif ($_group_id > 9 and in_array((int) $_group_id, array_map('intval', $_user['in_groups']), true)) {
                 // Các nhóm tài khoản trong phần quản lý nhóm thành viên
                 $in_groups[] = $_group_id;
             }
@@ -244,13 +247,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     // Kiểm tra nhóm thành viên mặc định phải thuộc các nhóm đã chọn
-    if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $in_groups)) {
+    if (!empty($_user['in_groups_default']) and !in_array((int) $_user['in_groups_default'], array_map('intval', $in_groups), true)) {
         $_user['in_groups_default'] = 0;
     }
 
     // Khi không chọn nhóm mặc định thì tự xác định nhóm mặc định theo từng bước
     if (empty($_user['in_groups_default'])) {
-        if (in_array(7, $array_old_groups_all) and !$_user['is_official']) {
+        if (in_array(7, $array_old_groups_all, true) and !$_user['is_official']) {
             // Tài khoản đang là tài khoản mới và không cho làm tài khoản chính thức => Mặc định là tài khoản mới
             $_user['in_groups_default'] = 7;
         } else {
@@ -259,7 +262,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
     }
 
-    if (in_array(7, $array_old_groups_all)) {
+    if (in_array(7, $array_old_groups_all, true)) {
         if (!$_user['is_official']) {
             $_user['in_groups_default'] = 7;
             $in_groups[] = 7;
@@ -336,7 +339,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         last_name=' . $db->quote($_user['last_name']) . ',
         gender=' . $db->quote($_user['gender']) . ',
         photo=' . $db->quote(nv_unhtmlspecialchars($_user['photo'])) . ',
-        birthday=' . intval($_user['birthday']) . ',
+        birthday=' . (int) ($_user['birthday']) . ',
         sig=' . $db->quote($_user['sig']) . ',
         question=' . $db->quote($_user['question']) . ',
         answer=' . $db->quote($_user['answer']) . ',
@@ -400,9 +403,9 @@ if (!empty($groups_list)) {
         $groups[] = [
             'id' => $group_id,
             'title' => $grtl,
-            'checked' => (in_array($group_id, $_user['in_groups'])) ? ' checked="checked"' : '',
-            'default' => (in_array($group_id, $_user['in_groups']) and $_user['group_id'] == $group_id) ? ' checked="checked"' : '',
-            'default_show' => in_array($group_id, $_user['in_groups']) ? '' : ' style="display: none;"'
+            'checked' => (in_array((int) $group_id, $_user['in_groups'], true)) ? ' checked="checked"' : '',
+            'default' => (in_array((int) $group_id, $_user['in_groups'], true) and $_user['group_id'] == $group_id) ? ' checked="checked"' : '',
+            'default_show' => in_array((int) $group_id, $_user['in_groups'], true) ? '' : ' style="display: none;"'
         ];
     }
 }
@@ -431,7 +434,7 @@ if (defined('NV_IS_USER_FORUM')) {
         $xtpl->parse('main.edit_user.add_photo');
     }
 
-    $xtpl->assign('SHOW_BTN_CLEAR', (sizeof($array_old_groups) > 0 and !in_array(7, $array_old_groups_all)) ? '' : ' style="display: none;"');
+    $xtpl->assign('SHOW_BTN_CLEAR', (sizeof($array_old_groups) > 0 and !in_array(7, $array_old_groups_all, true)) ? '' : ' style="display: none;"');
 
     $a = 0;
     foreach ($groups as $group) {
@@ -446,7 +449,7 @@ if (defined('NV_IS_USER_FORUM')) {
         }
     }
     if ($a > 0) {
-        if (in_array(7, $array_old_groups_all)) {
+        if (in_array(7, $array_old_groups_all, true)) {
             $xtpl->parse('main.edit_user.group.hide');
         }
         $xtpl->parse('main.edit_user.group');
@@ -456,7 +459,7 @@ if (defined('NV_IS_USER_FORUM')) {
         $xtpl->parse('main.edit_user.changepass');
     }
 
-    if (in_array(7, $array_old_groups_all)) {
+    if (in_array(7, $array_old_groups_all, true)) {
         $xtpl->parse('main.edit_user.is_official');
     }
 
@@ -553,7 +556,7 @@ if (defined('NV_IS_USER_FORUM')) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
-                        'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
+                        'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                         'value' => $value
                     ]);
                     $xtpl->parse('main.edit_user.field.loop.checkbox');
@@ -563,7 +566,7 @@ if (defined('NV_IS_USER_FORUM')) {
                 foreach ($row['field_choices'] as $key => $value) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
-                        'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
+                        'selected' => (in_array($key, $valueselect, true)) ? ' selected="selected"' : '',
                         'value' => $value
                     ]);
                     $xtpl->parse('main.edit_user.field.loop.multiselect.loop');

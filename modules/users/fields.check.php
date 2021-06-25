@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/5/2012 11:29
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Gọi global biến này vì có thể file này include từ trong hàm
@@ -44,7 +45,7 @@ foreach ($array_field_config as $row_f) {
                     'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                 ]);
             } else {
-                $value = ($number_type == 1) ? intval($value) : floatval($value);
+                $value = ($number_type == 1) ? (int) $value : (float) $value;
 
                 if ($value < $row_f['min_length'] or $value > $row_f['max_length']) {
                     nv_jsonOutput([
@@ -56,9 +57,9 @@ foreach ($array_field_config as $row_f) {
             }
         } elseif ($row_f['field_type'] == 'date') {
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $value, $m)) {
-                $m[1] = intval($m[1]);
-                $m[2] = intval($m[2]);
-                $m[3] = intval($m[3]);
+                $m[1] = (int) ($m[1]);
+                $m[2] = (int) ($m[2]);
+                $m[3] = (int) ($m[3]);
                 $value = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
 
                 if ($row_f['min_length'] > 0 and ($value < $row_f['min_length'] or $value > $row_f['max_length'])) {
@@ -238,7 +239,7 @@ foreach ($array_field_config as $row_f) {
 
     if (empty($row_f['system'])) {
         if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-            $value = floatval($value);
+            $value = (float) $value;
             $valid_field[$row_f['field']] = $value;
         } else {
             $valid_field[$row_f['field']] = $value;

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Xuất ajax autocomplete các dòng sự kiện
@@ -322,14 +323,14 @@ if ($rowcontent['id'] == 0) {
 $array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = [];
 $array_cat_locked = [];
 foreach ($global_array_cat as $catid_i => $array_value) {
-    if (!in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
+    if (!in_array((int) $array_value['status'], array_map('intval', $global_code_defined['cat_visible_status']), true)) {
         $array_cat_locked[] = $catid_i;
     }
-    /**
+    /*
      * Đăng bài thì kiểm tra chuyên mục không bị đình chỉ
      * Sửa bài thì kiểm tra thêm cả chuyên mục bị đình chỉ và bài viết đang sửa thuộc chuyên mục đó
      */
-    if (in_array($array_value['status'], $global_code_defined['cat_visible_status']) or ($rowcontent['id'] > 0 and in_array($catid_i, $rowcontent['old_listcatid']))) {
+    if (in_array((int) $array_value['status'], array_map('intval', $global_code_defined['cat_visible_status']), true) or ($rowcontent['id'] > 0 and in_array($catid_i, $rowcontent['old_listcatid'], true))) {
         $check_add_content = $check_pub_content = $check_edit_content = $check_censor_content = false;
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_add_content = $check_pub_content = $check_edit_content = $check_censor_content = true;
@@ -370,7 +371,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     }
 }
 
-/**
+/*
  * Kiểm tra bị chiếm quyền sửa hoặc cố tình sửa bài của người đang sửa
  * Kiểm tra nếu đang sửa bài, đang thêm bài hoặc copy bài thì không kiểm tra
  * Đưa lên trước khi submit để tránh trường hợp đang sửa bài bị người khác chiếm quyền
@@ -390,7 +391,7 @@ if ($rowcontent['mode'] == 'edit') {
                 ip=' . $db->quote($client_info['ip']) . '
             WHERE id=' . $rowcontent['id']);
         } elseif ($row_tmp['time_late'] < (NV_CURRENTTIME - $global_code_defined['edit_timeout']) or empty($_username)) {
-            /**
+            /*
              * Cho phép sửa nếu:
              * - Người đang sửa 3 phút không thao tác đến
              * - Không tồn tại thành viên nữa (có thể bị xóa tài khoản)
@@ -473,7 +474,7 @@ if ($is_submit_form) {
 
     $message_error_show = $lang_module['permissions_pub_error'];
     if ($rowcontent['status'] == 1) {
-        $array_cat_check_content = $array_cat_pub_content;
+        $array_cat_check_content = array_map('intval', $array_cat_pub_content);
     } elseif ($rowcontent['status'] == 1 and $rowcontent['publtime'] <= NV_CURRENTTIME) {
         $array_cat_check_content = $array_cat_edit_content;
     } elseif ($rowcontent['status'] == 0) {
@@ -484,12 +485,12 @@ if ($is_submit_form) {
     }
 
     foreach ($catids as $catid_i) {
-        if (!in_array($catid_i, $array_cat_check_content)) {
+        if (!in_array($catid_i, $array_cat_check_content, true)) {
             $error[] = sprintf($message_error_show, $global_array_cat[$catid_i]['title']);
         }
     }
     if (!empty($catids)) {
-        $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
+        $rowcontent['catid'] = in_array($rowcontent['catid'], $catids, true) ? $rowcontent['catid'] : $catids[0];
     }
 
     $rowcontent['topicid'] = $nv_Request->get_int('topicid', 'post', 0);
@@ -630,7 +631,7 @@ if ($is_submit_form) {
 
         if (sizeof($tags_return) < 20) {
             foreach ($tags as $tag_i) {
-                if (!in_array($tag_i, $tags_return)) {
+                if (!in_array($tag_i, $tags_return, true)) {
                     $tags_return[] = $tag_i;
                     if (sizeof($tags_return) > 20) {
                         break;
@@ -680,7 +681,7 @@ if ($is_submit_form) {
     if (empty($error)) {
         if (!empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
-            $weightopic = intval($weightopic) + 1;
+            $weightopic = (int) $weightopic + 1;
             $aliastopic = get_mod_alias($rowcontent['topictext'], 'topics');
             $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
             $data_insert = [];
@@ -704,7 +705,7 @@ if ($is_submit_form) {
 
                 if (empty($rowcontent['sourceid'])) {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-                    $weight = intval($weight) + 1;
+                    $weight = (int) $weight + 1;
                     $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title ,:sourceid_link, '', :weight, " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
 
                     $data_insert = [];
@@ -724,7 +725,7 @@ if ($is_submit_form) {
 
                 if (empty($rowcontent['sourceid'])) {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-                    $weight = intval($weight) + 1;
+                    $weight = (int) $weight + 1;
                     $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, '', '', " . $weight . ' , ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
                     $data_insert = [];
                     $data_insert['title'] = $rowcontent['sourcetext'];
@@ -758,7 +759,7 @@ if ($is_submit_form) {
         // Xử lý lưu vào CSDL khi đăng mới hoặc sao chép
         if ($rowcontent['id'] == 0 or $copy) {
             // Toàn quyền module trở lên được đăng bài lùi về sau
-            if (!$NV_IS_ADMIN_FULL_MODULE and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
+            if (!$NV_IS_ADMIN_FULL_MODULE and (int) ($rowcontent['publtime']) < NV_CURRENTTIME) {
                 $rowcontent['publtime'] = NV_CURRENTTIME;
             }
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
@@ -778,43 +779,43 @@ if ($is_submit_form) {
             }
 
             $_weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
-            $_weight = intval($_weight) + 1;
+            $_weight = (int) $_weight + 1;
 
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
                 catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext,
                 homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template,
                 instant_creatauto
             ) VALUES (
-                 ' . intval($rowcontent['catid']) . ',
+                 ' . (int) ($rowcontent['catid']) . ',
                  :listcatid,
                  ' . $rowcontent['topicid'] . ',
-                 ' . intval($rowcontent['admin_id']) . ',
+                 ' . (int) ($rowcontent['admin_id']) . ',
                  :author,
-                 ' . intval($rowcontent['sourceid']) . ',
-                 ' . intval($rowcontent['addtime']) . ',
-                 ' . intval($rowcontent['edittime']) . ',
-                 ' . intval($rowcontent['status']) . ',
+                 ' . (int) ($rowcontent['sourceid']) . ',
+                 ' . (int) ($rowcontent['addtime']) . ',
+                 ' . (int) ($rowcontent['edittime']) . ',
+                 ' . (int) ($rowcontent['status']) . ',
                  ' . $_weight . ',
-                 ' . intval($rowcontent['publtime']) . ',
-                 ' . intval($rowcontent['exptime']) . ',
-                 ' . intval($rowcontent['archive']) . ',
+                 ' . (int) ($rowcontent['publtime']) . ',
+                 ' . (int) ($rowcontent['exptime']) . ',
+                 ' . (int) ($rowcontent['archive']) . ',
                  :title,
                  :alias,
                  :hometext,
                  :homeimgfile,
                  :homeimgalt,
                  :homeimgthumb,
-                 ' . intval($rowcontent['inhome']) . ',
+                 ' . (int) ($rowcontent['inhome']) . ',
                  :allowed_comm,
-                 ' . intval($rowcontent['allowed_rating']) . ',
-                 ' . intval($rowcontent['external_link']) . ',
-                 ' . intval($rowcontent['hitstotal']) . ',
-                 ' . intval($rowcontent['hitscm']) . ',
-                 ' . intval($rowcontent['total_rating']) . ',
-                 ' . intval($rowcontent['click_rating']) . ',
-                 ' . intval($rowcontent['instant_active']) . ',
+                 ' . (int) ($rowcontent['allowed_rating']) . ',
+                 ' . (int) ($rowcontent['external_link']) . ',
+                 ' . (int) ($rowcontent['hitstotal']) . ',
+                 ' . (int) ($rowcontent['hitscm']) . ',
+                 ' . (int) ($rowcontent['total_rating']) . ',
+                 ' . (int) ($rowcontent['click_rating']) . ',
+                 ' . (int) ($rowcontent['instant_active']) . ',
                  :instant_template,
-                 ' . intval($rowcontent['instant_creatauto']) . ')';
+                 ' . (int) ($rowcontent['instant_creatauto']) . ')';
 
             $data_insert = [];
             $data_insert['listcatid'] = $rowcontent['listcatid'];
@@ -896,7 +897,7 @@ if ($is_submit_form) {
             }
 
             // Toàn quyền module trở lên được sửa thời gian đăng bài lùi về sau
-            if (!$NV_IS_ADMIN_FULL_MODULE and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
+            if (!$NV_IS_ADMIN_FULL_MODULE and (int) ($rowcontent['publtime']) < (int) ($rowcontent_old['addtime'])) {
                 $rowcontent['publtime'] = $rowcontent_old['addtime'];
             }
 
@@ -910,28 +911,28 @@ if ($is_submit_form) {
             }
 
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
-                catid=' . intval($rowcontent['catid']) . ',
+                catid=' . (int) ($rowcontent['catid']) . ',
                 listcatid=:listcatid,
                 topicid=' . $rowcontent['topicid'] . ',
                 author=:author,
-                sourceid=' . intval($rowcontent['sourceid']) . ',
-                status=' . intval($rowcontent['status']) . ',
-                publtime=' . intval($rowcontent['publtime']) . ',
-                exptime=' . intval($rowcontent['exptime']) . ',
-                archive=' . intval($rowcontent['archive']) . ',
+                sourceid=' . (int) ($rowcontent['sourceid']) . ',
+                status=' . (int) ($rowcontent['status']) . ',
+                publtime=' . (int) ($rowcontent['publtime']) . ',
+                exptime=' . (int) ($rowcontent['exptime']) . ',
+                archive=' . (int) ($rowcontent['archive']) . ',
                 title=:title,
                 alias=:alias,
                 hometext=:hometext,
                 homeimgfile=:homeimgfile,
                 homeimgalt=:homeimgalt,
                 homeimgthumb=:homeimgthumb,
-                inhome=' . intval($rowcontent['inhome']) . ',
+                inhome=' . (int) ($rowcontent['inhome']) . ',
                 allowed_comm=:allowed_comm,
-                allowed_rating=' . intval($rowcontent['allowed_rating']) . ',
-                external_link=' . intval($rowcontent['external_link']) . ',
-                instant_active=' . intval($rowcontent['instant_active']) . ',
+                allowed_rating=' . (int) ($rowcontent['allowed_rating']) . ',
+                external_link=' . (int) ($rowcontent['external_link']) . ',
+                instant_active=' . (int) ($rowcontent['instant_active']) . ',
                 instant_template=:instant_template,
-                instant_creatauto=' . intval($rowcontent['instant_creatauto']) . ',
+                instant_creatauto=' . (int) ($rowcontent['instant_creatauto']) . ',
                 edittime=' . NV_CURRENTTIME . '
             WHERE id =' . $rowcontent['id']);
 
@@ -957,12 +958,12 @@ if ($is_submit_form) {
                     keywords=:keywords,
                     sourcetext=:sourcetext,
                     files=:files,
-                    imgposition=' . intval($rowcontent['imgposition']) . ',
+                    imgposition=' . (int) ($rowcontent['imgposition']) . ',
                     layout_func=:layout_func,
-                    copyright=' . intval($rowcontent['copyright']) . ',
-                    allowed_send=' . intval($rowcontent['allowed_send']) . ',
-                    allowed_print=' . intval($rowcontent['allowed_print']) . ',
-                    allowed_save=' . intval($rowcontent['allowed_save']) . '
+                    copyright=' . (int) ($rowcontent['copyright']) . ',
+                    allowed_send=' . (int) ($rowcontent['allowed_send']) . ',
+                    allowed_print=' . (int) ($rowcontent['allowed_print']) . ',
+                    allowed_save=' . (int) ($rowcontent['allowed_save']) . '
                 WHERE id =' . $rowcontent['id']);
 
                 $sth->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
@@ -981,7 +982,7 @@ if ($is_submit_form) {
                     $array_cat_diff = array_diff($array_cat_old, $array_cat_new);
                     foreach ($array_cat_diff as $catid) {
                         if (!empty($catid)) {
-                            $ct_query[] = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . intval($rowcontent['id']));
+                            $ct_query[] = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . (int) ($rowcontent['id']));
                         }
                     }
                 }
@@ -1044,7 +1045,7 @@ if ($is_submit_form) {
                 ]);
                 $tags = array_unique($tags);
                 foreach ($tags as $_tag) {
-                    if (!in_array($_tag, $array_tags_old)) {
+                    if (!in_array($_tag, $array_tags_old, true)) {
                         $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($_tag) : change_alias_tags($_tag);
                         $alias_i = nv_strtolower($alias_i);
                         $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
@@ -1079,11 +1080,11 @@ if ($is_submit_form) {
 
                         // insert keyword for table _tags_id
                         try {
-                            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . intval($tid) . ', :keyword)');
+                            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . (int) $tid . ', :keyword)');
                             $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                             $sth->execute();
                         } catch (PDOException $e) {
-                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval($tid));
+                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . (int) $tid);
                             $sth->bindParam(':keyword', $_tag, PDO::PARAM_STR);
                             $sth->execute();
                         }
@@ -1092,7 +1093,7 @@ if ($is_submit_form) {
                 }
 
                 foreach ($array_tags_old as $tid => $_tag_i) {
-                    if (!in_array($_tag_i, $tags)) {
+                    if (!in_array($_tag_i, $tags, true)) {
                         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = ' . $tid);
                         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid);
                     }
@@ -1252,21 +1253,21 @@ foreach ($global_array_cat as $catid_i => $array_value) {
         $array_cat = GetCatidInParent($catid_i);
         $check_show = array_intersect($array_cat, $array_cat_check_content);
     }
-    /**
+    /*
      * Thêm bài viết không hiển thị chuyên mục bị đình chỉ hoạt động
      * Sửa bài viết hiển thị chuyên mục bị đình chỉ hoạt động với:
      * - Bài viết đang thuộc chuyên mục thì enable
      * - Bài viết chưa nằm trong chuyên mục thì disable
      */
-    if (!empty($check_show) and ($rowcontent['id'] > 0 or in_array($array_value['status'], $global_code_defined['cat_visible_status']))) {
-        $space = intval($array_value['lev']) * 30;
-        $catiddisplay = (sizeof($array_catid_in_row) > 1 and (in_array($catid_i, $array_catid_in_row))) ? '' : ' display: none;';
+    if (!empty($check_show) and ($rowcontent['id'] > 0 or in_array((int) $array_value['status'], array_map('intval', $global_code_defined['cat_visible_status']), true))) {
+        $space = (int) ($array_value['lev']) * 30;
+        $catiddisplay = (sizeof($array_catid_in_row) > 1 and (in_array((int) $catid_i, array_map('intval', $array_catid_in_row), true))) ? '' : ' display: none;';
         $temp = [
             'catid' => $catid_i,
             'space' => $space,
             'title' => $array_value['title'],
-            'disabled' => (!in_array($catid_i, $array_cat_check_content) or (!in_array($array_value['status'], $global_code_defined['cat_visible_status']) and !in_array($catid_i, $array_catid_in_row))) ? ' disabled="disabled"' : '',
-            'checked' => (in_array($catid_i, $array_catid_in_row)) ? ' checked="checked"' : '',
+            'disabled' => (!in_array((int) $catid_i, array_map('intval', $array_cat_check_content), true) or (!in_array((int) $array_value['status'], array_map('intval', $global_code_defined['cat_visible_status']), true) and !in_array((int) $catid_i, array_map('intval', $array_catid_in_row), true))) ? ' disabled="disabled"' : '',
+            'checked' => (in_array((int) $catid_i, array_map('intval', $array_catid_in_row), true)) ? ' checked="checked"' : '',
             'catidchecked' => ($catid_i == $rowcontent['catid']) ? ' checked="checked"' : '',
             'catiddisplay' => $catiddisplay
         ];
@@ -1348,11 +1349,11 @@ for ($i = 0; $i < 60; ++$i) {
 $xtpl->assign('emin', $select);
 
 // allowed comm
-$allowed_comm = explode(',', $rowcontent['allowed_comm']);
+$allowed_comm = array_map('intval', explode(',', $rowcontent['allowed_comm']));
 foreach ($groups_list as $_group_id => $_title) {
     $xtpl->assign('ALLOWED_COMM', [
         'value' => $_group_id,
-        'checked' => in_array($_group_id, $allowed_comm) ? ' checked="checked"' : '',
+        'checked' => in_array((int) $_group_id, $allowed_comm, true) ? ' checked="checked"' : '',
         'title' => $_title
     ]);
     $xtpl->parse('main.allowed_comm');
@@ -1401,7 +1402,7 @@ if (sizeof($array_block_cat_module)) {
         $xtpl->assign('BLOCKS', [
             'title' => $bid_title,
             'bid' => $bid_i,
-            'checked' => in_array($bid_i, $id_block_content) ? 'checked="checked"' : ''
+            'checked' => in_array((int) $bid_i, array_map('intval', $id_block_content), true) ? 'checked="checked"' : ''
         ]);
         $xtpl->parse('main.block_cat.loop');
     }

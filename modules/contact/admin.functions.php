@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_SPADMIN')) {
@@ -54,7 +55,7 @@ $array_url_instruction['row'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:contac
 /**
  * nv_getAllowed()
  *
- * @return
+ * @return array
  */
 function nv_getAllowed()
 {
@@ -75,7 +76,7 @@ function nv_getAllowed()
     $sql = 'SELECT id,full_name,admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
-        $id = intval($row['id']);
+        $id = (int) ($row['id']);
 
         if (defined('NV_IS_SPADMIN')) {
             $contact_allowed['view'][$id] = $row['full_name'];

@@ -1,25 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_CONTACT')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
- * main_theme()
+ * contact_main_theme()
  *
- * @param mixed $array_content
- * @param mixed $array_department
- * @param mixed $base_url
- * @param mixed $checkss
- * @return
+ * @param array  $array_content
+ * @param array  $array_department
+ * @param array  $catsName
+ * @param string $base_url
+ * @param string $checkss
+ * @return string
  */
 function contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss)
 {
@@ -210,17 +212,18 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
     $xtpl->assign('FORM', $form);
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * contact_form_theme()
  *
- * @param mixed $array_content
- * @param mixed $catsName
- * @param mixed $base_url
- * @param mixed $checkss
- * @return
+ * @param array  $array_content
+ * @param array  $catsName
+ * @param string $base_url
+ * @param string $checkss
+ * @return string
  */
 function contact_form_theme($array_content, $catsName, $base_url, $checkss)
 {
@@ -274,22 +277,23 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * contact_sendcontact()
  *
- * @param mixed $row_id
- * @param mixed $fcat
- * @param mixed $ftitle
- * @param mixed $fname
- * @param mixed $femail
- * @param mixed $fphone
- * @param mixed $fcon
- * @param mixed $fpart
- * @param bool $sendinfo
- * @return
+ * @param int    $row_id
+ * @param mixed  $fcat
+ * @param string $ftitle
+ * @param string $fname
+ * @param string $femail
+ * @param string $fphone
+ * @param string $fcon
+ * @param mixed  $fpart
+ * @param bool   $sendinfo
+ * @return string
  */
 function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, $sendinfo = true)
 {
@@ -331,5 +335,6 @@ function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, 
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

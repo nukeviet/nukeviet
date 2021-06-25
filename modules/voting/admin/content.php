@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['voting_edit'];
@@ -25,9 +26,9 @@ if (!empty($submit)) {
 
     $vote_one = $nv_Request->get_int('vote_one', 'post', 0) ? 1 : 0;
     $_groups_post = $nv_Request->get_array('groups_view', 'post', []);
-    $_groups_post = !empty($_groups_post) ? nv_groups_post(array_intersect($_groups_post, array_keys($groups_list))) : [];
+    $_groups_post = !empty($_groups_post) ? array_map('intval', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : [];
 
-    if (!empty($_groups_post) and (in_array(5, $_groups_post) or in_array(6, $_groups_post))) {
+    if (!empty($_groups_post) and (in_array(5, $_groups_post, true) or in_array(6, $_groups_post, true))) {
         $vote_one = 0;
     }
 
@@ -107,10 +108,10 @@ if (!empty($submit)) {
                     if (!nv_is_url($url)) {
                         $url = '';
                     }
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . intval($id) . ' AND vid =' . $vid);
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . (int) $id . ' AND vid =' . $vid);
                     ++$maxoption_data;
                 } else {
-                    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . intval($id) . ' AND vid =' . $vid);
+                    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . (int) $id . ' AND vid =' . $vid);
                 }
             }
 
@@ -282,11 +283,11 @@ foreach ($array_answervote as $id => $title) {
 $xtpl->assign('NEW_ITEM', ++$items);
 $xtpl->assign('NEW_ITEM_NUM', $items);
 
-$groups_view = explode(',', $rowvote['groups_view']);
+$groups_view = array_map('intval', explode(',', $rowvote['groups_view']));
 foreach ($groups_list as $_group_id => $_title) {
     $xtpl->assign('GROUPS_VIEW', [
         'value' => $_group_id,
-        'checked' => in_array($_group_id, $groups_view) ? ' checked="checked"' : '',
+        'checked' => in_array((int) $_group_id, $groups_view, true) ? ' checked="checked"' : '',
         'title' => $_title
     ]);
     $xtpl->parse('main.groups_view');

@@ -1,29 +1,37 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/02/2013 15:07
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
+/**
+ * nv_getRPC()
+ *
+ * @param string $url
+ * @param mixed  $data
+ * @return array
+ */
 function nv_getRPC($url, $data)
 {
     global $lang_module, $sys_info;
 
     $userAgents = ['Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1) Gecko/20090624 Firefox/3.5 (.NET CLR 3.5.30729)', 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)', 'Mozilla/4.8 [en] (Windows NT 6.0; U)', 'Opera/9.25 (Windows NT 6.0; U; en)'];
 
-    srand(( float )microtime() * 10000000);
+    srand((float) microtime() * 10000000);
     $rand = array_rand($userAgents);
     $agent = $userAgents[$rand];
 
     $url_info = parse_url($url);
-    $url_info['port'] = isset($url_info['port']) ? intval($url_info['port']) : 80;
+    $url_info['port'] = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
     if (isset($url_info['path'])) {
         if (substr($url_info['path'], 0, 1) != '/') {
             $url_info['path'] = '/' . $url_info['path'];
@@ -40,7 +48,7 @@ function nv_getRPC($url, $data)
             $proxy = $proxy[rand(0, count($proxy) - 1)];
         }
     }
-    if (function_exists('fsockopen') and !in_array('fsockopen', $sys_info['disable_functions'])) {
+    if (function_exists('fsockopen') and !in_array('fsockopen', $sys_info['disable_functions'], true)) {
         if (!empty($proxy)) {
             $fp = @fsockopen($proxy[1], $proxy[2], $errno, $errstr, 10);
             if ($fp) {
@@ -69,13 +77,15 @@ function nv_getRPC($url, $data)
                     if (!empty($errstr)) {
                         return [2, trim(strip_tags($errstr . '(' . $errno . ')'))];
                     }
+
                     return [3, $lang_module['rpc_error_unknown']];
                 }
 
                 unset($matches1, $matches2);
                 if (preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*flerror[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<boolean\>)?[\s\n\t\r]*([0|1]{1})[\s\n\t\r]*(\<\/boolean\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result, $matches1) and preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*message[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<string\>)?[\s\n\t\r]*([^\<]*)[\s\n\t\r]*(\<\/string\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result, $matches2)) {
-                    return [( int )$matches1[2], ( string )$matches2[2]];
+                    return [(int) $matches1[2], (string) $matches2[2]];
                 }
+
                 return [3, $lang_module['rpc_error_unknown']];
             }
         }
@@ -105,17 +115,19 @@ function nv_getRPC($url, $data)
             if (!empty($errstr)) {
                 return [2, trim(strip_tags($errstr . '(' . $errno . ')'))];
             }
+
             return [3, $lang_module['rpc_error_unknown']];
         }
 
         unset($matches1, $matches2);
         if (preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*flerror[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<boolean\>)?[\s\n\t\r]*([0|1]{1})[\s\n\t\r]*(\<\/boolean\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result, $matches1) and preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*message[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<string\>)?[\s\n\t\r]*([^\<]*)[\s\n\t\r]*(\<\/string\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result, $matches2)) {
-            return [( int )$matches1[2], ( string )$matches2[2]];
+            return [(int) $matches1[2], (string) $matches2[2]];
         }
+
         return [3, $lang_module['rpc_error_unknown']];
     }
 
-    if (!function_exists('curl_init') or in_array('curl_init', $sys_info['disable_functions']) or !function_exists('curl_exec') or in_array('curl_exec', $sys_info['disable_functions'])) {
+    if (!function_exists('curl_init') or in_array('curl_init', $sys_info['disable_functions'], true) or !function_exists('curl_exec') or in_array('curl_exec', $sys_info['disable_functions'], true)) {
         return [3, $lang_module['rpc_error_unknown']];
     }
 
@@ -156,7 +168,7 @@ function nv_getRPC($url, $data)
 
     unset($matches1, $matches2);
     if (preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*flerror[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<boolean\>)?[\s\n\t\r]*([0|1]{1})[\s\n\t\r]*(\<\/boolean\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result['XML'], $matches1) and preg_match("/\<member\>[\s\n\t\r]*\<name\>[\s\n\t\r]*message[\s\n\t\r]*\<\/name\>[\s\n\t\r]*\<value\>[\s\n\t\r]*(\<string\>)?[\s\n\t\r]*([^\<]*)[\s\n\t\r]*(\<\/string\>)?[\s\n\t\r]*\<\/value\>[\s\n\t\r]*\<\/member\>/is", $result['XML'], $matches2)) {
-        return [( int )$matches1[2], ( string )$matches2[2]];
+        return [(int) $matches1[2], (string) $matches2[2]];
     }
 
     if (!empty($result['ERR'])) {
@@ -166,6 +178,16 @@ function nv_getRPC($url, $data)
     return [3, $lang_module['rpc_error_unknown']];
 }
 
+/**
+ * nv_rpcXMLCreate()
+ *
+ * @param string $webtitle
+ * @param string $webhome
+ * @param string $linkpage
+ * @param string $webrss
+ * @param string $method
+ * @return false|string
+ */
 function nv_rpcXMLCreate($webtitle, $webhome, $linkpage, $webrss = '', $method = 'weblogUpdates.ping')
 {
     if ($method != 'weblogUpdates.ping') {

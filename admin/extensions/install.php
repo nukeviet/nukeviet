@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_global['mod_extensions'];
@@ -70,7 +71,7 @@ if (empty($error) and empty($message)) {
     // Next step
     if (!empty($array['data']['compatible']['id']) and $request['mode'] == 'getfile') {
         header('location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=install&id=' . $array['data']['id'] . '&fid=' . $array['data']['compatible']['id'] . '&getfile=1');
-        die();
+        exit();
     }
 
     if (!empty(NukeViet\Http\Http::$error)) {
@@ -133,7 +134,7 @@ if (!empty($error)) {
 
             if ($allow_continue === true) {
                 // Check auto install
-                if ($array['compatible']['type'] != 1 or !in_array($array['tid'], [1, 2, 3, 4])) {
+                if ($array['compatible']['type'] != 1 or !in_array((int) $array['tid'], [1, 2, 3, 4], true)) {
                     $xtpl->assign('MANUAL_MESSAGE', $array['documentation'] ? $lang_module['install_manual_install'] : $lang_module['install_manual_install_danger']);
                     $xtpl->parse('main.install.manual');
                 } else {

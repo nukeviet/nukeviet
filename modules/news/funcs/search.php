@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10-5-2010 0:14
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * GetSourceNews()
  *
- * @param mixed $sourceid
- * @return
+ * @param int $sourceid
+ * @return mixed
  */
 function GetSourceNews($sourceid)
 {
@@ -30,6 +31,7 @@ function GetSourceNews($sourceid)
             return $title;
         }
     }
+
     return '-/-';
 }
 
@@ -111,9 +113,7 @@ function BoldKeywordInStr($str, $keyword)
 
     $pattern = '/(' . implode('|', $pattern) . ')/uis';
 
-    $str = preg_replace($pattern, '<span class="keyword">$1</span>', $str);
-
-    return $str;
+    return preg_replace($pattern, '<span class="keyword">$1</span>', $str);
 }
 
 $key = $nv_Request->get_title('q', 'get', '');

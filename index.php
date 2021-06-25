@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (isset($_GET['response_headers_detect'])) {
     if ((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443) {
-        Header('x-is-https: 1');
+        header('x-is-https: 1');
     } else {
-        Header('x-is-http: 1');
+        header('x-is-http: 1');
     }
     exit(0);
 }
@@ -20,7 +21,7 @@ if (isset($_GET['response_headers_detect'])) {
 define('NV_SYSTEM', true);
 
 // Xac dinh thu muc goc cua site
-define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __file__), PATHINFO_DIRNAME));
+define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 require NV_ROOTDIR . '/includes/core/user_functions.php';
@@ -28,7 +29,7 @@ require NV_ROOTDIR . '/includes/core/user_functions.php';
 // Google Sitemap
 if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_string(NV_NAME_VARIABLE, 'get') == 'SitemapIndex') {
     nv_xmlSitemapIndex_generate();
-    die();
+    exit();
 }
 
 // Check user
@@ -74,7 +75,7 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') or $nv_Request->isset_re
         // Kiểm tra xem trước giao diện
         $theme = $nv_Request->get_title('theme', 'post,get', '');
         $checksum = $nv_Request->get_title('checksum', 'post,get', '');
-        if (in_array($theme, $global_config['array_preview_theme']) and $checksum == md5(NV_LANG_DATA . $theme . $global_config['sitekey'])) {
+        if (in_array($theme, $global_config['array_preview_theme'], true) and $checksum == md5(NV_LANG_DATA . $theme . $global_config['sitekey'])) {
             $nv_Request->set_Session('nv_preview_theme_' . NV_LANG_DATA, $theme);
         }
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
@@ -82,7 +83,7 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') or $nv_Request->isset_re
         // Thay đổi giao diện người dùng
         $theme = $nv_Request->get_title('theme', 'post,get', '');
         $tokend = $nv_Request->get_title('tokend', 'post,get', '');
-        if ($tokend === NV_CHECK_SESSION and in_array($theme, $global_config['array_user_allowed_theme'])) {
+        if ($tokend === NV_CHECK_SESSION and in_array($theme, $global_config['array_user_allowed_theme'], true)) {
             $nv_Request->set_Cookie('nv_u_theme_' . NV_LANG_DATA, $theme, NV_LIVE_COOKIE_TIME);
         }
         $nv_BotManager->setPrivate();
@@ -129,7 +130,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             if ($nv_Request->isset_request('nv' . NV_LANG_DATA . 'themever', 'get')) {
                 $nv_BotManager->setNoIndex()->printToHeaders();
                 $theme_type = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '', 1);
-                if (in_array($theme_type, $global_config['array_theme_type'])) {
+                if (in_array($theme_type, $global_config['array_theme_type'], true)) {
                     $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME);
                 }
 
@@ -188,7 +189,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
 
             // Xem trước giao diện
-            if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $nv_preview_theme . '/theme.php')) {
+            if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme'], true) and file_exists(NV_ROOTDIR . '/themes/' . $nv_preview_theme . '/theme.php')) {
                 if (preg_match($global_config['check_theme_mobile'], $nv_preview_theme)) {
                     $is_mobile = true;
                     $global_config['current_theme_type'] = 'm';
@@ -213,7 +214,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                  * - mobile: m
                  */
                 $global_config['current_theme_type'] = $nv_Request->get_string('nv' . NV_LANG_DATA . 'themever', 'cookie', '');
-                if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'])) {
+                if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'], true)) {
                     $global_config['current_theme_type'] = '';
                     $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', '', NV_LIVE_COOKIE_TIME);
                 }
@@ -225,25 +226,24 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 if (
                     (
                         // Giao diện mobile tự động nhận diện dựa vào client
-                        ($client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'])
+                        ($client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'], true)
                             and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des'])))
                         // Giao diện mobile lấy từ chuyển đổi giao diện
-                        or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))
-                    )
+                        or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des'])))
                     and !empty($_theme_mobile) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_mobile . '/theme.php')
                 ) {
                     $global_config['module_theme'] = $_theme_mobile;
                     $is_mobile = true;
                     $theme_type = 'm';
                 } else {
-                    if (empty($global_config['current_theme_type']) and in_array('r', $global_config['array_theme_type']) and ($client_info['is_mobile'] or empty($_theme_mobile))) {
+                    if (empty($global_config['current_theme_type']) and in_array('r', $global_config['array_theme_type'], true) and ($client_info['is_mobile'] or empty($_theme_mobile))) {
                         $global_config['current_theme_type'] = 'r';
                     }
 
                     $_theme = (!empty($module_info['theme'])) ? $module_info['theme'] : $global_config['site_theme'];
                     $_u_theme = $nv_Request->get_title('nv_u_theme_' . NV_LANG_DATA, 'cookie', '');
 
-                    if (in_array($_u_theme, $global_config['array_user_allowed_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $_u_theme . '/theme.php')) {
+                    if (in_array($_u_theme, $global_config['array_user_allowed_theme'], true) and file_exists(NV_ROOTDIR . '/themes/' . $_u_theme . '/theme.php')) {
                         // Giao diện do người dùng chọn
                         $global_config['module_theme'] = $_u_theme;
                         $global_config['site_theme'] = $_u_theme;
@@ -358,7 +358,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/funcs/' . $op_file . '.php';
             }
             exit();
-        } elseif (isset($module_info['funcs']['main'])) {
+        }
+        if (isset($module_info['funcs']['main'])) {
             $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title= :title');
             $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
             $sth->execute();

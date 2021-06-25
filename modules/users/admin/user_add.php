@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($nv_Request->isset_request('nv_genpass', 'post')) {
@@ -74,7 +75,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
     $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
     $_user['adduser_email'] = $nv_Request->get_int('adduser_email', 'post', 0);
-    $_user['is_email_verified'] = (int)$nv_Request->get_bool('is_email_verified', 'post', false);
+    $_user['is_email_verified'] = (int) $nv_Request->get_bool('is_email_verified', 'post', false);
 
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     $custom_fields['first_name'] = $_user['first_name'];
@@ -212,9 +213,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             }
         }
         $_user['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
+        $_user['in_groups'] = array_map('intval', $_user['in_groups']);
 
         // Kiểm tra nhóm thành viên mặc định phải thuộc các nhóm đã chọn
-        if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $_user['in_groups'])) {
+        if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $_user['in_groups'], true)) {
             $_user['in_groups_default'] = 0;
         }
 
@@ -240,7 +242,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         :first_name,
         :last_name,
         :gender,
-        ' . intval($_user['birthday']) . ',
+        ' . (int) ($_user['birthday']) . ',
         :sig,
         ' . NV_CURRENTTIME . ",
         :question,
@@ -422,7 +424,7 @@ if (defined('NV_IS_USER_FORUM')) {
                     $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : $row['default_value'];
                 } else {
                     $temp = array_keys($row['field_choices']);
-                    $tempkey = isset($initdata[$row['field']]) ? $initdata[$row['field']] : intval($row['default_value']) - 1;
+                    $tempkey = isset($initdata[$row['field']]) ? $initdata[$row['field']] : (int) ($row['default_value']) - 1;
                     $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
                 }
             } else {
@@ -517,7 +519,7 @@ if (defined('NV_IS_USER_FORUM')) {
                         $xtpl->assign('FIELD_CHOICES', [
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
-                            'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
+                            'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                             'value' => $value
                         ]);
                         $xtpl->parse('main.edit_user.field.loop.checkbox');

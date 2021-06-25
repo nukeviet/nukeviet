@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
- * @Development version theme control
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_bid = $nv_Request->get_typed_array('bl', 'post', 'int', []);
@@ -115,4 +115,4 @@ if (md5(NV_CHECK_SESSION . '_' . $position) == $nv_Request->get_string('checkss'
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 }
 
-die('OK_' . $func_id);
+exit('OK_' . $func_id);

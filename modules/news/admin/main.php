@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['content_list'];
@@ -62,7 +63,7 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
                 $_array_catid = explode(',', $_row2['listcatid']);
                 foreach ($_array_catid as $_catid) {
                     try {
-                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
                     } catch (PDOException $e) {
                     }
                 }
@@ -72,7 +73,7 @@ if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and e
             $_array_catid = explode(',', $_row1['listcatid']);
             foreach ($_array_catid as $_catid) {
                 try {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $_weight_new . ' WHERE id=' . $_id);
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $_weight_new . ' WHERE id=' . $_id);
                 } catch (PDOException $e) {
                 }
             }
@@ -139,7 +140,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
         $array_cat_view[] = $catid_i;
     }
 }
-if (!defined('NV_IS_ADMIN_MODULE') and $catid > 0 and !in_array($catid, $array_cat_view)) {
+if (!defined('NV_IS_ADMIN_MODULE') and $catid > 0 and !in_array($catid, array_map('intval', $array_cat_view), true)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main');
 }
 $array_search = [
@@ -202,7 +203,7 @@ if (defined('NV_IS_ADMIN_MODULE')) {
     $array_list_action['declined'] = $lang_module['declined'];
 }
 
-if (!in_array($stype, array_keys($array_search))) {
+if (!in_array($stype, array_keys($array_search), true)) {
     $stype = '-';
 }
 if ($sstatus < 0 or ($sstatus > 10 and $sstatus != ($global_code_defined['row_locked_status'] + 1))) {
@@ -210,7 +211,7 @@ if ($sstatus < 0 or ($sstatus > 10 and $sstatus != ($global_code_defined['row_lo
 }
 // Fix error https://github.com/nukeviet/nukeviet/issues/3135
 // Tu php 8.x doi so $strict cua function in_array co gi tri la TRUE
-if (!in_array($ordername, $array_in_ordername)) {
+if (!in_array($ordername, $array_in_ordername, true)) {
     $ordername = 'id';
 }
 if ($catid == 0) {
@@ -289,7 +290,6 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         if (isset($url_info['scheme']) and isset($url_info['host'])) {
             $qurl = $url_info['scheme'] . '://' . $url_info['host'];
         }
-        // T�m ki?m c� 1 trong c�c t?.
         $search_elastic = [
             'should' => [
                 'match' => [
@@ -298,7 +298,6 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             ]
         ];
     } elseif ($stype == 'admin_id') {
-        // tim tat ca cac admin_id c� username=$db_slave->dblikeescape($qhtml) ho?c first_name=$db_slave->dblikeescape($qhtml)
         $db->sqlreset()
             ->select('userid')
             ->from(NV_USERS_GLOBALTABLE)
@@ -309,7 +308,6 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         $sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
         $sth->execute();
         $admin_id_search = [];
-        // search elastic theo admin_id v?a t�m dc
         $match = [];
         while ($admin_id_search = $sth->fetch(3)) {
             $match[] = [
@@ -762,7 +760,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     }
 }
 
-for ($i = 0; $i <= 10; $i++) {
+for ($i = 0; $i <= 10; ++$i) {
     $sl = ($i == $sstatus) ? ' selected="selected"' : '';
     $search_status[] = [
         'key' => $i,

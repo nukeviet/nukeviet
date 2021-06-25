@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (empty($module_config[$module_name]['instant_articles_active'])) {
@@ -68,7 +69,7 @@ if (!empty($catid)) {
 
 // Lấy RSS từ cache
 $cacheFile = NV_LANG_DATA . '_instantrss' . $catid . '_' . NV_CACHE_PREFIX . '.cache';
-$cacheTTL = 60 * intval($module_config[$module_file]['instant_articles_livetime']);
+$cacheTTL = 60 * (int) ($module_config[$module_file]['instant_articles_livetime']);
 
 $FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 
@@ -135,4 +136,4 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
 }
 
 nv_rss_generate($channel, $items, $atomlink, 'ISO8601');
-die();
+exit();

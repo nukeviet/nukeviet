@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_CONTACT')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Danh sach cac bo phan
@@ -53,7 +54,7 @@ if (!empty($array_department)) {
                     $department['id'],
                     $_cats2
                 ];
-                $catsName[] = in_array($_cats2, $catsName) ? $_cats2 . ', ' . $department['full_name'] : $_cats2;
+                $catsName[] = in_array($_cats2, $catsName, true) ? $_cats2 . ', ' . $department['full_name'] : $_cats2;
             }
         }
 
@@ -85,16 +86,16 @@ if (defined('NV_IS_USER')) {
 
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
-/**
+/*
  * Nhan thong tin va gui den admin
  */
 if ($nv_Request->isset_request('checkss', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
     if ($checkss != NV_CHECK_SESSION) {
-        die();
+        exit();
     }
 
-    /**
+    /*
      * Ajax
      */
     if ($nv_Request->isset_request('loadForm', 'post')) {
@@ -191,7 +192,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
     $faddress = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
     $fsendcopy = ((int) $nv_Request->get_bool('sendcopy', 'post') and $sendcopy);
-    $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
+    $sender_id = (int) (defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
     (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES

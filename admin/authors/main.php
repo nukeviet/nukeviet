@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:24
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['main'];
@@ -40,9 +41,9 @@ if ($numrows) {
     $list_modules = $nv_Cache->db($sql, '', 'modules');
     foreach ($adminrows as $row) {
         $login = $row['username'];
-        $email = (defined('NV_IS_SPADMIN')) ? $row['email'] : (($row['admin_id'] == $admin_info['admin_id']) ? $row['email'] : (intval($row['view_mail']) ? $row['email'] : ''));
+        $email = (defined('NV_IS_SPADMIN')) ? $row['email'] : (($row['admin_id'] == $admin_info['admin_id']) ? $row['email'] : ((int) ($row['view_mail']) ? $row['email'] : ''));
         $email = !empty($email) ? nv_EncodeEmail($email) : '';
-        $level = intval($row['lev']);
+        $level = (int) ($row['lev']);
         if ($level == 1) {
             $level_txt = '<strong>' . $lang_global['level1'] . '</strong>';
         } elseif ($level == 2) {
@@ -50,13 +51,13 @@ if ($numrows) {
         } else {
             $array_mod = [];
             foreach ($list_modules as $row_mod) {
-                if (!empty($row_mod['admins']) and in_array($row['admin_id'], explode(',', $row_mod['admins']))) {
+                if (!empty($row_mod['admins']) and in_array((int) $row['admin_id'], array_map('intval', explode(',', $row_mod['admins'])), true)) {
                     $array_mod[] = $row_mod['custom_title'];
                 }
             }
             $level_txt = implode(', ', $array_mod);
         }
-        $last_login = intval($row['last_login']);
+        $last_login = (int) ($row['last_login']);
         $last_login = $last_login ? nv_date('l, d/m/Y H:i', $last_login) : $lang_module['last_login0'];
         $last_agent = $row['last_agent'];
 
@@ -64,11 +65,11 @@ if ($numrows) {
         $browser = ['key' => $_browser->getBrowserKey(), 'name' => $_browser->getBrowser()];
         $os = ['key' => $_browser->getPlatformKey(), 'name' => $_browser->getPlatform()];
 
-        $is_suspend = intval($row['is_suspend']);
+        $is_suspend = (int) ($row['is_suspend']);
         if (!empty($is_suspend)) {
             $last_reason = unserialize($row['susp_reason']);
             $last_reason = array_shift($last_reason);
-            list($susp_admin_id, $susp_admin_name) = $db->query('SELECT userid,first_name,last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval($last_reason['start_admin']))->fetch(3);
+            list($susp_admin_id, $susp_admin_name) = $db->query('SELECT userid,first_name,last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) ($last_reason['start_admin']))->fetch(3);
             $susp_admin_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $susp_admin_id . '">' . $susp_admin_name . '</a>';
             $is_suspend = sprintf($lang_module['is_suspend1'], nv_date('d/m/Y H:i', $last_reason['starttime']), $susp_admin_name, $last_reason['info']);
         } elseif (empty($row['active'])) {
@@ -243,14 +244,14 @@ if (!empty($admins)) {
                 $xtpl->assign('EDIT_HREF', $values['thead']['edit'][0]);
                 $xtpl->assign('EDIT_NAME', $values['thead']['edit'][1]);
                 $xtpl->parse('main.loop.tools.edit');
-                $is_tools++;
+                ++$is_tools;
             }
 
             if (!empty($values['thead']['del'])) {
                 $xtpl->assign('DEL_HREF', $values['thead']['del'][0]);
                 $xtpl->assign('DEL_NAME', $values['thead']['del'][1]);
                 $xtpl->parse('main.loop.tools.dropdown.del');
-                $is_tools++;
+                ++$is_tools;
             }
 
             $xtpl->assign('OPTION_LEV', $values['options']['lev'][1]);
@@ -272,13 +273,13 @@ if (!empty($admins)) {
                 $xtpl->assign('SUSPEND_HREF', $values['thead']['chg_is_suspend'][0]);
                 $xtpl->assign('SUSPEND_NAME', ($values['options']['is_suspend'][2]) ? $lang_module['suspend0'] : $lang_module['suspend1']);
                 $xtpl->parse('main.loop.tools.dropdown.suspend');
-                $is_tools++;
+                ++$is_tools;
             }
             if (!empty($values['thead']['2step'])) {
                 $xtpl->assign('2STEP_HREF', $values['thead']['2step'][0]);
                 $xtpl->assign('2STEP_NAME', $values['thead']['2step'][1]);
                 $xtpl->parse('main.loop.tools.dropdown.2step');
-                $is_tools++;
+                ++$is_tools;
             }
 
             // Có công cụ

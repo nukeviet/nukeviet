@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES ( contact@vinades.vn )
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2 - 10 - 2010 16 : 3
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_show_list_mods() {
@@ -15,7 +16,7 @@ function nv_show_list_mods() {
 
 function nv_chang_func_in_submenu(func_id) {
     var nv_timer = nv_settimeout_disable('chang_func_in_submenu_' + func_id, 5000);
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_submenu&nocache=' + new Date().getTime(), 'id=' + func_id, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_submenu&nocache=' + new Date().getTime(), 'id=' + func_id, function (res) {
         var r_split = res.split("_");
         var sl = document.getElementById('chang_func_in_submenu_' + r_split[1]);
         if (r_split[0] != 'OK') {
@@ -34,7 +35,7 @@ function nv_chang_func_in_submenu(func_id) {
 function nv_chang_weight(modname) {
     var nv_timer = nv_settimeout_disable('change_weight_' + modname, 5000);
     var new_weight = $("#change_weight_" + modname).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(), 'mod=' + modname + '&new_weight=' + new_weight, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(), 'mod=' + modname + '&new_weight=' + new_weight, function (res) {
         var r_split = res.split("_");
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -48,7 +49,7 @@ function nv_chang_weight(modname) {
 function nv_chang_act(modname, checkss) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable('change_act_' + modname, 5000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act&nocache=' + new Date().getTime(), 'mod=' + modname + '&checkss=' + checkss, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act&nocache=' + new Date().getTime(), 'mod=' + modname + '&checkss=' + checkss, function (res) {
             var r_split = res.split("_");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -65,7 +66,7 @@ function nv_chang_act(modname, checkss) {
 
 function nv_mod_del(modname, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'mod=' + modname + '&checkss=' + checkss, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'mod=' + modname + '&checkss=' + checkss, function (res) {
             var r_split = res.split("_");
             if (r_split[0] == 'OK') {
                 window.location.href = script_name + '?' + nv_name_variable + '=modules&' + nv_randomPassword(6) + '=' + nv_randomPassword(8);
@@ -92,7 +93,7 @@ function nv_show_funcs(show_id) {
 function nv_chang_func_weight(func_id) {
     var nv_timer = nv_settimeout_disable('change_weight_' + func_id, 5000);
     var new_weight = $("#change_weight_" + func_id).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_weight&nocache=' + new Date().getTime(), 'fid=' + func_id + '&new_weight=' + new_weight, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_weight&nocache=' + new Date().getTime(), 'fid=' + func_id + '&new_weight=' + new_weight, function (res) {
         var r_split = res.split("|");
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -105,7 +106,7 @@ function nv_chang_func_weight(func_id) {
 
 function nv_chang_func_in_submenu(func_id) {
     var nv_timer = nv_settimeout_disable('chang_func_in_submenu_' + func_id, 5000);
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_submenu&nocache=' + new Date().getTime(), 'id=' + func_id, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_func_submenu&nocache=' + new Date().getTime(), 'id=' + func_id, function (res) {
         var r_split = res.split("_");
         var sl = document.getElementById('chang_func_in_submenu_' + r_split[1]);
         if (r_split[0] != 'OK') {
@@ -128,7 +129,7 @@ function nv_change_custom_name(func_id, containerid) {
 
 function nv_change_custom_name_submit(func_id, custom_name_id) {
     var new_custom_name = rawurlencode(document.getElementById(custom_name_id).value);
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_custom_name&nocache=' + new Date().getTime(), 'id=' + func_id + '&save=1&func_custom_name=' + new_custom_name, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_custom_name&nocache=' + new Date().getTime(), 'id=' + func_id + '&save=1&func_custom_name=' + new_custom_name, function (res) {
         var r_split = res.split("|");
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -147,7 +148,7 @@ function nv_change_site_title(func_id, containerid) {
 
 function nv_change_site_title_submit(func_id, site_title_id) {
     var new_site_title = rawurlencode(document.getElementById(site_title_id).value);
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_site_title&nocache=' + new Date().getTime(), 'id=' + func_id + '&save=1&func_site_title=' + new_site_title, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_site_title&nocache=' + new Date().getTime(), 'id=' + func_id + '&save=1&func_site_title=' + new_site_title, function (res) {
         var r_split = res.split("|");
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -166,7 +167,7 @@ function nv_change_alias(func_id, containerid) {
 
 function nv_change_alias_submit(func_id, custom_name_id) {
     var new_custom_name = rawurlencode(document.getElementById(custom_name_id).value);
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_alias&nocache=' + new Date().getTime(), 'id=' + func_id + '&save=1&fun_alias=' + new_custom_name, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_alias&nocache=' + new Date().getTime(), 'id=' + func_id + '&save=1&fun_alias=' + new_custom_name, function (res) {
         var r_split = res.split("|");
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -186,7 +187,7 @@ function nv_action_cancel(containerid) {
 function nv_chang_bl_weight(bl_id) {
     var nv_timer = nv_settimeout_disable('change_bl_weight_' + bl_id, 5000);
     var new_weight = $("#change_bl_weight_" + bl_id).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block_weight&nocache=' + new Date().getTime(), 'id=' + bl_id + '&new_weight=' + new_weight, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block_weight&nocache=' + new Date().getTime(), 'id=' + bl_id + '&new_weight=' + new_weight, function (res) {
         var r_split = res.split("|");
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -198,7 +199,7 @@ function nv_chang_bl_weight(bl_id) {
 }
 
 function nv_show_bl(bl_id, containerid) {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=show_block&nocache=' + new Date().getTime(), 'id=' + bl_id, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=show_block&nocache=' + new Date().getTime(), 'id=' + bl_id, function (res) {
         $("#" + containerid).html(res);
     });
     return;
@@ -206,7 +207,7 @@ function nv_show_bl(bl_id, containerid) {
 
 function nv_del_bl(bl_id) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.get(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_block&id=' + bl_id + '&nocache=' + new Date().getTime(), function(res) {
+        $.get(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_block&id=' + bl_id + '&nocache=' + new Date().getTime(), function (res) {
             var r_split = res.split("|");
             if (r_split[0] == 'OK') {
                 nv_bl_list(r_split[1], r_split[2], r_split[3]);
@@ -218,14 +219,14 @@ function nv_del_bl(bl_id) {
     return false;
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Re-install module
-    $('body').delegate('.nv-reinstall-module', 'click', function(e) {
+    $('body').delegate('.nv-reinstall-module', 'click', function (e) {
         e.preventDefault();
         $('#modal-reinstall-module').data('title', $(this).data('title')).modal('toggle');
     });
 
-    $('#modal-reinstall-module').on('show.bs.modal', function(e) {
+    $('#modal-reinstall-module').on('show.bs.modal', function (e) {
         var $this = $(this);
 
         $this.find('.load').removeClass('hidden');
@@ -238,7 +239,7 @@ $(document).ready(function() {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
             data: 'module=' + $this.data('title'),
             dataType: 'json',
-            success: function(e) {
+            success: function (e) {
                 if (e.status == 'success') {
                     $("input[name='checkss']").val(e.checkss);
                     var option = $this.find('option');
@@ -260,7 +261,7 @@ $(document).ready(function() {
     });
 
     // Submit re-install
-    $('#modal-reinstall-module .submit').click(function() {
+    $('#modal-reinstall-module .submit').click(function () {
         var $container = $('#modal-reinstall-module');
         var $this = $(this);
 
@@ -271,7 +272,7 @@ $(document).ready(function() {
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=recreate_mod&nocache=' + new Date().getTime(),
             data: 'mod=' + $container.data('title') + '&checkss=' + $('input[name=checkss]').val() + '&sample=' + $container.find('.option').val(),
-            success: function(e) {
+            success: function (e) {
                 $container.modal('hide');
                 var r_split = e.split("_");
                 if (r_split[0] != 'OK') {
@@ -285,7 +286,7 @@ $(document).ready(function() {
     });
 
     // Setup module
-    $('.nv-setup-module').click(function(e) {
+    $('.nv-setup-module').click(function (e) {
         e.preventDefault();
 
         var $this = $(this);
@@ -306,7 +307,7 @@ $(document).ready(function() {
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
             data: 'module=' + $this.data('title') + '&setup=1',
             dataType: 'json',
-            success: function(e) {
+            success: function (e) {
                 $this.prev().removeClass('fa-spin');
 
                 if (e.status == 'success') {
@@ -323,7 +324,7 @@ $(document).ready(function() {
     });
 
     // Submit setup option
-    $('#modal-setup-module .submit').click(function() {
+    $('#modal-setup-module .submit').click(function () {
         var $this = $('#modal-setup-module');
         $this.modal('hide');
         window.location = $this.data('link') + '&sample=' + $this.find('.option').val();

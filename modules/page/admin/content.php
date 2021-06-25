@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
@@ -68,7 +69,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $row['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
 
     $row['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
-    if (!empty($row['layout_func']) and !in_array('layout.' . $row['layout_func'] . '.tpl', $layout_array)) {
+    if (!empty($row['layout_func']) and !in_array('layout.' . $row['layout_func'] . '.tpl', $layout_array, true)) {
         $row['layout_func'] = '';
     }
 
@@ -115,7 +116,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $weight = 1;
             } else {
                 $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = (int) $weight + 1;
             }
 
             $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
@@ -216,11 +217,11 @@ foreach ($layout_array as $value) {
     $xtpl->parse('main.layout_func');
 }
 
-$activecomm = explode(',', $row['activecomm']);
+$activecomm = array_map('intval', explode(',', $row['activecomm']));
 foreach ($groups_list as $_group_id => $_title) {
     $xtpl->assign('ACTIVECOMM', [
         'value' => $_group_id,
-        'checked' => in_array($_group_id, $activecomm) ? ' checked="checked"' : '',
+        'checked' => in_array((int) $_group_id, $activecomm, true) ? ' checked="checked"' : '',
         'title' => $_title
     ]);
     $xtpl->parse('main.activecomm');

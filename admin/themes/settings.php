@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['settings'];
@@ -70,7 +71,7 @@ foreach ($array_site_cat_theme as $theme) {
     $xtpl->assign('USER_ALLOWED_THEME', [
         'key' => $theme,
         'title' => $theme,
-        'checked' => (in_array($theme, $array_config['user_allowed_theme']) or $theme == $global_config['site_theme']) ? ' checked="checked"' : '',
+        'checked' => (in_array($theme, $array_config['user_allowed_theme'], true) or $theme == $global_config['site_theme']) ? ' checked="checked"' : '',
         'disabled' => $theme == $global_config['site_theme'] ? ' disabled="disabled"' : ''
     ]);
     $xtpl->parse('main.loop_theme');

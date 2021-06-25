@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (empty($install_lang['groups'])) {
@@ -47,7 +48,7 @@ foreach ($array_lang_setup as $_lang) {
 }
 
 // Xác định ngôn ngữ mặc định sẽ copy các field lang qua
-if ($lang != $global_config['site_lang'] and in_array($global_config['site_lang'], $array_lang_module_setup)) {
+if ($lang != $global_config['site_lang'] and in_array($global_config['site_lang'], $array_lang_module_setup, true)) {
     $set_lang_data = $global_config['site_lang'];
 } else {
     foreach ($array_lang_module_setup as $_lang) {
@@ -62,7 +63,7 @@ if ($lang != $global_config['site_lang'] and in_array($global_config['site_lang'
 $num_module_exists = sizeof($array_lang_module_setup);
 
 // Xóa các langkey của trường dữ liệu khi xóa module ở ngôn ngữ đã cài (có từ 2 module đã cài trở lên)
-if (in_array($lang, $array_lang_module_setup) and $num_module_exists > 1) {
+if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) {
     // Không xóa khi cài lại module users
     if ($module_data != 'users' or $op != 'recreate_mod') {
         if (empty($global_config['idsite'])) {

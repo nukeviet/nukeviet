@@ -1,24 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_menu_blocks()
- * Ham xu ly chinh cho block
  *
  * @param array $block_config
- * @return
- *
+ * @return string
  */
 function nv_menu_blocks($block_config)
 {
@@ -117,9 +116,8 @@ function nv_menu_blocks($block_config)
 /**
  * nv_menu_blocks_active()
  *
- * @param mixed $cat
- * @return
- *
+ * @param array $cat
+ * @return string
  */
 function nv_menu_blocks_active($cat)
 {
@@ -139,10 +137,9 @@ function nv_menu_blocks_active($cat)
 /**
  * nv_menu_check_current()
  *
- * @param mixed $url
- * @param integer $type
- * @return
- *
+ * @param string $url
+ * @param int    $type
+ * @return bool
  */
 function nv_menu_check_current($url, $type = 0)
 {
@@ -158,18 +155,23 @@ function nv_menu_check_current($url, $type = 0)
 
     if ($home and ($_url == nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA) or $_url == NV_BASE_SITEURL . 'index.php' or $_url == NV_BASE_SITEURL)) {
         return true;
-    } elseif ($_url != NV_BASE_SITEURL) {
+    }
+    if ($_url != NV_BASE_SITEURL) {
         if ($type == 2) {
             if (preg_match('#' . preg_quote($_url, '#') . '#', $_curr_url)) {
                 return true;
             }
+
             return false;
-        } elseif ($type == 1) {
+        }
+        if ($type == 1) {
             if (preg_match('#^' . preg_quote($_url, '#') . '#', $_curr_url)) {
                 return true;
             }
+
             return false;
-        } elseif ($_curr_url == $_url) {
+        }
+        if ($_curr_url == $_url) {
             return true;
         }
     }
@@ -179,13 +181,13 @@ function nv_menu_check_current($url, $type = 0)
 
 /**
  * nv_smenu_blocks()
- * Hien thi menu con
  *
- * @param mixed $style
- * @param mixed $list_cats
- * @param mixed $list_sub
- * @return
- *
+ * @param string $style
+ * @param array  $list_cats
+ * @param string $list_sub
+ * @param array  $submenu_active
+ * @param string $block_theme
+ * @return string
  */
 function nv_smenu_blocks($style, $list_cats, $list_sub, &$submenu_active, $block_theme)
 {
@@ -193,32 +195,31 @@ function nv_smenu_blocks($style, $list_cats, $list_sub, &$submenu_active, $block
 
     if (empty($list_sub)) {
         return '';
-    } else {
-        $list = explode(',', $list_sub);
-
-        foreach ($list_cats as $cat) {
-            $catid = $cat['id'];
-            if (in_array($catid, $list)) {
-                $list_cats[$catid]['class'] = nv_menu_blocks_active($list_cats[$catid]);
-                if ($list_cats[$catid]['current'] === true) {
-                    $submenu_active[] = $catid;
-                }
-
-                $xtpl->assign('MENUTREE', $list_cats[$catid]);
-                if (!empty($list_cats[$catid]['icon'])) {
-                    $xtpl->parse('tree.icon');
-                }
-                if (!empty($list_cats[$catid]['subcats'])) {
-                    $tree = nv_smenu_blocks($style, $list_cats, $list_cats[$catid]['subcats'], $submenu_active, $block_theme);
-
-                    $xtpl->assign('TREE_CONTENT', $tree);
-                    $xtpl->parse('tree.tree_content');
-                }
-
-                $xtpl->parse('tree');
-            }
-        }
-
-        return $xtpl->text('tree');
     }
+    $list = array_map('intval', explode(',', $list_sub));
+
+    foreach ($list_cats as $cat) {
+        $catid = $cat['id'];
+        if (in_array((int) $catid, $list, true)) {
+            $list_cats[$catid]['class'] = nv_menu_blocks_active($list_cats[$catid]);
+            if ($list_cats[$catid]['current'] === true) {
+                $submenu_active[] = $catid;
+            }
+
+            $xtpl->assign('MENUTREE', $list_cats[$catid]);
+            if (!empty($list_cats[$catid]['icon'])) {
+                $xtpl->parse('tree.icon');
+            }
+            if (!empty($list_cats[$catid]['subcats'])) {
+                $tree = nv_smenu_blocks($style, $list_cats, $list_cats[$catid]['subcats'], $submenu_active, $block_theme);
+
+                $xtpl->assign('TREE_CONTENT', $tree);
+                $xtpl->parse('tree.tree_content');
+            }
+
+            $xtpl->parse('tree');
+        }
+    }
+
+    return $xtpl->text('tree');
 }

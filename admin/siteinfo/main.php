@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SITEINFO')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_global['mod_siteinfo'];
@@ -112,8 +113,8 @@ if (defined('NV_IS_GODADMIN')) {
     $info = '';
     if (!empty($new_version)) {
         $field[] = [
-            'key' => $lang_module['version_news'], //
-            'value' => sprintf($lang_module['newVersion_detail'], ( string )$new_version->version, nv_date('d/m/Y H:i', strtotime($new_version->date)))
+            'key' => $lang_module['version_news'],
+            'value' => sprintf($lang_module['newVersion_detail'], (string) $new_version->version, nv_date('d/m/Y H:i', strtotime($new_version->date)))
         ];
 
         if (nv_version_compare($global_config['version'], $new_version->version) < 0) {

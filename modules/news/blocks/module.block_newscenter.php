@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_news_block_newscenter')) {
     /**
      * nv_block_config_news_newscenter()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_news_newscenter($module, $data_block, $lang_block)
     {
@@ -119,21 +120,22 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                     }
                 }
                 $data_block['nocatid'] = !empty($data_block['nocatid']) ? $data_block['nocatid'] : [];
-                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
+                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array((int) $l['catid'], array_map('intval', $data_block['nocatid']), true)) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
         }
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * nv_block_config_news_newscenter_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_config_news_newscenter_submit($module, $lang_block)
     {
@@ -151,14 +153,15 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $return['config']['width'] = $nv_Request->get_int('config_width', 'post', '');
         $return['config']['height'] = $nv_Request->get_int('config_height', 'post', '');
         $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', []);
+
         return $return;
     }
 
     /**
      * nv_news_block_newscenter()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string|void
      */
     function nv_news_block_newscenter($block_config)
     {
@@ -264,6 +267,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
             }
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }

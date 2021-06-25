@@ -1,3 +1,12 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 body {
     color: #777;
 }
@@ -23,9 +32,9 @@ body {
  -----------------------------------------------------------------------------*/
 #login-content {
     background: #fff;
-    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .13);
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .13);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .13);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
     padding: 20px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -85,7 +94,9 @@ body {
     color: #fff;
 }
 
-.btn-facebook:hover, .btn-facebook:active, .btn-facebook:focus {
+.btn-facebook:hover,
+.btn-facebook:active,
+.btn-facebook:focus {
     background-color: #5180e0 !important;
     border-color: #5180e0 !important;
 }
@@ -96,12 +107,21 @@ body {
     color: #fff;
 }
 
-.btn-google:hover, .btn-google:active, .btn-google:focus {
+.btn-google:hover,
+.btn-google:active,
+.btn-google:focus {
     background-color: #f2574b !important;
     border-color: #f2574b !important;
 }
 
-.btn-facebook:active, .btn-facebook:focus, .btn-facebook:active:focus, .btn-facebook:hover, .btn-google:active, .btn-google:focus, .btn-google:active:focus, .btn-google:hover {
+.btn-facebook:active,
+.btn-facebook:focus,
+.btn-facebook:active:focus,
+.btn-facebook:hover,
+.btn-google:active,
+.btn-google:focus,
+.btn-google:active:focus,
+.btn-google:hover {
     color: #fff !important;
 }
 
@@ -131,6 +151,6 @@ body {
 
 .inner-message .error {
     padding-left: 10px;
-    border-left: 4px #D54E21 solid;
-    color: #D54E21;
+    border-left: 4px #d54e21 solid;
+    color: #d54e21;
 }

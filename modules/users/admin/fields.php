@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Chỉnh thứ tự các trường tùy chỉnh. Không cho phép chỉnh các trường mặc định
 if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
@@ -26,7 +27,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
     $weightsystem = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_field WHERE is_system=1')->fetchColumn();
     if ($numrows != 1 or $new_vid <= $weightsystem) {
-        die('NO');
+        exit('NO');
     }
 
     $query = 'SELECT fid FROM ' . NV_MOD_TABLE . '_field WHERE fid!=' . $fid . ' ORDER BY weight ASC';
@@ -42,7 +43,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     }
     $sql = 'UPDATE ' . NV_MOD_TABLE . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
     $db->query($sql);
-    die('OK');
+    exit('OK');
 }
 
 $array_sqlchoice_order = [
@@ -53,7 +54,7 @@ $array_sqlchoice_order = [
 // Xử lý lấy dữ liệu từ CSDL
 if ($nv_Request->isset_request('choicesql', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $array_choicesql = [
@@ -205,7 +206,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
         require_once NV_ROOTDIR . '/includes/field_not_allow.php';
 
-        if (in_array($dataform['field'], $field_not_allow)) {
+        if (in_array($dataform['field'], $field_not_allow, true)) {
             $error = $lang_module['field_error_not_allow'];
         } elseif (empty($dataform['field'])) {
             $error = $lang_module['field_error_empty'];
@@ -365,7 +366,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
             if ($dataform['max_length'] <= 4294967296 and !empty($dataform['field']) and !empty($dataform['title']) and !isset($_columns_array[$dataform['field']])) {
                 $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MOD_TABLE . '_field')->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = (int) $weight + 1;
 
                 $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_field (
                     field, weight, field_type, field_choices, sql_choices, match_type,
@@ -469,7 +470,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 // Xóa trường
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $fid = $nv_Request->get_int('fid', 'post', 0);
@@ -486,10 +487,10 @@ if ($nv_Request->isset_request('del', 'post')) {
                 $db->query('UPDATE ' . NV_MOD_TABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid']);
                 ++$weight;
             }
-            die('OK');
+            exit('OK');
         }
     }
-    die('NO');
+    exit('NO');
 }
 
 $array_field_type = [
@@ -526,7 +527,7 @@ $xtpl->assign('MATCH2', '{2}');
 // Danh sách các trường dữ liệu tùy biến
 if ($nv_Request->isset_request('qlist', 'get')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC';
     $_rows = $db->query($sql)->fetchAll();
@@ -560,7 +561,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
 
             if ($row['is_system'] == 1) {
                 $xtpl->assign('DISABLED_WEIGHT', 'disabled');
-                $fieldsys_offset++;
+                ++$fieldsys_offset;
             } else {
                 $xtpl->assign('DISABLED_WEIGHT', '');
                 $xtpl->parse('main.data.loop.show_delete');

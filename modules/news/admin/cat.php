@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['categories'];
@@ -100,7 +101,7 @@ if (!empty($savecat)) {
                 if (empty($_m_catid)) {
                     $alias = 'cat-1';
                 } else {
-                    $alias = 'cat-' . (intval($_m_catid) + 1);
+                    $alias = 'cat-' . ((int) $_m_catid + 1);
                 }
             }
         }
@@ -130,7 +131,7 @@ if (!empty($savecat)) {
 
     if ($catid == 0 and $title != '') {
         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
-        $weight = intval($weight) + 1;
+        $weight = (int) $weight + 1;
         $viewcat = 'viewcat_page_new';
         $subcatid = '';
 
@@ -165,10 +166,10 @@ if (!empty($savecat)) {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $admin_id . ', ' . $newcatid . ', 1, 1, 1, 1, 1)');
             }
 
-            if (in_array('1', $check_ad_block_cat)) {
+            if (in_array('1', $check_ad_block_cat, true)) {
                 $ini_edit = nv_add_block_topcat_news($newcatid);
             }
-            if (in_array('2', $check_ad_block_cat)) {
+            if (in_array('2', $check_ad_block_cat, true)) {
                 $ini_edit2 = nv_add_block_botcat_news($newcatid);
             }
 
@@ -201,19 +202,19 @@ if (!empty($savecat)) {
             $_r_t = nv_remove_block_topcat_news($catid);
             if ($parentid != $parentid_old) {
                 $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = (int) $weight + 1;
 
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ' WHERE catid=' . intval($catid);
+                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ' WHERE catid=' . (int) $catid;
                 $db->query($sql);
 
                 nv_fix_cat_order();
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid']);
             }
 
-            if (in_array('1', $check_ad_block_cat)) {
+            if (in_array('1', $check_ad_block_cat, true)) {
                 $ini_edit = nv_add_block_topcat_news($catid);
             }
-            if (in_array('2', $check_ad_block_cat)) {
+            if (in_array('2', $check_ad_block_cat, true)) {
                 $ini_edit2 = nv_add_block_botcat_news($catid);
             }
 
@@ -227,7 +228,7 @@ if (!empty($savecat)) {
     }
 }
 
-$groups_view = explode(',', $groups_view);
+$groups_view = array_map('intval', explode(',', $groups_view));
 
 if (!empty($ad_block_cat)) {
     $ad_block_cat = explode(',', $ad_block_cat);
@@ -257,7 +258,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
 if (!empty($array_cat_list)) {
     $cat_listsub = [];
     foreach ($array_cat_list as $catid_i => $title_i) {
-        if (!in_array($catid_i, $array_in_cat)) {
+        if (!in_array((int) $catid_i, array_map('intval', $array_in_cat), true)) {
             $cat_listsub[] = [
                 'value' => $catid_i,
                 'selected' => ($catid_i == $parentid) ? ' selected="selected"' : '',
@@ -270,7 +271,7 @@ if (!empty($array_cat_list)) {
     foreach ($groups_list as $group_id => $grtl) {
         $groups_views[] = [
             'value' => $group_id,
-            'checked' => in_array($group_id, $groups_view) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $group_id, $groups_view, true) ? ' checked="checked"' : '',
             'title' => $grtl
         ];
     }
@@ -283,7 +284,7 @@ if (!empty($array_cat_list)) {
     foreach ($ad_block_list as $ad_block_id => $ad_block_tl) {
         $ad_block_cats[] = [
             'value' => $ad_block_id,
-            'checked' => in_array($ad_block_id, $ad_block_cat) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $ad_block_id, array_map('intval', $ad_block_cat), true) ? ' checked="checked"' : '',
             'title' => $ad_block_tl
         ];
     }
@@ -318,7 +319,7 @@ $xtpl->assign('UPLOAD_CURRENT', $currentpath);
 $xtpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('image', $image);
 
-for ($i = 0; $i <= 2; $i++) {
+for ($i = 0; $i <= 2; ++$i) {
     $data = [
         'value' => $i,
         'selected' => ($viewdescription == $i) ? ' checked="checked"' : '',

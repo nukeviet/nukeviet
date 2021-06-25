@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -507,7 +508,6 @@ $copyright = serialize($copyright);
 
 /**
  * Blocks Groups
- *
  */
 $blockGroups = [
     'default' => [ // Theme Default
@@ -883,14 +883,14 @@ $blockGroups = [
 ];
 
 /*###########################*/
-/**
+/*
  * Nhap du lieu cho table: nv4_vi_modules
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 $weight = 0;
 foreach ($installMods as $mod_name => $vals) {
-    $weight++;
+    ++$weight;
     $_vals = [
         $mod_name,
         isset($vals['module_file']) ? $vals['module_file'] : $mod_name,
@@ -916,7 +916,7 @@ foreach ($installMods as $mod_name => $vals) {
     $sth->execute($_vals);
 }
 
-/**
+/*
  * Nhap du lieu cho table: nv4_vi_modfuncs
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs');
@@ -931,7 +931,7 @@ foreach ($installMods as $mod_name => $vals) {
     if (isset($vals['funcs'])) {
         $subweight = 0;
         foreach ($vals['funcs'] as $func_name => $func_vals) {
-            $func_id++;
+            ++$func_id;
             $array_funcid[] = $func_id;
             !isset($array_funcid_mod[$mod_name]) && $array_funcid_mod[$mod_name] = [];
             $array_funcid_mod[$mod_name][$func_name] = $func_id;
@@ -944,7 +944,7 @@ foreach ($installMods as $mod_name => $vals) {
 
             $show_func = !empty($func_vals['show_func']) ? 1 : 0;
             if ($show_func) {
-                $subweight++;
+                ++$subweight;
             }
 
             $_vals = [
@@ -963,7 +963,7 @@ foreach ($installMods as $mod_name => $vals) {
     }
 }
 
-/**
+/*
  * Nhap du lieu cho table: nv4_vi_modthemes
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
@@ -983,7 +983,7 @@ if (!empty($theme_mobile)) {
     }
 }
 
-/**
+/*
  * Nhap du lieu cho table: nv4_vi_blocks_groups
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups');
@@ -997,8 +997,8 @@ foreach ($blockGroups as $theme => $vals) {
         $weight = 0;
         foreach ($bls as $bl) {
             if ($bl['module'] == 'theme' or isset($installMods[$bl['module']])) {
-                $_bid++;
-                $weight++;
+                ++$_bid;
+                ++$weight;
                 $_bl = [
                     $_bid,
                     $theme,
@@ -1050,7 +1050,7 @@ foreach ($blockGroups as $theme => $vals) {
     }
 }
 
-/**
+/*
  * Nhap du lieu cho table: nv4_vi_blocks_weight
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight');

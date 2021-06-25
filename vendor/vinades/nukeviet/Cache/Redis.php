@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/9/2010, 3:21
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Cache;
@@ -13,17 +14,16 @@ namespace NukeViet\Cache;
 use Redis as CRedis;
 
 /**
- * Redis
+ * NukeViet\Cache\Redis
  *
- * @package NukeViet Cache
- * @author VINADES.,JSC (contact@vinades.vn)
- * @copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @version 4.0
+ * @package NukeViet\Cache
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
  * @access public
  */
 class Redis
 {
-
     private $_Lang = 'vi';
 
     private $_Cache_Prefix = '';
@@ -33,16 +33,15 @@ class Redis
     private $_Cache;
 
     /**
-     * Redis::__construct()
+     * __construct()
      *
-     * @param mixed $Host
-     * @param mixed $Port
-     * @param mixed $Timeout
-     * @param mixed $Password
-     * @param mixed $DBnumber
-     * @param mixed $Lang
-     * @param mixed $Cache_Prefix
-     * @return void
+     * @param string $Host
+     * @param int    $Port
+     * @param int    $Timeout
+     * @param string $Password
+     * @param int    $DBnumber
+     * @param string $Lang
+     * @param string $Cache_Prefix
      */
     public function __construct($Host, $Port, $Timeout, $Password, $DBnumber, $Lang, $Cache_Prefix)
     {
@@ -69,7 +68,7 @@ class Redis
             trigger_error('Can not connect to Redis DB!', 256);
         }
 
-        $checkOptions = array();
+        $checkOptions = [];
         $checkOptions[] = $redis->setOption(Redis::OPT_PREFIX, $Cache_Prefix);
         $checkOptions[] = $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 
@@ -83,11 +82,9 @@ class Redis
     }
 
     /**
+     * delAll()
      *
-     * @param mixed $sys
-     *
-     * @return
-     *
+     * @param bool $sys
      */
     public function delAll($sys = true)
     {
@@ -95,11 +92,10 @@ class Redis
     }
 
     /**
+     * delMod()
      *
-     * @param mixed $module_name
-     * @param mixed $lang
-     *
-     * @return void
+     * @param string $module_name
+     * @param string $lang
      */
     public function delMod($module_name, $lang = '')
     {
@@ -111,12 +107,12 @@ class Redis
     }
 
     /**
-     * Redis::getItem()
+     * getItem()
      *
-     * @param mixed $module_name
-     * @param mixed $filename
-     * @param integer $ttl
-     * @return
+     * @param string $module_name
+     * @param string $filename
+     * @param int    $ttl
+     * @return mixed
      */
     public function getItem($module_name, $filename, $ttl = 0)
     {
@@ -125,13 +121,12 @@ class Redis
     }
 
     /**
-     * Redis::setItem()
+     * setItem()
      *
-     * @param mixed $module_name
-     * @param mixed $filename
-     * @param mixed $content
-     * @param integer $ttl
-     * @return
+     * @param string $module_name
+     * @param string $filename
+     * @param string $content
+     * @param int    $ttl
      */
     public function setItem($module_name, $filename, $content, $ttl = 0)
     {
@@ -139,8 +134,9 @@ class Redis
     }
 
     /**
+     * setDb()
      *
-     * @param resource $db
+     * @param mixed $db
      */
     public function setDb($db)
     {
@@ -148,18 +144,18 @@ class Redis
     }
 
     /**
-     * Redis::db()
+     * db()
      *
-     * @param mixed $sql
-     * @param mixed $key
-     * @param mixed $modname
+     * @param string $sql
+     * @param string $key
+     * @param string $modname
      * @param string $lang
-     * @param integer $ttl
-     * @return
+     * @param int    $ttl
+     * @return array
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
-        $_rows = array();
+        $_rows = [];
 
         if (empty($sql)) {
             return $_rows;
@@ -188,12 +184,11 @@ class Redis
     }
 
     /**
-     * Redis::set()
+     * set()
      *
-     * @param mixed $key
-     * @param mixed $value
-     * @param integer $ttl
-     * @return void
+     * @param string $key
+     * @param string $value
+     * @param int    $ttl
      */
     private function set($key, $value, $ttl = 0)
     {

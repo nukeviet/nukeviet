@@ -1,15 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 27/11/2010, 22:45
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
 
+/**
+ * NukeViet\Core\Optimizer
+ *
+ * @package NukeViet\Core
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Optimizer
 {
     private $_content;
@@ -21,7 +31,7 @@ class Optimizer
     private $_links = [];
     private $_cssLinks = [];
     private $_jsMatches = [];
-    private $_htmlforFooter = "";
+    private $_htmlforFooter = '';
     private $_jsCount = 0;
     private $base_siteurl;
     private $eol = "\r\n";
@@ -31,9 +41,9 @@ class Optimizer
     private $headerPreloadFont = [];
 
     /**
+     * __construct()
      *
      * @param string $content
-     * @param boolean $opt_css_file
      * @param string $base_siteurl
      */
     public function __construct($content, $base_siteurl)
@@ -44,10 +54,10 @@ class Optimizer
     }
 
     /**
-     * optimizer::process()
+     * process()
      *
-     * @return
-     *
+     * @param bool $jquery
+     * @return string
      */
     public function process($jquery = true)
     {
@@ -57,7 +67,7 @@ class Optimizer
         $_jsSrc = [];
         $_linkHref = [];
         $_linkHrefPreload = '';
-        
+
         /* Tam thoi chua cho preload fonts truoc, de tinh sau
         if ($this->is_http2) {
             $this->headerPreloadFont[] = '<' . NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2>; rel=preload; as=font; crossorigin';
@@ -66,7 +76,7 @@ class Optimizer
             $_linkHrefPreload .= '<link rel="preload" as="font" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2" type="font/woff2" crossorigin>' . $this->eol;
             $_linkHrefPreload .= '<link rel="preload" as="font" href="' . NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2" type="font/woff2" crossorigin>' . $this->eol;
         }*/
-        
+
         // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
         $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
         if ($_isFullBuffer and $jquery) {
@@ -81,7 +91,7 @@ class Optimizer
         }
 
         if (preg_match("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $this->_content, $matches)) {
-            $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content);
+            $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", '', $this->_content);
             if ($jquery and $_isFullBuffer) {
                 $_jsAfter = $matches[0] . $this->eol;
                 if ($this->is_http2) {
@@ -98,13 +108,14 @@ class Optimizer
         $htmlRegex = "/<\!--\s*START\s+FORFOOTER\s*-->(.*?)<\!--\s*END\s+FORFOOTER\s*-->/is";
         if (preg_match_all($htmlRegex, $this->_content, $htmlMatches)) {
             $this->_htmlforFooter = implode($this->eol, $htmlMatches[1]);
-            $this->_content = preg_replace($htmlRegex, "", $this->_content);
+            $this->_content = preg_replace($htmlRegex, '', $this->_content);
         }
 
         $this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = [];
         $this->_meta['charset'] = '';
 
         $regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
+        $matches = $matches2 = [];
         if (preg_match_all($regex, $this->_content, $matches)) {
             foreach ($matches[0] as $tag) {
                 if (preg_match('/^<meta/', $tag)) {
@@ -128,7 +139,7 @@ class Optimizer
                 } elseif (preg_match('/^<link/', $tag)) {
                     preg_match_all("/([a-zA-Z]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2);
                     $combine = array_combine($matches2[1], $matches2[2]);
-                    if (isset($combine['rel']) and preg_match("/stylesheet/is", $combine['rel'])) {
+                    if (isset($combine['rel']) and preg_match('/stylesheet/is', $combine['rel'])) {
                         $this->_cssLinks[] = $tag;
                     } else {
                         $this->_links[] = $tag;
@@ -172,7 +183,7 @@ class Optimizer
                     // Chi cho phep ket noi 1 lan doi voi 1 file JS
                     $external = trim($matches2[3]);
                     if (!empty($external)) {
-                        if (!in_array($external, $_jsSrc)) {
+                        if (!in_array($external, $_jsSrc, true)) {
                             $_jsSrc[] = $external;
                             $matches3 = $matches4 = [];
                             $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
@@ -215,7 +226,7 @@ class Optimizer
                     // Chi cho phep ket noi 1 lan doi voi 1 file CSS
                     $external = trim($matches2[3]);
                     if (!empty($external)) {
-                        if (!in_array($external, $_linkHref)) {
+                        if (!in_array($external, $_linkHref, true)) {
                             $_linkHref[] = $external;
                             $matches3 = $matches4 = [];
                             $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
@@ -231,7 +242,7 @@ class Optimizer
             }
         }
 
-        $head = "";
+        $head = '';
 
         if (!empty($meta)) {
             $head .= implode($this->eol, $meta) . $this->eol;
@@ -273,14 +284,14 @@ class Optimizer
             $this->_content = $this->_content . $this->eol . $_jsAfter;
         }
         $this->_content = str_replace("\r\n", "\n", $this->_content);
+
         return preg_replace("/\n([\t\n\s]+)\n/", "\n", $this->_content);
     }
 
     /**
-     * Optimizer::headerPreload()
-     * 
-     * @param mixed $headers
-     * @return void
+     * headerPreload()
+     *
+     * @param array $headers
      */
     public function headerPreload(&$headers)
     {
@@ -300,36 +311,35 @@ class Optimizer
     }
 
     /**
-     * optimizer::conditionCallback()
+     * conditionCallback()
      *
-     * @param mixed $matches
-     * @return
-     *
+     * @param array $matches
+     * @return string
      */
     private function conditionCallback($matches)
     {
         $this->_conditon[] = $matches[0];
         $num = $this->_condCount;
         ++$this->_condCount;
+
         return '{|condition_' . $num . '|}';
     }
 
     /**
-     * optimizer::jsCallback()
+     * jsCallback()
      *
-     * @param mixed $matches
-     * @return
-     *
+     * @param array $matches
+     * @return string
      */
     private function jsCallback($matches)
     {
         if (preg_match('/<\s*\bscript\b[^>]*data\-show\=["|\']inline["|\'][^>]*>/is', $matches[0])) {
             return $matches[0];
-        } else {
-            $this->_jsMatches[] = $matches[0];
-            $num = $this->_jsCount;
-            ++$this->_jsCount;
-            return '{|js_' . $num . '|}';
         }
+        $this->_jsMatches[] = $matches[0];
+        $num = $this->_jsCount;
+        ++$this->_jsCount;
+
+        return '{|js_' . $num . '|}';
     }
 }

@@ -1,32 +1,33 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/27/2010 0:30
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
 
 /**
- * Blocker
+ * NukeViet\Core\Blocker
  *
- * @package NUKEVIET 4 CORE
+ * @package NukeViet\Core
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @version 4.0
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
  * @access public
  */
 class Blocker
 {
-    const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
-    const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
+    public const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
+    public const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
 
-    const LOGIN_RULE_NUMBER = 0;
-    const LOGIN_RULE_TIMERANGE = 1;
-    const LOGIN_RULE_END = 2;
+    public const LOGIN_RULE_NUMBER = 0;
+    public const LOGIN_RULE_TIMERANGE = 1;
+    public const LOGIN_RULE_END = 2;
 
     public $is_flooded;
     public $flood_block_time;
@@ -44,12 +45,10 @@ class Blocker
     private $track_login = true;
 
     /**
-     * Blocker::__construct()
+     * __construct()
      *
-     * @param mixed $logs_path
-     * @param mixed $rules
+     * @param string $logs_path
      * @param string $ip
-     * @return void
      */
     public function __construct($logs_path, $ip = '')
     {
@@ -85,12 +84,11 @@ class Blocker
     }
 
     /**
-     * Blocker::trackFlood()
+     * trackFlood()
      *
-     * @param mixed $rules
-     * @return void
+     * @param array $rules
      */
-    public function trackFlood($rules = array())
+    public function trackFlood($rules = [])
     {
         if (!empty($rules)) {
             $this->flood_rules = $rules;
@@ -122,8 +120,10 @@ class Blocker
     }
 
     /**
+     * trackLogin()
+     *
      * @param array $rules
-     * @param number $allowed
+     * @param int   $allowed
      */
     public function trackLogin($rules = [], $allowed = 1)
     {
@@ -134,10 +134,10 @@ class Blocker
     }
 
     /**
-     * Blocker::is_blocklogin()
+     * is_blocklogin()
      *
-     * @param mixed $loginname
-     * @return
+     * @param string $loginname
+     * @return bool
      */
     public function is_blocklogin($loginname)
     {
@@ -162,11 +162,11 @@ class Blocker
     }
 
     /**
-     * Blocker::set_loginFailed()
+     * set_loginFailed()
      *
-     * @param mixed $loginname
-     * @param integer $time
-     * @return void
+     * @param string $loginname
+     * @param int    $time
+     * @return true|void
      */
     public function set_loginFailed($loginname, $time = 0)
     {
@@ -182,13 +182,13 @@ class Blocker
             $info = $this->_get_info();
 
             if (!isset($info['login'][$loginname]) or ($time - $info['login'][$loginname]['starttime']) > ($this->login_rules[Blocker::LOGIN_RULE_TIMERANGE] * 60)) {
-                $info['login'][$loginname] = array();
+                $info['login'][$loginname] = [];
                 $info['login'][$loginname]['count'] = 0;
                 $info['login'][$loginname]['starttime'] = $time;
                 $info['login'][$loginname]['lasttime'] = 0;
             }
 
-            $info['login'][$loginname]['count'] ++;
+            ++$info['login'][$loginname]['count'];
             $info['login'][$loginname]['lasttime'] = $time;
 
             $this->_save_info($info);
@@ -196,10 +196,9 @@ class Blocker
     }
 
     /**
-     * Blocker::reset_trackLogin()
+     * reset_trackLogin()
      *
-     * @param mixed $loginname
-     * @return void
+     * @param string $loginname
      */
     public function reset_trackLogin($loginname)
     {
@@ -212,7 +211,7 @@ class Blocker
     }
 
     /**
-     *
+     * resetTrackFlood()
      */
     public function resetTrackFlood()
     {
@@ -224,13 +223,13 @@ class Blocker
     }
 
     /**
-     * Blocker::_get_info()
+     * _get_info()
      *
-     * @return
+     * @return mixed
      */
     private function _get_info()
     {
-        $info = array();
+        $info = [];
         $logfile = $this->_get_logfile();
         if (file_exists($logfile)) {
             $info = unserialize(file_get_contents($logfile));
@@ -240,21 +239,22 @@ class Blocker
     }
 
     /**
-     * Blocker::_save_info()
+     * _save_info()
      *
      * @param mixed $info
-     * @return
+     * @return false|int
      */
     private function _save_info($info)
     {
         $logfile = $this->_get_logfile();
+
         return file_put_contents($logfile, serialize($info));
     }
 
     /**
-     * Blocker::_get_logfile()
+     * _get_logfile()
      *
-     * @return
+     * @return string
      */
     private function _get_logfile()
     {

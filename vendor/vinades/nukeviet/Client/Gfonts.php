@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 30/07/2015 10:00
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Client;
@@ -13,12 +14,12 @@ namespace NukeViet\Client;
 use NukeViet\Http\Http;
 
 /**
- * Gfonts
+ * NukeViet\Client\Gfonts
  *
- * @package NukeViet Gfonts
+ * @package NukeViet\Client
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @version 4.0
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
  * @access public
  */
 class Gfonts
@@ -28,27 +29,28 @@ class Gfonts
     private $fontdir = 'assets/fonts';
     private $relfontdir = '../fonts';
     private $fontsLang = '';
-    private $fonts, $cssRealFile, $cssUrlFile;
+    private $fonts;
+    private $cssRealFile;
+    private $cssUrlFile;
 
     /**
-     * Gfonts::__construct()
+     * __construct()
      *
-     * @param mixed $gfonts
-     * @param mixed $client_info
-     * @return void
+     * @param array $gfonts
+     * @param array $client_info
      */
-    public function __construct($gfonts = array(), $client_info = array())
+    public function __construct($gfonts = [], $client_info = [])
     {
         $this->cssdir = NV_ASSETS_DIR . '/css';
         $this->fontdir = NV_ASSETS_DIR . '/fonts';
         $stringFonts = '';
 
         if (!empty($gfonts)) {
-            $this->fontsLang = ! empty($gfonts['subset']) ? preg_replace('/[^a-z0-9\,\-]/i', '', strtolower($gfonts['subset'])) : '';
+            $this->fontsLang = !empty($gfonts['subset']) ? preg_replace('/[^a-z0-9\,\-]/i', '', strtolower($gfonts['subset'])) : '';
             $stringFonts = $this->stringFonts($gfonts['fonts']);
             $this->fonts = 'family=' . $stringFonts;
             $stringFonts = str_replace(':', '.', $stringFonts);
-            if (! empty($this->fontsLang)) {
+            if (!empty($this->fontsLang)) {
                 $this->fonts .= '&subset=' . $this->fontsLang;
                 $stringFonts .= '.' . $this->fontsLang;
             }
@@ -64,9 +66,9 @@ class Gfonts
     }
 
     /**
-     * Gfonts::getUrlCss()
+     * getUrlCss()
      *
-     * @return
+     * @return mixed
      */
     public function getUrlCss()
     {
@@ -76,13 +78,14 @@ class Gfonts
         if (file_exists($this->cssRealFile)) {
             return $this->cssUrlFile;
         }
+
         return $this->addfile();
     }
 
     /**
-     * Gfonts::getDataCss()
+     * getDataCss()
      *
-     * @return
+     * @return mixed
      */
     public function getDataCss()
     {
@@ -97,40 +100,41 @@ class Gfonts
     }
 
     /**
-     * Gfonts::downloadFont()
+     * downloadFont()
      *
-     * @param mixed $url
-     * @param mixed $dir
-     * @param mixed $filename
-     * @return
+     * @param string $url
+     * @param string $dir
+     * @param string $filename
+     * @return bool
      */
     private function downloadFont($url, $dir, $filename)
     {
         global $global_config, $client_info;
 
         $NV_Http = new Http($global_config, NV_TEMP_DIR);
-        $args = array(
-            'headers' => array(
+        $args = [
+            'headers' => [
                 'Referer' => $client_info['selfurl'],
                 'User-Agent' => NV_USER_AGENT,
-            ),
+            ],
             'stream' => true,
             'filename' => $dir . '/' . $filename,
             'timeout' => 0
-        );
+        ];
         $result = $NV_Http->get($url, $args);
 
         if (!empty(Http::$error) or $result['response']['code'] != 200 or empty($result['filename']) or !file_exists($result['filename']) or filesize($result['filename']) <= 0) {
             return false;
         }
+
         return true;
     }
 
     /**
-     * Gfonts::download_Callback()
+     * download_Callback()
      *
-     * @param mixed $matches
-     * @return
+     * @param array $matches
+     * @return string
      */
     private function download_Callback($matches)
     {
@@ -141,26 +145,27 @@ class Gfonts
         if ($this->downloadFont($matches[0], $dir, $matches[1])) {
             return $this->relfontdir . '/' . $matches[1];
         }
+
         return $matches[0];
     }
 
     /**
-     * Gfonts::addfile()
+     * addfile()
      *
      * @param bool $data
-     * @return
+     * @return string
      */
     private function addfile($data = false)
     {
         global $global_config, $client_info;
 
         $NV_Http = new Http($global_config, NV_TEMP_DIR);
-        $args = array(
-            'headers' => array(
+        $args = [
+            'headers' => [
                 'Referer' => $client_info['selfurl'],
                 'User-Agent' => NV_USER_AGENT,
-            )
-        );
+            ]
+        ];
 
         $result = $NV_Http->get($this->fonts, $args);
         if (!empty(Http::$error) or $result['response']['code'] != 200) {
@@ -171,7 +176,7 @@ class Gfonts
         $Regex = '/http\:\/\/[^\) ]+\/([^\.\) ]+\.[^\) ]+)/';
 
         if (preg_match_all($Regex, $result, $matches)) {
-            $result = preg_replace_callback($Regex, array($this, 'download_Callback'), $result);
+            $result = preg_replace_callback($Regex, [$this, 'download_Callback'], $result);
         }
 
         @file_put_contents($this->cssRealFile, $result);
@@ -180,20 +185,20 @@ class Gfonts
     }
 
     /**
-     * Gfonts::stringFonts()
+     * stringFonts()
      *
-     * @param mixed $fonts
-     * @return
+     * @param array $fonts
+     * @return string
      */
     private function stringFonts($fonts)
     {
         if (empty($fonts)) {
             return '';
         }
-        $_fonts = array();
+        $_fonts = [];
         foreach ($fonts as $k => $font) {
             $_fonts[$k] = urlencode($font['family']);
-            if (isset($font['styles']) and ! empty($font['styles'])) {
+            if (isset($font['styles']) and !empty($font['styles'])) {
                 $_fonts[$k] .= ':' . $font['styles'];
             }
         }
@@ -202,9 +207,7 @@ class Gfonts
     }
 
     /**
-     * Gfonts::destroyAll()
-     *
-     * @return void
+     * destroyAll()
      */
     public function destroyAll()
     {
@@ -217,10 +220,9 @@ class Gfonts
     }
 
     /**
-     * Gfonts::destroyFont()
+     * destroyFont()
      *
-     * @param mixed $cssFile
-     * @return void
+     * @param string $cssFile
      */
     private function destroyFont($cssFile)
     {
