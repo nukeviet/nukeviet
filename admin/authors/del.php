@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:23
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!defined('NV_IS_SPADMIN')) {
@@ -34,7 +35,7 @@ if ($row['lev'] == 1 or (!defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
 
 /**
  * @param string $adminpass
- * @return boolean
+ * @return bool
  */
 function nv_checkAdmpass($adminpass)
 {
@@ -42,6 +43,7 @@ function nv_checkAdmpass($adminpass)
 
     $sql = 'SELECT password FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_info['userid'];
     $pass = $db->query($sql)->fetchColumn();
+
     return $crypt->validate_password($adminpass, $pass);
 }
 
@@ -82,8 +84,8 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             foreach ($array_keys as $mod) {
                 if (!empty($mod)) {
                     if (!empty($site_mods[$mod]['admins'])) {
-                        $admins = explode(',', $site_mods[$mod]['admins']);
-                        if (in_array($admin_id, $admins)) {
+                        $admins = array_map('intval', explode(',', $site_mods[$mod]['admins']));
+                        if (in_array($admin_id, $admins, true)) {
                             $admins = array_diff($admins, [$admin_id]);
                             $admins = implode(',', $admins);
 

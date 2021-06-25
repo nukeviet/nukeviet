@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 9/9/2010, 6:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_WEBTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['clearsystem'];
@@ -17,9 +18,9 @@ $page_title = $lang_module['clearsystem'];
 /**
  * nv_clear_files()
  *
- * @param mixed $dir
- * @param mixed $base
- * @return
+ * @param string $dir
+ * @param string $base
+ * @return array
  */
 function nv_clear_files($dir, $base)
 {
@@ -37,6 +38,7 @@ function nv_clear_files($dir, $base)
     if (!file_exists($dir . '/index.html')) {
         file_put_contents($dir . '/index.html', '');
     }
+
     return $dels;
 }
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
@@ -61,7 +63,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
     clearstatcache();
 
     if (defined('NV_IS_GODADMIN')) {
-        if (in_array('clearfiletemp', $deltype)) {
+        if (in_array('clearfiletemp', $deltype, true)) {
             $dir = NV_ROOTDIR . '/' . NV_TEMP_DIR;
             if ($dh = opendir($dir)) {
                 while (($file = readdir($dh)) !== false) {
@@ -84,7 +86,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
             }
         }
 
-        if (in_array('clearerrorlogs', $deltype)) {
+        if (in_array('clearerrorlogs', $deltype, true)) {
             $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs';
             $files = nv_clear_files($dir, NV_LOGS_DIR . '/error_logs');
             foreach ($files as $file) {
@@ -114,7 +116,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
             }
         }
 
-        if (in_array('clearip_logs', $deltype)) {
+        if (in_array('clearip_logs', $deltype, true)) {
             $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
             $files = nv_clear_files($dir, NV_LOGS_DIR . '/ip_logs');
             foreach ($files as $file) {
@@ -124,7 +126,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
         }
     }
 
-    if (in_array('clearcache', $deltype)) {
+    if (in_array('clearcache', $deltype, true)) {
         if ($dh = opendir(NV_ROOTDIR . '/' . NV_CACHEDIR)) {
             while (($modname = readdir($dh)) !== false) {
                 if (preg_match($global_config['check_module'], $modname)) {

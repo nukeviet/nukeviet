@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_USER_FORUM')) {
@@ -49,7 +50,7 @@ if ($checknum == $row['checknum']) {
     if (empty($row['password']) and substr($row['username'], 0, 20) == 'CHANGE_EMAIL_USERID_') {
         $is_change_email = true;
 
-        $userid_change_email = intval(substr($row['username'], 20));
+        $userid_change_email = (int) (substr($row['username'], 20));
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email=:email, email_verification_time=' . NV_CURRENTTIME . ' WHERE userid=' . $userid_change_email);
         $stmt->bindParam(':email', $row['email'], PDO::PARAM_STR);
         if ($stmt->execute()) {
@@ -99,7 +100,7 @@ if ($checknum == $row['checknum']) {
                     continue;
                 }
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                    $default_value = floatval($row_f['default_value']);
+                    $default_value = (float) ($row_f['default_value']);
                 } else {
                     $default_value = $db->quote($row_f['default_value']);
                 }

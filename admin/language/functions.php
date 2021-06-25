@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 1:58
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 unset($page_title, $select_options);
@@ -92,7 +93,6 @@ function nv_admin_add_field_lang($dirlang)
  * nv_update_config_allow_sitelangs()
  *
  * @param mixed $allow_sitelangs
- * @return void
  */
 function nv_update_config_allow_sitelangs($allow_sitelangs = [])
 {
@@ -108,7 +108,7 @@ function nv_update_config_allow_sitelangs($allow_sitelangs = [])
 
         $sitelangs = [];
         while ($row = $result->fetch()) {
-            if (in_array($row['lang'], $allow_sitelangs)) {
+            if (in_array($row['lang'], $allow_sitelangs, true)) {
                 $sitelangs[] = $row['lang'];
             }
         }

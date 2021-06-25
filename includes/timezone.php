@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-// Xac dinh ten mui gio
 /**
  * nv_getTimezoneName_from_cookie()
+ * Xác định tên múi giờ
  *
  * @param mixed $cookie
  * @return
@@ -24,18 +25,19 @@ function nv_getTimezoneName_from_cookie($cookie)
     global $nv_parse_ini_timezone;
     if (preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|(.*)$/', rawurldecode($cookie), $matches)) {
         foreach ($nv_parse_ini_timezone as $name => $offset) {
-            if ($offset['winter_offset'] == intval($matches[2]) * 60 and $offset['summer_offset'] == intval($matches[1]) * 60) {
+            if ($offset['winter_offset'] == (int) ($matches[2]) * 60 and $offset['summer_offset'] == (int) ($matches[1]) * 60) {
                 return $name;
             }
         }
     }
+
     return '';
 }
 
 $global_config['cookie_prefix'] = (empty($global_config['cookie_prefix'])) ? 'nv4' : $global_config['cookie_prefix'];
 
 if (isset($_COOKIE[$global_config['cookie_prefix'] . '_cltn'])) {
-    $nv_cltn = base64_decode($_COOKIE[$global_config['cookie_prefix'] . '_cltn']);
+    $nv_cltn = base64_decode($_COOKIE[$global_config['cookie_prefix'] . '_cltn'], true);
 
     if (preg_match('/^([^\.]+)\.([\-]*\d+)\.(\d{1})$/', $nv_cltn, $matches)) {
         define('NV_CLIENT_TIMEZONE_NAME', $matches[1]);

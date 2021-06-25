@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $checkss = $nv_Request->get_string('checkss', 'post');
@@ -34,7 +35,7 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
     $sth->execute();
 
     while (list($bid, $position) = $sth->fetch(3)) {
-        if (in_array($position, $array_pos)) {
+        if (in_array($position, $array_pos, true)) {
             $array_bid[$bid] = $position;
         } else {
             // Xóa các block không còn phần cấu hình.
@@ -55,11 +56,11 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         // Cac fuction da them block
         $result = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid);
         while (list($func_inlist) = $result->fetch(3)) {
-            $func_list[] = $func_inlist;
+            $func_list[] = (int) $func_inlist;
         }
 
         foreach ($array_funcid as $func_id) {
-            if (!in_array($func_id, $func_list)) {
+            if (!in_array((int) $func_id, $func_list, true)) {
                 // Cac function chua duoc them
 
                 $sth = $db->prepare('SELECT MAX(t1.weight)
@@ -72,7 +73,7 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
                 $sth->execute();
                 $weight = $sth->fetchColumn();
 
-                $weight = intval($weight) + 1;
+                $weight = (int) $weight + 1;
 
                 $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')');
             }

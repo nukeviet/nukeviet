@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014-2021 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 17-04-2021 10:40
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (empty($array_op)) {
@@ -17,7 +18,7 @@ if (empty($array_op)) {
 }
 $author_info = [];
 $author_info['alias'] = $array_op[1];
-$page = (isset($array_op[2]) and preg_match('/^page\-([0-9]+)$/', $array_op[2], $m)) ? intval($m[1]) : 1;
+$page = (isset($array_op[2]) and preg_match('/^page\-([0-9]+)$/', $array_op[2], $m)) ? (int) ($m[1]) : 1;
 
 $stmt = $db_slave->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
 $stmt->bindParam(':alias', $author_info['alias'], PDO::PARAM_STR);

@@ -1,41 +1,42 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['move_file'])) {
-    die('ERROR#' . $lang_module['notlevel']);
+    exit('ERROR#' . $lang_module['notlevel']);
 }
 
 $newfolder = nv_check_path_upload($nv_Request->get_string('newpath', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($newfolder);
 if (!isset($check_allow_upload_dir['create_file'])) {
-    die('ERROR#' . $lang_module['notlevel']);
+    exit('ERROR#' . $lang_module['notlevel']);
 }
 
 $images = array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
 
 // Check choose file
 if (empty($images)) {
-    die('ERROR#' . $lang_module['errorNotSelectFile']);
+    exit('ERROR#' . $lang_module['errorNotSelectFile']);
 }
 
 // Check file exists
-foreach ($images as  $file) {
+foreach ($images as $file) {
     if (!nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-        die('ERROR#' . $lang_module['file_no_exists'] . ': ' . $file);
+        exit('ERROR#' . $lang_module['file_no_exists'] . ': ' . $file);
     }
 }
 
@@ -56,7 +57,7 @@ foreach ($images as $image) {
     $moved_images[] = $file;
 
     if (!nv_copyfile(NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $file)) {
-        die('ERROR#' . $lang_module['errorNotCopyFile']);
+        exit('ERROR#' . $lang_module['errorNotCopyFile']);
     }
 
     if (isset($array_dirname[$newfolder])) {

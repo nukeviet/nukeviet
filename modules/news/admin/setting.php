@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['setting'];
@@ -96,7 +97,7 @@ if (!empty($savesetting)) {
     }
 
     $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], $socialbuttons);
-    if (in_array('zalo', $array_config['socialbutton']) and empty($global_config['zaloOfficialAccountID'])) {
+    if (in_array('zalo', $array_config['socialbutton'], true) and empty($global_config['zaloOfficialAccountID'])) {
         $array_config['socialbutton'] = array_diff($array_config['socialbutton'], [
             'zalo'
         ]);
@@ -192,7 +193,7 @@ foreach ($socialbuttons as $socialbutton) {
     $array = [
         'key' => $socialbutton,
         'title' => ucfirst($socialbutton),
-        'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons)) ? ' checked="checked"' : ''
+        'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons, true)) ? ' checked="checked"' : ''
     ];
     if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
         $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
@@ -289,7 +290,7 @@ foreach ($array_structure_image as $type => $dir) {
     $xtpl->parse('main.structure_upload');
 }
 
-for ($i = 0; $i < 2; $i++) {
+for ($i = 0; $i < 2; ++$i) {
     $xtpl->assign('ORDER_ARTICLES', [
         'key' => $i,
         'title' => $lang_module['order_articles_' . $i],
@@ -341,7 +342,7 @@ $xtpl->assign('COPYRIGHTHTML', $copyright);
 $xtpl->assign('PATH', defined('NV_IS_SPADMIN') ? '' : NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('CURRENTPATH', defined('NV_IS_SPADMIN') ? 'images' : NV_UPLOADS_DIR . '/' . $module_upload);
 
-if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
+if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)) {
     $groups_list = nv_groups_list();
     unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[6]);
 
@@ -368,10 +369,10 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func)) {
 
         foreach ($array_group_id as $group_id) {
             if (isset($groups_list[$group_id])) {
-                $addcontent = (isset($array_addcontent[$group_id]) and intval($array_addcontent[$group_id]) == 1) ? 1 : 0;
-                $postcontent = (isset($array_postcontent[$group_id]) and intval($array_postcontent[$group_id]) == 1) ? 1 : 0;
-                $editcontent = (isset($array_editcontent[$group_id]) and intval($array_editcontent[$group_id]) == 1) ? 1 : 0;
-                $delcontent = (isset($array_delcontent[$group_id]) and intval($array_delcontent[$group_id]) == 1) ? 1 : 0;
+                $addcontent = (isset($array_addcontent[$group_id]) and (int) ($array_addcontent[$group_id]) == 1) ? 1 : 0;
+                $postcontent = (isset($array_postcontent[$group_id]) and (int) ($array_postcontent[$group_id]) == 1) ? 1 : 0;
+                $editcontent = (isset($array_editcontent[$group_id]) and (int) ($array_editcontent[$group_id]) == 1) ? 1 : 0;
+                $delcontent = (isset($array_delcontent[$group_id]) and (int) ($array_delcontent[$group_id]) == 1) ? 1 : 0;
                 $addcontent = ($postcontent == 1) ? 1 : $addcontent;
                 if ($group_id == 5) {
                     $editcontent = 0;

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_IS_MOD_SEARCH', true);
@@ -17,7 +18,7 @@ define('NV_IS_MOD_SEARCH', true);
 /**
  * LoadModulesSearch()
  *
- * @return
+ * @return array
  */
 function LoadModulesSearch()
 {
@@ -35,15 +36,16 @@ function LoadModulesSearch()
             ];
         }
     }
+
     return $arrayfolder;
 }
 
 /**
  * nv_substr_clean()
  *
- * @param mixed $string
+ * @param string $string
  * @param string $mode
- * @return
+ * @return string
  */
 function nv_substr_clean($string, $mode = 'lr')
 {
@@ -64,9 +66,10 @@ function nv_substr_clean($string, $mode = 'lr')
 /**
  * BoldKeywordInStr()
  *
- * @param mixed $str
- * @param mixed $keyword
- * @return
+ * @param string $str
+ * @param string $keyword
+ * @param string $logic
+ * @return string
  */
 function BoldKeywordInStr($str, $keyword, $logic)
 {
@@ -121,18 +124,16 @@ function BoldKeywordInStr($str, $keyword, $logic)
 
     $pattern = '/(' . implode('|', $pattern) . ')/uis';
 
-    $str = preg_replace($pattern, '<span class="keyword">$1</span>', $str);
-
-    return $str;
+    return preg_replace($pattern, '<span class="keyword">$1</span>', $str);
 }
 
 /**
  * nv_like_logic()
  *
- * @param mixed $field
- * @param mixed $dbkeyword
- * @param mixed $logic
- * @return
+ * @param string $field
+ * @param string $dbkeyword
+ * @param string $logic
+ * @return string
  */
 function nv_like_logic($field, $dbkeyword, $logic)
 {
@@ -152,5 +153,6 @@ function nv_like_logic($field, $dbkeyword, $logic)
             $return = $field . " LIKE '%" . str_replace(' ', "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
         }
     }
+
     return $return;
 }

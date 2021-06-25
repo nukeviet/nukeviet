@@ -1,36 +1,49 @@
 <?php
 
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 namespace NukeViet\Core;
 
 /**
- * @author VINADES.,JSC
- * @since 4.5.00
+ * NukeViet\Core\Server
  *
+ * @package NukeViet\Core
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
  */
 class Server
 {
     /**
      * @var string
-     * Host của máy chủ website (máy chủ thật)
+     *             Host của máy chủ website (máy chủ thật)
      */
     protected $server_host = '';
 
     /**
      * @var string
-     * Giao thức của máy chủ website (máy chủ thật)
+     *             Giao thức của máy chủ website (máy chủ thật)
      */
     protected $server_protocol = '';
 
     /**
      * @var string
-     * Cổng của máy chủ website (máy chủ thật)
-     * Rỗng nếu là 80 hoặc 443 hoặc có dạng :PORT
+     *             Cổng của máy chủ website (máy chủ thật)
+     *             Rỗng nếu là 80 hoặc 443 hoặc có dạng :PORT
      */
     protected $server_port = '';
 
     /**
      * @var string
-     * Domain chạy thật của máy chủ có dạng protocol://host[:port]
+     *             Domain chạy thật của máy chủ có dạng protocol://host[:port]
      */
     protected $server_domain = '';
 
@@ -56,12 +69,12 @@ class Server
 
     /**
      * @var string
-     * Đường dẫn đến thư mục chứa site tính từ thư mục gốc của domain đến thư mục có file index.php
+     *             Đường dẫn đến thư mục chứa site tính từ thư mục gốc của domain đến thư mục có file index.php
      */
     protected $sitePath = '';
 
     /**
-     *
+     * __construct()
      */
     public function __construct()
     {
@@ -143,8 +156,10 @@ class Server
     }
 
     /**
+     * getEnv()
+     *
      * @param string $key
-     * @return mixed
+     * @return string
      */
     protected function getEnv($key)
     {
@@ -154,18 +169,24 @@ class Server
         foreach ($key as $k) {
             if (isset($_SERVER[$k])) {
                 return $_SERVER[$k];
-            } elseif (isset($_ENV[$k])) {
+            }
+            if (isset($_ENV[$k])) {
                 return $_ENV[$k];
-            } elseif (@getenv($k)) {
+            }
+            if (@getenv($k)) {
                 return @getenv($k);
-            } elseif (function_exists('apache_getenv') and apache_getenv($k, true)) {
+            }
+            if (function_exists('apache_getenv') and apache_getenv($k, true)) {
                 return apache_getenv($k, true);
             }
         }
+
         return false;
     }
 
     /**
+     * standardizeHost()
+     *
      * @param string $host
      * @return string
      */
@@ -175,6 +196,8 @@ class Server
     }
 
     /**
+     * getServerHost()
+     *
      * @return string
      */
     public function getServerHost()
@@ -183,6 +206,8 @@ class Server
     }
 
     /**
+     * getServerPort()
+     *
      * @return string
      */
     public function getServerPort()
@@ -191,6 +216,8 @@ class Server
     }
 
     /**
+     * getServerProtocol()
+     *
      * @return string
      */
     public function getServerProtocol()
@@ -199,6 +226,8 @@ class Server
     }
 
     /**
+     * getServerDomain()
+     *
      * @return string
      */
     public function getServerDomain()
@@ -207,6 +236,8 @@ class Server
     }
 
     /**
+     * getOriginalHost()
+     *
      * @return string
      */
     public function getOriginalHost()
@@ -215,6 +246,8 @@ class Server
     }
 
     /**
+     * getOriginalPort()
+     *
      * @return string
      */
     public function getOriginalPort()
@@ -223,6 +256,8 @@ class Server
     }
 
     /**
+     * getOriginalProtocol()
+     *
      * @return string
      */
     public function getOriginalProtocol()
@@ -231,6 +266,8 @@ class Server
     }
 
     /**
+     * getOriginalDomain()
+     *
      * @return string
      */
     public function getOriginalDomain()
@@ -239,6 +276,8 @@ class Server
     }
 
     /**
+     * getWebsitePath()
+     *
      * @return string
      */
     public function getWebsitePath()

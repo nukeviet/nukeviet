@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/7/2010 2:23
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!$nv_Request->isset_request('id', 'post,get')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
@@ -22,7 +23,7 @@ $sql = 'SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title
 $row = $db->query($sql)->fetch();
 
 if (!isset($row['func_title']) or $row['func_title'] == 'main') {
-    die('NO_' . $id);
+    exit('NO_' . $id);
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
@@ -39,10 +40,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     $nv_Cache->delMod('modules');
 
-    die('OK|show_funcs|action');
-} else {
-    $fun_alias = $row['fun_alias'];
+    exit('OK|show_funcs|action');
 }
+    $fun_alias = $row['fun_alias'];
 
 $contents = [];
 $contents['caption'] = sprintf($lang_module['change_fun_alias'], $row['func_title'], $row['mod_custom_title']);

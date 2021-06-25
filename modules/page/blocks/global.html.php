@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 10, 2011 6:04:30 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_data_config_html')) {
     /**
      * nv_block_data_config_html()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_data_config_html($module, $data_block, $lang_block)
     {
@@ -40,9 +41,9 @@ if (!nv_function_exists('nv_block_data_config_html')) {
     /**
      * nv_block_data_config_html_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_data_config_html_submit($module, $lang_block)
     {
@@ -66,8 +67,8 @@ if (!nv_function_exists('nv_block_data_config_html')) {
     /**
      * nv_block_global_html()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return mixed
      */
     function nv_block_global_html($block_config)
     {

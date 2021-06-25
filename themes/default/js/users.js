@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function addpass() {
@@ -25,8 +26,8 @@ function safekeySend(a) {
         url: $(a).prop("action"),
         data: $(a).serialize() + '&resend=1',
         dataType: "json",
-        success: function(e) {
-            "error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=\"" + e.input + "\"]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=\"" + e.input + "\"]", a).attr("data-mess")), validErrorShow($("[name=\"" + e.input + "\"]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function() {
+        success: function (e) {
+            "error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=\"" + e.input + "\"]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=\"" + e.input + "\"]", a).attr("data-mess")), validErrorShow($("[name=\"" + e.input + "\"]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function () {
                 var d = $(".nv-info", a).attr("data-default");
                 if (!d) d = $(".nv-info-default", a).html();
                 $(".nv-info", a).removeClass("error success").html(d);
@@ -52,7 +53,7 @@ function deleteAvatar(a, b, c) {
         url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=avatar/del',
         data: 'checkss=' + b + '&del=1',
         dataType: 'json',
-        success: function(e) {
+        success: function (e) {
             $(a).attr("src", $(a).attr("data-default"));
         }
     });
@@ -81,7 +82,7 @@ function button_datepickerShow(a) {
 function verkeySend(a) {
     $(".has-error", a).removeClass("has-error");
     var d = 0;
-    $(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+    $(a).find("input.required,textarea.required,select.required,div.required").each(function () {
         var b = $(this).prop("tagName");
         "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
@@ -104,7 +105,7 @@ function usageTermsShow(t) {
         url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register',
         data: 'get_usage_terms=1',
         dataType: 'html',
-        success: function(e) {
+        success: function (e) {
             if ($('#sitemodal').length) {
                 if (!$('#sitemodalTerm').length) {
                     $('body').append('<div id="sitemodalTerm" class="modal fade" role="dialog">' + $('#sitemodal').html() + '</div>')
@@ -112,7 +113,7 @@ function usageTermsShow(t) {
                 "" != t && 'undefined' != typeof t && $("#sitemodalTerm .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + t + '</h2></div>');
                 $("#sitemodalTerm").find(".modal-title").html(t);
                 $("#sitemodalTerm").find(".modal-body").html(e);
-                $('#sitemodalTerm').on('hidden.bs.modal', function() {
+                $('#sitemodalTerm').on('hidden.bs.modal', function () {
                     $("#sitemodalTerm .modal-content").find(".modal-header").remove()
                 });
                 $("#sitemodalTerm").modal({ backdrop: "static" })
@@ -130,7 +131,7 @@ function validErrorShow(a) {
     $(a).tooltip({
         container: "body",
         placement: "bottom",
-        title: function() {
+        title: function () {
             return "" != $(a).attr("data-current-mess") ? $(a).attr("data-current-mess") : nv_required
         }
     });
@@ -220,7 +221,7 @@ function login_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     var c = 0,
         b = [];
-    $(a).find(".required").each(function() {
+    $(a).find(".required").each(function () {
         "password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
     });
@@ -230,16 +231,16 @@ function login_validForm(a) {
         url: b.url,
         data: b.data,
         dataType: "json",
-        success: function(d) {
+        success: function (d) {
             var b = $("[onclick*='change_captcha']", a);
             b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
                     $(".tooltip-current", a).removeClass("tooltip-current"),
-                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
+                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function () {
                         $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                         validErrorShow(this)
-                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
+                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function () {
                         $("[type=submit]", a).prop("disabled", !1);
                         if ($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) {
                             change_captcha()
@@ -247,7 +248,7 @@ function login_validForm(a) {
                     }, 1E3)
             } else if (d.status == "ok") {
                 $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
-                    $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
+                    $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function () {
                         if ("undefined" != typeof d.redirect && "" != d.redirect) {
                             window.location.href = d.redirect;
                         } else {
@@ -274,7 +275,7 @@ function reg_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     var e = 0;
     c = [];
-    $(a).find("input.required,input[data-callback],textarea.required,select.required,div.required").each(function() {
+    $(a).find("input.required,input[data-callback],textarea.required,select.required,div.required").each(function () {
         var b = $(this).prop("tagName");
         "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return e++,
@@ -286,27 +287,27 @@ function reg_validForm(a) {
         url: c.url,
         data: c.data,
         dataType: "json",
-        success: function(b) {
+        success: function (b) {
             var d = $("[onclick*='change_captcha']", a);
             d && d.click();
             "error" == b.status ? ($("input,button,select,textarea",
-                a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find('[name="' + b.input + '"]').each(function() {
+                a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find('[name="' + b.input + '"]').each(function () {
                     $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                     validErrorShow(this)
                 }) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
                     scrollTop: $(".nv-info", a).offset().top
                 }, 800)), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
-                    "ok" == b.input ? setTimeout(function() {
+                    "ok" == b.input ? setTimeout(function () {
                         $(".nv-info", a).fadeOut();
                         $("input,button,select,textarea", a).prop("disabled", !1);
                         $("[onclick*=validReset]", a).click()
                     }, 6E3) : ($("html, body").animate({
                         scrollTop: $(".nv-info", a).offset().top
-                    }, 800), $(".form-detail", a).hide(), setTimeout(function() {
+                    }, 800), $(".form-detail", a).hide(), setTimeout(function () {
                         window.location.href = "" != b.input ? b.input : window.location.href
                     }, 6E3)))
         },
-        error: function(b, d, f) {
+        error: function (b, d, f) {
             window.console.log ? console.log(b.status + ": " + f) : alert(b.status + ": " + f)
         }
     }));
@@ -317,7 +318,7 @@ function lostpass_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     var d = 0,
         c = [];
-    $(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+    $(a).find("input.required,textarea.required,select.required,div.required").each(function () {
         var b = $(this).prop("tagName");
         "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
@@ -333,7 +334,7 @@ function lostpass_validForm(a) {
             url: c.url,
             data: c.data,
             dataType: "json",
-            success: function(b) {
+            success: function (b) {
                 if (b.status == "error") {
                     $("[name=step]", a).val(b.step);
                     if ("undefined" != typeof b.info && "" != b.info) $(".nv-info", a).removeClass('error success').text(b.info);
@@ -346,7 +347,7 @@ function lostpass_validForm(a) {
                     if (b.input == '') {
                         $(".nv-info", a).html(b.mess).addClass("error").show();
                     } else {
-                        $(a).find("[name=\"" + b.input + "\"]").each(function() {
+                        $(a).find("[name=\"" + b.input + "\"]").each(function () {
                             $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                             validErrorShow(this);
                         });
@@ -361,7 +362,7 @@ function lostpass_validForm(a) {
                     }
                 } else {
                     $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location.href = b.input;
                     }, 6E3);
                 }
@@ -375,7 +376,7 @@ function changemail_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     var d = 0,
         c = [];
-    $(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+    $(a).find("input.required,textarea.required,select.required,div.required").each(function () {
         var b = $(this).prop("tagName");
         "INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess",
@@ -387,13 +388,13 @@ function changemail_validForm(a) {
         url: c.url,
         data: c.data,
         dataType: "json",
-        success: function(b) {
+        success: function (b) {
             $("[name=vsend]", a).val("0");
-            "error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
+            "error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function () {
                 $(this).addClass("tooltip-current").attr("data-current-mess",
                     b.mess);
                 validErrorShow(this)
-            }), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
+            }), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function () {
                 window.location.href = "" != b.input ? b.input : window.location.href
             }, 6E3))
         }
@@ -409,10 +410,10 @@ function bt_logout(a) {
         url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=logout&nocache=' + new Date().getTime(),
         data: 'nv_ajax_login=1',
         dataType: 'html',
-        success: function(e) {
+        success: function (e) {
             $('.userBlock', $(a).parent().parent().parent().parent()).hide();
             $('.nv-info', $(a).parent().parent().parent().parent()).addClass("text-center success").html(e).show();
-            setTimeout(function() {
+            setTimeout(function () {
                 window.location.href = window.location.href
             }, 2E3)
         }
@@ -473,19 +474,19 @@ UAV.data = {
     cropperApi: null
 };
 UAV.tool = {
-    bytes2Size: function(bytes) {
+    bytes2Size: function (bytes) {
         var sizes = ['Bytes', 'KB', 'MB'];
         if (bytes == 0) return 'n/a';
         var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
     },
-    update: function(e) {
+    update: function (e) {
         $('#' + UAV.config.x).val(e.x);
         $('#' + UAV.config.y).val(e.y);
         $('#' + UAV.config.w).val(e.width);
         $('#' + UAV.config.h).val(e.height);
     },
-    clear: function() {
+    clear: function () {
         $('#' + UAV.config.x).val(0);
         $('#' + UAV.config.y).val(0);
         $('#' + UAV.config.w).val(0);
@@ -494,13 +495,13 @@ UAV.tool = {
 };
 // Please use this package with fengyuanchen/cropper https://fengyuanchen.github.io/cropper
 UAV.common = {
-    read: function(file) {
+    read: function (file) {
         $('#' + UAV.config.uploadIcon).hide();
         var fRead = new FileReader();
-        fRead.onload = function(e) {
+        fRead.onload = function (e) {
             $('#' + UAV.config.target).show();
             $('#' + UAV.config.target).attr('src', e.target.result);
-            $('#' + UAV.config.target).on('load', function() {
+            $('#' + UAV.config.target).on('load', function () {
                 var img = document.getElementById(UAV.config.target);
                 var boxWidth = $('#' + UAV.config.target).innerWidth();
                 var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);
@@ -541,10 +542,10 @@ UAV.common = {
                         minCropBoxHeight: minCropBoxHeight,
                         minContainerWidth: 10,
                         minContainerHeight: 10,
-                        crop: function(e) {
+                        crop: function (e) {
                             UAV.tool.update(e);
                         },
-                        built: function() {
+                        built: function () {
                             var imageData = $(this).cropper('getImageData');
                             var cropBoxScale = imageData.naturalWidth / imageData.width;
                             imageData.width = parseInt(Math.floor(imageData.width));
@@ -574,7 +575,7 @@ UAV.common = {
         };
         fRead.readAsDataURL(file);
     },
-    init: function() {
+    init: function () {
         UAV.data.error = false;
         if ($('#' + UAV.config.inputFile).val() == '') {
             UAV.data.error = true;
@@ -595,11 +596,11 @@ UAV.common = {
             UAV.common.read(image);
         }
     },
-    error: function(e) {
+    error: function (e) {
         UAV.common.reset();
         alert(e);
     },
-    reset: function() {
+    reset: function () {
         if (UAV.data.cropperApi != null) {
             UAV.data.cropperApi.cropper('destroy');
             UAV.data.cropperApi = null;
@@ -618,7 +619,7 @@ UAV.common = {
         $('#' + UAV.config.h).val('');
         $('#' + UAV.config.displayDimension).html('');
     },
-    submit: function() {
+    submit: function () {
         if (!UAV.data.busy) {
             if ($('#' + UAV.config.w).val() == '' || $('#' + UAV.config.w).val() == '0') {
                 alert(UAV.lang.upload);
@@ -630,31 +631,31 @@ UAV.common = {
         return false;
     }
 };
-UAV.init = function() {
-    $('#' + UAV.config.uploadIcon).click(function() {
+UAV.init = function () {
+    $('#' + UAV.config.uploadIcon).click(function () {
         $('#' + UAV.config.inputFile).trigger('click');
     });
-    $('#' + UAV.config.inputFile).change(function() {
+    $('#' + UAV.config.inputFile).change(function () {
         UAV.common.init();
     });
-    $('#' + UAV.config.btnReset).click(function() {
+    $('#' + UAV.config.btnReset).click(function () {
         if (!UAV.data.busy) {
             UAV.common.reset();
             $('#' + UAV.config.uploadIcon).trigger('click');
         }
     });
-    $('#' + UAV.config.uploadForm).submit(function() {
+    $('#' + UAV.config.uploadForm).submit(function () {
         return UAV.common.submit();
     });
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Delete user handler
-    $('[data-toggle="admindeluser"]').click(function(e) {
+    $('[data-toggle="admindeluser"]').click(function (e) {
         e.preventDefault();
         var data = $(this).data();
         if (confirm(nv_is_del_confirm[0])) {
-            $.post(data.link, 'userid=' + data.userid, function(res) {
+            $.post(data.link, 'userid=' + data.userid, function (res) {
                 if (res == 'OK') {
                     window.location.href = data.back;
                 } else {

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/29/2009 2:39
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $admin_cookie = $nv_Request->get_string('admin', 'session');
@@ -20,14 +21,14 @@ if (!empty($admin_cookie)) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Hacking attempt';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
-        die($info);
+        exit($info);
     }
 
     if (!nv_admin_checkip()) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: You are not signed in as admin!<br />Your IP address is incorrect!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
-        die($info);
+        exit($info);
     }
 
     if (defined('NV_ADMIN')) {
@@ -35,7 +36,7 @@ if (!empty($admin_cookie)) {
             $nv_Request->unset_request('admin,online', 'session');
             $info = 'Note: You are not signed in as admin!<br />This Firewall system does not accept your login information!';
             $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
-            die($info);
+            exit($info);
         }
     }
 
@@ -45,7 +46,7 @@ if (!empty($admin_cookie)) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: You are not signed in as admin!<br />Session Expired!Please Re-Login!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
-        die($info);
+        exit($info);
     }
 
     //Admin thoat
@@ -77,14 +78,14 @@ if (!empty($admin_cookie)) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: Access denied in Admin Panel!<br />Only God-Admin and Super-Admin has access in Admin Panel!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
-        die($info);
+        exit($info);
     }
 
     if (ADMIN_LOGIN_MODE == 1 and !defined('NV_IS_GODADMIN')) {
         $nv_Request->unset_request('admin,online', 'session');
         $info = 'Note: Access denied in Admin Panel!<br />Only God-Admin has access in Admin Panel!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
-        die($info);
+        exit($info);
     }
 
     if (!empty($admin_info['editor'])) {
@@ -126,9 +127,9 @@ if (!empty($admin_cookie)) {
     }
 
     $admin_online = explode('|', $admin_online);
-    $admin_info['checkpass'] = intval($admin_online[0]);
-    $admin_info['last_online'] = intval($admin_online[2]);
-    $admin_info['checkhits'] = intval($admin_online[3]);
+    $admin_info['checkpass'] = (int) ($admin_online[0]);
+    $admin_info['last_online'] = (int) ($admin_online[2]);
+    $admin_info['checkhits'] = (int) ($admin_online[3]);
     if ($_second == 'time_login') {
         $time_login = [];
         $time_login['showtimeoutsess'] = (NV_CURRENTTIME + 63 - $admin_info['last_online'] > $global_config['admin_check_pass_time']) ? 1 : 0;

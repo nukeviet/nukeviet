@@ -1,18 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_company_info')) {
+    /**
+     * nv_company_info_config()
+     *
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
+     */
     function nv_company_info_config($module, $data_block, $lang_block)
     {
         global $lang_global, $selectthemes;
@@ -106,6 +115,11 @@ if (!nv_function_exists('nv_company_info')) {
         return $html;
     }
 
+    /**
+     * nv_company_info_submit()
+     *
+     * @return array
+     */
     function nv_company_info_submit()
     {
         global $nv_Request;
@@ -130,10 +144,10 @@ if (!nv_function_exists('nv_company_info')) {
     }
 
     /**
-     * nv_menu_theme_default_footer()
+     * nv_company_info()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string
      */
     function nv_company_info($block_config)
     {
@@ -242,6 +256,7 @@ if (!nv_function_exists('nv_company_info')) {
         }
         $xtpl->assign('SITE_LOGO', NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

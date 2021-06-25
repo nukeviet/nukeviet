@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Tue, 21 Jan 2014 01:32:02 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['comment'];
@@ -34,11 +35,11 @@ $array_status_view = [
     '1' => $lang_module['enable'],
     '0' => $lang_module['disable']
 ];
-if (!in_array($stype, array_keys($array_search))) {
+if (!in_array($stype, array_keys($array_search), true)) {
     $stype = '';
 }
 
-if (!in_array($sstatus, array_keys($array_status_view))) {
+if (!in_array($sstatus, array_keys($array_status_view), true)) {
     $sstatus = 2;
 }
 
@@ -133,7 +134,7 @@ if ($sstatus == 0 or $sstatus == 1) {
 if (!empty($from['q'])) {
     $array_like = [];
     if ($stype == 'content_id' and preg_match('/^([0-9]+)$/', $from['q'])) {
-        $array_like[] = 'id =' . intval($from['q']);
+        $array_like[] = 'id =' . (int) ($from['q']);
     } else {
         if ($stype == '' or $stype == 'content') {
             $array_like[] = 'content LIKE :content';

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:42
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -121,6 +122,7 @@ function nv_step_1()
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -176,6 +178,7 @@ function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -225,6 +228,7 @@ function nv_step_4($array_resquest, $array_support, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -284,6 +288,7 @@ function nv_step_5($db_config, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -316,6 +321,7 @@ function nv_step_6($array_data, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -369,6 +375,7 @@ function nv_step_7($array_data, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -396,5 +403,6 @@ function nv_step_8($finish)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }

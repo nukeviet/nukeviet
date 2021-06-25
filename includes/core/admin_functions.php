@@ -1,21 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 2:13
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_groups_list()
  *
- * @return
+ * @param string $mod_data
+ * @return array
  */
 function nv_groups_list($mod_data = 'users')
 {
@@ -23,76 +25,85 @@ function nv_groups_list($mod_data = 'users')
     $cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
         return unserialize($cache);
-    } else {
-        global $db, $db_config, $global_config, $lang_global;
-
-        $groups = [];
-        $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
-        $result = $db->query('SELECT g.group_id, d.title, g.idsite FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
-        while ($row = $result->fetch()) {
-            if ($row['group_id'] < 9) {
-                $row['title'] = $lang_global['level' . $row['group_id']];
-            }
-            $groups[$row['group_id']] = ($global_config['idsite'] > 0 and empty($row['idsite'])) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
-        }
-        $nv_Cache->setItem($mod_data, $cache_file, serialize($groups));
-
-        return $groups;
     }
+    global $db, $db_config, $global_config, $lang_global;
+
+    $groups = [];
+    $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
+    $result = $db->query('SELECT g.group_id, d.title, g.idsite FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
+    while ($row = $result->fetch()) {
+        if ($row['group_id'] < 9) {
+            $row['title'] = $lang_global['level' . $row['group_id']];
+        }
+        $groups[$row['group_id']] = ($global_config['idsite'] > 0 and empty($row['idsite'])) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
+    }
+    $nv_Cache->setItem($mod_data, $cache_file, serialize($groups));
+
+    return $groups;
 }
 
 /**
  * nv_groups_post()
  *
- * @param mixed $groups_view
- * @return
+ * @param array $groups_view
+ * @return array
  */
 function nv_groups_post($groups_view)
 {
-    if (in_array(6, $groups_view)) {
+    $groups_view = array_map('intval', $groups_view);
+    if (in_array(6, $groups_view, true)) {
         return [6];
     }
-    if (in_array(4, $groups_view)) {
+    if (in_array(4, $groups_view, true)) {
         return array_intersect($groups_view, [4, 5, 7]);
     }
-    if (in_array(3, $groups_view)) {
+    if (in_array(3, $groups_view, true)) {
         return array_diff($groups_view, [1, 2]);
     }
-    if (in_array(2, $groups_view)) {
+    if (in_array(2, $groups_view, true)) {
         return array_diff($groups_view, [1]);
     }
     if (empty($groups_view)) {
         return [1];
     }
-    return array_map('intval', $groups_view);
+
+    return $groups_view;
 }
 
 /**
  * nv_var_export()
  *
- * @param mixed $var_array
- * @return
+ * @param array $var_array
+ * @param bool  $isInt
+ * @return string
  */
-function nv_var_export($var_array)
+function nv_var_export($var_array, $isInt = false)
 {
-    $ct = preg_replace('/[\s\t\r\n]+/', ' ', var_export($var_array, true));
-    $ct = str_replace("', ), '", "'), '", $ct);
-    $ct = str_replace('array ( ', 'array(', $ct);
-    $ct = str_replace(' => ', '=>', $ct);
-    $ct = str_replace('\', ), ), )', '\')))', $ct);
-    $ct = str_replace('\', ), )', '\'))', $ct);
-    $ct = preg_replace("/\'\, \)+$/", "')", $ct);
-    return $ct;
+    $patterns = [
+        '/[\s\t\n\r]+/' => ' ',
+        '/array\s*\(\s*/' => '[',
+        '/\s*,?\s*\)\s*/' => ']',
+        '/\s*=>\s*/' => ' => ',
+        '/\s*,\s*/' => ', '
+    ];
+    if ($isInt) {
+        $patterns['/\'0\'/'] = '0';
+        $patterns['/\'(-?[1-9][0-9]*)\'/'] = '$1';
+    }
+
+    $export = var_export($var_array, true);
+
+    return preg_replace(array_keys($patterns), array_values($patterns), $export);
 }
 
 /**
  * nv_save_file_config_global()
  *
- * @return
+ * @return bool
  */
 function nv_save_file_config_global()
 {
-    global $nv_Cache, $db, $sys_info, $global_config, $db_config;
+    global $nv_Cache, $db, $global_config, $db_config;
 
     if ($global_config['idsite']) {
         return false;
@@ -100,7 +111,7 @@ function nv_save_file_config_global()
 
     $content_config = '<?php' . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
 
     $config_variable = [];
     $allowed_html_tags = '';
@@ -126,7 +137,7 @@ function nv_save_file_config_global()
     $upload_max_filesize = min(nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')), $config_variable['nv_max_size']);
 
     $content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
-    $content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . floatval($upload_max_filesize) . ");\n";
+    $content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . (float) $upload_max_filesize . ");\n";
 
     $my_domains = array_map('trim', explode(',', $config_variable['my_domains']));
     $my_domains[] = NV_SERVER_NAME;
@@ -148,30 +159,30 @@ function nv_save_file_config_global()
     $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin'];
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
-        if (in_array($c_config_name, $config_name_array)) {
+        if (in_array($c_config_name, $config_name_array, true)) {
             if (!empty($c_config_value)) {
                 $c_config_value = "'" . implode("','", array_map('trim', explode(',', $c_config_value))) . "'";
             } else {
                 $c_config_value = '';
             }
-            $content_config .= "\$global_config['" . $c_config_name . "']=[" . $c_config_value . "];\n";
-        } elseif (in_array($c_config_name, $config_name_json)) {
+            $content_config .= "\$global_config['" . $c_config_name . "'] = [" . $c_config_value . "];\n";
+        } elseif (in_array($c_config_name, $config_name_json, true)) {
             $c_config_value = empty($c_config_value) ? [] : ((array) json_decode($c_config_value, true));
             if (empty($c_config_value)) {
                 $c_config_value = '';
             } else {
                 $c_config_value = "'" . implode("','", array_map('trim', $c_config_value)) . "'";
             }
-            $content_config .= "\$global_config['" . $c_config_name . "']=[" . $c_config_value . "];\n";
+            $content_config .= "\$global_config['" . $c_config_name . "'] = [" . $c_config_value . "];\n";
         } else {
             if (preg_match('/^(0|[1-9][0-9]*)$/', $c_config_value) and $c_config_name != 'facebook_client_id') {
-                $content_config .= "\$global_config['" . $c_config_name . "']=" . $c_config_value . ";\n";
+                $content_config .= "\$global_config['" . $c_config_name . "'] = " . $c_config_value . ";\n";
             } else {
                 $c_config_value = nv_unhtmlspecialchars($c_config_value);
                 if (!preg_match("/^[a-z0-9\-\_\.\,\;\:\@\/\\s]+$/i", $c_config_value) and $c_config_name != 'my_domains') {
                     $c_config_value = nv_htmlspecialchars($c_config_value);
                 }
-                $content_config .= "\$global_config['" . $c_config_name . "']='" . $c_config_value . "';\n";
+                $content_config .= "\$global_config['" . $c_config_name . "'] = '" . $c_config_value . "';\n";
             }
         }
     }
@@ -184,7 +195,7 @@ function nv_save_file_config_global()
     while ($row = $result->fetch()) {
         $c_config_value[] = $row['lang'];
     }
-    $content_config .= "\$global_config['setup_langs']=['" . implode("','", $c_config_value) . "'];\n";
+    $content_config .= "\$global_config['setup_langs'] = ['" . implode("','", $c_config_value) . "'];\n";
 
     //allowed_html_tags
     if (!empty($allowed_html_tags)) {
@@ -192,11 +203,11 @@ function nv_save_file_config_global()
     } else {
         $allowed_html_tags = '';
     }
-    $content_config .= "\$global_config['allowed_html_tags']=[" . $allowed_html_tags . "];\n";
+    $content_config .= "\$global_config['allowed_html_tags'] = [" . $allowed_html_tags . "];\n";
 
     //Xac dinh cac search_engine
     $engine_allowed = (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) ? nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine.xml')) : [];
-    $content_config .= "\$global_config['engine_allowed']=" . nv_var_export($engine_allowed) . ";\n";
+    $content_config .= "\$global_config['engine_allowed'] = " . nv_var_export($engine_allowed) . ";\n";
     $content_config .= "\n";
 
     $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
@@ -206,10 +217,10 @@ function nv_save_file_config_global()
         $tmp_array[$lang] = $language_array[$lang];
     }
     unset($language_array);
-    $content_config .= '$language_array=' . nv_var_export($tmp_array) . ";\n";
+    $content_config .= '$language_array = ' . nv_var_export($tmp_array) . ";\n";
 
     $tmp_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/timezone.ini', true);
-    $content_config .= '$nv_parse_ini_timezone=' . nv_var_export($tmp_array) . ";\n";
+    $content_config .= '$nv_parse_ini_timezone = ' . nv_var_export($tmp_array, true) . ";\n";
 
     $global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
     $global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
@@ -234,14 +245,15 @@ function nv_save_file_config_global()
     if (function_exists('opcache_reset')) {
         opcache_reset();
     }
+
     return $return;
 }
 
 /**
  * nv_geVersion()
  *
- * @param integer $updatetime
- * @return
+ * @param int $updatetime
+ * @return mixed
  */
 function nv_geVersion($updatetime = 3600)
 {
@@ -302,9 +314,9 @@ function nv_geVersion($updatetime = 3600)
 /**
  * nv_version_compare()
  *
- * @param mixed $version1
- * @param mixed $version2
- * @return
+ * @param string $version1
+ * @param string $version2
+ * @return int
  */
 function nv_version_compare($version1, $version2)
 {
@@ -341,29 +353,32 @@ function nv_version_compare($version1, $version2)
 /**
  * nv_check_rewrite_file()
  *
- * @return
+ * @return bool
  */
 function nv_check_rewrite_file()
 {
     global $sys_info;
+
     if ($sys_info['supports_rewrite'] == 'nginx') {
         return true;
-    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+    }
+    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         if (!file_exists(NV_ROOTDIR . '/.htaccess')) {
             return false;
         }
 
         $htaccess = @file_get_contents(NV_ROOTDIR . '/.htaccess');
 
-        return (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s', $htaccess));
-    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+        return preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/s', $htaccess);
+    }
+    if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
         }
 
         $web_config = @file_get_contents(NV_ROOTDIR . '/web.config');
 
-        return (preg_match('/<rule name="nv_rule_rewrite">(.*)<\/rule>/s', $web_config));
+        return preg_match('/<rule name="nv_rule_rewrite">(.*)<\/rule>/s', $web_config);
     }
 
     return false;
@@ -372,8 +387,8 @@ function nv_check_rewrite_file()
 /**
  * nv_rewrite_change()
  *
- * @param mixed $rewrite_optional
- * @return
+ * @param array $array_config_global
+ * @return mixed
  */
 function nv_rewrite_change($array_config_global)
 {
@@ -383,7 +398,8 @@ function nv_rewrite_change($array_config_global)
 
     if ($sys_info['supports_rewrite'] == 'nginx') {
         return [true, true];
-    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    }
+    if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         $filename = NV_ROOTDIR . '/web.config';
         $rulename = 0;
         $rewrite_rule .= "\n";
@@ -495,14 +511,15 @@ function nv_rewrite_change($array_config_global)
             $return = false;
         }
     }
+
     return [$return, NV_BASE_SITEURL . basename($filename)];
 }
 
 /**
  * nv_server_config_change()
  *
- * @param mixed $array_config
- * @return
+ * @param array $array_config
+ * @return mixed
  */
 function nv_server_config_change($array_config)
 {
@@ -585,14 +602,15 @@ function nv_server_config_change($array_config)
             $return = false;
         }
     }
+
     return [$return, basename($filename)];
 }
 
 /**
  * nv_rewrite_rule_iis7()
  *
- * @param mixed $rewrite_rule
- * @return
+ * @param string $rewrite_rule
+ * @return false|string
  */
 function nv_rewrite_rule_iis7($rewrite_rule = '')
 {
@@ -659,14 +677,15 @@ function nv_rewrite_rule_iis7($rewrite_rule = '')
         $rules_node->appendChild($rule_fragment);
     }
     $doc->formatOutput = true;
+
     return $doc->saveXML();
 }
 
 /**
  * nv_getExtVersion()
  *
- * @param integer $updatetime
- * @return
+ * @param int $updatetime
+ * @return mixed
  */
 function nv_getExtVersion($updatetime = 3600)
 {
@@ -815,8 +834,8 @@ function nv_getExtVersion($updatetime = 3600)
 /**
  * nv_http_get_lang()
  *
- * @param mixed $input
- * @return
+ * @param array $input
+ * @return string
  */
 function nv_http_get_lang($input)
 {
@@ -840,8 +859,9 @@ function nv_http_get_lang($input)
 /**
  * nv_save_file_ips()
  *
- * @param integer $type 0 là IP cấm, 1 là IP bỏ qua flood
- * @return
+ * @param int $type
+ *                  $type 0 là IP cấm, 1 là IP bỏ qua flood
+ * @return string|true
  */
 function nv_save_file_ips($type = 0)
 {
@@ -862,8 +882,8 @@ function nv_save_file_ips($type = 0)
 
     $result = $db->query('SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type=' . $type);
     while (list($dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result->fetch(3)) {
-        $dbendtime = intval($dbendtime);
-        $dbarea = intval($dbarea);
+        $dbendtime = (int) $dbendtime;
+        $dbarea = (int) $dbarea;
 
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
             if ($ips->isIp6($dbip)) {
@@ -898,12 +918,13 @@ function nv_save_file_ips($type = 0)
 
     if (!$content_config_site and !$content_config_admin) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $file_name . '.php');
+
         return true;
     }
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
     $content_config .= '$array_' . $variable_name . "_site = [];\n";
     $content_config .= $content_config_site;
     $content_config .= "\n";

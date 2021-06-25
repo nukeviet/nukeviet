@@ -1,23 +1,33 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 18/1/2011, 1:11
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Files;
 
 use COM;
-use finfo;
 use Exception;
+use finfo;
 
 if (!defined('NV_MIME_INI_FILE')) {
     define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
 }
 
+/**
+ * NukeViet\Files\Upload
+ *
+ * @package NukeViet\Files
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Upload
 {
     private $config = [
@@ -80,19 +90,18 @@ class Upload
     private $chunk_total = 0;
     private $chunk_tmpdir = '';
     private $chunk_prefix = '';
-    private $chunk_resource = null;
+    private $chunk_resource;
 
     /**
-     * upload::__construct()
+     * __construct()
      *
-     * @param mixed $allowed_filetypes
-     * @param mixed $forbid_extensions
-     * @param mixed $forbid_mimes
+     * @param mixed                 $allowed_filetypes
+     * @param mixed                 $forbid_extensions
+     * @param mixed                 $forbid_mimes
      * @param integer|array~integer $maxsize
-     * @param integer $maxwidth
-     * @param integer $maxheight
-     * @param string $magic_path
-     * @return
+     * @param int                   $maxwidth
+     * @param int                   $maxheight
+     * @param string                $magic_path
      */
     public function __construct($allowed_filetypes = ['any'], $forbid_extensions = ['php'], $forbid_mimes = [], $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '')
     {
@@ -101,7 +110,7 @@ class Upload
                 $allowed_filetypes
             ];
         }
-        if (!empty($allowed_filetypes) and in_array('any', $allowed_filetypes)) {
+        if (!empty($allowed_filetypes) and in_array('any', $allowed_filetypes, true)) {
             $allowed_filetypes = [
                 'any'
             ];
@@ -119,13 +128,13 @@ class Upload
 
         $this->config['allowed_files'] = $this->get_ini($allowed_filetypes, $forbid_extensions, $forbid_mimes);
         if (is_array($maxsize)) {
-            $this->config['maxsize'] = floatval($maxsize[0]);
-            $this->config['overflowsize'] = floatval($maxsize[1]);
+            $this->config['maxsize'] = (float) ($maxsize[0]);
+            $this->config['overflowsize'] = (float) ($maxsize[1]);
         } else {
-            $this->config['maxsize'] = $this->config['overflowsize'] = floatval($maxsize);
+            $this->config['maxsize'] = $this->config['overflowsize'] = (float) $maxsize;
         }
-        $this->config['maxwidth'] = intval($maxwidth);
-        $this->config['maxheight'] = intval($maxheight);
+        $this->config['maxwidth'] = (int) $maxwidth;
+        $this->config['maxheight'] = (int) $maxheight;
         $this->config['upload_checking_mode'] = defined('UPLOAD_CHECKING_MODE') ? UPLOAD_CHECKING_MODE : 'strong';
         $this->config['magic_path'] = $magic_path;
 
@@ -148,16 +157,21 @@ class Upload
         $rand = array_rand($userAgents);
         $this->user_agent = $userAgents[$rand];
 
-        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
             set_time_limit(120);
         }
 
-        if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions)) {
+        if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions, true)) {
             ini_set('default_socket_timeout', 120);
             ini_set('user_agent', $this->user_agent);
         }
     }
 
+    /**
+     * setLanguage()
+     *
+     * @param string $lang_upload
+     */
     public function setLanguage($lang_upload)
     {
         if (isset($lang_upload['error_uploadNameEmpty'])) {
@@ -226,32 +240,32 @@ class Upload
     }
 
     /**
-     * upload::func_exists()
+     * func_exists()
      *
-     * @param mixed $funcName
-     * @return
+     * @param string $funcName
+     * @return bool
      */
     private function func_exists($funcName)
     {
-        return (function_exists($funcName) and !in_array($funcName, $this->disable_functions));
+        return function_exists($funcName) and !in_array($funcName, $this->disable_functions, true);
     }
 
     /**
-     * upload::cl_exists()
+     * cl_exists()
      *
-     * @param mixed $clName
-     * @return
+     * @param string $clName
+     * @return bool
      */
     private function cl_exists($clName)
     {
-        return (class_exists($clName, false) and !in_array($clName, $this->disable_classes));
+        return class_exists($clName, false) and !in_array($clName, $this->disable_classes, true);
     }
 
     /**
-     * upload::getextension()
+     * getextension()
      *
-     * @param mixed $filename
-     * @return
+     * @param string $filename
+     * @return string
      */
     private function getextension($filename)
     {
@@ -260,16 +274,17 @@ class Upload
         }
         $filename = basename(strtolower($filename));
         $filename = explode('.', $filename);
+
         return array_pop($filename);
     }
 
     /**
-     * upload::get_ini()
+     * get_ini()
      *
-     * @param mixed $allowed_filetypes
-     * @param mixed $forbid_extensions
-     * @param mixed $forbid_mimes
-     * @return
+     * @param array $allowed_filetypes
+     * @param array $forbid_extensions
+     * @param array $forbid_mimes
+     * @return array
      */
     private function get_ini($allowed_filetypes, $forbid_extensions, $forbid_mimes)
     {
@@ -293,7 +308,7 @@ class Upload
                     continue;
                 }
 
-                list ($key, $value) = explode('=', $line);
+                list($key, $value) = explode('=', $line);
                 $key = trim($key);
                 $value = trim($value);
                 $value = str_replace([
@@ -314,7 +329,7 @@ class Upload
             foreach ($all_ini as $section => $line) {
                 if ($allowed_filetypes == [
                     'any'
-                ] or in_array($section, $allowed_filetypes)) {
+                ] or in_array($section, $allowed_filetypes, true)) {
                     $ini = array_merge($ini, $line);
                 }
             }
@@ -331,7 +346,7 @@ class Upload
                     $new = [];
                     $new[$key] = [];
                     foreach ($i as $i2) {
-                        if (!in_array($i2, $forbid_mimes)) {
+                        if (!in_array($i2, $forbid_mimes, true)) {
                             $new[$key][] = $i2;
                         }
                     }
@@ -347,9 +362,9 @@ class Upload
     }
 
     /**
-     * upload::get_mime_from_iniFile()
+     * get_mime_from_iniFile()
      *
-     * @return
+     * @return string
      */
     private function get_mime_from_iniFile()
     {
@@ -357,10 +372,10 @@ class Upload
     }
 
     /**
-     * upload::get_mime_from_userFile()
+     * get_mime_from_userFile()
      *
-     * @param mixed $userfile
-     * @return
+     * @param string $userfile
+     * @return string
      */
     private function get_mime_from_userFile($userfile)
     {
@@ -368,10 +383,10 @@ class Upload
     }
 
     /**
-     * upload::get_mime_finfo()
+     * get_mime_finfo()
      *
-     * @param mixed $userfile
-     * @return
+     * @param string $userfile
+     * @return string
      */
     private function get_mime_finfo($userfile)
     {
@@ -415,10 +430,10 @@ class Upload
     }
 
     /**
-     * upload::get_mime_exec()
+     * get_mime_exec()
      *
-     * @param mixed $userfile
-     * @return
+     * @param string $userfile
+     * @return string
      */
     private function get_mime_exec($userfile)
     {
@@ -446,10 +461,10 @@ class Upload
     }
 
     /**
-     * upload::get_mime_content_type()
+     * get_mime_content_type()
      *
-     * @param mixed $userfile
-     * @return
+     * @param string $userfile
+     * @return string
      */
     private function get_mime_content_type($userfile)
     {
@@ -464,10 +479,10 @@ class Upload
     }
 
     /**
-     * upload::get_mime_image()
+     * get_mime_image()
      *
-     * @param mixed $userfile
-     * @return
+     * @param string $userfile
+     * @return string
      */
     private function get_mime_image($userfile)
     {
@@ -484,7 +499,7 @@ class Upload
         ];
         defined('IMAGETYPE_WEBP') && $img_exts[IMAGETYPE_WEBP] = 'webp';
 
-        if (in_array($this->file_extension, $img_exts)) {
+        if (in_array($this->file_extension, $img_exts, true)) {
             if (($img_info = @getimagesize($userfile['tmp_name'])) !== false) {
                 $this->img_info = $img_info;
 
@@ -506,24 +521,25 @@ class Upload
     }
 
     /**
-     * upload::check_mime_from_ext()
+     * check_mime_from_ext()
      *
-     * @param mixed $mime
-     * @return
+     * @param string $mime
+     * @return string
      */
     private function check_mime_from_ext($mime)
     {
-        if (!empty($mime) and !in_array($mime, $this->config['allowed_files'][$this->file_extension])) {
+        if (!empty($mime) and !in_array($mime, $this->config['allowed_files'][$this->file_extension], true)) {
             $mime = '';
         }
+
         return $mime;
     }
 
     /**
-     * upload::mime_ign()
+     * mime_ign()
      *
-     * @param mixed $mime
-     * @return
+     * @param string $mime
+     * @return string
      */
     private function mime_ign($mime)
     {
@@ -574,14 +590,15 @@ class Upload
                 $mime = 'application/vnd.ms-powerpoint';
             }
         }
+
         return $mime;
     }
 
     /**
-     * upload::get_mime_type()
+     * get_mime_type()
      *
-     * @param mixed $userfile
-     * @return
+     * @param string $userfile
+     * @return string
      */
     private function get_mime_type($userfile)
     {
@@ -604,6 +621,7 @@ class Upload
             if (($mime = $this->get_mime_from_iniFile()) != '') {
                 return $this->mime_ign($mime);
             }
+
             return '';
         }
 
@@ -623,6 +641,7 @@ class Upload
             if (($mime = $this->get_mime_from_userFile($userfile)) != '') {
                 return $this->mime_ign($mime);
             }
+
             return '';
         }
 
@@ -642,6 +661,7 @@ class Upload
             if ($this->check_mime_from_ext($mime = $this->get_mime_from_userFile($userfile)) != '') {
                 return $this->mime_ign($mime);
             }
+
             return '';
         }
 
@@ -657,13 +677,16 @@ class Upload
         if ($this->check_mime_from_ext($mime = $this->get_mime_image($userfile)) != '') {
             return $this->mime_ign($mime);
         }
+
         return '';
     }
 
     /**
+     * verify_image()
+     *
      * @param string $file
-     * @param boolean $svg
-     * @return boolean
+     * @param bool   $svg
+     * @return bool
      */
     private function verify_image($file, $svg = false)
     {
@@ -678,28 +701,38 @@ class Upload
         //else
         if (preg_match("#([a-z]*)=([\`\'\"]*)script:#iU", $txt)) {
             return false;
-        } elseif (preg_match("#([a-z]*)=([\`\'\"]*)javascript:#iU", $txt)) {
-            return false;
-        } elseif (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $txt)) {
-            return false;
-        } elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt)) {
-            return false;
-        } elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $txt)) {
-            return false;
-        } elseif (!$svg and preg_match("#</*(applet|link|style|script|iframe|frame|frameset)[^>]*>#i", $txt)) {
-            return false;
-        } elseif ($svg and preg_match("#</*(applet|link|script|iframe|frame|frameset)[^>]*>#i", $txt)) {
-            return false;
-        } elseif (preg_match("#<\?php(.*)\?>#ms", $txt)) {
+        }
+        if (preg_match("#([a-z]*)=([\`\'\"]*)javascript:#iU", $txt)) {
             return false;
         }
+        if (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $txt)) {
+            return false;
+        }
+        if (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt)) {
+            return false;
+        }
+        if (preg_match("#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $txt)) {
+            return false;
+        }
+        if (!$svg and preg_match('#</*(applet|link|style|script|iframe|frame|frameset)[^>]*>#i', $txt)) {
+            return false;
+        }
+        if ($svg and preg_match('#</*(applet|link|script|iframe|frame|frameset)[^>]*>#i', $txt)) {
+            return false;
+        }
+        if (preg_match("#<\?php(.*)\?>#ms", $txt)) {
+            return false;
+        }
+
         return true;
     }
 
     /**
+     * checkUploadBlob()
      * Kiểm tra cơ bản phần $_FILES
+     *
      * @param array $userfile
-     * @return string
+     * @return mixed
      */
     private function checkUploadBlob($userfile)
     {
@@ -728,7 +761,7 @@ class Upload
                     break;
                 case UPLOAD_ERR_NO_FILE:
                     $er = $this->lang['error_upload_no_file'];
-                    ;
+
                     break;
                 case UPLOAD_ERR_NO_TMP_DIR:
                     $er = $this->lang['error_upload_no_tmp_dir'];
@@ -742,6 +775,7 @@ class Upload
                 default:
                     $er = $this->lang['error_upload_unknown'];
             }
+
             return $er;
         }
 
@@ -756,11 +790,11 @@ class Upload
     }
 
     /**
-     * Upload::check_tmpfile()
+     * check_tmpfile()
      *
      * @param mixed $userfile
      * @param mixed $no_check_size
-     * @return
+     * @return string
      */
     private function check_tmpfile($userfile, $no_check_size)
     {
@@ -790,6 +824,7 @@ class Upload
             // Kiểm tra file ảnh SVG
             if ($this->file_extension == 'svg') {
                 $this->is_svg = true;
+
                 return $this->check_svg_tmpfile($userfile['tmp_name']);
             }
 
@@ -821,7 +856,9 @@ class Upload
     }
 
     /**
-     * @param array $userfile
+     * check_svg_tmpfile()
+     *
+     * @param string $tmp_name
      * @return string
      */
     private function check_svg_tmpfile($tmp_name)
@@ -839,16 +876,16 @@ class Upload
 
         $this->img_info['maxWidth'] = $this->img_info['maxHeight'] = 0;
         if (isset($attr['viewBox'])) {
-            $viewBox = explode(' ', (string)$attr['viewBox']);
-            if (!isset($viewBox[3]))  {
+            $viewBox = explode(' ', (string) $attr['viewBox']);
+            if (!isset($viewBox[3])) {
                 return $this->lang['error_upload_not_image'];
             }
-            $this->img_info['maxWidth'] = intval($viewBox[2]);
-            $this->img_info['maxHeight'] = intval($viewBox[3]);
+            $this->img_info['maxWidth'] = (int) ($viewBox[2]);
+            $this->img_info['maxHeight'] = (int) ($viewBox[3]);
         }
         if (isset($attr['width']) and isset($attr['height'])) {
-            $this->img_info[0] = intval($attr['width']);
-            $this->img_info[1] = intval($attr['height']);
+            $this->img_info[0] = (int) ($attr['width']);
+            $this->img_info[1] = (int) ($attr['height']);
         } else {
             $this->img_info[0] = $this->img_info['maxWidth'];
             $this->img_info[1] = $this->img_info['maxHeight'];
@@ -866,10 +903,10 @@ class Upload
     }
 
     /**
-     * upload::check_save_path()
+     * check_save_path()
      *
-     * @param mixed $savepath
-     * @return
+     * @param string $savepath
+     * @return string
      */
     private function check_save_path($savepath)
     {
@@ -883,14 +920,15 @@ class Upload
                 return sprintf($this->lang['error_upload_writable'], $savepath);
             }
         }
+
         return '';
     }
 
     /**
-     * upload::string_to_filename()
+     * string_to_filename()
      *
-     * @param mixed $word
-     * @return
+     * @param string $word
+     * @return string
      */
     private function string_to_filename($word)
     {
@@ -909,17 +947,18 @@ class Upload
         $word = preg_replace('/[^a-z0-9\.\-\_ ]/i', '', $word);
         $word = preg_replace('/^\W+|\W+$/', '', $word);
         $word = preg_replace('/[ ]+/', '-', $word);
+
         return strtolower(preg_replace('/\W-/', '', $word));
     }
 
     /**
-     * Upload::save_file()
+     * save_file()
      *
-     * @param mixed $userfile
-     * @param mixed $savepath
-     * @param bool $replace_if_exists
-     * @param bool $no_check_size
-     * @return
+     * @param array  $userfile
+     * @param string $savepath
+     * @param bool   $replace_if_exists
+     * @param bool   $no_check_size
+     * @return array
      */
     public function save_file($userfile, $savepath, $replace_if_exists = true, $no_check_size = false)
     {
@@ -942,7 +981,7 @@ class Upload
         }
 
         // Kiểm tra quyền ghi vào thư mục upload
-        $savepath = str_replace("\\", "/", realpath($savepath));
+        $savepath = str_replace('\\', '/', realpath($savepath));
         $return['error'] = $this->check_save_path($savepath);
         if (!empty($return['error'])) {
             return $return;
@@ -994,7 +1033,7 @@ class Upload
                 if (!$out = @fopen($file_tmp, 'ab')) {
                     throw new Exception($this->lang['error_upload_cant_write']);
                 }
-                if (!$in = @fopen($userfile['tmp_name'], "rb")) {
+                if (!$in = @fopen($userfile['tmp_name'], 'rb')) {
                     throw new Exception($this->lang['error_upload_no_file']);
                 }
 
@@ -1038,6 +1077,7 @@ class Upload
                 $this->unlockChunkFile($file_tmp);
                 @unlink($file_tmp);
                 $return['error'] = $e->getMessage();
+
                 return $return;
             }
         } else {
@@ -1055,6 +1095,7 @@ class Upload
 
             if (!file_exists($savepath . $filename)) {
                 $return['error'] = $this->lang['error_upload_cant_write'];
+
                 return $return;
             }
         }
@@ -1084,10 +1125,10 @@ class Upload
     }
 
     /**
-     * upload::url_get_info()
+     * url_get_info()
      *
-     * @param mixed $url
-     * @return
+     * @param string $url
+     * @return array|false
      */
     private function url_get_info($url)
     {
@@ -1155,19 +1196,19 @@ class Upload
     }
 
     /**
-     * upload::check_url()
+     * check_url()
      *
-     * @param integer $is_200
-     * @return
+     * @param int $is_200
+     * @return bool
      */
     private function check_url($is_200 = 0)
     {
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
-        if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions) and $allow_url_fopen == 1) {
+        if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions, true) and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
-        } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions)) {
+        } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions, true) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions, true)) {
             $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
+            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
 
             $userAgents = [
                 'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
@@ -1203,20 +1244,19 @@ class Upload
 
             if ($response === false) {
                 return false;
-            } else {
-                $res = explode("\n", $response);
             }
-        } elseif (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions) and function_exists('fgets') and !in_array('fgets', $this->disable_functions)) {
+            $res = explode("\n", $response);
+        } elseif (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions, true) and function_exists('fgets') and !in_array('fgets', $this->disable_functions, true)) {
             $res = [];
             $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
+            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
             $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
             if ($fp) {
                 $path = !empty($url_info['path']) ? $url_info['path'] : '/';
                 $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
 
-                fputs($fp, "HEAD " . $path . " HTTP/1.0\r\n");
-                fputs($fp, "Host: " . $url_info['host'] . ":" . $port . "\r\n");
+                fputs($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
+                fputs($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
                 fputs($fp, "Connection: close\r\n\r\n");
 
                 while (!feof($fp)) {
@@ -1234,7 +1274,7 @@ class Upload
         if (!$res) {
             return false;
         }
-        if (preg_match("/(200)/", $res[0])) {
+        if (preg_match('/(200)/', $res[0])) {
             $ContentType = '';
             foreach ($res as $k => $v) {
                 if (preg_match("/content-type:\s(.*?)$/is", $v, $matches)) {
@@ -1255,6 +1295,7 @@ class Upload
                     }
                 }
             }
+
             return true;
         }
         if ($is_200 > 5) {
@@ -1272,17 +1313,19 @@ class Upload
                     if (empty($this->url_info) or !isset($this->url_info['scheme'])) {
                         return false;
                     }
+
                     return $this->check_url($is_200);
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * upload::check_allow_methods()
+     * check_allow_methods()
      *
-     * @return
+     * @return array
      */
     private function check_allow_methods()
     {
@@ -1309,17 +1352,17 @@ class Upload
     }
 
     /**
-     * upload::check_mime()
+     * check_mime()
      *
-     * @param mixed $mime
-     * @return
+     * @param string $mime
+     * @return bool
      */
     private function check_mime($mime)
     {
         $return = false;
 
         foreach ($this->config['allowed_files'] as $ext => $mimes) {
-            if (in_array($mime, $mimes)) {
+            if (in_array($mime, $mimes, true)) {
                 $this->urlfile_extension = $ext;
                 $return = true;
                 break;
@@ -1330,9 +1373,9 @@ class Upload
     }
 
     /**
-     * upload::curl_Download()
+     * curl_Download()
      *
-     * @return
+     * @return bool
      */
     private function curl_Download()
     {
@@ -1348,6 +1391,7 @@ class Upload
         curl_setopt_array($curlHandle, $options);
         if (($fp = fopen($this->temp_file, 'wb')) === false) {
             curl_close($curlHandle);
+
             return false;
         }
 
@@ -1357,17 +1401,19 @@ class Upload
         if (curl_exec($curlHandle) === false) {
             fclose($fp);
             curl_close($curlHandle);
+
             return false;
         }
         fclose($fp);
         curl_close($curlHandle);
+
         return true;
     }
 
     /**
-     * upload::fopen_Download()
+     * fopen_Download()
      *
-     * @return
+     * @return bool
      */
     private function fopen_Download()
     {
@@ -1376,6 +1422,7 @@ class Upload
         }
         if (($fp2 = fopen($this->temp_file, 'wb')) === false) {
             fclose($fp);
+
             return false;
         }
 
@@ -1383,19 +1430,21 @@ class Upload
             if (fwrite($fp2, fread($fp, 1024)) === false) {
                 fclose($fp2);
                 fclose($fp);
+
                 return false;
             }
         }
 
         fclose($fp2);
         fclose($fp);
+
         return true;
     }
 
     /**
-     * upload::file_get_contents_Download()
+     * file_get_contents_Download()
      *
-     * @return
+     * @return false|int
      */
     private function file_get_contents_Download()
     {
@@ -1403,13 +1452,14 @@ class Upload
         if ($content === false) {
             return false;
         }
+
         return @file_put_contents($this->temp_file, $content);
     }
 
     /**
-     * upload::file_Download()
+     * file_Download()
      *
-     * @return
+     * @return bool
      */
     private function file_Download()
     {
@@ -1424,21 +1474,24 @@ class Upload
         foreach ($lines as $line) {
             if (fwrite($fp, $line) === false) {
                 fclose($fp);
+
                 return false;
             }
         }
 
         fclose($fp);
+
         return true;
     }
 
     /**
-     * upload::save_urlfile()
+     * save_urlfile()
      *
-     * @param mixed $urlfile
-     * @param mixed $savepath
-     * @param bool $replace_if_exists
-     * @return
+     * @param string $urlfile
+     * @param string $savepath
+     * @param bool   $replace_if_exists
+     * @param bool   $no_check_size
+     * @return array
      */
     public function save_urlfile($urlfile, $savepath, $replace_if_exists = true, $no_check_size = false)
     {
@@ -1457,28 +1510,32 @@ class Upload
         $this->url_info = $this->url_get_info($urlfile);
         if (empty($this->url_info) or !isset($this->url_info['scheme'])) {
             $return['error'] = $this->lang['error_upload_urlfile'];
+
             return $return;
         }
 
         if ($this->check_url() === false) {
             $return['error'] = $this->lang['error_upload_url_notfound'];
+
             return $return;
         }
 
         if (empty($this->urlfile_mime)) {
             $return['error'] = $this->lang['error_upload_mime_not_recognize'];
+
             return $return;
         }
 
         if (!$this->check_mime($this->urlfile_mime)) {
             $return['error'] = $this->lang['error_upload_type_not_allowed'] . ' (' . $this->urlfile_mime . ')';
+
             return $return;
         }
 
         if (isset($this->url_info['file'])) {
             $urlfile_extension = $this->getextension($this->url_info['file']);
             if (!empty($urlfile_extension) and isset($this->config['allowed_files'][$urlfile_extension])) {
-                if (in_array($this->urlfile_mime, $this->config['allowed_files'][$urlfile_extension])) {
+                if (in_array($this->urlfile_mime, $this->config['allowed_files'][$urlfile_extension], true)) {
                     $this->urlfile_extension = $urlfile_extension;
                 }
             }
@@ -1491,7 +1548,7 @@ class Upload
             ];
         }
 
-        $this->temp_file = str_replace("\\", "/", tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX));
+        $this->temp_file = str_replace('\\', '/', tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX));
 
         $result = false;
         foreach ($allow_methods as $method) {
@@ -1507,6 +1564,7 @@ class Upload
         if ($result === false) {
             @unlink($this->temp_file);
             $return['error'] = $this->lang['error_upload_no_file'];
+
             return $return;
         }
 
@@ -1520,6 +1578,7 @@ class Upload
         if (empty($this->file_mime)) {
             @unlink($this->temp_file);
             $return['error'] = $this->lang['error_upload_mime_not_recognize'];
+
             return $return;
         }
 
@@ -1527,6 +1586,7 @@ class Upload
             if (!($no_check_size and preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime))) {
                 @unlink($this->temp_file);
                 $return['error'] = sprintf($this->lang['error_upload_max_user_size'], $this->config['maxsize']);
+
                 return $return;
             }
         }
@@ -1541,6 +1601,7 @@ class Upload
                 if (!empty($error)) {
                     @unlink($this->temp_file);
                     $return['error'] = $error;
+
                     return $return;
                 }
             } else {
@@ -1551,12 +1612,14 @@ class Upload
                 if (empty($this->img_info) or !isset($this->img_info[0]) or empty($this->img_info[0]) or !isset($this->img_info[1]) or empty($this->img_info[1])) {
                     @unlink($this->temp_file);
                     $return['error'] = $this->lang['error_upload_not_image'];
+
                     return $return;
                 }
 
                 if (!$this->verify_image($this->temp_file)) {
                     @unlink($this->temp_file);
                     $return['error'] = $this->lang['error_upload_image_failed'];
+
                     return $return;
                 }
 
@@ -1564,35 +1627,38 @@ class Upload
                     if (!empty($this->config['maxwidth']) and $this->img_info[0] > $this->config['maxwidth']) {
                         @unlink($this->temp_file);
                         $return['error'] = sprintf($this->lang['error_upload_image_width'], $this->config['maxwidth']);
+
                         return $return;
                     }
 
                     if (!empty($this->config['maxheight']) and $this->img_info[1] > $this->config['maxheight']) {
                         @unlink($this->temp_file);
                         $return['error'] = sprintf($this->lang['error_upload_image_height'], $this->config['maxheight']);
+
                         return $return;
                     }
                 }
             }
         }
 
-        $savepath = str_replace("\\", "/", realpath($savepath));
+        $savepath = str_replace('\\', '/', realpath($savepath));
         $return['error'] = $this->check_save_path($savepath);
         if (!empty($return['error'])) {
             @unlink($this->temp_file);
+
             return $return;
         }
 
         unset($f);
         if (isset($this->url_info['file']) and preg_match("/^(.*)\.[a-zA-Z0-9]+$/", $this->url_info['file'], $f)) {
             $fn = $this->string_to_filename($f[1]);
-            $filename = $fn . "." . $this->file_extension;
+            $filename = $fn . '.' . $this->file_extension;
         } else {
-            $filename = time() . "." . $this->file_extension;
+            $filename = time() . '.' . $this->file_extension;
         }
 
         if (!preg_match('/\/$/', $savepath)) {
-            $savepath = $savepath . "/";
+            $savepath = $savepath . '/';
         }
         if (empty($replace_if_exists)) {
             $filename2 = $filename;
@@ -1611,6 +1677,7 @@ class Upload
         if (!file_exists($savepath . $filename)) {
             @unlink($this->temp_file);
             $return['error'] = $this->lang['error_upload_cant_write'];
+
             return $return;
         }
 
@@ -1632,28 +1699,27 @@ class Upload
         if ($this->is_img) {
             $return['img_info'] = $this->img_info;
         }
+
         return $return;
     }
 
     /**
-     * Upload::headersNoCache()
-     *
-     * @return void
+     * headersNoCache()
      */
     private function headersNoCache()
     {
-        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        header("Cache-Control: no-store, no-cache, must-revalidate");
-        header("Cache-Control: post-check=0, pre-check=0", false);
-        header("Pragma: no-cache");
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: no-store, no-cache, must-revalidate');
+        header('Cache-Control: post-check=0, pre-check=0', false);
+        header('Pragma: no-cache');
     }
 
     /**
-     * Upload::setChunkOption()
+     * setChunkOption()
      *
-     * @param mixed $chunk_upload
-     * @return
+     * @param array $chunk_upload
+     * @return $this
      */
     public function setChunkOption($chunk_upload)
     {
@@ -1674,14 +1740,17 @@ class Upload
                 $this->chunk_prefix = $chunk_upload['chunk_prefix'];
             }
         }
+
         return $this;
     }
 
     /**
+     * filesize()
      * PHPs filesize() fails to measure files larger than 2gb
      * @see http://stackoverflow.com/a/5502328/189673
      *
-     * @param string $file Path to the file to measure
+     * @param string $file
+     *                     Path to the file to measure
      * @return int
      */
     protected function filesize($file)
@@ -1706,7 +1775,7 @@ class Upload
             }
         }
         // Try the Windows COM interface
-        if ($iswin and $this->cl_exists("COM")) {
+        if ($iswin and $this->cl_exists('COM')) {
             try {
                 $fsobj = new COM('Scripting.FileSystemObject');
                 $filecal = $fsobj->GetFile(realpath($file));
@@ -1723,10 +1792,9 @@ class Upload
     }
 
     /**
-     * Upload::lockChunkFile()
+     * lockChunkFile()
      *
      * @param mixed $file
-     * @return void
      */
     private function lockChunkFile($file)
     {
@@ -1738,10 +1806,9 @@ class Upload
     }
 
     /**
-     * Upload::unlockChunkFile()
+     * unlockChunkFile()
      *
      * @param mixed $file
-     * @return void
      */
     private function unlockChunkFile($file)
     {

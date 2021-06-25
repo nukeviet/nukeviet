@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $proxy_blocker_array = [
@@ -87,10 +88,10 @@ if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Reques
         $array_config_global['two_step_verification'] = 0;
     }
     $array_config_global['admin_2step_opt'] = array_intersect($array_config_global['admin_2step_opt'], $admin_2step_array);
-    if (!in_array($array_config_global['admin_2step_default'], $admin_2step_array)) {
+    if (!in_array($array_config_global['admin_2step_default'], $admin_2step_array, true)) {
         $array_config_global['admin_2step_default'] = '';
     }
-    if (!in_array($array_config_global['admin_2step_default'], $array_config_global['admin_2step_opt'])) {
+    if (!in_array($array_config_global['admin_2step_default'], $array_config_global['admin_2step_opt'], true)) {
         $array_config_global['admin_2step_default'] = current($array_config_global['admin_2step_opt']);
     }
     $array_config_global['admin_2step_opt'] = empty($array_config_global['admin_2step_opt']) ? '' : implode(',', $array_config_global['admin_2step_opt']);
@@ -102,15 +103,15 @@ if ($nv_Request->isset_request('submitbasic', 'post') and $checkss == $nv_Reques
         $sth->execute();
     }
 
-    $array_config_define['nv_anti_agent'] = (int)$nv_Request->get_bool('nv_anti_agent', 'post');
-    $array_config_define['nv_anti_iframe'] = (int)$nv_Request->get_bool('nv_anti_iframe', 'post');
+    $array_config_define['nv_anti_agent'] = (int) $nv_Request->get_bool('nv_anti_agent', 'post');
+    $array_config_define['nv_anti_iframe'] = (int) $nv_Request->get_bool('nv_anti_iframe', 'post');
     $variable = $nv_Request->get_string('nv_allowed_html_tags', 'post');
     $variable = str_replace(';', ',', strtolower($variable));
     $variable = explode(',', $variable);
     $nv_allowed_html_tags = [];
     foreach ($variable as $value) {
         $value = trim($value);
-        if (preg_match('/^[a-z0-9]+$/', $value) and !in_array($value, $nv_allowed_html_tags)) {
+        if (preg_match('/^[a-z0-9]+$/', $value) and !in_array($value, $nv_allowed_html_tags, true)) {
             $nv_allowed_html_tags[] = $value;
         }
     }
@@ -147,7 +148,7 @@ $array_config_flood = [];
 
 // Xử lý phần chống Flood
 if ($nv_Request->isset_request('submitflood', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
-    $array_config_flood['is_flood_blocker'] = (int)$nv_Request->get_bool('is_flood_blocker', 'post');
+    $array_config_flood['is_flood_blocker'] = (int) $nv_Request->get_bool('is_flood_blocker', 'post');
     $array_config_flood['max_requests_60'] = $nv_Request->get_int('max_requests_60', 'post');
     $array_config_flood['max_requests_300'] = $nv_Request->get_int('max_requests_300', 'post');
 
@@ -670,7 +671,7 @@ foreach ($recaptcha_vers as $ver) {
     $xtpl->parse('main.recaptcha_ver');
 }
 
-for ($i = 2; $i < 10; $i++) {
+for ($i = 2; $i < 10; ++$i) {
     $array = [
         'value' => $i,
         'select' => ($i == $array_define_captcha['nv_gfx_num']) ? ' selected="selected"' : '',
@@ -726,7 +727,7 @@ if ($ip_version == 4) {
 }
 
 // Xuất mask IPv6
-for ($i = 1; $i <= 128; $i++) {
+for ($i = 1; $i <= 128; ++$i) {
     $xtpl->assign('IPMASK', [
         'key' => $i,
         'title' => '/' . $i,
@@ -811,7 +812,7 @@ $xtpl->assign('FLDATA', [
     'notice' => $array_flip['flnotice']
 ]);
 
-for ($i = 0; $i <= 3; $i++) {
+for ($i = 0; $i <= 3; ++$i) {
     $two_step_verification = [
         'key' => $i,
         'title' => $lang_module['two_step_verification' . $i],
@@ -825,7 +826,7 @@ foreach ($admin_2step_array as $admin_2step) {
     $admin_2step_opt = [
         'key' => $admin_2step,
         'title' => $lang_global['admin_2step_opt_' . $admin_2step],
-        'checked' => in_array($admin_2step, $array_config_global['admin_2step_opt']) ? ' checked="checked"' : ''
+        'checked' => in_array($admin_2step, $array_config_global['admin_2step_opt'], true) ? ' checked="checked"' : ''
     ];
     $xtpl->assign('ADMIN_2STEP_OPT', $admin_2step_opt);
 

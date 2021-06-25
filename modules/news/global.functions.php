@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 0:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $global_code_defined = [
@@ -29,7 +30,7 @@ if ($timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME) {
 /**
  * nv_set_status_module()
  *
- * @return
+ * @throws PDOException
  */
 function nv_set_status_module()
 {
@@ -47,7 +48,7 @@ function nv_set_status_module()
     while (list($id, $listcatid) = $query->fetch(3)) {
         $array_catid = explode(',', $listcatid);
         foreach ($array_catid as $catid_i) {
-            $catid_i = intval($catid_i);
+            $catid_i = (int) $catid_i;
             if ($catid_i > 0) {
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status=1 WHERE id=' . $id);
             }
@@ -59,7 +60,7 @@ function nv_set_status_module()
     $weight_min = 0;
     $query = $db->query('SELECT id, listcatid, archive, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY weight DESC, exptime ASC');
     while (list($id, $listcatid, $archive, $weight) = $query->fetch(3)) {
-        if (intval($archive) == 0) {
+        if ((int) $archive == 0) {
             nv_del_content_module($id);
             $weight_min = $weight;
         } else {
@@ -78,7 +79,7 @@ function nv_set_status_module()
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'timecheckstatus'");
     $sth->bindValue(':module_name', $module_name, PDO::PARAM_STR);
-    $sth->bindValue(':config_value', intval($timecheckstatus), PDO::PARAM_STR);
+    $sth->bindValue(':config_value', (int) $timecheckstatus, PDO::PARAM_STR);
     $sth->execute();
 
     nv_fix_weight_content($weight_min);
@@ -92,20 +93,20 @@ function nv_set_status_module()
 /**
  * nv_del_content_module()
  *
- * @param mixed $id
- * @return
+ * @param int $id
+ * @return string
  */
 function nv_del_content_module($id)
 {
     global $db, $module_name, $module_data, $title, $lang_module, $module_config;
     $content_del = 'NO_' . $id;
     $title = '';
-    list($id, $listcatid, $title) = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . intval($id))->fetch(3);
+    list($id, $listcatid, $title) = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . (int) $id)->fetch(3);
     if ($id > 0) {
         $number_no_del = 0;
         $array_catid = explode(',', $listcatid);
         foreach ($array_catid as $catid_i) {
-            $catid_i = intval($catid_i);
+            $catid_i = (int) $catid_i;
             if ($catid_i > 0) {
                 $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id=' . $id;
                 if (!$db->exec($_sql)) {
@@ -147,14 +148,14 @@ function nv_del_content_module($id)
             $content_del = 'ERR_' . $lang_module['error_del_content'];
         }
     }
+
     return $content_del;
 }
 
 /**
  * nv_fix_weight_content()
  *
- * @param mixed $weight_min
- * @return
+ * @param int $weight_min
  */
 function nv_fix_weight_content($weight_min)
 {
@@ -169,7 +170,7 @@ function nv_fix_weight_content($weight_min)
             $_array_catid = explode(',', $_row2['listcatid']);
             foreach ($_array_catid as $_catid) {
                 try {
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . intval($_catid) . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . (int) $_catid . ' SET weight=' . $weight . ' WHERE id=' . $_row2['id']);
                 } catch (PDOException $e) {
                 }
             }
@@ -181,16 +182,15 @@ function nv_fix_weight_content($weight_min)
 /**
  * nv_archive_content_module()
  *
- * @param mixed $id
- * @param mixed $listcatid
- * @return
+ * @param int    $id
+ * @param string $listcatid
  */
 function nv_archive_content_module($id, $listcatid)
 {
     global $db, $module_data;
     $array_catid = explode(',', $listcatid);
     foreach ($array_catid as $catid_i) {
-        $catid_i = intval($catid_i);
+        $catid_i = (int) $catid_i;
         if ($catid_i > 0) {
             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status=3 WHERE id=' . $id);
         }
@@ -201,26 +201,29 @@ function nv_archive_content_module($id, $listcatid)
 /**
  * nv_link_edit_page()
  *
- * @param mixed $id
- * @return
+ * @param int $id
+ * @return string
  */
 function nv_link_edit_page($id)
 {
     global $lang_global, $module_name;
     $link = '<a class="btn btn-primary btn-xs btn_edit" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $id . '"><em class="fa fa-edit margin-right"></em> ' . $lang_global['edit'] . '</a>';
+
     return $link;
 }
 
 /**
  * nv_link_delete_page()
  *
- * @param mixed $id
- * @return
+ * @param int $id
+ * @param int $detail
+ * @return string
  */
 function nv_link_delete_page($id, $detail = 0)
 {
     global $lang_global;
     $link = '<a class="btn btn-danger btn-xs" href="javascript:void(0);" onclick="nv_del_content(' . $id . ", '" . md5($id . NV_CHECK_SESSION) . "','" . NV_BASE_ADMINURL . "', " . $detail . ')"><em class="fa fa-trash-o margin-right"></em> ' . $lang_global['delete'] . '</a>';
+
     return $link;
 }
 
@@ -228,22 +231,22 @@ function nv_link_delete_page($id, $detail = 0)
  * nv_get_firstimage()
  *
  * @param string $contents
- * @return
+ * @return string
  */
 function nv_get_firstimage($contents)
 {
     if (preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $contents, $img)) {
         return $img[1];
-    } else {
-        return '';
     }
+
+    return '';
 }
 
 /**
  * nv_check_block_topcat_news()
  *
- * @param string $catid
- * @return boolean
+ * @param int $catid
+ * @return bool
  */
 function nv_check_block_topcat_news($catid)
 {
@@ -260,16 +263,16 @@ function nv_check_block_topcat_news($catid)
     $find2 = "/<tag>\[" . strtoupper($module_name) . '_TOPCAT_' . $catid . "\]<\/tag>/";
     if (preg_match($find1, $contents) and preg_match($find2, $contents)) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 /**
  * nv_check_block_block_botcat_news()
  *
- * @param string $catid
- * @return boolean
+ * @param int $catid
+ * @return bool
  */
 function nv_check_block_block_botcat_news($catid)
 {
@@ -286,16 +289,16 @@ function nv_check_block_block_botcat_news($catid)
     $find2 = "/<tag>\[" . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . "\]<\/tag>/";
     if (preg_match($find1, $contents) and preg_match($find2, $contents)) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 /**
  * nv_add_block_topcat_news()
  *
- * @param string $catid
- * @return boolean
+ * @param int $catid
+ * @return bool|void
  */
 function nv_add_block_topcat_news($catid)
 {
@@ -331,10 +334,10 @@ function nv_add_block_topcat_news($catid)
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
-        } else {
-            fclose($fhandle);
-            return true;
         }
+        fclose($fhandle);
+
+        return true;
         $nv_Cache->delMod($module_name);
     }
 }
@@ -342,8 +345,8 @@ function nv_add_block_topcat_news($catid)
 /**
  * nv_add_block_botcat_news()
  *
- * @param string $catid
- * @return boolean
+ * @param int $catid
+ * @return bool|void
  */
 function nv_add_block_botcat_news($catid)
 {
@@ -379,10 +382,10 @@ function nv_add_block_botcat_news($catid)
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
-        } else {
-            fclose($fhandle);
-            return true;
         }
+        fclose($fhandle);
+
+        return true;
         $nv_Cache->delMod($module_name);
     }
 }
@@ -390,8 +393,8 @@ function nv_add_block_botcat_news($catid)
 /**
  * nv_remove_block_topcat_news()
  *
- * @param string $catid
- * @return boolean
+ * @param int $catid
+ * @return bool|void
  */
 function nv_remove_block_topcat_news($catid)
 {
@@ -422,10 +425,10 @@ function nv_remove_block_topcat_news($catid)
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
-        } else {
-            fclose($fhandle);
-            return true;
         }
+        fclose($fhandle);
+
+        return true;
         $nv_Cache->delMod($module_name);
     }
 }
@@ -433,8 +436,8 @@ function nv_remove_block_topcat_news($catid)
 /**
  * nv_remove_block_botcat_news()
  *
- * @param string $catid
- * @return boolean
+ * @param int $catid
+ * @return bool|void
  */
 function nv_remove_block_botcat_news($catid)
 {
@@ -465,10 +468,10 @@ function nv_remove_block_botcat_news($catid)
         $fwrite = fwrite($fhandle, $contents);
         if ($fwrite === false) {
             return false;
-        } else {
-            fclose($fhandle);
-            return true;
         }
+        fclose($fhandle);
+
+        return true;
         $nv_Cache->delMod($module_name);
     }
 }
@@ -477,8 +480,7 @@ function nv_remove_block_botcat_news($catid)
  * get_pseudonym_alias()
  *
  * @param string $pseudonym
- * @param int $aid
- * @param string $alias
+ * @param int    $aid
  * @return string
  */
 function get_pseudonym_alias($pseudonym, $aid)
@@ -495,6 +497,7 @@ function get_pseudonym_alias($pseudonym, $aid)
     if (!empty($nb)) {
         return false;
     }
+
     return $alias;
 }
 

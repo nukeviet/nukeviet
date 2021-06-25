@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_IS_FILE_ADMIN', true);
@@ -30,7 +31,7 @@ $type_target[3] = $lang_module['type_target3'];
 /**
  * nv_list_menu()
  *
- * @return
+ * @return array
  */
 function nv_list_menu()
 {
@@ -53,15 +54,15 @@ function nv_list_menu()
 /**
  * menu_fix_order()
  *
- * @param mixed $mid
- * @param integer $parentid
- * @param integer $order
- * @param integer $lev
- * @return
+ * @param int $mid
+ * @param int $parentid
+ * @param int $order
+ * @param int $lev
+ * @return int
  */
 function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
 {
-    global $db, $lang_global, $module_name, $module_data, $op;
+    global $db, $module_data;
 
     $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $parentid . ' AND mid= ' . $mid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
@@ -82,7 +83,7 @@ function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
     foreach ($array_cat_order as $catid_i) {
         ++$order;
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ', sort=' . $order . ", lev='" . $lev . "' WHERE id=" . intval($catid_i);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ', sort=' . $order . ", lev='" . $lev . "' WHERE id=" . (int) $catid_i;
         $db->query($sql);
         $order = menu_fix_order($mid, $catid_i, $order, $lev);
     }
@@ -90,6 +91,14 @@ function menu_fix_order($mid, $parentid = 0, $order = 0, $lev = 0)
     return $order;
 }
 
+/**
+ * nv_menu_del_sub()
+ *
+ * @param int $id
+ * @param int $parentid
+ * @return bool
+ * @throws PDOException
+ */
 function nv_menu_del_sub($id, $parentid)
 {
     global $module_data, $module_name, $db, $admin_info;
@@ -125,17 +134,22 @@ function nv_menu_del_sub($id, $parentid)
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
         }
     }
+
     return true;
 }
 
 /**
- * @param int $id
- * @param array $array_item
+ * nv_menu_get_submenu()
+ *
+ * @param int    $id
+ * @param string $alias_selected
+ * @param array  $array_item
  * @param string $sp_i
  */
 function nv_menu_get_submenu($id, $alias_selected, $array_item, $sp_i)
 {
-    global  $array_submenu, $sp, $mod_name;
+    global $array_submenu, $sp, $mod_name;
+
     foreach ($array_item as $item2) {
         if (isset($item2['parentid']) and $item2['parentid'] == $id) {
             $item2['title'] = $sp_i . $item2['title'];
@@ -151,17 +165,16 @@ function nv_menu_get_submenu($id, $alias_selected, $array_item, $sp_i)
 /**
  * nv_menu_insert_id()
  *
- * @param mixed $mid
- * @param mixed $parentid
- * @param mixed $title
- * @param mixed $weight
- * @param mixed $sort
- * @param mixed $lev
- * @param mixed $mod_name
- * @param mixed $op_mod
- * @param mixed $groups_view
- * @return
- *
+ * @param int    $mid
+ * @param int    $parentid
+ * @param string $title
+ * @param int    $weight
+ * @param int    $sort
+ * @param int    $lev
+ * @param string $mod_name
+ * @param string $op_mod
+ * @param string $groups_view
+ * @return false|int
  */
 function nv_menu_insert_id($mid, $parentid, $title, $weight, $sort, $lev, $mod_name, $op_mod, $groups_view)
 {
@@ -197,17 +210,20 @@ function nv_menu_insert_id($mid, $parentid, $title, $weight, $sort, $lev, $mod_n
     $data_insert['groups_view'] = $groups_view;
     $data_insert['module_name'] = $mod_name;
     $data_insert['op'] = $op_mod;
+
     return $db->insert_id($sql, 'id', $data_insert);
 }
 
 /**
- * @param int $mid
- * @param int $parentid
- * @param int $sort
- * @param int $lev
+ * nv_menu_insert_submenu()
+ *
+ * @param int    $mid
+ * @param int    $parentid
+ * @param int    $sort
+ * @param int    $lev
  * @param string $mod_name
- * @param array $array_item
- * @param int $key
+ * @param array  $array_item
+ * @param int    $key
  */
 function nv_menu_insert_submenu($mid, $parentid, &$sort, $lev, $mod_name, $array_item, $key)
 {

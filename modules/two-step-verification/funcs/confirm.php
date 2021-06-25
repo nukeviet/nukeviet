@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MOD_2STEP_VERIFICATION')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $module_info['site_title'];
@@ -27,8 +28,8 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 /**
  * nv_json_result()
  *
- * @param mixed $array
- * @return
+ * @param array $array
+ * @return never
  */
 function nv_json_result($array)
 {
@@ -88,11 +89,10 @@ if ($tokend_confirm_password != $tokend) {
 } else {
     if (empty($nv_redirect)) {
         header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
-        die();
-    } else {
-        header('Location: ' . nv_redirect_decrypt($nv_redirect));
-        die();
+        exit();
     }
+    header('Location: ' . nv_redirect_decrypt($nv_redirect));
+    exit();
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);

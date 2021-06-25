@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Lay chu de cua module duoc chon
@@ -25,7 +26,7 @@ $stmt->execute();
 list($mod_name, $mod_file, $mod_data) = $stmt->fetch(3);
 
 if (empty($mod_name)) {
-    die($lang_module['add_error_module']);
+    exit($lang_module['add_error_module']);
 }
 
 $array_item = [];
@@ -73,4 +74,4 @@ if (!empty($array_item)) {
     echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 }
-die('&nbsp;');
+exit('&nbsp;');

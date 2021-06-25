@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sat, 10 Dec 2011 06:46:54 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_voting_select')) {
     /**
      * nv_block_voting_select_config()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_voting_select_config($module, $data_block, $lang_block)
     {
@@ -37,15 +38,16 @@ if (!nv_function_exists('nv_block_voting_select')) {
         }
         $html .= '</select></div>';
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * nv_block_voting_select_config_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_voting_select_config_submit($module, $lang_block)
     {
@@ -55,15 +57,16 @@ if (!nv_function_exists('nv_block_voting_select')) {
         $return['error'] = [];
         $return['config'] = [];
         $return['config']['vid'] = $nv_Request->get_int('vid', 'post', 0);
+
         return $return;
     }
 
     /**
      * nv_block_voting_select()
      *
-     * @param mixed $block_config
-     * @param mixed $global_array_cat
-     * @return
+     * @param array $block_config
+     * @param array $global_array_cat
+     * @return string|void
      */
     function nv_block_voting_select($block_config, $global_array_cat)
     {
@@ -152,6 +155,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 $xtpl->parse('main');
+
                 return $xtpl->text('main');
             }
         }

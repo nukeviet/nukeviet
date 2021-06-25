@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 9/9/2010, 6:38
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['extUpd'];
@@ -39,9 +40,9 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
 
         $ftp_check_login = 0;
 
-        if ($sys_info['ftp_support'] and intval($global_config['ftp_check_login']) == 1) {
+        if ($sys_info['ftp_support'] and (int) ($global_config['ftp_check_login']) == 1) {
             $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-            $ftp_port = intval($global_config['ftp_port']);
+            $ftp_port = (int) ($global_config['ftp_port']);
             $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
@@ -197,7 +198,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
         echo $xtpl->text('complete');
     }
 
-    die();
+    exit();
 }
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $fid . NV_CHECK_SESSION)) {
@@ -271,7 +272,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
         }
     }
 
-    die();
+    exit();
 }
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid . NV_CHECK_SESSION)) {
@@ -354,7 +355,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
 
     $xtpl->parse('check');
     echo $xtpl->text('check');
-    die();
+    exit();
 }
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . NV_CHECK_SESSION)) {

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $contents = '';
@@ -59,7 +60,7 @@ if (!empty($file_name)) {
             }
         }
     } else {
-        die();
+        exit();
     }
 
     if (!empty($path_file_php) and !empty($path_file_ini)) {
@@ -76,7 +77,7 @@ if (!empty($file_name)) {
                 if (nv_function_exists($function_name)) {
                     //load cau hinh mac dinh cua block
                     $xmlconfig = $xml->xpath('config');
-                    $config = ( array )$xmlconfig[0];
+                    $config = (array) $xmlconfig[0];
                     $array_config = [];
 
                     foreach ($config as $key => $value) {
@@ -101,12 +102,12 @@ if (!empty($file_name)) {
                         require $path_file_lang;
                     } else {
                         $xmllanguage = $xml->xpath('language');
-                        $language = (empty($xmllanguage)) ? [] : ( array )$xmllanguage[0];
+                        $language = (empty($xmllanguage)) ? [] : (array) $xmllanguage[0];
 
                         if (isset($language[NV_LANG_INTERFACE])) {
-                            $lang_block = ( array )$language[NV_LANG_INTERFACE];
+                            $lang_block = (array) $language[NV_LANG_INTERFACE];
                         } elseif (isset($language['en'])) {
-                            $lang_block = ( array )$language['en'];
+                            $lang_block = (array) $language['en'];
                         } else {
                             $key = array_keys($array_config);
                             $lang_block = array_combine($key, $key);

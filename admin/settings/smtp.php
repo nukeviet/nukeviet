@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['smtp_config'];
@@ -41,7 +42,7 @@ $dkim_verified_list = nv_scandir(NV_ROOTDIR . '/' . NV_CERTS_DIR, '/^nv\_dkim\.(
 if ($nv_Request->isset_request('dkimread, domain', 'post')) {
     $domain = $nv_Request->get_title('domain', 'post', '');
 
-    if (!in_array($domain, $dkim_list)) {
+    if (!in_array($domain, $dkim_list, true)) {
         exit(0);
     }
 
@@ -56,7 +57,7 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
     $publickey = str_split($publickey, 253);
     $publickey = 'v=DKIM1; h=sha256; t=s; p=' . implode('', $publickey);
     $xtpl->assign('DNSVALUE', $publickey);
-    $is_verified = (!empty($dkim_verified_list) and in_array($domain, $dkim_verified_list));
+    $is_verified = (!empty($dkim_verified_list) and in_array($domain, $dkim_verified_list, true));
 
     if ($is_verified) {
         $xtpl->parse('dkimread.verified');
@@ -75,7 +76,7 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
 if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
     $domain = $nv_Request->get_title('domain', 'post', '');
 
-    if (!in_array($domain, $dkim_list)) {
+    if (!in_array($domain, $dkim_list, true)) {
         exit(0);
     }
 
@@ -100,7 +101,7 @@ if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
 if ($nv_Request->isset_request('dkimdel, domain', 'post')) {
     $domain = $nv_Request->get_title('domain', 'post', '');
 
-    if (!in_array($domain, $dkim_list)) {
+    if (!in_array($domain, $dkim_list, true)) {
         exit(0);
     }
 
@@ -162,7 +163,7 @@ if ($nv_Request->isset_request('dkimadd', 'post') and $checkss == $nv_Request->g
 if ($nv_Request->isset_request('smimeread, email', 'post')) {
     $email = $nv_Request->get_title('email', 'post', '');
 
-    if (!in_array($email, $cert_list)) {
+    if (!in_array($email, $cert_list, true)) {
         exit(0);
     }
 
@@ -198,7 +199,7 @@ if ($nv_Request->isset_request('smimeread, email', 'post')) {
 // Xoa chung chi
 if ($nv_Request->isset_request('smimedel, email', 'post')) {
     $email = $nv_Request->get_title('email', 'post', '');
-    if (!in_array($email, $cert_list)) {
+    if (!in_array($email, $cert_list, true)) {
         exit(0);
     }
     $email_name = str_replace('@', '__', $email);
@@ -233,7 +234,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
         ]);
     }
 
-    if (!in_array($upload_info['ext'], ['pfx', 'p12'])) {
+    if (!in_array($upload_info['ext'], ['pfx', 'p12'], true)) {
         @unlink($upload_info['name']);
         nv_jsonOutput([
             'status' => 'error',
@@ -297,7 +298,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
 // Download chung chi
 if ($nv_Request->isset_request('smimedownload, email, passphrase', 'get')) {
     $email = $nv_Request->get_title('email', 'get', '');
-    if (!in_array($email, $cert_list)) {
+    if (!in_array($email, $cert_list, true)) {
         exit(0);
     }
 
@@ -340,9 +341,9 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $array_config['sender_email'] = nv_substr($nv_Request->get_title('sender_email', 'post', ''), 0, 250);
     $array_config['reply_name'] = nv_substr($nv_Request->get_title('reply_name', 'post', ''), 0, 250);
     $array_config['reply_email'] = nv_substr($nv_Request->get_title('reply_email', 'post', ''), 0, 250);
-    $array_config['force_sender'] = intval($nv_Request->get_bool('force_sender', 'post', false));
-    $array_config['force_reply'] = intval($nv_Request->get_bool('force_reply', 'post', false));
-    $array_config['notify_email_error'] = intval($nv_Request->get_bool('notify_email_error', 'post', false));
+    $array_config['force_sender'] = (int) ($nv_Request->get_bool('force_sender', 'post', false));
+    $array_config['force_reply'] = (int) ($nv_Request->get_bool('force_reply', 'post', false));
+    $array_config['notify_email_error'] = (int) ($nv_Request->get_bool('notify_email_error', 'post', false));
     $array_config['dkim_included'] = $nv_Request->get_typed_array('dkim_included', 'post', 'title');
     $array_config['smime_included'] = $nv_Request->get_typed_array('smime_included', 'post', 'title');
 
@@ -413,12 +414,12 @@ $array_config['smtp_ssl_checked'] = ($array_config['smtp_ssl'] == 1) ? ' checked
 $array_config['force_sender'] = $array_config['force_sender'] ? ' checked="checked"' : '';
 $array_config['force_reply'] = $array_config['force_reply'] ? ' checked="checked"' : '';
 $array_config['notify_email_error'] = $array_config['notify_email_error'] ? ' checked="checked"' : '';
-$array_config['smtp_dkim_included'] = in_array('smtp', $array_config['dkim_included']) ? ' checked="checked"' : '';
-$array_config['sendmail_dkim_included'] = in_array('sendmail', $array_config['dkim_included']) ? ' checked="checked"' : '';
-$array_config['mail_dkim_included'] = in_array('mail', $array_config['dkim_included']) ? ' checked="checked"' : '';
-$array_config['smtp_smime_included'] = in_array('smtp', $array_config['smime_included']) ? ' checked="checked"' : '';
-$array_config['sendmail_smime_included'] = in_array('sendmail', $array_config['smime_included']) ? ' checked="checked"' : '';
-$array_config['mail_smime_included'] = in_array('mail', $array_config['smime_included']) ? ' checked="checked"' : '';
+$array_config['smtp_dkim_included'] = in_array('smtp', $array_config['dkim_included'], true) ? ' checked="checked"' : '';
+$array_config['sendmail_dkim_included'] = in_array('sendmail', $array_config['dkim_included'], true) ? ' checked="checked"' : '';
+$array_config['mail_dkim_included'] = in_array('mail', $array_config['dkim_included'], true) ? ' checked="checked"' : '';
+$array_config['smtp_smime_included'] = in_array('smtp', $array_config['smime_included'], true) ? ' checked="checked"' : '';
+$array_config['sendmail_smime_included'] = in_array('sendmail', $array_config['smime_included'], true) ? ' checked="checked"' : '';
+$array_config['mail_smime_included'] = in_array('mail', $array_config['smime_included'], true) ? ' checked="checked"' : '';
 
 $array_config['mailer_mode_smtpt'] = ($array_config['mailer_mode'] == 'smtp') ? ' checked="checked"' : '';
 $array_config['mailer_mode_sendmail'] = ($array_config['mailer_mode'] == 'sendmail') ? ' checked="checked"' : '';
@@ -498,7 +499,7 @@ if (!empty($dkim_list)) {
         if ($domain == $d) {
             $did = $num;
         }
-        $is_verified = (!empty($dkim_verified_list) and in_array($domain, $dkim_verified_list));
+        $is_verified = (!empty($dkim_verified_list) and in_array($domain, $dkim_verified_list, true));
         $xtpl->assign('DKIM', [
             'domain' => $domain,
             'num' => $num,

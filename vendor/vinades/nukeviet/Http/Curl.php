@@ -1,18 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 9:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Http;
 
+/**
+ * NukeViet\Http\Curl
+ *
+ * @package NukeViet\Http
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Curl
 {
-
     /**
      * Temporary header storage for during requests.
      * @access private
@@ -46,26 +55,27 @@ class Curl
      * @access public
      * @var array
      */
-    public $error = array();
+    public $error = [];
 
     /**
+     * request()
      *
-     * @param mixed $url
-     * @param mixed $args
-     * @return
+     * @param string $url
+     * @param array  $args
+     * @return mixed
      */
-    public function request($url, $args = array())
+    public function request($url, $args = [])
     {
-        $defaults = array(
+        $defaults = [
             'method' => 'GET',
             'timeout' => 5,
             'redirection' => 5,
             'httpversion' => '1.0',
             'blocking' => true,
-            'headers' => array(),
+            'headers' => [],
             'body' => null,
-            'cookies' => array()
-        );
+            'cookies' => []
+        ];
 
         $args = Http::build_args($args, $defaults);
 
@@ -109,14 +119,14 @@ class Curl
                 curl_setopt( $handle, CURLOPT_PROXYUSERPWD, $proxy->authentication() );
             }
         }
-        */
+         */
 
         $is_local = isset($args['local']) and $args['local'];
         $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
 
         // CURLOPT_TIMEOUT and CURLOPT_CONNECTTIMEOUT expect integers. Have to use ceil since
         // a value of 0 will allow an unlimited timeout.
-        $timeout = ( int ) ceil($args['timeout']);
+        $timeout = (int) ceil($args['timeout']);
         curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($handle, CURLOPT_TIMEOUT, $timeout);
 
@@ -128,7 +138,7 @@ class Curl
         curl_setopt($handle, CURLOPT_USERAGENT, $args['user-agent']);
 
         // Add Curl referer if not empty
-        if (! is_null($args['referer']) or ! empty($args['referer'])) {
+        if (!is_null($args['referer']) or !empty($args['referer'])) {
             curl_setopt($handle, CURLOPT_AUTOREFERER, true);
             curl_setopt($handle, CURLOPT_REFERER, $args['referer']);
         }
@@ -156,7 +166,7 @@ class Curl
             default:
                 curl_setopt($handle, CURLOPT_CUSTOMREQUEST, $args['method']);
 
-                if (! is_null($args['body'])) {
+                if (!is_null($args['body'])) {
                     curl_setopt($handle, CURLOPT_POSTFIELDS, $args['body']);
                 }
 
@@ -164,14 +174,14 @@ class Curl
         }
 
         if ($args['blocking'] === true) {
-            curl_setopt($handle, CURLOPT_HEADERFUNCTION, array( $this, 'stream_headers' ));
-            curl_setopt($handle, CURLOPT_WRITEFUNCTION, array( $this, 'stream_body' ));
+            curl_setopt($handle, CURLOPT_HEADERFUNCTION, [$this, 'stream_headers']);
+            curl_setopt($handle, CURLOPT_WRITEFUNCTION, [$this, 'stream_body']);
         }
 
         curl_setopt($handle, CURLOPT_HEADER, false);
 
         if (isset($args['limit_response_size'])) {
-            $this->max_body_length = intval($args['limit_response_size']);
+            $this->max_body_length = (int) ($args['limit_response_size']);
         } else {
             $this->max_body_length = false;
         }
@@ -180,17 +190,18 @@ class Curl
         if ($args['stream']) {
             $this->stream_handle = @fopen($args['filename'], 'w+');
 
-            if (! $this->stream_handle) {
+            if (!$this->stream_handle) {
                 Http::set_error(10);
+
                 return $this;
             }
         } else {
             $this->stream_handle = false;
         }
 
-        if (! empty($args['headers'])) {
+        if (!empty($args['headers'])) {
             // cURL expects full header strings in each element
-            $headers = array();
+            $headers = [];
             foreach ($args['headers'] as $name => $value) {
                 $headers[] = "{$name}: $value";
             }
@@ -205,25 +216,28 @@ class Curl
         }
 
         // We don't need to return the body, so don't. Just execute request and return.
-        if (! $args['blocking']) {
+        if (!$args['blocking']) {
             curl_exec($handle);
 
             if ($curl_error = curl_error($handle)) {
                 curl_close($handle);
 
                 Http::set_error(11);
+
                 return $this;
             }
 
-            if (in_array(curl_getinfo($handle, CURLINFO_HTTP_CODE), array( 301, 302 ))) {
+            if (in_array((int) curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
                 curl_close($handle);
 
                 Http::set_error(5);
+
                 return $this;
             }
 
             curl_close($handle);
-            return array( 'headers' => array(), 'body' => '', 'response' => array( 'code' => false, 'message' => false ), 'cookies' => array() );
+
+            return ['headers' => [], 'body' => '', 'response' => ['code' => false, 'message' => false], 'cookies' => []];
         }
 
         $theResponse = curl_exec($handle);
@@ -241,6 +255,7 @@ class Curl
                 fclose($this->stream_handle);
 
                 Http::set_error(9);
+
                 return $this;
             }
 
@@ -248,18 +263,20 @@ class Curl
                 curl_close($handle);
 
                 Http::set_error(11);
+
                 return $this;
             }
 
-            if (in_array(curl_getinfo($handle, CURLINFO_HTTP_CODE), array( 301, 302 ))) {
+            if (in_array(curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
                 curl_close($handle);
 
                 Http::set_error(5);
+
                 return $this;
             }
         }
 
-        $response = array();
+        $response = [];
         $response['code'] = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         $response['message'] = $response['code'];
 
@@ -269,13 +286,13 @@ class Curl
             fclose($this->stream_handle);
         }
 
-        $response = array(
+        $response = [
             'headers' => $theHeaders['headers'],
             'body' => null,
             'response' => $response,
             'cookies' => $theHeaders['cookies'],
             'filename' => $args['filename']
-        );
+        ];
 
         // Handle redirects
         if (($redirect_response = Http::handle_redirects($url, $args, $response)) !== false) {
@@ -286,28 +303,31 @@ class Curl
             $theBody = Encoding::decompress($theBody);
         }
 
-        $response['body'] = str_replace("\xEF\xBB\xBF", "", $theBody);
+        $response['body'] = str_replace("\xEF\xBB\xBF", '', $theBody);
 
         return $response;
     }
 
     /**
+     * stream_headers()
      *
      * @param mixed $handle
      * @param mixed $headers
-     * @return
+     * @return int
      */
     private function stream_headers($handle, $headers)
     {
         $this->headers .= $headers;
+
         return strlen($headers);
     }
 
     /**
+     * stream_body()
      *
      * @param mixed $handle
      * @param mixed $data
-     * @return
+     * @return false|int
      */
     private function stream_body($handle, $data)
     {
@@ -328,13 +348,14 @@ class Curl
     }
 
     /**
+     * test()
      *
-     * @param mixed $args
-     * @return
+     * @param array $args
+     * @return bool
      */
-    public static function test($args = array())
+    public static function test($args = [])
     {
-        if (! function_exists('curl_init') or ! function_exists('curl_exec')) {
+        if (!function_exists('curl_init') or !function_exists('curl_exec')) {
             return false;
         }
 
@@ -342,7 +363,7 @@ class Curl
 
         if ($is_ssl) {
             $curl_version = curl_version();
-            if (! (CURL_VERSION_SSL & $curl_version['features'])) {
+            if (!(CURL_VERSION_SSL & $curl_version['features'])) {
                 // Does this cURL version support SSL requests?
                 return false;
             }

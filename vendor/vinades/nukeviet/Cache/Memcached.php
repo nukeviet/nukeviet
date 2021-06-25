@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/9/2010, 3:21
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Cache;
@@ -13,17 +14,16 @@ namespace NukeViet\Cache;
 use Memcached as GMemcached;
 
 /**
- * Memcached
+ * NukeViet\Cache\Memcached
  *
- * @package NukeViet Cache
- * @author VINADES.,JSC (contact@vinades.vn)
- * @copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @version 4.0
+ * @package NukeViet\Cache
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
  * @access public
  */
 class Memcached
 {
-
     private $_Lang = 'vi';
 
     private $_Cache_Prefix = '';
@@ -33,13 +33,12 @@ class Memcached
     private $_Cache;
 
     /**
-     * Memcached::__construct()
+     * __construct()
      *
-     * @param mixed $Host
-     * @param mixed $Port
-     * @param mixed $Lang
-     * @param mixed $Cache_Prefix
-     * @return void
+     * @param string $Host
+     * @param int    $Port
+     * @param string $Lang
+     * @param string $Cache_Prefix
      */
     public function __construct($Host, $Port, $Lang, $Cache_Prefix)
     {
@@ -50,11 +49,9 @@ class Memcached
     }
 
     /**
+     * delAll()
      *
-     * @param mixed $sys
-     *
-     * @return
-     *
+     * @param bool $sys
      */
     public function delAll($sys = true)
     {
@@ -62,11 +59,10 @@ class Memcached
     }
 
     /**
+     * delMod()
      *
-     * @param mixed $module_name
-     * @param mixed $lang
-     *
-     * @return void
+     * @param string $module_name
+     * @param string $lang
      */
     public function delMod($module_name, $lang = '')
     {
@@ -79,12 +75,12 @@ class Memcached
     }
 
     /**
+     * getItem()
      *
-     * @param mixed $module_name
-     * @param mixed $filename
-     * @param integer $ttl
-     * @return
-     *
+     * @param string $module_name
+     * @param string $filename
+     * @param int    $ttl
+     * @return mixed
      */
     public function getItem($module_name, $filename, $ttl = 0)
     {
@@ -93,13 +89,13 @@ class Memcached
     }
 
     /**
+     * setItem()
      *
-     * @param mixed $module_name
-     * @param mixed $filename
-     * @param mixed $content
-     * @param integer $ttl
-     * @return
-     *
+     * @param string $module_name
+     * @param string $filename
+     * @param string $content
+     * @param int    $ttl
+     * @return mixed
      */
     public function setItem($module_name, $filename, $content, $ttl = 0)
     {
@@ -107,8 +103,9 @@ class Memcached
     }
 
     /**
+     * setDb()
      *
-     * @param resource $db
+     * @param mixed $db
      */
     public function setDb($db)
     {
@@ -116,18 +113,18 @@ class Memcached
     }
 
     /**
+     * db()
      *
-     * @param mixed $sql
-     * @param mixed $key
-     * @param mixed $modname
-     * @param mixed $lang
-     * @param integer $ttl
-     * @return
-     *
+     * @param string $sql
+     * @param string $key
+     * @param string $modname
+     * @param string $lang
+     * @param int    $ttl
+     * @return array
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
-        $_rows = array();
+        $_rows = [];
 
         if (empty($sql)) {
             return $_rows;

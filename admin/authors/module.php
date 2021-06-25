@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 16-12-2012 15:48
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
@@ -49,7 +50,7 @@ if (defined('NV_IS_AJAX')) {
                     $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET act_' . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid);
                 }
             }
-            die('OK');
+            exit('OK');
         }
     }
 }
@@ -73,13 +74,13 @@ foreach ($rows as $row) {
     if ($row['module'] == 'siteinfo') {
         continue;
     }
-    for ($i = 1; $i <= $numrows; $i++) {
+    for ($i = 1; $i <= $numrows; ++$i) {
         $xtpl->assign('WEIGHT', ['key' => $i, 'selected' => ($i == $row['weight']) ? ' selected="selected"' : '']);
         $xtpl->parse('main.loop.weight');
     }
     $row['custom_title'] = isset($lang_global[$row['lang_key']]) ? $lang_global[$row['lang_key']] : '';
     $chang_act = [];
-    for ($i = 1; $i <= 3; $i++) {
+    for ($i = 1; $i <= 3; ++$i) {
         $chang_act[$i] = ($row['act_' . $i]) ? ' checked="checked"' : '';
         if ($i == 3 and ($row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site')) {
             $chang_act[$i] .= ' disabled="disabled"';

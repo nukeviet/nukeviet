@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_add_files(nv_admin_baseurl, nv_files_dir, nv_lang_delete, nv_lang_select) {
@@ -26,7 +27,7 @@ function nv_show_list_cat(parentid) {
 }
 
 function nv_del_cat(catid) {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(), 'catid=' + catid, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(), 'catid=' + catid, function (res) {
         nv_del_cat_result(res);
     });
     return false;
@@ -41,7 +42,7 @@ function nv_del_cat_result(res) {
         if (confirm(nv_is_del_confirm[0])) {
             var catid = r_split[1];
             var delallcheckss = r_split[2];
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(), 'catid=' + catid + '&delallcheckss=' + delallcheckss, function(res) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(), 'catid=' + catid + '&delallcheckss=' + delallcheckss, function (res) {
                 nv_del_cat_result(res);
             });
         }
@@ -51,7 +52,7 @@ function nv_del_cat_result(res) {
         if (confirm(r_split[4])) {
             var catid = r_split[2];
             var delallcheckss = r_split[3];
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(), 'catid=' + catid + '&delallcheckss=' + delallcheckss, function(res) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_cat&nocache=' + new Date().getTime(), 'catid=' + catid + '&delallcheckss=' + delallcheckss, function (res) {
                 $("#edit").html(res);
             });
             parent.location = '#edit';
@@ -65,7 +66,7 @@ function nv_del_cat_result(res) {
 function nv_chang_topic(topicid, mod) {
     var nv_timer = nv_settimeout_disable('id_' + mod + '_' + topicid, 5000);
     var new_vid = $('#id_' + mod + '_' + topicid).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_topic&nocache=' + new Date().getTime(), 'topicid=' + topicid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_topic&nocache=' + new Date().getTime(), 'topicid=' + topicid + '&mod=' + mod + '&new_vid=' + new_vid, function (res) {
         var r_split = res.split('_');
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -84,7 +85,7 @@ function nv_show_list_topic() {
 }
 
 function nv_del_topic(topicid) {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_topic&nocache=' + new Date().getTime(), 'topicid=' + topicid, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_topic&nocache=' + new Date().getTime(), 'topicid=' + topicid, function (res) {
         nv_del_topic_result(res);
     });
 }
@@ -98,7 +99,7 @@ function nv_del_topic_result(res) {
             if (confirm(r_split[4])) {
                 var topicid = r_split[2];
                 var checkss = r_split[3];
-                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_topic&nocache=' + new Date().getTime(), 'topicid=' + topicid + '&checkss=' + checkss, function(res) {
+                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_topic&nocache=' + new Date().getTime(), 'topicid=' + topicid + '&checkss=' + checkss, function (res) {
                     nv_del_topic_result(res);
                 });
             }
@@ -114,7 +115,7 @@ function nv_del_topic_result(res) {
 function nv_chang_sources(sourceid, mod) {
     var nv_timer = nv_settimeout_disable('id_' + mod + '_' + sourceid, 5000);
     var new_vid = $('#id_' + mod + '_' + sourceid).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_source&nocache=' + new Date().getTime(), 'sourceid=' + sourceid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_source&nocache=' + new Date().getTime(), 'sourceid=' + sourceid + '&mod=' + mod + '&new_vid=' + new_vid, function (res) {
         var r_split = res.split('_');
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -134,7 +135,7 @@ function nv_show_list_source() {
 
 function nv_del_source(sourceid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_source&nocache=' + new Date().getTime(), 'sourceid=' + sourceid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_source&nocache=' + new Date().getTime(), 'sourceid=' + sourceid, function (res) {
             var r_split = res.split('_');
             if (r_split[0] == 'OK') {
                 nv_show_list_source();
@@ -148,7 +149,7 @@ function nv_del_source(sourceid) {
 
 function nv_del_block_cat(bid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_block_cat&nocache=' + new Date().getTime(), 'bid=' + bid, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_block_cat&nocache=' + new Date().getTime(), 'bid=' + bid, function (res) {
             var r_split = res.split('_');
             if (r_split[0] == 'OK') {
                 nv_show_list_block_cat();
@@ -165,7 +166,7 @@ function nv_del_block_cat(bid) {
 function nv_chang_block_cat(bid, mod) {
     var nv_timer = nv_settimeout_disable('id_' + mod + '_' + bid, 5000);
     var new_vid = $('#id_' + mod + '_' + bid).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=chang_block_cat&nocache=' + new Date().getTime(), 'bid=' + bid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=chang_block_cat&nocache=' + new Date().getTime(), 'bid=' + bid + '&mod=' + mod + '&new_vid=' + new_vid, function (res) {
         var r_split = res.split('_');
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
@@ -189,7 +190,7 @@ function nv_chang_block(bid, id, mod) {
     }
     var nv_timer = nv_settimeout_disable('id_weight_' + id, 5000);
     var new_vid = $('#id_weight_' + id).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'id=' + id + '&bid=' + bid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'id=' + id + '&bid=' + bid + '&mod=' + mod + '&new_vid=' + new_vid, function (res) {
         nv_chang_block_result(res);
     });
     return;
@@ -229,7 +230,7 @@ function nv_del_block_list(oForm, bid) {
 
     if (del_list != '') {
         if (confirm(nv_is_del_confirm[0])) {
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'del_list=' + del_list + '&bid=' + bid, function(res) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'del_list=' + del_list + '&bid=' + bid, function (res) {
                 nv_chang_block_result(res);
             });
         }
@@ -255,7 +256,7 @@ function nv_main_action(oForm, checkss, msgnocheck) {
         var action = document.getElementById('action').value;
         if (action == 'delete') {
             if (confirm(nv_is_del_confirm[0])) {
-                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'listid=' + listid + '&checkss=' + checkss, function(res) {
+                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'listid=' + listid + '&checkss=' + checkss, function (res) {
                     nv_del_content_result(res);
                 });
             }
@@ -269,7 +270,7 @@ function nv_main_action(oForm, checkss, msgnocheck) {
 
 function nv_del_content(id, checkss, base_adminurl, detail) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function (res) {
             nv_del_content_result(res);
         });
     }
@@ -299,7 +300,7 @@ function nv_del_content_result(res) {
 function get_alias_tags() {
     var title = strip_tags(document.getElementById('idtitle').value);
     if (title != '') {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias_tag&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title), function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias_tag&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title), function (res) {
             if (res != "") {
                 document.getElementById('idalias').value = res;
             } else {
@@ -313,7 +314,7 @@ function get_alias_tags() {
 function get_alias(mod, id) {
     var title = strip_tags(document.getElementById('idtitle').value);
     if (title != '') {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title) + '&mod=' + mod + '&id=' + id, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title) + '&mod=' + mod + '&id=' + id, function (res) {
             if (res != "") {
                 document.getElementById('idalias').value = res;
             } else {
@@ -363,14 +364,14 @@ function nv_del_check_tags(oForm, checkss, msgnocheck) {
 
 function checkallfirst() {
     $(this).one("click", checkallsecond);
-    $('input:checkbox').each(function() {
+    $('input:checkbox').each(function () {
         $(this).attr('checked', 'checked');
     });
 }
 
 function checkallsecond() {
     $(this).one("click", checkallfirst);
-    $('input:checkbox').each(function() {
+    $('input:checkbox').each(function () {
         $(this).removeAttr('checked');
     });
 }
@@ -435,22 +436,22 @@ function check_admin_second() {
     $("input[name='admin_content[]']:checkbox").prop("checked", false);
 }
 
-$(document).ready(function() {
-    $('#checkall').click(function() {
-        $('input:checkbox').each(function() {
+$(document).ready(function () {
+    $('#checkall').click(function () {
+        $('input:checkbox').each(function () {
             $(this).attr('checked', 'checked');
         });
     });
-    $('#uncheckall').click(function() {
-        $('input:checkbox').each(function() {
+    $('#uncheckall').click(function () {
+        $('input:checkbox').each(function () {
             $(this).removeAttr('checked');
         });
     });
 
     // Topic
-    $('#delete-topic').click(function() {
+    $('#delete-topic').click(function () {
         var list = [];
-        $('input[name=newsid]:checked').each(function() {
+        $('input[name=newsid]:checked').each(function () {
             list.push($(this).val());
         });
         if (list.length < 1) {
@@ -462,7 +463,7 @@ $(document).ready(function() {
                 type: 'POST',
                 url: 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicdelnews',
                 data: 'list=' + list,
-                success: function(data) {
+                success: function (data) {
                     alert(data);
                     window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + CFG.topicid;
                 }
@@ -472,7 +473,7 @@ $(document).ready(function() {
     });
 
     // Topics
-    $("#select-img-topic").click(function() {
+    $("#select-img-topic").click(function () {
         var area = "homeimg";
         var path = CFG.upload_dir;
         var currentpath = CFG.upload_dir;
@@ -482,7 +483,7 @@ $(document).ready(function() {
     });
 
     // Tags
-    $("#select-img-tag").click(function() {
+    $("#select-img-tag").click(function () {
         var area = "image";
         var path = CFG.upload_path;
         var currentpath = CFG.upload_current;
@@ -492,7 +493,7 @@ $(document).ready(function() {
     });
 
     // Sources
-    $("#select-img-source").click(function() {
+    $("#select-img-source").click(function () {
         var area = "logo";
         var path = CFG.upload_path;
         var type = "image";
@@ -501,7 +502,7 @@ $(document).ready(function() {
     });
 
     // Setting
-    $("#select-img-setting").click(function() {
+    $("#select-img-setting").click(function () {
         var area = "show_no_image";
         var type = "image";
         var path = CFG.path;
@@ -511,7 +512,7 @@ $(document).ready(function() {
     });
 
     // Groups
-    $("#select-img-group").click(function() {
+    $("#select-img-group").click(function () {
         var area = "image";
         var path = CFG.upload_path;
         var currentpath = CFG.upload_current;
@@ -521,7 +522,7 @@ $(document).ready(function() {
     });
 
     // News content
-    $("#select-img-post").click(function() {
+    $("#select-img-post").click(function () {
         var area = "homeimg";
         var alt = "homeimgalt";
         var path = CFG.uploads_dir_user;
@@ -531,7 +532,7 @@ $(document).ready(function() {
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + encodeURIComponent(path) + "&type=" + type + "&currentpath=" + encodeURIComponent(currentpath) + '&currentfile=' + encodeURIComponent(currentfile), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
     });
-    $('.submit-post').hover(function() {
+    $('.submit-post').hover(function () {
         if ($('[name="keywords[]"]').length == 0) {
             if ($('#message-tags').length == 0) {
                 $('#message').append('<div id="message-tags" class="alert alert-danger">' + LANG.content_tags_empty + '</div>');
@@ -549,9 +550,9 @@ $(document).ready(function() {
     });
 
     // Add to topic
-    $('#update-topic').click(function() {
+    $('#update-topic').click(function () {
         var listid = [];
-        $('input[name=idcheck]:checked').each(function() {
+        $('input[name=idcheck]:checked').each(function () {
             listid.push($(this).val());
         });
         if (listid.length < 1) {
@@ -563,7 +564,7 @@ $(document).ready(function() {
             type: 'POST',
             url: 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics',
             data: 'listid=' + listid + '&topicsid=' + topic,
-            success: function(data) {
+            success: function (data) {
                 alert(data);
                 window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + topic;
             }
@@ -572,7 +573,7 @@ $(document).ready(function() {
     });
 
     // Cat
-    $("#select-img-cat").click(function() {
+    $("#select-img-cat").click(function () {
         var area = "image";
         var path = CFG.upload_path;
         var currentpath = CFG.upload_current;
@@ -580,13 +581,13 @@ $(document).ready(function() {
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
     });
-    $('a.viewinstantrss').click(function(e) {
+    $('a.viewinstantrss').click(function (e) {
         e.preventDefault();
         modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control w500" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
     });
     var popOverALl = new Array();
     // Thay đổi thứ tự số chuyên mục: Thứ tự, số liên kết, ngày mới
-    $(document).delegate('[data-toggle="changecat"]', 'click', function(e) {
+    $(document).delegate('[data-toggle="changecat"]', 'click', function (e) {
         e.preventDefault();
         e.stopPropagation();
         popOverALl.push(this);
@@ -600,7 +601,7 @@ $(document).ready(function() {
                 trigger: "manual"
             });
             $(this).popover('show');
-            $(this).on('shown.bs.popover', function() {
+            $(this).on('shown.bs.popover', function () {
                 var $this = $(this);
                 var ctn = $('#' + $this.attr('aria-describedby'));
                 var wrapArea = ctn.find('.dropdown-cattool-ctn');
@@ -614,7 +615,7 @@ $(document).ready(function() {
             });
         }
     });
-    $(document).delegate('.dropdown-cattool a', 'click', function(e) {
+    $(document).delegate('.dropdown-cattool a', 'click', function (e) {
         e.preventDefault();
         destroyAllPop();
         var $this = $(this);
@@ -625,7 +626,7 @@ $(document).ready(function() {
         }
         btn.find('span.text').html('<i class="fa fa-spinner fa-spin fa-fw"></i>' + $this.html());
         btn.prop('disabled', true);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(), 'catid=' + ctn.data('catid') + '&mod=' + ctn.data('mod') + '&new_vid=' + $this.data('value'), function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_cat&nocache=' + new Date().getTime(), 'catid=' + ctn.data('catid') + '&mod=' + ctn.data('mod') + '&new_vid=' + $this.data('value'), function (res) {
             var r_split = res.split('_');
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -636,14 +637,14 @@ $(document).ready(function() {
         });
     });
     // Các thao tác với popover
-    $(document).delegate('div.popover', 'click', function(e) {
+    $(document).delegate('div.popover', 'click', function (e) {
         e.stopPropagation();
     });
-    $(window).on('click', function() {
+    $(window).on('click', function () {
         destroyAllPop();
     });
     function destroyAllPop() {
-        $.each(popOverALl, function(k, v) {
+        $.each(popOverALl, function (k, v) {
             $(v).popover('destroy');
             $(v).data('havepop', false);
         });
@@ -651,10 +652,10 @@ $(document).ready(function() {
     }
 
     // Setting Instant Articles
-    $(document).delegate('[data-toggle="selectall"]', 'focus', function() {
+    $(document).delegate('[data-toggle="selectall"]', 'focus', function () {
         $(this).select();
     });
-    $('.showhidepass').click(function(e) {
+    $('.showhidepass').click(function (e) {
         e.preventDefault();
         var tg = $($(this).data('target'));
         if (tg.prop('type') == 'text') {
@@ -663,7 +664,7 @@ $(document).ready(function() {
             tg.prop('type', 'text');
         }
     });
-    $('.genrandpass').click(function(e) {
+    $('.genrandpass').click(function (e) {
         e.preventDefault();
         $($(this).data('target')).prop('type', 'text');
         $($(this).data('target')).val(nv_randomPassword(10));

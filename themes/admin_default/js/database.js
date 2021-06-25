@@ -1,16 +1,17 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 9:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-(function($) {
-    $.fn.tshift = function() {
+(function ($) {
+    $.fn.tshift = function () {
         var start = 0;
         var checkboxes = $("#" + this.attr('id') + " :checkbox");
-        checkboxes.on("click", function(event) {
+        checkboxes.on("click", function (event) {
             if (this.checked) {
                 if (event.shiftKey) {
                     end = checkboxes.index(this);
@@ -18,7 +19,7 @@
                         end = start;
                         start = checkboxes.index(this);
                     }
-                    checkboxes.each(function(index) {
+                    checkboxes.each(function (index) {
                         if (index >= start && index < end) {
                             this.checked = true;
                         }
@@ -59,7 +60,7 @@ function nv_chsubmit(oForm, cbName) {
         var subm_form = document.getElementById('subm_form');
         subm_form.disabled = true;
 
-        $.post(oForm.action + '&nocache=' + new Date().getTime(), nv_fc_variable + '=' + op_name + '&tables=' + tabs, function(res) {
+        $.post(oForm.action + '&nocache=' + new Date().getTime(), nv_fc_variable + '=' + op_name + '&tables=' + tabs, function (res) {
             alert(res);
             nv_show_dbtables();
             return;
@@ -71,13 +72,13 @@ function nv_chsubmit(oForm, cbName) {
 }
 
 function nv_show_dbtables() {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'show_tabs=1', function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'show_tabs=1', function (res) {
         $("#show_tables").html(res);
     });
 }
 
 function nv_show_highlight(tp) {
-    $.post(window.location.href + '&nocache=' + new Date().getTime(), 'show_highlight=' + tp, function(res) {
+    $.post(window.location.href + '&nocache=' + new Date().getTime(), 'show_highlight=' + tp, function (res) {
         $("#my_highlight").html(res);
     });
     return false;
@@ -85,7 +86,7 @@ function nv_show_highlight(tp) {
 
 function nv_delete_sampledata(sname, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=sampledata&nocache=' + new Date().getTime(), 'delete=' + checkss + '&sname=' + encodeURIComponent(sname), function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=sampledata&nocache=' + new Date().getTime(), 'delete=' + checkss + '&sname=' + encodeURIComponent(sname), function (res) {
             window.location.reload(true);
         });
     }
@@ -93,10 +94,10 @@ function nv_delete_sampledata(sname, checkss) {
 }
 
 function ajaxWriteSampleData(url, data) {
-    $.post(url + '&nocache=' + new Date().getTime(), data, function(res) {
+    $.post(url + '&nocache=' + new Date().getTime(), data, function (res) {
         $('<p class="text-' + (res.lev == 1 ? 'success' : (res.lev == 2 ? 'warning' : 'danger')) + '">' + res.message + '</p>').insertAfter('#spdresulttop');
         if (res.next) {
-            setTimeout(function() {
+            setTimeout(function () {
                 ajaxWriteSampleData(url, res.nextdata);
             }, 400);
         } else {
@@ -108,18 +109,18 @@ function ajaxWriteSampleData(url, data) {
                 $('[name="delifexists"]', $this).val('1');
             }
             if (res.reload) {
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.reload(true);
                 }, 5000);
             }
         }
-    }, 'json').fail(function(e) {
+    }, 'json').fail(function (e) {
         $('<p class="text-danger">' + $('#sampledataarea').data('errsys') + '</p>').insertAfter('#spdresulttop');
     });
 }
 
-$(function() {
-    $('#sampledataarea form').submit(function(e) {
+$(function () {
+    $('#sampledataarea form').submit(function (e) {
         e.preventDefault();
         var $this = $(this);
         var sname = encodeURIComponent($('[name="sample_name"]', $this).val());
@@ -136,12 +137,12 @@ $(function() {
             delifexists: delifexists
         };
 
-        setTimeout(function() {
+        setTimeout(function () {
             ajaxWriteSampleData(url, data);
         }, 400);
     });
 
-    $('#sampledataarea [name="sample_name"]').keydown(function() {
+    $('#sampledataarea [name="sample_name"]').keydown(function () {
         $('[name="delifexists"]', $(this.form)).val('0');
     });
 });

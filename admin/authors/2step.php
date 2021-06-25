@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:17
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $admin_id = $nv_Request->get_absint('admin_id', 'get', $admin_info['admin_id']);
@@ -151,7 +152,7 @@ while ($_row = $result->fetch()) {
 // Xóa tất cả
 if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $sql = 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $row['admin_id'];
@@ -164,7 +165,7 @@ if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
 // Xóa một tài khoản
 if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $id = $nv_Request->get_absint('id', 'post', 0);

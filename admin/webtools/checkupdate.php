@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21/12/2010, 8:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_WEBTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['checkupdate'];
@@ -41,19 +42,19 @@ if ($nv_Request->isset_request('i', 'get')) {
             $xtpl->parse('error');
             echo $xtpl->text('error');
         } else {
-            $values['onlineVersion'] = sprintf($lang_module['newVersion_detail'], (string)$new_version->version, (string)$new_version->name, nv_date('d/m/Y H:i', strtotime((string)$new_version->date)));
+            $values['onlineVersion'] = sprintf($lang_module['newVersion_detail'], (string) $new_version->version, (string) $new_version->name, nv_date('d/m/Y H:i', strtotime((string) $new_version->date)));
             $xtpl->assign('VALUE', $values);
 
-            if (nv_version_compare($global_config['version'], (string)$new_version->version) < 0) {
-                $xtpl->assign('VERSION_INFO', (string)$new_version->message);
+            if (nv_version_compare($global_config['version'], (string) $new_version->version) < 0) {
+                $xtpl->assign('VERSION_INFO', (string) $new_version->message);
 
                 // Allow auto update to newest version
-                if ((string)$new_version->version == (string)$new_version->updateable) {
-                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string)$new_version->updateable) . '&amp;package=' . ((string)$new_version->updatepackage) . '&amp;checksess=' . md5(((string)$new_version->updateable) . ((string)$new_version->updatepackage) . NV_CHECK_SESSION)));
-                } elseif (((string)$new_version->updateable) != '') {
-                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info2'], ((string)$new_version->updateable), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string)$new_version->updateable) . '&amp;package=' . ((string)$new_version->updatepackage) . '&amp;checksess=' . md5(((string)$new_version->updateable) . ((string)$new_version->updatepackage) . NV_CHECK_SESSION)));
+                if ((string) $new_version->version == (string) $new_version->updateable) {
+                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string) $new_version->updateable) . '&amp;package=' . ((string) $new_version->updatepackage) . '&amp;checksess=' . md5(((string) $new_version->updateable) . ((string) $new_version->updatepackage) . NV_CHECK_SESSION)));
+                } elseif (((string) $new_version->updateable) != '') {
+                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info2'], ((string) $new_version->updateable), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string) $new_version->updateable) . '&amp;package=' . ((string) $new_version->updatepackage) . '&amp;checksess=' . md5(((string) $new_version->updateable) . ((string) $new_version->updatepackage) . NV_CHECK_SESSION)));
                 } else {
-                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info3'], (string)$new_version->link));
+                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info3'], (string) $new_version->link));
                 }
 
                 $xtpl->parse('sysUpd.inf');
@@ -89,26 +90,26 @@ if ($nv_Request->isset_request('i', 'get')) {
             $a = 1;
 
             foreach ($exts as $extname => $values) {
-                $ext_type = (string)$values->type;
-                $ext_name = (string)$values->name;
+                $ext_type = (string) $values->type;
+                $ext_name = (string) $values->name;
 
-                if (!isset($static_exts[$ext_type]) or !in_array($ext_name, $static_exts[$ext_type])) {
+                if (!isset($static_exts[$ext_type]) or !in_array($ext_name, $static_exts[$ext_type], true)) {
                     $value = [
-                        'id' => (int)$values->id,
+                        'id' => (int) $values->id,
                         'type' => $ext_type,
                         'name' => $ext_name,
-                        'version' => (string)$values->version,
-                        'date' => (string)$values->date,
-                        'new_version' => (string)$values->new_version,
-                        'new_date' => (string)$values->new_date,
-                        'author' => (string)$values->author,
-                        'license' => (string)$values->license,
-                        'mode' => (string)$values->mode,
-                        'message' => (string)$values->message,
-                        'link' => (string)$values->link,
-                        'support' => (string)$values->support,
+                        'version' => (string) $values->version,
+                        'date' => (string) $values->date,
+                        'new_version' => (string) $values->new_version,
+                        'new_date' => (string) $values->new_date,
+                        'author' => (string) $values->author,
+                        'license' => (string) $values->license,
+                        'mode' => (string) $values->mode,
+                        'message' => (string) $values->message,
+                        'link' => (string) $values->link,
+                        'support' => (string) $values->support,
                         'updateable' => [],
-                        'origin' => ((string)$values->origin) == 'true' ? true : false,
+                        'origin' => ((string) $values->origin) == 'true' ? true : false,
                     ];
 
                     // Xu ly update
@@ -117,9 +118,9 @@ if ($nv_Request->isset_request('i', 'get')) {
                     if (!empty($updateables)) {
                         foreach ($updateables as $updateable) {
                             $value['updateable'][] = [
-                                'fid' => (string)$updateable->upd_fid,
-                                'old' => explode(',', (string)$updateable->upd_old),
-                                'new' => (string)$updateable->upd_new,
+                                'fid' => (string) $updateable->upd_fid,
+                                'old' => explode(',', (string) $updateable->upd_old),
+                                'new' => (string) $updateable->upd_new,
                             ];
                         }
                     }
@@ -176,7 +177,7 @@ if ($nv_Request->isset_request('i', 'get')) {
                         $updateVersion = [];
 
                         foreach ($value['updateable'] as $updateable) {
-                            if (in_array($value['version'], $updateable['old'])) {
+                            if (in_array($value['version'], $updateable['old'], true)) {
                                 if (empty($updateVersion) or nv_version_compare($updateVersion['new'], $updateable['new']) < 0) {
                                     $updateVersion = $updateable;
                                 }
@@ -217,7 +218,7 @@ if ($nv_Request->isset_request('i', 'get')) {
             echo $xtpl->text('extUpd');
         }
     }
-    die();
+    exit();
 }
 
 $xtpl->parse('main');

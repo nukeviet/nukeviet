@@ -1,22 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MOD_2STEP_VERIFICATION')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_theme_info_2step()
  *
- * @param mixed $backupcodes
- * @return
+ * @param array $backupcodes
+ * @param bool  $autoshowcode
+ * @return string
  */
 function nv_theme_info_2step($backupcodes, $autoshowcode)
 {
@@ -63,15 +65,16 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_config_2step()
  *
- * @param mixed $secretkey
- * @param mixed $nv_redirect
- * @return
+ * @param string $secretkey
+ * @param string $nv_redirect
+ * @return string
  */
 function nv_theme_config_2step($secretkey, $nv_redirect)
 {
@@ -88,13 +91,15 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_confirm_password()
  *
- * @return
+ * @param bool $is_pass_valid
+ * @return string
  */
 function nv_theme_confirm_password($is_pass_valid)
 {
@@ -109,10 +114,11 @@ function nv_theme_confirm_password($is_pass_valid)
         $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
-    } else {
-        $xtpl->assign('CHANGE_2STEP_NOTVALID', sprintf($lang_module['change_2step_notvalid'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
-        $xtpl->parse('pass_empty');
-        return $xtpl->text('pass_empty');
     }
+    $xtpl->assign('CHANGE_2STEP_NOTVALID', sprintf($lang_module['change_2step_notvalid'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
+    $xtpl->parse('pass_empty');
+
+    return $xtpl->text('pass_empty');
 }

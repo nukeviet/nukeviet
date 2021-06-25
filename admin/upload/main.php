@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['upload_manager'];
@@ -93,9 +94,9 @@ if ($popup) {
     $xtpl->assign('UPLOAD_LOGO_CONFIG', $upload_logo_config);
 
     // Check upload allow file types
-    if ($type == 'image' and in_array('images', $admin_info['allow_files_type'])) {
+    if ($type == 'image' and in_array('images', $admin_info['allow_files_type'], true)) {
         $allow_files_type = ['images'];
-    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'])) {
+    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'], true)) {
         $allow_files_type = ['flash'];
     } else {
         $allow_files_type = $admin_info['allow_files_type'];

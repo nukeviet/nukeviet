@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['nv_lang_check'];
@@ -79,7 +80,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
 foreach ($language_array as $key => $value) {
-    if (in_array($key, $array_lang_exit)) {
+    if (in_array($key, $array_lang_exit, true)) {
         $xtpl->assign('LANGUAGE', [
             'key' => $key,
             'selected' => ($key == $typelang) ? ' selected="selected"' : '',
@@ -91,7 +92,7 @@ foreach ($language_array as $key => $value) {
 }
 
 foreach ($language_array_source as $key) {
-    if (in_array($key, $array_lang_exit)) {
+    if (in_array($key, $array_lang_exit, true)) {
         $xtpl->assign('LANGUAGE_SOURCE', [
             'key' => $key,
             'selected' => ($key == $sourcelang) ? ' selected="selected"' : '',
@@ -104,7 +105,7 @@ foreach ($language_array_source as $key) {
 
 $sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query($sql);
-while (list($idfile_i, $module, $admin_file, ) = $result->fetch(3)) {
+while (list($idfile_i, $module, $admin_file) = $result->fetch(3)) {
     $module = preg_replace('/^theme\_(.*?)$/', 'Theme: \\1', $module);
     switch ($admin_file) {
         case '1':
@@ -140,7 +141,7 @@ foreach ($language_check_type as $key => $value) {
 
 $submit = $nv_Request->get_int('submit', 'post,get', 0);
 
-if ($submit > 0 and in_array($sourcelang, $array_lang_exit) and in_array($typelang, $array_lang_exit)) {
+if ($submit > 0 and in_array($sourcelang, $array_lang_exit, true) and in_array($typelang, $array_lang_exit, true)) {
     $array_where = [];
     if ($idfile > 0) {
         $array_where[] = 'idfile=' . $idfile;

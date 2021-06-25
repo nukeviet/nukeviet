@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Dang nhap thanh vien thi khong duoc truy cap
@@ -197,7 +198,7 @@ while ($row = $result->fetch()) {
 
 // Captcha
 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-$gfx_chk = (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk)) ? 1 : 0;
+$gfx_chk = (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk, true)) ? 1 : 0;
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 $array_register = [];
@@ -406,7 +407,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['first_name'] = $array_register['first_name'];
         $data_insert['last_name'] = $array_register['last_name'];
         $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = intval($array_register['birthday']);
+        $data_insert['birthday'] = (int) ($array_register['birthday']);
         $data_insert['sig'] = $array_register['sig'];
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
@@ -441,7 +442,7 @@ if ($checkss == $array_register['checkss']) {
                     // Thêm thông báo vào hệ thống
                     $access_admin = unserialize($global_users_config['access_admin']);
                     if (isset($access_admin['access_waiting'])) {
-                        for ($i = 1; $i <= 3; $i++) {
+                        for ($i = 1; $i <= 3; ++$i) {
                             if (!empty($access_admin['access_waiting'][$i])) {
                                 $admin_view_allowed = $i == 3 ? 0 : $i;
                                 nv_insert_notification($module_name, 'send_active_link_fail', [
@@ -509,7 +510,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = intval($array_register['birthday']);
+        $data_insert['birthday'] = (int) ($array_register['birthday']);
         $data_insert['sig'] = $array_register['sig'];
 
         $userid = $db->insert_id($sql, 'userid', $data_insert);

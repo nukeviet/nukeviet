@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_comment_data()
  *
  * @param string $module
- * @param int $area
- * @param int $id
- * @param int $page
- * @param int $sortcomm
+ * @param string $area
+ * @param int    $id
+ * @param int    $page
+ * @param int    $sortcomm
  * @param string $base_url
  * @return array
  */
@@ -89,6 +90,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
         } else {
             $generate_page = '';
         }
+
         return [
             'comment' => $comment_array,
             'page' => $generate_page
@@ -99,11 +101,11 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
 /**
  * nv_comment_get_reply()
  *
- * @param mixed $cid
- * @param mixed $module
- * @param mixed $session_id
- * @param mixed $sortcomm
- * @return
+ * @param int    $cid
+ * @param string $module
+ * @param string $session_id
+ * @param int    $sortcomm
+ * @return array
  */
 function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 {
@@ -142,20 +144,21 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
             $data_reply_comment[$row['cid']]['subcomment'] = nv_comment_get_reply($row['cid'], $module, $session_id, $sortcomm);
         }
     }
+
     return $data_reply_comment;
 }
 
 /**
  * nv_comment_load()
  *
- * @param mixed $module
- * @param mixed $checkss
- * @param mixed $area
- * @param mixed $id
- * @param mixed $allowed
- * @param mixed $page
+ * @param string $module
+ * @param string $checkss
+ * @param string $area
+ * @param int    $id
+ * @param mixed  $allowed
+ * @param int    $page
  * @param string $status_comment
- * @return
+ * @return string
  */
 function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status_comment = '')
 {
@@ -191,11 +194,12 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
                     $is_delete = true;
                 } elseif (defined('NV_IS_ADMIN')) {
                     global $admin_info;
-                    $adminscomm = explode(',', $module_config[$module]['adminscomm']);
-                    if (in_array($admin_info['admin_id'], $adminscomm)) {
+                    $adminscomm = array_map('intval', explode(',', $module_config[$module]['adminscomm']));
+                    if (in_array((int) $admin_info['admin_id'], $adminscomm, true)) {
                         $is_delete = true;
                     }
                 }
+
                 return nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment);
             }
         }
@@ -207,15 +211,15 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
 /**
  * nv_comment_module()
  *
- * @param mixed $module
- * @param mixed $checkss
- * @param mixed $area
- * @param mixed $id
- * @param mixed $allowed
- * @param mixed $page
+ * @param string $module
+ * @param string $checkss
+ * @param string $area
+ * @param int    $id
+ * @param mixed  $allowed
+ * @param int    $page
  * @param string $status_comment
- * @param integer $header
- * @return
+ * @param int    $header
+ * @return string|void
  */
 function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $status_comment = '', $header = 1)
 {
@@ -276,9 +280,6 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 }
             }
 
-            $page_title = $module_info['site_title'];
-            $key_words = $module_info['keywords'];
-
             $sortcomm = $nv_Request->get_int('sortcomm', 'cookie', $module_config[$module]['sortcomm']);
             if ($sortcomm < 0 or $sortcomm > 2) {
                 $sortcomm = 0;
@@ -289,8 +290,8 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 $is_delete = true;
             } elseif (defined('NV_IS_ADMIN')) {
                 global $admin_info;
-                $adminscomm = explode(',', $module_config[$module]['adminscomm']);
-                if (in_array($admin_info['admin_id'], $adminscomm)) {
+                $adminscomm = array_map('intval', explode(',', $module_config[$module]['adminscomm']));
+                if (in_array((int) $admin_info['admin_id'], $adminscomm, true)) {
                     $is_delete = true;
                 }
             }
@@ -302,25 +303,25 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             }
 
             return nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $form_login, $header);
-        } else {
-            return '';
         }
+
+        return '';
     }
 }
 
 /**
  * nv_theme_comment_module()
  *
- * @param mixed $module
- * @param mixed $area
- * @param mixed $id
- * @param mixed $allowed_comm
- * @param mixed $checkss
- * @param mixed $comment
- * @param mixed $sortcomm
- * @param mixed $form_login
- * @param integer $header
- * @return
+ * @param string $module
+ * @param string $area
+ * @param int    $id
+ * @param mixed  $allowed_comm
+ * @param string $checkss
+ * @param mixed  $comment
+ * @param int    $sortcomm
+ * @param array  $form_login
+ * @param int    $header
+ * @return string
  */
 function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $form_login, $header = 1)
 {
@@ -392,7 +393,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             $xtpl->assign('EDITOR_COMM', 0);
         }
 
-        $captcha = intval($module_config[$module]['captcha_area_comm']);
+        $captcha = (int) ($module_config[$module]['captcha_area_comm']);
         $show_captcha = true;
         if ($captcha == 0) {
             $show_captcha = false;
@@ -402,8 +403,8 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             if (defined('NV_IS_SPADMIN')) {
                 $show_captcha = false;
             } else {
-                $adminscomm = explode(',', $module_config[$module]['adminscomm']);
-                if (in_array($admin_info['admin_id'], $adminscomm)) {
+                $adminscomm = array_map('intval', explode(',', $module_config[$module]['adminscomm']));
+                if (in_array((int) $admin_info['admin_id'], $adminscomm, true)) {
                     $show_captcha = false;
                 }
             }
@@ -450,18 +451,19 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_comment_module_data()
  *
- * @param mixed $module
- * @param mixed $comment_array
- * @param mixed $is_delete
- * @param mixed $allowed_comm
- * @param mixed $status_comment
- * @return
+ * @param string $module
+ * @param array  $comment_array
+ * @param bool   $is_delete
+ * @param bool   $allowed_comm
+ * @param string $status_comment
+ * @return string
  */
 function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment)
 {
@@ -524,20 +526,21 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
             $xtpl->assign('PAGE', $comment_array['page']);
         }
         $xtpl->parse('main');
+
         return $xtpl->text('main');
-    } else {
-        return '';
     }
+
+    return '';
 }
 
 /**
  * nv_comment_module_data_reply()
  *
- * @param mixed $module
- * @param mixed $comment_array
- * @param mixed $is_delete
- * @param mixed $allowed_comm
- * @return
+ * @param string $module
+ * @param array  $comment_array
+ * @param bool   $is_delete
+ * @param bool   $allowed_comm
+ * @return string
  */
 function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allowed_comm)
 {
@@ -588,5 +591,6 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allo
         $xtpl->parse('children.detail');
     }
     $xtpl->parse('children');
+
     return $xtpl->text('children');
 }

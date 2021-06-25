@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:42
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_ADMIN', true);
@@ -25,7 +26,7 @@ foreach ($dirs as $file) {
     }
 }
 
-if (!in_array(NV_LANG_DATA, $languageslist)) {
+if (!in_array(NV_LANG_DATA, $languageslist, true)) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . $languageslist[0] . '&step=1');
 }
 
@@ -79,12 +80,12 @@ if ($step == 1) {
     // Tu dong nhan dang Remove Path
     if ($nv_Request->isset_request('tetectftp', 'post')) {
         $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
-        $ftp_port = intval($nv_Request->get_title('ftp_port', 'post', '21', 1));
+        $ftp_port = (int) ($nv_Request->get_title('ftp_port', 'post', '21', 1));
         $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
         $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', '', 1));
 
         if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
-            die('ERROR|' . $lang_module['ftp_error_empty']);
+            exit('ERROR|' . $lang_module['ftp_error_empty']);
         }
 
         $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, [
@@ -93,30 +94,29 @@ if ($step == 1) {
 
         if (!empty($ftp->error)) {
             $ftp->close();
-            die('ERROR|' . (string) $ftp->error);
-        } else {
-            $list_valid = [
-                NV_ASSETS_DIR,
-                'includes',
-                'index.php',
-                'modules',
-                'themes',
-                'vendor'
-            ];
+            exit('ERROR|' . (string) $ftp->error);
+        }
+        $list_valid = [
+            NV_ASSETS_DIR,
+            'includes',
+            'index.php',
+            'modules',
+            'themes',
+            'vendor'
+        ];
 
-            $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
+        $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
-            if ($ftp_root === false) {
-                $ftp->close();
-                die('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : (string) $ftp->error));
-            }
-
+        if ($ftp_root === false) {
             $ftp->close();
-            die('OK|' . $ftp_root);
+            exit('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : (string) $ftp->error));
         }
 
         $ftp->close();
-        die('ERROR|' . $lang_module['ftp_error_detect_root']);
+        exit('OK|' . $ftp_root);
+
+        $ftp->close();
+        exit('ERROR|' . $lang_module['ftp_error_detect_root']);
     }
 
     // Danh sach cac file can kiem tra quyen ghi
@@ -210,7 +210,7 @@ if ($step == 1) {
                 $a = 0;
                 foreach ($list_files as $filename) {
                     $filename = basename($filename);
-                    if (in_array($filename, $check_files)) {
+                    if (in_array($filename, $check_files, true)) {
                         ++$a;
                     }
                 }
@@ -384,7 +384,7 @@ if ($step == 1) {
             // Not check default dbtype
             $respon['status'] = 'success';
         } else {
-            if (!in_array($dbtype, $PDODrivers)) {
+            if (!in_array($dbtype, $PDODrivers, true)) {
                 $respon['message'] = $lang_module['dbcheck_error_driver'];
             } else {
                 $array_check_files = [
@@ -422,7 +422,7 @@ if ($step == 1) {
         nv_jsonOutput($respon);
     }
 
-    if (in_array($db_config['dbtype'], $PDODrivers) and !empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and !empty($db_config['dbuname']) and !empty($db_config['prefix'])) {
+    if (in_array($db_config['dbtype'], $PDODrivers, true) and !empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and !empty($db_config['dbuname']) and !empty($db_config['prefix'])) {
         $db_config['dbuname'] = preg_replace([
             '/[^a-z0-9]/i',
             '/[\_]+/',
@@ -658,11 +658,11 @@ if ($step == 1) {
                     foreach ($modules as $key => $row) {
                         $setmodule = $row['title'];
 
-                        if (in_array($row['module_file'], $modules_exit)) {
+                        if (in_array($row['module_file'], $modules_exit, true)) {
                             $sm = nv_setup_data_module(NV_LANG_DATA, $setmodule);
 
                             if ($sm != 'OK_' . $setmodule) {
-                                die('error set module: ' . $setmodule);
+                                exit('error set module: ' . $setmodule);
                             }
                         } else {
                             unset($modules[$key]);
@@ -874,7 +874,7 @@ if ($step == 1) {
                             }
                         } catch (PDOException $e) {
                             trigger_error($e->getMessage());
-                            die($e->getMessage());
+                            exit($e->getMessage());
                         }
 
                         nv_save_file_config();
@@ -941,7 +941,7 @@ if ($step == 1) {
                             $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)");
 
                             $year = date('Y');
-                            for ($i = 0; $i < 9; $i++) {
+                            for ($i = 0; $i < 9; ++$i) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)");
                                 ++$year;
                             }
@@ -951,7 +951,7 @@ if ($step == 1) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('month', '" . $month . "', 0, 0, 0)");
                             }
 
-                            for ($i = 1; $i < 32; $i++) {
+                            for ($i = 1; $i < 32; ++$i) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('day', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
                             }
 
@@ -960,7 +960,7 @@ if ($step == 1) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('dayofweek', '" . $dayofweek . "', 0, 0, 0)");
                             }
 
-                            for ($i = 0; $i < 24; $i++) {
+                            for ($i = 0; $i < 24; ++$i) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad($i, 2, '0', STR_PAD_LEFT) . "', 0, 0, 0)");
                             }
 
@@ -1074,7 +1074,7 @@ if ($step == 1) {
         echo '<pre>';
         print_r($e);
         echo '</pre>';
-        die();
+        exit();
     }
     $array_data['error'] = $error;
     $title = $lang_module['website_info'];
@@ -1090,13 +1090,13 @@ if ($step == 1) {
 
     if ($nv_Request->isset_request('submit', 'post')) {
         $package = $nv_Request->get_title('package', 'post', '');
-        if (!in_array('data_' . $package . '.php', $array_samples_data)) {
+        if (!in_array('data_' . $package . '.php', $array_samples_data, true)) {
             nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
         }
         require NV_ROOTDIR . '/install/samples/data_' . $package . '.php';
         $db = $db_slave = new NukeViet\Core\Database($db_config);
         if (empty($db->connect)) {
-            die('Sorry! Could not connect to data server');
+            exit('Sorry! Could not connect to data server');
         }
         foreach ($sql_create_table as $sql) {
             try {
@@ -1129,7 +1129,7 @@ if ($step == 1) {
             echo '<pre>';
             print_r($e);
             echo '</pre>';
-            die();
+            exit();
         }
 
         $nv_Cache->delAll();
@@ -1169,7 +1169,7 @@ if ($step == 1) {
 
             $content_config = "<?php\n\n";
             $content_config .= NV_FILEHEAD . "\n\n";
-            $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
+            $content_config .= "if (!defined( 'NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
             $content_config .= "\$cache = '" . serialize($robots_data) . "';\n\n";
             $content_config .= "\$cache_other = '" . serialize($robots_other) . "';";
             file_put_contents($cache_file, $content_config, LOCK_EX);
@@ -1192,7 +1192,7 @@ if ($step == 1) {
             $ftp_server_array = unserialize($ftp_server_array);
         }
 
-        if (isset($ftp_server_array['ftp_check_login']) and intval($ftp_server_array['ftp_check_login']) == 1) {
+        if (isset($ftp_server_array['ftp_check_login']) and (int) ($ftp_server_array['ftp_check_login']) == 1) {
             // Set up basic connection
             $conn_id = ftp_connect($ftp_server_array['ftp_server'], $ftp_server_array['ftp_port'], 10);
 
@@ -1245,7 +1245,7 @@ if ($step == 1) {
             $db = $db_slave = new NukeViet\Core\Database($db_config);
             unset($db_config['dbpass']);
             if (empty($db->connect)) {
-                die('Sorry! Could not connect to data server');
+                exit('Sorry! Could not connect to data server');
             }
             $sth = $db->prepare('INSERT IGNORE INTO ' . $db_config['prefix'] . '_ips (
                 type, ip, mask, area, begintime, endtime, notice
@@ -1290,9 +1290,7 @@ function nv_save_file_config()
         $content = '';
         $content .= "<?php\n\n";
         $content .= NV_FILEHEAD . "\n\n";
-        $content .= "if (!defined('NV_MAINFILE')) {\n";
-        $content .= "    die('Stop!!!');\n";
-        $content .= "}\n\n";
+        $content .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
         $content .= "\$db_config['dbhost'] = '" . $db_config['dbhost'] . "';\n";
         $content .= "\$db_config['dbport'] = '" . $db_config['dbport'] . "';\n";
         $content .= "\$db_config['dbname'] = '" . $db_config['dbname'] . "';\n";
@@ -1353,8 +1351,9 @@ function nv_save_file_config()
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
+
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }

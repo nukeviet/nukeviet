@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-11-2010 0:44
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $data = [];
@@ -61,10 +62,10 @@ $theme_list = $theme_mobile_list = $array_theme = [];
 // Chi nhung giao dien da duoc thiet lap layout moi duoc them
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
 while (list($theme) = $result->fetch(3)) {
-    if (in_array($theme, $theme_site_array)) {
+    if (in_array($theme, $theme_site_array, true)) {
         $array_theme[] = $theme;
         $theme_list[] = $theme;
-    } elseif (in_array($theme, $theme_mobile_array)) {
+    } elseif (in_array($theme, $theme_mobile_array, true)) {
         $array_theme[] = $theme;
         $theme_mobile_list[] = $theme;
     }
@@ -87,11 +88,11 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $rss = $nv_Request->get_int('rss', 'post', 0);
     $sitemap = $nv_Request->get_int('sitemap', 'post', 0);
 
-    if (!empty($theme) and !in_array($theme, $theme_list)) {
+    if (!empty($theme) and !in_array($theme, $theme_list, true)) {
         $theme = '';
     }
 
-    if (!empty($mobile) and !in_array($mobile, $theme_mobile_list) and !isset($theme_mobile_default[$mobile])) {
+    if (!empty($mobile) and !in_array($mobile, $theme_mobile_list, true) and !isset($theme_mobile_default[$mobile])) {
         $mobile = '';
     }
 
@@ -116,7 +117,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
         foreach ($array_theme as $_theme) {
             $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini');
-            $layoutdefault = ( string )$xml->layoutdefault;
+            $layoutdefault = (string) $xml->layoutdefault;
 
             if (!empty($layoutdefault) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/layout/layout.' . $layoutdefault . '.tpl')) {
                 $array_layoutdefault[$_theme] = $layoutdefault;
@@ -139,7 +140,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 $sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
                 $sth->execute();
                 while (list($func_id) = $sth->fetch(3)) {
-                    if (!in_array($func_id, $array_func_id)) {
+                    if (!in_array((int) $func_id, array_map('intval', $array_func_id), true)) {
                         $sth2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (' . $func_id . ', :layout, :theme)');
                         $sth2->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);
                         $sth2->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
@@ -314,7 +315,7 @@ if (!empty($data['groups_view'])) {
         if ($group_id > 2) {
             $xtpl->assign('GROUPS_VIEW', [
                 'key' => $group_id,
-                'checked' => in_array($group_id, $data['groups_view'][2]) ? ' checked="checked"' : '',
+                'checked' => in_array((int) $group_id, array_map('intval', $data['groups_view'][2]), true) ? ' checked="checked"' : '',
                 'title' => $grtl
             ]);
             $xtpl->parse('main.groups_view.loop');

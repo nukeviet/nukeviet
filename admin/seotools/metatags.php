@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/12/2010, 13:16
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($global_config['idsite']) {
@@ -29,7 +30,7 @@ if ($mt['meta_item']) {
 }
 $default_metasys = [];
 foreach ($sys_metatags['meta'] as $value) {
-    if ($value['group'] == 'name' and in_array($value['value'], ['author', 'copyright'])) {
+    if ($value['group'] == 'name' and in_array($value['value'], ['author', 'copyright'], true)) {
         $default_metasys[] = [
             'group' => $value['group'],
             'value' => $value['value'],
@@ -63,7 +64,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
         $value = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaGroupsValue[$key]))));
         $content = str_replace(['\\', '"'], '', nv_unhtmlspecialchars(trim(strip_tags($metaContents[$key]))));
-        if ($global_config['idsite'] and $name == 'name' and in_array($value, ['author', 'copyright'])) {
+        if ($global_config['idsite'] and $name == 'name' and in_array($value, ['author', 'copyright'], true)) {
             continue;
         }
         $newArray = [
@@ -71,7 +72,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             'value' => $value,
             'content' => $content
         ];
-        if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'])) {
+        if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore, true) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'], true)) {
             $metatags['meta'][] = $newArray;
         }
     }
@@ -88,9 +89,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     }
 
     $array_config = [];
-    $array_config['metaTagsOgp'] = (int)$nv_Request->get_bool('metaTagsOgp', 'post', false);
+    $array_config['metaTagsOgp'] = (int) $nv_Request->get_bool('metaTagsOgp', 'post', false);
     $array_config['description_length'] = $nv_Request->get_absint('description_length', 'post', 0);
-    $array_config['private_site'] = (int)$nv_Request->get_bool('private_site', 'post', false);
+    $array_config['private_site'] = (int) $nv_Request->get_bool('private_site', 'post', false);
     $array_config['ogp_image'] = '';
     $ogp_image = $nv_Request->get_title('ogp_image', 'post', '');
     if (!empty($ogp_image) and !nv_is_url($ogp_image) and nv_is_file($ogp_image) === true) {
@@ -144,7 +145,7 @@ if (!empty($metatags['meta'])) {
         $value['n_selected'] = $value['group'] == 'name' ? ' selected="selected"' : '';
         $value['p_selected'] = $value['group'] == 'property' ? ' selected="selected"' : '';
 
-        if ($global_config['idsite'] and $value['group'] == 'name' and in_array($value['value'], ['author', 'copyright'])) {
+        if ($global_config['idsite'] and $value['group'] == 'name' and in_array($value['value'], ['author', 'copyright'], true)) {
             $value['disabled'] = ' disabled="disabled"';
         } else {
             $value['disabled'] = '';

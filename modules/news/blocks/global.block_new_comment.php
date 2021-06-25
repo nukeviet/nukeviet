@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_comment_new')) {
     /**
      * nv_block_comment_new()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_comment_new($module, $data_block, $lang_block)
     {
@@ -32,15 +33,16 @@ if (!nv_function_exists('nv_comment_new')) {
         $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
         $html .= '	<div class="col-sm-5"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * nv_block_comment_new_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_comment_new_submit($module, $lang_block)
     {
@@ -50,14 +52,15 @@ if (!nv_function_exists('nv_comment_new')) {
         $return['config'] = [];
         $return['config']['titlelength'] = $nv_Request->get_int('config_titlelength', 'post', 0);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
+
         return $return;
     }
 
     /**
      * nv_comment_new()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string|void
      */
     function nv_comment_new($block_config)
     {
@@ -103,6 +106,7 @@ if (!nv_function_exists('nv_comment_new')) {
                 }
             }
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }

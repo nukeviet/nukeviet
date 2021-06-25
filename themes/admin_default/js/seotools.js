@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2013 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function formatStringAsUriComponent(s) {
@@ -23,16 +24,16 @@ function formatStringAsUriComponent(s) {
     return s.replace(/^\s+|\s+$/g, "");
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     // RPC ping
-    $("#rpc .col3").click(function() {
+    $("#rpc .col3").click(function () {
         var a = $(this).attr("title");
         a != "" && alert(a);
         return !1
     });
 
     // ogp_image setting
-    $(".selectimg").click(function() {
+    $(".selectimg").click(function () {
         var area = $(this).attr('data-name');
         var path = "";
         var currentpath = "images";

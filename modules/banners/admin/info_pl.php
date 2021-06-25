@@ -1,18 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/13/2010 0:12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
+
 if ($client_info['is_myreferer'] != 1) {
-    die('Wrong URL');
+    exit('Wrong URL');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -22,7 +24,7 @@ $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $contents = [];
@@ -37,9 +39,9 @@ $contents['rows']['uploadtype'] = [$lang_module['uploadtype'], str_replace(',', 
 
 $uploadgroup = [];
 if (!empty($row['uploadgroup'])) {
-    $row['uploadgroup'] = array_map('trim', explode(',', $row['uploadgroup']));
+    $row['uploadgroup'] = array_map('intval', explode(',', $row['uploadgroup']));
     foreach ($groups_list as $k => $v) {
-        if (in_array($k, $row['uploadgroup'])) {
+        if (in_array($k, $row['uploadgroup'], true)) {
             $uploadgroup[] = $v;
         }
     }

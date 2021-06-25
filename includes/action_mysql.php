@@ -1,21 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jun 20, 2010 8:59:32 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification');
 
 /**
- *
  * @param string $table_des
  * @param string $table_src
  * @return number
@@ -24,11 +24,11 @@ function nv_copy_structure_table($table_des, $table_src)
 {
     global $db;
     $db->exec('DROP TABLE IF EXISTS ' . $table_des);
+
     return $db->exec('CREATE TABLE ' . $table_des . ' LIKE ' . $table_src);
 }
 
 /**
- *
  * @param string $lang
  * @return string[]
  */
@@ -50,7 +50,6 @@ function nv_delete_table_sys($lang)
 }
 
 /**
- *
  * @param string $lang
  * @return string[]
  */

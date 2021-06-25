@@ -1,23 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_module_menu')) {
     /**
      * nv_module_menu()
      *
-     * @return
-     *
+     * @return string
      */
     function nv_module_menu()
     {
@@ -72,6 +72,7 @@ if (!nv_function_exists('nv_module_menu')) {
 
         $xtpl->assign('MOD', $mod);
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

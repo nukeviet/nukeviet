@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:17
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $admin_id = $nv_Request->get_int('admin_id', 'get', 0);
@@ -46,7 +47,7 @@ if ($row['lev'] == 3) {
     foreach ($array_keys as $mod) {
         if (!empty($mod)) {
             if (!empty($site_mods[$mod]['admins'])) {
-                if (in_array($admin_id, explode(',', $site_mods[$mod]['admins']))) {
+                if (in_array($admin_id, array_map('intval', explode(',', $site_mods[$mod]['admins'])), true)) {
                     $old_modules[] = $mod;
                 }
             }
@@ -144,7 +145,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
         $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-        $admin_theme = (!empty($admin_theme) and in_array($admin_theme, $adminThemes)) ? $admin_theme : '';
+        $admin_theme = (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) ? $admin_theme : '';
 
         $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position, main_module = :main_module, admin_theme = :admin_theme WHERE admin_id=' . $admin_id);
         $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
@@ -274,7 +275,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         nv_admin_edit_result($result);
     }
 } else {
-    $lev = intval($row['lev']);
+    $lev = (int) ($row['lev']);
     $modules = $old_modules;
     $position = $row['position'];
     $editor = $row['editor'];
@@ -295,7 +296,7 @@ if (defined('NV_IS_SPADMIN') and $row['admin_id'] != $admin_info['admin_id']) {
     $mods = [];
     $array_keys = array_keys($site_mods);
     foreach ($array_keys as $mod) {
-        $mods[$mod]['checked'] = in_array($mod, $modules) ? 1 : 0;
+        $mods[$mod]['checked'] = in_array($mod, $modules, true) ? 1 : 0;
         $mods[$mod]['custom_title'] = $site_mods[$mod]['custom_title'];
     }
 
@@ -380,7 +381,7 @@ foreach ($edit_admin_mods as $mod) {
 
 foreach ($site_mods as $index => $value) {
     if ($value['admin_file']) {
-        if ($row['lev'] == 3 and !in_array($index, $old_modules)) {
+        if ($row['lev'] == 3 and !in_array($index, $old_modules, true)) {
             continue;
         }
         $array_module[$index] = [
@@ -420,7 +421,7 @@ if (isset($contents['allow_files_type'])) {
 
     foreach ($contents['allow_files_type'][1] as $tp) {
         $xtpl->assign('VALUE', $tp);
-        $xtpl->assign('CHECKED', in_array($tp, $contents['allow_files_type'][2]) ? ' checked="checked"' : '');
+        $xtpl->assign('CHECKED', in_array($tp, $contents['allow_files_type'][2], true) ? ' checked="checked"' : '');
         $xtpl->parse('edit.allow_files_type.loop');
     }
     $xtpl->parse('edit.allow_files_type');

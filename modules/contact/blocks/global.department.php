@@ -1,22 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_department_info')) {
     /**
-     * nv_department_info()
+     * nv_block_config_contact_department()
      *
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_contact_department($module, $data_block, $lang_block)
     {
@@ -37,6 +41,13 @@ if (!nv_function_exists('nv_department_info')) {
         return $html;
     }
 
+    /**
+     * nv_block_config_contact_department_submit()
+     *
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
+     */
     function nv_block_config_contact_department_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -44,9 +55,16 @@ if (!nv_function_exists('nv_department_info')) {
         $return['error'] = [];
         $return['config'] = [];
         $return['config']['departmentid'] = $nv_Request->get_int('config_departmentid', 'post', 0);
+
         return $return;
     }
 
+    /**
+     * nv_department_info()
+     *
+     * @param array $block_config
+     * @return string
+     */
     function nv_department_info($block_config)
     {
         global $global_config, $site_mods, $nv_Cache, $module_name, $lang_module;
@@ -225,6 +243,7 @@ if (!nv_function_exists('nv_department_info')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 21:7
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_BANNERS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_BANNER_CLIENT')) {
     $type = $nv_Request->get_title('type', 'post,get', 'country', 1);
     $month = $nv_Request->get_int('month', 'post,get');
     $ads = $nv_Request->get_int('ads', 'post,get');
-    $year = (int)date('Y');
+    $year = (int) date('Y');
     $month_array = [
         '1' => 31,
         '3' => 31,
@@ -69,7 +70,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
             if ($type == 'date') {
                 $process[$country . '(' . $quantity . ' click)'] = $quantity;
             } else {
-                $process[$country . '(' . round(((intval($quantity) * 100) / $total), 2) . '%)'] = round(((intval($quantity) * 100) / $total), 2);
+                $process[$country . '(' . round((((int) $quantity * 100) / $total), 2) . '%)'] = round((((int) $quantity * 100) / $total), 2);
             }
         }
 

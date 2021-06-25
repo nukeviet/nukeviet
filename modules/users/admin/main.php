@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright(C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $table_caption = $lang_module['list_module_title'];
@@ -113,7 +114,7 @@ $num_items = $db->query($db->sql())->fetchColumn();
 $db->select('*')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
-if (!empty($orderby) and in_array($orderby, $orders)) {
+if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
@@ -123,13 +124,13 @@ $result2 = $db->query($db->sql());
 
 $users_list = [];
 $admin_in = [];
-$is_edit = (in_array('edit', $allow_func)) ? true : false;
-$is_delete = (in_array('del', $allow_func)) ? true : false;
-$is_setactive = (in_array('setactive', $allow_func) and !defined('NV_IS_USER_FORUM')) ? true : false;
+$is_edit = (in_array('edit', $allow_func, true)) ? true : false;
+$is_delete = (in_array('del', $allow_func, true)) ? true : false;
+$is_setactive = (in_array('setactive', $allow_func, true) and !defined('NV_IS_USER_FORUM')) ? true : false;
 $array_userids = $array_users = [];
 
 while ($row = $result2->fetch()) {
-    $row['in_groups'] = explode(',', $row['in_groups']);
+    $row['in_groups'] = array_map('intval', explode(',', $row['in_groups']));
 
     // Thông tin tài khoản, xác thực email
     if ($row['email_verification_time'] == -3) {
@@ -165,7 +166,7 @@ while ($row = $result2->fetch()) {
         'is_admin' => false,
         'info_verify' => $info_verify,
         'active_obj' => $row['active_obj'],
-        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'])),
+        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'], true)),
         'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username']
     ];
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
@@ -269,7 +270,7 @@ foreach ($methods as $m) {
     $xtpl->parse('main.method');
 }
 $_bg = (defined('NV_CONFIG_DIR') and $global_config['idsite'] == 0) ? 3 : 1;
-for ($i = $_bg; $i >= 0; $i--) {
+for ($i = $_bg; $i >= 0; --$i) {
     $m = [
         'key' => $i,
         'selected' => ($i == $usactive) ? ' selected="selected"' : '',
@@ -323,7 +324,7 @@ foreach ($users_list as $u) {
         if ($u['is_delete']) {
             $xtpl->parse('main.xusers.del');
         }
-        if ($u['is_newuser'] and in_array('setofficial', $allow_func)) {
+        if ($u['is_newuser'] and in_array('setofficial', $allow_func, true)) {
             $xtpl->parse('main.xusers.set_official');
         }
         if ($is_setactive and $u['is_delete']) {
@@ -357,7 +358,7 @@ if (!empty($generate_page)) {
     $has_footer = true;
 }
 
-if (in_array('export', $allow_func)) {
+if (in_array('export', $allow_func, true)) {
     $has_footer = true;
     $xtpl->parse('main.footer.exportfile');
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/28/2009 20:8
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (headers_sent() or connection_status() != 0 or connection_aborted()) {
@@ -34,7 +35,7 @@ if ($sys_info['ini_set_support']) {
     ini_set('user_agent', 'NV4');
     ini_set('default_charset', $global_config['site_charset']);
 
-    $memoryLimitMB = (int)ini_get('memory_limit');
+    $memoryLimitMB = (int) ini_get('memory_limit');
 
     if ($memoryLimitMB < 64) {
         ini_set('memory_limit', '64M');
@@ -48,7 +49,7 @@ $sys_info['php_required_min'] = '5.6.0';
 $sys_info['php_allowed_max'] = '8.1.0';
 $sys_info['php_version'] = PHP_VERSION;
 $sys_info['php_support'] = (version_compare($sys_info['php_version'], $sys_info['php_required_min']) >= 0 and version_compare($sys_info['php_version'], $sys_info['php_allowed_max']) <= 0) ? 1 : 0;
-$sys_info['opendir_support'] = (function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['opendir_support'] = (function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'], true)) ? 1 : 0;
 $sys_info['gd_support'] = (extension_loaded('gd')) ? 1 : 0;
 $sys_info['xml_support'] = (extension_loaded('xml')) ? 1 : 0;
 $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? 1 : 0;
@@ -57,14 +58,14 @@ $sys_info['session_support'] = (extension_loaded('session')) ? 1 : 0;
 $sys_info['mb_support'] = (extension_loaded('mbstring')) ? 1 : 0;
 $sys_info['iconv_support'] = (extension_loaded('iconv')) ? 1 : 0;
 $sys_info['json_support'] = (extension_loaded('json')) ? 1 : 0;
-$sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and !in_array('curl_init', $sys_info['disable_functions'])) ? 1 : 0;
-$sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and !in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and !in_array('curl_init', $sys_info['disable_functions'], true)) ? 1 : 0;
+$sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and !in_array('set_time_limit', $sys_info['disable_functions'], true)) ? 1 : 0;
 
-$sys_info['os'] = strtoupper((function_exists('php_uname') and !in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
-$sys_info['ftp_support'] = (function_exists('ftp_connect') and !in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and !in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and !in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and !in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and !in_array('ftp_nlist', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['os'] = strtoupper((function_exists('php_uname') and !in_array('php_uname', $sys_info['disable_functions'], true) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
+$sys_info['ftp_support'] = (function_exists('ftp_connect') and !in_array('ftp_connect', $sys_info['disable_functions'], true) and function_exists('ftp_chmod') and !in_array('ftp_chmod', $sys_info['disable_functions'], true) and function_exists('ftp_mkdir') and !in_array('ftp_mkdir', $sys_info['disable_functions'], true) and function_exists('ftp_chdir') and !in_array('ftp_chdir', $sys_info['disable_functions'], true) and function_exists('ftp_nlist') and !in_array('ftp_nlist', $sys_info['disable_functions'], true)) ? 1 : 0;
 $sys_info['openssl_support'] = (function_exists('openssl_encrypt')) ? 1 : 0;
 if (!$sys_info['openssl_support']) {
-    die('Openssl library not available');
+    exit('Openssl library not available');
 }
 
 //Xac dinh tien ich mo rong lam viec voi string
@@ -75,7 +76,7 @@ $sys_info['supports_rewrite'] = false;
 if (function_exists('apache_get_modules')) {
     $apache_modules = apache_get_modules();
 
-    if (in_array('mod_rewrite', $apache_modules)) {
+    if (in_array('mod_rewrite', $apache_modules, true)) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
 } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {

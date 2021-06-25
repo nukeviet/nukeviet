@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['question'];
@@ -17,14 +18,14 @@ $page_title = $lang_module['question'];
 // Sua cau hoi
 if ($nv_Request->isset_request('edit', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '', 1);
 
     if (empty($title)) {
-        die('NO');
+        exit('NO');
     }
     $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_question SET
 		title= :title, edit_time=' . NV_CURRENTTIME . '
@@ -33,25 +34,25 @@ if ($nv_Request->isset_request('edit', 'post')) {
     $stmt->bindParam(':title', $title, PDO::PARAM_STR, strlen($title));
     if ($stmt->execute()) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['savequestion'], 'id: ' . $qid . '; ' . $title);
-        die('OK');
+        exit('OK');
     }
-    die('NO');
+    exit('NO');
 }
 
 // Them cau hoi
 if ($nv_Request->isset_request('add', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $title = $nv_Request->get_title('title', 'post', '', 1);
     if (empty($title)) {
-        die('NO');
+        exit('NO');
     }
 
     $sql = 'SELECT MAX(weight) FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "'";
     $weight = $db->query($sql)->fetchColumn();
-    $weight = intval($weight) + 1;
+    $weight = (int) $weight + 1;
     $_sql = 'INSERT INTO ' . NV_MOD_TABLE . "_question
 		(title, lang, weight, add_time, edit_time) VALUES
 		( :title, '" . NV_LANG_DATA . "', " . $weight . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
@@ -60,15 +61,15 @@ if ($nv_Request->isset_request('add', 'post')) {
     $data_insert['title'] = $title;
     if ($db->insert_id($_sql, 'qid', $data_insert)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addquestion'], $title);
-        die('OK');
+        exit('OK');
     }
-    die('NO' . $_sql);
+    exit('NO' . $_sql);
 }
 
 // Chinh thu tu
 if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
@@ -77,7 +78,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid . " AND lang='" . NV_LANG_DATA . "'";
     $numrows = $db->query($query)->fetchColumn();
     if ($numrows != 1) {
-        die('NO');
+        exit('NO');
     }
 
     $query = 'SELECT qid FROM ' . NV_MOD_TABLE . '_question WHERE qid!=' . $qid . " AND lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
@@ -93,13 +94,13 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     }
     $sql = 'UPDATE ' . NV_MOD_TABLE . '_question SET weight=' . $new_vid . ' WHERE qid=' . $qid;
     $db->query($sql);
-    die('OK');
+    exit('OK');
 }
 
 // Xoa cau hoi
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
@@ -121,10 +122,10 @@ if ($nv_Request->isset_request('del', 'post')) {
                 $db->query($sql);
             }
             $result->closeCursor();
-            die('OK');
+            exit('OK');
         }
     }
-    die('NO');
+    exit('NO');
 }
 
 $xtpl = new XTemplate('question.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -134,7 +135,7 @@ $xtpl->assign('GLANG', $lang_global);
 // Danh sach cau hoi
 if ($nv_Request->isset_request('qlist', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";

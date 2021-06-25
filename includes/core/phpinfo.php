@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @copyright 2010
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/9/2010 20:40
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * phpinfo_array()
  *
- * @param integer $option
+ * @param int  $option
  * @param bool $return
  * @return
  * - INFO_GENERAL => 1 The configuration line, php.ini location, build date, Web Server, System and more.

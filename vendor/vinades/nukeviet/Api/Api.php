@@ -1,20 +1,30 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 9:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Api;
 
+/**
+ * NukeViet\Api\Api
+ *
+ * @package NukeViet\Api
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Api
 {
-    const ADMIN_LEV_GOD = 1;
-    const ADMIN_LEV_SP = 2;
-    const ADMIN_LEV_MOD = 3;
+    public const ADMIN_LEV_GOD = 1;
+    public const ADMIN_LEV_SP = 2;
+    public const ADMIN_LEV_MOD = 3;
 
     private static $admin_id = 0;
     private static $admin_username = '';
@@ -24,8 +34,10 @@ class Api
     private static $module_info = [];
 
     /**
+     * test()
+     *
      * @param string $module
-     * @return number
+     * @return false|int
      */
     public static function test($module = '')
     {
@@ -33,31 +45,39 @@ class Api
     }
 
     /**
+     * testParamKey()
+     *
      * @param string $key
-     * @return number
+     * @return bool
      */
     public static function testParamKey($key = '')
     {
-        return (!is_numeric($key) and preg_match('/^[a-zA-Z0-9\_\-]+$/', $key));
+        return !is_numeric($key) and preg_match('/^[a-zA-Z0-9\_\-]+$/', $key);
     }
 
     /**
-     * @param integer $lev
+     * setAdminLev()
+     *
+     * @param int $lev
      */
     public static function setAdminLev($lev)
     {
-        self::$admin_lev = intval($lev);
+        self::$admin_lev = (int) $lev;
     }
 
     /**
-     * @param integer $id
+     * setAdminId()
+     *
+     * @param int $id
      */
     public static function setAdminId($id)
     {
-        self::$admin_id = intval($id);
+        self::$admin_id = (int) $id;
     }
 
     /**
+     * setAdminName()
+     *
      * @param string $username
      */
     public static function setAdminName($username)
@@ -66,6 +86,8 @@ class Api
     }
 
     /**
+     * setModuleName()
+     *
      * @param string $name
      */
     public static function setModuleName($name)
@@ -74,6 +96,8 @@ class Api
     }
 
     /**
+     * setModuleInfo()
+     *
      * @param array $info
      */
     public static function setModuleInfo($info)
@@ -82,7 +106,9 @@ class Api
     }
 
     /**
-     * @return number
+     * getAdminLev()
+     *
+     * @return int
      */
     public static function getAdminLev()
     {
@@ -90,7 +116,9 @@ class Api
     }
 
     /**
-     * @return number
+     * getAdminId()
+     *
+     * @return int
      */
     public static function getAdminId()
     {
@@ -98,6 +126,8 @@ class Api
     }
 
     /**
+     * getAdminName()
+     *
      * @return string
      */
     public static function getAdminName()
@@ -106,6 +136,8 @@ class Api
     }
 
     /**
+     * getModuleName()
+     *
      * @return string
      */
     public static function getModuleName()
@@ -114,6 +146,8 @@ class Api
     }
 
     /**
+     * getModuleInfo()
+     *
      * @return array
      */
     public static function getModuleInfo()
@@ -122,7 +156,7 @@ class Api
     }
 
     /**
-     *
+     * reset()
      */
     public static function reset()
     {

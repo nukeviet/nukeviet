@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_theme_type = ['r', 'd', 'm'];
@@ -20,20 +21,20 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config = [];
 
     $site_domain = $nv_Request->get_title('site_domain', 'post', '');
-    $array_config['site_domain'] = (sizeof($global_config['my_domains']) > 1 and in_array($site_domain, $global_config['my_domains'])) ? $site_domain : '';
+    $array_config['site_domain'] = (sizeof($global_config['my_domains']) > 1 and in_array($site_domain, $global_config['my_domains'], true)) ? $site_domain : '';
     $array_config['site_theme'] = nv_substr($nv_Request->get_title('site_theme', 'post', '', 1), 0, 255);
     $array_config['mobile_theme'] = nv_substr($nv_Request->get_title('mobile_theme', 'post', '', 1), 0, 255);
     $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);
     $array_config['switch_mobi_des'] = $nv_Request->get_int('switch_mobi_des', 'post', 0);
     $_array_theme_type = $nv_Request->get_typed_array('theme_type', 'post', 'title');
     $_array_theme_type = array_intersect($_array_theme_type, $array_theme_type);
-    if (!in_array('m', $_array_theme_type)) {
+    if (!in_array('m', $_array_theme_type, true)) {
         $array_config['mobile_theme'] = '';
     }
     if (empty($array_config['mobile_theme'])) {
         $array_config['switch_mobi_des'] = 0;
     }
-    if (!in_array('r', $_array_theme_type) and !in_array('d', $_array_theme_type)) {
+    if (!in_array('r', $_array_theme_type, true) and !in_array('d', $_array_theme_type, true)) {
         $_array_theme_type[] = 'r';
     }
     $array_config['theme_type'] = implode(',', $_array_theme_type);
@@ -136,9 +137,9 @@ $mobile_theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['ch
 $sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
 $result = $db->query($sql);
 while (list($theme) = $result->fetch(3)) {
-    if (in_array($theme, $theme_array_file)) {
+    if (in_array($theme, $theme_array_file, true)) {
         $theme_array[] = $theme;
-    } elseif (in_array($theme, $mobile_theme_array_file)) {
+    } elseif (in_array($theme, $mobile_theme_array_file, true)) {
         $mobile_theme_array[] = $theme;
     }
 }
@@ -188,7 +189,7 @@ $xtpl->assign('VALUE', $value_setting);
 foreach ($array_theme_type as $theme_type) {
     $xtpl->assign('THEME_TYPE', $theme_type);
     $xtpl->assign('THEME_TYPE_TXT', $lang_global['theme_type_' . $theme_type]);
-    $xtpl->assign('THEME_TYPE_CHECKED', in_array($theme_type, $global_config['array_theme_type']) ? ' checked="checked"' : '');
+    $xtpl->assign('THEME_TYPE_CHECKED', in_array($theme_type, $global_config['array_theme_type'], true) ? ' checked="checked"' : '');
     $xtpl->parse('main.theme_type');
 }
 
@@ -206,7 +207,7 @@ foreach ($theme_array as $folder) {
     $xtpl->assign('SITE_THEME', $folder);
     $xtpl->parse('main.site_theme');
 }
-if (!empty($mobile_theme_array) and in_array('m', $global_config['array_theme_type'])) {
+if (!empty($mobile_theme_array) and in_array('m', $global_config['array_theme_type'], true)) {
     foreach ($mobile_theme_array as $folder) {
         $xtpl->assign('SELECTED', ($global_config['mobile_theme'] == $folder) ? ' selected="selected"' : '');
         $xtpl->assign('SITE_THEME', $folder);

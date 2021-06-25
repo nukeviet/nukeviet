@@ -1,32 +1,32 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_freecontent')) {
     /**
      * nv_block_config_freecontent()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_freecontent($module, $data_block, $lang_block)
     {
         global $site_mods, $nv_Cache;
 
         $html = '';
-
         $html .= '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . $lang_block['blockid'] . ':</label>';
         $html .= '	<div class="col-sm-9">';
@@ -48,7 +48,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select name="config_numrows" class="form-control">';
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; ++$i) {
             $html .= '	<option value="' . $i . '"' . ($i == $data_block['numrows'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
         }
 
@@ -62,9 +62,9 @@ if (!nv_function_exists('nv_block_freecontent')) {
     /**
      * nv_block_config_freecontent_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_config_freecontent_submit($module, $lang_block)
     {
@@ -74,13 +74,16 @@ if (!nv_function_exists('nv_block_freecontent')) {
         $return['config'] = [];
         $return['config']['blockid'] = $nv_Request->get_int('config_blockid', 'post', 0);
         $return['config']['numrows'] = $nv_Request->get_int('config_numrows', 'post', 2);
+
         return $return;
     }
 
     /**
      * nv_block_freecontent()
      *
-     * @return
+     * @param array $block_config
+     * @return string
+     * @throws PDOException
      */
     function nv_block_freecontent($block_config)
     {
@@ -96,7 +99,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
             // Get next execute
             $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE end_time > 0 AND status = 1';
             $result = $db->query($sql);
-            $next_execute = intval($result->fetchColumn());
+            $next_execute = (int) ($result->fetchColumn());
             $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
             $sth->bindParam(':module_name', $module, PDO::PARAM_STR);
             $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
@@ -164,6 +167,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
             }
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
 

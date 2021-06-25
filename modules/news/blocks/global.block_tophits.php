@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_news_block_tophits')) {
     /**
      * nv_block_config_tophits_blocks()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_tophits_blocks($module, $data_block, $lang_block)
     {
@@ -87,7 +88,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
                         $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                     }
                 }
-                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
+                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array((int) $l['catid'], array_map('intval', $data_block['nocatid']), true)) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
         }
         $html .= '</div>';
@@ -100,9 +101,9 @@ if (!nv_function_exists('nv_news_block_tophits')) {
     /**
      * nv_block_config_tophits_blocks_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_config_tophits_blocks_submit($module, $lang_block)
     {
@@ -116,15 +117,16 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
         $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
         $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', []);
+
         return $return;
     }
 
     /**
      * nv_news_block_tophits()
      *
-     * @param mixed $block_config
-     * @param mixed $mod_data
-     * @return
+     * @param array  $block_config
+     * @param string $mod_data
+     * @return string
      */
     function nv_news_block_tophits($block_config, $mod_data)
     {
@@ -216,6 +218,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

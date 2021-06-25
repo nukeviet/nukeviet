@@ -1,25 +1,33 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 9:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Http;
 
+/**
+ * NukeViet\Http\Encoding
+ *
+ * @package NukeViet\Http
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Encoding
 {
-
     /**
-     * Encoding::compress()
+     * compress()
      *
      * @param mixed $raw
-     * @param integer $level
-     * @param mixed $supports
-     * @return
+     * @param int   $level
+     * @return false|string
      */
     public static function compress($raw, $level = 9)
     {
@@ -27,11 +35,10 @@ class Encoding
     }
 
     /**
-     * Encoding::decompress()
+     * decompress()
      *
      * @param mixed $compressed
-     * @param mixed $length
-     * @return
+     * @return mixed
      */
     public static function decompress($compressed)
     {
@@ -63,10 +70,10 @@ class Encoding
     }
 
     /**
-     * Encoding::compatible_gzinflate()
+     * compatible_gzinflate()
      *
      * @param mixed $gzData
-     * @return
+     * @return false|string
      */
     public static function compatible_gzinflate($gzData)
     {
@@ -76,7 +83,7 @@ class Encoding
             $flg = ord(substr($gzData, 3, 1));
             if ($flg > 0) {
                 if ($flg & 4) {
-                    list ($xlen) = unpack('v', substr($gzData, $i, 2));
+                    list($xlen) = unpack('v', substr($gzData, $i, 2));
                     $i = $i + 2 + $xlen;
                 }
 
@@ -111,15 +118,15 @@ class Encoding
     }
 
     /**
-     * Encoding::accept_encoding()
+     * accept_encoding()
      *
      * @param mixed $url
      * @param mixed $args
-     * @return
+     * @return string
      */
     public static function accept_encoding($url, $args)
     {
-        $type = array();
+        $type = [];
         $compression_enabled = Encoding::is_available();
 
         if (!$args['decompress']) {
@@ -151,9 +158,9 @@ class Encoding
     }
 
     /**
-     * Encoding::content_encoding()
+     * content_encoding()
      *
-     * @return
+     * @return string
      */
     public static function content_encoding()
     {
@@ -161,10 +168,10 @@ class Encoding
     }
 
     /**
-     * Encoding::should_decode()
+     * should_decode()
      *
      * @param mixed $headers
-     * @return
+     * @return bool
      */
     public static function should_decode($headers)
     {
@@ -173,19 +180,19 @@ class Encoding
                 return true;
             }
         } elseif (is_string($headers)) {
-            return (stripos($headers, 'content-encoding:') !== false);
+            return stripos($headers, 'content-encoding:') !== false;
         }
 
         return false;
     }
 
     /**
-     * Encoding::is_available()
+     * is_available()
      *
-     * @return
+     * @return bool
      */
     public static function is_available()
     {
-        return (function_exists('gzuncompress') or function_exists('gzdeflate') or function_exists('gzinflate'));
+        return function_exists('gzuncompress') or function_exists('gzdeflate') or function_exists('gzinflate');
     }
 }

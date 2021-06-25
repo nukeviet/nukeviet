@@ -1,14 +1,15 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_del_content(vid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'vid=' + vid + '&checkss=' + checkss, function(res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'vid=' + vid + '&checkss=' + checkss, function (res) {
             var r_split = res.split("_");
             if (r_split[0] == 'OK') {
                 window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main';
@@ -32,8 +33,8 @@ function nv_vote_add_item(mess) {
     $("#items").append(newitem);
 }
 
-$(document).ready(function() {
-    $('[data-toggle="viewresult"]').click(function(e) {
+$(document).ready(function () {
+    $('[data-toggle="viewresult"]').click(function (e) {
         e.preventDefault();
         var poptitle = $(this).data('title');
         $.ajax({
@@ -42,7 +43,7 @@ $(document).ready(function() {
             url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + $(this).data('vid') + "&checkss=" + $(this).data('checkss') + "&lid=0",
             data: "nv_ajax_voting=1",
             dataType: "html",
-            success: function(res) {
+            success: function (res) {
                 if (res.match(/^ERROR\|/g)) {
                     alert(res.substring(6));
                 } else {

@@ -1,24 +1,34 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 17/8/2010, 0:16
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Files;
 
 use finfo;
 
-if (! defined('NV_MIME_INI_FILE')) {
+if (!defined('NV_MIME_INI_FILE')) {
     define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
 }
 
+/**
+ * NukeViet\Files\Download
+ *
+ * @package NukeViet\Files
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Download
 {
-    private $properties = array(
+    private $properties = [
         'path' => '',
         'name' => '',
         'extension' => '',
@@ -28,56 +38,55 @@ class Download
         'resume' => '',
         'max_speed' => '',
         'directory' => ''
-    );
-    private $disable_functions = array();
-    private $disable_classes = array();
+    ];
+    private $disable_functions = [];
+    private $disable_classes = [];
     private $magic_path;
 
     /**
-     * download::__construct()
+     * __construct()
      *
-     * @param mixed $path
+     * @param string $path
      * @param string $name
-     * @param bool $resume
-     * @param integer $max_speed
-     * @return
+     * @param bool   $resume
+     * @param int    $max_speed
      */
     public function __construct($path, $directory, $name = '', $resume = false, $max_speed = 0, $magic_path = '')
     {
         $directory = $this->real_dir($directory);
-        if (empty($directory) or ! is_dir($directory)) {
+        if (empty($directory) or !is_dir($directory)) {
             $directory = NV_UPLOADS_REAL_DIR;
         }
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
+        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : [];
         if (extension_loaded('suhosin')) {
             $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
         }
         $this->disable_functions = $disable_functions;
 
-        $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : array();
+        $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : [];
 
         $path = $this->real_path($path, $directory);
         $extension = $this->getextension($path);
-        $this->properties = array(
+        $this->properties = [
             'path' => $path,
             'name' => ($name == '') ? substr(strrchr('/' . $path, '/'), 1) : $name,
             'extension' => $extension,
             'type' => '',
-            'size' => intval(sprintf('%u', filesize($path))),
+            'size' => (int) (sprintf('%u', filesize($path))),
             'mtime' => ($mtime = filemtime($path)) > 0 ? $mtime : time(),
             'resume' => $resume,
             'max_speed' => $max_speed,
             'directory' => $directory
-        );
+        ];
         $this->properties['type'] = $this->my_mime_content_type($path);
         $this->magic_path = $magic_path;
     }
 
     /**
-     * download::real_dir()
+     * real_dir()
      *
-     * @param mixed $dir
-     * @return
+     * @param string $dir
+     * @return false|string
      */
     public function real_dir($dir)
     {
@@ -89,22 +98,24 @@ class Download
             return false;
         }
         $dir = str_replace('\\', '/', $dir);
-        $dir = rtrim($dir, "\\/");
-        if (! preg_match("/^(" . nv_preg_quote(NV_ROOTDIR) . ")(\/[\S]+)/", $dir)) {
+        $dir = rtrim($dir, '\\/');
+        if (!preg_match('/^(' . nv_preg_quote(NV_ROOTDIR) . ")(\/[\S]+)/", $dir)) {
             return false;
         }
+
         return $dir;
     }
 
     /**
-     * download::real_path()
+     * real_path()
      *
-     * @param mixed $path
-     * @return
+     * @param string $path
+     * @param string $dir
+     * @return false|string
      */
     public function real_path($path, $dir)
     {
-        if (empty($path) or ! is_readable($path) or ! is_file($path)) {
+        if (empty($path) or !is_readable($path) or !is_file($path)) {
             return false;
         }
 
@@ -115,9 +126,9 @@ class Download
         }
 
         $realpath = str_replace('\\', '/', $realpath);
-        $realpath = rtrim($realpath, "\\/");
+        $realpath = rtrim($realpath, '\\/');
 
-        if (! preg_match("/^(" . nv_preg_quote($dir) . ")(\/[\S]+)/", $realpath)) {
+        if (!preg_match('/^(' . nv_preg_quote($dir) . ")(\/[\S]+)/", $realpath)) {
             return false;
         }
 
@@ -125,32 +136,32 @@ class Download
     }
 
     /**
-     * download::func_exists()
+     * func_exists()
      *
-     * @param mixed $funcName
-     * @return
+     * @param string $funcName
+     * @return bool
      */
     private function func_exists($funcName)
     {
-        return (function_exists($funcName) and ! in_array($funcName, $this->disable_functions));
+        return function_exists($funcName) and !in_array($funcName, $this->disable_functions, true);
     }
 
     /**
-     * download::cl_exists()
+     * cl_exists()
      *
-     * @param mixed $clName
-     * @return
+     * @param string $clName
+     * @return bool
      */
     private function cl_exists($clName)
     {
-        return (class_exists($clName, false) and ! in_array($clName, $this->disable_classes));
+        return class_exists($clName, false) and !in_array($clName, $this->disable_classes, true);
     }
 
     /**
-     * download::getextension()
+     * getextension()
      *
-     * @param mixed $filename
-     * @return
+     * @param string $filename
+     * @return string
      */
     private function getextension($filename)
     {
@@ -159,14 +170,15 @@ class Download
         }
         $filename = basename(strtolower($filename));
         $filename = explode('.', $filename);
+
         return array_pop($filename);
     }
 
     /**
-     * download::my_mime_content_type()
+     * my_mime_content_type()
      *
-     * @param mixed $path
-     * @return
+     * @param string $path
+     * @return string
      */
     private function my_mime_content_type($path)
     {
@@ -214,13 +226,13 @@ class Download
                     system('file -i -b ' . escapeshellarg($path));
                     $m = ob_get_clean();
                     $m = trim($m);
-                    if (! empty($m)) {
+                    if (!empty($m)) {
                         $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m);
                     }
                 } elseif ($this->func_exists('exec')) {
                     $m = @exec('file -bi ' . escapeshellarg($path));
                     $m = trim($m);
-                    if (! empty($m)) {
+                    if (!empty($m)) {
                         $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m);
                     }
                 }
@@ -235,10 +247,10 @@ class Download
         }
 
         if (empty($mime) or $mime == 'application/octet-stream') {
-            $img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
-            if (in_array($this->properties['extension'], $img_exts)) {
+            $img_exts = ['png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd'];
+            if (in_array($this->properties['extension'], $img_exts, true)) {
                 if (($img_info = @getimagesize($path)) !== false) {
-                    if (array_key_exists('mime', $img_info) and ! empty($img_info['mime'])) {
+                    if (array_key_exists('mime', $img_info) and !empty($img_info['mime'])) {
                         $mime = trim($img_info['mime']);
                         $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $mime);
                     }
@@ -299,50 +311,54 @@ class Download
             }
         }
 
-        return ! empty($mime) ? $mime : 'application/force-download';
+        return !empty($mime) ? $mime : 'application/force-download';
     }
 
     /**
-     * download::nv_getenv()
+     * nv_getenv()
      *
-     * @param mixed $key
-     * @return
+     * @param string $key
+     * @return string
      */
     private function nv_getenv($key)
     {
         if (isset($_SERVER[$key])) {
             return $_SERVER[$key];
-        } elseif (isset($_ENV[$key])) {
+        }
+        if (isset($_ENV[$key])) {
             return $_ENV[$key];
-        } elseif (@getenv($key)) {
+        }
+        if (@getenv($key)) {
             return @getenv($key);
-        } elseif (function_exists('apache_getenv') and apache_getenv($key, true)) {
+        }
+        if (function_exists('apache_getenv') and apache_getenv($key, true)) {
             return apache_getenv($key, true);
         }
+
         return '';
     }
 
     /**
-     * download::get_property()
+     * get_property()
      *
-     * @param mixed $property
-     * @return
+     * @param string $property
+     * @return string|null
      */
     public function get_property($property)
     {
         if (array_key_exists($property, $this->properties)) {
             return $this->properties[$property];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
-     * download::set_property()
+     * set_property()
      *
-     * @param mixed $property
-     * @param mixed $value
-     * @return
+     * @param string $property
+     * @param string $value
+     * @return bool
      */
     public function set_property($property, $value)
     {
@@ -350,24 +366,24 @@ class Download
             $this->properties[$property] = $value;
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
-     * download::download_file()
+     * download_file()
      *
-     * @return
+     * @return never
      */
     public function download_file()
     {
-        if (! $this->properties['path']) {
+        if (!$this->properties['path']) {
             exit('Nothing to download!');
         }
 
         $seek_start = 0;
-        $seek_end = - 1;
+        $seek_end = -1;
         $data_section = false;
 
         if (($http_range = nv_getenv('HTTP_RANGE')) != '') {
@@ -375,15 +391,15 @@ class Download
 
             $range = explode('-', $seek_range);
 
-            if (! empty($range[0])) {
-                $seek_start = intval($range[0]);
+            if (!empty($range[0])) {
+                $seek_start = (int) ($range[0]);
             }
 
-            if (isset($range[1]) and ! empty($range[1])) {
-                $seek_end = intval($range[1]);
+            if (isset($range[1]) and !empty($range[1])) {
+                $seek_end = (int) ($range[1]);
             }
 
-            if (! $this->properties['resume']) {
+            if (!$this->properties['resume']) {
                 $seek_start = 0;
             } else {
                 $data_section = true;
@@ -395,7 +411,7 @@ class Download
         }
         $old_status = ignore_user_abort(true);
 
-        if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
             set_time_limit(0);
         }
 
@@ -405,7 +421,7 @@ class Download
 
         $res = fopen($this->properties['path'], 'rb');
 
-        if (! $res) {
+        if (!$res) {
             exit('File error');
         }
 
@@ -438,14 +454,14 @@ class Download
             header('Content-Length: ' . $this->properties['size']);
         }
 
-        if (function_exists('usleep') and ! in_array('usleep', $this->disable_functions) and ($speed = $this->properties['max_speed']) > 0) {
+        if (function_exists('usleep') and !in_array('usleep', $this->disable_functions, true) and ($speed = $this->properties['max_speed']) > 0) {
             $sleep_time = (8 / $speed) * 1e6;
         } else {
             $sleep_time = 0;
         }
 
-        while (! (connection_aborted() or connection_status() == 1) and ! feof($res)) {
-            print(fread($res, 1024 * 8)) ;
+        while (!(connection_aborted() or connection_status() == 1) and !feof($res)) {
+            echo fread($res, 1024 * 8);
             flush();
             if ($sleep_time > 0) {
                 usleep($sleep_time);
@@ -454,7 +470,7 @@ class Download
         fclose($res);
 
         ignore_user_abort($old_status);
-        if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
             set_time_limit(ini_get('max_execution_time'));
         }
         exit(0);

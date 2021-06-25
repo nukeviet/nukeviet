@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $mod_name = $nv_Request->get_title('mod_name', 'post,get', '');
@@ -45,7 +46,7 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
     }
 
     $_groups_com = $nv_Request->get_array('allowed_comm', 'post', []);
-    if (in_array(-1, $_groups_com)) {
+    if (in_array('-1', $_groups_com, true)) {
         $array_config['allowed_comm'] = '-1';
     } else {
         $array_config['allowed_comm'] = !empty($_groups_com) ? implode(',', nv_groups_post(array_intersect($_groups_com, array_keys($groups_list)))) : '';
@@ -98,7 +99,7 @@ if (!empty($mod_name)) {
     $admins_module_name = explode(',', $site_mods[$module_name]['admins']);
     $admins_module_name = array_unique(array_merge($admins_mod_name, $admins_module_name));
     if (!empty($admins_module_name)) {
-        $adminscomm = explode(',', $module_config[$mod_name]['adminscomm']);
+        $adminscomm = array_map('intval', explode(',', $module_config[$mod_name]['adminscomm']));
 
         $admins_module_name = array_map('intval', $admins_module_name);
         $_sql = 'SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $admins_module_name) . ')';
@@ -111,7 +112,7 @@ if (!empty($mod_name)) {
             $xtpl->assign('OPTION', [
                 'key' => $row['userid'],
                 'title' => $row['username'],
-                'checked' => (in_array($row['userid'], $adminscomm)) ? ' checked="checked"' : ''
+                'checked' => (in_array((int) $row['userid'], $adminscomm, true)) ? ' checked="checked"' : ''
             ]);
             $xtpl->parse('main.config.adminscomm');
         }
@@ -126,13 +127,13 @@ if (!empty($mod_name)) {
         $xtpl->parse('main.config.auto_postcomm');
     }
 
-    $array_allowed_comm = explode(',', $module_config[$mod_name]['allowed_comm']);
-    $array_view_comm = explode(',', $module_config[$mod_name]['view_comm']);
-    $array_setcomm = explode(',', $module_config[$mod_name]['setcomm']);
+    $array_allowed_comm = array_map('intval', explode(',', $module_config[$mod_name]['allowed_comm']));
+    $array_view_comm = array_map('intval', explode(',', $module_config[$mod_name]['view_comm']));
+    $array_setcomm = array_map('intval', explode(',', $module_config[$mod_name]['setcomm']));
 
     $xtpl->assign('OPTION', [
         'value' => -1,
-        'checked' => in_array(-1, $array_allowed_comm) ? ' checked="checked"' : '',
+        'checked' => in_array(-1, $array_allowed_comm, true) ? ' checked="checked"' : '',
         'title' => $lang_module['allowed_comm_item']
     ]);
     $xtpl->parse('main.config.allowed_comm');
@@ -140,21 +141,21 @@ if (!empty($mod_name)) {
     foreach ($groups_list as $_group_id => $_title) {
         $xtpl->assign('OPTION', [
             'value' => $_group_id,
-            'checked' => in_array($_group_id, $array_allowed_comm) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $_group_id, $array_allowed_comm, true) ? ' checked="checked"' : '',
             'title' => $_title
         ]);
         $xtpl->parse('main.config.allowed_comm');
 
         $xtpl->assign('OPTION', [
             'value' => $_group_id,
-            'checked' => in_array($_group_id, $array_view_comm) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $_group_id, $array_view_comm, true) ? ' checked="checked"' : '',
             'title' => $_title
         ]);
         $xtpl->parse('main.config.view_comm');
 
         $xtpl->assign('OPTION', [
             'value' => $_group_id,
-            'checked' => in_array($_group_id, $array_setcomm) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $_group_id, $array_setcomm, true) ? ' checked="checked"' : '',
             'title' => $_title
         ]);
         $xtpl->parse('main.config.setcomm');
@@ -211,10 +212,10 @@ if (!empty($mod_name)) {
     foreach ($site_mod_comm as $mod_name => $row_mod) {
         $admin_title = (!empty($row_mod['admin_title'])) ? $row_mod['admin_title'] : $row_mod['custom_title'];
 
-        $array_allowed_comm = (!empty($module_config[$mod_name]['allowed_comm'])) ? explode(',', $module_config[$mod_name]['allowed_comm']) : [];
+        $array_allowed_comm = (!empty($module_config[$mod_name]['allowed_comm'])) ? array_map('intval', explode(',', $module_config[$mod_name]['allowed_comm'])) : [];
         $array_view_comm = (!empty($module_config[$mod_name]['view_comm'])) ? explode(',', $module_config[$mod_name]['view_comm']) : [];
 
-        if (in_array(-1, $array_allowed_comm)) {
+        if (in_array(-1, $array_allowed_comm, true)) {
             $allowed_comm = $lang_module['allowed_comm_item'];
         } else {
             $allowed_comm = [];

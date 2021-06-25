@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 28/10/2012, 14:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $errormess = $lang_module['plugin_info'];
@@ -32,7 +33,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
         } elseif (!empty($plugin_area)) {
             $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $plugin_area;
             $weight = $db->query($_sql)->fetchColumn();
-            $weight = intval($weight) + 1;
+            $weight = (int) $weight + 1;
 
             try {
                 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_plugin (plugin_file, plugin_area, weight) VALUES (:plugin_file, :plugin_area, :weight)');
@@ -55,7 +56,7 @@ if ($nv_Request->isset_request('dpid', 'get')) {
     if ($dpid > 0 and $checkss == md5($dpid . '-' . NV_CHECK_SESSION)) {
         $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $dpid)->fetch();
         if (!empty($row) and $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $dpid)) {
-            $weight = intval($row['weight']);
+            $weight = (int) ($row['weight']);
             $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND weight > ' . $weight . ' ORDER BY weight ASC');
             while (list($pid) = $_query->fetch(3)) {
                 $db->query('UPDATE ' . $db_config['prefix'] . '_plugin SET weight = ' . $weight++ . ' WHERE pid=' . $pid);
@@ -114,7 +115,7 @@ foreach ($_nv_plugin_area as $area => $nv_plugin_area_i) {
         $row['plugin_area'] = ($row['weight'] == 1) ? $lang_module['plugin_area_' . $row['plugin_area']] : '';
         $row['plugin_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dpid=' . $row['pid'] . '&amp;checkss=' . md5($row['pid'] . '-' . NV_CHECK_SESSION);
         $xtpl->assign('DATA', $row);
-        for ($i = 1; $i <= $_sizeof; $i++) {
+        for ($i = 1; $i <= $_sizeof; ++$i) {
             $xtpl->assign('WEIGHT_SELECTED', ($i == $row['weight']) ? ' selected="selected"' : '');
             $xtpl->assign('WEIGHT', $i);
             $xtpl->parse('main.loop.weight');
@@ -124,7 +125,7 @@ foreach ($_nv_plugin_area as $area => $nv_plugin_area_i) {
 }
 
 foreach ($plugin_all as $_file) {
-    if (!in_array($_file, $nv_plugin_array)) {
+    if (!in_array($_file, $nv_plugin_array, true)) {
         $plugin_new[] = $_file;
     }
 }

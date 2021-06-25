@@ -1,3 +1,12 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 .wraper {
     width: 100%;
 }
@@ -28,7 +37,7 @@
         display: none;
     }
     .column-margin-left {
-        margin-left: 0 !important
+        margin-left: 0 !important;
     }
     .qr-code-wraper {
         padding-left: 10px;
@@ -62,29 +71,36 @@
         -ms-flex-negative: 0;
         flex-shrink: 0;
     }
-    .personalArea, .social-icons {
+    .personalArea,
+    .social-icons {
         padding-left: 10px;
     }
-    .social-icons .content, .contactDefault .content {
+    .social-icons .content,
+    .contactDefault .content {
         display: none;
     }
     .contactList li {
         display: block;
     }
-    .contactList li .fa, .contactList li [class^="icon-"], .contactList li [class*=" icon-"] {
-        width: 20px !important
+    .contactList li .fa,
+    .contactList li [class^='icon-'],
+    .contactList li [class*=' icon-'] {
+        width: 20px !important;
     }
     .breadcrumbs-wrap {
-        display: none
+        display: none;
     }
-    .hidden-ss-block, .hidden-ss-inline, .hidden-ss-inline-block {
+    .hidden-ss-block,
+    .hidden-ss-inline,
+    .hidden-ss-inline-block {
         display: none !important;
     }
     #header {
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     }
-    #header .right-ads, #header .logo {
+    #header .right-ads,
+    #header .logo {
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         width: 100%;
@@ -100,7 +116,7 @@
     #header .logo img {
         max-height: 100px;
     }
-    .section-nav>.wraper {
+    .section-nav > .wraper {
         position: inherit;
     }
     .second-nav {
@@ -116,39 +132,52 @@
         display: none;
     }
     #menusite .navbar-default {
-        background-color: #428BCA;
-        border-color: #428BCA;
+        background-color: #428bca;
+        border-color: #428bca;
         border-radius: 0;
         min-height: 0;
     }
-    #menusite .navbar-default:before, #menusite .navbar-default:after, #menusite .navbar-header:before, #menusite .navbar-header:after {
+    #menusite .navbar-default:before,
+    #menusite .navbar-default:after,
+    #menusite .navbar-header:before,
+    #menusite .navbar-header:after {
         display: none;
     }
-    #menusite .navbar-default .navbar-nav>li {
+    #menusite .navbar-default .navbar-nav > li {
         margin-left: 0;
     }
-    #menusite .navbar-default .navbar-nav>li:first-child {
+    #menusite .navbar-default .navbar-nav > li:first-child {
         margin-left: 0;
     }
-    #menusite .navbar-default .navbar-nav>li:last-child {
+    #menusite .navbar-default .navbar-nav > li:last-child {
         margin-right: 0;
     }
-    #menusite .navbar-default .navbar-nav>li>a {
-        background-color: #428BCA;
+    #menusite .navbar-default .navbar-nav > li > a {
+        background-color: #428bca;
         color: #fff;
         padding-right: 35px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    #menusite .navbar-default .navbar-nav>li>a:hover, #menusite .navbar-default .navbar-nav>li>a:focus, #menusite .navbar-default .navbar-nav>.open>a, #menusite .navbar-default .navbar-nav>.open>a:hover, #menusite .navbar-default .navbar-nav>.open>a:focus {
-        background: linear-gradient(to bottom, #357ebd 0%, #2f70a7 100%) !important;
+    #menusite .navbar-default .navbar-nav > li > a:hover,
+    #menusite .navbar-default .navbar-nav > li > a:focus,
+    #menusite .navbar-default .navbar-nav > .open > a,
+    #menusite .navbar-default .navbar-nav > .open > a:hover,
+    #menusite .navbar-default .navbar-nav > .open > a:focus {
+        background: linear-gradient(
+            to bottom,
+            #357ebd 0%,
+            #2f70a7 100%
+        ) !important;
         color: #ffffff !important;
     }
-    #menusite .navbar-default .navbar-nav>.active>a, #menusite .navbar-default .navbar-nav>.active>a:hover, #menusite .navbar-default .navbar-nav>.active>a:focus {
+    #menusite .navbar-default .navbar-nav > .active > a,
+    #menusite .navbar-default .navbar-nav > .active > a:hover,
+    #menusite .navbar-default .navbar-nav > .active > a:focus {
         background: #4247ca !important;
         color: #ffffff !important;
     }
-    #menusite .navbar-default .navbar-nav>li>a>.caret {
+    #menusite .navbar-default .navbar-nav > li > a > .caret {
         position: absolute;
         width: 30px;
         height: 30px;
@@ -158,9 +187,9 @@
         margin-left: 0;
         line-height: 1;
     }
-    #menusite .navbar-default .navbar-nav>li>a>.caret:before {
+    #menusite .navbar-default .navbar-nav > li > a > .caret:before {
         font-family: 'FontAwesome';
-        content: "\f0d7";
+        content: '\f0d7';
         position: absolute;
         top: 50%;
         left: 50%;
@@ -180,12 +209,13 @@
         margin-left: 0;
         margin-right: -55px;
         color: #dcdcdc;
-        border-color: #428BCA;
-        background-color: #428BCA;
+        border-color: #428bca;
+        background-color: #428bca;
         position: absolute;
         left: 10px;
     }
-    #menusite .navbar-toggle:hover, #menusite .navbar-toggle:focus {
+    #menusite .navbar-toggle:hover,
+    #menusite .navbar-toggle:focus {
         color: #fff;
         background-color: #245682;
         border-color: #245682;
@@ -199,7 +229,7 @@
         margin: 0;
         padding: 0;
     }
-    #menusite .dropdown-submenu li>ul>li {
+    #menusite .dropdown-submenu li > ul > li {
         margin-left: 30px;
     }
     #menusite .dropdown-submenu a {
@@ -214,7 +244,7 @@
     #menusite .dropdown-submenu li a {
         color: #333333 !important;
     }
-    #menusite .dropdown-submenu>a:after {
+    #menusite .dropdown-submenu > a:after {
         display: none;
     }
 }
@@ -236,10 +266,13 @@
     .visible-ss-inline-block {
         display: inline-block !important;
     }
-    .hidden-ss-block, .hidden-ss-inline, .hidden-ss-inline-block {
+    .hidden-ss-block,
+    .hidden-ss-inline,
+    .hidden-ss-inline-block {
         display: none !important;
     }
-    #tip, #footer-tip {
+    #tip,
+    #footer-tip {
         max-width: 100%;
         margin-right: 0 !important;
     }
@@ -252,11 +285,12 @@
     #footer .menu li {
         width: 32%;
     }
-    #footer .menu li:nth-child(3n+2) {
+    #footer .menu li:nth-child(3n + 2) {
         padding-right: 8px;
         padding-left: 7px;
     }
-    #footer .menu li:nth-child(3n), #footer .menu li:nth-child(3n+1) {
+    #footer .menu li:nth-child(3n),
+    #footer .menu li:nth-child(3n + 1) {
         padding-left: 0;
         padding-right: 0;
     }

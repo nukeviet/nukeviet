@@ -1,22 +1,30 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 namespace NukeViet\Core;
 
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
 /**
- * extends for PHPMailer
+ * NukeViet\Core\Sendmail
+ *
+ * @package NukeViet\Core
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
  */
 class Sendmail extends PHPMailer
 {
-
     private $configs = [];
 
     private $myFrom = [];
@@ -26,9 +34,11 @@ class Sendmail extends PHPMailer
     private $logo = false;
 
     /**
+     * __construct()
      *
-     * @param array $config
+     * @param array  $config
      * @param string $lang_interface
+     * @throws Exception
      */
     public function __construct($config, $lang_interface)
     {
@@ -47,7 +57,7 @@ class Sendmail extends PHPMailer
             $this->Username = $this->configs['smtp_username'];
             $this->Password = $this->configs['smtp_password'];
 
-            $SMTPSecure = intval($this->configs['smtp_ssl']);
+            $SMTPSecure = (int) ($this->configs['smtp_ssl']);
             switch ($SMTPSecure) {
                 case 1:
                     $this->SMTPSecure = 'ssl';
@@ -69,12 +79,12 @@ class Sendmail extends PHPMailer
             $this->IsSendmail();
         } elseif ($mailer_mode == 'mail') {
             // disable_functions
-            $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
+            $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
 
             if (extension_loaded('suhosin')) {
                 $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
             }
-            if (!in_array('mail', $disable_functions)) {
+            if (!in_array('mail', $disable_functions, true)) {
                 $this->IsMail();
             } else {
                 $this->Mailer = 'no';
@@ -87,35 +97,47 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * addFile()
      *
      * @param string $file
+     * @return true
+     * @throws Exception
      */
     public function addFile($file)
     {
         $this->addAttachment($file);
+
         return true;
     }
 
     /**
+     * addLogo()
+     *
+     * @return true
      */
     public function addLogo()
     {
         $this->logo = true;
+
         return true;
     }
 
     /**
+     * addFrom()
      *
      * @param string $address
      * @param string $name
+     * @return true
      */
     public function addFrom($address, $name = '')
     {
         $this->myFrom[$address] = $name;
+
         return true;
     }
 
     /**
+     * addReply()
      *
      * @param string $address
      * @param string $name
@@ -126,9 +148,12 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * addTo()
      *
      * @param string $address
      * @param string $name
+     * @return bool
+     * @throws Exception
      */
     public function addTo($address, $name = '')
     {
@@ -136,9 +161,12 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * addCC()
      *
      * @param string $address
      * @param string $name
+     * @return bool
+     * @throws Exception
      */
     public function addCC($address, $name = '')
     {
@@ -146,9 +174,12 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * addBCC()
      *
      * @param string $address
      * @param string $name
+     * @return bool
+     * @throws Exception
      */
     public function addBCC($address, $name = '')
     {
@@ -156,6 +187,7 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * setSubject()
      *
      * @param string $subject
      */
@@ -165,6 +197,7 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * setContent()
      *
      * @param string $message
      */
@@ -173,15 +206,25 @@ class Sendmail extends PHPMailer
         $this->Body = $message;
     }
 
+    /**
+     * _formatBody()
+     *
+     * @param string $Body
+     * @return string
+     */
     private static function _formatBody($Body)
     {
         $Body = nv_url_rewrite($Body);
         $optimizer = new Optimizer($Body, NV_BASE_SITEURL);
         $Body = $optimizer->process(false);
+
         return nv_unhtmlspecialchars($Body);
     }
 
     /**
+     * _setFrom()
+     *
+     * @throws Exception
      */
     private function _setFrom()
     {
@@ -201,18 +244,18 @@ class Sendmail extends PHPMailer
                 if (empty($sender_email)) {
                     if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
                         $sender_email = $_SERVER['SERVER_ADMIN'];
-                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                        $sender_email = "webmaster@" . $_SERVER['SERVER_NAME'];
+                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], 'MX') || checkdnsrr($_SERVER['SERVER_NAME'], 'A')) {
+                        $sender_email = 'webmaster@' . $_SERVER['SERVER_NAME'];
                     }
                 }
             } elseif ($this->Mailer == 'mail') {
                 if (empty($sender_email)) {
-                    if (($php_email = @ini_get("sendmail_from")) != "" and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
+                    if (($php_email = @ini_get('sendmail_from')) != '' and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
                         $sender_email = $php_email;
-                    } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get("sendmail_path"), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
+                    } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get('sendmail_path'), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
                         $sender_email = $matches[0];
-                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], "MX") || checkdnsrr($_SERVER['SERVER_NAME'], "A")) {
-                        $sender_email = "webmaster@" . $_SERVER['SERVER_NAME'];
+                    } elseif (checkdnsrr($_SERVER['SERVER_NAME'], 'MX') || checkdnsrr($_SERVER['SERVER_NAME'], 'A')) {
+                        $sender_email = 'webmaster@' . $_SERVER['SERVER_NAME'];
                     }
                 }
             }
@@ -225,6 +268,9 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * _setReply()
+     *
+     * @throws Exception
      */
     private function _setReply()
     {
@@ -247,21 +293,19 @@ class Sendmail extends PHPMailer
     }
 
     /**
-     * Sendmail::_addDKIM()
-     * 
-     * @return void
+     * _addDKIM()
      */
     private function _addDKIM()
     {
         $dkim_included = !empty($this->configs['dkim_included']) ? array_map('trim', explode(',', $this->configs['dkim_included'])) : [];
-        if (!empty($dkim_included) and in_array($this->Mailer, $dkim_included)) {
+        if (!empty($dkim_included) and in_array($this->Mailer, $dkim_included, true)) {
             // https://github.com/PHPMailer/PHPMailer/blob/master/examples/DKIM_sign.phps
             $domain = substr(strstr($this->From, '@'), 1);
             $privatekeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.private.pem';
             $verifiedkey = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.verified';
             if (file_exists($verifiedkey)) {
                 $verifiedTime = file_get_contents($verifiedkey);
-                $verifiedTime = (int)$verifiedTime + 604800;
+                $verifiedTime = (int) $verifiedTime + 604800;
                 if (NV_CURRENTTIME > $verifiedTime) {
                     $verified = DKIM_verify($domain, 'nv');
                     if (!$verified) {
@@ -285,17 +329,15 @@ class Sendmail extends PHPMailer
     }
 
     /**
-     * Sendmail::_addSMIME()
-     * 
-     * @return void
+     * _addSMIME()
      */
     private function _addSMIME()
     {
         $smime_included = !empty($this->configs['smime_included']) ? array_map('trim', explode(',', $this->configs['smime_included'])) : [];
-        if (!empty($smime_included) and in_array($this->Mailer, $smime_included)) {
+        if (!empty($smime_included) and in_array($this->Mailer, $smime_included, true)) {
             // This PHPMailer example shows S/MIME signing a message and then sending.
             // https://github.com/PHPMailer/PHPMailer/blob/master/examples/smime_signed_mail.phps
-            $email_name = str_replace("@", "__", $this->From);
+            $email_name = str_replace('@', '__', $this->From);
             $cert_key = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.key';
             $cert_crt = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.crt';
             $certchain_pem = file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem') ? NV_ROOTDIR . '/' . NV_CERTS_DIR . '/' . $email_name . '.pem' : '';
@@ -313,54 +355,55 @@ class Sendmail extends PHPMailer
     }
 
     /**
+     * send()
      *
-     * @return boolean
+     * @return bool
+     * @throws Exception
      */
     public function send()
     {
         if ($this->Mailer == 'no') {
             return false;
-        } else {
-            $this->_setReply();
+        }
+        $this->_setReply();
 
-            // https://www.php.net/manual/en/function.mail.php
-            // Lines should not be larger than 70 characters. 
-            $this->WordWrap = 70;
-            $this->IsHTML(true);
-            $this->XMailer = 'NukeViet CMS with PHPMailer';
+        // https://www.php.net/manual/en/function.mail.php
+        // Lines should not be larger than 70 characters.
+        $this->WordWrap = 70;
+        $this->IsHTML(true);
+        $this->XMailer = 'NukeViet CMS with PHPMailer';
 
-            $this->AltBody = strip_tags($this->Body);
+        $this->AltBody = strip_tags($this->Body);
 
-            if (function_exists("nv_mailHTML")) {
-                $this->Body = nv_mailHTML($this->Subject, $this->Body);
-                $this->logo = true;
-            }
+        if (function_exists('nv_mailHTML')) {
+            $this->Body = nv_mailHTML($this->Subject, $this->Body);
+            $this->logo = true;
+        }
 
-            $this->Subject = nv_unhtmlspecialchars($this->Subject);
-            $this->Body = self::_formatBody($this->Body);
+        $this->Subject = nv_unhtmlspecialchars($this->Subject);
+        $this->Body = self::_formatBody($this->Body);
 
-            if ($this->logo) {
-                $this->AddEmbeddedImage(NV_ROOTDIR . '/' . $this->configs['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $this->configs['site_logo']));
-            }
+        if ($this->logo) {
+            $this->AddEmbeddedImage(NV_ROOTDIR . '/' . $this->configs['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $this->configs['site_logo']));
+        }
 
-            $this->_addSMIME();
-            $this->_addDKIM();
+        $this->_addSMIME();
+        $this->_addDKIM();
 
-            try {
-                if (!$this->preSend()) {
-                    return false;
-                }
-
-                return $this->postSend();
-            } catch (Exception $exc) {
-                $this->mailHeader = '';
-                $this->setError($exc->getMessage());
-                if ($this->exceptions) {
-                    throw $exc;
-                }
-
+        try {
+            if (!$this->preSend()) {
                 return false;
             }
+
+            return $this->postSend();
+        } catch (Exception $exc) {
+            $this->mailHeader = '';
+            $this->setError($exc->getMessage());
+            if ($this->exceptions) {
+                throw $exc;
+            }
+
+            return false;
         }
     }
 }

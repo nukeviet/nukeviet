@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_page_list')) {
     /**
      * nv_block_config_page_list()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_page_list($module, $data_block, $lang_block)
     {
@@ -32,15 +33,16 @@ if (!nv_function_exists('nv_page_list')) {
         $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
         $html .= '	<div class="col-sm-9"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * nv_block_config_page_list_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_config_page_list_submit($module, $lang_block)
     {
@@ -50,14 +52,15 @@ if (!nv_function_exists('nv_page_list')) {
         $return['config'] = [];
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 5);
+
         return $return;
     }
 
     /**
      * nv_page_list()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string
      */
     function nv_page_list($block_config)
     {
@@ -91,10 +94,11 @@ if (!nv_function_exists('nv_page_list')) {
             }
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
-        } else {
-            return '';
         }
+
+        return '';
     }
 }
 

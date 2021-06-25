@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12-11-2010 20:40
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_EDITOR')) {
@@ -22,12 +23,12 @@ if (defined('NV_EDITOR')) {
     /**
      * nv_aleditor()
      *
-     * @param mixed $textareaname
+     * @param string $textareaname
      * @param string $width
      * @param string $height
      * @param string $val
      * @param string $customtoolbar
-     * @return
+     * @return string
      */
     function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '', $customtoolbar = '')
     {
@@ -36,6 +37,7 @@ if (defined('NV_EDITOR')) {
         $return .= "<script type=\"text/javascript\">
         CKEDITOR.replace( '" . $module_data . '_' . $textareaname . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
         </script>";
+
         return $return;
     }
 }
@@ -246,7 +248,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $rowcontent_old = $db->query('SELECT r.* FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows r 
             LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON r.id=a.id 
             WHERE r.id=' . $contentid . ' AND a.aid= ' . $my_author_detail['id'] . ' AND r.status<=' . $global_code_defined['row_locked_status'])->fetch();
-        $contentid = (isset($rowcontent_old['id'])) ? intval($rowcontent_old['id']) : 0;
+        $contentid = (isset($rowcontent_old['id'])) ? (int) ($rowcontent_old['id']) : 0;
 
         if (empty($contentid)) {
             nv_redirect_location($base_url);
@@ -412,7 +414,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             } elseif ($nv_Request->isset_request('status4', 'post')) {
                 $rowcontent['status'] = 4;
             }
-            $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
+            $rowcontent['catid'] = in_array((int) $rowcontent['catid'], $catids, true) ? $rowcontent['catid'] : $catids[0];
             $rowcontent['sourceid'] = 0;
             if (!empty($rowcontent['sourcetext'])) {
                 $url_info = parse_url($rowcontent['sourcetext']);
@@ -424,7 +426,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
                     if (empty($rowcontent['sourceid'])) {
                         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-                        $weight = intval($weight) + 1;
+                        $weight = (int) $weight + 1;
                         $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_sources (title, link, logo, weight, add_time, edit_time) VALUES (' . $db->quote($url_info['host']) . ', ' . $db->quote($sourceid_link) . ", '', " . $db->quote($weight) . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
                         $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid');
                     }
@@ -432,37 +434,37 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             }
             if ($rowcontent['id'] == 0) {
                 $_weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows')->fetchColumn();
-                $_weight = intval($_weight) + 1;
+                $_weight = (int) $_weight + 1;
 
                 $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
                         (catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, weight, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
-                         (' . intval($rowcontent['catid']) . ',
+                         (' . (int) ($rowcontent['catid']) . ',
                          ' . $db->quote($rowcontent['listcatid']) . ',
-                         ' . intval($rowcontent['topicid']) . ',
-                         ' . intval($rowcontent['admin_id']) . ',
+                         ' . (int) ($rowcontent['topicid']) . ',
+                         ' . (int) ($rowcontent['admin_id']) . ',
                          ' . $db->quote($rowcontent['author']) . ',
-                         ' . intval($rowcontent['sourceid']) . ',
-                         ' . intval($rowcontent['addtime']) . ',
-                         ' . intval($rowcontent['edittime']) . ',
-                         ' . intval($rowcontent['status']) . ',
+                         ' . (int) ($rowcontent['sourceid']) . ',
+                         ' . (int) ($rowcontent['addtime']) . ',
+                         ' . (int) ($rowcontent['edittime']) . ',
+                         ' . (int) ($rowcontent['status']) . ',
                          ' . $_weight . ',
-                         ' . intval($rowcontent['publtime']) . ',
-                         ' . intval($rowcontent['exptime']) . ',
-                         ' . intval($rowcontent['archive']) . ',
+                         ' . (int) ($rowcontent['publtime']) . ',
+                         ' . (int) ($rowcontent['exptime']) . ',
+                         ' . (int) ($rowcontent['archive']) . ',
                          ' . $db->quote($rowcontent['title']) . ',
                          ' . $db->quote($rowcontent['alias']) . ',
                          ' . $db->quote($rowcontent['hometext']) . ',
                          ' . $db->quote($rowcontent['homeimgfile']) . ',
                          ' . $db->quote($rowcontent['homeimgalt']) . ',
-                         ' . intval($rowcontent['homeimgthumb']) . ',
-                         ' . intval($rowcontent['inhome']) . ',
-                         ' . intval($rowcontent['allowed_comm']) . ',
-                         ' . intval($rowcontent['allowed_rating']) . ',
-                         ' . intval($rowcontent['external_link']) . ',
-                         ' . intval($rowcontent['hitstotal']) . ',
-                         ' . intval($rowcontent['hitscm']) . ',
-                         ' . intval($rowcontent['total_rating']) . ',
-                         ' . intval($rowcontent['click_rating']) . ')';
+                         ' . (int) ($rowcontent['homeimgthumb']) . ',
+                         ' . (int) ($rowcontent['inhome']) . ',
+                         ' . (int) ($rowcontent['allowed_comm']) . ',
+                         ' . (int) ($rowcontent['allowed_rating']) . ',
+                         ' . (int) ($rowcontent['external_link']) . ',
+                         ' . (int) ($rowcontent['hitstotal']) . ',
+                         ' . (int) ($rowcontent['hitscm']) . ',
+                         ' . (int) ($rowcontent['total_rating']) . ',
+                         ' . (int) ($rowcontent['click_rating']) . ')';
 
                 $rowcontent['id'] = $db->insert_id($_sql, 'id');
                 if ($rowcontent['id'] > 0) {
@@ -476,12 +478,12 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                             ' . $db->quote($rowcontent['description']) . ',
                             ' . $db->quote($rowcontent['bodyhtml']) . ',
                             ' . $db->quote($rowcontent['sourcetext']) . ',
-                            ' . intval($rowcontent['imgposition']) . ',
+                            ' . (int) ($rowcontent['imgposition']) . ',
                             ' . $db->quote($rowcontent['layout_func']) . ',
-                            ' . intval($rowcontent['copyright']) . ',
-                            ' . intval($rowcontent['allowed_send']) . ',
-                            ' . intval($rowcontent['allowed_print']) . ',
-                            ' . intval($rowcontent['allowed_save']) . '
+                            ' . (int) ($rowcontent['copyright']) . ',
+                            ' . (int) ($rowcontent['allowed_send']) . ',
+                            ' . (int) ($rowcontent['allowed_print']) . ',
+                            ' . (int) ($rowcontent['allowed_save']) . '
                         )');
 
                     if (defined('NV_IS_USER')) {
@@ -514,18 +516,18 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 }
 
                 $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
-                         catid=' . intval($rowcontent['catid']) . ',
+                         catid=' . (int) ($rowcontent['catid']) . ',
                          listcatid=' . $db->quote($rowcontent['listcatid']) . ',
-                         topicid=' . intval($rowcontent['topicid']) . ',
+                         topicid=' . (int) ($rowcontent['topicid']) . ',
                          author=' . $db->quote($rowcontent['author']) . ',
-                         sourceid=' . intval($rowcontent['sourceid']) . ',
-                         status=' . intval($rowcontent['status']) . ',
+                         sourceid=' . (int) ($rowcontent['sourceid']) . ',
+                         status=' . (int) ($rowcontent['status']) . ',
                          title=' . $db->quote($rowcontent['title']) . ',
                          alias=' . $db->quote($rowcontent['alias']) . ',
                          hometext=' . $db->quote($rowcontent['hometext']) . ',
                          homeimgfile=' . $db->quote($rowcontent['homeimgfile']) . ',
                          homeimgalt=' . $db->quote($rowcontent['homeimgalt']) . ',
-                         homeimgthumb=' . intval($rowcontent['homeimgthumb']) . ',
+                         homeimgthumb=' . (int) ($rowcontent['homeimgthumb']) . ',
                          edittime=' . NV_CURRENTTIME . '
                         WHERE id =' . $rowcontent['id'];
 
@@ -719,7 +721,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $array_temp = [];
         $array_temp['value'] = $value['catid'];
         $array_temp['title'] = $xtitle_i . $value['title'];
-        $array_temp['checked'] = (in_array($value['catid'], $array_catid_in_row)) ? ' checked="checked"' : '';
+        $array_temp['checked'] = (in_array((int) $value['catid'], array_map('intval', $array_catid_in_row), true)) ? ' checked="checked"' : '';
 
         $xtpl->assign('DATACATID', $array_temp);
         $xtpl->parse('main.catid');
@@ -764,7 +766,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $page = 1;
 
     if (isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-') {
-        $page = intval(substr($array_op[1], 5));
+        $page = (int) (substr($array_op[1], 5));
 
         $page_url .= '/page-' . $page;
         $canonicalUrl = getCanonicalUrl($page_url);

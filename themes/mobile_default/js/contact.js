@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_validReset(a) {
@@ -44,7 +45,7 @@ function nv_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
     var c = 0;
-    $(a).find(".required,input[data-callback]").each(function() {
+    $(a).find(".required,input[data-callback]").each(function () {
         $(this).val(trim(strip_tags($(this).val())));
         if (!nv_validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), nv_validErrorShow(this), !1
     });
@@ -54,14 +55,14 @@ function nv_validForm(a) {
         url: $(a).prop("action"),
         data: $(a).serialize(),
         dataType: "json",
-        success: function(b) {
+        success: function (b) {
             change_captcha('.fcode');
-            "error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
+            "error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function () {
                 $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                 nv_validErrorShow(this)
-            }), setTimeout(function() {
+            }), setTimeout(function () {
                 $(a).find("[type='submit']").prop("disabled", !1)
-            }, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info", a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info", a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
+            }, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info", a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info", a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function () {
                 $("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
                 nv_validReset(a)
             }, 5E3))

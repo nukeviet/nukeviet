@@ -1,7 +1,16 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 .news {
     clear: both;
     margin: 2px 0;
-    text-align: right
+    text-align: right;
 }
 
 .news label {
@@ -9,127 +18,135 @@
     display: inline;
     float: left;
     text-align: left;
-    width: 150px
+    width: 150px;
 }
 
 .news input {
-    width: 380px
+    width: 380px;
 }
 
 .news select {
-    width: 382px
+    width: 382px;
 }
 
 .news_checkbox {
-    width: 18px !important
+    width: 18px !important;
 }
 
-.collapse_buttons, .collapse_buttons {
-    width: 280px
+.collapse_buttons,
+.collapse_buttons {
+    width: 280px;
 }
 
 .message_list {
     list-style: none;
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
 .message_list li {
     background: url(../images/message-bar.gif) no-repeat;
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
-.message_head .timestamp, .show_all_message, .collpase_all_message {
-    color: #666
+.message_head .timestamp,
+.show_all_message,
+.collpase_all_message {
+    color: #666;
 }
 
 .message_head {
     cursor: pointer;
     font-size: 95%;
     padding: 0px 10px;
-    position: relative
+    position: relative;
 }
 
 .message_head .timestamp {
     position: absolute;
     right: 10px;
-    top: 5px
+    top: 5px;
 }
 
 .timestamp {
-    font-size: 85%
+    font-size: 85%;
 }
 
 .message_head cite {
     font-size: 100%;
     font-style: normal;
-    font-weight: 700
+    font-weight: 700;
 }
 
 .message_body {
-    padding: 0px 10px 15px
+    padding: 0px 10px 15px;
 }
 
 .collapse_buttons {
     border-top: solid 1px #e4e4e4;
     padding: 5px 0;
-    text-align: right
+    text-align: right;
 }
 
 .collapse_buttons a {
     float: right;
-    margin-left: 15px
+    margin-left: 15px;
 }
 
 .show_all_message {
     background: url(../images/tall-down-arrow.gif) no-repeat right center;
-    padding-right: 12px
+    padding-right: 12px;
 }
 
 .collpase_all_message {
     background: url(../images/collapse-all.gif) no-repeat right center;
-    padding-right: 12px
+    padding-right: 12px;
 }
 
 .divbor {
-    border: 1px solid #DADADA;
-    padding: 8px
+    border: 1px solid #dadada;
+    padding: 8px;
 }
 
 .divbor td {
-    padding: 8px
+    padding: 8px;
 }
 
 .gray {
-    background: #F0F0F0;
-    border: 1px solid #DADADA;
+    background: #f0f0f0;
+    border: 1px solid #dadada;
     margin-bottom: 2px;
-    padding: 0 4px 4px
+    padding: 0 4px 4px;
 }
 
 ul li {
-    list-style: none
+    list-style: none;
 }
 
-select, input {
+select,
+input {
     font-family: Arial;
-    font-size: 13px
+    font-size: 13px;
 }
 
 .newserror {
-    background: #F8F8F8;
-    border: 1px solid #F2F2F2;
+    background: #f8f8f8;
+    border: 1px solid #f2f2f2;
     color: red;
     display: block;
     font-size: 12px;
     font-weight: 700;
     margin-bottom: 2px;
-    padding: 10px
+    padding: 10px;
 }
 
-.news input, .news select, .textareas, .message_body textarea, .message_body select {
-    border: 1px solid #ccc
+.news input,
+.news select,
+.textareas,
+.message_body textarea,
+.message_body select {
+    border: 1px solid #ccc;
 }
 
 /* as fb */
@@ -138,11 +155,11 @@ select, input {
 }
 
 .uiInlineTokenizer {
-    border: 1px solid #BDC7D8;
+    border: 1px solid #bdc7d8;
     cursor: text;
 }
 .uiCloseButtonSmall {
-    background-image: url("../images/delfb.png");
+    background-image: url('../images/delfb.png');
     height: 11px;
     margin-top: 1px;
     width: 11px;
@@ -153,15 +170,15 @@ select, input {
     margin: 0;
     padding: 0;
 }
-.uiTypeahead{
+.uiTypeahead {
     border-top: 1px solid #ccc;
 }
 .uiTypeahead .innerWrap {
     overflow: hidden;
 }
 .uiTypeahead .textInput {
-    background:none !important;
-    border: none!important;
+    background: none !important;
+    border: none !important;
     border: 0 none;
     outline: 0 none;
     -webkit-box-shadow: 0 0 0 #fff;
@@ -169,19 +186,20 @@ select, input {
     box-shadow: 0 0 0 #fff;
 }
 .uiTypeahead .selected {
-    background-color: #E2E8F6;
+    background-color: #e2e8f6;
 }
-.uiTypeaheadDisabled, .uiTypeaheadDisabled div.wrap {
-    border-color: #CCCCCC;
+.uiTypeaheadDisabled,
+.uiTypeaheadDisabled div.wrap {
+    border-color: #cccccc;
 }
 .uiTypeaheadDisabled div.wrap {
-    background: none repeat scroll 0 0 #E2E2E2;
+    background: none repeat scroll 0 0 #e2e2e2;
 }
 .uiToken {
-    background: #E6E6E6;
+    background: #e6e6e6;
     border: 1px solid #ccc;
     border-radius: 2px 2px 2px 2px;
-    color: #1C2A47;
+    color: #1c2a47;
     cursor: default;
     display: block;
     float: left;
@@ -199,16 +217,16 @@ select, input {
     outline: medium none;
 }
 .uiTokenSelected {
-    background-color: #6D84B4;
-    border-color: #3B5998;
-    color: #FFFFFF;
+    background-color: #6d84b4;
+    border-color: #3b5998;
+    color: #ffffff;
 }
 .uiTokenGray {
-    background: none repeat scroll 0 0 #DDDDDD;
+    background: none repeat scroll 0 0 #dddddd;
     border-color: gray;
 }
 .uiTokenizer {
-    background: none repeat scroll 0 0 #FFFFFF;
+    background: none repeat scroll 0 0 #ffffff;
 }
 
 .tokenarea {
@@ -223,8 +241,8 @@ select, input {
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    background: none repeat scroll 0 0 #FFFFFF;
-    border-color: #333333 #333333 #293E6A;
+    background: none repeat scroll 0 0 #ffffff;
+    border-color: #333333 #333333 #293e6a;
     border-image: none;
     border-style: solid;
     border-width: 1px 1px 2px;
@@ -232,26 +250,26 @@ select, input {
     padding: 2px 0;
 }
 .uiTypeaheadView .freeform {
-    border-top-color: #DDDDDD;
+    border-top-color: #dddddd;
     padding: 2px 6px 1px;
     text-align: center;
 }
 
 /* Icon info */
-.news-inf-icons{
+.news-inf-icons {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
-.news-inf-icons li{
+.news-inf-icons li {
     display: inline-block;
     padding-left: 10px;
 }
-.news-inf-icons li:first-child{
+.news-inf-icons li:first-child {
     padding-left: 0;
 }
-@media only screen and (min-width:320px) and (max-width: 992px) {
-    .form-control{
+@media only screen and (min-width: 320px) and (max-width: 992px) {
+    .form-control {
         padding: 6px 0px;
     }
 }
@@ -268,7 +286,7 @@ select, input {
 
 .btn-cattool {
     text-align: left;
-    padding-right: 20px!important;
+    padding-right: 20px !important;
 }
 
 .btn-cattool .caret {

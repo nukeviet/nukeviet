@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 25/11/2011 5:27 GMT+7
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $countries = [
@@ -251,6 +252,7 @@ function inet_to_bits($inet)
     foreach ($unpacked as $char) {
         $binaryip .= str_pad(decbin(ord($char)), 8, '0', STR_PAD_LEFT);
     }
+
     return $binaryip;
 }
 
@@ -296,6 +298,7 @@ function nv_getCountry_from_file($ip)
             }
         }
     }
+
     return 'ZZ';
 }
 
@@ -310,7 +313,7 @@ function nv_getCountry_from_cookie($ip)
     global $global_config, $countries;
     $code = preg_replace('/[^a-z0-9]/', '_', $ip);
     if (isset($_COOKIE[$global_config['cookie_prefix'] . '_ctr'])) {
-        $codecountry = base64_decode($_COOKIE[$global_config['cookie_prefix'] . '_ctr']);
+        $codecountry = base64_decode($_COOKIE[$global_config['cookie_prefix'] . '_ctr'], true);
         if (preg_match('/^' . $code . '\.([A-Z]{2})$/', $codecountry, $matches)) {
             if (isset($countries[$matches[1]])) {
                 return $matches[1];
@@ -336,15 +339,15 @@ function nv_getCountry_from_cookie($ip)
             'expires' => $livecookietime,
             'path' => $cookie_path,
             'domain' => $cookie_domain,
-            'secure' => (bool)$global_config['cookie_secure'],
-            'httponly' => (bool)$global_config['cookie_httponly']
+            'secure' => (bool) $global_config['cookie_secure'],
+            'httponly' => (bool) $global_config['cookie_httponly']
         ];
         if (!empty($global_config['cookie_SameSite']) and ('Lax' == $global_config['cookie_SameSite'] or 'Strict' == $global_config['cookie_SameSite'] or ('None' == $global_config['cookie_SameSite'] and $global_config['cookie_secure']))) {
             $options['samesite'] = $global_config['cookie_SameSite'];
         }
         setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $options);
     } else {
-        setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, $cookie_path, $cookie_domain, (bool)$global_config['cookie_secure'], (bool)$global_config['cookie_httponly']);
+        setcookie($global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, $cookie_path, $cookie_domain, (bool) $global_config['cookie_secure'], (bool) $global_config['cookie_httponly']);
     }
 
     return $country;

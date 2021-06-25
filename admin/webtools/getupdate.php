@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 9/9/2010, 6:38
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_WEBTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['get_update'];
@@ -40,9 +41,9 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
 
         $ftp_check_login = 0;
 
-        if ($sys_info['ftp_support'] and intval($global_config['ftp_check_login']) == 1) {
+        if ($sys_info['ftp_support'] and (int) ($global_config['ftp_check_login']) == 1) {
             $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-            $ftp_port = intval($global_config['ftp_port']);
+            $ftp_port = (int) ($global_config['ftp_port']);
             $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
@@ -198,7 +199,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
         echo $xtpl->text('complete');
     }
 
-    die();
+    exit();
 }
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version . $package . NV_CHECK_SESSION)) {
@@ -271,7 +272,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
             $error = $lang_module['get_update_error_file_download'];
             $new_version = nv_geVersion(NV_CURRENTTIME);
             if ($new_version !== false and !is_string($new_version)) {
-                $manual_link = (string)$new_version->link;
+                $manual_link = (string) $new_version->link;
                 if (!empty($manual_link)) {
                     $error .= ' ' . sprintf($lang_module['get_update_error_file_download1'], $manual_link);
                 }
@@ -288,7 +289,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
         }
     }
 
-    die();
+    exit();
 }
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5($version . $package . NV_CHECK_SESSION)) {

@@ -1,15 +1,16 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sat, 08 Feb 2014 06:33:39 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function checkallmodfirst() {
     $(this).one("click", checkallmodsecond);
     $("input.checkmodule").prop("checked", true);
-    $("input[name='func_id[]']:checkbox").each(function() {
+    $("input[name='func_id[]']:checkbox").each(function () {
         $("input[name='func_id[]']:visible").prop("checked", true);
     });
 }
@@ -17,7 +18,7 @@ function checkallmodfirst() {
 function checkallmodsecond() {
     $(this).one("click", checkallmodfirst);
     $("input.checkmodule").prop("checked", false);
-    $("input[name='func_id[]']:checkbox").each(function() {
+    $("input[name='func_id[]']:checkbox").each(function () {
         $("input[name='func_id[]']:visible").prop("checked", false);
     });
 }
@@ -71,7 +72,7 @@ function file_name_change() {
     if (blok_file_name != "") {
         $("#block_config").show();
         $("#block_config").html(htmlload);
-        $.get(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + '&' + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + module_type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
+        $.get(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + '&' + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + module_type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function (theResponse) {
             if (theResponse.length > 10) {
                 theResponse = theResponse.replace("<head/><tr><td", "<tr><td"); //fix for Centmin Mod 1.2.3-eva2000.07
                 $("#block_config").html(theResponse);
@@ -84,8 +85,8 @@ function file_name_change() {
     }
 }
 
-$(function() {
-    $("select[name=file_name]").load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + '&' + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=loadblocks&selectthemes=" + selectthemes + "&module=" + bid_module + "&bid=" + bid + "&nocache=" + new Date().getTime(), function() {
+$(function () {
+    $("select[name=file_name]").load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + '&' + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=loadblocks&selectthemes=" + selectthemes + "&module=" + bid_module + "&bid=" + bid + "&nocache=" + new Date().getTime(), function () {
         file_name_change();
     });
 
@@ -100,11 +101,11 @@ $(function() {
         buttonText: ""
     });
 
-    $("#exp_time_btn").click(function() {
+    $("#exp_time_btn").click(function () {
         $("#exp_time").focus();
     });
 
-    $("select[name=module_type]").change(function() {
+    $("select[name=module_type]").change(function () {
         var module_type = $("select[name=module_type]").val();
         $("select[name=file_name]").html("");
         if (module_type != "") {
@@ -114,11 +115,11 @@ $(function() {
         }
     });
 
-    $("select[name=file_name]").change(function() {
+    $("select[name=file_name]").change(function () {
         file_name_change();
     });
 
-    $("input[name=all_func]").click(function() {
+    $("input[name=all_func]").click(function () {
         var module_type = $("select[name=module_type]").val();
         var af = $(this).val();
         if (af == "0" && module_type != "global") {
@@ -130,7 +131,7 @@ $(function() {
         }
     });
 
-    $("input[name=leavegroup]").click(function() {
+    $("input[name=leavegroup]").click(function () {
         var lv = $("input[name='leavegroup']:checked").val();
         if (lv == "1") {
             var $radios = $("input:radio[name=all_func]");
@@ -141,7 +142,7 @@ $(function() {
 
     $('[name="checkallmod"]').one("click", checkallmodfirst);
 
-    $("input[name='func_id[]']:checkbox").change(function() {
+    $("input[name='func_id[]']:checkbox").change(function () {
         var numfuc = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox").length;
         var fuccheck = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox:checked").length;
         if (fuccheck != numfuc) {
@@ -151,16 +152,16 @@ $(function() {
         }
     });
 
-    $("input.checkmodule").change(function() {
+    $("input.checkmodule").change(function () {
         $("#idmodule_" + $(this).attr('value') + " input[name='func_id[]']:checkbox").prop("checked", $(this).prop('checked'));
     });
 
-    $("input[name=confirm]").click(function() {
+    $("input[name=confirm]").click(function () {
         var leavegroup = $("input[name=leavegroup]").is(":checked") ? 1 : 0;
         var all_func = $("input[name='all_func']:checked").val();
         if (all_func == 0) {
             var funcid = [];
-            $("input[name='func_id[]']:checked").each(function() {
+            $("input[name='func_id[]']:checked").each(function () {
                 funcid.push($(this).val());
             });
             if (funcid.length < 1) {

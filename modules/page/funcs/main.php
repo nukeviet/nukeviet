@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_PAGE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_url = $base_url;
@@ -86,7 +87,7 @@ if ($page_config['viewtype'] == 2) {
     // Hiển thị các bài liên quan mới nhất.
     $other_links = [];
 
-    $related_articles = intval($page_config['related_articles']);
+    $related_articles = (int) ($page_config['related_articles']);
     if ($related_articles) {
         $db_slave->sqlreset()
             ->select('*')

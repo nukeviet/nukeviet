@@ -1,18 +1,18 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 22/8/2010, 19:32
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-// @formatter:off
 $utf8_lookup = [
     'strtoupper' => [
         'ｚ' => 'Ｚ', 'ｙ' => 'Ｙ', 'ｘ' => 'Ｘ', 'ｗ' => 'Ｗ', 'ｖ' => 'Ｖ', 'ｕ' => 'Ｕ', 'ｔ' => 'Ｔ', 'ｓ' => 'Ｓ', 'ｒ' => 'Ｒ', 'ｑ' => 'Ｑ',
@@ -189,4 +189,3 @@ $utf8_lookup = [
         'ǐ' => 'i', 'ǔ' => 'u', 'ǎ' => 'a', 'ǒ' => 'o', 'ǚ' => 'u', 'ǚ' => 'u', 'ǜ' => 'u', 'ǐ' => 'i', 'ǐ' => 'i', '@' => 'a'
     ]
 ];
-// @formatter:on

@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 29-03-2012 03:29
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_SYSTEM', true);
 define('NV_IS_UPDATE', true);
 
 //Xac dinh thu muc goc cua site
-define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__file__, PATHINFO_DIRNAME) . '/../')));
+define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__FILE__, PATHINFO_DIRNAME) . '/../')));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
@@ -32,7 +33,7 @@ if (empty($nv_update_config)) {
 
 // Ham cua admin
 define('NV_ADMIN', true);
-include_once NV_ROOTDIR . '/includes/core/admin_functions.php' ;
+include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
 // Xac dinh ngon ngu cap nhat
 $dirs = nv_scandir(NV_ROOTDIR . '/includes/language', '/^([a-z]{2})/');
@@ -50,13 +51,13 @@ $nv_update_config['allow_lang'] = $array_lang_update;
 $cookie_lang = $nv_Request->get_string('update_lang', 'cookie', '');
 $update_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', '');
 
-if (!empty($update_lang) and (in_array($update_lang, $array_lang_update)) and file_exists(NV_ROOTDIR . '/includes/language/' . $update_lang . '/global.php')) {
+if (!empty($update_lang) and (in_array($update_lang, $array_lang_update, true)) and file_exists(NV_ROOTDIR . '/includes/language/' . $update_lang . '/global.php')) {
     if ($update_lang != $cookie_lang) {
         $nv_Request->set_Cookie('update_lang', $update_lang, NV_LIVE_COOKIE_TIME);
     }
-} elseif (preg_match('/^[a-z]{2}$/', $cookie_lang) and (in_array($cookie_lang, $array_lang_update)) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie_lang . '/global.php')) {
+} elseif (preg_match('/^[a-z]{2}$/', $cookie_lang) and (in_array($cookie_lang, $array_lang_update, true)) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie_lang . '/global.php')) {
     $update_lang = $cookie_lang;
-} elseif (in_array(NV_LANG_DATA, $array_lang_update)) {
+} elseif (in_array(NV_LANG_DATA, $array_lang_update, true)) {
     $update_lang = NV_LANG_DATA;
     $nv_Request->set_Cookie('update_lang', $update_lang, NV_LIVE_COOKIE_TIME);
 } else {
@@ -119,21 +120,29 @@ class NvUpdate
     {
         if (!isset($this->config['release_date'])) {
             return false;
-        } elseif (!isset($this->config['author'])) {
-            return false;
-        } elseif (!isset($this->config['support_website'])) {
-            return false;
-        } elseif (!isset($this->config['to_version'])) {
-            return false;
-        } elseif (!isset($this->config['allow_old_version'])) {
-            return false;
-        } elseif (!isset($this->config['type'])) {
-            return false;
-        } elseif (!isset($this->config['packageID'])) {
-            return false;
-        } elseif (!isset($this->config['tasklist'])) {
+        }
+        if (!isset($this->config['author'])) {
             return false;
         }
+        if (!isset($this->config['support_website'])) {
+            return false;
+        }
+        if (!isset($this->config['to_version'])) {
+            return false;
+        }
+        if (!isset($this->config['allow_old_version'])) {
+            return false;
+        }
+        if (!isset($this->config['type'])) {
+            return false;
+        }
+        if (!isset($this->config['packageID'])) {
+            return false;
+        }
+        if (!isset($this->config['tasklist'])) {
+            return false;
+        }
+
         return true;
     }
 
@@ -208,7 +217,7 @@ class NvUpdate
     {
         $content_config = "<?php\n\n";
         $content_config .= NV_FILEHEAD . "\n\n";
-        $content_config .= "if( !defined( 'NV_IS_UPDATE' ) ) die( 'Stop!!!' );\n\n";
+        $content_config .= "if(!defined( 'NV_IS_UPDATE')) {\n    exit('Stop!!!');\n}\n\n";
         $content_config .= "\$nv_update_config['updatelog'] = " . var_export($data, true) . ';';
         $content_config .= "\n\n";
 
@@ -247,7 +256,7 @@ class NvUpdate
         $is_ftp = false;
         if ($global_config['ftp_check_login'] == 1) {
             $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-            $ftp_port = intval($global_config['ftp_port']);
+            $ftp_port = (int) ($global_config['ftp_port']);
             $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
@@ -285,6 +294,7 @@ class NvUpdate
                         if ($is_ftp === true) {
                             $ftp->close();
                         }
+
                         return $this->lang['update_error_creat_dir'] . ' ' . $cp . $p;
                     }
 
@@ -353,6 +363,7 @@ class NvUpdate
     private function getsysinfo()
     {
         global $sys_info;
+
         return $sys_info;
     }
 
@@ -472,6 +483,7 @@ class NvUpdate
 
         $xtpl->parse('main.step_bar');
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
@@ -519,6 +531,7 @@ class NvUpdate
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
@@ -686,7 +699,7 @@ class NvUpdate
                 $xtpl->assign('ROW', [
                     'id' => $fileID,
                     'name' => $fileName,
-                    'status' => in_array($fileName, $array['file_list']) ? '' : ' iok'
+                    'status' => in_array($fileName, $array['file_list'], true) ? '' : ' iok'
                 ]);
                 $xtpl->parse('main.step4.loop');
             }
@@ -703,6 +716,7 @@ class NvUpdate
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
@@ -733,6 +747,7 @@ class NvUpdate
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
@@ -754,6 +769,7 @@ class NvUpdate
         $xtpl->assign('URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo');
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
@@ -797,7 +813,7 @@ class NvUpdate
 
         $i = 0;
         foreach ($exts as $mod) {
-            if (($mod['type'] == 'module' and in_array($mod['name'], ['banners', 'comment', 'contact', 'feeds', 'freecontent', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'])) or ($mod['type'] == 'theme' and in_array($mod['name'], ['default', 'mobile_default']))) {
+            if (($mod['type'] == 'module' and in_array($mod['name'], ['banners', 'comment', 'contact', 'feeds', 'freecontent', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting', 'two-step-verification'], true)) or ($mod['type'] == 'theme' and in_array($mod['name'], ['default', 'mobile_default'], true))) {
                 $mod['note'] = $this->lang['update_mod_uptodate'];
             } else {
                 $mod['note'] = $this->lang['update_mod_othermod'];
@@ -834,7 +850,7 @@ class NvUpdate
         if (!isset($onlineModules[$this->config['formodule']])) {
             $xtpl->parse('commodule.notcertified');
         } else {
-            $lastest_version = isset($onlineModules[$this->config['formodule']]['version']) ? ( string )$onlineModules[$this->config['formodule']]['version'] : 'N/A';
+            $lastest_version = isset($onlineModules[$this->config['formodule']]['version']) ? (string) $onlineModules[$this->config['formodule']]['version'] : 'N/A';
 
             if (nv_version_compare($lastest_version, $this->config['to_version']) > 0) {
                 $xtpl->parse('commodule.checkversion');
@@ -903,6 +919,7 @@ class NvUpdate
         $xtpl->assign('MESSAGE', $message);
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
@@ -910,12 +927,11 @@ class NvUpdate
      * NvUpdate::trigger_error()
      *
      * @param mixed $message
-     * @return void
      */
     public function trigger_error($message)
     {
         $_info = $this->call_error($message);
-        die($_info);
+        exit($_info);
     }
 }
 
@@ -971,8 +987,8 @@ if ($nv_update_config['step'] == 1) {
                 $v = '';
                 $d = 0;
                 if (preg_match("/^([^\s]+)\s+([\d]+)$/", $row['version'], $matches)) {
-                    $v = ( string )$matches[1];
-                    $d = ( int )$matches[2];
+                    $v = (string) $matches[1];
+                    $d = (int) $matches[2];
                 }
 
                 $array['current_version'] = trim($v);
@@ -986,7 +1002,7 @@ if ($nv_update_config['step'] == 1) {
         $array['sysnotsupport'] = $NvUpdate->checksys();
 
         // Kiem tra ho tro phien ban nang cap
-        if (in_array($array['current_version'], $nv_update_config['allow_old_version'])) {
+        if (in_array($array['current_version'], $nv_update_config['allow_old_version'], true)) {
             if (!empty($array['sysnotsupport'])) {
                 $array['ability'] = $lang_module['update_ability_2'];
                 $array['isupdate_allow'] = false;
@@ -1031,7 +1047,7 @@ if ($nv_update_config['step'] == 1) {
         if ($nv_Request->isset_request('dump', 'get')) {
             $checksess = $nv_Request->get_title('checksess', 'get', '');
             if ($checksess != NV_CHECK_SESSION) {
-                die('Error!!!');
+                exit('Error!!!');
             }
 
             $type = $nv_Request->get_title('type', 'get', '');
@@ -1063,41 +1079,38 @@ if ($nv_update_config['step'] == 1) {
                 $NvUpdate->log($nv_update_config, $lang_module['update_dump'] . ' ' . $contents['savetype'], $dump);
 
                 if ($dump == false) {
-                    die($lang_module['update_dump_error']);
-                } else {
-                    $file = str_replace(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup/', '', $dump[0]);
-
-                    // Danh dau da sao luu CSDL
-                    $nv_update_config['updatelog']['data_backuped'] = NV_CURRENTTIME;
-                    $NvUpdate->set_data_log($nv_update_config['updatelog']);
-
-                    die($lang_module['update_dump_ok'] . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=database&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file . '&amp;checkss=' . md5($file . NV_CHECK_SESSION) . '" title="' . $lang_module['update_dump_download'] . '">' . $lang_module['update_dump_download'] . '</a>');
+                    exit($lang_module['update_dump_error']);
                 }
-            } else {
-                die($lang_module['update_dump_exist']);
+                $file = str_replace(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup/', '', $dump[0]);
+
+                // Danh dau da sao luu CSDL
+                $nv_update_config['updatelog']['data_backuped'] = NV_CURRENTTIME;
+                $NvUpdate->set_data_log($nv_update_config['updatelog']);
+
+                exit($lang_module['update_dump_ok'] . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=database&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file . '&amp;checkss=' . md5($file . NV_CHECK_SESSION) . '" title="' . $lang_module['update_dump_download'] . '">' . $lang_module['update_dump_download'] . '</a>');
             }
+            exit($lang_module['update_dump_exist']);
         }
 
         // Download CODE thay doi
         if ($nv_Request->isset_request('downfile', 'get')) {
             $checksess = $nv_Request->get_title('checksess', 'get', '');
             if ($checksess != NV_CHECK_SESSION) {
-                die('Error!!!');
+                exit('Error!!!');
             }
 
             $file = $nv_Request->get_title('downfile', 'get', '');
 
             if (!file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file)) {
                 $NvUpdate->log($nv_update_config, $lang_module['update_log_dump_file_down'], false);
-                die('Error Access!!!');
-            } else {
-                $NvUpdate->log($nv_update_config, $lang_module['update_log_dump_file_down'], true);
-
-                //Download file
-                $download = new NukeViet\Files\Download(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs', 'backup_update_' . date('Y_m_d') . '.zip');
-                $download->download_file();
-                exit();
+                exit('Error Access!!!');
             }
+            $NvUpdate->log($nv_update_config, $lang_module['update_log_dump_file_down'], true);
+
+            //Download file
+            $download = new NukeViet\Files\Download(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs', 'backup_update_' . date('Y_m_d') . '.zip');
+            $download->download_file();
+            exit();
         }
 
         // Sao luu file thay doi
@@ -1132,7 +1145,7 @@ if ($nv_update_config['step'] == 1) {
                 $i = 1;
                 while (file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $filename2)) {
                     $filename2 = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $file_src);
-                    $i++;
+                    ++$i;
                 }
 
                 $zip = new PclZip(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $filename2);
@@ -1142,17 +1155,16 @@ if ($nv_update_config['step'] == 1) {
                     // Ghi Log
                     $NvUpdate->log($nv_update_config, $lang_module['update_log_dump_file'], false);
 
-                    die($lang_module['update_file_backup_error']);
-                } else {
-                    // Ghi log
-                    $NvUpdate->log($nv_update_config, $lang_module['update_log_dump_file'], true);
-
-                    // Danh dau da sao luu
-                    $nv_update_config['updatelog']['file_backuped'] = NV_CURRENTTIME;
-                    $NvUpdate->set_data_log($nv_update_config['updatelog']);
-
-                    die('<a href="' . NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=4&downfile=' . $filename2 . '&checksess=' . NV_CHECK_SESSION . '" title="' . $lang_module['update_log_dump_file_down'] . '">' . $lang_module['update_file_backup_ok'] . '</a>');
+                    exit($lang_module['update_file_backup_error']);
                 }
+                // Ghi log
+                $NvUpdate->log($nv_update_config, $lang_module['update_log_dump_file'], true);
+
+                // Danh dau da sao luu
+                $nv_update_config['updatelog']['file_backuped'] = NV_CURRENTTIME;
+                $NvUpdate->set_data_log($nv_update_config['updatelog']);
+
+                exit('<a href="' . NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=4&downfile=' . $filename2 . '&checksess=' . NV_CHECK_SESSION . '" title="' . $lang_module['update_log_dump_file_down'] . '">' . $lang_module['update_file_backup_ok'] . '</a>');
             }
         }
 
@@ -1421,7 +1433,7 @@ if ($nv_update_config['step'] == 1) {
                 $log_message = $functitle . ($check_return['message'] ? (' - ' . $check_return['message']) : '');
                 $NvUpdate->log($nv_update_config, $log_message, $check_return['status']);
 
-                die(implode('|', $return));
+                exit(implode('|', $return));
             }
 
             $array['task'] = [];
@@ -1556,35 +1568,34 @@ if ($nv_update_config['step'] == 1) {
         // Tu dong nhan dien remove_path
         if ($nv_Request->isset_request('tetectftp', 'post')) {
             $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
-            $ftp_port = intval($nv_Request->get_title('ftp_port', 'post', '21', 1));
+            $ftp_port = (int) ($nv_Request->get_title('ftp_port', 'post', '21', 1));
             $ftp_user_name = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_name', 'post', '', 1));
             $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', '', 1));
 
             if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
-                die('ERROR|' . $lang_module['ftp_error_empty']);
+                exit('ERROR|' . $lang_module['ftp_error_empty']);
             }
 
             $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, ['timeout' => 10], $ftp_port);
 
             if (!empty($ftp->error)) {
                 $ftp->close();
-                die('ERROR|' . ( string )$ftp->error);
-            } else {
-                $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
+                exit('ERROR|' . (string) $ftp->error);
+            }
+            $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
 
-                $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
+            $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
-                if ($ftp_root === false) {
-                    $ftp->close();
-                    die('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : ( string )$ftp->error));
-                }
-
+            if ($ftp_root === false) {
                 $ftp->close();
-                die('OK|' . $ftp_root);
+                exit('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : (string) $ftp->error));
             }
 
             $ftp->close();
-            die('ERROR|' . $lang_module['ftp_error_detect_root']);
+            exit('OK|' . $ftp_root);
+
+            $ftp->close();
+            exit('ERROR|' . $lang_module['ftp_error_detect_root']);
         }
 
         // Danh sach cac file con lai
@@ -1615,10 +1626,9 @@ if ($nv_update_config['step'] == 1) {
                     $NvUpdate->set_data_log($nv_update_config['updatelog']);
                 }
 
-                die('OK');
-            } else {
-                die($check);
+                exit('OK');
             }
+            exit($check);
         }
 
         // Khong co file nao nua thi luu lai va chuyen buoc 3
@@ -1639,7 +1649,7 @@ if ($nv_update_config['step'] == 1) {
         }
 
         if (!$array['getcomplete']) {
-            $ftp_check_login = intval($global_config['ftp_check_login']);
+            $ftp_check_login = (int) ($global_config['ftp_check_login']);
             $show_ftp_error = false;
             // Luu thong tin cau hinh FTP
             if ($nv_Request->isset_request('modftp', 'post')) {
@@ -1672,7 +1682,7 @@ if ($nv_update_config['step'] == 1) {
                     // Dang nhap FTP
 
                     $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-                    $ftp_port = intval($global_config['ftp_port']);
+                    $ftp_port = (int) ($global_config['ftp_port']);
                     $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
                     $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
                     $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
@@ -1788,8 +1798,8 @@ if ($nv_update_config['step'] == 1) {
             }
 
             $array['current_version'] = $global_config['version'];
-            $array['newVersionCode'] = ( string )$version->version;
-            $array['newVersion'] = $array['newVersionCode'] . ' - ' . ( string )$version->name;
+            $array['newVersionCode'] = (string) $version->version;
+            $array['newVersion'] = $array['newVersionCode'] . ' - ' . (string) $version->name;
 
             $array['checkversion'] = false;
             if (nv_version_compare($global_config['version'], $array['newVersionCode']) < 0) {
@@ -1810,21 +1820,21 @@ if ($nv_update_config['step'] == 1) {
             $i = 0;
             foreach ($XML_exts as $extname => $values) {
                 $exts[$i] = [
-                    'id' => ( int ) $values->id,
-                    'type' => ( string ) $values->type,
-                    'name' => ( string ) $values->name,
-                    'version' => ( string ) $values->version,
-                    'date' => ( string ) $values->date,
-                    'new_version' => ( string ) $values->new_version,
-                    'new_date' => ( string ) $values->new_date,
-                    'author' => ( string ) $values->author,
-                    'license' => ( string ) $values->license,
-                    'mode' => ( string ) $values->mode,
-                    'message' => ( string ) $values->message,
-                    'link' => ( string ) $values->link,
-                    'support' => ( string ) $values->support,
+                    'id' => (int) $values->id,
+                    'type' => (string) $values->type,
+                    'name' => (string) $values->name,
+                    'version' => (string) $values->version,
+                    'date' => (string) $values->date,
+                    'new_version' => (string) $values->new_version,
+                    'new_date' => (string) $values->new_date,
+                    'author' => (string) $values->author,
+                    'license' => (string) $values->license,
+                    'mode' => (string) $values->mode,
+                    'message' => (string) $values->message,
+                    'link' => (string) $values->link,
+                    'support' => (string) $values->support,
                     'updateable' => [],
-                    'origin' => (( string ) $values->origin) == 'true' ? true : false,
+                    'origin' => ((string) $values->origin) == 'true' ? true : false,
                 ];
 
                 // Xu ly update
@@ -1833,14 +1843,14 @@ if ($nv_update_config['step'] == 1) {
                 if (!empty($updateables)) {
                     foreach ($updateables as $updateable) {
                         $exts[$i]['updateable'][] = [
-                            'fid' => ( string ) $updateable->upd_fid,
-                            'old' => explode(',', ( string ) $updateable->upd_old),
-                            'new' => ( string ) $updateable->upd_new,
+                            'fid' => (string) $updateable->upd_fid,
+                            'old' => explode(',', (string) $updateable->upd_old),
+                            'new' => (string) $updateable->upd_new,
                         ];
                     }
                 }
 
-                $i++;
+                ++$i;
                 unset($updateables, $updateable);
             }
 
@@ -1856,25 +1866,25 @@ if ($nv_update_config['step'] == 1) {
 
             $onlineModules = [];
             foreach ($XML_exts as $extname => $values) {
-                $exts_type = trim((string)$values->type);
-                $exts_name = trim((string)$values->name);
+                $exts_type = trim((string) $values->type);
+                $exts_name = trim((string) $values->name);
                 if ($exts_type == 'module') {
                     $onlineModules[$exts_name] = [
-                        'id' => (int)$values->id,
-                        'type' => (string)$values->type,
-                        'name' => (string)$values->name,
-                        'version' => (string)$values->version,
-                        'date' => (string)$values->date,
-                        'new_version' => (string)$values->new_version,
-                        'new_date' => (string)$values->new_date,
-                        'author' => (string)$values->author,
-                        'license' => (string)$values->license,
-                        'mode' => (string)$values->mode,
-                        'message' => (string)$values->message,
-                        'link' => (string)$values->link,
-                        'support' => (string)$values->support,
+                        'id' => (int) $values->id,
+                        'type' => (string) $values->type,
+                        'name' => (string) $values->name,
+                        'version' => (string) $values->version,
+                        'date' => (string) $values->date,
+                        'new_version' => (string) $values->new_version,
+                        'new_date' => (string) $values->new_date,
+                        'author' => (string) $values->author,
+                        'license' => (string) $values->license,
+                        'mode' => (string) $values->mode,
+                        'message' => (string) $values->message,
+                        'link' => (string) $values->link,
+                        'support' => (string) $values->support,
                         'updateable' => [],
-                        'origin' => ((string)$values->origin) == 'true' ? true : false,
+                        'origin' => ((string) $values->origin) == 'true' ? true : false,
                     ];
 
                     $onlineModules[$exts_name]['pubtime'] = strtotime($onlineModules[$exts_name]['date']);
@@ -1885,9 +1895,9 @@ if ($nv_update_config['step'] == 1) {
                     if (!empty($updateables)) {
                         foreach ($updateables as $updateable) {
                             $onlineModules[$exts_name]['updateable'][] = [
-                                'fid' => (string)$updateable->upd_fid,
-                                'old' => explode(',', (string)$updateable->upd_old),
-                                'new' => (string)$updateable->upd_new,
+                                'fid' => (string) $updateable->upd_fid,
+                                'old' => explode(',', (string) $updateable->upd_old),
+                                'new' => (string) $updateable->upd_new,
                             ];
                         }
                     }
@@ -1898,7 +1908,7 @@ if ($nv_update_config['step'] == 1) {
 
             $NvUpdate->module_com_info($onlineModules);
         } else {
-            die('&nbsp;');
+            exit('&nbsp;');
         }
     } else {
         // Gọi thêm các công việc khác sau khi update xong.

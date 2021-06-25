@@ -1,21 +1,28 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
 
 use PDO;
-use PDOStatement;
 use PDOException;
+use PDOStatement;
 
 /**
- * extends for PDO
+ * NukeViet\Core\Database
+ *
+ * @package NukeViet\Core
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
  */
 class Database extends PDO
 {
@@ -40,20 +47,22 @@ class Database extends PDO
     private $allowedDebug = false;
 
     /**
+     * __construct()
+     *
      * @param array $config
      */
     public function __construct($config)
     {
-        $_alldbtype = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
+        $_alldbtype = ['mysql', 'pgsql', 'mssql', 'sybase', 'dblib'];
 
-        $driver_options = array(
+        $driver_options = [
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_PERSISTENT => $config['persistent'],
             PDO::ATTR_CASE => PDO::CASE_LOWER,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        );
+        ];
 
-        if (in_array($config['dbtype'], $_alldbtype)) {
+        if (in_array($config['dbtype'], $_alldbtype, true)) {
             $dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=' . $config['charset'];
             if (!empty($config['dbport'])) {
                 $dsn .= ';port=' . $config['dbport'];
@@ -87,21 +96,22 @@ class Database extends PDO
     }
 
     /**
+     * insert_id()
      * Insert a row into the database return primary key column
      *
-     * @param string $query
-     * @param string $column The name of the primary key column
-     * @param array $data
-     * @return integer|false
+     * @param string $_sql
+     * @param string $column
+     * @param array  $data
+     * @return mixed
      */
-    public function insert_id($_sql, $column = '', $data = array())
+    public function insert_id($_sql, $column = '', $data = [])
     {
         try {
             if ($this->dbtype == 'oci') {
                 $_sql .= ' RETURNING ' . $column . ' INTO :primary_key';
             }
             $stmt = $this->prepare($_sql);
-            if(!empty($data)) {
+            if (!empty($data)) {
                 foreach (array_keys($data) as $key) {
                     $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($data[$key]));
                 }
@@ -113,24 +123,26 @@ class Database extends PDO
 
             if ($this->dbtype == 'oci') {
                 return $primary_key;
-            } else {
-                return $this->lastInsertId();
             }
+
+            return $this->lastInsertId();
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
+
         return false;
     }
 
     /**
+     * affected_rows_count()
      * Database::affected_rows_count()
      * Get the number of affected rows by the last INSERT, UPDATE, REPLACE or DELETE query
      *
-     * @param mixed $_sql
-     * @param mixed $data
-     * @return
+     * @param string $_sql
+     * @param array  $data
+     * @return false|int
      */
-    public function affected_rows_count($_sql, $data = array())
+    public function affected_rows_count($_sql, $data = [])
     {
         try {
             $stmt = $this->prepare($_sql);
@@ -140,14 +152,17 @@ class Database extends PDO
                 }
             }
             $stmt->execute();
+
             return $stmt->rowCount();
         } catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
+
         return false;
     }
 
     /**
+     * columns_array()
      *
      * @param string $table
      * @return array
@@ -155,7 +170,7 @@ class Database extends PDO
     public function columns_array($table)
     {
         //Array: field 	type 	null 	key 	default 	extra
-        $return = array();
+        $return = [];
         if ($this->dbtype == 'mysql') {
             $sql = 'SHOW COLUMNS FROM ' . $table;
             $result = $this->query($sql);
@@ -167,31 +182,34 @@ class Database extends PDO
             $result = $this->query($sql);
             while ($row = $result->fetch()) {
                 if ($row['char_length']) {
-                    $row['data_type'] .= '(' .$row['char_length']. ')';
+                    $row['data_type'] .= '(' . $row['char_length'] . ')';
                 }
                 $column_name = strtolower($row['column_name']);
 
-                $_tmp = array();
+                $_tmp = [];
                 $_tmp['field'] = $column_name;
                 $_tmp['type'] = $row['data_type'];
-                $_tmp['null'] = ($row['nullable'] =='N') ? 'NO' : 'YES';
+                $_tmp['null'] = ($row['nullable'] == 'N') ? 'NO' : 'YES';
                 $_tmp['key'] = '';
                 $_tmp['default'] = $row['data_default'];
                 $_tmp['extra'] = '';
                 $return[$column_name] = $_tmp;
             }
         }
+
         return $return;
     }
 
     /**
-     * @param string $table
-     * @param string $column
-     * @param string $type
-     * @param integer $length
-     * @param boolean $null
-     * @param string $default
-     * @return
+     * columns_add()
+     *
+     * @param string     $table
+     * @param string     $column
+     * @param string     $type
+     * @param mixed|null $length
+     * @param bool       $null
+     * @param mixed|null $default
+     * @return false|PDOStatement
      */
     public function columns_add($table, $column, $type, $length = null, $null = true, $default = null)
     {
@@ -234,7 +252,7 @@ class Database extends PDO
                     $sql .= $default;
                 }
             }
-            if (! $null) {
+            if (!$null) {
                 $sql .= ' NOT NULL';
             }
         } elseif ($this->dbtype == 'oci') {
@@ -271,7 +289,7 @@ class Database extends PDO
                     $sql .= $default;
                 }
             }
-            if (! $null) {
+            if (!$null) {
                 $sql .= ' NOT NULL ENABLE';
             }
             $sql .= ')';
@@ -287,25 +305,27 @@ class Database extends PDO
     }
 
     /**
+     * dblikeescape()
      *
-     * @param mixed $value
-     * @return
+     * @param string $value
+     * @return array|string
      */
     public function dblikeescape($value)
     {
         if (is_array($value)) {
-            $value = array_map(array( $this, __function__ ), $value);
+            $value = array_map([$this, __FUNCTION__], $value);
         } else {
             $value = trim($this->quote($value), "'");
             $value = addcslashes($value, '_%');
         }
+
         return $value;
     }
 
     /**
-     * reset query.
+     * sqlreset()
      *
-     * @return Database $this
+     * @return $this
      */
     public function sqlreset()
     {
@@ -323,10 +343,10 @@ class Database extends PDO
     }
 
     /**
-     * select for the query.
+     * select()
      *
      * @param string $select
-     * @return Database $this
+     * @return $this
      */
     public function select($select = '')
     {
@@ -336,10 +356,10 @@ class Database extends PDO
     }
 
     /**
-     * from for the query.
+     * from()
      *
      * @param string $from
-     * @return Database $this
+     * @return $this
      */
     public function from($from = '')
     {
@@ -349,10 +369,10 @@ class Database extends PDO
     }
 
     /**
-     * join for the query.
+     * join()
      *
-     * @param string join_table_on
-     * @return Database $this
+     * @param string $join_table_on
+     * @return $this
      */
     public function join($join_table_on)
     {
@@ -362,10 +382,10 @@ class Database extends PDO
     }
 
     /**
-     * where for the query.
+     * where()
      *
      * @param string $where
-     * @return Database $this
+     * @return $this
      */
     public function where($where = '')
     {
@@ -375,10 +395,10 @@ class Database extends PDO
     }
 
     /**
-     * group for the query.
+     * group()
      *
      * @param string $group
-     * @return Database $this
+     * @return $this
      */
     public function group($group = '')
     {
@@ -388,10 +408,10 @@ class Database extends PDO
     }
 
     /**
-     * having for the query.
+     * having()
      *
      * @param string $having
-     * @return Database $this
+     * @return $this
      */
     public function having($having = '')
     {
@@ -401,10 +421,10 @@ class Database extends PDO
     }
 
     /**
-     * order for the query.
+     * order()
      *
      * @param string $order
-     * @return Database $this
+     * @return $this
      */
     public function order($order = '')
     {
@@ -414,31 +434,36 @@ class Database extends PDO
     }
 
     /**
-     * sets the limit for the query.
+     * limit()
      *
      * @param int $limit
-     * @return Database $this
+     * @return $this
      */
     public function limit($limit)
     {
-        $this->_limit = (int)$limit;
+        $this->_limit = (int) $limit;
 
         return $this;
     }
 
     /**
-     * sets the offset for the query.
+     * offset()
      *
      * @param int $offset
-     * @return Database $this
+     * @return $this
      */
     public function offset($offset)
     {
-        $this->_offset = (int)$offset;
+        $this->_offset = (int) $offset;
 
         return $this;
     }
 
+    /**
+     * sql()
+     *
+     * @return string
+     */
     public function sql()
     {
         $return = 'SELECT ' . $this->_select;
@@ -484,36 +509,46 @@ class Database extends PDO
     }
 
     /**
-     * {@inheritDoc}
-     * @see PDO::query()
+     * query()
+     *
+     * @param string   $statement
+     * @param int|null $fetchMode
+     * @param array    $fetchModeArgs
+     * @return false|PDOStatement
      */
-    public function query($statement, $fetchMode = NULL, ...$fetchModeArgs)
+    public function query($statement, $fetchMode = null, ...$fetchModeArgs)
     {
         if ($this->debug) {
             $this->sqls[] = $statement;
         }
         if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
             return parent::query($statement, $fetchMode, ...$fetchModeArgs);
-        } else {
-            return parent::query($statement);
         }
+
+        return parent::query($statement);
     }
 
     /**
-     * {@inheritDoc}
-     * @see PDO::exec()
+     * exec()
+     *
+     * @param string $statement
+     * @return false|int
      */
     public function exec($statement)
     {
         if ($this->debug) {
             $this->sqls[] = $statement;
         }
+
         return parent::exec($statement);
     }
 
     /**
-     * {@inheritDoc}
-     * @see PDO::prepare()
+     * prepare()
+     *
+     * @param string $statement
+     * @param array  $driver_options
+     * @return false|PDOStatement
      */
     public function prepare($statement, $driver_options = [])
     {
@@ -525,7 +560,7 @@ class Database extends PDO
     }
 
     /**
-     *
+     * enableDebug()
      */
     public function enableDebug()
     {
@@ -537,7 +572,7 @@ class Database extends PDO
     }
 
     /**
-     *
+     * disableDebug()
      */
     public function disableDebug()
     {
@@ -546,6 +581,8 @@ class Database extends PDO
     }
 
     /**
+     * debugListSQL()
+     *
      * @return array
      */
     public function debugListSQL()
@@ -554,7 +591,9 @@ class Database extends PDO
     }
 
     /**
-     * @return integer
+     * getNumQueries()
+     *
+     * @return int
      */
     public function getNumQueries()
     {
@@ -562,6 +601,8 @@ class Database extends PDO
     }
 
     /**
+     * addDebugListSql()
+     *
      * @param string $sql
      */
     public function addDebugListSql($sql)
@@ -570,9 +611,12 @@ class Database extends PDO
     }
 
     /**
+     * appendLastDebugSql()
+     *
      * @param string $sql
      */
-    public function appendLastDebugSql($sql) {
+    public function appendLastDebugSql($sql)
+    {
         end($this->sqls);
         $key = key($this->sqls);
         if (isset($this->sqls[$key])) {
@@ -583,7 +627,9 @@ class Database extends PDO
     }
 
     /**
-     * @return boolean
+     * isDebug()
+     *
+     * @return false
      */
     public function isDebug()
     {
@@ -592,14 +638,22 @@ class Database extends PDO
 }
 
 /**
- * @author VINADES.,JSC
+ * NukeViet\Core\NukeVietPDOStatement
  *
+ * @package NukeViet\Core
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
  */
-class NukeVietPDOStatement extends PDOStatement {
+class NukeVietPDOStatement extends PDOStatement
+{
     protected $pdo;
 
     /**
-     * @param PDO $pdo
+     * __construct()
+     *
+     * @param mixed $pdo
      */
     protected function __construct($pdo)
     {
@@ -607,18 +661,22 @@ class NukeVietPDOStatement extends PDOStatement {
     }
 
     /**
-     * {@inheritDoc}
-     * @see PDOStatement::execute()
+     * execute()
+     *
+     * @param array|null $args
+     * @return bool
+     * @throws PDOException
      */
     public function execute($args = null)
     {
         $result = parent::execute($args);
-        if ($this->pdo->isDebug())  {
+        if ($this->pdo->isDebug()) {
             ob_start();
             $this->debugDumpParams();
             $this->pdo->addDebugListSql(ob_get_contents());
             ob_end_clean();
         }
+
         return $result;
     }
 }

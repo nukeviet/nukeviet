@@ -1,24 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 0:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * viewcat_grid_new()
  *
- * @param mixed $array_catpage
- * @param mixed $catid
- * @param mixed $generate_page
- * @return
+ * @param array  $array_catpage
+ * @param int    $catid
+ * @param string $generate_page
+ * @return string
  */
 function viewcat_grid_new($array_catpage, $catid, $generate_page)
 {
@@ -92,17 +93,18 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * viewcat_list_new()
  *
- * @param mixed $array_catpage
- * @param mixed $catid
- * @param mixed $page
- * @param mixed $generate_page
- * @return
+ * @param array  $array_catpage
+ * @param int    $catid
+ * @param int    $page
+ * @param string $generate_page
+ * @return string
  */
 function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 {
@@ -153,16 +155,17 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * viewcat_page_new()
  *
- * @param mixed $array_catpage
- * @param mixed $array_cat_other
- * @param mixed $generate_page
- * @return
+ * @param array  $array_catpage
+ * @param array  $array_cat_other
+ * @param string $generate_page
+ * @return string
  */
 function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
@@ -264,15 +267,16 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * viewcat_top()
  *
- * @param mixed $array_catcontent
- * @param mixed $generate_page
- * @return
+ * @param array  $array_catcontent
+ * @param string $generate_page
+ * @return string
  */
 function viewcat_top($array_catcontent, $generate_page)
 {
@@ -329,15 +333,16 @@ function viewcat_top($array_catcontent, $generate_page)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * viewsubcat_main()
  *
- * @param mixed $viewcat
- * @param mixed $array_cat
- * @return
+ * @param string $viewcat
+ * @param array  $array_cat
+ * @return string
  */
 function viewsubcat_main($viewcat, $array_cat)
 {
@@ -351,7 +356,7 @@ function viewsubcat_main($viewcat, $array_cat)
         if (isset($array_cat[$key]['content'])) {
             $array_row_i['rss'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_row_i['alias'];
             $xtpl->assign('CAT', $array_row_i);
-            $catid = intval($array_row_i['catid']);
+            $catid = (int) ($array_row_i['catid']);
 
             if ($array_row_i['subcatid'] != '') {
                 $_arr_subcat = explode(',', $array_row_i['subcatid']);
@@ -415,15 +420,16 @@ function viewsubcat_main($viewcat, $array_cat)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * viewcat_two_column()
  *
- * @param mixed $array_content
- * @param mixed $array_catpage
- * @return
+ * @param array $array_content
+ * @param array $array_catpage
+ * @return string
  */
 function viewcat_two_column($array_content, $array_catpage)
 {
@@ -528,7 +534,7 @@ function viewcat_two_column($array_content, $array_catpage)
             $array_catpage_i['ad_block_cat'] = isset($array_catpage_i['ad_block_cat']) ? explode(',', $array_catpage_i['ad_block_cat']) : [];
             if (($a + 1) % 2) {
                 $_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_catpage_i['catid'] . ']';
-                if (in_array('1', $array_catpage_i['ad_block_cat'])) {
+                if (in_array('1', $array_catpage_i['ad_block_cat'], true)) {
                     if (!nv_check_block_topcat_news($array_catpage_i['catid'])) {
                         nv_add_block_topcat_news($array_catpage_i['catid']);
                     }
@@ -544,7 +550,7 @@ function viewcat_two_column($array_content, $array_catpage)
             // Block Bottom
             if ($a % 2) {
                 $_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_catpage_i['catid'] . ']';
-                if (in_array('2', $array_catpage_i['ad_block_cat'])) {
+                if (in_array('2', $array_catpage_i['ad_block_cat'], true)) {
                     if (!nv_check_block_block_botcat_news($array_catpage_i['catid'])) {
                         nv_add_block_botcat_news($array_catpage_i['catid']);
                     }
@@ -564,19 +570,20 @@ function viewcat_two_column($array_content, $array_catpage)
 
     // Theo chu de
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * detail_theme()
  *
- * @param mixed $news_contents
- * @param mixed $array_keyword
- * @param mixed $related_new_array
- * @param mixed $related_array
- * @param mixed $topic_array
- * @param mixed $content_comment
- * @return
+ * @param array  $news_contents
+ * @param array  $array_keyword
+ * @param array  $related_new_array
+ * @param array  $related_array
+ * @param array  $topic_array
+ * @param string $content_comment
+ * @return string
  */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
@@ -784,13 +791,14 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * no_permission()
  *
- * @return
+ * @return string
  */
 function no_permission()
 {
@@ -800,19 +808,20 @@ function no_permission()
 
     $xtpl->assign('NO_PERMISSION', $lang_module['no_permission']);
     $xtpl->parse('no_permission');
+
     return $xtpl->text('no_permission');
 }
 
 /**
  * topic_theme()
  *
- * @param mixed $topic_array
- * @param mixed $topic_other_array
- * @param mixed $generate_page
- * @param mixed $page_title
- * @param mixed $description
- * @param mixed $topic_image
- * @return
+ * @param array  $topic_array
+ * @param array  $topic_other_array
+ * @param string $generate_page
+ * @param string $page_title
+ * @param string $description
+ * @param string $topic_image
+ * @return string
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
@@ -870,17 +879,18 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * author_theme()
  *
- * @param mixed $author_info
- * @param mixed $topic_array
- * @param mixed $topic_other_array
- * @param mixed $generate_page
- * @return
+ * @param array  $author_info
+ * @param array  $topic_array
+ * @param array  $topic_other_array
+ * @param string $generate_page
+ * @return string
  */
 function author_theme($author_info, $topic_array, $topic_other_array, $generate_page)
 {
@@ -942,14 +952,15 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * sendmail_themme()
  *
- * @param mixed $sendmail
- * @return
+ * @param string $sendmail
+ * @return string
  */
 function sendmail_themme($sendmail)
 {
@@ -987,14 +998,15 @@ function sendmail_themme($sendmail)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * news_print()
  *
- * @param mixed $result
- * @return
+ * @param array $result
+ * @return string
  */
 function news_print($result)
 {
@@ -1040,18 +1052,18 @@ function news_print($result)
         $xtpl->parse('main.no_public');
     }
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
-// Search
 /**
  * search_theme()
  *
- * @param mixed $key
- * @param mixed $check_num
- * @param mixed $date_array
- * @param mixed $array_cat_search
- * @return
+ * @param string $key
+ * @param int    $check_num
+ * @param array  $date_array
+ * @param array  $array_cat_search
+ * @return string
  */
 function search_theme($key, $check_num, $date_array, $array_cat_search)
 {
@@ -1084,19 +1096,21 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * search_result_theme()
  *
- * @param mixed $key
- * @param mixed $numRecord
- * @param mixed $per_pages
- * @param mixed $page
- * @param mixed $array_content
- * @param mixed $catid
- * @return
+ * @param string $key
+ * @param int    $numRecord
+ * @param int    $per_pages
+ * @param int    $page
+ * @param array  $array_content
+ * @param int    $catid
+ * @param array  $internal_authors
+ * @return string
  */
 function search_result_theme($key, $numRecord, $per_pages, $page, $array_content, $catid, $internal_authors)
 {
@@ -1167,14 +1181,15 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
     $xtpl->assign('MY_DOMAIN', NV_MY_DOMAIN);
 
     $xtpl->parse('results');
+
     return $xtpl->text('results');
 }
 
 /**
  * nv_theme_viewpdf()
  *
- * @param mixed $file_url
- * @return
+ * @param string $file_url
+ * @return string
  */
 function nv_theme_viewpdf($file_url)
 {
@@ -1185,5 +1200,6 @@ function nv_theme_viewpdf($file_url)
     $xtpl->assign('PDF_JS_DIR', NV_STATIC_URL . NV_ASSETS_DIR . '/js/pdf.js/');
     $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

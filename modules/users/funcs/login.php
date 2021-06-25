@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
@@ -32,7 +33,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 }
 
 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-$gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk)) ? 1 : 0;
+$gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 : 0;
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 /**
@@ -152,7 +153,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     $server = $nv_Request->get_string('server', 'get', '');
     $result = $nv_Request->isset_request('result', 'get');
 
-    if (empty($server) or !in_array($server, $global_config['openid_servers']) or !$result) {
+    if (empty($server) or !in_array($server, $global_config['openid_servers'], true) or !$result) {
         nv_redirect_location(NV_BASE_SITEURL);
     }
 
@@ -261,7 +262,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             ]);
         }
 
-        /**
+        /*
          * Nếu tài khoản trùng email này có mật khẩu và chức năng tự động gán Oauh bị tắt
          * thì yêu cầu nhập mật khẩu xác nhận
          */
@@ -337,11 +338,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         }
     }
 
-    /**
+    /*
      * Neu chua co hoan toan trong CSDL
      */
 
-    /**
+    /*
      * Neu gan OpenID nay vao 1 tai khoan da co
      */
     if ($nv_Request->isset_request('nv_login', 'post')) {
@@ -467,7 +468,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         ]);
     }
 
-    /**
+    /*
      * Neu dang ky moi va cho dang ky khong can kich hoat hoac kich hoat qua email (allowuserreg = 1, 2)
      * bo qua phuong an kiem tra email
      * Vi ban than xac thuc cua OpenID da du dieu kien
@@ -496,7 +497,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             :gender,
             '', 0,
             " . NV_CURRENTTIME . ",
-            '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . ',
+            '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . (int) ($global_config['idsite']) . ',
             -1, ' . $db->quote('OAUTH:' . $reg_attribs['server']) . '
         )';
 
@@ -545,7 +546,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
 
         // Luu vao bang OpenID
-        $user_id = intval($row['userid']);
+        $user_id = (int) ($row['userid']);
         $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid , :email)');
         $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
@@ -584,7 +585,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         }
     }
 
-    /**
+    /*
      * Neu dang ky moi va phai qua kiem duyet cua admin (allowuserreg = 3)
      */
     if ($nv_Request->isset_request('nv_reg', 'post') and $global_config['allowuserreg'] == 3) {
@@ -812,10 +813,10 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                 'mess' => $error1
             ]);
         } elseif (empty($row['active2step'])) {
-            $_2step_require = in_array($global_config['two_step_verification'], [
+            $_2step_require = in_array((int) $global_config['two_step_verification'], [
                 2,
                 3
-            ]);
+            ], true);
             if (!$_2step_require) {
                 $_2step_require = nv_user_groups($row['in_groups'], true);
                 $_2step_require = $_2step_require[1];
@@ -840,7 +841,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
 $nv_Request->unset_request('users_dismiss_captcha', 'session');
 
 if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
-    die(nv_url_rewrite(user_login(true), true));
+    exit(nv_url_rewrite(user_login(true), true));
 }
 
 $page_title = $lang_module['login'];

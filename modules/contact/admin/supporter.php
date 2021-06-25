@@ -1,14 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Jan 2017 01:38:09 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // change status
@@ -20,7 +22,7 @@ if ($nv_Request->isset_request('change_status', 'post, get')) {
     $row = $db->query($query)->fetch();
     if (isset($row['act'])) {
         $act = ($row['act']) ? 0 : 1;
-        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET act=' . intval($act) . ' WHERE id=' . $id;
+        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET act=' . (int) $act . ' WHERE id=' . $id;
         $db->query($query);
         $content = 'OK_' . $id;
     }
@@ -74,8 +76,8 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
             $sql = 'SELECT id, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE weight >' . $weight . ' AND departmentid=' . $departmentid;
             $result = $db->query($sql);
             while (list($id, $weight) = $result->fetch(3)) {
-                $weight--;
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . intval($id)) . ' AND departmentid=' . $departmentid;
+                --$weight;
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . (int) $id) . ' AND departmentid=' . $departmentid;
             }
         }
         $nv_Cache->delMod($module_name);
