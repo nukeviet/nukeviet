@@ -411,11 +411,9 @@ ol {
 
 .bg-gradient {
     background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjgiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjMiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjZ3JhZC11Y2dnLWdlbmVyYXRlZCkiIC8+Cjwvc3ZnPg==);
-    background-image: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(255, 255, 255, 0.3) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 255, 255, 0.3) 100%);
 }
 
 .box-shadow {
@@ -833,13 +831,11 @@ a.btn {
 }
 
 .section-header-bar {
-    background-image: linear-gradient(
-        to bottom,
-        #428bca 0,
-        #245682 100%,
-        rgba(255, 255, 255, 1) 100%,
-        rgba(255, 255, 255, 1) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            #428bca 0,
+            #245682 100%,
+            rgba(255, 255, 255, 1) 100%,
+            rgba(255, 255, 255, 1) 100%);
 }
 
 /* Header */
@@ -989,12 +985,9 @@ a.btn {
 .subs-breadcrumbs {
     margin: 0;
     padding: 0;
-    background-color: #fff
-        linear-gradient(
-            to bottom,
+    background-color: #fff linear-gradient(to bottom,
             rgba(0, 0, 0, 0) 0px,
-            rgba(0, 0, 0, 0.1) 100%
-        );
+            rgba(0, 0, 0, 0.1) 100%);
     background-repeat: repeat;
     background-attachment: scroll;
     background-position: 0 0;
@@ -1083,11 +1076,9 @@ a.btn {
 
 .second-nav .bg {
     background: #cccccc;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.05) 0%,
-        rgba(0, 0, 0, 0) 100%
-    ) !important;
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.05) 0%,
+            rgba(0, 0, 0, 0) 100%) !important;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -1236,11 +1227,9 @@ a.btn {
 #menusite .navbar .navbar-nav .open .dropdown-menu > .active > a,
 #menusite .navbar .navbar-nav .open .dropdown-menu > .active > a:hover,
 #menusite .navbar .navbar-nav .open .dropdown-menu > .active > a:focus {
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.1) 100%
-    ) !important;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.1) 100%) !important;
     color: #333;
 }
 
@@ -1632,11 +1621,9 @@ a.btn {
     border-bottom-style: solid;
     border-bottom-color: #245682;
     background-color: #245682;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.1) 0,
-        rgba(0, 0, 0, 0) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.1) 0,
+            rgba(0, 0, 0, 0) 100%);
     padding: 20px 0;
     font-size: 13px;
 }
@@ -2116,11 +2103,9 @@ input[type='radio']:checked:before {
 }
 
 .panel-heading {
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.05) 0%,
-        rgba(0, 0, 0, 0) 100%
-    ) !important;
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.05) 0%,
+            rgba(0, 0, 0, 0) 100%) !important;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: rgba(0, 0, 0, 0);
@@ -2217,6 +2202,7 @@ button.close {
         margin-left: 10px;
         margin-right: 10px;
     }
+
     #sitemodal .modal-content {
         display: block;
     }
@@ -2373,11 +2359,9 @@ button.close {
 .module-menu a:focus {
     color: #333;
     text-decoration: none;
-    background-image: linear-gradient(
-        to right,
-        #42cac5 4px,
-        rgba(0, 0, 0, 0) 4px
-    );
+    background-image: linear-gradient(to right,
+            #42cac5 4px,
+            rgba(0, 0, 0, 0) 4px);
 }
 
 .calendar-icon {

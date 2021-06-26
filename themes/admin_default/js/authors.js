@@ -27,7 +27,7 @@ function nv_chang_weight(mid) {
     var nv_timer = nv_settimeout_disable('id_weight_' + mid, 5000);
     var new_vid = $("#id_weight_" + mid).val();
     var checkss = $("input[name='checkss']").val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changeweight=' + mid + '&new_vid=' + new_vid + '&checkss=' + checkss, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changeweight=' + mid + '&new_vid=' + new_vid + '&checkss=' + checkss, function(res) {
         $("#main_module").html(res);
     });
     return;
@@ -37,7 +37,7 @@ function nv_chang_act(mid, act) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable('change_act_' + act + '_' + mid, 5000);
         var checkss = $("input[name='checkss']").val();
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changact=' + act + '&mid=' + mid + '&checkss=' + checkss, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&nocache=' + new Date().getTime(), 'changact=' + act + '&mid=' + mid + '&checkss=' + checkss, function(res) {
             nv_set_disable_false('change_act_' + act + '_' + mid);
         });
     } else {
@@ -50,7 +50,7 @@ function nv_chang_act(mid, act) {
 // Xóa hết Oauth của quản trị
 function nv_del_oauthall(userid, tokend) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'delall=' + tokend, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'delall=' + tokend, function(res) {
             if (res == 'OK') {
                 location.reload();
             } else {
@@ -63,7 +63,7 @@ function nv_del_oauthall(userid, tokend) {
 // Xóa một Oauth của quản trị
 function nv_del_oauthone(id, userid, tokend) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'del=' + tokend + '&id=' + id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=2step&admin_id=' + userid + '&nocache=' + new Date().getTime(), 'del=' + tokend + '&id=' + id, function(res) {
             if (res == 'OK') {
                 location.reload();
             } else {
@@ -75,7 +75,7 @@ function nv_del_oauthone(id, userid, tokend) {
 
 function apiRoleChanged() {
     var totalApis = 0;
-    $('[data-toggle="apicat"]').each(function () {
+    $('[data-toggle="apicat"]').each(function() {
         var $this = $(this);
         var ctnItem = $($this.attr('href'));
         var total = ctnItem.find('[data-toggle="apiroleit"]:checked').length;
@@ -103,20 +103,20 @@ function apiRoleChanged() {
     }
 }
 
-$(document).ready(function () {
-    $("#checkall").click(function () {
+$(document).ready(function() {
+    $("#checkall").click(function() {
         $("input[name='modules[]']:checkbox").prop("checked", true);
     });
 
-    $("#uncheckall").click(function () {
+    $("#uncheckall").click(function() {
         $("input[name='modules[]']:checkbox").prop("checked", false);
     });
 
-    $('[data-toggle="apiroleit"]').change(function () {
+    $('[data-toggle="apiroleit"]').change(function() {
         apiRoleChanged();
     });
 
-    $('[data-toggle="apicat"]').click(function (e) {
+    $('[data-toggle="apicat"]').click(function(e) {
         e.preventDefault();
         $('[data-toggle="apicat"]').removeClass('active');
         $(this).addClass('active');
@@ -125,22 +125,22 @@ $(document).ready(function () {
         $('[name="current_cat"]').val($(this).data('cat'));
     });
 
-    $('[data-toggle="apicheck"]').click(function (e) {
+    $('[data-toggle="apicheck"]').click(function(e) {
         e.preventDefault();
         $($(this).attr('href')).find('[type="checkbox"]').prop('checked', true);
         apiRoleChanged();
     });
 
-    $('[data-toggle="apiuncheck"]').click(function (e) {
+    $('[data-toggle="apiuncheck"]').click(function(e) {
         e.preventDefault();
         $($(this).attr('href')).find('[type="checkbox"]').prop('checked', false);
         apiRoleChanged();
     });
 
-    $('[data-toggle="apiroledel"]').click(function (e) {
+    $('[data-toggle="apiroledel"]').click(function(e) {
         e.preventDefault();
         if (confirm(nv_is_del_confirm[0])) {
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=api-roles&nocache=' + new Date().getTime(), 'del=1&role_id=' + $(this).data('id'), function (res) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=api-roles&nocache=' + new Date().getTime(), 'del=1&role_id=' + $(this).data('id'), function(res) {
                 if (res == 'OK') {
                     location.reload();
                 } else {
@@ -150,10 +150,10 @@ $(document).ready(function () {
         }
     });
 
-    $('[data-toggle="apicerdel"]').click(function (e) {
+    $('[data-toggle="apicerdel"]').click(function(e) {
         e.preventDefault();
         if (confirm(nv_is_del_confirm[0])) {
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=api-credentials&nocache=' + new Date().getTime(), 'del=1&credential_ident=' + $(this).data('id'), function (res) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=api-credentials&nocache=' + new Date().getTime(), 'del=1&credential_ident=' + $(this).data('id'), function(res) {
                 if (res == 'OK') {
                     location.reload();
                 } else {

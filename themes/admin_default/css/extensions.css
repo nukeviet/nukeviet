@@ -73,17 +73,20 @@
     direction: rtl;
     font-size: 22px;
 }
+
 .rating span.star {
     font-family: FontAwesome;
     font-weight: normal;
     font-style: normal;
     display: inline-block;
 }
+
 .rating span.star:before {
     content: '\f006';
     padding-right: 5px;
     color: #999999;
 }
+
 .rating span.star.active:before,
 .rating span.star.active ~ span.star:before {
     content: '\f005';
@@ -110,6 +113,7 @@
     width: 300px;
     margin-left: 10px;
 }
+
 .ext-detail img {
     margin-bottom: 10px !important;
     max-width: 90% !important;

@@ -355,10 +355,12 @@ h3.newh3 {
         padding: 4px;
         clear: both;
     }
+
     div.news_column ul.fixedwidth {
         width: 100%;
         clear: both;
     }
+
     div.news_column div.fixedwidth {
         float: left;
         width: 100%;
@@ -370,6 +372,7 @@ h3.newh3 {
     div.news_column ul.fixedwidth {
         width: 100%;
     }
+
     div.news_column div.fixedwidth {
         float: left;
         width: 100%;
@@ -380,6 +383,7 @@ h3.newh3 {
     div.news_column ul.related {
         margin-bottom: 0;
     }
+
     div.news_column ul.related li {
         padding: 0 4px 4px 0 !important;
     }
@@ -389,9 +393,11 @@ h3.newh3 {
     div.news_column ul.related {
         padding: 4px;
     }
+
     div.news_column ul.fixedwidth {
         width: 28%;
     }
+
     div.news_column div.fixedwidth {
         float: left;
         width: 68%;
@@ -402,9 +408,11 @@ h3.newh3 {
     div.news_column ul.related {
         padding: 4px;
     }
+
     div.news_column ul.fixedwidth {
         width: 28%;
     }
+
     div.news_column div.fixedwidth {
         float: left;
         width: 68%;
@@ -415,9 +423,11 @@ h3.newh3 {
     div.news_column ul.related {
         padding: 4px;
     }
+
     div.news_column ul.fixedwidth {
         width: 28%;
     }
+
     div.news_column div.fixedwidth {
         float: left;
         width: 68%;
@@ -428,9 +438,11 @@ h3.newh3 {
     div.news_column ul.related {
         padding: 4px;
     }
+
     div.news_column ul.fixedwidth {
         width: 100%;
     }
+
     div.news_column div.fixedwidth {
         float: left;
         width: 100%;

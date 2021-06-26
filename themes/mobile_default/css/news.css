@@ -20,6 +20,7 @@
 #topnews ul.lastest-news li {
     text-indent: 10px;
 }
+
 #topnews ul.lastest-news a {
     background: transparent url(../images/squared-blue.png) no-repeat 5px 9px;
     border-bottom: 1px dotted #bbdbf6;
@@ -28,9 +29,11 @@
     font-weight: normal;
     padding: 2px 0;
 }
+
 #topnews ul.lastest-news a:hover {
     background: #fff url(../images/squared-blue.png) no-repeat 5px 9px;
 }
+
 ul.other-news {
     padding-left: 0px;
     margin-left: 0px;
@@ -40,30 +43,38 @@ div.news_column .time {
     margin: 3px 0 10px 0;
     display: inline;
 }
+
 div.news_column h5 .list-inline > li {
     padding-left: 0;
 }
+
 div.news_column h5 .list-inline {
     margin-bottom: 3px;
 }
+
 div.news_column ul.list-inline li {
     font-size: 12px;
 }
+
 div.news_column .socialicon {
     margin: -8px 0 -8px 0;
 }
+
 div.news_column .imghome {
     margin: 0 10px 0 0;
 }
+
 #hometext h2 {
     font-weight: bold;
     line-height: 20px;
 }
+
 div.news_column .imgalt {
     display: block;
     text-align: center;
     margin-top: 5px;
 }
+
 div.news_column div.items p,
 div.news_column #hometext,
 div.news_column div.bodytext,
@@ -72,6 +83,7 @@ p.copyright {
     text-align: justify;
     margin-bottom: 10px;
 }
+
 div.news_column div.copyright {
     margin-top: 10px;
 }
@@ -79,31 +91,39 @@ div.news_column div.copyright {
 div.news_column p.adminlink {
     margin-bottom: 10px;
 }
+
 ul.related {
     float: left;
     padding: 0;
     margin: 0px;
 }
+
 div.news_column ul.related li {
     padding: 0 4px 10px 0;
 }
+
 div.news_column {
     padding: 10px 0px;
 }
+
 div.news_column .panel-heading {
     font-size: 14px;
     font-weight: bold;
 }
+
 div.span-25 ul.related li {
     padding: 0 10px;
 }
+
 div.news_column ul.related a {
     color: #3b3b3b;
     padding-left: 6px;
 }
+
 div.news_column ul.related a:hover {
     color: #004175;
 }
+
 .icon_new {
     background: url('../images/news/new.gif') no-repeat;
     display: inline-block;
@@ -277,6 +297,7 @@ p {
     text-decoration: none;
     cursor: pointer;
 }
+
 .bodytext {
     word-break: break-word;
 }
@@ -300,6 +321,7 @@ p {
     font-size: 1.4em;
     font-weight: bold;
 }
+
 h2,
 .h2 {
     font-size: 18px;
@@ -314,14 +336,17 @@ h2,
     font-size: 16px !important;
     padding-left: 5px !important;
 }
+
 .featured p {
     font-size: 14px !important;
     padding-left: 5px !important;
 }
+
 .list-group {
     padding: 10px;
     margin: 0px;
 }
+
 .news-download-file {
     margin-top: -6px;
 }

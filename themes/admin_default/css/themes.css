@@ -51,6 +51,7 @@
     width: 100%;
     margin: 10px auto;
 }
+
 ul.tabs {
     margin: 0;
     padding: 0;
@@ -61,6 +62,7 @@ ul.tabs {
     border-left: 1px solid #999;
     width: 100%;
 }
+
 ul.tabs li {
     float: left;
     margin: 0;
@@ -74,6 +76,7 @@ ul.tabs li {
     overflow: hidden;
     position: relative;
 }
+
 ul.tabs li a {
     text-decoration: none;
     color: #000;
@@ -83,9 +86,11 @@ ul.tabs li a {
     border: 1px solid #fff;
     outline: none;
 }
+
 ul.tabs li a:hover {
     background: #ccc;
 }
+
 html ul.tabs li.active,
 html ul.tabs li.active a:hover {
     background: #fff;
@@ -158,33 +163,41 @@ html ul.tabs li.active a:hover {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
+
 .theme-config-submit-area {
     margin-top: 10px;
 }
+
 .theme-config-gfont label.cname {
     width: 50px;
     display: inline-block;
 }
+
 .theme-config-gfont .form-control {
     display: inline-block;
     margin-right: 10px;
     width: 200px;
 }
+
 .theme-config-basic label.cname {
     width: 100px;
     display: inline-block;
 }
+
 .theme-config-basic label.cval {
     margin-right: 10px;
 }
+
 .theme-config-basic .form-control {
     display: inline-block;
     margin-right: 10px;
     width: 240px;
 }
+
 .theme-config-basic .sizem {
     width: 120px;
 }
+
 .theme-config-basic .input-group-wrap {
     display: inline-block;
     width: 254px;
@@ -192,22 +205,27 @@ html ul.tabs li.active a:hover {
     margin-top: -1px;
     margin-right: 10px;
 }
+
 .theme-config-basic .input-group-wrap .form-control {
     display: table-cell;
     width: 100%;
 }
+
 .theme-config-basic .rowTextarea .wrp {
     display: block;
     width: 100%;
     padding-left: 104px;
 }
+
 .theme-config-basic .rowTextarea .wrp .form-control {
     display: block;
     width: 100%;
 }
+
 .theme-config-basic .rowTextarea .cname {
     float: left;
 }
+
 div.colpick {
     z-index: 99999;
 }

@@ -7,12 +7,14 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var type = '', month = '', ads = '';
+var type = "",
+    month = '',
+    ads = '';
 var charturl;
 
-$(document).ready(function () {
+$(document).ready(function() {
     // Add banner
-    $('#banner_plan').change(function () {
+    $('#banner_plan').change(function() {
         var typeimage = $('option:selected', $(this)).data('image');
         var uploadtype = $('option:selected', $(this)).data('uploadtype');
         if (typeimage) {
@@ -39,21 +41,21 @@ $(document).ready(function () {
     });
     $('#banner_plan').change();
     // Statistics
-    $('#adsstat-ads a').click(function () {
+    $('#adsstat-ads a').click(function() {
         ads = $(this).attr('rel');
         $('#text-ads').html($(this).text());
         if (type != "" && month != "" & ads != "") {
             $('#chartdata').html('<img src="' + charturl + '&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
         }
     });
-    $('#adsstat-type a').click(function () {
+    $('#adsstat-type a').click(function() {
         type = $(this).attr('rel');
         $('#text-type').html($(this).text());
         if (type != "" && month != "" & ads != "") {
             $('#chartdata').html('<img src="' + charturl + '&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
         }
     });
-    $('#adsstat-month a').click(function () {
+    $('#adsstat-month a').click(function() {
         month = $(this).attr('rel');
         $('#text-month').html($(this).text());
         if (type != "" && month != "" & ads != "") {

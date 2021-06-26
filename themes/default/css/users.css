@@ -18,10 +18,12 @@
     overflow-y: auto;
     font-size: 13px;
 }
+
 .users-av-wraper > form > div {
     position: relative;
     padding: 15px 0 0 15px;
 }
+
 .users-av-wraper > form > div:first-child {
     background-color: #efefef;
     min-height: 400px;
@@ -76,15 +78,18 @@
     text-align: center;
     padding: 10px;
 }
+
 .users-avupload .img-area img {
     width: 100%;
 }
+
 .users-av-wraper .guide {
     padding: 8px;
     background: #d8eaf8;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .users-av-wraper .exit-bt {
     position: fixed;
     top: 380px;

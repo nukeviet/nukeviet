@@ -15,10 +15,10 @@ function timeoutsesscancel() {
     $.ajax({
         url: nv_base_siteurl + 'index.php?second=statimg',
         cache: false
-    }).done(function () {
+    }).done(function() {
         $("#timeoutsess").hide();
         load_notification = 1;
-        myTimerPage = setTimeout(function () {
+        myTimerPage = setTimeout(function() {
             timeoutsessrun();
         }, nv_check_pass_mstime);
         if (typeof nv_get_notification === "function") {
@@ -33,7 +33,7 @@ function timeoutsessrun() {
     document.getElementById('secField').innerHTML = Timeout;
     $("#timeoutsess").show();
     var msBegin = new Date().getTime();
-    myTimersecField = setInterval(function () {
+    myTimersecField = setInterval(function() {
         load_notification = 0;
         var msCurrent = new Date().getTime();
         var ms = Timeout - Math.round((msCurrent - msBegin) / 1000);
@@ -45,14 +45,15 @@ function timeoutsessrun() {
             $.getJSON(nv_base_siteurl + "index.php", {
                 second: "time_login",
                 nocache: (new Date).getTime()
-            }).done(function (json) {
+            }).done(function(json) {
                 if (json.showtimeoutsess == 1) {
-                    $.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&system=1&nocache=" + (new Date).getTime(), function (re) {
+                    $.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&system=1&nocache=" + (new Date).getTime(), function(re) {
                         window.location.reload();
                     });
-                }
-                else {
-                    myTimerPage = setTimeout(function () { timeoutsessrun(); }, json.check_pass_time);
+                } else {
+                    myTimerPage = setTimeout(function() {
+                        timeoutsessrun();
+                    }, json.check_pass_time);
                 }
             });
         }
@@ -65,7 +66,7 @@ function modalShow(a, b, callback) {
     $("#sitemodal").find(".modal-title").html(a);
     $("#sitemodal").find(".modal-body").html(b);
     $("#sitemodal").modal();
-    $('#sitemodal').on('shown.bs.modal', function (e) {
+    $('#sitemodal').on('shown.bs.modal', function(e) {
         if (typeof callback === "function") {
             callback(this);
             $(e.currentTarget).unbind('shown');
@@ -83,19 +84,19 @@ var NV = {
     menuBusy: false,
     menuTimer: null,
     menu: null,
-    openMenu: function (menu) {
+    openMenu: function(menu) {
         this.menuBusy = true;
         this.menu = $(menu);
-        this.menuTimer = setTimeout(function () {
+        this.menuTimer = setTimeout(function() {
             NV.menu.addClass('open');
         }, 300);
     },
-    closeMenu: function (menu) {
+    closeMenu: function(menu) {
         clearTimeout(this.menuTimer);
         this.menuBusy = false;
         this.menu = $(menu).removeClass('open');
     },
-    fixContentHeight: function () {
+    fixContentHeight: function() {
         var wrap = $('.nvwrap');
         var vmenu = $('#left-menu');
 
@@ -108,26 +109,29 @@ var NV = {
     }
 };
 
-$(document).ready(function () {
+$(document).ready(function() {
     // Control content height
     NV.fixContentHeight();
-    $(window).resize(function () {
+    $(window).resize(function() {
         NV.fixContentHeight();
     });
 
     // Add rel="noopener noreferrer nofollow" to all external links
-    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({ target: "_blank", rel: "noopener noreferrer nofollow" });
+    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({
+        target: "_blank",
+        rel: "noopener noreferrer nofollow"
+    });
 
 
     // Show submenu
-    $('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function () {
+    $('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function() {
         NV.openMenu(this);
-    }, function () {
+    }, function() {
         NV.closeMenu(this);
     });
 
     // Left menu handle
-    $('#left-menu-toggle').click(function () {
+    $('#left-menu-toggle').click(function() {
         if ($('#left-menu').is(':visible')) {
             $('#left-menu, #left-menu-bg, #container, #footer').removeClass('open');
         } else {
@@ -137,37 +141,37 @@ $(document).ready(function () {
     });
 
     // Show admin confirm
-    myTimerPage = setTimeout(function () {
+    myTimerPage = setTimeout(function() {
         timeoutsessrun();
     }, nv_check_pass_mstime);
 
     // Show confirm message on leave, reload page
-    $('form.confirm-reload').change(function () {
-        $(window).bind('beforeunload', function () {
+    $('form.confirm-reload').change(function() {
+        $(window).bind('beforeunload', function() {
             return nv_msgbeforeunload;
         });
     });
 
     // Disable confirm message on submit form
-    $('form').submit(function () {
+    $('form').submit(function() {
         $(window).unbind();
     });
 
-    $('a[href="#"]').on('click', function (e) {
+    $('a[href="#"]').on('click', function(e) {
         e.preventDefault();
     });
 
-    $('[data-btn="toggleLang"]').on('click', function (e) {
+    $('[data-btn="toggleLang"]').on('click', function(e) {
         e.preventDefault();
         $('.menu-lang').toggleClass('menu-lang-show');
     });
 
     //Change Localtion
-    $("[data-location]").on("click", function () {
+    $("[data-location]").on("click", function() {
         locationReplace($(this).data("location"))
     });
 
-    $(document).on('click', function (e) {
+    $(document).on('click', function(e) {
         if (
             $('[data-btn="toggleLang"]').is(':visible') &&
             !$(e.target).closest('.menu-lang').length &&
@@ -179,5 +183,7 @@ $(document).ready(function () {
     });
 
     // Bootstrap tooltip
-    $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
+    $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+    });
 });

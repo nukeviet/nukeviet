@@ -13,7 +13,7 @@ function validErrorShow(a) {
     $(a).tooltip({
         container: "body",
         placement: "bottom",
-        title: function () {
+        title: function() {
             return "" != $(a).attr("data-current-mess") ? $(a).attr("data-current-mess") : nv_required
         }
     });
@@ -35,9 +35,10 @@ function validCheck(a) {
             if (!$("[type=radio]:checked", a).length) return !1
         } else if ("DIV" == b && $(a).is(".check-box")) {
             if (!$("[type=checkbox]:checked", a).length) return !1
-        } else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
-            if ("" == d) return !1
-        } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
+        } else if ("INPUT" == b || "TEXTAREA" == b)
+            if ("undefined" == typeof c || "" == c) {
+                if ("" == d) return !1
+            } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
     }
     return !0
 }
@@ -73,7 +74,7 @@ function confirmpass_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     var c = 0,
         b = [];
-    $(a).find(".required").each(function () {
+    $(a).find(".required").each(function() {
         "password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
     });
@@ -83,16 +84,16 @@ function confirmpass_validForm(a) {
         url: b.url,
         data: b.data,
         dataType: "json",
-        success: function (d) {
+        success: function(d) {
             var b = $("[onclick*='change_captcha']", a);
             b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
                     $(".tooltip-current", a).removeClass("tooltip-current"),
-                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function () {
+                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
                         $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                         validErrorShow(this)
-                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function () {
+                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
                         $("[type=submit]", a).prop("disabled", !1)
                     }, 1E3)
             } else {
@@ -107,7 +108,7 @@ function opt_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     var c = 0,
         b = [];
-    $(a).find(".required").each(function () {
+    $(a).find(".required").each(function() {
         "password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
         if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
     });
@@ -117,16 +118,16 @@ function opt_validForm(a) {
         url: b.url,
         data: b.data,
         dataType: "json",
-        success: function (d) {
+        success: function(d) {
             var b = $("[onclick*='change_captcha']", a);
             b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
                     $(".tooltip-current", a).removeClass("tooltip-current"),
-                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function () {
+                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
                         $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                         validErrorShow(this)
-                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function () {
+                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
                         $("[type=submit]", a).prop("disabled", !1)
                     }, 1E3)
             } else {
@@ -137,25 +138,25 @@ function opt_validForm(a) {
     return !1
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     // View secretkey
-    $('[data-toggle="manualsecretkey"]').click(function (e) {
+    $('[data-toggle="manualsecretkey"]').click(function(e) {
         e.preventDefault();
         modalShowByObj($(this).attr('href'));
     });
     // View backupcode
-    $('[data-toggle="viewcode"]').click(function (e) {
+    $('[data-toggle="viewcode"]').click(function(e) {
         e.preventDefault();
         modalShowByObj($(this).attr('href'));
     });
     // Tắt xác thực 2 bước
-    $('[data-toggle="turnoff2step"]').click(function () {
+    $('[data-toggle="turnoff2step"]').click(function() {
         $(this).prop('disabled', true);
         var tokend = $(this).data('tokend');
         $.post(
             nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
             'turnoff2step=1&tokend=' + tokend,
-            function (res) {
+            function(res) {
                 if (res == 'OK') {
                     window.location.reload(true);
                 } else {
@@ -165,13 +166,13 @@ $(document).ready(function () {
         );
     });
     // Đổi mã
-    $('[data-toggle="changecode2step"]').click(function () {
+    $('[data-toggle="changecode2step"]').click(function() {
         $(this).prop('disabled', true);
         var tokend = $(this).data('tokend');
         $.post(
             nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
             'changecode2step=1&tokend=' + tokend,
-            function (res) {
+            function(res) {
                 if (res == 'OK') {
                     window.location.reload(true);
                 } else {

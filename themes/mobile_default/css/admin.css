@@ -20,19 +20,23 @@
     height: 28px;
     overflow: hidden;
 }
+
 #toolbar ul {
     list-style: none;
     padding: 0;
     margin: 5px 20px;
 }
+
 #toolbar ul li {
     float: left;
     margin-left: 10px;
     white-space: nowrap;
 }
+
 #toolbar ul li:first-child {
     margin-left: 0;
 }
+
 #toolbar .no-level {
     color: #999;
 }
@@ -45,6 +49,7 @@
     min-height: 50px;
     width: 100%;
 }
+
 .column .add {
     position: absolute !important;
     display: inline-block !important;
@@ -65,10 +70,12 @@
     z-index: 9999;
     opacity: 0.6;
 }
+
 .column:hover .add {
     background: #ff6600;
     opacity: 1;
 }
+
 .column .add em {
     display: inline-block;
     vertical-align: middle;
@@ -82,9 +89,11 @@
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
 }
+
 .portlet .act0 {
     opacity: 0.3;
 }
+
 .portlet .tool {
     position: absolute;
     top: -1px;
@@ -100,13 +109,16 @@
     white-space: nowrap;
     opacity: 0;
 }
+
 .portlet:hover .tool {
     opacity: 1;
 }
+
 .portlet .tool a {
     background: #205fa0;
     border: 1px solid #8dc2ee;
 }
+
 .portlet .tool a,
 .portlet .tool a:hover {
     display: inline-block !important;
@@ -120,13 +132,16 @@
     margin: 4px 6px 4px 0;
     border-radius: 4px;
 }
+
 .portlet .tool a:first-child {
     margin-left: 6px;
 }
+
 .portlet .tool a:hover {
     background: #1c528b;
     border: 1px solid #5697d0;
 }
+
 #header .portlet,
 #footer .portlet {
     min-width: 165px;
@@ -148,10 +163,12 @@
         position: relative;
         height: auto;
     }
+
     #toolbar .pull-left,
     #toolbar .pull-right {
         float: none !important;
     }
+
     #toolbar ul li {
         width: 100%;
         margin: 0;
@@ -167,10 +184,12 @@
         float: left;
         margin-left: 5px;
     }
+
     #toolbar ul {
         margin: 5px;
     }
 }
+
 @media (min-width: 992px) {
     #wraper {
         margin-bottom: 28px;

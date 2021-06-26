@@ -18,7 +18,9 @@ jsi[2] || (jsi[2] = 0);
 jsi[3] || (jsi[3] = 6);
 var strHref = window.location.href;
 if (-1 < strHref.indexOf("?")) {
-    var strHref_split = strHref.split("?"), script_name = strHref_split[0], query_string = strHref_split[1];
+    var strHref_split = strHref.split("?"),
+        script_name = strHref_split[0],
+        query_string = strHref_split[1];
 } else {
     script_name = strHref, query_string = "";
 }
@@ -55,7 +57,9 @@ function nv_change_captcha() {
 };
 
 function login2step_change(ele) {
-    var ele = $(ele), form = ele, i = 0;
+    var ele = $(ele),
+        form = ele,
+        i = 0;
     while (!form.is('form')) {
         if (i++ > 100) {
             break;
@@ -69,9 +73,9 @@ function login2step_change(ele) {
     return false;
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     // Submit form
-    $('#admin-login-form').submit(function (e) {
+    $('#admin-login-form').submit(function(e) {
         var validForm = true;
 
         if ($('.loginStep1', $(this)).is(':visible')) {
@@ -114,7 +118,7 @@ $(document).ready(function () {
     }
 
     // Mở popup (chưa sử dụng nhưng để đây phòng về sau)
-    $('[data-toggle="popup-oauth"]').on('click', function (e) {
+    $('[data-toggle="popup-oauth"]').on('click', function(e) {
         nv_open_browse($(this)[0], "NVADMINOAUTH", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
         e.preventDefault();
     });

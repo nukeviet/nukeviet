@@ -14,7 +14,7 @@ function nv_show_cl_list(containerid) {
 
 function nv_cl_del(cl_id) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function(res) {
             var r_split = res.split("|");
             if (r_split[0] == 'OK') {
                 nv_show_cl_list(r_split[1]);
@@ -28,7 +28,7 @@ function nv_cl_del(cl_id) {
 
 function nv_cl_del2(cl_id) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function(res) {
             var r_split = res.split("|");
             if (r_split[0] == 'OK') {
                 window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + r_split[2];
@@ -43,7 +43,7 @@ function nv_cl_del2(cl_id) {
 function nv_chang_act(cl_id, checkbox_id) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable(checkbox_id, 5000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -68,7 +68,7 @@ function nv_chang_act(cl_id, checkbox_id) {
 
 function nv_chang_act2(cl_id) {
     if (confirm(nv_is_change_act_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_client&nocache=' + new Date().getTime(), 'id=' + cl_id, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -98,7 +98,7 @@ function nv_show_plans_list(containerid) {
 function nv_pl_chang_act(pid, checkbox_id) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable(checkbox_id, 5000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -123,7 +123,7 @@ function nv_pl_chang_act(pid, checkbox_id) {
 
 function nv_pl_del(pid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
             var r_split = res.split("|");
             if (r_split[0] == 'OK') {
                 nv_show_plans_list(r_split[1]);
@@ -144,7 +144,7 @@ function nv_plan_info(pid, containerid) {
 
 function nv_pl_chang_act2(pid) {
     if (confirm(nv_is_change_act_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -158,7 +158,7 @@ function nv_pl_chang_act2(pid) {
 
 function nv_pl_del2(pid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_plan&nocache=' + new Date().getTime(), 'id=' + pid, function(res) {
             var r_split = res.split("|");
             if (r_split[0] == 'OK') {
                 window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + r_split[2];
@@ -204,7 +204,7 @@ function nv_chang_weight_banners(pid, id) {
 function nv_b_chang_act(id, checkbox_id) {
     if (confirm(nv_is_change_act_confirm[0])) {
         var nv_timer = nv_settimeout_disable(checkbox_id, 5000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -231,7 +231,7 @@ function nv_b_chang_act(id, checkbox_id) {
 
 function nv_b_chang_act2(id) {
     if (confirm(nv_is_change_act_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_act_banner&nocache=' + new Date().getTime(), 'id=' + id, function(res) {
             var r_split = res.split("|");
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -260,14 +260,14 @@ function nv_show_list_stat(bid, month, ext, val, containerid, page) {
 }
 
 function nv_genpass() {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=add_client&nocache=' + new Date().getTime(), 'nv_genpass=1', function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=add_client&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
         $("input[name='pass_iavim']").val(res);
         $("input[name='re_pass_iavim']").val(res);
     });
     return;
 }
 
-$.toggleShowPassword = function (options) {
+$.toggleShowPassword = function(options) {
     var settings = $.extend({
         field: "#password",
         control: "#toggle_show_password"
@@ -276,7 +276,7 @@ $.toggleShowPassword = function (options) {
     var control = $(settings.control);
     var field = $(settings.field);
 
-    control.bind('click', function () {
+    control.bind('click', function() {
         if (control.is(':checked')) {
             field.attr('type', 'text');
         } else {
@@ -291,7 +291,7 @@ function find_User() {
         type: 'POST',
         url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=add_client&nocache=' + new Date().getTime(),
         data: 'name=' + name,
-        success: function (data) {
+        success: function(data) {
             var obj = jQuery.parseJSON(data);
             if ($('#email_iavim').val() == '') {
                 $('#email_iavim').val(obj.email);
@@ -321,12 +321,12 @@ function find_User() {
     });
 }
 
-$(function () {
+$(function() {
     // Auto complete search
     var autoSearchTimer = null;
     var autosearchpersion = $('.autosearchpersion');
     if (autosearchpersion.length == 1) {
-        $('[name="assign_user"]', autosearchpersion).keyup(function (e) {
+        $('[name="assign_user"]', autosearchpersion).keyup(function(e) {
             $('.searchloading', autosearchpersion).addClass('hidden');
             $('.searchresultaj', autosearchpersion).html('').hide();
             if (autoSearchTimer) {
@@ -337,15 +337,15 @@ $(function () {
                 valu = trim(valu);
                 if (valu.length >= 3) {
                     $('.searchloading', autosearchpersion).removeClass('hidden');
-                    autoSearchTimer = setTimeout(function () {
+                    autoSearchTimer = setTimeout(function() {
                         $.ajax({
                             type: "POST",
                             url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&nocache=" + new Date().getTime(),
                             data: "checkss=" + autosearchpersion.data('checkss') + "&ajaxqueryusername=" + encodeURIComponent(valu),
-                            success: function (res) {
+                            success: function(res) {
                                 if (res.length) {
                                     var html = '<ul>';
-                                    $.each(res, function (k, v) {
+                                    $.each(res, function(k, v) {
                                         html += '<li class="clearfix" data-value="' + v.username + '">';
                                         html += '<img class="left pull-left" src="' + v.photo + '" width="40" height="40"/>';
                                         html += '' + v.fullname + '<br />';
@@ -362,13 +362,13 @@ $(function () {
                 }
             }
         });
-        $(document).delegate('.autosearchpersion ul li', 'click', function () {
+        $(document).delegate('.autosearchpersion ul li', 'click', function() {
             $('[name="assign_user"]', autosearchpersion).val($(this).data('value')).focus();
             $('.searchresultaj', autosearchpersion).html('').hide();
         });
     }
     // Custom plan exp
-    $('#plan_exp_time').change(function () {
+    $('#plan_exp_time').change(function() {
         var val = $(this).val();
         if (val == -1) {
             $('#plan_exp_time_custom').show();
@@ -376,7 +376,7 @@ $(function () {
             $('#plan_exp_time_custom').hide();
         }
     });
-    $('[data-toggle="delval"]').click(function (e) {
+    $('[data-toggle="delval"]').click(function(e) {
         e.preventDefault();
         $($(this).data('target')).val('');
         if ($(this).data('select') != '' && typeof $(this).data('select') != 'undefined') {
