@@ -904,10 +904,10 @@ function addlogo() {
                 });
                 var wrapCropper = $(this).parent();
                 $('.cropper-face', wrapCropper).css({
-                    'opacity' : 1,
-                    'background-image' : 'url(' + logo + ')',
-                    'background-size' : '100%',
-                    'background-color' : 'transparent'
+                    'opacity': 1,
+                    'background-image': 'url(' + logo + ')',
+                    'background-size': '100%',
+                    'background-color': 'transparent'
                 });
             }
         });
@@ -1226,13 +1226,14 @@ $("div#createfolder").dialog({
 });
 
 var timer_recreatethumb = 0;
+
 function nv_recreatethumb_loop(a, idf) {
     clearTimeout(timer_recreatethumb);
     $.ajax({
-        type : "POST",
-        url : nv_module_url + "recreatethumb&random=" + nv_randomNum(10),
-        data : "path=" + a + "&idf=" + idf,
-        success : function(d) {
+        type: "POST",
+        url: nv_module_url + "recreatethumb&random=" + nv_randomNum(10),
+        data: "path=" + a + "&idf=" + idf,
+        success: function(d) {
             var e = d.split("_");
             if (e[0] == "ERROR") {
                 alert(e[1])
@@ -1248,7 +1249,9 @@ function nv_recreatethumb_loop(a, idf) {
                         html += '<h3 class="text-center">' + LANG.recreatethumb + ': <strong><span class="mcur">' + e[1] + '</span> / ' + e[2] + '</strong> file.</h3>';
                         loadarea.html(html);
                     }
-                    $('.progress-bar', loadarea).css({width: per + '%'});
+                    $('.progress-bar', loadarea).css({
+                        width: per + '%'
+                    });
                     $('.mcur', loadarea).html(e[1]);
                     nv_recreatethumb_loop(a, e[1]);
                 }, 1000);
@@ -1263,7 +1266,7 @@ function nv_recreatethumb_loop(a, idf) {
 }
 
 $("div#recreatethumb").dialog({
-    autoOpen : false,
+    autoOpen: false,
     width: 500,
     height: 270,
     modal: true,
@@ -1510,7 +1513,9 @@ $('[name="uploadremoteFileOK"]').click(function() {
     var auto_logo = ($('[name="auto_logo"]', panel).is(':checked') ? 1 : 0);
     var regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
 
-    if (/^(https?|ftp):\/\//i.test(fileUrl) === false){fileUrl = 'http://' + fileUrl;}
+    if (/^(https?|ftp):\/\//i.test(fileUrl) === false) {
+        fileUrl = 'http://' + fileUrl;
+    }
     $("input[name=uploadremoteFile]").val(fileUrl);
 
     if (
@@ -1543,7 +1548,9 @@ $('[name="uploadremoteFileOK"]').click(function() {
         });
     } else if (nv_alt_require && fileAlt == '' && fileUrl != '') {
         $("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
-    } else {alert(nv_url)}
+    } else {
+        alert(nv_url)
+    }
 });
 
 /* List File Handle */
@@ -1862,8 +1869,8 @@ var NVUPLOAD = {
                 multipart_params: {
                     "filealt": "--"
                 },
-                filters : {
-                    max_file_size : nv_max_size_bytes,
+                filters: {
+                    max_file_size: nv_max_size_bytes,
                     mime_types: []
                 },
                 chunk_size: nv_chunk_size,

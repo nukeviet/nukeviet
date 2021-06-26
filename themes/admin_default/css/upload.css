@@ -72,24 +72,30 @@
         height: auto;
         padding-bottom: 0;
     }
+
     .upload-wrap {
         height: auto;
     }
+
     .imgfolder {
         height: auto;
         max-height: 300px;
     }
+
     .filebrowse {
         height: auto;
     }
+
     .footer {
         position: inherit;
         height: auto;
         border-top: 1px #dadada solid;
     }
+
     .footer .form-control {
         margin-bottom: 10px;
     }
+
     .footer .refresh,
     .footer .search {
         text-align: center;

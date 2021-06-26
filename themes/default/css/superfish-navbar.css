@@ -4,6 +4,7 @@
     position: relative;
     margin-bottom: 5em;
 }
+
 /* provide background colour for submenu strip */
 /* you should just set the menu's container bg colour rather than use pseudo-elements */
 .sf-navbar:before {
@@ -15,52 +16,66 @@
     height: 200%;
     width: 100%;
 }
+
 .sf-navbar ul {
     box-shadow: none;
 }
+
 .sf-navbar li {
     background: #aabde6;
     position: static;
 }
+
 .sf-navbar > li > a,
 .sf-navbar > li > ul > li > a {
     border: none;
 }
+
 .sf-navbar > li > ul {
-    min-width: 36em; /* set this to whatever suits your design */
+    min-width: 36em;
+    /* set this to whatever suits your design */
 }
+
 .sf-navbar ul li {
     background: #bdd2ff;
     position: relative;
 }
+
 .sf-navbar ul ul {
     left: 0;
     top: 100%;
 }
+
 .sf-navbar ul ul li {
     width: 100%;
 }
+
 .sf-navbar > li > ul > li {
     float: left;
 }
+
 .sf-navbar li.current {
     background: #bdd2ff;
 }
+
 .sf-navbar li:hover,
 .sf-navbar li.sfHover,
 .sf-navbar ul li.current {
     background: #bdd2ff;
 }
+
 .sf-navbar ul li:hover,
 .sf-navbar ul li.sfHover,
 .sf-navbar ul ul li {
     background: #d1dfff;
 }
+
 .sf-navbar ul ul li:hover,
 .sf-navbar ul ul li.sfHover,
 .sf-navbar ul ul li.current {
     background: #e6eeff;
 }
+
 .sf-navbar ul li.current > a {
     font-weight: bold;
 }
@@ -70,7 +85,8 @@
     margin-top: -3px;
     margin-right: 0;
     border-color: transparent;
-    border-top-color: #dfeeff; /* edit this to suit design (no rgba in IE8) */
+    border-top-color: #dfeeff;
+    /* edit this to suit design (no rgba in IE8) */
     border-top-color: rgba(255, 255, 255, 0.5);
 }
 

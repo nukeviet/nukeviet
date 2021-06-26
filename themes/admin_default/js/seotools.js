@@ -24,16 +24,16 @@ function formatStringAsUriComponent(s) {
     return s.replace(/^\s+|\s+$/g, "");
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     // RPC ping
-    $("#rpc .col3").click(function () {
+    $("#rpc .col3").click(function() {
         var a = $(this).attr("title");
         a != "" && alert(a);
         return !1
     });
 
     // ogp_image setting
-    $(".selectimg").click(function () {
+    $(".selectimg").click(function() {
         var area = $(this).attr('data-name');
         var path = "";
         var currentpath = "images";

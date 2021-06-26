@@ -2,6 +2,7 @@
     color: #fff !important;
     text-decoration: none !important;
 }
+
 .metismenu .arrow {
     float: right;
     margin-top: -33px;
@@ -102,11 +103,9 @@
 .metismenu .sidebar-nav ul a:active {
     color: #fff;
     text-decoration: none;
-    background-image: linear-gradient(
-        to right,
-        #ff6600 4px,
-        rgba(0, 0, 0, 0) 4px
-    );
+    background-image: linear-gradient(to right,
+            #ff6600 4px,
+            rgba(0, 0, 0, 0) 4px);
 }
 
 .metismenu .sidebar-nav ul ul a {

@@ -7,9 +7,9 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-$(document).ready(function () {
+$(document).ready(function() {
     // Config logo
-    $("input[name=selectimg]").click(function () {
+    $("input[name=selectimg]").click(function() {
         var area = "upload_logo";
         var path = "";
         var currentpath = "images";
@@ -18,7 +18,7 @@ $(document).ready(function () {
         return false;
     });
     // Thumbconfig
-    $('[data-toggle="thumbCfgViewEx"]').click(function (e) {
+    $('[data-toggle="thumbCfgViewEx"]').click(function(e) {
         e.preventDefault();
 
         if (typeof $(this).data('busy') == "undefined" || !$(this).data('busy')) {
@@ -43,7 +43,7 @@ $(document).ready(function () {
             $.post(
                 script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=thumbconfig&nocache=' + new Date().getTime(),
                 'getexample=1&did=' + did + '&t=' + thumbType + '&w=' + thumbW + '&h=' + thumbH + '&q=' + thumbQuality,
-                function (res) {
+                function(res) {
                     $this.data('busy', false);
                     $this.find('i').removeClass('fa-cog');
                     $this.find('i').removeClass('fa-spin');
@@ -55,7 +55,9 @@ $(document).ready(function () {
                     $('#thumbprewiewtmp .imgorg').attr('src', res.src);
                     $('#thumbprewiewtmp .imgthumb').attr('src', res.thumbsrc);
                     $('#thumbprewiew').html($('#thumbprewiewtmp').html());
-                    $('html, body').animate({ scrollTop: $('#thumbprewiew').offset().top - 10 }, 'slow');
+                    $('html, body').animate({
+                        scrollTop: $('#thumbprewiew').offset().top - 10
+                    }, 'slow');
                 }
             );
         }

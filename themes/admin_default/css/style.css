@@ -220,6 +220,7 @@ h6 {
     #header div.logo .logo-xs {
         display: block;
     }
+
     #header div.logo .logo-md {
         display: none;
     }
@@ -309,12 +310,15 @@ h6 {
     #header .dropdown-menu a {
         text-align: right;
     }
+
     #header .menu > li > a em {
         font-size: 3em;
     }
+
     #header .menu > li {
         padding: 0 5px;
     }
+
     #header .menu > li > a em.fix {
         bottom: -9px;
         right: -2px;
@@ -427,8 +431,7 @@ h6 {
  -----------------------------------------------------------------------------*/
 
 #left-menu-bg {
-    background: url('../images/bg_left.png') repeat-y scroll right center
-        rgba(0, 0, 0, 0);
+    background: url('../images/bg_left.png') repeat-y scroll right center rgba(0, 0, 0, 0);
     bottom: 0;
     left: 0;
     position: absolute;
@@ -490,8 +493,7 @@ h6 {
 }
 
 #left-menu .nav > li a.subcurrent {
-    background: url('../images/vertical_menu_bg.png') no-repeat scroll left 0px
-        #f3f3f3;
+    background: url('../images/vertical_menu_bg.png') no-repeat scroll left 0px #f3f3f3;
     color: #333;
     text-align: right;
     text-indent: 0;
@@ -504,8 +506,7 @@ h6 {
 }
 
 #left-menu .nav > li a.subactive {
-    background: url('../images/vertical_menu_bg.png') no-repeat scroll left 0px
-        #f3f3f3;
+    background: url('../images/vertical_menu_bg.png') no-repeat scroll left 0px #f3f3f3;
     color: #cb0000;
     font-weight: bold;
     padding: 3px 5px 3px 22px;
@@ -640,36 +641,46 @@ sup.required {
     #left-menu {
         display: none;
     }
+
     #left-menu-toggle {
         display: block !important;
     }
+
     #left-menu-bg {
         display: none;
     }
+
     #container {
         margin-left: 0;
     }
+
     #footer {
         margin-left: 0;
     }
+
     #left-menu.open,
     #left-menu-bg.open {
         display: inline-block;
     }
+
     #container.open {
         right: -200px;
     }
+
     #container.open,
     #footer.open {
         right: -200px;
         left: 200px;
     }
+
     .table-responsive {
         overflow-y: auto !important;
     }
+
     #header .menu > li.menu-lang-mobile {
         display: block;
     }
+
     #header .menu > li.menu-lang {
         display: none;
         position: absolute;
@@ -679,25 +690,31 @@ sup.required {
         right: 0;
         background: #333;
     }
+
     #header .menu > li.menu-lang.menu-lang-show {
         display: block;
     }
+
     #header .menu > li.menu-lang-data {
         top: 92px;
         border-top: 1px #222 solid;
     }
+
     #header .menu > li.menu-lang > a {
         text-align: right;
         padding-right: 15px;
         height: 40px;
         line-height: 40px;
     }
+
     #header .menu > li.menu-lang > a .fa {
         font-size: inherit;
     }
+
     #header .menu > li.menu-lang.open {
         z-index: 1002;
     }
+
     #header .menu > li.menu-lang .dropdown-menu {
         background-color: #000;
         width: 100%;
@@ -1088,6 +1105,7 @@ button.close {
         margin-left: 10px;
         margin-right: 10px;
     }
+
     #sitemodal .modal-content {
         display: block;
     }

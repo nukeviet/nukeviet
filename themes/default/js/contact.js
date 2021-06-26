@@ -19,12 +19,13 @@ function nv_validErrorShow(a) {
     $(a).parent().parent().addClass("has-error");
     $("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
     $(a).tooltip({
-        title: function () {
+        title: function() {
             return $(a).attr("data-current-mess")
         }
     });
     $(a).focus().tooltip("show")
 }
+
 function nv_validErrorHidden(a) {
     $(a).parent().parent().removeClass("has-error")
 }
@@ -49,7 +50,7 @@ function nv_validCheck(a) {
 function nv_validForm(a) {
     $(".has-error", a).removeClass("has-error");
     var c = 0;
-    $(a).find(".required,input[data-callback]").each(function () {
+    $(a).find(".required,input[data-callback]").each(function() {
         $(this).val(trim(strip_tags($(this).val())));
         if (!nv_validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), nv_validErrorShow(this), !1
     });
@@ -59,14 +60,14 @@ function nv_validForm(a) {
         url: $(a).prop("action"),
         data: $(a).serialize(),
         dataType: "json",
-        success: function (b) {
+        success: function(b) {
             change_captcha('.fcode');
-            "error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function () {
+            "error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
                 $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                 nv_validErrorShow(this)
-            }), setTimeout(function () {
+            }), setTimeout(function() {
                 $(a).find("[type='submit']").prop("disabled", !1)
-            }, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(a).next().html(b.mess).removeClass("alert-info").addClass("alert-danger").show() : $(a).next().html(b.mess).removeClass("alert-danger").addClass("alert-info").show(), $("[data-mess]").tooltip("destroy"), setTimeout(function () {
+            }, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(a).next().html(b.mess).removeClass("alert-info").addClass("alert-danger").show() : $(a).next().html(b.mess).removeClass("alert-danger").addClass("alert-info").show(), $("[data-mess]").tooltip("destroy"), setTimeout(function() {
                 $(a).next().hide();
                 $("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
                 nv_validReset(a)
@@ -75,36 +76,36 @@ function nv_validForm(a) {
     }));
     return !1
 };
-$(function () {
+$(function() {
     var a = $("#contactButton");
     if (a) {
         var b = $(".ctb", a),
             c = $(".panel", a),
-            d = function () {
+            d = function() {
                 c.hide();
                 b.removeClass("fs").show()
             },
             e = $("[data-cs]", a);
-        $(document).on("keydown", function (a) {
+        $(document).on("keydown", function(a) {
             27 === a.keyCode && b.is(".fs") && d()
         });
-        $(document).on("click", function () {
+        $(document).on("click", function() {
             b.is(".fs") && d()
         });
-        c.on("click", function (a) {
+        c.on("click", function(a) {
             a.stopPropagation()
         });
-        $(".close", a).on("click", function () {
+        $(".close", a).on("click", function() {
             d()
         });
-        b.on("click", function () {
+        b.on("click", function() {
             return b.is(".ld") ? (b.addClass("fs").hide(), c.fadeIn(), !1) : ($.ajax({
                 type: "POST",
                 cache: !1,
                 url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b.attr("data-module"),
                 data: "loadForm=1&checkss=" + e.data("cs"),
                 dataType: "html",
-                success: function (a) {
+                success: function(a) {
                     e.html(a);
                     b.addClass("ld fs").hide();
                     c.fadeIn();

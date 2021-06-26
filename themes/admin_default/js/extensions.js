@@ -9,7 +9,7 @@
 
 var LANG = [];
 
-if (typeof (CFG) == 'undefined') {
+if (typeof(CFG) == 'undefined') {
     var CFG = [];
     CFG.id = 0;
     CFG.string_data = '';
@@ -33,7 +33,7 @@ var nv_loading = '<div class="text-center"><em class="fa fa-spin fa-spinner fa-2
 var EXT = {
     tid: CFG.id,
     isDownloaded: false,
-    startDownload: function () {
+    startDownload: function() {
         if (!EXT.isDownloaded) {
             EXT.isDownloaded = true;
 
@@ -45,7 +45,7 @@ var EXT = {
                 type: 'POST',
                 url: script_name,
                 data: nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&data=' + CFG.string_data,
-                success: function (e) {
+                success: function(e) {
                     $('#file-download .waiting').hide();
                     e = e.split('|');
                     if (e[0] == 'OK') {
@@ -57,10 +57,10 @@ var EXT = {
             });
         }
     },
-    cancel: function () {
+    cancel: function() {
         window.location = CFG.cancel_link;
     },
-    handleOk: function (f) {
+    handleOk: function(f) {
         $('#file-download').addClass('text-success');
         $('#file-download .status').removeClass('fa-meh-o').addClass('fa-smile-o');
         $('#file-download .complete').show();
@@ -69,12 +69,12 @@ var EXT = {
 
         setTimeout("EXT.redirect()", 3000);
     },
-    handleError: function (m) {
+    handleError: function(m) {
         $('#file-download').addClass('text-danger');
         $('#file-download .status').removeClass('fa-meh-o').addClass('fa-frown-o');
         $('#file-download-response').html('<div class="alert alert-danger">' + m + '</div>');
     },
-    redirect: function () {
+    redirect: function() {
         var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
         window.location = url;
     }
@@ -101,9 +101,9 @@ function checkform() {
     return true;
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     // Login
-    $('#login-form').submit(function (e) {
+    $('#login-form').submit(function(e) {
         e.preventDefault();
         var username = $('#username').val();
         var password = $('#password').val();
@@ -121,7 +121,7 @@ $(document).ready(function () {
             $.post(
                 script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
                 'username=' + username + '&password=' + password + '&checksess=' + checksess + '&redirect=' + $('[name="redirect"]').val(),
-                function (res) {
+                function(res) {
                     $('#login-form input, #login-form button').removeAttr('disabled');
                     $('#login-result').html(res);
                 }
@@ -131,12 +131,12 @@ $(document).ready(function () {
 
     // Manage
     $('[data-toggle="tooltip"]').tooltip();
-    $('.package-ext').click(function (e) {
+    $('.package-ext').click(function(e) {
         window.location = $(this).data('href');
     });
-    $('.delete-ext').click(function () {
+    $('.delete-ext').click(function() {
         if (confirm(LANG.delele_ext_confirm)) {
-            $.post($(this).data('href') + '&nocache=' + new Date().getTime(), '', function (res) {
+            $.post($(this).data('href') + '&nocache=' + new Date().getTime(), '', function(res) {
                 res = res.split('_');
                 alert(res[1]);
 

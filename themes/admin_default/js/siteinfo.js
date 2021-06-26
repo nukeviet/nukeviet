@@ -7,9 +7,9 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-$(document).ready(function () {
+$(document).ready(function() {
     // System info
-    $("#checkchmod").click(function (event) {
+    $("#checkchmod").click(function(event) {
         event.preventDefault();
         var url = $(this).attr("href");
         $("#checkchmod").hide();
@@ -18,7 +18,7 @@ $(document).ready(function () {
             type: "POST",
             url: url,
             data: "",
-            success: function (data) {
+            success: function(data) {
                 $("#wait").html("");
                 alert(data);
                 $("#checkchmod").show();
@@ -27,13 +27,13 @@ $(document).ready(function () {
     });
 
     // Delete update package
-    $('.delete_update_backage').click(function () {
+    $('.delete_update_backage').click(function() {
         if (confirm(nv_is_del_confirm[0])) {
             $('#infodetectedupg').append('<div id="dpackagew"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading"></em></div>');
-            $.get($(this).attr('href'), function (e) {
+            $.get($(this).attr('href'), function(e) {
                 $('#dpackagew').remove()
                 if (e == 'OK') {
-                    $('#infodetectedupg').slideUp(500, function () {
+                    $('#infodetectedupg').slideUp(500, function() {
                         $('#infodetectedupg').remove()
                     });
                 } else {
@@ -56,11 +56,11 @@ $(document).ready(function () {
             showOn: 'focus'
         });
     }
-    $('input[name=clear]').click(function () {
+    $('input[name=clear]').click(function() {
         $('#filter-form .text').val('');
         $('input[name=q]').val(LANG.filter_enterkey);
     });
-    $('input[name=action]').click(function () {
+    $('input[name=action]').click(function() {
         var f_q = $('input[name=q]').val();
         var f_from = $('input[name=from]').val();
         var f_to = $('input[name=to]').val();
@@ -74,16 +74,16 @@ $(document).ready(function () {
             alert(LANG.filter_err_submit);
         }
     });
-    $("#check_all").click(function () {
+    $("#check_all").click(function() {
         if ($("#check_all").prop("checked")) {
             $('input.list').prop("checked", true);
         } else {
             $('input.list').prop("checked", false);
         }
     });
-    $('#delall').click(function () {
+    $('#delall').click(function() {
         var listall = [];
-        $('input.list:checked').each(function () {
+        $('input.list:checked').each(function() {
             listall.push($(this).val());
         });
         if (listall.length < 1) {
@@ -95,7 +95,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: CFG.url_del,
                 data: 'listall=' + listall + '&checksess=' + CFG.checksess,
-                success: function (data) {
+                success: function(data) {
                     var s = data.split('_');
                     if (s[0] == 'OK') {
                         location.reload();
@@ -105,7 +105,7 @@ $(document).ready(function () {
             });
         }
     });
-    $('a.delete').click(function (event) {
+    $('a.delete').click(function(event) {
         event.preventDefault();
         if (confirm(LANG.log_del_confirm)) {
             var href = $(this).attr('href');
@@ -113,7 +113,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: href,
                 data: 'checksess=' + CFG.checksess,
-                success: function (data) {
+                success: function(data) {
                     var s = data.split('_');
                     if (s[0] == 'OK') {
                         location.reload();
@@ -124,14 +124,14 @@ $(document).ready(function () {
             });
         }
     });
-    $("#logempty").click(function () {
+    $("#logempty").click(function() {
         if (confirm(LANG.log_del_confirm)) {
             $("#logempty").attr("disabled", "disabled");
             $.ajax({
                 type: 'POST',
                 url: script_name,
                 data: nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs_del&logempty=1&checksess=" + CFG.checksess,
-                success: function (data) {
+                success: function(data) {
                     if (data == 'OK') {
                         window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs";
                     } else {

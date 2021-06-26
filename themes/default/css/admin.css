@@ -157,10 +157,12 @@
         position: relative;
         height: auto;
     }
+
     #toolbar .pull-left,
     #toolbar .pull-right {
         float: none !important;
     }
+
     #toolbar ul li {
         width: 100%;
         margin: 0;
@@ -176,10 +178,12 @@
         float: left;
         margin-left: 5px;
     }
+
     #toolbar ul {
         margin: 5px;
     }
 }
+
 @media (min-width: 992px) {
     #wraper {
         margin-bottom: 28px;

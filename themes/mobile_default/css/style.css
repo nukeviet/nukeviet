@@ -271,11 +271,9 @@
     line-height: 39px;
     color: #fff;
     background: transparent;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0,
-        rgba(0, 0, 0, 0.05) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 0.05) 100%);
     border-radius: 3px;
     -webkit-border-radius: 3px;
 }
@@ -288,11 +286,9 @@
     line-height: 47px;
     color: #fff;
     background: transparent;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0,
-        rgba(0, 0, 0, 0.2) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 0.2) 100%);
     border-radius: 3px;
     -webkit-border-radius: 3px;
 }
@@ -302,11 +298,9 @@
 .mbt-lg:hover,
 .active .mbt-lg {
     color: #fff;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.1) 0,
-        rgba(0, 0, 0, 0.3) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.1) 0,
+            rgba(0, 0, 0, 0.3) 100%);
 }
 
 .mbt-circle {
@@ -315,11 +309,9 @@
     width: 30px;
     color: #fff;
     background: #bbb;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0,
-        rgba(0, 0, 0, 0.1) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 0.1) 100%);
     text-align: center;
     border-radius: 15px;
     -webkit-border-radius: 15px;
@@ -327,11 +319,9 @@
 
 .mbt-circle:hover,
 .active .mbt-circle {
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.2) 0,
-        rgba(0, 0, 0, 0.3) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.2) 0,
+            rgba(0, 0, 0, 0.3) 100%);
 }
 
 .clear {
@@ -788,13 +778,11 @@ header.first-child {
     z-index: 10;
     min-height: 48px;
     background: #137cbe;
-    background-image: linear-gradient(
-        60deg,
-        #d8eaf8 0,
-        #d8eaf8 133px,
-        rgba(0, 0, 0, 0) 134px,
-        rgba(0, 0, 0, 0) 100%
-    );
+    background-image: linear-gradient(60deg,
+            #d8eaf8 0,
+            #d8eaf8 133px,
+            rgba(0, 0, 0, 0) 134px,
+            rgba(0, 0, 0, 0) 100%);
     -webkit-transition: top 0.08s ease-in-out;
     transition: top 0.08s ease-in-out;
 }
@@ -805,11 +793,9 @@ header.header-up {
 
 #header {
     min-height: 47px;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0,
-        rgba(0, 0, 0, 0.2) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 0.2) 100%);
     border-bottom: 1px solid #205fa0;
 }
 
@@ -1067,13 +1053,9 @@ header.header-up {
 .sub-breadcrumbs {
     margin: 0;
     padding: 0;
-    background: #fff
-        linear-gradient(
-            to bottom,
+    background: #fff linear-gradient(to bottom,
             rgba(0, 0, 0, 0) 0px,
-            rgba(0, 0, 0, 0.1) 100%
-        )
-        repeat scroll 0 0;
+            rgba(0, 0, 0, 0.1) 100%) repeat scroll 0 0;
     position: absolute;
     left: 39px;
     top: 36px;
@@ -1143,11 +1125,9 @@ header.header-up {
     height: 39px;
     width: 100%;
     background: #205fa0;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0,
-        rgba(0, 0, 0, 0.2) 100%
-    );
+    background-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 0.2) 100%);
     border-top: 1px solid #205fa0;
     font-size: 0.9em;
     color: #333;
@@ -1636,6 +1616,7 @@ button.close {
         margin-left: 10px;
         margin-right: 10px;
     }
+
     #sitemodal .modal-content {
         display: block;
     }
@@ -1723,19 +1704,24 @@ hr {
     .min-width {
         width: 100% !important;
     }
+
     #tip {
         width: 100%;
     }
+
     #ftip {
         max-width: 100%;
     }
+
     .winHelp {
         width: calc(100% - 80px);
     }
+
     .contactForm {
         width: 100%;
         margin: 0;
     }
+
     .contactForm .panel {
         width: 100%;
     }

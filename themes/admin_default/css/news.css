@@ -158,24 +158,29 @@ input {
     border: 1px solid #bdc7d8;
     cursor: text;
 }
+
 .uiCloseButtonSmall {
     background-image: url('../images/delfb.png');
     height: 11px;
     margin-top: 1px;
     width: 11px;
 }
+
 .uiCloseButton {
     cursor: pointer;
     display: inline-block;
     margin: 0;
     padding: 0;
 }
+
 .uiTypeahead {
     border-top: 1px solid #ccc;
 }
+
 .uiTypeahead .innerWrap {
     overflow: hidden;
 }
+
 .uiTypeahead .textInput {
     background: none !important;
     border: none !important;
@@ -185,16 +190,20 @@ input {
     -moz-box-shadow: 0 0 0 #fff;
     box-shadow: 0 0 0 #fff;
 }
+
 .uiTypeahead .selected {
     background-color: #e2e8f6;
 }
+
 .uiTypeaheadDisabled,
 .uiTypeaheadDisabled div.wrap {
     border-color: #cccccc;
 }
+
 .uiTypeaheadDisabled div.wrap {
     background: none repeat scroll 0 0 #e2e2e2;
 }
+
 .uiToken {
     background: #e6e6e6;
     border: 1px solid #ccc;
@@ -212,19 +221,23 @@ input {
     white-space: nowrap;
     cursor: pointer;
 }
+
 .uiToken .remove {
     margin: 2px 0 -2px 1px;
     outline: medium none;
 }
+
 .uiTokenSelected {
     background-color: #6d84b4;
     border-color: #3b5998;
     color: #ffffff;
 }
+
 .uiTokenGray {
     background: none repeat scroll 0 0 #dddddd;
     border-color: gray;
 }
+
 .uiTokenizer {
     background: none repeat scroll 0 0 #ffffff;
 }
@@ -233,9 +246,11 @@ input {
     overflow: hidden;
     padding-left: 3px;
 }
+
 .uiContextualTypeaheadView {
     position: static;
 }
+
 .uiTypeaheadView ul {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -249,6 +264,7 @@ input {
     overflow: hidden;
     padding: 2px 0;
 }
+
 .uiTypeaheadView .freeform {
     border-top-color: #dddddd;
     padding: 2px 6px 1px;
@@ -261,13 +277,16 @@ input {
     padding: 0;
     margin: 0;
 }
+
 .news-inf-icons li {
     display: inline-block;
     padding-left: 10px;
 }
+
 .news-inf-icons li:first-child {
     padding-left: 0;
 }
+
 @media only screen and (min-width: 320px) and (max-width: 992px) {
     .form-control {
         padding: 6px 0px;

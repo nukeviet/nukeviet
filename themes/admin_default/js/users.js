@@ -22,14 +22,14 @@ function user_validForm(a) {
         url: $(a).prop("action"),
         data: $(a).serialize(),
         dataType: "json",
-        success: function (b) {
+        success: function(b) {
             $('[type="submit"] .fa', $(a)).toggleClass('hidden');
             $('[type="submit"]', $(a)).prop('disabled', false);
             if (b.status == "error") {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
-                location_href = typeof (b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
+                location_href = typeof(b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
                 if (b.admin_add == "yes") {
                     if (confirm(b.mess)) {
                         location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
@@ -56,7 +56,7 @@ function user_editcensor_validForm(a) {
         url: $(a).prop("action"),
         data: $(a).serialize(),
         dataType: "json",
-        success: function (b) {
+        success: function(b) {
             $('[type="submit"]', $(a)).prop('disabled', false);
             if (b.status == "error") {
                 alert(b.mess);
@@ -72,7 +72,7 @@ function user_editcensor_validForm(a) {
 function nv_chang_question(qid) {
     var nv_timer = nv_settimeout_disable('id_weight_' + qid, 5000);
     var new_vid = $('#id_weight_' + qid).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'changeweight=1&qid=' + qid + '&new_vid=' + new_vid, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'changeweight=1&qid=' + qid + '&new_vid=' + new_vid, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
         }
@@ -97,7 +97,7 @@ function nv_save_title(qid) {
     }
 
     var nv_timer = nv_settimeout_disable('title_' + qid, 5000);
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'edit=1&qid=' + qid + '&title=' + new_title.value, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'edit=1&qid=' + qid + '&title=' + new_title.value, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
         }
@@ -109,7 +109,7 @@ function nv_save_title(qid) {
 
 function nv_show_list_question() {
     if (document.getElementById('module_show_list')) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'qlist=1', function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'qlist=1', function(res) {
             $("#module_show_list").html(res);
         });
     }
@@ -118,7 +118,7 @@ function nv_show_list_question() {
 
 function nv_del_question(qid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'del=1&qid=' + qid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'del=1&qid=' + qid, function(res) {
             if (res == 'OK') {
                 nv_show_list_question();
             } else {
@@ -140,7 +140,7 @@ function nv_add_question() {
 
     var nv_timer = nv_settimeout_disable('new_title', 5000);
 
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'add=1&title=' + new_title.value, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=question&nocache=' + new Date().getTime(), 'add=1&title=' + new_title.value, function(res) {
         if (res == 'OK') {
             nv_show_list_question();
         } else {
@@ -153,7 +153,7 @@ function nv_add_question() {
 function nv_row_del(vid) {
     if (confirm(nv_is_del_confirm[0])) {
         var checkss = $("input[name='checkss']").val();
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -171,7 +171,7 @@ function nv_row_del(vid) {
 }
 
 function nv_set_official(vid) {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(), 'userid=' + vid, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
         if (res == 'OK') {
             window.location.href = window.location.href;
         } else {
@@ -184,7 +184,7 @@ function nv_set_official(vid) {
 
 function nv_waiting_row_del(uid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid + '&checkss=' + checkss, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid + '&checkss=' + checkss, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -198,7 +198,7 @@ function nv_waiting_row_del(uid, checkss) {
 // Xóa thông tin chỉnh sửa
 function nv_editcensor_row_del(uid, msg) {
     if (confirm(msg)) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
             location.reload();
         });
     }
@@ -207,7 +207,7 @@ function nv_editcensor_row_del(uid, msg) {
 // Xác nhận thông tin chỉnh sửa
 function nv_editcensor_row_accept(uid, msg) {
     if (confirm(msg)) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
             if (res.status != 'SUCCESS') {
                 alert(res.mess);
             } else {
@@ -220,7 +220,7 @@ function nv_editcensor_row_accept(uid, msg) {
 function nv_chang_status(vid) {
     var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
     var checkss = $("input[name='checkss']").val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + vid + '&checkss=' + checkss, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
             window.location.href = window.location.href;
@@ -231,12 +231,16 @@ function nv_chang_status(vid) {
 
 function nv_group_change_status(group_id) {
     var nv_timer = nv_settimeout_disable('select_' + group_id, 5000);
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_act&nocache=' + new Date().getTime(), 'group_id=' + group_id, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_act&nocache=' + new Date().getTime(), 'group_id=' + group_id, function(res) {
         var r_split = res.split("_");
         var sl = document.getElementById('select_' + r_split[1]);
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            if (sl.checked == true) { sl.checked = false; } else { sl.checked = true; }
+            if (sl.checked == true) {
+                sl.checked = false;
+            } else {
+                sl.checked = true;
+            }
             clearTimeout(nv_timer);
             sl.disabled = true;
             return;
@@ -247,7 +251,7 @@ function nv_group_change_status(group_id) {
 
 function nv_group_del(group_id) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_del&nocache=' + new Date().getTime(), 'group_id=' + group_id, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_del&nocache=' + new Date().getTime(), 'group_id=' + group_id, function(res) {
             var r_split = res.split("_");
             if (r_split[0] == 'OK') {
                 window.location.href = strHref;
@@ -275,7 +279,7 @@ function nv_group_add_user(group_id, userid) {
     var user_checkbox = document.getElementById('user_' + userid);
     if (confirm(nv_is_add_user_confirm[0])) {
         user_checkbox.disabled = true;
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_add_user&nocache=' + new Date().getTime(), 'group_id=' + group_id + '&userid=' + userid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_add_user&nocache=' + new Date().getTime(), 'group_id=' + group_id + '&userid=' + userid, function(res) {
             var res2 = res.split("_");
             if (res2[0] != 'OK') {
                 var user_checkbox = document.getElementById('user_' + userid);
@@ -310,7 +314,7 @@ function nv_group_exclude_user(group_id, userid) {
     var user_checkbox2 = document.getElementById('exclude_user_' + userid);
     if (confirm(nv_is_exclude_user_confirm[0])) {
         user_checkbox2.disabled = true;
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_exclude_user&nocache=' + new Date().getTime(), 'group_id=' + group_id + '&userid=' + userid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups_exclude_user&nocache=' + new Date().getTime(), 'group_id=' + group_id + '&userid=' + userid, function(res) {
             var res3 = res.split("_");
             if (res3[0] != 'OK') {
                 var user_checkbox2 = document.getElementById('exclude_user_' + userid);
@@ -343,7 +347,7 @@ function nv_group_exclude_user(group_id, userid) {
 }
 
 function nv_genpass() {
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
         $("input[name='password1']").val(res);
         $("input[name='password2']").val(res);
     });
@@ -359,7 +363,7 @@ function nv_check_form(OForm) {
     return false;
 }
 
-$.toggleShowPassword = function (options) {
+$.toggleShowPassword = function(options) {
     var settings = $.extend({
         field: "#password",
         control: "#toggle_show_password"
@@ -368,7 +372,7 @@ $.toggleShowPassword = function (options) {
     var control = $(settings.control);
     var field = $(settings.field);
 
-    control.bind('click', function () {
+    control.bind('click', function() {
         if (control.is(':checked')) {
             field.attr('type', 'text');
         } else {
@@ -382,7 +386,7 @@ function nv_data_export(set_export) {
         type: "POST",
         url: "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=export&nocache=" + new Date().getTime(),
         data: "step=1&set_export=" + set_export + "&method=" + $("select[name=method]").val() + "&value=" + $("input[name=value]").val() + "&usactive=" + $("select[name=usactive]").val(),
-        success: function (response) {
+        success: function(response) {
             if (response == "OK_GETFILE") {
                 nv_data_export(0);
             } else if (response == "OK_COMPLETE") {
@@ -419,7 +423,7 @@ function nv_show_list_field() {
 function nv_chang_field(fid) {
     var nv_timer = nv_settimeout_disable('id_weight_' + fid, 5000);
     var new_vid = $('#id_weight_' + fid).val();
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid, function (res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid, function(res) {
         if (res != 'OK') {
             alert(nv_is_change_act_confirm[2]);
         }
@@ -431,7 +435,7 @@ function nv_chang_field(fid) {
 
 function nv_del_field(fid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'del=1&fid=' + fid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'del=1&fid=' + fid, function(res) {
             if (res == 'OK') {
                 nv_show_list_field();
             } else {
@@ -478,7 +482,7 @@ function nv_users_check_choicetypes(elemnet) {
 }
 
 function control_theme_groups() {
-    $('[name="group[]"]').each(function () {
+    $('[name="group[]"]').each(function() {
         if ($(this).is(':checked')) {
             $('.group_default', $(this).parent().parent()).show();
         } else {
@@ -496,7 +500,7 @@ function control_theme_groups() {
 
 function nv_del_oauthall(userid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -509,7 +513,7 @@ function nv_del_oauthall(userid) {
 
 function nv_del_oauthone(opid, userid) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function (res) {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function(res) {
             if (res == 'OK') {
                 window.location.href = window.location.href;
             } else {
@@ -525,7 +529,7 @@ function nv_main_action(btn) {
     var setactive = 0;
     var listid = '';
     if (fa.length) {
-        fa.each(function () {
+        fa.each(function() {
             if ($(this).is(':checked')) {
                 listid = listid + $(this).val() + ',';
             }
@@ -537,7 +541,7 @@ function nv_main_action(btn) {
         var checkss = $("input[name='checkss']").val();
         if (action == 'del') {
             if (confirm(nv_is_del_confirm[0])) {
-                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid + '&checkss=' + checkss, function (res) {
+                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'userid=' + listid + '&checkss=' + checkss, function(res) {
                     if (res == 'OK') {
                         window.location.href = window.location.href;
                     } else {
@@ -558,7 +562,7 @@ function nv_main_action(btn) {
             if (action == 'active') {
                 setactive = 1;
             }
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + listid + '&setactive=' + setactive + '&checkss=' + checkss, function (res) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setactive&nocache=' + new Date().getTime(), 'userid=' + listid + '&setactive=' + setactive + '&checkss=' + checkss, function(res) {
                 if (res != 'OK') {
                     alert(nv_is_change_act_confirm[2]);
                     btn.prop('disabled', false);
@@ -573,24 +577,24 @@ function nv_main_action(btn) {
     }
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     // List user main
-    $('#mainusersaction').click(function () {
+    $('#mainusersaction').click(function() {
         $(this).prop('disabled', true);
         nv_main_action($(this));
     });
 
     // Edit user
-    $("#btn_upload").click(function () {
+    $("#btn_upload").click(function() {
         nv_open_browse(nv_base_siteurl + "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
         return false;
     });
-    $('#current-photo-btn').click(function () {
+    $('#current-photo-btn').click(function() {
         $('#current-photo').hide();
         $('#photo_delete').val('1');
         $('#change-photo').show();
     });
-    $('#imageresource').click(function () {
+    $('#imageresource').click(function() {
         $('#current-photo-btn').click();
         $("#btn_upload").click();
     });
@@ -625,30 +629,30 @@ $(document).ready(function () {
             buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
             buttonImageOnly: true,
             yearRange: "-99:+0",
-            beforeShow: function () {
-                setTimeout(function () {
+            beforeShow: function() {
+                setTimeout(function() {
                     $('.ui-datepicker').css('z-index', 999999999);
                 }, 0);
             }
         });
     }
 
-    $('[name="group[]"]').change(function () {
+    $('[name="group[]"]').change(function() {
         control_theme_groups();
     });
-    $('[name="is_official"]').change(function () {
+    $('[name="is_official"]').change(function() {
         control_theme_groups();
     });
 
     // Export user
-    $("input[name=data_export]").click(function () {
+    $("input[name=data_export]").click(function() {
         $("input[name=data_export]").attr("disabled", "disabled");
         $('#users').html('<center>' + export_note + '<br /><br /><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="" /></center>');
         nv_data_export(1);
     });
 
     // Get userid
-    $("#resultdata").delegate("thead a,.generatePage a", "click", function (e) {
+    $("#resultdata").delegate("thead a,.generatePage a", "click", function(e) {
         e.preventDefault()
         $("#resultdata").load($(this).attr("href"))
     });
@@ -663,7 +667,7 @@ $(document).ready(function () {
             showOn: 'focus'
         });
     }
-    $("#formgetuid").submit(function () {
+    $("#formgetuid").submit(function() {
         var a = $(this).attr("action");
         b = $(this).serialize();
         a = a + "&" + b + "&submit";
@@ -671,7 +675,7 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             url: a,
-            success: function (c) {
+            success: function(c) {
                 $("#resultdata").html(c);
                 $("#formgetuid input, #formgetuid select").removeAttr("disabled")
             }
@@ -680,7 +684,7 @@ $(document).ready(function () {
     });
 
     // User field
-    $("input[name=field_type]").click(function () {
+    $("input[name=field_type]").click(function() {
         var field_type = $("input[name='field_type']:checked").val();
         $("#textfields").hide();
         $("#numberfields").hide();
@@ -715,12 +719,12 @@ $(document).ready(function () {
             nv_users_check_choicetypes("select[name=choicetypes]");
         }
     });
-    $("input[name=required],input[name=show_register]").click(function () {
+    $("input[name=required],input[name=show_register]").click(function() {
         if ($("input[name='required']:checked").val() == 1) {
             $("input[name=show_register]").prop("checked", true);
         }
     });
-    $("input[name=match_type]").click(function () {
+    $("input[name=match_type]").click(function() {
         $("input[name=match_regex]").attr('disabled', 'disabled');
         $("input[name=match_callback]").attr('disabled', 'disabled');
         var match_type = $("input[name='match_type']:checked").val();
@@ -739,15 +743,15 @@ $(document).ready(function () {
         }
     });
 
-    $("input[name=current_date]").click(function () {
+    $("input[name=current_date]").click(function() {
         nv_load_current_date();
     });
-    $("select[name=choicetypes]").change(function () {
+    $("select[name=choicetypes]").change(function() {
         nv_users_check_choicetypes(this);
     });
 
     // Group
-    $("[name='browse-image']").click(function (e) {
+    $("[name='browse-image']").click(function(e) {
         e.preventDefault();
         var area = $(this).data('area'),
             path = $(this).data('path'),
@@ -756,7 +760,7 @@ $(document).ready(function () {
 
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
     });
-    $('[data-toggle="opendatepicker"]').click(function (e) {
+    $('[data-toggle="opendatepicker"]').click(function(e) {
         e.preventDefault();
         var wrp = $(this).parent().parent();
         wrp.find('[type="text"]').focus();
@@ -766,7 +770,7 @@ $(document).ready(function () {
     var popOverALl = new Array();
 
     function destroyAllPop() {
-        $.each(popOverALl, function (k, v) {
+        $.each(popOverALl, function(k, v) {
             $(v).popover('destroy');
             $(v).data('havepop', false);
         });
@@ -790,7 +794,7 @@ $(document).ready(function () {
         return '<div class="dropdown-tool-ctn"><ul class="dropdown-tool" data-mod="' + $(e).data('mod') + '" data-id="' + $(e).data('id') + '">' + tmpgroup.html() + '</ul></div>';
     }
 
-    $(document).delegate('[data-toggle="changegroupweight"]', 'click', function (e) {
+    $(document).delegate('[data-toggle="changegroupweight"]', 'click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         popOverALl.push(this);
@@ -804,7 +808,7 @@ $(document).ready(function () {
                 trigger: "manual"
             });
             $(this).popover('show');
-            $(this).on('shown.bs.popover', function () {
+            $(this).on('shown.bs.popover', function() {
                 var $this = $(this);
                 var ctn = $('#' + $this.attr('aria-describedby'));
                 var wrapArea = ctn.find('.dropdown-tool-ctn');
@@ -818,7 +822,7 @@ $(document).ready(function () {
             });
         }
     });
-    $(document).delegate('.dropdown-tool a', 'click', function (e) {
+    $(document).delegate('.dropdown-tool a', 'click', function(e) {
         e.preventDefault();
         destroyAllPop();
         var $this = $(this);
@@ -829,7 +833,7 @@ $(document).ready(function () {
         $.post(
             script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
             'id=' + ctn.data('id') + '&cWeight=' + $this.data('value') + '&tokend=' + btn.data('tokend'),
-            function (res) {
+            function(res) {
                 if (res != 'OK') {
                     alert(btn.data('msgerror'));
                 }
@@ -838,15 +842,15 @@ $(document).ready(function () {
         );
     });
     // Các thao tác với popover
-    $(document).delegate('div.popover', 'click', function (e) {
+    $(document).delegate('div.popover', 'click', function(e) {
         e.stopPropagation();
     });
-    $(window).on('click', function () {
+    $(window).on('click', function() {
         destroyAllPop();
     });
 
     // Xóa các nhóm ngưng kích hoạt
-    $('[data-toggle="delInactiveGroup"]').on('click', function (e) {
+    $('[data-toggle="delInactiveGroup"]').on('click', function(e) {
         e.preventDefault();
         var $this = $(this);
         if ($this.data('busy')) {
@@ -857,7 +861,7 @@ $(document).ready(function () {
             $.post(
                 script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&nocache=' + new Date().getTime(),
                 'deleteinactive=1&tokend=' + $this.data('tokend'),
-                function (res) {
+                function(res) {
                     alert(res);
                     location.reload();
                 }

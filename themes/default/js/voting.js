@@ -46,7 +46,7 @@ function nv_sendvoting_submit(id, checkss, vals, capt) {
         url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + id + "&checkss=" + checkss + "&lid=" + vals + (typeof capt != 'undefined' ? '&captcha=' + capt : ''),
         data: "nv_ajax_voting=1",
         dataType: "html",
-        success: function (res) {
+        success: function(res) {
             var b = $("[onclick*='change_captcha']");
             if (b.length) {
                 b.click()

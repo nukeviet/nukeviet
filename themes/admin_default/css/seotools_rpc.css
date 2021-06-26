@@ -117,18 +117,15 @@
 }
 
 #rpc .list .error {
-    background: transparent url(../images/seotools/error.png) no-repeat center
-        center;
+    background: transparent url(../images/seotools/error.png) no-repeat center center;
 }
 
 #rpc .list .load {
-    background: transparent url(../images/seotools/load.gif) no-repeat center
-        center;
+    background: transparent url(../images/seotools/load.gif) no-repeat center center;
 }
 
 #rpc .list .ok {
-    background: transparent url(../images/seotools/ok.png) no-repeat center
-        center;
+    background: transparent url(../images/seotools/ok.png) no-repeat center center;
 }
 
 #rpc .list img {

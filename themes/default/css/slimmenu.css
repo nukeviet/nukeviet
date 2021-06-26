@@ -35,6 +35,7 @@ ul.slimmenu li {
     font-size: 16px;
     padding: 0;
 }
+
 .collapse-button {
     position: absolute;
     right: -40px;
@@ -64,12 +65,14 @@ ul.slimmenu li {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+
 .collapse-button:hover,
 .collapse-button:focus {
     background-image: none;
     background-color: #1182c8;
     color: #fff;
 }
+
 .collapse-button .icon-bar {
     background-color: #f5f5f5;
     border-radius: 0px;
@@ -83,6 +86,7 @@ ul.slimmenu li {
 ul.slimmenu li a {
     padding: 15px 26px;
 }
+
 ul.slimmenu li ul li a,
 ul.slimmenu.collapsed li a {
     padding: 10px;
@@ -91,14 +95,17 @@ ul.slimmenu.collapsed li a {
 ul.slimmenu.collapsed {
     z-index: 3;
 }
+
 ul.slimmenu.collapsed li a {
     display: block;
     min-width: 200px;
 }
+
 ul.slimmenu.collapsed li ul li {
     padding: 0px;
     clear: both;
 }
+
 ul.slimmenu.collapsed li ul li a i {
     padding: 0px 5px;
 }
@@ -106,12 +113,15 @@ ul.slimmenu.collapsed li ul li a i {
 ul.slimmenu > li {
     margin-right: -5px;
 }
+
 ul.slimmenu > li:first-child {
     border-left: 0;
 }
+
 ul.slimmenu > li:last-child {
     margin-right: 0;
 }
+
 ul.slimmenu > li > a {
     display: block;
     color: #fff;
@@ -121,6 +131,7 @@ ul.slimmenu > li > a {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
     background: none;
 }
+
 ul.slimmenu li a:hover,
 ul.slimmenu li a:focus,
 ul.slimmenu li.current {
@@ -139,6 +150,7 @@ ul.slimmenu li .sub-collapser {
     z-index: 999;
     cursor: pointer;
 }
+
 ul.slimmenu li .sub-collapser:before {
     content: '';
     display: inline-block;
@@ -146,15 +158,18 @@ ul.slimmenu li .sub-collapser:before {
     vertical-align: middle;
     margin-right: -0.25em;
 }
+
 ul.slimmenu li .sub-collapser > i {
     color: #ffffff;
     font-size: 9px;
     display: inline-block;
     vertical-align: middle;
 }
+
 ul.slimmenu li ul li .sub-collapser > i {
     color: #333;
 }
+
 ul.slimmenu.collapsed li .sub-collapser > i {
     vertical-align: top;
     margin-top: 14px;
@@ -169,6 +184,7 @@ ul.slimmenu li ul {
     margin: 0;
     list-style-type: none;
 }
+
 ul.slimmenu li ul li {
     display: block;
     padding: 0;
@@ -176,6 +192,7 @@ ul.slimmenu li ul li {
     z-index: 1000;
     clear: both;
 }
+
 ul.slimmenu li ul li a {
     color: #333333;
     clear: both;
@@ -184,6 +201,7 @@ ul.slimmenu li ul li a {
     line-height: 1.42857;
     white-space: nowrap;
 }
+
 ul.slimmenu li ul li a:hover,
 ul.slimmenu li ul li a:focus {
     background-color: #f5f5f5;
@@ -207,6 +225,7 @@ ul.slimmenu li > ul {
     min-width: 200px;
     background: #ffffff;
 }
+
 ul.slimmenu li > ul > li ul {
     display: none;
     position: absolute;
@@ -223,6 +242,7 @@ ul.slimmenu.collapsed li {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+
 ul.slimmenu.collapsed li a {
     display: block;
     border-bottom: 1px solid rgba(0, 0, 0, 0.075);
@@ -230,10 +250,12 @@ ul.slimmenu.collapsed li a {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+
 ul.slimmenu.collapsed li > ul {
     display: none;
     position: static;
 }
+
 @media (max-width: 768px) {
     ul.slimmenu li > ul {
         border-radius: 0px;
@@ -241,9 +263,10 @@ ul.slimmenu.collapsed li > ul {
         border: none;
     }
 }
+
 @media (min-width: 992px) {
     nav > .container > .row {
-        margin-left: -5px !important ;
-        margin-right: -5px !important ;
+        margin-left: -5px !important;
+        margin-right: -5px !important;
     }
 }
