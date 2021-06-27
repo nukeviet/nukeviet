@@ -70,23 +70,9 @@ function nv_admin_write_lang($dirlang, $idfile)
         if ($include_lang == '') {
             return $lang_module['nv_error_write_module'] . ' : ' . $module;
         }
-        if (preg_match('/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})[\-\/\.\,\\s]{2}(0?\d|[1]{1}\d|2[0-4]{1})[\-\/\.\:]{1}([0-5]?[0-9])$/', $array_translator['createdate'], $m)) {
-            $createdate = mktime($m[4], $m[5], 0, $m[2], $m[1], $m[3]);
-        } elseif (preg_match('/^(0?\d|[1-2]{1}\d|3[0-1]{1})[\-\/\.]{1}(0?\d|1[0-2]{1})[\-\/\.]{1}(19[\d]{2}|20[\d]{2})$/', $array_translator['createdate'], $m)) {
-            $createdate = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
-        } else {
-            $createdate = time();
-        }
 
         $content_lang = "<?php\n\n";
-        $content_lang .= "/**\n";
-        $content_lang .= "* @Project NUKEVIET 4.x\n";
-        $content_lang .= "* @Author VINADES.,JSC <contact@vinades.vn>\n";
-        $content_lang .= '* @Copyright (C) ' . date('Y') . " VINADES.,JSC. All rights reserved\n";
-        $content_lang .= '* @Language ' . $language_array[$dirlang]['name'] . "\n";
-        $content_lang .= "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n";
-        $content_lang .= '* @Createdate ' . gmdate('M d, Y, h:i:s A', $createdate) . "\n";
-        $content_lang .= "*/\n";
+        $content_lang .= NV_FILEHEAD . "\n";
 
         if ($langtype != 'lang_theme') {
             if ($admin_file) {
