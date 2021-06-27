@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SITEINFO')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
@@ -26,7 +27,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
     $_arr_siteinfo['number_user'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table)->fetchColumn();
     $_arr_siteinfo['number_user_reg'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_reg')->fetchColumn();
     $_arr_siteinfo['number_user_edit'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_edit')->fetchColumn();
-    $access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
+    $access_admin = $db->query('SELECT content FROM ' . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
     $access_admin = unserialize($access_admin);
     $_arr_siteinfo['access_admin'] = $access_admin;
     $nv_Cache->setItem($mod, $cacheFile, serialize($_arr_siteinfo), $cacheTTL);

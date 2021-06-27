@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 $page_title = $nv_Lang->getModule('block');
 
 $error = '';
 $savecat = 0;
-list($bid, $title, $alias, $description, $image, $keywords) = array( 0, '', '', '', '', '' );
+list($bid, $title, $alias, $description, $image, $keywords) = [0, '', '', '', '', ''];
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $bid = $nv_Request->get_int('bid', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
@@ -39,7 +40,7 @@ if (! empty($savecat)) {
     }
 
     // Kiểm tra trùng
-    $sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat WHERE (title=:title OR alias=:alias)" . ($bid ? ' AND bid!=' . $bid : '');
+    $sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE (title=:title OR alias=:alias)' . ($bid ? ' AND bid!=' . $bid : '');
     $sth = $db->prepare($sql);
     $sth->bindParam(':title', $title, PDO::PARAM_STR);
     $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
@@ -51,11 +52,11 @@ if (! empty($savecat)) {
     } elseif ($is_exists) {
         $error = $nv_Lang->getModule('errorexists');
     } elseif ($bid == 0) {
-        $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat")->fetchColumn();
-        $weight = intval($weight) + 1;
+        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat')->fetchColumn();
+        $weight = (int) $weight + 1;
 
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block_cat (adddefault, numbers, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (0, 4, :title , :alias, :description, :image, :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-        $data_insert = array();
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat (adddefault, numbers, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (0, 4, :title , :alias, :description, :image, :weight, :keywords, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
+        $data_insert = [];
         $data_insert['title'] = $title;
         $data_insert['alias'] = $alias;
         $data_insert['description'] = $description;
@@ -64,20 +65,20 @@ if (! empty($savecat)) {
         $data_insert['keywords'] = $keywords;
 
         if ($db->insert_id($sql, 'bid', $data_insert)) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_blockcat', " ", $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_blockcat', ' ', $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
             $error = $nv_Lang->getModule('errorsave');
         }
     } else {
-        $stmt = $db->prepare("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET title= :title, alias = :alias, description= :description, image= :image, keywords= :keywords, edit_time=" . NV_CURRENTTIME . " WHERE bid =" . $bid);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET title= :title, alias = :alias, description= :description, image= :image, keywords= :keywords, edit_time=' . NV_CURRENTTIME . ' WHERE bid =' . $bid);
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':image', $image, PDO::PARAM_STR);
         $stmt->bindParam(':keywords', $keywords, PDO::PARAM_STR);
         if ($stmt->execute()) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_blockcat', 'blockid ' . $bid, $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
             $error = $nv_Lang->getModule('errorsave');
@@ -87,7 +88,7 @@ if (! empty($savecat)) {
 
 $bid = $nv_Request->get_int('bid', 'get', 0);
 if ($bid > 0) {
-    list($bid, $title, $alias, $description, $image, $keywords) = $db->query("SELECT bid, title, alias, description, image, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat where bid=" . $bid)->fetch(3);
+    list($bid, $title, $alias, $description, $image, $keywords) = $db->query('SELECT bid, title, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat where bid=' . $bid)->fetch(3);
     $nv_Lang->setModule('add_block_cat', $nv_Lang->getModule('edit_block_cat'));
 }
 
@@ -110,15 +111,15 @@ $xtpl->assign('alias', $alias);
 $xtpl->assign('keywords', $keywords);
 $xtpl->assign('description', nv_htmlspecialchars(nv_br2nl($description)));
 
-if (! empty($image) and file_exists(NV_UPLOADS_REAL_DIR . "/" . $module_upload . "/" . $image)) {
-    $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $image;
+if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
+    $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
     $currentpath = dirname($image);
 }
 $xtpl->assign('image', $image);
 $xtpl->assign('UPLOAD_CURRENT', $currentpath);
 $xtpl->assign('UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }

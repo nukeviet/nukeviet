@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Lay chu de cua module duoc chon
@@ -25,10 +26,10 @@ $stmt->execute();
 list($mod_name, $mod_file, $mod_data) = $stmt->fetch(3);
 
 if (empty($mod_name)) {
-    die($nv_Lang->getModule('add_error_module'));
+    exit($nv_Lang->getModule('add_error_module'));
 }
 
-$array_item = array();
+$array_item = [];
 if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php')) {
     include NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php';
 }
@@ -37,11 +38,11 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php')) {
 $funcs_item = $site_mods[$mod_name]['funcs'];
 foreach ($funcs_item as $key => $sub_item) {
     if ($sub_item['in_submenu'] == 1) {
-        $array_item[] = array(
+        $array_item[] = [
             'key' => $key,
             'title' => $sub_item['func_custom_name'],
             'alias' => $key
-        );
+        ];
     }
 }
 
@@ -57,7 +58,7 @@ if (!empty($array_item)) {
             $xtpl->assign('item', $item1);
             $xtpl->parse('main.link.item');
 
-            $array_submenu = array();
+            $array_submenu = [];
             nv_menu_get_submenu($key, '', $array_item, $sp);
             foreach ($array_submenu as $item2) {
                 $xtpl->assign('item', $item2);
@@ -73,4 +74,4 @@ if (!empty($array_item)) {
     echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 }
-die('&nbsp;');
+exit('&nbsp;');

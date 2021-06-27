@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/14/2010 0:50
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -28,9 +29,9 @@ $height = $row['height'];
 $imageforswf = $row['imageforswf'];
 $page_title = $nv_Lang->getModule('edit_banner');
 
-$contents = array();
+$contents = [];
 $contents['upload_blocked'] = '';
-$contents['file_allowed_ext'] = array();
+$contents['file_allowed_ext'] = [];
 
 if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
     $contents['file_allowed_ext'][] = 'images';
@@ -51,7 +52,7 @@ if (empty($contents['file_allowed_ext'])) {
 $sql = 'SELECT id, title, blang, require_image, exp_time FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC';
 $result = $db->query($sql);
 
-$plans = $require_image = $plans_exp = array();
+$plans = $require_image = $plans_exp = [];
 while ($pl_row = $result->fetch()) {
     $plans[$pl_row['id']] = $pl_row['title'] . ' (' . (!empty($pl_row['blang']) ? $language_array[$pl_row['blang']]['name'] : $nv_Lang->getModule('blang_all')) . ')';
     $require_image[$pl_row['id']] = $pl_row['require_image'];
@@ -168,7 +169,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         if (empty($error)) {
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
                 $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
-                // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
+            // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
                 //if ($publtime < $row['add_time']) {
                 //    $publtime = $row['add_time'];
                 //}
@@ -205,7 +206,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $act = ($act != 3 and $act != 4) ? 2 : $act;
             }
 
-            $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . intval($id))->fetchColumn();
+            $pid_old = $db->query('SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . (int) $id)->fetchColumn();
 
             $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_rows SET
                 title= :title, pid=' . $pid . ', clid=' . $assign_user_id . ',
@@ -249,7 +250,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     if (!empty($row['publ_time'])) {
         $publ_date = date('d/m/Y', $row['publ_time']);
         $publ_date_h = date('G', $row['publ_time']);
-        $publ_date_m = intval(date('i', $row['publ_time']));
+        $publ_date_m = (int) (date('i', $row['publ_time']));
     } else {
         $publ_date = '';
         $publ_date_h = 0;
@@ -259,7 +260,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     if (!empty($row['exp_time'])) {
         $exp_date = date('d/m/Y', $row['exp_time']);
         $exp_date_h = date('G', $row['exp_time']);
-        $exp_date_m = intval(date('i', $row['exp_time']));
+        $exp_date_m = (int) (date('i', $row['exp_time']));
     } else {
         $exp_date = '';
         $exp_date_h = 23;
@@ -280,78 +281,78 @@ $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);
 $contents['submit'] = $nv_Lang->getModule('edit_banner');
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id;
-$contents['title'] = array(
+$contents['title'] = [
     $nv_Lang->getModule('title'),
     'title',
     $title,
     255
-);
-$contents['plan'] = array(
+];
+$contents['plan'] = [
     $nv_Lang->getModule('in_plan'),
     'pid',
     $plans,
     $pid,
     $require_image,
     $plans_exp
-);
+];
 $contents['assign_user'] = $assign_user;
 
 $imageforswf = (!empty($imageforswf)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
 if ($file_ext != 'no_image') {
-    $contents['file_name'] = array(
+    $contents['file_name'] = [
         $nv_Lang->getModule('file_name'),
         NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name,
-        "data-width=" . $width . " id=" . ($file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image') . "",
-        NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif",
+        'data-width=' . $width . ' id=' . ($file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image') . '',
+        NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/ico_' . $file_ext . '.gif',
         $nv_Lang->getGlobal('show_picture'),
         $imageforswf,
-        NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif"
-    );
+        NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/ico_' . substr($imageforswf, -3) . '.gif'
+    ];
 } else {
-    $contents['file_name'] = array($nv_Lang->getModule('file_name'), '');
+    $contents['file_name'] = [$nv_Lang->getModule('file_name'), ''];
 }
 
-$contents['upload'] = array(
+$contents['upload'] = [
     sprintf($nv_Lang->getModule('re_upload'), $contents['file_allowed_ext']),
     'banner',
     $nv_Lang->getModule('imageforswf'),
     'imageforswf'
-);
-$contents['file_alt'] = array(
+];
+$contents['file_alt'] = [
     $nv_Lang->getModule('file_alt'),
     'file_alt',
     $file_alt,
     255
-);
-$contents['click_url'] = array(
+];
+$contents['click_url'] = [
     $nv_Lang->getModule('click_url'),
     'click_url',
     $click_url,
     255
-);
+];
 
-$contents['target'] = array(
+$contents['target'] = [
     $nv_Lang->getModule('target'),
     'target',
     $targets,
     $target
-);
+];
 
-$contents['publ_date'] = array(
+$contents['publ_date'] = [
     $nv_Lang->getModule('publ_date'),
     'publ_date',
     $publ_date,
     $publ_date_h,
     $publ_date_m
-);
-$contents['exp_date'] = array(
+];
+$contents['exp_date'] = [
     $nv_Lang->getModule('exp_date'),
     'exp_date',
     $exp_date,
     $exp_date_h,
     $exp_date_m
-);
+];
 
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
 

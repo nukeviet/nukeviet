@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 22/8/2010, 19:33
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /**
  * nv_internal_encoding()
- * 
+ *
  * @param mixed $encoding
  * @return
  */
@@ -25,7 +26,7 @@ function nv_internal_encoding($encoding)
 
 /**
  * nv_strlen()
- * 
+ *
  * @param mixed $string
  * @return
  */
@@ -36,7 +37,7 @@ function nv_strlen($string)
 
 /**
  * nv_substr()
- * 
+ *
  * @param mixed $string
  * @param mixed $start
  * @param mixed $length
@@ -60,7 +61,7 @@ function nv_substr($string, $start, $length)
 
 /**
  * nv_substr_count()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
  * @return
@@ -69,15 +70,16 @@ function nv_substr_count($haystack, $needle)
 {
     $needle = preg_quote($needle, '/');
     preg_match_all('/' . $needle . '/u', $haystack, $dummy);
+
     return sizeof($dummy[0]);
 }
 
 /**
  * nv2_strpos()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
- * @param integer $offset
+ * @param int   $offset
  * @return
  */
 function nv_strpos($haystack, $needle, $offset = 0)
@@ -110,7 +112,7 @@ function nv_strpos($haystack, $needle, $offset = 0)
 
 /**
  * nv_strrpos()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
  * @param mixed $offset
@@ -124,48 +126,49 @@ function nv_strrpos($haystack, $needle, $offset = null)
         if (sizeof($ar) > 1) {
             array_pop($ar);
             $haystack = join($needle, $ar);
+
             return nv_strlen($haystack);
         }
 
         return false;
-    } else {
-        if (! is_int($offset)) {
-            trigger_error('nv_strrpos expects parameter 3 to be long', E_USER_WARNING);
-            return false;
-        }
-
-        $haystack = nv_substr($haystack, $offset);
-
-        if (false !== ($pos = nv_strrpos($haystack, $needle))) {
-            return $pos + $offset;
-        }
+    }
+    if (!is_int($offset)) {
+        trigger_error('nv_strrpos expects parameter 3 to be long', E_USER_WARNING);
 
         return false;
     }
+
+    $haystack = nv_substr($haystack, $offset);
+
+    if (false !== ($pos = nv_strrpos($haystack, $needle))) {
+        return $pos + $offset;
+    }
+
+    return false;
 }
 
 /**
  * nv_strtolower()
- * 
+ *
  * @param mixed $string
  * @return
  */
 function nv_strtolower($string)
 {
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup['strtolower']);
 }
 
 /**
  * nv_strtoupper()
- * 
+ *
  * @param mixed $string
  * @return
  */
 function nv_strtoupper($string)
 {
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup['strtoupper']);
 }

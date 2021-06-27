@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $set_layout_site = false;
@@ -38,7 +39,7 @@ foreach ($theme_array as $themes_i) {
 $selectthemes_old = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 $selectthemes = $nv_Request->get_string('selectthemes', 'get', $selectthemes_old);
 
-if (!in_array($selectthemes, $theme_array)) {
+if (!in_array($selectthemes, $theme_array, true)) {
     $selectthemes = 'default';
 }
 
@@ -55,17 +56,17 @@ $array_layout_func_default = [];
 
 if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
-    $layoutdefault = ( string )$xml->layoutdefault;
+    $layoutdefault = (string) $xml->layoutdefault;
     $layout = $xml->xpath('setlayout/layout');
 
     for ($i = 0, $count = sizeof($layout); $i < $count; ++$i) {
-        $layout_name = ( string )$layout[$i]->name;
+        $layout_name = (string) $layout[$i]->name;
 
-        if (in_array($layout_name, $layout_array)) {
+        if (in_array($layout_name, $layout_array, true)) {
             $layout_funcs = $layout[$i]->xpath('funcs');
 
             for ($j = 0, $sizeof = sizeof($layout_funcs); $j < $sizeof; ++$j) {
-                $mo_funcs = ( string )$layout_funcs[$j];
+                $mo_funcs = (string) $layout_funcs[$j];
                 $mo_funcs = explode(':', $mo_funcs);
                 $m = $mo_funcs[0];
                 $arr_f = explode(',', $mo_funcs[1]);
@@ -90,7 +91,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         $func_arr_save = $nv_Request->get_array('func', 'post');
 
         foreach ($func_arr_save as $func_id => $layout_name) {
-            if (in_array($layout_name, $layout_array)) {
+            if (in_array($layout_name, $layout_array, true)) {
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout=:layout WHERE func_id = :func_id AND theme= :theme');
                 $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
                 $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
@@ -105,7 +106,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     } elseif ($nv_Request->isset_request('saveall', 'post') and $nv_Request->isset_request('layout', 'post')) {
         $layout = $nv_Request->get_string('layout', 'post');
         $module = $nv_Request->get_string('block_module', 'post');
-        if (in_array($layout, $layout_array)) {
+        if (in_array($layout, $layout_array, true)) {
             if (empty($module)) {
                 //Setup layout for all module
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1) AND theme= :theme');
@@ -158,7 +159,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         if (isset($array_layout_func_data[$func_id]) and !empty($array_layout_func_data[$func_id])) {
             $layout_name = $array_layout_func_data[$func_id];
 
-            if (!in_array($layout_name, $layout_array)) {
+            if (!in_array($layout_name, $layout_array, true)) {
                 $layout_name = $layoutdefault;
 
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id= :func_id AND theme= :theme');

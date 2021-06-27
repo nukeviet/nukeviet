@@ -1,9 +1,10 @@
-/* *
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+/**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 // NukeViet Default Custom JS
@@ -142,7 +143,9 @@ function tipShow(a, b, callback) {
                     var oldID = $(this).attr('id');
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
-                    var btn = false, pnum = 0, btnselector = '';
+                    var btn = false,
+                        pnum = 0,
+                        btnselector = '';
 
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
@@ -153,7 +156,7 @@ function tipShow(a, b, callback) {
                             pnum = ele.pnum;
                             btnselector = ele.btnselector;
                             btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
+                            for (k = 1; k <= ele.pnum; k++) {
                                 btn = btn.parent();
                             }
                             btn = $(ele.btnselector, btn);
@@ -194,7 +197,9 @@ function ftipShow(a, b, callback) {
                     var oldID = $(this).attr('id');
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
-                    var btn = false, pnum = 0, btnselector = '';
+                    var btn = false,
+                        pnum = 0,
+                        btnselector = '';
 
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
@@ -205,7 +210,7 @@ function ftipShow(a, b, callback) {
                             pnum = ele.pnum;
                             btnselector = ele.btnselector;
                             btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
+                            for (k = 1; k <= ele.pnum; k++) {
                                 btn = btn.parent();
                             }
                             btn = $(ele.btnselector, btn);
@@ -327,7 +332,9 @@ function modalShow(a, b, callback) {
                     var oldID = $(this).attr('id');
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
-                    var btn = false, pnum = 0, btnselector = '';
+                    var btn = false,
+                        pnum = 0,
+                        btnselector = '';
 
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
@@ -338,7 +345,7 @@ function modalShow(a, b, callback) {
                             pnum = ele.pnum;
                             btnselector = ele.btnselector;
                             btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
+                            for (k = 1; k <= ele.pnum; k++) {
                                 btn = btn.parent();
                             }
                             btn = $(ele.btnselector, btn);
@@ -359,13 +366,17 @@ function modalShow(a, b, callback) {
         }
     }
     if (scrollTop) {
-        $("html,body").animate({scrollTop: 0}, 200, function() {
+        $("html,body").animate({
+            scrollTop: 0
+        }, 200, function() {
             $("#sitemodal").modal({
                 backdrop: "static"
             });
         });
         $('#sitemodal').on('hide.bs.modal', function() {
-            $("html,body").animate({scrollTop: scrollTop}, 200);
+            $("html,body").animate({
+                scrollTop: scrollTop
+            }, 200);
         });
     } else {
         $("#sitemodal").modal({

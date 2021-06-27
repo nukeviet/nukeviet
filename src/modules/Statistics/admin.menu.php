@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 07/30/2013 10:27
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 //Ket noi ngon ngu cua module
 $nv_Lang->loadModule($module_file, false, true);
 
-$allow_func = array(
+$allow_func = [
     'main',
     'allbots',
     'allbrowsers',
@@ -23,7 +24,7 @@ $allow_func = array(
     'allos',
     'allreferers',
     'referer'
-);
+];
 
 $submenu['allbots'] = $nv_Lang->getModule('bot');
 $submenu['allbrowsers'] = $nv_Lang->getModule('browser');

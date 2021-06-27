@@ -1,27 +1,28 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 1:58
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
+    exit('Stop!!!');
 }
 
 unset($page_title, $select_options);
-$select_options = array();
+$select_options = [];
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $nv_Lang->getGlobal('mod_language')
-);
+];
 
-$allow_func = array( 'main' );
+$allow_func = ['main'];
 if (empty($global_config['idsite'])) {
     $allow_func[] = 'read';
     $allow_func[] = 'copy';
@@ -37,7 +38,7 @@ if (empty($global_config['idsite'])) {
     }
 }
 
-if (! isset($global_config['site_description'])) {
+if (!isset($global_config['site_description'])) {
     $global_config['site_description'] = '';
     $global_config['cronjobs_next_time'] = NV_CURRENTTIME;
 }
@@ -69,7 +70,7 @@ function nv_admin_add_field_lang($dirlang)
 {
     global $db, $language_array;
 
-    if (isset($language_array[$dirlang]) and ! empty($language_array[$dirlang])) {
+    if (isset($language_array[$dirlang]) and !empty($language_array[$dirlang])) {
         $add_field = true;
 
         $columns_array = $db->columns_array(NV_LANGUAGE_GLOBALTABLE . '_file');
@@ -92,9 +93,8 @@ function nv_admin_add_field_lang($dirlang)
  * nv_update_config_allow_sitelangs()
  *
  * @param mixed $allow_sitelangs
- * @return void
  */
-function nv_update_config_allow_sitelangs($allow_sitelangs = array())
+function nv_update_config_allow_sitelangs($allow_sitelangs = [])
 {
     global $global_config, $db_config, $db;
 
@@ -106,14 +106,14 @@ function nv_update_config_allow_sitelangs($allow_sitelangs = array())
         $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language ORDER BY weight ASC';
         $result = $db->query($sql);
 
-        $sitelangs = array();
+        $sitelangs = [];
         while ($row = $result->fetch()) {
-            if (in_array($row['lang'], $allow_sitelangs)) {
+            if (in_array($row['lang'], $allow_sitelangs, true)) {
                 $sitelangs[] = $row['lang'];
             }
         }
 
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'");
         $sth->bindValue(':config_value', implode(',', $sitelangs), PDO::PARAM_STR);
         $sth->execute();
     }

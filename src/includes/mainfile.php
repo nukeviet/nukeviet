@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM') and !defined('NV_ADMIN') and !defined('NV_WYSIWYG')) {
-    Header('Location: index.php');
+    header('Location: index.php');
     exit();
 }
 
@@ -51,9 +52,9 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
     require realpath(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME);
 } else {
     if (file_exists(NV_ROOTDIR . '/install/index.php')) {
-        Header('Location: ' . NV_BASE_SITEURL . 'install/index.php');
+        header('Location: ' . NV_BASE_SITEURL . 'install/index.php');
     }
-    die();
+    exit();
 }
 
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
@@ -84,7 +85,7 @@ define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
-    die('Error: Your IP address is not correct');
+    exit('Error: Your IP address is not correct');
 }
 
 // Xac dinh Quoc gia
@@ -169,7 +170,7 @@ foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
 }
 unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook, $pid);
 
-if (!in_array(NV_SERVER_NAME, $global_config['my_domains'])) {
+if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
     $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
     nv_info_die($nv_Lang->get('error_404_title'), $nv_Lang->get('error_404_title'), $nv_Lang->get('error_404_content'), 400, '', '', '', '');
@@ -237,10 +238,10 @@ if (preg_match('/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches)) {
 $client_info['is_mobile'] = $browser->isMobile();
 $client_info['is_tablet'] = $browser->isTablet();
 $client_info['is_bot'] = $browser->isRobot();
-$client_info['client_os'] = array(
+$client_info['client_os'] = [
     'key' => $browser->getPlatformKey(),
     'name' => $browser->getPlatform()
-);
+];
 
 $is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
 if ($is_mobile_tablet != $nv_Request->get_string('is_mobile_tablet', 'session')) {
@@ -256,7 +257,7 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
 // Ket noi voi class chong flood
-if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
+if ($global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and
 (!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))) {
     require NV_ROOTDIR . '/includes/core/flood_blocker.php';
 }
@@ -275,7 +276,7 @@ $db = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
     trigger_error('Sorry! Could not connect to data server', 256);
 }
-$db_slave = nv_apply_hook('', 'db_slave_connect', array($db, $db_config), $db);
+$db_slave = nv_apply_hook('', 'db_slave_connect', [$db, $db_config], $db);
 unset($db_config['dbpass']);
 $nv_Cache->SetDb($db);
 
@@ -302,7 +303,7 @@ define('NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs');
 define('NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys');
 define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
-$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND module='site') ORDER BY module ASC";
+$sql = 'SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND module='site') ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
 
 foreach ($list as $row) {
@@ -341,13 +342,13 @@ $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
 $global_config['array_preview_theme'] = explode(',', $global_config['preview_theme']);
 $global_config['array_user_allowed_theme'] = empty($global_config['user_allowed_theme']) ? [] : json_decode($global_config['user_allowed_theme'], true);
 
-define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
+define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains'], true) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
 $global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
-if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild','lite','none'))) {
+if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], ['mild', 'lite', 'none'], true)) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
@@ -398,7 +399,7 @@ if (!empty($admin_cookie)) {
 // Dinh chi hoat dong cua site
 if (!defined('NV_IS_ADMIN')) {
     $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', NV_LANG_DATA);
-    if (!in_array($site_lang, $global_config['allow_sitelangs'])) {
+    if (!in_array($site_lang, $global_config['allow_sitelangs'], true)) {
         $global_config['closed_site'] = 1;
     }
 }
@@ -412,7 +413,7 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     if (!empty($global_config['closed_site'])) {
         $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $nv_Lang->get('disable_site_content');
         nv_info_die($global_config['site_description'], $nv_Lang->get('disable_site_title'), $disable_site_content, 200, '', '', '', '');
-    } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
+    } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'], true)) {
         nv_redirect_location(NV_BASE_SITEURL);
     }
 }
@@ -433,7 +434,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
             $f_name = $row['func_name'];
             $f_alias = $row['alias'];
             if (!isset($sys_mods[$m_title])) {
-                $sys_mods[$m_title] = array(
+                $sys_mods[$m_title] = [
                     'module_file' => $row['module_file'],
                     'module_data' => $row['module_data'],
                     'module_upload' => $row['module_upload'],
@@ -454,16 +455,16 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'sitemap' => $row['sitemap'],
                     'icon' => $row['icon'],
                     'funcs' => []
-                );
+                ];
             }
-            $sys_mods[$m_title]['funcs'][$f_alias] = array(
+            $sys_mods[$m_title]['funcs'][$f_alias] = [
                 'func_id' => $row['func_id'],
                 'func_name' => $f_name,
                 'show_func' => $row['show_func'],
                 'func_custom_name' => $row['func_custom_name'],
                 'func_site_title' => empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'],
                 'in_submenu' => $row['in_submenu']
-            );
+            ];
             $sys_mods[$m_title]['alias'][$f_name] = $f_alias;
         }
         $cache = serialize($sys_mods);

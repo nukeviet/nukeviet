@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 18:49
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
-if (! defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+if (!defined('NV_IS_AJAX')) {
+    exit('Wrong URL');
 }
 
 $topicid = $nv_Request->get_int('topicid', 'post', 0);
@@ -20,7 +21,7 @@ $mod = $nv_Request->get_string('mod', 'post', '');
 $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
 if (empty($topicid)) {
-    die('NO_' . $topicid);
+    exit('NO_' . $topicid);
 }
 $content = 'NO_' . $topicid;
 
@@ -28,7 +29,7 @@ if ($mod == 'weight' and $new_vid > 0) {
     $sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . $topicid;
     $numrows = $db->query($sql)->fetchColumn();
     if ($numrows != 1) {
-        die('NO_' . $topicid);
+        exit('NO_' . $topicid);
     }
 
     $sql = 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid!=' . $topicid . ' ORDER BY weight ASC';

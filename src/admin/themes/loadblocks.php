@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $module = $nv_Request->get_string('module', 'get', '');
@@ -23,7 +24,7 @@ if ($bid > 0) {
     $row = $db->query('SELECT theme, file_name FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
 }
 
-echo "<option value=\"\">" . $nv_Lang->getModule('block_select') . "</option>\n";
+echo '<option value="">' . $nv_Lang->getModule('block_select') . "</option>\n";
 
 if ($module == 'theme') {
     if (empty($row['theme'])) {
@@ -43,7 +44,7 @@ if ($module == 'theme') {
                     }
                 }
             }
-            echo "<option value=\"" . $file_name . "|" . $load_config . "|" . implode('.', $load_mod_array) . "\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
+            echo '<option value="' . $file_name . '|' . $load_config . '|' . implode('.', $load_mod_array) . '" ' . $sel . '>' . $matches[1] . ' ' . $matches[2] . " </option>\n";
         }
     }
 } elseif (isset($site_mods[$module]['module_file'])) {
@@ -60,7 +61,7 @@ if ($module == 'theme') {
 
                 $load_config = (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini')) ? 1 : 0;
 
-                echo "<option value=\"" . $file_name . "|" . $load_config . "|\" " . $sel . ">" . $matches[1] . " " . $matches[2] . " </option>\n";
+                echo '<option value="' . $file_name . '|' . $load_config . '|" ' . $sel . '>' . $matches[1] . ' ' . $matches[2] . " </option>\n";
             }
         }
     }

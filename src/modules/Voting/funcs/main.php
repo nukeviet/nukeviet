@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:33
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_VOTING')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $vid = $nv_Request->get_int('vid', 'get', 0);
@@ -51,7 +52,7 @@ if (empty($vid)) {
             $voting_array = [
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
-                'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
+                'active_captcha' => ((int) $current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
                 'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($nv_Lang->getModule('voting_warning_all'), (int) $current_voting['acceptcm']) : $nv_Lang->getModule('voting_warning_accept1'),
                 'vid' => $current_voting['vid'],
                 'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
@@ -161,7 +162,7 @@ if (empty($vid)) {
 
     if ($count) {
         if ($row['active_captcha'] and !nv_capcha_txt($captcha)) {
-            die('ERROR|' . $nv_Lang->getGlobal('securitycodeincorrect'));
+            exit('ERROR|' . $nv_Lang->getGlobal('securitycodeincorrect'));
         }
 
         $acceptcm = (int) $row['acceptcm'];

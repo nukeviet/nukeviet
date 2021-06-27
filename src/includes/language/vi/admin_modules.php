@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 03:22:00 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
@@ -89,4 +89,3 @@ $lang_module['error_no_hook_module'] = 'Để cài đặt module này bạn cầ
 $lang_module['select_hook_module'] = 'Chọn module kết nối %s';
 $lang_module['select_hook_sys'] = 'Kết nối %s với';
 $lang_module['module_groups_view_note'] = 'Quản trị tối cao, điều hành chung, người quản trị module luôn được quyền xem module';
-

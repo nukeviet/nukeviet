@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_page_list')) {
@@ -32,6 +33,7 @@ if (!nv_function_exists('nv_page_list')) {
         $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('numrow') . ':</label>';
         $html .= '	<div class="col-sm-9"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -45,11 +47,12 @@ if (!nv_function_exists('nv_page_list')) {
     function nv_block_config_page_list_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 5);
+
         return $return;
     }
 
@@ -91,10 +94,11 @@ if (!nv_function_exists('nv_page_list')) {
             }
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
-        } else {
-            return '';
         }
+
+        return '';
     }
 }
 

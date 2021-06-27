@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
@@ -48,10 +49,10 @@ if ($idf < 0) {
     }
     $number_file = sizeof($_array_filename);
     if ($number_file > 0) {
-        $content_config = "<?php" . "\n\n";
+        $content_config = '<?php' . "\n\n";
         $content_config .= NV_FILEHEAD . "\n\n";
-        $content_config .= "if (!defined('NV_IS_FILE_ADMIN'))\n    die('Stop!!!');\n\n";
-        $content_config .= "\$_array_filename=" . var_export($_array_filename, true) . ";\n";
+        $content_config .= "if (!defined('NV_IS_FILE_ADMIN')) {\n    exit('Stop!!!');\n}\n\n";
+        $content_config .= '$_array_filename=' . var_export($_array_filename, true) . ";\n";
         $listfile = file_put_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/recreatethumb_' . md5($path . '_' . NV_CHECK_SESSION) . '.php', trim($content_config), LOCK_EX);
         nv_htmlOutput('OK_0_' . $number_file);
     } else {
@@ -70,7 +71,7 @@ if ($idf < 0) {
     if ($idf_next > $number_file) {
         $idf_next = $number_file;
     }
-    for ($i = $idf; $i < $idf_next; $i++) {
+    for ($i = $idf; $i < $idf_next; ++$i) {
         nv_get_viewImage($_array_filename[$i], 1);
     }
 

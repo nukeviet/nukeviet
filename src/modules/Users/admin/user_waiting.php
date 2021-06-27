@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 //Xoa thanh vien
@@ -18,9 +19,9 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
     if ($db->exec($sql)) {
-        die('OK');
+        exit('OK');
     }
-    die('NO');
+    exit('NO');
 }
 
 //Kich hoat thanh vien
@@ -33,7 +34,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
-    $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+    $sql = 'INSERT INTO ' . NV_MOD_TABLE . " (
         group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,
         regdate, question,
         answer, passlostkey, view_mail, remember, in_groups, active, checknum,
@@ -56,7 +57,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ", -2, '" . $admin_info['userid'] . "'
     )";
 
-    $data_insert = array();
+    $data_insert = [];
     $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
     $data_insert['username'] = $row['username'];
     $data_insert['md5_username'] = nv_md5safe($row['username']);
@@ -84,7 +85,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         }
 
         $users_info = unserialize(nv_base64_decode($row['users_info']));
-        $query_field = array();
+        $query_field = [];
         $query_field['userid'] = $userid;
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
@@ -92,7 +93,7 @@ if ($nv_Request->isset_request('act', 'get')) {
                 continue;
             }
             if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                $default_value = floatval($row_f['default_value']);
+                $default_value = (float) ($row_f['default_value']);
             } else {
                 $default_value = $db->quote($row_f['default_value']);
             }
@@ -127,8 +128,8 @@ if ($nv_Request->isset_request('act', 'get')) {
         }
 
         $user_data = $row;
-        nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
-        nv_apply_hook($module_name, 'user_waiting_active_in_admin', array($userid, $user_data));
+        nv_apply_hook($module_name, 'user_add', [$userid, $user_data]);
+        nv_apply_hook($module_name, 'user_waiting_active_in_admin', [$userid, $user_data]);
     }
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting');
 }
@@ -137,42 +138,42 @@ $page_title = $table_caption = $nv_Lang->getModule('member_wating');
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting';
 
-$methods = array(
-    'userid' => array(
+$methods = [
+    'userid' => [
         'key' => 'userid',
         'sql' => 'userid',
         'value' => $nv_Lang->getModule('search_id'),
         'selected' => ''
-    ),
-    'username' => array(
+    ],
+    'username' => [
         'key' => 'username',
         'sql' => 'username',
         'value' => $nv_Lang->getModule('search_account'),
         'selected' => ''
-    ),
-    'full_name' => array(
+    ],
+    'full_name' => [
         'key' => 'full_name',
         'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
         'value' => $nv_Lang->getModule('search_name'),
         'selected' => ''
-    ),
-    'email' => array(
+    ],
+    'email' => [
         'key' => 'email',
         'sql' => 'email',
         'value' => $nv_Lang->getModule('search_mail'),
         'selected' => ''
-    )
-);
+    ]
+];
 $method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string('method', 'post', '') : ($nv_Request->isset_request('method', 'get') ? urldecode($nv_Request->get_string('method', 'get', '')) : '');
 $methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_string('value', 'post') : ($nv_Request->isset_request('value', 'get') ? urldecode($nv_Request->get_string('value', 'get', '')) : '');
 
-$orders = array(
+$orders = [
     'userid',
     'username',
     'full_name',
     'email',
     'regdate'
-);
+];
 $orderby = $nv_Request->get_string('sortby', 'get', '');
 $ordertype = $nv_Request->get_string('sorttype', 'get', '');
 if ($ordertype != 'ASC') {
@@ -201,7 +202,7 @@ $db->select('*')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
 
-if (!empty($orderby) and in_array($orderby, $orders)) {
+if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
@@ -209,20 +210,20 @@ if (!empty($orderby) and in_array($orderby, $orders)) {
 
 $result = $db->query($db->sql());
 
-$users_list = array();
+$users_list = [];
 while ($row = $result->fetch()) {
-    $users_list[$row['userid']] = array(
+    $users_list[$row['userid']] = [
         'userid' => $row['userid'],
         'username' => $row['username'],
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
         'regdate' => date('d/m/Y H:i', $row['regdate'])
-    );
+    ];
 }
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
-$head_tds = array();
+$head_tds = [];
 $head_tds['userid']['title'] = $nv_Lang->getModule('userid');
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $nv_Lang->getModule('account');

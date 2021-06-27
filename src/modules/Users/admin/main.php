@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright(C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $table_caption = $nv_Lang->getModule('list_module_title');
@@ -32,7 +33,7 @@ if ($usactive == -3) {
         $_arr_where[] = 'active=' . ($usactive % 2);
     }
     if ($usactive > 1) {
-        $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
+        $_arr_where[] = '(idsite=' . $global_config['idsite'] . ' OR userid = ' . $admin_info['admin_id'] . ')';
     }
 }
 
@@ -83,13 +84,12 @@ if (!empty($methodvalue)) {
         }
         $_arr_where[] = '(' . implode(' OR ', $array_like) . ')';
     } else {
-        $_arr_where[] = " (" . $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%')";
+        $_arr_where[] = ' (' . $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%')";
         $methods[$method]['selected'] = ' selected="selected"';
     }
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
     $table_caption = $nv_Lang->getModule('search_page_title');
 }
-
 
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
@@ -107,7 +107,7 @@ $num_items = $db->query($db->sql())->fetchColumn();
 $db->select('*')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
-if (!empty($orderby) and in_array($orderby, $orders)) {
+if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
@@ -117,13 +117,13 @@ $result2 = $db->query($db->sql());
 
 $users_list = [];
 $admin_in = [];
-$is_edit = (in_array('edit', $allow_func)) ? true : false;
-$is_delete = (in_array('del', $allow_func)) ? true : false;
-$is_setactive = (in_array('setactive', $allow_func)) ? true : false;
+$is_edit = (in_array('edit', $allow_func, true)) ? true : false;
+$is_delete = (in_array('del', $allow_func, true)) ? true : false;
+$is_setactive = (in_array('setactive', $allow_func, true)) ? true : false;
 $array_userids = $array_users = [];
 
 while ($row = $result2->fetch()) {
-    $row['in_groups'] = explode(',', $row['in_groups']);
+    $row['in_groups'] = array_map('intval', explode(',', $row['in_groups']));
 
     // Thông tin tài khoản, xác thực email
     if ($row['email_verification_time'] == -3) {
@@ -146,12 +146,12 @@ while ($row = $result2->fetch()) {
     }
 
     $users_list[$row['userid']] = [
-        'userid' =>  $row['userid'],
-        'username' =>  $row['username'],
-        'full_name' =>  nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
-        'email' =>  $row['email'],
+        'userid' => $row['userid'],
+        'username' => $row['username'],
+        'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
+        'email' => $row['email'],
         'regdate' => date('d/m/Y H:i', $row['regdate']),
-        'checked' =>  $row['active'] ? ' checked="checked"' : '',
+        'checked' => $row['active'] ? ' checked="checked"' : '',
         'disabled' => ($is_setactive) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,
@@ -159,7 +159,7 @@ while ($row = $result2->fetch()) {
         'is_admin' => false,
         'info_verify' => $info_verify,
         'active_obj' => $row['active_obj'],
-        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'])),
+        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'], true)),
         'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username']
     ];
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
@@ -262,7 +262,7 @@ foreach ($methods as $m) {
     $xtpl->parse('main.method');
 }
 $_bg = (defined('NV_CONFIG_DIR')) ? 3 : 1;
-for ($i = $_bg; $i >= 0; $i--) {
+for ($i = $_bg; $i >= 0; --$i) {
     $m = [
         'key' => $i,
         'selected' => ($i == $usactive) ? ' selected="selected"' : '',
@@ -316,7 +316,7 @@ foreach ($users_list as $u) {
         if ($u['is_delete']) {
             $xtpl->parse('main.xusers.del');
         }
-        if ($u['is_newuser'] and in_array('setofficial', $allow_func)) {
+        if ($u['is_newuser'] and in_array('setofficial', $allow_func, true)) {
             $xtpl->parse('main.xusers.set_official');
         }
         if ($is_setactive and $u['is_delete']) {
@@ -350,7 +350,7 @@ if (!empty($generate_page)) {
     $has_footer = true;
 }
 
-if (in_array('export', $allow_func)) {
+if (in_array('export', $allow_func, true)) {
     $has_footer = true;
     $xtpl->parse('main.footer.exportfile');
 }

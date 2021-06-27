@@ -1,24 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('sources');
 
-list($sourceid, $title, $link, $logo, $error) = array( 0, '', 'http://', '', '' );
+list($sourceid, $title, $link, $logo, $error) = [0, '', 'http://', '', ''];
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $sourceid = $nv_Request->get_int('sourceid', 'post', 0);
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $link = strtolower($nv_Request->get_title('link', 'post', ''));
@@ -33,17 +34,17 @@ if (! empty($savecat)) {
     $logo_old = $db->query('SELECT logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid =' . $sourceid)->fetchColumn();
 
     $logo = $nv_Request->get_title('logo', 'post', '');
-    if (! nv_is_url($logo) and nv_is_file($logo, NV_UPLOADS_DIR . '/' . $module_upload . '/source')) {
+    if (!nv_is_url($logo) and nv_is_file($logo, NV_UPLOADS_DIR . '/' . $module_upload . '/source')) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/');
         $logo = substr($logo, $lu);
-    } elseif (! nv_is_url($logo) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/source/' . $logo_old)) {
+    } elseif (!nv_is_url($logo) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/source/' . $logo_old)) {
         $logo = $logo_old;
     } else {
         $logo = '';
     }
 
-    if (($logo != $logo_old) and ! empty($logo_old)) {
-        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid .' AND logo =' . $db->quote(basename($logo_old)))->fetchColumn();
+    if (($logo != $logo_old) and !empty($logo_old)) {
+        $_count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid . ' AND logo =' . $db->quote(basename($logo_old)))->fetchColumn();
         if (empty($_count)) {
             @unlink(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old);
             @unlink(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old);
@@ -56,9 +57,9 @@ if (! empty($savecat)) {
         $error = $nv_Lang->getModule('error_name');
     } elseif ($sourceid == 0) {
         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-        $weight = intval($weight) + 1;
+        $weight = (int) $weight + 1;
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, :link, :logo, :weight, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['title'] = $title;
         $data_insert['link'] = $link;
         $data_insert['logo'] = $logo;
@@ -90,7 +91,7 @@ if ($sourceid > 0) {
     $nv_Lang->setModule('add_topic', $nv_Lang->getModule('edit_topic'));
 }
 
-if (! empty($logo)) {
+if (!empty($logo)) {
     $logo = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo;
 }
 
@@ -111,11 +112,11 @@ $xtpl->assign('title', $title);
 $xtpl->assign('link', $link);
 $xtpl->assign('logo', $logo);
 
-if (! empty($logo)) {
+if (!empty($logo)) {
     $xtpl->parse('main.logo');
 }
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }

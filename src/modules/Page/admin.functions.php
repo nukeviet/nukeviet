@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 2:29
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$allow_func = array(
+$allow_func = [
     'main',
     'content',
     'alias',
@@ -20,12 +21,12 @@ $allow_func = array(
     'change_weight',
     'del',
     'view'
-);
+];
 
 define('NV_IS_FILE_ADMIN', true);
 
 if (defined('NV_IS_SPADMIN')) {
-	$allow_func[] = 'config';
+    $allow_func[] = 'config';
 }
 
 // Document
@@ -36,7 +37,7 @@ $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:about
 // Get Config Module
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $list = $nv_Cache->db($sql, '', $module_name);
-$page_config = array();
+$page_config = [];
 foreach ($list as $values) {
     $page_config[$values['config_name']] = $values['config_value'];
 }

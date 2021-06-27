@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 16/6/2010, 10:23
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_STATISTICS')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_STATISTICS')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('referer');
@@ -34,16 +35,16 @@ if ($num_items) {
         ->offset(($page - 1) * $per_page);
     $result = $db->query($db->sql());
 
-    $host_list = array();
+    $host_list = [];
     while (list($host, $count, $last_visit) = $result->fetch(3)) {
-        $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+        $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
         $bymonth = '<a href="' . NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $nv_Lang->getModule('statbymoth2') . '</a>';
-        $host_list[$host] = array( $count, $last_visit, $bymonth );
+        $host_list[$host] = [$count, $last_visit, $bymonth];
     }
 
-    if (! empty($host_list)) {
-        $cts = array();
-        $cts['thead'] = array( $nv_Lang->getModule('referer'), $nv_Lang->getModule('hits'), $nv_Lang->getModule('last_visit') );
+    if (!empty($host_list)) {
+        $cts = [];
+        $cts['thead'] = [$nv_Lang->getModule('referer'), $nv_Lang->getModule('hits'), $nv_Lang->getModule('last_visit')];
         $cts['rows'] = $host_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);

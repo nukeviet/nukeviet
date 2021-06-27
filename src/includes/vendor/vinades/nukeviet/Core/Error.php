@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 4/10/2010 19:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
@@ -28,9 +29,9 @@ if (!defined('NV_DEBUG')) {
 
 class Error
 {
-    const INCORRECT_IP = 'Incorrect IP address specified';
-    const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
-    const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
+    public const INCORRECT_IP = 'Incorrect IP address specified';
+    public const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
+    public const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
 
     private $log_errors_list;
     private $display_errors_list;
@@ -53,7 +54,7 @@ class Error
     private $day;
     private $month;
     private $error_date;
-    private $errortype = array(
+    private $errortype = [
         E_ERROR => 'Error',
         E_WARNING => 'Warning',
         E_PARSE => 'Parsing Error',
@@ -69,22 +70,22 @@ class Error
         E_RECOVERABLE_ERROR => 'Catchable fatal error',
         E_DEPRECATED => 'Run-time notices',
         E_USER_DEPRECATED => 'User-generated warning message'
-    );
-    private $track_fatal_error = array(
-        array(
+    ];
+    private $track_fatal_error = [
+        [
             'file' => 'vendor/vinades/nukeviet/Cache/CRedis.php',
-            'pattern' => array(
-                array('/[\'|"]Redis[\'|"] not found/i', 'PHP Redis Extension does not exists!')
-            )
-        ),
-        array(
+            'pattern' => [
+                ['/[\'|"]Redis[\'|"] not found/i', 'PHP Redis Extension does not exists!']
+            ]
+        ],
+        [
             'file' => 'vendor/vinades/nukeviet/Cache/Memcacheds.php',
-            'pattern' => array(
-                array('/[\'|"]Memcached[\'|"] not found/i', 'PHP Memcached Extension does not exists!')
-            )
-        )
-    );
-    private $error_excluded = array("/^ftp\_login\(\)/i", "/^gzinflate\(\)\: data error/i");
+            'pattern' => [
+                ['/[\'|"]Memcached[\'|"] not found/i', 'PHP Memcached Extension does not exists!']
+            ]
+        ]
+    ];
+    private $error_excluded = ["/^ftp\_login\(\)/i", "/^gzinflate\(\)\: data error/i"];
 
     /**
      * Error::__construct()
@@ -94,11 +95,11 @@ class Error
      */
     public function __construct($config)
     {
-        $this->log_errors_list = $this->parse_error_num((int)$config['log_errors_list']);
-        $this->display_errors_list = $this->parse_error_num((int)$config['display_errors_list']);
-        $this->send_errors_list = $this->parse_error_num((int)$config['send_errors_list']);
-        $this->error_log_path = $this->get_error_log_path((string )$config['error_log_path']);
-        $this->error_send_mail = (string )$config['error_send_email'];
+        $this->log_errors_list = $this->parse_error_num((int) $config['log_errors_list']);
+        $this->display_errors_list = $this->parse_error_num((int) $config['display_errors_list']);
+        $this->send_errors_list = $this->parse_error_num((int) $config['send_errors_list']);
+        $this->error_log_path = $this->get_error_log_path((string) $config['error_log_path']);
+        $this->error_send_mail = (string) $config['error_send_email'];
         $this->error_set_logs = $config['error_set_logs'];
 
         if (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) {
@@ -160,8 +161,8 @@ class Error
             $this->useragent = substr($useragent, 0, 500);
         }
 
-        set_error_handler(array(&$this, 'error_handler'));
-        register_shutdown_function(array(&$this, 'shutdown'));
+        set_error_handler([&$this, 'error_handler']);
+        register_shutdown_function([&$this, 'shutdown']);
     }
 
     /**
@@ -173,20 +174,24 @@ class Error
     private function get_Env($key)
     {
         if (!is_array($key)) {
-            $key = array($key);
+            $key = [$key];
         }
 
         foreach ($key as $k) {
             if (isset($_SERVER[$k])) {
                 return $_SERVER[$k];
-            } elseif (isset($_ENV[$k])) {
+            }
+            if (isset($_ENV[$k])) {
                 return $_ENV[$k];
-            } elseif (@getenv($k)) {
+            }
+            if (@getenv($k)) {
                 return @getenv($k);
-            } elseif (function_exists('apache_getenv') and apache_getenv($k, true)) {
+            }
+            if (function_exists('apache_getenv') and apache_getenv($k, true)) {
                 return apache_getenv($k, true);
             }
         }
+
         return '';
     }
 
@@ -198,7 +203,7 @@ class Error
      */
     private function get_error_log_path($path)
     {
-        $path = ltrim(rtrim(preg_replace(array("/\\\\/", "/\/{2,}/"), "/", $path), '/'), '/');
+        $path = ltrim(rtrim(preg_replace(['/\\\\/', "/\/{2,}/"], '/', $path), '/'), '/');
         if (is_dir(NV_ROOTDIR . '/' . $path)) {
             $log_path = NV_ROOTDIR . '/' . $path;
         } else {
@@ -229,6 +234,7 @@ class Error
         if (is_dir($log_path . '/errors256')) {
             $this->error_log_256 = $log_path . '/errors256';
         }
+
         return $log_path;
     }
 
@@ -246,7 +252,7 @@ class Error
         if ($num < 0) {
             $num = 0;
         }
-        $result = array();
+        $result = [];
         $n = 1;
         while ($num > 0) {
             if ($num & 1 == 1) {
@@ -266,7 +272,7 @@ class Error
      */
     public function get_request()
     {
-        $request = array();
+        $request = [];
         if (sizeof($_GET)) {
             foreach ($_GET as $key => $value) {
                 if (preg_match('/^[a-zA-Z0-9\_]+$/', $key) and !is_numeric($key)) {
@@ -301,13 +307,14 @@ class Error
                         $value[$k] = $_value;
                     }
                 }
+
                 return $value;
             }
 
             $value = strip_tags(stripslashes($value));
-            $value = preg_replace("/[\'|\"|\t|\r|\n|\.\.\/]+/", "", $value);
-            $value = str_replace(array("'", '"', "&"), array('&rsquo;', '&quot;', '&amp;'), $value);
-            return $value;
+            $value = preg_replace("/[\'|\"|\t|\r|\n|\.\.\/]+/", '', $value);
+
+            return str_replace(["'", '"', '&'], ['&rsquo;', '&quot;', '&amp;'], $value);
         }
 
         return false;
@@ -315,32 +322,30 @@ class Error
 
     /**
      * Error::info_die()
-     *
-     * @return void
      */
     private function info_die()
     {
-        $error_code = md5($this->errno . (string )$this->errfile . (string )$this->errline . $this->ip);
+        $error_code = md5($this->errno . (string) $this->errfile . (string) $this->errline . $this->ip);
         $error_code2 = md5($error_code);
         $error_file = $this->error_log_256 . '/' . $this->month . '__' . $error_code2 . '__' . $error_code . '.' . $this->error_log_fileext;
 
         if ($this->error_set_logs and !file_exists($error_file)) {
-            $content = "TIME: " . $this->error_date . "\n";
+            $content = 'TIME: ' . $this->error_date . "\n";
             if (!empty($this->ip)) {
-                $content .= "IP: " . $this->ip . "\n";
+                $content .= 'IP: ' . $this->ip . "\n";
             }
-            $content .= "INFO: " . $this->errortype[$this->errno] . "(" . $this->errno . "): " . $this->errstr . "\n";
+            $content .= 'INFO: ' . $this->errortype[$this->errno] . '(' . $this->errno . '): ' . $this->errstr . "\n";
             if (!empty($this->errfile)) {
-                $content .= "FILE: " . $this->errfile . "\n";
+                $content .= 'FILE: ' . $this->errfile . "\n";
             }
             if (!empty($this->errline)) {
-                $content .= "LINE: " . $this->errline . "\n";
+                $content .= 'LINE: ' . $this->errline . "\n";
             }
             if (!empty($this->request)) {
-                $content .= "REQUEST: " . $this->request . "\n";
+                $content .= 'REQUEST: ' . $this->request . "\n";
             }
             if (!empty($this->useragent)) {
-                $content .= "USER-AGENT: " . $this->useragent . "\n";
+                $content .= 'USER-AGENT: ' . $this->useragent . "\n";
             }
 
             file_put_contents($error_file, $content, FILE_APPEND);
@@ -349,12 +354,12 @@ class Error
         $strEncodedEmail = '';
         $strlen = strlen($this->error_send_mail);
         for ($i = 0; $i < $strlen; ++$i) {
-            $strEncodedEmail .= "&#" . ord(substr($this->error_send_mail, $i)) . ";";
+            $strEncodedEmail .= '&#' . ord(substr($this->error_send_mail, $i)) . ';';
         }
 
         header('Content-Type: text/html; charset=utf-8');
         if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
-            Header('X-Frame-Options: SAMEORIGIN');
+            header('X-Frame-Options: SAMEORIGIN');
         }
         header('X-Content-Type-Options: nosniff');
         header('X-XSS-Protection: 1; mode=block');
@@ -365,23 +370,21 @@ class Error
         $_info .= "<head>\n";
         $_info .= "	<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n";
         $_info .= "	<meta http-equiv=\"expires\" content=\"0\" />\n";
-        $_info .= "<title>" . $this->errortype[$this->errno] . "</title>\n";
+        $_info .= '<title>' . $this->errortype[$this->errno] . "</title>\n";
         $_info .= "</head>\n\n";
         $_info .= "<body>\n";
-        $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;\"><span style=\"font-weight: bold;\">" . $this->errortype[$this->errno] . "</span><br />\n";
-        $_info .= "	<span style=\"color: #1a264e;font-weight: bold;\">" . $this->errstr . "</span><br />\n";
-        $_info .= "	<span style=\"color: #1a264e;\">(Code: " . $error_code2 . ")</span></div>\n";
+        $_info .= '	<div style="width: 400px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px; color: #dd3e31; text-align: center;"><span style="font-weight: bold;">' . $this->errortype[$this->errno] . "</span><br />\n";
+        $_info .= '	<span style="color: #1a264e;font-weight: bold;">' . $this->errstr . "</span><br />\n";
+        $_info .= '	<span style="color: #1a264e;">(Code: ' . $error_code2 . ")</span></div>\n";
         $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
-        $_info .= "	If you have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
+        $_info .= '	If you have any questions about this site,<br />please <a href="mailto:' . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
         $_info .= "</body>\n";
-        $_info .= "</html>";
+        $_info .= '</html>';
         exit($_info);
     }
 
     /**
      * Error::_log()
-     *
-     * @return void
      */
     private function _log()
     {
@@ -406,8 +409,8 @@ class Error
                 $content .= " [TRACE:]\n";
                 $trace_total = sizeof($backtrace);
                 $stt = 0;
-                for ($i = $trace_total - 1; $i >= 3; $i--) {
-                    $stt++;
+                for ($i = $trace_total - 1; $i >= 3; --$i) {
+                    ++$stt;
                     $content .= '#' . str_pad($stt, 2, ' ', STR_PAD_RIGHT) . ' LINE: ' . str_pad($backtrace[$i]['line'], 5, ' ', STR_PAD_RIGHT) . ' FILE: ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file'])) . "\n";
                 }
             }
@@ -420,8 +423,6 @@ class Error
 
     /**
      * Error::_send()
-     *
-     * @return void
      */
     private function _send()
     {
@@ -449,8 +450,6 @@ class Error
 
     /**
      * Error::_display()
-     *
-     * @return void
      */
     private function _display()
     {
@@ -475,7 +474,7 @@ class Error
                 }
             }
 
-            $error_info[] = array('errno' => $this->errno, 'info' => $info);
+            $error_info[] = ['errno' => $this->errno, 'info' => $info];
         }
     }
 
@@ -509,8 +508,6 @@ class Error
 
     /**
      * Error::shutdown()
-     *
-     * @return void
      */
     public function shutdown()
     {
@@ -547,11 +544,11 @@ class Error
                 $this->info_die();
             } else {
                 if (NV_DEBUG) {
-                    echo('Error on file ' . $this->errfile . ' line ' . $this->errline . ':<br /><pre><code>');
-                    echo($error['message']);
-                    die('</code></pre>');
+                    echo 'Error on file ' . $this->errfile . ' line ' . $this->errline . ':<br /><pre><code>';
+                    echo $error['message'];
+                    exit('</code></pre>');
                 }
-                die(chr(0));
+                exit(chr(0));
             }
         }
     }
@@ -564,7 +561,7 @@ class Error
      */
     private function fix_path($path)
     {
-        return str_replace('\\', '/', preg_replace(array("/\\\\/", "/\/{2,}/"), "/", $path));
+        return str_replace('\\', '/', preg_replace(['/\\\\/', "/\/{2,}/"], '/', $path));
     }
 
     /**
@@ -580,12 +577,10 @@ class Error
 
     /**
      * Error::log_control()
-     *
-     * @return void
      */
     private function log_control()
     {
-        $track_errors = $this->day . '_' . md5($this->errno . (string )$this->errfile . (string )$this->errline . $this->ip);
+        $track_errors = $this->day . '_' . md5($this->errno . (string) $this->errfile . (string) $this->errline . $this->ip);
         $track_errors = $this->error_log_tmp . '/' . $track_errors . '.' . $this->error_log_fileext;
         $log_is_displayed = file_exists($track_errors);
 
@@ -599,7 +594,6 @@ class Error
             if (!empty($this->send_errors_list) and isset($this->send_errors_list[$this->errno])) {
                 $this->_send();
             }
-
         }
         if ((NV_DEBUG or (!$log_is_displayed and $this->error_set_logs)) and !empty($this->display_errors_list) and isset($this->display_errors_list[$this->errno])) {
             $this->_display();
@@ -608,8 +602,6 @@ class Error
 
     /**
      * Error::get_server_name()
-     *
-     * @return void
      */
     private function get_server_name()
     {
@@ -620,6 +612,7 @@ class Error
         $server_name = preg_replace('/^[a-z]+\:\/\//i', '', $server_name);
         $server_name = preg_replace('/(\:[0-9]+)$/', '', $server_name);
         $this->server_name = $server_name;
+
         return $server_name;
     }
 }

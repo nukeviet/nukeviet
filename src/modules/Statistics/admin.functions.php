@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 19 Apr 2015 11:35:18 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 //Ket noi ngon ngu cua module
 $nv_Lang->loadModule($module_file);
 
-$allow_func = array(
+$allow_func = [
     'main',
     'allbots',
     'allbrowsers',
@@ -23,7 +24,7 @@ $allow_func = array(
     'allos',
     'allreferers',
     'referer'
-);
+];
 
 $submenu['allbots'] = $nv_Lang->getModule('bot');
 $submenu['allbrowsers'] = $nv_Lang->getModule('browser');
@@ -31,7 +32,7 @@ $submenu['allcountries'] = $nv_Lang->getModule('country');
 $submenu['allos'] = $nv_Lang->getModule('os');
 $submenu['allreferers'] = $nv_Lang->getModule('referer');
 
-$module_info['alias'] = array();
+$module_info['alias'] = [];
 $module_info['alias']['allbots'] = 'allbots';
 $module_info['alias']['allbrowsers'] = 'allbrowsers';
 $module_info['alias']['allcountries'] = 'allcountries';
@@ -52,7 +53,7 @@ define('NV_BASE_MOD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '
 
 $module_info['template'] = 'default';
 if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
-    $my_head = "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />\n";
+    $my_head = '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/css/' . $module_file . ".css\" type=\"text/css\" />\n";
 }
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';

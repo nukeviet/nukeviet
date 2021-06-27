@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 15:48
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $act_modules = $deact_modules = $bad_modules = $weight_list = [];
@@ -19,15 +20,15 @@ $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['c
 $array_plugins = [];
 /**
  * Để đoạn này thì nếu module khác có HOOK của module này => module này không xóa được
-$sql = 'SELECT plugin_module_name, hook_module FROM ' . $db_config['prefix'] . '_plugin';
-$result = $db->query($sql);
-
-while ($row = $result->fetch()) {
-    if (!isset($array_plugins[$row['hook_module']])) {
-        $array_plugins[$row['hook_module']] = [];
-    }
-    $array_plugins[$row['hook_module']][] = $row['plugin_module_name'];
-}
+ * $sql = 'SELECT plugin_module_name, hook_module FROM ' . $db_config['prefix'] . '_plugin';
+ * $result = $db->query($sql);
+ *
+ * while ($row = $result->fetch()) {
+ * if (!isset($array_plugins[$row['hook_module']])) {
+ * $array_plugins[$row['hook_module']] = [];
+ * }
+ * $array_plugins[$row['hook_module']][] = $row['plugin_module_name'];
+ * }
  */
 
 // Lay danh sach cac module co trong he thong
@@ -39,11 +40,11 @@ $result = $db->query($sql);
 $is_delCache = false;
 $act2 = [];
 while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
-    $new_modules[$m] = array(
+    $new_modules[$m] = [
         'module_file' => $mod_file,
         'is_sys' => $is_sys,
         'version' => $version
-    );
+    ];
 
     if (!isset($modules_exit[$mod_file])) {
         $act2[] = $m;
@@ -51,8 +52,8 @@ while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
 }
 
 if (!empty($act2)) {
-    $act2 = "'" . implode("','",$act2) . "'";
-    $db->query("UPDATE " . NV_MODULES_TABLE . " SET act=2 WHERE title IN (".$act2.")");
+    $act2 = "'" . implode("','", $act2) . "'";
+    $db->query('UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title IN (' . $act2 . ')');
     $is_delCache = true;
 }
 

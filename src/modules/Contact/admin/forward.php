@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (@) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -55,7 +56,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $mail->Subject($row['title']);
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
-            $content = sprintf($nv_Lang->getModule('forward'), $forward_to)  . '</br>' . $mess_content;
+            $content = sprintf($nv_Lang->getModule('forward'), $forward_to) . '</br>' . $mess_content;
             $sth->bindParam(':reply_content', $content, PDO::PARAM_STR, strlen($content));
             $sth->execute();
 
@@ -66,7 +67,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $error = $nv_Lang->getGlobal('error_sendmail_admin');
         }
     }
-
 } else {
     $mess_content .= '-----------------------' . $nv_Lang->getModule('forwarded') . '-------------------------<br />';
     $mess_content .= '<strong>From:</strong> ' . $row['sender_name'] . ' [mailto:' . $row['sender_email'] . ']<br />';
@@ -91,7 +91,7 @@ $xtpl = new XTemplate('forward.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('POST', $row);
-$is_read = intval($row['is_read']);
+$is_read = (int) ($row['is_read']);
 if (!$is_read) {
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=1 WHERE id=' . $id);
     $is_read = 1;

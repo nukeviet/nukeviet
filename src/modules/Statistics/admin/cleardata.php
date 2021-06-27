@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_STATISTICS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('cleardata');
@@ -24,7 +25,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $alllang = $nv_Request->get_int('alllang', 'post', 0);
     $clearmode = '';
 
-    $query_update = array();
+    $query_update = [];
     $query_update[] = 'last_update=0';
     foreach ($global_config['allow_sitelangs'] as $lang) {
         if ($alllang or $lang == NV_LANG_DATA) {
@@ -39,22 +40,22 @@ if ($nv_Request->isset_request('submit', 'post')) {
     // Xóa máy chủ tìm kiếm
     if ($clearall or $nv_Request->isset_request('bot', 'post')) {
         $clearmode = 'Bot';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='bot'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='bot'");
     }
     // Xóa thống kê theo trình duyệt
     if ($clearall or $nv_Request->isset_request('browser', 'post')) {
         $clearmode = 'Browser';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='browser'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='browser'");
     }
     // Xóa thống kê quốc gia truy cập
     if ($clearall or $nv_Request->isset_request('country', 'post')) {
         $clearmode = 'Country';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='country'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='country'");
     }
     // Xóa thống kê máy chủ tìm kiếm
     if ($clearall or $nv_Request->isset_request('os', 'post')) {
         $clearmode = 'OS';
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type='os'");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type='os'");
     }
     // Xóa đường dẫn đến site
     if ($clearall or $nv_Request->isset_request('referer', 'post')) {
@@ -67,7 +68,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
     // Xóa bộ đếm lượt truy cập
     if ($clearall or $nv_Request->isset_request('hit', 'post')) {
-        $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET " . $query_update . " WHERE c_type IN('hour', 'dayofweek', 'day', 'month', 'year', 'total', 'c_time')");
+        $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET ' . $query_update . " WHERE c_type IN('hour', 'dayofweek', 'day', 'month', 'year', 'total', 'c_time')");
     }
 
     $clearmode = $clearall ? 'All' : $clearmode;

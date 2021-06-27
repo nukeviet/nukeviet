@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_menu_theme_default_footer')) {
@@ -26,14 +27,14 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
         global $site_mods;
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
-            $data_block['module_in_menu'] = array();
+            $data_block['module_in_menu'] = [];
         }
 
         $html = '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('bl_module_in_menu') . ':</label>';
         $html .= '<div class="col-sm-18">';
         foreach ($site_mods as $modname => $modvalues) {
-            $checked = in_array($modname, $data_block['module_in_menu']) ? ' checked="checked"' : '';
+            $checked = in_array($modname, $data_block['module_in_menu'], true) ? ' checked="checked"' : '';
             $html .= '<div class="w150 pull-left"><div class="ellipsis"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div></div>';
         }
         $html .= '</div>';
@@ -52,9 +53,10 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
     function nv_menu_theme_default_footer_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
+        $return = [];
+        $return['error'] = [];
         $return['config']['module_in_menu'] = $nv_Request->get_typed_array('module_in_menu', 'post', 'string');
+
         return $return;
     }
 
@@ -63,7 +65,6 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      *
      * @param mixed $block_config
      * @return
-     *
      */
     function nv_menu_theme_default_footer($block_config)
     {
@@ -85,14 +86,15 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
 
         $a = 0;
         foreach ($site_mods as $modname => $modvalues) {
-            if (in_array($modname, $block_config['module_in_menu']) and !empty($modvalues['funcs'])) {
-                $_array_menu = array('title' => $modvalues['custom_title'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname);
+            if (in_array($modname, $block_config['module_in_menu'], true) and !empty($modvalues['funcs'])) {
+                $_array_menu = ['title' => $modvalues['custom_title'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname];
                 $xtpl->assign('FOOTER_MENU', $_array_menu);
                 $xtpl->parse('main.footer_menu');
                 ++$a;
             }
         }
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

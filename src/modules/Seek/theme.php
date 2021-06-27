@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_SEARCH')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_SEARCH')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -40,7 +41,7 @@ function search_main_theme($is_search, $search, $array_modul)
 
     $xtpl->assign('DATA', $search);
 
-    if (! empty($array_modul)) {
+    if (!empty($array_modul)) {
         foreach ($array_modul as $m_name => $m_info) {
             $m_info['value'] = $m_name;
             $m_info['selected'] = ($m_name == $search['mod']) ? ' selected="selected"' : '';
@@ -51,7 +52,7 @@ function search_main_theme($is_search, $search, $array_modul)
         }
     }
 
-    if (isset($global_config['searchEngineUniqueID']) and ! empty($global_config['searchEngineUniqueID'])) {
+    if (isset($global_config['searchEngineUniqueID']) and !empty($global_config['searchEngineUniqueID'])) {
         $xtpl->assign('SEARCH_ENGINE_UNIQUE_ID', $global_config['searchEngineUniqueID']);
         $xtpl->parse('main.search_engine_unique_ID');
     }
@@ -65,6 +66,7 @@ function search_main_theme($is_search, $search, $array_modul)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -76,8 +78,9 @@ function search_main_theme($is_search, $search, $array_modul)
  */
 function urlencode_rfc_3986($string)
 {
-    $entities = array( '%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D' );
-    $replacements = array( '!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]" );
+    $entities = ['%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D'];
+    $replacements = ['!', '*', "'", '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '%', '#', '[', ']'];
+
     return str_replace($entities, $replacements, urlencode($string));
 }
 
@@ -117,7 +120,7 @@ function search_result_theme($result_array, $mod, $mod_custom_title, $search, $i
 
     if ($is_generate_page) {
         $generate_page = nv_generate_page($base_url, $num_items, $limit, $search['page']);
-        if (! empty($generate_page)) {
+        if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.generate_page');
         }
@@ -129,5 +132,6 @@ function search_result_theme($result_array, $mod, $mod_custom_title, $search, $i
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

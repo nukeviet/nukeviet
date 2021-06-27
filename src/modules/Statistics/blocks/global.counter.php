@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_counter')) {
+if (!nv_function_exists('nv_block_counter')) {
     function nv_block_counter()
     {
         global $global_config, $db, $nv_Lang;
@@ -30,7 +31,7 @@ if (! nv_function_exists('nv_block_counter')) {
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/');
 
-        $sql = "SELECT c_type, c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
+        $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
         while (list($c_type, $c_count) = $query->fetch(3)) {
             if ($c_type == 'day') {

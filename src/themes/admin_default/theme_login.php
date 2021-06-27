@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
- * @param array $array
- * @param array $cfg_2step
- * @param array $admin_pre_data
+ * @param array  $array
+ * @param array  $cfg_2step
+ * @param array  $admin_pre_data
  * @param string $error
  * @return string
  */
@@ -64,7 +65,7 @@ function nv_admin_login_theme($array, $cfg_2step, $admin_pre_data, $error = '')
                 if (file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php') and file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/admin_global.php')) {
                     $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i);
                     $xtpl->assign('LANGTITLE', $nv_Lang->getGlobal('langinterface'));
-                    $xtpl->assign('SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : "");
+                    $xtpl->assign('SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : '');
                     $xtpl->assign('LANGVALUE', $language_array[$lang_i]['name']);
                     $xtpl->parse('main.pre_form.lang_multi.option');
                 }
@@ -161,5 +162,6 @@ function nv_admin_login_theme($array, $cfg_2step, $admin_pre_data, $error = '')
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

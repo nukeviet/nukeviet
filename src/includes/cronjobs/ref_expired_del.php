@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -27,9 +28,9 @@ function cron_ref_expired_del()
 
         while (($logfile = readdir($dh)) !== false) {
             if (preg_match('/^([0-9]{10,12})\.' . preg_quote(NV_LOGS_EXT) . '$/', $logfile, $matches)) {
-                $d = ( int )$matches[1];
+                $d = (int) $matches[1];
                 if ($d < $log_start) {
-                    if (! @unlink($log_path . '/' . $logfile)) {
+                    if (!@unlink($log_path . '/' . $logfile)) {
                         $result = false;
                     }
                 }

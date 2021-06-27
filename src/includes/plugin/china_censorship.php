@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 29 Jan 2018 07:32:56 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /* Hiện tại trong nhân của hệ thống tích hợp một số tiện ích của Google, Facebook.
@@ -17,7 +18,7 @@ if (!defined('NV_MAINFILE')) {
  Tất cả các tiện ích online của Google và một số mạng xã hội khác đều bị chặn, Vì vậy những site sử dụng NukeViet đều bị "đơ" khi xem từ IP của TQ.
  */
 
-nv_add_hook($module_name, 'modify_global_config', $priority, function($vars) {
+nv_add_hook($module_name, 'modify_global_config', $priority, function ($vars) {
     $global_config = $vars[0];
     $client_info = $vars[1];
 

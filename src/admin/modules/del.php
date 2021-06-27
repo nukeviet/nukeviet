@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-17-2010 0:5
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $modname = $nv_Request->get_title('mod', 'post');
@@ -21,7 +22,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname)) {
     $sth->execute();
     list($is_sys, $module_file) = $sth->fetch(3);
 
-    if (intval($is_sys) != 1) {
+    if ((int) $is_sys != 1) {
         $contents = 'OK_' . $modname;
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('delete') . ' module "' . $modname . '"', '', $admin_info['userid']);
 
@@ -46,7 +47,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname)) {
                         $db->query($sql);
                     } catch (PDOException $e) {
                         trigger_error($e->getMessage());
-                        die('NO_' . $modname);
+                        exit('NO_' . $modname);
                     }
                 }
             }
@@ -57,38 +58,38 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname)) {
         $sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module)');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         if (!$sth->execute()) {
-            die('NO_' . $modname);
+            exit('NO_' . $modname);
         }
 
         $sth = $db->prepare('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         if (!$sth->execute()) {
-            die('NO_' . $modname);
+            exit('NO_' . $modname);
         }
 
         $nv_Cache->delMod('themes');
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module)');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         if (!$sth->execute()) {
-            die('NO_' . $modname);
+            exit('NO_' . $modname);
         }
 
         // Xoa du lieu tai bang nvx_vi_modfuncs
         $sth = $db->prepare('DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         if (!$sth->execute()) {
-            die('NO_' . $modname);
+            exit('NO_' . $modname);
         }
 
         // Xoa du lieu tai bang nvx_vi_modules
         $sth = $db->prepare('DELETE FROM ' . NV_MODULES_TABLE . ' WHERE title= :module');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         if (!$sth->execute()) {
-            die('NO_' . $modname);
+            exit('NO_' . $modname);
         }
 
         // Xoa du lieu tai bang nvx_config
-        $sth = $db->prepare("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' AND module= :module");
+        $sth = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' AND module= :module");
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         $sth->execute();
 
@@ -107,7 +108,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname)) {
             }
         }
 
-        /**
+        /*
          * Nếu ngôn ngữ khác không tồn tại thì
          * Xóa các thư mục uploads, assets, CSDL dir upload
          * Xóa các plugin của module nếu có
@@ -133,11 +134,11 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname)) {
             }
 
             $plugin_deleted = 0;
-            $sql = "SELECT * FROM " . $db_config['prefix'] . "_plugin WHERE plugin_lang=" . $db->quote(NV_LANG_DATA) . " AND plugin_module_file!='' AND plugin_module_name=" . $db->quote($modname);
+            $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=' . $db->quote(NV_LANG_DATA) . " AND plugin_module_file!='' AND plugin_module_name=" . $db->quote($modname);
             $plugins = $db->query($sql)->fetchAll();
             foreach ($plugins as $plugin) {
                 if ($db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $plugin['pid'])) {
-                    $plugin_deleted++;
+                    ++$plugin_deleted;
                     // Sắp xếp lại thứ tự
                     $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\') AND plugin_area=' . $db->quote($plugin['plugin_area']) . ' AND hook_module=' . $db->quote($plugin['hook_module']) . ' ORDER BY weight ASC';
                     $result = $db->query($sql);

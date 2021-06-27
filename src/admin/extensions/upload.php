@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('autoinstall_install');
@@ -49,9 +50,9 @@ if ($nv_Request->isset_request('extract', 'get')) {
             // Kiem tra FTP
             $ftp_check_login = 0;
 
-            if ($sys_info['ftp_support'] and intval($global_config['ftp_check_login']) == 1) {
+            if ($sys_info['ftp_support'] and (int) $global_config['ftp_check_login'] == 1) {
                 $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-                $ftp_port = intval($global_config['ftp_port']);
+                $ftp_port = (int) $global_config['ftp_port'];
                 $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
                 $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
                 $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
@@ -172,7 +173,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                         list($key, $value) = explode('=', $line);
                         $key = trim($key);
                         $value = trim($value);
-                        $value = str_replace(array('"', "'"), array('', ''), $value);
+                        $value = str_replace(['"', "'"], ['', ''], $value);
 
                         if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
                             $all_ini[$section][$match[1]][] = $value;
@@ -194,7 +195,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                             $mime_real = $mime_check = nv_get_mime_type(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename']);
                             $file_ext = nv_getextension($array_file['filename']);
 
-                            if (!empty($mime_check) and (!isset($ini[$file_ext]) or !in_array($mime_check, $ini[$file_ext]))) {
+                            if (!empty($mime_check) and (!isset($ini[$file_ext]) or !in_array($mime_check, $ini[$file_ext], true))) {
                                 $mime_check = '';
                             }
 
@@ -204,7 +205,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                                         continue;
                                     }
                                 }
-                                $array_error_mine[] = array('mime' => $mime_real, 'filename' => $array_file['stored_filename']);
+                                $array_error_mine[] = ['mime' => $mime_real, 'filename' => $array_file['stored_filename']];
                             }
                         }
                     }
@@ -286,7 +287,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                             $sth->execute();
 
                             if (!$sth->fetchColumn()) {
-                                $sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( ' . intval($extConfig['extension']['id']) . ', :type, :title, ' . (intval($extConfig['extension']['sys']) == 1 ? 1 : 0) . ', ' . (intval($extConfig['extension']['virtual']) == 1 ? 1 : 0) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
+                                $sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( ' . (int) $extConfig['extension']['id'] . ', :type, :title, ' . ((int) $extConfig['extension']['sys'] == 1 ? 1 : 0) . ', ' . ((int) $extConfig['extension']['virtual'] == 1 ? 1 : 0) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
                                 $table_prefix = preg_replace('/(\W+)/i', '_', $extConfig['extension']['name']);
                                 $author = $extConfig['author']['name'] . ' (' . $extConfig['author']['email'] . ')';
                                 $version = $extConfig['extension']['version'] . ' ' . NV_CURRENTTIME;
@@ -383,7 +384,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
     nv_htmlOutput('Error Access!!!');
 }
 
-$error = "";
+$error = '';
 $info = [];
 
 if ($nv_Request->isset_request('uploaded', 'get')) {
@@ -488,7 +489,7 @@ if (empty($error)) {
 
                 if (!$extConfigCheck) {
                     $error = $nv_Lang->getModule('autoinstall_error_cfg_content');
-                } elseif (!in_array($extConfig['extension']['type'], $arraySysOption['allowExtType'])) {
+                } elseif (!in_array($extConfig['extension']['type'], $arraySysOption['allowExtType'], true)) {
                     $error = $nv_Lang->getModule('autoinstall_error_cfg_type');
                 } elseif (!preg_match($global_config['check_version'], $extConfig['extension']['version'])) {
                     $error = $nv_Lang->getModule('autoinstall_error_cfg_version');
@@ -533,14 +534,14 @@ if (empty($error)) {
                     $bytes = '';
                 }
 
-                $info['filelist'][$j] = array(
+                $info['filelist'][$j] = [
                     'title' => '[' . $j . '] ' . ($info['exttype'] == 'theme' ? 'themes/' : '') . $listFiles[$i]['filename'] . ' ' . $bytes,
                     'class' => [],
-                );
+                ];
 
                 // Kiem tra file ton tai tren he thong
                 if (empty($listFiles[$i]['folder']) and (($info['exttype'] == 'theme' and file_exists(NV_ROOTDIR . '/themes/' . trim($listFiles[$i]['filename']))) or ($info['exttype'] != 'theme' and file_exists(NV_ROOTDIR . '/' . trim($listFiles[$i]['filename']))))) {
-                    $info['existsnum']++;
+                    ++$info['existsnum'];
                     $info['filelist'][$j]['class'][] = $info['classcfg']['exists'];
 
                     if ($info['checkresult'] != 'fail') {
@@ -551,8 +552,8 @@ if (empty($error)) {
                 // Check valid folder structure nukeviet (modules, themes, uploads)
                 $folder = explode('/', $listFiles[$i]['filename']);
 
-                if (trim($listFiles[$i]['filename']) != 'config.ini' and (($info['exttype'] == 'theme' and $folder[0] != $info['extname']) or ($info['exttype'] != 'theme' and !in_array($folder[0], $arraySysOption['allowfolder']) and (isset($folder[1]) and !in_array($folder[0] . '/' . $folder[1], $arraySysOption['allowfolder']))) or ($folder[0] == 'assets' and in_array(nv_getextension($listFiles[$i]['filename']), $arraySysOption['forbidExt'])))) {
-                    $info['invaildnum']++;
+                if (trim($listFiles[$i]['filename']) != 'config.ini' and (($info['exttype'] == 'theme' and $folder[0] != $info['extname']) or ($info['exttype'] != 'theme' and !in_array($folder[0], $arraySysOption['allowfolder'], true) and (isset($folder[1]) and !in_array($folder[0] . '/' . $folder[1], $arraySysOption['allowfolder'], true))) or ($folder[0] == 'assets' and in_array(nv_getextension($listFiles[$i]['filename']), $arraySysOption['forbidExt'], true)))) {
+                    ++$info['invaildnum'];
                     $info['filelist'][$j]['class'][] = $info['classcfg']['invaild'];
                     $info['checkresult'] = 'fail';
 

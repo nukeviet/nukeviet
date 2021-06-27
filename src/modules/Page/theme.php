@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jul 11, 2010 8:43:46 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_PAGE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -39,7 +40,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     } elseif (nv_is_url($row['image'])) {
         $xtpl->assign('SCHEMA_IMAGE', $row['image']);
     } else {
-        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL. 'themes/' . $module_info['template'] . '/images/no_image.gif');
+        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/no_image.gif');
     }
 
     if (!empty($row['description'])) {
@@ -101,6 +102,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -150,5 +152,6 @@ function nv_page_main_list($array_data, $generate_page)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 20:59
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -17,8 +18,7 @@ if (!defined('NV_ADMIN')) {
  * 	- Module var is: $lang, $module_file, $module_data, $module_upload, $module_theme, $module_name
  * 	- Accept global var: $db, $db_config, $global_config
  */
-
-$sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)");
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)");
 
 $full_name = 'Consumer Care Division';
 $alias = 'Consumer-Care';
@@ -26,11 +26,11 @@ $phone = '(08) 38.000.000[+84838000000]';
 $fax = '08 38.000.001';
 $email = 'customer@mysite.com';
 $note = 'Receive requests, suggestions, comments relating to the operations of company';
-$others = json_encode(array(
+$others = json_encode([
     'viber' => 'myViber',
     'skype' => 'mySkype',
     'yahoo' => 'myYahoo'
-));
+]);
 $cats = 'Consulting|Complaints|Cooperation';
 $weight = 1;
 $is_default = 1;
@@ -52,11 +52,11 @@ $phone = '(08) 38.000.002[+84838000002]';
 $fax = '08 38.000.003';
 $email = 'technical@mysite.com';
 $note = 'Resolve technical issues';
-$others = json_encode(array(
+$others = json_encode([
     'viber' => 'myViber2',
     'skype' => 'mySkype2',
     'yahoo' => 'myYahoo2'
-));
+]);
 $cats = 'Bug Reports|Recommendations to improve';
 $weight = 2;
 $is_default = 0;
@@ -73,6 +73,6 @@ $sth->bindValue(':is_default', $is_default, PDO::PARAM_INT);
 $sth->execute();
 
 $bodytext = 'If you have any questions or comments, please contact us below and we will get back to you as soon as possible.';
-$sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='" . $lang . "' AND module='" . $module_name . "' AND config_name='bodytext'");
+$sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='" . $lang . "' AND module='" . $module_name . "' AND config_name='bodytext'");
 $sth->bindParam(':config_value', $bodytext, PDO::PARAM_STR, strlen($bodytext));
 $sth->execute();

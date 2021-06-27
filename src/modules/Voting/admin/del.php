@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
-if (! defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+if (!defined('NV_IS_AJAX')) {
+    exit('Wrong URL');
 }
 
 $checkss = $nv_Request->get_string('checkss', 'post');
@@ -21,15 +22,15 @@ $vid = $nv_Request->get_int('vid', 'post', 0);
 $contents = '';
 
 if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
-    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_vote', "votingid " . $vid, $admin_info['userid']);
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE vid=" . $vid;
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_vote', 'votingid ' . $vid, $admin_info['userid']);
+    $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid;
     if ($db->exec($sql)) {
-        $db->query("DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid=" . $vid);
+        $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid=' . $vid);
         $nv_Cache->delMod($module_name);
 
-        $contents = "OK_" . $vid;
+        $contents = 'OK_' . $vid;
     } else {
-        $contents = "ERR_" . $nv_Lang->getModule('voting_delete_unsuccess');
+        $contents = 'ERR_' . $nv_Lang->getModule('voting_delete_unsuccess');
     }
 }
 

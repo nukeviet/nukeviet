@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 26 Oct 2014 08:34:25 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $_cas_config = unserialize($global_config['config_sso']);
@@ -58,13 +59,13 @@ if (!empty($username)) {
             $result = ldap_search($ldapconn, $_cas_config['user_contexts'], '(uid=' . $username . ')');
             $data = ldap_get_entries($ldapconn, $result);
 
-            $attribs = array(
+            $attribs = [
                 'identity' => md5($username . '@' . $cas_host),
                 'result' => 'is_res',
                 'id' => $username,
                 'server' => $server,
                 'current_mode' => 4
-            );
+            ];
 
             foreach ($_cas_config['config_field'] as $key => $ckey) {
                 if (!empty($ckey) and isset($data[0][$ckey])) {
@@ -93,9 +94,9 @@ if (!empty($username)) {
         ldap_close($ldapconn);
     }
 } else {
-    $attribs = array(
+    $attribs = [
         'result' => 'notlogin'
-    );
+    ];
 }
 
 $nv_Request->set_Session('openid_attribs', serialize($attribs));

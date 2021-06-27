@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 20:59
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$sql_drop_module = array();
-$array_table = array(
+$sql_drop_module = [];
+$array_table = [
     'admins',
     'block',
     'block_cat',
@@ -28,12 +29,12 @@ $array_table = array(
     'detail',
     'logs',
     'tmp'
-);
+];
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
 while ($item = $result->fetch()) {
     $name = substr($item['name'], strlen($table) + 1);
-    if (preg_match('/^' . $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_/', $item['name']) and (preg_match('/^([0-9]+)$/', $name) or in_array($name, $array_table) or preg_match('/^bodyhtml\_([0-9]+)$/', $name))) {
+    if (preg_match('/^' . $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_/', $item['name']) and (preg_match('/^([0-9]+)$/', $name) or in_array($name, $array_table, true) or preg_match('/^bodyhtml\_([0-9]+)$/', $name))) {
         $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $item['name'];
     }
 }
@@ -41,11 +42,11 @@ while ($item = $result->fetch()) {
 $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comment'");
 $rows = $result->fetchAll();
 if (sizeof($rows)) {
-    $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_comment WHERE module='" . $module_name . "'";
+    $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang . "_comment WHERE module='" . $module_name . "'";
 }
 $sql_create_module = $sql_drop_module;
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_cat (
       catid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
       parentid smallint(5) unsigned NOT NULL DEFAULT '0',
       title varchar(250) NOT NULL,
@@ -77,7 +78,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
       KEY status (status)
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_sources (
      sourceid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
      title varchar(250) NOT NULL DEFAULT '',
      link varchar(255) DEFAULT '',
@@ -89,7 +90,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      UNIQUE KEY title (title(191))
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_topics (
      topicid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
      title varchar(250) NOT NULL DEFAULT '',
      alias varchar(250) NOT NULL DEFAULT '',
@@ -104,7 +105,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      UNIQUE KEY alias (alias(191))
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_block_cat (
      bid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
      adddefault tinyint(4) NOT NULL DEFAULT '0',
      numbers smallint(5) NOT NULL DEFAULT '10',
@@ -121,14 +122,14 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      UNIQUE KEY alias (alias(191))
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block (
      bid smallint(5) unsigned NOT NULL,
      id int(11) unsigned NOT NULL,
      weight int(11) unsigned NOT NULL,
      UNIQUE KEY bid (bid,id)
-    ) ENGINE=InnoDB";
+    ) ENGINE=InnoDB';
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_rows (
      id int(11) unsigned NOT NULL auto_increment,
      catid smallint(5) unsigned NOT NULL default '0',
      listcatid varchar(255) NOT NULL default '',
@@ -175,7 +176,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      KEY instant_creatauto (instant_creatauto)
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_detail (
      id int(11) unsigned NOT NULL,
      titlesite varchar(255) NOT NULL DEFAULT '',
      description text NOT NULL,
@@ -192,7 +193,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
      PRIMARY KEY (id)
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_logs (
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_logs (
      id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
      sid mediumint(8) NOT NULL DEFAULT '0',
      userid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -204,16 +205,16 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
      KEY userid (userid)
 ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post (
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config_post (
      group_id smallint(5) NOT NULL,
      addcontent tinyint(4) NOT NULL,
      postcontent tinyint(4) NOT NULL,
      editcontent tinyint(4) NOT NULL,
      delcontent tinyint(4) NOT NULL,
      PRIMARY KEY (group_id)
-    ) ENGINE=InnoDB";
+    ) ENGINE=InnoDB';
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_admins (
      userid mediumint(8) unsigned NOT NULL default '0',
      catid smallint(5) NOT NULL default '0',
      admin tinyint(4) NOT NULL default '0',
@@ -225,7 +226,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      UNIQUE KEY userid (userid,catid)
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_tags (
      tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
      numnews mediumint(8) NOT NULL DEFAULT '0',
      alias varchar(250) NOT NULL DEFAULT '',
@@ -236,15 +237,15 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
      UNIQUE KEY alias (alias(191))
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags_id (
      id int(11) NOT NULL,
      tid mediumint(9) NOT NULL,
      keyword varchar(65) NOT NULL,
      UNIQUE KEY id_tid (id,tid),
      KEY tid (tid)
-    ) ENGINE=InnoDB";
+    ) ENGINE=InnoDB';
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_tmp (
       id mediumint(8) unsigned NOT NULL,
       admin_id int(11) NOT NULL DEFAULT '0',
       time_edit int(11) NOT NULL,
@@ -253,7 +254,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
       PRIMARY KEY (id)
     ) ENGINE=InnoDB";
 
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
     ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right'),
     ('" . $lang . "', '" . $module_name . "', 'per_page', '20'),
     ('" . $lang . "', '" . $module_name . "', 'st_links', '10'),

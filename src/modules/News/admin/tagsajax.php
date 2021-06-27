@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $q = $nv_Request->get_title('term', 'get', '', 1);
@@ -29,7 +30,7 @@ $sth->bindValue(':alias', '%' . $q . '%', PDO::PARAM_STR);
 $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
-$array_data = array();
+$array_data = [];
 while (list($keywords) = $sth->fetch(3)) {
     $keywords = explode(',', $keywords);
     foreach ($keywords as $_keyword) {

@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
-$arr = array();
+$arr = [];
 $arr['title'] = '';
 $arr['id'] = $nv_Request->get_int('id', 'post,get', 0);
 $error = '';
@@ -23,8 +24,8 @@ if ($nv_Request->get_int('save', 'post')) {
     if (empty($arr['title'])) {
         $error = $nv_Lang->getModule('error_menu_block');
     } elseif ($arr['id'] == 0) {
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (title) VALUES ( :title )";
-        $data_insert = array();
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title) VALUES ( :title )';
+        $data_insert = [];
         $data_insert['title'] = $arr['title'];
         $arr['id'] = $db->insert_id($sql, 'id', $data_insert);
         if (empty($arr['id'])) {
@@ -33,7 +34,7 @@ if ($nv_Request->get_int('save', 'post')) {
     } else {
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title= :title WHERE id =' . $arr['id']);
         $stmt->bindParam(':title', $arr['title'], PDO::PARAM_STR);
-        if (! $stmt->execute()) {
+        if (!$stmt->execute()) {
             $error = $nv_Lang->getModule('errorsave');
         }
     }
@@ -54,9 +55,9 @@ if ($nv_Request->get_int('save', 'post')) {
                 if ($parentid and $action_menu == 'sys_mod_sub') {
                     // Thêm menu từ các chủ đề của module
                     $subweight = 0;
-                    $array_sub_id = array();
+                    $array_sub_id = [];
                     if (file_exists(NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php')) {
-                        $array_item = array();
+                        $array_item = [];
                         $mod_data = $modvalues['module_data'];
                         include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
                         foreach ($array_item as $key => $item) {
@@ -72,7 +73,7 @@ if ($nv_Request->get_int('save', 'post')) {
                         }
                     }
                     // Thêm menu từ các funtion
-                    if (! empty($modvalues['funcs'])) {
+                    if (!empty($modvalues['funcs'])) {
                         foreach ($modvalues['funcs'] as $key => $sub_item) {
                             if ($sub_item['in_submenu'] == 1) {
                                 ++$subweight;
@@ -81,8 +82,8 @@ if ($nv_Request->get_int('save', 'post')) {
                             }
                         }
                     }
-                    if (! empty($array_sub_id)) {
-                        $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $parentid);
+                    if (!empty($array_sub_id)) {
+                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $parentid);
                     }
                 }
             }
@@ -94,7 +95,7 @@ if ($nv_Request->get_int('save', 'post')) {
             if (file_exists(NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php')) {
                 $mod_data = $modvalues['module_data'];
 
-                $array_item = array();
+                $array_item = [];
                 include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
                 foreach ($array_item as $key => $item) {
                     $pid = (isset($item['parentid'])) ? $item['parentid'] : 0;
@@ -109,7 +110,7 @@ if ($nv_Request->get_int('save', 'post')) {
             }
 
             // Thêm menu từ các funtion
-            if (! empty($modvalues['funcs'])) {
+            if (!empty($modvalues['funcs'])) {
                 foreach ($modvalues['funcs'] as $key => $sub_item) {
                     if ($sub_item['in_submenu'] == 1) {
                         ++$weight;
@@ -122,7 +123,7 @@ if ($nv_Request->get_int('save', 'post')) {
         $nv_Cache->delMod($module_name);
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
-} elseif (! empty($arr['id'])) {
+} elseif (!empty($arr['id'])) {
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $arr['id'];
     $result = $db->query($sql);
     $arr = $result->fetch();
@@ -138,7 +139,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }

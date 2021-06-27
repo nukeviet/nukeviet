@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:13
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!(defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['spadmin_add_admin'] == 1))) {
@@ -65,15 +66,15 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $position = $nv_Request->get_title('position', 'post', '', 1);
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    $admin_theme =  (! empty($admin_theme) and in_array($admin_theme, $adminThemes))? $admin_theme : '';
+    $admin_theme = (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) ? $admin_theme : '';
 
     $md5username = nv_md5safe($userid);
     if (preg_match('/^([0-9]+)$/', $userid)) {
-        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval($userid) . ' OR md5username=' . $db->quote($md5username);
+        $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) $userid . ' OR md5username=' . $db->quote($md5username);
     } else {
         $sql = 'SELECT userid, username, active, group_id, in_groups FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote($md5username);
     }
-    list ($userid, $username, $active, $_group_id, $_in_groups) = $db->query($sql)->fetch(3);
+    list($userid, $username, $active, $_group_id, $_in_groups) = $db->query($sql)->fetch(3);
     if (empty($userid)) {
         nv_htmlOutput($nv_Lang->getModule('add_error_choose'));
     }
@@ -101,7 +102,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         $titles = [];
         $array_keys = array_keys($site_mods);
         foreach ($array_keys as $i => $mod) {
-            if (!empty($mod) and in_array($mod, $modules)) {
+            if (!empty($mod) and in_array($mod, $modules, true)) {
                 $site_mods_admins = ((!empty($site_mods[$mod]['admins'])) ? $site_mods[$mod]['admins'] . ',' : '') . $userid;
                 $site_mods_admins = explode(',', $site_mods_admins);
                 $site_mods_admins = array_map('intval', $site_mods_admins);
@@ -123,9 +124,9 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
     $files_level = (!empty($allow_files_type) ? implode(',', $allow_files_type) : '') . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-    $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "
+    $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '
         (admin_id, editor, lev, files_level, position, admin_theme, config_theme, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
-        ( " . $userid . ", :editor, " . $lev . ", :files_level, :position, :admin_theme, '', 0,'', '', 0, '', ''	)");
+        ( ' . $userid . ', :editor, ' . $lev . ", :files_level, :position, :admin_theme, '', 0,'', '', 0, '', ''	)");
     $sth->bindParam(':editor', $editor, PDO::PARAM_STR);
     $sth->bindParam(':files_level', $files_level, PDO::PARAM_STR);
     $sth->bindParam(':position', $position, PDO::PARAM_STR);
@@ -135,7 +136,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         nv_groups_add_user($lev, $userid);
 
         // Nếu là thành viên mới, thì xóa khỏi nhóm thành viên mới
-        if ($_group_id == 7 or in_array(7, explode(',', $_in_groups))) {
+        if ($_group_id == 7 or in_array(7, explode(',', $_in_groups), true)) {
             $_group_id = $lev;
             $_in_groups = array_diff($_in_groups, [
                 7
@@ -159,7 +160,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
             $_in_groups = array_filter(array_unique(array_map('trim', $_in_groups)));
             $_in_groups = empty($_in_groups) ? '' : implode(',', $_in_groups);
 
-            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET group_id=" . $lev . ", in_groups=" . $db->quote($_in_groups) . " WHERE userid=" . $userid;
+            $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $lev . ', in_groups=' . $db->quote($_in_groups) . ' WHERE userid=' . $userid;
             $db->query($sql);
         }
 
@@ -185,7 +186,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     }
 } else {
     $position = '';
-    $admin_theme =  '';
+    $admin_theme = '';
     $userid = $nv_Request->get_title('userid', 'get');
     $editor = 'ckeditor';
     $lev = 3;
@@ -200,7 +201,7 @@ $page_title = $nv_Lang->getModule('nv_admin_add');
 $mods = [];
 $array_keys = array_keys($site_mods);
 foreach ($array_keys as $mod) {
-    $mods[$mod]['checked'] = in_array($mod, $modules) ? 1 : 0;
+    $mods[$mod]['checked'] = in_array($mod, $modules, true) ? 1 : 0;
     $mods[$mod]['custom_title'] = $site_mods[$mod]['custom_title'];
 }
 

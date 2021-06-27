@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
-$array_menu_type = array();
-$arr = array();
+$array_menu_type = [];
+$arr = [];
 
 $arr['id'] = $nv_Request->get_int('id', 'post,get', 0);
 
@@ -21,8 +22,8 @@ $page_title = $nv_Lang->getModule('m_list');
 
 // Delete menu
 if ($nv_Request->isset_request('del', 'post')) {
-    if (! defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+    if (!defined('NV_IS_AJAX')) {
+        exit('Wrong URL');
     }
 
     $id = $nv_Request->get_int('id', 'post', 0);
@@ -31,7 +32,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     $title = $db->query($query)->fetchColumn();
 
     if (empty($title)) {
-        die('NO_' . $id);
+        exit('NO_' . $id);
     }
 
     if ($db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = ' . $id)) {
@@ -39,10 +40,10 @@ if ($nv_Request->isset_request('del', 'post')) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'delete menu id: ' . $id, $title, $admin_info['userid']);
         $nv_Cache->delMod($module_name);
     } else {
-        die('NO_' . $id);
+        exit('NO_' . $id);
     }
 
-    die('OK_' . $id);
+    exit('OK_' . $id);
 }
 
 // List menu
@@ -53,10 +54,10 @@ $db->sqlreset()
 
 $query2 = $db->query($db->sql());
 
-$array = array();
+$array = [];
 $a = 0;
 while ($row = $query2->fetch()) {
-    $arr_items = array();
+    $arr_items = [];
     $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $row['id'] . ' ORDER BY sort ASC';
     $result = $db->query($sql);
     while (list($title_i) = $result->fetch(3)) {
@@ -64,7 +65,7 @@ while ($row = $query2->fetch()) {
     }
 
     ++$a;
-    $array[$row['id']] = array(
+    $array[$row['id']] = [
         'id' => $row['id'],
         'nb' => $a,
         'title' => $row['title'],
@@ -72,9 +73,8 @@ while ($row = $query2->fetch()) {
         'num' => sizeof($arr_items),
         'link_view' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $row['id'],
         'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=menu&amp;id=' . $row['id']
-    );
+    ];
 }
-
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

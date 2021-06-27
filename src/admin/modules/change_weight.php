@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 18:49
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $mod = $nv_Request->get_title('mod', 'post', '');
 $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
 
 if (empty($mod) or empty($new_weight) or !preg_match($global_config['check_module'], $mod)) {
-    die('NO_' . $mod);
+    exit('NO_' . $mod);
 }
 
 $sth = $db->prepare('SELECT weight FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
@@ -24,7 +25,7 @@ $sth->bindParam(':title', $mod, PDO::PARAM_STR);
 $sth->execute();
 $row = $sth->fetch();
 if (empty($row)) {
-    die('NO_' . $mod);
+    exit('NO_' . $mod);
 }
 
 $sth = $db->prepare('SELECT title FROM ' . NV_MODULES_TABLE . ' WHERE title != :title ORDER BY weight ASC');

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:17
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $admin_id = $nv_Request->get_absint('admin_id', 'get', $admin_info['admin_id']);
@@ -48,7 +49,7 @@ if (empty($row_user)) {
 $error = '';
 
 // Xác định quyền sửa tài khoản thành viên
-$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'";
+$sql = 'SELECT content FROM ' . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'";
 $config_user = $db->query($sql)->fetchColumn();
 $config_user = empty($config_user) ? [] : unserialize($config_user);
 $manager_user_2step = false;
@@ -94,8 +95,8 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
                 $error = $nv_Lang->getGlobal('admin_oauth_error_getdata');
             } else {
                 // Kiểm tra trùng
-                $sql = "SELECT * FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE oauth_uid=" . $db->quote($attribs['full_identity']) . "
-                AND admin_id=" . $row['admin_id'] . " AND oauth_server=" . $db->quote($opt);
+                $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE oauth_uid=' . $db->quote($attribs['full_identity']) . '
+                AND admin_id=' . $row['admin_id'] . ' AND oauth_server=' . $db->quote($opt);
                 if ($db->query($sql)->fetch()) {
                     $error = $nv_Lang->getModule('2step_error_oauth_exists');
                 }
@@ -103,12 +104,12 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
 
             if (empty($error)) {
                 // Thêm mới vào CSDL
-                $sql = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_oauth (
+                $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_oauth (
                     admin_id, oauth_server, oauth_uid, oauth_email, addtime
                 ) VALUES (
-                    " . $row['admin_id'] . ", " . $db->quote($opt) . ", " . $db->quote($attribs['full_identity']) . ",
-                    " . $db->quote($attribs['email']) . ", " . NV_CURRENTTIME . "
-                )";
+                    ' . $row['admin_id'] . ', ' . $db->quote($opt) . ', ' . $db->quote($attribs['full_identity']) . ',
+                    ' . $db->quote($attribs['email']) . ', ' . NV_CURRENTTIME . '
+                )';
                 if (!$db->insert_id($sql, 'id')) {
                     $error = $nv_Lang->getGlobal('admin_oauth_error_savenew');
                 } else {
@@ -124,7 +125,7 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
 
 // Danh sách các cổng xác thực
 $array_oauth = [];
-$sql = "SELECT * FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=" . $row['admin_id'] . " ORDER BY addtime DESC";
+$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $row['admin_id'] . ' ORDER BY addtime DESC';
 $result = $db->query($sql);
 while ($_row = $result->fetch()) {
     $array_oauth[$_row['id']] = $_row;
@@ -133,10 +134,10 @@ while ($_row = $result->fetch()) {
 // Xóa tất cả
 if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
-    $sql = "DELETE FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=" . $row['admin_id'];
+    $sql = 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $row['admin_id'];
     $db->query($sql);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_TRUNCATE_OAUTH', 'AID ' . $row['admin_id'], $admin_info['userid']);
@@ -146,7 +147,7 @@ if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
 // Xóa một tài khoản
 if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $id = $nv_Request->get_absint('id', 'post', 0);
@@ -154,7 +155,7 @@ if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
         nv_htmlOutput('NO');
     }
 
-    $sql = "DELETE FROM " . NV_AUTHORS_GLOBALTABLE . "_oauth WHERE admin_id=" . $row['admin_id'] . " AND id=" . $id;
+    $sql = 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $row['admin_id'] . ' AND id=' . $id;
     $db->query($sql);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DELETE_OAUTH', 'AID ' . $row['admin_id'] . ': ' . $array_oauth[$id]['oauth_server'] . '|' . $array_oauth[$id]['oauth_email'], $admin_info['userid']);

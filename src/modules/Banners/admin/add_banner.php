@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/12/2010 12:11
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('add_banner_admin');
@@ -151,7 +152,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $_weight = 0;
         if ($plans_form[$pid] == 'sequential' and $act != 2) {
             $_weight = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid=' . $pid)->fetchColumn();
-            $_weight = intval($_weight) + 1;
+            $_weight = (int) $_weight + 1;
         }
         if (!is_uploaded_file($_FILES['banner']['tmp_name'])) {
             $file_name = 'no_image';
@@ -159,14 +160,14 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $file_mime = 'no_image';
             $width = 0;
             $height = 0;
-            $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+            $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
                 title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml,
                 add_time, publ_time, exp_time, hits_total, act, weight
             ) VALUES (
-                :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
-                " . $width . ", " . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
-                0, " . $act . ", " . $_weight . "
-            )";
+                :title, ' . $pid . ', ' . $assign_user_id . ', :file_name, :file_ext, :file_mime,
+                ' . $width . ', ' . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ', ' . $publtime . ', ' . $exptime . ',
+                0, ' . $act . ', ' . $_weight . '
+            )';
 
             $data_insert = [];
             $data_insert['title'] = $title;
@@ -194,14 +195,14 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $width = $upload_info['img_info'][0];
                 $height = $upload_info['img_info'][1];
 
-                $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+                $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
                     title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf,
                     click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
                 ) VALUES (
-                    :title, " . $pid . ", " . $assign_user_id . ", :file_name, :file_ext, :file_mime,
-                    " . $width . ", " . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
-                    0, " . $act . ", " . $_weight . "
-                )";
+                    :title, ' . $pid . ', ' . $assign_user_id . ', :file_name, :file_ext, :file_mime,
+                    ' . $width . ', ' . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ', ' . $publtime . ', ' . $exptime . ',
+                    0, ' . $act . ', ' . $_weight . '
+                )';
 
                 $data_insert = [];
                 $data_insert['title'] = $title;
@@ -247,13 +248,13 @@ $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);
 $contents['submit'] = $nv_Lang->getModule('add_banner_admin');
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner';
-$contents['title'] = array(
+$contents['title'] = [
     $nv_Lang->getModule('title'),
     'title',
     $title,
     255
-);
-$contents['plan'] = array(
+];
+$contents['plan'] = [
     $nv_Lang->getModule('in_plan'),
     'pid',
     $plans,
@@ -261,43 +262,43 @@ $contents['plan'] = array(
     $row,
     $require_image,
     $plans_exp
-);
-$contents['upload'] = array(
+];
+$contents['upload'] = [
     sprintf($nv_Lang->getModule('upload'), $contents['file_allowed_ext']),
     'banner'
-);
-$contents['file_alt'] = array(
+];
+$contents['file_alt'] = [
     $nv_Lang->getModule('file_alt'),
     'file_alt',
     $file_alt,
     255
-);
-$contents['click_url'] = array(
+];
+$contents['click_url'] = [
     $nv_Lang->getModule('click_url'),
     'click_url',
     $click_url,
     255
-);
-$contents['target'] = array(
+];
+$contents['target'] = [
     $nv_Lang->getModule('target'),
     'target',
     $targets,
     $target
-);
-$contents['publ_date'] = array(
+];
+$contents['publ_date'] = [
     $nv_Lang->getModule('publ_date'),
     'publ_date',
     $publ_date,
     $publ_date_h,
     $publ_date_m
-);
-$contents['exp_date'] = array(
+];
+$contents['exp_date'] = [
     $nv_Lang->getModule('exp_date'),
     'exp_date',
     $exp_date,
     $exp_date_h,
     $exp_date_m
-);
+];
 $contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
 $contents['assign_user'] = $assign_user;
 
@@ -310,10 +311,10 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 } else {
     $contents['bannerhtml'] = '<textarea style="width:100%;height:300px" name="bannerhtml">' . $contents['bannerhtml'] . '</textarea>';
 }
-$contents['bannerhtml'] = array(
+$contents['bannerhtml'] = [
     $nv_Lang->getModule('bannerhtml'),
     $contents['bannerhtml']
-);
+];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme(nv_add_banner_theme($contents));

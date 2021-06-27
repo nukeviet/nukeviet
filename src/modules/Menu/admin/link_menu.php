@@ -1,26 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $mid = $nv_Request->get_int('mid', 'post', 0);
 $parentid = $nv_Request->get_int('parentid', 'post', 0);
 
-$arr_item = array();
-$arr_item[0] = array(
+$arr_item = [];
+$arr_item[0] = [
     'key' => 0,
     'title' => $nv_Lang->getModule('cat0'),
     'selected' => ($parentid == 0) ? ' selected="selected"' : ''
-);
+];
 
 $sp = '&nbsp;&nbsp;&nbsp;';
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid . ' ORDER BY sort';
@@ -32,11 +33,11 @@ while ($row = $result->fetch()) {
             $sp_title .= $sp;
         }
     }
-    $arr_item[$row['id']] = array(
+    $arr_item[$row['id']] = [
         'key' => $row['id'],
         'title' => $sp_title . $row['title'],
         'selected' => ($parentid == $row['id']) ? ' selected="selected"' : ''
-    );
+    ];
 }
 $xtpl = new XTemplate('rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

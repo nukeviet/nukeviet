@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$channel = array();
-$items = array();
+$channel = [];
+$items = [];
 
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -47,7 +48,7 @@ if (!empty($catid)) {
 }
 if ($module_info['rss']) {
     $result = $db_slave->query($db_slave->sql());
-    while (list ($id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile) = $result->fetch(3)) {
+    while (list($id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile) = $result->fetch(3)) {
         $catalias = $global_array_cat[$catid_i]['alias'];
 
         if ($homeimgthumb == 1) {
@@ -65,14 +66,14 @@ if ($module_info['rss']) {
         }
         $rimages = (!empty($rimages)) ? '<img src="' . $rimages . '" width="100" align="left" border="0">' : '';
 
-        $items[] = array(
+        $items[] = [
             'title' => $title,
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], //
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
             'guid' => $module_name . '_' . $id,
             'description' => $rimages . $hometext,
             'pubdate' => $publtime
-        );
+        ];
     }
 }
 nv_rss_generate($channel, $items);
-die();
+exit();

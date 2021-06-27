@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 4/13/2010 20:00
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -52,8 +53,8 @@ function nv_error_info()
  * nv_info_die()
  *
  * @param string $page_title
- * @param mixed $info_title
- * @param mixed $info_content
+ * @param mixed  $info_title
+ * @param mixed  $info_content
  * @param string $admin_link
  * @param string $admin_title
  * @param string $site_link
@@ -102,19 +103,18 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
  * nv_htmlOutput()
  *
  * @param array $html
- * @return void
  */
 function nv_htmlOutput($html)
 {
     header('Content-Type: text/html; charset=utf-8');
-    Header('Cache-Control: no-cache, must-revalidate');
+    header('Cache-Control: no-cache, must-revalidate');
 
     if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-        Header('X-Frame-Options: SAMEORIGIN');
+        header('X-Frame-Options: SAMEORIGIN');
     }
 
-    Header('X-Content-Type-Options: nosniff');
-    Header('X-XSS-Protection: 1; mode=block');
+    header('X-Content-Type-Options: nosniff');
+    header('X-XSS-Protection: 1; mode=block');
 
     ob_start('ob_gzhandler');
     echo $html;
@@ -125,19 +125,18 @@ function nv_htmlOutput($html)
  * nv_jsonOutput()
  *
  * @param array $array_data
- * @return void
  */
 function nv_jsonOutput($array_data)
 {
-    Header('Cache-Control: no-cache, must-revalidate');
-    Header('Content-type: application/json');
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Content-type: application/json');
 
     if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-        Header('X-Frame-Options: SAMEORIGIN');
+        header('X-Frame-Options: SAMEORIGIN');
     }
 
-    Header('X-Content-Type-Options: nosniff');
-    Header('X-XSS-Protection: 1; mode=block');
+    header('X-Content-Type-Options: nosniff');
+    header('X-XSS-Protection: 1; mode=block');
 
     ob_start('ob_gzhandler');
     echo json_encode($array_data);
@@ -148,19 +147,18 @@ function nv_jsonOutput($array_data)
  * nv_xmlOutput()
  *
  * @param string $content
- * @param mixed $lastModified
- * @return void
+ * @param mixed  $lastModified
  */
 function nv_xmlOutput($content, $lastModified)
 {
     if (class_exists('tidy', false)) {
-        $tidy_options = array(
+        $tidy_options = [
             'input-xml' => true,
             'output-xml' => true,
             'indent' => true,
             'indent-cdata' => true,
             'wrap' => false
-        );
+        ];
         $tidy = new tidy();
         $tidy->parseString($content, $tidy_options, 'utf8');
         $tidy->cleanRepair();
@@ -169,24 +167,24 @@ function nv_xmlOutput($content, $lastModified)
         $content = trim($content);
     }
 
-    @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-    @Header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-    @Header('Content-Type: text/xml; charset=utf-8');
+    @header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+    @header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+    @header('Content-Type: text/xml; charset=utf-8');
 
     if (!empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
-        @Header('Cache-Control: no-cache, pre-check=0, post-check=0');
+        @header('Cache-Control: no-cache, pre-check=0, post-check=0');
     } else {
-        @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
+        @header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
     }
 
     if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-        Header('X-Frame-Options: SAMEORIGIN');
+        header('X-Frame-Options: SAMEORIGIN');
     }
 
-    Header('X-Content-Type-Options: nosniff');
-    Header('X-XSS-Protection: 1; mode=block');
+    header('X-Content-Type-Options: nosniff');
+    header('X-XSS-Protection: 1; mode=block');
 
-    @Header('Pragma: no-cache');
+    @header('Pragma: no-cache');
 
     $encoding = 'none';
 
@@ -195,7 +193,7 @@ function nv_xmlOutput($content, $lastModified)
 
         if ($encoding != 'none') {
             if (!strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') and preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-                $version = floatval($matches[1]);
+                $version = (float) ($matches[1]);
 
                 if ($version < 6 or ($version == 6 and !strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
                     $encoding = 'none';
@@ -218,11 +216,10 @@ function nv_xmlOutput($content, $lastModified)
 /**
  * nv_rss_generate()
  *
- * @param mixed $channel
- * @param mixed $items
+ * @param mixed  $channel
+ * @param mixed  $items
  * @param string $timemode
- * @param boolean $noindex
- * @return void
+ * @param bool   $noindex
  */
 function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 {
@@ -270,7 +267,7 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
                 $item['title'] = nv_htmlspecialchars($item['title']);
 
                 if (isset($item['pubdate']) and !empty($item['pubdate'])) {
-                    $item['pubdate'] = intval($item['pubdate']);
+                    $item['pubdate'] = (int) ($item['pubdate']);
                     $channel['pubDate'] = max($channel['pubDate'], $item['pubdate']);
                     if ($timemode == 'ISO8601') {
                         $item['pubdate'] = date('c', $item['pubdate']);
@@ -395,9 +392,8 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT', $noindex = true)
 /**
  * nv_xmlSitemap_generate()
  *
- * @param mixed $url
- * @return void
- * @param array $url
+ * @param mixed  $url
+ * @param array  $url
  * @param string $changefreq
  * @param string $priority
  */
@@ -449,11 +445,11 @@ function nv_xmlSitemapCat_generate($url)
     $contents = $xml->asXML();
     if ($global_config['rewrite_enable']) {
         if ($global_config['check_rewrite_file']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "sitemap-\\1.\\2.\\3.xml", $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'sitemap-\\1.\\2.\\3.xml', $contents);
         } elseif ($global_config['rewrite_optional']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
         } else {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\1/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\1/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
         }
     }
     nv_xmlOutput($contents, $lastModified);
@@ -461,8 +457,6 @@ function nv_xmlSitemapCat_generate($url)
 
 /**
  * nv_xmlSitemapIndex_generate()
- *
- * @return void
  */
 function nv_xmlSitemapIndex_generate()
 {
@@ -475,7 +469,7 @@ function nv_xmlSitemapIndex_generate()
 
     if ($global_config['lang_multi']) {
         foreach ($global_config['allow_sitelangs'] as $lang) {
-            $sql = "SELECT m.title, m.module_file FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
+            $sql = 'SELECT m.title, m.module_file FROM ' . $db_config['prefix'] . '_' . $lang . '_modules m LEFT JOIN ' . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
             while (list($modname, $modfile) = $result->fetch(3)) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
@@ -518,15 +512,15 @@ function nv_xmlSitemapIndex_generate()
 
     if ($global_config['rewrite_enable']) {
         if ($global_config['check_rewrite_file']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "sitemap-\\1.xml", $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "sitemap-\\1.\\2.\\3.xml", $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "sitemap-\\1.\\2.xml", $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", 'sitemap-\\1.xml', $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'sitemap-\\1.\\2.\\3.xml', $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", 'sitemap-\\1.\\2.xml', $contents);
         } elseif ($global_config['rewrite_optional']) {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", 'index.php/\\2/sitemap' . $global_config['rewrite_endurl'], $contents);
         } else {
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", "index.php/\\1/\\2/sitemap/\\3" . $global_config['rewrite_endurl'], $contents);
-            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\1/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap\/([a-zA-Z0-9\-]+)/", 'index.php/\\1/\\2/sitemap/\\3' . $global_config['rewrite_endurl'], $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", 'index.php/\\1/\\2/sitemap' . $global_config['rewrite_endurl'], $contents);
         }
     }
 
@@ -560,11 +554,12 @@ function nv_css_setproperties($tag, $property_array)
                 $css .= $property . ':' . $value . ';';
             }
         } elseif (!empty($value)) {
-            $value = substr(trim($value), - 1) == ';' ? $value : $value . ';';
+            $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
             $css .= $value;
         }
     }
     !empty($css) and $css = $tag . '{' . $css . '}';
+
     return $css;
 }
 
@@ -631,5 +626,6 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

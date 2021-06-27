@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -25,9 +26,9 @@ function nv_save_file_admin_config()
     $sql = 'SELECT keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . '_config';
     $result = $db->query($sql);
     while (list($keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice) = $result->fetch(3)) {
-        $dbendtime = intval($dbendtime);
+        $dbendtime = (int) $dbendtime;
         if ($dbendtime == 0 or $dbendtime > NV_CURRENTTIME) {
-            if ($dbmask == - 1) {
+            if ($dbmask == -1) {
                 $content_config_user .= "\$adv_admins['" . md5($keyname) . "'] = ['password' => \"" . trim($dbnotice) . "\", 'begintime' => " . $dbbegintime . ", 'endtime' => " . $dbendtime . "];\n";
             } else {
                 switch ($dbmask) {
@@ -49,7 +50,7 @@ function nv_save_file_admin_config()
     }
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
     $content_config .= "\$array_adminip = [];\n";
     $content_config .= $content_config_ip . "\n";
     $content_config .= "\$adv_admins = [];\n";
@@ -84,7 +85,7 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
         $array_config_global['admin_check_pass_time'] = 120;
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -134,19 +135,19 @@ if ($nv_Request->isset_request('submituser', 'post')) {
     }
     if (empty($error)) {
         if ($uid > 0 and $password != '') {
-            $sth = $db->prepare("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname= :username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . ", notice='" . md5($password) . "' WHERE id=" . $uid);
+            $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . "_config SET keyname= :username, mask='-1', begintime=" . $begintime1 . ', endtime=' . $endtime1 . ", notice='" . md5($password) . "' WHERE id=" . $uid);
             $sth->bindParam(':username', $username, PDO::PARAM_STR);
             $sth->execute();
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('title_username'), $nv_Lang->getModule('username_edit') . ' username: ' . $username, $admin_info['userid']);
         } elseif ($uid > 0) {
-            $sth = $db->prepare("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname=:username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . " WHERE id=" . $uid);
+            $sth = $db->prepare('UPDATE ' . NV_AUTHORS_GLOBALTABLE . "_config SET keyname=:username, mask='-1', begintime=" . $begintime1 . ', endtime=' . $endtime1 . ' WHERE id=' . $uid);
             $sth->bindParam(':username', $username, PDO::PARAM_STR);
             $sth->execute();
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('title_username'), $nv_Lang->getModule('username_edit') . ' username: ' . $username, $admin_info['userid']);
         } else {
-            $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_config (keyname, mask, begintime, endtime, notice) VALUES (:username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5($password) . "' )");
+            $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_config (keyname, mask, begintime, endtime, notice) VALUES (:username, '-1', " . $begintime1 . ', ' . $endtime1 . ", '" . md5($password) . "' )");
             $sth->bindParam(':username', $username, PDO::PARAM_STR);
             $sth->execute();
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('title_username'), $nv_Lang->getModule('username_add') . ' username: ' . $username, $admin_info['userid']);
@@ -222,7 +223,7 @@ $tpl->assign('UID', $uid);
 $tpl->assign('CID', $cid);
 $tpl->assign('ERROR', empty($error) ? '' : implode('<br />', $error));
 
-$sql = "SELECT id, keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' ORDER BY keyname DESC";
+$sql = 'SELECT id, keyname, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' ORDER BY keyname DESC";
 $result = $db->query($sql);
 
 $array_firewall_users = [];
@@ -238,7 +239,7 @@ while (list($dbid, $keyname, $dbbegintime, $dbendtime) = $result->fetch(3)) {
 $tpl->assign('ARRAY_FIREWALL_USERS', $array_firewall_users);
 
 if (!empty($uid)) {
-    list($username, $begintime1, $endtime1) = $db->query("SELECT keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid)->fetch(3);
+    list($username, $begintime1, $endtime1) = $db->query('SELECT keyname, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid)->fetch(3);
 
     $nv_Lang->setModule('username_add', $nv_Lang->getModule('username_edit'));
     $password2 = $password = '';
@@ -258,7 +259,7 @@ $mask_text_array[3] = '255.255.255.xxx';
 $mask_text_array[2] = '255.255.xxx.xxx';
 $mask_text_array[1] = '255.xxx.xxx.xxx';
 
-$sql = "SELECT id, keyname, mask, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask!='-1' ORDER BY keyname DESC";
+$sql = 'SELECT id, keyname, mask, begintime, endtime FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask!='-1' ORDER BY keyname DESC";
 $result = $db->query($sql);
 
 $array_ipaccess = [];
@@ -275,7 +276,7 @@ while (list($dbid, $keyname, $dbmask, $dbbegintime, $dbendtime) = $result->fetch
 $tpl->assign('ARRAY_IPACCESS', $array_ipaccess);
 
 if (!empty($cid)) {
-    list($id, $keyname, $mask, $begintime, $endtime, $notice) = $db->query("SELECT id, keyname, mask, begintime, endtime, notice FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid)->fetch(3);
+    list($id, $keyname, $mask, $begintime, $endtime, $notice) = $db->query('SELECT id, keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid)->fetch(3);
     $nv_Lang->setModule('adminip_add', $nv_Lang->getModule('adminip_edit'));
 }
 

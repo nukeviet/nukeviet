@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
@@ -17,7 +18,6 @@ use PHPMailer\PHPMailer\PHPMailer;
  */
 class Sendmail extends PHPMailer
 {
-
     public function __construct($config, $lang_interface)
     {
         parent::__construct();
@@ -34,7 +34,7 @@ class Sendmail extends PHPMailer
             $this->Username = $config['smtp_username'];
             $this->Password = $config['smtp_password'];
 
-            $SMTPSecure = intval($config['smtp_ssl']);
+            $SMTPSecure = (int) ($config['smtp_ssl']);
             switch ($SMTPSecure) {
                 case 1:
                     $this->SMTPSecure = 'ssl';
@@ -45,23 +45,23 @@ class Sendmail extends PHPMailer
                 default:
                     $this->SMTPSecure = '';
             }
-            $this->SMTPOptions = array(
-            		'ssl' => array(
-            				'verify_peer' => ($config['verify_peer_ssl'] == 1) ? true : false,
-            				'verify_peer_name' => ($config['verify_peer_name_ssl'] == 1) ? true : false,
-            				'allow_self_signed' => true
-            		)
-            );
+            $this->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => ($config['verify_peer_ssl'] == 1) ? true : false,
+                    'verify_peer_name' => ($config['verify_peer_name_ssl'] == 1) ? true : false,
+                    'allow_self_signed' => true
+                ]
+            ];
         } elseif ($mailer_mode == 'sendmail') {
             $this->IsSendmail();
         } else {
             //disable_functions
-            $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
+            $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
 
             if (extension_loaded('suhosin')) {
                 $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
             }
-            if (!in_array('mail', $disable_functions)) {
+            if (!in_array('mail', $disable_functions, true)) {
                 $this->IsMail();
             } else {
                 return false;
@@ -131,5 +131,4 @@ class Sendmail extends PHPMailer
         $this->Body = $message;
         $this->AltBody = strip_tags($message);
     }
-
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 18/10/2011, 9:45
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -29,6 +30,7 @@ function jdFromDate($dd, $mm, $yy)
     if ($jd < 2299161) {
         $jd = $dd + floor((153 * $m + 2) / 5) + 365 * $y + floor($y / 4) - 32083;
     }
+
     return $jd;
 }
 
@@ -55,7 +57,7 @@ function jdToDate($jd)
     $month = $m + 3 - 12 * floor($m / 10);
     $year = $b * 100 + $d - 4800 + floor($m / 10);
 
-    return array( $day, $month, $year );
+    return [$day, $month, $year];
 }
 
 /**
@@ -88,12 +90,12 @@ function getNewMoonDay($k, $timeZone)
     $C1 = $C1 - 0.0074 * sin($dr * ($M - $Mpr)) + 0.0004 * sin($dr * (2 * $F + $M));
     $C1 = $C1 - 0.0004 * sin($dr * (2 * $F - $M)) - 0.0006 * sin($dr * (2 * $F + $Mpr));
     $C1 = $C1 + 0.0010 * sin($dr * (2 * $F - $Mpr)) + 0.0005 * sin($dr * (2 * $Mpr + $M));
-    if ($T < - 11) {
+    if ($T < -11) {
         $deltat = 0.001 + 0.000839 * $T + 0.0002261 * $T2 - 0.00000845 * $T3 - 0.000000081 * $T * $T3;
     } else {
-        $deltat = - 0.000278 + 0.000265 * $T + 0.000262 * $T2;
+        $deltat = -0.000278 + 0.000265 * $T + 0.000262 * $T2;
     }
-    ;
+
     $JdNew = $Jd1 + $C1 - $deltat;
 
     return floor($JdNew + 0.5 + $timeZone / 24);
@@ -144,6 +146,7 @@ function getLunarMonth11($yy, $timeZone)
     if ($sunLong >= 9) {
         $nm = getNewMoonDay($k - 1, $timeZone);
     }
+
     return $nm;
 }
 
@@ -166,6 +169,7 @@ function getLeapMonthOffset($a11, $timeZone)
         $i = $i + 1;
         $arc = getSunLongitude(getNewMoonDay($k + $i, $timeZone), $timeZone);
     } while ($arc != $last and $i < 14);
+
     return $i - 1;
 }
 
@@ -212,9 +216,10 @@ function convertSolar2Lunar($dd, $mm, $yy, $timeZone)
         $lunarMonth = $lunarMonth - 12;
     }
     if ($lunarMonth >= 11 and $diff < 4) {
-        $lunarYear -= 1;
+        --$lunarYear;
     }
-    return array( $lunarDay, $lunarMonth, $lunarYear, $lunarLeap );
+
+    return [$lunarDay, $lunarMonth, $lunarYear, $lunarLeap];
 }
 
 /**
@@ -248,12 +253,14 @@ function convertLunar2Solar($lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $tim
             $leapMonth += 12;
         }
         if ($lunarLeap != 0 and $lunarMonth != $leapMonth) {
-            return array( 0, 0, 0 );
-        } elseif ($lunarLeap != 0 or $off >= $leapOff) {
-            $off += 1;
+            return [0, 0, 0];
+        }
+        if ($lunarLeap != 0 or $off >= $leapOff) {
+            ++$off;
         }
     }
     $monthStart = getNewMoonDay($k + $off, $timeZone);
+
     return jdToDate($monthStart + $lunarDay - 1);
 }
 
@@ -264,11 +271,12 @@ function convertLunar2Solar($lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $tim
  */
 function alhn()
 {
-    $CAN = array( 'Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý' );
-    $CHI = array( 'Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi' );
+    $CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
+    $CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
     $arr = array_slice(convertSolar2Lunar(date('d'), date('m'), date('Y'), 7), 0, 3);
     $arr[0] = str_pad($arr[0], 2, '0', STR_PAD_LEFT);
     $arr[1] = str_pad($arr[1], 2, '0', STR_PAD_LEFT);
     $arr[2] = $CAN[($arr[2] + 6) % 10] . ' ' . $CHI[($arr[2] + 8) % 12];
+
     return 'Âm lịch: ngày ' . $arr[0] . ' tháng ' . $arr[1] . ' năm ' . $arr[2];
 }

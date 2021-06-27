@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 5/12/2010, 1:34
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -72,12 +73,12 @@ function nv_sitemapPing($module, $link)
             $url_parts['path'] = '/';
         }
 
-        $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? ( int )$url_parts['port'] : 80), $errno, $errstr, 3);
+        $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? (int) $url_parts['port'] : 80), $errno, $errstr, 3);
         if (!$sock) {
             return $nv_Lang->getModule('PingNotSupported');
         }
 
-        $request = "GET " . $url_parts['path'] . (isset($url_parts['query']) ? '?' . $url_parts['query'] : '') . " HTTP/1.1\r\n";
+        $request = 'GET ' . $url_parts['path'] . (isset($url_parts['query']) ? '?' . $url_parts['query'] : '') . " HTTP/1.1\r\n";
         $request .= 'Host: ' . $url_parts['host'] . "\r\n";
         $request .= "Connection: Close\r\n\r\n";
         fwrite($sock, $request);
@@ -112,7 +113,7 @@ $searchEngines['searchEngine'] = [];
 $info = '';
 
 $sitemapFiles = [];
-$sql = "SELECT f.in_module as name, m.custom_title as title FROM " . NV_MODFUNCS_TABLE . " f, " . NV_MODULES_TABLE . " m WHERE m.act = 1 AND f.func_name='sitemap' AND f.in_module = m.title";
+$sql = 'SELECT f.in_module as name, m.custom_title as title FROM ' . NV_MODFUNCS_TABLE . ' f, ' . NV_MODULES_TABLE . " m WHERE m.act = 1 AND f.func_name='sitemap' AND f.in_module = m.title";
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $sitemapFiles[$row['name']] = $row['title'];
@@ -137,14 +138,14 @@ if ($nv_Request->isset_request('submit', 'post') and empty($global_config['idsit
     foreach ($searchEngineName as $key => $name) {
         $name = trim(strip_tags($name));
         $value = trim(strip_tags($searchEngineValue[$key]));
-        $active = intval($nv_Request->get_bool('searchEngineActive_' . $key, 'post', false));
+        $active = (int) ($nv_Request->get_bool('searchEngineActive_' . $key, 'post', false));
 
         if (!empty($name) and !empty($value)) {
-            $searchEngines['searchEngine'][] = array(
+            $searchEngines['searchEngine'][] = [
                 'name' => $name,
                 'value' => $value,
                 'active' => $active
-            );
+            ];
         }
     }
 

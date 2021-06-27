@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 function cron_auto_del_temp_download()
@@ -22,7 +23,7 @@ function cron_auto_del_temp_download()
             if (preg_match('/^(' . nv_preg_quote(NV_TEMPNAM_PREFIX) . ')[a-zA-Z0-9\_\.]+$/', $file)) {
                 if ((filemtime($dir . '/' . $file) + 600) < NV_CURRENTTIME) {
                     if (is_file($dir . '/' . $file)) {
-                        if (! @unlink($dir . '/' . $file)) {
+                        if (!@unlink($dir . '/' . $file)) {
                             $result = false;
                         }
                     } else {

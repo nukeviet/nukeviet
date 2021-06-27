@@ -1,41 +1,42 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['move_file'])) {
-    die('ERROR#' . $nv_Lang->getModule('notlevel'));
+    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $newfolder = nv_check_path_upload($nv_Request->get_string('newpath', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($newfolder);
 if (!isset($check_allow_upload_dir['create_file'])) {
-    die('ERROR#' . $nv_Lang->getModule('notlevel'));
+    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $images = array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
 
 // Check choose file
 if (empty($images)) {
-    die('ERROR#' . $nv_Lang->getModule('errorNotSelectFile'));
+    exit('ERROR#' . $nv_Lang->getModule('errorNotSelectFile'));
 }
 
 // Check file exists
-foreach ($images as  $file) {
+foreach ($images as $file) {
     if (!nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-        die('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
+        exit('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
     }
 }
 
@@ -50,13 +51,13 @@ foreach ($images as $image) {
     // Change file name if exists
     while (file_exists(NV_ROOTDIR . '/' . $newfolder . '/' . $file)) {
         $file = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $image);
-        ++ $i;
+        ++$i;
     }
 
     $moved_images[] = $file;
 
     if (!nv_copyfile(NV_ROOTDIR . '/' . $path . '/' . $image, NV_ROOTDIR . '/' . $newfolder . '/' . $file)) {
-        die('ERROR#' . $nv_Lang->getModule('errorNotCopyFile'));
+        exit('ERROR#' . $nv_Lang->getModule('errorNotCopyFile'));
     }
 
     if (isset($array_dirname[$newfolder])) {
@@ -64,7 +65,7 @@ foreach ($images as $image) {
         $info = nv_getFileInfo($newfolder, $file);
         $info['userid'] = $admin_info['userid'];
 
-        $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')");
+        $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $file . "')");
     }
 
     if (!$mirror) {
@@ -77,7 +78,7 @@ foreach ($images as $image) {
 
         if (isset($array_dirname[$path])) {
             $did = $array_dirname[$path];
-            $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $image . "'");
+            $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . " AND title='" . $image . "'");
         }
     }
 

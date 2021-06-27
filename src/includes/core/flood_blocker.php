@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/27/2010 4:6
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_except_flood_site = $array_except_flood_admin = [];
 $ip_exclusion = false;
 if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php')) {
-    include NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php' ;
+    include NV_ROOTDIR . '/' . NV_DATADIR . '/efloodip.php';
 }
 
 foreach ($array_except_flood_site as $e => $f) {
@@ -79,9 +80,8 @@ if (!$ip_exclusion) {
             $xtpl->parse('main');
             echo $xtpl->text('main');
             exit();
-        } else {
-            trigger_error($nv_Lang->getGlobal('flood_info1'), 256);
         }
+        trigger_error($nv_Lang->getGlobal('flood_info1'), 256);
     }
 
     unset($rules, $flb);

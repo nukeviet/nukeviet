@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $install_lang['modules'] = [];
@@ -100,8 +101,8 @@ $install_lang['groups']['NukeViet-Fans'] = 'NukeViet-Fans';
 $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';
 $install_lang['groups']['NukeViet-Programmers'] = 'NukeViet-Programmers';
 
-$install_lang['vinades_fullname'] = "Vietnam Open Source Development Joint Stock Company";
-$install_lang['vinades_address'] = "Room 1706 – CT2 Nang Huong building, 583 Nguyen Trai street, Ha Dong, Hanoi, Vietnam";
+$install_lang['vinades_fullname'] = 'Vietnam Open Source Development Joint Stock Company';
+$install_lang['vinades_address'] = 'Room 1706 – CT2 Nang Huong building, 583 Nguyen Trai street, Ha Dong, Hanoi, Vietnam';
 $install_lang['nukeviet_description'] = 'Sharing success, connect passions';
 $install_lang['disable_site_content'] = 'For technical reasons Web site temporary not available. we are very sorry for that inconvenience!';
 
@@ -223,71 +224,71 @@ $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTO_ERROR_REPORT] = [
     'c' => 'The system received some error messages. Please open the attached file for details.'
 ];
 
-$menu_rows_lev0['about'] = array(
+$menu_rows_lev0['about'] = [
     'title' => $install_lang['modules']['about'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=about',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['news'] = array(
+];
+$menu_rows_lev0['news'] = [
     'title' => $install_lang['modules']['news'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['users'] = array(
+];
+$menu_rows_lev0['users'] = [
     'title' => $install_lang['modules']['users'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['voting'] = array(
+];
+$menu_rows_lev0['voting'] = [
     'title' => $install_lang['modules']['voting'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=voting",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=voting',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['contact'] = array(
+];
+$menu_rows_lev0['contact'] = [
     'title' => $install_lang['modules']['contact'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=contact",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=contact',
     'groups_view' => '6',
     'op' => ''
-);
+];
 
 $menu_rows_lev1['users'] = [];
-$menu_rows_lev1['users'][] = array(
+$menu_rows_lev1['users'][] = [
     'title' => $install_lang['modfuncs']['users']['login'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=login",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users&op=login',
     'groups_view' => '5',
     'op' => 'login'
-);
-$menu_rows_lev1['users'][] = array(
+];
+$menu_rows_lev1['users'][] = [
     'title' => $install_lang['modfuncs']['users']['register'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=register",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users&op=register',
     'groups_view' => '5',
     'op' => 'register'
-);
-$menu_rows_lev1['users'][] = array(
+];
+$menu_rows_lev1['users'][] = [
     'title' => $install_lang['modfuncs']['users']['lostpass'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=lostpass",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users&op=lostpass',
     'groups_view' => '5',
     'op' => 'lostpass'
-);
-$menu_rows_lev1['users'][] = array(
+];
+$menu_rows_lev1['users'][] = [
     'title' => $install_lang['modfuncs']['users']['editinfo'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=editinfo",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users&op=editinfo',
     'groups_view' => '4,7',
     'op' => 'editinfo'
-);
-$menu_rows_lev1['users'][] = array(
+];
+$menu_rows_lev1['users'][] = [
     'title' => $install_lang['modfuncs']['users']['memberlist'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=memberlist",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users&op=memberlist',
     'groups_view' => '4,7',
     'op' => 'memberlist'
-);
-$menu_rows_lev1['users'][] = array(
+];
+$menu_rows_lev1['users'][] = [
     'title' => $install_lang['modfuncs']['users']['logout'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=logout",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users&op=logout',
     'groups_view' => '4,7',
     'op' => 'logout'
-);
+];

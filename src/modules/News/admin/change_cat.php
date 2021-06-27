@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 18:49
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $catid = $nv_Request->get_int('catid', 'post', 0);
@@ -39,11 +40,11 @@ if ($catid > 0) {
         nv_fix_cat_order();
         $content = 'OK_' . $parentid;
     } elseif (defined('NV_IS_ADMIN_MODULE') or (isset($array_cat_admin[$admin_id][$catid]) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1)) {
-        if ($mod == 'status' and in_array($new_vid, array(0, 1, 2)) and in_array($curr_status, array(0, 1, 2)) and !(nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS and ($new_vid == 0 or $curr_status == 0))) {
+        if ($mod == 'status' and in_array($new_vid, [0, 1, 2], true) and in_array($curr_status, [0, 1, 2], true) and !(nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS and ($new_vid == 0 or $curr_status == 0))) {
             // Đối với các chuyên mục bị khóa bởi chuyên mục cha thì không thay đổi gì
             // Đối với hệ thống lớn thì không thể đình chỉ
             if (($new_vid == 0 or $curr_status == 0) and $new_vid != $curr_status) {
-                $sudcatids = GetCatidInParent($catid);
+                $sudcatids = array_map('intval', GetCatidInParent($catid));
                 if ($new_vid == 0) {
                     // Đình chỉ
                     $query_update_cat = 'status=status+' . ($global_code_defined['cat_locked_status'] + 1);
@@ -54,14 +55,14 @@ if ($catid > 0) {
                     $query_update_row = 'status=status-' . ($global_code_defined['row_locked_status'] + 1);
 
                     // Tìm ra các chuyên mục vẫn còn bị khóa sau khi mở khóa chuyên mục này
-                    $array_cat_locked = array();
+                    $array_cat_locked = [];
                     foreach ($global_array_cat as $_catid_i => $_cat_value) {
                         if ($_catid_i != $catid) {
-                            if (in_array($_catid_i, $sudcatids)) {
+                            if (in_array((int) $_catid_i, $sudcatids, true)) {
                                 // Các chuyên mục con sẽ bị tác động thì trả về trạng thái status ban đầu
                                 $_cat_value['status'] -= ($global_code_defined['cat_locked_status'] + 1);
                             }
-                            if (!in_array($_cat_value['status'], $global_code_defined['cat_visible_status'])) {
+                            if (!in_array((int) $_cat_value['status'], array_map('intval', $global_code_defined['cat_visible_status']), true)) {
                                 $array_cat_locked[] = $_catid_i;
                             }
                         }
@@ -78,7 +79,7 @@ if ($catid > 0) {
                         }
                     }
 
-                    /**
+                    /*
                      * Khi khóa chuyên mục thì chỉ cần xác định các bài viết này có listcatid thuộc vào $sudcatids thì sẽ lập tức bị khóa
                      * Không khóa các bài viết hiện tại đang bị khóa
                      */
@@ -104,7 +105,7 @@ if ($catid > 0) {
                         while ($row = $result->fetch()) {
                             $row['listcatid'] = explode(',', $row['listcatid']);
                             // Xem thử bài viết này còn thuộc chuyên mục nào bị khóa không
-                            if (array_intersect($array_cat_locked, $row['listcatid']) == array() and $row['status'] > $global_code_defined['row_locked_status']) {
+                            if (array_intersect($array_cat_locked, $row['listcatid']) == [] and $row['status'] > $global_code_defined['row_locked_status']) {
                                 // Mở khóa ở bảng rows
                                 try {
                                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET ' . $query_update_row . ' WHERE id=' . $row['id']);

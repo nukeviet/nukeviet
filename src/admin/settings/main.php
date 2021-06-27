@@ -1,45 +1,46 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = sprintf($nv_Lang->getModule('lang_site_config'), $language_array[NV_LANG_DATA]['name']);
 
-$array_theme_type = array(
+$array_theme_type = [
     'r',
     'd',
     'm'
-);
+];
 $submit = $nv_Request->get_string('submit', 'post');
 $errormess = '';
 
 if ($submit) {
-    $array_config = array();
+    $array_config = [];
 
     $site_domain = $nv_Request->get_title('site_domain', 'post', '');
-    $array_config['site_domain'] = (sizeof($global_config['my_domains']) > 1 and in_array($site_domain, $global_config['my_domains'])) ? $site_domain : '';
+    $array_config['site_domain'] = (sizeof($global_config['my_domains']) > 1 and in_array($site_domain, $global_config['my_domains'], true)) ? $site_domain : '';
     $array_config['site_theme'] = nv_substr($nv_Request->get_title('site_theme', 'post', '', 1), 0, 255);
     $array_config['mobile_theme'] = nv_substr($nv_Request->get_title('mobile_theme', 'post', '', 1), 0, 255);
     $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);
     $array_config['switch_mobi_des'] = $nv_Request->get_int('switch_mobi_des', 'post', 0);
     $_array_theme_type = $nv_Request->get_typed_array('theme_type', 'post', 'title');
     $_array_theme_type = array_intersect($_array_theme_type, $array_theme_type);
-    if (!in_array('m', $_array_theme_type)) {
+    if (!in_array('m', $_array_theme_type, true)) {
         $array_config['mobile_theme'] = '';
     }
     if (empty($array_config['mobile_theme'])) {
         $array_config['switch_mobi_des'] = 0;
     }
-    if (!in_array('r', $_array_theme_type) and !in_array('d', $_array_theme_type)) {
+    if (!in_array('r', $_array_theme_type, true) and !in_array('d', $_array_theme_type, true)) {
         $_array_theme_type[] = 'r';
     }
     $array_config['theme_type'] = implode(',', $_array_theme_type);
@@ -47,7 +48,7 @@ if ($submit) {
     $array_config['site_keywords'] = nv_substr($nv_Request->get_title('site_keywords', 'post', '', 1), 0, 255);
     if (!empty($array_config['site_keywords'])) {
         $site_keywords = array_map('trim', explode(',', $array_config['site_keywords']));
-        $array_config['site_keywords'] = array();
+        $array_config['site_keywords'] = [];
 
         if (!empty($site_keywords)) {
             foreach ($site_keywords as $keywords) {
@@ -107,7 +108,7 @@ if ($submit) {
         $array_config['disable_site_content'] = $nv_Lang->getGlobal('disable_site_content');
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -119,10 +120,10 @@ if ($submit) {
     if (empty($errormess)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass());
     } else {
-        $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
+        $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
         $result = $db->query($sql);
 
-        while (list ($c_module, $c_config_name, $c_config_value) = $result->fetch(3)) {
+        while (list($c_module, $c_config_name, $c_config_value) = $result->fetch(3)) {
             if ($c_module == 'global') {
                 $global_config[$c_config_name] = $c_config_value;
             } else {
@@ -132,18 +133,18 @@ if ($submit) {
     }
 }
 
-$theme_array = array();
+$theme_array = [];
 $theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme']);
 
-$mobile_theme_array = array();
+$mobile_theme_array = [];
 $mobile_theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_mobile']);
 
 $sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
 $result = $db->query($sql);
-while (list ($theme) = $result->fetch(3)) {
-    if (in_array($theme, $theme_array_file)) {
+while (list($theme) = $result->fetch(3)) {
+    if (in_array($theme, $theme_array_file, true)) {
         $theme_array[] = $theme;
-    } elseif (in_array($theme, $mobile_theme_array_file)) {
+    } elseif (in_array($theme, $mobile_theme_array_file, true)) {
         $mobile_theme_array[] = $theme;
     }
 }
@@ -163,7 +164,7 @@ if (!empty($global_config['site_favicon']) and $global_config['site_favicon'] !=
     $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
 }
 
-$value_setting = array(
+$value_setting = [
     'sitename' => $global_config['site_name'],
     'site_logo' => $site_logo,
     'site_banner' => $site_banner,
@@ -171,7 +172,7 @@ $value_setting = array(
     'site_keywords' => $global_config['site_keywords'],
     'description' => $global_config['site_description'],
     'switch_mobi_des' => $global_config['switch_mobi_des']
-);
+];
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
@@ -190,7 +191,7 @@ $tpl->assign('THEME_TYPE', $array_theme_type);
 $tpl->assign('SITE_THEME', $theme_array);
 $tpl->assign('MOBILE_THEME', $mobile_theme_array);
 
-$sql = "SELECT title, custom_title FROM " . NV_MODULES_TABLE . " WHERE act=1 AND title NOT IN ('menu', 'comment') ORDER BY weight ASC";
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . " WHERE act=1 AND title NOT IN ('menu', 'comment') ORDER BY weight ASC";
 $tpl->assign('HOME_MODULES', $db->query($sql)
     ->fetchAll());
 
@@ -199,7 +200,7 @@ $global_config['disable_site_content'] = htmlspecialchars(nv_editor_br2nl($globa
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $disable_site_content = nv_aleditor('disable_site_content', '100%', '100px', $global_config['disable_site_content']);
 } else {
-    $disable_site_content = "<textarea style=\"width:100%;height:100px\" name=\"disable_site_content\" id=\"disable_site_content\">" . $global_config['disable_site_content'] . "</textarea>";
+    $disable_site_content = '<textarea style="width:100%;height:100px" name="disable_site_content" id="disable_site_content">' . $global_config['disable_site_content'] . '</textarea>';
 }
 
 $tpl->assign('DISABLE_SITE_CONTENT', $disable_site_content);

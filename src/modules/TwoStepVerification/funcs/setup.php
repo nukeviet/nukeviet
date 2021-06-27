@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MOD_2STEP_VERIFICATION')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!empty($user_info['active2step'])) {
@@ -49,7 +50,7 @@ if (isset($array_op[1]) and $array_op[1] == 'qr-image') {
     $qrCode->setEncoding('UTF-8');
     $qrCode->setErrorCorrectionLevel(Endroid\QrCode\ErrorCorrectionLevel::MEDIUM);
 
-    header('Content-Type: '. $qrCode->getContentType());
+    header('Content-Type: ' . $qrCode->getContentType());
     echo $qrCode->writeString();
     exit();
 }
@@ -61,11 +62,11 @@ if ($checkss == NV_CHECK_SESSION) {
     $opt = $nv_Request->get_title('opt', 'post', 6);
 
     if (!$GoogleAuthenticator->verifyOpt($secretkey, $opt)) {
-        nv_json_result(array(
+        nv_json_result([
             'status' => 'error',
             'input' => 'opt',
             'mess' => $nv_Lang->getModule('wrong_confirm')
-        ));
+        ]);
     }
 
     try {
@@ -76,11 +77,11 @@ if ($checkss == NV_CHECK_SESSION) {
 
     nv_creat_backupcodes();
 
-    nv_json_result(array(
+    nv_json_result([
         'status' => 'ok',
         'input' => '',
         'mess' => ''
-    ));
+    ]);
 }
 
 $contents = nv_theme_config_2step($secretkey, $nv_redirect);

@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 19:53
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Ftp;
@@ -14,7 +15,7 @@ class Buffer
 {
     public $position = 0;
 
-    public $varname = null;
+    public $varname;
 
     /**
      * @param mixed $path
@@ -26,7 +27,7 @@ class Buffer
     public function stream_open($path, $mode, $options, &$opened_path)
     {
         $url = parse_url($path);
-        $this->varname = $url["host"];
+        $this->varname = $url['host'];
         $this->position = 0;
 
         return true;
@@ -45,7 +46,6 @@ class Buffer
     }
 
     /**
-     *
      * @param mixed $data
      * @return
      */
@@ -64,7 +64,6 @@ class Buffer
     }
 
     /**
-     *
      * @return
      */
     public function stream_tell()
@@ -73,7 +72,6 @@ class Buffer
     }
 
     /**
-     *
      * @return
      */
     public function stream_eof()
@@ -82,7 +80,6 @@ class Buffer
     }
 
     /**
-     *
      * @param mixed $offset
      * @param mixed $whence
      * @return
@@ -93,40 +90,36 @@ class Buffer
             case SEEK_SET:
                 if ($offset < strlen($GLOBALS[$this->varname]) and $offset >= 0) {
                     $this->position = $offset;
+
                     return true;
-                } else {
-                    return false;
                 }
 
+                    return false;
                 break;
-
             case SEEK_CUR:
                 if ($offset >= 0) {
                     $this->position += $offset;
+
                     return true;
-                } else {
-                    return false;
                 }
 
+                    return false;
                 break;
-
             case SEEK_END:
                 if (strlen($GLOBALS[$this->varname]) + $offset >= 0) {
                     $this->position = strlen($GLOBALS[$this->varname]) + $offset;
+
                     return true;
-                } else {
-                    return false;
                 }
 
+                    return false;
                 break;
-
             default:
                 return false;
         }
     }
 
     /**
-     *
      * @param mixed $path
      * @param mixed $option
      * @param mixed $var
@@ -136,7 +129,7 @@ class Buffer
     {
         if ($option == STREAM_META_TOUCH) {
             $url = parse_url($path);
-            $varname = $url["host"];
+            $varname = $url['host'];
 
             if (!isset($GLOBALS[$varname])) {
                 $GLOBALS[$varname] = '';
@@ -144,6 +137,7 @@ class Buffer
 
             return true;
         }
+
         return false;
     }
 }

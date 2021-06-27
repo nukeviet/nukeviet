@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_NEWS')) {
+    exit('Stop!!!');
 }
 
 $alias_cat_url = $array_op[1];
 $array_page = explode('-', $array_op[2]);
-$id = intval(end($array_page));
+$id = (int) (end($array_page));
 $catid = 0;
 foreach ($global_array_cat as $catid_i => $array_cat_i) {
     if ($alias_cat_url == $array_cat_i['alias']) {
@@ -53,7 +54,7 @@ if ($id > 0 and $catid > 0) {
 
         $meta_tags = nv_html_meta_tags();
 
-        $result = array(
+        $result = [
             'url' => $global_config['site_url'],
             'meta_tags' => $meta_tags,
             'sitename' => $global_config['site_name'],
@@ -67,13 +68,13 @@ if ($id > 0 and $catid > 0) {
             'bodytext' => $content['bodytext'],
             'copyright' => $content['copyright'],
             'copyvalue' => $module_config[$module_name]['copyright'],
-            'link' => "<a href=\"" . NV_MY_DOMAIN . $base_url_rewrite . "\" title=\"" . $content['title'] . "\">" . NV_MY_DOMAIN . $base_url_rewrite . "</a>\n",
+            'link' => '<a href="' . NV_MY_DOMAIN . $base_url_rewrite . '" title="' . $content['title'] . '">' . NV_MY_DOMAIN . $base_url_rewrite . "</a>\n",
             'contact' => $global_config['site_email'],
             'author' => $content['author'],
             'source' => $sourcetext
-        );
+        ];
 
-        if (! empty($content['homeimgfile']) and $content['imgposition'] > 0) {
+        if (!empty($content['homeimgfile']) and $content['imgposition'] > 0) {
             $src = $alt = $note = '';
             $width = $height = 0;
             if ($content['homeimgthumb'] == 1 and $content['imgposition'] == 1) {
@@ -88,13 +89,13 @@ if ($id > 0 and $catid > 0) {
             }
             $alt = (empty($content['homeimgalt'])) ? $content['title'] : $content['homeimgalt'];
 
-            $result['image'] = array(
+            $result['image'] = [
                 'src' => $src,
                 'width' => $width,
                 'alt' => $alt,
                 'note' => $content['homeimgalt'],
                 'position' => $content['imgposition']
-            );
+            ];
         }
 
         // Chặn lập chỉ mục tìm kiếm

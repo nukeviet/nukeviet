@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/7/2010, 3:26
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
-if (! defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+if (!defined('NV_IS_AJAX')) {
+    exit('Wrong URL');
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
@@ -21,12 +22,11 @@ $id = $nv_Request->get_int('id', 'post', 0);
 $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $id;
 $id = $db->query($sql)->fetchColumn();
 if (empty($id)) {
-    die('NO');
+    exit('NO');
 }
 
 $new_status = $nv_Request->get_int('new_status', 'post');
-if ($new_status < 0 OR $new_status > 2)
-{
+if ($new_status < 0 or $new_status > 2) {
     $new_status = 0;
 }
 

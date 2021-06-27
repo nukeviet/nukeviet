@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sat, 07 Mar 2015 03:43:56 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /*
@@ -31,7 +32,7 @@ if (! defined('NV_MAINFILE')) {
  * $db_config['slave'][3]['dbpass'] = 'dbpass_slave';*
  */
 
-nv_add_hook($module_name, 'db_slave_connect', $priority, function($vars) {
+nv_add_hook($module_name, 'db_slave_connect', $priority, function ($vars) {
     $db = $vars[0];
     $db_config = $vars[1];
 
@@ -52,5 +53,6 @@ nv_add_hook($module_name, 'db_slave_connect', $priority, function($vars) {
         trigger_error('Sorry! Could not connect to data server slave ' . $db_config_slave['dbhost']);
         $db_slave = $db;
     }
+
     return $db_slave;
 });

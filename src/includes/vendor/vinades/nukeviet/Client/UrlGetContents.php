@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 5-8-2010 1:13
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Client;
 
 class UrlGetContents
 {
-    private $allow_methods = array();
+    private $allow_methods = [];
     private $open_basedir;
     private $url_info = false;
     private $login = '';
@@ -21,7 +22,7 @@ class UrlGetContents
     private $user_agent = '';
     private $redirectCount = 0;
     public $time_limit = 60;
-    private $disable_functions = array();
+    private $disable_functions = [];
 
     /**
      * UrlGetContents::__construct()
@@ -32,19 +33,19 @@ class UrlGetContents
     {
         $this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5($global_config['sitekey']);
 
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get("disable_functions"))) : array();
+        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : [];
         if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
+            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
         }
         $this->disable_functions = $disable_functions;
 
-        $this->time_limit = ( int )$time_limit;
+        $this->time_limit = (int) $time_limit;
 
-        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
             set_time_limit($this->time_limit);
         }
 
-        if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions)) {
+        if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions, true)) {
             ini_set('default_socket_timeout', $this->time_limit);
             ini_set('user_agent', $this->user_agent);
         }
@@ -53,21 +54,21 @@ class UrlGetContents
             $this->allow_methods[] = 'curl';
         }
 
-        if (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions)) {
+        if (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions, true)) {
             $this->allow_methods[] = 'fsockopen';
         }
 
         if (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') {
-            if (function_exists('fopen') and !in_array('fopen', $this->disable_functions)) {
+            if (function_exists('fopen') and !in_array('fopen', $this->disable_functions, true)) {
                 $this->allow_methods[] = 'fopen';
             }
 
-            if (function_exists('file_get_contents') and !in_array('file_get_contents', $this->disable_functions)) {
+            if (function_exists('file_get_contents') and !in_array('file_get_contents', $this->disable_functions, true)) {
                 $this->allow_methods[] = 'file_get_contents';
             }
         }
 
-        if (function_exists('file') and !in_array('file', $this->disable_functions)) {
+        if (function_exists('file') and !in_array('file', $this->disable_functions, true)) {
             $this->allow_methods[] = 'file';
         }
 
@@ -77,27 +78,27 @@ class UrlGetContents
     /**
      * UrlGetContents::check_url()
      *
-     * @param integer $is_200
+     * @param int $is_200
      * @return
      */
     private function check_url($is_200 = 0)
     {
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
-        if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions) and $allow_url_fopen == 1) {
+        if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions, true) and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
-        } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions)) {
+        } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions, true) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions, true)) {
             $url_info = @parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
+            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
 
-            $userAgents = array(
+            $userAgents = [
                 'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
                 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
                 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
                 'Mozilla/4.8 [en] (Windows NT 6.0; U)',
                 'Opera/9.25 (Windows NT 6.0; U; en)'
-            );
-            srand(( float )microtime() * 10000000);
+            ];
+            srand((float) microtime() * 10000000);
             $rand = array_rand($userAgents);
             $agent = $userAgents[$rand];
 
@@ -120,20 +121,19 @@ class UrlGetContents
 
             if ($response === false) {
                 return false;
-            } else {
-                $res = explode("\n", $response);
             }
-        } elseif (function_exists("fsockopen") and !in_array('fsockopen', $this->disable_functions) and function_exists("fgets") and !in_array('fgets', $this->disable_functions)) {
-            $res = array();
+            $res = explode("\n", $response);
+        } elseif (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions, true) and function_exists('fgets') and !in_array('fgets', $this->disable_functions, true)) {
+            $res = [];
             $url_info = parse_url($this->url_info['uri']);
-            $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
+            $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
             $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
             if ($fp) {
                 $path = !empty($url_info['path']) ? $url_info['path'] : '/';
                 $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
 
-                fputs($fp, "HEAD " . $path . " HTTP/1.0\r\n");
-                fputs($fp, "Host: " . $url_info['host'] . ":" . $port . "\r\n");
+                fputs($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
+                fputs($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
                 fputs($fp, "Connection: close\r\n\r\n");
 
                 while (!feof($fp)) {
@@ -169,10 +169,12 @@ class UrlGetContents
                     if (!$this->url_info or !isset($this->url_info['scheme'])) {
                         return false;
                     }
+
                     return $this->check_url($is_200);
                 }
             }
         }
+
         return false;
     }
 
@@ -198,7 +200,7 @@ class UrlGetContents
     /**
      * UrlGetContents::curl_Get()
      *
-     * @param mixed $url
+     * @param mixed  $url
      * @param string $login
      * @param string $password
      * @param string $ref
@@ -241,6 +243,7 @@ class UrlGetContents
 
         if (curl_errno($curlHandle)) {
             curl_close($curlHandle);
+
             return false;
         }
 
@@ -270,6 +273,7 @@ class UrlGetContents
 
         if (($response['http_code'] < 200) or (300 <= $response['http_code'])) {
             curl_close($curlHandle);
+
             return false;
         }
 
@@ -297,7 +301,7 @@ class UrlGetContents
     /**
      * UrlGetContents::fsockopen_Get()
      *
-     * @param mixed $url
+     * @param mixed  $url
      * @param string $login
      * @param string $password
      * @param string $ref
@@ -325,7 +329,7 @@ class UrlGetContents
         $request .= "\r\n";
 
         $request .= "Connection: Close\r\n";
-        $request .= "User-Agent: " . $this->user_agent . "\r\n\r\n";
+        $request .= 'User-Agent: ' . $this->user_agent . "\r\n\r\n";
 
         if (function_exists('gzinflate')) {
             $request .= "Accept-Encoding: gzip,deflate\r\n";
@@ -334,9 +338,9 @@ class UrlGetContents
         $request .= "Accept: */*\r\n";
 
         if (!empty($this->ref)) {
-            $request .= "Referer: " . urlencode($this->ref) . "\r\n";
+            $request .= 'Referer: ' . urlencode($this->ref) . "\r\n";
         } else {
-            $request .= "Referer: " . $this->url_info['uri'] . "\r\n";
+            $request .= 'Referer: ' . $this->url_info['uri'] . "\r\n";
         }
 
         if (!empty($this->login)) {
@@ -349,6 +353,7 @@ class UrlGetContents
 
         if (@fwrite($fp, $request) === false) {
             @fclose($fp);
+
             return false;
         }
 
@@ -363,6 +368,7 @@ class UrlGetContents
             $inf = @stream_get_meta_data($fp);
             if ($inf['timed_out']) {
                 @fclose($fp);
+
                 return false;
             }
         }
@@ -391,7 +397,7 @@ class UrlGetContents
         }
 
         preg_match("/^HTTP\/[0-9\.]+\s+(\d+)\s+/", $header, $matches);
-        if ($matches == array()) {
+        if ($matches == []) {
             return false;
         }
         if ($matches[1] != 200) {
@@ -423,12 +429,12 @@ class UrlGetContents
      */
     private function fopen_Get()
     {
-        $ctx = stream_context_create(array( 'http' => array(
-                'method' => 'GET',
-                'max_redirects' => '2',
-                'ignore_errors' => '0',
-                'timeout' => 30
-            ) ));
+        $ctx = stream_context_create(['http' => [
+            'method' => 'GET',
+            'max_redirects' => '2',
+            'ignore_errors' => '0',
+            'timeout' => 30
+        ]]);
 
         if (($fd = @fopen($this->url_info['uri'], 'rb', 0, $ctx)) === false) {
             return false;
@@ -451,12 +457,12 @@ class UrlGetContents
      */
     private function file_get_contents_Get()
     {
-        $ctx = stream_context_create(array( 'http' => array(
-                'method' => 'GET',
-                'max_redirects' => '5',
-                'ignore_errors' => '0',
-                'timeout' => 30
-            ) ));
+        $ctx = stream_context_create(['http' => [
+            'method' => 'GET',
+            'max_redirects' => '5',
+            'ignore_errors' => '0',
+            'timeout' => 30
+        ]]);
 
         return file_get_contents($this->url_info['uri'], 0, $ctx);
     }
@@ -465,22 +471,22 @@ class UrlGetContents
      * UrlGetContents::file_Get()
      *
      * @param mixed $url
-     * @return void
      */
     private function file_Get()
     {
-        $ctx = stream_context_create(array( 'http' => array(
-                'method' => 'GET',
-                'max_redirects' => '5',
-                'ignore_errors' => '0',
-                'timeout' => 30
-            ) ));
+        $ctx = stream_context_create(['http' => [
+            'method' => 'GET',
+            'max_redirects' => '5',
+            'ignore_errors' => '0',
+            'timeout' => 30
+        ]]);
 
         $result = file($this->url_info['uri'], 0, $ctx);
 
         if ($result) {
             return implode($result);
         }
+
         return '';
     }
 
@@ -557,7 +563,7 @@ class UrlGetContents
     /**
      * UrlGetContents::get()
      *
-     * @param mixed $url
+     * @param mixed  $url
      * @param string $login
      * @param string $password
      * @param string $ref
@@ -575,16 +581,16 @@ class UrlGetContents
             return false;
         }
 
-        $this->login = ( string )$login;
-        $this->password = ( string )$password;
-        $this->ref = ( string )$ref;
+        $this->login = (string) $login;
+        $this->password = (string) $password;
+        $this->ref = (string) $ref;
 
         if (!empty($this->allow_methods)) {
             foreach ($this->allow_methods as $method) {
-                $result = call_user_func(array(
+                $result = call_user_func([
                     &$this,
                     $method . '_Get'
-                ));
+                ]);
 
                 if (!empty($result)) {
                     return $result;

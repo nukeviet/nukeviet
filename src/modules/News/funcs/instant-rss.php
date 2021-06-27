@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (empty($module_config[$module_name]['instant_articles_active'])) {
@@ -29,8 +30,8 @@ if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
     }
 }
 
-$channel = array();
-$items = array();
+$channel = [];
+$items = [];
 $gettime = empty($module_config[$module_name]['instant_articles_gettime']) ? 0 : (NV_CURRENTTIME - ($module_config[$module_name]['instant_articles_gettime'] * 60));
 
 $channel['title'] = $module_info['custom_title'];
@@ -66,7 +67,7 @@ if (!empty($catid)) {
 
 // Lấy RSS từ cache
 $cacheFile = NV_LANG_DATA . '_instantrss' . $catid . '_' . NV_CACHE_PREFIX . '.cache';
-$cacheTTL = 60 * intval($module_config[$module_file]['instant_articles_livetime']);
+$cacheTTL = 60 * (int) ($module_config[$module_file]['instant_articles_livetime']);
 
 $FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 
@@ -77,7 +78,7 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
     while ($row = $result->fetch()) {
         $row['catalias'] = $global_array_cat[$row['catid']]['alias'];
         $row['hometext'] = strip_tags($row['hometext']);
-        $items[$row['id']] = array(
+        $items[$row['id']] = [
             'title' => $row['title'],
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['catalias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'],
             'guid' => md5($module_name . '_' . $row['id']),
@@ -90,15 +91,15 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
             'cattitle' => $global_array_cat[$row['catid']]['title'],
             'instant_template' => $row['instant_template'],
             'instant_creatauto' => $row['instant_creatauto']
-        );
+        ];
     }
 
     if (!empty($items)) {
-        $sql = "SELECT id, bodyhtml FROM " . NV_PREFIXLANG . "_" . $module_data . "_detail WHERE id IN(" . implode(',', array_keys($items)) . ")";
+        $sql = 'SELECT id, bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id IN(' . implode(',', array_keys($items)) . ')';
         $result = $db->query($sql);
 
         while ($row = $result->fetch()) {
-            $content = array();
+            $content = [];
             $FBIA->setArticle($row['bodyhtml']);
             if ($items[$row['id']]['instant_creatauto']) {
                 $content['html'] = $FBIA->hardProcces();
@@ -133,4 +134,4 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
 }
 
 nv_rss_generate($channel, $items, 'ISO8601');
-die();
+exit();

@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-function nv_mailHTML($title, $content, $footer='')
+function nv_mailHTML($title, $content, $footer = '')
 {
     global $global_config;
 
@@ -24,6 +25,7 @@ function nv_mailHTML($title, $content, $footer='')
     $xtpl->assign('MESSAGE_CONTENT', $content);
     $xtpl->assign('MESSAGE_FOOTER', $footer);
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -37,7 +39,7 @@ function nv_get_submenu($mod)
 {
     global $module_name, $global_config, $admin_mods, $nv_Lang;
 
-    $submenu = array();
+    $submenu = [];
 
     if (file_exists(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php')) {
         $nv_Lang->loadModule($mod, true, true);
@@ -58,7 +60,7 @@ function nv_get_submenu_mod($module_name)
 {
     global $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods, $nv_Lang;
 
-    $submenu = array();
+    $submenu = [];
     if (isset($site_mods[$module_name])) {
         $module_info = $site_mods[$module_name];
         $module_file = $module_info['module_file'];
@@ -69,6 +71,7 @@ function nv_get_submenu_mod($module_name)
             $nv_Lang->changeLang();
         }
     }
+
     return $submenu;
 }
 
@@ -76,7 +79,7 @@ function nv_get_submenu_mod($module_name)
  * nv_admin_theme()
  *
  * @param mixed $contents
- * @param integer $head_site
+ * @param int   $head_site
  * @return
  */
 function nv_admin_theme($contents, $head_site = 1)
@@ -124,7 +127,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
     $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->get('admin_page') . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title']);
     $xtpl->assign('SITE_DESCRIPTION', empty($global_config['site_description']) ? $page_title : $global_config['site_description']);
-    $xtpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['admin_check_pass_time']) - 62) * 1000);
+    $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['admin_check_pass_time']) - 62) * 1000);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMINDIR', NV_ADMINDIR);
     $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -173,11 +176,11 @@ function nv_admin_theme($contents, $head_site = 1)
             $xtpl->assign('NV_LANGINTERFACE_CURRENT', $array_lang_admin[NV_LANG_INTERFACE]);
             foreach ($array_lang_admin as $lang_i => $lang_name) {
                 $xtpl->assign('LANGVALUE', $lang_name);
-                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_DATA) ? " class=\"disabled\"" : "");
+                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_DATA) ? ' class="disabled"' : '');
                 $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . NV_LANG_INTERFACE . '&' . NV_LANG_VARIABLE . '=' . $lang_i);
                 $xtpl->parse('main.langdata.option');
 
-                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_INTERFACE) ? " class=\"disabled\"" : "");
+                $xtpl->assign('DISABLED', ($lang_i == NV_LANG_INTERFACE) ? ' class="disabled"' : '');
                 $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i . '&' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
                 $xtpl->parse('main.langinterface.option');
             }
@@ -327,13 +330,13 @@ function nv_admin_theme($contents, $head_site = 1)
      * By default, breadcrumbs is $page_title
      */
     if (empty($array_mod_title) and !empty($page_title)) {
-        $array_mod_title = array(
-            0 => array(
+        $array_mod_title = [
+            0 => [
                 'title' => $page_title,
                 'link' => '',
                 'active' => true,
-            )
-        );
+            ]
+        ];
     }
 
     if (!empty($array_mod_title)) {
@@ -374,10 +377,10 @@ function nv_admin_theme($contents, $head_site = 1)
     $sitecontent = $xtpl->text('main');
 
     if (!empty($my_head)) {
-        $sitecontent = preg_replace('/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1);
+        $sitecontent = preg_replace('/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1);
     }
     if (!empty($my_footer)) {
-        $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1);
+        $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1);
     }
 
     return $sitecontent;

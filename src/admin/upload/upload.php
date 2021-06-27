@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24/1/2011, 1:33
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get', NV_UPLOADS_DIR));
@@ -39,14 +40,14 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
 } else {
     $type = $nv_Request->get_string('type', 'post,get');
 
-    if ($type == 'image' and in_array('images', $admin_info['allow_files_type'])) {
-        $allow_files_type = array(
+    if ($type == 'image' and in_array('images', $admin_info['allow_files_type'], true)) {
+        $allow_files_type = [
             'images'
-        );
-    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'])) {
-        $allow_files_type = array(
+        ];
+    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'], true)) {
+        $allow_files_type = [
             'flash'
-        );
+        ];
     } elseif (empty($type)) {
         $allow_files_type = $admin_info['allow_files_type'];
     } else {
@@ -110,7 +111,7 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
                 }
             } else {
                 $autologomod = explode(',', $global_config['autologomod']);
-                $dir = str_replace("\\", '/', $path);
+                $dir = str_replace('\\', '/', $path);
                 $dir = rtrim($dir, '/');
                 $arr_dir = explode('/', $dir);
 
@@ -142,16 +143,16 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
                     $config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
 
                     // Logo vertical
-                    if (preg_match("/^top/", $global_config['upload_logo_pos'])) {
+                    if (preg_match('/^top/', $global_config['upload_logo_pos'])) {
                         $config_logo['y'] = 5;
-                    } elseif (preg_match("/^center/", $global_config['upload_logo_pos'])) {
+                    } elseif (preg_match('/^center/', $global_config['upload_logo_pos'])) {
                         $config_logo['y'] = round(($file_size[1] / 2) - ($h / 2));
                     }
 
                     // Logo horizontal
-                    if (preg_match("/Left$/", $global_config['upload_logo_pos'])) {
+                    if (preg_match('/Left$/', $global_config['upload_logo_pos'])) {
                         $config_logo['x'] = 5;
-                    } elseif (preg_match("/Center$/", $global_config['upload_logo_pos'])) {
+                    } elseif (preg_match('/Center$/', $global_config['upload_logo_pos'])) {
                         $config_logo['x'] = round(($file_size[0] / 2) - ($w / 2));
                     }
 
@@ -189,9 +190,9 @@ if (!empty($error)) {
     if ($responseType == 'json') {
         $array_data = [];
         $array_data['uploaded'] = 0;
-        $array_data['error'] = array(
+        $array_data['error'] = [
             'message' => $error
-        );
+        ];
 
         nv_jsonOutput($array_data);
     } elseif ($editor == 'ckeditor') {
@@ -218,12 +219,12 @@ if (!empty($error)) {
             $newalt = str_replace('-', ' ', change_alias($newalt));
         }
 
-        $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (
+        $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
             name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
         ) VALUES (
             '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ",
-            '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "',
-            " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt
+            '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "',
+            " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $upload_info['basename'] . "', :newalt
         )");
 
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
@@ -244,12 +245,11 @@ if (!empty($error)) {
             nv_jsonOutput([
                 'uploaded' => 1,
                 'fileName' => $upload_info['basename'],
-                'url' => NV_BASE_SITEURL . $path . "/" . $upload_info['basename']
+                'url' => NV_BASE_SITEURL . $path . '/' . $upload_info['basename']
             ]);
         }
     } else {
         echo $upload_info['basename'];
     }
-} else {
-    // Upload chunk hoàn thành
 }
+    // Upload chunk hoàn thành

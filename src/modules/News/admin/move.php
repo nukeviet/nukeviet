@@ -1,43 +1,44 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * Khi di chuyển bài viết sẽ làm mất hoàn toàn các chuyên mục cũ dó đó nếu bài viết
  * đang bị đình chỉ thì chúng sẽ được trả lại trạng thái trước đó.
  */
-
 $page_title = $nv_Lang->getModule('move');
 
-$id_array = array();
+$id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
-$catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
+$catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', []));
 $catid = $nv_Request->get_int('catid', 'get,post', 0);
 
 if ($nv_Request->isset_request('idcheck', 'post')) {
     // Kiểm tra ID các chuyên mục phải hợp lệ
-    $array_catid_allowed = array();
+    $array_catid_allowed = [];
+    $global_code_defined['cat_visible_status'] = array_map('intval', $global_code_defined['cat_visible_status']);
     foreach ($global_array_cat as $catid_i => $array_value) {
-        if (in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
+        if (in_array((int) $array_value['status'], $global_code_defined['cat_visible_status'], true)) {
             $array_catid_allowed[$catid_i] = $catid_i;
         }
     }
     $catids = array_intersect($catids, $array_catid_allowed);
-    $id_array = array_unique($nv_Request->get_typed_array('idcheck', 'post', 'int', array()));
+    $id_array = array_unique($nv_Request->get_typed_array('idcheck', 'post', 'int', []));
 
     if (!empty($id_array) and !empty($catids)) {
         $listcatid = implode(',', $catids);
-        if (empty($catid) or !in_array($catid, $catids)) {
+        if (empty($catid) or !in_array($catid, $catids, true)) {
             $catid = $catids[0];
         }
 
@@ -88,27 +89,29 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
 while (list($id, $title) = $result->fetch(3)) {
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'id' => $id,
         'title' => $title,
-        'checked' => in_array($id, $id_array) ? ' checked="checked"' : ''
-    ));
+        'checked' => in_array((int) $id, $id_array, true) ? ' checked="checked"' : ''
+    ]);
 
     $xtpl->parse('main.loop');
 }
 
+$global_code_defined['cat_visible_status'] = array_map('intval', $global_code_defined['cat_visible_status']);
+$catids = array_map('intval', $catids);
 foreach ($global_array_cat as $catid_i => $array_value) {
-    if (in_array($array_value['status'], $global_code_defined['cat_visible_status'])) {
-        $space = intval($array_value['lev']) * 30;
-        $catiddisplay = (sizeof($catids) > 1 and (in_array($catid_i, $catids))) ? '' : ' display: none;';
-        $temp = array(
+    if (in_array((int) $array_value['status'], $global_code_defined['cat_visible_status'], true)) {
+        $space = (int) $array_value['lev'] * 30;
+        $catiddisplay = (sizeof($catids) > 1 and (in_array((int) $catid_i, $catids, true))) ? '' : ' display: none;';
+        $temp = [
             'catid' => $catid_i,
             'space' => $space,
             'title' => $array_value['title'],
-            'checked' => (in_array($catid_i, $catids)) ? ' checked="checked"' : '',
+            'checked' => (in_array((int) $catid_i, $catids, true)) ? ' checked="checked"' : '',
             'catidchecked' => ($catid_i == $catid) ? ' checked="checked"' : '',
             'catiddisplay' => $catiddisplay
-        );
+        ];
         $xtpl->assign('CATS', $temp);
         $xtpl->parse('main.catid');
     }

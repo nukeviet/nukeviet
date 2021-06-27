@@ -1,44 +1,57 @@
+/**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 .margin-bottom {
     margin-bottom: 10px;
 }
 
 .exp_time {
-	line-height: 20px
+    line-height: 20px
 }
 
 .exp_time input {
-	float: left
+    float: left
 }
 
 .exp_time img {
-	float: left;
-	margin: 2px
+    float: left;
+    margin: 2px
 }
 
-.content{
-	padding: 5px;
+.content {
+    padding: 5px;
 }
 
-.bg-gainsboro{
-    background-color:#C0C0C0
+.bg-gainsboro {
+    background-color: #C0C0C0
 }
 
 .hr {
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-bottom-color: #dadada;
-	margin: 5px 0
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #dadada;
+    margin: 5px 0
 }
 
 .requie {
-	color: red
+    color: red
 }
 
 #shows_all_func td {
-	background-color: #f9f9f9
+    background-color: #f9f9f9
 }
 
-.container {width: 100%; margin: 10px auto;}
+.container {
+    width: 100%;
+    margin: 10px auto;
+}
+
 ul.tabs {
     margin: 0;
     padding: 0;
@@ -49,6 +62,7 @@ ul.tabs {
     border-left: 1px solid #999;
     width: 100%;
 }
+
 ul.tabs li {
     float: left;
     margin: 0;
@@ -62,6 +76,7 @@ ul.tabs li {
     overflow: hidden;
     position: relative;
 }
+
 ul.tabs li a {
     text-decoration: none;
     color: #000;
@@ -71,10 +86,13 @@ ul.tabs li a {
     border: 1px solid #fff;
     outline: none;
 }
+
 ul.tabs li a:hover {
     background: #ccc;
 }
-html ul.tabs li.active, html ul.tabs li.active a:hover  {
+
+html ul.tabs li.active,
+html ul.tabs li.active a:hover {
     background: #fff;
     border-bottom: 1px solid #fff;
 }
@@ -132,9 +150,9 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 }
 
 @media (max-width: 767px) {
-.margin-bottom-sm {
-    margin-bottom: 15px;
-}
+    .margin-bottom-sm {
+        margin-bottom: 15px;
+    }
 }
 
 /*
@@ -145,33 +163,41 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
+
 .theme-config-submit-area {
     margin-top: 10px;
 }
+
 .theme-config-gfont label.cname {
     width: 50px;
     display: inline-block;
 }
+
 .theme-config-gfont .form-control {
     display: inline-block;
     margin-right: 10px;
     width: 200px;
 }
+
 .theme-config-basic label.cname {
     width: 100px;
     display: inline-block;
 }
+
 .theme-config-basic label.cval {
     margin-right: 10px;
 }
+
 .theme-config-basic .form-control {
     display: inline-block;
     margin-right: 10px;
     width: 240px;
 }
+
 .theme-config-basic .sizem {
     width: 120px;
 }
+
 .theme-config-basic .input-group-wrap {
     display: inline-block;
     width: 254px;
@@ -179,22 +205,27 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
     margin-top: -1px;
     margin-right: 10px;
 }
+
 .theme-config-basic .input-group-wrap .form-control {
     display: table-cell;
     width: 100%;
 }
+
 .theme-config-basic .rowTextarea .wrp {
     display: block;
     width: 100%;
     padding-left: 104px;
 }
+
 .theme-config-basic .rowTextarea .wrp .form-control {
     display: block;
     width: 100%;
 }
+
 .theme-config-basic .rowTextarea .cname {
     float: left;
 }
+
 div.colpick {
     z-index: 99999;
 }
@@ -212,7 +243,7 @@ div.colpick {
 .nv-themelist:hover,
 .nv-themelist.active {
     border-color: #0074a2;
-    box-shadow: 0 0 2px rgba(0,116,162,.8);
+    box-shadow: 0 0 2px rgba(0, 116, 162, .8);
 }
 
 .nv-themelist .themelistthumb {
@@ -261,7 +292,7 @@ div.colpick {
 
 .nv-themelist .themelistthumb .actions .ctn .btn {
     background: #23282d;
-    background: rgba(0,0,0,.7);
+    background: rgba(0, 0, 0, .7);
     transition: opacity .1s ease-in-out;
     margin-bottom: 10px;
     color: #fff;

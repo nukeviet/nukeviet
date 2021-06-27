@@ -1,26 +1,36 @@
+/**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 #rankForm {
-	margin: 10px 0
+    margin: 10px 0
 }
 
 #rankForm h2 {
-	font: 800 13px Arial, Tahoma, Verdana, sans-serif
+    font: 800 13px Arial, Tahoma, Verdana, sans-serif
 }
 
 #rankForm input[type="text"] {
-	width: 200px
+    width: 200px
 }
 
-#rankForm dd, #rankForm dt {
-	float: left;
-	line-height: 20px;
-	height: 20px
+#rankForm dd,
+#rankForm dt {
+    float: left;
+    line-height: 20px;
+    height: 20px
 }
 
 #rankForm dt {
-	width: 80px
+    width: 80px
 }
 
 .error {
-	color: #EF3805;
-	font: 800 12px Tahoma, Arial, Verdana, sans-serif
+    color: #EF3805;
+    font: 800 12px Tahoma, Arial, Verdana, sans-serif
 }

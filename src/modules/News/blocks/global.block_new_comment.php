@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_comment_new')) {
@@ -32,6 +33,7 @@ if (!nv_function_exists('nv_comment_new')) {
         $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('bl_numrow') . ':</label>';
         $html .= '	<div class="col-sm-5"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -45,11 +47,12 @@ if (!nv_function_exists('nv_comment_new')) {
     function nv_block_comment_new_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['titlelength'] = $nv_Request->get_int('config_titlelength', 'post', 0);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
+
         return $return;
     }
 
@@ -66,10 +69,10 @@ if (!nv_function_exists('nv_comment_new')) {
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
 
-        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_comment WHERE module = " . $db->quote($module) . " AND status=1 ORDER BY post_time DESC LIMIT " . $block_config['numrow'];
+        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_comment WHERE module = ' . $db->quote($module) . ' AND status=1 ORDER BY post_time DESC LIMIT ' . $block_config['numrow'];
         $result = $db_slave->query($sql);
-        $array_comment = array();
-        $array_news_id = array();
+        $array_comment = [];
+        $array_news_id = [];
         while ($comment = $result->fetch()) {
             $array_comment[] = $comment;
             $array_news_id[] = $comment['id'];
@@ -77,7 +80,7 @@ if (!nv_function_exists('nv_comment_new')) {
 
         if (!empty($array_news_id)) {
             $result = $db_slave->query('SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode(',', array_unique($array_news_id)) . ') AND t1.status = 1');
-            $array_news_id = array();
+            $array_news_id = [];
             while ($row = $result->fetch()) {
                 $array_news_id[$row['id']] = $row;
             }
@@ -103,6 +106,7 @@ if (!nv_function_exists('nv_comment_new')) {
                 }
             }
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }

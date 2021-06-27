@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 07/30/2013 10:27
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 global $nv_Cache;
 
 // Xác định cấu hình
 $_mod_table = ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data;
-$sql = "SELECT config, content FROM " . $_mod_table . "_config WHERE config IN('access_admin', 'active_editinfo_censor')";
+$sql = 'SELECT config, content FROM ' . $_mod_table . "_config WHERE config IN('access_admin', 'active_editinfo_censor')";
 $_config_module = $nv_Cache->db($sql, 'config', $module_name);
 
 $access_admin = $_config_module['access_admin']['content'];

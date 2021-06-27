@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $contents = '';
@@ -167,21 +168,21 @@ if (!empty($news_contents)) {
             $news_contents['files'] = [];
 
             foreach ($files as $file_id => $file) {
-                $file_title = (!preg_match("/^http*/", $file)) ? basename($file) : $nv_Lang->getModule('click_to_download');
+                $file_title = (!preg_match('/^http*/', $file)) ? basename($file) : $nv_Lang->getModule('click_to_download');
                 $news_contents['files'][] = [
                     'title' => $file_title,
                     'key' => md5($file_id . $file_title),
                     'ext' => nv_getextension($file_title),
                     'titledown' => $nv_Lang->getModule('download') . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                     'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
-                    'url' => (!preg_match("/^http*/", $file)) ? $base_url_rewrite . '?download=1&amp;id=' . $file_id : $file,
+                    'url' => (!preg_match('/^http*/', $file)) ? $base_url_rewrite . '?download=1&amp;id=' . $file_id : $file,
                     'urlpdf' => $base_url_rewrite . '?pdf=1&amp;id=' . $file_id,
-                    'urldoc' => (preg_match("/^http*/", $file)) ? $file : 'https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file
+                    'urldoc' => (preg_match('/^http*/', $file)) ? $file : 'https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file
                 ];
             }
         }
 
-        $publtime = intval($news_contents['publtime']);
+        $publtime = (int) ($news_contents['publtime']);
         $meta_property['og:type'] = 'article';
         $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $publtime);
         $meta_property['article:modified_time'] = date('Y-m-dTH:i:s', $news_contents['edittime']);
@@ -212,7 +213,7 @@ $news_contents['source'] = '';
 if ($news_contents['sourceid']) {
     $sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
     $result = $db_slave->query($sql);
-    list ($sourcetext, $source_link, $source_logo) = $result->fetch(3);
+    list($sourcetext, $source_link, $source_logo) = $result->fetch(3);
     unset($sql, $result);
     if ($module_config[$module_name]['config_source'] == 0) {
         $news_contents['source'] = $sourcetext; // Hiển thị tiêu đề nguồn tin
@@ -315,7 +316,7 @@ if ($st_links > 0) {
 
 $topic_array = [];
 if ($news_contents['topicid'] > 0 & $st_links > 0) {
-    list ($topic_title, $topic_alias) = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
+    list($topic_title, $topic_alias) = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
 
     $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
@@ -379,7 +380,7 @@ if ($news_contents['allowed_rating']) {
     ];
 }
 
-list ($post_username, $post_first_name, $post_last_name) = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
+list($post_username, $post_first_name, $post_last_name) = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
 $news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
 
 $array_keyword = [];

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 0:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $global_array_genders = [
@@ -53,12 +54,13 @@ function nv_get_users_field_config()
             }
             $result = $db->query($query);
             $weight = 0;
-            while (list ($key, $val) = $result->fetch(3)) {
+            while (list($key, $val) = $result->fetch(3)) {
                 $row_field['field_choices'][$key] = $val;
             }
         }
         $row_field['system'] = $row_field['is_system'];
         $array_field_config[$row_field['field']] = $row_field;
     }
+
     return $array_field_config;
 }

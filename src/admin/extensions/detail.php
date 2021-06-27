@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getGlobal('mod_extensions');
@@ -60,7 +61,7 @@ if (empty($error)) {
     unset($array['files'], $array['image_demo']);
 
     // Change some variable to display value
-    $array['updatetime'] = nv_date("H:i d/m/Y", $array['updatetime']);
+    $array['updatetime'] = nv_date('H:i d/m/Y', $array['updatetime']);
     $array['view_hits'] = number_format($array['view_hits'], 0, '.', '.');
     $array['download_hits'] = number_format($array['download_hits'], 0, '.', '.');
     $array['rating_text'] = sprintf($nv_Lang->getModule('rating_text_detail'), number_format($array['rating_totals'], 0, '.', '.'), number_format($array['rating_hits'], 0, '.', '.'));

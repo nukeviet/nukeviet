@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 11-10-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $allowed_mods = array_unique(array_merge_recursive(array_keys($admin_mods), array_keys($site_mods)));
@@ -62,7 +63,7 @@ if ($nv_Request->isset_request('notification_reset', 'post')) {
 // Lấy số thông báo chưa xem
 if ($nv_Request->isset_request('notification_get', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $return = [
@@ -82,7 +83,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $ids = array_filter(array_unique(array_map('intval', $ids)));
 
     if (!empty($ids)) {
-        $db->query("DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . " WHERE id IN(" . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin);
+        $db->query('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE id IN(' . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin);
         nv_htmlOutput('OK');
     }
 
@@ -98,7 +99,7 @@ if ($nv_Request->isset_request('setviewed', 'post')) {
     $ids = array_filter(array_unique(array_map('intval', $ids)));
 
     if (!empty($ids)) {
-        $db->query("UPDATE " . NV_NOTIFICATION_GLOBALTABLE . " SET view=1 WHERE id IN(" . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin);
+        $db->query('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1 WHERE id IN(' . implode(',', $ids) . ') AND module IN(\'' . implode("', '", $allowed_mods) . '\') AND ' . $sql_lev_admin);
         nv_htmlOutput('OK');
     }
 
@@ -109,7 +110,7 @@ $page = $nv_Request->get_int('page', 'get', 1);
 $is_ajax = $nv_Request->isset_request('ajax', 'post,get');
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $per_page = $is_ajax ? 10 : 20;
-$array_data = array();
+$array_data = [];
 $array_search = [
     'v' => $nv_Request->get_int('v', 'get', 0)
 ];

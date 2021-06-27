@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$array_site_cat_module = array();
+$array_site_cat_module = [];
 if ($global_config['idsite']) {
     $_module = $db->query('SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'])->fetchColumn();
 
@@ -36,16 +37,16 @@ if ($nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
         $error = $nv_Lang->getModule('vmodule_no_title');
     } elseif (empty($modfile) or !preg_match($global_config['check_module'], $modfile)) {
         $error = $nv_Lang->getModule('vmodule_no_file');
-    } elseif (in_array($title, $modules_site) or in_array($title, $modules_admin) or !preg_match($global_config['check_module'], $title)) {
+    } elseif (in_array($title, $modules_site, true) or in_array($title, $modules_admin, true) or !preg_match($global_config['check_module'], $title)) {
         $error = $nv_Lang->getModule('vmodule_exit');
     } else {
         $version = '';
         $author = '';
         $note = nv_nl2br($note, '<br />');
         $module_data = preg_replace('/(\W+)/i', '_', $title);
-        if (empty($array_site_cat_module) or in_array($modfile, $array_site_cat_module)) {
+        if (empty($array_site_cat_module) or in_array($modfile, $array_site_cat_module, true)) {
             // Xác định lại row trong CSDL
-            $sql = "SELECT * FROM " . $db_config['prefix'] . "_setup_extensions WHERE is_virtual=1 AND type='module' AND title=:title";
+            $sql = 'SELECT * FROM ' . $db_config['prefix'] . "_setup_extensions WHERE is_virtual=1 AND type='module' AND title=:title";
             $sth = $db->prepare($sql);
             $sth->bindParam(':title', $modfile, PDO::PARAM_STR);
             $sth->execute();
@@ -95,8 +96,8 @@ $result = $db->query($sql);
 
 $array_module = [];
 while (list($modfile_i) = $result->fetch(3)) {
-    if (in_array($modfile_i, $modules_site)) {
-        if (!empty($array_site_cat_module) and !in_array($modfile_i, $array_site_cat_module)) {
+    if (in_array($modfile_i, $modules_site, true)) {
+        if (!empty($array_site_cat_module) and !in_array($modfile_i, $array_site_cat_module, true)) {
             continue;
         }
         $array_module[] = $modfile_i;

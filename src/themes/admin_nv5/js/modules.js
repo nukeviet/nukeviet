@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES ( contact@vinades.vn )
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2 - 10 - 2010 16 : 3
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_show_list_mods() {
@@ -19,7 +20,11 @@ function nv_chang_func_in_submenu(func_id) {
         var sl = document.getElementById('chang_func_in_submenu_' + r_split[1]);
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            if (sl.checked == true){sl.checked = false;} else {sl.checked = true;}
+            if (sl.checked == true) {
+                sl.checked = false;
+            } else {
+                sl.checked = true;
+            }
             clearTimeout(nv_timer);
             sl.disabled = true;
         }
@@ -106,7 +111,11 @@ function nv_chang_func_in_submenu(func_id) {
         var sl = document.getElementById('chang_func_in_submenu_' + r_split[1]);
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            if (sl.checked == true){sl.checked = false;} else {sl.checked = true;}
+            if (sl.checked == true) {
+                sl.checked = false;
+            } else {
+                sl.checked = true;
+            }
             clearTimeout(nv_timer);
             sl.disabled = true;
         }
@@ -226,9 +235,9 @@ function nv_del_bl(bl_id) {
     return false;
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     // Re-install module
-    $('body').delegate( '.nv-reinstall-module', 'click', function(e){
+    $('body').delegate('.nv-reinstall-module', 'click', function(e) {
         e.preventDefault();
         $('#modal-reinstall-module').data('title', $(this).data('title')).modal('toggle');
     });
@@ -267,7 +276,7 @@ $(document).ready(function(){
     });
 
     // Submit re-install
-    $('#modal-reinstall-module .submit').click(function(){
+    $('#modal-reinstall-module .submit').click(function() {
         var $container = $('#modal-reinstall-module');
         var $this = $(this);
 
@@ -278,7 +287,7 @@ $(document).ready(function(){
             cache: false,
             url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=recreate_mod&nocache=' + new Date().getTime(),
             data: 'mod=' + $container.data('title') + '&sample=' + $container.find('.option').val(),
-            success: function(e){
+            success: function(e) {
                 $container.modal('hide');
                 var r_split = e.split("_");
                 if (r_split[0] != 'OK') {
@@ -292,7 +301,7 @@ $(document).ready(function(){
     });
 
     // Setup module
-    $('.nv-setup-module').click(function(e){
+    $('.nv-setup-module').click(function(e) {
         e.preventDefault();
 
         var $this = $(this);
@@ -321,7 +330,7 @@ $(document).ready(function(){
                         window.location = link;
                         return;
                     } else if (e.code == 1) {
-                       $container.find('.message').html(e.message.splice(1, 2).join('. ') + '.');
+                        $container.find('.message').html(e.message.splice(1, 2).join('. ') + '.');
                     }
 
                     if (e.ishook) {
@@ -340,7 +349,7 @@ $(document).ready(function(){
                             var html = '<div class="form-group row">' +
                                 '<label class="col-12 col-sm-7 col-form-label text-sm-right" for="choose_hook_' + hook_stt + '">' + e.hookmgs[k] + '</label>' +
                                 '<div class="col-12 col-sm-4">' +
-                                    '<select class="form-control form-control-sm hookmods">';
+                                '<select class="form-control form-control-sm hookmods">';
                             $.each(v, function(k2, v2) {
                                 html += '<option value="' + v2.title + '">' + v2.title + ' (' + v2.custom_title + ')' + '</option>';
                             });

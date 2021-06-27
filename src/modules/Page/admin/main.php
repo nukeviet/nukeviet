@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('list');
-$array = array();
+$array = [];
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY weight ASC';
 $_rows = $db->query($sql)->fetchAll();
@@ -23,10 +24,10 @@ if ($num < 1) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content');
 }
 
-$array_status = array(
+$array_status = [
     $nv_Lang->getModule('inactive'),
     $nv_Lang->getModule('active')
-);
+];
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -38,20 +39,20 @@ foreach ($_rows as $row) {
     $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
     $row['checkss'] = md5($row['id'] . NV_CHECK_SESSION);
     for ($i = 1; $i <= $num; ++$i) {
-        $xtpl->assign('WEIGHT', array(
+        $xtpl->assign('WEIGHT', [
             'w' => $i,
             'selected' => ($i == $row['weight']) ? ' selected="selected"' : ''
-        ));
+        ]);
 
         $xtpl->parse('main.row.weight');
     }
 
     foreach ($array_status as $key => $val) {
-        $xtpl->assign('STATUS', array(
+        $xtpl->assign('STATUS', [
             'key' => $key,
             'val' => $val,
             'selected' => ($key == $row['status']) ? ' selected="selected"' : ''
-        ));
+        ]);
 
         $xtpl->parse('main.row.status');
     }
@@ -65,10 +66,9 @@ foreach ($_rows as $row) {
 
     $is_excdata = 0;
     if ($global_config['idsite'] > 0 and isset($site_mods['excdata']) and isset($push_content['module'][$module_name]) and $row['status'] == 1) {
-        $count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db->quote($module_name))->fetchColumn(); {
-            $is_excdata = 1;
-            $row['url_send'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=excdata&amp;' . NV_OP_VARIABLE . '=send&amp;module=' . $module_name . '&amp;id=' . $row['id'];
-        }
+        $count = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db->quote($module_name))->fetchColumn();
+        $is_excdata = 1;
+        $row['url_send'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=excdata&amp;' . NV_OP_VARIABLE . '=send&amp;module=' . $module_name . '&amp;id=' . $row['id'];
     }
 
     $row['edit_time'] = nv_date('H:i d/m/y', $row['edit_time']);

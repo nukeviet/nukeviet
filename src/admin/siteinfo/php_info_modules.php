@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:0
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_SITEINFO')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_SITEINFO')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('extensions_php');
@@ -17,9 +18,7 @@ $page_title = $nv_Lang->getModule('extensions_php');
 require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 
 $array = phpinfo_array(8, 1);
-unset($array['Apache Environment']['HTTP_COOKIE']);
-unset($array['HTTP Headers Information']['Cookie']);
-unset($array['HTTP Headers Information']['Set-Cookie']);
+unset($array['Apache Environment']['HTTP_COOKIE'], $array['HTTP Headers Information']['Cookie'], $array['HTTP Headers Information']['Set-Cookie']);
 
 $tpl = new \NukeViet\Template\Smarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

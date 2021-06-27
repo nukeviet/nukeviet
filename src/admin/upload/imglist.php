@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $per_page = 50;
@@ -29,17 +30,17 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
 
     $page = $nv_Request->get_int('page', 'get', 1);
     $type = $nv_Request->get_title('type', 'get', '');
-    if (!in_array($type, $array_allowed_type)) {
+    if (!in_array($type, $array_allowed_type, true)) {
         reset($array_allowed_type);
         $type = current($array_allowed_type);
     }
     $order = $nv_Request->get_title('order', 'get', '');
-    if (!in_array($order, $array_allowed_order)) {
+    if (!in_array($order, $array_allowed_order, true)) {
         reset($array_allowed_order);
         $order = current($array_allowed_order);
     }
     $author = $nv_Request->get_title('author', 'get', '');
-    if (!in_array($author, $array_allowed_author)) {
+    if (!in_array($author, $array_allowed_author, true)) {
         reset($array_allowed_author);
         $author = current($array_allowed_author);
     }
@@ -78,7 +79,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
         $check_like = true;
 
         $_where = "(t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
-        $_where .= " AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)";
+        $_where .= ' AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)';
 
         // Tìm theo kiểu
         if ($type != 'all' and $type != 'file') {

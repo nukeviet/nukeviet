@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    $allow_func = array(
+    $allow_func = [
         'main',
         'reply',
         'send',
@@ -30,16 +31,16 @@ if (defined('NV_IS_SPADMIN')) {
         'supporter',
         'supporter-content',
         'forward'
-    );
+    ];
 } else {
-    $allow_func = array(
+    $allow_func = [
         'main',
         'reply',
         'del',
         'view',
         'send',
         'forward'
-    );
+    ];
 }
 
 //Tài liệu hướng dẫn
@@ -60,11 +61,11 @@ function nv_getAllowed()
 {
     global $module_data, $db, $admin_info, $nv_Lang;
 
-    $contact_allowed = array(
-        'view' => array(),
-        'reply' => array(),
-        'obt' => array()
-    );
+    $contact_allowed = [
+        'view' => [],
+        'reply' => [],
+        'obt' => []
+    ];
 
     if (defined('NV_IS_SPADMIN')) {
         $contact_allowed['view'][0] = $nv_Lang->getModule('is_default');
@@ -75,7 +76,7 @@ function nv_getAllowed()
     $sql = 'SELECT id,full_name,admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
-        $id = intval($row['id']);
+        $id = (int) ($row['id']);
 
         if (defined('NV_IS_SPADMIN')) {
             $contact_allowed['view'][$id] = $row['full_name'];

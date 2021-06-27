@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 9:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_change_weight_res(res) {
@@ -21,9 +22,10 @@ function nv_change_weight(lang) {
     var nv_timer = nv_settimeout_disable('change_weight_' + lang, 5000);
     var new_weight = $('#change_weight_' + lang).val();
     $.post(
-        script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 
-        'changeweight=1&keylang=' + lang + '&new_weight=' + new_weight, function(res) {
-        nv_change_weight_res(res);
-    });
+        script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+        'changeweight=1&keylang=' + lang + '&new_weight=' + new_weight,
+        function(res) {
+            nv_change_weight_res(res);
+        });
     return;
 }

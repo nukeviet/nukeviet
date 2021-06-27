@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $select_options = [];
@@ -25,7 +26,7 @@ foreach ($theme_array as $themes_i) {
 $selectthemes_old = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 $selectthemes = $nv_Request->get_string('selectthemes', 'get', $selectthemes_old);
 
-if (!in_array($selectthemes, $theme_array)) {
+if (!in_array($selectthemes, $theme_array, true)) {
     $selectthemes = $global_config['site_theme'];
 }
 
@@ -40,7 +41,7 @@ $func_id = $nv_Request->get_int('func', 'get', 0);
 if ($func_id > 0) {
     $selectedmodule = $db->query('SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $func_id)->fetchColumn();
 } elseif (!empty($selectedmodule)) {
-    $sth = $db->prepare("SELECT func_id FROM " . NV_MODFUNCS_TABLE . " WHERE func_name='main' AND in_module= :module");
+    $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . " WHERE func_name='main' AND in_module= :module");
     $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
     $sth->execute();
     $func_id = $sth->fetchColumn();
@@ -59,7 +60,7 @@ $tpl->assign('LANG', $nv_Lang);
 $array_modules = [];
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query($sql);
-while (list ($m_title, $m_custom_title) = $result->fetch(3)) {
+while (list($m_title, $m_custom_title) = $result->fetch(3)) {
     $array_modules[] = [
         'key' => $m_title,
         'title' => $m_custom_title
@@ -75,7 +76,7 @@ $sth->bindParam(':module', $selectedmodule, PDO::PARAM_STR);
 $sth->execute();
 
 $array_functions = [];
-while (list ($f_id, $f_custom_title) = $sth->fetch(3)) {
+while (list($f_id, $f_custom_title) = $sth->fetch(3)) {
     $array_functions[] = [
         'key' => $f_id,
         'title' => $f_custom_title
@@ -92,7 +93,7 @@ $sth = $db->prepare('SELECT t1.position, COUNT(*)
 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 
-while (list ($position, $numposition) = $sth->fetch(3)) {
+while (list($position, $numposition) = $sth->fetch(3)) {
     $blocks_positions[$position] = $numposition;
 }
 

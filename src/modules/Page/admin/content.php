@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
-$copy = $nv_Request->get_int('copy', 'get,post',0);
+$copy = $nv_Request->get_int('copy', 'get,post', 0);
 
 if ($id) {
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
@@ -57,14 +58,14 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $row['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
     $row['hot_post'] = $nv_Request->get_int('hot_post', 'post', 0);
 
-    $_groups_post = $nv_Request->get_array('activecomm', 'post', array());
+    $_groups_post = $nv_Request->get_array('activecomm', 'post', []);
     $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     if (empty($row['title'])) {
         $error = $nv_Lang->getModule('empty_title');
     } elseif (strip_tags($row['bodytext']) == '') {
         $error = $nv_Lang->getModule('empty_bodytext');
-    } elseif (empty($row['layout_func']) or in_array('layout.' . $row['layout_func'] . '.tpl', $layout_array)) {
+    } elseif (empty($row['layout_func']) or in_array('layout.' . $row['layout_func'] . '.tpl', $layout_array, true)) {
         $row['alias'] = empty($row['alias']) ? change_alias($row['title']) : change_alias($row['alias']);
 
         if (empty($row['keywords'])) {
@@ -88,13 +89,14 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             WHERE id =' . $id;
             $publtime = $row['add_time'];
         } else {
-            if ($copy)
+            if ($copy) {
                 $row['alias'] = 'copy-' . $id;
+            }
             if ($page_config['news_first']) {
                 $weight = 1;
             } else {
-                $weight = $db->query("SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data)->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
+                $weight = (int) $weight + 1;
             }
 
             $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
@@ -194,20 +196,20 @@ $xtpl->assign('ISCOPY', $copy);
 
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-    $xtpl->assign('LAYOUT_FUNC', array(
+    $xtpl->assign('LAYOUT_FUNC', [
         'key' => $value,
         'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.layout_func');
 }
 
-$activecomm = explode(',', $row['activecomm']);
+$activecomm = array_map('intval', explode(',', $row['activecomm']));
 foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ACTIVECOMM', array(
+    $xtpl->assign('ACTIVECOMM', [
         'value' => $_group_id,
-        'checked' => in_array($_group_id, $activecomm) ? ' checked="checked"' : '',
+        'checked' => in_array((int) $_group_id, $activecomm, true) ? ' checked="checked"' : '',
         'title' => $_title
-    ));
+    ]);
     $xtpl->parse('main.activecomm');
 }
 
@@ -216,11 +218,11 @@ if (empty($row['alias'])) {
 }
 
 // position images
-$array_imgposition = array(
+$array_imgposition = [
     0 => $nv_Lang->getModule('imgposition_0'),
     1 => $nv_Lang->getModule('imgposition_1'),
     2 => $nv_Lang->getModule('imgposition_2')
-);
+];
 foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';
     $xtpl->assign('id_imgposition', $id_imgposition);

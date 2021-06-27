@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_site_cat_module = [];
@@ -47,7 +48,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
         $modrow = $sth->fetch();
 
         if (!empty($modrow)) {
-            if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module)) {
+            if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module, true)) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
 
@@ -76,7 +77,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             }
 
             $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MODULES_TABLE)->fetchColumn();
-            $weight = intval($weight) + 1;
+            $weight = (int) $weight + 1;
 
             $module_version = [];
             $custom_title = preg_replace('/(\W+)/i', ' ', $setmodule);
@@ -94,12 +95,12 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             $_module_data = (strlen($modrow['table_prefix']) > 30) ? trim(substr($modrow['table_prefix'], 0, 20), '_') . '_' . NV_CURRENTTIME : $modrow['table_prefix'];
 
             try {
-                $sth = $db->prepare("INSERT INTO " . NV_MODULES_TABLE . " (
+                $sth = $db->prepare('INSERT INTO ' . NV_MODULES_TABLE . " (
                     title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file,
                     admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap
                 ) VALUES (
                     :title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '',
-                    " . NV_CURRENTTIME . ", " . $_main_file . ", " . $_admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '', 1, 1
+                    " . NV_CURRENTTIME . ', ' . $_main_file . ', ' . $_admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '', 1, 1
                 )");
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->bindParam(':module_file', $modrow['basename'], PDO::PARAM_STR);
@@ -128,7 +129,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                             // Lấy vị trí mới
                             $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=' . $db->quote(NV_LANG_DATA) . ' AND plugin_area=' . $db->quote($hook['plugin_area']) . ' AND hook_module=' . $db->quote($hook['hook_module']);
                             $weight = $db->query($_sql)->fetchColumn();
-                            $weight = intval($weight) + 1;
+                            $weight = (int) $weight + 1;
 
                             $db->query('INSERT INTO ' . $db_config['prefix'] . '_plugin (
                                 plugin_lang, plugin_file, plugin_area, plugin_module_name, plugin_module_file, hook_module, weight
@@ -224,7 +225,7 @@ foreach ($arr_module_news as $module_file_i => $arr) {
             ];
         }
 
-        $date_ver = intval(strtotime($module_version['date']));
+        $date_ver = (int) (strtotime($module_version['date']));
 
         if ($date_ver == 0) {
             $date_ver = NV_CURRENTTIME;
@@ -242,7 +243,7 @@ foreach ($arr_module_news as $module_file_i => $arr) {
         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (
             type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note
         ) VALUES (
-            \'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ',
+            \'module\', :title, ' . (int) $module_version['is_sysmod'] . ', ' . (int) $module_version['virtual'] . ',
             :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note
         )');
 
@@ -281,8 +282,8 @@ $news_modules_for_file = array_diff_key($modules_data, $modules_for_file);
 $array_modules = $array_virtual_modules = $mod_virtual = [];
 
 foreach ($modules_data as $row) {
-    if (in_array($row['basename'], $modules_exit)) {
-        if (!empty($array_site_cat_module) and !in_array($row['basename'], $array_site_cat_module)) {
+    if (in_array($row['basename'], $modules_exit, true)) {
+        if (!empty($array_site_cat_module) and !in_array($row['basename'], $array_site_cat_module, true)) {
             continue;
         }
 

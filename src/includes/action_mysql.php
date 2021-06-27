@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jun 20, 2010 8:59:32 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification');
@@ -23,6 +24,7 @@ function nv_copy_structure_table($table_des, $table_src)
 {
     global $db;
     $db->exec('DROP TABLE IF EXISTS ' . $table_des);
+
     return $db->exec('CREATE TABLE ' . $table_des . ' LIKE ' . $table_src);
 }
 
@@ -34,7 +36,7 @@ function nv_delete_table_sys($lang)
 {
     global $db_config;
 
-    $sql_drop_table = array();
+    $sql_drop_table = [];
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modules';
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups';
     $sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_weight';
@@ -46,14 +48,14 @@ function nv_delete_table_sys($lang)
     $sql_drop_table[] = 'DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=\'' . $lang . '\'';
 
     // Xóa các trường theo ngôn ngữ email template
-    $sql_drop_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates
-      DROP " . $lang . "_title,
-      DROP " . $lang . "_subject,
-      DROP " . $lang . "_content
-    ";
-    $sql_drop_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories
-      DROP " . $lang . "_title
-    ";
+    $sql_drop_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates
+      DROP ' . $lang . '_title,
+      DROP ' . $lang . '_subject,
+      DROP ' . $lang . '_content
+    ';
+    $sql_drop_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates_categories
+      DROP ' . $lang . '_title
+    ';
 
     return $sql_drop_table;
 }
@@ -67,10 +69,10 @@ function nv_create_table_sys($lang)
     global $db_config, $global_config, $db;
 
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini');
-    $layoutdefault = ( string )$xml->layoutdefault;
+    $layoutdefault = (string) $xml->layoutdefault;
 
-    $sql_create_table = array();
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modules (
+    $sql_create_table = [];
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_modules (
          title varchar(50) NOT NULL,
          module_file varchar(50) NOT NULL DEFAULT '',
          module_data varchar(50) NOT NULL DEFAULT '',
@@ -96,7 +98,7 @@ function nv_create_table_sys($lang)
          PRIMARY KEY (title)
     ) ENGINE=InnoDB";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_blocks_groups (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_blocks_groups (
          bid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
          theme varchar(55) NOT NULL,
          module varchar(55) NOT NULL,
@@ -119,14 +121,14 @@ function nv_create_table_sys($lang)
          KEY exp_time (exp_time)
     ) ENGINE=InnoDB";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_blocks_weight (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_blocks_weight (
          bid mediumint(8) NOT NULL DEFAULT '0',
          func_id mediumint(8) NOT NULL DEFAULT '0',
          weight mediumint(8) NOT NULL DEFAULT '0',
          UNIQUE KEY bid (bid,func_id)
     ) ENGINE=InnoDB";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modfuncs (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_modfuncs (
          func_id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
          func_name varchar(55) NOT NULL,
          alias varchar(55) NOT NULL DEFAULT '',
@@ -142,17 +144,17 @@ function nv_create_table_sys($lang)
          UNIQUE KEY alias (alias,in_module)
     ) ENGINE=InnoDB";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_searchkeys (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_searchkeys (
          id varchar(32) NOT NULL DEFAULT '',
          skey varchar(250) NOT NULL,
          total int(11) NOT NULL DEFAULT '0',
          search_engine varchar(50) NOT NULL,
          KEY (id),
-         KEY skey (skey),
+         KEY skey (skey(191)),
          KEY search_engine (search_engine)
     ) ENGINE=InnoDB";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_referer_stats (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_referer_stats (
          host varchar(250) NOT NULL,
          total int(11) NOT NULL DEFAULT '0',
          month01 int(11) NOT NULL DEFAULT '0',
@@ -172,14 +174,14 @@ function nv_create_table_sys($lang)
          KEY total (total)
     ) ENGINE=InnoDB";
 
-    $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modthemes (
+    $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_modthemes (
          func_id mediumint(8) DEFAULT NULL,
          layout varchar(100) DEFAULT NULL,
          theme varchar(100) DEFAULT NULL,
          UNIQUE KEY func_id (func_id,layout,theme)
-     ) ENGINE=InnoDB";
+     ) ENGINE=InnoDB';
 
-    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (
+    $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . "_modules (
         title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file,
         theme, mobile, description, keywords, groups_view, weight, act, admins, rss, icon, sitemap
     ) VALUES
@@ -199,7 +201,7 @@ function nv_create_table_sys($lang)
         ('freecontent', 'FreeContent', 'freecontent', 'freecontent', 'FreeContent', 'Free Content', '', 1525251600, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 'far fa-square', 1),
         ('two-step-verification', 'TwoStepVerification', 'twostepverification', 'twostepverification', 'TwoStepVerification', 'Two-Step Verification', '', 1525251600, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 'fas fa-key', 1)";
 
-    $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+    $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
         ('" . $lang . "', 'global', 'site_domain', ''),
         ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x'),
         ('" . $lang . "', 'global', 'site_logo', ''),
@@ -227,10 +229,10 @@ function nv_create_table_sys($lang)
 
     $lang_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_setup_language')->fetchColumn() + 1;
 
-    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup, weight) VALUES('" . $lang . "', 1, " . $lang_weight . ")";
+    $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_language (lang, setup, weight) VALUES('" . $lang . "', 1, " . $lang_weight . ')';
 
-    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modthemes (func_id, layout, theme) VALUES ('0', '" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
-    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_cronjobs ADD " . $lang . "_cron_name VARCHAR( 255 ) NOT NULL DEFAULT ''";
+    $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . "_modthemes (func_id, layout, theme) VALUES ('0', '" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
+    $sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_cronjobs ADD ' . $lang . "_cron_name VARCHAR( 255 ) NOT NULL DEFAULT ''";
 
     /*
      * Tạo các trường theo ngôn ngữ email template
@@ -246,29 +248,29 @@ function nv_create_table_sys($lang)
         }
     }
 
-    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates
-        ADD " . $lang . "_title varchar(250) NOT NULL DEFAULT '',
+    $sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates
+        ADD ' . $lang . "_title varchar(250) NOT NULL DEFAULT '',
         ADD " . $lang . "_subject varchar(250) NOT NULL DEFAULT '',
-        ADD " . $lang . "_content mediumtext NOT NULL
-    ";
-    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories
-        ADD " . $lang . "_title varchar(250) NOT NULL
-    ";
+        ADD " . $lang . '_content mediumtext NOT NULL
+    ';
+    $sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates_categories
+        ADD ' . $lang . '_title varchar(250) NOT NULL
+    ';
 
     if (!empty($default_lang)) {
-        $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_emailtemplates SET
-            " . $lang . "_title = " . $default_lang . "_title
-        ";
-        $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_emailtemplates_categories SET
-            " . $lang . "_title = " . $default_lang . "_title
-        ";
+        $sql_create_table[] = 'UPDATE ' . $db_config['prefix'] . '_emailtemplates SET
+            ' . $lang . '_title = ' . $default_lang . '_title
+        ';
+        $sql_create_table[] = 'UPDATE ' . $db_config['prefix'] . '_emailtemplates_categories SET
+            ' . $lang . '_title = ' . $default_lang . '_title
+        ';
     }
-    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates
-        ADD UNIQUE " . $lang . "_title (" . $lang . "_title(191))
-    ";
-    $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories
-        ADD UNIQUE " . $lang . "_title (" . $lang . "_title(191))
-    ";
+    $sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates
+        ADD UNIQUE ' . $lang . '_title (' . $lang . '_title(191))
+    ';
+    $sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates_categories
+        ADD UNIQUE ' . $lang . '_title (' . $lang . '_title(191))
+    ';
 
     return $sql_create_table;
 }

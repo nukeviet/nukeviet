@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_IS_MOD_USER', true);
@@ -31,9 +32,9 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
 {
     global $db, $global_config, $nv_Request, $global_users_config, $module_name, $client_info, $nv_Lang;
 
-    $remember = intval($remember);
+    $remember = (int) $remember;
     $checknum = md5(nv_genpass(10));
-    $user = array(
+    $user = [
         'userid' => $array_user['userid'],
         'current_mode' => $current_mode,
         'checknum' => $checknum,
@@ -43,19 +44,19 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
         'current_ip' => NV_CLIENT_IP,
         'last_ip' => $array_user['last_ip'],
         'current_login' => NV_CURRENTTIME,
-        'last_login' => intval($array_user['last_login']),
+        'last_login' => (int) ($array_user['last_login']),
         'last_openid' => $array_user['last_openid'],
         'current_openid' => $opid
-    );
+    ];
 
-    $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET
         checknum = :checknum,
-        last_login = " . NV_CURRENTTIME . ",
+        last_login = ' . NV_CURRENTTIME . ',
         last_ip = :last_ip,
         last_agent = :last_agent,
         last_openid = :opid,
-        remember = " . $remember . "
-        WHERE userid=" . $array_user['userid']);
+        remember = ' . $remember . '
+        WHERE userid=' . $array_user['userid']);
 
     $stmt->bindValue(':checknum', $checknum, PDO::PARAM_STR);
     $stmt->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
@@ -97,54 +98,53 @@ function nv_del_user($userid)
     $query = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id IN (1,2,3) AND userid=' . $userid);
     if ($query->fetchColumn()) {
         return 0;
-    } else {
-        $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
-        if (!$result) {
-            return 0;
-        }
-
-        $in_groups = explode(',', $in_groups);
-
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups)) ? 7 : 4));
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
-
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
-
-        if (!empty($photo) and is_file(NV_ROOTDIR . '/' . $photo)) {
-            @nv_deletefile(NV_ROOTDIR . '/' . $photo);
-        }
-
-        $send_data = [[
-            'to' => [$email],
-            'data' => [
-                $group_id,
-                $username,
-                $first_name,
-                $last_name,
-                $email,
-                $photo,
-                $in_groups,
-                $idsite,
-                $global_config
-            ]
-        ]];
-        nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_DELETE, $send_data);
-
-        return $userid;
     }
+    $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
+    if (!$result) {
+        return 0;
+    }
+
+    $in_groups = array_map('intval', explode(',', $in_groups));
+
+    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
+    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups, true)) ? 7 : 4));
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
+
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $user_info['userid']);
+
+    if (!empty($photo) and is_file(NV_ROOTDIR . '/' . $photo)) {
+        @nv_deletefile(NV_ROOTDIR . '/' . $photo);
+    }
+
+    $send_data = [[
+        'to' => [$email],
+        'data' => [
+            $group_id,
+            $username,
+            $first_name,
+            $last_name,
+            $email,
+            $photo,
+            $in_groups,
+            $idsite,
+            $global_config
+        ]
+    ]];
+    nv_sendmail_from_template(NukeViet\Template\Email\Tpl::E_USER_DELETE, $send_data);
+
+    return $userid;
 }
 
 // Xác định cấu hình module
-$global_users_config = array();
+$global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 3600;
 if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
     $global_users_config = unserialize($cache);
 } else {
-    $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config";
+    $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . '_config';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $global_users_config[$row['config']] = $row['content'];
@@ -157,7 +157,7 @@ $group_id = 0;
 if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($array_op[0] == 'register' or $array_op[0] == 'editinfo')) {
     $sql = 'SELECT group_id, title, config FROM ' . NV_MOD_TABLE . '_groups';
     $_query = $db->query($sql);
-    $group_lists = array();
+    $group_lists = [];
     while ($_row = $_query->fetch()) {
         $group_lists[$_row['group_id']] = $_row;
     }
@@ -176,22 +176,21 @@ if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($
                 $module_info['funcs'][$op] = $sys_mods[$module_name]['funcs'][$op];
                 $group_id = $row['group_id'];
                 define('ACCESS_ADDUS', $group['config']['access_addus']);
-            } else
-                if ($group['config']['access_editus'] and $array_op[0] == 'editinfo') { // sửa thông tin
-                    $group_id = $row['group_id'];
+            } elseif ($group['config']['access_editus'] and $array_op[0] == 'editinfo') { // sửa thông tin
+                $group_id = $row['group_id'];
 
-                    $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
+                $result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users
                         WHERE group_id = ' . $group_id . ' and userid = ' . $array_op[2] . ' and is_leader = 0');
 
-                    if ($row = $result->fetch()) { // nếu tài khoản nằm trong nhóm đó thì được quyền sửa
-                        $userid = $array_op[2];
+                if ($row = $result->fetch()) { // nếu tài khoản nằm trong nhóm đó thì được quyền sửa
+                    $userid = $array_op[2];
 
-                        if ($group['config']['access_passus']) {
-                            define('ACCESS_PASSUS', $group['config']['access_passus']);
-                        }
-                        define('ACCESS_EDITUS', $group['config']['access_editus']);
+                    if ($group['config']['access_passus']) {
+                        define('ACCESS_PASSUS', $group['config']['access_passus']);
                     }
+                    define('ACCESS_EDITUS', $group['config']['access_editus']);
                 }
+            }
         }
     }
 }

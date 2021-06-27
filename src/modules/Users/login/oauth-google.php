@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 26 Oct 2014 08:34:25 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_USER')) {
+    exit('Stop!!!');
 }
 
-use OAuth\Common\Storage\Session;
 use OAuth\Common\Consumer\Credentials;
+use OAuth\Common\Storage\Session;
 
 // Session storage
 $storage = new Session();
@@ -25,10 +26,10 @@ $credentials = new Credentials($global_config['google_client_id'], $global_confi
 
 // Instantiate the Google service using the credentials, http client and storage mechanism for the token
 /** @var $googleService Google */
-$googleService = $serviceFactory->createService('google', $credentials, $storage, array(
+$googleService = $serviceFactory->createService('google', $credentials, $storage, [
     'userinfo_email',
     'userinfo_profile'
-));
+]);
 
 if (!empty($_GET['code'])) {
     // This was a callback request from google, get the token
@@ -38,7 +39,7 @@ if (!empty($_GET['code'])) {
     $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
 
     if (isset($result['email'])) {
-        $attribs = array(
+        $attribs = [
             'identity' => empty($result['link']) ? $result['id'] : $result['link'],
             'result' => 'is_res',
             'id' => $result['id'],
@@ -51,9 +52,9 @@ if (!empty($_GET['code'])) {
             'picture_url' => $result['picture'],
             'picture_mode' => 0, // 0: Remote picture
             'current_mode' => 3
-        );
+        ];
     } else {
-        $attribs = array( 'result' => 'notlogin' );
+        $attribs = ['result' => 'notlogin'];
     }
     $nv_Request->set_Session('openid_attribs', serialize($attribs));
 

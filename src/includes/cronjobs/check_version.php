@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 11-7-2011 9:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -23,7 +24,7 @@ function cron_auto_check_version()
 
     $admin_cookie = $nv_Request->get_bool('admin', 'session', false);
 
-    if (! empty($admin_cookie) and $global_config['autocheckupdate']) {
+    if (!empty($admin_cookie) and $global_config['autocheckupdate']) {
         require NV_ROOTDIR . '/includes/core/admin_access.php';
         require NV_ROOTDIR . '/includes/core/is_admin.php';
 

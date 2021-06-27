@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('block_list');
@@ -18,7 +19,7 @@ $page_title = $nv_Lang->getModule('block_list');
 if ($nv_Request->isset_request('getinfo', 'post')) {
     $bid = $nv_Request->get_int('bid', 'post', '0');
 
-    $array = array();
+    $array = [];
 
     if ($bid) {
         $sth = $db->prepare('SELECT title, description FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
@@ -29,11 +30,11 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
     $message = $array ? '' : 'Invalid post data';
 
-    nv_jsonOutput(array(
-        'status' => ! empty($array) ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !empty($array) ? 'success' : 'error',
         'message' => $message,
         'data' => $array
-    ));
+    ]);
 }
 
 // Delete block
@@ -60,15 +61,15 @@ if ($nv_Request->isset_request('del', 'post')) {
         $message = 'Invalid post data';
     }
 
-    nv_jsonOutput(array(
-        'status' => ! $message ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !$message ? 'success' : 'error',
         'message' => $message,
-    ));
+    ]);
 }
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
-    $data = $error = array();
+    $data = $error = [];
     $message = '';
 
     $data['bid'] = $nv_Request->get_int('bid', 'post', 0);
@@ -76,10 +77,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $data['description'] = $nv_Request->get_title('description', 'post', '');
 
     if (empty($data['title'])) {
-        $error[] = array(
+        $error[] = [
             'name' => 'title',
             'value' => $nv_Lang->getModule('block_title_error')
-        );
+        ];
     } else {
         if ($data['bid']) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_blocks SET title = :title, description = :description WHERE bid = ' . $data['bid'];
@@ -103,24 +104,24 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $nv_Cache->delMod($module_name);
                 $message = $nv_Lang->getModule('save_success');
             } else {
-                $error[] = array(
+                $error[] = [
                     'name' => '',
                     'value' => $nv_Lang->getModule('error_save')
-                );
+                ];
             }
         } catch (PDOException $e) {
-            $error[] = array(
+            $error[] = [
                 'name' => '',
                 'value' => $nv_Lang->getModule('error_save')
-            );
+            ];
         }
     }
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => empty($error) ? 'success' : 'error',
         'message' => $message,
         'error' => $error
-    ));
+    ]);
 }
 
 // Write row

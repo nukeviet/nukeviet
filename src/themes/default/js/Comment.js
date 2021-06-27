@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_commment_feedback(cid, post_name) {
@@ -34,7 +35,7 @@ function nv_commment_delete(cid, checkss) {
             var rs = res.split('_');
             if (rs[0] == 'OK') {
                 $("#cid_" + cid).remove();
-                $.post(nv_url_comm + '&nocache=' + new Date().getTime(), 'sortcomm=' + $('#sort').val() , function(res) {
+                $.post(nv_url_comm + '&nocache=' + new Date().getTime(), 'sortcomm=' + $('#sort').val(), function(res) {
                     $('#idcomment').html(res);
                     nv_commment_buildeditor();
                 });
@@ -59,7 +60,7 @@ function nv_commment_reload(res) {
             scrollTop: $("#idcomment").offset().top
         }, 800);
     } else {
-        if (data.gfxnum > 0 ) {
+        if (data.gfxnum > 0) {
             change_captcha('#commentseccode_iavim');
         }
         if (rs[0] == 'ERR') {
@@ -74,7 +75,11 @@ function nv_commment_reload(res) {
 function nv_commment_buildeditor() {
     var data = $('#formcomment form').data();
     if (data.editor) {
-        CKEDITOR.replace('content', {width: '100%',height: '200px',removePlugins: 'uploadfile,uploadimage,autosave'});
+        CKEDITOR.replace('content', {
+            width: '100%',
+            height: '200px',
+            removePlugins: 'uploadfile,uploadimage,autosave'
+        });
     }
 }
 
@@ -111,7 +116,7 @@ $(document).ready(function() {
             sd.disabled = true;
         }
     });
-    
+
     // ctrl + enter post comment    
     var data = $('#formcomment form').data();
     if (data.editor) {

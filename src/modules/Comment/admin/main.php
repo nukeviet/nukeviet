@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Tue, 21 Jan 2014 01:32:02 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('comment_manager');
@@ -23,22 +24,22 @@ $from['q'] = $nv_Request->get_title('q', 'get', '');
 $from['from_date'] = $nv_Request->get_title('from_date', 'get', '');
 $from['to_date'] = $nv_Request->get_title('to_date', 'get', '');
 
-$array_search = array(
+$array_search = [
     'content' => $nv_Lang->getModule('search_content'),
     'post_name' => $nv_Lang->getModule('search_post_name'),
     'post_email' => $nv_Lang->getModule('search_post_email'),
     'content_id' => $nv_Lang->getModule('search_content_id')
-);
-$array_status_view = array(
+];
+$array_status_view = [
     '2' => $nv_Lang->getModule('search_status'),
     '1' => $nv_Lang->getModule('enable'),
     '0' => $nv_Lang->getModule('disable')
-);
-if (!in_array($stype, array_keys($array_search))) {
+];
+if (!in_array($stype, array_keys($array_search), true)) {
     $stype = '';
 }
 
-if (!in_array($sstatus, array_keys($array_status_view))) {
+if (!in_array($sstatus, array_keys($array_status_view), true)) {
     $sstatus = 2;
 }
 
@@ -52,44 +53,44 @@ $xtpl->assign('OP', $op);
 $xtpl->assign('FROM', $from);
 
 foreach ($array_search as $key => $val) {
-    $xtpl->assign('OPTION', array(
+    $xtpl->assign('OPTION', [
         'key' => $key,
         'title' => $val,
         'selected' => ($key == $stype) ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.search_type');
 }
 
 foreach ($array_status_view as $key => $val) {
-    $xtpl->assign('OPTION', array(
+    $xtpl->assign('OPTION', [
         'key' => $key,
         'title' => $val,
         'selected' => ($key == $sstatus) ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.search_status');
 }
 
-$xtpl->assign('OPTION', array(
+$xtpl->assign('OPTION', [
     'key' => '',
     'title' => $nv_Lang->getModule('search_module_all'),
     'selected' => ($module == '') ? ' selected="selected"' : ''
-));
+]);
 $xtpl->parse('main.module');
 
 foreach ($site_mod_comm as $module_i => $row) {
     $custom_title = (!empty($row['admin_title'])) ? $row['admin_title'] : $row['custom_title'];
-    $xtpl->assign('OPTION', array(
+    $xtpl->assign('OPTION', [
         'key' => $module_i,
         'title' => $custom_title,
         'selected' => ($module_i == $module) ? ' selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.module');
 }
 
 $i = 15;
 while ($i < 100) {
     $i = $i + 5;
-    $xtpl->assign('OPTION', array('page' => $i, 'selected' => ($i == $per_page) ? ' selected="selected"' : ''));
+    $xtpl->assign('OPTION', ['page' => $i, 'selected' => ($i == $per_page) ? ' selected="selected"' : '']);
     $xtpl->parse('main.per_page');
 }
 
@@ -97,7 +98,7 @@ $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_D
 
 $db->sqlreset()->select('COUNT(*)')->from(NV_PREFIXLANG . '_' . $module_data);
 
-$array_where = array();
+$array_where = [];
 if (!empty($module) and isset($site_mod_comm[$module])) {
     $array_where[] = 'module = ' . $db->quote($module);
     $base_url .= '&amp;module=' . $module;
@@ -108,7 +109,7 @@ if (!empty($module) and isset($site_mod_comm[$module])) {
         echo nv_admin_theme($nv_Lang->getGlobal('admin_no_allow_func'));
         include NV_ROOTDIR . '/includes/footer.php';
     } else {
-        $mod_where = array();
+        $mod_where = [];
         foreach ($site_mod_comm as $module_i => $custom_title) {
             $mod_where[] = 'module = ' . $db->quote($module_i);
         }
@@ -131,9 +132,9 @@ if ($sstatus == 0 or $sstatus == 1) {
     $base_url .= '&amp;status=' . $sstatus;
 }
 if (!empty($from['q'])) {
-    $array_like = array();
+    $array_like = [];
     if ($stype == 'content_id' and preg_match('/^([0-9]+)$/', $from['q'])) {
-        $array_like[] = 'id =' . intval($from['q']);
+        $array_like[] = 'id =' . (int) ($from['q']);
     } else {
         if ($stype == '' or $stype == 'content') {
             $array_like[] = 'content LIKE :content';
@@ -188,13 +189,13 @@ if (strpos($sql, ':post_email')) {
     $sth->bindValue(':post_email', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
 $sth->execute();
-$array = array();
+$array = [];
 while (list($cid, $module, $area, $id, $content, $attach, $userid, $post_name, $email, $status) = $sth->fetch(3)) {
     if ($userid > 0) {
         $email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
     }
     $content = nv_br2nl($content);
-    $row = array(
+    $row = [
         'cid' => $cid,
         'post_name' => $post_name,
         'email' => $email,
@@ -206,7 +207,7 @@ while (list($cid, $module, $area, $id, $content, $attach, $userid, $post_name, $
         'status' => ($status == 1) ? 'check' : 'circle-o',
         'linkedit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;cid=' . $cid,
         'linkdelete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;list=' . $cid
-    );
+    ];
 
     $xtpl->assign('ROW', $row);
 

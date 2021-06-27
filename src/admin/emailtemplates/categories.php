@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('categories');
@@ -20,21 +21,24 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
 
     $sql = 'SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid=' . $catid;
     $catid = $db->query($sql)->fetchColumn();
-    if (empty($catid))
-        die('NO_' . $catid);
+    if (empty($catid)) {
+        exit('NO_' . $catid);
+    }
 
     $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
-    if (empty($new_weight))
-        die('NO_' . $module_name);
+    if (empty($new_weight)) {
+        exit('NO_' . $module_name);
+    }
 
     $sql = 'SELECT catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid!=' . $catid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
 
     $weight = 0;
     while ($row = $result->fetch()) {
-        ++ $weight;
-        if ($weight == $new_weight)
-            ++ $weight;
+        ++$weight;
+        if ($weight == $new_weight) {
+            ++$weight;
+        }
 
         $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight=' . $weight . ' WHERE catid=' . $row['catid'];
         $db->query($sql);
@@ -57,8 +61,9 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $sql = 'SELECT catid, is_system FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid=' . $catid;
     $row = $db->query($sql)->fetch();
 
-    if (empty($row) or $row['is_system'])
-        die('NO_' . $catid);
+    if (empty($row) or $row['is_system']) {
+        exit('NO_' . $catid);
+    }
 
     $sql = 'DELETE FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = ' . $catid;
 
@@ -70,7 +75,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
         $weight = 0;
 
         while ($row = $result->fetch()) {
-            ++ $weight;
+            ++$weight;
             $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET weight=' . $weight . ' WHERE catid=' . $row['catid'];
             $db->query($sql);
         }
@@ -79,7 +84,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
 
         $nv_Cache->delMod($module_name);
     } else {
-        die('NO_' . $catid);
+        exit('NO_' . $catid);
     }
 
     include NV_ROOTDIR . '/includes/header.php';

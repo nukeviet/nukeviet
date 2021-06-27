@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $theme1 = $nv_Request->get_title('theme1', 'get');
@@ -52,8 +53,8 @@ if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_co
     $array_position = [];
     for ($i = 0, $count = sizeof($diffarray); $i < $count; ++$i) {
         $array_position[] = [
-            'name' => (string)$positions[$i]->tag,
-            'value' => (string)$positions[$i]->name,
+            'name' => (string) $positions[$i]->tag,
+            'value' => (string) $positions[$i]->name,
         ];
     }
 

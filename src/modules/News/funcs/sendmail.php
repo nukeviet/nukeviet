@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $alias_cat_url = $array_op[1];
 $array_page = explode('-', $array_op[2]);
-$id = intval(end($array_page));
+$id = (int) (end($array_page));
 $catid = 0;
 foreach ($global_array_cat as $catid_i => $array_cat_i) {
     if ($alias_cat_url == $array_cat_i['alias']) {
@@ -49,7 +50,7 @@ if ($id > 0 and $catid > 0) {
                 if (strpos($link, NV_MY_DOMAIN) !== 0) {
                     $link = NV_MY_DOMAIN . $link;
                 }
-                $link = "<a href=\"" . $link . "\" title=\"" . $title . "\">" . $link . "</a>\n";
+                $link = '<a href="' . $link . '" title="' . $title . '">' . $link . "</a>\n";
 
                 if ($global_config['captcha_type'] == 2) {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
@@ -98,7 +99,7 @@ if ($id > 0 and $catid > 0) {
                 'to_mail' => $to_mail,
                 'content' => $content,
                 'result' => $result,
-                'action' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'] //
+                'action' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl']
             ];
 
             $page_title = $title;

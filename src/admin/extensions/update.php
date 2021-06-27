@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 9/9/2010, 6:38
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('extUpd');
@@ -41,9 +42,9 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
 
         $ftp_check_login = 0;
 
-        if ($sys_info['ftp_support'] and intval($global_config['ftp_check_login']) == 1) {
+        if ($sys_info['ftp_support'] and (int) $global_config['ftp_check_login'] == 1) {
             $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-            $ftp_port = intval($global_config['ftp_port']);
+            $ftp_port = (int) $global_config['ftp_port'];
             $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);

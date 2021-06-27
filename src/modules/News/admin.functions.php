@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 2:29
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
+    exit('Stop!!!');
 }
 
 if ($NV_IS_ADMIN_MODULE) {
@@ -22,7 +23,7 @@ if ($NV_IS_ADMIN_FULL_MODULE) {
 
 define('NV_MIN_MEDIUM_SYSTEM_ROWS', 100000);
 
-$array_viewcat_full = array(
+$array_viewcat_full = [
     'viewcat_page_new' => $nv_Lang->getModule('viewcat_page_new'),
     'viewcat_page_old' => $nv_Lang->getModule('viewcat_page_old'),
     'viewcat_list_new' => $nv_Lang->getModule('viewcat_list_new'),
@@ -34,21 +35,21 @@ $array_viewcat_full = array(
     'viewcat_main_bottom' => $nv_Lang->getModule('viewcat_main_bottom'),
     'viewcat_two_column' => $nv_Lang->getModule('viewcat_two_column'),
     'viewcat_none' => $nv_Lang->getModule('viewcat_none')
-);
-$array_viewcat_nosub = array(
+];
+$array_viewcat_nosub = [
     'viewcat_page_new' => $nv_Lang->getModule('viewcat_page_new'),
     'viewcat_page_old' => $nv_Lang->getModule('viewcat_page_old'),
     'viewcat_list_new' => $nv_Lang->getModule('viewcat_list_new'),
     'viewcat_list_old' => $nv_Lang->getModule('viewcat_list_old'),
     'viewcat_grid_new' => $nv_Lang->getModule('viewcat_grid_new'),
     'viewcat_grid_old' => $nv_Lang->getModule('viewcat_grid_old')
-);
+];
 
-$array_allowed_comm = array(
+$array_allowed_comm = [
     $nv_Lang->getGlobal('no'),
     $nv_Lang->getGlobal('level6'),
     $nv_Lang->getGlobal('level4')
-);
+];
 
 define('NV_IS_FILE_ADMIN', true);
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
@@ -65,7 +66,7 @@ $array_url_instruction['admins'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:new
 $array_url_instruction['setting'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:news#cấu_hinh_module';
 
 global $global_array_cat;
-$global_array_cat = array();
+$global_array_cat = [];
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $result = $db_slave->query($sql);
 while ($row = $result->fetch()) {
@@ -75,9 +76,9 @@ while ($row = $result->fetch()) {
 /**
  * nv_fix_cat_order()
  *
- * @param integer $parentid
- * @param integer $order
- * @param integer $lev
+ * @param int $parentid
+ * @param int $order
+ * @param int $lev
  * @return
  */
 function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
@@ -86,7 +87,7 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
 
     $sql = 'SELECT catid, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
     $result = $db->query($sql);
-    $array_cat_order = array();
+    $array_cat_order = [];
     while ($row = $result->fetch()) {
         $array_cat_order[] = $row['catid'];
     }
@@ -100,7 +101,7 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
     foreach ($array_cat_order as $catid_i) {
         ++$order;
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE catid=' . intval($catid_i);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE catid=' . (int) $catid_i;
         $db->query($sql);
         $order = nv_fix_cat_order($catid_i, $order, $lev);
     }
@@ -112,9 +113,10 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
         } else {
             $sql .= ",subcatid='" . implode(',', $array_cat_order) . "'";
         }
-        $sql .= ' WHERE catid=' . intval($parentid);
+        $sql .= ' WHERE catid=' . (int) $parentid;
         $db->query($sql);
     }
+
     return $order;
 }
 
@@ -131,7 +133,7 @@ function nv_fix_topic()
     $weight = 0;
     while ($row = $result->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . intval($row['topicid']);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . (int) ($row['topicid']);
         $db->query($sql);
     }
     $result->closeCursor();
@@ -150,7 +152,7 @@ function nv_fix_block_cat()
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . intval($row['bid']);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . (int) ($row['bid']);
         $db->query($sql);
     }
     $result->closeCursor();
@@ -169,7 +171,7 @@ function nv_fix_source()
     $weight = 0;
     while ($row = $result->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . intval($row['sourceid']);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . (int) ($row['sourceid']);
         $db->query($sql);
     }
     $result->closeCursor();
@@ -179,13 +181,13 @@ function nv_fix_source()
  * nv_news_fix_block()
  *
  * @param mixed $bid
- * @param bool $repairtable
+ * @param bool  $repairtable
  * @return
  */
 function nv_news_fix_block($bid, $repairtable = true)
 {
     global $db, $module_data;
-    $bid = intval($bid);
+    $bid = (int) $bid;
     if ($bid > 0) {
         $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $bid . ' ORDER BY weight ASC';
         $result = $db->query($sql);
@@ -209,7 +211,7 @@ function nv_news_fix_block($bid, $repairtable = true)
 /**
  * nv_show_cat_list()
  *
- * @param integer $parentid
+ * @param int $parentid
  * @return
  */
 function nv_show_cat_list($parentid = 0)
@@ -221,7 +223,7 @@ function nv_show_cat_list($parentid = 0)
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     // Cac chu de co quyen han
-    $array_cat_check_content = array();
+    $array_cat_check_content = [];
     foreach ($global_array_cat as $catid_i => $array_value) {
         if (defined('NV_IS_ADMIN_MODULE')) {
             $array_cat_check_content[] = $catid_i;
@@ -241,21 +243,21 @@ function nv_show_cat_list($parentid = 0)
     // Cac chu de co quyen han
     if ($parentid > 0) {
         $parentid_i = $parentid;
-        $array_cat_title = array();
+        $array_cat_title = [];
         $stt = 0;
         while ($parentid_i > 0) {
-            $array_cat_title[] = array(
+            $array_cat_title[] = [
                 'active' => ($stt++ == 0) ? true : false,
-                'link' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $parentid_i,
+                'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $parentid_i,
                 'title' => $global_array_cat[$parentid_i]['title']
-            );
+            ];
             $parentid_i = $global_array_cat[$parentid_i]['parentid'];
         }
-        $array_cat_title[] = array(
+        $array_cat_title[] = [
             'active' => false,
-            'link' => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat",
+            'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat',
             'title' => $nv_Lang->getModule('cat_parent')
-        );
+        ];
         krsort($array_cat_title, SORT_NUMERIC);
 
         foreach ($array_cat_title as $cat) {
@@ -273,11 +275,11 @@ function nv_show_cat_list($parentid = 0)
     $rowall = $db->query($sql)->fetchAll(3);
     $num = sizeof($rowall);
     $a = 1;
-    $array_status = array(
+    $array_status = [
         $nv_Lang->getModule('cat_status_0'),
         $nv_Lang->getModule('cat_status_1'),
         $nv_Lang->getModule('cat_status_2')
-    );
+    ];
     $is_large_system = (nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS);
 
     $xtpl->assign('MAX_WEIGHT', $num);
@@ -293,39 +295,39 @@ function nv_show_cat_list($parentid = 0)
             $check_show = array_intersect($array_cat, $array_cat_check_content);
         }
 
-        if (! empty($check_show)) {
+        if (!empty($check_show)) {
             $array_viewcat = ($numsubcat > 0) ? $array_viewcat_full : $array_viewcat_nosub;
-            if (! array_key_exists($viewcat, $array_viewcat)) {
+            if (!array_key_exists($viewcat, $array_viewcat)) {
                 $viewcat = 'viewcat_page_new';
-                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . intval($catid));
+                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . (int) $catid);
                 $stmt->bindParam(':viewcat', $viewcat, PDO::PARAM_STR);
                 $stmt->execute();
             }
 
-            $admin_funcs = array();
+            $admin_funcs = [];
             $weight_disabled = $func_cat_disabled = true;
             if (!empty($module_config[$module_name]['instant_articles_active'])) {
-                $admin_funcs[] = "<a title=\"" . $nv_Lang->getModule('cat_instant_view') . "\" href=\"" . NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=instant-rss/" . $alias, true) . "\" class=\"btn btn-default btn-xs viewinstantrss\" data-toggle=\"tooltip\" data-modaltitle=\"" . $nv_Lang->getModule('cat_instant_title') . "\"><em class=\"fa fa-rss\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $nv_Lang->getModule('cat_instant_viewsimple') . "</span></a>\n";
+                $admin_funcs[] = '<a title="' . $nv_Lang->getModule('cat_instant_view') . '" href="' . NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss/' . $alias, true) . '" class="btn btn-default btn-xs viewinstantrss" data-toggle="tooltip" data-modaltitle="' . $nv_Lang->getModule('cat_instant_title') . '"><em class="fa fa-rss"></em><span class="visible-xs-inline-block">&nbsp;' . $nv_Lang->getModule('cat_instant_viewsimple') . "</span></a>\n";
             }
             if (defined('NV_IS_ADMIN_MODULE') or (isset($array_cat_admin[$admin_id][$catid]) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1)) {
                 $func_cat_disabled = false;
-                $admin_funcs[] = "<a title=\"" . $nv_Lang->getModule('content_add') . "\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "\" class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\"><em class=\"fa fa-plus\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $nv_Lang->getModule('content_add') . "</span></a>\n";
+                $admin_funcs[] = '<a title="' . $nv_Lang->getModule('content_add') . '" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;catid=' . $catid . '&amp;parentid=' . $parentid . '" class="btn btn-success btn-xs" data-toggle="tooltip"><em class="fa fa-plus"></em><span class="visible-xs-inline-block">&nbsp;' . $nv_Lang->getModule('content_add') . "</span></a>\n";
             }
             if (defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
                 $func_cat_disabled = false;
-                $admin_funcs[] = "<a title=\"" . $nv_Lang->getGlobal('edit') . "\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "#edit\" class=\"btn btn-info btn-xs\" data-toggle=\"tooltip\"><em class=\"fa fa-edit\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $nv_Lang->getGlobal('edit') . "</span></a>\n";
+                $admin_funcs[] = '<a title="' . $nv_Lang->getGlobal('edit') . '" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;catid=' . $catid . '&amp;parentid=' . $parentid . '#edit" class="btn btn-info btn-xs" data-toggle="tooltip"><em class="fa fa-edit"></em><span class="visible-xs-inline-block">&nbsp;' . $nv_Lang->getGlobal('edit') . "</span></a>\n";
             }
             if (defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
                 $weight_disabled = false;
-                $admin_funcs[] = "<a title=\"" . $nv_Lang->getGlobal('delete') . "\" href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\" class=\"btn btn-danger btn-xs\" data-toggle=\"tooltip\"><em class=\"fa fa-trash-o\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $nv_Lang->getGlobal('delete') . "</span></a>";
+                $admin_funcs[] = '<a title="' . $nv_Lang->getGlobal('delete') . '" href="javascript:void(0);" onclick="nv_del_cat(' . $catid . ')" class="btn btn-danger btn-xs" data-toggle="tooltip"><em class="fa fa-trash-o"></em><span class="visible-xs-inline-block">&nbsp;' . $nv_Lang->getGlobal('delete') . '</span></a>';
             }
 
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'catid' => $catid,
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $catid,
                 'title' => $title,
                 'adminfuncs' => implode(' ', $admin_funcs)
-            ));
+            ]);
 
             $xtpl->assign('STT', $a);
             $xtpl->assign('STATUS', $status > $global_code_defined['cat_locked_status'] ? $nv_Lang->getModule('cat_locked_byparent') : $array_status[$status]);
@@ -412,7 +414,7 @@ function nv_show_topics_list($page = 1)
     $per_page = $module_config[$module_name]['per_page'];
     $db_slave->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics' );
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics');
 
     $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
     $max_height = $page * $per_page;
@@ -434,7 +436,7 @@ function nv_show_topics_list($page = 1)
         foreach ($_array_topic as $row) {
             $numnews = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where topicid=' . $row['topicid'])->fetchColumn();
 
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'topicid' => $row['topicid'],
                 'description' => $row['description'],
                 'title' => $row['title'],
@@ -442,14 +444,14 @@ function nv_show_topics_list($page = 1)
                 'linksite' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $row['alias'],
                 'numnews' => $numnews,
                 'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics&amp;topicid=' . $row['topicid'] . '#edit'
-            ));
+            ]);
 
-            for ($i = (($page-1)* $per_page) + 1; $i <= $max_height; ++$i) {
-                $xtpl->assign('WEIGHT', array(
+            for ($i = (($page - 1) * $per_page) + 1; $i <= $max_height; ++$i) {
+                $xtpl->assign('WEIGHT', [
                     'key' => $i,
                     'title' => $i,
                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.weight');
             }
 
@@ -462,6 +464,7 @@ function nv_show_topics_list($page = 1)
     } else {
         $contents = '&nbsp;';
     }
+
     return $contents;
 }
 
@@ -479,10 +482,10 @@ function nv_show_block_cat_list()
     $num = sizeof($_array_block_cat);
 
     if ($num > 0) {
-        $array_adddefault = array(
+        $array_adddefault = [
             $nv_Lang->getGlobal('no'),
             $nv_Lang->getGlobal('yes')
-        );
+        ];
 
         $xtpl = new XTemplate('blockcat_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -491,39 +494,39 @@ function nv_show_block_cat_list()
         foreach ($_array_block_cat as $row) {
             $numnews = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $row['bid'])->fetchColumn();
 
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'bid' => $row['bid'],
                 'title' => $row['title'],
                 'numnews' => $numnews,
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=block&amp;bid=' . $row['bid'],
                 'linksite' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $row['alias'],
                 'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups&amp;bid=' . $row['bid'] . '#edit'
-            ));
+            ]);
 
             for ($i = 1; $i <= $num; ++$i) {
-                $xtpl->assign('WEIGHT', array(
+                $xtpl->assign('WEIGHT', [
                     'key' => $i,
                     'title' => $i,
                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.weight');
             }
 
             foreach ($array_adddefault as $key => $val) {
-                $xtpl->assign('ADDDEFAULT', array(
+                $xtpl->assign('ADDDEFAULT', [
                     'key' => $key,
                     'title' => $val,
                     'selected' => $key == $row['adddefault'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.adddefault');
             }
 
             for ($i = 1; $i <= 30; ++$i) {
-                $xtpl->assign('NUMBER', array(
+                $xtpl->assign('NUMBER', [
                     'key' => $i,
                     'title' => $i,
                     'selected' => $i == $row['numbers'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.number');
             }
 
@@ -568,19 +571,19 @@ function nv_show_sources_list()
 
         $result = $db_slave->query($db_slave->sql());
         while ($row = $result->fetch()) {
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'sourceid' => $row['sourceid'],
                 'title' => $row['title'],
                 'link' => $row['link'],
                 'url_edit' => $base_url . '&amp;sourceid=' . $row['sourceid'] . '#edit'
-            ));
+            ]);
 
             for ($i = 1; $i <= $num; ++$i) {
-                $xtpl->assign('WEIGHT', array(
+                $xtpl->assign('WEIGHT', [
                     'key' => $i,
                     'title' => $i,
                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.weight');
             }
 
@@ -589,7 +592,7 @@ function nv_show_sources_list()
         $result->closeCursor();
 
         $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-        if (! empty($generate_page)) {
+        if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.generate_page');
         }
@@ -623,14 +626,14 @@ function nv_show_block_list($bid)
     $xtpl->assign('OP', $op);
     $xtpl->assign('BID', $bid);
 
-    $global_array_cat[0] = array( 'alias' => 'Other' );
+    $global_array_cat[0] = ['alias' => 'Other'];
 
     $sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t1.publtime, t1.status, t1.hitstotal, t1.hitscm, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
     $array_block = $db_slave->query($sql)->fetchAll();
     $num = sizeof($array_block);
     if ($num > 0) {
         foreach ($array_block as $row) {
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'publtime' => nv_date('H:i d/m/Y', $row['publtime']),
                 'status' => $nv_Lang->getModule('status_' . $row['status']),
                 'hitstotal' => number_format($row['hitstotal'], 0, ',', '.'),
@@ -638,22 +641,21 @@ function nv_show_block_list($bid)
                 'id' => $row['id'],
                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'],
                 'title' => $row['title']
-            ));
+            ]);
 
             for ($i = 1; $i <= $num; ++$i) {
-                $xtpl->assign('WEIGHT', array(
+                $xtpl->assign('WEIGHT', [
                     'key' => $i,
                     'title' => $i,
                     'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ));
+                ]);
                 $xtpl->parse('main.loop.weight');
             }
 
             $xtpl->parse('main.loop');
         }
 
-        if(defined('NV_IS_SPADMIN'))
-        {
+        if (defined('NV_IS_SPADMIN')) {
             $xtpl->assign('ORDER_PUBLTIME', md5($bid . NV_CHECK_SESSION));
             $xtpl->parse('main.order_publtime');
         }
@@ -663,6 +665,7 @@ function nv_show_block_list($bid)
     } else {
         $contents = '&nbsp;';
     }
+
     return $contents;
 }
 
@@ -675,10 +678,10 @@ function nv_show_block_list($bid)
 function GetCatidInParent($catid)
 {
     global $global_array_cat;
-    $array_cat = array();
+    $array_cat = [];
     $array_cat[] = $catid;
     $subcatid = explode(',', $global_array_cat[$catid]['subcatid']);
-    if (! empty($subcatid)) {
+    if (!empty($subcatid)) {
         foreach ($subcatid as $id) {
             if ($id > 0) {
                 if ($global_array_cat[$id]['numsubcat'] == 0) {
@@ -692,6 +695,7 @@ function GetCatidInParent($catid)
             }
         }
     }
+
     return array_unique($array_cat);
 }
 
@@ -700,7 +704,7 @@ function GetCatidInParent($catid)
  *
  * @param string $msg1
  * @param string $msg2
- * @param mixed $nv_redirect
+ * @param mixed  $nv_redirect
  * @return
  */
 function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_back = '')
@@ -716,7 +720,7 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
     $xtpl->assign('MSG1', $msg1);
     $xtpl->assign('MSG2', $msg2);
 
-    if (! empty($autoSaveKey)) {
+    if (!empty($autoSaveKey)) {
         $xtpl->assign('AUTOSAVEKEY', $autoSaveKey);
         $xtpl->parse('main.removelocalstorage');
     }
@@ -746,9 +750,9 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
 /**
  * get_mod_alias()
  *
- * @param mixed $title
+ * @param mixed  $title
  * @param string $mod
- * @param integer $id
+ * @param int    $id
  * @return
  */
 function get_mod_alias($title, $mod = '', $id = 0)
@@ -763,7 +767,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
     if ($module_config[$module_name]['alias_lower']) {
         $alias = strtolower($alias);
     }
-    $id = intval($id);
+    $id = (int) $id;
 
     if ($mod == 'cat') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
@@ -771,10 +775,10 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
-        if (! empty($nb)) {
+        if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(catid) FROM ' . $tab)->fetchColumn();
 
-            $alias .= '-' . (intval($nb) + 1);
+            $alias .= '-' . ((int) $nb + 1);
         }
     } elseif ($mod == 'topics') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_topics';
@@ -782,10 +786,10 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
-        if (! empty($nb)) {
+        if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(topicid) FROM ' . $tab)->fetchColumn();
 
-            $alias .= '-' . (intval($nb) + 1);
+            $alias .= '-' . ((int) $nb + 1);
         }
     } elseif ($mod == 'blockcat') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_block_cat';
@@ -793,10 +797,10 @@ function get_mod_alias($title, $mod = '', $id = 0)
         $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $stmt->execute();
         $nb = $stmt->fetchColumn();
-        if (! empty($nb)) {
+        if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(bid) FROM ' . $tab)->fetchColumn();
 
-            $alias .= '-' . (intval($nb) + 1);
+            $alias .= '-' . ((int) $nb + 1);
         }
     }
 
@@ -813,5 +817,6 @@ function nv_get_mod_countrows()
     global $module_data, $nv_Cache, $module_name;
     $sql = 'SELECT COUNT(*) totalnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows';
     $list = $nv_Cache->db($sql, '', $module_name);
+
     return $list[0]['totalnews'];
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 //Xac dinh ten mui gio
@@ -18,18 +19,19 @@ function nv_getTimezoneName_from_cookie($cookie)
     global $nv_parse_ini_timezone;
     if (preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|(.*)$/', rawurldecode($cookie), $matches)) {
         foreach ($nv_parse_ini_timezone as $name => $offset) {
-            if ($offset['winter_offset'] == intval($matches[2]) * 60 and $offset['summer_offset'] == intval($matches[1]) * 60) {
+            if ($offset['winter_offset'] == (int) ($matches[2]) * 60 and $offset['summer_offset'] == (int) ($matches[1]) * 60) {
                 return $name;
             }
         }
     }
+
     return '';
 }
 
 $global_config['cookie_prefix'] = (empty($global_config['cookie_prefix'])) ? 'nv4' : $global_config['cookie_prefix'];
 
 if (isset($_COOKIE[$global_config['cookie_prefix'] . '_cltn'])) {
-    $nv_cltn = base64_decode($_COOKIE[$global_config['cookie_prefix'] . '_cltn']);
+    $nv_cltn = base64_decode($_COOKIE[$global_config['cookie_prefix'] . '_cltn'], true);
 
     if (preg_match('/^([^\.]+)\.([\-]*\d+)\.(\d{1})$/', $nv_cltn, $matches)) {
         define('NV_CLIENT_TIMEZONE_NAME', $matches[1]);
@@ -40,14 +42,14 @@ if (isset($_COOKIE[$global_config['cookie_prefix'] . '_cltn'])) {
     }
 }
 
-if (! defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cookie_prefix'] . '_cltz']) and preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|([^\|]*)\|(.*)$/', rawurldecode($_COOKIE[$global_config['cookie_prefix'] . '_cltz']), $matches2)) {
+if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cookie_prefix'] . '_cltz']) and preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|([^\|]*)\|(.*)$/', rawurldecode($_COOKIE[$global_config['cookie_prefix'] . '_cltz']), $matches2)) {
     $client_timezone_name = nv_getTimezoneName_from_cookie($_COOKIE[$global_config['cookie_prefix'] . '_cltz']);
 
-    if (! empty($client_timezone_name)) {
+    if (!empty($client_timezone_name)) {
         define('NV_CLIENT_TIMEZONE_NAME', $client_timezone_name);
         define('NV_CLIENT_TIMEZONE_OFFSET', $matches2[3] * 60);
     } else {
-        $sd = floor($matches2[2] >= 0 ? $matches2[2] / 60 : - $matches2[2] / 60);
+        $sd = floor($matches2[2] >= 0 ? $matches2[2] / 60 : -$matches2[2] / 60);
 
         define('NV_CLIENT_TIMEZONE_NAME', ($matches2[2] >= 0 ? '+' : '-') . str_pad($sd, 2, '0', STR_PAD_LEFT) . ':00');
         define('NV_CLIENT_TIMEZONE_OFFSET', floor($matches2[3] / 60) * 3600);

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $install_lang['modules'] = [];
@@ -223,139 +224,139 @@ $install_lang['emailtemplates']['emails'][EmailTpl::E_AUTO_ERROR_REPORT] = [
     'c' => 'Hệ thống đã nhận được một số thông báo. Bạn hãy mở file đính kèm để xem chi tiết'
 ];
 
-$menu_rows_lev0['about'] = array(
+$menu_rows_lev0['about'] = [
     'title' => $install_lang['modules']['about'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=about',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['news'] = array(
+];
+$menu_rows_lev0['news'] = [
     'title' => $install_lang['modules']['news'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['users'] = array(
+];
+$menu_rows_lev0['users'] = [
     'title' => $install_lang['modules']['users'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=users',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['statistics'] = array(
+];
+$menu_rows_lev0['statistics'] = [
     'title' => $install_lang['modules']['statistics'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=statistics',
     'groups_view' => '2',
     'op' => ''
-);
-$menu_rows_lev0['voting'] = array(
+];
+$menu_rows_lev0['voting'] = [
     'title' => $install_lang['modules']['voting'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=voting",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=voting',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['seek'] = array(
+];
+$menu_rows_lev0['seek'] = [
     'title' => $install_lang['modules']['seek'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=seek",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=seek',
     'groups_view' => '6',
     'op' => ''
-);
-$menu_rows_lev0['contact'] = array(
+];
+$menu_rows_lev0['contact'] = [
     'title' => $install_lang['modules']['contact'],
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=contact",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=contact',
     'groups_view' => '6',
     'op' => ''
-);
+];
 
 $menu_rows_lev1['about'] = [];
-$menu_rows_lev1['about'][] = array(
+$menu_rows_lev1['about'][] = [
     'title' => 'Giới thiệu về NukeViet',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=gioi-thieu-ve-nukeviet" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=gioi-thieu-ve-nukeviet' . $global_config['rewrite_exturl'],
     'groups_view' => '6',
     'op' => 'gioi-thieu-ve-nukeviet'
-);
-$menu_rows_lev1['about'][] = array(
+];
+$menu_rows_lev1['about'][] = [
     'title' => 'Giới thiệu về NukeViet CMS',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=gioi-thieu-ve-nukeviet-cms" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=gioi-thieu-ve-nukeviet-cms' . $global_config['rewrite_exturl'],
     'groups_view' => '6',
     'op' => 'gioi-thieu-ve-nukeviet-cms'
-);
-$menu_rows_lev1['about'][] = array(
+];
+$menu_rows_lev1['about'][] = [
     'title' => 'Logo và tên gọi NukeViet',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=logo-va-ten-goi-nukeviet" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=logo-va-ten-goi-nukeviet' . $global_config['rewrite_exturl'],
     'groups_view' => '6',
     'op' => 'logo-va-ten-goi-nukeviet'
-);
-$menu_rows_lev1['about'][] = array(
+];
+$menu_rows_lev1['about'][] = [
     'title' => 'Giấy phép sử dụng NukeViet',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=giay-phep-su-dung-nukeviet" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=giay-phep-su-dung-nukeviet' . $global_config['rewrite_exturl'],
     'groups_view' => '6,7',
     'op' => 'giay-phep-su-dung-nukeviet'
-);
-$menu_rows_lev1['about'][] = array(
+];
+$menu_rows_lev1['about'][] = [
     'title' => 'Những tính năng của NukeViet CMS 4.0',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=nhung-tinh-nang-cua-nukeviet-cms-4-0" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=nhung-tinh-nang-cua-nukeviet-cms-4-0' . $global_config['rewrite_exturl'],
     'groups_view' => '6',
     'op' => 'nhung-tinh-nang-cua-nukeviet-cms-4-0'
-);
-$menu_rows_lev1['about'][] = array(
+];
+$menu_rows_lev1['about'][] = [
     'title' => 'Yêu cầu sử dụng NukeViet 4',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=Yeu-cau-su-dung-NukeViet-4" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=Yeu-cau-su-dung-NukeViet-4' . $global_config['rewrite_exturl'],
     'groups_view' => '6',
     'op' => 'Yeu-cau-su-dung-NukeViet-4'
-);
-$menu_rows_lev1['about'][] = array(
+];
+$menu_rows_lev1['about'][] = [
     'title' => 'Giới thiệu về Công ty cổ phần phát triển nguồn mở Việt Nam',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=gioi-thieu-ve-cong-ty-co-phan-phat-trien-nguon-mo-viet-nam" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=gioi-thieu-ve-cong-ty-co-phan-phat-trien-nguon-mo-viet-nam' . $global_config['rewrite_exturl'],
     'groups_view' => '6',
     'op' => 'gioi-thieu-ve-cong-ty-co-phan-phat-trien-nguon-mo-viet-nam'
-);
-$menu_rows_lev1['about'][] = array(
+];
+$menu_rows_lev1['about'][] = [
     'title' => 'Ủng hộ, hỗ trợ và tham gia phát triển NukeViet',
-    'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=ung-ho-ho-tro-va-tham-gia-phat-trien-nukeviet" . $global_config['rewrite_exturl'],
+    'link' => NV_BASE_SITEURL . 'index.php?language=vi&nv=about&op=ung-ho-ho-tro-va-tham-gia-phat-trien-nukeviet' . $global_config['rewrite_exturl'],
     'groups_view' => '6',
     'op' => 'ung-ho-ho-tro-va-tham-gia-phat-trien-nukeviet'
-);
+];
 
 $menu_rows_lev1['news'] = [];
-$menu_rows_lev1['news'][] = array(
+$menu_rows_lev1['news'][] = [
     'title' => 'Đối tác',
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=Doi-tac",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news&op=Doi-tac',
     'groups_view' => '6',
     'op' => 'Doi-tac'
-);
-$menu_rows_lev1['news'][] = array(
+];
+$menu_rows_lev1['news'][] = [
     'title' => 'Tuyển dụng',
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=Tuyen-dung",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news&op=Tuyen-dung',
     'groups_view' => '6',
     'op' => 'Tuyen-dung'
-);
-$menu_rows_lev1['news'][] = array(
+];
+$menu_rows_lev1['news'][] = [
     'title' => 'Rss',
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=rss",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news&op=rss',
     'groups_view' => '6',
     'op' => 'rss'
-);
-$menu_rows_lev1['news'][] = array(
+];
+$menu_rows_lev1['news'][] = [
     'title' => 'Đăng bài viết',
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=content",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news&op=content',
     'groups_view' => '6',
     'op' => 'content'
-);
-$menu_rows_lev1['news'][] = array(
+];
+$menu_rows_lev1['news'][] = [
     'title' => 'Tìm kiếm',
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=search",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news&op=search',
     'groups_view' => '6',
     'op' => 'search'
-);
-$menu_rows_lev1['news'][] = array(
+];
+$menu_rows_lev1['news'][] = [
     'title' => 'Tin tức',
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=Tin-tuc",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news&op=Tin-tuc',
     'groups_view' => '6',
     'op' => 'Tin-tuc'
-);
-$menu_rows_lev1['news'][] = array(
+];
+$menu_rows_lev1['news'][] = [
     'title' => 'Sản phẩm',
-    'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=San-pham",
+    'link' => NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&nv=news&op=San-pham',
     'groups_view' => '6',
     'op' => 'San-pham'
-);
+];

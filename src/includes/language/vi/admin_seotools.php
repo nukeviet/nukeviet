@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 03:22:00 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
@@ -64,24 +64,24 @@ $lang_module['private_site'] = 'Chặn các máy chủ tìm kiếm đánh chỉ 
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Tên gọi ngoài site';
 
-$lang_module['rpc'] = "Dịch vụ PING";
-$lang_module['rpc_setting'] = "Cấu hình dịch vụ PING";
-$lang_module['rpc_error_timeout'] = "Vui lòng đợi %s nữa để tiếp tục Ping";
-$lang_module['rpc_error_titleEmpty'] = "Vui lòng khai báo tên của URL cần Ping";
-$lang_module['rpc_error_urlEmpty'] = "Vui lòng khai báo đúng URL cần Ping";
-$lang_module['rpc_error_rsschannelEmpty'] = "Vui lòng khai báo đúng kênh RSS của URL này";
-$lang_module['rpc_error_serviceEmpty'] = "Dịch vụ chưa khả dụng. Vui lòng thông báo đến Ban quản trị website";
-$lang_module['rpc_error_unknown'] = "Lỗi không xác định";
-$lang_module['rpc_flerror0'] = "PING thành công";
-$lang_module['rpc_flerror1'] = "Lỗi";
-$lang_module['rpc_ftitle'] = "PING là một tiện ích miễn phí giúp bạn nhanh chóng tạo chỉ mục cho các trang tin của mình trên các máy chủ tìm kiếm lớn.";
-$lang_module['rpc_webtitle'] = "Tiêu đề trang tin";
-$lang_module['rpc_weblink'] = "URL của trang tin";
-$lang_module['rpc_rsslink'] = "Kênh RSS của trang tin";
-$lang_module['rpc_submit'] = "PING !";
-$lang_module['rpc_linkname'] = "Máy chủ";
-$lang_module['rpc_reruslt'] = "Kết quả";
-$lang_module['rpc_message'] = "Thông tin";
-$lang_module['rpc_ping'] = "PING khi cập nhật dữ liệu";
-$lang_module['rpc_ping_page'] = "PING bài viết";
-$lang_module['rpc_finish'] = "Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?";
+$lang_module['rpc'] = 'Dịch vụ PING';
+$lang_module['rpc_setting'] = 'Cấu hình dịch vụ PING';
+$lang_module['rpc_error_timeout'] = 'Vui lòng đợi %s nữa để tiếp tục Ping';
+$lang_module['rpc_error_titleEmpty'] = 'Vui lòng khai báo tên của URL cần Ping';
+$lang_module['rpc_error_urlEmpty'] = 'Vui lòng khai báo đúng URL cần Ping';
+$lang_module['rpc_error_rsschannelEmpty'] = 'Vui lòng khai báo đúng kênh RSS của URL này';
+$lang_module['rpc_error_serviceEmpty'] = 'Dịch vụ chưa khả dụng. Vui lòng thông báo đến Ban quản trị website';
+$lang_module['rpc_error_unknown'] = 'Lỗi không xác định';
+$lang_module['rpc_flerror0'] = 'PING thành công';
+$lang_module['rpc_flerror1'] = 'Lỗi';
+$lang_module['rpc_ftitle'] = 'PING là một tiện ích miễn phí giúp bạn nhanh chóng tạo chỉ mục cho các trang tin của mình trên các máy chủ tìm kiếm lớn.';
+$lang_module['rpc_webtitle'] = 'Tiêu đề trang tin';
+$lang_module['rpc_weblink'] = 'URL của trang tin';
+$lang_module['rpc_rsslink'] = 'Kênh RSS của trang tin';
+$lang_module['rpc_submit'] = 'PING !';
+$lang_module['rpc_linkname'] = 'Máy chủ';
+$lang_module['rpc_reruslt'] = 'Kết quả';
+$lang_module['rpc_message'] = 'Thông tin';
+$lang_module['rpc_ping'] = 'PING khi cập nhật dữ liệu';
+$lang_module['rpc_ping_page'] = 'PING bài viết';
+$lang_module['rpc_finish'] = 'Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?';

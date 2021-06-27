@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/9/2010, 3:21
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Cache;
@@ -21,7 +22,6 @@ namespace NukeViet\Cache;
  */
 class Files
 {
-
     private $_CacheDir = '/tmp';
 
     private $_Lang = 'vi';
@@ -42,7 +42,6 @@ class Files
      * @param mixed $CacheDir
      * @param mixed $Lang
      * @param mixed $Cache_Prefix
-     * @return void
      */
     public function __construct($CacheDir, $Lang, $Cache_Prefix)
     {
@@ -67,10 +66,8 @@ class Files
     }
 
     /**
-     *
      * @param mixed $pattern
      * @return
-     *
      */
     private function _delete($modname, $pattern)
     {
@@ -87,11 +84,9 @@ class Files
     }
 
     /**
-     *
      * @param mixed $sys
      *
      * @return
-     *
      */
     public function delAll($sys = true)
     {
@@ -112,11 +107,8 @@ class Files
     }
 
     /**
-     *
      * @param mixed $module_name
      * @param mixed $lang
-     *
-     * @return void
      */
     public function delMod($module_name, $lang = '')
     {
@@ -130,12 +122,10 @@ class Files
     }
 
     /**
-     *
      * @param mixed $module_name
      * @param mixed $filename
-     * @param integer $ttl
+     * @param int   $ttl
      * @return
-     *
      */
     public function getItem($module_name, $filename, $ttl = 0)
     {
@@ -162,13 +152,11 @@ class Files
     }
 
     /**
-     *
      * @param mixed $module_name
      * @param mixed $filename
      * @param mixed $content
-     * @param integer $ttl
+     * @param int   $ttl
      * @return
-     *
      */
     public function setItem($module_name, $filename, $content, $ttl = 0)
     {
@@ -189,7 +177,6 @@ class Files
     }
 
     /**
-     *
      * @param resource $db
      */
     public function setDb($db)
@@ -198,19 +185,17 @@ class Files
     }
 
     /**
-     *
      * @param mixed $sql
      * @param mixed $key
      * @param mixed $modname
      * @param mixed $lang
-     * @param integer $ttl
+     * @param int   $ttl
      * @return
-     *
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
         // Note: $ttl not use in Files cache
-        $list = array();
+        $list = [];
 
         if (empty($sql)) {
             return $list;

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_COMMENT')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_COMMENT')) {
+    exit('Stop!!!');
 }
 
 $contents = 'ERR_' . $nv_Lang->getModule('comment_unsuccess');
@@ -45,7 +46,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
             $status = $module_config[$module]['auto_postcomm'];
 
             $timeout = $nv_Request->get_int($site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, 'cookie', 0);
-            $difftimeout = isset($module_config[$module]['timeoutcomm']) ? intval($module_config[$module]['timeoutcomm']) : 360;
+            $difftimeout = isset($module_config[$module]['timeoutcomm']) ? (int) ($module_config[$module]['timeoutcomm']) : 360;
 
             if (($status == 2 and !defined('NV_IS_USER')) or $status == 0) {
                 $status = 0;
@@ -68,7 +69,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                 $email = $nv_Request->get_title('email', 'post', '');
             }
 
-            $captcha = intval($module_config[$module]['captcha']);
+            $captcha = (int) ($module_config[$module]['captcha']);
             $show_captcha = true;
             if ($captcha == 0) {
                 $show_captcha = false;
@@ -78,13 +79,13 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                 if (defined('NV_IS_SPADMIN')) {
                     $show_captcha = false;
                 } else {
-                    $adminscomm = explode(',', $module_config[$module]['adminscomm']);
-                    if (in_array($admin_info['admin_id'], $adminscomm)) {
+                    $adminscomm = array_map('intval', explode(',', $module_config[$module]['adminscomm']));
+                    if (in_array((int) $admin_info['admin_id'], $adminscomm, true)) {
                         $show_captcha = false;
                     }
                 }
             }
-            if ($show_captcha and ! nv_capcha_txt($code)) {
+            if ($show_captcha and !nv_capcha_txt($code)) {
                 $contents = 'ERR_' . $nv_Lang->getGlobal('securitycodeincorrect');
             } elseif ($timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout) {
                 $pid = $nv_Request->get_int('pid', 'post', 0);
@@ -98,7 +99,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                         $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, $dir);
                         if ($mk[0] > 0) {
                             try {
-                                $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $dir . "', 0)");
+                                $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $dir . "', 0)");
                             } catch (PDOException $e) {
                                 trigger_error($e->getMessage());
                             }
@@ -111,7 +112,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                     @unlink($_FILES['fileattach']['tmp_name']);
 
                     if (empty($upload_info['error'])) {
-                        mt_srand(( double )microtime() * 1000000);
+                        mt_srand((float) microtime() * 1000000);
                         $maxran = 1000000;
                         $random_num = mt_rand(0, $maxran);
                         $random_num = md5($random_num);
@@ -142,7 +143,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                             :module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, :attach, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email,
                             :post_ip, ' . $status . '
                         )';
-                        $data_insert = array();
+                        $data_insert = [];
                         $data_insert['module'] = $module;
                         $data_insert['content'] = $content;
                         $data_insert['attach'] = $fileupload;
@@ -159,8 +160,8 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                             if ($status) {
                                 $mod_info = $site_mods[$module];
                                 if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
-                                    $row = array();
-                                    $row['module'] =  $module;
+                                    $row = [];
+                                    $row['module'] = $module;
                                     $row['id'] = $id;
                                     include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
                                 }
@@ -170,7 +171,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
                                 $comment_success = $nv_Lang->getModule('comment_success_queue');
 
                                 // Gui thong bao kiem duyet
-                                nv_insert_notification($module_name, 'comment_queue', array( 'content' => strip_tags($content) ), $new_id);
+                                nv_insert_notification($module_name, 'comment_queue', ['content' => strip_tags($content)], $new_id);
                             } else {
                                 $comment_success = $nv_Lang->getModule('comment_success');
                             }

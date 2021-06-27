@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $listcid = $nv_Request->get_string('list', 'post,get');
@@ -22,18 +23,18 @@ if (!empty($listcid)) {
     // Duyệt các bình luận từ sau ra trước theo thứ tự pid
     $sql = 'SELECT cid, module, area, id, pid, attach FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ') ORDER BY pid DESC';
     $comments = $db->query($sql)->fetchAll();
-    $array_row_id = array();
+    $array_row_id = [];
 
     foreach ($comments as $row) {
         // Xác định các bài viết của các module tương ứng cần cập nhật lại sau khi xóa
         if (!isset($array_row_id[$row['module']])) {
-            $array_row_id[$row['module']] = array();
+            $array_row_id[$row['module']] = [];
         }
-        $array_row_id[$row['module']][$row['id']] = array(
+        $array_row_id[$row['module']][$row['id']] = [
             'module' => $row['module'],
             'area' => $row['area'],
             'id' => $row['id']
-        );
+        ];
 
         // Xóa đính kèm
         if (!empty($row['attach'])) {
@@ -44,7 +45,7 @@ if (!empty($listcid)) {
             $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $row['cid']);
             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET pid=' . $row['pid'] . ' WHERE pid=' . $row['cid']);
         } elseif (!empty($site_mod_comm)) {
-            $array_mod_name = array();
+            $array_mod_name = [];
             foreach ($site_mod_comm as $module_i => $row) {
                 $array_mod_name[] = "'" . $module_i . "'";
             }

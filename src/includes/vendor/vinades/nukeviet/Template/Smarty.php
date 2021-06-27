@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 6/5/2010 2:18
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Template;
@@ -14,16 +15,14 @@ namespace NukeViet\Template;
  * Class này mặc định sửa dụng sau khi core được load
  * Các hằng, tài nguyên nghiễm phiên dùng được
  */
-
 class Smarty extends \Smarty
 {
     /**
      * Smarty::__construct()
      *
      * @param mixed $config
-     * @return void
      */
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         if (empty($config)) {
             global $global_config;
@@ -32,7 +31,7 @@ class Smarty extends \Smarty
 
         parent::__construct();
 
-        /**
+        /*
          * Bật chế độ nhà phát triển thì
          * - Bật debug
          * - Biên dịch tpl mỗi khi truy vấn
@@ -52,7 +51,7 @@ class Smarty extends \Smarty
         $this->setCompileDir(NV_ROOTDIR . '/' . NV_CACHEDIR . '/smarty-compile');
         $this->setCacheDir(NV_ROOTDIR . '/' . NV_CACHEDIR . '/smarty-cache');
 
-        /**
+        /*
          * Xuất luôn một số hằng có sẵn trong hệ thống
          * Các hằng này viết hoa hết để phân biệt với biến thường
          */

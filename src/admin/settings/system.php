@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $adminThemes = [''];
@@ -41,7 +42,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config_site = [];
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes)) {
+    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) {
         $array_config_site['admin_theme'] = $admin_theme;
     }
 
@@ -75,7 +76,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array_config_site['ssl_https'] = 0;
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -85,7 +86,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (defined('NV_IS_GODADMIN')) {
         $array_config_global = [];
         $site_timezone = $nv_Request->get_title('site_timezone', 'post', '', 0);
-        if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array) or $site_timezone == 'byCountry'))) {
+        if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array, true) or $site_timezone == 'byCountry'))) {
             $array_config_global['site_timezone'] = $site_timezone;
         }
         $my_domains = $nv_Request->get_title('my_domains', 'post', '');
@@ -96,10 +97,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
             foreach ($my_domains as $dm) {
                 $dm = preg_replace('/^(http|https)\:\/\//', '', $dm);
                 $dm = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $dm);
-                $_p  = '';
+                $_p = '';
                 if (preg_match('/(.*)\:([0-9]+)$/', $dm, $m)) {
                     $dm = $m[1];
-                    $_p  = ':' . $m[2];
+                    $_p = ':' . $m[2];
                 }
                 $dm = nv_check_domain(nv_strtolower($dm));
                 if (!empty($dm)) {
@@ -120,7 +121,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
 
         $site_lang = $nv_Request->get_title('site_lang', 'post', '', 1);
-        if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs)) {
+        if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs, true)) {
             $array_config_global['site_lang'] = $site_lang;
         }
 
@@ -154,10 +155,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
         if (!empty($cdn_url)) {
             $cdn_url = preg_replace('/^(http|https)\:\/\//', '', $cdn_url);
             $cdn_url = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $cdn_url);
-            $_p  = '';
+            $_p = '';
             if (preg_match('/(.*)\:([0-9]+)$/', $cdn_url, $m)) {
                 $cdn_url = $m[1];
-                $_p  = ':' . $m[2];
+                $_p = ':' . $m[2];
             }
             $cdn_url = nv_check_domain(nv_strtolower($cdn_url));
             if (!empty($cdn_url)) {
@@ -167,7 +168,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array_config_global['remote_api_access'] = (int) $nv_Request->get_bool('remote_api_access', 'post', 0);
         $array_config_global['remote_api_log'] = (int) $nv_Request->get_bool('remote_api_log', 'post', 0);
 
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -175,9 +176,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
 
         // Cấu hình ghi ra hằng
-        $array_config_define['nv_debug'] = (int)$nv_Request->get_bool('nv_debug', 'post');
+        $array_config_define['nv_debug'] = (int) $nv_Request->get_bool('nv_debug', 'post');
 
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
         foreach ($array_config_define as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -225,7 +226,7 @@ $tpl->assign('CONFIG_LANG_GEO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIAB
 $tpl->assign('CURRENT_TIME', sprintf($nv_Lang->getModule('current_time'), nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
 
 if (defined('NV_IS_GODADMIN')) {
-    $result = $db->query("SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
+    $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
     while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
         $array_config_global[$c_config_name] = $c_config_value;
     }

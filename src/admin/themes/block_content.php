@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $functionid = $nv_Request->get_int('func', 'get');
@@ -120,7 +121,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     $row['active_device'] = $nv_Request->get_typed_array('active_device', 'post', 'int');
-    if (in_array('1', $row['active_device']) or (in_array('2', $row['active_device']) and in_array('3', $row['active_device']) and in_array('4', $row['active_device']))) {
+    if (in_array('1', $row['active_device'], true) or (in_array('2', $row['active_device'], true) and in_array('3', $row['active_device'], true) and in_array('4', $row['active_device'], true))) {
         $row['active'] = 1;
     } else {
         $row['active'] = implode(',', $row['active_device']);
@@ -130,7 +131,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $row['groups_view'] = !empty($groups_view) ? implode(',', nv_groups_post(array_intersect($groups_view, array_keys($groups_list)))) : '';
 
     $all_func = ($nv_Request->get_int('all_func', 'post') == 1 and ((preg_match($global_config['check_block_module'], $row['file_name']) or preg_match($global_config['check_block_theme'], $row['file_name'])) and preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name']))) ? 1 : 0;
-    $array_funcid_post = $nv_Request->get_array('func_id', 'post');
+    $array_funcid_post = $nv_Request->get_typed_array('func_id', 'post', 'int');
 
     if (empty($all_func) and empty($array_funcid_post)) {
         $error[] = $nv_Lang->getModule('block_no_func');
@@ -216,7 +217,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
             $array_funcid = [];
             foreach ($array_funcid_module as $func_id => $mod) {
-                if (in_array($mod, $array_in_module) and in_array($func_id, $array_funcid_post)) {
+                if (in_array($mod, $array_in_module, true) and in_array((int) $func_id, array_map('intval', $array_funcid_post), true)) {
                     $array_funcid[] = $func_id;
                 }
             }
@@ -254,9 +255,9 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
                 $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
                 $sth->execute();
-                $row['weight'] = intval($sth->fetchColumn()) + 1;
+                $row['weight'] = (int) ($sth->fetchColumn()) + 1;
 
-                $_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', :active, :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )";
+                $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', :active, :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )";
                 $data = [];
                 $data['selectthemes'] = $selectthemes;
                 $data['module'] = $row['module'];
@@ -320,14 +321,16 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 if (!empty($array_funcid_old)) {
                     $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] . ' AND func_id in (' . implode(',', $array_funcid_old) . ')');
                 }
+
+                $func_list = array_map('intval', $func_list);
                 foreach ($array_funcid as $func_id) {
-                    if (!in_array($func_id, $func_list)) {
+                    if (!in_array((int) $func_id, $func_list, true)) {
                         $sth = $db->prepare('SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.func_id=' . $func_id . ' AND t2.theme= :theme AND t2.position= :position');
                         $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
                         $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
                         $sth->execute();
                         $weight = $sth->fetchColumn();
-                        $weight = intval($weight) + 1;
+                        $weight = (int) $weight + 1;
 
                         $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')');
                     }
@@ -386,7 +389,6 @@ $templ_list = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', '/
 $templ_list = preg_replace('/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/', '\\1', $templ_list);
 $tpl->assign('ARRAY_TEMPLATES', $templ_list);
 
-
 $tpl->assign('POSITIONS', $positions);
 $tpl->assign('POSITIONS_NUM', sizeof($positions) - 1);
 $tpl->assign('GROUPS_VIEW', $groups_view);
@@ -421,7 +423,7 @@ $func_list = [];
 if ($row['bid']) {
     $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
     while (list($func_inlist) = $result_func->fetch(3)) {
-        $func_list[] = $func_inlist;
+        $func_list[] = (int) $func_inlist;
     }
 }
 
@@ -432,7 +434,7 @@ while (list($m_title, $m_custom_title) = $result->fetch(3)) {
     if (isset($array_mod_func[$m_title]) and sizeof($array_mod_func[$m_title]) > 0) {
         $i = 0;
         foreach ($array_mod_func[$m_title] as $array_mod_func_i) {
-            if (in_array($array_mod_func_i['id'], $func_list) or $functionid == $array_mod_func_i['id']) {
+            if (in_array((int) $array_mod_func_i['id'], $func_list, true) or $functionid == $array_mod_func_i['id']) {
                 ++$i;
             }
         }

@@ -1,25 +1,26 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 .w70 {
-    width: 70px!important;
+    width: 70px !important;
 }
 
 .mw300 {
-    min-width: 300px!important;
+    min-width: 300px !important;
 }
 
 .mw200 {
-    min-width: 200px!important;
+    min-width: 200px !important;
 }
 
 .mw100 {
-    min-width: 100px!important;
+    min-width: 100px !important;
 }
 
 .noselect {
@@ -32,7 +33,7 @@
 }
 
 .cursor-pointer {
-    cursor: pointer!important;
+    cursor: pointer !important;
 }
 
 /* Row captcha */
@@ -42,17 +43,17 @@
     align-items: center;
 }
 
-.nv-row-captcha>.ipt {
+.nv-row-captcha > .ipt {
     flex: 1;
     margin-right: 20px;
 }
 
-.nv-row-captcha>.img,
-.nv-row-captcha>.rfs {
+.nv-row-captcha > .img,
+.nv-row-captcha > .rfs {
     flex: 0;
 }
 
-.nv-row-captcha>.rfs {
+.nv-row-captcha > .rfs {
     padding-left: 10px;
 }
 
@@ -61,11 +62,11 @@
     justify-content: center;
 }
 
-.nv-row-recaptcha>div {
+.nv-row-recaptcha > div {
     flex: 0;
 }
 
 /* Jquery UI Selectable Fix */
 .ui-selectable-helper {
-    z-index: 100001!important;
+    z-index: 100001 !important;
 }

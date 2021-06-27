@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('nv_lang_setting');
@@ -27,7 +28,7 @@ $is_saved = false;
 if ($nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION) {
     $read_type = $nv_Request->get_int('read_type', 'post', 0);
 
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'");
+    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'");
 
     nv_save_file_config_global();
 
@@ -56,13 +57,13 @@ if (!$is_saved) {
     foreach ($language_array as $key => $value) {
         if (file_exists(NV_ROOTDIR . '/includes/language/' . $key . '/global.php')) {
             $funcs = [];
-            $funcs['read'] = "read&amp;dirlang=" . $key . "&amp;checksess=" . md5("readallfile" . NV_CHECK_SESSION);
-            if (in_array($key, $lang_array_data_exit) and in_array('write', $allow_func)) {
-                $funcs['write'] = "write&amp;dirlang=" . $key . "&amp;checksess=" . md5("writeallfile" . NV_CHECK_SESSION);
+            $funcs['read'] = 'read&amp;dirlang=' . $key . '&amp;checksess=' . md5('readallfile' . NV_CHECK_SESSION);
+            if (in_array($key, $lang_array_data_exit, true) and in_array('write', $allow_func, true)) {
+                $funcs['write'] = 'write&amp;dirlang=' . $key . '&amp;checksess=' . md5('writeallfile' . NV_CHECK_SESSION);
             }
-            $funcs['download'] = "download&amp;dirlang=" . $key . "&amp;checksess=" . md5("downloadallfile" . NV_CHECK_SESSION);
-            if (!empty($funcs) and in_array('delete', $allow_func)) {
-                $funcs['delete'] = "delete&amp;dirlang=" . $key . "&amp;checksess=" . md5("deleteallfile" . NV_CHECK_SESSION);
+            $funcs['download'] = 'download&amp;dirlang=' . $key . '&amp;checksess=' . md5('downloadallfile' . NV_CHECK_SESSION);
+            if (!empty($funcs) and in_array('delete', $allow_func, true)) {
+                $funcs['delete'] = 'delete&amp;dirlang=' . $key . '&amp;checksess=' . md5('deleteallfile' . NV_CHECK_SESSION);
             }
 
             $array[] = [

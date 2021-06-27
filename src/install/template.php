@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:42
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -34,7 +35,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('VERSION', 'v' . $global_config['version']);
 
-    $step_bar = array(
+    $step_bar = [
         $nv_Lang->getModule('select_language'),
         $nv_Lang->getModule('check_chmod'),
         $nv_Lang->getModule('license'),
@@ -43,7 +44,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
         $nv_Lang->getModule('website_info'),
         $nv_Lang->getModule('sample_data'),
         $nv_Lang->getModule('done')
-    );
+    ];
 
     foreach ($step_bar as $i => $step_bar_i) {
         $n = $i + 1;
@@ -53,10 +54,10 @@ function nv_site_theme($step, $titletheme, $contenttheme)
             continue;
         }
         if ($step >= $n) {
-            $class = " class=\"";
+            $class = ' class="';
             $class .= ($step > $n) ? 'passed_step' : '';
             $class .= ($step == $n) ? 'current_step' : '';
-            $class .= "\"";
+            $class .= '"';
         }
 
         $xtpl->assign('CLASS_STEP', $class);
@@ -98,7 +99,7 @@ function nv_step_1()
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
 
     foreach ($languageslist as $languageslist_i) {
-        if (! empty($languageslist_i)) {
+        if (!empty($languageslist_i)) {
             $langname = (isset($language_array[$languageslist_i]['name_' . NV_LANG_DATA])) ? $language_array[$languageslist_i]['name_' . NV_LANG_DATA] : $language_array[$languageslist_i]['name'];
 
             $xtpl->assign('LANGTYPE', $languageslist_i);
@@ -121,6 +122,7 @@ function nv_step_1()
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -153,21 +155,20 @@ function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
 
     $a = 0;
     foreach ($array_dir_check as $dir => $check) {
-        $class = ($a % 2 == 0) ? "spec text_normal" : "specalt text_normal";
+        $class = ($a % 2 == 0) ? 'spec text_normal' : 'specalt text_normal';
 
-        $xtpl->assign('DATAFILE', array(
+        $xtpl->assign('DATAFILE', [
             'dir' => $dir,
             'check' => $check,
             'classcheck' => ($check == $nv_Lang->getModule('dir_writable')) ? 'highlight_green' : 'highlight_red',
             'class' => $class
-
-        ));
+        ]);
 
         $xtpl->parse('step.loopdir');
         ++$a;
     }
 
-    if (! (strpos($sys_info['os'], 'WIN') === false)) {
+    if (!(strpos($sys_info['os'], 'WIN') === false)) {
         if ($nextstep) {
             $xtpl->parse('step.winhost.infonext');
         } else {
@@ -177,6 +178,7 @@ function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -226,6 +228,7 @@ function nv_step_4($array_resquest, $array_support, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -248,7 +251,7 @@ function nv_step_5($db_config, $nextstep)
     $xtpl->assign('DATADASE', $db_config);
     $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
 
-    $lang_pdo = array();
+    $lang_pdo = [];
     $lang_pdo['pdo_cubrid'] = 'Cubrid';
     $lang_pdo['pdo_dblib'] = 'FreeTDS / Microsoft SQL Server / Sybase';
     $lang_pdo['pdo_firebird'] = 'Firebird';
@@ -263,7 +266,7 @@ function nv_step_5($db_config, $nextstep)
     $lang_pdo['pdo_4d'] = '4D';
 
     foreach ($PDODrivers as $value) {
-        $array_dbtype = array();
+        $array_dbtype = [];
         $array_dbtype['value'] = $value;
         $array_dbtype['selected'] = ($db_config['dbtype'] == $value) ? ' selected="selected"' : '';
         $array_dbtype['text'] = (isset($lang_pdo['pdo_' . $value])) ? $lang_pdo['pdo_' . $value] : $value;
@@ -276,7 +279,7 @@ function nv_step_5($db_config, $nextstep)
         $xtpl->parse('step.db_detete');
     }
 
-    if (! empty($db_config['error'])) {
+    if (!empty($db_config['error'])) {
         $xtpl->parse('step.errordata');
     }
 
@@ -285,6 +288,7 @@ function nv_step_5($db_config, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -308,7 +312,7 @@ function nv_step_6($array_data, $nextstep)
     $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
     $xtpl->assign('CHECK_LANG_MULTI', ($array_data['lang_multi']) ? ' checked="checked"' : '');
 
-    if (! empty($array_data['error'])) {
+    if (!empty($array_data['error'])) {
         $xtpl->parse('step.errordata');
     }
 
@@ -317,6 +321,7 @@ function nv_step_6($array_data, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -344,11 +349,11 @@ function nv_step_7($array_data, $nextstep)
         require NV_ROOTDIR . '/install/samples/' . $data;
         unset($sql_create_table);
         $data = substr(substr($data, 0, -4), 5);
-        $row = array(
+        $row = [
             'url' => $sample_base_siteurl,
             'compatible' => $sample_base_siteurl == NV_BASE_SITEURL ? true : false,
             'title' => $data
-        );
+        ];
         $xtpl->assign('ROW', $row);
         $xtpl->assign('ROWKEY', $key);
 
@@ -370,6 +375,7 @@ function nv_step_7($array_data, $nextstep)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }
 
@@ -397,5 +403,6 @@ function nv_step_8($finish)
     }
 
     $xtpl->parse('step');
+
     return $xtpl->text('step');
 }

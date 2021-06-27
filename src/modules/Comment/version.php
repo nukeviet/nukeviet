@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$module_version = array(
+$module_version = [
     'name' => 'Comment',
     'modfuncs' => '',
     'submenu' => '',
@@ -21,6 +22,6 @@ $module_version = array(
     'version' => '4.3.02',
     'date' => 'Wednesday, May 2, 2018 4:00:00 PM GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
-    'uploads_dir' => array($module_upload),
+    'uploads_dir' => [$module_upload],
     'note' => ''
-);
+];

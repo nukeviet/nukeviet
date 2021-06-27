@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
+    exit('Stop!!!');
 }
 
 class nv_menu
@@ -24,7 +25,6 @@ class nv_menu
      * @param mixed $module_data
      * @param mixed $module_name
      * @param mixed $admin_info
-     * @return void
      */
     public function __construct($module_data, $module_name, $admin_info)
     {
@@ -40,7 +40,7 @@ class nv_menu
      * @param mixed $parentid
      * @return
      */
-    function delRow($id, $parentid)
+    public function delRow($id, $parentid)
     {
         global $db, $admin_info;
 
@@ -57,8 +57,8 @@ class nv_menu
             if ($parentid > 0) {
                 $sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $this->module_data . '_rows WHERE id=' . $parentid;
                 $subitem = $db->query($sql)->fetch();
-                if (! empty($subitem)) {
-                    $subitem = implode(',', array_diff(array_filter(array_unique(explode(',', $subitem['subitem']))), array( $id )));
+                if (!empty($subitem)) {
+                    $subitem = implode(',', array_diff(array_filter(array_unique(explode(',', $subitem['subitem']))), [$id]));
 
                     $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $this->module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid);
                     $stmt->bindParam(':subitem', $subitem, PDO::PARAM_STR, strlen($subitem));
@@ -66,7 +66,7 @@ class nv_menu
                 }
             }
 
-            $subitem = (! empty($row['subitem'])) ? explode(',', $row['subitem']) : array();
+            $subitem = (!empty($row['subitem'])) ? explode(',', $row['subitem']) : [];
             foreach ($subitem as $id) {
                 $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $this->module_data . '_rows WHERE id=' . $id;
 
@@ -75,6 +75,7 @@ class nv_menu
                 nv_insert_logs(NV_LANG_DATA, $this->module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
             }
         }
+
         return true;
     }
 
@@ -82,19 +83,19 @@ class nv_menu
      * nv_menu::fixMenuOrder()
      *
      * @param mixed $mid
-     * @param integer $parentid
-     * @param integer $order
-     * @param integer $lev
+     * @param int   $parentid
+     * @param int   $order
+     * @param int   $lev
      * @return
      */
-    function fixMenuOrder($mid, $parentid = 0, $order = 0, $lev = 0)
+    public function fixMenuOrder($mid, $parentid = 0, $order = 0, $lev = 0)
     {
         global $db;
 
         $sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $this->module_data . '_rows WHERE parentid=' . $parentid . ' AND mid= ' . $mid . ' ORDER BY weight ASC';
         $result = $db->query($sql);
 
-        $array_cat_order = array();
+        $array_cat_order = [];
         while ($row = $result->fetch()) {
             $array_cat_order[] = $row['id'];
         }
@@ -110,7 +111,7 @@ class nv_menu
         foreach ($array_cat_order as $catid_i) {
             ++$order;
             ++$weight;
-            $sql = "UPDATE " . NV_PREFIXLANG . "_" . $this->module_data . "_rows SET weight=" . $weight . ", sort=" . $order . ", lev='" . $lev . "' WHERE id=" . intval($catid_i);
+            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $this->module_data . '_rows SET weight=' . $weight . ', sort=' . $order . ", lev='" . $lev . "' WHERE id=" . (int) $catid_i;
             $db->query($sql);
             $order = $this->fixMenuOrder($mid, $catid_i, $order, $lev);
         }

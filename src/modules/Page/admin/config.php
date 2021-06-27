@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('config');
 
-$array_config = array();
+$array_config = [];
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['viewtype'] = $nv_Request->get_int('viewtype', 'post', 0);
@@ -46,7 +47,7 @@ $array_config['alias_lower'] = 1;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query($sql);
-while (list ($c_config_name, $c_config_value) = $result->fetch(3)) {
+while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;
 }
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -57,34 +58,34 @@ $xtpl->assign('NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' :
 $xtpl->assign('COPY_PAGE', $array_config['copy_page'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $array_config['alias_lower'] ? ' checked="checked"' : '');
 
-$view_array = array(
+$view_array = [
     $nv_Lang->getModule('config_view_type_0'),
     $nv_Lang->getModule('config_view_type_1'),
     $nv_Lang->getModule('config_view_type_2')
-);
+];
 foreach ($view_array as $key => $title) {
-    $xtpl->assign('VIEWTYPE', array(
+    $xtpl->assign('VIEWTYPE', [
         'id' => $key,
         'title' => $title,
         'selected' => $array_config['viewtype'] == $key ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.loop');
 }
 for ($i = 5; $i <= 30; ++$i) {
-    $xtpl->assign('PER_PAGE', array(
+    $xtpl->assign('PER_PAGE', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $array_config['per_page'] ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.per_page');
 }
 
 for ($i = 0; $i <= 30; ++$i) {
-    $xtpl->assign('RELATED_ARTICLES', array(
+    $xtpl->assign('RELATED_ARTICLES', [
         'key' => $i,
         'title' => $i,
         'selected' => $i == $array_config['related_articles'] ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.related_articles');
 }
 $xtpl->parse('main');

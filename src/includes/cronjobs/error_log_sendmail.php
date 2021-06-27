@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 4/13/2010 2:24
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -23,7 +24,7 @@ function cron_auto_sendmail_error_log()
 
     $result = true;
 
-    $error_log_fileext = preg_match("/[a-z]+/i", NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';
+    $error_log_fileext = preg_match('/[a-z]+/i', NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';
     $file = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/sendmail.' . $error_log_fileext;
 
     if (file_exists($file) and filesize($file) > 0) {

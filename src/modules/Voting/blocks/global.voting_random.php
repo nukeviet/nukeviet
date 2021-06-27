@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_voting')) {
@@ -36,8 +37,8 @@ if (!nv_function_exists('nv_block_voting')) {
             return '';
         }
 
-        $allowed = array();
-        $is_update = array();
+        $allowed = [];
+        $is_update = [];
 
         $a = 0;
         foreach ($list as $row) {
@@ -82,22 +83,22 @@ if (!nv_function_exists('nv_block_voting')) {
             }
 
             if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/Voting.js')) {
-                $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/js/Voting.js\"></script>\n";
+                $my_footer .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'themes/' . $block_theme . "/js/Voting.js\"></script>\n";
             }
 
             $action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
 
-            $voting_array = array(
+            $voting_array = [
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
-                'accept' => (int)$current_voting['acceptcm'],
-                'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
-                'errsm' => (int)$current_voting['acceptcm'] > 1 ? sprintf($nv_Lang->getModule('voting_warning_all'), (int)$current_voting['acceptcm']) : $nv_Lang->getModule('voting_warning_accept1'),
+                'accept' => (int) $current_voting['acceptcm'],
+                'active_captcha' => ((int) $current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
+                'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($nv_Lang->getModule('voting_warning_all'), (int) $current_voting['acceptcm']) : $nv_Lang->getModule('voting_warning_accept1'),
                 'vid' => $current_voting['vid'],
                 'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
                 'action' => $action,
                 'langresult' => $nv_Lang->getModule('voting_result'),
                 'langsubmit' => $nv_Lang->getModule('voting_hits')
-            );
+            ];
 
             $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
             $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -108,7 +109,7 @@ if (!nv_function_exists('nv_block_voting')) {
                     $row['title'] = '<a target="_blank" href="' . $row['url'] . '">' . $row['title'] . '</a>';
                 }
                 $xtpl->assign('RESULT', $row);
-                if ((int)$current_voting['acceptcm'] > 1) {
+                if ((int) $current_voting['acceptcm'] > 1) {
                     $xtpl->parse('main.resultn');
                 } else {
                     $xtpl->parse('main.result1');

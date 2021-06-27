@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jun 20, 2010 8:59:32 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Module\Page\Api;
@@ -16,7 +17,7 @@ use NukeViet\Api\IApi;
 use PDO;
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 class CreatArticle implements IApi
@@ -75,7 +76,7 @@ class CreatArticle implements IApi
         $row['description'] = $nv_Request->get_textarea('description', '', 'br', 1);
         $row['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
         $row['keywords'] = nv_strtolower($nv_Request->get_title('keywords', 'post', '', 0));
-        $row['socialbutton'] = intval($nv_Request->get_bool('socialbutton', 'post', false));
+        $row['socialbutton'] = (int) ($nv_Request->get_bool('socialbutton', 'post', false));
 
         $row['alias'] = empty($row['alias']) ? change_alias($row['title']) : change_alias($row['alias']);
         $row['alias'] = $page_config['alias_lower'] ? strtolower($row['alias']) : $row['alias'];
@@ -91,24 +92,24 @@ class CreatArticle implements IApi
 
             if ($stmt->fetchColumn()) {
                 $weight = $db->query('SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = (int) $weight + 1;
                 $row['alias'] = $row['alias'] . '-' . $weight;
             }
 
             if ($page_config['news_first']) {
                 $weight = 1;
             } else {
-                $weight = $db->query("SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data)->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data)->fetchColumn();
+                $weight = (int) $weight + 1;
             }
 
-            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (
+            $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . " (
                 title, alias, image, imagealt, imageposition, description, bodytext, keywords, socialbutton, activecomm,
                 layout_func, gid, weight,admin_id, add_time, edit_time, status, hot_post
             ) VALUES (
                 :title, :alias, '', '', 0, :description, :bodytext, :keywords, :socialbutton, '',
-                '', 0, " . $weight . ", " . $admin_id . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1, 0
-            )";
+                '', 0, " . $weight . ', ' . $admin_id . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1, 0
+            )';
             $sth = $db->prepare($sql);
             $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
             $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);

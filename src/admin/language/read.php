@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -38,7 +39,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
     } elseif ($module == 'install' and $admin_file == 0) {
         // Lang cài đặt ngoài site
         $include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
-    } elseif (in_array($module, $modules_exit) and $admin_file == 0) {
+    } elseif (in_array($module, $modules_exit, true) and $admin_file == 0) {
         // Lang các module
         $include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
     } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php')) {
@@ -48,9 +49,9 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
     }
 
     if ($include_lang != '' and file_exists($include_lang)) {
-        $lang_module = array();
-        $lang_global = array();
-        $lang_translator = array();
+        $lang_module = [];
+        $lang_global = [];
+        $lang_translator = [];
 
         include $include_lang;
 
@@ -58,20 +59,20 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         $sth->bindParam(':module', $module, PDO::PARAM_STR);
         $sth->bindParam(':admin_file', $admin_file, PDO::PARAM_STR);
         $sth->execute();
-        list ($idfile, $langtype) = $sth->fetch(3);
+        list($idfile, $langtype) = $sth->fetch(3);
 
         if (empty($idfile)) {
             // Tạo file mới trong CSDL
             $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_theme';
 
-            $lang_translator_save = array();
+            $lang_translator_save = [];
             $lang_translator_save['author'] = isset($lang_translator['author']) ? trim($lang_translator['author']) : 'VINADES.,JSC <contact@vinades.vn>';
             $lang_translator_save['createdate'] = isset($lang_translator['createdate']) ? trim($lang_translator['createdate']) : date('d/m/Y, H:i');
             $lang_translator_save['copyright'] = isset($lang_translator['copyright']) ? trim($lang_translator['copyright']) : 'Copyright (C) ' . date('Y') . ' VINADES.,JSC. All rights reserved';
             $lang_translator_save['info'] = isset($lang_translator['info']) ? trim($lang_translator['info']) : '';
             $lang_translator_save['langtype'] = $langtype;
 
-            $data = array();
+            $data = [];
             $data['module'] = $module;
             $data['admin_file'] = $admin_file;
             $data['langtype'] = $langtype;
@@ -82,7 +83,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             }
         } else {
             // Cập nhật lại tác giả cho các file đã có trong CSDL
-            $lang_translator_save = array();
+            $lang_translator_save = [];
 
             $langtype = isset($lang_translator['langtype']) ? trim($lang_translator['langtype']) : 'lang_theme';
 
@@ -125,7 +126,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             $string_lang_value = ", '" . $string_lang_value . "'";
         }
 
-        $read_type = intval($global_config['read_type']);
+        $read_type = (int) $global_config['read_type'];
 
         $sth_is = $db->prepare('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (
             idfile, langtype, lang_key, lang_' . $dirlang . ', update_' . $dirlang . '
@@ -173,17 +174,17 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
         }
 
         return '';
-    } else {
-        $include_lang = '';
-        return $nv_Lang->getModule('nv_error_exit_module') . ' : ' . $module;
     }
+    $include_lang = '';
+
+    return $nv_Lang->getModule('nv_error_exit_module') . ' : ' . $module;
 }
 
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
 $page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv_admin_read');
 
-if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_SESSION) and preg_match("/^([a-z]{2})$/", $dirlang) and is_dir(NV_ROOTDIR . '/includes/language/' . $dirlang)) {
-    $array_filename = array();
+if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_SESSION) and preg_match('/^([a-z]{2})$/', $dirlang) and is_dir(NV_ROOTDIR . '/includes/language/' . $dirlang)) {
+    $array_filename = [];
 
     nv_admin_add_field_lang($dirlang);
     // Đọc ngôn ngữ global ngoài site

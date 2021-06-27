@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 04 May 2014 12:41:32 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_language')) {
+if (!nv_function_exists('nv_block_language')) {
     function nv_block_language($block_config)
     {
         global $global_config, $language_array, $nv_Lang;
@@ -47,6 +48,7 @@ if (! nv_function_exists('nv_block_language')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

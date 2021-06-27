@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 23/8/2010, 0:13
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -20,8 +21,8 @@ if (! defined('NV_MAINFILE')) {
  */
 function utf8_to_unicode($str)
 {
-    $unicode = array();
-    $values = array();
+    $unicode = [];
+    $values = [];
     $lookingFor = 1;
     $strlen = strlen($str);
 
@@ -41,7 +42,7 @@ function utf8_to_unicode($str)
                 $number = ($lookingFor == 3) ? (($values[0] % 16) * 4096) + (($values[1] % 64) * 64) + ($values[2] % 64) : (($values[0] % 32) * 64) + ($values[1] % 64);
 
                 $unicode[] = $number;
-                $values = array();
+                $values = [];
                 $lookingFor = 1;
             }
         }
@@ -63,6 +64,7 @@ function unicode_to_entities($unicode)
     foreach ($unicode as $value) {
         $entities .= '&#' . $value . ';';
     }
+
     return $entities;
 }
 
@@ -79,6 +81,7 @@ function unicode_to_entities_preserving_ascii($unicode)
     foreach ($unicode as $value) {
         $entities .= ($value > 127) ? '&#' . $value . ';' : chr($value);
     }
+
     return $entities;
 }
 
@@ -113,21 +116,22 @@ function unicode_to_utf8($str)
  * nv_str_split()
  *
  * @param mixed $str
- * @param integer $split_len
+ * @param int   $split_len
  * @return
  */
 function nv_str_split($str, $split_len = 1)
 {
-    if (! is_int($split_len) or $split_len < 1) {
+    if (!is_int($split_len) or $split_len < 1) {
         return false;
     }
 
     $len = nv_strlen($str);
     if ($len <= $split_len) {
-        return array( $str );
+        return [$str];
     }
 
     preg_match_all('/.{' . $split_len . '}|[^\x00]{1,' . $split_len . '}$/us', $str, $ar);
+
     return $ar[0];
 }
 
@@ -167,13 +171,12 @@ function nv_ucfirst($str)
         case 0:
             return '';
             break;
-
         case 1:
             return nv_strtoupper($str);
             break;
-
         default:
             preg_match('/^(.{1})(.*)$/us', $str, $matches);
+
             return nv_strtoupper($matches[1]) . $matches[2];
             break;
     }
@@ -183,7 +186,7 @@ function nv_ucfirst($str)
  * nv_ltrim()
  *
  * @param mixed $str
- * @param bool $charlist
+ * @param bool  $charlist
  * @return
  */
 function nv_ltrim($str, $charlist = false)
@@ -201,7 +204,7 @@ function nv_ltrim($str, $charlist = false)
  * nv_rtrim()
  *
  * @param mixed $str
- * @param bool $charlist
+ * @param bool  $charlist
  * @return
  */
 function nv_rtrim($str, $charlist = false)
@@ -219,7 +222,7 @@ function nv_rtrim($str, $charlist = false)
  * nv_trim()
  *
  * @param mixed $str
- * @param bool $charlist
+ * @param bool  $charlist
  * @return
  */
 function nv_trim($str, $charlist = false)
@@ -240,11 +243,12 @@ function nv_trim($str, $charlist = false)
 function nv_EncString($string)
 {
     if (file_exists(NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php')) {
-        include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ;
+        include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php';
         $string = strtr($string, $utf8_lookup_lang);
     }
 
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
+
     return strtr($string, $utf8_lookup['romanize']);
 }
 
@@ -256,9 +260,9 @@ function nv_EncString($string)
 function change_alias($alias)
 {
     $alias = preg_replace('/[\x{0300}\x{0301}\x{0303}\x{0309}\x{0323}]/u', '', $alias); // fix unicode consortium for Vietnamese
-    $search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
-    $alias = preg_replace(array( '/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/' ), array( ' ', '-', '', '' ), str_replace($search, ' ', nv_EncString($alias)));
-    return $alias;
+    $search = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
+
+    return preg_replace(['/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/'], [' ', '-', '', ''], str_replace($search, ' ', nv_EncString($alias)));
 }
 
 /**
@@ -270,14 +274,14 @@ function change_alias_tags($alias)
 {
     // Pho phép dấu .
     $search = ['&lt;lt;', '&gt;gt;', '&#039;', '&quot;', '&lt;', '&gt;', '!', '*', '\'', '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '#', '[', ']', '"', '%', '-', '_', '<', '>', '\\', '^', '`', '{', '|', '}', '~'];
-    $alias = preg_replace(['/[ ]+/u', '/^[\-]+/u', '/[\-]+$/u'], ['-', '', ''], str_replace($search, ' ', $alias));
-    return $alias;
+
+    return preg_replace(['/[ ]+/u', '/^[\-]+/u', '/[\-]+$/u'], ['-', '', ''], str_replace($search, ' ', $alias));
 }
 
 /**
  * @param string $string
- * @param integer $num
- * @param boolean $specialchars
+ * @param int    $num
+ * @param bool   $specialchars
  * @return string
  */
 function nv_clean60($string, $num = 60, $specialchars = true)

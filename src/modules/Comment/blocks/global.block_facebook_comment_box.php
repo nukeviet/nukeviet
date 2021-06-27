@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sat, 08 Feb 2014 06:33:39 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
@@ -51,6 +52,7 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
         $html .= ' <\select>';
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -64,9 +66,9 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
     function nv_block_config_facebook_comment_box_blocks_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['facebookappid'] = $nv_Request->get_title('config_facebookappid', 'post', 0);
         $return['config']['width'] = $nv_Request->get_string('config_width', 'post', 0);
         $return['config']['numpost'] = $nv_Request->get_int('config_numpost', 'post', 0);
@@ -89,13 +91,13 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
             $lang = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
             $facebookappid = (isset($module_config[$module_name]['facebookappid'])) ? $module_config[$module_name]['facebookappid'] : $block_config['facebookappid'];
 
-            $content .= "<div id=\"fb-root\"></div>
-			<script type=\"text/javascript\">
+            $content .= '<div id="fb-root"></div>
+			<script type="text/javascript">
 			 (function(d, s, id) {
 			 var js, fjs = d.getElementsByTagName(s)[0];
 			 if (d.getElementById(id)) return;
 			 js = d.createElement(s); js.id = id;
-			 js.src = \"//connect.facebook.net/" . $lang . "/all.js#xfbml=1&appId=" . $facebookappid . "\";
+			 js.src = "//connect.facebook.net/' . $lang . '/all.js#xfbml=1&appId=' . $facebookappid . "\";
 			 fjs.parentNode.insertBefore(js, fjs);
 			 }(document, 'script', 'facebook-jssdk'));
 			</script>";

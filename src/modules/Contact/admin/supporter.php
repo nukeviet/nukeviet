@@ -1,14 +1,17 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Jan 2017 01:38:09 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
-if (! defined('NV_IS_FILE_ADMIN'))
-    die('Stop!!!');
+
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
+}
 
 // change status
 if ($nv_Request->isset_request('change_status', 'post, get')) {
@@ -19,7 +22,7 @@ if ($nv_Request->isset_request('change_status', 'post, get')) {
     $row = $db->query($query)->fetch();
     if (isset($row['act'])) {
         $act = ($row['act']) ? 0 : 1;
-        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET act=' . intval($act) . ' WHERE id=' . $id;
+        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET act=' . (int) $act . ' WHERE id=' . $id;
         $db->query($query);
         $content = 'OK_' . $id;
     }
@@ -40,13 +43,14 @@ if ($nv_Request->isset_request('ajax_action', 'post')) {
         $result = $db->query($sql);
         $weight = 0;
         while ($row = $result->fetch()) {
-            ++ $weight;
-            if ($weight == $new_vid)
-                ++ $weight;
+            ++$weight;
+            if ($weight == $new_vid) {
+                ++$weight;
+            }
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . $row['id'] . ' AND departmentid=' . $departmentid;
             $db->query($sql);
         }
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $new_vid . ' WHERE id=' . $id  . ' AND departmentid=' . $departmentid;
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $new_vid . ' WHERE id=' . $id . ' AND departmentid=' . $departmentid;
         $db->query($sql);
         $content = 'OK_' . $id;
     }
@@ -65,15 +69,15 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
         $weight = 0;
         $sql = 'SELECT weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE id =' . $db->quote($id) . ' AND departmentid=' . $departmentid;
         $result = $db->query($sql);
-        list ($weight) = $result->fetch(3);
+        list($weight) = $result->fetch(3);
 
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter  WHERE id = ' . $db->quote($id));
         if ($weight > 0) {
             $sql = 'SELECT id, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_supporter WHERE weight >' . $weight . ' AND departmentid=' . $departmentid;
             $result = $db->query($sql);
-            while (list ($id, $weight) = $result->fetch(3)) {
-                $weight --;
-                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . intval($id)) . ' AND departmentid=' . $departmentid;
+            while (list($id, $weight) = $result->fetch(3)) {
+                --$weight;
+                $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_supporter SET weight=' . $weight . ' WHERE id=' . (int) $id) . ' AND departmentid=' . $departmentid;
             }
         }
         $nv_Cache->delMod($module_name);
@@ -81,16 +85,16 @@ if ($nv_Request->isset_request('delete_id', 'get') and $nv_Request->isset_reques
     }
 }
 
-$array_data = array();
-$error = array();
+$array_data = [];
+$error = [];
 
 $sql = 'SELECT id, full_name FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';
 $array_department = $nv_Cache->db($sql, 'id', $module_name);
 
-if (! empty($array_department)) {
+if (!empty($array_department)) {
     $departmentid = $nv_Request->get_int('departmentid', 'get', 0);
 
-    if(empty($departmentid)){
+    if (empty($departmentid)) {
         $departmentid = array_keys($array_department)[0];
     }
 
@@ -130,19 +134,19 @@ $xtpl->assign('URL_ADD_SUPPORTER', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VAR
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
-if (! empty($generate_page)) {
+if (!empty($generate_page)) {
     $xtpl->assign('NV_GENERATE_PAGE', $generate_page);
     $xtpl->parse('main.generate_page');
 }
 $number = $page > 1 ? ($per_page * ($page - 1)) + 1 : 1;
-if (! empty($array_data)) {
+if (!empty($array_data)) {
     foreach ($array_data as $view) {
-        for ($i = 1; $i <= $num_items; ++ $i) {
-            $xtpl->assign('WEIGHT', array(
+        for ($i = 1; $i <= $num_items; ++$i) {
+            $xtpl->assign('WEIGHT', [
                 'key' => $i,
                 'title' => $i,
                 'selected' => ($i == $view['weight']) ? ' selected="selected"' : ''
-            ));
+            ]);
             $xtpl->parse('main.loop.weight_loop');
         }
         $xtpl->assign('CHECK', $view['act'] == 1 ? 'checked' : '');
@@ -153,7 +157,7 @@ if (! empty($array_data)) {
     }
 }
 
-if (! empty($array_department)) {
+if (!empty($array_department)) {
     foreach ($array_department as $department) {
         $department['selected'] = $department['id'] == $departmentid ? 'selected="selected"' : '';
         $xtpl->assign('DEPARTMENT', $department);

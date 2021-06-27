@@ -1,21 +1,21 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-function nv_validReset(a)
-{
-    $(".has-error",a).removeClass("has-error");
-    $("[data-mess]",a).tooltip("destroy");
+function nv_validReset(a) {
+    $(".has-error", a).removeClass("has-error");
+    $("[data-mess]", a).tooltip("destroy");
     $(a)[0].reset();
 }
 
 function nv_validErrorShow(a) {
     $(a).parent().parent().addClass("has-error");
-    $("[data-mess]",$(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
+    $("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
     $(a).tooltip({
         title: function() {
             return $(a).attr("data-current-mess")
@@ -23,6 +23,7 @@ function nv_validErrorShow(a) {
     });
     $(a).focus().tooltip("show")
 }
+
 function nv_validErrorHidden(a) {
     $(a).parent().parent().removeClass("has-error")
 }
@@ -51,7 +52,7 @@ function nv_validForm(a) {
         data: $(a).serialize(),
         dataType: "json",
         success: function(b) {
-          change_captcha('.fcode');
+            change_captcha('.fcode');
             "error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
                 $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                 nv_validErrorShow(this)
@@ -93,7 +94,7 @@ $(function() {
             return b.is(".ld") ? (b.addClass("fs").hide(), c.fadeIn(), !1) : ($.ajax({
                 type: "POST",
                 cache: !1,
-                url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b.attr( "data-module" ),
+                url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b.attr("data-module"),
                 data: "loadForm=1&checkss=" + e.data("cs"),
                 dataType: "html",
                 success: function(a) {
