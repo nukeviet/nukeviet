@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_message_page')) {
-
     /**
      * nv_block_config_about()
      *
@@ -45,13 +45,14 @@ if (!nv_function_exists('nv_message_page')) {
         $html .= '	<div class="col-sm-9"><select class="form-control" name="config_rowid"><option value="0">---' . $nv_Lang->getModule('rowid_select') . '---</option>';
 
         $result = $db->query('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . ' WHERE status=1');
-        while (list ($id, $title) = $result->fetch(3)) {
+        while (list($id, $title) = $result->fetch(3)) {
             $sl = $id == $data_block['rowid'] ? 'selected="selected"' : '';
             $html .= '<option value="' . $id . '" ' . $sl . '>' . $title . '</option>';
         }
 
         $html .= '  </select><span class="help-block">' . $nv_Lang->getModule('rowid_note') . '</span></div>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -65,13 +66,14 @@ if (!nv_function_exists('nv_message_page')) {
     function nv_block_config_about_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 0);
         $return['config']['bodytext_length'] = $nv_Request->get_int('config_bodytext_length', 'post', 300);
         $return['config']['rowid'] = $nv_Request->get_int('config_rowid', 'post', 0);
         $return['config']['show_image'] = $nv_Request->get_int('config_show_image', 'post', 0);
+
         return $return;
     }
 
@@ -162,6 +164,7 @@ if (!nv_function_exists('nv_message_page')) {
             }
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
 

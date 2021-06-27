@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 21:7
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_BANNERS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $module_info['site_title'];
@@ -28,10 +29,10 @@ $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 $xtpl->assign('MANAGEMENT', $manament);
 $xtpl->parse('main.management');
 
-$array = array();
+$array = [];
 
 if ($nv_Request->isset_request('confirm', 'post')) {
-    $error = array();
+    $error = [];
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
     $array['blockid'] = $nv_Request->get_title('block', 'post', '', 1);
     $array['description'] = $nv_Request->get_title('description', 'post', '', 1);
@@ -99,14 +100,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $endtime = $begintime + $global_array_uplans[$array['blockid']]['exp_time'];
         }
 
-        $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
+        $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
             title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
-            :title, " . $array['blockid'] . ", " . $user_info['userid'] . ", :file_name, :file_ext, :file_mime, " . $width . ", " . $height . ", :description, '',
-            :url, " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, 0
-        )";
+            :title, ' . $array['blockid'] . ', ' . $user_info['userid'] . ', :file_name, :file_ext, :file_mime, ' . $width . ', ' . $height . ", :description, '',
+            :url, " . NV_CURRENTTIME . ', ' . $begintime . ', ' . $endtime . ', 0, 4, 0
+        )';
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['title'] = $array['title'];
         $data_insert['file_name'] = $file_name;
         $data_insert['file_ext'] = $file_ext;
@@ -128,7 +129,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $array['url'] = '';
 }
 
-$result = $db->query("SELECT id,title, blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC");
+$result = $db->query('SELECT id,title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC');
 
 foreach ($global_array_uplans as $row) {
     $row['title'] .= ' (' . (empty($row['blang']) ? $nv_Lang->getModule('addads_block_lang_all') : $lang_array[$row['blang']]) . ')';

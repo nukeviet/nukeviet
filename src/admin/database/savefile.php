@@ -1,28 +1,29 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:49
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_DATABASE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$tables = $nv_Request->get_array('tables', 'post', array());
+$tables = $nv_Request->get_array('tables', 'post', []);
 $type = $nv_Request->get_title('type', 'post', '');
 $ext = $nv_Request->get_title('ext', 'post', '');
 
 if (empty($tables)) {
-    $tables = array();
+    $tables = [];
 } elseif (!is_array($tables)) {
-    $tables = array( $tables );
+    $tables = [$tables];
 }
 
-$tab_list = array();
+$tab_list = [];
 
 $result = $db->query("SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'");
 while ($item = $result->fetch(3)) {
@@ -30,7 +31,7 @@ while ($item = $result->fetch(3)) {
 }
 $result->closeCursor();
 
-$contents = array();
+$contents = [];
 $contents['tables'] = (empty($tables)) ? $tab_list : array_values(array_intersect($tab_list, $tables));
 $contents['type'] = ($type != 'str') ? 'all' : 'str';
 $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
@@ -44,7 +45,7 @@ if ($global_config['idsite']) {
 }
 $contents['filename'] = $log_dir . '/' . $file_name;
 
-include NV_ROOTDIR . '/includes/core/dump.php' ;
+include NV_ROOTDIR . '/includes/core/dump.php';
 $result = nv_dump_save($contents);
 
 $tpl = new \NukeViet\Template\Smarty();

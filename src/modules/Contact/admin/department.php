@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 22, 2010 3:00:20 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -22,33 +23,33 @@ $array_department = $db->query($sql)->fetchAll();
 $count_department = sizeof($array_department);
 foreach ($array_department as $row) {
     ++$a;
-    $xtpl->assign('ROW', array(
+    $xtpl->assign('ROW', [
         'full_name' => $row['full_name'],
         'email' => $row['email'],
-        'phone' => preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", "", $row['phone']),
+        'phone' => preg_replace("/(\[|&#91;)[^\]]*(&#93;|\])$/", '', $row['phone']),
         'fax' => $row['fax'],
         'id' => $row['id'],
         'url_department' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '/0',
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['id']
-    ));
+    ]);
 
-    for ($i = 1; $i <= $count_department; $i++) {
-        $opt = array(
+    for ($i = 1; $i <= $count_department; ++$i) {
+        $opt = [
             'value' => $i,
-            'selected' => $i == $row['weight'] ? " selected=\"selected\"" : ""
-        );
+            'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
+        ];
         $xtpl->assign('WEIGHT', $opt);
         $xtpl->parse('main.row.option');
     }
 
-    $array = array( $nv_Lang->getGlobal('disable'), $nv_Lang->getGlobal('active'), $nv_Lang->getModule('department_no_home') );
+    $array = [$nv_Lang->getGlobal('disable'), $nv_Lang->getGlobal('active'), $nv_Lang->getModule('department_no_home')];
 
     foreach ($array as $key => $val) {
-        $xtpl->assign('STATUS', array(
+        $xtpl->assign('STATUS', [
             'key' => $key,
             'selected' => $key == $row['act'] ? ' selected="selected"' : '',
             'title' => $val
-        ));
+        ]);
 
         $xtpl->parse('main.row.status');
     }

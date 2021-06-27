@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/9/2010, 3:21
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Cache;
@@ -14,7 +15,7 @@ use Redis;
 
 /**
  * CRedis
- * 
+ *
  * @package NukeViet Cache
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2016 VINADES.,JSC. All rights reserved
@@ -23,7 +24,6 @@ use Redis;
  */
 class CRedis
 {
-
     private $_Lang = 'vi';
 
     private $_Cache_Prefix = '';
@@ -34,7 +34,7 @@ class CRedis
 
     /**
      * CRedis::__construct()
-     * 
+     *
      * @param mixed $Host
      * @param mixed $Port
      * @param mixed $Timeout
@@ -42,7 +42,6 @@ class CRedis
      * @param mixed $DBnumber
      * @param mixed $Lang
      * @param mixed $Cache_Prefix
-     * @return void
      */
     public function __construct($Host, $Port, $Timeout, $Password, $DBnumber, $Lang, $Cache_Prefix)
     {
@@ -50,7 +49,7 @@ class CRedis
         $this->_Cache_Prefix = $Cache_Prefix;
 
         $redis = new Redis();
-        
+
         $connected = false;
         if ($redis->pconnect($Host, $Port, $Timeout) === true) {
             $connected = true;
@@ -60,34 +59,32 @@ class CRedis
         if ($connected !== true) {
             trigger_error('Can not connect to Redis server!', 256);
         }
-        
+
         if (!empty($Password) and $redis->auth($Password) !== true) {
             trigger_error('Can not Authenticate Redis server!', 256);
         }
-        
+
         if ($redis->select($DBnumber) !== true) {
             trigger_error('Can not connect to Redis DB!', 256);
         }
-        
-        $checkOptions = array();
+
+        $checkOptions = [];
         $checkOptions[] = $redis->setOption(Redis::OPT_PREFIX, $Cache_Prefix);
         $checkOptions[] = $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-        
+
         foreach ($checkOptions as $opt) {
             if ($opt !== true) {
                 trigger_error('Can not set Redis option!', 256);
             }
         }
-                
+
         $this->_Cache = $redis;
     }
 
     /**
-     *
      * @param mixed $sys
      *
      * @return
-     *
      */
     public function delAll($sys = true)
     {
@@ -95,16 +92,13 @@ class CRedis
     }
 
     /**
-     *
      * @param mixed $module_name
      * @param mixed $lang
-     *
-     * @return void
      */
     public function delMod($module_name, $lang = '')
     {
         $AllKeys = $this->_Cache->keys(str_replace('-', '\-', $module_name) . '*');
-        
+
         foreach ($AllKeys as $key) {
             $this->_Cache->delete(substr($key, strlen($this->_Cache_Prefix)));
         }
@@ -112,10 +106,10 @@ class CRedis
 
     /**
      * CRedis::getItem()
-     * 
+     *
      * @param mixed $module_name
      * @param mixed $filename
-     * @param integer $ttl
+     * @param int   $ttl
      * @return
      */
     public function getItem($module_name, $filename, $ttl = 0)
@@ -126,11 +120,11 @@ class CRedis
 
     /**
      * CRedis::setItem()
-     * 
+     *
      * @param mixed $module_name
      * @param mixed $filename
      * @param mixed $content
-     * @param integer $ttl
+     * @param int   $ttl
      * @return
      */
     public function setItem($module_name, $filename, $content, $ttl = 0)
@@ -139,7 +133,6 @@ class CRedis
     }
 
     /**
-     *
      * @param resource $db
      */
     public function setDb($db)
@@ -149,17 +142,17 @@ class CRedis
 
     /**
      * CRedis::db()
-     * 
-     * @param mixed $sql
-     * @param mixed $key
-     * @param mixed $modname
+     *
+     * @param mixed  $sql
+     * @param mixed  $key
+     * @param mixed  $modname
      * @param string $lang
-     * @param integer $ttl
+     * @param int    $ttl
      * @return
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
-        $_rows = array();
+        $_rows = [];
 
         if (empty($sql)) {
             return $_rows;
@@ -186,19 +179,18 @@ class CRedis
 
         return $_rows;
     }
-    
+
     /**
      * CRedis::set()
-     * 
+     *
      * @param mixed $key
      * @param mixed $value
-     * @param integer $ttl
-     * @return void
+     * @param int   $ttl
      */
     private function set($key, $value, $ttl = 0)
     {
         $this->_Cache->set($key, $value);
-        
+
         if ($ttl > 0) {
             $this->_Cache->setTimeout($key, $ttl);
         }

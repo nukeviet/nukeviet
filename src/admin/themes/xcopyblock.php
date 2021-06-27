@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 08-19-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('xcopyblock');
@@ -28,7 +29,7 @@ $theme_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme'])
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
 $theme_dbs = [];
 while (list($theme) = $result->fetch(3)) {
-    if (in_array($theme, $theme_list)) {
+    if (in_array($theme, $theme_list, true)) {
         $theme_dbs[] = $theme;
     }
 }

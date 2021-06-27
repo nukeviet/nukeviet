@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('mng');
@@ -18,7 +19,7 @@ $page_title = $nv_Lang->getModule('mng');
 if ($nv_Request->isset_request('getinfo', 'post')) {
     $id = $nv_Request->get_int('id', 'post', '0');
 
-    $array = array();
+    $array = [];
 
     if ($id) {
         $sth = $db->prepare('SELECT title, description, link, target, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
@@ -26,9 +27,9 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
         $sth->execute();
         $array = $sth->fetch();
 
-        if (! empty($array)) {
+        if (!empty($array)) {
             // Check image exists
-            if (! empty($array['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array['image'])) {
+            if (!empty($array['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array['image'])) {
                 $array['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $array['image'];
             } else {
                 $array['image'] = '';
@@ -47,11 +48,11 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 
     $message = $array ? '' : 'Invalid post data';
 
-    nv_jsonOutput(array(
-        'status' => ! empty($array) ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !empty($array) ? 'success' : 'error',
         'message' => $message,
         'data' => $array
-    ));
+    ]);
 }
 
 // Delete content
@@ -74,10 +75,10 @@ if ($nv_Request->isset_request('del', 'post')) {
         $message = 'Invalid post data';
     }
 
-    nv_jsonOutput(array(
-        'status' => ! $message ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !$message ? 'success' : 'error',
         'message' => $message,
-    ));
+    ]);
 }
 
 // Change content status
@@ -107,9 +108,9 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
                 $start_time = 0;
                 $end_time = 0;
 
-                if (empty($row['start_time']) or (! empty($row['end_time']) and $row['end_time'] <= NV_CURRENTTIME)) {
+                if (empty($row['start_time']) or (!empty($row['end_time']) and $row['end_time'] <= NV_CURRENTTIME)) {
                     $start_time = NV_CURRENTTIME;
-                    $end_time = ! empty($row['end_time']) ? (($row['end_time'] - $row['start_time']) + $start_time) : 0;
+                    $end_time = !empty($row['end_time']) ? (($row['end_time'] - $row['start_time']) + $start_time) : 0;
                 } else {
                     $start_time = $row['start_time'];
                     $end_time = $row['end_time'];
@@ -126,8 +127,8 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
             // Get next execute
             $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
             $result = $db->query($sql);
-            $next_execute = intval($result->fetchColumn());
-            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
+            $next_execute = (int) ($result->fetchColumn());
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
             $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
             $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
             $sth->execute();
@@ -141,33 +142,33 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
         $message = 'Invalid post data';
     }
 
-    nv_jsonOutput(array(
-        'status' => ! $message ? 'success' : 'error',
+    nv_jsonOutput([
+        'status' => !$message ? 'success' : 'error',
         'message' => $message,
         'responCode' => $status,
         'responText' => $nv_Lang->getModule('content_status_' . $status)
-    ));
+    ]);
 }
 
 $bid = $nv_Request->get_int('bid', 'post', '');
-$block = array();
+$block = [];
 
 if ($bid) {
     $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
 }
 
 if (empty($block)) {
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'error',
         'message' => 'Invalid data',
-        'data' => array(),
-        'error' => array(),
-    ));
+        'data' => [],
+        'error' => [],
+    ]);
 }
 
 // Add + Edit submit
 if ($nv_Request->isset_request('submit', 'post')) {
-    $data = $error = array();
+    $data = $error = [];
     $message = '';
 
     $data['id'] = $nv_Request->get_int('id', 'post', 0);
@@ -180,10 +181,10 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $data['exptime'] = $nv_Request->get_int('exptime', 'post', 0);
 
     if (empty($data['title'])) {
-        $error[] = array(
+        $error[] = [
             'name' => 'title',
             'value' => $nv_Lang->getModule('content_title_error')
-        );
+        ];
     }
 
     // Prosess image
@@ -224,8 +225,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 // Get next execute
                 $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
                 $result = $db->query($sql);
-                $next_execute = intval($result->fetchColumn());
-                $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
+                $next_execute = (int) ($result->fetchColumn());
+                $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'");
                 $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
                 $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
                 $sth->execute();
@@ -240,24 +241,24 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $nv_Cache->delMod($module_name);
                 $message = $nv_Lang->getModule('save_success');
             } else {
-                $error[] = array(
+                $error[] = [
                     'name' => '',
                     'value' => $nv_Lang->getModule('error_save')
-                );
+                ];
             }
         } catch (PDOException $e) {
-            $error[] = array(
+            $error[] = [
                 'name' => '',
                 'value' => $nv_Lang->getModule('error_save')
-            );
+            ];
         }
     }
 
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => empty($error) ? 'success' : 'error',
         'message' => $message,
         'error' => $error
-    ));
+    ]);
 }
 
 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('topics');
@@ -17,7 +18,7 @@ $page_title = $nv_Lang->getModule('topics');
 $error = '';
 $savecat = 0;
 
-$array = array();
+$array = [];
 $array['topicid'] = 0;
 $array['title'] = '';
 $array['alias'] = '';
@@ -26,7 +27,7 @@ $array['description'] = '';
 $array['keywords'] = '';
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $array['topicid'] = $nv_Request->get_int('topicid', 'post', 0);
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
     $array['keywords'] = $nv_Request->get_title('keywords', 'post', '', 1);
@@ -37,7 +38,7 @@ if (! empty($savecat)) {
 
     // Xu ly anh minh hoa
     $array['image'] = $nv_Request->get_title('homeimg', 'post', '');
-    if (! nv_is_url($array['image']) and nv_is_file($array['image'], NV_UPLOADS_DIR . '/' . $module_upload . '/topics')) {
+    if (!nv_is_url($array['image']) and nv_is_file($array['image'], NV_UPLOADS_DIR . '/' . $module_upload . '/topics')) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/');
         $array['image'] = substr($array['image'], $lu);
     } else {
@@ -47,7 +48,7 @@ if (! empty($savecat)) {
     $array['alias'] = ($array['alias'] == '') ? get_mod_alias($array['title'], 'topics', $array['topicid']) : get_mod_alias($array['alias'], 'topics', $array['topicid']);
 
     // Kiểm tra trùng
-    $sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE (title=:title OR alias=:alias)" . ($array['topicid'] ? ' AND topicid!=' . $array['topicid'] : '');
+    $sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE (title=:title OR alias=:alias)' . ($array['topicid'] ? ' AND topicid!=' . $array['topicid'] : '');
     $sth = $db->prepare($sql);
     $sth->bindParam(':title', $array['title'], PDO::PARAM_STR);
     $sth->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
@@ -59,11 +60,11 @@ if (! empty($savecat)) {
     } elseif ($is_exists) {
         $error = $nv_Lang->getModule('errorexists');
     } elseif ($array['topicid'] == 0) {
-        $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics")->fetchColumn();
-        $weight = intval($weight) + 1;
+        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
+        $weight = (int) $weight + 1;
 
-        $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, :image, :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-        $data_insert = array();
+        $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, :image, :weight, :keywords, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')';
+        $data_insert = [];
         $data_insert['title'] = $array['title'];
         $data_insert['alias'] = $array['alias'];
         $data_insert['description'] = $array['description'];
@@ -72,13 +73,13 @@ if (! empty($savecat)) {
         $data_insert['keywords'] = $array['keywords'];
 
         if ($db->insert_id($_sql, 'topicid', $data_insert)) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_topic', ' ', $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
             $error = $nv_Lang->getModule('errorsave');
         }
     } else {
-        $stmt = $db->prepare("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET title= :title, alias = :alias, description= :description, image = :image, keywords= :keywords, edit_time=" . NV_CURRENTTIME . " WHERE topicid =" . $array['topicid']);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET title= :title, alias = :alias, description= :description, image = :image, keywords= :keywords, edit_time=' . NV_CURRENTTIME . ' WHERE topicid =' . $array['topicid']);
         $stmt->bindParam(':title', $array['title'], PDO::PARAM_STR);
         $stmt->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
         $stmt->bindParam(':description', $array['description'], PDO::PARAM_STR);
@@ -86,7 +87,7 @@ if (! empty($savecat)) {
         $stmt->bindParam(':keywords', $array['keywords'], PDO::PARAM_STR);
 
         if ($stmt->execute()) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_topic', 'topicid ' . $array['topicid'], $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
             $error = $nv_Lang->getModule('errorsave');
@@ -96,7 +97,7 @@ if (! empty($savecat)) {
 
 $array['topicid'] = $nv_Request->get_int('topicid', 'get', 0);
 if ($array['topicid'] > 0) {
-    list($array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords']) = $db->query("SELECT topicid, title, alias, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics where topicid=" . $array['topicid'])->fetch(3);
+    list($array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords']) = $db->query('SELECT topicid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics where topicid=' . $array['topicid'])->fetch(3);
     $nv_Lang->setModule('add_topic', $nv_Lang->getModule('edit_topic'));
 }
 
@@ -117,7 +118,7 @@ $xtpl->assign('UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/topics');
 $xtpl->assign('DATA', $array);
 $xtpl->assign('TOPIC_LIST', nv_show_topics_list($page));
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('ERROR', $error);
     $xtpl->parse('main.error');
 }

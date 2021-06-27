@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_show_tags_list()
  *
  * @param string $q
- * @param integer $incomplete
+ * @param int    $incomplete
  * @return
  */
 function nv_show_tags_list($q = '', $incomplete = false)
@@ -74,6 +75,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
     if (empty($contents)) {
         $contents = '&nbsp;';
     }
+
     return $contents;
 }
 
@@ -105,7 +107,7 @@ if ($nv_Request->isset_request('del_tid', 'get')) {
 $error = '';
 $savecat = 0;
 $incomplete = $nv_Request->get_bool('incomplete', 'get,post', false);
-list($tid, $title, $alias, $description, $image, $keywords) = array( 0, '', '', '', '', '' );
+list($tid, $title, $alias, $description, $image, $keywords) = [0, '', '', '', '', ''];
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
@@ -119,7 +121,7 @@ if (!empty($savecat)) {
     $keywords = explode(',', $keywords);
     $keywords[] = $alias;
     $keywords = array_map('trim', $keywords);
-    $keywords = array_diff($keywords, array(''));
+    $keywords = array_diff($keywords, ['']);
     $keywords = array_unique($keywords);
     $keywords = implode(',', $keywords);
 

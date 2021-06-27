@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $selectthemes = $nv_Request->get_title('theme', 'post', '');
 
 if (empty($selectthemes) or !(preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
-    die();
+    exit();
 }
 
 $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 AND theme= :theme');
@@ -23,7 +24,7 @@ $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
 $sth->execute();
 if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColumn()) {
     // Kích hoạt sử dụng nếu đã có thiết lập
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :theme WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :theme WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'");
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
 
@@ -43,16 +44,16 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
         // Thiết lập Layout
         $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
-        $layoutdefault = ( string )$xml->layoutdefault;
+        $layoutdefault = (string) $xml->layoutdefault;
         $layout = $xml->xpath('setlayout/layout');
 
         for ($i = 0, $count = sizeof($layout); $i < $count; ++$i) {
-            $layout_name = ( string )$layout[$i]->name;
+            $layout_name = (string) $layout[$i]->name;
 
             $layout_funcs = $layout[$i]->xpath('funcs');
 
             for ($j = 0, $sizeof = sizeof($layout_funcs); $j < $sizeof; ++$j) {
-                $mo_funcs = ( string )$layout_funcs[$j];
+                $mo_funcs = (string) $layout_funcs[$j];
                 $mo_funcs = explode(':', $mo_funcs);
                 $m = $mo_funcs[0];
                 $arr_f = explode(',', $mo_funcs[1]);
@@ -87,7 +88,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
         $blocks = $xml->xpath('setblocks/block');
         for ($i = 0, $count = sizeof($blocks); $i < $count; ++$i) {
-            $row = (array)$blocks[$i];
+            $row = (array) $blocks[$i];
 
             if (!isset($row['link'])) {
                 $row['link'] = '';
@@ -116,7 +117,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
             $sth->execute();
 
-            $row['weight'] = intval($sth->fetchColumn()) + 1;
+            $row['weight'] = (int) ($sth->fetchColumn()) + 1;
 
             $row['exp_time'] = 0;
             $row['active'] = 1;
@@ -124,7 +125,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
             $all_func = ($row['all_func'] == 1 and preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name)) ? 1 : 0;
 
-            $_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
+            $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
             ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";
             $data = [];
             $data['selectthemes'] = $selectthemes;
@@ -132,10 +133,10 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $data['file_name'] = $file_name;
             $data['title'] = $row['title'];
             $data['link'] = $row['link'];
-            $data['template'] = (string)$row['template'];
+            $data['template'] = (string) $row['template'];
             $data['position'] = $row['position'];
             $data['groups_view'] = $row['groups_view'];
-            $data['config'] = (string)$row['config'];
+            $data['config'] = (string) $row['config'];
             $row['bid'] = $db->insert_id($_sql, 'bid', $data);
             if ($all_func) {
                 $array_funcid = $array_all_funcid;
@@ -149,7 +150,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
                     if (isset($site_mods[$mod])) {
                         $func_array = explode(',', $func_list);
                         foreach ($site_mods[$mod]['funcs'] as $_tmp) {
-                            if (in_array($_tmp['func_name'], $func_array)) {
+                            if (in_array($_tmp['func_name'], $func_array, true)) {
                                 $array_funcid[] = $_tmp['func_id'];
                             }
                         }
@@ -163,7 +164,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
                 $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
                 $sth->execute();
                 $weight = $sth->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = (int) $weight + 1;
 
                 $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')');
             }

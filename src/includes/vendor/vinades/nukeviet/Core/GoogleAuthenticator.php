@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 4/10/2010 19:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
 
 /**
  * GoogleAuthenticator
- * 
+ *
  * @package NUKEVIET 4 CORE
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2016 VINADES.,JSC. All rights reserved
@@ -23,19 +24,18 @@ class GoogleAuthenticator
 {
     private $secretLength = 16;
     private $optLength = 6;
-    
+
     /**
      * GoogleAuthenticator::__construct()
-     * 
-     * @param integer $secretLength
-     * @param integer $optLength
-     * @return void
+     *
+     * @param int $secretLength
+     * @param int $optLength
      */
     public function __construct($secretLength = 16, $optLength = 6)
     {
-        $secretLength = intval($secretLength);
-        $optLength = intval($optLength);
-        
+        $secretLength = (int) $secretLength;
+        $optLength = (int) $optLength;
+
         if ($secretLength > 0) {
             $this->secretLength = $secretLength;
         }
@@ -43,29 +43,31 @@ class GoogleAuthenticator
             $this->optLength = $optLength;
         }
     }
-    
+
     /**
      * GoogleAuthenticator::verifyOpt()
-     * 
+     *
      * @param mixed $secretkey
      * @param mixed $opt
      * @return
      */
-    public function verifyOpt($secretkey, $opt) {
+    public function verifyOpt($secretkey, $opt)
+    {
         $timeSlice = floor(time() / 30);
         // Check realtime code and 30sec code before
-        for ($i = -1; $i <= 0; $i++) {
+        for ($i = -1; $i <= 0; ++$i) {
             $trueCode = $this->getTrueCode($secretkey, $timeSlice + $i);
             if ($trueCode === $opt) {
                 return true;
             }
         }
+
         return false;
     }
-    
+
     /**
      * GoogleAuthenticator::creatSecretkey()
-     * 
+     *
      * @return
      */
     public function creatSecretkey()
@@ -73,16 +75,17 @@ class GoogleAuthenticator
         $secret = '';
         $validChars = $this->getTable();
         unset($validChars[32]);
-        
-        for ($i = 0; $i < $this->secretLength; $i++) {
+
+        for ($i = 0; $i < $this->secretLength; ++$i) {
             $secret .= $validChars[array_rand($validChars)];
         }
+
         return $secret;
     }
-    
+
     /**
      * GoogleAuthenticator::getTrueCode()
-     * 
+     *
      * @param mixed $secret
      * @param mixed $timeSlice
      * @return
@@ -92,7 +95,7 @@ class GoogleAuthenticator
         if ($timeSlice === null) {
             $timeSlice = floor(time() / 30);
         }
-        
+
         $secretkey = $this->decode($secret);
         $time = chr(0) . chr(0) . chr(0) . chr(0) . pack('N*', $timeSlice);
         $hm = hash_hmac('SHA1', $time, $secretkey, true);
@@ -102,112 +105,118 @@ class GoogleAuthenticator
         $value = $value[1];
         $value = $value & 0x7FFFFFFF;
         $modulo = pow(10, $this->optLength);
+
         return str_pad($value % $modulo, $this->optLength, '0', STR_PAD_LEFT);
     }
-    
+
     /**
      * GoogleAuthenticator::encode()
-     * 
+     *
      * @param mixed $secret
-     * @param bool $padding
+     * @param bool  $padding
      * @return
      */
     private function encode($secret, $padding = true)
     {
-        if (empty($secret))
+        if (empty($secret)) {
             return '';
-        
+        }
+
         $validChars = $this->getTable();
         $secret = str_split($secret);
-        $binaryString = "";
-        
-        for ($i = 0; $i < count($secret); $i++) {
+        $binaryString = '';
+
+        for ($i = 0; $i < count($secret); ++$i) {
             $binaryString .= str_pad(base_convert(ord($secret[$i]), 10, 2), 8, '0', STR_PAD_LEFT);
         }
-        
+
         $fiveBitBinaryArray = str_split($binaryString, 5);
-        $base32 = "";
-        
+        $base32 = '';
+
         $i = 0;
         while ($i < count($fiveBitBinaryArray)) {
             $base32 .= $validChars[base_convert(str_pad($fiveBitBinaryArray[$i], 5, '0'), 2, 10)];
-            $i++;
+            ++$i;
         }
-        
+
         if ($padding and ($x = strlen($binaryString) % 40) != 0) {
-            if ($x == 8)
+            if ($x == 8) {
                 $base32 .= str_repeat($validChars[32], 6);
-            elseif ($x == 16)
+            } elseif ($x == 16) {
                 $base32 .= str_repeat($validChars[32], 4);
-            elseif ($x == 24)
+            } elseif ($x == 24) {
                 $base32 .= str_repeat($validChars[32], 3);
-            elseif ($x == 32)
+            } elseif ($x == 32) {
                 $base32 .= $validChars[32];
+            }
         }
+
         return $base32;
     }
-    
+
     /**
      * GoogleAuthenticator::decode()
-     * 
+     *
      * @param mixed $secret
      * @return
      */
     private function decode($secret)
     {
-        if (empty($secret))
+        if (empty($secret)) {
             return '';
-        
+        }
+
         $validChars = $this->getTable();
         $validCharsFlipped = array_flip($validChars);
         $paddingCharCount = substr_count($secret, $validChars[32]);
-        $allowedValues = array(6, 4, 3, 1, 0);
-        
-        if (!in_array($paddingCharCount, $allowedValues))
+        $allowedValues = [6, 4, 3, 1, 0];
+
+        if (!in_array($paddingCharCount, $allowedValues, true)) {
             return false;
-        
-        for ($i = 0; $i < 4; $i++) {
-            if ($paddingCharCount == $allowedValues[$i] and substr($secret, -($allowedValues[$i])) != str_repeat($validChars[32], $allowedValues[$i]))
-                return false;
         }
-        
+
+        for ($i = 0; $i < 4; ++$i) {
+            if ($paddingCharCount == $allowedValues[$i] and substr($secret, -($allowedValues[$i])) != str_repeat($validChars[32], $allowedValues[$i])) {
+                return false;
+            }
+        }
+
         $secret = str_replace('=', '', $secret);
         $secret = str_split($secret);
-        
-        $binaryString = "";
+
+        $binaryString = '';
         for ($i = 0; $i < count($secret); $i = $i + 8) {
-            $x = "";
-            if (!in_array($secret[$i], $validChars))
+            $x = '';
+            if (!in_array($secret[$i], $validChars, true)) {
                 return false;
-            
-            for ($j = 0; $j < 8; $j++) {
+            }
+
+            for ($j = 0; $j < 8; ++$j) {
                 $x .= str_pad(base_convert(@$validCharsFlipped[@$secret[$i + $j]], 10, 2), 5, '0', STR_PAD_LEFT);
             }
-            
+
             $eightBits = str_split($x, 8);
-            for ($z = 0; $z < count($eightBits); $z++) {
-                $binaryString .= (($y = chr(base_convert($eightBits[$z], 2, 10))) || ord($y) == 48) ? $y : "";
+            for ($z = 0; $z < count($eightBits); ++$z) {
+                $binaryString .= (($y = chr(base_convert($eightBits[$z], 2, 10))) || ord($y) == 48) ? $y : '';
             }
         }
-        
+
         return $binaryString;
     }
-    
+
     /**
      * GoogleAuthenticator::getTable()
-     * 
+     *
      * @return
      */
     private function getTable()
     {
-        $table = array(
+        return [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', // 7
             'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', // 15
             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', // 24
             'Y', 'Z', '2', '3', '4', '5', '6', '7', // 32
             '='
-        );
-        
-        return $table;
+        ];
     }
 }

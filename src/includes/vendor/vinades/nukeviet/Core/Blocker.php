@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/27/2010 0:30
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
@@ -21,12 +22,12 @@ namespace NukeViet\Core;
  */
 class Blocker
 {
-    const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
-    const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
+    public const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
+    public const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
 
-    const LOGIN_RULE_NUMBER = 0;
-    const LOGIN_RULE_TIMERANGE = 1;
-    const LOGIN_RULE_END = 2;
+    public const LOGIN_RULE_NUMBER = 0;
+    public const LOGIN_RULE_TIMERANGE = 1;
+    public const LOGIN_RULE_END = 2;
 
     public $is_flooded;
     public $flood_block_time;
@@ -34,21 +35,20 @@ class Blocker
 
     private $logs_path;
     private $ip_addr;
-    private $flood_rules = array(
+    private $flood_rules = [
         10 => 10, // rule 1 - maximum 10 requests in 10 secs
         60 => 30, // rule 2 - maximum 30 requests in 60 secs
         300 => 50, // rule 3 - maximum 50 requests in 300 secs
         3600 => 200 // rule 4 - maximum 200 requests in 3600 secs
-    );
-    private $login_rules = array(5, 5, 1440);
+    ];
+    private $login_rules = [5, 5, 1440];
 
     /**
      * Blocker::__construct()
      *
-     * @param mixed $logs_path
-     * @param mixed $rules
+     * @param mixed  $logs_path
+     * @param mixed  $rules
      * @param string $ip
-     * @return void
      */
     public function __construct($logs_path, $ip = '')
     {
@@ -87,9 +87,8 @@ class Blocker
      * Blocker::trackFlood()
      *
      * @param mixed $rules
-     * @return void
      */
-    public function trackFlood($rules = array())
+    public function trackFlood($rules = [])
     {
         if (!empty($rules)) {
             $this->flood_rules = $rules;
@@ -124,9 +123,8 @@ class Blocker
      * Blocker::trackLogin()
      *
      * @param mixed $rules
-     * @return void
      */
-    public function trackLogin($rules = array())
+    public function trackLogin($rules = [])
     {
         if (!empty($rules)) {
             $this->login_rules = $rules;
@@ -162,8 +160,7 @@ class Blocker
      * Blocker::set_loginFailed()
      *
      * @param mixed $loginname
-     * @param integer $time
-     * @return void
+     * @param int   $time
      */
     public function set_loginFailed($loginname, $time = 0)
     {
@@ -176,13 +173,13 @@ class Blocker
             $info = $this->_get_info();
 
             if (!isset($info['login'][$loginname]) or ($time - $info['login'][$loginname]['starttime']) > ($this->login_rules[Blocker::LOGIN_RULE_TIMERANGE] * 60)) {
-                $info['login'][$loginname] = array();
+                $info['login'][$loginname] = [];
                 $info['login'][$loginname]['count'] = 0;
                 $info['login'][$loginname]['starttime'] = $time;
                 $info['login'][$loginname]['lasttime'] = 0;
             }
 
-            $info['login'][$loginname]['count'] ++;
+            ++$info['login'][$loginname]['count'];
             $info['login'][$loginname]['lasttime'] = $time;
 
             $this->_save_info($info);
@@ -193,7 +190,6 @@ class Blocker
      * Blocker::reset_trackLogin()
      *
      * @param mixed $loginname
-     * @return void
      */
     public function reset_trackLogin($loginname)
     {
@@ -205,9 +201,6 @@ class Blocker
         }
     }
 
-    /**
-     *
-     */
     public function resetTrackFlood()
     {
         $info = $this->_get_info();
@@ -224,7 +217,7 @@ class Blocker
      */
     private function _get_info()
     {
-        $info = array();
+        $info = [];
         $logfile = $this->_get_logfile();
         if (file_exists($logfile)) {
             $info = unserialize(file_get_contents($logfile));
@@ -242,6 +235,7 @@ class Blocker
     private function _save_info($info)
     {
         $logfile = $this->_get_logfile();
+
         return file_put_contents($logfile, serialize($info));
     }
 

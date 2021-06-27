@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $error = '';
@@ -76,7 +77,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             if ($id) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_cronjob_add', 'id ' . $id, $admin_info['userid']);
 
-                $sql = "SELECT lang FROM " . $db_config['prefix'] . "_setup_language where lang!='" . NV_LANG_INTERFACE . "'";
+                $sql = 'SELECT lang FROM ' . $db_config['prefix'] . "_setup_language where lang!='" . NV_LANG_INTERFACE . "'";
                 $result = $db->query($sql);
                 while (list($lang_i) = $result->fetch(3)) {
                     $sth = $db->prepare('UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name= :run_func WHERE id=' . $id);
@@ -90,7 +91,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
     }
 } else {
-    $min = intval(date('i', NV_CURRENTTIME));
+    $min = (int) (date('i', NV_CURRENTTIME));
     $hour = date('G', NV_CURRENTTIME);
     $start_time = NV_CURRENTTIME;
     $interval = 60;

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $module_info['site_title'];
@@ -37,8 +38,8 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
 if (empty($contents)) {
     $viewcat = $module_config[$module_name]['indexfile'];
     $show_no_image = $module_config[$module_name]['show_no_image'];
-    $array_catpage = array();
-    $array_cat_other = array();
+    $array_catpage = [];
+    $array_cat_other = [];
 
     if ($viewcat == 'viewcat_none') {
         $contents = '';
@@ -106,7 +107,7 @@ if (empty($contents)) {
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
         $contents = call_user_func($viewcat, $array_catpage, $array_cat_other, $generate_page);
     } elseif ($viewcat == 'viewcat_main_left' or $viewcat == 'viewcat_main_right' or $viewcat == 'viewcat_main_bottom') {
-        $array_cat = array();
+        $array_cat = [];
 
         $key = 0;
         $db_slave->sqlreset()
@@ -177,7 +178,7 @@ if (empty($contents)) {
         $contents = viewsubcat_main($viewcat, $array_cat);
     } elseif ($viewcat == 'viewcat_two_column') {
         // Cac bai viet phan dau
-        $array_content = $array_catpage = array();
+        $array_content = $array_catpage = [];
 
         // cac bai viet cua cac chu de con
         $key = 0;

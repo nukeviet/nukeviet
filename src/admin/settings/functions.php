@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 1:58
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$allow_func = array( 'main', 'language', 'smtp' );
+$allow_func = ['main', 'language', 'smtp'];
 if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0)) {
     $allow_func[] = 'system';
 }
@@ -29,11 +30,11 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'cdn';
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $nv_Lang->getGlobal('mod_settings')
-);
+];
 
 unset($page_title, $select_options);
 
@@ -51,7 +52,7 @@ $array_url_instruction['variables'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:
 
 /**
  * Cập nhật lại thời điểm thực hiện tiếp theo của Cronjob
- * @return boolean
+ * @return bool
  */
 function update_cronjob_next_time()
 {
@@ -66,7 +67,7 @@ function update_cronjob_next_time()
     }
     // Xác định thời điểm chạy tiếp theo
     $cronjobs_next_time = 0;
-    $sql = "SELECT start_time, inter_val, inter_val_type, last_time FROM " . NV_CRONJOBS_GLOBALTABLE . " WHERE act=1";
+    $sql = 'SELECT start_time, inter_val, inter_val_type, last_time FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE act=1';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         if (empty($row['last_time'])) {
@@ -78,7 +79,7 @@ function update_cronjob_next_time()
             $cronjobs_next_time = $next_time;
         }
     }
-    if ($cronjobs_next_time > 0 and $db->exec("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) <= " . NV_CURRENTTIME . " OR CAST(config_value AS UNSIGNED) >= " . $cronjobs_next_time . ")")) {
+    if ($cronjobs_next_time > 0 and $db->exec('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) <= " . NV_CURRENTTIME . ' OR CAST(config_value AS UNSIGNED) >= ' . $cronjobs_next_time . ')')) {
         $nv_Cache->delMod('settings');
     }
     $nv_Cache->delMod('settings');

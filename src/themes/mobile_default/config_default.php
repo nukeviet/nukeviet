@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$default_config_theme = array(
-    'body' => array(
+$default_config_theme = [
+    'body' => [
         'color' => '',
         'font_size' => '',
         'font_family' => '',
@@ -34,18 +35,18 @@ $default_config_theme = array(
         'padding_left' => '',
         'padding_right' => '',
         'customcss' => ''
-    ),
-    'a_link' => array(
+    ],
+    'a_link' => [
         'color' => '',
         'font_weight' => '',
         'font_style' => ''
-    ),
-    'a_link_hover' => array(
+    ],
+    'a_link_hover' => [
         'color' => '',
         'font_weight' => '',
         'font_style' => ''
-    ),
-    'content' => array(
+    ],
+    'content' => [
         'margin' => '',
         'margin_top' => '',
         'margin_bottom' => '',
@@ -59,8 +60,8 @@ $default_config_theme = array(
         'width' => '',
         'height' => '',
         'customcss' => ''
-    ),
-    'header' => array(
+    ],
+    'header' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
@@ -78,8 +79,8 @@ $default_config_theme = array(
         'width' => '',
         'height' => '',
         'customcss' => ''
-    ),
-    'footer' => array(
+    ],
+    'footer' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
@@ -97,8 +98,8 @@ $default_config_theme = array(
         'width' => '',
         'height' => '',
         'customcss' => ''
-    ),
-    'block' => array(
+    ],
+    'block' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
@@ -118,17 +119,17 @@ $default_config_theme = array(
         'border_width' => '',
         'border_radius' => '',
         'customcss' => ''
-    ),
-    'block_heading' => array(
+    ],
+    'block_heading' => [
         'background_color' => '',
         'background_image' => '',
         'background_repeat' => '',
         'background_position' => ''
-    ),
+    ],
     'generalcss' => '',
-    'gfont' => array(
+    'gfont' => [
         'family' => '',
         'styles' => '',
         'subset' => ''
-    )
-);
+    ]
+];

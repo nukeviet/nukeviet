@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function user_validForm(a) {
@@ -24,13 +25,13 @@ function user_validForm(a) {
         success: function(b) {
             $('[type="submit"] .fa', $(a)).toggleClass('hidden');
             $('[type="submit"]', $(a)).prop('disabled', false);
-            if( b.status == "error" ) {
+            if (b.status == "error") {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
                 location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
-                if( b.admin_add == "yes" ) {
-                    if (confirm( b.mess )) {
+                if (b.admin_add == "yes") {
+                    if (confirm(b.mess)) {
                         location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
                     }
                 }
@@ -57,7 +58,7 @@ function user_editcensor_validForm(a) {
         dataType: "json",
         success: function(b) {
             $('[type="submit"]', $(a)).prop('disabled', false);
-            if( b.status == "error" ) {
+            if (b.status == "error") {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
@@ -207,7 +208,7 @@ function nv_editcensor_row_accept(uid, msg) {
     if (confirm(msg)) {
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=editcensor&nocache=' + new Date().getTime(), 'approved=1&userid=' + uid, function(res) {
             if (res.status != 'SUCCESS') {
-                 alert(res.mess);
+                alert(res.mess);
             } else {
                 location.reload();
             }
@@ -360,7 +361,7 @@ function nv_check_form(OForm) {
     return false;
 }
 
-$.toggleShowPassword = function (options) {
+$.toggleShowPassword = function(options) {
     var settings = $.extend({
         field: "#password",
         control: "#toggle_show_password"
@@ -369,7 +370,7 @@ $.toggleShowPassword = function (options) {
     var control = $(settings.control);
     var field = $(settings.field);
 
-    control.bind('click', function () {
+    control.bind('click', function() {
         if (control.is(':checked')) {
             field.attr('type', 'text');
         } else {
@@ -380,10 +381,10 @@ $.toggleShowPassword = function (options) {
 
 function nv_data_export(set_export) {
     $.ajax({
-        type : "POST",
-        url : "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=export&nocache=" + new Date().getTime(),
-        data : "step=1&set_export=" + set_export + "&method=" + $("select[name=method]").val() + "&value=" + $("input[name=value]").val() + "&usactive=" + $("select[name=usactive]").val(),
-        success : function(response) {
+        type: "POST",
+        url: "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=export&nocache=" + new Date().getTime(),
+        data: "step=1&set_export=" + set_export + "&method=" + $("select[name=method]").val() + "&value=" + $("input[name=value]").val() + "&usactive=" + $("select[name=usactive]").val(),
+        success: function(response) {
             if (response == "OK_GETFILE") {
                 nv_data_export(0);
             } else if (response == "OK_COMPLETE") {
@@ -453,13 +454,13 @@ function nv_load_current_date() {
         $("input[name=default_date]").datepicker("destroy");
     } else {
         $("input[name=default_date]").datepicker({
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true
+            showOn: "both",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
+            buttonImageOnly: true
         });
         $("input[name=default_date]").removeAttr("disabled");
         $("input[name=default_date]").focus();
@@ -582,7 +583,7 @@ $(document).ready(function() {
 
     // Edit user
     $("#btn_upload").click(function() {
-        nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+        nv_open_browse(nv_base_siteurl + "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
         return false;
     });
     $('#current-photo-btn').click(function() {
@@ -595,48 +596,48 @@ $(document).ready(function() {
         $("#btn_upload").click();
     });
 
-    if ($.fn.validate){
+    if ($.fn.validate) {
         $('#form_user').validate({
-            rules : {
-                username : {
-                    minlength : 5
+            rules: {
+                username: {
+                    minlength: 5
                 }
             }
         });
 
     }
-    if ($.fn.datepicker){
+    if ($.fn.datepicker) {
         $(".datepicker").datepicker({
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true,
+            showOn: "both",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
+            buttonImageOnly: true,
             yearRange: "-90:+90"
         });
         $("#birthday").datepicker({
-            showOn : "both",
-            dateFormat : "dd/mm/yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-            buttonImageOnly : true,
+            showOn: "both",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
+            buttonImageOnly: true,
             yearRange: "-99:+0",
             beforeShow: function() {
-                setTimeout(function(){
+                setTimeout(function() {
                     $('.ui-datepicker').css('z-index', 999999999);
                 }, 0);
             }
         });
     }
 
-    $('[name="group[]"]').change(function(){
+    $('[name="group[]"]').change(function() {
         control_theme_groups();
     })
-    $('[name="is_official"]').change(function(){
+    $('[name="is_official"]').change(function() {
         control_theme_groups();
     })
 
@@ -652,15 +653,15 @@ $(document).ready(function() {
         e.preventDefault()
         $("#resultdata").load($(this).attr("href"))
     });
-    if ($.fn.datepicker){
+    if ($.fn.datepicker) {
         $("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
-            dateFormat : "dd.mm.yy",
-            changeMonth : true,
-            changeYear : true,
-            showOtherMonths : true,
-            buttonText : '',
-            showButtonPanel : true,
-            showOn : 'focus'
+            dateFormat: "dd.mm.yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            buttonText: '',
+            showButtonPanel: true,
+            showOn: 'focus'
         });
     }
     $("#formgetuid").submit(function() {
@@ -669,9 +670,9 @@ $(document).ready(function() {
         a = a + "&" + b + "&submit";
         $("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
         $.ajax({
-            type : "GET",
-            url : a,
-            success : function(c) {
+            type: "GET",
+            url: a,
+            success: function(c) {
                 $("#resultdata").html(c);
                 $("#formgetuid input, #formgetuid select").removeAttr("disabled")
             }
@@ -747,7 +748,7 @@ $(document).ready(function() {
     });
 
     // Group
-     $("[name='browse-image']").click(function(e) {
+    $("[name='browse-image']").click(function(e) {
         e.preventDefault();
         var area = $(this).data('area'),
             path = $(this).data('path'),

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 5/12/2010, 1:34
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $tpl = new \NukeViet\Template\Smarty();
@@ -26,13 +27,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $robots_other = [];
     foreach ($fileother as $key => $value) {
         if (!empty($value)) {
-            $robots_other[$value] = intval($optionother[$key]);
+            $robots_other[$value] = (int) $optionother[$key];
         }
     }
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
     $content_config .= "\$cache = '" . serialize($robots_data) . "';\n\n";
     $content_config .= "\$cache_other = '" . serialize($robots_other) . "';\n";
 

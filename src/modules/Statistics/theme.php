@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_STATISTICS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -53,6 +54,7 @@ function nv_theme_statistics_referer($cts, $total)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -73,7 +75,7 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
 
             $a = 0;
             foreach ($cts['rows'] as $key => $value) {
-                $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+                $class = ($a % 2 == 0) ? ' class="second"' : '';
 
                 $xtpl->assign('CLASS', $class);
                 $xtpl->assign('KEY', $key);
@@ -100,6 +102,7 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -120,7 +123,7 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
 
             $a = 0;
             foreach ($cts['rows'] as $key => $value) {
-                $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+                $class = ($a % 2 == 0) ? ' class="second"' : '';
 
                 $xtpl->assign('CLASS', $class);
                 $xtpl->assign('KEY', $key);
@@ -147,6 +150,7 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -170,7 +174,7 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
                 $const = 'PLATFORM_' . strtoupper($key);
                 $key = defined($const) ? constant($const) : $nv_Lang->getGlobal('unknown');
 
-                $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+                $class = ($a % 2 == 0) ? ' class="second"' : '';
                 $xtpl->assign('CLASS', $class);
                 $xtpl->assign('KEY', $key);
 
@@ -196,6 +200,7 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -219,7 +224,7 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
                 $const = 'BROWSER_' . strtoupper($key);
                 $key = defined($const) ? constant($const) : $key;
 
-                $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+                $class = ($a % 2 == 0) ? ' class="second"' : '';
                 $xtpl->assign('CLASS', $class);
                 $xtpl->assign('KEY', $key);
 
@@ -246,6 +251,7 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -269,7 +275,7 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
                 if ($key == 'ZZ') {
                     $value[0] = $nv_Lang->getGlobal('unknown');
                 }
-                $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+                $class = ($a % 2 == 0) ? ' class="second"' : '';
 
                 $xtpl->assign('CLASS', $class);
                 $xtpl->assign('KEY', $key);
@@ -296,6 +302,7 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -322,9 +329,9 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     // Thống kê theo ngày trong tuần
     $xtpl->assign('CTS', $ctsdw);
 
-    $data_label = array();
-    $data_value = array();
-    $data_bgcolor = array(
+    $data_label = [];
+    $data_value = [];
+    $data_bgcolor = [
         'rgb(255, 99, 132)',
         'rgb(255, 159, 64)',
         'rgb(255, 205, 86)',
@@ -332,7 +339,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
         'rgb(54, 162, 235)',
         'rgb(153, 102, 255)',
         'rgb(201, 203, 207)'
-    );
+    ];
 
     foreach ($ctsdw['rows'] as $key => $m) {
         $data_label[] = $m['fullname'];
@@ -355,8 +362,8 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     // Thống kê tháng của năm
     $xtpl->assign('CTS', $ctsm);
 
-    $data_label = array();
-    $data_value = array();
+    $data_label = [];
+    $data_value = [];
 
     foreach ($ctsm['rows'] as $key => $m) {
         $data_label[] = $m['fullname'];
@@ -383,7 +390,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
         if ($key == 'ZZ') {
             $value[0] = $nv_Lang->getGlobal('unknown');
         }
-        $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+        $class = ($a % 2 == 0) ? ' class="second"' : '';
         $xtpl->assign('CLASS', $class);
         $xtpl->assign('KEY', $key);
 
@@ -403,7 +410,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     }
 
     if ($ctsc['others'][1]) {
-        $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+        $class = ($a % 2 == 0) ? ' class="second"' : '';
         $xtpl->assign('CLASS', $class);
         $xtpl->assign('URL', NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries']);
         $xtpl->parse('main.ct.ot');
@@ -420,7 +427,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
         $const = 'BROWSER_' . strtoupper($key);
         $key = defined($const) ? constant($const) : $key;
 
-        $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+        $class = ($a % 2 == 0) ? ' class="second"' : '';
         $xtpl->assign('CLASS', $class);
         $xtpl->assign('KEY', $key);
 
@@ -439,7 +446,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     }
 
     if ($ctsb['others'][1]) {
-        $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+        $class = ($a % 2 == 0) ? ' class="second"' : '';
         $xtpl->assign('CLASS', $class);
         $xtpl->assign('URL', NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers']);
         $xtpl->parse('main.br.ot');
@@ -456,7 +463,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
         $const = 'PLATFORM_' . strtoupper($key);
         $key = defined($const) ? constant($const) : $nv_Lang->getGlobal('unknown');
 
-        $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+        $class = ($a % 2 == 0) ? ' class="second"' : '';
         $xtpl->assign('CLASS', $class);
         $xtpl->assign('KEY', $key);
 
@@ -475,7 +482,7 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
     }
 
     if ($ctso['others'][1]) {
-        $class = ($a % 2 == 0) ? " class=\"second\"" : "";
+        $class = ($a % 2 == 0) ? ' class="second"' : '';
 
         $xtpl->assign('CLASS', $class);
         $xtpl->assign('URL', NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allos']);

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_USER')) {
+    exit('Stop!!!');
 }
 
 $nv_redirect = '';
@@ -24,7 +25,7 @@ if (!empty($nv_redirect) and nv_redirect_decrypt($nv_redirect) != '') {
 if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
     $server = $nv_Request->get_string('server', 'get', '');
 
-    if (! empty($server) and in_array($server, $global_config['openid_servers'])) {
+    if (!empty($server) and in_array($server, $global_config['openid_servers'], true)) {
         $global_config['avatar_width'] = $global_users_config['avatar_width'];
         $global_config['avatar_height'] = $global_users_config['avatar_height'];
 

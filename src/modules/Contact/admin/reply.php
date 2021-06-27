@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (@) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -35,7 +36,7 @@ $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('POST', $row);
 
-$is_read = intval($row['is_read']);
+$is_read = (int) ($row['is_read']);
 if (!$is_read) {
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=1 WHERE id=' . $id);
     $is_read = 1;
@@ -46,11 +47,10 @@ $mess_content = $error = '';
 if ($nv_Request->get_int('save', 'post') == '1') {
     $mess_content = $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS);
     if (strip_tags($mess_content) != '') {
-
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
         $mail->To($row['sender_email']);
 
-        $_array_email = array();
+        $_array_email = [];
         $frow = $db->query('SELECT full_name, email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $row['cid'])->fetch();
         if (!empty($frow)) {
             $_arr_mail = explode(',', $frow['email']);
@@ -62,20 +62,20 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
 
             // Gửi cho các quản trị trong bộ phận
-            $obt_level = array();
+            $obt_level = [];
             $admins_list = $frow['admins'];
-            $admins_list = !empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : array();
+            $admins_list = !empty($admins_list) ? array_map('trim', explode(';', $admins_list)) : [];
             foreach ($admins_list as $l) {
                 $l2 = array_map('intval', explode('/', $l));
                 if (isset($l2[3]) and $l2[3] === 1) {
-                    $obt_level[] = intval($l2[0]);
+                    $obt_level[] = (int) ($l2[0]);
                 }
             }
             if (!empty($obt_level)) {
                 $sql = 'SELECT username, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id IN (' . implode(',', $obt_level) . ') AND is_suspend=0) AND active=1';
                 $_result = $db->query($sql);
                 while ($_row = $_result->fetch()) {
-                    if (!in_array($_row['email'], $_array_email)) {
+                    if (!in_array($_row['email'], $_array_email, true)) {
                         $_row['full_name'] = nv_show_name_user($_row['first_name'], $_row['last_name'], $_row['username']);
                         $mail->Cc($_row['email'], $_row['full_name']);
                         $_array_email[] = $_row['email'];
@@ -87,7 +87,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         if (empty($_array_email)) {
             $mail->addReplyTo($admin_info['email'], $admin_info['full_name']);
             $_array_email[] = $admin_info['email'];
-        } elseif (!in_array($admin_info['email'], $_array_email)) {
+        } elseif (!in_array($admin_info['email'], $_array_email, true)) {
             $mail->Cc($admin_info['email'], $admin_info['full_name']);
             $_array_email[] = $admin_info['email'];
         }

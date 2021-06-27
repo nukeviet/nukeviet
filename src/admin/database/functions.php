@@ -1,24 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $nv_Lang->getGlobal('mod_database')
-);
+];
 
-$allow_func = array(
+$allow_func = [
     'main',
     'savefile',
     'download',
@@ -26,7 +27,7 @@ $allow_func = array(
     'file',
     'getfile',
     'delfile'
-);
+];
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'setting';
     $allow_func[] = 'sampledata';
@@ -44,7 +45,7 @@ $array_url_instruction['sampledata'] = 'https://wiki.nukeviet.vn/nukeviet4:admin
 /**
  * nv_highlight_string()
  *
- * @param mixed $tab
+ * @param mixed  $tab
  * @param string $type
  * @return
  */
@@ -60,7 +61,7 @@ function nv_highlight_string($tab, $type = 'sql')
 
     if ($type == 'sql') {
         return highlight_string($show . ';', 1);
-    } else {
-        return highlight_string("<?php\n\n\$sql = \"" . $show . "\";\n\n?>", 1);
     }
+
+    return highlight_string("<?php\n\n\$sql = \"" . $show . "\";\n\n?>", 1);
 }

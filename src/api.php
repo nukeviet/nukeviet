@@ -1,17 +1,18 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jul 2, 2017 2:06:56 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_SYSTEM', true);
 
 // Xac dinh thu muc goc cua site
-define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __file__), PATHINFO_DIRNAME));
+define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
@@ -109,7 +110,7 @@ if (empty($api_request['action'])) {
     $apiresults->setCode(ApiResult::CODE_MISSING_REQUEST_CMD)->setMessage('Missing Api Command!!!')->returnResult();
 } elseif (empty($api_request['module'])) {
     // Api hệ thống
-    if (!in_array($api_request['action'], $credential_data['api_allowed'][''])) {
+    if (!in_array($api_request['action'], $credential_data['api_allowed'][''], true)) {
         $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)->setMessage('Api Command Not Found!!!')->returnResult();
     }
     $classname = 'NukeViet\\Api\\' . $api_request['action'];
@@ -119,7 +120,7 @@ if (empty($api_request['action'])) {
         $apiresults->setCode(ApiResult::CODE_LANG_NOT_EXISTS)->setMessage('Api Lang Not Found!!!')->returnResult();
     } elseif (!isset($credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']]) or !isset($sys_mods[$api_request['module']])) {
         $apiresults->setCode(ApiResult::CODE_MODULE_NOT_EXISTS)->setMessage('Api Module Not Found!!!')->returnResult();
-    } elseif (!in_array($api_request['action'], $credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']])) {
+    } elseif (!in_array($api_request['action'], $credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']], true)) {
         $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)->setMessage('Api Command Not Found!!!')->returnResult();
     }
 
@@ -144,7 +145,7 @@ if (!empty($api_request['module'])) {
      * Nếu API của module kiểm tra xem admin có phải là Admin module không
      * Nếu quản trị tối cao và điều hành chung thì nghiễm nhiên có quyền quản trị module
      */
-    if ($credential_data['lev'] > 2 and !in_array($credential_data['admin_id'], explode(',', $module_info['admins']))) {
+    if ($credential_data['lev'] > 2 and !in_array((int) $credential_data['admin_id'], array_map('intval', explode(',', $module_info['admins'])), true)) {
         $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)->setMessage('Admin do not have the right to manage this module!!!')->returnResult();
     }
 
@@ -177,15 +178,15 @@ $return = $api->execute();
 
 Api::reset();
 
-Header('Cache-Control: no-cache, must-revalidate');
-Header('Content-type: application/json');
+header('Cache-Control: no-cache, must-revalidate');
+header('Content-type: application/json');
 
 if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-    Header('X-Frame-Options: SAMEORIGIN');
+    header('X-Frame-Options: SAMEORIGIN');
 }
 
-Header('X-Content-Type-Options: nosniff');
-Header('X-XSS-Protection: 1; mode=block');
+header('X-Content-Type-Options: nosniff');
+header('X-XSS-Protection: 1; mode=block');
 
 ob_start('ob_gzhandler');
 echo $return;

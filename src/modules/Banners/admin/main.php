@@ -1,30 +1,31 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('main_caption');
 
-$contents = array();
-$contents['containerid'] = array();
-$contents['aj'] = array();
+$contents = [];
+$contents['containerid'] = [];
+$contents['aj'] = [];
 $contents['keyword'] = $nv_Request->get_title('q', 'get', '');
 $contents['pid'] = $nv_Request->get_int('pid', 'get', 0);
 
-$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang ASC";
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang ASC';
 $contents['plans'] = $db->query($sql)->fetchAll();
 
 // Chờ duyệt
-$new = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=4")->fetchColumn();
+$new = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act=4')->fetchColumn();
 
 if ($new > 0) {
     $contents['containerid'][] = 'new_list';
@@ -32,7 +33,7 @@ if ($new > 0) {
 }
 
 // Chờ hoạt động
-$deact = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=0")->fetchColumn();
+$deact = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act=0')->fetchColumn();
 
 if ($deact > 0) {
     $contents['containerid'][] = 'unpub_list';
@@ -40,7 +41,7 @@ if ($deact > 0) {
 }
 
 // Đình chỉ hoạt động
-$deact = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=3")->fetchColumn();
+$deact = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act=3')->fetchColumn();
 
 if ($deact > 0) {
     $contents['containerid'][] = 'deact_list';
@@ -48,7 +49,7 @@ if ($deact > 0) {
 }
 
 // Hết hạn
-$exp = $db->query("SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act=2")->fetchColumn();
+$exp = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act=2')->fetchColumn();
 
 if ($exp > 0) {
     $contents['containerid'][] = 'exp_list';

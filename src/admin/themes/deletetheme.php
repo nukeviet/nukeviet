@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 30 Nov 2014 01:54:12 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $theme = $nv_Request->get_title('theme', 'post', '', 1);
 if (empty($theme) or !(preg_match($global_config['check_theme'], $theme) or preg_match($global_config['check_theme_mobile'], $theme))) {
-    die();
+    exit();
 }
 try {
     $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 AND theme= :theme');
@@ -24,9 +25,9 @@ try {
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('theme_delete'), 'theme ' . $theme, $admin_info['userid']);
 
         if (preg_match($global_config['check_theme_mobile'], $theme)) {
-            $sth = $db->prepare("UPDATE " . NV_MODULES_TABLE . " SET mobile='' WHERE mobile = :theme");
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . " SET mobile='' WHERE mobile = :theme");
         } else {
-            $sth = $db->prepare("UPDATE " . NV_MODULES_TABLE . " SET theme='' WHERE theme = :theme");
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . " SET theme='' WHERE theme = :theme");
         }
         $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();
@@ -55,5 +56,5 @@ try {
         echo $nv_Lang->getModule('theme_delete_unsuccess');
     }
 } catch (PDOException $e) {
-    die($e->getMessage());
+    exit($e->getMessage());
 }

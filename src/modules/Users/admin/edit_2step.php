@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $userid = $nv_Request->get_int('userid', 'get', 0);
@@ -73,24 +74,24 @@ if (empty($row['active2step'])) {
 
     // Tắt xác thực hai bước
     if ($nv_Request->isset_request('turnoff2step', 'post')) {
-        $db->query("DELETE FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid']);
-        $db->query("UPDATE " . NV_MOD_TABLE . " SET active2step=0, secretkey='' WHERE userid=" . $row['userid']);
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
+        $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='' WHERE userid=" . $row['userid']);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_turnoff_user2step', 'userid ' . $row['userid'], $admin_info['userid']);
         $nv_Cache->delMod($module_name);
 
         header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&userid=' . $row['userid']);
-        die();
+        exit();
     }
 
     // Tạo lại mã dự phòng
     if ($nv_Request->isset_request('resetbackupcodes', 'post')) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
 
-        $new_code = array();
+        $new_code = [];
         while (sizeof($new_code) < 10) {
             $code = nv_strtolower(nv_genpass(8, 0));
-            if (!in_array($code, $new_code)) {
+            if (!in_array($code, $new_code, true)) {
                 $new_code[] = $code;
             }
         }
@@ -116,10 +117,10 @@ if (empty($row['active2step'])) {
         $nv_Cache->delMod($module_name);
 
         header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&userid=' . $row['userid']);
-        die();
+        exit();
     }
 
-    $sql = "SELECT * FROM " . NV_MOD_TABLE . "_backupcodes WHERE userid=" . $row['userid'];
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid'];
     $result = $db->query($sql);
     while ($code = $result->fetch()) {
         $code['status'] = $nv_Lang->getModule('user_2step_codes_s' . $code['is_used']);

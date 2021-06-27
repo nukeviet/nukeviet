@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 21:7
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_BANNERS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('stats_views');
@@ -26,7 +27,7 @@ $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MANAGEMENT', $manament);
 $xtpl->parse('main.management');
 
-$sql = "SELECT id,title FROM " . NV_BANNERS_GLOBALTABLE . "_rows WHERE act='1' AND clid=" . $user_info['userid'] . " ORDER BY id ASC";
+$sql = 'SELECT id,title FROM ' . NV_BANNERS_GLOBALTABLE . "_rows WHERE act='1' AND clid=" . $user_info['userid'] . ' ORDER BY id ASC';
 $result = $db->query($sql);
 
 while ($row = $result->fetch()) {

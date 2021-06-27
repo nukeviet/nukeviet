@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 // Ket noi ngon ngu
@@ -31,15 +32,15 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         $nv_redirect2 = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&rand=' . nv_genpass();
 
         $prcservice = (isset($module_config['seotools']['prcservice'])) ? $module_config['seotools']['prcservice'] : '';
-        $prcservice = (! empty($prcservice)) ? explode(',', $prcservice) : array();
+        $prcservice = (!empty($prcservice)) ? explode(',', $prcservice) : [];
 
-        if ($news_contents['id'] > 0 and ! empty($prcservice)) {
+        if ($news_contents['id'] > 0 and !empty($prcservice)) {
             if ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME + 1 and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME + 1)) {
                 if ($nv_Request->get_string('checkss', 'post,get', '') == md5($id . NV_CHECK_SESSION)) {
-                    $services_active = array();
+                    $services_active = [];
                     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
                     foreach ($services as $key => $service) {
-                        if (in_array($service[1], $prcservice)) {
+                        if (in_array($service[1], $prcservice, true)) {
                             $services_active[] = $service;
                         }
                     }
@@ -58,13 +59,13 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
 
                         $xtpl->assign('HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                         foreach ($services_active as $key => $service) {
-                            $xtpl->assign('SERVICE', array(
+                            $xtpl->assign('SERVICE', [
                                 'id' => $key,
                                 'title' => $service[1],
                                 'icon' => (isset($service[3]) ? $service[3] : '')
-                            ));
+                            ]);
 
-                            if (isset($service[3]) and ! empty($service[3])) {
+                            if (isset($service[3]) and !empty($service[3])) {
                                 $xtpl->parse('main.service.icon');
                             } else {
                                 $xtpl->parse('main.service.noticon');
@@ -88,9 +89,9 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                             $timeout = nv_convertfromSec($timeout);
                             $finish->nodeValue = 'glb|' . sprintf($nv_Lang->getModule('rpc_error_timeout'), $timeout);
                             $content = $xml2->saveXML();
-                            @Header('Content-Type: text/xml; charset=utf-8');
+                            @header('Content-Type: text/xml; charset=utf-8');
                             print_r($content);
-                            die();
+                            exit();
                         }
 
                         $listcatid_arr = explode(',', $news_contents['listcatid']);
@@ -158,27 +159,27 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
 
                         $content = $xml2->saveXML();
 
-                        @Header('Content-Type: text/xml; charset=utf-8');
+                        @header('Content-Type: text/xml; charset=utf-8');
                         print_r($content);
-                        die();
+                        exit();
                     }
                 } else {
                     $msg1 = $nv_Lang->getModule('content_saveok');
                     $msg2 = $nv_Lang->getModule('content_main') . ' ' . $module_info['custom_title'];
 
-                    $contents .= "<div align=\"center\">";
-                    $contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
-                    $contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
-                    $contents .= "<strong><a href=\"" . $nv_redirect2 . "\">" . $nv_Lang->getModule('rpc_ping_page') . "</a></strong>";
-                    $contents .= " - <strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
-                    $contents .= "</div>";
-                    $contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . $nv_redirect2 . "\" />";
+                    $contents .= '<div align="center">';
+                    $contents .= '<strong>' . $msg1 . "</strong><br /><br />\n";
+                    $contents .= '<img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
+                    $contents .= '<strong><a href="' . $nv_redirect2 . '">' . $nv_Lang->getModule('rpc_ping_page') . '</a></strong>';
+                    $contents .= ' - <strong><a href="' . $nv_redirect . '">' . $msg2 . '</a></strong>';
+                    $contents .= '</div>';
+                    $contents .= '<meta http-equiv="refresh" content="3;url=' . $nv_redirect2 . '" />';
                 }
             } else {
-                $contents = "<meta http-equiv=\"refresh\" content=\"1;url=" . $nv_redirect . "\" />";
+                $contents = '<meta http-equiv="refresh" content="1;url=' . $nv_redirect . '" />';
             }
         } else {
-            $contents = "<meta http-equiv=\"refresh\" content=\"1;url=" . $nv_redirect . "\" />";
+            $contents = '<meta http-equiv="refresh" content="1;url=' . $nv_redirect . '" />';
         }
     }
 } else {

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_CONTACT')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -37,8 +38,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
 
     if (!empty($array_department)) {
         foreach ($array_department as $dep) {
-            if (empty($alias_url) and $dep['act'] == 2)
-            {
+            if (empty($alias_url) and $dep['act'] == 2) {
                 // Không hiển thị các bộ phận theo cấu hình trong quản trị
                 continue;
             }
@@ -54,13 +54,13 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                 foreach ($nums as $k => $num) {
                     unset($m);
                     if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
-                        $phone = array( 'number' => nv_htmlspecialchars($m[1]), 'href' => $m[2] );
+                        $phone = ['number' => nv_htmlspecialchars($m[1]), 'href' => $m[2]];
                         $xtpl->assign('PHONE', $phone);
                         $xtpl->parse('main.dep.phone.item.href');
                         $xtpl->parse('main.dep.phone.item.href2');
                     } else {
                         $num = preg_replace("/\[[^\]]*\]/", '', $num);
-                        $phone = array( 'number' => nv_htmlspecialchars($num) );
+                        $phone = ['number' => nv_htmlspecialchars($num)];
                         $xtpl->assign('PHONE', $phone);
                     }
                     if ($k) {
@@ -96,7 +96,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                             if (strtolower($key) == 'yahoo') {
                                 $ys = array_map('trim', explode(',', $value));
                                 foreach ($ys as $k => $y) {
-                                    $xtpl->assign('YAHOO', array( 'name' => $key, 'value' => $y ));
+                                    $xtpl->assign('YAHOO', ['name' => $key, 'value' => $y]);
                                     if ($k) {
                                         $xtpl->parse('main.dep.yahoo.item.comma');
                                     }
@@ -106,7 +106,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                             } elseif (strtolower($key) == 'skype') {
                                 $ss = array_map('trim', explode(',', $value));
                                 foreach ($ss as $k => $s) {
-                                    $xtpl->assign('SKYPE', array( 'name' => $key, 'value' => $s ));
+                                    $xtpl->assign('SKYPE', ['name' => $key, 'value' => $s]);
                                     if ($k) {
                                         $xtpl->parse('main.dep.skype.item.comma');
                                     }
@@ -116,7 +116,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                             } elseif (strtolower($key) == 'viber') {
                                 $ss = array_map('trim', explode(',', $value));
                                 foreach ($ss as $k => $s) {
-                                    $xtpl->assign('VIBER', array( 'name' => $key, 'value' => $s ));
+                                    $xtpl->assign('VIBER', ['name' => $key, 'value' => $s]);
                                     if ($k) {
                                         $xtpl->parse('main.dep.viber.item.comma');
                                     }
@@ -126,7 +126,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                             } elseif (strtolower($key) == 'icq') {
                                 $ss = array_map('trim', explode(',', $value));
                                 foreach ($ss as $k => $s) {
-                                    $xtpl->assign('ICQ', array( 'name' => $key, 'value' => $s ));
+                                    $xtpl->assign('ICQ', ['name' => $key, 'value' => $s]);
                                     if ($k) {
                                         $xtpl->parse('main.dep.icq.item.comma');
                                     }
@@ -136,7 +136,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                             } elseif (strtolower($key) == 'whatsapp') {
                                 $ss = array_map('trim', explode(',', $value));
                                 foreach ($ss as $k => $s) {
-                                    $xtpl->assign('WHATSAPP', array( 'name' => $key, 'value' => $s ));
+                                    $xtpl->assign('WHATSAPP', ['name' => $key, 'value' => $s]);
                                     if ($k) {
                                         $xtpl->parse('main.dep.whatsapp.item.comma');
                                     }
@@ -144,7 +144,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                                 }
                                 $xtpl->parse('main.dep.whatsapp');
                             } else {
-                                $xtpl->assign('OTHER', array( 'name' => $key, 'value' => $value ));
+                                $xtpl->assign('OTHER', ['name' => $key, 'value' => $value]);
 
                                 if (nv_is_url($value)) {
                                     $xtpl->parse('main.dep.other.url');
@@ -167,6 +167,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
     $xtpl->assign('FORM', $form);
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -223,6 +224,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -237,7 +239,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
  * @param mixed $fphone
  * @param mixed $fcon
  * @param mixed $fpart
- * @param bool $sendinfo
+ * @param bool  $sendinfo
  * @return
  */
 function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, $sendinfo = true)
@@ -269,5 +271,6 @@ function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, 
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

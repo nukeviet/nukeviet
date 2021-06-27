@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:24
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('api_cr');
@@ -55,11 +56,10 @@ while ($row = $result->fetch()) {
     $array[$row['credential_ident']] = $row;
 }
 
-
 // Xóa API Credential
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL!!!');
+        exit('Wrong URL!!!');
     }
 
     $credential_ident = $nv_Request->get_title('credential_ident', 'post', '');

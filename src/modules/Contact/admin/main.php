@@ -1,24 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $mark = $nv_Request->get_title('mark', 'post', '');
 
-if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
+if (!empty($mark) and ($mark == 'read' or $mark == 'unread')) {
     $mark = $mark == 'read' ? 1 : 0;
-    $sends = $nv_Request->get_array('sends', 'post', array());
+    $sends = $nv_Request->get_array('sends', 'post', []);
     if (empty($sends)) {
-        nv_jsonOutput(array( 'status' => 'error', 'mess' => $nv_Lang->getModule('please_choose') ));
+        nv_jsonOutput(['status' => 'error', 'mess' => $nv_Lang->getModule('please_choose')]);
     }
 
     foreach ($sends as $id) {
@@ -27,7 +28,7 @@ if (! empty($mark) and ($mark == 'read' or $mark == 'unread')) {
 
     $sends = implode(',', $sends);
     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')');
-    nv_jsonOutput(array( 'status' => 'ok', 'mess' => '' ));
+    nv_jsonOutput(['status' => 'ok', 'mess' => '']);
 }
 
 $page_title = $module_info['site_title'];
@@ -38,7 +39,7 @@ $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $contact_allowed = nv_getAllowed();
 
-if (! empty($contact_allowed['view'])) {
+if (!empty($contact_allowed['view'])) {
     $in = implode(',', array_keys($contact_allowed['view']));
 
     $page = $nv_Request->get_int('page', 'get', 1);
@@ -66,27 +67,27 @@ if (! empty($contact_allowed['view'])) {
         $result = $db->query($db->sql());
 
         while ($row = $result->fetch()) {
-            $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_new.gif', 12, 9 );
+            $image = [NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_new.gif', 12, 9];
             $status = 'New';
-            $style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
+            $style = ' style="font-weight:bold;cursor:pointer;white-space:nowrap;"';
 
             if ($row['is_read'] == 1) {
-            	$style = " style=\"cursor:pointer;white-space:nowrap;\"";
-	            if ($row['is_reply']==1) {
-	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14 );
-	                $status = $nv_Lang->getModule('tt2_row_title');
-	            }elseif ($row['is_reply']==2) {
-	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif', 13, 14 );
-	                $status = $nv_Lang->getModule('tt2_row_title');
-	            }else{
-	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );
-	                $status = $nv_Lang->getModule('tt1_row_title');
-	            }
+                $style = ' style="cursor:pointer;white-space:nowrap;"';
+                if ($row['is_reply'] == 1) {
+                    $image = [NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14];
+                    $status = $nv_Lang->getModule('tt2_row_title');
+                } elseif ($row['is_reply'] == 2) {
+                    $image = [NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_forward.gif', 13, 14];
+                    $status = $nv_Lang->getModule('tt2_row_title');
+                } else {
+                    $image = [NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11];
+                    $status = $nv_Lang->getModule('tt1_row_title');
+                }
             }
 
-            $onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
+            $onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=view&amp;id=' . $row['id'] . "'\"";
 
-            $xtpl->assign('ROW', array(
+            $xtpl->assign('ROW', [
                 'id' => $row['id'],
                 'sender_name' => $row['sender_name'],
                 'path' => $contact_allowed['view'][$row['cid']],
@@ -97,14 +98,14 @@ if (! empty($contact_allowed['view'])) {
                 'onclick' => $onclick,
                 'status' => $status,
                 'image' => $image
-            ));
+            ]);
 
             $xtpl->parse('main.data.row');
         }
 
         $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
-        if (! empty($generate_page)) {
+        if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('main.data.generate_page');
         }

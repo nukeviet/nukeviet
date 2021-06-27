@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 04 May 2014 12:41:32 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_qr_code')) {
@@ -26,12 +27,12 @@ if (!nv_function_exists('nv_block_qr_code')) {
         global $selectthemes;
 
         // Find language file
-        $array_levels = array(
+        $array_levels = [
             'L',
             'M',
             'Q',
             'H'
-        );
+        ];
 
         $html = '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('qr_level') . ':</label>';
@@ -51,7 +52,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_pixel_per_point">';
 
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 12; ++$i) {
             $html .= '		<option value="' . $i . '"' . ($i == $data_block['pixel_per_point'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
         }
 
@@ -64,7 +65,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_outer_frame">';
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $html .= '		<option value="' . $i . '"' . ($i == $data_block['outer_frame'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
         }
 
@@ -85,11 +86,12 @@ if (!nv_function_exists('nv_block_qr_code')) {
     function nv_block_qr_code_config_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
+        $return = [];
+        $return['error'] = [];
         $return['config']['level'] = $nv_Request->get_title('config_level', 'post');
         $return['config']['pixel_per_point'] = $nv_Request->get_int('config_pixel_per_point', 'post', 4);
         $return['config']['outer_frame'] = $nv_Request->get_int('config_outer_frame', 'post', 1);
+
         return $return;
     }
 
@@ -116,10 +118,11 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
         $block_config['selfurl'] = $client_info['selfurl'];
-        $block_config['title'] = "QR-Code: " . str_replace('"', "&quot;", ($page_title ? $page_title : $global_config['site_name']));
+        $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ? $page_title : $global_config['site_name']));
         $xtpl->assign('QRCODE', $block_config);
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

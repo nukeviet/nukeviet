@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3 / 25 / 2010 18 : 6
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var total = 0;
@@ -23,7 +24,7 @@ function nv_sendvoting(form, id, num, checkss, errmsg, captcha) {
         for (var b = 0; b < opts.length; b++) opts[b].checked && (vals = opts[b].value)
     } else if (1 < num)
         for (opts = form["option[]"], b = 0; b < opts.length; b++) opts[b].checked && (vals = vals + "," + opts[b].value);
-    
+
     if ("0" == vals && 0 < num) {
         alert(errmsg);
     } else if (captcha == 0 || "0" == vals) {

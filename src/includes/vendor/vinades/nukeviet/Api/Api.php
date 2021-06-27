@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 9:10
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Api;
 
 class Api
 {
-    const ADMIN_LEV_GOD = 1;
-    const ADMIN_LEV_SP = 2;
-    const ADMIN_LEV_MOD = 3;
+    public const ADMIN_LEV_GOD = 1;
+    public const ADMIN_LEV_SP = 2;
+    public const ADMIN_LEV_MOD = 3;
 
     private static $admin_id = 0;
     private static $admin_username = '';
@@ -38,23 +39,23 @@ class Api
      */
     public static function testParamKey($key = '')
     {
-        return (!is_numeric($key) and preg_match('/^[a-zA-Z0-9\_\-]+$/', $key));
+        return !is_numeric($key) and preg_match('/^[a-zA-Z0-9\_\-]+$/', $key);
     }
 
     /**
-     * @param integer $lev
+     * @param int $lev
      */
     public static function setAdminLev($lev)
     {
-        self::$admin_lev = intval($lev);
+        self::$admin_lev = (int) $lev;
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      */
     public static function setAdminId($id)
     {
-        self::$admin_id = intval($id);
+        self::$admin_id = (int) $id;
     }
 
     /**
@@ -121,9 +122,6 @@ class Api
         return self::$module_info;
     }
 
-    /**
-     *
-     */
     public static function reset()
     {
         self::$admin_id = 0;

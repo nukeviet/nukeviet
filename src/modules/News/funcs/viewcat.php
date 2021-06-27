@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $cache_file = '';
@@ -47,8 +48,8 @@ if (!empty($global_array_cat[$catid]['image'])) {
 }
 
 if (empty($contents)) {
-    $array_catpage = array();
-    $array_cat_other = array();
+    $array_catpage = [];
+    $array_cat_other = [];
     $base_url = $global_array_cat[$catid]['link'];
     $show_no_image = $module_config[$module_name]['show_no_image'];
 
@@ -140,8 +141,8 @@ if (empty($contents)) {
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
         $contents = viewcat_page_new($array_catpage, $array_cat_other, $generate_page);
     } elseif ($viewcat == 'viewcat_main_left' or $viewcat == 'viewcat_main_right' or $viewcat == 'viewcat_main_bottom') {
-        $array_catcontent = array();
-        $array_subcatpage = array();
+        $array_catcontent = [];
+        $array_subcatpage = [];
 
         $db_slave->sqlreset()
             ->select('COUNT(*)')
@@ -210,7 +211,7 @@ if (empty($contents)) {
         }
         unset($sql, $result);
 
-        $array_cat_other = array();
+        $array_cat_other = [];
 
         if ($global_array_cat[$catid]['subcatid'] != '') {
             $key = 0;
@@ -290,7 +291,7 @@ if (empty($contents)) {
         $contents .= call_user_func('viewsubcat_main', $viewcat, $array_cat_other);
     } elseif ($viewcat == 'viewcat_two_column') {
         // Cac bai viet phan dau
-        $array_catcontent = array();
+        $array_catcontent = [];
 
         $db_slave->sqlreset()
             ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')

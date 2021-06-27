@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('checkss', 'get') == NV_CHECK_SESSION) {
     $listid = $nv_Request->get_string('listid', 'get');
     $id_array = array_map('intval', explode(',', $listid));
 
-    $exp_array = array();
+    $exp_array = [];
     $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode(',', $id_array) . ')';
     $result = $db->query($sql);
     while (list($id, $listcatid, $publtime, $exptime, $status) = $result->fetch(3)) {
@@ -59,7 +60,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
         }
     }
 
-    if (! empty($exp_array)) {
+    if (!empty($exp_array)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_exp_content', 'listid: ' . implode(', ', $exp_array), $admin_info['userid']);
     }
     nv_set_status_module();

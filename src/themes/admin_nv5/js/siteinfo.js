@@ -1,12 +1,13 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 9:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-$(document).ready(function(){
+$(document).ready(function() {
     // Kiểm tra CHMOD các thư mục
     $("#checkchmod").on('click', function(e) {
         e.preventDefault();
@@ -16,10 +17,10 @@ $(document).ready(function(){
         }
         $this.attr('class', 'fas fa-spinner fa-spin');
         $.ajax({
-            type : "POST",
-            url : $this.data('url'),
-            data : "",
-            success : function(data) {
+            type: "POST",
+            url: $this.data('url'),
+            data: "",
+            success: function(data) {
                 $this.attr('class', 'fas fa-wrench');
                 alert(data);
                 location.reload();

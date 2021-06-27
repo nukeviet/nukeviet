@@ -1,29 +1,30 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['delete_file'])) {
-    die('ERROR#' . $nv_Lang->getModule('notlevel'));
+    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_QUOTES);
 $file = basename($file);
 
 if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-    die('ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $file);
+    exit('ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $file);
 }
 
 if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x', 'post') and $nv_Request->isset_request('y', 'post')) {
@@ -41,11 +42,11 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
 
         if ($keep_original) {
             $file_ext = nv_getextension($file);
-            $file_old = $file = substr($file, 0, - (strlen($file_ext) + 1));
+            $file_old = $file = substr($file, 0, -(strlen($file_ext) + 1));
             $file_add = '-' . $config_logo['w'] . 'x' . $config_logo['h'];
             $i = 0;
             while (file_exists(NV_ROOTDIR . '/' . $path . '/' . $file . $file_add . '.' . $file_ext)) {
-                $i++;
+                ++$i;
                 $file = $file_old . 'v' . $i;
             }
             $file = $file . $file_add . '.' . $file_ext;
@@ -67,31 +68,30 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
                 $newalt = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $file);
                 $newalt = str_replace('-', ' ', change_alias($newalt));
 
-                $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file (
+                $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
                     name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
                 ) VALUES (
                     '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "',
-                    " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ",
-                    " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ",
-                    " . $info['mtime'] . ", " . $did . ", '" . $file . "', :newalt
+                    " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ',
+                    ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ',
+                    ' . $info['mtime'] . ', ' . $did . ", '" . $file . "', :newalt
                 )");
 
                 $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
                 $sth->execute();
             } else {
-                $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET
-                    filesize=" . $info['filesize'] . ", src='" . $info['src'] . "',
-                    srcwidth=" . $info['srcwidth'] . ", srcheight=" . $info['srcheight'] . ",
-                    sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ",
-                    mtime=" . $info['mtime'] . "
-                WHERE did = " . $did . " AND title = '" . $file . "'");
+                $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET
+                    filesize=' . $info['filesize'] . ", src='" . $info['src'] . "',
+                    srcwidth=" . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ",
+                    sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ',
+                    mtime=' . $info['mtime'] . '
+                WHERE did = ' . $did . " AND title = '" . $file . "'");
             }
         }
 
-        die('OK#' . basename($file));
-    } else {
-        die('ERROR#' . $nv_Lang->getModule('notlevel'));
+        exit('OK#' . basename($file));
     }
+    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
-die('ERROR#Error Access!!!');
+exit('ERROR#Error Access!!!');

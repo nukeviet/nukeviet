@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 03-05-2010
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_SEARCH')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
-
     $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$m_values['module_name']]['elas_host'], $module_config[$m_values['module_name']]['elas_port'], $module_config[$m_values['module_name']]['elas_index']);
 
     $dbkeyword = nv_EncString($dbkeyword);
@@ -37,7 +37,7 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
         ]
     ];
 
-    $array_query_elastic = array();
+    $array_query_elastic = [];
     $array_query_elastic['query']['bool'] = $search_elastic;
     $array_query_elastic['size'] = $limit;
     $array_query_elastic['from'] = ($page - 1) * $limit;
@@ -46,12 +46,12 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
 
     $num_items = $response['hits']['total'];
     if ($num_items) {
-        $array_cat_alias = array();
+        $array_cat_alias = [];
         $array_cat_alias[0] = 'other';
 
         $sql_cat = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_cat';
         $re_cat = $db_slave->query($sql_cat);
-        while (list ($catid, $alias) = $re_cat->fetch(3)) {
+        while (list($catid, $alias) = $re_cat->fetch(3)) {
             $array_cat_alias[$catid] = $alias;
         }
         $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
@@ -59,11 +59,11 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
         foreach ($response['hits']['hits'] as $key => $value) {
             $content = $value['_source']['hometext'] . strip_tags($value['_source']['bodyhtml']);
             $url = $link . $array_cat_alias[$value['_source']['catid']] . '/' . $value['_source']['alias'] . '-' . $value['_source']['id'] . $global_config['rewrite_exturl'];
-            $result_array[] = array(
+            $result_array[] = [
                 'link' => $url,
                 'title' => BoldKeywordInStr($value['_source']['title'], $key, $logic),
                 'content' => BoldKeywordInStr($content, $key, $logic)
-            );
+            ];
         }
     }
 } else {
@@ -77,12 +77,12 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
         ->fetchColumn();
 
     if ($num_items) {
-        $array_cat_alias = array();
+        $array_cat_alias = [];
         $array_cat_alias[0] = 'other';
 
         $sql_cat = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_cat';
         $re_cat = $db_slave->query($sql_cat);
-        while (list ($catid, $alias) = $re_cat->fetch(3)) {
+        while (list($catid, $alias) = $re_cat->fetch(3)) {
             $array_cat_alias[$catid] = $alias;
         }
 
@@ -93,14 +93,14 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
             ->limit($limit)
             ->offset(($page - 1) * $limit);
         $result = $db_slave->query($db_slave->sql());
-        while (list ($id, $tilterow, $alias, $catid, $hometext, $bodytext) = $result->fetch(3)) {
+        while (list($id, $tilterow, $alias, $catid, $hometext, $bodytext) = $result->fetch(3)) {
             $content = strip_tags($hometext, 'br') . strip_tags($bodytext);
             $url = $link . $array_cat_alias[$catid] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
-            $result_array[] = array(
+            $result_array[] = [
                 'link' => $url,
                 'title' => BoldKeywordInStr($tilterow, $key, $logic),
                 'content' => BoldKeywordInStr($content, $key, $logic)
-            );
+            ];
         }
     }
 }

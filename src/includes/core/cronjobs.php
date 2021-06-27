@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @copyright 2010
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/23/2010 16:10
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Duyệt tất cả các cron đến giờ chạy
@@ -56,7 +57,7 @@ while ($cron_row = $cron_result->fetch()) {
             require_once NV_ROOTDIR . '/includes/cronjobs/' . $cron_row['run_file'];
         }
         if (!nv_function_exists($cron_row['run_func'])) {
-            nv_insert_notification('settings', 'auto_deactive_cronjobs', array( 'cron_id' => $cron_row['id'] ));
+            nv_insert_notification('settings', 'auto_deactive_cronjobs', ['cron_id' => $cron_row['id']]);
             $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . $this_time . ', last_result=0 WHERE id=' . $cron_row['id']);
             continue;
         }
@@ -72,22 +73,22 @@ while ($cron_row = $cron_result->fetch()) {
         }
         file_put_contents($check_run_cronjobs, var_export($cron_row, true));
 
-        $params = (!empty($cron_row['params'])) ? array_map('trim', explode(',', $cron_row['params'])) : array();
+        $params = (!empty($cron_row['params'])) ? array_map('trim', explode(',', $cron_row['params'])) : [];
         $result2 = call_user_func_array($cron_row['run_func'], $params);
         if (!$result2) {
-            nv_insert_notification('settings', 'auto_deactive_cronjobs', array( 'cron_id' => $cron_row['id'] ));
+            nv_insert_notification('settings', 'auto_deactive_cronjobs', ['cron_id' => $cron_row['id']]);
             $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . $this_time . ', last_result=0 WHERE id=' . $cron_row['id']);
         } else {
             if ($cron_row['del']) {
                 $db->query('DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $cron_row['id']);
             } elseif (empty($cron_row['inter_val'])) {
-                nv_insert_notification('settings', 'auto_deactive_cronjobs', array( 'cron_id' => $cron_row['id'] ));
+                nv_insert_notification('settings', 'auto_deactive_cronjobs', ['cron_id' => $cron_row['id']]);
                 $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . $this_time . ', last_result=1 WHERE id=' . $cron_row['id']);
             } else {
                 $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET last_time=' . $this_time . ', last_result=1 WHERE id=' . $cron_row['id']);
 
                 $cronjobs_next_time = $this_time + $interval;
-                if ($db->exec("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) < " . NV_CURRENTTIME . " OR CAST(config_value AS UNSIGNED) > " . $cronjobs_next_time . ")")) {
+                if ($db->exec('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) < " . NV_CURRENTTIME . ' OR CAST(config_value AS UNSIGNED) > ' . $cronjobs_next_time . ')')) {
                     $nv_Cache->delMod('settings');
                 }
             }
@@ -98,7 +99,7 @@ while ($cron_row = $cron_result->fetch()) {
 }
 
 $image = imagecreate(1, 1);
-Header('Content-type: image/jpg');
+header('Content-type: image/jpg');
 imagejpeg($image, null, 80);
 imagedestroy($image);
-die();
+exit();

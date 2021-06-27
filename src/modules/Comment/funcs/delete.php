@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_COMMENT')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_COMMENT')) {
+    exit('Stop!!!');
 }
 
 $contents = 'ERR_' . $nv_Lang->getModule('comment_unsuccess');
@@ -30,7 +31,7 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
             $is_delete = true;
         } elseif (defined('NV_IS_MODADMIN')) {
             $adminscomm = explode(',', $module_config[$module]['adminscomm']);
-            if (in_array($admin_info['admin_id'], $adminscomm)) {
+            if (in_array($admin_info['admin_id'], $adminscomm, true)) {
                 $is_delete = true;
             }
         }
@@ -45,8 +46,8 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
 
             $mod_info = $site_mods[$module];
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
-                $row = array();
-                $row['module'] =  $module;
+                $row = [];
+                $row['module'] = $module;
                 $row['id'] = $id;
                 include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
             }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_LANG')) {
+    exit('Stop!!!');
 }
 
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
@@ -17,7 +18,7 @@ $page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv
 
 if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CHECK_SESSION)) {
     if (preg_match('/^([a-z]{2})$/', $dirlang)) {
-        $allowfolder = array();
+        $allowfolder = [];
         $dirs = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
         $err = 0;
 
@@ -61,7 +62,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
         $pattern_lang_js = '/[a-zA-Z0-9\-\_\.]+\-' . $dirlang . '\.js$/';
         $array_lang_js = nv_scandir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language', $pattern_lang_js);
 
-        if (! empty($array_lang_js)) {
+        if (!empty($array_lang_js)) {
             foreach ($array_lang_js as $fjs) {
                 $allowfolder[] = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language/' . $fjs;
             }

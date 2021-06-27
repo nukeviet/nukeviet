@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/12/2010, 13:16
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($global_config['idsite']) {
@@ -42,7 +43,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 'value' => $value,
                 'content' => $content
             ];
-            if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'])) {
+            if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore, true) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'], true)) {
                 $metatags['meta'][] = $newArray;
             }
         }
@@ -56,13 +57,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array2XML = new NukeViet\Xml\Array2XML();
         $array2XML->saveXML($metatags, 'metatags', $file_metatags, $global_config['site_charset']);
     }
-    $metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post');
+    $metaTagsOgp = (int) $nv_Request->get_bool('metaTagsOgp', 'post');
     $description_length = $nv_Request->get_absint('description_length', 'post');
-    $private_site = (int)$nv_Request->get_bool('private_site', 'post', false);
+    $private_site = (int) $nv_Request->get_bool('private_site', 'post', false);
 
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $metaTagsOgp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'metaTagsOgp'");
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $description_length . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'description_length'");
-    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $private_site . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'private_site'");
+    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $metaTagsOgp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'metaTagsOgp'");
+    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $description_length . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'description_length'");
+    $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $private_site . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'private_site'");
 
     $nv_Cache->delAll(false);
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());

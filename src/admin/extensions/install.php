@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getGlobal('mod_extensions');
@@ -71,7 +72,7 @@ if (empty($error) and empty($message)) {
 $tpl->assign('ERROR', $error);
 $tpl->assign('REQUEST', $request);
 
-if (empty($error))  {
+if (empty($error)) {
     // Save cookies
     nv_store_cookies(nv_object2array($cookies), $stored_cookies);
 
@@ -104,7 +105,7 @@ if (empty($error))  {
 
             if ($allow_continue === true) {
                 // Kiểm tra cài đặt tự động được hay không
-                if ($array['compatible']['type'] != 1 or !in_array($array['tid'], [1, 2, 3, 4])) {
+                if ($array['compatible']['type'] != 1 or !in_array((int) $array['tid'], [1, 2, 3, 4], true)) {
                     $tpl->assign('MANUAL_MESSAGE', $array['documentation'] ? $nv_Lang->getModule('install_manual_install') : $nv_Lang->getModule('install_manual_install_danger'));
                 } else {
                     $tpl->assign('CANCEL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

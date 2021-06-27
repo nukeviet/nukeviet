@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $tpl = new \NukeViet\Template\Smarty();
@@ -17,7 +18,7 @@ $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . 
 $tpl->assign('LANG', $nv_Lang);
 
 // Lấy các plugin xử lý dữ liệu
-$sql = "SELECT pid, plugin_file, plugin_module_name FROM " . $db_config['prefix'] . "_plugin WHERE plugin_area='get_email_merge_fields' AND hook_module='' ORDER BY weight ASC";
+$sql = 'SELECT pid, plugin_file, plugin_module_name FROM ' . $db_config['prefix'] . "_plugin WHERE plugin_area='get_email_merge_fields' AND hook_module='' ORDER BY weight ASC";
 $array_mplugins = [];
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
@@ -119,9 +120,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array['send_email'] = $nv_Request->get_title('send_email', 'post', '');
     $array['send_cc'] = $nv_Request->get_title('send_cc', 'post', '');
     $array['send_bcc'] = $nv_Request->get_title('send_bcc', 'post', '');
-    $array['is_plaintext'] = intval($nv_Request->get_bool('is_plaintext', 'post', false));
-    $array['is_disabled'] = intval($nv_Request->get_bool('is_disabled', 'post', false));
-    $array['is_selftemplate'] = intval($nv_Request->get_bool('is_selftemplate', 'post', false));
+    $array['is_plaintext'] = (int) ($nv_Request->get_bool('is_plaintext', 'post', false));
+    $array['is_disabled'] = (int) ($nv_Request->get_bool('is_disabled', 'post', false));
+    $array['is_selftemplate'] = (int) ($nv_Request->get_bool('is_selftemplate', 'post', false));
     $array['attachments'] = $nv_Request->get_typed_array('attachments', 'post', 'string', []);
     $array['default_subject'] = $nv_Request->get_title('default_subject', 'post', '');
     $array['default_content'] = $nv_Request->get_editor('default_content', '', NV_ALLOWED_HTML_TAGS);
@@ -170,7 +171,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $error = $nv_Lang->getModule('tpl_error_title');
     } elseif (empty($array['default_subject'])) {
         $error = $nv_Lang->getModule('tpl_error_default_subject');
-    }elseif (empty($array['default_content'])) {
+    } elseif (empty($array['default_content'])) {
         $error = $nv_Lang->getModule('tpl_error_default_content');
     } else {
         if (!$array['emailid']) {

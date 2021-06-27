@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_WEBTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $timezone_array = array_keys($nv_parse_ini_timezone);
@@ -21,7 +22,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $statistics_timezone = nv_substr($nv_Request->get_title('statistics_timezone', 'post', '', 0), 0, 255);
 
-    if (!empty($statistics_timezone) and in_array($statistics_timezone, $timezone_array)) {
+    if (!empty($statistics_timezone) and in_array($statistics_timezone, $timezone_array, true)) {
         $array_config_global['statistics_timezone'] = $statistics_timezone;
     } else {
         $array_config_global['statistics_timezone'] = NV_SITE_TIMEZONE_NAME;
@@ -33,7 +34,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array_config_global['googleAnalyticsID'] = '';
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);

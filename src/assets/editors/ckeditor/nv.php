@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 10, 2010 10:08:08 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_aleditor()
  *
- * @param mixed $textareaname
+ * @param mixed  $textareaname
  * @param string $width
  * @param string $height
  * @param string $val
@@ -147,19 +148,19 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         }
     }
 
-    $return .= "<script type=\"text/javascript\">";
+    $return .= '<script type="text/javascript">';
     if (defined('NV_IS_ADMIN')) {
         $return .= "$(document).on('nv.upload.ready', function() {";
     }
-    $return .= "CKEDITOR.replace( '" . $module_data . "_" . $textareaid . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',";
-    $return .= "contentsCss: '" . NV_BASE_SITEURL . NV_EDITORSDIR . "/ckeditor/nv.css?t=" . $global_config['timestamp'] . "',";
+    $return .= "CKEDITOR.replace( '" . $module_data . '_' . $textareaid . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',";
+    $return .= "contentsCss: '" . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/nv.css?t=' . $global_config['timestamp'] . "',";
 
     if (defined('NV_IS_ADMIN')) {
         if (empty($path) and empty($currentpath)) {
             $path = NV_UPLOADS_DIR;
             $currentpath = NV_UPLOADS_DIR;
 
-            if (!empty($module_upload) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . date("Y_m"))) {
+            if (!empty($module_upload) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . date('Y_m'))) {
                 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y_m');
                 $path = NV_UPLOADS_DIR . '/' . $module_upload;
             } elseif (!empty($module_upload) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload)) {
@@ -168,20 +169,20 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         }
 
         if (!empty($admin_info['allow_files_type'])) {
-            $return .= "filebrowserUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=upload&editor=ckeditor&path=" . $currentpath . "',";
+            $return .= "filebrowserUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "',";
         }
 
-        if (in_array('images', $admin_info['allow_files_type'])) {
-            $return .= "filebrowserImageUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=upload&editor=ckeditor&path=" . $currentpath . "&type=image',";
+        if (in_array('images', $admin_info['allow_files_type'], true)) {
+            $return .= "filebrowserImageUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "&type=image',";
         }
 
-        if (in_array('flash', $admin_info['allow_files_type'])) {
-            $return .= "filebrowserFlashUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&" . NV_OP_VARIABLE . "=upload&editor=ckeditor&path=" . $currentpath . "&type=flash',";
+        if (in_array('flash', $admin_info['allow_files_type'], true)) {
+            $return .= "filebrowserFlashUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "&type=flash',";
         }
         $return .= "
-        filebrowserBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&path=" . $path . "&currentpath=" . $currentpath . "',
-        filebrowserImageBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&type=image&path=" . $path . "&currentpath=" . $currentpath . "',
-        filebrowserFlashBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . "/index.php?" . NV_NAME_VARIABLE . "=upload&popup=1&type=flash&path=" . $path . "&currentpath=" . $currentpath . "',
+        filebrowserBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&path=' . $path . '&currentpath=' . $currentpath . "',
+        filebrowserImageBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&type=image&path=' . $path . '&currentpath=' . $currentpath . "',
+        filebrowserFlashBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&type=flash&path=' . $path . '&currentpath=' . $currentpath . "',
         filebrowserPath: '" . $path . "',
         filebrowserCurrentPath: '" . $currentpath . "'
         ";
@@ -190,11 +191,11 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         $return .= "removePlugins: 'uploadfile,uploadimage'";
     }
 
-    $return .= "});";
+    $return .= '});';
     if (defined('NV_IS_ADMIN')) {
-        $return .= "});";
+        $return .= '});';
     }
-    $return .= "</script>";
+    $return .= '</script>';
 
     return $return;
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_news_block_newscenter')) {
@@ -25,12 +26,12 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
     {
         global $nv_Cache, $site_mods;
 
-        $tooltip_position = array(
+        $tooltip_position = [
             'top' => $nv_Lang->getModule('tooltip_position_top'),
             'bottom' => $nv_Lang->getModule('tooltip_position_bottom'),
             'left' => $nv_Lang->getModule('tooltip_position_left'),
             'right' => $nv_Lang->getModule('tooltip_position_right')
-        );
+        ];
 
         $html = '<div class="form-group">';
         $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('bl_numrow') . ':</label>';
@@ -118,13 +119,14 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                         $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                     }
                 }
-                $data_block['nocatid'] = !empty($data_block['nocatid']) ? $data_block['nocatid'] : array();
-                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
+                $data_block['nocatid'] = !empty($data_block['nocatid']) ? array_map('intval', $data_block['nocatid']) : [];
+                $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array((int) $l['catid'], $data_block['nocatid'], true)) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
             }
         }
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -138,9 +140,9 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
     function nv_block_config_news_newscenter_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
         $return['config']['tooltip_position'] = $nv_Request->get_title('config_tooltip_position', 'post', 0);
@@ -150,7 +152,8 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         $return['config']['length_othertitle'] = $nv_Request->get_int('config_length_othertitle', 'post', 0);
         $return['config']['width'] = $nv_Request->get_int('config_width', 'post', '');
         $return['config']['height'] = $nv_Request->get_int('config_height', 'post', '');
-        $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', array());
+        $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', []);
+
         return $return;
     }
 
@@ -196,7 +199,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                     $width = isset($block_config['width']) ? $block_config['width'] : 400;
                     $height = isset($block_config['height']) ? $block_config['height'] : 268;
 
-                    if ($row['homeimgfile'] != '' and ($imginfo = nv_is_image(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'])) != array()) {
+                    if ($row['homeimgfile'] != '' and ($imginfo = nv_is_image(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'])) != []) {
                         $image = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
 
                         if ($imginfo['width'] <= $width and $imginfo['height'] <= $height) {
@@ -264,6 +267,7 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
             }
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }

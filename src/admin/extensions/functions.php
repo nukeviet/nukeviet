@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 5:50
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_IS_FILE_EXTENSIONS', true);
@@ -57,23 +58,30 @@ function nv_extensions_is_installed($type, $name, $version)
         if (!is_dir(NV_ROOTDIR . '/modules/' . $name)) {
             return 0;
         }
+
         return 1;
-    } elseif ($type == 2) {
+    }
+    if ($type == 2) {
         // Theme
         if (!is_dir(NV_ROOTDIR . '/themes/' . $name)) {
             return 0;
         }
+
         return 1;
-    } elseif ($type == 3) {
+    }
+    if ($type == 3) {
         // Block
         return 2;
-    } elseif ($type == 4) {
+    }
+    if ($type == 4) {
         // Crons
         if (!is_file(NV_ROOTDIR . '/includes/cronjobs/' . $name)) {
             return 0;
         }
+
         return 1;
     }
+
     return 2;
 }
 
@@ -94,13 +102,15 @@ function is_serialized_string($data)
 
     if ($length < 4) {
         return false;
-    } elseif ($data[1] !== ':') {
-        return false;
-    } elseif ($data[0] !== 'a') {
-        return false;
-    } else {
-        return true;
     }
+    if ($data[1] !== ':') {
+        return false;
+    }
+    if ($data[0] !== 'a') {
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -126,7 +136,7 @@ function nv_get_cookies($full = false)
     $array_expires = [];
 
     while ($row = $result->fetch()) {
-        $row['expires'] = floatval($row['expires']);
+        $row['expires'] = (float) $row['expires'];
 
         if ($row['expires'] <= NV_CURRENTTIME) {
             $array_expires[] = $db->quote($row['name']);
@@ -156,7 +166,6 @@ function nv_get_cookies($full = false)
  *
  * @param mixed $cookies
  * @param mixed $currCookies
- * @return void
  */
 function nv_store_cookies($cookies = [], $currCookies = [])
 {
@@ -165,10 +174,10 @@ function nv_store_cookies($cookies = [], $currCookies = [])
     if (!empty($cookies)) {
         foreach ($cookies as $cookie) {
             if (!empty($cookie['expires'])) {
-                if (!preg_match("/^([0-9]+)$/", $cookie['expires'])) {
+                if (!preg_match('/^([0-9]+)$/', $cookie['expires'])) {
                     $cookie['expires'] = strtotime($cookie['expires']);
                 } else {
-                    $cookie['expires'] = intval($cookie['expires']);
+                    $cookie['expires'] = (int) $cookie['expires'];
                 }
 
                 // Update cookie

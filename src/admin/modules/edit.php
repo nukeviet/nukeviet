@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-11-2010 0:44
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $data = [];
@@ -32,18 +33,18 @@ $theme_site_array = $theme_mobile_array = [];
 $theme_array = scandir(NV_ROOTDIR . '/themes');
 
 $theme_mobile_default = [];
-$theme_mobile_default[''] = array(
+$theme_mobile_default[''] = [
     'key' => '',
     'title' => $nv_Lang->getModule('theme_mobiledefault')
-);
-$theme_mobile_default[':pcsite'] = array(
+];
+$theme_mobile_default[':pcsite'] = [
     'key' => ':pcsite',
     'title' => $nv_Lang->getModule('theme_mobile_bysite')
-);
-$theme_mobile_default[':pcmod'] = array(
+];
+$theme_mobile_default[':pcmod'] = [
     'key' => ':pcmod',
     'title' => $nv_Lang->getModule('theme_mobile_bymod')
-);
+];
 
 foreach ($theme_array as $dir) {
     if (preg_match($global_config['check_theme'], $dir)) {
@@ -62,10 +63,10 @@ $theme_list = $theme_mobile_list = $array_theme = [];
 // Chi nhung giao dien da duoc thiet lap layout moi duoc them
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
 while (list($theme) = $result->fetch(3)) {
-    if (in_array($theme, $theme_site_array)) {
+    if (in_array($theme, $theme_site_array, true)) {
         $array_theme[] = $theme;
         $theme_list[] = $theme;
-    } elseif (in_array($theme, $theme_mobile_array)) {
+    } elseif (in_array($theme, $theme_mobile_array, true)) {
         $array_theme[] = $theme;
         $theme_mobile_list[] = $theme;
     }
@@ -87,11 +88,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $rss = $nv_Request->get_int('rss', 'post', 0);
     $sitemap = $nv_Request->get_int('sitemap', 'post', 0);
 
-    if (!empty($theme) and !in_array($theme, $theme_list)) {
+    if (!empty($theme) and !in_array($theme, $theme_list, true)) {
         $theme = '';
     }
 
-    if (!empty($mobile) and !in_array($mobile, $theme_mobile_list) and !isset($theme_mobile_default[$mobile])) {
+    if (!empty($mobile) and !in_array($mobile, $theme_mobile_list, true) and !isset($theme_mobile_default[$mobile])) {
         $mobile = '';
     }
 
@@ -116,7 +117,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         foreach ($array_theme as $_theme) {
             $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini');
-            $layoutdefault = ( string )$xml->layoutdefault;
+            $layoutdefault = (string) $xml->layoutdefault;
 
             if (!empty($layoutdefault) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/layout/layout.' . $layoutdefault . '.tpl')) {
                 $array_layoutdefault[$_theme] = $layoutdefault;
@@ -132,14 +133,14 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
                 $sth->execute();
                 while (list($func_id) = $sth->fetch(3)) {
-                    $array_func_id[] = $func_id;
+                    $array_func_id[] = (int) $func_id;
                 }
 
                 $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC');
                 $sth->bindParam(':in_module', $mod, PDO::PARAM_STR);
                 $sth->execute();
                 while (list($func_id) = $sth->fetch(3)) {
-                    if (!in_array($func_id, $array_func_id)) {
+                    if (!in_array((int) $func_id, $array_func_id, true)) {
                         $sth2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (' . $func_id . ', :layout, :theme)');
                         $sth2->bindParam(':layout', $layoutdefault, PDO::PARAM_STR);
                         $sth2->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
@@ -193,7 +194,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
                             // Change site_home_module
                             if ($mod == $global_config['site_home_module']) {
-                                $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'site_home_module' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+                                $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'site_home_module' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
                                 $sth->bindParam(':config_value', $mod_name, PDO::PARAM_STR);
                                 $sth->execute();
                             }
@@ -205,19 +206,19 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                             $sth->execute();
 
                             // Change config
-                            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET module= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module= :mod_old");
+                            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET module= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module= :mod_old");
                             $sth->bindParam(':mod_name', $mod_name, PDO::PARAM_STR);
                             $sth->bindParam(':mod_old', $mod, PDO::PARAM_STR);
                             $sth->execute();
 
                             // Change comment
-                            $sth = $db->prepare("UPDATE " . NV_PREFIXLANG . "_comment SET module= :mod_name WHERE module= :mod_old");
+                            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_comment SET module= :mod_name WHERE module= :mod_old');
                             $sth->bindParam(':mod_name', $mod_name, PDO::PARAM_STR);
                             $sth->bindParam(':mod_old', $mod, PDO::PARAM_STR);
                             $sth->execute();
 
                             // Change logs
-                            $sth = $db->prepare("UPDATE " . $db_config['prefix'] . "_logs SET module_name= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module_name= :mod_old");
+                            $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . "_logs SET module_name= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module_name= :mod_old");
                             $sth->bindParam(':mod_name', $mod_name, PDO::PARAM_STR);
                             $sth->bindParam(':mod_old', $mod, PDO::PARAM_STR);
                             $sth->execute();

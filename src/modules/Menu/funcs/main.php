@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Dec 3, 2010 11:32:04 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_MENU')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_MENU')) {
+    exit('Stop!!!');
 }
 
-header("location:" . $global_config['site_url']);
+header('location:' . $global_config['site_url']);
 exit();

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_RSS')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_RSS')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -27,28 +28,29 @@ function nv_get_rss_link()
             $mod_data = $mod_info['module_data'];
             $mod_file = $mod_info['module_file'];
 
-            $contentrss .= "<li><span><i class='fa fa-rss text-warning'></i> <a rel=\"nofollow\" title=\"" . $mod_info['custom_title'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\"><strong> " . $mod_info['custom_title'] . "</strong></span></a>";
+            $contentrss .= "<li><span><i class='fa fa-rss text-warning'></i> <a rel=\"nofollow\" title=\"" . $mod_info['custom_title'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod_name . '&amp;' . NV_OP_VARIABLE . '=' . $mod_info['alias']['rss'] . '"><strong> ' . $mod_info['custom_title'] . '</strong></span></a>';
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php')) {
-                $rssarray = array();
-                include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
+                $rssarray = [];
+                include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php';
 
-                $contentrss .= "<ul>";
+                $contentrss .= '<ul>';
                 foreach ($rssarray as $key => $value) {
                     $parentid = (isset($value['parentid'])) ? $value['parentid'] : 0;
                     if ($parentid == 0) {
-                        $contentrss .= "<li><span><i class='fa fa-rss text-warning'></i> <a rel=\"nofollow\" title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
+                        $contentrss .= "<li><span><i class='fa fa-rss text-warning'></i> <a rel=\"nofollow\" title=\"" . $value['title'] . '" href="' . $value['link'] . '">' . $value['title'] . '</a></span>';
                         $catid = (isset($value['catid'])) ? $value['catid'] : 0;
                         if ($catid > 0) {
                             $contentrss .= nv_get_sub_rss_link($rssarray, $catid);
                         }
-                        $contentrss .= "</li>";
+                        $contentrss .= '</li>';
                     }
                 }
-                $contentrss .= "</ul>";
-                $contentrss .= "</li>";
+                $contentrss .= '</ul>';
+                $contentrss .= '</li>';
             }
         }
     }
+
     return $contentrss;
 }
 
@@ -66,15 +68,16 @@ function nv_get_sub_rss_link($rssarray, $id)
     $content .= '<ul>';
     foreach ($rssarray as $value) {
         if (isset($value['parentid']) and $value['parentid'] == $id) {
-            $content .= "<li><span><i class='fa fa-rss text-warning'></i> <a rel=\"nofollow\" title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
+            $content .= "<li><span><i class='fa fa-rss text-warning'></i> <a rel=\"nofollow\" title=\"" . $value['title'] . '" href="' . $value['link'] . '">' . $value['title'] . '</a></span>';
             $catid = (isset($value['catid'])) ? $value['catid'] : 0;
             if ($catid > 0) {
                 $content .= nv_get_sub_rss_link($rssarray, $catid);
             }
-            $content .= "</li>";
+            $content .= '</li>';
         }
     }
     $content .= '</ul>';
+
     return $content;
 }
 

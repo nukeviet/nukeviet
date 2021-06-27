@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 16/6/2010, 10:23
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_STATISTICS')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_STATISTICS')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('os');
 $key_words = $module_info['keywords'];
 $mod_title = $nv_Lang->getModule('os');
 
-$sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os' AND c_count!=0";
+$sql = 'SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os' AND c_count!=0";
 $result = $db->query($sql);
 list($num_items, $max) = $result->fetch(3);
 
@@ -35,15 +36,15 @@ if ($num_items) {
 
     $result = $db->query($db->sql());
 
-    $os_list = array();
+    $os_list = [];
     while (list($os, $count, $last_visit) = $result->fetch(3)) {
-        $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-        $os_list[$os] = array( $count, $last_visit );
+        $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+        $os_list[$os] = [$count, $last_visit];
     }
 
-    if (! empty($os_list)) {
-        $cts = array();
-        $cts['thead'] = array( $nv_Lang->getModule('os'), $nv_Lang->getModule('hits'), $nv_Lang->getModule('last_visit') );
+    if (!empty($os_list)) {
+        $cts = [];
+        $cts['thead'] = [$nv_Lang->getModule('os'), $nv_Lang->getModule('hits'), $nv_Lang->getModule('last_visit')];
         $cts['rows'] = $os_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);

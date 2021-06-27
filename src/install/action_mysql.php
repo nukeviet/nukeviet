@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/28/2009 20:8
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /*
@@ -24,7 +25,7 @@ while ($item = $result->fetch()) {
     $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
 }
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . " (
   admin_id int(11) unsigned NOT NULL,
   editor varchar(100) DEFAULT '',
   lev tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -48,7 +49,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
   PRIMARY KEY (admin_id)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_config (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   keyname varchar(32) DEFAULT NULL,
   mask tinyint(4) NOT NULL DEFAULT '0',
@@ -59,7 +60,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
   UNIQUE KEY keyname (keyname)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_oauth (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_oauth (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   admin_id int(11) unsigned NOT NULL COMMENT 'ID của quản trị',
   oauth_server varchar(50) NOT NULL COMMENT 'Eg: facebook, google...',
@@ -71,7 +72,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_oauth (
   KEY oauth_email (oauth_email)
 ) ENGINE=MyISAM COMMENT 'Bảng lưu xác thực 2 bước từ oauth của admin'";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_module (
   mid mediumint(8) NOT NULL AUTO_INCREMENT,
   module varchar(50) NOT NULL,
   lang_key varchar(50) NOT NULL DEFAULT '',
@@ -86,7 +87,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
   UNIQUE KEY icon (icon)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_role (
   role_id smallint(4) NOT NULL AUTO_INCREMENT,
   role_title varchar(250) NOT NULL DEFAULT '',
   role_description text NOT NULL,
@@ -96,7 +97,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_role (
   PRIMARY KEY (role_id)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_credential (
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_credential (
   admin_id int(11) unsigned NOT NULL,
   credential_title varchar(255) NOT NULL DEFAULT '',
   credential_ident varchar(50) NOT NULL DEFAULT '',
@@ -110,7 +111,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_api_credentia
   KEY admin_id (admin_id)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_CONFIG_GLOBALTABLE . " (
   lang varchar(3) NOT NULL DEFAULT 'sys',
   module varchar(50) NOT NULL DEFAULT 'global',
   config_name varchar(30) NOT NULL DEFAULT '',
@@ -118,7 +119,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
   UNIQUE KEY lang (lang,module,config_name)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_CRONJOBS_GLOBALTABLE . " (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   start_time int(11) unsigned NOT NULL DEFAULT '0',
   inter_val int(11) unsigned NOT NULL DEFAULT '0',
@@ -135,7 +136,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
   KEY is_sys (is_sys)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_LANGUAGE_GLOBALTABLE . " (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   idfile mediumint(8) unsigned NOT NULL DEFAULT '0',
   langtype varchar(50) NOT NULL DEFAULT 'lang_module',
@@ -144,7 +145,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
   UNIQUE KEY filelang (idfile,lang_key,langtype)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
+$sql_create_table[] = 'CREATE TABLE ' . NV_LANGUAGE_GLOBALTABLE . "_file (
   idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   module varchar(50) NOT NULL,
   admin_file varchar(200) NOT NULL DEFAULT '0',
@@ -153,7 +154,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
   UNIQUE KEY module (module,admin_file(191))
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_SESSIONS_GLOBALTABLE . " (
   session_id varchar(50) DEFAULT NULL,
   userid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username varchar(100) NOT NULL,
@@ -162,7 +163,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
   KEY onl_time (onl_time)
 ) ENGINE=MEMORY";
 
-$sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
+$sql_create_table[] = 'CREATE TABLE ' . NV_COOKIES_GLOBALTABLE . " (
   name varchar(50) NOT NULL DEFAULT '',
   value mediumtext NOT NULL,
   domain varchar(100) NOT NULL DEFAULT '',
@@ -173,14 +174,14 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
   KEY name (name)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_setup_language (
   lang char(2) NOT NULL,
   setup tinyint(1) NOT NULL DEFAULT '0',
   weight smallint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (lang)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extensions (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_setup_extensions (
   id int(11) NOT NULL DEFAULT '0',
   type varchar(10) NOT NULL DEFAULT 'other',
   title varchar(55) NOT NULL,
@@ -197,7 +198,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
   KEY type (type)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_extension_files (
   idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   type varchar(10) NOT NULL DEFAULT 'other',
   title varchar(55) NOT NULL DEFAULT '',
@@ -207,7 +208,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files
   PRIMARY KEY (idfile)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_banners_click (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   bid mediumint(8) NOT NULL DEFAULT '0',
   click_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -228,7 +229,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_banners_plans (
   id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   blang char(2) DEFAULT '',
   title varchar(250) NOT NULL,
@@ -245,7 +246,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
   KEY title (title(191))
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_banners_rows (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   title varchar(255) NOT NULL,
   pid smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -271,7 +272,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
   KEY clid (clid)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ips (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_ips (
   id mediumint(8) NOT NULL AUTO_INCREMENT,
   type tinyint(4) unsigned NOT NULL DEFAULT '0',
   ip varchar(32) DEFAULT NULL,
@@ -284,7 +285,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ips (
   UNIQUE KEY ip (ip, type)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_logs (
   id int(11) NOT NULL AUTO_INCREMENT,
   lang varchar(10) NOT NULL,
   module_name varchar(50) NOT NULL,
@@ -296,7 +297,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_dir (
   did mediumint(8) NOT NULL AUTO_INCREMENT,
   dirname varchar(250) DEFAULT NULL,
   time int(11) NOT NULL DEFAULT '0',
@@ -308,7 +309,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
   UNIQUE KEY name (dirname(191))
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_file (
   name varchar(245) NOT NULL,
   ext varchar(10) NOT NULL DEFAULT '',
   type varchar(5) NOT NULL DEFAULT '',
@@ -327,7 +328,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
   KEY type (type)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_plugin (
   pid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   plugin_lang varchar(3) NOT NULL DEFAULT 'all',
   plugin_file varchar(50) NOT NULL,
@@ -340,9 +341,9 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_plugin AUTO_INCREMENT=1001;";
+$sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_plugin AUTO_INCREMENT=1001;';
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_counter (
    c_type varchar(100) NOT NULL,
    c_val varchar(100) NOT NULL,
    last_update int(11) NOT NULL DEFAULT '0',
@@ -351,7 +352,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
    UNIQUE KEY c_type (c_type,c_val)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_notification (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   admin_view_allowed tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Cấp quản trị được xem: 0,1,2',
   logic_mode tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Cấp trên xem được cấp dưới, 1: chỉ cấp hoặc người được chỉ định',
@@ -367,13 +368,13 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   view tinyint(1) unsigned NOT NULL DEFAULT '0',
   is_new tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'Mới gửi đến',
   PRIMARY KEY (id),
-  KEY send_to (send_to),
+  KEY send_to (send_to(191)),
   KEY admin_view_allowed (admin_view_allowed),
   KEY logic_mode (logic_mode)
 ) ENGINE=InnoDB";
 
 // CSDL module email templates
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_emailtemplates (
   emailid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   sys_pids varchar(255) NOT NULL DEFAULT '' COMMENT 'Các plugin xử lý dữ liệu của hệ thống',
   pids varchar(255) NOT NULL DEFAULT '' COMMENT 'Các plugin xử lý dữ liệu',
@@ -395,9 +396,9 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates 
   KEY catid (catid)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates AUTO_INCREMENT=1001;";
+$sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates AUTO_INCREMENT=1001;';
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates_categories (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_emailtemplates_categories (
   catid smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   time_add int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Tạo lúc',
   time_update int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Cập nhật lúc',
@@ -406,4 +407,4 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_emailtemplates_
   PRIMARY KEY (catid)
 ) ENGINE=InnoDB";
 
-$sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_emailtemplates_categories AUTO_INCREMENT=101;";
+$sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates_categories AUTO_INCREMENT=101;';

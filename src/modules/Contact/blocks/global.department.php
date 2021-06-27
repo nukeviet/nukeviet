@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_department_info')) {
@@ -40,10 +41,11 @@ if (!nv_function_exists('nv_department_info')) {
     function nv_block_config_contact_department_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['departmentid'] = $nv_Request->get_int('config_departmentid', 'post', 0);
+
         return $return;
     }
 
@@ -91,18 +93,18 @@ if (!nv_function_exists('nv_department_info')) {
                         foreach ($nums as $k => $num) {
                             unset($m);
                             if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
-                                $phone = array(
+                                $phone = [
                                     'number' => nv_htmlspecialchars($m[1]),
                                     'href' => $m[2]
-                                );
+                                ];
                                 $xtpl->assign('PHONE', $phone);
                                 $xtpl->parse('main.phone.item.href');
                                 $xtpl->parse('main.phone.item.href2');
                             } else {
                                 $num = preg_replace("/\[[^\]]*\]/", '', $num);
-                                $phone = array(
+                                $phone = [
                                     'number' => nv_htmlspecialchars($num)
-                                );
+                                ];
                                 $xtpl->assign('PHONE', $phone);
                             }
                             if ($k) {
@@ -141,10 +143,10 @@ if (!nv_function_exists('nv_department_info')) {
                                     if (strtolower($key) == 'yahoo') {
                                         $ys = array_map('trim', explode(',', $value));
                                         foreach ($ys as $k => $y) {
-                                            $xtpl->assign('YAHOO', array(
+                                            $xtpl->assign('YAHOO', [
                                                 'name' => $key,
                                                 'value' => $y
-                                            ));
+                                            ]);
                                             if ($k) {
                                                 $xtpl->parse('main.yahoo.item.comma');
                                             }
@@ -154,10 +156,10 @@ if (!nv_function_exists('nv_department_info')) {
                                     } elseif (strtolower($key) == 'skype') {
                                         $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
-                                            $xtpl->assign('SKYPE', array(
+                                            $xtpl->assign('SKYPE', [
                                                 'name' => $key,
                                                 'value' => $s
-                                            ));
+                                            ]);
                                             if ($k) {
                                                 $xtpl->parse('main.skype.item.comma');
                                             }
@@ -167,10 +169,10 @@ if (!nv_function_exists('nv_department_info')) {
                                     } elseif (strtolower($key) == 'viber') {
                                         $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
-                                            $xtpl->assign('VIBER', array(
+                                            $xtpl->assign('VIBER', [
                                                 'name' => $key,
                                                 'value' => $s
-                                            ));
+                                            ]);
                                             if ($k) {
                                                 $xtpl->parse('main.viber.item.comma');
                                             }
@@ -180,10 +182,10 @@ if (!nv_function_exists('nv_department_info')) {
                                     } elseif (strtolower($key) == 'icq') {
                                         $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
-                                            $xtpl->assign('ICQ', array(
+                                            $xtpl->assign('ICQ', [
                                                 'name' => $key,
                                                 'value' => $s
-                                            ));
+                                            ]);
                                             if ($k) {
                                                 $xtpl->parse('main.icq.item.comma');
                                             }
@@ -193,10 +195,10 @@ if (!nv_function_exists('nv_department_info')) {
                                     } elseif (strtolower($key) == 'whatsapp') {
                                         $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
-                                            $xtpl->assign('WHATSAPP', array(
+                                            $xtpl->assign('WHATSAPP', [
                                                 'name' => $key,
                                                 'value' => $s
-                                            ));
+                                            ]);
                                             if ($k) {
                                                 $xtpl->parse('main.whatsapp.item.comma');
                                             }
@@ -204,10 +206,10 @@ if (!nv_function_exists('nv_department_info')) {
                                         }
                                         $xtpl->parse('main.whatsapp');
                                     } else {
-                                        $xtpl->assign('OTHER', array(
+                                        $xtpl->assign('OTHER', [
                                             'name' => $key,
                                             'value' => $value
-                                        ));
+                                        ]);
                                         $xtpl->parse('main.other');
                                     }
                                 }
@@ -225,6 +227,7 @@ if (!nv_function_exists('nv_department_info')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

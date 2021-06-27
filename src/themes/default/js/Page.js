@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 06 Aug 2014 60:43:04 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_del_content(id, checkss, base_adminurl) {
@@ -20,22 +21,23 @@ function nv_del_content(id, checkss, base_adminurl) {
     return false;
 }
 
-function fix_page_image(){
-    var postHtml = $('#page-bodyhtml'), postHtmlW, w, h;
-    if( postHtml.length ){
+function fix_page_image() {
+    var postHtml = $('#page-bodyhtml'),
+        postHtmlW, w, h;
+    if (postHtml.length) {
         var postHtmlW = postHtml.innerWidth();
-        $.each($('img', postHtml), function(){
-            if( typeof $(this).data('width') == "undefined" ){
+        $.each($('img', postHtml), function() {
+            if (typeof $(this).data('width') == "undefined") {
                 w = $(this).innerWidth();
                 h = $(this).innerHeight();
                 $(this).data('width', w);
                 $(this).data('height', h);
-            }else{
+            } else {
                 w = $(this).data('width');
                 h = $(this).data('height');
             }
-            
-            if( w > postHtmlW ){
+
+            if (w > postHtmlW) {
                 $(this).prop('width', postHtmlW);
                 $(this).prop('height', h * postHtmlW / w);
             }

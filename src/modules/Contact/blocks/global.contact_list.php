@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
-if (! nv_function_exists('nv_contact_list_info')) {
+if (!nv_function_exists('nv_contact_list_info')) {
     function nv_contact_list_info($module)
     {
         global $nv_Cache, $site_mods, $global_config, $nv_Lang;
@@ -55,18 +56,18 @@ if (! nv_function_exists('nv_contact_list_info')) {
                     $xtpl->parse('main.loop.image');
                 }
 
-                if (! empty($row['phone'])) {
+                if (!empty($row['phone'])) {
                     $nums = array_map('trim', explode('|', nv_unhtmlspecialchars($row['phone'])));
                     foreach ($nums as $k => $num) {
                         unset($m);
                         if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
-                            $phone = array( 'number' => nv_htmlspecialchars($m[1]), 'href' => $m[2] );
+                            $phone = ['number' => nv_htmlspecialchars($m[1]), 'href' => $m[2]];
                             $xtpl->assign('PHONE', $phone);
                             $xtpl->parse('main.loop.phone.item.href');
                             $xtpl->parse('main.loop.phone.item.href2');
                         } else {
                             $num = preg_replace("/\[[^\]]*\]/", '', $num);
-                            $phone = array( 'number' => nv_htmlspecialchars($num) );
+                            $phone = ['number' => nv_htmlspecialchars($num)];
                             $xtpl->assign('PHONE', $phone);
                         }
                         if ($k) {
@@ -78,7 +79,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                     $xtpl->parse('main.loop.phone');
                 }
 
-                if (! empty($row['email'])) {
+                if (!empty($row['email'])) {
                     $emails = array_map('trim', explode(',', $row['email']));
 
                     foreach ($emails as $k => $email) {
@@ -92,7 +93,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                     $xtpl->parse('main.loop.email');
                 }
 
-                if (! empty($row['others'])) {
+                if (!empty($row['others'])) {
                     $others = json_decode($row['others'], true);
 
                     if (!empty($others)) {
@@ -101,7 +102,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                                 if (strtolower($key) == 'yahoo') {
                                     $ys = array_map('trim', explode(',', $value));
                                     foreach ($ys as $k => $y) {
-                                        $xtpl->assign('YAHOO', array('name' => $key, 'value' => $y ));
+                                        $xtpl->assign('YAHOO', ['name' => $key, 'value' => $y]);
                                         if ($k) {
                                             $xtpl->parse('main.loop.yahoo.item.comma');
                                         }
@@ -111,7 +112,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                                 } elseif (strtolower($key) == 'skype') {
                                     $ss = array_map('trim', explode(',', $value));
                                     foreach ($ss as $k => $s) {
-                                        $xtpl->assign('SKYPE', array('name' => $key, 'value' => $s ));
+                                        $xtpl->assign('SKYPE', ['name' => $key, 'value' => $s]);
                                         if ($k) {
                                             $xtpl->parse('main.loop.skype.item.comma');
                                         }
@@ -121,7 +122,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                                 } elseif (strtolower($key) == 'viber') {
                                     $ss = array_map('trim', explode(',', $value));
                                     foreach ($ss as $k => $s) {
-                                        $xtpl->assign('VIBER', array('name' => $key, 'value' => $s ));
+                                        $xtpl->assign('VIBER', ['name' => $key, 'value' => $s]);
                                         if ($k) {
                                             $xtpl->parse('main.loop.viber.item.comma');
                                         }
@@ -131,7 +132,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                                 } elseif (strtolower($key) == 'icq') {
                                     $ss = array_map('trim', explode(',', $value));
                                     foreach ($ss as $k => $s) {
-                                        $xtpl->assign('ICQ', array('name' => $key, 'value' => $s ));
+                                        $xtpl->assign('ICQ', ['name' => $key, 'value' => $s]);
                                         if ($k) {
                                             $xtpl->parse('main.loop.icq.item.comma');
                                         }
@@ -141,7 +142,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                                 } elseif (strtolower($key) == 'whatsapp') {
                                     $ss = array_map('trim', explode(',', $value));
                                     foreach ($ss as $k => $s) {
-                                        $xtpl->assign('WHATSAPP', array('name' => $key, 'value' => $s ));
+                                        $xtpl->assign('WHATSAPP', ['name' => $key, 'value' => $s]);
                                         if ($k) {
                                             $xtpl->parse('main.loop.whatsapp.item.comma');
                                         }
@@ -149,7 +150,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                                     }
                                     $xtpl->parse('main.loop.whatsapp');
                                 } else {
-                                    $xtpl->assign('OTHER', array( 'name' => $key, 'value' => $value ));
+                                    $xtpl->assign('OTHER', ['name' => $key, 'value' => $value]);
                                     $xtpl->parse('main.loop.other');
                                 }
                             }
@@ -159,6 +160,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
                 $xtpl->parse('main.loop');
             }
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }

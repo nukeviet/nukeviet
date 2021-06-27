@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_DATABASE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_ignore_save = [
@@ -104,7 +105,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
         'reload' => false
     ];
 
-    $array_request =  [];
+    $array_request = [];
     $array_request['sample_name'] = nv_strtolower(nv_substr($nv_Request->get_title('sample_name', 'post', ''), 0, 50));
     $array_request['delifexists'] = $nv_Request->get_int('delifexists', 'post', 0);
     $array_request['offsettable'] = $nv_Request->get_int('offsettable', 'post', 0);
@@ -127,22 +128,22 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
             $a = 0;
             $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($db_config['prefix'] . '_%'));
             while ($row = $result->fetch()) {
-                if (!in_array($row['name'], $array_ignore_save)) {
+                if (!in_array($row['name'], $array_ignore_save, true)) {
                     /*
                      * MyISAM cho ra chính xác số row, các enginee khác chỉ là số xấp xỉ
                      * Xem https://dev.mysql.com/doc/refman/8.0/en/show-table-status.html
                      */
                     if ($row['engine'] != 'MyISAM') {
-                        $row['rows'] = $db->query("SELECT COUNT(*) FROM " . $row['name'])->fetchColumn();
+                        $row['rows'] = $db->query('SELECT COUNT(*) FROM ' . $row['name'])->fetchColumn();
                     }
                     $array_tables[$a] = [];
                     $array_tables[$a]['name'] = $row['name'];
-                    $array_tables[$a]['size'] = intval($row['data_length']) + intval($row['index_length']);
+                    $array_tables[$a]['size'] = (int) $row['data_length'] + (int) $row['index_length'];
                     $array_tables[$a]['limit'] = 1 + round(1048576 / ($row['avg_row_length'] + 1));
                     $array_tables[$a]['numrow'] = $row['rows'];
                     $array_tables[$a]['charset'] = (preg_match('/^([a-z0-9]+)_/i', $row['collation'], $m)) ? $m[1] : '';
                     $array_tables[$a]['type'] = isset($row['engine']) ? $row['engine'] : $row['t'];
-                    $a++;
+                    ++$a;
                 }
             }
             $check = file_put_contents($file_data_tmp, serialize($array_tables), LOCK_EX);
@@ -157,7 +158,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
         // Kiểm tra và xuất file dump
         if (!$error) {
             if (!file_exists($file_data_dump)) {
-                $dump_content = "<?php\n\n" . NV_FILEHEAD . "\n\nif (!defined('NV_MAINFILE')) {\n    die('Stop!!!');\n}\n\n\$sample_base_siteurl = '" . NV_BASE_SITEURL . "';\n\$sql_create_table = [];\n\n";
+                $dump_content = "<?php\n\n" . NV_FILEHEAD . "\n\nif (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n\$sample_base_siteurl = '" . NV_BASE_SITEURL . "';\n\$sql_create_table = [];\n\n";
                 $check = file_put_contents($file_data_dump, $dump_content, LOCK_EX);
                 if ($check === false) {
                     $json['message'] = sprintf($nv_Lang->getModule('sampledata_error_writetmp'), NV_TEMP_DIR);
@@ -174,7 +175,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                 $content = '';
 
                 // Xóa bảng tạo lại
-                if (!in_array($table['name'], $array_ignore_drop)) {
+                if (!in_array($table['name'], $array_ignore_drop, true)) {
                     $content = $db->query('SHOW CREATE TABLE ' . $table['name'])->fetchColumn(1);
                     $content = preg_replace('/[\s]+COLLATE[\s]+([a-zA-Z0-9\_]+)/i', '', $content);
                     $content = preg_replace('/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content);
@@ -202,7 +203,8 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                             // Bỏ qua tài khoản có userid = 1
                             if ($table['name'] == NV_USERS_GLOBALTABLE and $row['userid'] == 1) {
                                 continue;
-                            } elseif (preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_menu\_rows$/', $table['name'])) {
+                            }
+                            if (preg_match('/^' . nv_preg_quote($db_config['prefix']) . '\_([a-z0-9]+)\_menu\_rows$/', $table['name'])) {
                                 // Chỉnh lại đường dẫn menu
                                 if (isset($row['link'])) {
                                     if ($row['link'] == NV_BASE_SITEURL) {
@@ -252,7 +254,7 @@ if ($nv_Request->isset_request('startwrite', 'get')) {
                                     $check_ignore = 0;
                                     foreach ($ignore_row as $k => $v) {
                                         if ($row[$k] == $v) {
-                                            $check_ignore++;
+                                            ++$check_ignore;
                                         }
                                     }
                                     if ($check_ignore >= sizeof($ignore_row)) {

@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
- if (! defined('NV_IS_MOD_NEWS')) {
-     die('Stop!!!');
+ if (!defined('NV_IS_MOD_NEWS')) {
+     exit('Stop!!!');
  }
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
 if (isset($array_op[1])) {
     $alias = trim($array_op[1]);
-    $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? intval(substr($array_op[2], 5)) : 1;
+    $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? (int) (substr($array_op[2], 5)) : 1;
 
     $stmt = $db_slave->prepare('SELECT bid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
@@ -33,13 +34,13 @@ if (isset($array_op[1])) {
             nv_redirect_location($base_url_rewrite);
         }
 
-        $array_mod_title[] = array(
+        $array_mod_title[] = [
             'catid' => 0,
             'title' => $page_title,
             'link' => $base_url
-        );
+        ];
 
-        $item_array = array();
+        $item_array = [];
         $end_weight = 0;
 
         $db_slave->sqlreset()
@@ -66,14 +67,14 @@ if (isset($array_op[1])) {
             } elseif ($item['homeimgthumb'] == 3) {
                 //image url
                 $item['src'] = $item['homeimgfile'];
-            } elseif (! empty($show_no_image)) {
+            } elseif (!empty($show_no_image)) {
                 //no image
                 $item['src'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $item['src'] = '';
             }
 
-            $item['alt'] = ! empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
+            $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
             $item['width'] = $module_config[$module_name]['homewidth'];
 
             $end_weight = $item['weight'];
@@ -84,7 +85,7 @@ if (isset($array_op[1])) {
         $result->closeCursor();
         unset($query, $row);
 
-        $item_array_other = array();
+        $item_array_other = [];
         if ($st_links > 0) {
             $db_slave->sqlreset()
                 ->select('t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal, t1.external_link')
@@ -102,25 +103,25 @@ if (isset($array_op[1])) {
         }
 
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
-        if (! empty($image_group)) {
+        if (!empty($image_group)) {
             $image_group = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $image_group;
         }
         $contents = topic_theme($item_array, $item_array_other, $generate_page, $page_title, $description, $image_group);
     }
 } else {
-    $array_cat = array();
+    $array_cat = [];
     $key = 0;
 
     $query_cat = $db_slave->query('SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC');
 
     while (list($bid, $numberlink, $btitle, $balias) = $query_cat->fetch(3)) {
-        $array_cat[$key] = array(
+        $array_cat[$key] = [
             'catid' => $bid,
             'alias' => '',
             'subcatid' => '',
             'title' => $btitle,
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $balias
-        );
+        ];
 
         $db_slave->sqlreset()
             ->select('t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.external_link, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating')
@@ -140,14 +141,14 @@ if (isset($array_op[1])) {
             } elseif ($item['homeimgthumb'] == 3) {
                 //image url
                 $item['imghome'] = $item['homeimgfile'];
-            } elseif (! empty($show_no_image)) {
+            } elseif (!empty($show_no_image)) {
                 //no image
                 $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $item['imghome'] = '';
             }
 
-            $item['alt'] = ! empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
+            $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
             $item['width'] = $module_config[$module_name]['homewidth'];
 
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'];

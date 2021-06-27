@@ -1,14 +1,15 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Dec 3, 2010 11:24:58 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-$module_version = array(
+$module_version = [
     'name' => 'Module Menu',
     'modfuncs' => '',
     'submenu' => '',
@@ -18,7 +19,7 @@ $module_version = array(
     'date' => 'Wednesday, May 2, 2018 4:00:00 PM GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => '',
-    'uploads_dir' => array(
+    'uploads_dir' => [
         $module_upload
-    )
-);
+    ]
+];

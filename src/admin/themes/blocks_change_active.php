@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $list = $nv_Request->get_string('list', 'post,get');
@@ -21,7 +22,7 @@ if (!empty($array_bid)) {
 
     $array_active_device = explode(',', $list);
     $array_active_device = array_map('intval', $array_active_device);
-    if (in_array('1', $array_active_device) or (in_array('2', $array_active_device) and in_array('3', $array_active_device) and in_array('4', $array_active_device))) {
+    if (in_array('1', $array_active_device, true) or (in_array('2', $array_active_device, true) and in_array('3', $array_active_device, true) and in_array('4', $array_active_device, true))) {
         $active = 1;
     } else {
         $active = implode(',', $array_active_device);

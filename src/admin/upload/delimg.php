@@ -1,39 +1,40 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 if (!isset($check_allow_upload_dir['delete_file'])) {
-    die('ERROR#' . $nv_Lang->getModule('notlevel'));
+    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $files = array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
 
 // Check choose file
 if (empty($files)) {
-    die('ERROR#' . $nv_Lang->getModule('errorNotSelectFile'));
+    exit('ERROR#' . $nv_Lang->getModule('errorNotSelectFile'));
 }
 
 // Check file exists
-foreach ($files as  $file) {
+foreach ($files as $file) {
     if (!nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-        die('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
+        exit('ERROR#' . $nv_Lang->getModule('file_no_exists') . ': ' . $file);
     }
 }
 
 // Do action: Delete
-foreach ($files as  $file) {
+foreach ($files as $file) {
     @nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $file);
 
     if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $path . '/' . $file, $m)) {
@@ -41,7 +42,7 @@ foreach ($files as  $file) {
     }
 
     if (isset($array_dirname[$path])) {
-        $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $array_dirname[$path] . " AND title='" . $file . "'");
+        $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $array_dirname[$path] . " AND title='" . $file . "'");
     }
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_delfile'), $path . '/' . $file, $admin_info['userid']);

@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function addpass() {
@@ -119,10 +120,12 @@ function usageTermsShow(t) {
                 "" != t && 'undefined' != typeof t && $("#sitemodalTerm .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + t + '</h2></div>');
                 $("#sitemodalTerm").find(".modal-title").html(t);
                 $("#sitemodalTerm").find(".modal-body").html(e);
-                $('#sitemodalTerm').on('hidden.bs.modal', function () {
+                $('#sitemodalTerm').on('hidden.bs.modal', function() {
                     $("#sitemodalTerm .modal-content").find(".modal-header").remove()
                 });
-                $("#sitemodalTerm").modal({backdrop: "static"})
+                $("#sitemodalTerm").modal({
+                    backdrop: "static"
+                })
             } else {
                 alert(strip_tags(e))
             }
@@ -135,7 +138,7 @@ function validErrorShow(a) {
     $(a).parent().parent().addClass("has-error");
     $("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
     $(a).tooltip({
-       container: "body",
+        container: "body",
         placement: "bottom",
         title: function() {
             return "" != $(a).attr("data-current-mess") ? $(a).attr("data-current-mess") : nv_required
@@ -159,9 +162,10 @@ function validCheck(a) {
             if (!$("[type=radio]:checked", a).length) return !1
         } else if ("DIV" == b && $(a).is(".check-box")) {
             if (!$("[type=checkbox]:checked", a).length) return !1
-        } else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
-            if ("" == d) return !1
-        } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
+        } else if ("INPUT" == b || "TEXTAREA" == b)
+            if ("undefined" == typeof c || "" == c) {
+                if ("" == d) return !1
+            } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
     }
     return !0
 }
@@ -212,26 +216,26 @@ function login_validForm(a) {
             b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
-                $(".tooltip-current", a).removeClass("tooltip-current"),
-                "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
-                    $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
-                    validErrorShow(this)
-                }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                    $("[type=submit]", a).prop("disabled", !1);
-                    if (nv_is_recaptcha) {
-                        change_captcha();
-                    }
-                }, 1E3)
+                    $(".tooltip-current", a).removeClass("tooltip-current"),
+                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
+                        $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
+                        validErrorShow(this)
+                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
+                        $("[type=submit]", a).prop("disabled", !1);
+                        if (nv_is_recaptcha) {
+                            change_captcha();
+                        }
+                    }, 1E3)
             } else if (d.status == "ok") {
                 $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
-                $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
-                    if( "undefined" != typeof d.redirect && "" != d.redirect){
-                         window.location.href = d.redirect;
-                    }else{
-                         $('#sitemodal').modal('hide');
-                         window.location.href = window.location.href;
-                    }
-                }, 3E3)
+                    $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
+                        if ("undefined" != typeof d.redirect && "" != d.redirect) {
+                            window.location.href = d.redirect;
+                        } else {
+                            $('#sitemodal').modal('hide');
+                            window.location.href = window.location.href;
+                        }
+                    }, 3E3)
             } else if (d.status == "2steprequire") {
                 $(".form-detail", a).hide(), $("#other_form").hide();
                 $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
@@ -286,7 +290,7 @@ function reg_validForm(a) {
                 }, 6E3)
             })))
         },
-        error: function (xhr, opt, err) {
+        error: function(xhr, opt, err) {
             if (window.console.log) {
                 console.log(xhr.status + ': ' + err);
             } else {
@@ -307,8 +311,8 @@ function lostpass_validForm(a) {
         if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
     });
     if (!d) {
-        if (nv_is_recaptcha && $("[name=step]",a).val() == 'step1') {
-            $("[name=gcaptcha_session]",a).val($("[name=g-recaptcha-response]",a).val());
+        if (nv_is_recaptcha && $("[name=step]", a).val() == 'step1') {
+            $("[name=gcaptcha_session]", a).val($("[name=g-recaptcha-response]", a).val());
         }
         c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0);
         $.ajax({
@@ -319,10 +323,10 @@ function lostpass_validForm(a) {
             dataType: "json",
             success: function(b) {
                 if (b.status == "error") {
-                    $("[name=step]",a).val(b.step);
-                    if("undefined" != typeof b.info && "" != b.info) $(".nv-info",a).removeClass('error success').text(b.info);
+                    $("[name=step]", a).val(b.step);
+                    if ("undefined" != typeof b.info && "" != b.info) $(".nv-info", a).removeClass('error success').text(b.info);
                     $("input,button", a).prop("disabled", !1);
-                    $(".required",a).removeClass("required");
+                    $(".required", a).removeClass("required");
                     $(".tooltip-current", a).removeClass("tooltip-current");
                     $("[class*=step]", a).hide();
                     $("." + b.step + " input", a).addClass("required");
@@ -335,11 +339,11 @@ function lostpass_validForm(a) {
                             validErrorShow(this);
                         });
                     }
-                    if(b.step == 'step1') {
+                    if (b.step == 'step1') {
                         $("[onclick*='change_captcha']", a).click();
                         if (nv_is_recaptcha) {
                             change_captcha();
-                            $("[name=gcaptcha_session]",a).val('');
+                            $("[name=gcaptcha_session]", a).val('');
                         }
                     }
                 } else {
@@ -410,7 +414,9 @@ function bt_logout(a) {
 }
 
 function login2step_change(ele) {
-    var ele = $(ele), form = ele, i = 0;
+    var ele = $(ele),
+        form = ele,
+        i = 0;
     while (!form.is('form')) {
         if (i++ > 10) {
             break;

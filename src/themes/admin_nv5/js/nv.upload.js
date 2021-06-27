@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var NVCoreFileBrowser = function() {
@@ -578,10 +579,10 @@ NVCoreFileBrowser.prototype.init = function(data) {
                         });
                         var wrapCropper = $(this).parent();
                         $('.cropper-face', wrapCropper).css({
-                            'opacity' : 1,
-                            'background-image' : 'url(' + logo + ')',
-                            'background-size' : '100%',
-                            'background-color' : 'transparent'
+                            'opacity': 1,
+                            'background-image': 'url(' + logo + ')',
+                            'background-size': '100%',
+                            'background-color': 'transparent'
                         });
                     }
                 });
@@ -1258,7 +1259,7 @@ NVCoreFileBrowser.prototype.folderMenu = function(folder, event) {
 /*
  * Xử lý khi chuột phải thư mục chọn truy cập
  */
-NVCoreFileBrowser.prototype.handleMenuAccessFolder = function (element) {
+NVCoreFileBrowser.prototype.handleMenuAccessFolder = function(element) {
     var self = this;
     var cfg = self.cfg;
     var folder = $(element).data('folder');
@@ -1268,7 +1269,7 @@ NVCoreFileBrowser.prototype.handleMenuAccessFolder = function (element) {
 /*
  * Xử lý khi chuột phải thư mục chọn tạo thư mục mới
  */
-NVCoreFileBrowser.prototype.handleMenuNewFolder = function (element) {
+NVCoreFileBrowser.prototype.handleMenuNewFolder = function(element) {
     var self = this;
     var cfg = self.cfg;
     var folder = $(element).data('folder');
@@ -1279,7 +1280,7 @@ NVCoreFileBrowser.prototype.handleMenuNewFolder = function (element) {
 /*
  * Xử lý khi chuột phải thư mục chọn xóa thư mục
  */
-NVCoreFileBrowser.prototype.handleMenuDeleteFolder = function (element) {
+NVCoreFileBrowser.prototype.handleMenuDeleteFolder = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
@@ -1320,10 +1321,11 @@ NVCoreFileBrowser.prototype.handleMenuDeleteFolder = function (element) {
 /*
  * Xử lý khi chuột phải thư mục chọn đổi tên thư mục
  */
-NVCoreFileBrowser.prototype.handleMenuRenameFolder = function (element) {
+NVCoreFileBrowser.prototype.handleMenuRenameFolder = function(element) {
     var self = this;
     var cfg = self.cfg;
-    var folder = $(element).data('folder'), folderName;
+    var folder = $(element).data('folder'),
+        folderName;
     folderName = folder.split("/");
     folderName = folderName[folderName.length - 1];
     $('form', $(cfg.formRenameFolder)).data('folder', folder);
@@ -1334,7 +1336,7 @@ NVCoreFileBrowser.prototype.handleMenuRenameFolder = function (element) {
 /*
  * Xử lý khi chuột phải thư mục chọn tạo lại ảnh thumb
  */
-NVCoreFileBrowser.prototype.handleMenuReThumb = function (element) {
+NVCoreFileBrowser.prototype.handleMenuReThumb = function(element) {
     var self = this;
     var cfg = self.cfg;
     var folder = $(element).data('folder');
@@ -1351,7 +1353,7 @@ NVCoreFileBrowser.prototype.handleMenuReThumb = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn download
  */
-NVCoreFileBrowser.prototype.handleMenuDownload = function (element) {
+NVCoreFileBrowser.prototype.handleMenuDownload = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1360,7 +1362,8 @@ NVCoreFileBrowser.prototype.handleMenuDownload = function (element) {
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
     if (fileItem.length) {
-        var fdata = fileItem.data('fdata').split("|"), filepath, urldown;
+        var fdata = fileItem.data('fdata').split("|"),
+            filepath, urldown;
         if (fdata[7] == "") {
             filepath = $(cfgf.folder).data('value');
         } else {
@@ -1376,7 +1379,7 @@ NVCoreFileBrowser.prototype.handleMenuDownload = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn xem chi tiết
  */
-NVCoreFileBrowser.prototype.handleMenuPreview = function (element) {
+NVCoreFileBrowser.prototype.handleMenuPreview = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1385,7 +1388,8 @@ NVCoreFileBrowser.prototype.handleMenuPreview = function (element) {
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
     if (fileItem.length) {
-        var fdata = fileItem.data('fdata').split("|"), filepath, fsizeinfo;
+        var fdata = fileItem.data('fdata').split("|"),
+            filepath, fsizeinfo;
         if (fdata[7] == "") {
             filepath = $(cfgf.folder).data('value');
         } else {
@@ -1415,7 +1419,7 @@ NVCoreFileBrowser.prototype.handleMenuPreview = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn xem đổi tên file
  */
-NVCoreFileBrowser.prototype.handleMenuRenameFile = function (element) {
+NVCoreFileBrowser.prototype.handleMenuRenameFile = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1436,7 +1440,7 @@ NVCoreFileBrowser.prototype.handleMenuRenameFile = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn di chuyển
  */
-NVCoreFileBrowser.prototype.handleMenuMove = function (element) {
+NVCoreFileBrowser.prototype.handleMenuMove = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1460,13 +1464,14 @@ NVCoreFileBrowser.prototype.handleMenuMove = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn xóa file
  */
-NVCoreFileBrowser.prototype.handleMenuDeleteFile = function (element) {
+NVCoreFileBrowser.prototype.handleMenuDeleteFile = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
     var cfgf = self.cfgFolderData;
 
-    var selFile = $(cfgm.file).data('value'), path, confirmMessage;
+    var selFile = $(cfgm.file).data('value'),
+        path, confirmMessage;
 
     // Kiem tra xoa nhieu file hay xoa 1 file
     if (selFile.indexOf('|') == -1) {
@@ -1506,7 +1511,7 @@ NVCoreFileBrowser.prototype.handleMenuDeleteFile = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn xoay ảnh
  */
-NVCoreFileBrowser.prototype.handleMenuRotate = function (element) {
+NVCoreFileBrowser.prototype.handleMenuRotate = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1528,7 +1533,7 @@ NVCoreFileBrowser.prototype.handleMenuRotate = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn cắt ảnh
  */
-NVCoreFileBrowser.prototype.handleMenuCrop = function (element) {
+NVCoreFileBrowser.prototype.handleMenuCrop = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1543,7 +1548,7 @@ NVCoreFileBrowser.prototype.handleMenuCrop = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn công cụ ảnh (tạo ảnh mới)
  */
-NVCoreFileBrowser.prototype.handleMenuCreatImage = function (element) {
+NVCoreFileBrowser.prototype.handleMenuCreatImage = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1551,7 +1556,8 @@ NVCoreFileBrowser.prototype.handleMenuCreatImage = function (element) {
 
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -1575,7 +1581,7 @@ NVCoreFileBrowser.prototype.handleMenuCreatImage = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn thêm logo
  */
-NVCoreFileBrowser.prototype.handleMenuAddLogo = function (element) {
+NVCoreFileBrowser.prototype.handleMenuAddLogo = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1583,7 +1589,8 @@ NVCoreFileBrowser.prototype.handleMenuAddLogo = function (element) {
 
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -1599,7 +1606,7 @@ NVCoreFileBrowser.prototype.handleMenuAddLogo = function (element) {
 /*
  * Xử lý khi chuột phải file, chọn chọn file
  */
-NVCoreFileBrowser.prototype.handleMenuSelect = function (element) {
+NVCoreFileBrowser.prototype.handleMenuSelect = function(element) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1607,7 +1614,8 @@ NVCoreFileBrowser.prototype.handleMenuSelect = function (element) {
 
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -1633,7 +1641,7 @@ NVCoreFileBrowser.prototype.handleMenuSelect = function (element) {
 /*
  * Submit form tìm kiếm file
  */
-NVCoreFileBrowser.prototype.submitSearch = function (e) {
+NVCoreFileBrowser.prototype.submitSearch = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
@@ -1655,7 +1663,7 @@ NVCoreFileBrowser.prototype.submitSearch = function (e) {
 /*
  * Submit form tạo thư mục
  */
-NVCoreFileBrowser.prototype.submitCreatFolder = function (e) {
+NVCoreFileBrowser.prototype.submitCreatFolder = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
@@ -1701,7 +1709,7 @@ NVCoreFileBrowser.prototype.submitCreatFolder = function (e) {
 /*
  * Submit form đổi tên thư mục
  */
-NVCoreFileBrowser.prototype.submitRenameFolder = function (e) {
+NVCoreFileBrowser.prototype.submitRenameFolder = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
@@ -1767,7 +1775,7 @@ NVCoreFileBrowser.prototype.submitRenameFolder = function (e) {
 /*
  * Submit form tạo lại ảnh thumb
  */
-NVCoreFileBrowser.prototype.submitRecreatThumb = function (e) {
+NVCoreFileBrowser.prototype.submitRecreatThumb = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
@@ -1790,7 +1798,7 @@ NVCoreFileBrowser.prototype.submitRecreatThumb = function (e) {
 /*
  * Submit form đổi tên file
  */
-NVCoreFileBrowser.prototype.submitRenameFile = function (e) {
+NVCoreFileBrowser.prototype.submitRenameFile = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1819,7 +1827,8 @@ NVCoreFileBrowser.prototype.submitRenameFile = function (e) {
         return true;
     }
 
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -1857,7 +1866,7 @@ NVCoreFileBrowser.prototype.submitRenameFile = function (e) {
 /*
  * Submit form di chuyển file
  */
-NVCoreFileBrowser.prototype.submitMoveFile = function (e) {
+NVCoreFileBrowser.prototype.submitMoveFile = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1916,7 +1925,7 @@ NVCoreFileBrowser.prototype.submitMoveFile = function (e) {
 /*
  * Submit form xoay ảnh
  */
-NVCoreFileBrowser.prototype.submitRotateFile = function (e) {
+NVCoreFileBrowser.prototype.submitRotateFile = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1928,7 +1937,8 @@ NVCoreFileBrowser.prototype.submitRotateFile = function (e) {
 
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -1965,7 +1975,7 @@ NVCoreFileBrowser.prototype.submitRotateFile = function (e) {
 /*
  * Submit form cắt ảnh
  */
-NVCoreFileBrowser.prototype.submitCrop = function (e) {
+NVCoreFileBrowser.prototype.submitCrop = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -1977,7 +1987,8 @@ NVCoreFileBrowser.prototype.submitCrop = function (e) {
 
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -2018,7 +2029,7 @@ NVCoreFileBrowser.prototype.submitCrop = function (e) {
 /*
  * Submit form tạo ảnh mới
  */
-NVCoreFileBrowser.prototype.submitCreatImage = function (e) {
+NVCoreFileBrowser.prototype.submitCreatImage = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -2030,7 +2041,8 @@ NVCoreFileBrowser.prototype.submitCreatImage = function (e) {
 
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -2071,7 +2083,7 @@ NVCoreFileBrowser.prototype.submitCreatImage = function (e) {
 /*
  * Submit form thêm logo
  */
-NVCoreFileBrowser.prototype.submitAddLogo = function (e) {
+NVCoreFileBrowser.prototype.submitAddLogo = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -2083,7 +2095,8 @@ NVCoreFileBrowser.prototype.submitAddLogo = function (e) {
 
     var file = $(cfgm.file).data('value');
     var fileItem = $('[data-file="' + file + '"]', $(cfg.filesContainer));
-    var fdata = fileItem.data('fdata').split("|"), filepath;
+    var fdata = fileItem.data('fdata').split("|"),
+        filepath;
     if (fdata[7] == "") {
         filepath = $(cfgf.folder).data('value');
     } else {
@@ -2122,7 +2135,7 @@ NVCoreFileBrowser.prototype.submitAddLogo = function (e) {
 /*
  * Submit form upload file từ internet
  */
-NVCoreFileBrowser.prototype.submitRemoteUpload = function (e) {
+NVCoreFileBrowser.prototype.submitRemoteUpload = function(e) {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -2185,20 +2198,20 @@ NVCoreFileBrowser.prototype.submitRemoteUpload = function (e) {
 /*
  * Tiến trình chạy tạo lại ảnh thumb
  */
-NVCoreFileBrowser.prototype.runRecreatThumb = function (path, idfile) {
+NVCoreFileBrowser.prototype.runRecreatThumb = function(path, idfile) {
     var self = this;
     var cfg = self.cfg;
     var form = $('form', $(cfg.formRecreatThumb));
 
     clearTimeout(self.timerRecreatThumb);
     $.ajax({
-        type : 'POST',
-        url : nv_module_url + 'recreatethumb&random=' + self.strRand(10),
-        data : {
+        type: 'POST',
+        url: nv_module_url + 'recreatethumb&random=' + self.strRand(10),
+        data: {
             path: path,
             idf: idfile
         },
-        success : function(d) {
+        success: function(d) {
             var e = d.split("_");
             if (e[0] == "ERROR") {
                 alert(e[1]);
@@ -2212,7 +2225,9 @@ NVCoreFileBrowser.prototype.runRecreatThumb = function (path, idfile) {
                     $('[data-toggle="creatcurrent"]', form).html(e[1]);
                     $('[data-toggle="creattotal"]', form).html(e[2]);
 
-                    progressbar.css({width: per + '%'});
+                    progressbar.css({
+                        width: per + '%'
+                    });
                     progressbar.attr('aria-valuenow', per);
                     progressbar.html(Math.ceil(per) + '%');
 
@@ -2234,7 +2249,7 @@ NVCoreFileBrowser.prototype.runRecreatThumb = function (path, idfile) {
 }
 
 // Tạo chuỗi ngẫu nhiên
-NVCoreFileBrowser.prototype.strRand = function (a) {
+NVCoreFileBrowser.prototype.strRand = function(a) {
     for (var b = "", d = 0; d < a; d++) {
         b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
     }
@@ -2242,7 +2257,7 @@ NVCoreFileBrowser.prototype.strRand = function (a) {
 }
 
 // Kiểm tra ẩn icon load
-NVCoreFileBrowser.prototype.checkInitCompleted = function () {
+NVCoreFileBrowser.prototype.checkInitCompleted = function() {
     if (this.perload > 1) {
         this.hideLoader();
         updatePerfectScrollbar();
@@ -2290,9 +2305,9 @@ NVCoreFileBrowser.prototype.uploadInit = function() {
         drop_element: $(cfg.container)[0],
         file_data_name: 'upload',
         multipart: true,
-        filters : {
-           max_file_size : nv_max_size_bytes,
-           mime_types: []
+        filters: {
+            max_file_size: nv_max_size_bytes,
+            mime_types: []
         },
         chunk_size: nv_chunk_size,
         resize: false,
@@ -2536,7 +2551,7 @@ NVCoreFileBrowser.prototype.uploadRenderUI = function() {
         </div>\
         <div class="queue-opts' + ((logo == '' || folder.length < 1) ? ' d-none' : '') + '">\
             <label class="custom-control custom-checkbox custom-control-inline mb-2">\
-                <input class="custom-control-input" type="checkbox" name="auto_logo" value="1"' + ((logo != '' && folder.length && folder.is('.auto_logo'))  ? ' checked="checked"' : '') + '><span class="custom-control-label custom-control-color text-truncate">Chèn logo vào tập tin tải lên (nếu là ảnh)</span>\
+                <input class="custom-control-input" type="checkbox" name="auto_logo" value="1"' + ((logo != '' && folder.length && folder.is('.auto_logo')) ? ' checked="checked"' : '') + '><span class="custom-control-label custom-control-color text-truncate">Chèn logo vào tập tin tải lên (nếu là ảnh)</span>\
             </label>\
         </div>\
         <div class="queue-head">\
@@ -2616,7 +2631,7 @@ NVCoreFileBrowser.prototype.uploadRenderUI = function() {
 /*
  * Build lại danh sách các file upload
  */
-NVCoreFileBrowser.prototype.uploadRefreshList = function () {
+NVCoreFileBrowser.prototype.uploadRefreshList = function() {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -2682,7 +2697,7 @@ NVCoreFileBrowser.prototype.uploadRefreshList = function () {
 /*
  * Xử lý hiển thị trạng thái file upload
  */
-NVCoreFileBrowser.prototype.handleStatus = function (file, response) {
+NVCoreFileBrowser.prototype.handleStatus = function(file, response) {
     var self = this;
     var actionClass;
 
@@ -2732,7 +2747,7 @@ NVCoreFileBrowser.prototype.handleStatus = function (file, response) {
 /*
  * Cập nhật tổng tiến trình upload
  */
-NVCoreFileBrowser.prototype.updateTotalProgress = function () {
+NVCoreFileBrowser.prototype.updateTotalProgress = function() {
     var self = this;
     var cfg = self.cfg;
     var cfgm = self.cfgMain;
@@ -2749,7 +2764,7 @@ NVCoreFileBrowser.prototype.updateTotalProgress = function () {
 /*
  * Hiển thị thông báo lỗi
  */
-NVCoreFileBrowser.prototype.showMsgError = function (message) {
+NVCoreFileBrowser.prototype.showMsgError = function(message) {
     var self = this;
     var cfg = self.cfg;
 
@@ -2764,7 +2779,7 @@ NVCoreFileBrowser.prototype.showMsgError = function (message) {
 /*
  * Hiển thị thông báo thành công
  */
-NVCoreFileBrowser.prototype.showMsgSuccess = function (message) {
+NVCoreFileBrowser.prototype.showMsgSuccess = function(message) {
     var self = this;
     var cfg = self.cfg;
 
@@ -2779,7 +2794,7 @@ NVCoreFileBrowser.prototype.showMsgSuccess = function (message) {
 /*
  * Hiển thị thông báo thường
  */
-NVCoreFileBrowser.prototype.showMsgInfo = function (message) {
+NVCoreFileBrowser.prototype.showMsgInfo = function(message) {
     var self = this;
     var cfg = self.cfg;
 
@@ -2798,7 +2813,7 @@ NVCoreFileBrowser.prototype.showMsgInfo = function (message) {
  * - Tải lại folder
  * - Thiết lập lại upload
  */
-NVCoreFileBrowser.prototype.uploadFinish = function () {
+NVCoreFileBrowser.prototype.uploadFinish = function() {
     var self = this;
     var cfg = self.cfg;
     var cfgf = self.cfgFolderData;
@@ -2828,7 +2843,7 @@ NVCoreFileBrowser.prototype.uploadFinish = function () {
  * Thông số pitago cho phép chỉnh ảnh nhỏ lại
  * đảo bảo đường chéo lớn nhất bằng chiều rộng vùng chứa
  */
-NVCoreFileBrowser.prototype.getImageDisplaySize = function (imgW, imgH, ctnW, ctnH, pitago) {
+NVCoreFileBrowser.prototype.getImageDisplaySize = function(imgW, imgH, ctnW, ctnH, pitago) {
     var ratioImg = imgW / imgH;
     var ratioCtn = ctnW / ctnH;
     if (ratioImg > ratioCtn) {
@@ -2844,7 +2859,9 @@ NVCoreFileBrowser.prototype.getImageDisplaySize = function (imgW, imgH, ctnW, ct
             imgW = imgH * ratioImg;
         }
     }
-    var size = [imgW, imgH], sizePi = [0, 0], ratio;
+    var size = [imgW, imgH],
+        sizePi = [0, 0],
+        ratio;
     if (pitago && Math.sqrt((imgW * imgW) + (imgH * imgH)) > ctnW) {
         ratio = size[0] / size[1];
         sizePi[1] = Math.sqrt((ctnW * ctnW) / ((ratio * ratio) + 1));
@@ -2857,7 +2874,7 @@ NVCoreFileBrowser.prototype.getImageDisplaySize = function (imgW, imgH, ctnW, ct
 /*
  * Kiểm tra kích thước ảnh mới hợp lệ
  */
-NVCoreFileBrowser.prototype.checkNewImageSize = function () {
+NVCoreFileBrowser.prototype.checkNewImageSize = function() {
     var self = this;
     var cfg = self.cfg;
 
@@ -2903,7 +2920,7 @@ NVCoreFileBrowser.prototype.checkNewImageSize = function () {
 /*
  * Xử lý khi có nhiều modal mở lên
  */
-NVCoreFileBrowser.prototype.fix2Modal = function (modalEle) {
+NVCoreFileBrowser.prototype.fix2Modal = function(modalEle) {
     var numBackFrop = $('.modal-backdrop').length;
     if (numBackFrop != 2) {
         return true;
@@ -2919,7 +2936,7 @@ NVCoreFileBrowser.prototype.fix2Modal = function (modalEle) {
 /*
  * Lấy Image Alt từ url
  */
-NVCoreFileBrowser.prototype.getImgAlt = function (fileAlt) {
+NVCoreFileBrowser.prototype.getImgAlt = function(fileAlt) {
     var lastChar = fileAlt.charAt(fileAlt.length - 1);
 
     if (lastChar === '/' || lastChar === '\\') {
@@ -2944,7 +2961,7 @@ NVCoreFileBrowser.prototype.getImgAlt = function (fileAlt) {
 /*
  * htmlspecialchars_decode
  */
-NVCoreFileBrowser.prototype.decode = function (string, quote_style) {
+NVCoreFileBrowser.prototype.decode = function(string, quote_style) {
     //       discuss at: http://phpjs.org/functions/htmlspecialchars_decode/
     //      original by: Mirek Slugen
     //      improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
@@ -3384,7 +3401,7 @@ var NVCMENU = {
             NVCMENU.menu.css({
                 'left': '0px',
                 'top': '0px',
-                'will-change' : 'transform',
+                'will-change': 'transform',
                 'position': 'absolute',
                 'transform': 'translate3d(' + menuLeft + 'px, ' + menuTop + 'px, 0px)',
                 'width': menuWidth + 'px',
@@ -3470,7 +3487,7 @@ $(document).ready(function() {
     function loadCSS(url) {
         var head = document.getElementsByTagName("head")[0]
         var link = document.createElement('link');
-        link.rel  = 'stylesheet';
+        link.rel = 'stylesheet';
         link.href = url;
         head.appendChild(link);
         link.onload = function() {
@@ -3482,7 +3499,8 @@ $(document).ready(function() {
 /*
  * Xử lý trình quản lý file ở cấp độ toàn trang
  */
-+function($) {
++
+function($) {
     'use strict';
 
     var NVStaticUpload = function(element, options) {
@@ -3494,12 +3512,12 @@ $(document).ready(function() {
         self.loadMainContainer();
     }
 
-    NVStaticUpload.VERSION  = '5.0.00';
+    NVStaticUpload.VERSION = '5.0.00';
 
     NVStaticUpload.DEFAULTS = {
-        modal 			: false,
-        adminBaseUrl	: "",
-        templateLoader	: '<div class="card card-filemanager card-border-color card-border-color-primary loading"><div class="filemanager-loader"><div><i class="fas fa-spinner fa-pulse"></i></div></div></div>',
+        modal: false,
+        adminBaseUrl: "",
+        templateLoader: '<div class="card card-filemanager card-border-color card-border-color-primary loading"><div class="filemanager-loader"><div><i class="fas fa-spinner fa-pulse"></i></div></div></div>',
         path: '',
         currentpath: '',
         type: '',
@@ -3517,7 +3535,9 @@ $(document).ready(function() {
         $.ajax({
             method: "GET",
             url: url,
-            data: {popup: 1},
+            data: {
+                popup: 1
+            },
             dataType: "json",
             cache: false
         }).done(function(data) {
@@ -3556,7 +3576,7 @@ $(document).ready(function() {
         });
     }
 
-    NVStaticUpload.prototype.strRand = function (a) {
+    NVStaticUpload.prototype.strRand = function(a) {
         for (var b = "", d = 0; d < a; d++) {
             b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
         }
@@ -3565,9 +3585,9 @@ $(document).ready(function() {
 
     function Plugin(option) {
         return this.each(function() {
-            var $this   = $(this);
+            var $this = $(this);
             var options = $.extend({}, NVStaticUpload.DEFAULTS, $this.data(), typeof option == 'object' && option);
-            var data    = $this.data('nv.upload');
+            var data = $this.data('nv.upload');
 
             if (!data && option == 'destroy') {
                 return true;
@@ -3597,7 +3617,8 @@ $(document).ready(function() {
 /*
  * Xử lý trình quản lý file ở các nút duyệt
  */
-+function($) {
++
+function($) {
     'use strict';
 
     var NVBrowseFile = function(element, options) {
@@ -3615,11 +3636,11 @@ $(document).ready(function() {
         });
     }
 
-    NVBrowseFile.VERSION  = '5.0.00';
+    NVBrowseFile.VERSION = '5.0.00';
 
     NVBrowseFile.DEFAULTS = {
-        adminBaseUrl	: "",
-        templateLoader	: '<div class="card card-filemanager card-border-color card-border-color-primary loading"><div class="filemanager-loader"><div><i class="fas fa-spinner fa-pulse"></i></div></div></div>',
+        adminBaseUrl: "",
+        templateLoader: '<div class="card card-filemanager card-border-color card-border-color-primary loading"><div class="filemanager-loader"><div><i class="fas fa-spinner fa-pulse"></i></div></div></div>',
         path: 'uploads', // Thư mục upload gốc
         currentpath: 'uploads', // Thư mục upload hiện tại (thư mục con hoặc là thư mục gốc)
         type: 'file', // file|image|flash
@@ -3665,7 +3686,7 @@ $(document).ready(function() {
         });
     }
 
-    NVBrowseFile.prototype.strRand = function (a) {
+    NVBrowseFile.prototype.strRand = function(a) {
         for (var b = "", d = 0; d < a; d++) {
             b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
         }
@@ -3722,9 +3743,9 @@ $(document).ready(function() {
         }
 
         return this.each(function() {
-            var $this   = $(this);
+            var $this = $(this);
             var options = $.extend({}, NVBrowseFile.DEFAULTS, $this.data(), typeof option == 'object' && option);
-            var data    = $this.data('nv.upload');
+            var data = $this.data('nv.upload');
 
             if (!data && option == 'destroy') {
                 return true;

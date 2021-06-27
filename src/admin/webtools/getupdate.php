@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 9/9/2010, 6:38
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_WEBTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('get_update');
@@ -32,9 +33,9 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
 
         $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
 
-        $no_extract = array();
-        $error_create_folder = array();
-        $error_move_folder = array();
+        $no_extract = [];
+        $error_create_folder = [];
+        $error_move_folder = [];
 
         if (is_dir(NV_ROOTDIR . '/' . $temp_extract_dir)) {
             nv_deletefile(NV_ROOTDIR . '/' . $temp_extract_dir, true);
@@ -42,9 +43,9 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
 
         $ftp_check_login = 0;
 
-        if ($sys_info['ftp_support'] and intval($global_config['ftp_check_login']) == 1) {
+        if ($sys_info['ftp_support'] and (int) ($global_config['ftp_check_login']) == 1) {
             $ftp_server = nv_unhtmlspecialchars($global_config['ftp_server']);
-            $ftp_port = intval($global_config['ftp_port']);
+            $ftp_port = (int) ($global_config['ftp_port']);
             $ftp_user_name = nv_unhtmlspecialchars($global_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
@@ -182,21 +183,21 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
     $filename = NV_TEMPNAM_PREFIX . 'sysupd_' . NV_CHECK_SESSION . '.zip';
 
     // Debug
-    $args = array(
-        'headers' => array(
+    $args = [
+        'headers' => [
             'Referer' => NUKEVIET_STORE_APIURL,
-        ),
+        ],
         'stream' => true,
         'filename' => NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename,
-        'body' => array(
+        'body' => [
             'lang' => NV_LANG_INTERFACE,
             'basever' => $global_config['version'],
             'mode' => 'getsysupd',
             'version' => $version,
             'package' => $package
-        ),
+        ],
         'timeout' => 0
-    );
+    ];
 
     // Delete temp file if exists
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
@@ -211,7 +212,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
         $error = $nv_Lang->getModule('get_update_error_file_download');
     }
 
-    if (empty($error))  {
+    if (empty($error)) {
         $zip = new PclZip(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
         $ziplistContent = $zip->listContent();
 
@@ -235,7 +236,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
             $error = $nv_Lang->getModule('get_update_error_file_download');
             $new_version = nv_geVersion(NV_CURRENTTIME);
             if ($new_version !== false and !is_string($new_version)) {
-                $manual_link = (string)$new_version->link;
+                $manual_link = (string) $new_version->link;
                 if (!empty($manual_link)) {
                     $error .= ' ' . sprintf($nv_Lang->getModule('get_update_error_file_download1'), $manual_link);
                 }

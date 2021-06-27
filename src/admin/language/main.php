@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('nv_lang_data');
@@ -27,7 +28,7 @@ if ($_lang_multi == $_md5_lang_multi) {
     $array_config_global['rewrite_optional'] = 0;
     $array_config_global['rewrite_op_mod'] = '';
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -36,14 +37,14 @@ if ($_lang_multi == $_md5_lang_multi) {
 
     nv_save_file_config_global();
 
-    $array_config_rewrite = array(
+    $array_config_rewrite = [
         'rewrite_enable' => $array_config_global['rewrite_enable'],
         'rewrite_optional' => $array_config_global['rewrite_optional'],
         'rewrite_endurl' => $global_config['rewrite_endurl'],
         'rewrite_exturl' => $global_config['rewrite_exturl'],
         'rewrite_op_mod' => $array_config_global['rewrite_op_mod'],
         'ssl_https' => $global_config['ssl_https']
-    );
+    ];
     $rewrite = nv_rewrite_change($array_config_rewrite);
     if (empty($rewrite[0])) {
         $nv_Lang->setModule('nv_data_note', $nv_Lang->getModule('nv_data_note') . sprintf($nv_Lang->getModule('err_writable'), $rewrite[1]));
@@ -62,25 +63,25 @@ $array_lang_setup = [];
 $db->sqlreset()->select('*')->from($db_config['prefix'] . '_setup_language')->order('weight ASC');
 $result = $db->query($db->sql());
 while ($row = $result->fetch()) {
-    $array_lang_setup[$row['lang']] = intval($row['setup']);
+    $array_lang_setup[$row['lang']] = (int) $row['setup'];
 }
 
 if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
     // Change weight
     if ($nv_Request->isset_request('changeweight', 'post')) {
         if (!defined('NV_IS_AJAX')) {
-            die('NO_Access denied!!!');
+            exit('NO_Access denied!!!');
         }
 
         $keylang = $nv_Request->get_title('keylang', 'post', '');
 
         if (!isset($array_lang_setup[$keylang])) {
-            die('NO_Access denied!!!');
+            exit('NO_Access denied!!!');
         }
 
         $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
         if (empty($new_weight)) {
-            die('NO_Access denied!!!');
+            exit('NO_Access denied!!!');
         }
 
         $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE lang!=' . $db->quote($keylang) . ' ORDER BY weight ASC';
@@ -89,8 +90,9 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         $weight = 0;
         while ($row = $result->fetch()) {
             ++$weight;
-            if ($weight == $new_weight)
+            if ($weight == $new_weight) {
                 ++$weight;
+            }
 
             $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $weight . ' WHERE lang=' . $db->quote($row['lang']);
             $db->query($sql);
@@ -123,9 +125,9 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             if ($activelang) {
                 $allow_sitelangs[] = $keylang;
             } elseif ($keylang != $global_config['site_lang']) {
-                $allow_sitelangs = array_diff($allow_sitelangs, array(
+                $allow_sitelangs = array_diff($allow_sitelangs, [
                     $keylang
-                ));
+                ]);
             }
 
             nv_update_config_allow_sitelangs(array_unique($allow_sitelangs));
@@ -142,7 +144,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=site&' . NV_OP_VARIABLE . '=edit&idsite=' . $global_config['idsite']);
         }
-    } elseif ($checksess == md5($keylang . NV_CHECK_SESSION) and in_array($keylang, $lang_array_exit)) {
+    } elseif ($checksess == md5($keylang . NV_CHECK_SESSION) and in_array($keylang, $lang_array_exit, true)) {
         // Cài đặt mới ngôn ngữ data
         if (isset($array_lang_setup[$keylang]) and $array_lang_setup[$keylang] == 1) {
             include NV_ROOTDIR . '/includes/header.php';
@@ -151,7 +153,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         } elseif ($global_config['lang_multi']) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_setup_new') . ' ' . $nv_Lang->getModule('nv_lang_data'), ' langkey : ' . $keylang, $admin_info['userid']);
 
-            $site_theme = $db->query("SELECT config_value FROM " . NV_CONFIG_GLOBALTABLE . " where lang='" . $global_config['site_lang'] . "' AND module='global' AND config_name='site_theme'")->fetchColumn();
+            $site_theme = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " where lang='" . $global_config['site_lang'] . "' AND module='global' AND config_name='site_theme'")->fetchColumn();
 
             $global_config['site_theme'] = $site_theme;
 
@@ -207,7 +209,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $setmodule = $row['title'];
                     $row['module_file'] = $row['module_file'];
 
-                    if (in_array($row['module_file'], $modules_exit) and in_array($setmodule, $array_module_setup)) {
+                    if (in_array($row['module_file'], $modules_exit, true) and in_array($setmodule, $array_module_setup, true)) {
                         nv_setup_data_module($keylang, $setmodule);
                     } else {
                         $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules WHERE title= :module');
@@ -218,10 +220,10 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
 
                 // Cai dat du lieu mau
                 $global_config['site_home_module'] = 'users';
-                $_site_home_module = $db->query("SELECT config_value FROM " . $db_config['prefix'] . "_config WHERE module = 'global' AND config_name = 'site_home_module' AND lang=" . $db->quote($global_config['site_lang']))
+                $_site_home_module = $db->query('SELECT config_value FROM ' . $db_config['prefix'] . "_config WHERE module = 'global' AND config_name = 'site_home_module' AND lang=" . $db->quote($global_config['site_lang']))
                     ->fetchColumn();
                 if (!empty($_site_home_module)) {
-                    $result = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $keylang . "_modules where title=" . $db->quote($_site_home_module));
+                    $result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules where title=' . $db->quote($_site_home_module));
                     if ($result->fetchColumn()) {
                         $global_config['site_home_module'] = $_site_home_module;
                     }
@@ -230,10 +232,10 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 try {
                     include_once NV_ROOTDIR . '/install/data_by_lang.php';
                     //xoa du lieu tai bang nvx_vi_modules
-                    $db->query("DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode("', '", $modules_exit) . "')");
+                    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules WHERE module_file NOT IN ('" . implode("', '", $modules_exit) . "')");
 
                     //xoa du lieu tai bang nvx_setup_extensions
-                    $db->query("DELETE FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode("', '", $modules_exit) . "') AND type='module'");
+                    $db->query('DELETE FROM ' . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode("', '", $modules_exit) . "') AND type='module'");
 
                     //xoa du lieu tai bang nvx_vi_blocks_groups
                     $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module!=\'theme\' AND module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
@@ -248,18 +250,18 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)');
 
                     //xoa du lieu tai bang nvx_config
-                    $db->query("DELETE FROM " . $db_config['prefix'] . "_config WHERE lang= '" . $lang_data . "' AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)");
+                    $db->query('DELETE FROM ' . $db_config['prefix'] . "_config WHERE lang= '" . $lang_data . "' AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . '_' . $lang_data . '_modules)');
 
-                    $result = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE title='news'");
+                    $result = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_data . "_modules WHERE title='news'");
                     if ($result->fetchColumn()) {
                         $result = $db->query('SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_cat ORDER BY sort ASC');
-                        while (list ($catid_i) = $result->fetch(3)) {
+                        while (list($catid_i) = $result->fetch(3)) {
                             nv_copy_structure_table($db_config['prefix'] . '_' . $lang_data . '_news_' . $catid_i, $db_config['prefix'] . '_' . $lang_data . '_news_rows');
                         }
                         $result->closeCursor();
 
                         $result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows ORDER BY id ASC');
-                        while (list ($id, $listcatid) = $result->fetch(3)) {
+                        while (list($id, $listcatid) = $result->fetch(3)) {
                             $arr_catid = explode(',', $listcatid);
                             foreach ($arr_catid as $catid) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows WHERE id=' . $id);
@@ -311,7 +313,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             echo nv_admin_theme($nv_Lang->getModule('nv_data_note'));
             include NV_ROOTDIR . '/includes/footer.php';
         }
-    } elseif ($checksess == md5($deletekeylang . NV_CHECK_SESSION . 'deletekeylang') and !in_array($deletekeylang, $global_config['allow_sitelangs'])) {
+    } elseif ($checksess == md5($deletekeylang . NV_CHECK_SESSION . 'deletekeylang') and !in_array($deletekeylang, $global_config['allow_sitelangs'], true)) {
         // Xóa ngôn ngữ data
         define('NV_IS_FILE_MODULES', true);
 
@@ -322,7 +324,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         $sql = 'SELECT title, module_file, module_data FROM ' . $db_config['prefix'] . '_' . $lang . '_modules ORDER BY weight ASC';
         $result_del_module = $db->query($sql);
 
-        while (list ($title, $module_file, $module_data) = $result_del_module->fetch(3)) {
+        while (list($title, $module_file, $module_data) = $result_del_module->fetch(3)) {
             if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
                 $sql_drop_module = [];
 
@@ -353,8 +355,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             }
         }
 
-        $db->query("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang = '" . $deletekeylang . "'");
-        $db->query("DELETE FROM " . $db_config['prefix'] . "_setup_language WHERE lang = '" . $deletekeylang . "'");
+        $db->query('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang = '" . $deletekeylang . "'");
+        $db->query('DELETE FROM ' . $db_config['prefix'] . "_setup_language WHERE lang = '" . $deletekeylang . "'");
 
         $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language ORDER BY weight ASC';
         $result = $db->query($sql);
@@ -379,11 +381,11 @@ $weight = 0;
 $array_installed = [];
 
 foreach ($array_lang_setup as $keylang => $setup) {
-    if (in_array($keylang, $lang_array_exit)) {
+    if (in_array($keylang, $lang_array_exit, true)) {
         if ($setup == 1) {
             $array_lang_installed[$keylang] = $keylang;
         }
-        $weight ++;
+        ++$weight;
         $array_installed[$weight] = [
             'keylang' => $keylang,
             'name' => $language_array[$keylang]['name'],
@@ -393,14 +395,14 @@ foreach ($array_lang_setup as $keylang => $setup) {
         ];
 
         if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN')) and $setup == 1) {
-            if (!in_array($keylang, $global_config['allow_sitelangs'])) {
+            if (!in_array($keylang, $global_config['allow_sitelangs'], true)) {
                 $array_installed[$weight]['delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;deletekeylang=' . $keylang . '&amp;checksess=' . md5($keylang . NV_CHECK_SESSION . 'deletekeylang');
             }
 
             if ($keylang != $global_config['site_lang']) {
                 $selected_yes = $selected_no = ' ';
 
-                if (in_array($keylang, $global_config['allow_sitelangs'])) {
+                if (in_array($keylang, $global_config['allow_sitelangs'], true)) {
                     $array_installed[$weight]['display'] = 1;
                 } else {
                     $array_installed[$weight]['display'] = 0;

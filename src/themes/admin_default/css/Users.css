@@ -1,9 +1,18 @@
+/**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 .mt-1 {
-    margin-top: 5px!important;
+    margin-top: 5px !important;
 }
 
 .align-middle {
-    vertical-align: middle!important;
+    vertical-align: middle !important;
 }
 
 .control-label-inline {
@@ -90,7 +99,8 @@
     width: 150px
 }
 
-#pageContent dd, #pageContent dt {
+#pageContent dd,
+#pageContent dt {
     float: left
 }
 
@@ -128,20 +138,21 @@
     background-image: url('../images/arrows/tall-down-arrow.gif')
 }
 
-.group-allow-area{
+.group-allow-area {
     max-height: 200px;
     overflow: auto;
 }
 
 /* EDIT INFO */
-#change-photo{
+#change-photo {
     display: none;
 }
 
 .twostepp {
-    padding-left: 15px!important;
+    padding-left: 15px !important;
 }
+
 .disabled {
-   pointer-events: none;
-   cursor: default;
+    pointer-events: none;
+    cursor: default;
 }

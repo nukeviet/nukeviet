@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $proxy_blocker_array = [
@@ -57,8 +58,8 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
         $array_config_global['proxy_blocker'] = $proxy_blocker;
     }
 
-    $array_config_global['str_referer_blocker'] = (int)$nv_Request->get_bool('str_referer_blocker', 'post');
-    $array_config_global['is_login_blocker'] = (int)$nv_Request->get_bool('is_login_blocker', 'post', false);
+    $array_config_global['str_referer_blocker'] = (int) $nv_Request->get_bool('str_referer_blocker', 'post');
+    $array_config_global['is_login_blocker'] = (int) $nv_Request->get_bool('is_login_blocker', 'post', false);
     $array_config_global['login_number_tracking'] = $nv_Request->get_int('login_number_tracking', 'post', 0);
     $array_config_global['login_time_tracking'] = $nv_Request->get_int('login_time_tracking', 'post', 0);
     $array_config_global['login_time_ban'] = $nv_Request->get_int('login_time_ban', 'post', 0);
@@ -76,36 +77,36 @@ if ($nv_Request->isset_request('submitbasic', 'post')) {
         $array_config_global['two_step_verification'] = 0;
     }
     $array_config_global['admin_2step_opt'] = array_intersect($array_config_global['admin_2step_opt'], $admin_2step_array);
-    if (!in_array($array_config_global['admin_2step_default'], $admin_2step_array)) {
+    if (!in_array($array_config_global['admin_2step_default'], $admin_2step_array, true)) {
         $array_config_global['admin_2step_default'] = '';
     }
-    if (!in_array($array_config_global['admin_2step_default'], $array_config_global['admin_2step_opt'])) {
+    if (!in_array($array_config_global['admin_2step_default'], $array_config_global['admin_2step_opt'], true)) {
         $array_config_global['admin_2step_default'] = current($array_config_global['admin_2step_opt']);
     }
     $array_config_global['admin_2step_opt'] = empty($array_config_global['admin_2step_opt']) ? '' : implode(',', $array_config_global['admin_2step_opt']);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
-    $array_config_define['nv_anti_agent'] = (int)$nv_Request->get_bool('nv_anti_agent', 'post');
-    $array_config_define['nv_anti_iframe'] = (int)$nv_Request->get_bool('nv_anti_iframe', 'post');
+    $array_config_define['nv_anti_agent'] = (int) $nv_Request->get_bool('nv_anti_agent', 'post');
+    $array_config_define['nv_anti_iframe'] = (int) $nv_Request->get_bool('nv_anti_iframe', 'post');
     $variable = $nv_Request->get_string('nv_allowed_html_tags', 'post');
     $variable = str_replace(';', ',', strtolower($variable));
     $variable = explode(',', $variable);
     $nv_allowed_html_tags = [];
     foreach ($variable as $value) {
         $value = trim($value);
-        if (preg_match('/^[a-z0-9]+$/', $value) and !in_array($value, $nv_allowed_html_tags)) {
+        if (preg_match('/^[a-z0-9]+$/', $value) and !in_array($value, $nv_allowed_html_tags, true)) {
             $nv_allowed_html_tags[] = $value;
         }
     }
     $array_config_define['nv_allowed_html_tags'] = implode(', ', $nv_allowed_html_tags);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($array_config_define as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -135,7 +136,7 @@ $array_config_flood = [];
 
 // Xử lý phần chống Flood
 if ($nv_Request->isset_request('submitflood', 'post')) {
-    $array_config_flood['is_flood_blocker'] = (int)$nv_Request->get_bool('is_flood_blocker', 'post');
+    $array_config_flood['is_flood_blocker'] = (int) $nv_Request->get_bool('is_flood_blocker', 'post');
     $array_config_flood['max_requests_60'] = $nv_Request->get_int('max_requests_60', 'post');
     $array_config_flood['max_requests_300'] = $nv_Request->get_int('max_requests_300', 'post');
 
@@ -144,7 +145,7 @@ if ($nv_Request->isset_request('submitflood', 'post')) {
     } elseif ($array_config_flood['max_requests_300'] <= 0) {
         $errormess = $nv_Lang->getModule('max_requests_error');
     } else {
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_flood as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -196,14 +197,14 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     $array_define_captcha['nv_gfx_width'] = $nv_Request->get_int('nv_gfx_width', 'post');
     $array_define_captcha['nv_gfx_height'] = $nv_Request->get_int('nv_gfx_height', 'post');
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_captcha as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($array_define_captcha as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -226,7 +227,7 @@ $nv_Lang->setModule('two_step_verification_note', sprintf($nv_Lang->getModule('t
 
 // Xử lý thiết lập CORS
 if ($nv_Request->isset_request('submitcors', 'post')) {
-    $array_config_site['cors_restrict_domains'] = (int)$nv_Request->get_bool('cors_restrict_domains', 'post', false);
+    $array_config_site['cors_restrict_domains'] = (int) $nv_Request->get_bool('cors_restrict_domains', 'post', false);
     $cors_valid_domains = $nv_Request->get_textarea('cors_valid_domains', '', NV_ALLOWED_HTML_TAGS, true);
     $cors_valid_domains = explode('<br />', strip_tags($cors_valid_domains, '<br>'));
     $array_config_site['cors_valid_domains'] = [];
@@ -245,7 +246,7 @@ if ($nv_Request->isset_request('submitcors', 'post')) {
         }
     }
     $array_config_site['cors_valid_domains'] = empty($array_config_site['cors_valid_domains']) ? '' : json_encode($array_config_site['cors_valid_domains']);
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -329,7 +330,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
         if ($save !== true) {
             $tpl->assign('MANUAL_WRITE_MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
-            $tpl->assign('MANUAL_WRITE_CODE', str_replace(["\n", "\t"], ["<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"], nv_htmlspecialchars($save)));
+            $tpl->assign('MANUAL_WRITE_CODE', str_replace(["\n", "\t"], ['<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'], nv_htmlspecialchars($save)));
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
         }
@@ -407,7 +408,7 @@ if ($nv_Request->isset_request('submitfloodip', 'post')) {
 
         if ($save !== true) {
             $tpl->assign('MANUAL_WRITE_MESSAGE', sprintf($nv_Lang->getModule('banip_error_write'), NV_DATADIR, NV_DATADIR));
-            $tpl->assign('MANUAL_WRITE_CODE', str_replace(["\n", "\t"], ["<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"], nv_htmlspecialchars($save)));
+            $tpl->assign('MANUAL_WRITE_CODE', str_replace(["\n", "\t"], ['<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'], nv_htmlspecialchars($save)));
         } else {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
         }

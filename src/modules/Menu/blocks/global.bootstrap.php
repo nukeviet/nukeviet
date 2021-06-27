@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_FILE_THEMES')) {
@@ -17,14 +18,13 @@ if (defined('NV_IS_FILE_THEMES')) {
     require NV_ROOTDIR . '/modules/Menu/menu_config.php';
 }
 
-if (! nv_function_exists('nv_menu_bootstrap')) {
+if (!nv_function_exists('nv_menu_bootstrap')) {
     /**
      * nv_menu_bootstrap_check_current()
      *
      * @param mixed $url
-     * @param integer $type
+     * @param int   $type
      * @return
-     *
      */
     function nv_menu_bootstrap_check_current($url, $type = 0)
     {
@@ -37,7 +37,8 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
 
         if ($home and ($url == nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA) or $url == NV_BASE_SITEURL . 'index.php' or $url == NV_BASE_SITEURL)) {
             return true;
-        } elseif ($url != NV_BASE_SITEURL) {
+        }
+        if ($url != NV_BASE_SITEURL) {
             $_curr_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
             if ($type == 2) {
                 if (preg_match('#' . preg_quote($url, '#') . '#', $_curr_url)) {
@@ -51,6 +52,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -59,7 +61,6 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
      *
      * @param mixed $block_config
      * @return
-     *
      */
     function nv_menu_bootstrap($block_config)
     {
@@ -73,7 +74,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
             $block_theme = 'default';
         }
 
-        $array_menu = array();
+        $array_menu = [];
         $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
         $list = $nv_Cache->db($sql, '', $block_config['module']);
         foreach ($list as $row) {
@@ -89,7 +90,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
                         $row['target'] = ' onclick="this.target=\'_blank\'"';
                 }
 
-                $array_menu[$row['parentid']][$row['id']] = array(
+                $array_menu[$row['parentid']][$row['id']] = [
                     'id' => $row['id'],
                     'title' => $row['title'],
                     'title_trim' => nv_clean60($row['title'], $block_config['title_length']),
@@ -99,7 +100,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
                     'icon' => (empty($row['icon'])) ? '' : NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'],
                     'css' => $row['css'],
                     'active_type' => $row['active_type']
-                );
+                ];
             }
         }
 
@@ -111,8 +112,8 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
 
         if (!empty($array_menu)) {
             foreach ($array_menu[0] as $id => $item) {
-                $classcurrent = array();
-                $submenu_active = array();
+                $classcurrent = [];
+                $submenu_active = [];
                 if (isset($array_menu[$id])) {
                     $classcurrent[] = 'dropdown';
                     $submenu = nv_get_bootstrap_submenu($id, $array_menu, $submenu_active, $block_theme);
@@ -122,10 +123,10 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
                 }
                 if (nv_menu_bootstrap_check_current($item['link'], $item['active_type'])) {
                     $classcurrent[] = 'active';
-                } elseif (! empty($submenu_active)) {
+                } elseif (!empty($submenu_active)) {
                     $classcurrent[] = 'active';
                 }
-                if (! empty($item['css'])) {
+                if (!empty($item['css'])) {
                     $classcurrent[] = $item['css'];
                 }
                 $item['current'] = empty($classcurrent) ? '' : ' class="' . (implode(' ', $classcurrent)) . '"';
@@ -135,7 +136,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
                 }
 
                 $xtpl->assign('TOP_MENU', $item);
-                if (! empty($item['icon'])) {
+                if (!empty($item['icon'])) {
                     $xtpl->parse('main.top_menu.icon');
                 }
                 $xtpl->parse('main.top_menu');
@@ -143,13 +144,14 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
     /**
-     * @param int $id
-     * @param array $array_menu
-     * @param bool $submenu_active
+     * @param int    $id
+     * @param array  $array_menu
+     * @param bool   $submenu_active
      * @param string $block_theme
      * @return string
      */
@@ -157,7 +159,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
     {
         $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/Menu');
 
-        if (! empty($array_menu[$id])) {
+        if (!empty($array_menu[$id])) {
             foreach ($array_menu[$id] as $sid => $smenu) {
                 if (nv_menu_bootstrap_check_current($smenu['link'], $smenu['active_type'])) {
                     $submenu_active[] = $id;
@@ -169,16 +171,17 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
                     $xtpl->parse('submenu.loop.item');
                 }
                 $xtpl->assign('SUBMENU', $smenu);
-                if (! empty($submenu)) {
+                if (!empty($submenu)) {
                     $xtpl->parse('submenu.loop.submenu');
                 }
-                if (! empty($smenu['icon'])) {
+                if (!empty($smenu['icon'])) {
                     $xtpl->parse('submenu.loop.icon');
                 }
                 $xtpl->parse('submenu.loop');
             }
             $xtpl->parse('submenu');
         }
+
         return $xtpl->text('submenu');
     }
 }

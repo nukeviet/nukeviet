@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10-5-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -26,10 +27,11 @@ function GetSourceNews($sourceid)
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
 
-        if (list ($title) = $re->fetch(3)) {
+        if (list($title) = $re->fetch(3)) {
             return $title;
         }
     }
+
     return '-/-';
 }
 
@@ -54,6 +56,7 @@ function BoldKeywordInStr($str, $keyword)
             $str = str_replace($k, '<span class="keyword">' . $k . '</span>', $str);
         }
     }
+
     return $str;
 }
 
@@ -97,16 +100,16 @@ $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
 $request_uri = $_SERVER['REQUEST_URI'];
 if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
     header('Location: ' . $base_url_rewrite);
-    die();
+    exit();
 }
 
-$array_cat_search = array();
+$array_cat_search = [];
 foreach ($global_array_cat as $arr_cat_i) {
-    $array_cat_search[$arr_cat_i['catid']] = array(
+    $array_cat_search[$arr_cat_i['catid']] = [
         'catid' => $arr_cat_i['catid'],
         'title' => $arr_cat_i['title'],
         'select' => ($arr_cat_i['catid'] == $catid) ? 'selected' : ''
-    );
+    ];
 }
 
 $array_cat_search[0]['title'] = $nv_Lang->getModule('search_all');
@@ -149,7 +152,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     ]
                 ]
             ];
-        } else if ($choose == 2) {
+        } elseif ($choose == 2) {
             //match:tim kiem theo 1 truong
             $search_elastic = [
                 'should' => [
@@ -158,8 +161,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                     ]
                 ]
             ];
-
-        } else if ($choose == 3) {
+        } elseif ($choose == 3) {
             $qurl = $key;
             $url_info = @parse_url($qurl);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
@@ -173,7 +175,6 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 ]
             ];
         } else {
-
             $search_elastic = [
                 'should' => [
                     'multi_match' => [ //dung multi_match:tim kiem theo nhieu truong
@@ -204,20 +205,20 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             ];
         }
 
-        $todate_elastic = array();
+        $todate_elastic = [];
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
             $todate_elastic = [
                 'lte' => mktime(23, 59, 59, $m[2], $m[1], $m[3])
             ];
         }
-        $fromdate_elastic = array();
+        $fromdate_elastic = [];
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m)) {
             $fromdate_elastic = [
                 'gte' => mktime(0, 0, 0, $m[2], $m[1], $m[3])
             ];
         }
 
-        $array_query_elastic = array();
+        $array_query_elastic = [];
         $array_query_elastic['query']['bool'] = $search_elastic;
         $array_query_elastic['size'] = $per_page;
         $array_query_elastic['from'] = ($page - 1) * $per_page;
@@ -253,7 +254,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             } else {
                 $img_src = '';
             }
-            $array_content[] = array(
+            $array_content[] = [
                 'id' => $value['_source']['id'],
                 'title' => $value['_source']['title'],
                 'alias' => $value['_source']['alias'],
@@ -264,8 +265,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'homeimgfile' => $img_src,
                 'sourceid' => $value['_source']['sourceid'],
                 'external_link' => $value['_source']['external_link']
-            );
-
+            ];
         }
         $contents .= search_result_theme($key, $numRecord, $per_page, $page, $array_content, $catid);
     } else {
@@ -280,7 +280,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $qurl = $url_info['scheme'] . '://' . $url_info['host'];
             }
-            $where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
+            $where = 'AND (tb1.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
         } else {
             $qurl = $key;
             $url_info = @parse_url($qurl);
@@ -289,7 +289,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             }
             $tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail tb2 ON ( tb1.id = tb2.id )';
             $where = " AND ( tb1.title LIKE '%" . $dbkeyhtml . "%' OR tb1.hometext LIKE '%" . $dbkey . "%' ";
-            $where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
+            $where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodyhtml LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($dbkey) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%'))";
         }
 
         if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m)) {
@@ -320,10 +320,10 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 
         $result = $db_slave->query($db_slave->sql());
 
-        $array_content = array();
+        $array_content = [];
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
-        while (list ($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
+        while (list($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -339,7 +339,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
             } else {
                 $img_src = '';
             }
-            $array_content[] = array(
+            $array_content[] = [
                 'id' => $id,
                 'title' => $title,
                 'alias' => $alias,
@@ -350,7 +350,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'homeimgfile' => $img_src,
                 'sourceid' => $sourceid,
                 'external_link' => $external_link
-            );
+            ];
         }
     }
 

@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/7/2010 2:23
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!$nv_Request->isset_request('id', 'post,get')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
@@ -23,7 +24,7 @@ FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
-    die('NO_' . $id);
+    exit('NO_' . $id);
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
@@ -35,10 +36,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     $nv_Cache->delMod('modules');
 
-    die('OK|show_funcs|show_funcs_action');
-} else {
-    $func_site_title = $row['func_site_title'];
+    exit('OK|show_funcs|show_funcs_action');
 }
+    $func_site_title = $row['func_site_title'];
 
 $tpl = new \NukeViet\Template\Smarty();
 $tpl->setTemplateDir(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

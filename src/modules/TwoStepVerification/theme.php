@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MOD_2STEP_VERIFICATION')) {
-    die('Stop!!!');
+if (!defined('NV_MOD_2STEP_VERIFICATION')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -63,6 +64,7 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -88,6 +90,7 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -108,5 +111,6 @@ function nv_theme_confirm_password()
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

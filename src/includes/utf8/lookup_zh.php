@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24/10/2013, 22:10
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 // Chinese
 
 // @formatter:off
-$utf8_lookup_lang = array(
+$utf8_lookup_lang = [
     '起' => 'qi ', '果' => 'guo ', '热' => 're ', '院' => 'yuan ', '四' => 'si ', '回' => 'hui ', '西' => 'xi ', '国' => 'guo ',
     '高' => 'gao ', '怎' => 'zen ', '系' => 'xi ', '北' => 'bei ', '一' => 'yi ', '七' => 'qi ', '三' => 'san ', '上' => 'shang ', '下' => 'xia ',
     '不' => 'bu ', '东' => 'dong ', '子' => 'zi ', '医' => 'yi ', '字' => 'zi ', '个' => 'ge ', '十' => 'shi ', '中' => 'zhong ', '午' => 'wu ',
@@ -309,6 +310,6 @@ $utf8_lookup_lang = array(
     '嫂' => 'sao ', '嫉' => 'ji ', '赋' => 'fu ', '驻' => 'zhu ', '赌' => 'du ', '潮' => 'chao ', '杖' => 'zhang ', '嫌' => 'xian ', '蔼' => 'ai ',
     '蔽' => 'bi ', '杜' => 'du ', '赖' => 'lai ', '杠' => 'gang ', '砖' => 'zhuan ', '鉴' => 'jian ', '勃' => 'bo ', '赠' => 'zeng ', '勉' => 'mian ',
     '赤' => 'chi ', '澄' => 'cheng ', '澈' => 'che ', '阂' => 'he ', '骚' => 'sao ', '杰' => 'jie ', '勘' => 'kan ', '鸣' => 'ming '
-);
+];
 
 // @formatter:on

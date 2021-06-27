@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_SYSTEM')) {
-    die('Stop!!!');
+if (!defined('NV_SYSTEM')) {
+    exit('Stop!!!');
 }
 
 define('NV_IS_MOD_SEARCH', true);
@@ -23,25 +24,26 @@ function LoadModulesSearch()
 {
     global $site_mods;
 
-    $arrayfolder = array();
+    $arrayfolder = [];
     foreach ($site_mods as $mod => $arr_mod) {
         if (file_exists(NV_ROOTDIR . '/modules/' . $arr_mod['module_file'] . '/search.php')) {
-            $arrayfolder[$mod] = array(
+            $arrayfolder[$mod] = [
                 'module_name' => $mod,
                 'module_file' => $arr_mod['module_file'],
                 'module_data' => $arr_mod['module_data'],
                 'custom_title' => $arr_mod['custom_title'],
                 'adv_search' => isset($arr_mod['funcs']['search']) ? true : false,
-            );
+            ];
         }
     }
+
     return $arrayfolder;
 }
 
 /**
  * nv_substr_clean()
  *
- * @param mixed $string
+ * @param mixed  $string
  * @param string $mode
  * @return
  */
@@ -77,7 +79,7 @@ function BoldKeywordInStr($str, $keyword, $logic)
     $pos = false;
 
     if ($logic == 'AND') {
-        $array_keyword = array( $keyword, nv_EncString($keyword) );
+        $array_keyword = [$keyword, nv_EncString($keyword)];
     } else {
         $keyword .= ' ' . nv_EncString($keyword);
         $array_keyword = explode(' ', $keyword);
@@ -111,19 +113,18 @@ function BoldKeywordInStr($str, $keyword, $logic)
         }
     }
 
-    if (! $pos) {
+    if (!$pos) {
         return nv_clean60($str, 300);
     }
 
-    $pattern = array();
+    $pattern = [];
     foreach ($array_keyword as $k) {
         $pattern[] = '/(' . nv_preg_quote($k) . ')/uis';
     }
 
     $str = preg_replace($pattern, '{\\1}', $str);
-    $str = str_replace(array( '{', '}' ), array( '<span class="keyword">', '</span>' ), $str);
 
-    return $str;
+    return str_replace(['{', '}'], ['<span class="keyword">', '</span>'], $str);
 }
 
 /**
@@ -139,7 +140,8 @@ function nv_like_logic($field, $dbkeyword, $logic)
     if ($logic == 'AND') {
         $return = $field . " LIKE '%" . $dbkeyword . "%'";
     } else {
-        $return = $field . " LIKE '%" . str_replace(" ", "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
+        $return = $field . " LIKE '%" . str_replace(' ', "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
     }
+
     return $return;
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('userwait_resend_email');
@@ -19,7 +20,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
     $per_email = $nv_Request->get_int('per_email', 'post', 0);
     $offset = $nv_Request->get_int('offset', 'post', 0);
     $tokend = $nv_Request->get_title('tokend', 'post', '');
-    $useriddel = array_unique(array_filter(array_map("trim", explode(',', $nv_Request->get_title('useriddel', 'post', '')))));
+    $useriddel = array_unique(array_filter(array_map('trim', explode(',', $nv_Request->get_title('useriddel', 'post', '')))));
 
     $respon = [
         'continue' => false,
@@ -28,15 +29,15 @@ if ($nv_Request->isset_request('ajax', 'post')) {
     ];
 
     if ($tokend == NV_CHECK_SESSION and $per_email > 0 and $offset >= 0) {
-        $sql = "SELECT * FROM " . NV_MOD_TABLE . "_reg ORDER BY userid ASC LIMIT " . $offset . ", " . $per_email;
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg ORDER BY userid ASC LIMIT ' . $offset . ', ' . $per_email;
         $result = $db->query($sql);
         $numrows = $result->rowCount();
         if ($numrows) {
             while ($row = $result->fetch()) {
                 // Kiểm tra xem email đã tồn tại chưa nếu có xóa đi
-                if ($db->query("SELECT userid FROM " . NV_MOD_TABLE . " WHERE email=" . $db->quote($row['email']))->fetchColumn()) {
+                if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email=' . $db->quote($row['email']))->fetchColumn()) {
                     $respon['messages'][] = $row['email'] . ': ' . $nv_Lang->getModule('userwait_resend_delete');
-                    if (!in_array($row['userid'], $useriddel)) {
+                    if (!in_array($row['userid'], $useriddel, true)) {
                         $useriddel[] = $row['userid'];
                     }
                 } else {
@@ -52,7 +53,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                          * Cập nhật lại thời gian đăng ký là ngay lúc gửi mail này
                          * để đảm bảo thành viên vào kích hoạt thì không bị xóa mất tài khoản chờ duyệt
                          */
-                        $db->query("UPDATE " . NV_MOD_TABLE . "_reg SET regdate=" . NV_CURRENTTIME . " WHERE userid=" . $row['userid']);
+                        $db->query('UPDATE ' . NV_MOD_TABLE . '_reg SET regdate=' . NV_CURRENTTIME . ' WHERE userid=' . $row['userid']);
                     }
 
                     $respon['messages'][] = $row['email'] . ': ' . ($checkSend ? $nv_Lang->getModule('userwait_resend_ok') : $nv_Lang->getModule('userwait_resend_error'));
@@ -71,7 +72,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
             // Xóa các email đã kích hoạt
             if (!empty($respon['useriddel'])) {
                 try {
-                    $db->query("DELETE FROM " . NV_MOD_TABLE . "_reg WHERE userid IN(" . $respon['useriddel'] . ")");
+                    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid IN(' . $respon['useriddel'] . ')');
                 } catch (PDOException $e) {
                     trigger_error(print_r($e, true));
                 }

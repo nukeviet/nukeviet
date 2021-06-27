@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 16-12-2012 15:48
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('module_admin');
@@ -46,7 +47,7 @@ if (defined('NV_IS_AJAX')) {
             if ($save) {
                 $act_val = ($row['act_' . $act]) ? 0 : 1;
                 $checksum = md5($row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey']);
-                $db->query("UPDATE " . NV_AUTHORS_GLOBALTABLE . "_module SET act_" . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid);
+                $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET act_' . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid);
             }
         }
         nv_htmlOutput('OK');

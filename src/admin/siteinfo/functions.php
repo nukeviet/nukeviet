@@ -1,26 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 5:50
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($admin_info['level'] == 1) {
     $allow_func[] = 'logs_del';
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $nv_Lang->getGlobal('mod_siteinfo')
-);
+];
 
 //Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:siteinfo';
@@ -43,7 +44,7 @@ function nv_siteinfo_getlang()
     global $db_config, $nv_Cache;
     $sql = 'SELECT DISTINCT lang FROM ' . $db_config['prefix'] . '_logs';
     $result = $nv_Cache->db($sql, 'lang', 'siteinfo');
-    $array_lang = array();
+    $array_lang = [];
 
     if (!empty($result)) {
         foreach ($result as $row) {
@@ -64,14 +65,14 @@ function nv_siteinfo_getuser()
     global $db_config, $nv_Cache;
     $sql = 'SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT DISTINCT userid FROM ' . $db_config['prefix'] . '_logs WHERE userid!=0 ) ORDER BY username ASC';
     $result = $nv_Cache->db($sql, 'userid', 'siteinfo');
-    $array_user = array();
+    $array_user = [];
 
     if (!empty($result)) {
         foreach ($result as $row) {
-            $array_user[] = array(
+            $array_user[] = [
                 'userid' => $row['userid'],
                 'username' => $row['username']
-            );
+            ];
         }
     }
 
@@ -88,7 +89,7 @@ function nv_siteinfo_getmodules()
     global $db_config, $nv_Cache;
     $sql = 'SELECT DISTINCT module_name FROM ' . $db_config['prefix'] . '_logs';
     $result = $nv_Cache->db($sql, 'module_name', 'siteinfo');
-    $array_modules = array();
+    $array_modules = [];
 
     if (!empty($result)) {
         foreach ($result as $row) {

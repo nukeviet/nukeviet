@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_SYSTEM') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_SYSTEM') or !defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -19,7 +20,7 @@ if (! defined('NV_SYSTEM') or ! defined('NV_MAINFILE')) {
  * @param string $content
  * @param string $footer
  */
-function nv_mailHTML($title, $content, $footer='')
+function nv_mailHTML($title, $content, $footer = '')
 {
     global $global_config, $nv_Lang;
     $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
@@ -30,6 +31,7 @@ function nv_mailHTML($title, $content, $footer='')
     $xtpl->assign('MESSAGE_CONTENT', $content);
     $xtpl->assign('MESSAGE_FOOTER', $footer);
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -37,7 +39,7 @@ function nv_mailHTML($title, $content, $footer='')
  *  nv_site_theme()
  *
  * @param string $contents
- * @param bool $full
+ * @param bool   $full
  */
 function nv_site_theme($contents, $full = true)
 {
@@ -46,7 +48,7 @@ function nv_site_theme($contents, $full = true)
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
-    if (! file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file)) {
+    if (!file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file)) {
         $layout_file = 'body';
     }
 
@@ -55,7 +57,7 @@ function nv_site_theme($contents, $full = true)
     }
 
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
-    if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
+    if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
     }
 
@@ -69,13 +71,13 @@ function nv_site_theme($contents, $full = true)
     // System variables
     $xtpl->assign('THEME_PAGE_TITLE', nv_html_page_title(false));
 
-        // Meta-tags
+    // Meta-tags
     $metatags = nv_html_meta_tags(false);
-    $metatags[] = array(
+    $metatags[] = [
         'name' => 'name',
         'value' => 'viewport',
         'content' => 'width=device-width, initial-scale=1'
-    );
+    ];
 
     foreach ($metatags as $meta) {
         $xtpl->assign('THEME_META_TAGS', $meta);
@@ -83,26 +85,26 @@ function nv_site_theme($contents, $full = true)
     }
 
     //Links
-    $html_links = array();
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/font-awesome.min.css' );
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css' );
+    $html_links = [];
+    $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/font-awesome.min.css'];
+    $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css'];
+    $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css'];
 
     if (defined('NV_IS_ADMIN') and $full) {
-        $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css' );
+        $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css'];
     }
 
     $html_links = array_merge_recursive($html_links, nv_html_links(false));
 
     // Customs Style
-    if (isset($module_config['themes'][$global_config['module_theme']]) and ! empty($module_config['themes'][$global_config['module_theme']])) {
+    if (isset($module_config['themes'][$global_config['module_theme']]) and !empty($module_config['themes'][$global_config['module_theme']])) {
         $config_theme = unserialize($module_config['themes'][$global_config['module_theme']]);
 
-        if (isset($config_theme['css_content']) and ! empty($config_theme['css_content'])) {
+        if (isset($config_theme['css_content']) and !empty($config_theme['css_content'])) {
             $customFileName = $global_config['module_theme'] . '.' . NV_LANG_DATA . '.' . $global_config['idsite'];
 
-            if (! file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $customFileName . '.css')) {
-                $replace = array(
+            if (!file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $customFileName . '.css')) {
+                $replace = [
                     '[body]' => 'body',
                     '[a_link]' => 'a, a:link, a:active, a:visited',
                     '[a_link_hover]' => 'a:hover',
@@ -111,21 +113,21 @@ function nv_site_theme($contents, $full = true)
                     '[footer]' => '#footer',
                     '[block]' => '.panel, .well, .nv-block-banners',
                     '[block_heading]' => '.panel-default > .panel-heading'
-                );
+                ];
 
                 $css_content = str_replace(array_keys($replace), array_values($replace), $config_theme['css_content']);
 
                 file_put_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $customFileName . '.css', $css_content);
             }
 
-            $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css?t=' . $global_config['timestamp'] );
+            $html_links[] = ['rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css?t=' . $global_config['timestamp']];
         }
 
-        if (isset($config_theme['gfont']) and ! empty($config_theme['gfont']) and isset($config_theme['gfont']['family']) and !empty($config_theme['gfont']['family'])) {
+        if (isset($config_theme['gfont']) and !empty($config_theme['gfont']) and isset($config_theme['gfont']['family']) and !empty($config_theme['gfont']['family'])) {
             $subset = isset($config_theme['gfont']['subset']) ? $config_theme['gfont']['subset'] : '';
-            $gf = new NukeViet\Client\Gfonts(array('fonts' => array($config_theme['gfont']), 'subset' => $subset), $client_info);
+            $gf = new NukeViet\Client\Gfonts(['fonts' => [$config_theme['gfont']], 'subset' => $subset], $client_info);
             $webFontFile = $gf->getUrlCss();
-            array_unshift($html_links, array( 'rel' => 'StyleSheet', 'href' => $webFontFile ));
+            array_unshift($html_links, ['rel' => 'StyleSheet', 'href' => $webFontFile]);
         }
 
         unset($config_theme, $css_content, $webFontFile, $font, $subset, $gf);
@@ -133,7 +135,7 @@ function nv_site_theme($contents, $full = true)
 
     foreach ($html_links as $links) {
         foreach ($links as $key => $value) {
-            $xtpl->assign('LINKS', array( 'key' => $key, 'value' => $value ));
+            $xtpl->assign('LINKS', ['key' => $key, 'value' => $value]);
             if (!empty($value)) {
                 $xtpl->parse('main.links.attr.val');
             }
@@ -143,7 +145,7 @@ function nv_site_theme($contents, $full = true)
     }
 
     $html_js = nv_html_site_js(false);
-    $html_js[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/js/main.js' );
+    $html_js[] = ['ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/js/main.js'];
 
     foreach ($html_js as $js) {
         if ($js['ext']) {
@@ -193,14 +195,14 @@ function nv_site_theme($contents, $full = true)
         // Breadcrumbs
         if ($home != 1) {
             if ($global_config['rewrite_op_mod'] != $module_name) {
-                $arr_cat_title_i = array(
+                $arr_cat_title_i = [
                     'catid' => 0,
                     'title' => $module_info['custom_title'],
                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
-                );
+                ];
                 array_unshift($array_mod_title, $arr_cat_title_i);
             }
-            if (! empty($array_mod_title)) {
+            if (!empty($array_mod_title)) {
                 $border = 2;
                 foreach ($array_mod_title as $arr_cat_title_i) {
                     $arr_cat_title_i['position'] = $border++;
@@ -214,7 +216,7 @@ function nv_site_theme($contents, $full = true)
         // Statistics image
         $theme_stat_img = '';
         if ($global_config['statistic'] and isset($site_mods['statistics'])) {
-            $theme_stat_img .= "<a title=\"" . $nv_Lang->getGlobal('viewstats') . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $nv_Lang->getGlobal('viewstats') . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
+            $theme_stat_img .= '<a title="' . $nv_Lang->getGlobal('viewstats') . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=statistics"><img alt="' . $nv_Lang->getGlobal('viewstats') . '" src="' . NV_BASE_SITEURL . 'index.php?second=statimg&amp;p=' . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
         }
 
         $xtpl->assign('THEME_STAT_IMG', $theme_stat_img);
@@ -253,10 +255,10 @@ function nv_site_theme($contents, $full = true)
         }
     }
 
-    if (! empty($my_head)) {
+    if (!empty($my_head)) {
         $sitecontent = preg_replace('/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1);
     }
-    if (! empty($my_footer)) {
+    if (!empty($my_footer)) {
         $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1);
     }
 

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @copyright 2010
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/20/2010 20:48
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 class dumpsave
@@ -21,7 +22,6 @@ class dumpsave
     public $fp = false;
 
     /**
-     *
      * @param mixed $save_type
      * @param mixed $filesave_name
      * @return
@@ -45,7 +45,8 @@ class dumpsave
      */
     public function open()
     {
-        $this->fp = call_user_func_array(($this->savetype == 'gz') ? 'gzopen' : 'fopen', array( $this->filesavename, $this->mode ));
+        $this->fp = call_user_func_array(($this->savetype == 'gz') ? 'gzopen' : 'fopen', [$this->filesavename, $this->mode]);
+
         return $this->fp;
     }
 
@@ -58,8 +59,9 @@ class dumpsave
     public function write($content)
     {
         if ($this->fp) {
-            return @call_user_func_array(($this->savetype == 'gz') ? 'gzwrite' : 'fwrite', array( $this->fp, $content ));
+            return @call_user_func_array(($this->savetype == 'gz') ? 'gzwrite' : 'fwrite', [$this->fp, $content]);
         }
+
         return false;
     }
 
@@ -74,9 +76,11 @@ class dumpsave
             $return = @call_user_func(($this->savetype == 'gz') ? 'gzclose' : 'fclose', $this->fp);
             if ($return) {
                 @chmod($this->filesavename, 0666);
+
                 return true;
             }
         }
+
         return false;
     }
 }
@@ -95,34 +99,34 @@ function nv_dump_save($params)
         set_time_limit(1200);
     }
 
-    if (! isset($params['tables']) or ! is_array($params['tables']) or $params['tables'] == array()) {
+    if (!isset($params['tables']) or !is_array($params['tables']) or $params['tables'] == []) {
         return false;
     }
 
     $params['tables'] = array_map('trim', $params['tables']);
-    $tables = array();
+    $tables = [];
     $dbsize = 0;
     $result = $db->query('SHOW TABLE STATUS');
     $a = 0;
     while ($item = $result->fetch()) {
         unset($m);
-        if (in_array($item['name'], $params['tables'])) {
+        if (in_array($item['name'], $params['tables'], true)) {
             /*
              * MyISAM cho ra chính xác số row, các enginee khác chỉ là số xấp xỉ
              * Xem https://dev.mysql.com/doc/refman/8.0/en/show-table-status.html
              */
             if ($item['engine'] != 'MyISAM') {
-                $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+                $item['rows'] = $db->query('SELECT COUNT(*) FROM ' . $item['name'])->fetchColumn();
             }
-            $tables[$a] = array();
+            $tables[$a] = [];
             $tables[$a]['name'] = $item['name'];
-            $tables[$a]['size'] = intval($item['data_length']) + intval($item['index_length']);
+            $tables[$a]['size'] = (int) ($item['data_length']) + (int) ($item['index_length']);
             $tables[$a]['limit'] = 1 + round(1048576 / ($item['avg_row_length'] + 1));
             $tables[$a]['numrow'] = $item['rows'];
             $tables[$a]['charset'] = (preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
             $tables[$a]['type'] = isset($item['engine']) ? $item['engine'] : $item['t'];
             ++$a;
-            $dbsize += intval($item['data_length']) + intval($item['index_length']);
+            $dbsize += (int) ($item['data_length']) + (int) ($item['index_length']);
         }
     }
     $result->closeCursor();
@@ -132,16 +136,16 @@ function nv_dump_save($params)
     }
 
     $dumpsave = new dumpsave($params['savetype'], $params['filename']);
-    if (! $dumpsave->open()) {
+    if (!$dumpsave->open()) {
         return false;
     }
 
     $template = explode('@@@', file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/dump.tpl'));
 
-    $patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/", "/\{\|DB_CHARACTER\|\}/", "/\{\|DB_COLLATION\|\}/" );
-    $replacements = array( $db->server, gmdate("F j, Y, h:i A", NV_CURRENTTIME) . " GMT", $db->getAttribute(PDO::ATTR_SERVER_VERSION), PHP_VERSION, $db->dbname, $db_config['charset'], $db_config['collation'] );
+    $patterns = ["/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/", "/\{\|DB_CHARACTER\|\}/", "/\{\|DB_COLLATION\|\}/"];
+    $replacements = [$db->server, gmdate('F j, Y, h:i A', NV_CURRENTTIME) . ' GMT', $db->getAttribute(PDO::ATTR_SERVER_VERSION), PHP_VERSION, $db->dbname, $db_config['charset'], $db_config['collation']];
 
-    if (! $dumpsave->write(preg_replace($patterns, $replacements, $template[0]))) {
+    if (!$dumpsave->write(preg_replace($patterns, $replacements, $template[0]))) {
         return false;
     }
 
@@ -153,10 +157,10 @@ function nv_dump_save($params)
         $content = preg_replace('/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content);
         $content = preg_replace('/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $content);
 
-        $patterns = array( "/\{\|TABLE_NAME\|\}/", "/\{\|TABLE_STR\|\}/" );
-        $replacements = array( $table['name'], $content );
+        $patterns = ["/\{\|TABLE_NAME\|\}/", "/\{\|TABLE_STR\|\}/"];
+        $replacements = [$table['name'], $content];
 
-        if (! $dumpsave->write(preg_replace($patterns, $replacements, $template[1]))) {
+        if (!$dumpsave->write(preg_replace($patterns, $replacements, $template[1]))) {
             return false;
         }
 
@@ -164,14 +168,14 @@ function nv_dump_save($params)
             continue;
         }
 
-        if (! empty($table['numrow'])) {
-            $patterns = array( "/\{\|TABLE_NAME\|\}/" );
-            $replacements = array( $table['name'] );
-            if (! $dumpsave->write(preg_replace($patterns, $replacements, $template[2]))) {
+        if (!empty($table['numrow'])) {
+            $patterns = ["/\{\|TABLE_NAME\|\}/"];
+            $replacements = [$table['name']];
+            if (!$dumpsave->write(preg_replace($patterns, $replacements, $template[2]))) {
                 return false;
             }
 
-            $columns = array();
+            $columns = [];
             $columns_array = $db->columns_array($table['name']);
             foreach ($columns_array as $col) {
                 $columns[$col['field']] = preg_match('/^(\w*int|year)/', $col['type']) ? 'int' : 'txt';
@@ -189,19 +193,19 @@ function nv_dump_save($params)
                 $result = $db->query($db->sql());
                 while ($row = $result->fetch()) {
                     if (isset($row['bodyhtml'])) {
-                        $row['bodyhtml'] = strtr($row['bodyhtml'], array(
+                        $row['bodyhtml'] = strtr($row['bodyhtml'], [
                             "\r\n" => '',
                             "\r" => '',
                             "\n" => ''
-                        ));
+                        ]);
                     } elseif (isset($row['bodytext'])) {
-                        $row['bodytext'] = strtr($row['bodytext'], array(
+                        $row['bodytext'] = strtr($row['bodytext'], [
                             "\r\n" => ' ',
                             "\r" => ' ',
                             "\n" => ' '
-                        ));
+                        ]);
                     }
-                    $row2 = array();
+                    $row2 = [];
                     foreach ($columns as $key => $kt) {
                         $row2[] = isset($row[$key]) ? (($kt == 'int') ? $row[$key] : "'" . addslashes($row[$key]) . "'") : 'NULL';
                     }
@@ -209,11 +213,11 @@ function nv_dump_save($params)
 
                     ++$a;
                     if ($a < $table['numrow']) {
-                        if (! $dumpsave->write($row2 . ', ')) {
+                        if (!$dumpsave->write($row2 . ', ')) {
                             return false;
                         }
                     } else {
-                        if (! $dumpsave->write($row2 . ';')) {
+                        if (!$dumpsave->write($row2 . ';')) {
                             return false;
                         }
                         break;
@@ -225,10 +229,11 @@ function nv_dump_save($params)
         }
     }
 
-    if (! $dumpsave->close()) {
+    if (!$dumpsave->close()) {
         return false;
     }
-    return array( $params['filename'], $dbsize );
+
+    return [$params['filename'], $dbsize];
 }
 
 function nv_dump_restore($file)
@@ -239,7 +244,7 @@ function nv_dump_restore($file)
     }
 
     //kiem tra file
-    if (! file_exists($file)) {
+    if (!file_exists($file)) {
         return false;
     }
 
@@ -253,52 +258,52 @@ function nv_dump_restore($file)
     $execute = false;
 
     foreach ($str as $stKey => $st) {
-        $st = trim(str_replace("\\\\", "", $st));
+        $st = trim(str_replace('\\\\', '', $st));
 
         // Remove BOM
         if ($stKey == 0) {
-            $st = preg_replace("/^\xEF\xBB\xBF/", "", $st);
+            $st = preg_replace("/^\xEF\xBB\xBF/", '', $st);
         }
 
         if (empty($st) or preg_match('/^(#|--|\/\*\!)/', $st)) {
             continue;
-        } else {
-            $query_len += strlen($st);
+        }
+        $query_len += strlen($st);
 
-            unset($m);
-            if (empty($insert) and preg_match("/^(INSERT INTO `?[^` ]+`? .*?VALUES)(.*)$/i", $st, $m)) {
-                $insert = $m[1] . ' ';
-                $sql .= $m[2];
-            } else {
-                $sql .= $st;
+        unset($m);
+        if (empty($insert) and preg_match('/^(INSERT INTO `?[^` ]+`? .*?VALUES)(.*)$/i', $st, $m)) {
+            $insert = $m[1] . ' ';
+            $sql .= $m[2];
+        } else {
+            $sql .= $st;
+        }
+
+        if ($sql) {
+            if (preg_match("/;\s*$/", $st) and (empty($insert) or (!((substr_count($sql, '\'') - substr_count($sql, '\\\'')) % 2)))) {
+                $sql = rtrim($insert . $sql, ';');
+                $insert = '';
+                $execute = true;
             }
 
-            if ($sql) {
-                if (preg_match("/;\s*$/", $st) and (empty($insert) or (! ((substr_count($sql, '\'') - substr_count($sql, '\\\'')) % 2)))) {
-                    $sql = rtrim($insert . $sql, ';');
-                    $insert = '';
-                    $execute = true;
+            if ($query_len >= 65536 and preg_match("/,\s*$/", $st)) {
+                $sql = rtrim($insert . $sql, ',');
+                $execute = true;
+            }
+
+            if ($execute) {
+                $sql = preg_replace(["/\{\|prefix\|\}/", "/\{\|lang\|\}/"], [$db_config['prefix'], NV_LANG_DATA], $sql);
+                try {
+                    $db->query($sql);
+                } catch (PDOException $e) {
+                    return false;
                 }
 
-                if ($query_len >= 65536 and preg_match("/,\s*$/", $st)) {
-                    $sql = rtrim($insert . $sql, ',');
-                    $execute = true;
-                }
-
-                if ($execute) {
-                    $sql = preg_replace(array( "/\{\|prefix\|\}/", "/\{\|lang\|\}/" ), array( $db_config['prefix'], NV_LANG_DATA ), $sql);
-                    try {
-                        $db->query($sql);
-                    } catch (PDOException $e) {
-                        return false;
-                    }
-
-                    $sql = '';
-                    $query_len = 0;
-                    $execute = false;
-                }
+                $sql = '';
+                $query_len = 0;
+                $execute = false;
             }
         }
     }
+
     return true;
 }

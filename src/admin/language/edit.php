@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $select_options = [];
@@ -104,7 +105,7 @@ $page_title = $nv_Lang->getModule('nv_admin_edit') . ': ' . $language_array[$dir
 if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_string('checksess', 'get') == md5($nv_Request->get_int('idfile', 'get') . NV_CHECK_SESSION)) {
     $idfile = $nv_Request->get_int('idfile', 'get');
 
-    list ($idfile, $module, $admin_file, $langtype, $author_lang) = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3);
+    list($idfile, $module, $admin_file, $langtype, $author_lang) = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3);
 
     if (!empty($dirlang) and !empty($module)) {
         if (empty($author_lang)) {
@@ -129,7 +130,7 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
         $result = $db->query($sql);
         $array_data = [];
         $a = 3;
-        while (list ($id, $lang_key, $lang_value) = $result->fetch(3)) {
+        while (list($id, $lang_key, $lang_value) = $result->fetch(3)) {
             $array_data[] = [
                 'key' => $a++,
                 'lang_key' => $lang_key,

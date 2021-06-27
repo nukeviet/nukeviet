@@ -1,15 +1,18 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author  VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3 - 24 - 2010 23 : 41
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var type = '', month = '', ads = '';
+var type = '',
+    month = '',
+    ads = '';
 var charturl;
 
-$(document).ready(function(){
+$(document).ready(function() {
     // Add banner
     $('#banner_plan').change(function() {
         var typeimage = $('option:selected', $(this)).data('image');

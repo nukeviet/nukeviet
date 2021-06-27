@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 22, 2010 3:00:20 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
@@ -157,7 +158,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $note_action = 'id: ' . $id . ' ' . $full_name;
         } else {
             $weight = $db->query('SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department')->fetchColumn();
-            $weight++;
+            ++$weight;
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, image, phone, fax, email, address, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :image, :phone, :fax, :email, :address, :others, :cats, :note, :admins, 1, :weight, 0)';
             $name_key = 'log_add_row';
             $note_action = $full_name;
@@ -213,7 +214,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             foreach ($admins_list as $l) {
                 if (preg_match('/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i', $l)) {
                     $l2 = array_map('intval', explode('/', $l));
-                    $admid = intval($l2[0]);
+                    $admid = (int) ($l2[0]);
 
                     if (isset($adms[$admid])) {
                         if ($adms[$admid]['level'] === 1) {
@@ -306,6 +307,9 @@ if (!empty($cats)) {
 
 // list danh sách bộ phận liên hệ
 $a = 0;
+!empty($view_level) && $view_level = array_map('intval', $view_level);
+!empty($reply_level) && $reply_level = array_map('intval', $reply_level);
+!empty($obt_level) && $obt_level = array_map('intval', $obt_level);
 foreach ($adms as $admid => $values) {
     $xtpl->assign('ADMIN', [
         'suspend' => ($values['is_suspend']) ? 'class="warning" title="' . $nv_Lang->getGlobal('admin_suspend') . '"' : '',
@@ -315,9 +319,9 @@ foreach ($adms as $admid => $values) {
         'admid' => $admid,
         'img' => 'admin' . $values['level'],
         'level' => $nv_Lang->getGlobal('level' . $values['level']),
-        'view_level' => ($values['level'] === 1 or (!empty($view_level) and in_array($admid, $view_level))) ? ' checked="checked"' : '',
-        'reply_level' => ($values['level'] === 1 or (!empty($reply_level) and in_array($admid, $reply_level))) ? ' checked="checked"' : '',
-        'obt_level' => (!empty($obt_level) and in_array($admid, $obt_level)) ? ' checked="checked"' : '',
+        'view_level' => ($values['level'] === 1 or (!empty($view_level) and in_array((int) $admid, $view_level, true))) ? ' checked="checked"' : '',
+        'reply_level' => ($values['level'] === 1 or (!empty($reply_level) and in_array((int) $admid, $reply_level, true))) ? ' checked="checked"' : '',
+        'obt_level' => (!empty($obt_level) and in_array((int) $admid, $obt_level, true)) ? ' checked="checked"' : '',
         'disabled' => $values['level'] === 1 ? ' disabled="disabled"' : ''
     ]);
 

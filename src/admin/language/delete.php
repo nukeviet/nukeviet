@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
@@ -18,7 +19,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHEC
     if (preg_match('/^([a-z]{2})$/', $dirlang)) {
         $dirs = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
         $err = 0;
-        $array_filename = array();
+        $array_filename = [];
 
         foreach ($dirs as $module) {
             if (file_exists(NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php')) {

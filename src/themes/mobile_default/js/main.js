@@ -1,9 +1,10 @@
-/* *
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+/**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var tip_active = !1,
@@ -78,7 +79,7 @@ function contentScrt() {
         return;
     }
 
-    if (scrt > oldScrt && scrt > headerH){
+    if (scrt > oldScrt && scrt > headerH) {
         $('header.first-child').removeClass('header-down').addClass('header-up');
     } else {
         if (scrt + winY < docY) {
@@ -173,7 +174,9 @@ function tipShow(a, b, callback) {
                     var oldID = $(this).attr('id');
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
-                    var btn = false, pnum = 0, btnselector = '';
+                    var btn = false,
+                        pnum = 0,
+                        btnselector = '';
 
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
@@ -184,7 +187,7 @@ function tipShow(a, b, callback) {
                             pnum = ele.pnum;
                             btnselector = ele.btnselector;
                             btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
+                            for (k = 1; k <= ele.pnum; k++) {
                                 btn = btn.parent();
                             }
                             btn = $(ele.btnselector, btn);
@@ -229,7 +232,9 @@ function ftipShow(a, b, callback) {
                     var oldID = $(this).attr('id');
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
-                    var btn = false, pnum = 0, btnselector = '';
+                    var btn = false,
+                        pnum = 0,
+                        btnselector = '';
 
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
@@ -240,7 +245,7 @@ function ftipShow(a, b, callback) {
                             pnum = ele.pnum;
                             btnselector = ele.btnselector;
                             btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
+                            for (k = 1; k <= ele.pnum; k++) {
                                 btn = btn.parent();
                             }
                             btn = $(ele.btnselector, btn);
@@ -271,7 +276,7 @@ function ctbtLoad(a) {
     "yes" != a.attr("data-load") && $.ajax({
         type: "POST",
         cache: !1,
-        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + a.attr( "data-module" ),
+        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + a.attr("data-module"),
         data: "loadForm=1&checkss=" + a.attr("data-cs"),
         dataType: "html",
         success: function(c) {
@@ -317,13 +322,15 @@ function switchTab(a) {
     $(c + " [data-switch]").removeClass("current");
     $(a).addClass("current");
     $(c + " " + b[0]).removeClass("hidden");
-    for (i = 1; i < b.length; i++) {$(c + " " + b[i]).addClass("hidden")}
+    for (i = 1; i < b.length; i++) {
+        $(c + " " + b[i]).addClass("hidden")
+    }
 }
 
 //Form Ajax-login
 function loginForm() {
-    if(nv_is_user == 1) {
-        return!1;
+    if (nv_is_user == 1) {
+        return !1;
     }
     $.ajax({
         type: 'POST',
@@ -334,7 +341,7 @@ function loginForm() {
     }).done(function(a) {
         modalShow('', a)
     });
-    return!1
+    return !1
 }
 
 // ModalShow
@@ -352,7 +359,9 @@ function modalShow(a, b, callback) {
                     var oldID = $(this).attr('id');
                     var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
                     var ele;
-                    var btn = false, pnum = 0, btnselector = '';
+                    var btn = false,
+                        pnum = 0,
+                        btnselector = '';
 
                     $(this).remove();
                     parent.append('<div id="' + id + '" data-toggle="recaptcha"></div>');
@@ -363,7 +372,7 @@ function modalShow(a, b, callback) {
                             pnum = ele.pnum;
                             btnselector = ele.btnselector;
                             btn = $('#' + id);
-                            for (k = 1; k <= ele.pnum; k ++) {
+                            for (k = 1; k <= ele.pnum; k++) {
                                 btn = btn.parent();
                             }
                             btn = $(ele.btnselector, btn);
@@ -384,13 +393,17 @@ function modalShow(a, b, callback) {
         }
     }
     if (scrollTop) {
-        $("html,body").animate({scrollTop: 0}, 200, function() {
+        $("html,body").animate({
+            scrollTop: 0
+        }, 200, function() {
             $("#sitemodal").modal({
                 backdrop: "static"
             });
         });
         $('#sitemodal').on('hide.bs.modal', function() {
-            $("html,body").animate({scrollTop: scrollTop}, 200);
+            $("html,body").animate({
+                scrollTop: scrollTop
+            }, 200);
         });
     } else {
         $("#sitemodal").modal({
@@ -428,26 +441,31 @@ function headerSearchKeypress(a) {
 }
 
 function showSubBreadcrumbs(a, b) {
-  b.preventDefault();
-  b.stopPropagation();
-  $("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
-  subbreadcrumbs.toggleClass("open");
-  $(document).on("click", function() {
-    $("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), subbreadcrumbs.removeClass("open"));
-  });
+    b.preventDefault();
+    b.stopPropagation();
+    $("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
+    subbreadcrumbs.toggleClass("open");
+    $(document).on("click", function() {
+        $("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), subbreadcrumbs.removeClass("open"));
+    });
 }
 
 function nvbreadcrumbs() {
-  var b = $(".breadcrumb", breadcrumbs), e = $(".toggle", breadcrumbs), f = breadcrumbs.innerWidth() - 75, a = [], d = !1, c;
-  if (b.length && subbreadcrumbs.length && tempbreadcrumbs.length) {
-    for (b.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
-      a.push([$(this).attr("title"), $(this).attr("href")]);
-    }), i = a.length - 1;0 <= i;i--) {
-      d || (c = 0, b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>"), b.find("li").each(function() {
-        c += $(this).outerWidth(!0);
-      }), c > f && ($("#brcr_" + i, b).remove(), d = !0)), d ? (e.show(), subbreadcrumbs.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>")) : e.hide();
+    var b = $(".breadcrumb", breadcrumbs),
+        e = $(".toggle", breadcrumbs),
+        f = breadcrumbs.innerWidth() - 75,
+        a = [],
+        d = !1,
+        c;
+    if (b.length && subbreadcrumbs.length && tempbreadcrumbs.length) {
+        for (b.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
+                a.push([$(this).attr("title"), $(this).attr("href")]);
+            }), i = a.length - 1; 0 <= i; i--) {
+            d || (c = 0, b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>"), b.find("li").each(function() {
+                c += $(this).outerWidth(!0);
+            }), c > f && ($("#brcr_" + i, b).remove(), d = !0)), d ? (e.show(), subbreadcrumbs.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>")) : e.hide();
+        }
     }
-  }
 }
 
 var reCaptchaLoadCallback = function() {
@@ -495,9 +513,11 @@ $(function() {
     $('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
     // Smooth scroll to top
     $(".bttop").click(function() {
-        if($(this).find("em").is(".fa-chevron-up")) {
-            $('html,body').animate({scrollTop: 0}, 200);
-        } else if($(this).find("em").is(".fa-refresh")) {
+        if ($(this).find("em").is(".fa-chevron-up")) {
+            $('html,body').animate({
+                scrollTop: 0
+            }, 200);
+        } else if ($(this).find("em").is(".fa-refresh")) {
             window.location.href = window.location.href
         }
         return !1
@@ -558,8 +578,8 @@ $(function() {
         }
     }, 120);
     // FeedBack Button
-    if( $('#contactButton').length ){
-        var script = $('<script type="text/javascript">').attr("src",nv_base_siteurl + "themes/mobile_default/js/Contact.js");
+    if ($('#contactButton').length) {
+        var script = $('<script type="text/javascript">').attr("src", nv_base_siteurl + "themes/mobile_default/js/Contact.js");
         $("body").append(script);
     }
     // Change site lang
@@ -598,7 +618,7 @@ $(function() {
 
 // Fix bootstrap multiple modal
 $(document).on({
-    'show.bs.modal': function () {
+    'show.bs.modal': function() {
         var zIndex = 1040 + (10 * $('.modal:visible').length);
         $(this).css('z-index', zIndex);
         setTimeout(function() {
@@ -625,8 +645,8 @@ $(window).on('load', function() {
     nvbreadcrumbs();
     (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
-        var fb_app_id = ( $('[property="fb:app_id"]').length > 0 ) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
-        var fb_locale = ( $('[property="og:locale"]').length > 0 ) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data=="vi") ? 'vi_VN' : 'en_US');
+        var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
+        var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
         a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
     }(document, "script", "facebook-jssdk"));
 

@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
@@ -27,7 +28,6 @@ class Ips
      *
      * @param mixed $db_config
      * @return
-     *
      */
     public function __construct()
     {
@@ -42,17 +42,17 @@ class Ips
      *
      * @param mixed $key
      * @return
-     *
      */
     private function nv_getenv($key)
     {
         if (isset($_SERVER[$key])) {
             if (strpos($_SERVER[$key], ',')) {
                 $_arr = explode(',', $_SERVER[$key]);
+
                 return trim($_arr[0]);
-            } else {
-                return $_SERVER[$key];
             }
+
+            return $_SERVER[$key];
         } elseif (isset($_ENV[$key])) {
             return $_ENV[$key];
         } elseif (@getenv($key)) {
@@ -60,6 +60,7 @@ class Ips
         } elseif (function_exists('apache_getenv') and apache_getenv($key, true)) {
             return apache_getenv($key, true);
         }
+
         return '';
     }
 
@@ -68,7 +69,6 @@ class Ips
      *
      * @param mixed $ip
      * @return
-     *
      */
     public function nv_validip($ip)
     {
@@ -79,18 +79,20 @@ class Ips
      * ips::server_ip()
      *
      * @return
-     *
      */
     public function server_ip()
     {
         $serverip = $this->nv_getenv('SERVER_ADDR');
         if ($this->nv_validip($serverip)) {
             return $serverip;
-        } elseif ($_SERVER['SERVER_NAME'] == 'localhost') {
+        }
+        if ($_SERVER['SERVER_NAME'] == 'localhost') {
             return '127.0.0.1';
-        } elseif (function_exists('gethostbyname')) {
+        }
+        if (function_exists('gethostbyname')) {
             return gethostbyname($_SERVER['SERVER_NAME']);
         }
+
         return 'none';
     }
 
@@ -99,7 +101,6 @@ class Ips
      * IP có thể gửi qua HTTP Request Header
      *
      * @return
-     *
      */
     private function nv_get_clientip()
     {
@@ -116,9 +117,9 @@ class Ips
 
         if ($this->nv_validip($clientip)) {
             return $clientip;
-        } else {
-            return 'none';
         }
+
+        return 'none';
     }
 
     /**
@@ -126,21 +127,23 @@ class Ips
      * IP client được chuyển tiếp qua máy chủ Proxy
      *
      * @return
-     *
      */
     private function nv_get_forwardip()
     {
         if ($this->nv_getenv('HTTP_X_FORWARDED_FOR') and $this->nv_validip($this->nv_getenv('HTTP_X_FORWARDED_FOR'))) {
             return $this->nv_getenv('HTTP_X_FORWARDED_FOR');
-        } elseif ($this->nv_getenv('HTTP_X_FORWARDED') and $this->nv_validip($this->nv_getenv('HTTP_X_FORWARDED'))) {
-            return $this->nv_getenv('HTTP_X_FORWARDED');
-        } elseif ($this->nv_getenv('HTTP_FORWARDED_FOR') and $this->nv_validip($this->nv_getenv('HTTP_FORWARDED_FOR'))) {
-            return $this->nv_getenv('HTTP_FORWARDED_FOR');
-        } elseif ($this->nv_getenv('HTTP_FORWARDED') and $this->nv_validip($this->nv_getenv('HTTP_FORWARDED'))) {
-            return $this->nv_getenv('HTTP_FORWARDED');
-        } else {
-            return 'none';
         }
+        if ($this->nv_getenv('HTTP_X_FORWARDED') and $this->nv_validip($this->nv_getenv('HTTP_X_FORWARDED'))) {
+            return $this->nv_getenv('HTTP_X_FORWARDED');
+        }
+        if ($this->nv_getenv('HTTP_FORWARDED_FOR') and $this->nv_validip($this->nv_getenv('HTTP_FORWARDED_FOR'))) {
+            return $this->nv_getenv('HTTP_FORWARDED_FOR');
+        }
+        if ($this->nv_getenv('HTTP_FORWARDED') and $this->nv_validip($this->nv_getenv('HTTP_FORWARDED'))) {
+            return $this->nv_getenv('HTTP_FORWARDED');
+        }
+
+        return 'none';
     }
 
     /**
@@ -148,13 +151,13 @@ class Ips
      * Địa chỉ IP người dùng đang truy cập do máy chủ cung cấp
      *
      * @return
-     *
      */
     private function nv_get_remote_addr()
     {
         if ($this->nv_getenv('REMOTE_ADDR') and $this->nv_validip($this->nv_getenv('REMOTE_ADDR'))) {
             return $this->nv_getenv('REMOTE_ADDR');
         }
+
         return 'none';
     }
 
@@ -162,7 +165,6 @@ class Ips
      * ips::nv_getip()
      *
      * @return
-     *
      */
     private function nv_getip()
     {
@@ -179,6 +181,7 @@ class Ips
         if ($_SERVER['SERVER_NAME'] == 'localhost') {
             return '127.0.0.1';
         }
+
         return 'none';
     }
 
@@ -186,7 +189,6 @@ class Ips
      * ips::nv_check_proxy()
      *
      * @return
-     *
      */
     public function nv_check_proxy()
     {
@@ -194,13 +196,14 @@ class Ips
         if ($this->client_ip != 'none' or $this->forward_ip != 'none') {
             $proxy = 'Lite';
         }
-        $host = @getHostByAddr($this->remote_ip);
+        $host = @gethostbyaddr($this->remote_ip);
         if (stristr($host, 'proxy')) {
             $proxy = 'Mild';
         }
         if ($this->remote_ip == $host) {
             $proxy = 'Strong';
         }
+
         return $proxy;
     }
 }

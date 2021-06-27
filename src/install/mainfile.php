@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM') and !defined('NV_ADMIN') and !defined('NV_WYSIWYG')) {
-    Header('Location: index.php');
+    header('Location: index.php');
     exit();
 }
 
@@ -18,7 +19,7 @@ error_reporting(0);
 define('NV_MAINFILE', true);
 
 //Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $select_options = $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $select_options = $error_info = $countries = [];
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -27,14 +28,14 @@ if (!defined('NV_ROOTDIR')) {
     define('NV_ROOTDIR', str_replace('\\', '/', realpath(pathinfo(__FILE__, PATHINFO_DIRNAME) . '/../')));
 }
 
-$sys_info['disable_classes'] = (($disable_classes = ini_get("disable_classes")) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : array();
-$sys_info['disable_functions'] = (($disable_functions = ini_get("disable_functions")) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : array();
+$sys_info['disable_classes'] = (($disable_classes = ini_get('disable_classes')) != '' and $disable_classes != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_classes)) : [];
+$sys_info['disable_functions'] = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
 
 if (extension_loaded('suhosin')) {
-    $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
+    $sys_info['disable_functions'] = array_merge($sys_info['disable_functions'], array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
 }
 
-$sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'])) ? true : false;
+$sys_info['ini_set_support'] = (function_exists('ini_set') and !in_array('ini_set', $sys_info['disable_functions'], true)) ? true : false;
 
 //Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
@@ -53,7 +54,7 @@ define('NV_SERVER_PROTOCOL', $server_domain_info['server_protocol']);
 define('NV_SERVER_PORT', $server_domain_info['server_port']);
 define('NV_MY_DOMAIN', $server_domain_info['domain']);
 if (!defined('NV_BASE_SITEURL')) {
-    define('NV_BASE_SITEURL', preg_replace("/\/install$/", "/", $server_domain_info['base_siteurl']));
+    define('NV_BASE_SITEURL', preg_replace("/\/install$/", '/', $server_domain_info['base_siteurl']));
 }
 unset($server_domain_info);
 
@@ -68,8 +69,8 @@ $global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_
 //Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
 $client_info['ip'] = $ips->remote_ip;
-if ($client_info['ip'] == "none") {
-    die('Error: Your IP address is not correct');
+if ($client_info['ip'] == 'none') {
+    exit('Error: Your IP address is not correct');
 }
 
 //Neu khong co IP
@@ -104,7 +105,7 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
-$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map('trim', explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
+$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map('trim', explode(',', NV_ALLOW_REQUEST_MODS)) : 'request';
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV_REQUEST_DEFAULT_MODE) : 'request';
 
 $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
@@ -117,7 +118,7 @@ define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 define('NV_USER_AGENT', $nv_Request->user_agent);
 //HTTP_USER_AGENT
 if (!defined('NV_BASE_ADMINURL')) {
-    define("NV_BASE_ADMINURL", $nv_Request->base_adminurl . '/');
+    define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
     //vd: /ten_thu_muc_chua_site/admin/
 }
 if (!defined('NV_DOCUMENT_ROOT')) {
@@ -165,7 +166,7 @@ $client_info['agent'] = $nv_Request->user_agent;
 $global_config['sitekey'] = md5($_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_info['session_id']);
 
 // Chan truy cap neu HTTP_USER_AGENT == 'none'
-if (NV_USER_AGENT == "none") {
+if (NV_USER_AGENT == 'none') {
     trigger_error('We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256);
 }
 

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 //Neu thay doi bat ky gia tri trong file nay ban can vao admin phan cau hinh he thong va luu lai
@@ -111,7 +112,7 @@ define('NV_SEND_ERRORS_LIST', E_USER_ERROR);
 //Danh sach cac loi se gui den email
 
 //Phan dau cua trang
-define('NV_FILEHEAD', "/**\n * @Project NUKEVIET 4.x\n * @Author VINADES.,JSC <contact@vinades.vn>\n * @Copyright (C) " . gmdate("Y") . " VINADES.,JSC. All rights reserved\n * @License GNU/GPL version 2 or any later version\n * @Createdate " . gmdate("D, d M Y H:i:s") . " GMT\n */");
+define('NV_FILEHEAD', "/**\n * NUKEVIET Content Management System\n * @version 5.x\n * @author VINADES.,JSC <contact@vinades.vn>\n * @copyright (C) 2009-" . gmdate('Y') . " VINADES.,JSC. All rights reserved\n * @license GNU/GPL version 2 or any later version\n * @see https://github.com/nukeviet The NukeViet CMS GitHub project\n */");
 
 // Vui long khong thay doi gia tri nay
 define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');
@@ -205,4 +206,4 @@ $global_config['check_cron'] = '/^(cron)\_[a-zA-Z0-9\_]+$/';
 $global_config['check_op_layout'] = '/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/';
 $global_config['check_version'] = '/^([0-9]{1})\.([0-9]{1})\.([0-9]{2})$/';
 
-$global_config['others_headers'] = array('X-Content-Type-Options'=>'nosniff','X-XSS-Protection'=>'1; mode=block','Strict-Transport-Security'=>'max-age=31536000; preload');
+$global_config['others_headers'] = ['X-Content-Type-Options' => 'nosniff', 'X-XSS-Protection' => '1; mode=block', 'Strict-Transport-Security' => 'max-age=31536000; preload'];

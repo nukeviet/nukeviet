@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_menu_site_mods')) {
@@ -33,23 +34,24 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         $html .= $nv_Lang->getModule('title_length');
         $html .= ':</label>';
         $html .= '<div class="col-sm-9">';
-        $html .= "<input type=\"text\" class=\"form-control\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";
+        $html .= '<input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('module_display') . ':</label><div class="col-sm-18">';
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
-            $data_block['module_in_menu'] = array();
+            $data_block['module_in_menu'] = [];
         }
 
-        $array_no_show = array('comment', 'menu');
+        $array_no_show = ['comment', 'menu'];
         foreach ($site_mods as $modname => $modvalues) {
-            if (!in_array($modname, $array_no_show)) {
-                $checked = in_array($modname, $data_block['module_in_menu']) ? ' checked="checked"' : '';
+            if (!in_array($modname, $array_no_show, true)) {
+                $checked = in_array($modname, $data_block['module_in_menu'], true) ? ' checked="checked"' : '';
                 $html .= '<div class="w150 pull-left"><div class="ellipsis"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div></div>';
             }
         }
         $html .= '</div></div>';
+
         return $html;
     }
 
@@ -63,10 +65,11 @@ if (!nv_function_exists('nv_menu_site_mods')) {
     function nv_menu_site_mods_submit($module, $nv_Lang)
     {
         global $nv_Request;
-        $return = array();
-        $return['error'] = array();
+        $return = [];
+        $return['error'] = [];
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
         $return['config']['module_in_menu'] = $nv_Request->get_typed_array('module_in_menu', 'post', 'string');
+
         return $return;
     }
 
@@ -75,7 +78,6 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      *
      * @param mixed $block_config
      * @return
-     *
      */
     function nv_menu_site_mods($block_config)
     {
@@ -96,14 +98,14 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 
         foreach ($site_mods as $modname => $modvalues) {
-            if (in_array($modname, $block_config['module_in_menu']) and !empty($modvalues['funcs'])) {
-                $array_menu = array(
+            if (in_array($modname, $block_config['module_in_menu'], true) and !empty($modvalues['funcs'])) {
+                $array_menu = [
                     'title' => $modvalues['custom_title'],
                     'title_trim' => nv_clean60($modvalues['custom_title'], $block_config['title_length']),
                     'class' => $modname,
-                    'current' => array(),
+                    'current' => [],
                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname
-                );
+                ];
 
                 // Set current menu
                 if ($modname == $module_name and empty($home)) {
@@ -112,65 +114,65 @@ if (!nv_function_exists('nv_menu_site_mods')) {
 
                 // Get submenu
                 if (!empty($modvalues['funcs'])) {
-                    $sub_nav_item = array();
+                    $sub_nav_item = [];
 
                     if ($modvalues['module_file'] == 'news' or $modvalues['module_file'] == 'weblinks') {
                         $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat')->where('parentid=0 AND ' . ($modvalues['module_file'] == 'news' ? 'status=1' : 'inhome=1'))->order('weight ASC')->limit(10);
                         $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
-                            $sub_nav_item[] = array(
+                            $sub_nav_item[] = [
                                 'note' => $l['title'],
                                 'title_trim' => nv_clean60($l['title'], $block_config['title_length']),
                                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias']
-                            );
+                            ];
                         }
                     }
                     if ($modvalues['module_file'] == 'shops') {
                         $db->sqlreset()->select(NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias as alias')->from($db_config['prefix'] . '_' . $modvalues['module_data'] . '_catalogs')->where('parentid=0 AND inhome=1')->order('weight ASC')->limit(10);
                         $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
-                            $sub_nav_item[] = array(
+                            $sub_nav_item[] = [
                                 'note' => $l['title'],
                                 'title_trim' => nv_clean60($l['title'], $block_config['title_length']),
                                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias']
-                            );
+                            ];
                         }
                     } elseif ($modvalues['module_file'] == 'message') {
                         if (defined('NV_IS_USER')) {
-                            $sub_nav_item[] = array(
+                            $sub_nav_item[] = [
                                 'note' => $nv_Lang->getGlobal('your_account'),
                                 'title_trim' => nv_clean60($nv_Lang->getGlobal('your_account'), $block_config['title_length']),
                                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=config'
-                            );
+                            ];
                         }
                     } elseif ($modvalues['module_file'] == 'download' or $modvalues['module_file'] == 'faq' or $modvalues['module_file'] == 'saas') {
                         $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_categories')->where('parentid=0 AND status=1')->order('weight ASC')->limit(10);
                         $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
-                            $sub_nav_item[] = array(
+                            $sub_nav_item[] = [
                                 'note' => $l['title'],
                                 'title_trim' => nv_clean60($l['title'], $block_config['title_length']),
                                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias']
-                            );
+                            ];
                         }
                     } elseif ($modname == 'users') {
                         foreach ($modvalues['funcs'] as $key => $sub_item) {
                             if ($sub_item['in_submenu'] == 1) {
-                                $sub_nav_item[] = array(
+                                $sub_nav_item[] = [
                                     'note' => $sub_item['func_custom_name'],
                                     'title_trim' => nv_clean60($sub_item['func_custom_name'], $block_config['title_length']),
                                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $key
-                                );
+                                ];
                             }
                         }
                     } else {
                         foreach ($modvalues['funcs'] as $key => $sub_item) {
                             if ($sub_item['in_submenu'] == 1) {
-                                $sub_nav_item[] = array(
+                                $sub_nav_item[] = [
                                     'note' => $sub_item['func_custom_name'],
                                     'title_trim' => nv_clean60($sub_item['func_custom_name'], $block_config['title_length']),
                                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=' . $key
-                                );
+                                ];
                             }
                         }
                     }
@@ -186,7 +188,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
                     }
                 }
 
-                $array_menu['current'] = empty($array_menu['current']) ? "" : " class=\"" . (implode(" ", $array_menu['current'])) . "\"";
+                $array_menu['current'] = empty($array_menu['current']) ? '' : ' class="' . (implode(' ', $array_menu['current'])) . '"';
 
                 $xtpl->assign('TOP_MENU', $array_menu);
                 $xtpl->parse('main.top_menu');
@@ -202,6 +204,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
@@ -221,6 +224,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
             $xtpl->parse('submenu.loop');
         }
         $xtpl->parse('submenu');
+
         return $xtpl->text('submenu');
     }
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $error = '';
@@ -22,7 +23,7 @@ $tpl->assign('SYS_INFO', $sys_info);
 $tpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 if ($sys_info['ftp_support']) {
-    $array_config = array();
+    $array_config = [];
 
     $array_config['ftp_server'] = $nv_Request->get_title('ftp_server', 'post', $global_config['ftp_server'], 1);
     $array_config['ftp_port'] = $nv_Request->get_title('ftp_port', 'post', $global_config['ftp_port'], 1);
@@ -34,34 +35,33 @@ if ($sys_info['ftp_support']) {
     // Tu dong nhan dang Remove Path
     if ($nv_Request->isset_request('tetectftp', 'post')) {
         $ftp_server = nv_unhtmlspecialchars($array_config['ftp_server']);
-        $ftp_port = intval($array_config['ftp_port']);
+        $ftp_port = (int) $array_config['ftp_port'];
         $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
         $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
 
         if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
-            die('ERROR|' . $nv_Lang->getModule('ftp_error_full'));
+            exit('ERROR|' . $nv_Lang->getModule('ftp_error_full'));
         }
 
-        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, ['timeout' => 10], $ftp_port);
 
         if (!empty($ftp->error)) {
             $ftp->close();
-            die('ERROR|' . ( string )$ftp->error);
-        } else {
-            $list_valid = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
-            $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
+            exit('ERROR|' . (string) $ftp->error);
+        }
+        $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
+        $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
-            if ($ftp_root === false) {
-                $ftp->close();
-                die('ERROR|' . (empty($ftp->error) ? $nv_Lang->getModule('ftp_error_detect_root') : ( string )$ftp->error));
-            }
-
+        if ($ftp_root === false) {
             $ftp->close();
-            die('OK|' . $ftp_root);
+            exit('ERROR|' . (empty($ftp->error) ? $nv_Lang->getModule('ftp_error_detect_root') : (string) $ftp->error));
         }
 
         $ftp->close();
-        die('ERROR|' . $nv_Lang->getModule('ftp_error_detect_root'));
+        exit('OK|' . $ftp_root);
+
+        $ftp->close();
+        exit('ERROR|' . $nv_Lang->getModule('ftp_error_detect_root'));
     }
 
     if ($nv_Request->isset_request('ftp_server', 'post')) {
@@ -69,27 +69,27 @@ if ($sys_info['ftp_support']) {
 
         if (!empty($array_config['ftp_server']) and !empty($array_config['ftp_user_name']) and !empty($array_config['ftp_user_pass'])) {
             $ftp_server = nv_unhtmlspecialchars($array_config['ftp_server']);
-            $ftp_port = intval($array_config['ftp_port']);
+            $ftp_port = (int) $array_config['ftp_port'];
             $ftp_user_name = nv_unhtmlspecialchars($array_config['ftp_user_name']);
             $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($array_config['ftp_path']);
 
-            $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+            $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, ['timeout' => 10], $ftp_port);
 
             if (!empty($ftp->error)) {
                 $array_config['ftp_check_login'] = 3;
-                $error = ( string )$ftp->error;
+                $error = (string) $ftp->error;
             } elseif ($ftp->chdir($ftp_path) === false) {
                 $array_config['ftp_check_login'] = 2;
                 $error = $nv_Lang->getGlobal('ftp_error_path');
             } else {
-                $check_files = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
+                $check_files = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
                 $list_files = $ftp->listDetail($ftp_path, 'all');
 
                 $a = 0;
                 if (!empty($list_files)) {
                     foreach ($list_files as $filename) {
-                        if (in_array($filename['name'], $check_files)) {
+                        if (in_array($filename['name'], $check_files, true)) {
                             ++$a;
                         }
                     }
@@ -105,11 +105,10 @@ if ($sys_info['ftp_support']) {
             $ftp->close();
         }
 
-
         if (empty($error)) {
             $array_config['ftp_user_pass'] = $crypt->encrypt($ftp_user_pass);
 
-            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'");
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'");
             foreach ($array_config as $config_name => $config_value) {
                 $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
                 $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);

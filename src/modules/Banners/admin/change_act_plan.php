@@ -1,31 +1,32 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/12/2010 21:52
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+    exit('Wrong URL');
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
 
 if (empty($id)) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $sql = 'SELECT act FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . $id;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $act = $row['act'] ? 0 : 1;

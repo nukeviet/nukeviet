@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_CONTACT')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Danh sách các bộ phận
@@ -42,7 +43,7 @@ if (!empty($array_department)) {
             $_cats = array_map('trim', explode('|', $department['cats']));
             foreach ($_cats as $_cats2) {
                 $cats[] = [$department['id'], $_cats2];
-                $catsName[] = in_array($_cats2, $catsName) ? $_cats2 . ', ' . $department['full_name'] : $_cats2;
+                $catsName[] = in_array($_cats2, $catsName, true) ? $_cats2 . ', ' . $department['full_name'] : $_cats2;
             }
         }
 
@@ -72,16 +73,16 @@ if (defined('NV_IS_USER')) {
     $fphone = isset($user_info['phone']) ? $user_info['phone'] : '';
 }
 
-/**
+/*
  * Nhan thong tin va gui den admin
  */
 if ($nv_Request->isset_request('checkss', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
     if ($checkss != NV_CHECK_SESSION) {
-        die();
+        exit();
     }
 
-    /**
+    /*
      * Ajax
      */
     if ($nv_Request->isset_request('loadForm', 'post')) {
@@ -148,10 +149,10 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
     if (isset($cats[$fcat])) {
-        $fpart = (int)$cats[$fcat][0];
+        $fpart = (int) $cats[$fcat][0];
         $fcat = $cats[$fcat][1];
     } else {
-        $fpart = (int)$cats[0][0];
+        $fpart = (int) $cats[0][0];
         $fcat = $cats[0][1];
     }
 
@@ -163,8 +164,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
     $faddress = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
-    $fsendcopy = ((int)$nv_Request->get_bool('sendcopy', 'post') and $sendcopy);
-    $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
+    $fsendcopy = ((int) $nv_Request->get_bool('sendcopy', 'post') and $sendcopy);
+    $sender_id = (int) (defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
     (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
@@ -241,7 +242,6 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         'mess' => $nv_Lang->getModule('sendcontactfailed')
     ]);
 }
-
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];

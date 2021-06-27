@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
@@ -22,14 +23,12 @@ class Language
     private $defaultLang = 'vi';
     private $isTmpLoaded = false;
 
-    const TYPE_LANG_ALL = 0;
-    const TYPE_LANG_GLOBAL = 1;
-    const TYPE_LANG_MODULE = 2;
+    public const TYPE_LANG_ALL = 0;
+    public const TYPE_LANG_GLOBAL = 1;
+    public const TYPE_LANG_MODULE = 2;
 
     /**
      * Language::__construct()
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -40,7 +39,6 @@ class Language
      * Language::setLang()
      *
      * @param mixed $lang
-     * @return void
      */
     public function setLang($lang)
     {
@@ -55,7 +53,6 @@ class Language
      * Language::changeLang()
      *
      * @param string $lang
-     * @return void
      */
     public function changeLang($lang = '')
     {
@@ -71,8 +68,8 @@ class Language
      * Language::loadModule()
      *
      * @param mixed $modfile
-     * @param bool $modadmin
-     * @param bool $loadtmp
+     * @param bool  $modadmin
+     * @param bool  $loadtmp
      * @return
      */
     public function loadModule($modfile, $modadmin = false, $loadtmp = false)
@@ -100,7 +97,7 @@ class Language
      * Đọc một file ngôn ngữ bất kỳ
      *
      * @param string $file
-     * @param boolean $loadtmp
+     * @param bool   $loadtmp
      */
     public function loadFile($file, $loadtmp = false)
     {
@@ -130,7 +127,7 @@ class Language
      * Language::loadTheme()
      *
      * @param mixed $theme
-     * @param boolean $loadtmp
+     * @param bool  $loadtmp
      * @return
      */
     public function loadTheme($theme, $loadtmp = false)
@@ -147,7 +144,6 @@ class Language
      * Language::loadGlobal()
      *
      * @param bool $admin
-     * @return void
      */
     public function loadGlobal($admin = false)
     {
@@ -167,8 +163,7 @@ class Language
      * Language::load()
      *
      * @param mixed $file
-     * @param bool $loadtmp
-     * @return void
+     * @param bool  $loadtmp
      */
     private function load($file, $loadtmp = false)
     {
@@ -241,7 +236,8 @@ class Language
         if (NV_DEBUG and $type == self::TYPE_LANG_MODULE and isset(self::$lang_global[$langkey]) and $this->_get($funcArgs, $funcNum, self::TYPE_LANG_GLOBAL) == $langvalue) {
             trigger_error('You are using a language key available in lang global &gt;&gt;&gt;&gt; ' . $langkey);
         }
-        return (empty($args) ? $langvalue : vsprintf($langvalue, $args));
+
+        return empty($args) ? $langvalue : vsprintf($langvalue, $args);
     }
 
     /**
@@ -277,9 +273,8 @@ class Language
     /**
      * Language::setModule()
      *
-     * @param mixed $langkey
+     * @param mixed  $langkey
      * @param string $langvalue
-     * @return void
      */
     public function setModule($langkey, $langvalue = '')
     {
@@ -293,9 +288,8 @@ class Language
     /**
      * Language::setGlobal()
      *
-     * @param mixed $langkey
+     * @param mixed  $langkey
      * @param string $langvalue
-     * @return void
      */
     public function setGlobal($langkey, $langvalue = '')
     {
@@ -330,7 +324,7 @@ class Language
 
     /**
      * @param string $langkey
-     * @return boolean
+     * @return bool
      */
     public function existsTmpModule($langkey)
     {

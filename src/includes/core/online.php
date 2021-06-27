@@ -1,21 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/29/2009 15:33
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /**
  * nv_online_upd()
- *
- * @return void
  */
 function nv_online_upd()
 {
@@ -33,7 +32,7 @@ function nv_online_upd()
     $sth->bindParam(':session_id', $client_info['session_id'], PDO::PARAM_STR);
     $sth->bindParam(':username', $username, PDO::PARAM_STR);
     $sth->execute();
-    if (! $sth->rowCount()) {
+    if (!$sth->rowCount()) {
         try {
             $sth = $db->prepare('INSERT INTO ' . NV_SESSIONS_GLOBALTABLE . ' VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')');
             $sth->bindParam(':session_id', $client_info['session_id'], PDO::PARAM_STR);

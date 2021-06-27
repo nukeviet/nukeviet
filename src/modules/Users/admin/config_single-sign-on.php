@@ -1,17 +1,18 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 30 Nov 2014 01:54:12 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
-$_cas_config = array();
+$_cas_config = [];
 if ($nv_Request->isset_request('submit', 'post')) {
     $_cas_config['cas_hostname'] = $nv_Request->get_title('cas_hostname', 'post', '');
     $_cas_config['cas_baseuri'] = $nv_Request->get_title('cas_baseuri', 'post', '');
@@ -48,9 +49,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     try {
         if (isset($global_config['config_sso'])) {
-            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
         } else {
-            $sth = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', :config_name, :config_value)");
+            $sth = $db->prepare('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', :config_name, :config_value)");
         }
 
         $sth->bindValue(':config_name', 'config_sso', PDO::PARAM_STR);
@@ -67,7 +68,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $_cas_config = unserialize($global_config['config_sso']);
 } else {
     // Thiết lập các giá trị mặc định.
-    $_cas_config = array(
+    $_cas_config = [
         'cas_hostname' => 'cas.openroad.vn',
         'cas_baseuri' => 'cas/',
         'cas_port' => 8443,
@@ -92,20 +93,20 @@ if ($nv_Request->isset_request('submit', 'post')) {
         'member_attribute' => '',
         'member_attribute_isdn' => '',
         'user_objectclass' => '',
-        'config_field' => array(
+        'config_field' => [
             'firstname' => 'cn',
             'lastname' => 'sn',
             'email' => 'mail'
-        ),
-        'config_field_lock' => array(
+        ],
+        'config_field_lock' => [
             'firstname' => 'oncreate',
             'lastname' => 'oncreate',
             'email' => 'oncreate'
-        )
-    );
+        ]
+    ];
 }
 
-$field_lock = array();
+$field_lock = [];
 foreach ($_cas_config['config_field_lock'] as $key => $value) {
     $field_lock[$key]['oncreate'] = ($value == 'oncreate') ? 'selected="selected"' : '';
     $field_lock[$key]['onlogin'] = ($value == 'onlogin') ? 'selected="selected"' : '';
@@ -122,43 +123,43 @@ $_query = $db->query($sql);
 foreach ($_query as $row) {
     $_language = unserialize($row['language']);
     $_field_lock = (isset($_cas_config['config_field_lock'][$row['field']])) ? $_cas_config['config_field_lock'][$row['field']] : '';
-    $xtpl->assign('FIELD', array(
+    $xtpl->assign('FIELD', [
         'field' => $row['field'],
         'lang' => (isset($_language[NV_LANG_DATA])) ? $_language[NV_LANG_DATA][0] : '',
         'value' => (isset($_cas_config['config_field'][$row['field']])) ? $_cas_config['config_field'][$row['field']] : '',
         'oncreate' => ($_field_lock == 'oncreate') ? 'selected="selected"' : '',
         'onlogin' => ($_field_lock == 'onlogin') ? 'selected="selected"' : ''
-    ));
+    ]);
     $xtpl->parse('main.field');
 }
 
-$version = array(
+$version = [
     '1.0',
     '2.0',
     '3.0'
-);
+];
 foreach ($version as $v) {
-    $values = array();
+    $values = [];
     $values['value'] = $v;
-    $values['name'] = "CAS " . $v;
+    $values['name'] = 'CAS ' . $v;
     $values['select'] = ($v == $_cas_config['cas_version']) ? 'selected="selected"' : '';
     $xtpl->assign('VERSION', $values);
     $xtpl->parse('main.version');
 }
 
-$ldapversion = array(
+$ldapversion = [
     '2',
     '3'
-);
+];
 foreach ($ldapversion as $v) {
-    $values = array();
+    $values = [];
     $values['value'] = $v;
     $values['select'] = ($v == $_cas_config['ldap_version']) ? 'selected="selected"' : '';
     $xtpl->assign('LDAPVERSION', $values);
     $xtpl->parse('main.ldap_version');
 }
 
-$language = array(
+$language = [
     'CAS_Languages_English',
     'CAS_Languages_French',
     'CAS_Languages_Greek',
@@ -166,9 +167,9 @@ $language = array(
     'CAS_Languages_Japanese',
     'CAS_Languages_Spanish',
     'CAS_Languages_Catalan'
-);
+];
 foreach ($language as $i) {
-    $values = array();
+    $values = [];
     $values['value'] = $i;
     $values['name'] = str_replace('CAS_Languages_', '', $i);
     $values['select'] = ($i == $_cas_config['cas_language']) ? 'selected="selected"' : '';
@@ -176,34 +177,34 @@ foreach ($language as $i) {
     $xtpl->parse('main.language');
 }
 
-$usertype = array(
-    0 => array(
+$usertype = [
+    0 => [
         'value' => 'default',
         'name' => $nv_Lang->getModule('default')
-    ),
-    1 => array(
+    ],
+    1 => [
         'value' => 'edir',
         'name' => 'Novell Edirectory'
-    ),
-    2 => array(
+    ],
+    2 => [
         'value' => 'rfc2307',
         'name' => 'posixAccount (rfc2307)'
-    ),
-    3 => array(
+    ],
+    3 => [
         'value' => 'rfc2307bis',
         'name' => 'posixAccount (rfc2307bis)'
-    ),
-    4 => array(
+    ],
+    4 => [
         'value' => 'samba',
         'name' => 'sambaSamAccount (v.3.0.7)'
-    ),
-    5 => array(
+    ],
+    5 => [
         'value' => 'ad',
         'name' => 'MS ActiveDirectory'
-    )
-);
+    ]
+];
 foreach ($usertype as $i) {
-    $values = array();
+    $values = [];
     $values['value'] = $i['value'];
     $values['name'] = $i['name'];
     $values['select'] = ($i['value'] == $_cas_config['user_type']) ? 'selected="selected"' : '';
@@ -211,12 +212,12 @@ foreach ($usertype as $i) {
     $xtpl->parse('main.user_type');
 }
 
-$arr = array(
+$arr = [
     '0',
     '1'
-);
+];
 foreach ($arr as $i) {
-    $values = array();
+    $values = [];
     $values['value'] = $i;
     if ($i == 0) {
         $values['name'] = $nv_Lang->getGlobal('no');

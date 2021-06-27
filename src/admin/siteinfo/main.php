@@ -1,41 +1,42 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_SITEINFO')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_SITEINFO')) {
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getGlobal('mod_siteinfo');
 
 //Noi dung chinh cua trang
-$info = $pending_info = array();
+$info = $pending_info = [];
 
 foreach ($site_mods as $mod => $value) {
     if (file_exists(NV_ROOTDIR . '/modules/' . $value['module_file'] . '/siteinfo.php')) {
-        $siteinfo = $pendinginfo = array();
+        $siteinfo = $pendinginfo = [];
         $mod_data = $value['module_data'];
 
         // Đọc tạm ngôn ngữ của module
         $nv_Lang->loadModule($value['module_file'], false, true);
 
-        include NV_ROOTDIR . '/modules/' . $value['module_file'] . '/siteinfo.php' ;
+        include NV_ROOTDIR . '/modules/' . $value['module_file'] . '/siteinfo.php';
 
         // Xóa ngôn ngữ đã đọc tạm
         $nv_Lang->changeLang();
 
-        if (! empty($siteinfo)) {
+        if (!empty($siteinfo)) {
             $info[$mod]['caption'] = $value['custom_title'];
             $info[$mod]['field'] = $siteinfo;
         }
 
-        if (! empty($pendinginfo)) {
+        if (!empty($pendinginfo)) {
             $pending_info[$mod]['caption'] = $value['custom_title'];
             $pending_info[$mod]['field'] = $pendinginfo;
         }
@@ -53,8 +54,8 @@ if (defined('NV_IS_GODADMIN') and file_exists(NV_ROOTDIR . '/install/update_data
 }
 
 // Thong tin thong ke tu cac module
-if (! empty($info) or ! empty($pending_info)) {
-    if (! empty($info)) {
+if (!empty($info) or !empty($pending_info)) {
+    if (!empty($info)) {
         $i = 0;
         foreach ($info as $if) {
             foreach ($if['field'] as $field) {
@@ -62,7 +63,7 @@ if (! empty($info) or ! empty($pending_info)) {
                 $xtpl->assign('VALUE', $field['value']);
                 $xtpl->assign('MODULE', $if['caption']);
 
-                if (! empty($field['link'])) {
+                if (!empty($field['link'])) {
                     $xtpl->assign('LINK', $field['link']);
                     $xtpl->parse('main.info.loop.link');
                 } else {
@@ -77,7 +78,7 @@ if (! empty($info) or ! empty($pending_info)) {
     }
 
     // Thong tin dang can duoc xu ly tu cac module
-    if (! empty($pending_info)) {
+    if (!empty($pending_info)) {
         $i = 0;
         foreach ($pending_info as $if) {
             foreach ($if['field'] as $field) {
@@ -85,7 +86,7 @@ if (! empty($info) or ! empty($pending_info)) {
                 $xtpl->assign('VALUE', $field['value']);
                 $xtpl->assign('MODULE', $if['caption']);
 
-                if (! empty($field['link'])) {
+                if (!empty($field['link'])) {
                     $xtpl->assign('LINK', $field['link']);
                     $xtpl->parse('main.pendinginfo.loop.link');
                 } else {
@@ -98,7 +99,7 @@ if (! empty($info) or ! empty($pending_info)) {
 
         $xtpl->parse('main.pendinginfo');
     }
-} elseif (! defined('NV_IS_SPADMIN') and ! empty($site_mods)) {
+} elseif (!defined('NV_IS_SPADMIN') and !empty($site_mods)) {
     $arr_mod = array_keys($site_mods);
     $module_name = $arr_mod[0];
 
@@ -107,20 +108,20 @@ if (! empty($info) or ! empty($pending_info)) {
 
 // Thong tin phien ban NukeViet
 if (defined('NV_IS_GODADMIN')) {
-    $field = array();
-    $field[] = array( 'key' => $nv_Lang->getModule('version_user'), 'value' => $global_config['version'] );
+    $field = [];
+    $field[] = ['key' => $nv_Lang->getModule('version_user'), 'value' => $global_config['version']];
     if (file_exists(NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml')) {
         $new_version = simplexml_load_file(NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml');
     } else {
-        $new_version = array();
+        $new_version = [];
     }
 
     $info = '';
-    if (! empty($new_version)) {
-        $field[] = array(
-            'key' => $nv_Lang->getModule('version_news'), //
-            'value' => sprintf($nv_Lang->getModule('newVersion_detail'), ( string )$new_version->version, nv_date('d/m/Y H:i', strtotime($new_version->date)))
-        );
+    if (!empty($new_version)) {
+        $field[] = [
+            'key' => $nv_Lang->getModule('version_news'),
+            'value' => sprintf($nv_Lang->getModule('newVersion_detail'), (string) $new_version->version, nv_date('d/m/Y H:i', strtotime($new_version->date)))
+        ];
 
         if (nv_version_compare($global_config['version'], $new_version->version) < 0) {
             $info = sprintf($nv_Lang->getModule('newVersion_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate');
@@ -136,7 +137,7 @@ if (defined('NV_IS_GODADMIN')) {
         $xtpl->parse('main.version.loop');
     }
 
-    if (! empty($info)) {
+    if (!empty($info)) {
         $xtpl->assign('INFO', $info);
         $xtpl->parse('main.version.inf');
     }

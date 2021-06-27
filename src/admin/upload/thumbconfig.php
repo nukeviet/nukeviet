@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($nv_Request->isset_request('submit', 'post')) {
@@ -27,15 +28,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $thumb_quality[$did] = $nv_Request->get_int('other_thumb_quality', 'post', 0);
     }
     foreach ($thumb_type as $did => $type) {
-        $did = intval($did);
-        $type = intval($type);
-        $width = intval($thumb_width[$did]);
+        $did = (int) $did;
+        $type = (int) $type;
+        $width = (int) ($thumb_width[$did]);
         if ($type == 2) {
             $width = 0;
         } elseif ($width > 1000 or $width < 1) {
             $width = 100;
         }
-        $height = intval($thumb_height[$did]);
+        $height = (int) ($thumb_height[$did]);
         if ($type == 1) {
             $height = 0;
         } elseif ($height > 1000 or $height < 1) {
@@ -54,7 +55,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
 if ($nv_Request->isset_request('getexample', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL');
+        exit('Wrong URL');
     }
 
     $thumb_dir = $nv_Request->get_int('did', 'post', 0);
@@ -63,7 +64,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     $thumb_height = $nv_Request->get_int('h', 'post', 0);
     $thumb_quality = $nv_Request->get_int('q', 'post', 0);
 
-    if ((!empty($thumb_dir) and !in_array($thumb_dir, $array_dirname)) or $thumb_type <= 0 or $thumb_width <= 0 or $thumb_height <= 0 or $thumb_quality <= 0 or $thumb_quality > 100) {
+    if ((!empty($thumb_dir) and !in_array($thumb_dir, $array_dirname, true)) or $thumb_type <= 0 or $thumb_width <= 0 or $thumb_height <= 0 or $thumb_quality <= 0 or $thumb_quality > 100) {
         nv_jsonOutput([
             'status' => 'error',
             'message' => nv_theme_alert($nv_Lang->getModule('prViewExampleError1'), $nv_Lang->getModule('prViewExampleError'))

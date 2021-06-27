@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 5:53
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $menu_top = [
@@ -82,7 +83,7 @@ function nv_fix_subweight($mod)
  * nv_setup_block_module()
  *
  * @param mixed $mod
- * @param integer $func_id
+ * @param int   $func_id
  * @return
  */
 function nv_setup_block_module($mod, $func_id = 0)
@@ -104,7 +105,7 @@ function nv_setup_block_module($mod, $func_id = 0)
         $sth->execute();
     }
 
-    $array_funcid = array();
+    $array_funcid = [];
     $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 AND in_module= :module ORDER BY subweight ASC');
     $sth->bindParam(':module', $mod, PDO::PARAM_STR);
     $sth->execute();
@@ -141,7 +142,7 @@ function nv_setup_block_module($mod, $func_id = 0)
  *
  * @param mixed $lang
  * @param mixed $module_name
- * @param integer $sample
+ * @param int   $sample
  * @return
  */
 function nv_setup_data_module($lang, $module_name, $sample = 0)
@@ -157,17 +158,17 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
     list($module_file, $module_data, $module_upload, $module_theme) = $sth->fetch(3);
 
     if (!empty($module_file)) {
-        $module_version = array();
+        $module_version = [];
         $version_file = NV_ROOTDIR . '/modules/' . $module_file . '/version.php';
 
         if (file_exists($version_file)) {
             include $version_file;
         }
 
-        $arr_modfuncs = (isset($module_version['modfuncs']) and !empty($module_version['modfuncs'])) ? array_map('trim', explode(',', $module_version['modfuncs'])) : array();
+        $arr_modfuncs = (isset($module_version['modfuncs']) and !empty($module_version['modfuncs'])) ? array_map('trim', explode(',', $module_version['modfuncs'])) : [];
 
         // Delete config value in prefix_config table
-        $sth = $db->prepare("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module");
+        $sth = $db->prepare('DELETE FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module");
         $sth->bindParam(':module', $module_name, PDO::PARAM_STR);
         $sth->execute();
 
@@ -175,7 +176,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
         // Re-Creat all module table
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
-            $sql_recreate_module = array();
+            $sql_recreate_module = [];
 
             try {
                 $db->exec('ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation']);
@@ -183,7 +184,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                 trigger_error($e->getMessage());
             }
 
-            include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ;
+            include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php';
 
             if (!empty($sql_create_module)) {
                 foreach ($sql_create_module as $sql) {
@@ -191,6 +192,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                         $db->query($sql);
                     } catch (PDOException $e) {
                         trigger_error(print_r($e, true));
+
                         return $return;
                     }
                 }
@@ -198,8 +200,8 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         }
 
         // Setup layout if site module
-        $arr_func_id = array();
-        $arr_show_func = array();
+        $arr_func_id = [];
+        $arr_show_func = [];
         $new_funcs = nv_scandir(NV_ROOTDIR . '/modules/' . $module_file . '/funcs', $global_config['check_op_file']);
 
         if (!empty($new_funcs)) {
@@ -217,17 +219,17 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             }
 
             $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
-            $layoutdefault = ( string )$xml->layoutdefault;
+            $layoutdefault = (string) $xml->layoutdefault;
             $layout = $xml->xpath('setlayout/layout');
 
-            $array_layout_func_default = array();
+            $array_layout_func_default = [];
             for ($i = 0, $count = sizeof($layout); $i < $count; ++$i) {
-                $layout_name = ( string )$layout[$i]->name;
+                $layout_name = (string) $layout[$i]->name;
 
-                if (in_array($layout_name, $layout_array)) {
+                if (in_array($layout_name, $layout_array, true)) {
                     $layout_funcs = $layout[$i]->xpath('funcs');
                     for ($j = 0, $count2 = sizeof($layout_funcs); $j < $count2; ++$j) {
-                        $mo_funcs = ( string )$layout_funcs[$j];
+                        $mo_funcs = (string) $layout_funcs[$j];
                         $mo_funcs = explode(':', $mo_funcs);
                         $m = $mo_funcs[0];
                         $arr_f = explode(',', $mo_funcs[1]);
@@ -252,7 +254,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                 }
             }
 
-            $arr_func_id_old = array();
+            $arr_func_id_old = [];
 
             $sth = $db->prepare('SELECT func_id, func_name FROM ' . $db_config['prefix'] . '_' . $lang . '_modfuncs WHERE in_module= :in_module');
             $sth->bindParam(':in_module', $module_name, PDO::PARAM_STR);
@@ -265,24 +267,24 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             $new_funcs = array_flip($new_funcs);
             $array_keys = array_keys($new_funcs);
 
-            $array_submenu = (isset($module_version['submenu'])) ? explode(',', $module_version['submenu']) : array();
+            $array_submenu = (isset($module_version['submenu'])) ? explode(',', $module_version['submenu']) : [];
             foreach ($array_keys as $func) {
                 $show_func = 0;
                 $weight = 0;
-                $in_submenu = (in_array($func, $array_submenu)) ? 1 : 0;
+                $in_submenu = (in_array($func, $array_submenu, true)) ? 1 : 0;
                 if (isset($arr_func_id_old[$func]) and isset($arr_func_id_old[$func]) > 0) {
                     $arr_func_id[$func] = $arr_func_id_old[$func];
                     $db->query('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', in_submenu=' . $in_submenu . ', subweight=0 WHERE func_id=' . $arr_func_id[$func]);
                 } else {
-                    $data = array();
+                    $data = [];
                     $data['func_name'] = $func;
                     $data['alias'] = $func;
                     $data['func_custom_name'] = ucfirst($func);
                     $data['in_module'] = $module_name;
 
-                    $arr_func_id[$func] = $db->insert_id("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
+                    $arr_func_id[$func] = $db->insert_id('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modfuncs
                         (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-                         (:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", " . $in_submenu . ", " . $weight . ", '')", "func_id", $data);
+                         (:func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ', ' . $in_submenu . ', ' . $weight . ", '')", 'func_id', $data);
                     if ($arr_func_id[$func]) {
                         $layout = $layoutdefault;
                         if (isset($array_layout_func_default[$module_name][$func])) {

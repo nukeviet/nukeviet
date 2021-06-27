@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if ((!defined('NV_SYSTEM') and !defined('NV_ADMIN')) or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
@@ -26,14 +27,14 @@ if (!defined('NV_IS_AJAX')) {
         $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($nv_Lang->getGlobal('memory_time_usage'), nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
     }
 }
-$contents = nv_apply_hook('', 'change_site_buffer', array($global_config, $contents), $contents);
+$contents = nv_apply_hook('', 'change_site_buffer', [$global_config, $contents], $contents);
 
 $html_headers = $global_config['others_headers'];
 if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
     $html_headers['X-Frame-Options'] = 'SAMEORIGIN';
 }
 $html_headers['Content-Type'] = 'text/html; charset=' . $global_config['site_charset'];
-$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT";
+$html_headers['Last-Modified'] = gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT';
 $html_headers['Cache-Control'] = 'max-age=0, no-cache, no-store, must-revalidate'; // HTTP 1.1.
 $html_headers['Pragma'] = 'no-cache'; // HTTP 1.0.
 $html_headers['Expires'] = '-1'; // Proxies.
@@ -54,12 +55,12 @@ foreach ($html_headers as $key => $value) {
     $_key = strtolower($key);
     if (!isset($sys_info['server_headers'][$_key])) {
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
 
         foreach ($value as $val) {
             $replace = ($key != 'link') ? true : false;
-            Header($key . ': ' . $val, $replace);
+            header($key . ': ' . $val, $replace);
         }
     }
 }

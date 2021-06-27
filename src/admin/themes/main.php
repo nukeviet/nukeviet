@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('theme_manager');
@@ -48,9 +49,9 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
         'message' => ''
     ];
     $theme = $nv_Request->get_title('theme', 'post', '');
-    if (in_array($theme, $theme_list)) {
+    if (in_array($theme, $theme_list, true)) {
         $array['status'] = 'SUCCESS';
-        if (in_array($theme, $array_allow_preview)) {
+        if (in_array($theme, $array_allow_preview, true)) {
             $array['mode'] = 'disable';
             $array['spantext'] = $nv_Lang->getModule('preview_theme_on');
             $array_allow_preview = array_flip($array_allow_preview);
@@ -77,7 +78,7 @@ foreach ($theme_list as $value) {
         continue;
     }
     // Kiem tra giao dien co danh cho subsite hay ko
-    if ($global_config['idsite'] and !in_array($value, $array_site_cat_theme)) {
+    if ($global_config['idsite'] and !in_array($value, $array_site_cat_theme, true)) {
         continue;
     }
 
@@ -91,11 +92,11 @@ foreach ($theme_list as $value) {
     }
 
     $array_themes[] = [
-        'name' => (string)$info[0]->name,
-        'website' => (string)$info[0]->website,
-        'author' => (string)$info[0]->author,
-        'thumbnail' => (string)$info[0]->thumbnail,
-        'description' => (string)$info[0]->description,
+        'name' => (string) $info[0]->name,
+        'website' => (string) $info[0]->website,
+        'author' => (string) $info[0]->author,
+        'thumbnail' => (string) $info[0]->thumbnail,
+        'description' => (string) $info[0]->description,
         'value' => $value,
         'pos' => $pos,
         'link_preview' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $value . '&checksum=' . md5(NV_LANG_DATA . $value . $global_config['sitekey']), true)

@@ -1,21 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-5-2010 8:49
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_show_funcs()
- *
- * @return void
  */
 function nv_show_funcs()
 {
@@ -40,7 +39,7 @@ function nv_show_funcs()
 
     $is_delCache = false;
 
-    if ($admin_file != intval($row['admin_file'])) {
+    if ($admin_file != (int) $row['admin_file']) {
         $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=' . $admin_file . ' WHERE title= :title');
         $sth->bindParam(':title', $mod, PDO::PARAM_STR);
         $sth->execute();
@@ -91,7 +90,7 @@ function nv_show_funcs()
 
     while ($row = $sth->fetch()) {
         $func = $row['func_name'];
-        $show_func = in_array($func, $modfuncs) ? 1 : 0;
+        $show_func = in_array($func, $modfuncs, true) ? 1 : 0;
 
         if ($row['show_func'] != $show_func) {
             $row['show_func'] = $show_func;
@@ -142,14 +141,14 @@ function nv_show_funcs()
         }
 
         $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $mod_theme . '/config.ini');
-        $layoutdefault = ( string )$xml->layoutdefault;
+        $layoutdefault = (string) $xml->layoutdefault;
 
         $array_keys = array_keys($new_funcs);
 
         $sth2 = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)');
 
         foreach ($array_keys as $func) {
-            $show_func = in_array($func, $modfuncs) ? 1 : 0;
+            $show_func = in_array($func, $modfuncs, true) ? 1 : 0;
             try {
                 $data = [];
                 $data['func_name'] = $func;
@@ -157,7 +156,7 @@ function nv_show_funcs()
                 $data['func_custom_name'] = ucfirst($func);
                 $data['in_module'] = $mod;
 
-                $_sql = "INSERT INTO " . NV_MODFUNCS_TABLE . " (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, 0, '')";
+                $_sql = 'INSERT INTO ' . NV_MODFUNCS_TABLE . ' (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, ' . $show_func . ", 0, 0, '')";
                 $func_id = $db->insert_id($_sql, 'func_id', $data);
                 if ($show_func) {
                     $sth2->bindParam(':func_id', $func_id, PDO::PARAM_INT);

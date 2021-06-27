@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 28/10/2012, 14:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
@@ -24,7 +25,7 @@ $tpl->assign('MODULE_NAME', $module_name);
 $tpl->assign('OP', $op);
 
 // Lấy list các HOOK theo module hoặc hệ thống
-$sql = "SELECT DISTINCT plugin_area, hook_module FROM " . $db_config['prefix'] . "_plugin WHERE plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "'";
+$sql = 'SELECT DISTINCT plugin_area, hook_module FROM ' . $db_config['prefix'] . "_plugin WHERE plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "'";
 $result = $db->query($sql);
 $array_plugin_area = [];
 while ($row = $result->fetch()) {
@@ -44,7 +45,7 @@ if (!empty($array_search['plugin_area']) and !isset($array_plugin_area[$array_se
 
 // Xuất các plugin trong CSDL
 $max_weight = 0;
-$sql = "SELECT * FROM " . $db_config['prefix'] . "_plugin WHERE plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "'";
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . "_plugin WHERE plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "'";
 if (!empty($array_search['plugin_area'])) {
     // Xử lý lại phần tìm kiếm
     $_s_plugin_area = explode(':', $array_search['plugin_area']);
@@ -55,10 +56,10 @@ if (!empty($array_search['plugin_area'])) {
         $array_search['s_plugin_area'] = $array_search['plugin_area'];
     }
 
-    $sql .= " ORDER BY weight ASC";
+    $sql .= ' ORDER BY weight ASC';
     $max_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE (plugin_lang=\'all\' OR plugin_lang=\'' . NV_LANG_DATA . '\') AND plugin_area=' . $db->quote($array_search['s_plugin_area']) . ' AND hook_module=' . $db->quote($array_search['s_hook_module']))->fetchColumn();
 } else {
-    $sql .= " ORDER BY hook_module ASC, plugin_area ASC";
+    $sql .= ' ORDER BY hook_module ASC, plugin_area ASC';
 }
 $result = $db->query($sql);
 $array_plugin_db = [];
@@ -72,7 +73,7 @@ while ($row = $result->fetch()) {
         $array[] = $row;
     }
     if (isset($array_plugin_db[$key])) {
-        $array_plugin_db[$key] += 1;
+        ++$array_plugin_db[$key];
     } else {
         $array_plugin_db[$key] = 1;
     }
@@ -90,7 +91,7 @@ $tpl->assign('SEARCH', $array_search);
 $array_plstat_bymod = [];
 foreach ($site_mods as $mtitle => $mvalue) {
     if (isset($array_plstat_bymod[$mvalue['module_file']])) {
-        $array_plstat_bymod[$mvalue['module_file']] += 1;
+        ++$array_plstat_bymod[$mvalue['module_file']];
     } else {
         $array_plstat_bymod[$mvalue['module_file']] = 1;
     }
@@ -116,7 +117,7 @@ foreach ($file_plugins as $_plugin) {
             }
         } else {
             // Plugin hệ thống
-            $is_exists = in_array($_plugin, $array_plugin_db_sys) ? true : false;
+            $is_exists = in_array($_plugin, $array_plugin_db_sys, true) ? true : false;
         }
         if (!$is_exists) {
             $available_plugins[$_key][md5($_plugin)] = [
@@ -133,7 +134,7 @@ foreach ($file_plugins as $_plugin) {
 if ($nv_Request->isset_request('plugin_file', 'get')) {
     $plugin_file = $nv_Request->get_title('plugin_file', 'get');
     $plugin_file_key = md5($plugin_file);
-    if (!in_array($plugin_file, $file_plugins)) {
+    if (!in_array($plugin_file, $file_plugins, true)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     }
     $pl_area = nv_get_plugin_area(NV_ROOTDIR . '/includes/plugin/' . $plugin_file);
@@ -243,7 +244,7 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
     // Lấy vị trí mới
     $_sql = 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=' . $db->quote($plugin_lang) . ' AND plugin_area=' . $db->quote($plugin_area) . ' AND hook_module=' . $db->quote($plugin_hook_module);
     $weight = $db->query($_sql)->fetchColumn();
-    $weight = intval($weight) + 1;
+    $weight = (int) $weight + 1;
 
     try {
         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_plugin (
@@ -270,7 +271,7 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
 // Xóa plugin
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL!!!');
+        exit('Wrong URL!!!');
     }
 
     $pid = $nv_Request->get_int('pid', 'post', 0);
@@ -278,9 +279,9 @@ if ($nv_Request->isset_request('del', 'post')) {
     if ($pid > 0) {
         $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $pid)->fetch();
         if (!empty($row) and empty($row['plugin_module_file']) and ($row['plugin_lang'] == 'all' or $row['plugin_lang'] == NV_LANG_DATA) and $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $pid)) {
-            $weight = intval($row['weight']);
+            $weight = (int) ($row['weight']);
             $_query = $db->query('SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\') AND plugin_area=' . $db->quote($row['plugin_area']) . ' AND hook_module=' . $db->quote($row['hook_module']) . ' AND weight > ' . $weight . ' ORDER BY weight ASC');
-            while (list ($pid) = $_query->fetch(3)) {
+            while (list($pid) = $_query->fetch(3)) {
                 $db->query('UPDATE ' . $db_config['prefix'] . '_plugin SET weight = ' . $weight++ . ' WHERE pid=' . $pid);
             }
 
@@ -294,7 +295,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 // Thay đổi thứ tự ưu tiên
 if ($nv_Request->isset_request('changeweight', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL!!!');
+        exit('Wrong URL!!!');
     }
 
     $pid = $nv_Request->get_int('pid', 'post', 0);

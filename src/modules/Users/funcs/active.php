@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_USER_FORUM')) {
@@ -47,7 +48,7 @@ if ($checknum == $row['checknum']) {
     if (empty($row['password']) and substr($row['username'], 0, 20) == 'CHANGE_EMAIL_USERID_') {
         $is_change_email = true;
 
-        $userid_change_email = intval(substr($row['username'], 20));
+        $userid_change_email = (int) (substr($row['username'], 20));
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email=:email, email_verification_time=' . NV_CURRENTTIME . ' WHERE userid=' . $userid_change_email);
         $stmt->bindParam(':email', $row['email'], PDO::PARAM_STR);
         if ($stmt->execute()) {
@@ -57,7 +58,7 @@ if ($checknum == $row['checknum']) {
             $check_update_user = true;
         }
     } elseif (!defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
-        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name,
             gender, photo, birthday, regdate, question, answer,
             passlostkey, view_mail, remember, in_groups,
@@ -67,11 +68,11 @@ if ($checknum == $row['checknum']) {
             :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
             :gender, '', :birthday, :regdate, :question, :answer,
             '', 0, 1, :in_groups,
-            1, '', 0, '', '', '', " . $global_config['idsite'] . ", " . NV_CURRENTTIME . ",
+            1, '', 0, '', '', '', " . $global_config['idsite'] . ', ' . NV_CURRENTTIME . ",
             'EMAIL'
         )";
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
         $data_insert['username'] = $row['username'];
         $data_insert['md5_username'] = nv_md5safe($row['username']);
@@ -89,7 +90,7 @@ if ($checknum == $row['checknum']) {
         $userid = $db->insert_id($sql, 'userid', $data_insert);
         if ($userid) {
             $users_info = unserialize(nv_base64_decode($row['users_info']));
-            $query_field = array();
+            $query_field = [];
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
             while ($row_f = $result_field->fetch()) {
@@ -97,7 +98,7 @@ if ($checknum == $row['checknum']) {
                     continue;
                 }
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                    $default_value = floatval($row_f['default_value']);
+                    $default_value = (float) ($row_f['default_value']);
                 } else {
                     $default_value = $db->quote($row_f['default_value']);
                 }
@@ -120,8 +121,8 @@ if ($checknum == $row['checknum']) {
             $nv_Cache->delMod($module_name);
 
             $user_data = $row;
-            nv_apply_hook($module_name, 'user_add', array($userid, $user_data));
-            nv_apply_hook($module_name, 'user_waiting_active_self', array($userid, $user_data));
+            nv_apply_hook($module_name, 'user_add', [$userid, $user_data]);
+            nv_apply_hook($module_name, 'user_waiting_active_self', [$userid, $user_data]);
         }
     }
 }
@@ -140,11 +141,11 @@ if ($check_update_user) {
     }
 }
 
-$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
-$info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $nv_Lang->getModule('redirect_to_login') . "</a>]";
+$info .= '<img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
+$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $nv_Lang->getModule('redirect_to_login') . '</a>]';
 
 $contents = user_info_exit($info);
-$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . "\" />";
+$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

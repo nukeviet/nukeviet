@@ -1,37 +1,38 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
 
-$array_mod_title[] = array(
+$array_mod_title[] = [
     'catid' => 0,
     'title' => $module_info['funcs'][$op]['func_custom_name'],
     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']
-);
+];
 
 $alias = isset($array_op[1]) ? trim($array_op[1]) : '';
-$topic_array = array();
+$topic_array = [];
 
 $topicid = 0;
 if (!empty($alias)) {
-    $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? intval(substr($array_op[2], 5)) : 1;
+    $page = (isset($array_op[2]) and substr($array_op[2], 0, 5) == 'page-') ? (int) (substr($array_op[2], 5)) : 1;
 
     $sth = $db_slave->prepare('SELECT topicid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE alias= :alias');
     $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
     $sth->execute();
 
-    list ($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $sth->fetch(3);
+    list($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $sth->fetch(3);
 
     if ($topicid > 0) {
         $base_url_rewrite = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $alias;
@@ -44,11 +45,11 @@ if (!empty($alias)) {
             nv_redirect_location($base_url_rewrite);
         }
 
-        $array_mod_title[] = array(
+        $array_mod_title[] = [
             'catid' => 0,
             'title' => $page_title,
             'link' => $base_url
-        );
+        ];
 
         $db_slave->sqlreset()
             ->select('COUNT(*)')
@@ -93,13 +94,13 @@ if (!empty($alias)) {
         $result->closeCursor();
         unset($result, $row);
 
-        $topic_other_array = array();
+        $topic_other_array = [];
         if ($st_links > 0) {
             $db_slave->sqlreset()
                 ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
                 ->where('status=1 AND topicid = ' . $topicid . ' AND ' . $order_articles_by . ' < ' . $weight_publtime)
-                ->order($order_articles_by.' DESC')
+                ->order($order_articles_by . ' DESC')
                 ->limit($st_links);
 
             $result = $db_slave->query($db_slave->sql());
@@ -148,7 +149,7 @@ if (!empty($alias)) {
     $result->closeCursor();
     unset($result, $row);
 
-    $topic_other_array = array();
+    $topic_other_array = [];
     $contents = topic_theme($topic_array, $topic_other_array, '', $page_title, $description, '');
 }
 include NV_ROOTDIR . '/includes/header.php';

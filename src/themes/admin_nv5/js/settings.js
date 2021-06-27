@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 9:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_is_del_cron(cronid) {
@@ -42,7 +43,7 @@ function nv_change_plugin_weight(pid) {
 }
 
 
-$(document).ready(function(){
+$(document).ready(function() {
     // System
     $('#cdn_download').click(function() {
         window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + $(this).data('cdndl');
@@ -84,10 +85,10 @@ $(document).ready(function(){
             var url = $(this).attr('href');
             var selectedtab = $('[name="gselectedtab"]').val();
             $.ajax({
-                type : 'POST',
-                url : url,
-                data : '',
-                success : function(data) {
+                type: 'POST',
+                url: url,
+                data: '',
+                success: function(data) {
                     alert(btn.data('msgs'));
                     window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security&selectedtab=" + selectedtab;
                 }
@@ -149,7 +150,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#ssl_https').on('change', function(){
+    $('#ssl_https').on('change', function() {
         var val = $(this).data('val');
         var mode = $(this).val();
         if (mode != 0 && val == 0 && !confirm($(this).data('message'))) {

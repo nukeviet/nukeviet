@@ -1,3 +1,12 @@
+/**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 var myTimerPage = '';
 var myTimersecField = '';
 
@@ -34,16 +43,17 @@ function timeoutsessrun() {
             clearInterval(myTimersecField);
             $("#timeoutsess").hide();
             $.getJSON(nv_base_siteurl + "index.php", {
-                second : "time_login",
-                nocache : (new Date).getTime()
+                second: "time_login",
+                nocache: (new Date).getTime()
             }).done(function(json) {
                 if (json.showtimeoutsess == 1) {
                     $.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&system=1&nocache=" + (new Date).getTime(), function(re) {
                         window.location.reload();
                     });
-                }
-                else {
-                    myTimerPage = setTimeout(function() {timeoutsessrun();}, json.check_pass_time);
+                } else {
+                    myTimerPage = setTimeout(function() {
+                        timeoutsessrun();
+                    }, json.check_pass_time);
                 }
             });
         }
@@ -135,5 +145,7 @@ $(document).ready(function() {
     });
 
     // Bootstrap tooltip
-    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+    $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+    });
 });

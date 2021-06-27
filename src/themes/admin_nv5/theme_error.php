@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 function nv_error_theme($page_title, $info_title, $info_content, $error_code, $admin_link, $admin_title, $site_link, $site_title, $template)
@@ -39,7 +40,7 @@ function nv_error_theme($page_title, $info_title, $info_content, $error_code, $a
     $tpl->assign('NV_SITE_TIMEZONE_OFFSET', round(NV_SITE_TIMEZONE_OFFSET / 3600));
     $tpl->assign('NV_CURRENTTIME', NV_CURRENTTIME);
     $tpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
-    $tpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['admin_check_pass_time']) - 62) * 1000);
+    $tpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['admin_check_pass_time']) - 62) * 1000);
 
     $tpl->assign('PAGE_TITLE', $page_title);
     $tpl->assign('ERROR_CODE', $error_code);

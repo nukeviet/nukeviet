@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 21, 2010 4:22:24 PM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $t = $nv_Request->get_int('t', 'get', 0);
@@ -24,9 +25,9 @@ if ($t == 3) {
     $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send');
     $db->query('TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_reply');
 } elseif ($t == 2) {
-    $sends = $nv_Request->get_typed_array('sends', 'post', 'int', array());
+    $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
 
-    if (! empty($sends)) {
+    if (!empty($sends)) {
         $in = implode(',', $sends);
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id IN (' . $in . ')');
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id IN (' . $in . ')');

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:24
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('main');
@@ -40,9 +41,9 @@ if ($numrows) {
     $list_modules = $nv_Cache->db($sql, '', 'modules');
     foreach ($adminrows as $row) {
         $login = $row['username'];
-        $email = (defined('NV_IS_SPADMIN')) ? $row['email'] : (($row['admin_id'] == $admin_info['admin_id']) ? $row['email'] : (intval($row['view_mail']) ? $row['email'] : ''));
+        $email = (defined('NV_IS_SPADMIN')) ? $row['email'] : (($row['admin_id'] == $admin_info['admin_id']) ? $row['email'] : ((int) $row['view_mail'] ? $row['email'] : ''));
         $email = !empty($email) ? nv_EncodeEmail($email) : '';
-        $level = intval($row['lev']);
+        $level = (int) $row['lev'];
         if ($level == 1) {
             $level_txt = $nv_Lang->getGlobal('level1');
         } elseif ($level == 2) {
@@ -50,13 +51,13 @@ if ($numrows) {
         } else {
             $array_mod = [];
             foreach ($list_modules as $row_mod) {
-                if (!empty($row_mod['admins']) and in_array($row['admin_id'], explode(',', $row_mod['admins']))) {
+                if (!empty($row_mod['admins']) and in_array((int) $row['admin_id'], array_map('intval', explode(',', $row_mod['admins'])), true)) {
                     $array_mod[] = $row_mod['custom_title'];
                 }
             }
             $level_txt = implode(', ', $array_mod);
         }
-        $last_login = intval($row['last_login']);
+        $last_login = (int) $row['last_login'];
         $last_login = $last_login ? nv_date('l, d/m/Y H:i', $last_login) : $nv_Lang->getModule('last_login0');
         $last_agent = $row['last_agent'];
 
@@ -70,7 +71,7 @@ if ($numrows) {
             'name' => $_browser->getPlatform()
         ];
 
-        $is_suspend = intval($row['is_suspend']);
+        $is_suspend = (int) $row['is_suspend'];
         $suspen_id = 0;
         $suspen_name = '';
         $suspen_starttime = '';
@@ -79,12 +80,12 @@ if ($numrows) {
         if (!empty($is_suspend)) {
             $last_reason = unserialize($row['susp_reason']);
             $last_reason = array_shift($last_reason);
-            list($susp_admin_id, $susp_admin_uname, $susp_admin_fname, $susp_admin_lname) = $db->query('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval($last_reason['start_admin']))->fetch(3);
+            list($susp_admin_id, $susp_admin_uname, $susp_admin_fname, $susp_admin_lname) = $db->query('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . (int) $last_reason['start_admin'])->fetch(3);
             $suspen_id = $susp_admin_id;
             $suspen_name = nv_show_name_user($susp_admin_fname, $susp_admin_lname, $susp_admin_uname);
             $suspen_starttime = nv_date('d/m/Y H:i', $last_reason['starttime']);
             $suspen_info = $last_reason['info'];
-            $suspen_adminlink = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id;
+            $suspen_adminlink = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $susp_admin_id;
         }
 
         $tool_is_edit = $tool_is_suspend = $tool_is_del = $tool_is_2step = 0;

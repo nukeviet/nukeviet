@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EMAILTEMPLATES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Xóa mẫu email
@@ -20,7 +21,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
     $row = $db->query($sql)->fetch();
 
     if (empty($row) or $row['is_system']) {
-        die('NO_' . $emailid);
+        exit('NO_' . $emailid);
     }
 
     $sql = 'DELETE FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = ' . $emailid;
@@ -30,7 +31,7 @@ if ($nv_Request->isset_request('delete', 'post')) {
         nv_apply_hook('', 'emailtemplates_after_delete', [$emailid]);
         $nv_Cache->delMod($module_name);
     } else {
-        die('NO_' . $emailid);
+        exit('NO_' . $emailid);
     }
 
     include NV_ROOTDIR . '/includes/header.php';
@@ -71,7 +72,7 @@ $array_cat_change[2] = [];
 $i = 0;
 foreach ($global_array_cat as $cat) {
     if (isset($array[$cat['catid']])) {
-        $i++;
+        ++$i;
         $array_cat_change[$i][] = $cat;
         if ($i > 1) {
             $i = 0;

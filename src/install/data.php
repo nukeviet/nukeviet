@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/28/2009 20:8
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, icon, weight, act_1, act_2, act_3, checksum) VALUES
+$sql_create_table[] = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, icon, weight, act_1, act_2, act_3, checksum) VALUES
     (1, 'siteinfo', 'mod_siteinfo', 'fas fa-info-circle', 1, 1, 1, 1, ''),
     (2, 'authors', 'mod_authors', 'fab fa-adn', 2, 1, 1, 1, ''),
     (3, 'settings', 'mod_settings', 'fas fa-cogs', 3, 1, 1, 0, ''),
@@ -26,10 +27,10 @@ $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
     (11, 'upload', 'mod_upload', 'fas fa-file-alt', 11, 1, 1, 1, ''),
     (12, 'emailtemplates', 'mod_emailtemplates', 'fas fa-envelope', 12, 1, 1, 0, '')";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
-$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
+$sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
+$sql_create_table[] = 'UPDATE ' . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
 
-$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
     ('sys', 'site', 'closed_site', '0'),
     ('sys', 'site', 'admin_theme', 'admin_default'),
     ('sys', 'site', 'date_pattern', 'l, d/m/Y'),
@@ -150,8 +151,8 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
     ('sys', 'define', 'nv_allowed_html_tags', '" . NV_ALLOWED_HTML_TAGS . "'),
     ('sys', 'define', 'nv_debug', '" . NV_DEBUG . "')";
 
-$sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " (start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES
-    (" . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
+$sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES
+    (' . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
     (" . NV_CURRENTTIME . ", 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 0, 0),
     (" . NV_CURRENTTIME . ", 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 0, 0),
     (" . NV_CURRENTTIME . ", 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 0, 0),
@@ -161,7 +162,7 @@ $sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " (start_time, 
     (" . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0),
     (" . NV_CURRENTTIME . ", 1440, 'notification_autodel.php', 'cron_notification_autodel', '', 0, 1, 1, 0, 0)";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES
+$sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES
     (0, 'module', 'about', 0, 0, 'Page', 'about', '4.3.02 1525251600', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', ''),
     (0, 'module', 'siteterms', 0, 0, 'Page', 'siteterms', '4.3.02 1525251600', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', ''),
     (19, 'module', 'banners', 1, 0, 'Banners', 'banners', '4.3.02 1525251600', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', ''),
@@ -180,17 +181,17 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions
     (307, 'theme', 'default', 0, 0, 'default', 'default', '4.3.02 1525251600', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', ''),
     (311, 'theme', 'mobile_default', 0, 0, 'mobile_default', 'mobile_default', '4.3.02 1525251600', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES
+$sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES
     (1, '', 'Quang cao giua trang', '', 'sequential', 575, 72, 1, 1, 'images,flash'),
     (2, '', 'Quang cao trai', '', 'sequential', 212, 800, 1, 1, 'images,flash'),
     (3, '', 'Quang cao Phai', '', 'random', 250, 500, 1, 1, 'images,flash')";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows (id, title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
-    (2, 'vinades', 2, 1, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 2),
-    (3, 'Quang cao giua trang', 1, 1, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 1)";
+$sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_banners_rows (id, title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
+    (2, 'vinades', 2, 1, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', '', " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ", 0, 0, 1, 2),
+    (3, 'Quang cao giua trang', 1, 1, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', '', " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 0, 0, 1, 1)';
 
 // FIXME ID 1001, 1002 dùng để dev giao diện admin_nv5, sau khi dev xong xóa đi
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (pid, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES
+$sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_plugin (pid, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES
     (1, 'qrcode.php', 'get_qr_code', '', '', 1),
     (2, 'cdn_js_css_image.php', 'change_site_buffer', '', '', 1),
     (3, 'emf_active_via_email.php', 'get_email_merge_fields', 'users', 'Users', 1),

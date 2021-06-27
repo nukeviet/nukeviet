@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $table_caption = $nv_Lang->getModule('editcensor');
@@ -125,15 +126,15 @@ if ($nv_Request->isset_request('approved', 'post')) {
          * Đến đây tức là đã check hợp lệ dữ liệu
          * Cập nhật thông tin cơ bản
          */
-        $db->query("UPDATE " . NV_MOD_TABLE . " SET
-            first_name=" . $db->quote($custom_fields['first_name']) . ",
-            last_name=" . $db->quote($custom_fields['last_name']) . ",
-            gender=" . $db->quote($custom_fields['gender']) . ",
-            birthday=" . intval($custom_fields['birthday']) . ",
-            sig=" . $db->quote($custom_fields['sig']) . ",
-            view_mail=" . $custom_fields['view_mail'] . ",
-            last_update=" . NV_CURRENTTIME . "
-        WHERE userid=" . $userid);
+        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET
+            first_name=' . $db->quote($custom_fields['first_name']) . ',
+            last_name=' . $db->quote($custom_fields['last_name']) . ',
+            gender=' . $db->quote($custom_fields['gender']) . ',
+            birthday=' . (int) ($custom_fields['birthday']) . ',
+            sig=' . $db->quote($custom_fields['sig']) . ',
+            view_mail=' . $custom_fields['view_mail'] . ',
+            last_update=' . NV_CURRENTTIME . '
+        WHERE userid=' . $userid);
 
         // Cập nhật thông tin tùy biến dữ liệu
         if (!empty($query_field)) {
@@ -229,7 +230,7 @@ if (!empty($reviewuid)) {
         }
 
         // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
-        $query_field = array();
+        $query_field = [];
         $userid = $reviewuid;
         if (!empty($array_field_config)) {
             require NV_ROOTDIR . '/modules/users/fields.check.php';
@@ -237,15 +238,15 @@ if (!empty($reviewuid)) {
 
         // Cập nhật thông tin cơ bản
         if (!empty($info_basic)) {
-            $db->query("UPDATE " . NV_MOD_TABLE . " SET
-                first_name=" . $db->quote($_user['first_name']) . ",
-                last_name=" . $db->quote($_user['last_name']) . ",
-                gender=" . $db->quote($_user['gender']) . ",
-                birthday=" . intval($_user['birthday']) . ",
-                sig=" . $db->quote($_user['sig']) . ",
-                view_mail=" . $_user['view_mail'] . ",
-                last_update=" . NV_CURRENTTIME . "
-            WHERE userid=" . $reviewuid);
+            $db->query('UPDATE ' . NV_MOD_TABLE . ' SET
+                first_name=' . $db->quote($_user['first_name']) . ',
+                last_name=' . $db->quote($_user['last_name']) . ',
+                gender=' . $db->quote($_user['gender']) . ',
+                birthday=' . (int) ($_user['birthday']) . ',
+                sig=' . $db->quote($_user['sig']) . ',
+                view_mail=' . $_user['view_mail'] . ',
+                last_update=' . NV_CURRENTTIME . '
+            WHERE userid=' . $reviewuid);
         }
 
         if (!empty($query_field)) {
@@ -258,12 +259,12 @@ if (!empty($reviewuid)) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'Log Approved User Edit', 'Userid: ' . $reviewuid, $admin_info['userid']);
         $nv_Cache->delMod($module_name);
 
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'ok',
             'input' => '',
             'admin_add' => 'no',
             'mess' => ''
-        ));
+        ]);
     }
 
     $xtpl = new XTemplate('editcensor_review.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -345,11 +346,11 @@ if (!empty($reviewuid)) {
                 }
             } elseif ($row['field_type'] == 'select') {
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
                         'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.custom.loop.select.loop');
                 }
                 $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? $row['field_choices'][$row['valueold']] : $row['valueold'];
@@ -360,28 +361,28 @@ if (!empty($reviewuid)) {
                 $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? $row['field_choices'][$row['valueold']] : $row['valueold'];
                 $xtpl->assign('FIELD', $row);
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
                         'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.custom.loop.radio');
                 }
             } elseif ($row['field_type'] == 'checkbox') {
                 $valueold = empty($row['valueold']) ? [] : explode(',', $row['valueold']);
                 $row['valueold'] = [];
                 $number = 0;
-                $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
-                        'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
+                        'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.custom.loop.checkbox');
-                    if (in_array($key, $valueold)) {
+                    if (in_array($key, $valueold, true)) {
                         $row['valueold'][] = $value;
                     }
                 }
@@ -390,15 +391,15 @@ if (!empty($reviewuid)) {
             } elseif ($row['field_type'] == 'multiselect') {
                 $valueold = empty($row['valueold']) ? [] : explode(',', $row['valueold']);
                 $row['valueold'] = [];
-                $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                 foreach ($row['field_choices'] as $key => $value) {
-                    $xtpl->assign('FIELD_CHOICES', array(
+                    $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
-                        'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
+                        'selected' => (in_array($key, $valueselect, true)) ? ' selected="selected"' : '',
                         'value' => $value
-                    ));
+                    ]);
                     $xtpl->parse('main.custom.loop.multiselect.loop');
-                    if (in_array($key, $valueold)) {
+                    if (in_array($key, $valueold, true)) {
                         $row['valueold'][] = $value;
                     }
                 }
@@ -432,42 +433,42 @@ if (!empty($reviewuid)) {
 }
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$methods = array(
-    'userid' => array(
+$methods = [
+    'userid' => [
         'key' => 'userid',
         'sql' => 'tb2.userid',
         'value' => $nv_Lang->getModule('search_id'),
         'selected' => ''
-    ),
-    'username' => array(
+    ],
+    'username' => [
         'key' => 'username',
         'sql' => 'tb2.username',
         'value' => $nv_Lang->getModule('search_account'),
         'selected' => ''
-    ),
-    'full_name' => array(
+    ],
+    'full_name' => [
         'key' => 'full_name',
         'sql' => $global_config['name_show'] == 0 ? "concat(tb2.last_name,' ',tb2.first_name)" : "concat(tb2.first_name,' ',tb2.last_name)",
         'value' => $nv_Lang->getModule('search_name'),
         'selected' => ''
-    ),
-    'email' => array(
+    ],
+    'email' => [
         'key' => 'email',
         'sql' => 'tb2.email',
         'value' => $nv_Lang->getModule('search_mail'),
         'selected' => ''
-    )
-);
+    ]
+];
 $method = $nv_Request->isset_request('method', 'post') ? $nv_Request->get_string('method', 'post', '') : ($nv_Request->isset_request('method', 'get') ? urldecode($nv_Request->get_string('method', 'get', '')) : '');
 $methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_string('value', 'post') : ($nv_Request->isset_request('value', 'get') ? urldecode($nv_Request->get_string('value', 'get', '')) : '');
 
-$orders = array(
+$orders = [
     'userid',
     'username',
     'full_name',
     'email',
     'lastedit'
-);
+];
 $orderby = $nv_Request->get_string('sortby', 'get', '');
 $ordertype = $nv_Request->get_string('sorttype', 'get', '');
 if ($ordertype != 'ASC') {
@@ -501,7 +502,7 @@ $db->select('tb1.userid, tb1.lastedit, tb2.username, tb2.first_name, tb2.last_na
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
 
-if (!empty($orderby) and in_array($orderby, $orders)) {
+if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? (($orderby != 'lastedit' ? 'tb2.' : 'tb1.') . $orderby) : ($global_config['name_show'] == 0 ? "concat(tb2.first_name,' ',tb2.last_name)" : "concat(tb2.last_name,' ',tb2.first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
@@ -509,20 +510,20 @@ if (!empty($orderby) and in_array($orderby, $orders)) {
 
 $result = $db->query($db->sql());
 
-$users_list = array();
+$users_list = [];
 while ($row = $result->fetch()) {
-    $users_list[$row['userid']] = array(
+    $users_list[$row['userid']] = [
         'userid' => $row['userid'],
         'username' => $row['username'],
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
         'lastedit' => date('d/m/Y H:i', $row['lastedit'])
-    );
+    ];
 }
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
-$head_tds = array();
+$head_tds = [];
 $head_tds['userid']['title'] = $nv_Lang->getModule('userid');
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $nv_Lang->getModule('account');

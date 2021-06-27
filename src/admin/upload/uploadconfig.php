@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $ini = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
@@ -30,7 +31,7 @@ foreach ($ini as $type => $extmime) {
     } else {
         foreach ($m as $m2) {
             if (!is_array($m2)) {
-                $m2 = array($m2);
+                $m2 = [$m2];
             }
             $myini['mimes'] = array_merge($myini['mimes'], $m2);
         }
@@ -77,7 +78,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $nv_max_size = $nv_Request->get_float('nv_max_size', 'post', $global_config['nv_max_size']);
     $nv_max_size = min(nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')), $nv_max_size);
-    $nv_auto_resize = (int)$nv_Request->get_bool('nv_auto_resize', 'post', 0);
+    $nv_auto_resize = (int) $nv_Request->get_bool('nv_auto_resize', 'post', 0);
 
     $upload_chunk_size = $nv_Request->get_float('upload_chunk_size', 'post', 0);
     $upload_chunk_size_text = $nv_Request->get_title('upload_chunk_size_text', 'post', '');
@@ -93,7 +94,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $upload_chunk_size = 0;
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     $sth->bindValue(':config_name', 'file_allowed_ext', PDO::PARAM_STR);
     $sth->bindValue(':config_value', $type, PDO::PARAM_STR);
     $sth->execute();
@@ -122,9 +123,9 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->bindValue(':config_value', $upload_chunk_size, PDO::PARAM_STR);
     $sth->execute();
 
-    $array_config_define = array();
-    $array_config_define['upload_alt_require'] = (int)$nv_Request->get_bool('upload_alt_require', 'post', 0);
-    $array_config_define['upload_auto_alt'] = (int)$nv_Request->get_bool('upload_auto_alt', 'post', 0);
+    $array_config_define = [];
+    $array_config_define['upload_alt_require'] = (int) $nv_Request->get_bool('upload_alt_require', 'post', 0);
+    $array_config_define['upload_auto_alt'] = (int) $nv_Request->get_bool('upload_auto_alt', 'post', 0);
 
     $sth->bindValue(':config_name', 'upload_alt_require', PDO::PARAM_STR);
     $sth->bindValue(':config_value', $array_config_define['upload_alt_require'], PDO::PARAM_STR);
@@ -134,11 +135,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->bindValue(':config_value', $array_config_define['upload_auto_alt'], PDO::PARAM_STR);
     $sth->execute();
 
-    $array_config_define = array();
+    $array_config_define = [];
     $array_config_define['nv_max_width'] = $nv_Request->get_int('nv_max_width', 'post');
     $array_config_define['nv_max_height'] = $nv_Request->get_int('nv_max_height', 'post');
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
     foreach ($array_config_define as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -169,12 +170,12 @@ $p_size = $sys_max_size / 100;
 $tpl->assign('SYS_MAX_SIZE', nv_convertfromBytes($sys_max_size));
 $tpl->assign('VAL_MAX_SIZE', $p_size);
 
-$_upload_checking_mode = array(
+$_upload_checking_mode = [
     'strong' => $nv_Lang->getModule('strong_mode'),
     'mild' => $nv_Lang->getModule('mild_mode'),
     'lite' => $nv_Lang->getModule('lite_mode'),
     'none' => $nv_Lang->getModule('none_mode')
-);
+];
 $tpl->assign('CHECKING_MODE', $_upload_checking_mode);
 
 $strong = false;
@@ -195,7 +196,7 @@ if ($global_config['upload_chunk_size'] > 1048575) {
     $upload_chunk_size = $global_config['upload_chunk_size'];
 }
 
-$array_chunk_size = array('KB', 'MB');
+$array_chunk_size = ['KB', 'MB'];
 $tpl->assign('UPLOAD_CHUNK_SIZE', $upload_chunk_size);
 $tpl->assign('UPLOAD_CHUNK_SIZE_TEXT', $upload_chunk_size_text);
 $tpl->assign('CHUNK_SIZE', $array_chunk_size);

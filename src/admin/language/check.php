@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getModule('nv_lang_check');
@@ -86,7 +87,7 @@ $tpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 $language_area = [];
 $sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query($sql);
-while (list($idfile_i, $module, $admin_file, ) = $result->fetch(3)) {
+while (list($idfile_i, $module, $admin_file) = $result->fetch(3)) {
     $module = preg_replace('/^theme\_(.*?)$/', 'Theme: \\1', $module);
     switch ($admin_file) {
         case '1':
@@ -102,9 +103,9 @@ while (list($idfile_i, $module, $admin_file, ) = $result->fetch(3)) {
 
     $language_area[] = [
         'key' => $idfile_i,
-        'title' => $module . " " . $langsitename
+        'title' => $module . ' ' . $langsitename
     ];
-    $array_files[$idfile_i] = $module . " " . $langsitename;
+    $array_files[$idfile_i] = $module . ' ' . $langsitename;
 }
 
 $tpl->assign('LANGUAGE_AREA', $language_area);
@@ -112,16 +113,16 @@ $tpl->assign('LANGUAGE_CHECK_TYPE', $language_check_type);
 
 $submit = $nv_Request->get_int('submit', 'post,get', 0);
 
-if ($submit > 0 and in_array($sourcelang, $array_lang_exit) and in_array($typelang, $array_lang_exit)) {
+if ($submit > 0 and in_array($sourcelang, $array_lang_exit, true) and in_array($typelang, $array_lang_exit, true)) {
     $array_where = [];
     if ($idfile > 0) {
         $array_where[] = 'idfile=' . $idfile;
     }
 
     if ($check_type == 0) {
-        $array_where[] = "update_" . $typelang . "=0";
+        $array_where[] = 'update_' . $typelang . '=0';
     } elseif ($check_type == 1) {
-        $array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang;
+        $array_where[] = 'lang_' . $typelang . '=lang_' . $sourcelang;
     }
 
     if (empty($array_where)) {

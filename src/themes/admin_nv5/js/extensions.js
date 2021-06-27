@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 9:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var LANG = [];
@@ -17,7 +18,7 @@ if (typeof(CFG) == 'undefined') {
 var EXT = {
     tid: CFG.id,
     isDownloaded: false,
-    startDownload: function(){
+    startDownload: function() {
         if (!EXT.isDownloaded) {
             EXT.isDownloaded = true;
 
@@ -32,19 +33,19 @@ var EXT = {
                 success: function(e) {
                     $('#file-download .waiting').hide();
                     e = e.split('|');
-                    if( e[0] == 'OK' ){
+                    if (e[0] == 'OK') {
                         EXT.handleOk(e[1]);
-                    }else{
+                    } else {
                         EXT.handleError(e[1]);
                     }
                 }
             });
         }
     },
-    cancel: function(){
+    cancel: function() {
         window.location = CFG.cancel_link;
     },
-    handleOk: function(f){
+    handleOk: function(f) {
         $('#file-download').addClass('text-success');
         $('#file-download .status').removeClass('fa-meh').addClass('fa-smile');
         $('#file-download .complete').show();
@@ -53,12 +54,12 @@ var EXT = {
 
         setTimeout("EXT.redirect()", 3000);
     },
-    handleError: function(m){
+    handleError: function(m) {
         $('#file-download').addClass('text-danger');
         $('#file-download .status').removeClass('fa-meh').addClass('fa-frown');
         $('#file-download-response').html('<div class="alert alert-danger"><div class="message pl-3">' + m + '</div></div>');
     },
-    redirect: function(){
+    redirect: function() {
         var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
         window.location = url;
     }
@@ -86,7 +87,7 @@ function checkform() {
     return true;
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     // Đăng nhập Merchant site
     $('#login-form').submit(function(e) {
         e.preventDefault();

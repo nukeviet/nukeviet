@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -22,7 +23,7 @@ function nv_get_submenu($mod)
 {
     global $module_name, $global_config, $admin_mods, $nv_Lang;
 
-    $submenu = array();
+    $submenu = [];
 
     if (file_exists(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php')) {
         $nv_Lang->loadModule($mod, true, true);
@@ -43,7 +44,7 @@ function nv_get_submenu_mod($module_name)
 {
     global $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods, $nv_Lang;
 
-    $submenu = array();
+    $submenu = [];
     if (isset($site_mods[$module_name])) {
         $module_info = $site_mods[$module_name];
         $module_file = $module_info['module_file'];
@@ -54,6 +55,7 @@ function nv_get_submenu_mod($module_name)
             $nv_Lang->changeLang();
         }
     }
+
     return $submenu;
 }
 
@@ -61,7 +63,7 @@ function nv_get_submenu_mod($module_name)
  * nv_admin_theme()
  *
  * @param mixed $contents
- * @param integer $head_site
+ * @param int   $head_site
  * @return
  */
 function nv_admin_theme($contents, $head_site = 1)
@@ -113,7 +115,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $tpl->assign('NV_SITE_NAME', $global_config['site_name']);
     $tpl->assign('NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $nv_Lang->get('admin_page') . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title']);
     $tpl->assign('SITE_DESCRIPTION', empty($global_config['site_description']) ? $page_title : $global_config['site_description']);
-    $tpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['admin_check_pass_time']) - 62) * 1000);
+    $tpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['admin_check_pass_time']) - 62) * 1000);
     $tpl->assign('NV_ADMINDIR', NV_ADMINDIR);
     $tpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
     $tpl->assign('MODULE_NAME', $module_name);
@@ -174,7 +176,7 @@ function nv_admin_theme($contents, $head_site = 1)
         foreach ($top_menu as $m => $v) {
             if (!empty($v['custom_title'])) {
                 if ($loop_sys_menu % 4 == 0) {
-                    $key_sys_menu++;
+                    ++$key_sys_menu;
                 }
                 if (!isset($array_sys_menu[$key_sys_menu])) {
                     $array_sys_menu[$key_sys_menu] = [];
@@ -195,7 +197,7 @@ function nv_admin_theme($contents, $head_site = 1)
                         ];
                     }
                 }
-                $loop_sys_menu++;
+                ++$loop_sys_menu;
             }
         }
         $tpl->assign('SYS_MENU', $array_sys_menu);
@@ -292,10 +294,10 @@ function nv_admin_theme($contents, $head_site = 1)
     $sitecontent = $tpl->fetch($file_name_tpl);
 
     if (!empty($my_head)) {
-        $sitecontent = preg_replace('/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1);
+        $sitecontent = preg_replace('/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1);
     }
     if (!empty($my_footer)) {
-        $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1);
+        $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1);
     }
 
     return $sitecontent;
@@ -308,7 +310,7 @@ if ($nv_Request->isset_request('nv_change_theme_config', 'post')) {
     $config_theme[$admin_info['admin_theme']] = [
         'collapsed_leftsidebar' => $collapsed_leftsidebar
     ];
-    $sql = "UPDATE " . NV_AUTHORS_GLOBALTABLE . " SET config_theme=" . $db->quote(json_encode($config_theme)) . " WHERE admin_id=" . $admin_info['admin_id'];
+    $sql = 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET config_theme=' . $db->quote(json_encode($config_theme)) . ' WHERE admin_id=' . $admin_info['admin_id'];
     if ($db->exec($sql)) {
         nv_htmlOutput('OK');
     }

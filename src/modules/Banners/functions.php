@@ -1,29 +1,30 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 0:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$lang_array = array(
+$lang_array = [
     'vi' => $nv_Lang->getModule('addads_block_lang_vi'),
     'en' => $nv_Lang->getModule('addads_block_lang_en'),
     'ru' => $nv_Lang->getModule('addads_block_lang_ru'),
     'zz' => $nv_Lang->getModule('addads_block_lang_zz')
-);
+];
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE act=1 ORDER BY blang ASC';
 $global_array_plans = $nv_Cache->db($sql, 'id', $module_name);
 
-$manament = array();
-$global_array_uplans = array();
+$manament = [];
+$global_array_uplans = [];
 // Kiểm tra quyền đăng quảng cáo
 if (defined('NV_IS_USER')) {
     foreach ($global_array_plans as $plan) {

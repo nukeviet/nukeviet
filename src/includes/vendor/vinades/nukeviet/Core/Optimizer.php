@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 27/11/2010, 22:45
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
@@ -21,15 +22,14 @@ class Optimizer
     private $_links = [];
     private $_cssLinks = [];
     private $_jsMatches = [];
-    private $_htmlforFooter = "";
+    private $_htmlforFooter = '';
     private $_jsCount = 0;
     private $base_siteurl;
     private $eol = "\r\n";
 
     /**
-     *
      * @param string $content
-     * @param boolean $opt_css_file
+     * @param bool   $opt_css_file
      * @param string $base_siteurl
      */
     public function __construct($content, $base_siteurl)
@@ -42,7 +42,6 @@ class Optimizer
      * optimizer::process()
      *
      * @return
-     *
      */
     public function process($jquery = true)
     {
@@ -51,7 +50,7 @@ class Optimizer
          * Mục đích để đưa về cuối trong thẻ <head>
          */
         $conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
-        $this->_content = preg_replace_callback($conditionRegex, array($this, 'conditionCallback'), $this->_content);
+        $this->_content = preg_replace_callback($conditionRegex, [$this, 'conditionCallback'], $this->_content);
 
         // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
         $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
@@ -67,7 +66,7 @@ class Optimizer
          * Nếu có chèn jquery thì lấy jquery trong buffer thay vì jquery mặc định
          */
         if (preg_match("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $this->_content, $matches)) {
-            $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content);
+            $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", '', $this->_content);
             if ($jquery and $_isFullBuffer) {
                 $_jsAfter = $matches[0] . $this->eol;
                 $_jsSrcPreload = '<link rel="preload" as="script" href="' . $matches[1] . '">' . $this->eol;
@@ -78,7 +77,7 @@ class Optimizer
          * Lọc tất cả các js trong buffer
          */
         $jsRegex = "/<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
-        $this->_content = preg_replace_callback($jsRegex, array($this, 'jsCallback'), $this->_content);
+        $this->_content = preg_replace_callback($jsRegex, [$this, 'jsCallback'], $this->_content);
 
         /*
          * Lọc các nội dung trong buffer cần đưa xuống cuối trang
@@ -86,7 +85,7 @@ class Optimizer
         $htmlRegex = "/<\!--\s*START\s+FORFOOTER\s*-->(.*?)<\!--\s*END\s+FORFOOTER\s*-->/is";
         if (preg_match_all($htmlRegex, $this->_content, $htmlMatches)) {
             $this->_htmlforFooter = implode($this->eol, $htmlMatches[1]);
-            $this->_content = preg_replace($htmlRegex, "", $this->_content);
+            $this->_content = preg_replace($htmlRegex, '', $this->_content);
         }
 
         /*
@@ -110,7 +109,7 @@ class Optimizer
                         } elseif (array_key_exists('charset', $combine)) {
                             $this->_meta['charset'] = $combine['charset'];
                         } else {
-                            $this->_meta['other'][] = array($matches2[1], $matches2[2]);
+                            $this->_meta['other'][] = [$matches2[1], $matches2[2]];
                         }
                     }
                 } elseif (preg_match("/^<title>[^<]+<\/title>/is", $tag)) {
@@ -122,10 +121,10 @@ class Optimizer
                 } elseif (preg_match('/^<link/', $tag)) {
                     preg_match_all("/([a-zA-Z\-]+)[\s]*\=[\s]*[\"|']([^\"']+)/is", $tag, $matches2);
                     $combine = array_combine(array_map('strtolower', $matches2[1]), $matches2[2]);
-                    if (isset($combine['rel']) and preg_match("/stylesheet/is", $combine['rel'])) {
+                    if (isset($combine['rel']) and preg_match('/stylesheet/is', $combine['rel'])) {
                         // CSS ở file
                         if (isset($combine['data-offset'])) {
-                            $this->_cssLinks[intval($combine['data-offset'])][] = preg_replace('/[\s]*data\-offset[\s]*\=[\s]*["|\']([^"\']+)["|\'][\s]*/is', ' ', $tag);
+                            $this->_cssLinks[(int) ($combine['data-offset'])][] = preg_replace('/[\s]*data\-offset[\s]*\=[\s]*["|\']([^"\']+)["|\'][\s]*/is', ' ', $tag);
                         } else {
                             $this->_cssLinks[10000][] = $tag;
                         }
@@ -182,7 +181,7 @@ class Optimizer
                     // Chi cho phep ket noi 1 lan doi voi 1 file JS
                     $external = trim($matches2[3]);
                     if (!empty($external)) {
-                        if (!in_array($external, $_jsSrc)) {
+                        if (!in_array($external, $_jsSrc, true)) {
                             $_jsSrc[] = $external;
                             $_jsSrcPreload .= '<link rel="preload" as="script" href="' . $external . '">' . $this->eol;
                             $_jsAfter .= $value . $this->eol;
@@ -220,7 +219,7 @@ class Optimizer
          * - Css
          * - Style
          */
-        $head = "";
+        $head = '';
         if (!empty($meta)) {
             $head .= implode($this->eol, $meta) . $this->eol;
         }
@@ -261,6 +260,7 @@ class Optimizer
             $this->_content = $this->_content . $this->eol . $_jsAfter;
         }
         $this->_content = str_replace("\r\n", "\n", $this->_content);
+
         return preg_replace("/\n([\t\n\s]+)\n/", "\n", $this->_content);
     }
 
@@ -269,13 +269,13 @@ class Optimizer
      *
      * @param mixed $matches
      * @return
-     *
      */
     private function conditionCallback($matches)
     {
         $this->_conditon[] = $matches[0];
         $num = $this->_condCount;
         ++$this->_condCount;
+
         return '{|condition_' . $num . '|}';
     }
 
@@ -284,17 +284,16 @@ class Optimizer
      *
      * @param mixed $matches
      * @return
-     *
      */
     private function jsCallback($matches)
     {
         if (preg_match('/<\s*\bscript\b[^>]*data\-show\=["|\']inline["|\'][^>]*>/is', $matches[0])) {
             return $matches[0];
-        } else {
-            $this->_jsMatches[] = $matches[0];
-            $num = $this->_jsCount;
-            ++$this->_jsCount;
-            return '{|js_' . $num . '|}';
         }
+        $this->_jsMatches[] = $matches[0];
+        $num = $this->_jsCount;
+        ++$this->_jsCount;
+
+        return '{|js_' . $num . '|}';
     }
 }

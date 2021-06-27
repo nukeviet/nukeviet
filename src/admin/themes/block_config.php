@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_THEMES')) {
+    exit('Stop!!!');
 }
 
 use NukeViet\Ultis;
@@ -18,7 +19,7 @@ $contents = '';
 
 $file_name = $nv_Request->get_string('file_name', 'get');
 
-if (! empty($file_name)) {
+if (!empty($file_name)) {
     $module = $nv_Request->get_string('module', 'get', '');
     $selectthemes = $nv_Request->get_string('selectthemes', 'get', '');
 
@@ -42,25 +43,25 @@ if (! empty($file_name)) {
             $block_dir = $module_file;
         }
     } else {
-        die();
+        exit();
     }
 
-    if (! empty($path_file_php) and ! empty($path_file_ini)) {
+    if (!empty($path_file_php) and !empty($path_file_ini)) {
         // Neu ton tai file config cua block
         $xml = simplexml_load_file($path_file_ini);
 
         if ($xml !== false) {
             $function_name = trim($xml->datafunction);
 
-            if (! empty($function_name)) {
+            if (!empty($function_name)) {
                 // neu ton tai function de xay dung cau truc cau hinh block
                 include_once $path_file_php;
 
                 if (nv_function_exists($function_name)) {
                     //load cau hinh mac dinh cua block
                     $xmlconfig = $xml->xpath('config');
-                    $config = ( array )$xmlconfig[0];
-                    $array_config = array();
+                    $config = (array) $xmlconfig[0];
+                    $array_config = [];
 
                     foreach ($config as $key => $value) {
                         $array_config[$key] = trim($value);

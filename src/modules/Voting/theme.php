@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 0:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_MOD_VOTING')) {
-    die('Stop!!!');
+if (!defined('NV_IS_MOD_VOTING')) {
+    exit('Stop!!!');
 }
 
 /**
@@ -27,7 +28,7 @@ function voting_result($voting)
     $xtpl->assign('LANG', $voting['lang']);
     $xtpl->assign('VOTINGQUESTION', $voting['question']);
 
-    if (! empty($voting['note'])) {
+    if (!empty($voting['note'])) {
         $xtpl->assign('VOTINGNOTE', $voting['note']);
         $xtpl->parse('main.note');
     }
@@ -58,5 +59,6 @@ function voting_result($voting)
         }
     }
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

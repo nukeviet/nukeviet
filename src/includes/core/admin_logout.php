@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/30/2009 0:51
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 $js = $nv_Request->get_int('js', 'get', 0);
@@ -20,7 +21,7 @@ if ($js) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $nv_Lang->getGlobal('admin_logout_title'), ' Client IP:' . NV_CLIENT_IP, $log_userid);
     $nv_Request->unset_request('admin,online', 'session');
     session_destroy();
-    die('1');
+    exit('1');
 }
 
 $ok = $nv_Request->get_int('ok', 'get', 0);
@@ -33,8 +34,8 @@ if ($ok) {
 } else {
     $url = ($client_info['referer'] != '') ? $client_info['referer'] : (isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : '');
     $info = $nv_Lang->getGlobal('admin_logout_question') . " ?<br /><br />\n";
-    $info .= "<a href=\"" . NV_BASE_SITEURL . "index.php?second=admin_logout&amp;ok=1\">" . $nv_Lang->getGlobal('ok') . "</a> | \n";
-    $info .= "<a href=\"" . $url . "\">" . $nv_Lang->getGlobal('cancel') . "</a>\n";
+    $info .= '<a href="' . NV_BASE_SITEURL . 'index.php?second=admin_logout&amp;ok=1">' . $nv_Lang->getGlobal('ok') . "</a> | \n";
+    $info .= '<a href="' . $url . '">' . $nv_Lang->getGlobal('cancel') . "</a>\n";
 }
 
 nv_info_die($global_config['site_description'], $nv_Lang->getGlobal('admin_logout_title'), $info);

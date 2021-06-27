@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -20,68 +21,68 @@ function nv_error_info_theme($error_info)
 {
     global $nv_Lang, $template;
 
-    $errortype = array(
-        E_ERROR => array(
+    $errortype = [
+        E_ERROR => [
             $nv_Lang->getGlobal('error_error'),
             'bad.png'
-        ),
-        E_WARNING => array(
+        ],
+        E_WARNING => [
             $nv_Lang->getGlobal('error_warning'),
             'warning.png'
-        ),
-        E_PARSE => array(
+        ],
+        E_PARSE => [
             $nv_Lang->getGlobal('error_error'),
             'bad.png'
-        ),
-        E_NOTICE => array(
+        ],
+        E_NOTICE => [
             $nv_Lang->getGlobal('error_notice'),
             'comment.png'
-        ),
-        E_CORE_ERROR => array(
+        ],
+        E_CORE_ERROR => [
             $nv_Lang->getGlobal('error_error'),
             'bad.png'
-        ),
-        E_CORE_WARNING => array(
+        ],
+        E_CORE_WARNING => [
             $nv_Lang->getGlobal('error_warning'),
             'warning.png'
-        ),
-        E_COMPILE_ERROR => array(
+        ],
+        E_COMPILE_ERROR => [
             $nv_Lang->getGlobal('error_error'),
             'bad.png'
-        ),
-        E_COMPILE_WARNING => array(
+        ],
+        E_COMPILE_WARNING => [
             $nv_Lang->getGlobal('error_warning'),
             'warning.png'
-        ),
-        E_USER_ERROR => array(
+        ],
+        E_USER_ERROR => [
             $nv_Lang->getGlobal('error_error'),
             'bad.png'
-        ),
-        E_USER_WARNING => array(
+        ],
+        E_USER_WARNING => [
             $nv_Lang->getGlobal('error_warning'),
             'warning.png'
-        ),
-        E_USER_NOTICE => array(
+        ],
+        E_USER_NOTICE => [
             $nv_Lang->getGlobal('error_notice'),
             'comment.png'
-        ),
-        E_STRICT => array(
+        ],
+        E_STRICT => [
             $nv_Lang->getGlobal('error_notice'),
             'comment.png'
-        ),
-        E_RECOVERABLE_ERROR => array(
+        ],
+        E_RECOVERABLE_ERROR => [
             $nv_Lang->getGlobal('error_error'),
             'bad.png'
-        ),
-        E_DEPRECATED => array(
+        ],
+        E_DEPRECATED => [
             $nv_Lang->getGlobal('error_notice'),
             'comment.png'
-        ),
-        E_USER_DEPRECATED => array(
+        ],
+        E_USER_DEPRECATED => [
             $nv_Lang->getGlobal('error_warning'),
             'warning.png'
-        )
-    );
+        ]
+    ];
 
     $image_path = NV_BASE_SITEURL . 'themes/' . $template . '/images/icons/';
 
@@ -98,5 +99,6 @@ function nv_error_info_theme($error_info)
     }
 
     $xtpl->parse('error_info');
+
     return $xtpl->text('error_info');
 }

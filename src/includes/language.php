@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post');
@@ -66,8 +67,8 @@ if (empty($global_config['lang_multi'])) {
         $site_lang = $global_config['site_lang'];
 
         if ($global_config['lang_geo']) {
-            $config_geo = array();
-            include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php' ;
+            $config_geo = [];
+            include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php';
             if (isset($config_geo[$client_info['country']])) {
                 $cookie = $config_geo[$client_info['country']];
                 if (preg_match('/^[a-z]{2}$/', $cookie) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie . '/global.php')) {

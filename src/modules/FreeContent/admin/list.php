@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+if (!defined('NV_IS_FILE_ADMIN')) {
+    exit('Stop!!!');
 }
 
 $bid = $nv_Request->get_int('bid', 'get', '');
-$block = array();
+$block = [];
 
 if ($bid) {
     $block = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=' . $bid)->fetch();
@@ -32,7 +33,7 @@ if (defined('NV_EDITOR')) {
 
 $allow_editor = (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) ? true : false;
 
-if (! defined('CKEDITOR') and $allow_editor) {
+if (!defined('CKEDITOR') and $allow_editor) {
     define('CKEDITOR', true);
     $my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
 }
@@ -51,7 +52,7 @@ if ($num_rows < 1) {
     $xtpl->assign('NUM_ROWS', $num_rows);
 
     foreach ($array as $row) {
-        if (! empty($row['image'])) {
+        if (!empty($row['image'])) {
             if (file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $row['image'])) {
                 $row['image'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['image'];
             } elseif (file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'])) {
@@ -67,13 +68,13 @@ if ($num_rows < 1) {
             $row['status_text'] .= '. ' . $nv_Lang->getModule('content_status_note0') . ' ' . nv_date('H:i:s d/m/Y', $row['start_time']);
 
             if ($row['end_time'] > 0) {
-                $row['status_text'] .= '. ' .  sprintf($row['status'] == 2 ? $nv_Lang->getModule('content_status_note2') : $nv_Lang->getModule('content_status_note1'), nv_date('H:i:s d/m/Y', $row['end_time']));
+                $row['status_text'] .= '. ' . sprintf($row['status'] == 2 ? $nv_Lang->getModule('content_status_note2') : $nv_Lang->getModule('content_status_note1'), nv_date('H:i:s d/m/Y', $row['end_time']));
             }
         }
 
         $xtpl->assign('ROW', $row);
 
-        if (! empty($row['image'])) {
+        if (!empty($row['image'])) {
             $xtpl->parse('main.rows.loop.image');
         }
 

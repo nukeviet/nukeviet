@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (@) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_EDITOR')) {
@@ -19,7 +20,7 @@ if (defined('NV_EDITOR')) {
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-$post = array();
+$post = [];
 $post['title'] = $nv_Request->get_title('title', 'post');
 $post['email'] = $nv_Request->get_title('email', 'post');
 
@@ -53,7 +54,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $error = $nv_Lang->getGlobal('error_sendmail_admin') . ': ' . $mail->ErrorInfo;
         }
     }
-
 } else {
     require_once NV_ROOTDIR . '/modules/Contact/sign.php';
     $mess_content .= $sign_content;

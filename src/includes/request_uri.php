@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 5, 2011 11:29:47 AM
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Fix rewrite IIS 7 with Unicode Permalinks
@@ -59,7 +60,7 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
 
     $request_uri_array = explode('/', $matches[1], 3);
 
-    if (in_array($request_uri_array[0], array_keys($language_array))) {
+    if (in_array($request_uri_array[0], array_keys($language_array), true)) {
         $_GET[NV_LANG_VARIABLE] = $request_uri_array[0];
 
         if (isset($request_uri_array[1][0])) {

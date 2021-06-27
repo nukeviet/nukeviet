@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/9/2010, 3:21
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Seo;
@@ -14,7 +15,6 @@ namespace NukeViet\Seo;
  * @author VINADES.,JSC <contact@vinades.vn>
  *
  * @since 4.3.08
- *
  */
 class BotManager
 {
@@ -56,6 +56,7 @@ class BotManager
         if ($this->privateWebsite) {
             $this->setPrivate();
         }
+
         return $this;
     }
 
@@ -69,6 +70,7 @@ class BotManager
                 'all' => 'all'
             ];
         }
+
         return $this;
     }
 
@@ -84,6 +86,7 @@ class BotManager
             'noindex' => 'noindex',
             'follow' => 'follow'
         ];
+
         return $this;
     }
 
@@ -97,6 +100,7 @@ class BotManager
                 'none' => 'none'
             ];
         }
+
         return $this;
     }
 
@@ -109,6 +113,7 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['noindex']);
             $this->modes['index'] = 'index';
         }
+
         return $this;
     }
 
@@ -121,6 +126,7 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['index']);
             $this->modes['noindex'] = 'noindex';
         }
+
         return $this;
     }
 
@@ -134,6 +140,7 @@ class BotManager
         if (!$this->privateWebsite) {
             unset($this->modes['noimageindex']);
         }
+
         return $this;
     }
 
@@ -147,6 +154,7 @@ class BotManager
         if (!$this->privateWebsite) {
             $this->modes['noimageindex'] = 'noimageindex';
         }
+
         return $this;
     }
 
@@ -159,6 +167,7 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['nofollow']);
             $this->modes['follow'] = 'follow';
         }
+
         return $this;
     }
 
@@ -171,6 +180,7 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['follow']);
             $this->modes['nofollow'] = 'nofollow';
         }
+
         return $this;
     }
 
@@ -183,6 +193,7 @@ class BotManager
             unset($this->modes['noarchive']);
             $this->modes['archive'] = 'archive';
         }
+
         return $this;
     }
 
@@ -195,6 +206,7 @@ class BotManager
             unset($this->modes['archive']);
             $this->modes['noarchive'] = 'noarchive';
         }
+
         return $this;
     }
 
@@ -208,6 +220,7 @@ class BotManager
         if (!$this->privateWebsite) {
             unset($this->modes['nosnippet']);
         }
+
         return $this;
     }
 
@@ -221,6 +234,7 @@ class BotManager
         if (!$this->privateWebsite) {
             $this->modes['nosnippet'] = 'nosnippet';
         }
+
         return $this;
     }
 
@@ -234,6 +248,7 @@ class BotManager
         if (!$this->privateWebsite) {
             unset($this->modes['notranslate']);
         }
+
         return $this;
     }
 
@@ -247,6 +262,7 @@ class BotManager
         if (!$this->privateWebsite) {
             $this->modes['notranslate'] = 'notranslate';
         }
+
         return $this;
     }
 
@@ -262,6 +278,7 @@ class BotManager
             // RFC 850 date
             $this->modes['unavailable_after'] = 'unavailable_after: ' . gmdate('d-M-y H:i:s', $time) . ' GMT';
         }
+
         return $this;
     }
 
@@ -275,11 +292,12 @@ class BotManager
         if (!$this->privateWebsite) {
             unset($this->modes['unavailable_after']);
         }
+
         return $this;
     }
 
     /**
-     * @param boolean $html
+     * @param bool $html
      * @return string[][]
      */
     public function getMetaTags($html = false)
@@ -300,8 +318,9 @@ class BotManager
         }
         $res = '';
         foreach ($return as $link) {
-            $res .= "<meta " . $link['name'] . "=\"" . $link['value'] . "\" content=\"" . $link['content'] . "\" />" . PHP_EOL;
+            $res .= '<meta ' . $link['name'] . '="' . $link['value'] . '" content="' . $link['content'] . '" />' . PHP_EOL;
         }
+
         return $res;
     }
 
@@ -318,14 +337,11 @@ class BotManager
         }
     }
 
-    /**
-     *
-     */
     public function printToHeaders()
     {
         $mode = array_intersect_key($this->modes, array_flip($this->allBotsModes[$this->headerBotName]));
         if (!empty($mode)) {
-            @Header('X-Robots-Tag: ' . implode(', ', $mode));
+            @header('X-Robots-Tag: ' . implode(', ', $mode));
         }
     }
 }

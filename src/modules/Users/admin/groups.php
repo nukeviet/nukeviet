@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 15:5
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $nv_Lang->getGlobal('mod_groups');
@@ -46,7 +47,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
     $group_id = $nv_Request->get_int('id', 'post');
     $cWeight = $nv_Request->get_int('cWeight', 'post');
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $groupsList[$group_id]['idsite'] != $global_config['idsite'] or ($global_config['idsite'] > 0 and $group_id < 10)) {
-        die('ERROR');
+        exit('ERROR');
     }
 
     $cWeight = min($cWeight, sizeof($groupsList));
@@ -74,14 +75,14 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('changeGroupWeight'), 'group_id: ' . $group_id, $admin_info['userid']);
-    die('OK');
+    exit('OK');
 }
 
 // Thay doi tinh trang hien thi cua nhom
 if ($nv_Request->isset_request('act', 'post')) {
     $group_id = $nv_Request->get_int('act', 'post');
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
-        die('ERROR|' . $groupsList[$group_id]['act']);
+        exit('ERROR|' . $groupsList[$group_id]['act']);
     }
 
     $act = $groupsList[$group_id]['act'] ? 0 : 1;
@@ -90,7 +91,7 @@ if ($nv_Request->isset_request('act', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('ChangeGroupAct'), 'group_id: ' . $group_id, $admin_info['userid']);
-    die('OK|' . $act);
+    exit('OK|' . $act);
 }
 
 // Xoa nhom
@@ -98,7 +99,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     $group_id = $nv_Request->get_int('del', 'post', 0);
 
     if (!isset($groupsList[$group_id]) or !defined('NV_IS_SPADMIN') or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite']) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
 
     $array_groups = [];
@@ -111,7 +112,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     foreach ($array_groups as $userid => $gr) {
         unset($gr[$group_id]);
         $in_groups = array_keys($gr);
-        $db->exec("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $userid);
+        $db->exec('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $userid);
     }
 
     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups WHERE group_id = ' . $group_id);
@@ -130,7 +131,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delGroup'), 'group_id: ' . $group_id, $admin_info['userid']);
-    die('OK');
+    exit('OK');
 }
 
 // Them thanh vien vao nhom
@@ -138,22 +139,22 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('uid', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                die($nv_Lang->getModule('error_group_in_site'));
+                exit($nv_Lang->getModule('error_group_in_site'));
             }
         } else {
-            die($nv_Lang->getModule('search_not_result'));
+            exit($nv_Lang->getModule('search_not_result'));
         }
     }
 
     if (!nv_groups_add_user($gid, $uid, 1, $module_data)) {
-        die($nv_Lang->getModule('search_not_result'));
+        exit($nv_Lang->getModule('search_not_result'));
     }
 
     // Update for table users
@@ -162,12 +163,12 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
     while ($row_gru = $result_gru->fetch()) {
         $in_groups[] = $row_gru['group_id'];
     }
-    $db->exec("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
+    $db->exec('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addMemberToGroup'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
 
-    die('OK');
+    exit('OK');
 }
 
 // Loai thanh vien khoi nhom
@@ -175,22 +176,22 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('exclude', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                die($nv_Lang->getModule('error_group_in_site'));
+                exit($nv_Lang->getModule('error_group_in_site'));
             }
         } else {
-            die($nv_Lang->getModule('search_not_result'));
+            exit($nv_Lang->getModule('search_not_result'));
         }
     }
 
     if (!nv_groups_del_user($gid, $uid, $module_data)) {
-        die($nv_Lang->getModule('UserNotInGroup'));
+        exit($nv_Lang->getModule('UserNotInGroup'));
     }
 
     // Update for table users
@@ -199,11 +200,11 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
     while ($row_gru = $result_gru->fetch()) {
         $in_groups[] = $row_gru['group_id'];
     }
-    $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
+    $db->query('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('exclude_user2'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    die('OK');
+    exit('OK');
 }
 
 // Thang cap thanh vien
@@ -211,17 +212,17 @@ if ($nv_Request->isset_request('gid,promote', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('promote', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                die($nv_Lang->getModule('error_group_in_site'));
+                exit($nv_Lang->getModule('error_group_in_site'));
             }
         } else {
-            die($nv_Lang->getModule('search_not_result'));
+            exit($nv_Lang->getModule('search_not_result'));
         }
     }
 
@@ -229,7 +230,7 @@ if ($nv_Request->isset_request('gid,promote', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('promote'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    die('OK');
+    exit('OK');
 }
 
 // Giang cap quan tri
@@ -237,17 +238,17 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('demote', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                die($nv_Lang->getModule('error_group_in_site'));
+                exit($nv_Lang->getModule('error_group_in_site'));
             }
         } else {
-            die($nv_Lang->getModule('search_not_result'));
+            exit($nv_Lang->getModule('search_not_result'));
         }
     }
 
@@ -255,7 +256,7 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('demote'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    die('OK');
+    exit('OK');
 }
 
 // Duyet vao nhom
@@ -263,17 +264,17 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('approved', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                die($nv_Lang->getModule('error_group_in_site'));
+                exit($nv_Lang->getModule('error_group_in_site'));
             }
         } else {
-            die($nv_Lang->getModule('search_not_result'));
+            exit($nv_Lang->getModule('search_not_result'));
         }
     }
 
@@ -282,7 +283,7 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('approved'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    die('OK');
+    exit('OK');
 }
 
 // Tu choi gia nhap nhom
@@ -290,17 +291,17 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('denied', 'post', 0);
     if (!isset($groupsList[$gid]) or $gid < 10) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (!empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
-                die($nv_Lang->getModule('error_group_in_site'));
+                exit($nv_Lang->getModule('error_group_in_site'));
             }
         } else {
-            die($nv_Lang->getModule('search_not_result'));
+            exit($nv_Lang->getModule('search_not_result'));
         }
     }
 
@@ -308,7 +309,7 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('denied'), 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
-    die('OK');
+    exit('OK');
 }
 
 $nv_Lang->setModule('nametitle', ($global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname')));
@@ -330,7 +331,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups&listUsers=' . $group_id;
 
     if (!isset($groupsList[$group_id])) {
-        die($nv_Lang->getModule('error_group_not_found'));
+        exit($nv_Lang->getModule('error_group_not_found'));
     }
     $xtpl->assign('GID', $group_id);
     $title = ($group_id < 10) ? $nv_Lang->getGlobal('level' . $group_id) : $groupsList[$group_id]['title'];
@@ -413,7 +414,6 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         foreach ($group_users as $_type => $arr_userids) {
             $xtpl->assign('PTITLE', $nv_Lang->getModule($_type . '_in_group_caption', $title, number_format($array_number[$_type], 0, ',', '.')));
             foreach ($arr_userids as $_userid) {
-
                 $row = $array_userid[$_userid];
                 $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
                 $xtpl->assign('LOOP', $row);
@@ -497,7 +497,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         if (defined('NV_EDITOR')) {
-            require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
+            require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
         }
 
         if ($nv_Request->isset_request('save', 'post')) {
@@ -505,15 +505,15 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             if (empty($post['id']) or $post['id'] > 9) {
                 $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
                 if (empty($post['title'])) {
-                    die($nv_Lang->getModule('title_empty'));
+                    exit($nv_Lang->getModule('title_empty'));
                 }
 
                 // Kiểm tra trùng tên nhóm
-                $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
+                $stmt = $db->prepare('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups WHERE title LIKE :title AND group_id!= ' . (int) ($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
                 $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
                 $stmt->execute();
                 if ($stmt->fetchColumn()) {
-                    die(sprintf($nv_Lang->getModule('error_title_exists'), $post['title']));
+                    exit(sprintf($nv_Lang->getModule('error_title_exists'), $post['title']));
                 }
 
                 $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
@@ -527,7 +527,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 }
 
                 $post['group_type'] = $nv_Request->get_int('group_type', 'post', 0);
-                if (!in_array($post['group_type'], [0, 1, 2])) {
+                if (!in_array($post['group_type'], [0, 1, 2], true)) {
                     $post['group_type'] = 0;
                 }
 
@@ -546,14 +546,14 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['email'] = $nv_Request->get_title('email', 'post', '', 1);
                 $check_email = nv_check_valid_email($post['email'], true);
                 if (!empty($post['email']) and $check_email[0] != '') {
-                    die($check_email[0]);
+                    exit($check_email[0]);
                 }
                 $post['email'] = $check_email[1];
             } else {
                 $post['email'] = '';
             }
 
-            if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 ) {
+            if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3) {
                 // Lấy thông tin cấu hình phân quyền
                 $post['config']['access_groups_add'] = $nv_Request->get_int('access_groups_add', 'post', 0);
                 $post['config']['access_groups_del'] = $nv_Request->get_int('access_groups_del', 'post', 0);
@@ -568,7 +568,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             // Thông tin của tất cả các nhóm kể cả các nhóm hệ thống
             $post['group_color'] = nv_substr($nv_Request->get_title('group_color', 'post', '', 1), 0, 10);
 
-            if (preg_match("/^([0-9a-fA-F]{6})$/i", $post['group_color']) or preg_match("/^([0-9a-fA-F]{3})$/i", $post['group_color'])) {
+            if (preg_match('/^([0-9a-fA-F]{6})$/i', $post['group_color']) or preg_match('/^([0-9a-fA-F]{3})$/i', $post['group_color'])) {
                 $post['group_color'] = '#' . $post['group_color'];
             }
 
@@ -586,17 +586,17 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
             if (isset($post['id'])) {
                 if ($nv_Request->isset_request('add', 'get')) {
-                    $weight = $db->query("SELECT max(weight) FROM " . NV_MOD_TABLE . "_groups WHERE idsite=" . $global_config['idsite'])->fetchColumn();
-                    $weight = intval($weight) + 1;
+                    $weight = $db->query('SELECT max(weight) FROM ' . NV_MOD_TABLE . '_groups WHERE idsite=' . $global_config['idsite'])->fetchColumn();
+                    $weight = (int) $weight + 1;
 
-                    $_sql = "INSERT INTO " . NV_MOD_TABLE . "_groups (
+                    $_sql = 'INSERT INTO ' . NV_MOD_TABLE . '_groups (
                         title, email, description, content, group_type, group_color, group_avatar, require_2step_admin, require_2step_site, is_default, add_time, exp_time, weight, act,
                         idsite, numbers, siteus, config
                     ) VALUES (
-                        :title, :email, :description, :content, " . $post['group_type'] . ", :group_color,
-                        :group_avatar, " . $post['require_2step_admin'] . ", " . $post['require_2step_site'] . ", " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
-                        " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ", :config
-                    )";
+                        :title, :email, :description, :content, ' . $post['group_type'] . ', :group_color,
+                        :group_avatar, ' . $post['require_2step_admin'] . ', ' . $post['require_2step_site'] . ', ' . $post['is_default'] . ', ' . NV_CURRENTTIME . ', ' . $post['exp_time'] . ',
+                        ' . $weight . ', 1, ' . $global_config['idsite'] . ', 0, ' . $post['siteus'] . ', :config
+                    )';
 
                     $data_insert = [];
                     $data_insert['title'] = $post['title'];
@@ -610,7 +610,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
                 } elseif ($post['id'] > 9) {
                     // Sửa nhóm tự tạo
-                    $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups SET
+                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . "_groups SET
                         title = :title,
                         email = :email,
                         description = :description,
@@ -618,9 +618,9 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                         group_type = '" . $post['group_type'] . "',
                         group_color = :group_color,
                         group_avatar = :group_avatar,
-                        require_2step_admin = " . $post['require_2step_admin'] . ",
-                        require_2step_site = " . $post['require_2step_site'] . ",
-                        is_default = " . $post['is_default'] . ",
+                        require_2step_admin = " . $post['require_2step_admin'] . ',
+                        require_2step_site = ' . $post['require_2step_site'] . ',
+                        is_default = ' . $post['is_default'] . ",
                         exp_time ='" . $post['exp_time'] . "',
                         siteus = '" . $post['siteus'] . "',
                         config = :config
@@ -637,14 +637,14 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     $ok = $stmt->execute();
                 } else {
                     // Sửa nhóm hệ thống
-                    $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups SET
+                    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . '_groups SET
                         email = :email,
                         group_color = :group_color,
                         group_avatar = :group_avatar,
-                        require_2step_admin = " . $post['require_2step_admin'] . ",
-                        require_2step_site = " . $post['require_2step_site'] . ",
+                        require_2step_admin = ' . $post['require_2step_admin'] . ',
+                        require_2step_site = ' . $post['require_2step_site'] . ',
                         config = :config
-                    WHERE group_id=" . $post['id']);
+                    WHERE group_id=' . $post['id']);
 
                     $stmt->bindParam(':email', $post['email']);
                     $stmt->bindParam(':group_color', $post['group_color']);
@@ -658,10 +658,9 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             if ($ok) {
                 $nv_Cache->delMod($module_name);
                 nv_insert_logs(NV_LANG_DATA, $module_name, $log_title, 'Id: ' . $post['id'], $admin_info['userid']);
-                die('OK');
-            } else {
-                die($nv_Lang->getModule('errorsave'));
+                exit('OK');
             }
+            exit($nv_Lang->getModule('errorsave'));
         }
 
         if ($nv_Request->isset_request('edit', 'get')) {
@@ -671,22 +670,20 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $post['siteus'] = $post['siteus'] ? ' checked="checked"' : '';
             $post['id'] = $post['group_id'];
 
-            if(empty($post['config'])){
+            if (empty($post['config'])) {
                 $post['config']['access_groups_add'] = $post['config']['access_groups_del'] = 1;
                 $post['config']['access_addus'] = $post['config']['access_waiting'] = $post['config']['access_editus'] = $post['config']['access_delus'] = $post['config']['access_passus'] = $post['config']['access_passus'] = 0;
-            }
-            else {
+            } else {
                 $post['config'] = unserialize($post['config']);
             }
         } else {
-            $post['title'] = $post['email'] =  $post['description'] = $post['content'] = $post['exp_time'] = '';
+            $post['title'] = $post['email'] = $post['description'] = $post['content'] = $post['exp_time'] = '';
             $post['group_type'] = 0;
             $post['id'] = $post['is_default'] = $post['require_2step_admin'] = $post['require_2step_site'] = 0;
 
             $post['config']['access_groups_add'] = $post['config']['access_groups_del'] = 1;
             $post['config']['access_addus'] = $post['config']['access_waiting'] = $post['config']['access_editus'] = $post['config']['access_delus'] = $post['config']['access_passus'] = $post['config']['access_passus'] = 0;
         }
-
 
         $post['content'] = htmlspecialchars(nv_editor_br2nl($post['content']));
         $post['is_default'] = $post['is_default'] ? ' checked="checked"' : '';
@@ -718,7 +715,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $_cont = '<textarea style="width:100%;height:300px" name="content" id="content">' . $post['content'] . '</textarea>';
         }
 
-        for ($i = 0; $i <= 2; $i ++) {
+        for ($i = 0; $i <= 2; ++$i ) {
             $group_type = [
                 'key' => $i,
                 'title' => $nv_Lang->getModule('group_type_' . $i),
@@ -743,7 +740,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $xtpl->parse('add.email');
         }
 
-        if ($post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 ) {
+        if ($post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3) {
             $xtpl->parse('add.config');
         }
 
@@ -751,11 +748,11 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $xtpl->parse('add.group_color');
         }
 
-        if (in_array($global_config['two_step_verification'], [1, 3])) {
+        if (in_array((int) $global_config['two_step_verification'], [1, 3], true)) {
             $xtpl->parse('add.2step_admin_default');
             $xtpl->parse('add.2step_admin_default_active');
         }
-        if (in_array($global_config['two_step_verification'], [2, 3])) {
+        if (in_array((int) $global_config['two_step_verification'], [2, 3], true)) {
             $xtpl->parse('add.2step_site_default');
             $xtpl->parse('add.2step_site_default_active');
         }
@@ -778,7 +775,7 @@ if ($nv_Request->isset_request('list', 'get')) {
     foreach ($groupsList as $group_id => $values) {
         $xtpl->assign('GROUP_ID', $group_id);
         if ($group_id < 4 or $group_id > 9) {
-            $link_userlist = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op .'&amp;userlist=' . $group_id;
+            $link_userlist = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;userlist=' . $group_id;
         } elseif ($group_id == 4) {
             $link_userlist = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;usactive=-3';
         } elseif ($group_id == 7) {
@@ -799,7 +796,7 @@ if ($nv_Request->isset_request('list', 'get')) {
         if (defined('NV_IS_SPADMIN') and $values['idsite'] == $global_config['idsite']) {
             $_bg = empty($global_config['idsite']) ? 1 : $weight_op;
 
-            for ($i = $_bg; $i <= $allGroupCount; $i++) {
+            for ($i = $_bg; $i <= $allGroupCount; ++$i) {
                 $opt = [
                     'value' => $i,
                     'selected' => $i == ($_bg + $values['weight'] - 1) ? ' selected="selected"' : ''
@@ -836,7 +833,7 @@ if ($nv_Request->isset_request('list', 'get')) {
     $contents = $xtpl->text('list');
 
     include NV_ROOTDIR . '/includes/header.php';
-    echo ($contents);
+    echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 }
 

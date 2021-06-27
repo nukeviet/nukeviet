@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sat, 10 Dec 2011 06:46:54 GMT
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_voting_select')) {
@@ -33,10 +34,11 @@ if (!nv_function_exists('nv_block_voting_select')) {
         $list = $nv_Cache->db($sql, 'vid', $module);
         foreach ($list as $l) {
             $sel = ($data_block['vid'] == $l['vid']) ? ' selected' : '';
-            $html .= "<option value=\"" . $l['vid'] . "\" " . $sel . ">" . $l['question'] . "</option>";
+            $html .= '<option value="' . $l['vid'] . '" ' . $sel . '>' . $l['question'] . '</option>';
         }
         $html .= '</select></div>';
         $html .= '</div>';
+
         return $html;
     }
 
@@ -51,10 +53,11 @@ if (!nv_function_exists('nv_block_voting_select')) {
     {
         global $nv_Request;
 
-        $return = array();
-        $return['error'] = array();
-        $return['config'] = array();
+        $return = [];
+        $return['error'] = [];
+        $return['config'] = [];
         $return['config']['vid'] = $nv_Request->get_int('vid', 'post', 0);
+
         return $return;
     }
 
@@ -72,12 +75,12 @@ if (!nv_function_exists('nv_block_voting_select')) {
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
 
-        $sql = "SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " WHERE act=1";
+        $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
         $list = $nv_Cache->db($sql, 'vid', 'voting');
         if (isset($list[$block_config['vid']])) {
             $current_voting = $list[$block_config['vid']];
             if ($current_voting['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups($current_voting['groups_view'])) {
-                $sql = "SELECT id, vid, title, url FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows WHERE vid = " . $block_config['vid'] . " ORDER BY id ASC";
+                $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $block_config['vid'] . ' ORDER BY id ASC';
                 $list = $nv_Cache->db($sql, '', 'voting');
 
                 if (empty($list)) {
@@ -95,22 +98,22 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/Voting.js')) {
-                    $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/js/Voting.js\"></script>\n";
+                    $my_footer .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'themes/' . $block_theme . "/js/Voting.js\"></script>\n";
                 }
 
-                $action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
+                $action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
 
-                $voting_array = array(
+                $voting_array = [
                     'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                     'accept' => $current_voting['acceptcm'],
-                    'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
+                    'active_captcha' => ((int) $current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
                     'errsm' => $current_voting['acceptcm'] > 1 ? sprintf($nv_Lang->getModule('voting_warning_all'), $current_voting['acceptcm']) : $nv_Lang->getModule('voting_warning_accept1'),
                     'vid' => $current_voting['vid'],
                     'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
                     'action' => $action,
                     'langresult' => $nv_Lang->getModule('voting_result'),
                     'langsubmit' => $nv_Lang->getModule('voting_hits')
-                );
+                ];
 
                 $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
                 $xtpl->assign('VOTING', $voting_array);
@@ -121,7 +124,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                         $row['title'] = '<a target="_blank" href="' . $row['url'] . '">' . $row['title'] . '</a>';
                     }
                     $xtpl->assign('RESULT', $row);
-                    if ((int)$current_voting['acceptcm'] > 1) {
+                    if ((int) $current_voting['acceptcm'] > 1) {
                         $xtpl->parse('main.resultn');
                     } else {
                         $xtpl->parse('main.result1');
@@ -146,6 +149,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 $xtpl->parse('main');
+
                 return $xtpl->text('main');
             }
         }

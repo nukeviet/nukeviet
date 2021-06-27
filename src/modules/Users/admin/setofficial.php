@@ -1,35 +1,36 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+    exit('Wrong URL');
 }
 
 $userid = $nv_Request->get_int('userid', 'post', 0);
 
 if (!$userid or $admin_info['admin_id'] == $userid) {
-    die('NO');
+    exit('NO');
 }
 
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid = ' . $userid;
 $row = $db->query($sql)->fetch();
 
 if (!empty($row)) {
-    $row['in_groups'] = explode(',', $row['in_groups']);
+    $row['in_groups'] = array_map('intval', explode(',', $row['in_groups']));
 
-    if ($row['group_id'] != 7 and !in_array(7, $row['in_groups'])) {
-        die('NO');
+    if ($row['group_id'] != 7 and !in_array(7, $row['in_groups'], true)) {
+        exit('NO');
     }
 
     if ($row['group_id'] == 7) {
@@ -46,7 +47,7 @@ if (!empty($row)) {
     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
 
     $nv_Cache->delMod($module_name);
-    die('OK');
+    exit('OK');
 }
 
-die('NO');
+exit('NO');
