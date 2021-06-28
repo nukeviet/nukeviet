@@ -410,7 +410,7 @@ function nv_fix_group_order($parentid = 0, $sort = 0, $lev = 0)
     if ($parentid > 0) {
         $sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET numsubgroup=" . $numsubgroup;
         if ($numsubgroup == 0) {
-            $sql .= ",subgroupid='', viewgroup='viewcat_page_list'";
+            $sql .= ",subgroupid='', viewgroup='viewgrid'";
         } else {
             $sql .= ",subgroupid='" . implode(",", $array_group_order) . "'";
         }
@@ -471,7 +471,7 @@ function shops_show_group_list($parentid = 0)
         while (list ($groupid, $parentid, $title, $description, $weight, $viewgroup, $numsubgroup, $inhome, $indetail, $in_order) = $result->fetch(3)) {
             $array_viewgroup = $array_viewcat_nosub;
             if (!array_key_exists($viewgroup, $array_viewgroup)) {
-                $viewgroup = "viewcat_page_list";
+                $viewgroup = "viewgrid";
                 $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET viewgroup= :viewgroup WHERE groupid=" . intval($groupid));
                 $stmt->bindParam(':viewgroup', $viewgroup, PDO::PARAM_STR);
                 $stmt->execute();
