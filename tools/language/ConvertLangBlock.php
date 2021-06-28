@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 set_time_limit(0);
 
 function list_all_file($dir = '', $base_dir = '')
 {
-    $file_list = array();
+    $file_list = [];
 
     if (is_dir($dir)) {
         $array_filedir = scandir($dir);
@@ -50,15 +51,15 @@ $allfiles = list_all_file(NV_ROOTDIR);
 foreach ($allfiles as $filepath) {
     $filecontents = $filecontentsNew = file_get_contents(NV_ROOTDIR . '/' . $filepath);
 
-    $filecontentsNew = preg_replace("/([a-zA-Z0-9\_]+)[\s]*\([\s]*\\\$module[\s]*\,[\s]*\\\$data\_block[\s]*\,[\s]*\\\$lang\_block[\s]*\)/", "\\1(\$module, \$data_block, \$nv_Lang)", $filecontentsNew);
-    $filecontentsNew = preg_replace("/([a-zA-Z0-9\_]+)[\s]*\([\s]*\\\$module[\s]*\,[\s]*\\\$lang\_block[\s]*\)/", "\\1(\$module, \$nv_Lang)", $filecontentsNew);
-    $filecontentsNew = preg_replace("/\*([\s\n\t\r]+)\* \@param mixed \\\$module([\s\n\t\r]+)\* \@param mixed \\\$data\_block([\s\n\t\r]+)\* \@param mixed \\\$lang\_block/", "*\\1* @param mixed \$module\\2* @param mixed \$data_block\\3* @param mixed \$nv_Lang", $filecontentsNew);
-    $filecontentsNew = preg_replace("/\*([\s\n\t\r]+)\* \@param mixed \\\$module([\s\n\t\r]+)\* \@param mixed \\\$lang\_block/", "*\\1* @param mixed \$module\\2* @param mixed \$nv_Lang", $filecontentsNew);
+    $filecontentsNew = preg_replace("/([a-zA-Z0-9\_]+)[\s]*\([\s]*\\\$module[\s]*\,[\s]*\\\$data\_block[\s]*\,[\s]*\\\$lang\_block[\s]*\)/", '\\1($module, $data_block, $nv_Lang)', $filecontentsNew);
+    $filecontentsNew = preg_replace("/([a-zA-Z0-9\_]+)[\s]*\([\s]*\\\$module[\s]*\,[\s]*\\\$lang\_block[\s]*\)/", '\\1($module, $nv_Lang)', $filecontentsNew);
+    $filecontentsNew = preg_replace("/\*([\s\n\t\r]+)\* \@param mixed \\\$module([\s\n\t\r]+)\* \@param mixed \\\$data\_block([\s\n\t\r]+)\* \@param mixed \\\$lang\_block/", '*\\1* @param mixed $module\\2* @param mixed $data_block\\3* @param mixed $nv_Lang', $filecontentsNew);
+    $filecontentsNew = preg_replace("/\*([\s\n\t\r]+)\* \@param mixed \\\$module([\s\n\t\r]+)\* \@param mixed \\\$lang\_block/", '*\\1* @param mixed $module\\2* @param mixed $nv_Lang', $filecontentsNew);
 
     if ($filecontentsNew != $filecontents) {
-        echo("Change: " . $filepath . "\n");
+        echo 'Change: ' . $filepath . "\n";
         file_put_contents(NV_ROOTDIR . '/' . $filepath, $filecontentsNew, LOCK_EX);
     }
 }
 
-echo("OK\n");
+echo "OK\n";

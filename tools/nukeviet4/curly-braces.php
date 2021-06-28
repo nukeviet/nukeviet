@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 set_time_limit(0);
 
 function list_all_file($dir = '', $base_dir = '')
 {
-    $file_list = array();
+    $file_list = [];
 
     if (is_dir($dir)) {
         $array_filedir = scandir($dir);
@@ -44,13 +45,13 @@ $allfiles = list_all_file(NV_ROOTDIR);
 
 foreach ($allfiles as $filepath) {
     $is_line_by_line_check = 0;
-    $handle_read = fopen(NV_ROOTDIR . '/' . $filepath, "r");
+    $handle_read = fopen(NV_ROOTDIR . '/' . $filepath, 'r');
     $line = 0;
     while (($buffer = fgets($handle_read, 4096)) !== false) {
-        $line++;
+        ++$line;
         if (preg_match('/\$([a-zA-Z0-9\_\n\s\r\[\]]+)\{/s', $buffer)) {
-            echo("Error in line " . $line . ": " . $filepath . "\n");
-            $is_line_by_line_check++;
+            echo 'Error in line ' . $line . ': ' . $filepath . "\n";
+            ++$is_line_by_line_check;
         }
     }
     if (!feof($handle_read)) {
@@ -60,9 +61,9 @@ foreach ($allfiles as $filepath) {
     if ($is_line_by_line_check == 0) {
         $filecontents = file_get_contents(NV_ROOTDIR . '/' . $filepath);
         if (preg_match('/\$([a-zA-Z0-9\_\n\s\r\[\]]+)\{/s', $filecontents)) {
-            echo("Error in: " . $filepath . "\n");
+            echo 'Error in: ' . $filepath . "\n";
         }
     }
 }
 
-echo("OK\n");
+echo "OK\n";

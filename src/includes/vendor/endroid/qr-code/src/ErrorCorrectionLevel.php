@@ -19,6 +19,9 @@ use MyCLabs\Enum\Enum;
  * @method static ErrorCorrectionLevel MEDIUM()
  * @method static ErrorCorrectionLevel QUARTILE()
  * @method static ErrorCorrectionLevel HIGH()
+ *
+ * @extends Enum<string>
+ * @psalm-immutable
  */
 class ErrorCorrectionLevel extends Enum
 {
@@ -27,6 +30,9 @@ class ErrorCorrectionLevel extends Enum
     const QUARTILE = 'quartile';
     const HIGH = 'high';
 
+    /**
+     * @psalm-suppress ImpureMethodCall
+     */
     public function toBaconErrorCorrectionLevel(): BaconErrorCorrectionLevel
     {
         $name = strtoupper(substr($this->getValue(), 0, 1));

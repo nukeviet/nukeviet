@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 set_time_limit(0);
@@ -13,7 +14,7 @@ set_time_limit(0);
 /**
  * @param string $dir
  * @param string $base_dir
- * @return mixed[]|array[]
+ * @return array[]|mixed[]
  */
 function list_all_file($dir = '', $base_dir = '')
 {
@@ -45,7 +46,7 @@ function list_all_file($dir = '', $base_dir = '')
 
 define('NV_ROOTDIR', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../src')));
 
-echo('<pre><code style="font-size: 16px;font-family: Courier New;">');
+echo '<pre><code style="font-size: 16px;font-family: Courier New;">';
 
 $debug = false;
 
@@ -74,7 +75,7 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
     if (($offset = strpos($linecontents, 'nv_apply_hook')) !== false) {
         $linecontents = substr($linecontents, $offset);
     } else {
-        die("Không tìm thấy hàm nv_apply_hook\n");
+        exit("Không tìm thấy hàm nv_apply_hook\n");
     }
     if ($debug) {
         echo "<strong>Cắt lấy từ hàm nv_apply_hook về sau:</strong>\n";
@@ -83,10 +84,10 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
 
     // Kiểm tra xem kết thúc hàm hay chưa
     while (substr_count($linecontents, ')') < substr_count($linecontents, '(')) {
-        $line++;
+        ++$line;
         $linecontents .= "\n" . $filecontents[$line];
         if ($line >= $numberLines) {
-            die("Không tìm thấy chỗ kết thúc hàm\n");
+            exit("Không tìm thấy chỗ kết thúc hàm\n");
         }
     }
     if ($debug) {
@@ -95,7 +96,7 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
     }
 
     // Đưa hàm về 1 dòng
-    $linecontents = str_replace("\n", " ", $linecontents);
+    $linecontents = str_replace("\n", ' ', $linecontents);
     if ($debug) {
         echo "<strong>Đưa hàm về 1 dòng:</strong>\n";
         print_r($linecontents . "\n\n");
@@ -153,15 +154,15 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
         while (1) {
             $char = mb_substr($linecontents, $_offset, 1);
             if ($char == $bracket_open) {
-                $bracket_open_count++;
+                ++$bracket_open_count;
             } elseif ($char == $bracket_close) {
-                $bracket_close_count++;
+                ++$bracket_close_count;
             }
             if ($bracket_open_count <= $bracket_close_count) {
                 break;
             }
             $array_para .= $char;
-            $_offset++;
+            ++$_offset;
             if ($_offset >= $_line_length) {
                 break;
             }
@@ -170,9 +171,8 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
         if (!empty($array_para)) {
             $linecontents = preg_replace('/^' . preg_quote($array_para, '/') . '[\s]*[\)|\]]+[\s]*\,*[\s]*/', '', $linecontents);
         }
-    } else {
-        // FIXME tham số đầu vào từ 1 biến khác cần viết thêm
     }
+    // FIXME tham số đầu vào từ 1 biến khác cần viết thêm
 
     if ($debug) {
         echo "<strong>Tham số đầu vào</strong>\n";
@@ -221,27 +221,27 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
         if ($size > $maxSize) {
             $maxSize = $size;
         }
-        $i++;
+        ++$i;
     }
     if ($maxSize < 15) {
         $maxSize = 15;
     }
     $heading_pad = '';
-    for ($i = ($maxSize - 8); $i > 0; $i--) {
+    for ($i = ($maxSize - 8); $i > 0; --$i) {
         $heading_pad .= ' ';
     }
 
-    echo("<h1 style=\"margin:0;padding:0;\">====== " . $hook_tag . " ======</h1>\n");
-    echo("Xảy_ra_khi_nào.\n\n");
-    echo("<h3 style=\"margin:0;padding:0;\">==== Tham số ====</h3>\n");
-    echo("^ STT ^ Tên biến" . $heading_pad . " ^ Kiểu dữ liệu    ^ Ghi chú                ^\n");
+    echo '<h1 style="margin:0;padding:0;">====== ' . $hook_tag . " ======</h1>\n";
+    echo "Xảy_ra_khi_nào.\n\n";
+    echo "<h3 style=\"margin:0;padding:0;\">==== Tham số ====</h3>\n";
+    echo '^ STT ^ Tên biến' . $heading_pad . " ^ Kiểu dữ liệu    ^ Ghi chú                ^\n";
 
     foreach ($array_table_rows as $ii => $row) {
-        echo("| " . str_pad($ii, 3, ' ', STR_PAD_RIGHT) . " | " . str_pad($row, $maxSize, ' ', STR_PAD_RIGHT) . " |                 |                        |\n");
+        echo '| ' . str_pad($ii, 3, ' ', STR_PAD_RIGHT) . ' | ' . str_pad($row, $maxSize, ' ', STR_PAD_RIGHT) . " |                 |                        |\n";
     }
 
-    echo("\n");
-    echo("<h3 style=\"margin:0;padding:0;\">==== Dữ liệu trả về ====</h3>\n");
+    echo "\n";
+    echo "<h3 style=\"margin:0;padding:0;\">==== Dữ liệu trả về ====</h3>\n";
 
     if (empty($return_var)) {
         echo "Tùy người lập trình\n\n";
@@ -249,28 +249,28 @@ if (isset($_GET['template']) and isset($_GET['f']) and isset($_GET['l'])) {
         echo 'Biến \'\'' . htmlspecialchars($return_var) . '\'\'' . "\n\n";
     }
 
-    echo("<h3 style=\"margin:0;padding:0;\">==== Ví dụ viết plugin ====</h3>\n");
-    echo(htmlspecialchars('<code php>') . "\n");
-    echo(htmlspecialchars("nv_add_hook(\$module_name, '" . $hook_tag . "', \$priority, function(\$vars) {") . "\n");
+    echo "<h3 style=\"margin:0;padding:0;\">==== Ví dụ viết plugin ====</h3>\n";
+    echo htmlspecialchars('<code php>') . "\n";
+    echo htmlspecialchars("nv_add_hook(\$module_name, '" . $hook_tag . "', \$priority, function(\$vars) {") . "\n";
 
     if ($array_table_rows) {
         foreach ($array_table_rows as $ii => $row) {
-            echo("    " . $row . " = \$vars[" . $ii . "];\n");
+            echo '    ' . $row . ' = $vars[' . $ii . "];\n";
         }
-        echo("\n");
+        echo "\n";
     }
 
-    echo(htmlspecialchars("    // Thực hiện code hook tại đây...") . "\n");
+    echo htmlspecialchars('    // Thực hiện code hook tại đây...') . "\n";
 
     if ($return_var) {
-        echo(htmlspecialchars("\n    return " . $return_var . ";") . "\n");
+        echo htmlspecialchars("\n    return " . $return_var . ';') . "\n";
     }
 
-    echo(htmlspecialchars("});") . "\n");
-    echo(htmlspecialchars('</code>') . "\n");
+    echo htmlspecialchars('});') . "\n";
+    echo htmlspecialchars('</code>') . "\n";
 
-    echo('</code></pre>');
-    die();
+    echo '</code></pre>';
+    exit();
 }
 
 /*
@@ -300,7 +300,7 @@ if (isset($_GET['f']) and isset($_GET['c'])) {
 
         $offset_line = -1;
         while (($buffer = fgets($handle, 4096)) !== false) {
-            $offset_line++;
+            ++$offset_line;
 
             // Tìm kiếm line trùng đầu tiên
             if (!$offset_check and (($str_pos = strpos($buffer, $code[0])) !== false)) {
@@ -312,13 +312,14 @@ if (isset($_GET['f']) and isset($_GET['c'])) {
 
                 // Nếu chỉ có 1 line thì đánh dấu luôn hết thúc highlight
                 if ($checkNumber == 1) {
-                    $array_buffer_out = str_replace('---[[START:HIGHLIGHT]]---', "<span id=\"highlight\" style=\"background-color:#e01a31;\"><a style=\"text-decoration: none;color:#fff;\" href=\"?template=1&amp;f=" . urlencode($file) . "&amp;l=" . $start_line . "\" target=\"_blank\">", $array_buffer_out);
-                    $array_buffer_out .= "</a></span>";
+                    $array_buffer_out = str_replace('---[[START:HIGHLIGHT]]---', '<span id="highlight" style="background-color:#e01a31;"><a style="text-decoration: none;color:#fff;" href="?template=1&amp;f=' . urlencode($file) . '&amp;l=' . $start_line . '" target="_blank">', $array_buffer_out);
+                    $array_buffer_out .= '</a></span>';
                     $stack_bracket_str = '';
                 }
                 $array_buffer_out .= "\n";
                 continue;
-            } elseif (!$offset_check or $checkNumber == 1) {
+            }
+            if (!$offset_check or $checkNumber == 1) {
                 // Chưa tìm thấy line bắt đầu hoặc check line trên 1 dòng thì xuất ra
                 $array_buffer_out .= htmlspecialchars(rtrim($buffer)) . "\n";
                 $stack_bracket_str = '';
@@ -347,14 +348,14 @@ if (isset($_GET['f']) and isset($_GET['c'])) {
                 $stack_bracket_str .= $buffer;
 
                 if ($is_equal) {
-                    $offset_check++;
+                    ++$offset_check;
                     if ($offset_check >= $checkNumber) {
                         // FIXME chỗ này đếm ký tự ( và ) nếu có inline-comment mà trong comment có xuất hiện nữa nó chưa đếm chính xác
                         if (substr_count($stack_bracket_str, ')') >= substr_count($stack_bracket_str, '(')) {
                             // Xong lượt check
                             $offset_check = 0;
-                            $array_buffer_out = str_replace('---[[START:HIGHLIGHT]]---', "<span id=\"highlight\" style=\"background-color:#e01a31;\"><a style=\"text-decoration: none;color:#fff;\" href=\"?template=1&amp;f=" . urlencode($file) . "&amp;l=" . $start_line . "\" target=\"_blank\">", $array_buffer_out);
-                            $array_buffer_out .= "</a></span>";
+                            $array_buffer_out = str_replace('---[[START:HIGHLIGHT]]---', '<span id="highlight" style="background-color:#e01a31;"><a style="text-decoration: none;color:#fff;" href="?template=1&amp;f=' . urlencode($file) . '&amp;l=' . $start_line . '" target="_blank">', $array_buffer_out);
+                            $array_buffer_out .= '</a></span>';
                         }
                     }
                 } else {
@@ -376,8 +377,8 @@ if (isset($_GET['f']) and isset($_GET['c'])) {
         echo $array_buffer_out;
     }
 
-    echo('</code></pre>');
-    die();
+    echo '</code></pre>';
+    exit();
 }
 
 /*
@@ -398,7 +399,7 @@ foreach ($allfiles as $filepath) {
     if ($filepath == 'index.php') {
         if ($debug) {
             print_r($m);
-            die();
+            exit();
         }
     }
 
@@ -424,11 +425,11 @@ foreach ($allfiles as $filepath) {
     }
 }
 
-echo("<h1 style=\"margin:0;padding:0;\">====== Danh sách các hook của NukeViet ======</h1>
+echo '<h1 style="margin:0;padding:0;">====== Danh sách các hook của NukeViet ======</h1>
 > Khái niệm hook chỉ có từ NukeViet 5 trở đi
 
-<h2 style=\"margin:0;padding:0;\">===== Hook của hệ thống =====</h2>
-");
+<h2 style="margin:0;padding:0;">===== Hook của hệ thống =====</h2>
+';
 
 ksort($hook_sys);
 ksort($hook_modules);
@@ -437,15 +438,15 @@ foreach ($hook_modules as $mod => $modData) {
 }
 
 foreach ($hook_sys as $tag => $data) {
-    echo("  * [[<a style=\"text-decoration: none;\" href=\"?f=" . urlencode($data['file']) . "&amp;c=" . urlencode($data['code']) . "#highlight\" target=\"_blank\">nukeviet5:codex:hooks-reference:" . $tag . "|" . $tag . "</a>]]\n");
+    echo '  * [[<a style="text-decoration: none;" href="?f=' . urlencode($data['file']) . '&amp;c=' . urlencode($data['code']) . '#highlight" target="_blank">nukeviet5:codex:hooks-reference:' . $tag . '|' . $tag . "</a>]]\n";
 }
 
 foreach ($hook_modules as $module => $datas) {
-    echo("\n<h2 style=\"margin:0;padding:0;\">===== Hook của module " . $module . " =====</h2>\n");
+    echo "\n<h2 style=\"margin:0;padding:0;\">===== Hook của module " . $module . " =====</h2>\n";
     foreach ($datas as $tag => $data) {
-        echo("  * [[<a style=\"text-decoration: none;\" href=\"?f=" . urlencode($data['file']) . "&amp;c=" . urlencode($data['code']) . "#highlight\" target=\"_blank\">nukeviet5:codex:hooks-reference:" . $module . ":" . $tag . "|" . $tag . "</a>]]\n");
+        echo '  * [[<a style="text-decoration: none;" href="?f=' . urlencode($data['file']) . '&amp;c=' . urlencode($data['code']) . '#highlight" target="_blank">nukeviet5:codex:hooks-reference:' . $module . ':' . $tag . '|' . $tag . "</a>]]\n";
     }
 }
 
-echo("\n");
-echo('</code></pre>');
+echo "\n";
+echo '</code></pre>';

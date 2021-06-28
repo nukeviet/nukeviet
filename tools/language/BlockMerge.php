@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_ADMIN', true);
@@ -83,9 +84,9 @@ foreach ($array_modules as $module_file) {
                 // Đọc nội dung file ini tìm ra ngôn ngữ
                 $xml = simplexml_load_file(NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $block_info['name'] . '.ini');
                 $xmllanguage = $xml->xpath('language');
-                $language = (empty($xmllanguage)) ? array() : (array)$xmllanguage[0];
+                $language = (empty($xmllanguage)) ? [] : (array) $xmllanguage[0];
                 if (isset($language[$lang])) {
-                    $lang_block = (array)$language[$lang];
+                    $lang_block = (array) $language[$lang];
                 }
             }
 
@@ -101,7 +102,7 @@ foreach ($array_modules as $module_file) {
                         $_key_new = 'bl_' . $_key;
                         // Nếu key chuyển mà có thì báo lỗi
                         if (isset($finalLangModuleNew[$_key_new]) and $finalLangModuleNew[$_key_new] != $_value) {
-                            die('Error key exists ' . $_key_new . ' lang ' . $lang . ' module ' . $module_file . ' block ' . $block_info['php_file']);
+                            exit('Error key exists ' . $_key_new . ' lang ' . $lang . ' module ' . $module_file . ' block ' . $block_info['php_file']);
                         }
                         // Nếu có key mà khác lang thì chuyển key prefix
                         $lang_block_convert[] = [
@@ -127,15 +128,15 @@ foreach ($array_modules as $module_file) {
                 $content_lang .= "/**\n";
                 $content_lang .= "* @Project NUKEVIET 4.x\n";
                 $content_lang .= "* @Author VINADES.,JSC <contact@vinades.vn>\n";
-                $content_lang .= "* @Copyright (C) " . date("Y") . " VINADES.,JSC. All rights reserved\n";
-                $content_lang .= "* @Language " . $language_array[$lang]['name'] . "\n";
+                $content_lang .= '* @Copyright (C) ' . date('Y') . " VINADES.,JSC. All rights reserved\n";
+                $content_lang .= '* @Language ' . $language_array[$lang]['name'] . "\n";
                 $content_lang .= "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n";
-                $content_lang .= "* @Createdate " . gmdate("M d, Y, h:i:s A", $createdate) . "\n";
+                $content_lang .= '* @Createdate ' . gmdate('M d, Y, h:i:s A', $createdate) . "\n";
                 $content_lang .= "*/\n";
                 $content_lang .= "\nif (!defined('NV_MAINFILE')) {";
                 $content_lang .= "\n    die('Stop!!!');\n}\n\n";
 
-                $finalLangTranslator['info'] = (isset($finalLangTranslator['info'])) ? $finalLangTranslator['info'] : "";
+                $finalLangTranslator['info'] = (isset($finalLangTranslator['info'])) ? $finalLangTranslator['info'] : '';
 
                 $content_lang .= "\$lang_translator['author'] = '" . str_replace(['(', ')'], ['<', '>'], $finalLangTranslator['author']) . "';\n";
                 $content_lang .= "\$lang_translator['createdate'] = '" . $finalLangTranslator['createdate'] . "';\n";

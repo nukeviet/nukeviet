@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 set_time_limit(0);
 
 function list_all_file($dir = '', $base_dir = '')
 {
-    $file_list = array();
+    $file_list = [];
 
     if (is_dir($dir)) {
         $array_filedir = scandir($dir);
@@ -75,7 +76,7 @@ foreach ($allfiles as $filepath) {
             $array_variable = array_map('trim', explode(',', $m[1][$k]));
 
             $isGlobalLang = false;
-            $newVariable = array();
+            $newVariable = [];
 
             foreach ($array_variable as $vk => $vv) {
                 if ($vv == '$lang_global' or $vv == '$lang_module' or $vv == '$lang_block') {
@@ -111,9 +112,9 @@ foreach ($allfiles as $filepath) {
     $filecontentsNew = preg_replace("/\\\$lang\_block[\s]*\[[\s]*('|\")([a-zA-Z0-9\_\-]+)('|\")[\s]*\]/", '$nv_Lang->getBlock(\'\\2\')', $filecontentsNew);
 
     if ($filecontentsNew != $filecontents) {
-        echo("Change: " . $filepath . "\n");
+        echo 'Change: ' . $filepath . "\n";
         file_put_contents(NV_ROOTDIR . '/' . $filepath, $filecontentsNew, LOCK_EX);
     }
 }
 
-echo("OK\n");
+echo "OK\n";
