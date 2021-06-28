@@ -12,13 +12,18 @@ declare(strict_types=1);
 namespace Endroid\QrCode;
 
 use BaconQrCode\Encoder\Encoder;
-use Endroid\QrCode\Exception\InvalidPathException;
+use Endroid\QrCode\Exception\InvalidFontException;
 use Endroid\QrCode\Exception\UnsupportedExtensionException;
+use Endroid\QrCode\Exception\ValidationException;
 use Endroid\QrCode\Writer\WriterInterface;
 
 class QrCode implements QrCodeInterface
 {
     const LABEL_FONT_PATH_DEFAULT = __DIR__.'/../assets/fonts/noto_sans.otf';
+
+    const ROUND_BLOCK_SIZE_MODE_MARGIN = 'margin';
+    const ROUND_BLOCK_SIZE_MODE_SHRINK = 'shrink';
+    const ROUND_BLOCK_SIZE_MODE_ENLARGE = 'enlarge';
 
     private $text;
 
@@ -28,7 +33,7 @@ class QrCode implements QrCodeInterface
     /** @var int */
     private $margin = 10;
 
-    /** @var array */
+    /** @var array<int> */
     private $foregroundColor = [
         'r' => 0,
         'g' => 0,
@@ -36,7 +41,7 @@ class QrCode implements QrCodeInterface
         'a' => 0,
     ];
 
-    /** @var array */
+    /** @var array<int> */
     private $backgroundColor = [
         'r' => 255,
         'g' => 255,
@@ -49,6 +54,9 @@ class QrCode implements QrCodeInterface
 
     /** @var bool */
     private $roundBlockSize = true;
+
+    /** @var string */
+    private $roundBlockSizeMode = self::ROUND_BLOCK_SIZE_MODE_MARGIN;
 
     private $errorCorrectionLevel;
 
@@ -72,7 +80,7 @@ class QrCode implements QrCodeInterface
 
     private $labelAlignment;
 
-    /** @var array */
+    /** @var array<string, int> */
     private $labelMargin = [
         't' => 0,
         'r' => 10,
@@ -86,7 +94,7 @@ class QrCode implements QrCodeInterface
     /** @var WriterInterface|null */
     private $writer;
 
-    /** @var array */
+    /** @var array<mixed> */
     private $writerOptions = [];
 
     /** @var bool */
@@ -132,6 +140,7 @@ class QrCode implements QrCodeInterface
         return $this->margin;
     }
 
+    /** @param array<int> $foregroundColor */
     public function setForegroundColor(array $foregroundColor): void
     {
         if (!isset($foregroundColor['a'])) {
@@ -150,6 +159,7 @@ class QrCode implements QrCodeInterface
         return $this->foregroundColor;
     }
 
+    /** @param array<int> $backgroundColor */
     public function setBackgroundColor(array $backgroundColor): void
     {
         if (!isset($backgroundColor['a'])) {
@@ -178,14 +188,28 @@ class QrCode implements QrCodeInterface
         return $this->encoding;
     }
 
-    public function setRoundBlockSize(bool $roundBlockSize): void
+    public function setRoundBlockSize(bool $roundBlockSize, string $roundBlockSizeMode = self::ROUND_BLOCK_SIZE_MODE_MARGIN): void
     {
         $this->roundBlockSize = $roundBlockSize;
+        $this->setRoundBlockSizeMode($roundBlockSizeMode);
     }
 
     public function getRoundBlockSize(): bool
     {
         return $this->roundBlockSize;
+    }
+
+    public function setRoundBlockSizeMode(string $roundBlockSizeMode): void
+    {
+        if (!in_array($roundBlockSizeMode, [
+            self::ROUND_BLOCK_SIZE_MODE_ENLARGE,
+            self::ROUND_BLOCK_SIZE_MODE_MARGIN,
+            self::ROUND_BLOCK_SIZE_MODE_SHRINK,
+        ])) {
+            throw new ValidationException('Invalid round block size mode: '.$roundBlockSizeMode);
+        }
+
+        $this->roundBlockSizeMode = $roundBlockSizeMode;
     }
 
     public function setErrorCorrectionLevel(ErrorCorrectionLevel $errorCorrectionLevel): void
@@ -200,12 +224,6 @@ class QrCode implements QrCodeInterface
 
     public function setLogoPath(string $logoPath): void
     {
-        $logoPath = realpath($logoPath);
-
-        if (false === $logoPath || !is_file($logoPath)) {
-            throw new InvalidPathException('Invalid logo path: '.$logoPath);
-        }
-
         $this->logoPath = $logoPath;
     }
 
@@ -240,6 +258,7 @@ class QrCode implements QrCodeInterface
         return $this->logoHeight;
     }
 
+    /** @param array<string, int> $labelMargin */
     public function setLabel(string $label, int $labelFontSize = null, string $labelFontPath = null, string $labelAlignment = null, array $labelMargin = null): void
     {
         $this->label = $label;
@@ -281,7 +300,7 @@ class QrCode implements QrCodeInterface
         $resolvedLabelFontPath = (string) realpath($labelFontPath);
 
         if (!is_file($resolvedLabelFontPath)) {
-            throw new InvalidPathException('Invalid label font path: '.$labelFontPath);
+            throw new InvalidFontException('Invalid label font path: '.$labelFontPath);
         }
 
         $this->labelFontPath = $resolvedLabelFontPath;
@@ -302,6 +321,7 @@ class QrCode implements QrCodeInterface
         return $this->labelAlignment->getValue();
     }
 
+    /** @param array<string, int> $labelMargin */
     public function setLabelMargin(array $labelMargin): void
     {
         $this->labelMargin = array_merge($this->labelMargin, $labelMargin);
@@ -335,6 +355,7 @@ class QrCode implements QrCodeInterface
         return $this->writerRegistry->getDefaultWriter();
     }
 
+    /** @param array<string, mixed> $writerOptions */
     public function setWriterOptions(array $writerOptions): void
     {
         $this->writerOptions = $writerOptions;
@@ -428,7 +449,19 @@ class QrCode implements QrCodeInterface
         $data['block_count'] = count($matrix[0]);
         $data['block_size'] = $this->size / $data['block_count'];
         if ($this->roundBlockSize) {
-            $data['block_size'] = intval(floor($data['block_size']));
+            switch ($this->roundBlockSizeMode) {
+                case self::ROUND_BLOCK_SIZE_MODE_ENLARGE:
+                    $data['block_size'] = intval(ceil($data['block_size']));
+                    $this->size = $data['block_size'] * $data['block_count'];
+                    break;
+                case self::ROUND_BLOCK_SIZE_MODE_SHRINK:
+                    $data['block_size'] = intval(floor($data['block_size']));
+                    $this->size = $data['block_size'] * $data['block_count'];
+                    break;
+                case self::ROUND_BLOCK_SIZE_MODE_MARGIN:
+                default:
+                    $data['block_size'] = intval(floor($data['block_size']));
+            }
         }
         $data['inner_width'] = $data['block_size'] * $data['block_count'];
         $data['inner_height'] = $data['block_size'] * $data['block_count'];

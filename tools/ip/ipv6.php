@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
@@ -22,7 +23,7 @@ require NV_ROOTDIR . '/src/geoidInfo.php';
 set_time_limit(0);
 ini_set('memory_limit', '-1');
 
-/**
+/*
  * Bắt đầu tool
  */
 
@@ -43,7 +44,7 @@ $offsetRow = 0;
 
 while (1) {
     try {
-        echo('Offset: ' . $offsetRow . PHP_EOL);
+        echo 'Offset: ' . $offsetRow . PHP_EOL;
         echo 'Reading...' . PHP_EOL;
 
         $chunkFilter = new NukeViet\Files\ChunkReadFilter();
@@ -62,50 +63,49 @@ while (1) {
 
         $maxRow = $sheetData->getHighestRow();
 
-        $loaded_file = array();
+        $loaded_file = [];
 
         if ($maxRow <= 1) {
             echo 'No data.' . PHP_EOL;
-            die('Finish!' . PHP_EOL);
-        } else {
-            $keyloop = 0;
-            $keyecho = 0;
+            exit('Finish!' . PHP_EOL);
+        }
+        $keyloop = 0;
+        $keyecho = 0;
 
-            for ($i = $startRow; $i <= $maxRow; $i++) {
-                $keyloop++;
-                if ($keyloop % 100 == 0) {
-                    $keyecho++;
-                    echo 'Writing step ' . $keyecho . '...' . PHP_EOL;
-                }
+        for ($i = $startRow; $i <= $maxRow; ++$i) {
+            ++$keyloop;
+            if ($keyloop % 100 == 0) {
+                ++$keyecho;
+                echo 'Writing step ' . $keyecho . '...' . PHP_EOL;
+            }
 
-                $ip_range = $sheetData->getCell('A' . $i)->getValue();
-                $geo_id = $sheetData->getCell('B' . $i)->getValue();
+            $ip_range = $sheetData->getCell('A' . $i)->getValue();
+            $geo_id = $sheetData->getCell('B' . $i)->getValue();
 
-                if (isset($array_geo_info[$geo_id])) {
-                    list($range, $netmask) = explode('/', $ip_range, 2);
-                    if (!empty($netmask)) {
-                        $x = explode(':', $range);
-                        $a = $x[0];
+            if (isset($array_geo_info[$geo_id])) {
+                list($range, $netmask) = explode('/', $ip_range, 2);
+                if (!empty($netmask)) {
+                    $x = explode(':', $range);
+                    $a = $x[0];
 
-                        if (!isset($loaded_file[$a]) and file_exists(NV_ROOTDIR . '/release/ip6/' . $a . '.php')) {
-                            $ranges = array();
-                            include NV_ROOTDIR . '/release/ip6/' . $a . '.php';
-                            $loaded_file[$a] = $ranges;
-                        } elseif (isset($loaded_file[$a])) {
-                            $ranges = $loaded_file[$a];
-                        } else {
-                            $ranges = array();
-                        }
-
-                        $ranges[$ip_range] = $array_geo_info[$geo_id];
+                    if (!isset($loaded_file[$a]) and file_exists(NV_ROOTDIR . '/release/ip6/' . $a . '.php')) {
+                        $ranges = [];
+                        include NV_ROOTDIR . '/release/ip6/' . $a . '.php';
                         $loaded_file[$a] = $ranges;
+                    } elseif (isset($loaded_file[$a])) {
+                        $ranges = $loaded_file[$a];
                     } else {
-                        die('IP range invalid on line ' . $startRow . PHP_EOL);
+                        $ranges = [];
                     }
+
+                    $ranges[$ip_range] = $array_geo_info[$geo_id];
+                    $loaded_file[$a] = $ranges;
+                } else {
+                    exit('IP range invalid on line ' . $startRow . PHP_EOL);
                 }
             }
-            $offsetRow = ($offsetRow + $chunkSize);
         }
+        $offsetRow = ($offsetRow + $chunkSize);
 
         foreach ($loaded_file as $fname => $fdata) {
             $file_content = "<?php\n\n" . IP_FILEHEAD . "\n\$ranges = " . nv_print_variable_ip6($fdata) . ";\n";
@@ -117,6 +117,6 @@ while (1) {
     } catch (Exception $ex) {
         echo 'Error:' . PHP_EOL;
         print_r($ex);
-        die(PHP_EOL);
+        exit(PHP_EOL);
     }
 }

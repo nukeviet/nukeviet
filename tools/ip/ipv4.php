@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
@@ -22,7 +23,7 @@ require NV_ROOTDIR . '/src/geoidInfo.php';
 set_time_limit(0);
 ini_set('memory_limit', '-1');
 
-/**
+/*
  * Bắt đầu tool
  */
 
@@ -43,7 +44,7 @@ $offsetRow = 0;
 
 while (1) {
     try {
-        echo('Offset: ' . $offsetRow . PHP_EOL);
+        echo 'Offset: ' . $offsetRow . PHP_EOL;
         echo 'Reading...' . PHP_EOL;
 
         $chunkFilter = new NukeViet\Files\ChunkReadFilter();
@@ -62,82 +63,81 @@ while (1) {
 
         $maxRow = $sheetData->getHighestRow();
 
-        $loaded_file = array();
-        $loaded_file_reverse = array();
+        $loaded_file = [];
+        $loaded_file_reverse = [];
 
         if ($maxRow <= 1) {
             // Ghi lại các file không có từ 0 - 255
-            for ($i = 0; $i <= 255; $i++) {
+            for ($i = 0; $i <= 255; ++$i) {
                 if (!file_exists(NV_ROOTDIR . '/release/ip/' . $i . '.php')) {
                     $file_content = "<?php\n\n" . IP_FILEHEAD . "\n\$ranges=array();\n";
                     file_put_contents(NV_ROOTDIR . '/release/ip/' . $i . '.php', $file_content, LOCK_EX);
                 }
             }
             echo 'No data.' . PHP_EOL;
-            die('Finish!' . PHP_EOL);
-        } else {
-            $keyloop = 0;
-            $keyecho = 0;
+            exit('Finish!' . PHP_EOL);
+        }
+        $keyloop = 0;
+        $keyecho = 0;
 
-            for ($i = $startRow; $i <= $maxRow; $i++) {
-                $keyloop++;
-                if ($keyloop % 100 == 0) {
-                    $keyecho++;
-                    echo 'Writing step ' . $keyecho . '...' . PHP_EOL;
-                }
+        for ($i = $startRow; $i <= $maxRow; ++$i) {
+            ++$keyloop;
+            if ($keyloop % 100 == 0) {
+                ++$keyecho;
+                echo 'Writing step ' . $keyecho . '...' . PHP_EOL;
+            }
 
-                $ip_range = $sheetData->getCell('A' . $i)->getValue();
-                $geo_id = $sheetData->getCell('B' . $i)->getValue();
+            $ip_range = $sheetData->getCell('A' . $i)->getValue();
+            $geo_id = $sheetData->getCell('B' . $i)->getValue();
 
-                if (isset($array_geo_info[$geo_id])) {
-                    list($range, $netmask) = explode('/', $ip_range, 2);
-                    if (!empty($netmask)) {
-                        $x = explode('.', $range);
-                        while (count($x) < 4) {
-                            $x[] = '0';
-                        }
-                        list($a, $b, $c, $d) = $x;
-                        //$range = sprintf("%u.%u.%u.%u", empty($a) ? '0' : $a, empty($b) ? '0' : $b, empty($c) ? '0' : $c, empty($d) ? '0' : $d);
-
-                        $ip_start = ($a * 16777216) + ($b * 65536) + ($c * 256) + ($d);
-                        $ip_end = $ip_start + pow(2, 32 - intval($netmask)) - 1;
-
-                        if (!isset($loaded_file[$a]) and file_exists(NV_ROOTDIR . '/release/ip/' . $a . '.php')) {
-                            $ranges = array();
-                            $ranges_reverse = array();
-                            include NV_ROOTDIR . '/release/ip/' . $a . '.php';
-                            $loaded_file[$a] = $ranges;
-                            foreach ($ranges as $rkey => $rval) {
-                                $ranges_reverse[$rval[0]] = array($rkey, $rval[1]);
-                            }
-                            $loaded_file_reverse[$a] = $ranges_reverse;
-                        } elseif (isset($loaded_file[$a])) {
-                            $ranges = $loaded_file[$a];
-                            $ranges_reverse = $loaded_file_reverse[$a];
-                        } else {
-                            $ranges = array();
-                            $ranges_reverse = array();
-                        }
-
-                        $ip_sbefore = $ip_start - 1;
-
-                        if (isset($ranges_reverse[$ip_sbefore]) and $ranges_reverse[$ip_sbefore][1] == $array_geo_info[$geo_id]) {
-                            $ip_start = $ranges_reverse[$ip_sbefore][0];
-                            unset($ranges_reverse[$ip_sbefore]);
-                        }
-
-                        $ranges[$ip_start] = array($ip_end, $array_geo_info[$geo_id]);
-                        $ranges_reverse[$ip_end] = array($ip_start, $array_geo_info[$geo_id]);
-
-                        $loaded_file[$a] = $ranges;
-                        $loaded_file_reverse[$a] = $ranges_reverse;
-                    } else {
-                        die('IP range invalid on line ' . $startRow . PHP_EOL);
+            if (isset($array_geo_info[$geo_id])) {
+                list($range, $netmask) = explode('/', $ip_range, 2);
+                if (!empty($netmask)) {
+                    $x = explode('.', $range);
+                    while (count($x) < 4) {
+                        $x[] = '0';
                     }
+                    list($a, $b, $c, $d) = $x;
+                    //$range = sprintf("%u.%u.%u.%u", empty($a) ? '0' : $a, empty($b) ? '0' : $b, empty($c) ? '0' : $c, empty($d) ? '0' : $d);
+
+                    $ip_start = ($a * 16777216) + ($b * 65536) + ($c * 256) + ($d);
+                    $ip_end = $ip_start + pow(2, 32 - (int) $netmask) - 1;
+
+                    if (!isset($loaded_file[$a]) and file_exists(NV_ROOTDIR . '/release/ip/' . $a . '.php')) {
+                        $ranges = [];
+                        $ranges_reverse = [];
+                        include NV_ROOTDIR . '/release/ip/' . $a . '.php';
+                        $loaded_file[$a] = $ranges;
+                        foreach ($ranges as $rkey => $rval) {
+                            $ranges_reverse[$rval[0]] = [$rkey, $rval[1]];
+                        }
+                        $loaded_file_reverse[$a] = $ranges_reverse;
+                    } elseif (isset($loaded_file[$a])) {
+                        $ranges = $loaded_file[$a];
+                        $ranges_reverse = $loaded_file_reverse[$a];
+                    } else {
+                        $ranges = [];
+                        $ranges_reverse = [];
+                    }
+
+                    $ip_sbefore = $ip_start - 1;
+
+                    if (isset($ranges_reverse[$ip_sbefore]) and $ranges_reverse[$ip_sbefore][1] == $array_geo_info[$geo_id]) {
+                        $ip_start = $ranges_reverse[$ip_sbefore][0];
+                        unset($ranges_reverse[$ip_sbefore]);
+                    }
+
+                    $ranges[$ip_start] = [$ip_end, $array_geo_info[$geo_id]];
+                    $ranges_reverse[$ip_end] = [$ip_start, $array_geo_info[$geo_id]];
+
+                    $loaded_file[$a] = $ranges;
+                    $loaded_file_reverse[$a] = $ranges_reverse;
+                } else {
+                    exit('IP range invalid on line ' . $startRow . PHP_EOL);
                 }
             }
-            $offsetRow = ($offsetRow + $chunkSize);
         }
+        $offsetRow = ($offsetRow + $chunkSize);
 
         foreach ($loaded_file as $fname => $fdata) {
             $file_content = "<?php\n\n" . IP_FILEHEAD . "\n\$ranges=" . nv_print_variable_ip($fdata) . ";\n";
@@ -149,6 +149,6 @@ while (1) {
     } catch (Exception $ex) {
         echo 'Error:' . PHP_EOL;
         print_r($ex);
-        die(PHP_EOL);
+        exit(PHP_EOL);
     }
 }

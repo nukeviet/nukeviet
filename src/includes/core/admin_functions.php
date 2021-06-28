@@ -139,7 +139,7 @@ function nv_save_file_config_global()
 
     $my_domains = array_map('trim', explode(',', $config_variable['my_domains']));
     $my_domains[] = NV_SERVER_NAME;
-    $config_variable['my_domains'] = implode(',', array_unique($my_domains));
+    $config_variable['my_domains'] = implode(', ', array_unique($my_domains));
 
     $config_variable['check_rewrite_file'] = nv_check_rewrite_file();
     $config_variable['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? NV_ALLOW_REQUEST_MODS : 'request';
@@ -158,7 +158,7 @@ function nv_save_file_config_global()
     foreach ($config_variable as $c_config_name => $c_config_value) {
         if (in_array($c_config_name, $config_name_array, true)) {
             if (!empty($c_config_value)) {
-                $c_config_value = "'" . implode("','", array_map('trim', explode(',', $c_config_value))) . "'";
+                $c_config_value = "'" . implode("', '", array_map('trim', explode(',', $c_config_value))) . "'";
             } else {
                 $c_config_value = '';
             }
@@ -188,7 +188,7 @@ function nv_save_file_config_global()
 
     //allowed_html_tags
     if (!empty($allowed_html_tags)) {
-        $allowed_html_tags = "'" . implode("','", array_map('trim', explode(',', $allowed_html_tags))) . "'";
+        $allowed_html_tags = "'" . implode("', '", array_map('trim', explode(',', $allowed_html_tags))) . "'";
     } else {
         $allowed_html_tags = '';
     }
@@ -206,7 +206,7 @@ function nv_save_file_config_global()
         $tmp_array[$lang] = $language_array[$lang];
     }
     unset($language_array);
-    $content_config .= '$language_array=' . nv_var_export($tmp_array) . ";\n";
+    $content_config .= '$language_array = ' . nv_var_export($tmp_array) . ";\n";
 
     $tmp_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/timezone.ini', true);
     $content_config .= '$nv_parse_ini_timezone = ' . nv_var_export($tmp_array, true) . ";\n";
@@ -252,7 +252,7 @@ function nv_save_file_config_global()
             }
         }
     }
-    $content_config .= '$nv_plugins=' . nv_var_export($nv_plugins) . ";\n";
+    $content_config .= '$nv_plugins = ' . nv_var_export($nv_plugins) . ";\n";
 
     $return = file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php', $content_config, LOCK_EX);
     $nv_Cache->delAll();

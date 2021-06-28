@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 set_time_limit(0);
 
 function list_all_file($dir = '', $base_dir = '')
 {
-    $file_list = array();
+    $file_list = [];
 
     if (is_dir($dir)) {
         $array_filedir = scandir($dir);
@@ -52,13 +53,13 @@ foreach ($allfiles as $filepath) {
 
     //if (preg_match("/\\\$nv\_Lang\-\>get(.*?)[\s]+\=/", $filecontents)) {
     if (preg_match("/\\\$nv\_Lang\-\>get([Global|Module|Block]*)\(([^\)]+)\)[\s]+\=/", $filecontents) or preg_match("/isset[\s]*\([\s]*\\\$nv\_Lang/", $filecontents)) {
-        echo("Check: " . $filepath . "\n");
+        echo 'Check: ' . $filepath . "\n";
     }
 
     if ($filecontentsNew != $filecontents) {
-        echo("Change: " . $filepath . "\n");
+        echo 'Change: ' . $filepath . "\n";
         //file_put_contents(NV_ROOTDIR . '/' . $filepath, $filecontentsNew, LOCK_EX);
     }
 }
 
-echo("OK\n");
+echo "OK\n";

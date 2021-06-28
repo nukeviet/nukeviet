@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_TEST_ROOTDIR', rtrim(str_replace('\\', '/', realpath(__DIR__ . '/../../../')), '/'));
@@ -25,13 +25,13 @@ if (is_file(NV_ROOTDIR . '/config.php')) {
 
 // Uncomment for debug
 //echo('Installing... ' . PHP_EOL);
-for ($i = 1; $i <= 8; $i++) {
+for ($i = 1; $i <= 8; ++$i) {
     // Uncomment for debug
     //echo('Step ' . $i . '...' . PHP_EOL);
     unset($installRes);
     exec(NV_PHP_CMD . ' ' . escapeshellarg(NV_TEST_DIR . '/install.php') . ' ' . escapeshellarg($i) . ' ', $installRes);
     if ($installRes[0] !== 'OK') {
-        die('Test failed: Error install new site in step ' . $i . PHP_EOL);
+        exit('Test failed: Error install new site in step ' . $i . PHP_EOL);
     }
 }
 

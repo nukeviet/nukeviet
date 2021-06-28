@@ -1,7 +1,15 @@
 <?php
-//<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 /**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+/*
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC <contact@vinades.vn>
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
@@ -40,7 +48,7 @@ require NV_ROOTDIR . '/data/config/config_global.php';
 if (isset($_POST['deleteSession'])) {
     unset($_SESSION['finalLangTranslator'], $_SESSION['finalLangModule']);
     header('Location:' . $selfUrl);
-    die();
+    exit();
 }
 
 $currentModule = 'Users';
@@ -53,14 +61,14 @@ if (isset($_SESSION['finalLangTranslator']) and isset($_SESSION['finalLangModule
     // Nếu đã ghi session rồi thì đọc từ session
     $finalLangTranslator = $_SESSION['finalLangTranslator'];
     $finalLangModule = $_SESSION['finalLangModule'];
-    echo('
+    echo '
         <form method="post" action="' . $selfUrl . '">
             <div>
                 <p>Tiến trình này đang chạy dở, bạn có muốn xóa làm lại không</p>
                 <input type="submit" name="deleteSession" value="Xóa làm lại">
             </div>
         </form>
-    ');
+    ';
 } else {
     // Nếu có ngôn ngữ site thì đọc
     if (file_exists(NV_ROOTDIR . '/modules/' . $currentModule . '/language/' . $lang . '.php')) {
@@ -87,14 +95,14 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $currentModule . '/language/admin_' .
 
 // Nếu không có ngôn ngữ site lẫn admin thì module này không có phần lang
 if (empty($finalLangModule) and empty($workLang)) {
-    die('Không có ngôn ngữ');
+    exit('Không có ngôn ngữ');
 }
 
 /*
  * Bắt đầu loop để duyệt lang mới
  * Chỉ loop từ phần bắt đầu offset
  */
-$offsetKey = isset($_POST['offsetKey']) ? intval($_POST['offsetKey']) : (isset($_GET['offsetKey']) ? intval($_GET['offsetKey']) : 0);
+$offsetKey = isset($_POST['offsetKey']) ? (int) ($_POST['offsetKey']) : (isset($_GET['offsetKey']) ? (int) ($_GET['offsetKey']) : 0);
 $currentKey = 0;
 foreach ($workLang as $key => $value) {
     // Tới phần tiếp theo mới xử lý
@@ -108,18 +116,19 @@ foreach ($workLang as $key => $value) {
                 $_SESSION['finalLangTranslator'] = $finalLangTranslator;
                 $_SESSION['finalLangModule'] = $finalLangModule;
                 header('Location:' . $selfUrl . '?offsetKey=' . ($currentKey + 1));
-                die();
-            } elseif (isset($_POST['chooseSite'])) {
+                exit();
+            }
+            if (isset($_POST['chooseSite'])) {
                 $_SESSION['finalLangTranslator'] = $finalLangTranslator;
                 $_SESSION['finalLangModule'] = $finalLangModule;
                 header('Location:' . $selfUrl . '?offsetKey=' . ($currentKey + 1));
-                die();
-            } else {
-                /*
-                 * Nếu đã có mà giá trị khác nhau thì mới cho chọn
-                 * Còn đã có mà giá trị như nhau thì chỉ cần bỏ qua
-                 */
-                echo('
+                exit();
+            }
+            /*
+             * Nếu đã có mà giá trị khác nhau thì mới cho chọn
+             * Còn đã có mà giá trị như nhau thì chỉ cần bỏ qua
+             */
+            echo '
                     <form method="post" action="' . $selfUrl . '">
                         <input type="hidden" name="offsetKey" value="' . $currentKey . '">
                         <div>
@@ -131,19 +140,18 @@ foreach ($workLang as $key => $value) {
                             <input type="submit" name="chooseAdmin" value="Chọn Admin">
                         </div>
                     </form>
-                ');
+                ';
 
-                /*
-                 * Ghi lại vào SESSION
-                 */
-                $_SESSION['finalLangTranslator'] = $finalLangTranslator;
-                $_SESSION['finalLangModule'] = $finalLangModule;
+            /*
+             * Ghi lại vào SESSION
+             */
+            $_SESSION['finalLangTranslator'] = $finalLangTranslator;
+            $_SESSION['finalLangModule'] = $finalLangModule;
 
-                die();
-            }
+            exit();
         }
     }
-    $currentKey++;
+    ++$currentKey;
 }
 
 /*
@@ -162,15 +170,15 @@ if (isset($_POST['writeData'])) {
     $content_lang .= "/**\n";
     $content_lang .= "* @Project NUKEVIET 4.x\n";
     $content_lang .= "* @Author VINADES.,JSC <contact@vinades.vn>\n";
-    $content_lang .= "* @Copyright (C) " . date("Y") . " VINADES.,JSC. All rights reserved\n";
-    $content_lang .= "* @Language " . $language_array[$lang]['name'] . "\n";
+    $content_lang .= '* @Copyright (C) ' . date('Y') . " VINADES.,JSC. All rights reserved\n";
+    $content_lang .= '* @Language ' . $language_array[$lang]['name'] . "\n";
     $content_lang .= "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n";
-    $content_lang .= "* @Createdate " . gmdate("M d, Y, h:i:s A", $createdate) . "\n";
+    $content_lang .= '* @Createdate ' . gmdate('M d, Y, h:i:s A', $createdate) . "\n";
     $content_lang .= "*/\n";
     $content_lang .= "\nif (!defined('NV_MAINFILE')) {";
     $content_lang .= "\n    die('Stop!!!');\n}\n\n";
 
-    $finalLangTranslator['info'] = (isset($finalLangTranslator['info'])) ? $finalLangTranslator['info'] : "";
+    $finalLangTranslator['info'] = (isset($finalLangTranslator['info'])) ? $finalLangTranslator['info'] : '';
 
     $content_lang .= "\$lang_translator['author'] = '" . str_replace(['(', ')'], ['<', '>'], $finalLangTranslator['author']) . "';\n";
     $content_lang .= "\$lang_translator['createdate'] = '" . $finalLangTranslator['createdate'] . "';\n";
@@ -199,10 +207,10 @@ if (isset($_POST['writeData'])) {
     // Xóa thông tin và làm lại
     unset($_SESSION['finalLangTranslator'], $_SESSION['finalLangModule']);
     header('Location:' . $selfUrl);
-    die();
+    exit();
 }
 
-echo('
+echo '
     <form method="post" action="' . $selfUrl . '">
         <input type="hidden" name="offsetKey" value="' . $offsetKey . '">
         <div>
@@ -211,11 +219,11 @@ echo('
             <input type="submit" name="deleteSession" value="Thực hiện lại từ đầu">
         </div>
     </form>
-');
+';
 
-echo('<pre><code>');
-echo (htmlspecialchars(print_r($finalLangModule, true)));
-echo('</code></pre>');
+echo '<pre><code>';
+echo htmlspecialchars(print_r($finalLangModule, true));
+echo '</code></pre>';
 
 /**
  * @param string $text
@@ -228,11 +236,11 @@ function nv_nl2br($text, $replacement = '<br />')
         return '';
     }
 
-    return strtr($text, array(
+    return strtr($text, [
         "\r\n" => $replacement,
         "\r" => $replacement,
         "\n" => $replacement
-    ));
+    ]);
 }
 
 /**
@@ -252,12 +260,11 @@ function nv_unhtmlspecialchars($string)
             $string[$key] = nv_unhtmlspecialchars($string[$key]);
         }
     } else {
-        $search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
-        $replace = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~' );
+        $search = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
+        $replace = ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
 
         $string = str_replace($search, $replace, $string);
     }
 
     return $string;
 }
-

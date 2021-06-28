@@ -11,6 +11,7 @@ class GD extends Common
         'jpeg'  => \IMG_JPG,
         'gif'   => \IMG_GIF,
         'png'   => \IMG_PNG,
+        'webp'  => \IMG_WEBP
     );
 
     protected function loadResource($resource)
@@ -622,6 +623,18 @@ class GD extends Common
     {
         if (file_exists($file) && filesize($file)) {
             $this->resource = @imagecreatefrompng($file);
+        } else {
+            $this->resource = false;
+        }
+    }
+
+    /**
+     * Try to open the file using WEBP.
+     */
+    protected function openWebp($file)
+    {
+        if (file_exists($file) && filesize($file)) {
+            $this->resource = @imagecreatefromwebp($file);
         } else {
             $this->resource = false;
         }

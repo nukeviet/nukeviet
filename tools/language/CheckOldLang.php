@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 set_time_limit(0);
 
 function list_all_file($dir = '', $base_dir = '')
 {
-    $file_list = array();
+    $file_list = [];
 
     if (is_dir($dir)) {
         $array_filedir = scandir($dir);
@@ -51,8 +52,8 @@ foreach ($allfiles as $filepath) {
     $filecontents = file_get_contents(NV_ROOTDIR . '/' . $filepath);
 
     if (preg_match("/\\$(lang_global|lang_module|lang_block)[\s]*\[/", $filecontents)) {
-        echo("Check: " . $filepath . "\n");
+        echo 'Check: ' . $filepath . "\n";
     }
 }
 
-echo("OK\n");
+echo "OK\n";

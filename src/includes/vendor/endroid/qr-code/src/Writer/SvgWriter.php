@@ -21,6 +21,8 @@ class SvgWriter extends AbstractWriter
 {
     public function writeString(QrCodeInterface $qrCode): string
     {
+        $options = $qrCode->getWriterOptions();
+
         if ($qrCode->getValidateResult()) {
             throw new ValidationException('Built-in validation reader can not check SVG images: please disable via setValidateResult(false)');
         }
@@ -35,8 +37,9 @@ class SvgWriter extends AbstractWriter
         $svg->addChild('defs');
 
         // Block definition
+        $block_id = isset($options['rect_id']) && $options['rect_id'] ? $options['rect_id'] : 'block';
         $blockDefinition = $svg->defs->addChild('rect');
-        $blockDefinition->addAttribute('id', 'block');
+        $blockDefinition->addAttribute('id', $block_id);
         $blockDefinition->addAttribute('width', strval($data['block_size']));
         $blockDefinition->addAttribute('height', strval($data['block_size']));
         $blockDefinition->addAttribute('fill', '#'.sprintf('%02x%02x%02x', $qrCode->getForegroundColor()['r'], $qrCode->getForegroundColor()['g'], $qrCode->getForegroundColor()['b']));
@@ -57,14 +60,19 @@ class SvgWriter extends AbstractWriter
                     $block = $svg->addChild('use');
                     $block->addAttribute('x', strval($data['margin_left'] + $data['block_size'] * $column));
                     $block->addAttribute('y', strval($data['margin_left'] + $data['block_size'] * $row));
-                    $block->addAttribute('xlink:href', '#block', 'http://www.w3.org/1999/xlink');
+                    $block->addAttribute('xlink:href', '#'.$block_id, 'http://www.w3.org/1999/xlink');
                 }
             }
         }
 
         $logoPath = $qrCode->getLogoPath();
         if (is_string($logoPath)) {
-            $this->addLogo($svg, $data['outer_width'], $data['outer_height'], $logoPath, $qrCode->getLogoWidth(), $qrCode->getLogoHeight());
+            $forceXlinkHref = false;
+            if (isset($options['force_xlink_href']) && $options['force_xlink_href']) {
+                $forceXlinkHref = true;
+            }
+
+            $this->addLogo($svg, $data['outer_width'], $data['outer_height'], $logoPath, $qrCode->getLogoWidth(), $qrCode->getLogoHeight(), $forceXlinkHref);
         }
 
         $xml = $svg->asXML();
@@ -73,7 +81,6 @@ class SvgWriter extends AbstractWriter
             throw new GenerateImageException('Unable to save SVG XML');
         }
 
-        $options = $qrCode->getWriterOptions();
         if (isset($options['exclude_xml_declaration']) && $options['exclude_xml_declaration']) {
             $xml = str_replace("<?xml version=\"1.0\"?>\n", '', $xml);
         }
@@ -81,7 +88,7 @@ class SvgWriter extends AbstractWriter
         return $xml;
     }
 
-    private function addLogo(SimpleXMLElement $svg, int $imageWidth, int $imageHeight, string $logoPath, int $logoWidth = null, int $logoHeight = null): void
+    private function addLogo(SimpleXMLElement $svg, int $imageWidth, int $imageHeight, string $logoPath, int $logoWidth = null, int $logoHeight = null, bool $forceXlinkHref = false): void
     {
         $mimeType = $this->getMimeType($logoPath);
         $imageData = file_get_contents($logoPath);
@@ -97,12 +104,17 @@ class SvgWriter extends AbstractWriter
         if (null === $logoHeight || null === $logoWidth) {
             $logoImage = imagecreatefromstring(strval($imageData));
 
-            if (!is_resource($logoImage)) {
+            if (!$logoImage) {
                 throw new GenerateImageException('Unable to generate image: check your GD installation or logo path');
             }
 
+            /** @var mixed $logoImage */
             $logoSourceWidth = imagesx($logoImage);
             $logoSourceHeight = imagesy($logoImage);
+
+            if (PHP_VERSION_ID < 80000) {
+                imagedestroy($logoImage);
+            }
 
             if (null === $logoWidth) {
                 $logoWidth = $logoSourceWidth;
@@ -123,7 +135,14 @@ class SvgWriter extends AbstractWriter
         $imageDefinition->addAttribute('width', strval($logoWidth));
         $imageDefinition->addAttribute('height', strval($logoHeight));
         $imageDefinition->addAttribute('preserveAspectRatio', 'none');
-        $imageDefinition->addAttribute('xlink:href', 'data:'.$mimeType.';base64,'.base64_encode($imageData));
+
+        // xlink:href is actually deprecated, but still required when placing the qr code in a pdf.
+        // SimpleXML strips out the xlink part by using addAttribute(), so it must be set directly.
+        if ($forceXlinkHref) {
+            $imageDefinition['xlink:href'] = 'data:'.$mimeType.';base64,'.base64_encode($imageData);
+        } else {
+            $imageDefinition->addAttribute('href', 'data:'.$mimeType.';base64,'.base64_encode($imageData));
+        }
     }
 
     private function getOpacity(int $alpha): float
