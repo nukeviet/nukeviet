@@ -104,7 +104,7 @@ if (!empty($savegroup)) {
         $weight = $db->query($_sql)->fetchColumn();
         $weight = intval($weight) + 1;
 
-        $viewgroup = 'viewgroup_page_list';
+        $viewgroup = 'viewgrid';
         $subgroupid = '';
 
         $sql = "INSERT INTO " . $table_name . " (parentid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order, is_require " . $listfield . " )
