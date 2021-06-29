@@ -18,24 +18,26 @@ nv_add_hook($module_name, 'get_qr_code', $priority, function ($vars) {
     if ($nv_Request->get_string('second', 'get') == 'qr') {
         $url = $nv_Request->get_string('u', 'get', '');
         $level = $nv_Request->get_title('l', 'get', 'M');
-        $ModuleSize = $nv_Request->get_int('ppp', 'get', 4);
-        $outer_frame = $nv_Request->get_int('of', 'get', 1);
+        $ModuleSize = 190 + (10 * $nv_Request->get_int('ppp', 'get', 1));
+        $outer_frame = 2 * $nv_Request->get_int('of', 'get', 1);
 
-        $_ErrorCorrection = [
-            'L' => Endroid\QrCode\ErrorCorrectionLevel::LOW,
-            'M' => Endroid\QrCode\ErrorCorrectionLevel::MEDIUM,
-            'Q' => Endroid\QrCode\ErrorCorrectionLevel::QUARTILE,
-            'H' => Endroid\QrCode\ErrorCorrectionLevel::HIGH
-        ];
-        if (!empty($url) and isset($_ErrorCorrection[$level]) and ($ModuleSize > 0 and $ModuleSize < 13) and ($outer_frame > 0 and $outer_frame < 6)) {
-            // Readmore: https://github.com/endroid/QrCode and http://www.qrcode.com/en/about/version.html
+        if ('L' == $level) {
+            $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::LOW();
+        } elseif ('M' == $level) {
+            $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::MEDIUM();
+        } elseif ('Q' == $level) {
+            $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::QUARTILE();
+        } else {
+            $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::HIGH();
+        }
+        if (!empty($url)) {
             $qrCode = new Endroid\QrCode\QrCode($url);
-
-            $qrCode->setSize(200);
-            $qrCode->setWriterByName('png');
-            $qrCode->setMargin($ModuleSize);
             $qrCode->setEncoding('UTF-8');
-            $qrCode->setErrorCorrectionLevel($_ErrorCorrection[$level]);
+            $qrCode->setErrorCorrectionLevel($_ErrorCorrection);
+            $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+            $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+            $qrCode->setSize($ModuleSize);
+            $qrCode->setMargin($outer_frame);
 
             header('Content-Type: ' . $qrCode->getContentType());
             echo $qrCode->writeString();

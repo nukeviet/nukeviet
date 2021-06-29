@@ -3,6 +3,15 @@ http://nukeviet.vn
 
 NUKEVIET 5.0.00
 
+- Install/Update packages: symfony/polyfill-mbstring (v1.13.1 => v1.23.0), kriswallsmith/buzz (0.17.2 => v0.15),
+  gregwar/cache (v1.0.12 => v1.0.13), gregwar/image (v2.0.25 => v2.0.28), and/oauth (dev-master 48fa6e7 => dev-master 700b769),
+  dasprid/enum (1.0.0 => 1.0.3), symfony/polyfill-php80 (v1.23.0), symfony/polyfill-intl-normalizer (v1.23.0),
+  symfony/polyfill-intl-grapheme (v1.23.0), symfony/polyfill-ctype (v1.13.1 => v1.23.0), symfony/string (v5.3.2),
+  symfony/deprecation-contracts (v2.4.0), symfony/property-info (v5.3.1), symfony/property-access (v5.0.4 => v5.3.0),
+  symfony/polyfill-php73 (v1.23.0), symfony/options-resolver (v4.4.4 => v5.3.0), symfony/options-resolver (v4.4.4 => v5.3.0),
+  myclabs/php-enum (1.7.2 => 1.8.0), khanamiryan/qrcode-detector-decoder (1.0.2 => 1.0.5.1), bacon/bacon-qr-code (2.0.0 => 2.0.4),
+  endroid/qr-code (3.7.5 => 3.9.7), phpmailer/phpmailer (v6.1.4 => v6.5.0), smarty/smarty (v3.1.34 => v3.1.39)
+- Support php 8.x
 - Add parameter $template for function nv_sendmail
 - Add hook force_ssl_redirect (#2983)
 - New admin theme
