@@ -23,34 +23,38 @@ $sql = 'SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
-    exit('NO_' . $id);
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'NO_' . $id
+    ]);
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $func_custom_name = $nv_Request->get_title('func_custom_name', 'post', '', 1);
+    $func_custom_name = $nv_Request->get_title('newvalue', 'post', '', 1);
 
     if (empty($func_custom_name)) {
         $func_custom_name = ucfirst($row['func_name']);
     }
 
-    $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_custom_name= :func_custom_name WHERE func_id=' . $id);
-    $sth->bindParam(':func_custom_name', $func_custom_name, PDO::PARAM_STR);
-    $sth->execute();
+    if ($func_custom_name != $row['func_custom_title']) {
+        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_custom_name= :func_custom_name WHERE func_id=' . $id);
+        $sth->bindParam(':func_custom_name', $func_custom_name, PDO::PARAM_STR);
+        $sth->execute();
+    
+        $nv_Cache->delMod('modules');
+    }
 
-    $nv_Cache->delMod('modules');
-
-    exit('OK|show_funcs|action');
+    nv_jsonOutput([
+        'status' => 'OK',
+        'reload' => 'show_funcs'
+    ]);
 }
-    $func_custom_name = $row['func_custom_title'];
 
-$contents = [];
-$contents['caption'] = sprintf($lang_module['change_func_name'], $row['func_title'], $row['mod_custom_title']);
-$contents['func_custom_name'] = [$lang_module['funcs_custom_title'], $func_custom_name, 255, 'func_custom_name'];
-$contents['submit'] = [$lang_global['submit'], 'nv_change_custom_name_submit( ' . $id . ",'func_custom_name' );"];
-$contents['cancel'] = [$lang_global['cancel'], "nv_action_cancel('action');"];
-
-$contents = call_user_func('change_custom_name_theme', $contents);
-
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+nv_jsonOutput([
+    'label' => sprintf($lang_module['change_func_name'], $row['func_title'], $row['mod_custom_title']),
+    'title' => $lang_module['funcs_custom_title'],
+    'value' => $row['func_custom_title'],
+    'maxlength' => 255,
+    'type' => 'change_custom_name',
+    'id' => $id
+]);

@@ -551,42 +551,6 @@ function show_funcs_theme($contents)
 }
 
 /**
- * change_custom_name_theme()
- *
- * @param mixed $contents
- * @return
- */
-function change_custom_name_theme($contents)
-{
-    global $global_config, $module_file;
-
-    $xtpl = new XTemplate('change_custom_name_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENT', $contents);
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
- * change_site_title_theme()
- *
- * @param mixed $contents
- * @return
- */
-function change_site_title_theme($contents)
-{
-    global $global_config, $module_file;
-
-    $xtpl = new XTemplate('change_site_title_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENT', $contents);
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
  * setup_modules()
  *
  * @param mixed $array_head

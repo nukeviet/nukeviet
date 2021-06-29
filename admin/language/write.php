@@ -72,7 +72,7 @@ function nv_admin_write_lang($dirlang, $idfile)
         }
 
         $content_lang = "<?php\n\n";
-        $content_lang .= NV_FILEHEAD . "\n";
+        $content_lang .= NV_FILEHEAD . "\n\n";
 
         if ($langtype != 'lang_theme') {
             if ($admin_file) {

@@ -20,7 +20,7 @@ if (!defined('NV_IS_FILE_MODULES')) {
  */
 function nv_show_funcs()
 {
-    global $nv_Cache, $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file;
+    global $nv_Cache, $db, $lang_global, $lang_module, $global_config, $site_mods, $nv_Request, $module_file;
 
     $mod = $nv_Request->get_title('mod', 'get', '');
 
@@ -212,6 +212,7 @@ function nv_show_funcs()
 
     $xtpl = new XTemplate('aj_show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
     foreach ($act_funcs as $funcs => $values) {
         if ($values['show_func']) {
             $values['func_name'] = $funcs;
