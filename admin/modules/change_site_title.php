@@ -23,30 +23,34 @@ $sql = 'SELECT f.func_name AS func_title,f.func_site_title AS func_site_title,m.
 $row = $db->query($sql)->fetch();
 
 if (empty($row)) {
-    exit('NO_' . $id);
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'NO_' . $id
+    ]);
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $func_site_title = $nv_Request->get_title('func_site_title', 'post', '');
+    $func_site_title = $nv_Request->get_title('newvalue', 'post', '');
 
-    $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_site_title= :func_site_title WHERE func_id=' . $id);
-    $sth->bindParam(':func_site_title', $func_site_title, PDO::PARAM_STR);
-    $sth->execute();
+    if ($func_site_title != $row['func_site_title']) {
+        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_site_title= :func_site_title WHERE func_id=' . $id);
+        $sth->bindParam(':func_site_title', $func_site_title, PDO::PARAM_STR);
+        $sth->execute();
+    
+        $nv_Cache->delMod('modules');
+    }
 
-    $nv_Cache->delMod('modules');
-
-    exit('OK|show_funcs|action');
+    nv_jsonOutput([
+        'status' => 'OK',
+        'reload' => 'show_funcs'
+    ]);
 }
-    $func_site_title = $row['func_site_title'];
 
-$contents = [];
-$contents['caption'] = sprintf($lang_module['change_func_sitetitle'], $row['func_title'], $row['mod_custom_title']);
-$contents['func_site_title'] = [$lang_module['site_title'], $func_site_title, 255, 'func_site_title'];
-$contents['submit'] = [$lang_global['submit'], 'nv_change_site_title_submit( ' . $id . ",'func_site_title' );"];
-$contents['cancel'] = [$lang_global['cancel'], "nv_action_cancel('action');"];
-
-$contents = call_user_func('change_site_title_theme', $contents);
-
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+nv_jsonOutput([
+    'label' => sprintf($lang_module['change_func_sitetitle'], $row['func_title'], $row['mod_custom_title']),
+    'title' => $lang_module['site_title'],
+    'value' => $row['func_site_title'],
+    'maxlength' => 255,
+    'type' => 'change_site_title',
+    'id' => $id
+]);

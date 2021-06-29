@@ -23,35 +23,39 @@ $sql = 'SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title
 $row = $db->query($sql)->fetch();
 
 if (!isset($row['func_title']) or $row['func_title'] == 'main') {
-    exit('NO_' . $id);
+    nv_jsonOutput([
+        'status' => 'error',
+        'mess' => 'NO_' . $id
+    ]);
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $fun_alias = $nv_Request->get_title('fun_alias', 'post', '', 1);
+    $fun_alias = $nv_Request->get_title('newvalue', 'post', '', 1);
 
     if (empty($fun_alias)) {
         $fun_alias = $row['func_title'];
     }
     $fun_alias = strtolower(change_alias($fun_alias));
 
-    $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET alias= :alias WHERE func_id=' . $id);
-    $sth->bindParam(':alias', $fun_alias, PDO::PARAM_STR);
-    $sth->execute();
+    if ($fun_alias != $row['fun_alias']) {
+        $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET alias= :alias WHERE func_id=' . $id);
+        $sth->bindParam(':alias', $fun_alias, PDO::PARAM_STR);
+        $sth->execute();
 
-    $nv_Cache->delMod('modules');
+        $nv_Cache->delMod('modules');
+    }
 
-    exit('OK|show_funcs|action');
+    nv_jsonOutput([
+        'status' => 'OK',
+        'reload' => 'show_funcs'
+    ]);
 }
-    $fun_alias = $row['fun_alias'];
 
-$contents = [];
-$contents['caption'] = sprintf($lang_module['change_fun_alias'], $row['func_title'], $row['mod_custom_title']);
-$contents['func_custom_name'] = [$lang_module['funcs_alias'], $fun_alias, 255, 'fun_alias'];
-$contents['submit'] = [$lang_global['submit'], 'nv_change_alias_submit( ' . $id . ",'fun_alias' );"];
-$contents['cancel'] = [$lang_global['cancel'], "nv_action_cancel('action');"];
-
-$contents = change_custom_name_theme($contents);
-
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+nv_jsonOutput([
+    'label' => sprintf($lang_module['change_fun_alias'], $row['func_title'], $row['mod_custom_title']),
+    'title' => $lang_module['funcs_alias'],
+    'value' => $row['fun_alias'],
+    'maxlength' => 255,
+    'type' => 'change_alias',
+    'id' => $id
+]);

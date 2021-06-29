@@ -639,8 +639,10 @@ function nv_html_page_title($html = true)
             $global_config['pageTitleMode'] = 'pagetitle' . NV_TITLEBAR_DEFIS . 'sitename';
         }
 
+        $funcname = !empty($module_info['funcs'][$op]['func_site_title']) ? $module_info['funcs'][$op]['func_site_title'] : $module_info['funcs'][$op]['func_custom_name'];
+
         if (empty($page_title) and !preg_match('/(funcname|modulename|sitename)/i', $global_config['pageTitleMode'])) {
-            $_title = $module_info['funcs'][$op]['func_custom_name'] . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
+            $_title = $funcname . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
         } else {
             $_title = preg_replace([
                 '/pagetitle/i',
@@ -649,7 +651,7 @@ function nv_html_page_title($html = true)
                 '/sitename/i'
             ], [
                 $page_title,
-                $module_info['funcs'][$op]['func_custom_name'],
+                $funcname,
                 $module_info['custom_title'],
                 $global_config['site_name']
             ], $global_config['pageTitleMode']);
