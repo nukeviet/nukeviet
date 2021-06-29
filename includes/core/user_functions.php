@@ -639,6 +639,8 @@ function nv_html_page_title($html = true)
             $global_config['pageTitleMode'] = 'pagetitle' . NV_TITLEBAR_DEFIS . 'sitename';
         }
 
+        // $module_info['funcs'][$op]['func_site_title'] đã được định nghĩa ở đây:
+        // https://github.com/nukeviet/nukeviet/blob/eb042e37437b793202f5e6d7b5c3e6f89e536b90/includes/mainfile.php#L449
         if (empty($page_title) and !preg_match('/(funcname|modulename|sitename)/i', $global_config['pageTitleMode'])) {
             $_title = $module_info['funcs'][$op]['func_site_title'] . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
         } else {
@@ -649,7 +651,7 @@ function nv_html_page_title($html = true)
                 '/sitename/i'
             ], [
                 $page_title,
-                $$module_info['funcs'][$op]['func_site_title'],
+                $module_info['funcs'][$op]['func_site_title'],
                 $module_info['custom_title'],
                 $global_config['site_name']
             ], $global_config['pageTitleMode']);
