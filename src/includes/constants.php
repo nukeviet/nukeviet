@@ -1,8 +1,8 @@
 <?php
 
 /**
- * NukeViet Content Management System
- * @version 4.x
+ * NUKEVIET Content Management System
+ * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
@@ -115,7 +115,7 @@ define('NV_SEND_ERRORS_LIST', E_USER_ERROR);
 //Danh sach cac loi se gui den email
 
 //Phan dau cua trang
-define('NV_FILEHEAD', "/**\n * NukeViet Content Management System\n * @version 4.x\n * @author VINADES.,JSC <contact@vinades.vn>\n * @copyright (C) 2009-" . gmdate('Y') . " VINADES.,JSC. All rights reserved\n * @license GNU/GPL version 2 or any later version\n * @see https://github.com/nukeviet The NukeViet CMS GitHub project\n */");
+define('NV_FILEHEAD', "/**\n * NUKEVIET Content Management System\n * @version 5.x\n * @author VINADES.,JSC <contact@vinades.vn>\n * @copyright (C) 2009-" . gmdate('Y') . " VINADES.,JSC. All rights reserved\n * @license GNU/GPL version 2 or any later version\n * @see https://github.com/nukeviet The NukeViet CMS GitHub project\n */");
 
 // Vui long khong thay doi gia tri nay
 define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');

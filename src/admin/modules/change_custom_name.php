@@ -1,8 +1,8 @@
 <?php
 
 /**
- * NukeViet Content Management System
- * @version 4.x
+ * NUKEVIET Content Management System
+ * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
@@ -40,7 +40,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_custom_name= :func_custom_name WHERE func_id=' . $id);
         $sth->bindParam(':func_custom_name', $func_custom_name, PDO::PARAM_STR);
         $sth->execute();
-    
+
         $nv_Cache->delMod('modules');
     }
 

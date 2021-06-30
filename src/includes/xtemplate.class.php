@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * NUKEVIET Content Management System
+ * @version 5.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+/**
  * XTemplate PHP templating engine
  *
  * @package XTemplate
@@ -10,9 +19,8 @@
  * @copyright Jeremy Coates 2002-2007
  * @see license.txt LGPL / BSD license
  * @since PHP 5
- * @link $HeadURL$
+ * @see $HeadURL$
  * @version $Id$
- *
  *
  * XTemplate class - http://www.phpxtemplate.org/ (x)html / xml generation with templates - fast & easy
  * Latest stable & Subversion versions available @ http://sourceforge.net/projects/xtpl/
@@ -121,7 +129,7 @@ class XTemplate
      * @access public
      * @var null
      */
-    public $files = null;
+    public $files;
 
     /**
      * Template filename
@@ -277,7 +285,7 @@ class XTemplate
      * Whether to enable callback feature or not
      *
      * @access public
-     * @var boolean
+     * @var bool
      */
     public $allow_callbacks = true;
 
@@ -352,7 +360,7 @@ class XTemplate
      * Auto-reset sub blocks
      *
      * @access protected
-     * @var boolean
+     * @var bool
      */
     protected $_autoreset = true;
 
@@ -362,23 +370,23 @@ class XTemplate
      * @author NW
      * @since 2002/10/17
      * @access protected
-     * @var boolean
+     * @var bool
      */
     protected $_ignore_missing_blocks = true;
 
     /**
      * PHP 5 Constructor - Instantiate the object
      *
-     * @param array $options Options array (was $file)
-     * @param string/array $tpldir Location of template files (useful for keeping files outside web server root)
-     * @param array $files Filenames lookup
-     * @param string $mainblock Name of main block in the template
-     * @param boolean $autosetup If true, run setup() as part of constuctor
+     * @param array        $options   Options array (was $file)
+     * @param string/array $tpldir    Location of template files (useful for keeping files outside web server root)
+     * @param array        $files     Filenames lookup
+     * @param string       $mainblock Name of main block in the template
+     * @param bool         $autosetup If true, run setup() as part of constuctor
      * @return XTemplate
      */
     public function __construct($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true)
     {
-        /**
+        /*
          * Support deprecated multi-param constructor behaviour
          */
         if (!is_array($options)) {
@@ -395,9 +403,7 @@ class XTemplate
         $this->restart($options);
     }
 
-    /***************************************************************************/
     /***[ public stuff ]********************************************************/
-    /***************************************************************************/
 
     /**
      * Restart the class - allows one instantiation with several files processed by restarting
@@ -409,17 +415,17 @@ class XTemplate
      * $xtpl->out('main');
      * (Added in response to sf:641407 feature request)
      *
-     * @param string $file Template file to work on
-     * @param string/array $tpldir Location of template files
-     * @param array $files Filenames lookup
-     * @param string $mainblock Name of main block in the template
-     * @param boolean $autosetup If true, run setup() as part of restarting
-     * @param string $tag_start = {
-     * @param string $tag_end = }
+     * @param string       $file      Template file to work on
+     * @param string/array $tpldir    Location of template files
+     * @param array        $files     Filenames lookup
+     * @param string       $mainblock Name of main block in the template
+     * @param bool         $autosetup If true, run setup() as part of restarting
+     * @param string       $tag_start = {
+     * @param string       $tag_end   = }
      */
     public function restart($options, $tpldir = '', $files = null, $mainblock = 'main', $autosetup = true, $tag_start = '{', $tag_end = '}')
     {
-        /**
+        /*
          * Encourage an options array to be passed as the first parameter
          *
          * Deprecate the massive list of parameters
@@ -431,12 +437,10 @@ class XTemplate
                     case 'tpldir':
                         $tpldir = $value;
                         break;
-
                     case 'callbacks':
                         $this->allow_callbacks = true;
                         $this->allowed_callbacks = array_merge($this->allowed_callbacks, (array) $value);
                         break;
-
                     case 'file':
                     case 'files':
                     case 'mainblock':
@@ -511,7 +515,7 @@ class XTemplate
      * setup - the elements that were previously in the constructor
      *
      * @access public
-     * @param boolean $add_outer If true is passed when called, it adds an outer main block to the file
+     * @param bool $add_outer If true is passed when called, it adds an outer main block to the file
      */
     public function setup($add_outer = false)
     {
@@ -569,13 +573,13 @@ class XTemplate
      * @example {name.key} {name.key2} {name.key3} in template
      *
      * @access public
-     * @param string / array / object $name Variable to assign $val to
-     * @param string / array / object $val Value to assign to $name
-     * @param boolean $reset_array Reset the variable array if $val is an array
+     * @param string / array / object $name        Variable to assign $val to
+     * @param string / array / object $val         Value to assign to $name
+     * @param bool                    $reset_array Reset the variable array if $val is an array
      */
     public function assign($name, $val = '', $reset_array = true)
     {
-        /**
+        /*
          * Allow assigning with objects as well as arrays
          *
          * @author JRCoates
@@ -603,8 +607,8 @@ class XTemplate
      * assign a file variable
      *
      * @access public
-     * @param string $name Variable to assign $val to
-     * @param string / array $val Values to assign to $name
+     * @param string         $name Variable to assign $val to
+     * @param string / array $val  Values to assign to $name
      */
     public function assign_file($name, $val = '')
     {
@@ -638,6 +642,7 @@ class XTemplate
             // ------------------------------------------------------
             // JRC: 3/1/2003 added set error to ignore missing functionality
             $this->_set_error("parse: blockname [$bname] does not exist");
+
             return;
         } else {
             $this->_set_error("parse: blockname [$bname] does not exist");
@@ -707,11 +712,9 @@ class XTemplate
                         case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var) and preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $var):
                             $var = substr($var, 1, -1);
                             break;
-
                         case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var):
                             $var = substr($var, 1);
                             break;
-
                         case preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $var):
                             $var = substr($var, 0, -1);
                             break;
@@ -739,7 +742,7 @@ class XTemplate
                     // NW 4 Oct 2002 - Added isset and is_array check to avoid NOTICE messages
                     // JC 17 Oct 2002 - Changed EMPTY to strlen=0
                     //                if (empty($var[$v1])) { // this line would think that zeros(0) were empty - which is not true
-                    /**
+                    /*
                      * Allow assigning with objects as well as arrays
                      *
                      * @author JRCoates
@@ -757,7 +760,6 @@ class XTemplate
                             }
                             $var = $var[$v1];
                             break;
-
                         case is_object($var):
                              if (!isset($var->$v1) or (is_string($var->$v1) and strlen($var->$v1) == 0)) {
                                  // Check for constant, when variable not assigned
@@ -772,7 +774,7 @@ class XTemplate
                     }
                 }
 
-                /**
+                /*
                  * Callback function handling
                  * Inspired by sf feature request #1756946 christophe_lu
                  *
@@ -785,7 +787,7 @@ class XTemplate
                             // See if we've got parameters being used e.g. |str_replace('A', 'B', %s)
                             if (preg_match($this->preg_delimiter . '\((.*?)\)' . $this->preg_delimiter, $callback, $matches)) {
                                 $parameters = [];
-                                /**
+                                /*
                                  * Zero width assertion positive look behind (?<=a)x
                                  * Zero width assertion negative look behind (?<!a)x
                                  * Zero width assertion positive look ahead x(?=a)
@@ -806,7 +808,7 @@ class XTemplate
 
                                 if (count($parameters)) {
                                     array_walk($parameters, [$this, 'trim_callback']);
-                                    if (($key = array_search('%s', $parameters)) !== false) {
+                                    if (($key = array_search('%s', $parameters, true)) !== false) {
                                         $parameters[$key] = $var;
                                     } else {
                                         array_unshift($parameters, $var);
@@ -829,7 +831,7 @@ class XTemplate
                                     // Standard form e.g. {tag|callback}
                                     $var = call_user_func([$this, $callback], $var);
                                 }
-                            } elseif (in_array($callback, $this->allowed_callbacks) and function_exists($callback) and is_callable($callback)) {
+                            } elseif (in_array($callback, $this->allowed_callbacks, true) and function_exists($callback) and is_callable($callback)) {
                                 if (isset($parameters)) {
                                     $var = call_user_func_array($callback, $parameters);
                                     unset($parameters);
@@ -910,10 +912,10 @@ class XTemplate
      * inserts a loop ( call assign & parse )
      *
      * @access public
-     * @param string $bname Block name to assign
-     * @param string $var Variable to assign values to
+     * @param string         $bname Block name to assign
+     * @param string         $var   Variable to assign values to
      * @param string / array $value Value to assign to $var
-    */
+     */
     public function insert_loop($bname, $var, $value = '')
     {
         $this->assign($var, $value);
@@ -924,10 +926,10 @@ class XTemplate
      * parses a block for every set of data in the values array
      *
      * @access public
-     * @param string $bname Block name to loop
-     * @param string $var Variable to assign values to
-     * @param array $values Values to assign to $var
-    */
+     * @param string $bname  Block name to loop
+     * @param string $var    Variable to assign values to
+     * @param array  $values Values to assign to $var
+     */
     public function array_loop($bname, $var, &$values)
     {
         if (is_array($values)) {
@@ -1002,18 +1004,18 @@ class XTemplate
      *
      * @access public
      * @param string $bname Block name to test
-     * @return boolean
+     * @return bool
      */
     public function parsed($bname)
     {
-        return (!empty($this->parsed_blocks[$bname]));
+        return !empty($this->parsed_blocks[$bname]);
     }
 
     /**
      * sets the string to replace in case the var was not assigned
      *
      * @access public
-     * @param string $str Display string for null block
+     * @param string $str     Display string for null block
      * @param string $varname Variable name to apply $str to
      */
     public function set_null_string($str, $varname = '')
@@ -1037,7 +1039,7 @@ class XTemplate
      * sets the string to replace in case the block was not parsed
      *
      * @access public
-     * @param string $str Display string for null block
+     * @param string $str   Display string for null block
      * @param string $bname Block name to apply $str to
      */
     public function set_null_block($str, $bname = '')
@@ -1085,7 +1087,7 @@ class XTemplate
      * gets error condition / string
      *
      * @access public
-     * @return boolean / string
+     * @return bool / string
      */
     public function get_error()
     {
@@ -1098,7 +1100,6 @@ class XTemplate
                 case 'html':
                     $retval = '<b>[XTemplate]</b><ul>' . nl2br(str_replace('* ', '<li>', str_replace(" *\n", "</li>\n", $this->_error))) . '</ul>';
                     break;
-
                 default:
                     $retval = '[XTemplate] ' . str_replace(' *\n', "\n", $this->_error);
                     break;
@@ -1108,9 +1109,7 @@ class XTemplate
         return $retval;
     }
 
-    /***************************************************************************/
     /***[ private stuff ]*******************************************************/
-    /***************************************************************************/
 
     /**
      * generates the array containing to-be-parsed stuff:
@@ -1118,7 +1117,7 @@ class XTemplate
      * also builds the reverse parse order.
      *
      * @access public - aiming for private
-     * @param string $con content to be processed
+     * @param string $con         content to be processed
      * @param string $parentblock name of the parent block in the block hierarchy
      */
     public function _maketree($con, $parentblock = '')
@@ -1263,6 +1262,7 @@ class XTemplate
                 $parents[$v][] = $bname;
             }
         }
+
         return $parents;
     }
 
@@ -1305,7 +1305,7 @@ class XTemplate
 
         // prepend template dir
         if (!empty($this->tpldir)) {
-            /**
+            /*
              * Support hierarchy of file locations to search
              *
              * @example Supply array of filepaths when instantiating
