@@ -1,8 +1,8 @@
 <?php
 
 /**
- * NukeViet Content Management System
- * @version 4.x
+ * NUKEVIET Content Management System
+ * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
@@ -20,7 +20,7 @@ $module_version = [
     'submenu' => 'content,rss,search',
     'is_sysmod' => 0, // 1:0 => Co phai la module he thong hay khong
     'virtual' => 1, // 1:0 => Co cho phep ao hao module hay khong
-    'version' => '4.5.00', // Phien ban cua modle
+    'version' => '5.0.00', // Phien ban cua modle
     'date' => 'Tuesday, June 22, 2021 16:00:00 GMT+07:00', // Ngay phat hanh phien ban
     'author' => 'VINADES.,JSC <contact@vinades.vn>', // Tac gia
     'note' => '', // Ghi chu

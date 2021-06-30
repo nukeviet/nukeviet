@@ -1,8 +1,8 @@
 <?php
 
 /**
- * NukeViet Content Management System
- * @version 4.x
+ * NUKEVIET Content Management System
+ * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
@@ -20,7 +20,7 @@ $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
 $db_config['dbdetete'] = 0;
-$db_config['prefix'] = 'nv4';
+$db_config['prefix'] = 'nv5';
 $db_config['persistent'] = false;
 $db_config['collation'] = ''; //utf8_general_ci, utf8mb4_unicode_ci, utf8mb4_vietnamese_ci
 
@@ -36,7 +36,7 @@ $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
 $global_config['unofficial_mode'] = 1; // Cảnh báo bản thử nghiệm
-$global_config['version'] = '4.5.00 OpenBeta 1'; // NukeViet 4.5 OpenBeta 1
+$global_config['version'] = '5.0.00-dev'; // NukeViet 4.5 OpenBeta 1
 $global_config['site_email'] = '';
 $global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * NukeViet Content Management System
- * @version 4.x
+ * NUKEVIET Content Management System
+ * @version 5.x
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
@@ -1272,8 +1272,8 @@ function nv_save_file_config()
     global $nv_Request, $file_config_temp, $db_config, $global_config, $step;
 
     if (is_writable(NV_ROOTDIR . '/' . $file_config_temp) or is_writable(NV_ROOTDIR . '/' . NV_TEMP_DIR)) {
-        $global_config['cookie_prefix'] = (empty($global_config['cookie_prefix']) or $global_config['cookie_prefix'] == 'nv4') ? 'nv4c_' . nv_genpass(5) : $global_config['cookie_prefix'];
-        $global_config['session_prefix'] = (empty($global_config['session_prefix']) or $global_config['session_prefix'] == 'nv4') ? 'nv4s_' . nv_genpass(6) : $global_config['session_prefix'];
+        $global_config['cookie_prefix'] = (empty($global_config['cookie_prefix']) or $global_config['cookie_prefix'] == 'nv5') ? 'nv5c_' . nv_genpass(5) : $global_config['cookie_prefix'];
+        $global_config['session_prefix'] = (empty($global_config['session_prefix']) or $global_config['session_prefix'] == 'nv5') ? 'nv5s_' . nv_genpass(6) : $global_config['session_prefix'];
         $global_config['site_email'] = (!isset($global_config['site_email'])) ? '' : $global_config['site_email'];
 
         $db_config['dbhost'] = (!isset($db_config['dbhost'])) ? 'localhost' : $db_config['dbhost'];
@@ -1282,7 +1282,7 @@ function nv_save_file_config()
         $db_config['dbuname'] = (!isset($db_config['dbuname'])) ? '' : $db_config['dbuname'];
         $db_config['dbsystem'] = (isset($db_config['dbsystem'])) ? $db_config['dbsystem'] : $db_config['dbuname'];
         $db_config['dbpass'] = (!isset($db_config['dbpass'])) ? '' : $db_config['dbpass'];
-        $db_config['prefix'] = (!isset($db_config['prefix'])) ? 'nv4' : $db_config['prefix'];
+        $db_config['prefix'] = (!isset($db_config['prefix'])) ? 'nv5' : $db_config['prefix'];
         $db_config['charset'] = strstr($db_config['collation'], '_', true);
 
         $persistent = ($db_config['persistent']) ? 'true' : 'false';
