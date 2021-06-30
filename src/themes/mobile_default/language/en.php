@@ -10,8 +10,8 @@
  */
 
 $lang_block['qr_level'] = 'QR-code Image quality';
-$lang_block['qr_pixel_per_point'] = 'QR-code Image Size ';
-$lang_block['qr_outer_frame'] = 'QR-code Image Border';
+$lang_block['qr_size'] = 'QR-code Image Size ';
+$lang_block['qr_margin'] = 'QR-code Image Border';
 $lang_block['cominfo_map_yes'] = 'Enable Google MAP';
 $lang_block['cominfo_map_no'] = 'Disable Google MAP';
 $lang_block['cominfo_mapurl'] = 'Google MAP Iframe URL';

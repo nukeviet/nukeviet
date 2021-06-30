@@ -686,7 +686,7 @@ $blockGroups = [
                 'active' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
-                'config' => 'a:3:{s:5:"level";s:1:"M";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}'
+                'config' => 'a:3:{s:5:"level";s:1:"M";s:4:"size";i:150;s:6:"margin";i:5;}'
             ],
             [
                 'module' => 'statistics',
@@ -840,7 +840,7 @@ $blockGroups = [
                 'active' => '1',
                 'groups_view' => '6',
                 'all_func' => 1,
-                'config' => 'a:3:{s:5:"level";s:1:"L";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}'
+                'config' => 'a:3:{s:5:"level";s:1:"M";s:4:"size";i:150;s:6:"margin";i:5;}'
             ]
         ],
         'FOOTER_SITE' => [

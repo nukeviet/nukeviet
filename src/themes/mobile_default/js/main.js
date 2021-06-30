@@ -216,11 +216,11 @@ function openID_result() {
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
-    $(b).on("load", function() {
+    $(b).on('load', function() {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
-    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
+    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&s=" + $(a).data("size") + "&m=" + $(a).data("margin")
 }
 
 // Switch tab

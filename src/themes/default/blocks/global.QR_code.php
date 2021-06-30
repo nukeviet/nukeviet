@@ -32,10 +32,10 @@ if (!nv_function_exists('nv_block_qr_code')) {
         }
 
         $array_levels = [
-            'L',
-            'M',
-            'Q',
-            'H'
+            'L' => 'Low',
+            'M' => 'Medium',
+            'Q' => 'Quartile',
+            'H' => 'High'
         ];
 
         $html = '<div class="form-group">';
@@ -43,8 +43,8 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_level">';
 
-        foreach ($array_levels as $level) {
-            $html .= '		<option value="' . $level . '"' . ($level == $data_block['level'] ? ' selected="selected"' : '') . '>' . $level . '</option>';
+        foreach ($array_levels as $level => $lev_val) {
+            $html .= '		<option value="' . $level . '"' . ($level == $data_block['level'] ? ' selected="selected"' : '') . '>' . $lev_val . '</option>';
         }
 
         $html .= '		</select>';
@@ -52,28 +52,16 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_pixel_per_point']) ? 'qr_pixel_per_point' : $lang_block['qr_pixel_per_point']) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_size']) ? 'qr_size' : $lang_block['qr_size']) . ':</label>';
         $html .= '	<div class="col-sm-9">';
-        $html .= '		<select class="form-control" name="config_pixel_per_point">';
-
-        for ($i = 1; $i <= 12; ++$i) {
-            $html .= '		<option value="' . $i . '"' . ($i == $data_block['pixel_per_point'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
-        }
-
-        $html .= '		</select>';
+        $html .= '		<input type="text" class="form-control" name="size" value="' . $data_block['size'] . '"/>';
         $html .= '	</div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_outer_frame']) ? 'qr_outer_frame' : $lang_block['qr_outer_frame']) . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_margin']) ? 'qr_margin' : $lang_block['qr_margin']) . ':</label>';
         $html .= '	<div class="col-sm-9">';
-        $html .= '		<select class="form-control" name="config_outer_frame">';
-
-        for ($i = 1; $i <= 5; ++$i) {
-            $html .= '		<option value="' . $i . '"' . ($i == $data_block['outer_frame'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
-        }
-
-        $html .= '		</select>';
+        $html .= '		<input type="text" class="form-control" name="margin" value="' . $data_block['margin'] . '"/>';
         $html .= '	</div>';
         $html .= '</div>';
 
@@ -93,8 +81,11 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $return = [];
         $return['error'] = [];
         $return['config']['level'] = $nv_Request->get_title('config_level', 'post');
-        $return['config']['pixel_per_point'] = $nv_Request->get_int('config_pixel_per_point', 'post', 4);
-        $return['config']['outer_frame'] = $nv_Request->get_int('config_outer_frame', 'post', 1);
+        $return['config']['size'] = $nv_Request->get_int('size', 'post', 150);
+        $return['config']['margin'] = $nv_Request->get_int('margin', 'post', 5);
+
+        ($return['config']['size'] < 150 or $return['config']['size'] > 300) && $return['config']['size'] = 150;
+        ($return['config']['margin'] < 0 or $return['config']['margin'] > 10) && $return['config']['margin'] = 5;
 
         return $return;
     }
@@ -136,6 +127,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
 
         $block_config['selfurl'] = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
         $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ? $page_title : $global_config['site_name']));
+        $block_config['width'] = $block_config['height'] = (int) $block_config['size'] + (2 * (int) $block_config['margin']);
         $xtpl->assign('QRCODE', $block_config);
 
         $xtpl->parse('main');

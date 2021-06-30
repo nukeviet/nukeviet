@@ -16,25 +16,29 @@ if (!defined('NV_MAINFILE')) {
 if ($nv_Request->get_string('second', 'get') == 'qr') {
     $url = $nv_Request->get_string('u', 'get', '');
     $level = $nv_Request->get_title('l', 'get', 'M');
-    $ModuleSize = $nv_Request->get_int('ppp', 'get', 4);
-    $outer_frame = $nv_Request->get_int('of', 'get', 1);
+    $size = $nv_Request->get_int('s', 'get', 150);
+    $margin = $nv_Request->get_int('m', 'get', 5);
 
-    $_ErrorCorrection = [
-        'L' => 'low',
-        'M' => 'medium',
-        'Q' => 'quartile',
-        'H' => 'high'
-    ];
-    if (!empty($url) and isset($_ErrorCorrection[$level]) and ($ModuleSize > 0 and $ModuleSize < 13) and ($outer_frame > 0 and $outer_frame < 6)) {
-        // Readmore: https://github.com/endroid/QrCode and http://www.qrcode.com/en/about/version.html
-        $qrCode = new Endroid\QrCode\QrCode();
+    if ('L' == $level) {
+        $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::LOW();
+    } elseif ('M' == $level) {
+        $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::MEDIUM();
+    } elseif ('Q' == $level) {
+        $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::QUARTILE();
+    } else {
+        $_ErrorCorrection = Endroid\QrCode\ErrorCorrectionLevel::HIGH();
+    }
+    if (!empty($url)) {
+        $qrCode = new Endroid\QrCode\QrCode($url);
+        $qrCode->setEncoding('UTF-8');
+        $qrCode->setErrorCorrectionLevel($_ErrorCorrection);
+        $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+        $qrCode->setSize($size);
+        $qrCode->setMargin($margin);
 
-        header('Content-type: image/png');
-        $qrCode->setText($url)
-            ->setErrorCorrection($_ErrorCorrection[$level])
-            ->setModuleSize($ModuleSize)
-            ->setImageType('png')
-            ->render();
+        header('Content-Type: ' . $qrCode->getContentType());
+        echo $qrCode->writeString();
     }
     exit();
 }
