@@ -14,7 +14,7 @@ Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikiped
 ## Licensing
 NukeViet is released under GNU/GPL version 2 or any later version.
 
-See [LICENSE](LICENSE) for the full license.
+See [LICENSE.txt](LICENSE.txt) for the full license.
 
 ## NukeViet official website
   - Home page - link to all resources NukeViet: http://nukeviet.vn (select Vietnamese to have the latest information).
@@ -32,7 +32,7 @@ See [LICENSE](LICENSE) for the full license.
   - NukeViet group on FB: https://www.facebook.com/groups/nukeviet/
   - http://twitter.com/nukeviet
   - https://groups.google.com/forum/?fromgroups#!forum/nukeviet
-  - https://www.youtube.com/c/nukeviet
+  - http://google.com/+nukeviet
 
 
 
