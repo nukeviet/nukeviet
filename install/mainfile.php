@@ -44,6 +44,15 @@ define('NV_MOBILE_FILES_DIR', NV_ASSETS_DIR . '/mobile');
 require NV_ROOTDIR . '/vendor/autoload.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
+$nv_Server = new NukeViet\Core\Server();
+
+define('NV_SERVER_NAME', $nv_Server->getServerHost());
+define('NV_SERVER_PROTOCOL', $nv_Server->getServerProtocol());
+define('NV_SERVER_PORT', $nv_Server->getServerPort());
+
+define('NV_MY_DOMAIN', $nv_Server->getOriginalDomain());
+define('NV_BASE_SITEURL', $nv_Server->getWebsitePath() . '/');
+
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
 $global_config['my_domains'] = [
@@ -100,20 +109,10 @@ $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true
 // Ket noi voi class xu ly request
 $nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 
-define('NV_SERVER_NAME', $nv_Request->server_name);
-// vd: mydomain1.com
-define('NV_SERVER_PROTOCOL', $nv_Request->server_protocol);
-// vd: http
-define('NV_SERVER_PORT', $nv_Request->server_port);
-// vd: 80
-define('NV_MY_DOMAIN', $nv_Request->my_current_domain);
-// vd: http://mydomain1.com:80
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 define('NV_USER_AGENT', $nv_Request->user_agent);
 // HTTP_USER_AGENT
-define('NV_BASE_SITEURL', $nv_Request->base_siteurl . '/');
-// vd: /ten_thu_muc_chua_site/
 define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
 // vd: /ten_thu_muc_chua_site/admin/
 define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
