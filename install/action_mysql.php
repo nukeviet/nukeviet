@@ -2,14 +2,14 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/28/2009 20:8
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @createdate 12/28/2009 20:8
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Ten cac table cua CSDL dung chung cho he thong
@@ -77,6 +77,31 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_oauth (
   UNIQUE KEY admin_id (admin_id, oauth_server, oauth_uid),
   KEY oauth_email (oauth_email)
 ) ENGINE=MyISAM COMMENT 'Bảng lưu xác thực 2 bước từ oauth của admin'";
+
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_role (
+  role_id smallint(4) NOT NULL AUTO_INCREMENT,
+  role_title varchar(250) NOT NULL DEFAULT '',
+  role_description text NOT NULL,
+  role_data text NOT NULL,
+  addtime int(11) NOT NULL DEFAULT '0',
+  edittime int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (role_id)
+) ENGINE=MyISAM COMMENT 'Bảng lưu quyền truy cập API'";
+
+$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_credential (
+  admin_id int(11) unsigned NOT NULL,
+  credential_title varchar(255) NOT NULL DEFAULT '',
+  credential_ident varchar(50) NOT NULL DEFAULT '',
+  credential_secret varchar(255) NOT NULL DEFAULT '',
+  credential_ips varchar(255) NOT NULL DEFAULT '',
+  api_roles varchar(255) NOT NULL DEFAULT '',
+  addtime int(11) NOT NULL DEFAULT '0',
+  edittime int(11) NOT NULL DEFAULT '0',
+  last_access int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY credential_ident (credential_ident),
+  UNIQUE KEY credential_secret (credential_secret),
+  KEY admin_id (admin_id)
+) ENGINE=MyISAM COMMENT 'Bảng lưu key API của quản trị'";
 
 $sql_create_table[] = 'CREATE TABLE ' . NV_CONFIG_GLOBALTABLE . " (
   lang varchar(3) NOT NULL DEFAULT 'sys',

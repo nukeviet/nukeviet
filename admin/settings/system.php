@@ -2,14 +2,14 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @createdate 2-2-2010 12:55
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $adminThemes = [''];
@@ -41,7 +41,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_site = [];
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes)) {
+    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) {
         $array_config_site['admin_theme'] = $admin_theme;
     } else {
         $array_config_site['admin_theme'] = '';
@@ -79,7 +79,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_site['ssl_https'] = 0;
     }
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_site as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -89,7 +89,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     if (defined('NV_IS_GODADMIN')) {
         $array_config_global = [];
         $site_timezone = $nv_Request->get_title('site_timezone', 'post', '', 0);
-        if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array) or $site_timezone == 'byCountry'))) {
+        if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array, true) or $site_timezone == 'byCountry'))) {
             $array_config_global['site_timezone'] = $site_timezone;
         }
         $my_domains = $nv_Request->get_title('my_domains', 'post', '');
@@ -100,10 +100,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             foreach ($my_domains as $dm) {
                 $dm = preg_replace('/^(http|https)\:\/\//', '', $dm);
                 $dm = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $dm);
-                $_p  = '';
+                $_p = '';
                 if (preg_match('/(.*)\:([0-9]+)$/', $dm, $m)) {
                     $dm = $m[1];
-                    $_p  = ':' . $m[2];
+                    $_p = ':' . $m[2];
                 }
                 $dm = nv_check_domain(nv_strtolower($dm));
                 if (!empty($dm)) {
@@ -124,7 +124,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
 
         $site_lang = $nv_Request->get_title('site_lang', 'post', '', 1);
-        if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs)) {
+        if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs, true)) {
             $array_config_global['site_lang'] = $site_lang;
         }
 
@@ -160,10 +160,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         if (!empty($cdn_url)) {
             $cdn_url = preg_replace('/^(http|https)\:\/\//', '', $cdn_url);
             $cdn_url = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $cdn_url);
-            $_p  = '';
+            $_p = '';
             if (preg_match('/(.*)\:([0-9]+)$/', $cdn_url, $m)) {
                 $cdn_url = $m[1];
-                $_p  = ':' . $m[2];
+                $_p = ':' . $m[2];
             }
             $cdn_url = nv_check_domain(nv_strtolower($cdn_url));
             if (!empty($cdn_url)) {
@@ -171,7 +171,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             }
         }
 
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
+        $array_config_global['remote_api_access'] = (int) $nv_Request->get_bool('remote_api_access', 'post', false);
+        $array_config_global['remote_api_log'] = (int) $nv_Request->get_bool('remote_api_log', 'post', false);
+
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -179,9 +182,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
 
         // Cấu hình ghi ra hằng
-        $array_config_define['nv_debug'] = (int)$nv_Request->get_bool('nv_debug', 'post');
+        $array_config_define['nv_debug'] = (int) $nv_Request->get_bool('nv_debug', 'post');
 
-        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
+        $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
         foreach ($array_config_define as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
             $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
@@ -223,7 +226,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
-for ($i = 0; $i <= 2; $i ++) {
+for ($i = 0; $i <= 2; ++$i ) {
     $ssl_https = [
         'key' => $i,
         'title' => $lang_module['ssl_https_' . $i],
@@ -235,7 +238,7 @@ for ($i = 0; $i <= 2; $i ++) {
 }
 
 if (defined('NV_IS_GODADMIN')) {
-    $result = $db->query("SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
+    $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
     while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
         $array_config_global[$c_config_name] = $c_config_value;
     }
@@ -247,12 +250,14 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_ERROR_SET_LOGS', ($array_config_global['error_set_logs']) ? ' checked="checked"' : '');
     $xtpl->assign('CHECKED_REWRITE_ENABLE', ($array_config_global['rewrite_enable'] == 1) ? ' checked ' : '');
     $xtpl->assign('CHECKED_REWRITE_OPTIONAL', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '');
+    $xtpl->assign('CHECKED_REMOTE_API_ACCESS', ($array_config_global['remote_api_access'] == 1) ? ' checked ' : '');
+    $xtpl->assign('CHECKED_REMOTE_API_LOG', ($array_config_global['remote_api_log'] == 1) ? ' checked ' : '');
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
 
     foreach ($site_mods as $mod => $row) {
         $xtpl->assign('MODE_VALUE', $mod);
-        $xtpl->assign('MODE_SELECTED', ($mod == $array_config_global['rewrite_op_mod']) ? "selected='selected'" : "");
+        $xtpl->assign('MODE_SELECTED', ($mod == $array_config_global['rewrite_op_mod']) ? "selected='selected'" : '');
         $xtpl->assign('MODE_NAME', $row['custom_title']);
         $xtpl->parse('main.system.rewrite_op_mod');
     }
@@ -263,7 +268,7 @@ if (defined('NV_IS_GODADMIN')) {
     if (sizeof($global_config['allow_sitelangs']) > 1) {
         foreach ($allow_sitelangs as $lang_i) {
             $xtpl->assign('LANGOP', $lang_i);
-            $xtpl->assign('SELECTED', ($lang_i == $array_config_global['site_lang']) ? "selected='selected'" : "");
+            $xtpl->assign('SELECTED', ($lang_i == $array_config_global['site_lang']) ? "selected='selected'" : '');
             $xtpl->assign('LANGVALUE', $language_array[$lang_i]['name']);
             $xtpl->parse('main.system.lang_multi.site_lang_option');
         }
@@ -276,14 +281,14 @@ if (defined('NV_IS_GODADMIN')) {
     }
     $xtpl->assign('CURRENT_TIME', sprintf($lang_module['current_time'], nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
     $xtpl->assign('TIMEZONEOP', 'byCountry');
-    $xtpl->assign('TIMEZONESELECTED', ($array_config_global['site_timezone'] == 'byCountry') ? "selected='selected'" : "");
+    $xtpl->assign('TIMEZONESELECTED', ($array_config_global['site_timezone'] == 'byCountry') ? "selected='selected'" : '');
     $xtpl->assign('TIMEZONELANGVALUE', $lang_module['timezoneByCountry']);
     $xtpl->parse('main.system.opsite_timezone');
 
     sort($timezone_array);
     foreach ($timezone_array as $site_timezone_i) {
         $xtpl->assign('TIMEZONEOP', $site_timezone_i);
-        $xtpl->assign('TIMEZONESELECTED', ($site_timezone_i == $array_config_global['site_timezone']) ? "selected='selected'" : "");
+        $xtpl->assign('TIMEZONESELECTED', ($site_timezone_i == $array_config_global['site_timezone']) ? "selected='selected'" : '');
         $xtpl->assign('TIMEZONELANGVALUE', $site_timezone_i);
         $xtpl->parse('main.system.opsite_timezone');
     }
