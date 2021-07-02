@@ -2,6 +2,7 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.4.03
+- Add API manager
 - Update Jquery to v3.6.0, ckeditor - v4.16.1, Chart.js - v3.3.2, clipboard.js - v2.0.8, jquery.timeago.js - v1.6.7, jQuery Validation Plugin - v1.19.3, pdf.js - v2.8.335, Select2.js - 4.1.0-rc.0
 - Update Browser class to v1.9.6
 - System package updates: polyfill-mbstring (v1.3.0 => v1.23.0), gregwar/cache (v1.0.12 => v1.0.13), gregwar/image (v2.0.21 => v2.0.28), and/oauth (dev-master 48fa6e7 => dev-master 700b769), symfony/options-resolver (v3.2.6 => v3.4.47), endroid/qrcode (1.9.1 => 1.9.3), phpmailer/phpmailer (v6.1.6 => v6.5.0)
