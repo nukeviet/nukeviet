@@ -265,6 +265,10 @@ class Request
             $this->restrictCrossDomain = !empty($config['crossadmin_restrict']) ? true : false;
             $this->validCrossDomains = !empty($config['crossadmin_valid_domains']) ? ((array) $config['crossadmin_valid_domains']) : [];
             $this->validCrossIPs = !empty($config['crossadmin_valid_ips']) ? ((array) $config['crossadmin_valid_ips']) : [];
+        } elseif (defined('NV_REMOTE_API')) {
+            $this->restrictCrossDomain = false;
+            $this->validCrossDomains = [];
+            $this->validCrossIPs = [];
         } else {
             $this->restrictCrossDomain = !empty($config['crosssite_restrict']) ? true : false;
             $this->validCrossDomains = !empty($config['crosssite_valid_domains']) ? ((array) $config['crosssite_valid_domains']) : [];
