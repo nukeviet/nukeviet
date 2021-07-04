@@ -19,10 +19,11 @@ if (!nv_function_exists('nv_block_voting')) {
      *
      * @return string
      */
-    function nv_block_voting()
+    function nv_block_voting($block_config)
     {
-        global $nv_Cache, $db, $my_footer, $site_mods, $global_config, $lang_global, $module_config, $module_name;
+        global $nv_Cache, $db, $my_footer, $site_mods, $global_config, $lang_global, $module_config;
 
+        $module = $block_config['module'];
         $content = '';
 
         if (!isset($site_mods['voting'])) {
@@ -119,10 +120,10 @@ if (!nv_function_exists('nv_block_voting')) {
             if ($voting_array['active_captcha']) {
                 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
-                if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
                     $xtpl->parse('main.recaptcha3');
-                } elseif (($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module_name]['captcha_type'] == 'captcha') {
-                    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                } elseif (($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module]['captcha_type'] == 'captcha') {
+                    if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                         $xtpl->parse('main.has_captcha.recaptcha');
@@ -148,5 +149,5 @@ if (!nv_function_exists('nv_block_voting')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    $content = nv_block_voting();
+    $content = nv_block_voting($block_config);
 }

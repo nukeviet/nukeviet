@@ -70,10 +70,9 @@ if (!nv_function_exists('nv_block_voting_select')) {
      */
     function nv_block_voting_select($block_config, $global_array_cat)
     {
-        global $nv_Cache, $global_config, $site_mods, $module_name, $my_footer, $client_info, $lang_global, $module_config;
+        global $nv_Cache, $global_config, $site_mods, $my_footer, $lang_global, $module_config;
 
         $module = $block_config['module'];
-        $mod_data = $site_mods[$module]['module_data'];
 
         $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
         $list = $nv_Cache->db($sql, 'vid', 'voting');
@@ -134,10 +133,10 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 if ($voting_array['active_captcha']) {
                     $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
-                    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                    if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
                         $xtpl->parse('main.recaptcha3');
-                    } elseif (($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module_name]['captcha_type'] == 'captcha') {
-                        if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                    } elseif (($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module]['captcha_type'] == 'captcha') {
+                        if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
                             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                             $xtpl->parse('main.has_captcha.recaptcha');
