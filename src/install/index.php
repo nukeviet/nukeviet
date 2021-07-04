@@ -1169,7 +1169,7 @@ if ($step == 1) {
 
             $content_config = "<?php\n\n";
             $content_config .= NV_FILEHEAD . "\n\n";
-            $content_config .= "if (!defined( 'NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+            $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
             $content_config .= "\$cache = '" . serialize($robots_data) . "';\n\n";
             $content_config .= "\$cache_other = '" . serialize($robots_other) . "';";
             file_put_contents($cache_file, $content_config, LOCK_EX);
