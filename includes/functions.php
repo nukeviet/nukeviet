@@ -1771,7 +1771,13 @@ function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = fals
     global $home;
 
     if ($home) {
-        $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+        $page_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
+
+        if ($_SERVER['REQUEST_URI'] != NV_BASE_SITEURL and $_SERVER['REQUEST_URI'] != $page_url) {
+            nv_redirect_location($page_url);
+        }
+
+        return NV_MAIN_DOMAIN . $page_url;
     }
 
     $url_rewrite = nv_url_rewrite($page_url, true);
