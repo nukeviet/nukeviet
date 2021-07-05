@@ -6,7 +6,7 @@
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
- * @createdate Monday, 05 Jul 2021 11:03
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 use NukeViet\Api\Exception;
