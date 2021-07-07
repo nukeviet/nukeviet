@@ -360,42 +360,71 @@ function isRecaptchaCheck() {
     return "" == nv_recaptcha_sitekey ? 0 : 2 == nv_recaptcha_ver || 3 == nv_recaptcha_ver ? nv_recaptcha_ver : 0
 }
 
-function reCaptcha2Recreate(a) {
-    $("[data-toggle=recaptcha]", $(a)).each(function() {
-        var b = $(this).data("pnum"),
-            c = $(this).data("btnselector"),
-            d = $(this).data("size") && "compact" == $(this).data("size") ? "compact" : "",
-            e = "recaptcha" + (new Date).getTime() + nv_randomPassword(8);
-        $(this).replaceWith('<div id="' + e + '" data-toggle="recaptcha" data-pnum="' + b + '" data-btnselector="' + c + '" data-size="' + d + '"></div>')
+function reCaptcha2Recreate(obj) {
+    $('[data-toggle=recaptcha]', $(obj)).each(function() {
+        var callFunc = $(this).data('callback'),
+            pnum = $(this).data('pnum'),
+            btnselector = $(this).data('btnselector'),
+            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
+        var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+        if (callFunc) {
+            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-callback="' + callFunc + '" data-size="' + size + '"></div>');
+        } else {
+            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>')
+        }
     })
 }
 
 var reCaptcha2OnLoad = function() {
-    $("[data-toggle=recaptcha]").each(function() {
-        var id = $(this).attr("id"),
-            pnum = parseInt($(this).data("pnum")),
-            btnselector = $(this).data("btnselector"),
-            size = $(this).data("size") && $(this).data("size") == "compact" ? "compact" : "",
-            btn = $("#" + id),
-            k;
-        for (k = 1; k <= pnum; k++) btn = btn.parent();
-        btn = $(btnselector, btn);
-        if (btn.length) btn.prop("disabled", true);
-        if (typeof reCapIDs[id] === "undefined") reCapIDs[id] = grecaptcha.render(id, {
-            "sitekey": nv_recaptcha_sitekey,
-            "type": nv_recaptcha_type,
-            "size": size,
-            "callback": function() {
-                reCaptcha2Callback(id, false)
-            },
-            "expired-callback": function() {
-                reCaptcha2Callback(id, true)
-            },
-            "error-callback": function() {
-                reCaptcha2Callback(id, true)
+    $('[data-toggle=recaptcha]').each(function() {
+        var id = $(this).attr('id'),
+            callFunc = $(this).data('callback'),
+            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
+
+        if (typeof window[callFunc] === 'function') {
+            if (typeof reCapIDs[id] === "undefined") {
+                reCapIDs[id] = grecaptcha.render(id, {
+                    'sitekey': nv_recaptcha_sitekey,
+                    'type': nv_recaptcha_type,
+                    'size': size,
+                    'callback': callFunc
+                })
+            } else {
+                grecaptcha.reset(reCapIDs[id])
             }
-        });
-        else grecaptcha.reset(reCapIDs[id])
+        } else {
+            var pnum = parseInt($(this).data('pnum')),
+                btnselector = $(this).data('btnselector'),
+                btn = $('#' + id),
+                k = 1;
+
+            for (k; k <= pnum; k++) {
+                btn = btn.parent();
+            }
+            btn = $(btnselector, btn);
+            if (btn.length) {
+                btn.prop('disabled', true);
+            }
+
+            if (typeof reCapIDs[id] === "undefined") {
+                reCapIDs[id] = grecaptcha.render(id, {
+                    'sitekey': nv_recaptcha_sitekey,
+                    'type': nv_recaptcha_type,
+                    'size': size,
+                    'callback': function() {
+                        reCaptcha2Callback(id, false)
+                    },
+                    'expired-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    },
+                    'error-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    }
+                })
+            } else {
+                grecaptcha.reset(reCapIDs[id])
+            }
+        }
     })
 }
 
