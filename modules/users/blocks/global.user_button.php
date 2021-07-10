@@ -13,7 +13,7 @@ if (!defined('NV_SYSTEM')) {
     exit('Stop!!!');
 }
 
-global $site_mods, $client_info, $global_config, $module_file, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
+global $site_mods, $client_info, $global_config, $module_file, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID, $page_url;
 
 $content = '';
 
@@ -114,6 +114,7 @@ if ($global_config['allowuserlogin']) {
         $xtpl->parse('signed');
         $content = $xtpl->text('signed');
     } else {
+        $xtpl->assign('NV_REDIRECT', nv_redirect_encrypt(NV_MY_DOMAIN . (empty($page_url) ? '' : nv_url_rewrite(str_replace('&amp;', '&', $page_url), true))));
         $xtpl->parse('main');
         $content = $xtpl->text('main');
     }
