@@ -10,7 +10,10 @@ function loginFormLoad() {
         type: 'POST',
         url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
         cache: !1,
-        data: '&nv_ajax=1',
+        data: {
+            nv_ajax: 1,
+            nv_redirect: '{NV_REDIRECT}'
+        },
         dataType: "html"
     }).done(function(a) {
         $("#tip .log-area").html(a);
