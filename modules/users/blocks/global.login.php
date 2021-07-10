@@ -76,7 +76,7 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $module_file, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config, $my_head;
+        global $client_info, $global_config, $module_name, $module_file, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config, $my_head, $page_url, $nv_redirect;
 
         $content = '';
         $module = $block_config['module'];
@@ -236,9 +236,15 @@ if (!nv_function_exists('nv_block_login')) {
                         'google' => 'google-plus',
                         'facebook' => 'facebook'
                     ];
+                    $default_redirect = nv_redirect_encrypt(NV_MY_DOMAIN . (empty($page_url) ? '' : nv_url_rewrite(str_replace('&amp;', '&', $page_url), true)));
                     foreach ($global_config['openid_servers'] as $server) {
                         $assigns = [];
-                        $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
+                        $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
+                        if (!empty($nv_redirect)) {
+                            $assigns['href'] .= '&amp;nv_redirect=' . $nv_redirect;
+                        } else {
+                            $assigns['href'] .= '&amp;nv_redirect=' . $default_redirect;
+                        }
                         $assigns['title'] = ucfirst($server);
                         $assigns['server'] = $server;
                         $assigns['icon'] = $icons[$server];
