@@ -1891,10 +1891,11 @@ function nv_is_url($url)
  * nv_check_url()
  *
  * @param string $url
+ * @param bool   $isTriggerError
  * @param int    $is_200
  * @return bool
  */
-function nv_check_url($url, $is_200 = 0)
+function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 {
     if (empty($url)) {
         return false;
@@ -1940,7 +1941,9 @@ function nv_check_url($url, $is_200 = 0)
         curl_close($curl);
 
         if ($response === false) {
-            trigger_error(curl_error($curl), E_USER_WARNING);
+            if ($isTriggerError) {
+                trigger_error(curl_error($curl), E_USER_WARNING);
+            }
 
             return false;
         }
@@ -1952,7 +1955,9 @@ function nv_check_url($url, $is_200 = 0)
         $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
 
         if (!$fp) {
-            trigger_error($errstr, E_USER_WARNING);
+            if ($isTriggerError) {
+                trigger_error($errstr, E_USER_WARNING);
+            }
 
             return false;
         }
@@ -1971,7 +1976,9 @@ function nv_check_url($url, $is_200 = 0)
         }
         @fclose($fp);
     } else {
-        trigger_error('error server no support check url', E_USER_WARNING);
+        if ($isTriggerError) {
+            trigger_error('error server no support check url', E_USER_WARNING);
+        }
 
         return false;
     }
@@ -1993,7 +2000,7 @@ function nv_check_url($url, $is_200 = 0)
                 ++$is_200;
                 $location = trim($matches[1]);
 
-                return nv_check_url($location, $is_200);
+                return nv_check_url($location, $isTriggerError, $is_200);
             }
         }
     }
