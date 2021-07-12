@@ -1902,13 +1902,42 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
     }
 
     $url = str_replace(' ', '%20', $url);
-    $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+    $url = nv_strtolower($url);
 
-    if (nv_function_exists('get_headers') and $allow_url_fopen == 1) {
-        $res = get_headers($url);
-    } elseif (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
-        $url_info = parse_url($url);
-        $port = isset($url_info['port']) ? (int) $url_info['port'] : 80;
+    if (!preg_match('/^(http|https|ftp|gopher)\:\/\//', $url)) {
+        return false;
+    }
+
+    if (!($url_info = parse_url($url))) {
+        return false;
+    }
+
+    $domain = (isset($url_info['host'])) ? nv_check_domain($url_info['host']) : '';
+    if (empty($domain)) {
+        return false;
+    }
+
+    if (isset($paurl_inforts['user']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $url_info['user'])) {
+        return false;
+    }
+
+    if (isset($url_info['pass']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $url_info['pass'])) {
+        return false;
+    }
+
+    if (isset($url_info['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!\:]*$/', $url_info['path'])) {
+        return false;
+    }
+
+    if (isset($url_info['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $url_info['query'])) {
+        return false;
+    }
+
+    $allow_url_fopen = ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on';
+    $isHttps = $url_info['scheme'] == 'https';
+
+    if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
+        $port = isset($url_info['port']) ? (int) $url_info['port'] : ($isHttps ? 443 : 80);
 
         $userAgents = [
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
@@ -1923,11 +1952,16 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
         srand((float) microtime() * 10000000);
         $rand = array_rand($userAgents);
         $agent = $userAgents[$rand];
-
         $curl = curl_init($url);
+
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_setopt($curl, CURLOPT_PORT, $port);
+
+        if ($isHttps) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYSTATUS, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        }
 
         if ($open_basedir) {
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -1947,12 +1981,48 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 
             return false;
         }
-        $res = explode('\n', $response);
-    } elseif (nv_function_exists('fsockopen') and nv_function_exists('fgets')) {
+        $res = explode(PHP_EOL, $response);
+    } elseif (nv_function_exists('get_headers') and $allow_url_fopen) {
+        if ($isHttps) {
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ]
+            ]);
+        } else {
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
+                ]
+            ]);
+        }
+
+        $res = get_headers($url, 0, $context);
+    } elseif (nv_function_exists('stream_socket_client') and nv_function_exists('fgets')) {
         $res = [];
-        $url_info = parse_url($url);
-        $port = isset($url_info['port']) ? (int) $url_info['port'] : 80;
-        $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
+        if ($isHttps) {
+            $scheme = 'ssl://';
+            $port = isset($url_info['port']) ? (int) $url_info['port'] : 443;
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ]
+            ]);
+        } else {
+            $scheme = '';
+            $port = isset($url_info['port']) ? (int) $url_info['port'] : 80;
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
+                ]
+            ]);
+        }
+
+        $fp = stream_socket_client($scheme . $url_info['host'] . ':' . $port, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
 
         if (!$fp) {
             if ($isTriggerError) {
@@ -1965,9 +2035,9 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
         $path = !empty($url_info['path']) ? $url_info['path'] : '/';
         $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
 
-        fputs($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
-        fputs($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
-        fputs($fp, "Connection: close\r\n\r\n");
+        fwrite($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
+        fwrite($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
+        fwrite($fp, "Connection: close\r\n\r\n");
 
         while (!feof($fp)) {
             if ($header = trim(fgets($fp, 1024))) {
@@ -1994,8 +2064,8 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
         return false;
     }
 
-    if (preg_match('/(301)|(302)|(303)/', $res[0])) {
-        foreach ($res as $k => $v) {
+    if (preg_match('/(301)|(302)|(303)|(307)/', $res[0])) {
+        foreach ($res as $v) {
             if (preg_match('/location:\s(.*?)$/is', $v, $matches)) {
                 ++$is_200;
                 $location = trim($matches[1]);
