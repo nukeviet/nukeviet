@@ -595,7 +595,9 @@ $(function() {
     });
     //Change Localtion
     $("[data-location]").on("click", function() {
-        locationReplace($(this).data("location"))
+        if (window.location.origin + $(this).data("location") != window.location.href) {
+            locationReplace($(this).data("location"))
+        }
     });
 });
 
