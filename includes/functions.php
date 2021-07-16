@@ -1795,7 +1795,7 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
     $url_rewrite = nv_url_rewrite($page_url, true);
     $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
     $url_rewrite_check = urldecode($url_rewrite_check);
-    $url_parts = parse_url($url_rewrite);
+    $url_parts = parse_url($url_rewrite_check);
     !isset($url_parts['query']) && $url_parts['query'] = '';
 
     $request_uri = urldecode($_SERVER['REQUEST_URI']);
