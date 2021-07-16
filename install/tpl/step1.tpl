@@ -68,6 +68,7 @@
             <a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a>,
             <a target="_blank" href="https://github.com/tdfoss">tdfoss</a>,
             <a target="_blank" href="https://github.com/thehung">thehung</a>,
+            khoaij123, dat.huynh,
             dinhpc86 at gmail.com,
             <a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet</a>,
             <a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp</a>,
@@ -99,12 +100,15 @@
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
                 <h5>{LANG.thanks_other_version} 4.5.00</h5>
-                    <a target="_blank" href="https://github.com/vinades">vinades</a> (257 commits),
-                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a> (9 commits),
-                    <a target="_blank" href="https://github.com/zzvipro47zz">zzvipro47zz</a> (5 commits),
-                    <a target="_blank" href="https://github.com/dat.huynh@infodation.vn">dat.huynh@infodation.vn</a> (3 commits),
-                    <a target="_blank" href="https://github.com/hiidemo">hiidemo</a> (1 commits),
-                    <a target="_blank" href="https://github.com/anhtunguyen71@gmail.com">anhtunguyen71@gmail.com</a> (1 commits)
+                    <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (281 commits)</a>,
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (9 commits)</a>,
+                    khoaij123 (4 commits),
+                    <a target="_blank" href="https://github.com/thehung">thehung (3 commits)</a>,
+                    dat.huynh (3 commits),
+                    <a target="_blank" href="https://github.com/vuthao">vuthao (2 commits)</a>,
+                    <a target="_blank" href="https://github.com/hiidemo">hiidemo (1 commits)</a>,
+                    tuyenh (1 commits),
+                    anhtunguyen71 (1 commits)
                     <br><br>
                 <h5>{LANG.thanks_other_version} 4.4.02</h5>
                     VINADES.,JSC (3 commits),
