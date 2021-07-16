@@ -1773,12 +1773,12 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 /**
  * getCanonicalUrl()
  *
- * @param string $page_url          Đường dẫn tuyệt đối từ thư mục gốc đến trang
- * @param bool   $request_uri_check Có so sánh đường dẫn này với request_uri hay không
- * @param bool   $abs_comp          So sánh tuyệt đối (true) hoặc chỉ cần có chứa (false)
+ * @param string $page_url    Đường dẫn tuyệt đối từ thư mục gốc đến trang
+ * @param bool   $query_check So sánh query của $page_url với query của $_SERVER['REQUEST_URI']
+ * @param bool   $abs_comp    So sánh tuyệt đối (true) hoặc chỉ cần có chứa (false)
  * @return string
  */
-function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false)
+function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
 {
     global $home;
 
@@ -1793,18 +1793,26 @@ function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = fals
     }
 
     $url_rewrite = nv_url_rewrite($page_url, true);
+    $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
+    $url_rewrite_check = urldecode($url_rewrite_check);
+    $url_parts = parse_url($url_rewrite);
+    !isset($url_parts['query']) && $url_parts['query'] = '';
 
-    if ($request_uri_check) {
-        $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
-        $url_rewrite_check = urldecode($url_rewrite_check);
-        $request_uri = urldecode($_SERVER['REQUEST_URI']);
-        if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
-            $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
-        }
+    $request_uri = urldecode($_SERVER['REQUEST_URI']);
+    if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
+        $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
+    }
+    $request_parts = parse_url($request_uri);
+    !isset($request_parts['query']) && $request_parts['query'] = '';
 
-        if ($abs_comp and strcmp($request_uri, $url_rewrite_check) !== 0) {
+    if (empty($request_parts['path']) or strcmp($url_parts['path'], $request_parts['path']) !== 0) {
+        nv_redirect_location($page_url);
+    }
+
+    if ($query_check) {
+        if ($abs_comp and strcmp($url_parts['query'], $request_parts['query']) !== 0) {
             nv_redirect_location($page_url);
-        } elseif (!str_starts_with($request_uri, $url_rewrite_check)) {
+        } elseif (!empty($url_parts['query']) and !str_starts_with($url_parts['query'], $request_parts['query'])) {
             nv_redirect_location($page_url);
         }
     }
