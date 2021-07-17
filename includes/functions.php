@@ -1523,8 +1523,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 /**
  * betweenURLs()
  *
- * @param integer $page
- * @param integer $total
+ * @param int    $page
+ * @param int    $total
  * @param string $base_url
  * @param string $urlappend
  * @param string $prevPage
@@ -1532,7 +1532,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
  */
 function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPage)
 {
-    if ($page > 1 and $page > $total) {
+    if ($page < 1 or ($page > 1 and $page > $total)) {
         nv_redirect_location($base_url);
     }
 
@@ -1758,15 +1758,12 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 /**
  * getCanonicalUrl()
  *
- * $page_url: Đường dẫn tuyệt đối từ thư mục gốc đến trang
- * $request_uri_check: Có so sánh đường dẫn này với request_uri hay không
- * $abs_comp: So sánh tuyệt đối (true) hoặc chỉ cần có chứa (false)
- * @param string $page_url
- * @param bool $request_uri_check
- * @param bool $abs_comp
- * @return
+ * @param string $page_url    Đường dẫn tuyệt đối từ thư mục gốc đến trang
+ * @param bool   $query_check So sánh query của $page_url với query của $_SERVER['REQUEST_URI']
+ * @param bool   $abs_comp    So sánh tuyệt đối (true) hoặc chỉ cần có chứa (false)
+ * @return string
  */
-function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = false)
+function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
 {
     global $home;
 
@@ -1781,18 +1778,26 @@ function getCanonicalUrl($page_url, $request_uri_check = false, $abs_comp = fals
     }
 
     $url_rewrite = nv_url_rewrite($page_url, true);
+    $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
+    $url_rewrite_check = urldecode($url_rewrite_check);
+    $url_parts = parse_url($url_rewrite_check);
+    !isset($url_parts['query']) && $url_parts['query'] = '';
 
-    if ($request_uri_check) {
-        $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
-        $url_rewrite_check = urldecode($url_rewrite_check);
-        $request_uri = urldecode($_SERVER['REQUEST_URI']);
-        if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
-            $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
-        }
+    $request_uri = urldecode($_SERVER['REQUEST_URI']);
+    if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
+        $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
+    }
+    $request_parts = parse_url($request_uri);
+    !isset($request_parts['query']) && $request_parts['query'] = '';
 
-        if ($abs_comp and strcmp($request_uri, $url_rewrite_check) !== 0) {
+    if (empty($request_parts['path']) or strcmp($url_parts['path'], $request_parts['path']) !== 0) {
+        nv_redirect_location($page_url);
+    }
+
+    if ($query_check) {
+        if ($abs_comp and strcmp($url_parts['query'], $request_parts['query']) !== 0) {
             nv_redirect_location($page_url);
-        } elseif (!str_starts_with($request_uri, $url_rewrite_check)) {
+        } elseif (!empty($url_parts['query']) and !str_starts_with($url_parts['query'], $request_parts['query'])) {
             nv_redirect_location($page_url);
         }
     }
@@ -1876,23 +1881,53 @@ function nv_is_url($url)
  * nv_check_url()
  *
  * @param string $url
- * @param bool $is_200
- * @return
+ * @param bool   $isTriggerError
+ * @param int    $is_200
+ * @return bool
  */
-function nv_check_url($url, $is_200 = 0)
+function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 {
     if (empty($url)) {
         return false;
     }
 
     $url = str_replace(' ', '%20', $url);
-    $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+    $url = nv_strtolower($url);
 
-    if (nv_function_exists('get_headers') and $allow_url_fopen == 1) {
-        $res = get_headers($url);
-    } elseif (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
-        $url_info = parse_url($url);
-        $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
+    if (!preg_match('/^(http|https|ftp|gopher)\:\/\//', $url)) {
+        return false;
+    }
+
+    if (!($url_info = parse_url($url))) {
+        return false;
+    }
+
+    $domain = (isset($url_info['host'])) ? nv_check_domain($url_info['host']) : '';
+    if (empty($domain)) {
+        return false;
+    }
+
+    if (isset($paurl_inforts['user']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $url_info['user'])) {
+        return false;
+    }
+
+    if (isset($url_info['pass']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $url_info['pass'])) {
+        return false;
+    }
+
+    if (isset($url_info['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!\:]*$/', $url_info['path'])) {
+        return false;
+    }
+
+    if (isset($url_info['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $url_info['query'])) {
+        return false;
+    }
+
+    $allow_url_fopen = ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on';
+    $isHttps = $url_info['scheme'] == 'https';
+
+    if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
+        $port = isset($url_info['port']) ? (int) $url_info['port'] : ($isHttps ? 443 : 80);
 
         $userAgents = [
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
@@ -1907,11 +1942,16 @@ function nv_check_url($url, $is_200 = 0)
         srand((float) microtime() * 10000000);
         $rand = array_rand($userAgents);
         $agent = $userAgents[$rand];
-
         $curl = curl_init($url);
+
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_setopt($curl, CURLOPT_PORT, $port);
+
+        if ($isHttps) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYSTATUS, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        }
 
         if ($open_basedir) {
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -1925,29 +1965,69 @@ function nv_check_url($url, $is_200 = 0)
         curl_close($curl);
 
         if ($response === false) {
-            trigger_error(curl_error($curl), E_USER_WARNING);
+            if ($isTriggerError) {
+                trigger_error(curl_error($curl), E_USER_WARNING);
+            }
 
             return false;
-        } else {
-            $res = explode('\n', $response);
         }
-    } elseif (nv_function_exists('fsockopen') and nv_function_exists('fgets')) {
+        $res = explode(PHP_EOL, $response);
+    } elseif (nv_function_exists('get_headers') and $allow_url_fopen) {
+        if ($isHttps) {
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ]
+            ]);
+        } else {
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
+                ]
+            ]);
+        }
+
+        $res = get_headers($url, 0, $context);
+    } elseif (nv_function_exists('stream_socket_client') and nv_function_exists('fgets')) {
         $res = [];
-        $url_info = parse_url($url);
-        $port = isset($url_info['port']) ? intval($url_info['port']) : 80;
-        $fp = fsockopen($url_info['host'], $port, $errno, $errstr, 15);
+        if ($isHttps) {
+            $scheme = 'ssl://';
+            $port = isset($url_info['port']) ? (int) $url_info['port'] : 443;
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ]
+            ]);
+        } else {
+            $scheme = '';
+            $port = isset($url_info['port']) ? (int) $url_info['port'] : 80;
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
+                ]
+            ]);
+        }
+
+        $fp = stream_socket_client($scheme . $url_info['host'] . ':' . $port, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
 
         if (!$fp) {
-            trigger_error($errstr, E_USER_WARNING);
+            if ($isTriggerError) {
+                trigger_error($errstr, E_USER_WARNING);
+            }
+
             return false;
         }
 
         $path = !empty($url_info['path']) ? $url_info['path'] : '/';
         $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
 
-        fputs($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
-        fputs($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
-        fputs($fp, "Connection: close\r\n\r\n");
+        fwrite($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
+        fwrite($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
+        fwrite($fp, "Connection: close\r\n\r\n");
 
         while (!feof($fp)) {
             if ($header = trim(fgets($fp, 1024))) {
@@ -1956,7 +2036,9 @@ function nv_check_url($url, $is_200 = 0)
         }
         @fclose($fp);
     } else {
-        trigger_error('error server no support check url', E_USER_WARNING);
+        if ($isTriggerError) {
+            trigger_error('error server no support check url', E_USER_WARNING);
+        }
 
         return false;
     }
@@ -1972,13 +2054,13 @@ function nv_check_url($url, $is_200 = 0)
         return false;
     }
 
-    if (preg_match('/(301)|(302)|(303)/', $res[0])) {
-        foreach ($res as $k => $v) {
+    if (preg_match('/(301)|(302)|(303)|(307)/', $res[0])) {
+        foreach ($res as $v) {
             if (preg_match('/location:\s(.*?)$/is', $v, $matches)) {
                 ++$is_200;
                 $location = trim($matches[1]);
 
-                return nv_check_url($location, $is_200);
+                return nv_check_url($location, $isTriggerError, $is_200);
             }
         }
     }
