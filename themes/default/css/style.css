@@ -969,6 +969,10 @@ a.btn {
     display: block;
 }
 
+.subs-breadcrumbs li {
+    background-color: #eee;
+}
+
 .subs-breadcrumbs li:last-child,
 .subs-breadcrumbs li:last-child a,
 .subs-breadcrumbs{
