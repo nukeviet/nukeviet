@@ -1526,7 +1526,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
  */
 function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPage)
 {
-    if ($page > 1 and $page > $total) {
+    if ($page < 1 or ($page > 1 and $page > $total)) {
         nv_redirect_location($base_url);
     }
 
