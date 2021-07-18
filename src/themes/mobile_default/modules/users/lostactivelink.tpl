@@ -57,7 +57,7 @@
     	<div class="form-group">
     		<div class="col-sm-offset-8 col-sm-16">
     			<input type="hidden" name="checkss" value="{DATA.checkss}" />
-    			<input type="submit" value="{LANG.lostactivelink_submit}" class="btn btn-primary" />
+    			<input type="submit" value="{LANG.lostactivelink_submit}" class="btn btn-primary" onclick="btnClickSubmit(event,this.form);" />
     		</div>
     	</div>
     </form>

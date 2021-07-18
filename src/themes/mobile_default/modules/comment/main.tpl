@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: header -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE_JS}/js/comment.js"></script>
-<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
+<script type="text/javascript" src="{NV_STATIC_URL}themes/{TEMPLATE_JS}/js/comment.js"></script>
+<link rel="StyleSheet" href="{NV_STATIC_URL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
 <!-- END: header -->
 <div id="idcomment" class="nv-fullbg" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}">
     <div class="row clearfix margin-bottom-lg">
@@ -44,7 +44,7 @@
             <div class="form-group clearfix">
                 <textarea class="form-control" style="width: 100%" name="content" id="commentcontent" cols="20" rows="5"></textarea>
                 <!-- BEGIN: editor -->
-                <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/ckeditor.js?t={TIMESTAMP}"></script>
+                <script type="text/javascript" src="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor/ckeditor.js?t={TIMESTAMP}"></script>
                 <script type="text/javascript">CKEDITOR.replace('content', { width: '100%', height: '200px', removePlugins: 'uploadfile,uploadimage,autosave' });</script>
                 <!-- END: editor -->
             </div>
@@ -79,7 +79,7 @@
             </div>
             <!-- END: recaptcha -->
             <div class="form-group text-center">
-                <input type="button" value="{GLANG.reset}" class="reset btn btn-default" onclick="nv_comment_reset(event, this.form);" /> <input type="submit" value="{LANG.comment_submit}" class="btn btn-primary" />
+                <input type="button" value="{GLANG.reset}" class="reset btn btn-default" onclick="nv_comment_reset(event, this.form);" /> <input type="submit" value="{LANG.comment_submit}" class="btn btn-primary" onclick="commentFormSubmit(event, this.form);" />
             </div>
         </form>
         <iframe class="hidden" id="submitcommentarea" name="submitcommentarea"></iframe>

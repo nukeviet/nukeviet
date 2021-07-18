@@ -83,5 +83,5 @@ function loginFormLoad() {
     </div>
 </div>
 <!-- END FORFOOTER -->
-<script src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
+<script src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: signed -->

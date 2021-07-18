@@ -91,6 +91,25 @@ function nv_commment_reload(res) {
     }
 }
 
+function commentFormSubmit(event, form) {
+    event.preventDefault();
+    $("[name=name]", form).val(strip_tags(trim($("[name=name]", form).val())));
+    $("[name=email]", form).val(trim($("[name=email]", form).val()));
+    if ($(form).data('editor')) {
+        CKEDITOR.instances['commentcontent'].updateElement()
+    }
+    $("[name=content]", form).val(strip_tags(trim($("[name=content]", form).val())));
+    $("[name=code]", form).length && $("[name=code]", form).val(trim($("[name=code]", form).val()));
+
+    if ($(form).data('recaptcha3')) {
+        reCaptchaExecute(form, function() {
+            $(form).submit()
+        })
+    } else {
+        $(form).submit()
+    }
+}
+
 function nv_comment_submit(form) {
     var name = strip_tags(trim($("[name=name]", form).val()));
     $("[name=name]", form).val(name);

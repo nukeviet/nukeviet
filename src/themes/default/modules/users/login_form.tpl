@@ -58,8 +58,8 @@
             <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
-            <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
-           </div>
+            <button class="bsubmit btn btn-primary" type="submit" onclick="btnClickSubmit(event,this.form);">{GLANG.loginsubmit}</button>
+        </div>
 
         <!-- BEGIN: allowuserreg2_form -->
         <div class="form-group">

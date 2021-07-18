@@ -84,15 +84,19 @@ if (empty($vid)) {
                 }
             }
 
+            $captchaver = 0;
             if ($voting_array['active_captcha']) {
                 if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                    $captchaver = 3;
                     $xtpl->parse('main.loop.recaptcha3');
                 } elseif (($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module_name]['captcha_type'] == 'captcha') {
                     if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                        $captchaver = 2;
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                         $xtpl->parse('main.loop.has_captcha.recaptcha');
                     } else {
+                        $captchaver = 1;
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
                         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
                         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -105,6 +109,7 @@ if (empty($vid)) {
                 }
             }
 
+            $xtpl->assign('CAPTCHAVER', $captchaver);
             $xtpl->parse('main.loop');
         }
 
@@ -257,7 +262,6 @@ if (empty($vid)) {
         $page_url .= 'captcha=' . $captcha;
     }
     $canonicalUrl = getCanonicalUrl($page_url);
-
     include NV_ROOTDIR . '/includes/header.php';
     $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');
     if ($is_ajax) {

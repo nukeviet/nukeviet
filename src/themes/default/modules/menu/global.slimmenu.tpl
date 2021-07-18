@@ -12,7 +12,7 @@
 </li>
 <!-- END: tree -->
 <!-- BEGIN: main -->
-<link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/slimmenu.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/slimmenu.css" />
 
 <ul class="slimmenu">
 	<li>
@@ -32,7 +32,7 @@
 	</li>
 	<!-- END: loopcat1 -->
 </ul>
-<script	type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/jquery.slimmenu.js"></script>
+<script	type="text/javascript" src="{NV_STATIC_URL}themes/{BLOCK_THEME}/js/jquery.slimmenu.js"></script>
 <script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
 	$('ul.slimmenu').slimmenu({

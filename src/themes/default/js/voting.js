@@ -30,8 +30,11 @@ function nv_sendvoting(form, id, num, checkss, errmsg, captcha) {
     } else if (captcha == 0 || "0" == vals) {
         nv_sendvoting_submit(id, checkss, vals);
     } else if (captcha == 3) {
-        var capt = $('[name="g-recaptcha-response"]', form).val();
-        nv_sendvoting_submit(id, checkss, vals, capt);
+        grecaptcha.execute(nv_recaptcha_sitekey, {
+            action: "formSubmit"
+        }).then(function(a) {
+            nv_sendvoting_submit(id, checkss, vals, a);
+        })
     } else {
         $('#voting-modal-' + id).data('id', id).data('checkss', checkss).data('vals', vals);
         modalShowByObj('#voting-modal-' + id, "recaptchareset");

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/colpick.js"></script>
-<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/colpick.css">
+<script src="{NV_BASE_SNV_STATIC_URLITEURL}themes/{NV_ADMIN_THEME}/js/colpick.js"></script>
+<link rel="stylesheet" href="{NV_STATIC_URL}themes/{NV_ADMIN_THEME}/js/colpick.css">
 <div class="alert alert-warning"><i class="fa fa-fw fa-info-circle"></i>{LANG.note}</div>
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
     <ul class="nav nav-tabs" role="tablist" id="cfgThemeTabs">

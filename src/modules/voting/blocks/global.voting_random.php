@@ -16,9 +16,8 @@ if (!defined('NV_SYSTEM')) {
 if (!nv_function_exists('nv_block_voting')) {
     /**
      * nv_block_voting()
-     * 
-     * @param mixed $block_config 
-     * @return string 
+     *
+     * @return string
      */
     function nv_block_voting($block_config)
     {
@@ -118,17 +117,21 @@ if (!nv_function_exists('nv_block_voting')) {
                 }
             }
 
+            $captchaver = 0;
             if ($voting_array['active_captcha']) {
                 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
                 if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                    $captchaver = 3;
                     $xtpl->parse('main.recaptcha3');
                 } elseif (($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module]['captcha_type'] == 'captcha') {
                     if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                        $captchaver = 2;
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                         $xtpl->parse('main.has_captcha.recaptcha');
                     } else {
+                        $captchaver = 1;
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
                         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
                         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -141,6 +144,7 @@ if (!nv_function_exists('nv_block_voting')) {
                 }
             }
 
+            $xtpl->assign('CAPTCHAVER', $captchaver);
             $xtpl->parse('main');
             $content = $xtpl->text('main');
         }
@@ -150,5 +154,5 @@ if (!nv_function_exists('nv_block_voting')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    $content = nv_block_voting();
+    $content = nv_block_voting($block_config);
 }

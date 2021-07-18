@@ -67,7 +67,7 @@
              <input type="hidden" name="step" value="step1" />
              <input type="hidden" name="checkss" value="{DATA.checkss}" />
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
-            <button class="bsubmit btn btn-primary" type="submit">{LANG.lostpass_submit}</button>
+            <button class="bsubmit btn btn-primary" type="submit" onclick="btnClickSubmit(event,this.form);">{LANG.lostpass_submit}</button>
        	</div>
     </div>
 </form>

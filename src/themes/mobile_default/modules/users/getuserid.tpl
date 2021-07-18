@@ -19,8 +19,9 @@
 			<tfoot>
 				<tr>
 					<td colspan="4" class="text-center">
-						<input type="reset" class="btn btn-info" value="{LANG.reset}" /> 
-						<input class="btn btn-primary" type="submit" name="submit" value="{LANG.search}" />
+						<input type="reset" class="btn btn-info" value="{LANG.reset}" />
+						<input type="hidden" name="fsubmit" value="1"/>
+						<input class="btn btn-primary" type="submit" value="{LANG.search}" />
 					</td>
 				</tr>
 			</tfoot>
@@ -31,7 +32,7 @@
 	$("#formgetuid").submit(function() {
 		var a = $(this).attr("action");
 		b = $(this).serialize();
-		a = a + "&" + b + "&submit";
+		a = a + "&" + b + "&fsubmit";
 		$("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
 		$.ajax({
 			type : "GET",
