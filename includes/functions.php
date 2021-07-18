@@ -1798,7 +1798,8 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
     $url_parts = parse_url($url_rewrite_check);
     !isset($url_parts['query']) && $url_parts['query'] = '';
 
-    $request_uri = urldecode($_SERVER['REQUEST_URI']);
+    $request_uri = nv_url_rewrite($_SERVER['REQUEST_URI'], true);
+    $request_uri = urldecode($request_uri);
     if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
         $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
     }
@@ -2159,6 +2160,9 @@ function nv_url_rewrite_callback($matches)
                 ++$op_rewrite_count;
             }
             unset($query_array[NV_NAME_VARIABLE]);
+        }
+        if (isset($query_array[NV_OP_VARIABLE]) and $query_array[NV_OP_VARIABLE] == 'main') {
+            unset($query_array[NV_OP_VARIABLE]);
         }
         $rewrite_end = $global_config['rewrite_endurl'];
         if (isset($query_array[NV_OP_VARIABLE])) {
