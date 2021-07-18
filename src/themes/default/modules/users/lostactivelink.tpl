@@ -42,8 +42,8 @@
 
                     <div class="text-center margin-bottom-lg">
                         <input type="hidden" name="checkss" value="{DATA.checkss}" />
-                        <button class="bsubmit btn btn-primary" type="submit">{LANG.lostactivelink_submit}</button>
-                       </div>
+                        <button class="bsubmit btn btn-primary" type="submit" onclick="btnClickSubmit(event,this.form);">{LANG.lostactivelink_submit}</button>
+                    </div>
                 </form>
                 <!-- END: step1 -->
                 <!-- BEGIN: step2 -->

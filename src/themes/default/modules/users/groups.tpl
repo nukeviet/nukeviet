@@ -274,7 +274,7 @@ $(".deletemember").click(function() {
 <!-- END: tools -->
 <table class="table table-bordered">
     <tr>
-        <td rowspan="4" style="width:80px;border-top:0"><img title="{DATA.title}" alt="{DATA.title}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/pix.gif" width="80" height="80" style="background-image:url({DATA.group_avatar});background-repeat:no-repeat;background-size:cover;" /></td>
+        <td rowspan="4" style="width:80px;border-top:0"><img title="{DATA.title}" alt="{DATA.title}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.gif" width="80" height="80" style="background-image:url({DATA.group_avatar});background-repeat:no-repeat;background-size:cover;" /></td>
         <td class="text-nowrap" style="width:80px;border-top:0"><strong>{LANG.group_title}</strong></td>
         <td style="border-top:0">{DATA.title}<!-- BEGIN: group_desc --> ({DATA.description})<!-- END: group_desc --></td>
     </tr>

@@ -58,7 +58,7 @@
 				<div class="text-center margin-bottom-lg">
 					<input name="nv_login" value="1" type="hidden" />
 					<input type="reset" value="{GLANG.reset}" class="btn btn-default"/>
-					<button class="bsubmit btn btn-primary" type="submit">
+					<button class="bsubmit btn btn-primary" type="submit" onclick="btnClickSubmit(event,this.form);">
 						{GLANG.loginsubmit}
 					</button>
 				</div>

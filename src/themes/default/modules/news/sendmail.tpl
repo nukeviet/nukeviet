@@ -52,7 +52,7 @@
         <div class="col-sm-16 col-sm-push-8">
             <input type="hidden" name="checkss" value="{SENDMAIL.checkss}" />
             <input type="hidden" name="send" value="1" />
-            <input type="submit" value="{LANG.sendmail_submit}" class="btn btn-primary" />
+            <input type="submit" value="{LANG.sendmail_submit}" class="btn btn-primary" onclick="btnClickSubmit(event,this.form);" />
             <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
         </div>
     </div>

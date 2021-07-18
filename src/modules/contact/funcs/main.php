@@ -295,7 +295,7 @@ if (!empty($alias_department)) {
     }
 }
 
-$canonicalUrl = getCanonicalUrl($page_url, true, true);
+$canonicalUrl = getCanonicalUrl($page_url, true, false);
 
 $array_content = [
     'fname' => $fname,

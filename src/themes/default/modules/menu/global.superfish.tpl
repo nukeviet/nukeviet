@@ -9,16 +9,16 @@
 </li>
 <!-- END: tree -->
 <!-- BEGIN: main -->
-<link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/superfish.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/superfish-navbar.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/superfish-vertical.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish-navbar.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish-vertical.css" />
 <script	type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/superfish/hoverIntent.js"></script>
 <script	type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/superfish/superfish.js"></script>
 <script	type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/superfish/supersubs.js"></script>
 <style type="text/css">
 	.style_nav {
 		position: relative;
-		background: url("{NV_BASE_SITEURL}themes/{BLOCK_THEME}/images/menu/nen.png") repeat-x;
+		background: url("{NV_STATIC_URL}themes/{BLOCK_THEME}/images/menu/nen.png") repeat-x;
 		height: 60px;
 		line-height: 32px;
 		z-index: 990

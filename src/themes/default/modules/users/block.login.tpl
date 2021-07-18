@@ -50,7 +50,7 @@
 <script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- END: datepicker -->
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: main -->
 
 <!-- BEGIN: signed -->
@@ -129,5 +129,5 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_JS}/js/users.js"></script>
+<script type="text/javascript" src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: signed -->

@@ -66,13 +66,14 @@
         <!-- END: recaptcha -->
 		<div class="form-group">
 			<div class="col-sm-offset-6 col-sm-18">
-				<input type="submit" name="confirm" value="{LANG.addads_confirm}" class="btn btn-primary"/>
+				<input type="hidden" name="confirm" value="1" />
+				<input type="submit" value="{LANG.addads_confirm}" class="btn btn-primary" onclick="btnClickSubmit(event,this.form);"/>
 			</div>
 		</div>
 	</form>
 	<script type="text/javascript">
-	$(document).ready(function() {
-		$('#frm').validate();
+	$(function() {
+		$("#frm").validate()
 	});
 	</script>
 </div>

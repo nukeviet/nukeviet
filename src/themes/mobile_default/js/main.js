@@ -7,8 +7,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var gEInterval,
-    tip_active = !1,
+var tip_active = !1,
     ftip_active = !1,
     tip_autoclose = !0,
     ftip_autoclose = !0,
@@ -135,8 +134,8 @@ function tipShow(a, b, callback) {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length) {
-                    "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
+                    reCaptcha3ApiLoad()
                 }
             } else if (typeof window[callback] === "function") {
                 window[callback]()
@@ -166,8 +165,8 @@ function ftipShow(a, b, callback) {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length) {
-                    "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
+                    reCaptcha3ApiLoad()
                 }
             } else if (typeof window[callback] === "function") {
                 window[callback]()
@@ -216,11 +215,11 @@ function openID_result() {
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
-    $(b).on('load', function() {
+    $(b).on("load", function() {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
-    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&s=" + $(a).data("size") + "&m=" + $(a).data("margin")
+    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
 }
 
 // Switch tab
@@ -262,8 +261,8 @@ function modalShow(a, b, callback) {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length) {
-                    "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
+                    reCaptcha3ApiLoad()
                 }
             });
         }
@@ -351,13 +350,22 @@ function cookie_notice_hide() {
 
 // Change Captcha
 function change_captcha(a) {
-    $("[data-toggle=recaptcha]").length ? "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad() : $("[data-recaptcha3]").length && ("undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad());
-    $("img.captchaImg").length && ($("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10)), "undefined" != typeof a && "" != a && $(a).val(""));
+    if ($('[data-toggle=recaptcha]').length) {
+        "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
+    } else if ($("[data-recaptcha3]").length && "undefined" == typeof grecaptcha) {
+        reCaptcha3ApiLoad()
+    }
+
+    if ($("img.captchaImg").length) {
+        $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+        "undefined" != typeof a && "" != a && $(a).val("");
+    }
     return !1
 }
 
 function isRecaptchaCheck() {
-    return "" == nv_recaptcha_sitekey ? 0 : 2 == nv_recaptcha_ver || 3 == nv_recaptcha_ver ? nv_recaptcha_ver : 0
+    if (nv_recaptcha_sitekey == '') return 0;
+    return (nv_recaptcha_ver == 2 || nv_recaptcha_ver == 3) ? nv_recaptcha_ver : 0
 }
 
 function reCaptcha2Recreate(obj) {
@@ -430,41 +438,40 @@ var reCaptcha2OnLoad = function() {
 
 // reCaptcha v2 callback
 var reCaptcha2Callback = function(id, val) {
-    var btn = $("#" + id),
-        pnum = parseInt(btn.data("pnum")),
-        btnselector = btn.data("btnselector"),
-        k;
-    for (k = 1; k <= pnum; k++) btn = btn.parent();
+    var btn = $('#' + id),
+        pnum = parseInt(btn.data('pnum')),
+        btnselector = btn.data('btnselector'),
+        k = 1;
+    for (k; k <= pnum; k++) {
+        btn = btn.parent();
+    }
     btn = $(btnselector, btn);
-    if (btn.length) btn.prop("disabled", val)
+    if (btn.length) {
+        btn.prop('disabled', val);
+    }
 }
 
 // reCaptcha v2 load
-reCaptcha2ApiLoad = function() {
-    if (2 == isRecaptchaCheck()) {
+var reCaptcha2ApiLoad = function() {
+    if (isRecaptchaCheck() == 2) {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "https://www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptcha2OnLoad&render=explicit";
+        a.src = "//www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptcha2OnLoad&render=explicit";
         document.getElementsByTagName("head")[0].appendChild(a)
     }
 }
 
-// reCaptcha v3: reCaptcha3OnLoad
-var reCaptcha3OnLoad = function() {
-    grecaptcha.ready(function() {
-        $("[data-recaptcha3]").length && (clearInterval(gEInterval), grecaptcha.execute(nv_recaptcha_sitekey, {
-            action: "formSubmit"
-        }).then(function(a) {
-            $("[data-recaptcha3]").each(function() {
-                if ($("[name=g-recaptcha-response]", this).length) $("[name=g-recaptcha-response]", this).val(a);
-                else {
-                    var b = $('<input type="hidden" name="g-recaptcha-response" value="' + a + '"/>');
-                    $(this).append(b)
-                }
-            })
-        }), gEInterval = setTimeout(function() {
-            reCaptcha3OnLoad()
-        }, 12E4))
+// reCaptcha v3: reCaptcha Execute
+var reCaptchaExecute = function(obj, callFunc) {
+    grecaptcha.execute(nv_recaptcha_sitekey, {
+        action: "formSubmit"
+    }).then(function(a) {
+        $("[name=g-recaptcha-response]", obj).length ? $("[name=g-recaptcha-response]", obj).val(a) : (a = $('<input type="hidden" name="g-recaptcha-response" value="' + a + '"/>'), $(obj).append(a));
+        if ("function" === typeof callFunc) {
+            callFunc()
+        } else if ('string' == typeof callFunc && "function" === typeof window[callFunc]) {
+            window[callFunc]()
+        }
     })
 }
 
@@ -473,7 +480,7 @@ var reCaptcha3ApiLoad = function() {
     if (isRecaptchaCheck() == 3) {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "https://www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey + "&onload=reCaptcha3OnLoad";
+        a.src = "//www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey;
         document.getElementsByTagName("head")[0].appendChild(a)
     }
 }

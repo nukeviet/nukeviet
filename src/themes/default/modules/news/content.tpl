@@ -17,7 +17,10 @@
         <table id="edit" class="table table-striped table-bordered table-hover">
             <tfoot>
                 <tr>
-                    <td class="text-center" colspan="2"><input class="btn btn-primary frm-item" name="submit" type="submit" value="{LANG.author_info_save}" /></td>
+                    <td class="text-center" colspan="2">
+						<input type="hidden" name="fsubmit" value="1"/>
+						<input class="btn btn-primary frm-item" type="submit" value="{LANG.author_info_save}" />
+					</td>
                 </tr>
             </tfoot>
             <tbody>
@@ -224,12 +227,12 @@ function formSubmit(event, form) {
 	<ul class="list-inline text-center">
 		<input type="hidden" name="contentid" value="{DATA.id}" />
 		<input type="hidden" name="checkss" value="{CHECKSS}" />
-		<li><input type="submit" class="btn btn-primary" value="{LANG.save_draft}" name="status4"></li>
+		<li><input type="hidden" name="status4" value="1"/><input type="submit" class="btn btn-primary" value="{LANG.save_draft}" onclick="btnClickSubmit(event,this.form);"></li>
 		<!-- BEGIN: save_temp -->
-		<li><input type="submit" class="btn btn-primary" value="{LANG.save_temp}" name="status0"></li>
+		<li><input type="hidden" name="status0" value="1"/><input type="submit" class="btn btn-primary" value="{LANG.save_temp}" onclick="btnClickSubmit(event,this.form);"></li>
 		<!-- END: save_temp -->
 		<!-- BEGIN: postcontent -->
-		<li><input type="submit" class="btn btn-primary" value="{LANG.save_content}" name="status1"></li>
+		<li><input type="hidden" name="status1" value="1"/><input type="submit" class="btn btn-primary" value="{LANG.save_content}" onclick="btnClickSubmit(event,this.form);"></li>
 		<!-- END: postcontent -->
 	</ul>
 	<br />
