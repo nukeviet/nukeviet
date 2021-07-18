@@ -158,6 +158,8 @@ if (empty($vid)) {
     }
 
     $lid = $nv_Request->get_title('lid', 'get', '');
+    $checkss = $nv_Request->get_title('checkss', 'get', '');
+    $captcha = $nv_Request->get_title('captcha', 'get', '');
 
     $array_id = explode(',', $lid);
     $array_id = array_map('intval', $array_id);
@@ -169,9 +171,6 @@ if (empty($vid)) {
     $note = '';
 
     if ($count) {
-        $checkss = $nv_Request->get_title('checkss', 'get', '');
-        $captcha = $nv_Request->get_title('captcha', 'get', '');
-
         if ($checkss != md5($vid . NV_CHECK_SESSION)) {
             nv_redirect_location(nv_url_rewrite($page_url, true));
         }
@@ -253,7 +252,10 @@ if (empty($vid)) {
     $contents = voting_result($voting);
 
     $page_title = $row['question'];
-    $page_url .= '&amp;vid=' . $vid;
+    $page_url .= '&amp;vid=' . $vid . '&amp;checkss=' . $checkss . '&amp;lid=' . $lid;
+    if ($row['active_captcha'] and ($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+        $page_url .= 'captcha=' . $captcha;
+    }
     $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
