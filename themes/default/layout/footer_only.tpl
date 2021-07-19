@@ -20,6 +20,8 @@
                 $('#openidResult').html(event.data.mess + (event.data.status == 'success' ? ' <span class="load-bar"></span>' : ''));
                 $('#openidResult').addClass('nv-info ' + event.data.status);
                 $('#openidBt').trigger('click');
+            } else if (event.data == 'nv.reload') {
+                location.reload();
             }
         }
         window.addEventListener('message', nvgSSOReciver, false);
