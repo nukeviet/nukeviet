@@ -8,7 +8,7 @@
                 <div title="{LANG.avatar_select_img}" id="upload_icon" class="upload-button">
                     <div class="text-center">
                         <span><em class="fa fa-upload"></em></span>
-        			</div>
+                    </div>
                 </div>
                 <div class="img-area"><img id="preview" style="display: none;"/></div>
             </div>
@@ -21,15 +21,15 @@
                 <div>- {LANG.avatar_upload}</div>
             </div>
             <div style="display:none" id="uploadInfo">
-				<div>- {LANG.avatar_filesize}: <span id="image-size"></span></div>
-				<div>- {LANG.avatar_ftype}: <span id="image-type"></span></div>
-				<div>- {LANG.avatar_filedimension}: <span id="original-dimension"></span></div>
-				<div>- {LANG.avatar_displaydimension}: <span id="display-dimension"></span></div>
-				<div class="margin-top-lg">
+                <div>- {LANG.avatar_filesize}: <span id="image-size"></span></div>
+                <div>- {LANG.avatar_ftype}: <span id="image-type"></span></div>
+                <div>- {LANG.avatar_filedimension}: <span id="original-dimension"></span></div>
+                <div>- {LANG.avatar_displaydimension}: <span id="display-dimension"></span></div>
+                <div class="margin-top-lg">
                     <input id="btn-submit" type="submit" class="btn btn-primary btn-sm" value="{LANG.avatar_crop}" />
                     <input id="btn-reset" type="button" class="btn btn-primary btn-sm" value="{LANG.avatar_chosen_other}" />
-				</div>
- 			</div>
+                </div>
+             </div>
             <div class="exit-bt">
                 <button class="btn btn-primary btn-sm" onclick=" window.close();return!1">{GLANG.cancel}</button>
             </div>
@@ -43,34 +43,34 @@
     </form>
 </div>
 <script type="text/javascript">
-	UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
-	UAV.config.avatar_width = {NV_AVATAR_WIDTH};
-	UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
-	UAV.lang.bigsize = '{LANG.avatar_bigsize}';
-	UAV.lang.smallsize = '{LANG.avatar_smallsize}';
-	UAV.lang.filetype = '{LANG.avatar_filetype}';
-	UAV.lang.bigfile = '{LANG.avatar_bigfile}';
-	UAV.lang.upload = '{LANG.avatar_upload}';
-	$(document).ready(function() {
-		<!-- BEGIN: complete -->
-		$("#avatar", opener.document).val('{FILENAME}');
-		window.close();
-		<!-- END: complete -->
+    UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
+    UAV.config.avatar_width = {NV_AVATAR_WIDTH};
+    UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
+    UAV.lang.bigsize = '{LANG.avatar_bigsize}';
+    UAV.lang.smallsize = '{LANG.avatar_smallsize}';
+    UAV.lang.filetype = '{LANG.avatar_filetype}';
+    UAV.lang.bigfile = '{LANG.avatar_bigfile}';
+    UAV.lang.upload = '{LANG.avatar_upload}';
+    $(document).ready(function() {
+        <!-- BEGIN: complete -->
+        $("#avatar", opener.document).val('{FILENAME}');
+        window.close();
+        <!-- END: complete -->
         <!-- BEGIN: complete2 -->
         if ('{DATA.client}' != '') {
-            window.opener.postMessage('SUCCESS', '{DATA.client}');
+            window.opener.postMessage('nv.reload', '{DATA.client}');
         } else {
             window.opener.location.reload();
         }
-		window.close();
-		<!-- END: complete2 -->
+        window.close();
+        <!-- END: complete2 -->
         <!-- BEGIN: complete3 -->
         $("#myavatar", opener.document).attr('src', '{FILENAME}');
         $("#delavatar", opener.document).prop("disabled",!1);
-		window.close();
-		<!-- END: complete3 -->
-		<!-- BEGIN: init -->UAV.init();<!-- END: init -->
-		<!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
-	});
+        window.close();
+        <!-- END: complete3 -->
+        <!-- BEGIN: init -->UAV.init();<!-- END: init -->
+        <!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
+    });
 </script>
 <!-- END: main -->

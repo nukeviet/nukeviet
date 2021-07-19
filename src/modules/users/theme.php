@@ -1084,11 +1084,6 @@ function user_welcome($array_field_config, $custom_fields)
     $xtpl->assign('URL_GROUPS', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups', true));
     $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
 
-    if (defined('SSO_REGISTER_DOMAIN')) {
-        $xtpl->assign('SSO_REGISTER_ORIGIN', SSO_REGISTER_DOMAIN);
-        $xtpl->parse('main.crossdomain_listener');
-    }
-
     if (!empty($user_info['avata'])) {
         $xtpl->assign('IMG', [
             'src' => $user_info['avata'],
