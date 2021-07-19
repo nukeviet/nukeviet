@@ -1,5 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+
+NUKEVIET 5.0.00
+- Improving reCaptcha v3: Captcha code is generated only when the submit button is clicked
+
 NUKEVIET 4.5.00
 - Configure variable "page_title" relative to func_site_title
 - Update Browser class to v1.9.6

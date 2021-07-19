@@ -34,17 +34,6 @@ function loginFormLoad() {
         <div class="row">
             <div class="col-xs-8 text-center">
                 <a title="{LANG.edituser}" href="javascript:void(0)" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
-                <!-- BEGIN: crossdomain_listener -->
-                <script type="text/javascript">
-                function SSOReciver(event) {
-                    if (event.origin !== '{SSO_REGISTER_ORIGIN}') {
-                        return false;
-                    }
-                    location.reload();
-                }
-                window.addEventListener("message", SSOReciver, false);
-                </script>
-                <!-- END: crossdomain_listener -->
             </div>
             <div class="col-xs-16">
                 <ul class="nv-list-item sm">
