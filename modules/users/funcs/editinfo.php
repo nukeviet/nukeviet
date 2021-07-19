@@ -1171,7 +1171,7 @@ if (in_array('group', $types, true)) {
     foreach ($groups_list['all'] as $gid => $gvalues) {
         $groups[$gid] = $gvalues;
         $groups[$gid]['exp'] = !empty($gvalues['exp_time']) ? nv_date('d/m/Y', $gvalues['exp_time']) : $lang_module['group_exp_unlimited'];
-        $groups[$gid]['group_avatar'] = !empty($groups[$gid]['group_avatar']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $groups[$gid]['group_avatar'] : NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/user-group.jpg';
+        $groups[$gid]['group_avatar'] = !empty($groups[$gid]['group_avatar']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $groups[$gid]['group_avatar'] : NV_STATIC_URL . NV_ASSETS_DIR . '/images/user-group.jpg';
         $groups[$gid]['checked'] = '';
         $groups[$gid]['status'] = 0;
         if ($gvalues['userid'] == $edit_userid) {
