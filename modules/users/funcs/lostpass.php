@@ -288,27 +288,41 @@ if ($checkss == $data['checkss']) {
         ]);
     }
 
+    if (!passCmp($new_password, $row['password'], $row['userid'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'new_password',
+            'step' => 'step4',
+            'info' => $lang_module['lostpass_newpass_mess'],
+            'mess' => $lang_module['password_was_used']
+        ]);
+    }
+
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET password= :password, passlostkey='' WHERE userid=" . $row['userid']);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . " SET password= :password, passlostkey='', pass_creation_time=" . NV_CURRENTTIME . ', pass_reset_request=0, last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $row['userid']);
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
-    $name = $global_config['name_show'] ? [
-        $row['first_name'],
-        $row['last_name']
-    ] : [
-        $row['last_name'],
-        $row['first_name']
-    ];
-    $name = array_filter($name);
-    $name = implode(' ', $name);
-    $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-    $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
-    @nv_sendmail([
-        $global_config['site_name'],
-        $global_config['site_email']
-    ], $row['email'], $lang_module['edit_mail_subject'], $message);
+    oldPassSave($row['userid'], $row['password'], $row['pass_creation_time']);
+
+    if ($global_config['send_pass']) {
+        $name = $global_config['name_show'] ? [
+            $row['first_name'],
+            $row['last_name']
+        ] : [
+            $row['last_name'],
+            $row['first_name']
+        ];
+        $name = array_filter($name);
+        $name = implode(' ', $name);
+        $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+        $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
+        @nv_sendmail([
+            $global_config['site_name'],
+            $global_config['site_email']
+        ], $row['email'], $lang_module['edit_mail_subject'], $message);
+    }
 
     $redirect = nv_redirect_decrypt($nv_redirect, true);
     $url = !empty($redirect) ? $redirect : nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);

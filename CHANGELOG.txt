@@ -1,5 +1,12 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.01
+- Module Users: Manage changing user account password
+- Module Users: Fix $page_url definition
+- Module Users: Fix users redirection module when integrating sso
+- Module Voting: Fix $page_url definition
+- System: Fix error in getCanonicalUrl function
+
 NUKEVIET 4.5.00
 - Configure variable "page_title" relative to func_site_title
 - Update Browser class to v1.9.6

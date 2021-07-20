@@ -40,8 +40,8 @@ if (empty($row)) {
 
 $page_title = $mod_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&userid=' . $userid . '&checknum=' . $checknum;
+$canonicalUrl = getCanonicalUrl($page_url, true);
 
 $check_update_user = false;
 $is_change_email = false;
@@ -64,14 +64,15 @@ if ($checknum == $row['checknum']) {
             group_id, username, md5username, password, email, first_name, last_name,
             gender, photo, birthday, regdate, question, answer,
             passlostkey, view_mail, remember, in_groups,
-            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time,
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite, 
+            pass_creation_time, pass_reset_request, email_verification_time,
             active_obj
         ) VALUES (
             :group_id, :username, :md5_username, :password, :email, :first_name, :last_name,
             :gender, '', :birthday, :regdate, :question, :answer,
             '', 0, 1, :in_groups,
-            1, '', 0, '', '', '', " . $global_config['idsite'] . ', ' . NV_CURRENTTIME . ",
-            'EMAIL'
+            1, '', 0, '', '', '', " . $global_config['idsite'] . ', ' . NV_CURRENTTIME . ', 0,
+            ' . NV_CURRENTTIME . ", 'EMAIL'
         )";
 
         $data_insert = [];

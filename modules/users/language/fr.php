@@ -378,3 +378,7 @@ $lang_module['2step_status'] = 'L\'authentification à deux étapes';
 $lang_module['2step_link'] = 'Réglage';
 $lang_module['delconfirm_email_title'] = 'Notification de suppression du compte';
 $lang_module['delconfirm_email_content'] = 'Bonjour %1$s,<br /><br />Nous sommes désolé de vous informer la suppression de votre compte sur le site %2$s.';
+$lang_module['pass_reset1_info'] = 'Pour des raisons de sécurité, nous vous recommandons de changer votre mot de passe avant d\'utiliser les installations du site.';
+$lang_module['pass_reset2_info'] = 'Pour des raisons de sécurité, veuillez changer votre mot de passe avant d\'utiliser les installations du site. Veuillez <a href="%s">cliquer ici</a> pour changer votre mot de passe.';
+$lang_module['pass_reset3_info'] = 'Cela fait plus de %d jours et vous n\'avez pas modifié le mot de passe de votre compte utilisateur. Pour des raisons de sécurité, veuillez changer votre mot de passe avant d\'utiliser les installations du site.';
+$lang_module['password_was_used'] = 'Le mot de passe a été utilisé il n\'y a pas si longtemps';
