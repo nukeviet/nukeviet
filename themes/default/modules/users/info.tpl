@@ -2,7 +2,11 @@
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-
+<!-- BEGIN: changepass_request2 -->
+<div class="alert alert-danger">
+    {CHANGEPASS_INFO}
+</div>
+<!-- END: changepass_request2 -->
 <div class="page">
     <h2 class="margin-bottom-lg margin-top-lg">{LANG.editinfo_pagetitle}</h2>
     <ul class="users-menu nav nav-pills margin-bottom">

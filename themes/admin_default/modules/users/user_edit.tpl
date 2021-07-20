@@ -153,6 +153,17 @@
                 </tr>
                 <!-- END: group -->
                 <tr>
+                    <td> {LANG.pass_reset_request} </td>
+                    <td></td>
+                    <td>
+                        <select class="form-control" name="pass_reset_request">
+                            <!-- BEGIN: pass_reset_request -->
+                            <option value="{PASSRESET.num}"{PASSRESET.sel}>{PASSRESET.title}</option>
+                            <!-- END: pass_reset_request -->
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td> {LANG.adduser_email1} </td>
                     <td></td>
                     <td><label><input type="checkbox" name="adduser_email" value="1"{DATA.adduser_email}/> <small>{LANG.adduser_email1_note1}</small></label></td>

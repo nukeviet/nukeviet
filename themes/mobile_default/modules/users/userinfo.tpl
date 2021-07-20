@@ -1,4 +1,9 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: changepass_request2 -->
+<div class="alert alert-danger">
+    {CHANGEPASS_INFO}
+</div>
+<!-- END: changepass_request2 -->
 <div class="page panel panel-default">
     <div class="panel-body">
         <h2 class="margin-bottom-lg">{LANG.user_info}</h2>

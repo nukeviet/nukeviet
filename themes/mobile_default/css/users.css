@@ -220,3 +220,34 @@ fieldset[disabled] .openid-single-sign-on:focus {
     max-width: 100%;
     height: auto;
 }
+
+.changepass-cont {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 30px;
+}
+
+.changepass {
+    background-color: #fff;
+    padding: 15px;
+    min-height: 300px !important;
+    min-width: 300px !important;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+    border: 1px #dcdcdc solid;
+    border-radius: 5px;
+    width: 500px;
+}
+
+.changepass .form-detail {
+    padding: 20px 30px;
+}
+
+@media (max-width: 499.98px) {
+    .changepass-cont {
+        padding-top: 0;
+    }
+    .changepass {
+        width: 100%;
+    }
+}

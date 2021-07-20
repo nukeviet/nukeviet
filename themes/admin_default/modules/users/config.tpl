@@ -199,8 +199,34 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>{LANG.send_password}</td>
+                    <td><input name="send_pass" value="1" type="checkbox"{DATA.send_pass} /></td>
+                </tr>
+                <tr>
                     <td>{LANG.user_check_pass_time}</td>
                     <td><input class="form-control pull-left" style="width:50px;" type="text" value="{USER_CHECK_PASS_TIME}" name="user_check_pass_time" maxlength="3"/>({GLANG.min})</td>
+                </tr>
+                <tr>
+                    <td>{LANG.pass_timeout}</td>
+                    <td>
+                        <select name="pass_timeout" class="form-control">
+                        <option value="0">0</option>
+                            <!-- BEGIN: pass_timeout -->
+                            <option value="{PASSTIMEOUT.num}"{PASSTIMEOUT.sel}>{PASSTIMEOUT.num}</option>
+                            <!-- END: pass_timeout -->
+                        </select>
+                        {LANG.days}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{LANG.oldpass_num}</td>
+                    <td>
+                        <select name="oldpass_num" class="form-control">
+                            <!-- BEGIN: oldpass_num -->
+                            <option value="{OLDPASSNUM.num}"{OLDPASSNUM.sel}>{OLDPASSNUM.num}</option>
+                            <!-- END: oldpass_num -->
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td>{LANG.allowuserloginmulti}</td>

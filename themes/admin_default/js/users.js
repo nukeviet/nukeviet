@@ -572,6 +572,43 @@ function nv_main_action(btn) {
     }
 }
 
+function passResetRequest(id) {
+    $.ajax({
+        type: 'POST',
+        cache: !1,
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + id + '&nocache=' + new Date().getTime(),
+        data: 'psr=1',
+        dataType: "json",
+        success: function(e) {
+            $('#pass-reset-modal .userid').val(e.userid);
+            $('#pass-reset-modal .username').text(e.username);
+            $('#pass-reset-modal .currentpass-created-time').text(e.pass_creation_time);
+            $('#pass-reset-modal .currentpass-request-status').text(e.pass_reset_request);
+            $('#pass-reset-modal .btn').removeClass('disabled');
+            $('#pass-reset-modal .fa-spin').hide();
+            $('#pass-reset-modal').modal('show')
+        }
+    });
+}
+
+function passResetRequestSubmit(event, obj, type) {
+    event.preventDefault();
+    var userid = $('#pass-reset-modal .userid').val();
+    $('#pass-reset-modal .btn').addClass('disabled');
+    $(obj).next().show();
+    $.ajax({
+        type: 'POST',
+        cache: !1,
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + userid + '&nocache=' + new Date().getTime(),
+        data: 'psr=1&type=' + type,
+        dataType: "html",
+        success: function(e) {
+            alert(e);
+            $('#pass-reset-modal').modal('hide')
+        }
+    });
+}
+
 $(document).ready(function() {
     // List user main
     $('#mainusersaction').click(function() {

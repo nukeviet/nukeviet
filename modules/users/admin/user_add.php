@@ -61,6 +61,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['email'] = nv_strtolower($nv_Request->get_title('email', 'post', '', 1));
     $_user['password1'] = $nv_Request->get_title('password1', 'post', '', 0);
     $_user['password2'] = $nv_Request->get_title('password2', 'post', '', 0);
+    $_user['pass_reset_request'] = $nv_Request->get_int('pass_reset_request', 'post', 0);
     $_user['question'] = nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255);
     $_user['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
     $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
@@ -104,8 +105,9 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     // Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
+    $_username = nv_strtolower($_user['username']);
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE LOWER(username)=:username OR md5username= :md5username');
-    $stmt->bindParam(':username', nv_strtolower($_user['username']), PDO::PARAM_STR);
+    $stmt->bindParam(':username', $_username, PDO::PARAM_STR);
     $stmt->bindParam(':md5username', $md5username, PDO::PARAM_STR);
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
@@ -118,7 +120,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=:username OR md5username= :md5username');
-    $stmt->bindParam(':username', nv_strtolower($_user['username']), PDO::PARAM_STR);
+    $stmt->bindParam(':username', $_username, PDO::PARAM_STR);
     $stmt->bindParam(':md5username', $md5username, PDO::PARAM_STR);
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
@@ -226,11 +228,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $_user['in_groups'][] = 4;
     }
 
+    if ($_user['pass_reset_request'] > 2 or $_user['pass_reset_request'] < 0) {
+        $_user['pass_reset_request'] = 0;
+    }
+
     $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
         group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
-        question, answer, passlostkey, view_mail,
-        remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time,
-        active_obj
+        question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, 
+        last_agent, last_openid, idsite, pass_creation_time, pass_reset_request, email_verification_time, active_obj
     ) VALUES (
         ' . $_user['in_groups_default'] . ',
         :username,
@@ -249,6 +254,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         " . $_user['view_mail'] . ",
         1,
         '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ',
+        ' . NV_CURRENTTIME . ',
+        ' . $_user['pass_reset_request'] . ',
         ' . ($_user['is_email_verified'] ? '-1' : '0') . ",
         'SYSTEM'
     )";
@@ -328,9 +335,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     // Gửi mail thông báo
     if (!empty($_user['adduser_email'])) {
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
+        $pass_reset_request = $_user['pass_reset_request'] == 2 ? $lang_module['pass_reset_request2_info'] : ($_user['pass_reset_request'] == 1 ? $lang_module['pass_reset_request1_info'] : '');
         $subject = $lang_module['adduser_register'];
         $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-        $message = sprintf($lang_module['adduser_register_info1'], $full_name, $global_config['site_name'], $_url, $_user['username'], $_user['password1']);
+        $message = sprintf($lang_module['adduser_register_info1'], $full_name, $global_config['site_name'], $_url, $_user['username'], $_user['password1'], $pass_reset_request);
         @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $_user['email'], $subject, $message);
     }
 
@@ -361,6 +369,7 @@ $_user['sig'] = isset($initdata['sig']) ? $initdata['sig'] : '';
 $_user['birthday'] = isset($initdata['birthday']) ? $initdata['birthday'] : '';
 $_user['password1'] = isset($initdata['password1']) ? $initdata['password1'] : '';
 $_user['password2'] = isset($initdata['password2']) ? $initdata['password2'] : '';
+$_user['pass_reset_request'] = isset($initdata['pass_reset_request']) ? (int) $initdata['pass_reset_request'] : 1;
 
 $_user['view_mail'] = 0;
 $_user['in_groups'] = [];
@@ -398,6 +407,15 @@ $xtpl->assign('NV_REDIRECT', $nv_redirect);
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
 } else {
+    for($i = 0; $i <= 2; ++$i) {
+        $xtpl->assign('PASSRESET', [
+            'num' => $i,
+            'sel' => $i == $_user['pass_reset_request'] ? ' selected="selected"' : '',
+            'title' => $lang_module['pass_reset_request' . $i]
+        ]);
+        $xtpl->parse('main.edit_user.pass_reset_request');
+    }
+
     $a = 0;
     foreach ($groups as $group) {
         if ($group['id'] > 9) {

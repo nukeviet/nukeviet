@@ -359,3 +359,7 @@ $lang_module['2step_require_directgo'] = 'Click here if the system did not redir
 $lang_module['2step_error_opt_backup'] = 'Please enter confirmation code from the Google Authenticator app or redundant code saved';
 $lang_module['2step_status'] = 'Two-step authentication';
 $lang_module['2step_link'] = 'Settings';
+$lang_module['pass_reset1_info'] = 'For security reasons, please change your password before using the site\'s facilities.';
+$lang_module['pass_reset2_info'] = 'For security reasons, we recommend that you change your password before using the site\'s facilities. Please <a href="%s">click here</a> to change your password.';
+$lang_module['pass_reset3_info'] = 'It\'s been more than %d days and you haven\'t changed your user account password. For security reasons, please change your password before using the site\'s facilities.';
+$lang_module['password_was_used'] = 'The password was used not too long ago';

@@ -1,5 +1,11 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.4.04
+- Module Users: Manage changing user account password
+- Module Users: Fix $page_url definition
+- Module Users: Fix users redirection module when integrating sso
+- Module Voting: Fix $page_url definition
+- System: Fix error in getCanonicalUrl function
 
 NUKEVIET 4.4.03
 - Add API manager

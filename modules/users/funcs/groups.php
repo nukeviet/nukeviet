@@ -83,7 +83,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             username, md5username, password, email, first_name, last_name, gender, photo, birthday,
             regdate, question,
             answer, passlostkey, view_mail, remember, in_groups, active, checknum,
-            last_login, last_ip, last_agent, last_openid, idsite
+            last_login, last_ip, last_agent, last_openid, idsite, pass_creation_time, pass_reset_request
             ) VALUES (
             :username,
             :md5_username,
@@ -94,7 +94,8 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             '', '', 0, " . $row['regdate'] . ",
             :question,
             :answer,
-            '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ')';
+            '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ',
+            ' . (!empty($row['password']) ? NV_CURRENTTIME : 0) . ', 0)';
 
         $data_insert = [];
         $data_insert['username'] = $row['username'];

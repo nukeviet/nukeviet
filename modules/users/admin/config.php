@@ -81,6 +81,9 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['openid_processing'] = $nv_Request->get_int('openid_processing', 'post', 0);
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
+        $array_config['pass_timeout'] = 86400 * $nv_Request->get_int('pass_timeout', 'post', 0);
+        $array_config['oldpass_num'] = $nv_Request->get_int('oldpass_num', 'post', 5);
+        $array_config['send_pass'] = (int) $nv_Request->get_bool('send_pass', 'post', false);
 
         $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', []);
         $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
@@ -204,6 +207,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['allowuserloginmulti'] = !empty($array_config['allowuserloginmulti']) ? ' checked="checked"' : '';
     $array_config['is_user_forum'] = !empty($array_config['is_user_forum']) ? ' checked="checked"' : '';
     $array_config['auto_login_after_reg'] = !empty($array_config['auto_login_after_reg']) ? ' checked="checked"' : '';
+    $array_config['send_pass'] = !empty($array_config['send_pass']) ? ' checked="checked"' : '';
+    $array_config['pass_timeout'] = $array_config['pass_timeout'] / 86400;
 
     $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE
         config='deny_email' OR config='deny_name' OR config='password_simple' OR
@@ -372,6 +377,23 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         );
         $xtpl->assign('WHOVIEW', $whoview);
         $xtpl->parse('main.whoviewlistuser');
+    }
+
+    for ($i = 6; $i <= 73; ++$i) {
+        $y = $i * 5;
+        $xtpl->assign('PASSTIMEOUT', [
+            'num' => $y,
+            'sel' => $y == $array_config['pass_timeout'] ? ' selected="selected"' : ''
+        ]);
+        $xtpl->parse('main.pass_timeout');
+    }
+
+    for ($i = 1; $i <= 20; ++$i) {
+        $xtpl->assign('OLDPASSNUM', [
+            'num' => $i,
+            'sel' => $i == $array_config['oldpass_num'] ? ' selected="selected"' : ''
+        ]);
+        $xtpl->parse('main.oldpass_num');
     }
 
     foreach ($array_openid_processing as $id => $titleregister) {

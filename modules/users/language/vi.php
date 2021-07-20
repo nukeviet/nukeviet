@@ -364,3 +364,7 @@ $lang_module['2step_require_directgo'] = 'Nhấp vào đây nếu hệ thống k
 $lang_module['2step_error_opt_backup'] = 'Vui lòng nhập mã xác nhận từ ứng dụng Google Authenticator hoặc Mã dự phòng đã lưu';
 $lang_module['2step_status'] = 'Xác thực hai bước';
 $lang_module['2step_link'] = 'Thiết lập';
+$lang_module['pass_reset1_info'] = 'Vì lý do bảo mật, bạn vui lòng thay đổi mật khẩu trước khi sử dụng các tiện ích của site.';
+$lang_module['pass_reset2_info'] = 'Vì lý do bảo mật, chúng tôi khuyến cáo bạn thay đổi mật khẩu trước khi sử dụng các tiện ích của site. Hãy click <a href="%s">vào đây</a> để thay đổi mật khẩu.';
+$lang_module['pass_reset3_info'] = 'Đã hơn %d ngày bạn chưa thay đổi mật khẩu tài khoản người dùng. Vì lý do bảo mật, vui lòng thay đổi mật khẩu trước khi sử dụng các tiện ích của site.';
+$lang_module['password_was_used'] = 'Mật khẩu đã được sử dụng cách đây không lâu';

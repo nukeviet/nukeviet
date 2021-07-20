@@ -64,3 +64,41 @@ function nv_get_users_field_config()
 
     return $array_field_config;
 }
+
+function oldPassSave($userid, $oldpass, $oldpass_creation_time)
+{
+    global $db, $global_config;
+
+    empty($global_config['oldpass_num']) && $global_config['oldpass_num'] = 5;
+
+    try {
+        $db->query('INSERT INTO ' . NV_MOD_TABLE . '_oldpass VALUES (' . $userid . ', ' . $db->quote($oldpass) . ', ' . $oldpass_creation_time . ') ON DUPLICATE KEY UPDATE password=VALUES(password)');
+
+        $mtime = $db->query('SELECT pass_creation_time FROM ' . NV_MOD_TABLE . '_oldpass WHERE userid=' . $userid . ' ORDER BY pass_creation_time DESC LIMIT ' . $global_config['oldpass_num'] . ', 1')->fetchColumn();
+        if ($mtime !== false) {
+            $mtime = (int) $mtime;
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_oldpass WHERE userid=' . $userid . ' AND pass_creation_time <= ' . $mtime);
+        }
+    } catch (PDOException $e) {
+        trigger_error(print_r($e, true));
+    }
+}
+
+function passCmp($newpass, $currentpass, $userid)
+{
+    global $crypt, $db;
+
+    if (!empty($currentpass) and $crypt->validate_password($newpass, $currentpass)) {
+        return false;
+    }
+
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_oldpass WHERE userid=' . $userid;
+    $query = $db->query($sql);
+    while ($row = $query->fetch()) {
+        if ($crypt->validate_password($newpass, $row['password'])) {
+            return false;
+        }
+    }
+
+    return true;
+}
