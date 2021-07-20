@@ -40,7 +40,7 @@ if (defined('NV_IS_ADMIN')) {
                 if ($user['checkhash'] === md5($user['userid'] . $user['checknum'] . $global_config['sitekey'] . $client_info['browser']['key'])) {
                     $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
                         view_mail, remember, in_groups, active2step, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
-                        last_openid AS current_openid, password, question, answer, safemode, email_verification_time
+                        last_openid AS current_openid, password, question, answer, safemode, pass_creation_time, pass_reset_request, email_verification_time
                         FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
                     $user_info = $db->query($_sql)->fetch();

@@ -2,6 +2,11 @@
 <link type="text/css" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<!-- BEGIN: changepass_request2 -->
+<div class="alert alert-danger">
+    {CHANGEPASS_INFO}
+</div>
+<!-- END: changepass_request2 -->
 <div class="page">
     <ul class="nav nav-tabs margin-bottom">
         <li role="presentation" class="dropdown active"><a id="myTabEl" href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-controls="funcList" aria-expanded="false"><span class="caret"></span></a>

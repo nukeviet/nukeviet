@@ -640,7 +640,7 @@ function user_lostactivelink($data, $question)
  */
 function user_info($data, $array_field_config, $custom_fields, $types, $data_questions, $data_openid, $groups, $pass_empty)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders, $is_custom_field;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders, $is_custom_field, $user_info;
 
     $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -675,6 +675,11 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $xtpl->assign('DATA', $data);
     if ($pass_empty) {
         $xtpl->assign('FORM_HIDDEN', ' hidden');
+    }
+
+    if ((int) $user_info['pass_reset_request'] == 2 and $data['type'] != 'password') {
+        $xtpl->assign('CHANGEPASS_INFO', sprintf($lang_module['pass_reset2_info'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
+        $xtpl->parse('main.changepass_request2');
     }
 
     // Thông tin cơ bản
@@ -1083,6 +1088,11 @@ function user_welcome($array_field_config, $custom_fields)
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
     $xtpl->assign('URL_GROUPS', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups', true));
     $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
+
+    if ((int) $user_info['pass_reset_request'] == 2) {
+        $xtpl->assign('CHANGEPASS_INFO', sprintf($lang_module['pass_reset2_info'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
+        $xtpl->parse('main.changepass_request2');
+    }
 
     if (!empty($user_info['avata'])) {
         $xtpl->assign('IMG', [
@@ -1638,6 +1648,32 @@ function safe_deactivate($data)
             $xtpl->assign('NAVBAR', $li);
             $xtpl->parse('main.navbar');
         }
+    }
+
+    $xtpl->parse('main');
+
+    return $xtpl->text('main');
+}
+
+function theme_changePass($pass_timeout, $pass_empty, $checkss)
+{
+    global $module_info, $module_name, $lang_module, $lang_global, $global_config;
+
+    $xtpl = new XTemplate('changepass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('CHANGEPASS_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password');
+    $xtpl->assign('URL_LOGOUT', defined('NV_IS_ADMIN') ? 'nv_admin_logout' : 'bt_logout');
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
+    $xtpl->assign('SITE_NAME', $global_config['site_name']);
+    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
+    $xtpl->assign('CHECKSS', $checkss);
+
+    $xtpl->assign('CHANGEPASS_INFO', $pass_timeout ? sprintf($lang_module['pass_reset3_info'], floor($global_config['pass_timeout'] / 86400)) : $lang_module['pass_reset1_info']);
+
+    if (!$pass_empty) {
+        $xtpl->parse('main.is_old_pass');
     }
 
     $xtpl->parse('main');

@@ -92,6 +92,7 @@ if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) 
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_groups_detail';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_groups_users';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_info';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_oldpass';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_openid';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_question';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_reg';
@@ -132,6 +133,8 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     idsite int(11) NOT NULL DEFAULT '0',
     safemode tinyint(1) unsigned NOT NULL DEFAULT '0',
     safekey varchar(40) DEFAULT '',
+    pass_creation_time INT(11) NOT NULL DEFAULT '0',
+    pass_reset_request TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Yêu cầu thay đổi mật khẩu: 0: không; 1: Bắt buộc; 2: Khuyến khích',
     email_verification_time INT(11) NOT NULL DEFAULT '-1' COMMENT '-3: Tài khoản sys, -2: Admin kích hoạt, -1 không cần kích hoạt, 0: Chưa xác minh, > 0 thời gian xác minh',
     active_obj varchar(50) NOT NULL DEFAULT 'SYSTEM' COMMENT 'SYSTEM, EMAIL, OAUTH:xxxx, quản trị kích hoạt thì lưu userid',
     PRIMARY KEY (userid),
@@ -209,6 +212,13 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     time_requested int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian yêu cầu tham gia',
     time_approved int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Thời gian duyệt yêu cầu tham gia',
     PRIMARY KEY (group_id,userid)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_oldpass (
+    userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+    password varchar(150) NOT NULL DEFAULT '',
+    pass_creation_time INT(11) NOT NULL DEFAULT '0',
+    UNIQUE KEY pass_creation_time (userid, pass_creation_time)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_reg (
