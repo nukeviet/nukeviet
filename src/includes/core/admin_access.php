@@ -113,7 +113,7 @@ function nv_admin_checkdata($adm_session_value)
         a.last_ip current_ip, a.last_login current_login, a.files_level files_level, a.editor editor, b.userid userid, b.group_id group_id,
         b.username username, b.email email, b.first_name first_name, b.last_name last_name, b.view_mail view_mail, b.regdate regdate,
         b.sig sig, b.gender gender, b.photo photo, b.birthday birthday, b.in_groups in_groups, b.active2step active2step, b.last_openid last_openid,
-        b.password password, b.question question, b.answer answer, b.safemode safemode, b.email_verification_time email_verification_time
+        b.password password, b.question question, b.answer answer, b.safemode safemode, b.pass_creation_time pass_creation_time, b.pass_reset_request pass_reset_request, b.email_verification_time email_verification_time
         FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
         WHERE a.admin_id = ' . $array_admin['admin_id'] . '
         AND a.lev!=0

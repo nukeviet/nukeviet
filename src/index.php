@@ -153,6 +153,23 @@ try {
                     $array_op = explode('/', $op);
                     $op = (isset($module_info['funcs'][$array_op[0]])) ? $array_op[0] : 'main';
                 }
+
+                // Nếu buộc phải thay đổi mật khẩu hoặc thay đổi mật khẩu định kỳ
+                // Thì chuyển hướng đến trang thay đổi mật khẩu
+                if (defined('NV_IS_USER')) {
+                    $pass_reset_request = (int) $user_info['pass_reset_request'];
+                    $pass_timeout = !empty($global_config['pass_timeout']) && (((int) $user_info['pass_creation_time'] + (int) $global_config['pass_timeout']) < NV_CURRENTTIME);
+                    if ($pass_reset_request == 1 or $pass_timeout) {
+                        $editPassUrl = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password';
+                        $logoutUrl = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=logout';
+                        $editPassUrlFull = getPageUrl($editPassUrl, true, false);
+                        $logoutUrlFull = getPageUrl($logoutUrl, true, false);
+                        if (empty($editPassUrlFull) and empty($logoutUrlFull)) {
+                            nv_redirect_location($editPassUrl);
+                        }
+                    }
+                }
+
                 $op_file = $op;
 
                 // Xac dinh quyen dieu hanh module

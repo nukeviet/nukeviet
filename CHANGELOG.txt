@@ -2,6 +2,11 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 5.0.00
+- Module Users: Manage changing user account password
+- Module Users: Fix $page_url definition
+- Module Users: Fix users redirection module when integrating sso
+- Module Voting: Fix $page_url definition
+- System: Fix error in getCanonicalUrl function
 - Improving reCaptcha v3: Captcha code is generated only when the submit button is clicked
 
 NUKEVIET 4.5.00
