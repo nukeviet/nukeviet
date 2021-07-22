@@ -318,6 +318,9 @@ if ((int)$row['safemode'] > 0) {
 
     $contents = safe_deactivate($array_data);
 
+    $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+    $canonicalUrl = getCanonicalUrl($page_url);
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -381,10 +384,10 @@ if (defined('ACCESS_EDITUS')) {
     $array_data['userid'] = $edit_userid;
     $array_data['type'] = (isset($array_op[3]) and !empty($array_op[3]) and in_array($array_op[3], $types)) ? $array_op[3] : ((isset($array_op[3]) and !empty($array_op[3]) and $array_op[3] == 'password') ? $array_op[3] : 'basic');
 
-    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $edit_userid;
+    $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $edit_userid;
 } else {
     $array_data['type'] = (isset($array_op[1]) and !empty($array_op[1]) and in_array($array_op[1], $types)) ? $array_op[1] : 'basic';
-    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo';
+    $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo';
 }
 
 // OpenID add
@@ -504,7 +507,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($base_url . '/basic', true),
+            'input' => nv_url_rewrite($page_url . '/basic', true),
             'mess' => $lang_module['editinfo_okcensor']
         ]);
     } else {
@@ -527,7 +530,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($base_url . '/basic', true),
+            'input' => nv_url_rewrite($page_url . '/basic', true),
             'mess' => $lang_module['editinfo_ok']
         ]);
     }
@@ -579,7 +582,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($base_url . '/username', true),
+        'input' => nv_url_rewrite($page_url . '/username', true),
         'mess' => $lang_module['editinfo_ok']
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
@@ -721,7 +724,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($base_url . '/email', true),
+            'input' => nv_url_rewrite($page_url . '/email', true),
             'mess' => $lang_module['editinfo_ok']
         ]);
     }
@@ -785,7 +788,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($base_url . '/password', true),
+        'input' => nv_url_rewrite($page_url . '/basic', true),
         'mess' => $lang_module['editinfo_ok']
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
@@ -841,7 +844,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($base_url . '/openid', true),
+        'input' => nv_url_rewrite($page_url . '/openid', true),
         'mess' => $lang_module['openid_deleted']
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
@@ -900,7 +903,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $db->query('UPDATE ' . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($base_url . '/group', true),
+        'input' => nv_url_rewrite($page_url . '/group', true),
         'mess' => $lang_module['in_group_ok']
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'others') {
@@ -936,7 +939,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($base_url . '/others', true),
+            'input' => nv_url_rewrite($page_url . '/others', true),
             'mess' => $lang_module['editinfo_okcensor']
         ]);
     } else {
@@ -945,7 +948,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($base_url . '/others', true),
+            'input' => nv_url_rewrite($page_url . '/others', true),
             'mess' => $lang_module['editinfo_ok']
         ]);
     }
@@ -1018,15 +1021,15 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($base_url, true),
+        'input' => nv_url_rewrite($page_url, true),
         'mess' => $lang_module['safe_activate_ok']
     ]);
 }
 
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
+$page_url .= '/' . $array_data['type'];
+$canonicalUrl = getCanonicalUrl($page_url, true);
 
 if (!defined('NV_EDITOR')) {
     define('NV_EDITOR', 'ckeditor');

@@ -14,7 +14,6 @@ if (!defined('NV_IS_MOD_USER')) {
 
 $page_title = $lang_module['group_manage'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = '';
 
@@ -303,6 +302,7 @@ if ($nv_Request->isset_request('gid,del', 'post')) {
     $nv_Cache->delMod($module_name);
     die('OK');
 }
+
 // Them thanh vien vao nhom
 if ($nv_Request->isset_request('gid,uid', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
@@ -497,10 +497,12 @@ $xtpl->assign('OP', $op);
 
 // Danh sach thanh vien
 if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
-    $group_id = $array_op[1];
+    $group_id = (int) $array_op[1];
     if (!isset($groupsList[$group_id]) or !($group_id < 4 or $group_id > 9)) {
-        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+        nv_redirect_location($page_url);
     }
+
+    $page_url .= '/' . $group_id;
 
     // Kiem tra lai quyen truong nhom
     $count = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $group_id . ' AND is_leader=1 AND userid=' . $user_info['userid'])->fetchColumn();
@@ -545,6 +547,8 @@ if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
         'title' => $groupsList[$group_id]['title'],
         'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id
     ];
+
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -758,6 +762,8 @@ $array_mod_title[] = [
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

@@ -86,7 +86,6 @@ function deleteAvatar()
 
 $page_title = $lang_module['avatar_pagetitle'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
 
 $array = [];
 $array['success'] = 0;
@@ -95,6 +94,9 @@ $array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] ==
 $array['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_editinfo_' . $user_info['userid']);
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
+if (!empty($array['u'])) {
+    $page_url .= '/' . $array['u'];
+}
 //Xoa avatar
 if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post')) {
     deleteAvatar();
@@ -166,6 +168,8 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
         }
     }
 }
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = nv_avatar($array);
 

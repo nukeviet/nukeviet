@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.4.04:
+- All modules: Fix $page_url definition
+- System: Fix error in getCanonicalUrl function
 
 NUKEVIET 4.4.03
 - Add API manager

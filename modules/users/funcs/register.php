@@ -24,7 +24,6 @@ if (defined('NV_IS_USER_FORUM')) {
 }
 
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
 
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
@@ -34,6 +33,8 @@ if (!$global_config['allowuserreg']) {
 
     $contents = user_info_exit($lang_module['no_allowuserreg']);
     $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -52,6 +53,9 @@ if ($global_config['max_user_number'] > 0) {
         } else {
             $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
             $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+            $canonicalUrl = getCanonicalUrl($page_url);
+
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_site_theme($contents);
             include NV_ROOTDIR . '/includes/footer.php';
@@ -62,6 +66,9 @@ if ($global_config['max_user_number'] > 0) {
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $page_url .= '&nv_redirect=' . $nv_redirect;
+    }
 }
 
 /**
@@ -557,6 +564,8 @@ if ($nv_Request->isset_request('get_usage_terms', 'post')) {
 }
 
 $contents = user_register($gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields, $group_id);
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

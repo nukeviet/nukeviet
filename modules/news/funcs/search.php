@@ -80,13 +80,13 @@ if (!empty($catid)) {
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
 $date_array['from_date'] = preg_replace('/[^0-9]/', '.', urldecode($from_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'])) {
-    $page_url .= '&from_date=' . $date_array['from_date'];
+    $page_url .= '&from_date=' . urlencode($date_array['from_date']);
 }
 
 $to_date = $nv_Request->get_title('to_date', 'get', '', 0);
 $date_array['to_date'] = preg_replace('/[^0-9]/', '.', urldecode($to_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'])) {
-    $page_url .= '&to_date=' . $date_array['to_date'];
+    $page_url .= '&to_date=' . urlencode($date_array['to_date']);
 }
 
 $base_url = $page_url;
@@ -95,7 +95,7 @@ if ($page > 1) {
     $page_url .= '&page=' . $page;
 }
 
-$canonicalUrl = getCanonicalUrl($page_url, true);
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $array_cat_search = [];
 foreach ($global_array_cat as $arr_cat_i) {

@@ -39,8 +39,7 @@ if (empty($row)) {
 
 $page_title = $mod_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&userid=' . $userid . '&checknum=' . $checknum;
 
 $check_update_user = false;
 $is_change_email = false;
@@ -149,6 +148,8 @@ $info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' 
 
 $contents = user_info_exit($info);
 $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+$canonicalUrl = getCanonicalUrl($page_url, true);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
