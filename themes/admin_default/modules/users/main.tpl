@@ -93,6 +93,7 @@
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <li><a href="{EDIT_OAUTH_URL}">{LANG.user_openid_mamager}</a></li>
                                     <li><a href="{EDIT_2STEP_URL}">{LANG.user_2step_mamager}</a></li>
+                                    <li><a href="javascript:void(0);" onclick="passResetRequest({CONTENT_TD.userid});">{LANG.pass_reset_request}</a></li>
                                 </ul>
                             </div>
                             <!-- END: edit -->
@@ -130,6 +131,27 @@
         </div>
     </form>
 </div>
+<div id="pass-reset-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{LANG.pass_reset_request}</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="userid" value="0"/>
+                <p>{LANG.username}: <span class="username"></span></p>
+                <p>{LANG.currentpass_created_time}: <span class="currentpass-created-time"></span></p>
+                <p>{LANG.currentpass_request_status}: <span class="currentpass-request-status"></span></p>
+                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="passResetRequestSubmit(event, this, 1);">{LANG.pass_reset_request1_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
+                <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="passResetRequestSubmit(event, this, 2);">{LANG.pass_reset_request2_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
 <script type="text/javascript">
 var export_note = '{LANG.export_note}';
 var export_complete = '{LANG.export_complete}';

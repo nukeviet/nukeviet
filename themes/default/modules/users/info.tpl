@@ -2,6 +2,11 @@
 <link type="text/css" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<!-- BEGIN: changepass_request2 -->
+<div class="alert alert-danger">
+    {CHANGEPASS_INFO}
+</div>
+<!-- END: changepass_request2 -->
 <div class="page">
     <h2 class="margin-bottom-lg margin-top-lg">{LANG.editinfo_pagetitle}</h2>
     <ul class="users-menu nav nav-tabs margin-bottom">
@@ -442,7 +447,7 @@
                                             <div class="modal-body">
                                                 <div class="clearfix margin-bottom-lg">
                                                     <div class="pull-left margin-right">
-                                                        <img title="{GROUP_LIST.title}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/pix.gif" width="80" height="80" style="background-image:url({GROUP_LIST.group_avatar});background-repeat:no-repeat;background-size:cover;" />
+                                                        <img title="{GROUP_LIST.title}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.gif" width="80" height="80" style="background-image:url({GROUP_LIST.group_avatar});background-repeat:no-repeat;background-size:cover;" />
                                                     </div>
                                                     <p><strong>{LANG.group_type}: </strong>{GROUP_LIST.group_type_mess}<!-- BEGIN: group_type_note --> ({GROUP_LIST.group_type_note})<!-- END: group_type_note --></p>
                                                     <p><strong>{LANG.group_exp_time}: </strong>{GROUP_LIST.exp}</p>

@@ -1,4 +1,10 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: changepass_request2 -->
+<div class="alert alert-danger">
+    {CHANGEPASS_INFO}
+</div>
+<!-- END: changepass_request2 -->
+
 <div class="page panel panel-default">
     <div class="panel-body">
         <h2 class="margin-bottom-lg">{LANG.user_info}</h2>
@@ -39,8 +45,8 @@
 <div class="table-responsive margin-bottom-lg">
     <table class="table table-bordered table-striped">
         <colgroup>
-             <col style="width:45%"/>
-          </colgroup>
+            <col style="width:45%" />
+        </colgroup>
         <tbody>
             <tr>
                 <td>{LANG.name}</td>

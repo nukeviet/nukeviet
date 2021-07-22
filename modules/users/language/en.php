@@ -378,3 +378,7 @@ $lang_module['2step_status'] = 'Two-step authentication';
 $lang_module['2step_link'] = 'Settings';
 $lang_module['delconfirm_email_title'] = 'Email notification to delete account';
 $lang_module['delconfirm_email_content'] = 'Hi %1$s,<br />We are so sorry to delete your account at website %2$s.';
+$lang_module['pass_reset1_info'] = 'For security reasons, please change your password before using the site\'s facilities.';
+$lang_module['pass_reset2_info'] = 'For security reasons, we recommend that you change your password before using the site\'s facilities. Please <a href="%s">click here</a> to change your password.';
+$lang_module['pass_reset3_info'] = 'It\'s been more than %d days and you haven\'t changed your user account password. For security reasons, please change your password before using the site\'s facilities.';
+$lang_module['password_was_used'] = 'The password is not available because it was used in one of the last %d password changes.';

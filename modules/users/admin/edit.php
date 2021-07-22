@@ -64,6 +64,34 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+// Yêu cầu thay đổi mật khẩu
+if ($nv_Request->isset_request('psr', 'post')) {
+    if ($nv_Request->isset_request('type', 'post')) {
+        $type = $nv_Request->get_int('type', 'post', 0);
+        if ($type == 1 or $type == 2) {
+            try {
+                $db->query('UPDATE ' . NV_MOD_TABLE . ' SET pass_reset_request = ' . $type . ' WHERE userid=' . $userid);
+            } catch (PDOException $e) {
+                trigger_error(print_r($e, true));
+            }
+
+            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+            $pass_reset_request = $type == 2 ? $lang_module['pass_reset_request2_info'] : $lang_module['pass_reset_request1_info'];
+            $subject = $type == 1 ? $lang_module['pass_reset_request_subject1'] : $lang_module['pass_reset_request_subject2'];
+            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+            $message = $type == 1 ? sprintf($lang_module['pass_reset_request_info1'], $full_name, $global_config['site_name'], $_url) : sprintf($lang_module['pass_reset_request_info2'], $full_name, $global_config['site_name'], $_url);
+            @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
+        }
+        exit($lang_module['pass_reset_request_sent']);
+    }
+    nv_jsonOutput([
+        'userid' => $userid,
+        'username' => $row['username'],
+        'pass_creation_time' => !empty($row['pass_creation_time']) ? date('d/m/Y H:i', $row['pass_creation_time']) : '',
+        'pass_reset_request' => $lang_module['pass_reset_request' . $row['pass_reset_request']]
+    ]);
+}
+
 $groups_list = nv_groups_list($module_data);
 $array_field_config = nv_get_users_field_config();
 
@@ -102,6 +130,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     } else {
         $_user['password1'] = $_user['password2'] = '';
     }
+    $_user['pass_reset_request'] = $nv_Request->get_int('pass_reset_request', 'post', 0);
     $_user['question'] = nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255);
     $_user['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
     $_user['first_name'] = nv_substr($nv_Request->get_title('first_name', 'post', '', 1), 0, 255);
@@ -214,7 +243,16 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         require NV_ROOTDIR . '/modules/users/fields.check.php';
     }
 
-    $password = !empty($_user['password1']) ? $crypt->hash_password($_user['password1'], $global_config['hashprefix']) : $row['password'];
+    if (!empty($_user['password1'])) {
+        if (!empty($row['password'])) {
+            oldPassSave($userid, $row['password'], $row['pass_creation_time']);
+        }
+        $password = $crypt->hash_password($_user['password1'], $global_config['hashprefix']);
+        $pass_creation_time = NV_CURRENTTIME;
+    } else {
+        $password = $row['password'];
+        $pass_creation_time = (int) $row['pass_creation_time'];
+    }
 
     $in_groups = [];
     // Khi là thành viên mới thì không thể chọn thuộc các nhóm khác
@@ -329,6 +367,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $email_verification_time = $row['email_verification_time'];
     }
 
+    if ($_user['pass_reset_request'] > 2 or $_user['pass_reset_request'] < 0) {
+        $_user['pass_reset_request'] = 0;
+    }
+
     $db->query('UPDATE ' . NV_MOD_TABLE . ' SET
         group_id=' . $_user['in_groups_default'] . ',
         username=' . $db->quote($_user['username']) . ",
@@ -345,7 +387,9 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         answer=' . $db->quote($_user['answer']) . ',
         view_mail=' . $_user['view_mail'] . ",
         in_groups='" . implode(',', $in_groups) . "',
-        email_verification_time=" . $email_verification_time . ',
+        pass_creation_time=" . $pass_creation_time . ',
+        pass_reset_request=' . $_user['pass_reset_request'] . ',
+        email_verification_time=' . $email_verification_time . ',
         last_update=' . NV_CURRENTTIME . '
     WHERE userid=' . $userid);
 
@@ -356,13 +400,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     // Gửi mail thông báo
     if (!empty($_user['adduser_email'])) {
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
+        $pass_reset_request = $_user['pass_reset_request'] == 2 ? $lang_module['pass_reset_request2_info'] : ($_user['pass_reset_request'] == 1 ? $lang_module['pass_reset_request1_info'] : '');
         $subject = $lang_module['adduser_register1'];
         $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
         $message = sprintf($lang_module['adduser_register_info2'], $full_name, $global_config['site_name'], $_url, $_user['username']);
         if (!empty($_user['password1'])) {
             $message .= sprintf($lang_module['adduser_register_info3'], $_user['password1']);
         }
-        $message .= sprintf($lang_module['adduser_register_info4'], $global_config['site_name']);
+        $message .= sprintf($lang_module['adduser_register_info4'], $pass_reset_request, $global_config['site_name']);
         @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $_user['email'], $subject, $message);
     }
 
@@ -453,6 +498,15 @@ if (defined('NV_IS_USER_FORUM')) {
             $xtpl->parse('main.edit_user.group.hide');
         }
         $xtpl->parse('main.edit_user.group');
+    }
+
+    for ($i = 0; $i <= 2; ++$i) {
+        $xtpl->assign('PASSRESET', [
+            'num' => $i,
+            'sel' => $i == $_user['pass_reset_request'] ? ' selected="selected"' : '',
+            'title' => $lang_module['pass_reset_request' . $i]
+        ]);
+        $xtpl->parse('main.edit_user.pass_reset_request');
     }
 
     if ($access_passus) {
