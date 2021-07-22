@@ -74,6 +74,34 @@ function nv_preg_quote($a)
 }
 
 /**
+ * nv_array_diff_assoc()
+ *
+ * @param array $array1
+ * @param array $array2
+ * @return array
+ */
+function nv_array_diff_assoc($array1, $array2)
+{
+    $difference = [];
+    foreach ($array1 as $key => $value) {
+        if (is_array($value)) {
+            if (!isset($array2[$key]) or !is_array($array2[$key])) {
+                $difference[$key] = $value;
+            } else {
+                $new_diff = nv_array_diff_assoc($value, $array2[$key]);
+                if (!empty($new_diff)) {
+                    $difference[$key] = $new_diff;
+                }
+            }
+        } elseif (!array_key_exists($key, $array2) or $array2[$key] !== $value) {
+            $difference[$key] = $value;
+        }
+    }
+
+    return $difference;
+}
+
+/**
  * nv_is_myreferer()
  *
  * @param string $referer
@@ -1771,6 +1799,52 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 }
 
 /**
+ * getPageUrl()
+ *
+ * @param string $page_url
+ * @param bool   $query_check
+ * @param bool   $abs_comp
+ * @return false|string
+ */
+function getPageUrl($page_url, $query_check, $abs_comp)
+{
+    $url_rewrite = nv_url_rewrite($page_url, true);
+    $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
+    $url_parts = parse_url($url_rewrite_check);
+    !isset($url_parts['query']) && $url_parts['query'] = '';
+
+    $request_uri = nv_url_rewrite($_SERVER['REQUEST_URI'], true);
+    str_starts_with($request_uri, NV_MY_DOMAIN) && $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
+    $request_parts = parse_url($request_uri);
+    !isset($request_parts['query']) && $request_parts['query'] = '';
+
+    if (empty($request_parts['path']) or strcmp($url_parts['path'], $request_parts['path']) !== 0) {
+        return false;
+    }
+
+    if ($query_check) {
+        parse_str($url_parts['query'], $url_query_output);
+        parse_str($request_parts['query'], $request_query_output);
+
+        if (!empty($url_query_output)) {
+            $diff = nv_array_diff_assoc($url_query_output, $request_query_output);
+            if (!empty($diff)) {
+                return false;
+            }
+        }
+
+        if ($abs_comp and !empty($request_query_output)) {
+            $diff = nv_array_diff_assoc($request_query_output, $url_query_output);
+            if (!empty($diff)) {
+                return false;
+            }
+        }
+    }
+
+    return NV_MAIN_DOMAIN . $url_rewrite;
+}
+
+/**
  * getCanonicalUrl()
  *
  * @param string $page_url    Đường dẫn tuyệt đối từ thư mục gốc đến trang
@@ -1792,33 +1866,12 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
         return NV_MAIN_DOMAIN . $page_url;
     }
 
-    $url_rewrite = nv_url_rewrite($page_url, true);
-    $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
-    $url_rewrite_check = urldecode($url_rewrite_check);
-    $url_parts = parse_url($url_rewrite_check);
-    !isset($url_parts['query']) && $url_parts['query'] = '';
-
-    $request_uri = nv_url_rewrite($_SERVER['REQUEST_URI'], true);
-    $request_uri = urldecode($request_uri);
-    if (str_starts_with($request_uri, NV_MY_DOMAIN)) {
-        $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
-    }
-    $request_parts = parse_url($request_uri);
-    !isset($request_parts['query']) && $request_parts['query'] = '';
-
-    if (empty($request_parts['path']) or strcmp($url_parts['path'], $request_parts['path']) !== 0) {
+    $url = getPageUrl($page_url, $query_check, $abs_comp);
+    if (empty($url)) {
         nv_redirect_location($page_url);
     }
 
-    if ($query_check) {
-        if ($abs_comp and strcmp($url_parts['query'], $request_parts['query']) !== 0) {
-            nv_redirect_location($page_url);
-        } elseif (!empty($url_parts['query']) and !str_starts_with($url_parts['query'], $request_parts['query'])) {
-            nv_redirect_location($page_url);
-        }
-    }
-
-    return NV_MAIN_DOMAIN . $url_rewrite;
+    return $url;
 }
 
 /**

@@ -833,7 +833,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url . '/password', true),
+        'input' => nv_url_rewrite($page_url . '/basic', true),
         'mess' => $lang_module['editinfo_ok']
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
@@ -1086,7 +1086,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     nv_jsonOutput([
         'status' => 'ok',
-        'input' => nv_url_rewrite($page_url . '/safemode', true),
+        'input' => nv_url_rewrite($page_url, true),
         'mess' => $lang_module['safe_activate_ok']
     ]);
 }
@@ -1094,7 +1094,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
 $page_url .= '/' . $array_data['type'];
-$canonicalUrl = getCanonicalUrl($page_url);
+$canonicalUrl = getCanonicalUrl($page_url, true);
 
 if (!defined('NV_EDITOR')) {
     define('NV_EDITOR', 'ckeditor');

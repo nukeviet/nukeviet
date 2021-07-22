@@ -17,6 +17,8 @@ if (defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+
 // Dùng để bật giao diện login box
 $nv_header = '';
 if ($nv_Request->isset_request('nv_header', 'post,get')) {
@@ -24,12 +26,20 @@ if ($nv_Request->isset_request('nv_header', 'post,get')) {
     if ($nv_header != NV_CHECK_SESSION) {
         $nv_header = '';
     }
+
+    if ($nv_Request->isset_request('nv_header', 'get') and !empty($nv_header)) {
+        $page_url .= '&nv_header=' . $nv_header;
+    }
 }
 
 // Chuyển hướng sau khi login
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $page_url .= '&nv_redirect=' . $nv_redirect;
+    }
 }
 
 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
@@ -148,7 +158,6 @@ function set_reg_attribs($attribs)
 }
 
 // Đăng nhập qua Oauth
-$server = $nv_Request->get_string('server', 'get', '');
 if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')) {
     $server = $nv_Request->get_string('server', 'get', '');
     $result = $nv_Request->isset_request('result', 'get');
@@ -847,7 +856,7 @@ if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
 $page_title = $lang_module['login'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['login'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+
 $canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = user_login();

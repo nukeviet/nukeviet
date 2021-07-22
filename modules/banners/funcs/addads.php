@@ -15,7 +15,6 @@ if (!defined('NV_IS_MOD_BANNERS')) {
 
 $page_title = $module_info['site_title'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 if (!defined('NV_IS_BANNER_CLIENT')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -179,6 +178,8 @@ if (!empty($module_config[$module_name]['captcha_type'])) {
 
 $xtpl->parse('main');
 $contents .= $xtpl->text('main');
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
