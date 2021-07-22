@@ -32,14 +32,13 @@ $array_mod_title[] = [
 
 // Xem chi tiet thanh vien
 if (isset($array_op[1]) and !empty($array_op[1])) {
+    $page_url .= '/' . $array_op[1];
+
     $md5 = '';
     unset($matches);
     if (preg_match('/^(.*)\-([a-z0-9]{32})$/', $array_op[1], $matches)) {
         $md5 = $matches[2];
     }
-
-    $page_url .= '/' . $array_op[1];
-    $canonicalUrl = getCanonicalUrl($page_url);
 
     if (!empty($md5)) {
         $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username = :md5' . (defined('NV_IS_ADMIN') ? '' : ' AND active=1'));
@@ -97,6 +96,8 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         }
     }
 
+    $canonicalUrl = getCanonicalUrl($page_url);
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -145,6 +146,9 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
 
     $num_items = $db->query($db->sql())
         ->fetchColumn();
+    
+    $urlappend = '&page=';
+    betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
     $db->select('userid, username, md5username, first_name, last_name, photo, gender, regdate')
         ->order($orderby . ' ' . $sortby)
@@ -170,11 +174,6 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         $users_array[$item['userid']] = $item;
     }
     $result->closeCursor();
-
-    // Khong cho dat trang tuy tien
-    if (empty($users_array) and $page > 0) {
-        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    }
 
     // Them vao tieu de trang
     if (!empty($orderby)) {

@@ -45,7 +45,6 @@ if (defined('NV_EDITOR')) {
 $page_title = $lang_module['content'];
 $key_words = $module_info['keywords'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
 
 // check user post content
 $array_post_config = [];
@@ -137,6 +136,8 @@ if (!$array_post_user['addcontent']) {
     $xtpl->parse('mainrefresh');
     $contents = $xtpl->text('mainrefresh');
 
+    $canonicalUrl = getCanonicalUrl($page_url);
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -156,7 +157,6 @@ $my_author_detail = defined('NV_IS_USER') ? my_author_detail($user_info['userid'
 // Chinh sua thong tin tac gia
 if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) {
     $page_url .= '&amp;author_info=1';
-    $canonicalUrl = getCanonicalUrl($page_url);
 
     if ($nv_Request->isset_request('save', 'post')) {
         $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
@@ -221,6 +221,8 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
     $xtpl->parse('author_info');
     $contents = $xtpl->text('author_info');
 
+    $canonicalUrl = getCanonicalUrl($page_url);
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -237,8 +239,13 @@ $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', 
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
-    $page_url .= '&amp;author_info=1';
-    $canonicalUrl = getCanonicalUrl($page_url);
+    if ($nv_Request->isset_request('contentid', 'get')) {
+        $page_url .= '&amp;contentid=' . $contentid;
+    }
+
+    if ($nv_Request->isset_request('checkss', 'get')) {
+        $page_url .= '&amp;checkss=' . $fcheckss;
+    }
 
     if ($contentid > 0) {
         if (!defined('NV_IS_USER')) {
@@ -591,6 +598,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $xtpl->parse('mainrefresh');
                 $contents = $xtpl->text('mainrefresh');
 
+                $canonicalUrl = getCanonicalUrl($page_url);
+
                 include NV_ROOTDIR . '/includes/header.php';
                 echo nv_site_theme($contents);
                 include NV_ROOTDIR . '/includes/footer.php';
@@ -768,8 +777,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     if (isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-') {
         $page = (int) (substr($array_op[1], 5));
 
-        $page_url .= '/page-' . $page;
-        $canonicalUrl = getCanonicalUrl($page_url);
+        if ($page > 1) {
+            $page_url .= '/page-' . $page;
+        }
     }
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
@@ -794,11 +804,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         ->fetchColumn();
 
     if ($num_items) {
-        // Khong cho tu danh so page
-        $total = ceil($num_items / $per_page);
-        if ($page > $total) {
-            nv_redirect_location($base_url);
-        }
+        $urlappend = '/page-';
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
         $db->select('r.id, r.catid, r.listcatid, r.topicid, r.admin_id, r.author, r.sourceid, r.addtime, r.edittime, r.status, r.publtime, r.title, r.alias, r.hometext, r.homeimgfile, r.homeimgalt, r.homeimgthumb, r.allowed_rating, r.hitstotal, r.hitscm, r.total_rating, r.click_rating, a.aid AS author_id, a.alias AS author_alias, a.pseudonym AS author_pseudonym')
             ->order('r.id DESC')
@@ -882,6 +889,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 } elseif ($array_post_user['addcontent']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0&checkss=' . md5('0' . NV_CHECK_SESSION));
 }
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
