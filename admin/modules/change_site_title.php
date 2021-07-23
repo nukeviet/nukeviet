@@ -36,7 +36,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_site_title= :func_site_title WHERE func_id=' . $id);
         $sth->bindParam(':func_site_title', $func_site_title, PDO::PARAM_STR);
         $sth->execute();
-    
+
         $nv_Cache->delMod('modules');
     }
 
