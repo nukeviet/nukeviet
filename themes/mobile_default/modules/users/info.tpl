@@ -446,7 +446,7 @@
                                             <div class="modal-body">
                                                 <div class="clearfix margin-bottom-lg">
                                                     <div class="pull-left margin-right">
-                                                        <img title="{GROUP_LIST.title}" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/pix.gif" width="80" height="80" style="background-image:url({GROUP_LIST.group_avatar});background-repeat:no-repeat;background-size:cover;" />
+                                                        <img title="{GROUP_LIST.title}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.gif" width="80" height="80" style="background-image:url({GROUP_LIST.group_avatar});background-repeat:no-repeat;background-size:cover;" />
                                                     </div>
                                                     <p><strong>{LANG.group_type}: </strong>{GROUP_LIST.group_type_mess} ({GROUP_LIST.group_type_note})</p>
                                                     <p><strong>{LANG.group_exp_time}: </strong>{GROUP_LIST.exp}</p>

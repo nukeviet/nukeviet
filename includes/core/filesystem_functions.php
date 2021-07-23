@@ -751,7 +751,7 @@ function nv_is_image($img)
  * @param bool   $is_create_thumb
  *                                Neu chieu rong cua hinh lon hon $width, co the tao thumbnail
  * @param string $thumb_path
- *                                neu tao thumbnail thi chi ra thu muc chua file thumbnail nay.
+ *                                neu tao thumbnail thi chi ra thu muc chua file thumbnail nay
  * @return array
  */
 function nv_ImageInfo($original_name, $width = 0, $is_create_thumb = false, $thumb_path = '')

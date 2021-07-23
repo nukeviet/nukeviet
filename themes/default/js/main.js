@@ -9,7 +9,6 @@
 
 var myTimerPage = "",
     myTimersecField = "",
-    gEInterval,
     tip_active = !1,
     ftip_active = !1,
     tip_autoclose = !0,
@@ -146,8 +145,8 @@ function tipShow(a, b, callback) {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length) {
-                    "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
+                    reCaptcha3ApiLoad()
                 }
             } else if (typeof window[callback] === "function") {
                 window[callback]()
@@ -173,8 +172,8 @@ function ftipShow(a, b, callback) {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length) {
-                    "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
+                    reCaptcha3ApiLoad()
                 }
             } else if (typeof window[callback] === "function") {
                 window[callback]()
@@ -267,8 +266,8 @@ function modalShow(a, b, callback) {
                 if ($('[data-toggle=recaptcha]', this).length) {
                     reCaptcha2Recreate(this);
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length) {
-                    "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
+                    reCaptcha3ApiLoad()
                 }
             });
         }
@@ -353,8 +352,8 @@ function cookie_notice_hide() {
 function change_captcha(a) {
     if ($('[data-toggle=recaptcha]').length) {
         "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-    } else if ($("[data-recaptcha3]").length) {
-        "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+    } else if ($("[data-recaptcha3]").length && "undefined" == typeof grecaptcha) {
+        reCaptcha3ApiLoad()
     }
 
     if ($("img.captchaImg").length) {
@@ -382,6 +381,17 @@ function reCaptcha2Recreate(obj) {
             $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>')
         }
     })
+}
+
+function btnClickSubmit(event, form) {
+    event.preventDefault();
+    if ($(form).data('recaptcha3')) {
+        reCaptchaExecute(form, function() {
+            $(form).submit()
+        })
+    } else {
+        $(form).submit()
+    }
 }
 
 var reCaptcha2OnLoad = function() {
@@ -461,22 +471,17 @@ var reCaptcha2ApiLoad = function() {
     }
 }
 
-// reCaptcha v3: reCaptcha3OnLoad
-var reCaptcha3OnLoad = function() {
-    grecaptcha.ready(function() {
-        $("[data-recaptcha3]").length && (clearInterval(gEInterval), grecaptcha.execute(nv_recaptcha_sitekey, {
-            action: "formSubmit"
-        }).then(function(a) {
-            $("[data-recaptcha3]").each(function() {
-                if ($("[name=g-recaptcha-response]", this).length) $("[name=g-recaptcha-response]", this).val(a);
-                else {
-                    var b = $('<input type="hidden" name="g-recaptcha-response" value="' + a + '"/>');
-                    $(this).append(b)
-                }
-            })
-        }), gEInterval = setTimeout(function() {
-            reCaptcha3OnLoad()
-        }, 12E4))
+// reCaptcha v3: reCaptcha Execute
+var reCaptchaExecute = function(obj, callFunc) {
+    grecaptcha.execute(nv_recaptcha_sitekey, {
+        action: "formSubmit"
+    }).then(function(a) {
+        $("[name=g-recaptcha-response]", obj).length ? $("[name=g-recaptcha-response]", obj).val(a) : (a = $('<input type="hidden" name="g-recaptcha-response" value="' + a + '"/>'), $(obj).append(a));
+        if ("function" === typeof callFunc) {
+            callFunc()
+        } else if ('string' == typeof callFunc && "function" === typeof window[callFunc]) {
+            window[callFunc]()
+        }
     })
 }
 
@@ -485,7 +490,7 @@ var reCaptcha3ApiLoad = function() {
     if (isRecaptchaCheck() == 3) {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "//www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey + "&onload=reCaptcha3OnLoad";
+        a.src = "//www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey;
         document.getElementsByTagName("head")[0].appendChild(a)
     }
 }

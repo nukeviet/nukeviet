@@ -35,7 +35,7 @@ $allow_editor = (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) ? t
 
 if (!defined('CKEDITOR') and $allow_editor) {
     define('CKEDITOR', true);
-    $my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
+    $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
 }
 
 $xtpl->assign('EDITOR', $allow_editor ? 'true' : 'false');

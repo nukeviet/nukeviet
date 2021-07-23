@@ -11,7 +11,7 @@
         <div class="row">
             <figure onclick="changeAvatar('{URL_AVATAR}');" class="avatar left pointer">
                 <div style="width:80px;">
-                    <p class="text-center"><img src="{IMG.src}" alt="{USER.username}" title="{USER.username}" width="80" class="img-thumbnail bg-gainsboro m-bottom"/></p>
+                    <p class="text-center"><img src="{IMG.src}" alt="{USER.username}" title="{USER.username}" width="80" class="img-thumbnail bg-gainsboro m-bottom" /></p>
                     <figcaption>{IMG.title}</figcaption>
                 </div>
             </figure>

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" />
-<link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/contentslider.css" />
+<link type="text/css" rel="stylesheet" href="{NV_STATIC_URL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" />
+<link type="text/css" rel="stylesheet" href="{NV_STATIC_URL}themes/{TEMPLATE}/css/contentslider.css" />
 <div id="topnews" class="panel panel-default clearfix" style="display:none">
     <div class="row">
         <!-- BEGIN: hots_news_img -->
