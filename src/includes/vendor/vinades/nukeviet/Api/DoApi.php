@@ -19,7 +19,7 @@ use NukeViet\Http\Http;
  * @package NukeViet\Api
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
- * @version 4.6.00
+ * @version 5.0.00
  * @access public
  */
 class DoApi
