@@ -1468,7 +1468,7 @@ function compare($data_pro)
 
         if ($pro_config['active_order'] == '1' and $pro_config['active_order_non_detail'] == '1') {
             if ($data_row['showprice'] == '1' && !empty($data_row['product_price'])) {
-                if ($data_row['product_number'] > 0) {
+                if ($data_row['product_number'] > 0 or !empty($pro_config['active_order_number'])) {
                     // Kiem tra nhom bat buoc chon khi dat hang
                     $listgroupid = GetGroupID($data_row['id']);
                     $group_requie = 0;
@@ -1714,7 +1714,7 @@ function nv_template_viewgrid($array_data, $page = '')
 
             if ($pro_config['active_order'] == '1' and $pro_config['active_order_non_detail'] == '1') {
                 if ($data_row['showprice'] == '1' && !empty($data_row['product_price'])) {
-                    if ($data_row['product_number'] > 0) {
+                    if ($data_row['product_number'] > 0 or !empty($pro_config['active_order_number'])) {
                         // Kiem tra nhom bat buoc chon khi dat hang
                         $listgroupid = GetGroupID($data_row['id']);
                         $group_requie = 0;
@@ -1844,7 +1844,7 @@ function nv_template_viewlist($array_data, $page)
 
             if ($pro_config['active_order'] == '1' and $pro_config['active_order_non_detail'] == '1') {
                 if ($data_row['showprice'] == '1' && !empty($data_row['product_price'])) {
-                    if ($data_row['product_number'] > 0) {
+                    if ($data_row['product_number'] > 0 or !empty($pro_config['active_order_number'])) {
                         // Kiem tra nhom bat buoc chon khi dat hang
                         $listgroupid = GetGroupID($data_row['id']);
                         $group_requie = 0;
