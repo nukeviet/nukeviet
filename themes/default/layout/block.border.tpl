@@ -1,5 +1,5 @@
 <!-- BEGIN: mainblock -->
 <div class="well">
-	{BLOCK_CONTENT}
+    {BLOCK_CONTENT}
 </div>
 <!--  END: mainblock -->

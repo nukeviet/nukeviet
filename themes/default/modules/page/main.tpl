@@ -1,5 +1,4 @@
 <!-- BEGIN: main -->
-
 <!-- BEGIN: warning -->
 <div class="alert alert-danger">{LANG.warning}</div>
 <!-- END: warning -->

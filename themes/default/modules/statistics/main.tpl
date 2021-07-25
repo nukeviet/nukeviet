@@ -348,107 +348,107 @@ $(function() {
 
 <!-- BEGIN: ct -->
 <div class="statistics-responsive">
-	<table summary="{CTS.caption}" class="table table-bordered table-striped statistics">
-		<caption> {CTS.caption}</caption>
-		<tbody>
-			<tr>
-				<th colspan="2">{CTS.thead.0}</th>
-				<th class="text-right">{CTS.thead.1}</th>
-				<th></th>
-				<th>{CTS.thead.2}</th>
-			</tr>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td>{VALUE.0}</td>
-				<td>{KEY}</td>
-				<td class="text-right">{VALUE.1}</td>
-				<td>
-				<!-- BEGIN: img -->
-				<img alt="Statistics image" src="{SRC}" height="10" width="{WIDTH}" />
-				<!-- END: img -->
-				</td>
-				<td class="w250">{VALUE.2}</td>
-			</tr>
-			<!-- END: loop -->
-			<!-- BEGIN: ot -->
-			<tr>
-				<td>{CTS.others.0}</td>
-				<td class="text-right">{CTS.others.1}</td>
-				<td colspan="3"><a href="{URL}">{CTS.others.2}</a></td>
-			</tr>
-			<!-- END: ot -->
-		</tbody>
-	</table>
+    <table summary="{CTS.caption}" class="table table-bordered table-striped statistics">
+        <caption> {CTS.caption}</caption>
+        <tbody>
+            <tr>
+                <th colspan="2">{CTS.thead.0}</th>
+                <th class="text-right">{CTS.thead.1}</th>
+                <th></th>
+                <th>{CTS.thead.2}</th>
+            </tr>
+            <!-- BEGIN: loop -->
+            <tr>
+                <td>{VALUE.0}</td>
+                <td>{KEY}</td>
+                <td class="text-right">{VALUE.1}</td>
+                <td>
+                <!-- BEGIN: img -->
+                <img alt="Statistics image" src="{SRC}" height="10" width="{WIDTH}" />
+                <!-- END: img -->
+                </td>
+                <td class="w250">{VALUE.2}</td>
+            </tr>
+            <!-- END: loop -->
+            <!-- BEGIN: ot -->
+            <tr>
+                <td>{CTS.others.0}</td>
+                <td class="text-right">{CTS.others.1}</td>
+                <td colspan="3"><a href="{URL}">{CTS.others.2}</a></td>
+            </tr>
+            <!-- END: ot -->
+        </tbody>
+    </table>
 </div>
 <!-- END: ct -->
 
 <!-- BEGIN: br -->
 <div class="statistics-responsive">
-	<table summary="{CTS.caption}" class="table table-bordered table-striped statistics">
-		<caption> {CTS.caption}</caption>
-		<tbody>
-			<tr>
-				<th>{CTS.thead.0}</th>
-				<th class="text-right">{CTS.thead.1}</th>
-				<th></th>
-				<th>{CTS.thead.2}</th>
-			</tr>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td>{KEY}</td>
-				<td class="text-right">{VALUE.0}</td>
-				<td>
-				<!-- BEGIN: img -->
-				<img alt="Statistics image" src="{SRC}" height="10" width="{WIDTH}" />
-				<!-- END: loop -->
-				</td>
-				<td class="w250">{VALUE.1}</td>
-			</tr>
-			<!-- END: loop -->
-			<!-- BEGIN: ot -->
-			<tr>
-				<td>{CTS.others.0}</td>
-				<td class="text-right">{CTS.others.1}</td>
-				<td colspan="2"><a href="{URL}">{CTS.others.2}</a></td>
-			</tr>
-			<!-- END: ot -->
-		</tbody>
-	</table>
+    <table summary="{CTS.caption}" class="table table-bordered table-striped statistics">
+        <caption> {CTS.caption}</caption>
+        <tbody>
+            <tr>
+                <th>{CTS.thead.0}</th>
+                <th class="text-right">{CTS.thead.1}</th>
+                <th></th>
+                <th>{CTS.thead.2}</th>
+            </tr>
+            <!-- BEGIN: loop -->
+            <tr>
+                <td>{KEY}</td>
+                <td class="text-right">{VALUE.0}</td>
+                <td>
+                <!-- BEGIN: img -->
+                <img alt="Statistics image" src="{SRC}" height="10" width="{WIDTH}" />
+                <!-- END: loop -->
+                </td>
+                <td class="w250">{VALUE.1}</td>
+            </tr>
+            <!-- END: loop -->
+            <!-- BEGIN: ot -->
+            <tr>
+                <td>{CTS.others.0}</td>
+                <td class="text-right">{CTS.others.1}</td>
+                <td colspan="2"><a href="{URL}">{CTS.others.2}</a></td>
+            </tr>
+            <!-- END: ot -->
+        </tbody>
+    </table>
 </div>
 <!-- END: br -->
 
 <!-- BEGIN: os -->
 <div class="statistics-responsive">
-	<table summary="{CTS.caption}" class="table table-bordered table-striped statistics">
-		<caption> {CTS.caption}</caption>
-		<tbody>
-			<tr>
-				<th>{CTS.thead.0}</th>
-				<th class="text-right">{CTS.thead.1}</th>
-				<th></th>
-				<th>{CTS.thead.2}</th>
-			</tr>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td>{KEY}</td>
-				<td class="text-right">{VALUE.0}</td>
-				<td>
-				<!-- BEGIN: img -->
-				<img alt="Statistics image" src="{SRC}" height="10" width="{WIDTH}" />
-				<!-- END: img -->
-				</td>
-				<td class="w250">{VALUE.1}</td>
-			</tr>
-			<!-- END: loop -->
-			<!-- BEGIN: ot -->
-			<tr>
-				<td>{CTS.others.0}</td>
-				<td class="text-right">{CTS.others.1}</td>
-				<td colspan="2"><a href="{URL}">{CTS.others.2}</a></td>
-			</tr>
-			<!-- END: ot -->
-		</tbody>
-	</table>
+    <table summary="{CTS.caption}" class="table table-bordered table-striped statistics">
+        <caption> {CTS.caption}</caption>
+        <tbody>
+            <tr>
+                <th>{CTS.thead.0}</th>
+                <th class="text-right">{CTS.thead.1}</th>
+                <th></th>
+                <th>{CTS.thead.2}</th>
+            </tr>
+            <!-- BEGIN: loop -->
+            <tr>
+                <td>{KEY}</td>
+                <td class="text-right">{VALUE.0}</td>
+                <td>
+                <!-- BEGIN: img -->
+                <img alt="Statistics image" src="{SRC}" height="10" width="{WIDTH}" />
+                <!-- END: img -->
+                </td>
+                <td class="w250">{VALUE.1}</td>
+            </tr>
+            <!-- END: loop -->
+            <!-- BEGIN: ot -->
+            <tr>
+                <td>{CTS.others.0}</td>
+                <td class="text-right">{CTS.others.1}</td>
+                <td colspan="2"><a href="{URL}">{CTS.others.2}</a></td>
+            </tr>
+            <!-- END: ot -->
+        </tbody>
+    </table>
 </div>
 <!-- END: os -->
 <!-- END: main -->

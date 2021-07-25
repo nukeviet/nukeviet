@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-	<!-- END: result -->
+    <!-- END: result -->
     <p class="text-center">
         <strong>{LANG.total}</strong>: {TOTAL} {LANG.counter} - <strong>{LANG.publtime}: </strong>{PUBLTIME}
     </p>
