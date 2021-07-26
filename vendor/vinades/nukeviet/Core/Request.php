@@ -1109,6 +1109,7 @@ class Request
                     }
                     break;
                 case 'cookie':
+                    $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
                     if (array_key_exists($this->cookie_prefix . '_' . $name, $_COOKIE)) {
                         $value = $_COOKIE[$this->cookie_prefix . '_' . $name];
                         if ($decode) {
@@ -1122,6 +1123,7 @@ class Request
                     }
                     break;
                 case 'session':
+                    $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
                     if (array_key_exists($this->session_prefix . '_' . $name, $_SESSION)) {
                         $value = $_SESSION[$this->session_prefix . '_' . $name];
                         if ($decode) {
@@ -1186,6 +1188,7 @@ class Request
         if (is_array($value)) {
             return false;
         }
+        $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
         if (empty($name)) {
             return false;
         }
@@ -1231,6 +1234,7 @@ class Request
         if (is_array($value)) {
             return false;
         }
+        $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
         if (empty($name)) {
             return false;
         }
@@ -1255,7 +1259,7 @@ class Request
         }
         $names = ',' . $names;
         unset($matches);
-        preg_match_all("/\,\s*([a-zA-Z\_]{1}[a-zA-Z0-9\_]*)/", $names, $matches);
+        preg_match_all("/\,\s*([a-zA-Z\_]{1}[a-zA-Z0-9\-\_]*)/", $names, $matches);
         $names = $matches[1];
         if (empty($names)) {
             return false;
@@ -1278,6 +1282,7 @@ class Request
                 }
             } elseif ($arr == 'cookie') {
                 foreach ($names as $name) {
+                    $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
                     if (empty($name)) {
                         continue;
                     }
@@ -1293,6 +1298,7 @@ class Request
                 }
             } elseif ($arr == 'session') {
                 foreach ($names as $name) {
+                    $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
                     if (empty($name)) {
                         continue;
                     }
@@ -1342,7 +1348,7 @@ class Request
         }
         $names = ',' . $names;
         unset($matches);
-        preg_match_all("/\,\s*([a-zA-Z\_]{1}[a-zA-Z0-9\_]*)/", $names, $matches);
+        preg_match_all("/\,\s*([a-zA-Z\_]{1}[a-zA-Z0-9\-\_]*)/", $names, $matches);
         $names = $matches[1];
         if (empty($names)) {
             return false;
@@ -1352,6 +1358,7 @@ class Request
         foreach ($mode as $arr) {
             $array_keys = array_keys($names);
             foreach ($array_keys as $name) {
+                $name2 = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
                 if ($arr == 'get' and isset($_GET[$name])) {
                     if (empty($all)) {
                         return true;
@@ -1362,12 +1369,12 @@ class Request
                         return true;
                     }
                     unset($names[$name]);
-                } elseif ($arr == 'cookie' and isset($_COOKIE[$this->cookie_prefix . '_' . $name])) {
+                } elseif ($arr == 'cookie' and isset($_COOKIE[$this->cookie_prefix . '_' . $name2])) {
                     if (empty($all)) {
                         return true;
                     }
                     unset($names[$name]);
-                } elseif ($arr == 'session' and isset($_SESSION[$this->session_prefix . '_' . $name])) {
+                } elseif ($arr == 'session' and isset($_SESSION[$this->session_prefix . '_' . $name2])) {
                     if (empty($all)) {
                         return true;
                     }
