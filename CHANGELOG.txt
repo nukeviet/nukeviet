@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.00
+- System: Allows saving cookie/session with array values
 - Module Users: Manage changing user account password (Impact on interface)
 - System: Fixed users redirection module when integrating sso (Impact on interface)
 
