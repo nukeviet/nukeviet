@@ -1048,29 +1048,43 @@ class Request
     /**
      * encodeCookie()
      *
-     * @param string $string
+     * @param array|string $string
      * @return string
      */
     private function encodeCookie($string)
     {
+        $prefix = '';
+        if (is_array($string)) {
+            $string = json_encode($string);
+            $prefix = 'jsn.';
+        }
         $iv = substr($this->cookie_key, 0, 16);
         $string = openssl_encrypt($string, 'aes-256-cbc', $this->cookie_key, 0, $iv);
 
-        return strtr($string, '+/=', '-_,');
+        return $prefix . strtr($string, '+/=', '-_,');
     }
 
     /**
      * decodeCookie()
      *
      * @param string $string
-     * @return false|string
+     * @return array|false|string
      */
     private function decodeCookie($string)
     {
+        $isJsonDecode = false;
+        if (substr($string, 0, 4) == 'jsn.') {
+            $string = substr($string, 4);
+            $isJsonDecode = true;
+        }
         $string = strtr($string, '-_,', '+/=');
         $iv = substr($this->cookie_key, 0, 16);
+        $string = openssl_decrypt($string, 'aes-256-cbc', $this->cookie_key, 0, $iv);
+        if ($isJsonDecode) {
+            return json_decode($string, true);
+        }
 
-        return openssl_decrypt($string, 'aes-256-cbc', $this->cookie_key, 0, $iv);
+        return $string;
     }
 
     /**
@@ -1185,7 +1199,7 @@ class Request
      */
     public function set_Cookie($name, $value = '', $expire = 0, $encode = true)
     {
-        if (is_array($value)) {
+        if (!is_string($value) and !is_array($value)) {
             return false;
         }
         $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
@@ -1231,7 +1245,7 @@ class Request
      */
     public function set_Session($name, $value = '')
     {
-        if (is_array($value)) {
+        if (!is_string($value) and !is_array($value)) {
             return false;
         }
         $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
