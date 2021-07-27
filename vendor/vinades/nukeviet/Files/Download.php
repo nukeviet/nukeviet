@@ -360,7 +360,7 @@ class Download
      *
      * @return
      */
-    public function download_file()
+    public function download_file($attachment = 1)
     {
         if (! $this->properties['path']) {
             exit('Nothing to download!');
@@ -422,10 +422,12 @@ class Download
         header('Cache-Control: public');
         header('Content-Description: File Transfer');
         header('Content-Type: ' . $this->properties['type']);
-        if (strstr($this->nv_getenv('HTTP_USER_AGENT'), 'MSIE') != false) {
-            header('Content-Disposition: attachment; filename="' . urlencode($this->properties['name']) . '";');
-        } else {
-            header('Content-Disposition: attachment; filename="' . $this->properties['name'] . '";');
+        if ($attachment) {
+            if (strstr($this->nv_getenv('HTTP_USER_AGENT'), 'MSIE') != false) {
+                header('Content-Disposition: attachment; filename="' . urlencode($this->properties['name']) . '";');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $this->properties['name'] . '";');
+            }
         }
         header('Last-Modified: ' . date('D, d M Y H:i:s \G\M\T', $this->properties['mtime']));
 
