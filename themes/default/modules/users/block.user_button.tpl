@@ -16,8 +16,12 @@ function loginFormLoad() {
         },
         dataType: "html"
     }).done(function(a) {
-        $("#tip .log-area").html(a);
-        change_captcha()
+        if ('reload' == a) {
+            location.reload()
+        } else {
+            $("#tip .log-area").html(a);
+            change_captcha()
+        }
     });
 }
 </script>

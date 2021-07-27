@@ -14,7 +14,11 @@ if (!defined('NV_IS_MOD_USER')) {
 }
 
 if (isset($array_op[0])) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    if ((bool) $nv_Request->get_int('nv_ajax', 'post', 0)) {
+        exit('reload');
+    } else {
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
 }
 
 $page_title = $module_info['site_title'];
