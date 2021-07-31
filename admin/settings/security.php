@@ -858,7 +858,10 @@ $csp_directives = [
     'font-src' => $lang_module['csp_font_src'],
     'connect-src' => $lang_module['csp_connect_src'],
     'form-action' => $lang_module['csp_form_action'],
-    'base-uri' => $lang_module['csp_base_uri']
+    'base-uri' => $lang_module['csp_base_uri'],
+    'frame-ancestors' => $lang_module['csp_frame_ancestors'],
+    'manifest-src' => $lang_module['csp_manifest_src'],
+    'prefetch-src' => $lang_module['csp_prefetch_src']
 ];
 foreach ($csp_directives as $name => $desc) {
     $direct = [

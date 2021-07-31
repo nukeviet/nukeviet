@@ -368,6 +368,9 @@ $lang_module['csp_font_src'] = 'Chính sách dành riêng cho tập phông chữ
 $lang_module['csp_connect_src'] = 'Chính sách dành riêng cho các kết nối từ đối tượng XMLHttpRequest hoặc WebSocket';
 $lang_module['csp_form_action'] = 'Xác định các nguồn hợp lệ có thể được sử dụng như một hành động thực thi của biểu mẫu.';
 $lang_module['csp_base_uri'] = 'Chính sách bảo mật hạn chế các giá trị có thể có của phần tử &lt;base&gt;.';
+$lang_module['csp_frame_ancestors'] = 'Chỉ định nguồn cha hợp lệ có thể nhúng một trang bằng cách sử dụng một trong các thẻ &lt;frame&gt;, &lt;iframe&gt;, &lt;object&gt;, &lt;embed&gt;, &lt;applet&gt;.';
+$lang_module['csp_manifest_src'] = 'Chỉ định các nguồn hợp lệ của tệp kê khai ứng dụng.';
+$lang_module['csp_prefetch_src'] = 'Chỉ định các nguồn hợp lệ được tìm nạp trước hoặc hiển thị trước.';
 $lang_module['csp_act'] = 'Kích hoạt CSP';
 
 $lang_module['rp'] = 'Thiết lập RP';

@@ -356,6 +356,9 @@ $lang_module['csp_font_src'] = 'Politique dédiée aux polices';
 $lang_module['csp_connect_src'] = 'Politique dédiée aux connexions depuis un objet XMLHttpRequest ou un WebSocket';
 $lang_module['csp_form_action'] = 'Définit les sources valides qui peuvent être utilisées comme action de formulaire.';
 $lang_module['csp_base_uri'] = 'Politique de sécurité limitant les valeurs possibles d\'un élément &lt;base&gt;.';
+$lang_module['csp_frame_ancestors'] = 'Définit les parent valides qui peuvent intégrer une page grâce aux éléments &lt;frame&gt;, &lt;iframe&gt;, &lt;object&gt;, &lt;embed&gt;, &lt;applet&gt;.';
+$lang_module['csp_manifest_src'] = 'Définit les sources valides pour les fichiers de manifeste d\'application.';
+$lang_module['csp_prefetch_src'] = 'Spécifie les ressources pouvant être préchargées ou préaffichées.';
 $lang_module['csp_act'] = 'Activer CSP';
 
 $lang_module['rp'] = 'Paramètre RP';

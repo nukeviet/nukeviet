@@ -356,6 +356,9 @@ $lang_module['csp_font_src'] = 'Policy dedicated to fonts';
 $lang_module['csp_connect_src'] = 'Policy dedicated to connections from a XMLHttpRequest object or a WebSocket';
 $lang_module['csp_form_action'] = 'Defines valid sources that can be used as a form action.';
 $lang_module['csp_base_uri'] = 'Security policy restricting the possible values of a &lt;base&gt; element.';
+$lang_module['csp_frame_ancestors'] = 'Specifies valid parents that may embed a page using &lt;frame&gt;, &lt;iframe&gt;, &lt;object&gt;, &lt;embed&gt;, &lt;applet&gt;.';
+$lang_module['csp_manifest_src'] = 'Specifies valid sources of application manifest files.';
+$lang_module['csp_prefetch_src'] = 'Specifies valid sources to be prefetched or prerendered.';
 $lang_module['csp_act'] = 'Enable CSP';
 
 $lang_module['rp'] = 'RP setting';
