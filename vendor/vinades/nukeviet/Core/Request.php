@@ -1140,9 +1140,6 @@ class Request
                     $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
                     if (array_key_exists($this->session_prefix . '_' . $name, $_SESSION)) {
                         $value = $_SESSION[$this->session_prefix . '_' . $name];
-                        if ($decode) {
-                            $value = $this->decodeCookie($value);
-                        }
                         if (empty($value) or is_numeric($value)) {
                             return $value;
                         }
@@ -1192,14 +1189,14 @@ class Request
      * set_Cookie()
      *
      * @param string       $name
-     * @param array|string $value
+     * @param array|int|string $value
      * @param int          $expire
      * @param bool         $encode
      * @return bool
      */
     public function set_Cookie($name, $value = '', $expire = 0, $encode = true)
     {
-        if (!is_string($value) and !is_array($value)) {
+        if (!is_string($value) and !is_numeric($value) and !is_array($value)) {
             return false;
         }
         $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
@@ -1240,12 +1237,12 @@ class Request
      * set_Session()
      *
      * @param string $name
-     * @param string $value
+     * @param array|int|string $value
      * @return bool
      */
     public function set_Session($name, $value = '')
     {
-        if (!is_string($value) and !is_array($value)) {
+        if (!is_string($value) and !is_numeric($value) and !is_array($value)) {
             return false;
         }
         $name = preg_replace('/[^a-zA-Z0-9\_]/', '', $name);
@@ -1253,7 +1250,6 @@ class Request
             return false;
         }
         $name = $this->session_prefix . '_' . $name;
-        $value = $this->encodeCookie($value);
         $_SESSION[$name] = $value;
 
         return true;
