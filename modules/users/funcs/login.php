@@ -674,7 +674,13 @@ $rules = [
 $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
 // Dang nhap kieu thong thuong
-if ($nv_Request->isset_request('nv_login', 'post')) {
+if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
+    $csrf = $nv_Request->get_title('_csrf', 'post', '');
+    if (!hash_equals($checkss, $csrf)) {
+        exit('Stop!!!');
+    }
+
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
 

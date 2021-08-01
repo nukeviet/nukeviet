@@ -111,6 +111,7 @@ if ($global_config['allowuserlogin']) {
         $content = $xtpl->text('signed');
     } else {
         $xtpl->assign('NV_REDIRECT', nv_redirect_encrypt(NV_MY_DOMAIN . (empty($page_url) ? '' : nv_url_rewrite(str_replace('&amp;', '&', $page_url), true))));
+        $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $block_config['module'] . '_login'));
         $xtpl->parse('main');
         $content = $xtpl->text('main');
     }

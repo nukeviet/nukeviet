@@ -1,4 +1,5 @@
 <form action="{USER_LOGIN}" method="post" onsubmit="return login_validForm(this);" autocomplete="off" novalidate<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+    <input type="hidden" name="_csrf" value="{CSRF}"/>
     <div class="nv-info margin-bottom" data-default="{GLANG.logininfo}">{GLANG.logininfo}</div>
     <div class="form-detail">
         <div class="form-group loginstep1">
