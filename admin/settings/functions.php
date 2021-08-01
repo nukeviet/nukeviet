@@ -14,8 +14,9 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 }
 
 $allow_func = ['main', 'language', 'smtp'];
-if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0)) {
+if ($site_fulladmin) {
     $allow_func[] = 'system';
+    $allow_func[] = 'security';
 }
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'ftp';
