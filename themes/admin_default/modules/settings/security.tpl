@@ -14,15 +14,18 @@
 
 <div class="clearfix">
     <ul class="nav nav-tabs setting-tabnav" role="tablist" id="settingTabs">
+        <!-- BEGIN: sys_tabs -->
         <li role="presentation" class="{TAB0_ACTIVE}"><a href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=0">{LANG.security}</a></li>
         <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=1">{LANG.flood_blocker}</a></li>
         <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=2">{LANG.captcha}</a></li>
         <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=3">{LANG.banip}</a></li>
         <li role="presentation" class="{TAB4_ACTIVE}"><a href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=4">{LANG.cors}</a></li>
+        <!-- END: sys_tabs -->
         <li role="presentation" class="{TAB5_ACTIVE}"><a href="#settingCSP" aria-controls="settingCSP" aria-offsets="5" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=5">{LANG.csp}</a></li>
         <li role="presentation" class="{TAB6_ACTIVE}"><a href="#settingRP" aria-controls="settingRP" aria-offsets="6" role="tab" data-toggle="tab" data-location="{FORM_ACTION}&amp;selectedtab=6">{LANG.rp}</a></li>
     </ul>
     <div class="tab-content">
+        <!-- BEGIN: sys_contents -->
         <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
@@ -580,6 +583,7 @@
                 </form>
             </div>
         </div>
+        <!-- END: sys_contents -->
         <div role="tabpanel" class="tab-pane{TAB5_ACTIVE}" id="settingCSP">
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
@@ -633,7 +637,7 @@
                             {LANG.rp_desc} <a href="https://www.w3.org/TR/referrer-policy/" target="_blank">{LANG.rp_details}</a>.<br />
                             {LANG.rp_desc2}
                         </div>
-                        
+
                         <strong>{LANG.rp_directives}:</strong>
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                             <!-- BEGIN: rp_directive -->
