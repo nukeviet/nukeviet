@@ -550,7 +550,7 @@ function nv_server_config_change($array_config)
         $config_contents .= "  </FilesMatch>\n";
         $config_contents .= "</IfModule>\n\n";
         $config_contents .= "<IfModule mod_headers.c>\n";
-        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf)$\">\n";
+        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf|pdf)$\">\n";
         $config_contents .= "    Header append Vary Accept-Encoding\n";
         $config_contents .= "    Header set Access-Control-Allow-Origin \"*\"\n";
         if (!empty($array_config['nv_anti_iframe'])) {
@@ -562,8 +562,8 @@ function nv_server_config_change($array_config)
         $config_contents .= "  <FilesMatch \"\.(doc|pdf|swf)$\">\n";
         $config_contents .= "    Header set X-Robots-Tag \"noarchive, nosnippet\"\n";
         $config_contents .= "  </FilesMatch>\n\n";
-        $config_contents .= "  <FilesMatch \"\.(js|css|jpe?g|png|gif|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$\">\n";
-        $config_contents .= "	Header set Cache-Control \"max-age=2592000, public\"\n";
+        $config_contents .= "  <FilesMatch \"\.(js|css|jpe?g|png|gif|webp|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$\">\n";
+        $config_contents .= "    Header set Cache-Control 'max-age=2592000, public, no-cache=\"set-cookie\"'\n";
         $config_contents .= "  </FilesMatch>\n";
         $config_contents .= "</IfModule>\n\n";
         $config_contents .= "#nukeviet_config_end\n";

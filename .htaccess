@@ -28,7 +28,7 @@ ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
 </IfModule>
 
 <IfModule mod_headers.c>
-  <FilesMatch "\.(js|css|xml|ttf)$">
+  <FilesMatch "\.(js|css|xml|ttf|pdf)$">
     Header append Vary Accept-Encoding
     Header set Access-Control-Allow-Origin "*"
     Header set X-Frame-Options "SAMEORIGIN"
@@ -40,8 +40,8 @@ ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
     Header set X-Robots-Tag "noarchive, nosnippet"
   </FilesMatch>
 
-  <FilesMatch "\.(js|css|jpe?g|png|gif|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$">
-	Header set Cache-Control "max-age=2592000, public"
+  <FilesMatch "\.(js|css|jpe?g|png|gif|webp|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?t=[0-9]{9,11})?$">
+    Header set Cache-Control 'public, max-age=2592000, no-cache="set-cookie"'
   </FilesMatch>
 </IfModule>
 
