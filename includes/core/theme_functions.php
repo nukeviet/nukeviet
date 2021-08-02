@@ -334,12 +334,7 @@ function nv_xmlOutput($content, $lastModified)
     @header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
     @header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
     @header('Content-Type: text/xml; charset=utf-8');
-
-    if (!empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
-        @header('Cache-Control: no-cache, pre-check=0, post-check=0');
-    } else {
-        @header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
-    }
+    @header('Cache-Control: no-store, max-age=0');
 
     if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
         header('X-Frame-Options: SAMEORIGIN');
