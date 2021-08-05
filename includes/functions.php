@@ -1811,11 +1811,13 @@ function getPageUrl($page_url, $query_check, $abs_comp)
     $url_rewrite = nv_url_rewrite($page_url, true);
     $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
     $url_parts = parse_url($url_rewrite_check);
+    $url_parts['path'] = urldecode($url_parts['path']);
     !isset($url_parts['query']) && $url_parts['query'] = '';
 
     $request_uri = nv_url_rewrite($_SERVER['REQUEST_URI'], true);
     str_starts_with($request_uri, NV_MY_DOMAIN) && $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
     $request_parts = parse_url($request_uri);
+    $request_parts['path'] = urldecode($request_parts['path']);
     !isset($request_parts['query']) && $request_parts['query'] = '';
 
     if (empty($request_parts['path']) or strcmp($url_parts['path'], $request_parts['path']) !== 0) {
