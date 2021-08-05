@@ -264,24 +264,15 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $lang_global, $key_words, $description, $module_name, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
+    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
 
     $return = [];
 
-    if (empty($site_description) or ($global_config['metaTagsOgp'] and empty($meta_property['og:url']))) {
-        if (empty($page_url)) {
-            if ($home) {
-                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-            } else {
-                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-                if ($op != 'main') {
-                    $current_page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $op;
-                }
-            }
-        } else {
-            $current_page_url = $page_url;
-        }
-        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
+    $current_page_url = '';
+    if (!empty($page_url)) {
+        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    } elseif ($home) {
+        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
     }
 
     // Tại trang chủ lấy mô tả của site thay vì mô tả của module chọn làm trang chủ
@@ -296,7 +287,7 @@ function nv_html_meta_tags($html = true)
             $ds[] = $module_info['funcs'][$op]['func_custom_name'];
         }
         $ds[] = $module_info['custom_title'];
-        $ds[] = $current_page_url;
+        !empty($current_page_url) && $ds[] = $current_page_url;
         $site_description = implode(' - ', $ds);
     } elseif ($site_description == 'no') {
         $site_description = '';
@@ -378,7 +369,7 @@ function nv_html_meta_tags($html = true)
                 $metatags[] = $mt['meta_item'];
             }
             foreach ($metatags as $meta) {
-                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and preg_match("/^([^\'\"]+)$/", (string)$meta['content'])) {
+                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and preg_match("/^([^\'\"]+)$/", (string) $meta['content'])) {
                     $return[] = [
                         'name' => $meta['group'],
                         'value' => $meta['value'],
@@ -392,7 +383,7 @@ function nv_html_meta_tags($html = true)
     // Robot metatags
     $return = array_merge_recursive($return, $nv_BotManager->getMetaTags());
 
-    /**
+    /*
      * Đọc kỹ giấy phép trước khi thay đổi giá trị này
      *
      * @link https://github.com/nukeviet/nukeviet/blob/nukeviet4.5/LICENSE
@@ -430,7 +421,7 @@ function nv_html_meta_tags($html = true)
         if (empty($meta_property['og:type'])) {
             $meta_property['og:type'] = 'website';
         }
-        if (empty($meta_property['og:url'])) {
+        if (empty($meta_property['og:url']) and !empty($current_page_url)) {
             $meta_property['og:url'] = $current_page_url;
         }
         $meta_property['og:site_name'] = $global_config['site_name'];
@@ -486,6 +477,7 @@ function nv_html_meta_tags($html = true)
     foreach ($return as $link) {
         $res .= '<meta ' . $link['name'] . '="' . $link['value'] . '" content="' . $link['content'] . '" />' . PHP_EOL;
     }
+
     return $res;
 }
 
