@@ -813,11 +813,13 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
             'ext' => 1,
             'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
         ];
-    } elseif ($default_js and file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
-        $return[] = [
-            'ext' => 1,
-            'content' => NV_STATIC_URL . 'themes/default/js/' . $module_file . '.js'
-        ];
+    } else if ($default_js and !file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.nojs')) {
+        if (file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
+            $return[] = [
+                'ext' => 1,
+                'content' => NV_STATIC_URL . 'themes/default/js/' . $module_file . '.js'
+            ];
+        }
     }
 
     if (defined('NV_IS_DRAG_BLOCK')) {
