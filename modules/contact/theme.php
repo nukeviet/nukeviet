@@ -187,6 +187,19 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                                     $xtpl->parse('main.dep.whatsapp.item');
                                 }
                                 $xtpl->parse('main.dep.whatsapp');
+                            } elseif (strtolower($key) == 'zalo') {
+                                $ss = array_map('trim', explode(',', $value));
+                                foreach ($ss as $k => $s) {
+                                    $xtpl->assign('ZALO', [
+                                        'name' => $key,
+                                        'value' => $s
+                                    ]);
+                                    if ($k) {
+                                        $xtpl->parse('main.dep.zalo.item.comma');
+                                    }
+                                    $xtpl->parse('main.dep.zalo.item');
+                                }
+                                $xtpl->parse('main.dep.zalo');
                             } else {
                                 $xtpl->assign('OTHER', [
                                     'name' => $key,

@@ -75,7 +75,7 @@
                     <p>
                         <em class="icon-viber fa-horizon margin-right"></em>{VIBER.name}: <span>
                             <!-- BEGIN: item -->
-                            <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->{VIBER.value}<!-- END: item -->
+                            <!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="viber://pa?chatURI={VIBER.value}" class="black">{VIBER.value}</a><!-- END: item -->
                         </span>
                     </p>
                     <!-- END: viber -->
@@ -94,11 +94,21 @@
                         <em class="fa fa-whatsapp fa-horizon margin-right"></em>{WHATSAPP.name}: <span>
                             <!-- BEGIN: item -->
                             <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->
-                            <a data-android="intent://send/{WHATSAPP.value}#Intent;scheme=smsto;package=com.whatsapp;action=android.intent.action.SENDTO;end" class="black">{WHATSAPP.value}</a>
+                            <a href="https://wa.me/{WHATSAPP.value}" class="black">{WHATSAPP.value}</a>
                         <!-- END: item -->
                         </span>
                     </p>
                     <!-- END: whatsapp -->
+                    <!-- BEGIN: zalo -->
+                    <p>
+                        <em class="icon-zalo fa-horizon margin-right"></em>{ZALO.name}: <span>
+                            <!-- BEGIN: item -->
+                            <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->
+                            <a href="https://zalo.me/{ZALO.value}" class="black">{ZALO.value}</a>
+                        <!-- END: item -->
+                        </span>
+                    </p>
+                    <!-- END: zalo -->
                     <!-- BEGIN: other -->
                     <p>
                         <!-- BEGIN: text -->

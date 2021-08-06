@@ -44,6 +44,54 @@
     width: 22px;
 }
 
+.icon-zalo:before {
+    content: "\e90b";
+}
+
+.icon-skype:before {
+    content: "\e90a";
+}
+
+.icon-caret-right:before {
+    content: "\e906";
+}
+
+.icon-caret-left:before {
+    content: "\e907";
+}
+
+.icon-caret-up:before {
+    content: "\e908";
+}
+
+.icon-caret-down:before {
+    content: "\e909";
+}
+
+.icon-crown:before {
+    content: "\e905";
+}
+
+.icon-error:before {
+    content: "\e902";
+}
+
+.icon-success:before {
+    content: "\e903";
+}
+
+.icon-info:before {
+    content: "\e904";
+}
+
+.icon-eye:before {
+    content: "\e900";
+}
+
+.icon-eye-slash:before {
+    content: "\e901";
+}
+
 .icon-nukeviet:before {
     content: '\e607';
 }

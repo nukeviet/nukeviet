@@ -44,7 +44,7 @@
         <!-- BEGIN: viber -->
         <li><em class="icon-viber"></em>&nbsp;<!-- BEGIN: item -->
             <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->
-            <span title="{VIBER.name}">{VIBER.value}</span>
+            <a href="viber://pa?chatURI={VIBER.value}" title="{VIBER.name}">{VIBER.value}</a>
         <!-- END: item --></li>
         <!-- END: viber -->
         <!-- BEGIN: icq -->
@@ -56,9 +56,15 @@
         <!-- BEGIN: whatsapp -->
         <li><em class="fa fa-whatsapp"></em>&nbsp;<!-- BEGIN: item -->
             <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->
-            <a data-android="intent://send/{WHATSAPP.value}#Intent;scheme=smsto;package=com.whatsapp;action=android.intent.action.SENDTO;end" title="{WHATSAPP.name}">{WHATSAPP.value}</a>
+            <a href="https://wa.me/{WHATSAPP.value}" title="{WHATSAPP.name}">{WHATSAPP.value}</a>
         <!-- END: item --></li>
         <!-- END: whatsapp -->
+        <!-- BEGIN: zalo -->
+        <li><em class="icon-zalo"></em>&nbsp;<!-- BEGIN: item -->
+            <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->
+            <a href="https://zalo.me/{ZALO.value}" title="{ZALO.name}">{ZALO.value}</a>
+        <!-- END: item --></li>
+        <!-- END: zalo -->
         <!-- BEGIN: other -->
         <li>{OTHER.name}:&nbsp; {OTHER.value}</li>
         <!-- END: other -->

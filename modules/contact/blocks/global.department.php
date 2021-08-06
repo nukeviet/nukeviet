@@ -221,6 +221,19 @@ if (!nv_function_exists('nv_department_info')) {
                                             $xtpl->parse('main.whatsapp.item');
                                         }
                                         $xtpl->parse('main.whatsapp');
+                                    } elseif (strtolower($key) == 'zalo') {
+                                        $ss = array_map('trim', explode(',', $value));
+                                        foreach ($ss as $k => $s) {
+                                            $xtpl->assign('ZALO', [
+                                                'name' => $key,
+                                                'value' => $s
+                                            ]);
+                                            if ($k) {
+                                                $xtpl->parse('main.zalo.item.comma');
+                                            }
+                                            $xtpl->parse('main.zalo.item');
+                                        }
+                                        $xtpl->parse('main.zalo');
                                     } else {
                                         $xtpl->assign('OTHER', [
                                             'name' => $key,
