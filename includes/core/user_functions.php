@@ -808,17 +808,20 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
             'ext' => 1,
             'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js'
         ];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js')) {
-        $return[] = [
-            'ext' => 1,
-            'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
-        ];
-    } else if ($default_js and !file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.nojs')) {
-        if (file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
+    } else {
+        $fs = glob(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.*');
+        if (!empty($fs) and in_array(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js', $fs, true)) {
             $return[] = [
                 'ext' => 1,
-                'content' => NV_STATIC_URL . 'themes/default/js/' . $module_file . '.js'
+                'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
             ];
+        } elseif ($default_js and (empty($fs) or !in_array(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.nojs', $fs, true))) {
+            if (file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
+                $return[] = [
+                    'ext' => 1,
+                    'content' => NV_STATIC_URL . 'themes/default/js/' . $module_file . '.js'
+                ];
+            }
         }
     }
 
