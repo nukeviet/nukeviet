@@ -157,6 +157,8 @@ if ($page_config['viewtype'] == 2) {
 
     $result = $db_slave->query($db_slave->sql());
     while ($row = $result->fetch()) {
+        empty($row['description']) && $row['description'] = strip_tags(trim($row['bodytext']));
+        $row['description'] = nv_clean60($row['description'], 300);
         $row['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
         $array_data[$row['id']] = $row;
     }

@@ -37,7 +37,7 @@
             </div>
         </figure>
         <div id="imgpreview" style="display:none">
-            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.img.src}" srcset="{CONTENT.img.srcset}" alt="{CONTENT.title}" class="img-thumbnail"/></p>
+            <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.img.src}" srcset="{CONTENT.img.srcset}" class="img-thumbnail"/></p>
         </div>
         <!-- END: imageleft -->
 
