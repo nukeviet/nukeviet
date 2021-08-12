@@ -33,6 +33,25 @@ while ($row = $result->fetch()) {
     }
     $groupsList[$row['group_id']] = $row;
 }
+// Cập nhật thống kê số thành viên các nhóm ở các site con
+if (!empty($global_config['idsite'])) {
+    // Toàn bộ thành viên của site
+    $db->sqlreset()
+    ->select('COUNT(*)')
+    ->from(NV_MOD_TABLE)
+    ->where('idsite = "' . $global_config['idsite'] . '"');
+    $groupsList[6]['numbers'] = $db->query($db->sql())->fetchColumn();
+
+    // Thành viên mới của site
+    $db->sqlreset()
+    ->select('COUNT(*)')
+    ->from(NV_MOD_TABLE)
+    ->where('idsite = "' . $global_config['idsite'] . '" AND group_id = 7');
+    $groupsList[7]['numbers'] = $db->query($db->sql())->fetchColumn();
+
+    // Thành viên chính thức của site
+    $groupsList[4]['numbers'] = $groupsList[6]['numbers'] - $groupsList[7]['numbers'];
+}
 
 // Neu khong co nhom => chuyen den trang tao nhom
 if (!$checkEmptyGroup and !$nv_Request->isset_request('add', 'get')) {
