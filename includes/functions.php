@@ -1795,6 +1795,10 @@ function getPageUrl($page_url, $query_check, $abs_comp)
 {
     $url_rewrite = nv_url_rewrite($page_url, true);
     $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
+    $url_rewrite_check = urldecode($url_rewrite_check);
+    $url_rewrite_check = preg_replace_callback('/[^:\/@?&=#]+/usD', function ($matches) {
+        return urlencode($matches[0]);
+    }, $url_rewrite_check);
     $url_parts = parse_url($url_rewrite_check);
     $url_parts['path'] = urldecode($url_parts['path']);
     !isset($url_parts['query']) && $url_parts['query'] = '';
