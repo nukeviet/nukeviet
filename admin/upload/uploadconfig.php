@@ -69,6 +69,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $mime = $nv_Request->get_typed_array('mime', 'post', 'int');
     $mime = array_flip($mime);
     $mime = array_intersect_key($myini['mimes'], $mime);
+    $mime[] = 'application/x-httpd-php';
+    $mime[] = 'application/x-httpd-php-source';
+    $mime[] = 'application/php';
+    $mime[] = 'application/x-php';
+    $mime[] = 'text/php';
+    $mime[] = 'text/x-php';
+    $mime = array_unique($mime);
     $mime = implode(',', $mime);
 
     $upload_checking_mode = $nv_Request->get_string('upload_checking_mode', 'post', '');
