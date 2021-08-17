@@ -40,7 +40,7 @@ if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
 
 $nv_ajax_login = $nv_Request->get_int('nv_ajax_login', 'post', 0);
 if ($nv_ajax_login) {
-    $info = $lang_module['logout_ok'] . '<br /><br /><img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/images/load_bar.gif">';
+    $info = $lang_module['logout_ok'];
     include NV_ROOTDIR . '/includes/header.php';
     echo $info;
     include NV_ROOTDIR . '/includes/footer.php';
@@ -53,9 +53,9 @@ $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $m
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 $canonicalUrl = getCanonicalUrl($page_url);
 
-$info = $lang_module['logout_ok'] . '<br /><br />';
-$info .= '<img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />';
-$info .= '[<a href="' . $url_redirect . '">' . $lang_module['redirect_to_back'] . '</a>]';
+$info = $lang_module['logout_ok'];
+$info .= '<p><span class="load-bar"></span></p>';
+$info .= '<p>[<a href="' . $url_redirect . '">' . $lang_module['redirect_to_back'] . '</a>]</p>';
 
 $contents = user_info_exit($info);
 $contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite($url_redirect) . '" />';
