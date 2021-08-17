@@ -120,7 +120,8 @@ if ($checkss == $data['checkss']) {
                             $checknum = md5($checknum);
 
                             $subject = $lang_module['lostactive_mailtitle'];
-                            $message = sprintf($lang_module['lostactive_active_info'], $row['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
+                            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, true);
+                            $message = sprintf($lang_module['lostactive_active_info'], $row['first_name'], $global_config['site_name'], $_url, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
                             $ok = nv_sendmail([
                                 $global_config['site_name'],
                                 $global_config['site_email']
