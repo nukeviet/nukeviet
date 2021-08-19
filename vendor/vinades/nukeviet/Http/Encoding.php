@@ -193,6 +193,6 @@ class Encoding
      */
     public static function is_available()
     {
-        return function_exists('gzuncompress') or function_exists('gzdeflate') or function_exists('gzinflate');
+        return (function_exists('gzuncompress') or function_exists('gzdeflate') or function_exists('gzinflate'));
     }
 }
