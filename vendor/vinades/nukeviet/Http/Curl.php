@@ -121,8 +121,8 @@ class Curl
         }
          */
 
-        $is_local = isset($args['local']) and $args['local'];
-        $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
+        $is_local = (isset($args['local']) and $args['local']);
+        $ssl_verify = (isset($args['sslverify']) and $args['sslverify']);
 
         // CURLOPT_TIMEOUT and CURLOPT_CONNECTTIMEOUT expect integers. Have to use ceil since
         // a value of 0 will allow an unlimited timeout.
@@ -359,7 +359,7 @@ class Curl
             return false;
         }
 
-        $is_ssl = isset($args['ssl']) and $args['ssl'];
+        $is_ssl = (isset($args['ssl']) and $args['ssl']);
 
         if ($is_ssl) {
             $curl_version = curl_version();
