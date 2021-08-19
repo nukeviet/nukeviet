@@ -808,7 +808,7 @@ if ($step == 1) {
                         checknum, last_login, last_ip, last_agent, last_openid, idsite, pass_creation_time, email_verification_time
                     ) VALUES (
                         ' . $userid . ", 1, :username, :md5username, :password, :email, :first_name, '', '', '', 0, '',
-                        " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '1', 1, '', " . NV_CURRENTTIME . ",
+                        " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '1,4', 1, '', " . NV_CURRENTTIME . ",
                         '', '', '', 0, " . NV_CURRENTTIME . ', -3
                     )');
                     $sth->bindParam(':username', $array_data['nv_login'], PDO::PARAM_STR);
