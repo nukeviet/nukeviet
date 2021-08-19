@@ -134,7 +134,7 @@ class Http extends Server
         }
 
         // Set SSL
-        $args['ssl'] = $infoURL['scheme'] == 'https' or $infoURL['scheme'] == 'ssl';
+        $args['ssl'] = ($infoURL['scheme'] == 'https' or $infoURL['scheme'] == 'ssl');
 
         /**
          * Block url
@@ -148,7 +148,7 @@ class Http extends Server
 
         // Determine if this request is to OUR install of NukeViet
         $homeURL = parse_url(Http::$site_config['my_domain']);
-        $args['local'] = $homeURL['host'] == $infoURL['host'] or 'localhost' == $infoURL['host'];
+        $args['local'] = ($homeURL['host'] == $infoURL['host'] or 'localhost' == $infoURL['host']);
         unset($homeURL);
 
         // If Stream but no file, default is a file in temp dir with base $url name
@@ -371,7 +371,7 @@ class Http extends Server
         static $overloaded = null;
 
         if (is_null($overloaded)) {
-            $overloaded = function_exists('mb_internal_encoding') and (ini_get('mbstring.func_overload') & 2);
+            $overloaded = (function_exists('mb_internal_encoding') and (ini_get('mbstring.func_overload') & 2));
         }
 
         if ($overloaded === false) {
