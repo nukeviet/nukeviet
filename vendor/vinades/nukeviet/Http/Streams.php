@@ -12,6 +12,7 @@ namespace NukeViet\Http;
 
 class Streams
 {
+
     /**
      *
      * @param mixed $url
@@ -59,7 +60,7 @@ class Streams
         $connect_host = $arrURL['host'];
 
         $secure_transport = ($arrURL['scheme'] == 'ssl' or $arrURL['scheme'] == 'https');
-        if (! isset($arrURL['port'])) {
+        if (!isset($arrURL['port'])) {
             if ($arrURL['scheme'] == 'ssl' or $arrURL['scheme'] == 'https') {
                 $arrURL['port'] = 443;
                 $secure_transport = true;
@@ -86,22 +87,22 @@ class Streams
 
         $connect_host = $secure_transport ? 'ssl://' . $connect_host : 'tcp://' . $connect_host;
 
-        $is_local = isset($args['local']) and $args['local'];
-        $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
+        $is_local = (isset($args['local']) and $args['local']);
+        $ssl_verify = (isset($args['sslverify']) and $args['sslverify']);
 
         // NukeViet has no proxy setup
         $context = stream_context_create(array(
             'ssl' => array(
                 'verify_peer' => $ssl_verify,
-                //'CN_match' => $arrURL['host'], // This is handled by self::verify_ssl_certificate()
+                // 'CN_match' => $arrURL['host'], // This is handled by self::verify_ssl_certificate()
                 'capture_peer_cert' => $ssl_verify,
                 'SNI_enabled' => true,
                 'cafile' => $args['sslcertificates'],
-                'allow_self_signed' => ! $ssl_verify,
+                'allow_self_signed' => !$ssl_verify
             )
         ));
 
-        $timeout = ( int ) floor($args['timeout']);
+        $timeout = (int) floor($args['timeout']);
         $utimeout = $timeout == $args['timeout'] ? 0 : 1000000 * $args['timeout'] % 1000000;
         $connect_timeout = max($timeout, 1);
 
@@ -114,14 +115,14 @@ class Streams
         }
 
         // No proxy option on NukeViet, maybe in future!!!!
-        //if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
-        //{
-        //	$handle = @stream_socket_client( 'tcp://' . $proxy->host() . ':' . $proxy->port(), $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
-        //}
-        //else
-        //{
-            $handle = @stream_socket_client($connect_host . ':' . $arrURL['port'], $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context);
-        //}
+        // if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
+        // {
+        // $handle = @stream_socket_client( 'tcp://' . $proxy->host() . ':' . $proxy->port(), $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
+        // }
+        // else
+        // {
+        $handle = @stream_socket_client($connect_host . ':' . $arrURL['port'], $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context);
+        // }
 
         if ($secure_transport) {
             error_reporting($error_reporting);
@@ -140,7 +141,7 @@ class Streams
 
         // Verify that the SSL certificate is valid for this request
         if ($secure_transport and $ssl_verify /* and ! $proxy->is_enabled() */) {
-            if (! self::verify_ssl_certificate($handle, $arrURL['host'])) {
+            if (!self::verify_ssl_certificate($handle, $arrURL['host'])) {
                 Http::set_error(6);
                 return false;
             }
@@ -148,15 +149,15 @@ class Streams
 
         stream_set_timeout($handle, $timeout, $utimeout);
 
-        //if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
-        //{
-        //	//Some proxies require full URL in this field.
-        //	$requestPath = $url;
-        //}
-        //else
-        //{
-            $requestPath = $arrURL['path'] . (isset($arrURL['query']) ? '?' . $arrURL['query'] : '');
-        //}
+        // if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
+        // {
+        // //Some proxies require full URL in this field.
+        // $requestPath = $url;
+        // }
+        // else
+        // {
+        $requestPath = $arrURL['path'] . (isset($arrURL['query']) ? '?' . $arrURL['query'] : '');
+        // }
 
         if (empty($requestPath)) {
             $requestPath .= '/';
@@ -164,49 +165,57 @@ class Streams
 
         $strHeaders = strtoupper($args['method']) . ' ' . $requestPath . ' HTTP/' . $args['httpversion'] . "\r\n";
 
-        //if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
-        //{
-        //	$strHeaders .= 'Host: ' . $arrURL['host'] . ':' . $arrURL['port'] . "\r\n";
-        //}
-        //else
-        //{
-            $strHeaders .= 'Host: ' . $arrURL['host'] . "\r\n";
-        //}
+        // if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
+        // {
+        // $strHeaders .= 'Host: ' . $arrURL['host'] . ':' . $arrURL['port'] . "\r\n";
+        // }
+        // else
+        // {
+        $strHeaders .= 'Host: ' . $arrURL['host'] . "\r\n";
+        // }
 
         if (isset($args['user-agent'])) {
             $strHeaders .= 'User-agent: ' . $args['user-agent'] . "\r\n";
         }
 
         // Add referer if not empty
-        if (! empty($args['referer'])) {
+        if (!empty($args['referer'])) {
             $strHeaders .= 'Referer: ' . $args['referer'] . "\r\n";
         }
 
         if (is_array($args['headers'])) {
-            foreach (( array ) $args['headers'] as $header => $headerValue) {
+            foreach ((array) $args['headers'] as $header => $headerValue) {
                 $strHeaders .= $header . ': ' . $headerValue . "\r\n";
             }
         } else {
             $strHeaders .= $args['headers'];
         }
 
-        //if( $proxy->use_authentication() )
-        //{
-        //	$strHeaders .= $proxy->authentication_header() . "\r\n";
-        //}
+        // if( $proxy->use_authentication() )
+        // {
+        // $strHeaders .= $proxy->authentication_header() . "\r\n";
+        // }
 
         $strHeaders .= "\r\n";
 
-        if (! is_null($args['body'])) {
+        if (!is_null($args['body'])) {
             $strHeaders .= $args['body'];
         }
 
         fwrite($handle, $strHeaders);
 
-        if (! $args['blocking']) {
+        if (!$args['blocking']) {
             stream_set_blocking($handle, 0);
             fclose($handle);
-            return array( 'headers' => array(), 'body' => '', 'response' => array( 'code' => false, 'message' => false ), 'cookies' => array() );
+            return array(
+                'headers' => array(),
+                'body' => '',
+                'response' => array(
+                    'code' => false,
+                    'message' => false
+                ),
+                'cookies' => array()
+            );
         }
 
         $strResponse = '';
@@ -221,16 +230,16 @@ class Streams
         if ($args['stream']) {
             $stream_handle = @fopen($args['filename'], 'w+');
 
-            if (! $stream_handle) {
+            if (!$stream_handle) {
                 Http::set_error(8);
                 return false;
             }
 
             $bytes_written = 0;
-            while (! feof($handle) and $keep_reading) {
+            while (!feof($handle) and $keep_reading) {
                 $block = fread($handle, $block_size);
 
-                if (! $bodyStarted) {
+                if (!$bodyStarted) {
                     $strResponse .= $block;
 
                     if (strpos($strResponse, "\r\n\r\n")) {
@@ -259,7 +268,7 @@ class Streams
 
                 $bytes_written += $bytes_written_to_file;
 
-                $keep_reading = ! isset($args['limit_response_size']) or $bytes_written < $args['limit_response_size'];
+                $keep_reading = (!isset($args['limit_response_size']) or $bytes_written < $args['limit_response_size']);
             }
 
             fclose($stream_handle);
@@ -267,16 +276,16 @@ class Streams
             $header_length = 0;
 
             // Not end file and some one
-            while (! feof($handle) and $keep_reading) {
+            while (!feof($handle) and $keep_reading) {
                 $block = fread($handle, $block_size);
                 $strResponse .= $block;
 
-                if (! $bodyStarted and strpos($strResponse, "\r\n\r\n")) {
+                if (!$bodyStarted and strpos($strResponse, "\r\n\r\n")) {
                     $header_length = strpos($strResponse, "\r\n\r\n") + 4;
                     $bodyStarted = true;
                 }
 
-                $keep_reading = (! $bodyStarted or ! isset($args['limit_response_size']) or strlen($strResponse) < ($header_length + $args['limit_response_size']));
+                $keep_reading = (!$bodyStarted or !isset($args['limit_response_size']) or strlen($strResponse) < ($header_length + $args['limit_response_size']));
             }
 
             $process = Http::processResponse($strResponse);
@@ -301,7 +310,7 @@ class Streams
         }
 
         // If the body was chunk encoded, then decode it.
-        if (! empty($process['body']) and isset($arrHeaders['headers']['transfer-encoding']) and 'chunked' == $arrHeaders['headers']['transfer-encoding']) {
+        if (!empty($process['body']) and isset($arrHeaders['headers']['transfer-encoding']) and 'chunked' == $arrHeaders['headers']['transfer-encoding']) {
             $process['body'] = Http::chunkTransferDecode($process['body']);
         }
 
@@ -333,7 +342,7 @@ class Streams
         }
 
         $cert = openssl_x509_parse($context_options['ssl']['peer_certificate']);
-        if (! $cert) {
+        if (!$cert) {
             return false;
         }
 
@@ -342,18 +351,18 @@ class Streams
 
         $certificate_hostnames = array();
 
-        if (! empty($cert['extensions']['subjectAltName'])) {
+        if (!empty($cert['extensions']['subjectAltName'])) {
             $match_against = preg_split('/,\s*/', $cert['extensions']['subjectAltName']);
 
             foreach ($match_against as $match) {
-                list($match_type, $match_host) = explode(':', $match);
+                list ($match_type, $match_host) = explode(':', $match);
                 if ($host_type == strtolower(trim($match_type))) {
                     // IP: or DNS:
 
                     $certificate_hostnames[] = strtolower(trim($match_host));
                 }
             }
-        } elseif (! empty($cert['subject']['CN'])) {
+        } elseif (!empty($cert['subject']['CN'])) {
             // Only use the CN when the certificate includes no subjectAltName extension
             $certificate_hostnames[] = strtolower($cert['subject']['CN']);
         }
@@ -386,18 +395,18 @@ class Streams
      */
     public static function test($args = array())
     {
-        if (! function_exists('stream_socket_client')) {
+        if (!function_exists('stream_socket_client')) {
             return false;
         }
 
-        $is_ssl = isset($args['ssl']) and $args['ssl'];
+        $is_ssl = (isset($args['ssl']) and $args['ssl']);
 
         if ($is_ssl) {
-            if (! extension_loaded('openssl')) {
+            if (!extension_loaded('openssl')) {
                 return false;
             }
 
-            if (! function_exists('openssl_x509_parse')) {
+            if (!function_exists('openssl_x509_parse')) {
                 return false;
             }
         }
