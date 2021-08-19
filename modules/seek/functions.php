@@ -93,7 +93,7 @@ function BoldKeywordInStr($str, $keyword, $logic)
     foreach ($array_keyword as $k) {
         $_k = function_exists('searchPatternByLang') ? searchPatternByLang(nv_preg_quote($k)) : nv_preg_quote($k);
         $pattern[] = $_k;
-        if (!$pos and preg_match('/^(.*?)' . $_k . '/uis', $str, $matches)) {
+        if (!$pos and preg_match('/^(.*?)' . $_k . '/is', $str, $matches)) {
             $strlen = nv_strlen($str);
             $kstrlen = nv_strlen($k);
             $residual = $strlen - 300;
@@ -122,7 +122,7 @@ function BoldKeywordInStr($str, $keyword, $logic)
         return nv_clean60($str, 300);
     }
 
-    $pattern = '/(' . implode('|', $pattern) . ')/uis';
+    $pattern = '/(' . implode('|', $pattern) . ')/is';
 
     return preg_replace($pattern, '<span class="keyword">$1</span>', $str);
 }
