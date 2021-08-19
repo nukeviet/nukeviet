@@ -100,8 +100,8 @@ class Streams
 
         $connect_host = $secure_transport ? 'ssl://' . $connect_host : 'tcp://' . $connect_host;
 
-        $is_local = isset($args['local']) and $args['local'];
-        $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
+        $is_local = (isset($args['local']) and $args['local']);
+        $ssl_verify = (isset($args['sslverify']) and $args['sslverify']);
 
         // NukeViet has no proxy setup
         $context = stream_context_create([
@@ -279,7 +279,7 @@ class Streams
 
                 $bytes_written += $bytes_written_to_file;
 
-                $keep_reading = !isset($args['limit_response_size']) or $bytes_written < $args['limit_response_size'];
+                $keep_reading = (!isset($args['limit_response_size']) or $bytes_written < $args['limit_response_size']);
             }
 
             fclose($stream_handle);
@@ -412,7 +412,7 @@ class Streams
             return false;
         }
 
-        $is_ssl = isset($args['ssl']) and $args['ssl'];
+        $is_ssl = (isset($args['ssl']) and $args['ssl']);
 
         if ($is_ssl) {
             if (!extension_loaded('openssl')) {
