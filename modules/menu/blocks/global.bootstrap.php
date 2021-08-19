@@ -112,10 +112,14 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
 
         if (!empty($array_menu)) {
             foreach ($array_menu[0] as $id => $item) {
-                $classcurrent = [];
+                $classcurrent = []; // For bootstrap 3
+                $liclass = []; // For bootstrap 4/5
+                $aclass = []; // For bootstrap 4/5
                 $submenu_active = [];
                 if (isset($array_menu[$id])) {
                     $classcurrent[] = 'dropdown';
+                    $liclass[] = 'dropdown';
+                    $aclass[] = 'dropdown-toggle';
                     $submenu = nv_get_bootstrap_submenu($id, $array_menu, $submenu_active, $block_theme);
                     $xtpl->assign('SUB', $submenu);
                     $xtpl->parse('main.top_menu.sub');
@@ -123,17 +127,18 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
                 }
                 if (nv_menu_bootstrap_check_current($item['link'], $item['active_type'])) {
                     $classcurrent[] = 'active';
+                    $aclass[] = 'active';
                 } elseif (!empty($submenu_active)) {
                     $classcurrent[] = 'active';
+                    $aclass[] = 'active';
                 }
                 if (!empty($item['css'])) {
                     $classcurrent[] = $item['css'];
+                    $liclass[] = $item['css'];
                 }
                 $item['current'] = empty($classcurrent) ? '' : ' class="' . (implode(' ', $classcurrent)) . '"';
-
-                if (nv_menu_bootstrap_check_current($item['link'], $item['active_type'])) {
-                    $classcurrent[] = 'active';
-                }
+                $item['liclass'] = empty($liclass) ? '' : ' ' . implode(' ', $liclass);
+                $item['aclass'] = empty($aclass) ? '' : ' ' . implode(' ', $aclass);
 
                 $xtpl->assign('TOP_MENU', $item);
                 if (!empty($item['icon'])) {
@@ -163,19 +168,44 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
 
         if (!empty($array_menu[$id])) {
             foreach ($array_menu[$id] as $sid => $smenu) {
+                $liclass = []; // For bootstrap 4/5
+                $aclass = []; // For bootstrap 4/5
                 if (nv_menu_bootstrap_check_current($smenu['link'], $smenu['active_type'])) {
+                    $aclass[] = 'active';
                     $submenu_active[] = $id;
                 }
                 $submenu = '';
                 if (isset($array_menu[$sid])) {
                     $submenu = nv_get_bootstrap_submenu($sid, $array_menu, $submenu_active, $block_theme);
+                    // For bootstrap 4/5
+                    if (!empty($submenu_active) and in_array($sid, $submenu_active, true) and !in_array('active', $aclass, true)) {
+                        $aclass[] = 'active';
+                    }
+                    $liclass[] = 'dropdown dropend';
+                    $aclass[] = 'dropdown-toggle';
+                    // End for bootstrap 4/5
+
                     $xtpl->assign('SUB', $submenu);
                     $xtpl->parse('submenu.loop.item');
+                    $xtpl->parse('submenu.loop.has_sub'); // For bootstrap 4/5
+                    $xtpl->parse('submenu.loop.sub'); // For bootstrap 4/5
                 }
+
+                // For bootstrap 4/5
+                if (!empty($smenu['css'])) {
+                    $liclass[] = $smenu['css'];
+                }
+
+                $smenu['liclass'] = empty($liclass) ? '' : ' class="' . implode(' ', $liclass) . '"';
+                $smenu['aclass'] = empty($aclass) ? '' : ' ' . implode(' ', $aclass);
+                // End for bootstrap 4/5
+
                 $xtpl->assign('SUBMENU', $smenu);
+                // For bootstrap 3
                 if (!empty($submenu)) {
                     $xtpl->parse('submenu.loop.submenu');
                 }
+                // End for bootstrap 3
                 if (!empty($smenu['icon'])) {
                     $xtpl->parse('submenu.loop.icon');
                 }

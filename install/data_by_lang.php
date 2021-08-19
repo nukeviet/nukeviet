@@ -1095,7 +1095,7 @@ if (!empty($menu_rows_lev0)) {
         }
     }
 
-    $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_menu_rows (id, parentid, mid, title, link, weight, sort, lev, subitem, groups_view, module_name, op, target, status) VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)');
+    $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_menu_rows (id, parentid, mid, title, link, weight, sort, lev, subitem, groups_view, module_name, op, target, active_type, status) VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, 1)');
 
     $a = 1;
     $b = 1;
