@@ -1203,3 +1203,224 @@ function nv_theme_viewpdf($file_url)
 
     return $xtpl->text('main');
 }
+
+/**
+ * content_refresh()
+ *
+ * @param mixed $data
+ * @return string
+ */
+function content_refresh($data)
+{
+    global $module_info;
+
+    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('DATA', $data);
+    $xtpl->parse('mainrefresh');
+
+    return $xtpl->text('mainrefresh');
+}
+
+/**
+ * edit_author_info()
+ *
+ * @param mixed $data
+ * @param mixed $base_url
+ * @return string
+ */
+function edit_author_info($data, $base_url)
+{
+    global $module_name, $module_info, $op, $lang_module;
+
+    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;author_info=1');
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('BASE_URL', $base_url);
+    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));
+    $data['description_br2nl'] = !empty($data['description']) ? nv_htmlspecialchars(nv_br2nl($data['description'])) : '';
+    $xtpl->assign('DATA', $data);
+    $xtpl->parse('author_info');
+
+    return $xtpl->text('author_info');
+}
+
+/**
+ * content_add()
+ *
+ * @param mixed $rowcontent
+ * @param mixed $htmlbodyhtml
+ * @param mixed $catidList
+ * @param mixed $topicList
+ * @param mixed $post_status
+ * @param mixed $layouts
+ * @param mixed $base_url
+ * @return string
+ */
+function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_status, $layouts, $base_url)
+{
+    global $global_config, $module_name, $module_info, $module_config, $lang_global, $lang_module;
+
+    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('BASE_URL', $base_url);
+    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));
+    $xtpl->assign('ADD_OR_UPDATE', $rowcontent['id'] ? $lang_module['update_content'] : $lang_module['add_content']);
+    $xtpl->assign('OP', $module_info['alias']['content']);
+    $xtpl->assign('DATA', $rowcontent);
+    $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
+    $xtpl->assign('LANG_EXTERNAL_AUTHOR', defined('NV_IS_USER') ? $lang_module['external_author'] : $lang_module['author']);
+    $xtpl->assign('CONTENT_URL', $base_url . '&contentid=' . $rowcontent['id'] . '&checkss=' . md5($rowcontent['id'] . NV_CHECK_SESSION));
+
+    if (defined('NV_IS_USER')) {
+        if ($rowcontent['id']) {
+            $xtpl->parse('main.if_user.add_content');
+        }
+        $xtpl->parse('main.if_user');
+    }
+
+    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+
+    // Nếu dùng reCaptcha v3
+    if ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+        $xtpl->parse('main.recaptcha3');
+    }
+    // Nếu dùng reCaptcha v2
+    elseif ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+        $xtpl->parse('main.recaptcha');
+    } elseif ($module_config[$module_name]['ucaptcha_type'] == 'captcha') {
+        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
+        $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
+        $xtpl->parse('main.captcha');
+    }
+
+    if ($module_config[$module_name]['frontend_edit_alias'] == 1 and $rowcontent['id'] == 0) {
+        $xtpl->parse('main.alias');
+    }
+
+    // Lua chon Layout
+    if ($module_config[$module_name]['frontend_edit_layout'] == 1) {
+        foreach ($layouts as $value) {
+            $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
+            $xtpl->assign('LAYOUT_FUNC', [
+                'key' => $value,
+                'selected' => ($rowcontent['layout_func'] == $value) ? ' selected="selected"' : ''
+            ]);
+            $xtpl->parse('main.layout_func.loop');
+        }
+        $xtpl->parse('main.layout_func');
+    }
+
+    $array_catid_in_row = explode(',', $rowcontent['listcatid']);
+    $array_catid_in_row = array_map('intval', $array_catid_in_row);
+    foreach ($catidList as $value) {
+        $xtitle_i = '';
+
+        if ($value['lev'] > 0) {
+            for ($i = 1; $i <= $value['lev']; ++$i) {
+                $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            }
+        }
+
+        $array_temp = [];
+        $array_temp['value'] = $value['catid'];
+        $array_temp['title'] = $xtitle_i . $value['title'];
+        $array_temp['checked'] = (in_array($value['catid'], $array_catid_in_row, true)) ? ' checked="checked"' : '';
+
+        $xtpl->assign('DATACATID', $array_temp);
+        $xtpl->parse('main.catid');
+    }
+
+    foreach ($topicList as $topicid_i => $title_i) {
+        $array_temp = [];
+        $array_temp['value'] = $topicid_i;
+        $array_temp['title'] = $title_i;
+        $array_temp['selected'] = ($topicid_i == $rowcontent['topicid']) ? ' selected="selected"' : '';
+        $xtpl->assign('DATATOPIC', $array_temp);
+        $xtpl->parse('main.topic');
+    }
+
+    if (!empty($rowcontent['internal_authors'])) {
+        foreach ($rowcontent['internal_authors'] as $internal_authors) {
+            $xtpl->assign('ITEM', $internal_authors);
+            $xtpl->parse('main.internal_author.item');
+        }
+        $xtpl->parse('main.internal_author');
+    }
+
+    foreach ($post_status as $key) {
+        $xtpl->assign('SAVE_STATUS', [
+            'val' => $key,
+            'sel' => $rowcontent['status'] == $key ? ' selected="selected"' : '',
+            'name' => $lang_module['status_' . $key]
+        ]);
+        $xtpl->parse('main.save_status');
+    }
+    $xtpl->parse('main');
+
+    return $xtpl->text('main');
+}
+
+/**
+ * content_list()
+ * 
+ * @param mixed $articles 
+ * @param mixed $my_author_detail 
+ * @param mixed $base_url 
+ * @param mixed $generate_page 
+ * @return string 
+ */
+function content_list($articles, $my_author_detail, $base_url, $generate_page)
+{
+    global $module_name, $module_info, $module_config, $lang_global, $lang_module;
+
+    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('BASE_URL', $base_url);
+    $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));
+    $xtpl->assign('AUTHOR_PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $my_author_detail['alias']);
+    $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
+
+    foreach ($articles as $array_row_i) {
+        $xtpl->assign('CONTENT', $array_row_i);
+        if (!empty($array_row_i['status_note'])) {
+            $xtpl->parse('your_articles.news.status_note');
+        }
+
+        $checkss = md5($array_row_i['id'] . NV_CHECK_SESSION);
+        $array_link_content = [];
+        if ($array_row_i['is_edit_content']) {
+            $array_link_content[] = '<a href="' . $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;checkss=' . $checkss . '"><em class="fa fa-edit fa-lg"></em>&nbsp;' . $lang_global['edit'] . '</a>';
+        }
+        if ($array_row_i['is_del_content']) {
+            $array_link_content[] = '<a onclick="return confirm(nv_is_del_confirm[0]);" href="' . $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;delcontent=1&amp;checkss=' . $checkss . '"><em class="fa fa-trash-o fa-lg"></em>&nbsp;' . $lang_global['delete'] . '</a>';
+        }
+
+        if (!empty($array_link_content)) {
+            $xtpl->assign('ADMINLINK', implode('&nbsp;-&nbsp;', $array_link_content));
+            $xtpl->parse('your_articles.news.adminlink');
+        }
+
+        if ($array_row_i['imghome'] != '') {
+            $xtpl->assign('HOMEIMG1', $array_row_i['imghome']);
+            $xtpl->assign('HOMEIMGALT1', !empty($array_row_i['homeimgalt']) ? $array_row_i['homeimgalt'] : $array_row_i['title']);
+            $xtpl->parse('your_articles.news.image');
+        }
+
+        $xtpl->parse('your_articles.news');
+    }
+
+    if (!empty($generate_page)) {
+        $xtpl->assign('GENERATE_PAGE', $generate_page);
+        $xtpl->parse('your_articles.generate_page');
+    }
+
+    $xtpl->parse('your_articles');
+
+    return $xtpl->text('your_articles');
+}

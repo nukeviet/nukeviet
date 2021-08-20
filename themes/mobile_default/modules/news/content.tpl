@@ -86,6 +86,44 @@
     <span class="pull-right"><i class="fa fa-arrow-right"></i>&nbsp;<a href="{AUTHOR_PAGE_URL}">{LANG.author_page}</a></span>
     <h2>{LANG.your_content}</h2>
 </div>
+
+<div class="news_column">
+    <!-- BEGIN: news -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <!-- BEGIN: status_note -->
+            <div class="alert alert-warning">
+                {CONTENT.status_note}
+            </div>
+            <!-- END: status_note -->
+            <!-- BEGIN: image -->
+            <a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
+            <!-- END: image -->
+            <h3>
+                <a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}>{CONTENT.title}</a>
+            </h3>
+            <div class="text-muted">
+                <ul class="list-unstyled list-inline">
+                    <li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
+                    <li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
+                </ul>
+            </div>
+            {CONTENT.hometext}
+            <!-- BEGIN: adminlink -->
+            <p class="text-right">
+                {ADMINLINK}
+            </p>
+            <!-- END: adminlink -->
+        </div>
+    </div>
+    <!-- END: news -->
+</div>
+<!-- BEGIN: generate_page -->
+<div class="clearfix"></div>
+<div class="text-center">
+    {GENERATE_PAGE}
+</div>
+<!-- END: generate_page -->
 <!-- END: your_articles -->
 
 <!-- BEGIN: main -->
@@ -97,7 +135,7 @@
 </div>
 <!-- END: if_user -->
 <h2 class="text-center">{ADD_OR_UPDATE}</h2>
-<form action="{CONTENT_URL}" name="fsea" method="post" id="fsea" class="form-horizontal"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+<form action="{CONTENT_URL}" method="post" class="form-horizontal"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 
     <div class="form-group">
         <label class="col-sm-8 control-label text-normal">{LANG.name} <span class="txtrequired">(*)</span>:</label>
@@ -228,17 +266,17 @@
     </div>
     <!-- END: recaptcha -->
 
-    <ul class="list-inline text-center">
-        <input type="hidden" name="contentid" value="{DATA.id}" />
-        <input type="hidden" name="checkss" value="{CHECKSS}" />
-        <li><input type="hidden" name="status4" value="1" /><input type="submit" class="btn btn-primary" value="{LANG.save_draft}"></li>
-        <!-- BEGIN: save_temp -->
-        <li><input type="hidden" name="status0" value="1" /><input type="submit" class="btn btn-primary" value="{LANG.save_temp}"></li>
-        <!-- END: save_temp -->
-        <!-- BEGIN: postcontent -->
-        <li><input type="hidden" name="status1" value="1" /><input type="submit" class="btn btn-primary" value="{LANG.save_content}"></li>
-        <!-- END: postcontent -->
-    </ul>
-    <br />
+    <div class="form-inline text-center">
+        <div class="form-group">
+            <select class="form-control" name="status" style="width: auto">
+                <!-- BEGIN: save_status -->
+                <option value="{SAVE_STATUS.val}"{SAVE_STATUS.sel}>{SAVE_STATUS.name}</option>
+                <!-- END: save_status -->
+            </select>
+            <input type="hidden" name="save" value="1" />
+            <input type="submit" class="btn btn-primary" value="{GLANG.submit}" onclick="btnClickSubmit(event,this.form);">
+        </div>
+    </div>
+    <br/>
 </form>
 <!-- END: main -->
