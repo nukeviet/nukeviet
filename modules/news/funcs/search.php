@@ -114,11 +114,16 @@ $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
 } else {
-    $res = $db->query("SHOW TABLES LIKE '" . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . "'");
-    $item = $res->fetch(3);
-    if (!$item) {
-        $contents .= '<div class="alert alert-danger">' . $lang_module['search_catid_error'] . '</div>';
-    } else {
+    $allowed = true;
+    if ($catid) {
+        $res = $db->query("SHOW TABLES LIKE '" . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . "'");
+        $item = $res->fetch(3);
+        if (!$item) {
+            $contents .= '<div class="alert alert-danger">' . $lang_module['search_catid_error'] . '</div>';
+            $allowed = false;
+        }
+    }
+    if ($allowed) {
         $dbkey = $db_slave->dblikeescape($key);
         $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
 
