@@ -77,6 +77,7 @@ $lang_module['search_on_nuke'] = 'Search on site';
 $lang_module['search_none'] = 'No result match';
 $lang_module['empty_data_search'] = 'empty  search data';
 $lang_module['search_in_module'] = 'Search in module';
+$lang_module['search_catid_error'] = 'Error: The category you selected does not exist.';
 $lang_module['view_all_title'] = 'View all results';
 $lang_module['pages_title'] = 'Page';
 $lang_module['time_update'] = 'Time publish';
