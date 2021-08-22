@@ -178,11 +178,16 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 } elseif (!empty($key) and nv_strlen($key) < NV_MIN_SEARCH_LENGTH) {
     $contents .= '<div class="alert alert-danger">' . sprintf($lang_module['search_word_short'], NV_MIN_SEARCH_LENGTH) . '</div>';
 } else {
-    $res = $db->query("SHOW TABLES LIKE '" . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . "'");
-    $item = $res->fetch(3);
-    if (!$item) {
-        $contents .= '<div class="alert alert-danger">' . $lang_module['search_catid_error'] . '</div>';
-    } else {
+    $allowed = true;
+    if ($catid) {
+        $res = $db->query("SHOW TABLES LIKE '" . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . "'");
+        $item = $res->fetch(3);
+        if (!$item) {
+            $contents .= '<div class="alert alert-danger">' . $lang_module['search_catid_error'] . '</div>';
+            $allowed = false;
+        }
+    }
+    if ($allowed) {
         $dbkey = $db_slave->dblikeescape($key);
         $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
         $internal_authors = [];
