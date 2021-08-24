@@ -221,6 +221,7 @@ if (!nv_function_exists('nv_block_headline')) {
             }
 
             $xtpl->parse('main.loop_tabs_content');
+            ++$a;
         }
 
         if ($block_config['showtooltip']) {
@@ -234,7 +235,6 @@ if (!nv_function_exists('nv_block_headline')) {
         $xtpl->parse('main');
 
         return $xtpl->text('main');
-        ++$a;
     }
 }
 
