@@ -143,6 +143,7 @@ if (!nv_function_exists('nv_block_headline')) {
         $xtpl->assign('PIX_IMG', NV_STATIC_URL . NV_ASSETS_DIR . '/images/pix.gif');
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $module_info['template']);
+        $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
 
         $images = [];
 
@@ -152,7 +153,7 @@ if (!nv_function_exists('nv_block_headline')) {
             $a = 0;
             foreach ($hot_news as $hot_news_i) {
                 if ($hot_news_i['external_link']) {
-                    $hot_news_i['target_blank'] = 'target="_blank"';
+                    $hot_news_i['target_blank'] = ' target="_blank"';
                 }
 
                 if (!empty($hot_news_i['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'])) {
@@ -164,17 +165,24 @@ if (!nv_function_exists('nv_block_headline')) {
                 if (!empty($images_url)) {
                     $hot_news_i['image_alt'] = !empty($hot_news_i['homeimgalt']) ? $hot_news_i['homeimgalt'] : $hot_news_i['title'];
                     $hot_news_i['imgID'] = $a;
+                    $hot_news_i['imgActive'] = $a == 0 ? 'active' : ''; // bootstrap 4/5
+                    $hot_news_i['imgCurrent'] = $a == 0 ? 'true' : 'false'; // bootstrap 4/5
                     $hot_news_i['imagefull'] = $images_url;
                     $images[] = $images_url;
                     $xtpl->assign('HOTSNEWS', $hot_news_i);
                     $xtpl->parse('main.hots_news_img.loop');
+                    $xtpl->parse('main.hots_news_img.loop2'); // bootstrap 4/5
                     ++$a;
                 }
             }
             $xtpl->parse('main.hots_news_img');
         }
 
+        $a = 0;
         foreach ($array_bid_content as $i => $array_bid) {
+            $array_bid['selected'] = $a == 0 ? 'true' : 'false'; // bootstrap 4/5
+            $array_bid['active'] = $a == 0 ? 'active' : ''; // bootstrap 4/5
+            $array_bid['show_active'] = $a == 0 ? 'show active' : ''; // bootstrap 4/5
             $xtpl->assign('TAB_TITLE', $array_bid);
             $xtpl->parse('main.loop_tabs_title');
 
@@ -197,10 +205,16 @@ if (!nv_function_exists('nv_block_headline')) {
                     $lastest['hometext_clean'] = nv_clean60($lastest['hometext_clean'], $block_config['tooltip_length'], true);
 
                     if ($lastest['external_link']) {
-                        $lastest['target_blank'] = 'target="_blank"';
+                        $lastest['target_blank'] = ' target="_blank"';
                     }
 
                     $xtpl->assign('LASTEST', $lastest);
+
+                    // bootstrap 4/5
+                    if ($block_config['showtooltip']) {
+                        $xtpl->parse('main.loop_tabs_content.content.loop.tooltip');
+                    }
+
                     $xtpl->parse('main.loop_tabs_content.content.loop');
                 }
                 $xtpl->parse('main.loop_tabs_content.content');
@@ -210,22 +224,17 @@ if (!nv_function_exists('nv_block_headline')) {
         }
 
         if ($block_config['showtooltip']) {
-            $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
             $xtpl->parse('main.tooltip');
         }
 
-        if (empty($my_head) or !preg_match("/jquery\.imgpreload\.min\.js[^>]+>/", $my_head)) {
-            $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery/jquery.imgpreload.min.js\"></script>\n";
+        if (!empty($images)) {
+            $xtpl->assign('IMGPRELOAD', '"' . implode('","', $images) . '"');
+            $xtpl->parse('main.imgpreload');
         }
-
-        $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . "/js/contentslider.js\"></script>\n";
-        $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
-        $my_head .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
-        $my_head .= '$(document).ready(function(){var b=["' . implode('","', $images) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
-        $my_head .= "\n//]]>\n</script>\n";
         $xtpl->parse('main');
 
         return $xtpl->text('main');
+        ++$a;
     }
 }
 
