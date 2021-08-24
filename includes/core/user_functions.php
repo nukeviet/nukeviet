@@ -778,7 +778,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
  */
 function nv_admin_menu()
 {
-    global $lang_global, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db;
+    global $lang_global, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
 
     if ($module_info['theme'] == $module_info['template'] and file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/system/admin_toolbar.tpl')) {
         $block_theme = $module_info['template'];
@@ -794,8 +794,9 @@ function nv_admin_menu()
     $xtpl->assign('URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id']);
 
     if (defined('NV_IS_SPADMIN')) {
-        $row = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'')->fetch();
-        if (!empty($row)) {
+        $sql = 'SELECT COUNT(*) AS count FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'';
+        $list = $nv_Cache->db($sql, '', 'authors');
+        if (!empty($list[0]['count'])) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
             $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
 
