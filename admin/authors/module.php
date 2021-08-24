@@ -31,6 +31,7 @@ if (defined('NV_IS_AJAX')) {
                 $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $weight . ' WHERE mid=' . $row['mid']);
             }
             $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $new_vid . ' WHERE mid=' . $mid);
+            $nv_Cache->delMod('authors');
         } elseif ($nv_Request->isset_request('changact', 'post')) {
             $mid = $nv_Request->get_int('mid', 'post', 0);
             $act = $nv_Request->get_int('changact', 'post', 1);
@@ -48,6 +49,7 @@ if (defined('NV_IS_AJAX')) {
                     $act_val = ($row['act_' . $act]) ? 0 : 1;
                     $checksum = md5($row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey']);
                     $db->query('UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET act_' . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid);
+                    $nv_Cache->delMod('authors');
                 }
             }
             exit('OK');

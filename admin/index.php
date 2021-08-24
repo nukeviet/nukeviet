@@ -35,10 +35,10 @@ if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin
 }
 
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
-
 $admin_mods = [];
-$result = $db->query('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC');
-while ($row = $result->fetch()) {
+$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC';
+$list = $nv_Cache->db($sql, '', 'authors');
+foreach ($list as $row) {
     $row['custom_title'] = isset($lang_global[$row['lang_key']]) ? $lang_global[$row['lang_key']] : $row['module'];
     $admin_mods[$row['module']] = $row;
 }
