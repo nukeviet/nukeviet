@@ -28,8 +28,7 @@ $email = 'customer@mysite.com';
 $note = 'Receive requests, suggestions, comments relating to the operations of company';
 $others = json_encode([
     'viber' => 'myViber',
-    'skype' => 'mySkype',
-    'yahoo' => 'myYahoo'
+    'skype' => 'mySkype'
 ]);
 $cats = 'Consulting|Complaints|Cooperation';
 $weight = 1;
@@ -54,8 +53,7 @@ $email = 'technical@mysite.com';
 $note = 'Resolve technical issues';
 $others = json_encode([
     'viber' => 'myViber2',
-    'skype' => 'mySkype2',
-    'yahoo' => 'myYahoo2'
+    'skype' => 'mySkype2'
 ]);
 $cats = 'Bug Reports|Recommendations to improve';
 $weight = 2;

@@ -48,3 +48,4 @@ $lang_module['department'] = 'Département';
 $lang_module['sendcontactfailed'] = 'Votre message n\'a pas été envoyé pour des raisons techniques. Désolé pour le désagrément.';
 $lang_module['note'] = 'Complétez le formulaire ci-dessous et nous vous contacterons rapidement.';
 $lang_module['sendcopy'] = 'Envoyer une copie de cette lettre pour moi';
+$lang_module['next'] = 'Prochaine';

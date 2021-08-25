@@ -142,20 +142,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
                                     $key = $value['name'];
                                     $value = $value['value'];
                                     if (!empty($value)) {
-                                        if (strtolower($key) == 'yahoo') {
-                                            $ys = array_map('trim', explode(',', $value));
-                                            foreach ($ys as $k => $y) {
-                                                $xtpl->assign('YAHOO', [
-                                                    'name' => $key,
-                                                    'value' => $y
-                                                ]);
-                                                if ($k) {
-                                                    $xtpl->parse('main.loop.supporter.yahoo.item.comma');
-                                                }
-                                                $xtpl->parse('main.loop.supporter.yahoo.item');
-                                            }
-                                            $xtpl->parse('main.loop.supporter.yahoo');
-                                        } elseif (strtolower($key) == 'skype') {
+                                        if (strtolower($key) == 'skype') {
                                             $ss = array_map('trim', explode(',', $value));
                                             foreach ($ss as $k => $s) {
                                                 $xtpl->assign('SKYPE', [

@@ -100,17 +100,7 @@ if (!nv_function_exists('nv_contact_default_info')) {
                 if (!empty($others)) {
                     foreach ($others as $key => $value) {
                         if (!empty($value)) {
-                            if (strtolower($key) == 'yahoo') {
-                                $ys = array_map('trim', explode(',', $value));
-                                foreach ($ys as $k => $y) {
-                                    $xtpl->assign('YAHOO', ['name' => $key, 'value' => $y]);
-                                    if ($k) {
-                                        $xtpl->parse('main.yahoo.item.comma');
-                                    }
-                                    $xtpl->parse('main.yahoo.item');
-                                }
-                                $xtpl->parse('main.yahoo');
-                            } elseif (strtolower($key) == 'skype') {
+                            if (strtolower($key) == 'skype') {
                                 $ss = array_map('trim', explode(',', $value));
                                 foreach ($ss as $k => $s) {
                                     $xtpl->assign('SKYPE', ['name' => $key, 'value' => $s]);

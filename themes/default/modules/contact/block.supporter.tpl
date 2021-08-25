@@ -29,12 +29,6 @@
             <a href="{DEPARTMENT.emailhref}">{EMAIL}</a>
         <!-- END: item --></li>
         <!-- END: email -->
-        <!-- BEGIN: yahoo -->
-        <li><em class="icon-yahoo"></em>&nbsp;<!-- BEGIN: item -->
-            <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->
-            <a href="ymsgr:SendIM?{YAHOO.value}" title="{YAHOO.name}">{YAHOO.value}</a>
-        <!-- END: item --></li>
-        <!-- END: yahoo -->
         <!-- BEGIN: skype -->
         <li><em class="fa fa-skype"></em>&nbsp;<!-- BEGIN: item -->
             <!-- BEGIN: comma -->&nbsp; <!-- END: comma -->

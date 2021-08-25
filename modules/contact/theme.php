@@ -122,20 +122,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
                 if (!empty($others)) {
                     foreach ($others as $key => $value) {
                         if (!empty($value)) {
-                            if (strtolower($key) == 'yahoo') {
-                                $ys = array_map('trim', explode(',', $value));
-                                foreach ($ys as $k => $y) {
-                                    $xtpl->assign('YAHOO', [
-                                        'name' => $key,
-                                        'value' => $y
-                                    ]);
-                                    if ($k) {
-                                        $xtpl->parse('main.dep.yahoo.item.comma');
-                                    }
-                                    $xtpl->parse('main.dep.yahoo.item');
-                                }
-                                $xtpl->parse('main.dep.yahoo');
-                            } elseif (strtolower($key) == 'skype') {
+                            if (strtolower($key) == 'skype') {
                                 $ss = array_map('trim', explode(',', $value));
                                 foreach ($ss as $k => $s) {
                                     $xtpl->assign('SKYPE', [

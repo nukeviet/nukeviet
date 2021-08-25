@@ -29,7 +29,7 @@ $note = 'Bộ phận tiếp nhận và giải quyết các yêu cầu, đề ngh
 $others = json_encode([
     'viber' => 'myViber',
     'skype' => 'mySkype',
-    'yahoo' => 'myYahoo'
+    'zalo' => '0933456789'
 ]);
 $cats = 'Tư vấn|Khiếu nại, phản ánh|Đề nghị hợp tác';
 $weight = 1;
@@ -55,7 +55,7 @@ $note = 'Bộ phận tiếp nhận và giải quyết các câu hỏi liên quan
 $others = json_encode([
     'viber' => 'myViber2',
     'skype' => 'mySkype2',
-    'yahoo' => 'myYahoo2'
+    'zalo' => '0923456789'
 ]);
 $cats = 'Thông báo lỗi|Góp ý cải tiến';
 $weight = 2;

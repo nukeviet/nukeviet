@@ -29,12 +29,6 @@
                     <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="{DEPARTMENT.emailhref}">{EMAIL}</a><!-- END: item --></td>
                 </tr>
                 <!-- END: email -->
-                <!-- BEGIN: yahoo -->
-                <tr>
-                    <td>{YAHOO.name}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="ymsgr:SendIM?{YAHOO.value}" title="{YAHOO.name}">{YAHOO.value}</a><!-- END: item --></td>
-                </tr>
-                <!-- END: yahoo -->
                 <!-- BEGIN: skype -->
                 <tr>
                     <td>{SKYPE.name}</td>

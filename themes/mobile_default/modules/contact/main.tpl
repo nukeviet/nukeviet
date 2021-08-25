@@ -39,11 +39,6 @@
                         <span><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp;<!-- END: comma --><a href="mailto:{EMAIL}" class="black">{EMAIL}</a><!-- END: item --></span>
                     </p>
                     <!-- END: email -->
-                    <!-- BEGIN: yahoo -->
-                    <p><em class="icon-yahoo fa-horizon margin-right"></em>{YAHOO.name}:
-                        <span><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp;<!-- END: comma --><a href="ymsgr:SendIM?{YAHOO.value}" class="black">{YAHOO.value}</a><!-- END: item --></span>
-                    </p>
-                    <!-- END: yahoo -->
                     <!-- BEGIN: skype -->
                     <p><em class="fa fa-skype fa-horizon margin-right"></em>{SKYPE.name}:
                         <span><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp;<!-- END: comma --><a href="skype:{SKYPE.value}?call" class="black">{SKYPE.value}</a><!-- END: item --></span>
