@@ -32,6 +32,12 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_str
     exit();
 }
 
+// Google Sitemap
+if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_string(NV_NAME_VARIABLE, 'get') == 'rssxsl') {
+    nv_rssXsl_generate();
+    exit();
+}
+
 // Check user
 if (defined('NV_IS_USER')) {
     trigger_error('Hacking attempt', 256);

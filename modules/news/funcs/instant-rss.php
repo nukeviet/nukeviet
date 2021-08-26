@@ -135,5 +135,9 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
     }
 }
 
+if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/rss.xsl')) {
+    $channel['xsltheme'] = $module_info['template'];
+}
+
 nv_rss_generate($channel, $items, $atomlink, 'ISO8601');
 exit();

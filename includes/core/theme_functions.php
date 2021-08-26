@@ -385,9 +385,13 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
 {
     global $global_config, $client_info;
 
+    $xsl = NV_STATIC_URL . NV_ASSETS_DIR . '/css/rss.xsl';
+    if (!empty($channel['xsltheme'])) {
+        $xsl = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rssxsl&amp;theme=' . $channel['xsltheme'];
+        $xsl = NV_MY_DOMAIN . nv_url_rewrite($xsl, true);
+    }
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
-    // Chi co tac dung voi IE6 va Chrome
-    $xtpl->assign('CSSPATH', NV_STATIC_URL . NV_ASSETS_DIR . '/css/rss.xsl');
+    $xtpl->assign('CSSPATH', $xsl);
     $xtpl->assign('CHARSET', $global_config['site_charset']);
     $xtpl->assign('SITELANG', $global_config['site_lang']);
 
@@ -511,7 +515,10 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
         $xtpl->parse('main.pubDate');
     }
 
-    $image = file_exists(NV_ROOTDIR . '/' . $global_config['site_logo']) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/images/logo.png';
+    $image = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/images/logo.png';
+    if (preg_match('/^' . nv_preg_quote(NV_ROOTDIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', NV_ROOTDIR . '/' . $global_config['site_logo'])) {
+        $image = NV_ROOTDIR . '/' . $global_config['site_logo'];
+    }
     $image = nv_ImageInfo($image, 144, true, NV_UPLOADS_REAL_DIR);
 
     if (!empty($image)) {
@@ -546,7 +553,7 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
 /**
  * nv_xmlSitemap_generate()
  *
- * @param string $url
+ * @param array  $url
  * @param string $changefreq
  * @param string $priority
  */
@@ -684,6 +691,33 @@ function nv_xmlSitemapIndex_generate()
         }
     }
 
+    nv_xmlOutput($contents, $lastModified);
+}
+
+/**
+ * nv_rssXsl_generate()
+ * 
+ * @return never 
+ */
+function nv_rssXsl_generate()
+{
+    global $nv_Request;
+
+    $contents = '';
+    if ($nv_Request->isset_request('theme', 'get')) {
+        $theme = preg_replace('/[^a-zA-Z0-9\_\-]/', '', $nv_Request->get_string('theme', 'get'));
+        if (!empty($theme) and file_exists(NV_ROOTDIR . '/themes/' . $theme . '/css/rss.xsl')) {
+            $contents = file_get_contents(NV_ROOTDIR . '/themes/' . $theme . '/css/rss.xsl');
+        }
+    }
+
+    if (empty($contents)) {
+        $contents = file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/rss.xsl');
+    }
+
+    $contents = preg_replace('/\{NV\_BASE\_SITEURL\}/', NV_BASE_SITEURL, $contents);
+    $contents = preg_replace('/\{THEME\}/', $theme, $contents);
+    $lastModified = NV_CURRENTTIME;
     nv_xmlOutput($contents, $lastModified);
 }
 
