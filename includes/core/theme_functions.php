@@ -401,6 +401,10 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
 
+    if (empty($channel['description'])) {
+        $channel['description'] = $global_config['site_description'];
+    }
+
     $channel['docs'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true);
     if (!str_starts_with($channel['docs'], NV_MY_DOMAIN)) {
         $channel['docs'] = NV_MY_DOMAIN . $channel['docs'];
@@ -506,10 +510,6 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
     }
 
     $xtpl->assign('CHANNEL', $channel);
-
-    if (!empty($channel['description'])) {
-        $xtpl->parse('main.description');
-    }
 
     if (!empty($channel['pubDate'])) {
         $xtpl->parse('main.pubDate');
