@@ -198,7 +198,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
     }
 
     if (empty($mime) or $mime == 'application/octet-stream') {
-        $img_exts = ['png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd'];
+        $img_exts = ['png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd', 'webp'];
         if (in_array($ext, $img_exts, true)) {
             if (($img_info = @getimagesize($filename)) !== false) {
                 if (isset($img_info['mime']) and !empty($img_info['mime'])) {
@@ -725,6 +725,7 @@ function nv_is_image($img)
             $typeflag[14] = ['type' => IMAGETYPE_IFF, 'ext' => 'aiff'];
             $typeflag[15] = ['type' => IMAGETYPE_WBMP, 'ext' => 'wbmp'];
             $typeflag[16] = ['type' => IMAGETYPE_XBM, 'ext' => 'xbm'];
+            defined('IMAGETYPE_WEBP') && $typeflag[18] = ['type' => IMAGETYPE_WEBP, 'ext' => 'webp'];
 
             $imageinfo['src'] = $img;
             $imageinfo['width'] = $file[0];
@@ -769,7 +770,7 @@ function nv_ImageInfo($original_name, $width = 0, $is_create_thumb = false, $thu
     $original_name = rtrim($original_name, '\\/');
 
     unset($matches);
-    if (!preg_match('/^' . nv_preg_quote(NV_ROOTDIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $original_name, $matches)) {
+    if (!preg_match('/^' . nv_preg_quote(NV_ROOTDIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|webp)))$/i', $original_name, $matches)) {
         return false;
     }
 
