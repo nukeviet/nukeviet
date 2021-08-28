@@ -57,11 +57,13 @@
         window.close();
         <!-- END: complete -->
         <!-- BEGIN: complete2 -->
-        if ('{DATA.client}' != '') {
-            window.opener.postMessage('nv.reload', '{DATA.client}');
-        } else {
-            window.opener.location.reload();
-        }
+        $(window).on("unload", function() {
+            if ('{DATA.client}' != '') {
+                window.opener.postMessage('nv.reload', '{DATA.client}');
+            } else {
+                window.opener.location.reload();
+            }
+        });
         window.close();
         <!-- END: complete2 -->
         <!-- BEGIN: complete3 -->
