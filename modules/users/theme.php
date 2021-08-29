@@ -26,7 +26,7 @@ if (!defined('NV_IS_MOD_USER')) {
  */
 function user_register($gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields, $group_id)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect, $global_array_genders;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect, $global_array_genders, $global_users_config;
 
     $xtpl = new XTemplate('register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
@@ -37,6 +37,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
+    $xtpl->assign('TEMPLATE', $module_info['template']);
 
     if ($group_id != 0) {
         $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register/' . $group_id);
@@ -47,9 +48,21 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
 
     $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
     $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+    $password_pattern = "/^";
+    if ($global_config['nv_upass_type'] == 1) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 2) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W\_])";
+    } elseif ($global_config['nv_upass_type'] == 3) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 4) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_])";
+    }
+    $password_pattern .= "(.){" . $global_config['nv_upassmin'] . "," . $global_config['nv_upassmax'] . "}$/";
 
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
+    $xtpl->assign('PASSWORD_PATTERN', $password_pattern);
 
     // Có trường nào có kiểu ngày tháng hay không
     $datepicker = false;
@@ -84,6 +97,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
             if (!empty($row['system'])) {
                 if ($row['field'] == 'birthday') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                    $row['min_old_user'] = $global_users_config['min_old_user'];
                     $datepicker = true;
                 } elseif ($row['field'] == 'sig') {
                     $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
@@ -120,6 +134,13 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $xtpl->parse('main.' . $show_key . '.frquestion');
                     }
                 }
+                if ($row['field'] == 'birthday') {
+                    if (!empty($global_users_config['min_old_user'])) {
+                        $xtpl->parse('main.' . $show_key . '.min_old_user');
+                    } else {
+                        $xtpl->parse('main.' . $show_key . '.not_min_old_user');
+                    }
+                }
                 if ($row['description']) {
                     $xtpl->parse('main.' . $show_key . '.description');
                 }
@@ -143,6 +164,12 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                 } elseif ($row['field_type'] == 'date') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
                     $xtpl->assign('FIELD', $row);
+                    if ($row['min_length']) {
+                        $xtpl->parse('main.field.loop.date.minDate');
+                    }
+                    if ($row['max_length']) {
+                        $xtpl->parse('main.field.loop.date.maxDate');
+                    }
                     $xtpl->parse('main.field.loop.date');
                     $datepicker = true;
                 } elseif ($row['field_type'] == 'textarea') {
@@ -173,6 +200,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                     $xtpl->parse('main.field.loop.select');
                 } elseif ($row['field_type'] == 'radio') {
                     $number = 0;
+                    $count = count($row['field_choices']);
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', [
                             'id' => $row['fid'] . '_' . $number++,
@@ -180,11 +208,15 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
                             'value' => $value
                         ]);
+                        if ($number == $count) {
+                            $xtpl->parse('main.field.loop.radio.loop.invalidtooltip');
+                        }
                         $xtpl->parse('main.field.loop.radio.loop');
                     }
                     $xtpl->parse('main.field.loop.radio');
                 } elseif ($row['field_type'] == 'checkbox') {
                     $number = 0;
+                    $count = count($row['field_choices']);
                     $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', [
@@ -193,6 +225,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                             'value' => $value
                         ]);
+                        if ($number == $count) {
+                            $xtpl->parse('main.field.loop.checkbox.loop.invalidtooltip');
+                        }
                         $xtpl->parse('main.field.loop.checkbox.loop');
                     }
                     $xtpl->parse('main.field.loop.checkbox');
