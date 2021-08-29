@@ -171,10 +171,10 @@ if ($checkss == $data['checkss']) {
 
 if ($step == 2) {
     $data['step'] = 2;
-    $data['info'] = empty($error) ? $lang_module['step2'] : '<span style="color:#fb490b;">' . $error . '</span>';
+    $data['info'] = empty($error) ? $lang_module['step2'] : '<span class="text-danger">' . $error . '</span>';
 } else {
     $data['step'] = 1;
-    $data['info'] = empty($error) ? $lang_module['step1'] : '<span style="color:#fb490b;">' . $error . '</span>';
+    $data['info'] = empty($error) ? $lang_module['step1'] : '<span class="text-danger">' . $error . '</span>';
 }
 
 $contents = user_lostactivelink($data, $question);
