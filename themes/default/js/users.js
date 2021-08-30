@@ -338,9 +338,9 @@ function lostpass_validForm(a) {
             data: c.data,
             dataType: "json",
             success: function(b) {
-                if (b.status == "error") {
+                if (b.status != "ok") {
                     $("[name=step]", a).val(b.step);
-                    if ("undefined" != typeof b.info && "" != b.info) $(".nv-info", a).removeClass('error success').text(b.info);
+                    if ("undefined" != typeof b.info && "" != b.info) $(".nv-info", a).removeClass('error success').html(b.info);
                     $("input,button", a).prop("disabled", !1);
                     $(".required", a).removeClass("required");
                     $(".tooltip-current", a).removeClass("tooltip-current");
@@ -348,12 +348,17 @@ function lostpass_validForm(a) {
                     $("." + b.step + " input", a).addClass("required");
                     $("." + b.step, a).show();
                     if (b.input == '') {
-                        $(".nv-info", a).html(b.mess).addClass("error").show();
+                        alert(b.mess);
+                        if ("undefined" != typeof b.redirect && "" != b.redirect) {
+                            window.location.href = b.redirect
+                        }
                     } else {
-                        $(a).find("[name=\"" + b.input + "\"]").each(function() {
-                            $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-                            validErrorShow(this);
-                        });
+                        if ("error" == b.status) {
+                            $(a).find("[name=\"" + b.input + "\"]").each(function() {
+                                $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+                                validErrorShow(this);
+                            })
+                        }
                     }
                     if (b.step == 'step1') {
                         if ($("[onclick*='change_captcha']", a).length) {

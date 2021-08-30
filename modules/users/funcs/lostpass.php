@@ -29,7 +29,7 @@ if (defined('NV_IS_USER_FORUM')) {
  */
 function lost_pass_sendMail($row)
 {
-    global $db, $global_config, $lang_module;
+    global $db, $global_config, $lang_module, $module_name;
 
     $passlostkey = (!empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? [
         $matches[1],
@@ -61,7 +61,8 @@ function lost_pass_sendMail($row)
                 'status' => 'error',
                 'input' => '',
                 'step' => 'step1',
-                'mess' => $lang_module['lostpass_sendmail_error']
+                'mess' => $lang_module['lostpass_sendmail_error'],
+                'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true)
             ]);
         }
 
@@ -190,16 +191,16 @@ if ($checkss == $data['checkss']) {
     if ($data['step'] == 'step1') {
         if ($global_config['allowquestion']) {
             nv_jsonOutput([
-                'status' => 'error',
+                'status' => 'answer',
                 'input' => 'answer',
                 'step' => 'step2',
-                'info' => $row['question'],
-                'mess' => $row['question']
+                'info' => '<p>' . $lang_module['lostpass_question'] . ':</p><strong>' . $row['question'] . '</strong>',
+                'mess' => ''
             ]);
         } else {
             lost_pass_sendMail($row);
             nv_jsonOutput([
-                'status' => 'error',
+                'status' => 'verify',
                 'input' => 'verifykey',
                 'step' => 'step3',
                 'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
@@ -215,7 +216,7 @@ if ($checkss == $data['checkss']) {
                 'status' => 'error',
                 'input' => 'answer',
                 'step' => 'step2',
-                'info' => $row['question'],
+                'info' => '<p>' . $lang_module['lostpass_question'] . ':</p><strong>' . $row['question'] . '</strong>',
                 'mess' => $lang_module['answer_failed']
             ]);
         }
@@ -223,7 +224,7 @@ if ($checkss == $data['checkss']) {
         if ($data['step'] == 'step2') {
             lost_pass_sendMail($row);
             nv_jsonOutput([
-                'status' => 'error',
+                'status' => 'verify',
                 'input' => 'verifykey',
                 'step' => 'step3',
                 'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
@@ -263,7 +264,7 @@ if ($checkss == $data['checkss']) {
 
     if ($data['step'] == 'step3') {
         nv_jsonOutput([
-            'status' => 'error',
+            'status' => 'new_password',
             'input' => 'new_password',
             'step' => 'step4',
             'info' => $lang_module['lostpass_newpass_mess'],
