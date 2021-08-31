@@ -70,7 +70,6 @@
                     <div class="text-center margin-bottom-lg">
                         <input type="hidden" name="userField" value="{DATA.userField}" />
                         <input type="hidden" name="nv_seccode" value="{DATA.nv_seccode}" />
-                        <input type="hidden" name="g-recaptcha-response" value="{DATA.nv_seccode}" />
                         <input type="hidden" name="checkss" value="{DATA.checkss}" />
                         <input type="hidden" name="send" value="1" />
                         <button class="bsubmit btn btn-primary" type="submit">{LANG.lostactivelink_submit}</button>
