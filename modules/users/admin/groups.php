@@ -37,16 +37,16 @@ while ($row = $result->fetch()) {
 if (!empty($global_config['idsite'])) {
     // Thành viên mới của site
     $db->sqlreset()
-    ->select('COUNT(*)')
+    ->select('COUNT(userid)')
     ->from(NV_MOD_TABLE)
-    ->where('idsite = "' . $global_config['idsite'] . '" AND (group_id=7 OR FIND_IN_SET(7, in_groups))');
+    ->where('idsite = ' . $global_config['idsite'] . ' AND (group_id=7 OR FIND_IN_SET(7, in_groups))');
     $groupsList[7]['numbers'] = $db->query($db->sql())->fetchColumn();
 
     // Thành viên chính thức của site
     $db->sqlreset()
-    ->select('COUNT(*)')
+    ->select('COUNT(userid)')
     ->from(NV_MOD_TABLE)
-    ->where('idsite = "' . $global_config['idsite'] . '"');
+    ->where('idsite = ' . $global_config['idsite']);
     $all_member = $db->query($db->sql())->fetchColumn();
     $groupsList[4]['numbers'] = $all_member - $groupsList[7]['numbers'];
 }
