@@ -8,15 +8,17 @@
  * @Createdate 16/6/2010, 10:23
  */
 
-if (! defined('NV_IS_MOD_STATISTICS')) {
+if (!defined('NV_IS_MOD_STATISTICS')) {
     die('Stop!!!');
 }
 
 $page_title = $lang_module['os'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['os'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
-$sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os' AND c_count!=0";
+$sql = 'SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os' AND c_count!=0";
 $result = $db->query($sql);
 list($num_items, $max) = $result->fetch(3);
 
@@ -35,15 +37,15 @@ if ($num_items) {
 
     $result = $db->query($db->sql());
 
-    $os_list = array();
+    $os_list = [];
     while (list($os, $count, $last_visit) = $result->fetch(3)) {
-        $last_visit = ! empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-        $os_list[$os] = array( $count, $last_visit );
+        $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
+        $os_list[$os] = [$count, $last_visit];
     }
 
-    if (! empty($os_list)) {
-        $cts = array();
-        $cts['thead'] = array( $lang_module['os'], $lang_module['hits'], $lang_module['last_visit'] );
+    if (!empty($os_list)) {
+        $cts = [];
+        $cts['thead'] = [$lang_module['os'], $lang_module['hits'], $lang_module['last_visit']];
         $cts['rows'] = $os_list;
         $cts['max'] = $max;
         $cts['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page);

@@ -703,7 +703,7 @@ function GetCatidInParent($catid)
  * @param mixed $nv_redirect
  * @return
  */
-function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_back = '')
+function redriect($msg1, $msg2, $nv_redirect, $autoSaveKey = '', $go_back = '')
 {
     global $global_config, $module_file, $module_name;
     $xtpl = new XTemplate('redriect.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

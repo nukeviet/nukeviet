@@ -44,14 +44,14 @@ class Database extends PDO
      */
     public function __construct($config)
     {
-        $_alldbtype = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
+        $_alldbtype = ['mysql', 'pgsql', 'mssql', 'sybase', 'dblib'];
 
-        $driver_options = array(
+        $driver_options = [
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_PERSISTENT => $config['persistent'],
             PDO::ATTR_CASE => PDO::CASE_LOWER,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        );
+        ];
 
         if (in_array($config['dbtype'], $_alldbtype)) {
             $dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=' . $config['charset'];
@@ -94,14 +94,14 @@ class Database extends PDO
      * @param array $data
      * @return integer|false
      */
-    public function insert_id($_sql, $column = '', $data = array())
+    public function insert_id($_sql, $column = '', $data = [])
     {
         try {
             if ($this->dbtype == 'oci') {
                 $_sql .= ' RETURNING ' . $column . ' INTO :primary_key';
             }
             $stmt = $this->prepare($_sql);
-            if(!empty($data)) {
+            if (!empty($data)) {
                 foreach (array_keys($data) as $key) {
                     $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($data[$key]));
                 }
@@ -130,7 +130,7 @@ class Database extends PDO
      * @param mixed $data
      * @return
      */
-    public function affected_rows_count($_sql, $data = array())
+    public function affected_rows_count($_sql, $data = [])
     {
         try {
             $stmt = $this->prepare($_sql);
@@ -155,7 +155,7 @@ class Database extends PDO
     public function columns_array($table)
     {
         //Array: field 	type 	null 	key 	default 	extra
-        $return = array();
+        $return = [];
         if ($this->dbtype == 'mysql') {
             $sql = 'SHOW COLUMNS FROM ' . $table;
             $result = $this->query($sql);
@@ -167,14 +167,14 @@ class Database extends PDO
             $result = $this->query($sql);
             while ($row = $result->fetch()) {
                 if ($row['char_length']) {
-                    $row['data_type'] .= '(' .$row['char_length']. ')';
+                    $row['data_type'] .= '(' . $row['char_length'] . ')';
                 }
                 $column_name = strtolower($row['column_name']);
 
-                $_tmp = array();
+                $_tmp = [];
                 $_tmp['field'] = $column_name;
                 $_tmp['type'] = $row['data_type'];
-                $_tmp['null'] = ($row['nullable'] =='N') ? 'NO' : 'YES';
+                $_tmp['null'] = ($row['nullable'] == 'N') ? 'NO' : 'YES';
                 $_tmp['key'] = '';
                 $_tmp['default'] = $row['data_default'];
                 $_tmp['extra'] = '';
@@ -234,7 +234,7 @@ class Database extends PDO
                     $sql .= $default;
                 }
             }
-            if (! $null) {
+            if (!$null) {
                 $sql .= ' NOT NULL';
             }
         } elseif ($this->dbtype == 'oci') {
@@ -271,7 +271,7 @@ class Database extends PDO
                     $sql .= $default;
                 }
             }
-            if (! $null) {
+            if (!$null) {
                 $sql .= ' NOT NULL ENABLE';
             }
             $sql .= ')';
@@ -294,7 +294,7 @@ class Database extends PDO
     public function dblikeescape($value)
     {
         if (is_array($value)) {
-            $value = array_map(array( $this, __function__ ), $value);
+            $value = array_map([$this, __function__], $value);
         } else {
             $value = trim($this->quote($value), "'");
             $value = addcslashes($value, '_%');
@@ -487,12 +487,16 @@ class Database extends PDO
      * {@inheritDoc}
      * @see PDO::query()
      */
-    public function query($statement)
+    public function query($statement, $fetchMode = null, ...$fetchModeArgs)
     {
         if ($this->debug) {
             $this->sqls[] = $statement;
         }
-        return parent::query($statement);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            return parent::query($statement, $fetchMode, ...$fetchModeArgs);
+        } else {
+            return parent::query($statement);
+        }
     }
 
     /**
@@ -568,7 +572,8 @@ class Database extends PDO
     /**
      * @param string $sql
      */
-    public function appendLastDebugSql($sql) {
+    public function appendLastDebugSql($sql)
+    {
         end($this->sqls);
         $key = key($this->sqls);
         if (isset($this->sqls[$key])) {
@@ -591,7 +596,8 @@ class Database extends PDO
  * @author VINADES.,JSC
  *
  */
-class NukeVietPDOStatement extends PDOStatement {
+class NukeVietPDOStatement extends PDOStatement
+{
     protected $pdo;
 
     /**
@@ -609,7 +615,7 @@ class NukeVietPDOStatement extends PDOStatement {
     public function execute($args = null)
     {
         $result = parent::execute($args);
-        if ($this->pdo->isDebug())  {
+        if ($this->pdo->isDebug()) {
             ob_start();
             $this->debugDumpParams();
             $this->pdo->addDebugListSql(ob_get_contents());

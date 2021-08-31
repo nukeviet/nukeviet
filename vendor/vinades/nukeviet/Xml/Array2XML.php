@@ -158,11 +158,7 @@ class Array2XML
 
         @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT');
         @Header('Content-Type: text/xml; charset=' . $encoding);
-        if (! empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
-            @Header('Cache-Control: no-cache, pre-check=0, post-check=0');
-        } else {
-            @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
-        }
+        @header('Cache-Control: no-store, max-age=0');
         @Header('Expires: 0');
         @Header('Pragma: no-cache');
         Header('Content-Encoding: none');

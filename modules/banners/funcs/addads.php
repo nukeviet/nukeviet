@@ -13,6 +13,7 @@ if (!defined('NV_IS_MOD_BANNERS')) {
 }
 
 $page_title = $module_info['site_title'];
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 if (!defined('NV_IS_BANNER_CLIENT')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -28,10 +29,10 @@ $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 $xtpl->assign('MANAGEMENT', $manament);
 $xtpl->parse('main.management');
 
-$array = array();
+$array = [];
 
 if ($nv_Request->isset_request('confirm', 'post')) {
-    $error = array();
+    $error = [];
     $array['title'] = $nv_Request->get_title('title', 'post', '', 1);
     $array['blockid'] = $nv_Request->get_title('block', 'post', '', 1);
     $array['description'] = $nv_Request->get_title('description', 'post', '', 1);
@@ -99,14 +100,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $endtime = $begintime + $global_array_uplans[$array['blockid']]['exp_time'];
         }
 
-        $sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE . "_rows (
-            title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, add_time, publ_time, exp_time, hits_total, act, weight
+        $sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE . '_rows (
+            title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight
         ) VALUES (
-            :title, " . $array['blockid'] . ", " . $user_info['userid'] . ", :file_name, :file_ext, :file_mime, " . $width . ", " . $height . ", :description, '',
-            :url, " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 4, 0
-        )";
+            :title, ' . $array['blockid'] . ', ' . $user_info['userid'] . ', :file_name, :file_ext, :file_mime, ' . $width . ', ' . $height . ", :description, '',
+            :url, '', " . NV_CURRENTTIME . ', ' . $begintime . ', ' . $endtime . ', 0, 4, 0
+        )';
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['title'] = $array['title'];
         $data_insert['file_name'] = $file_name;
         $data_insert['file_ext'] = $file_ext;
@@ -128,7 +129,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $array['url'] = '';
 }
 
-$result = $db->query("SELECT id,title, blang FROM " . NV_BANNERS_GLOBALTABLE . "_plans ORDER BY blang, title ASC");
+$result = $db->query('SELECT id,title, blang FROM ' . NV_BANNERS_GLOBALTABLE . '_plans ORDER BY blang, title ASC');
 
 foreach ($global_array_uplans as $row) {
     $row['title'] .= ' (' . (empty($row['blang']) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']]) . ')';
@@ -158,6 +159,8 @@ if ($global_config['captcha_type'] == 2) {
 
 $xtpl->parse('main');
 $contents .= $xtpl->text('main');
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

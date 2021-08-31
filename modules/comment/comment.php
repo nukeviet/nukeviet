@@ -265,9 +265,6 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $xtpl->assign('ALLOWED_COMM', $allowed_comm);
     $xtpl->assign('PER_PAGE', $per_page_comment);
 
-    // Hiện không dùng, giữ lại để tương thích phiên bản cũ.
-    $xtpl->assign('BASE_URL_COMM', $base_url);
-
     if (defined('NV_COMM_ID')) {
         $xtpl->parse('main.header');
     }

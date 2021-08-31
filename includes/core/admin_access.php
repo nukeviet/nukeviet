@@ -152,6 +152,7 @@ function nv_admin_checkdata($adm_session_value)
         $allow_files_type = $allow_files_type2;
     }
 
+    $admin_info['avata'] = !empty($admin_info['photo']) ? NV_BASE_SITEURL . $admin_info['photo'] : '';
     $admin_info['level'] = $admin_info['lev'];
     $admin_info['last_login'] = intval($array_admin['last_login']);
     $admin_info['last_agent'] = $array_admin['last_agent'];

@@ -105,15 +105,31 @@
                 <!-- BEGIN: active_group_newusers -->
                 <tr>
                     <td>{LANG.active_group_newusers}</td>
-                    <td><input type="checkbox" value="1" name="active_group_newusers"{DATA.active_group_newusers}/> <small>{LANG.active_group_newusers_note}</small></td>
+                    <td>
+                        <label class="mb-0">
+                            <input type="checkbox" value="1" name="active_group_newusers"{DATA.active_group_newusers}/> <small>{LANG.active_group_newusers_note}</small>
+                        </label>
+                    </td>
                 </tr>
                 <!-- END: active_group_newusers -->
                 <!-- BEGIN: active_editinfo_censor -->
                 <tr>
                     <td>{LANG.active_editinfo_censor}</td>
-                    <td><input type="checkbox" value="1" name="active_editinfo_censor"{DATA.active_editinfo_censor}/> <small>{LANG.active_editinfo_censor_note} {LINK_EDITCENSOR}</small></td>
+                    <td>
+                        <label class="mb-0">
+                            <input type="checkbox" value="1" name="active_editinfo_censor"{DATA.active_editinfo_censor}/> <small>{LANG.active_editinfo_censor_note} {LINK_EDITCENSOR}</small>
+                        </label>
+                    </td>
                 </tr>
                 <!-- END: active_editinfo_censor -->
+                <tr>
+                    <td>{LANG.auto_assign_oauthuser}</td>
+                    <td>
+                        <label class="mb-0">
+                            <input type="checkbox" value="1" name="auto_assign_oauthuser"{DATA.auto_assign_oauthuser}/> <small>{LANG.auto_assign_oauthuser_note}</small>
+                        </label>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -149,8 +165,8 @@
                         </label>
                     </td>
                 </tr>
-                <!-- BEGIN: avatar_size -->
-                <!-- END: user_forum -->
+                <!-- END: avatar_size -->
+                <!-- BEGIN: user_forum -->
                 <tr>
                     <td>{LANG.is_user_forum}</td>
                     <td><input name="is_user_forum" value="1" type="checkbox"{DATA.is_user_forum} /></td>

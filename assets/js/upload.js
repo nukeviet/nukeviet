@@ -527,7 +527,7 @@ function fileMouseup(file, e) {
 
         if (e.which == 3) {
             var isMultiple = $('.imgsel').length === 1 ? false : true;
-            var fileExt = $("input[name=selFile]").val().slice(-3);
+            var fileExt = $("input[name=selFile]").val().split('.').pop();
             var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
             var area = $("input[name=area]").val();
             var html = "";

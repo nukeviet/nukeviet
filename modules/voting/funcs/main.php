@@ -12,17 +12,21 @@ if (!defined('NV_IS_MOD_VOTING')) {
     die('Stop!!!');
 }
 
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
 if (empty($vid)) {
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
+
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
 
     $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
     $list = $nv_Cache->db($sql, 'vid', 'voting');
 
-    $allowed = array();
-    $is_update = array();
+    $allowed = [];
+    $is_update = [];
 
     $a = 0;
     foreach ($list as $row) {
@@ -48,7 +52,7 @@ if (empty($vid)) {
         $xtpl->assign('LANG', $lang_module);
 
         foreach ($allowed as $current_voting) {
-            $voting_array = array(
+            $voting_array = [
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
                 'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
@@ -59,7 +63,7 @@ if (empty($vid)) {
                 'langresult' => $lang_module['voting_result'],
                 'langsubmit' => $lang_module['voting_hits'],
                 'publtime' => nv_date('l - d/m/Y H:i', $current_voting['publ_time'])
-            );
+            ];
             $xtpl->assign('VOTING', $voting_array);
 
             $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
@@ -154,9 +158,9 @@ if (empty($vid)) {
 
     $array_id = explode(',', $lid);
     $array_id = array_map('intval', $array_id);
-    $array_id = array_diff($array_id, array(
+    $array_id = array_diff($array_id, [
         0
-    ));
+    ]);
     $count = sizeof($array_id);
 
     $note = '';
@@ -171,7 +175,7 @@ if (empty($vid)) {
 
         if (file_exists($dir . '/' . $logfile)) {
             $timeout = filemtime($dir . '/' . $logfile);
-            $timeout = ceil(($difftimeout - NV_CURRENTTIME + $vtime) / 60);
+            $timeout = ceil(($difftimeout - NV_CURRENTTIME + $timeout) / 60);
             $note = sprintf($lang_module['timeoutmsg'], $timeout);
         } elseif ($count <= $acceptcm) {
             $in = implode(',', $array_id);
@@ -188,7 +192,7 @@ if (empty($vid)) {
     $result = $db->query($sql);
 
     $totalvote = 0;
-    $vrow = array();
+    $vrow = [];
 
     while ($row2 = $result->fetch()) {
         $totalvote += (int) $row2['hitstotal'];
@@ -196,21 +200,28 @@ if (empty($vid)) {
     }
 
     $pubtime = nv_date('l - d/m/Y H:i', $row['publ_time']);
-    $lang = array(
+    $lang = [
         'total' => $lang_module['voting_total'],
         'counter' => $lang_module['voting_counter'],
         'publtime' => $lang_module['voting_pubtime']
-    );
-    $voting = array(
+    ];
+    $voting = [
         'question' => $row['question'],
         'total' => $totalvote,
         'pubtime' => $pubtime,
         'row' => $vrow,
         'lang' => $lang,
         'note' => $note
-    );
+    ];
 
     $contents = voting_result($voting);
+
+    $page_title = $row['question'];
+    $page_url .= '&amp;vid=' . $vid . '&amp;checkss=' . $checkss . '&amp;lid=' . $lid;
+    if ($row['active_captcha']) {
+        $page_url .= 'captcha=' . $captcha;
+    }
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     $is_ajax = $nv_Request->get_int('nv_ajax_voting', 'post');

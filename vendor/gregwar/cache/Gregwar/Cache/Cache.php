@@ -11,14 +11,15 @@ class Cache implements CacheInterface
 {
     /**
      * Cache directory
+     * @var string
      */
     protected $cacheDirectory;
 
     /**
      * Use a different directory as actual cache
-     * @var string
+     * @var string|null
      */
-    protected $actualCacheDirectory = null;
+    protected $actualCacheDirectory;
 
     /**
      * Prefix directories size
@@ -76,7 +77,7 @@ class Cache implements CacheInterface
     /**
      * Sets the actual cache directory
      *
-     * @param string $actualCacheDirectory the actual cache directory
+     * @param string|null $actualCacheDirectory the actual cache directory
      * @return self
      */
     public function setActualCacheDirectory($actualCacheDirectory = null)
@@ -321,7 +322,7 @@ class Cache implements CacheInterface
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getOrCreate($filename, array $conditions = array(), $function, $file = false, $actual = false)
+    public function getOrCreate($filename, array $conditions, $function, $file = false, $actual = false)
     {
         if (!is_callable($function)) {
             throw new \InvalidArgumentException('The argument $function should be callable');
@@ -358,7 +359,7 @@ class Cache implements CacheInterface
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getOrCreateFile($filename, array $conditions = array(), $function, $actual = false)
+    public function getOrCreateFile($filename, array $conditions, $function, $actual = false)
     {
         return $this->getOrCreate($filename, $conditions, $function, true, $actual);
     }

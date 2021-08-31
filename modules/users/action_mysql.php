@@ -65,14 +65,16 @@ $num_module_exists = sizeof($array_lang_module_setup);
 if (in_array($lang, $array_lang_module_setup) and $num_module_exists > 1) {
     // Không xóa khi cài lại module users
     if ($module_data != 'users' or $op != 'recreate_mod') {
-        $sql = "SELECT fid, language FROM " . $db_config['prefix'] . "_" . $module_data . "_field";
-        $_result = $db->query($sql);
-        while ($_row = $_result->fetch()) {
-            $_row['language'] = unserialize($_row['language']);
-            if (isset($_row['language'][$lang])) {
-                unset($_row['language'][$lang]);
-                $_row['language'] = empty($_row['language']) ? '' : serialize($_row['language']);
-                $sql_drop_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote($_row['language']) . ' WHERE fid=' . $_row['fid'];
+        if (empty($global_config['idsite'])) {
+            $sql = "SELECT fid, language FROM " . $db_config['prefix'] . "_" . $module_data . "_field";
+            $_result = $db->query($sql);
+            while ($_row = $_result->fetch()) {
+                $_row['language'] = unserialize($_row['language']);
+                if (isset($_row['language'][$lang])) {
+                    unset($_row['language'][$lang]);
+                    $_row['language'] = empty($_row['language']) ? '' : serialize($_row['language']);
+                    $sql_drop_module[] = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET language=' . $db->quote($_row['language']) . ' WHERE fid=' . $_row['fid'];
+                }
             }
         }
         $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE lang='" . $lang . "'";
@@ -240,7 +242,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
     field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
     field_choices text NOT NULL,
     sql_choices text NOT NULL,
-    match_type enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
+    match_type enum('none','alphanumeric','unicodename','email','url','regex','callback') NOT NULL DEFAULT 'none',
     match_regex varchar(250) NOT NULL DEFAULT '',
     func_callback varchar(75) NOT NULL DEFAULT '',
     min_length int(11) NOT NULL DEFAULT '0',
@@ -281,6 +283,7 @@ $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $mod
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_user_logs', '1', " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('min_old_user', '16', " . NV_CURRENTTIME . ")";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('register_active_time', '86400', " . NV_CURRENTTIME . ")";
+$sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('auto_assign_oauthuser', '0', " . NV_CURRENTTIME . ")";
 
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('first_name', 1, 'textbox', '', '', 'none', '', '', 0, 100, 1, 1, 1, 1, 'input', '', '', 1)";
 $sql_create_module[] = "INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('last_name', 2, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', '', '', 1)";

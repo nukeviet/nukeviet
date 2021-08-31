@@ -134,6 +134,26 @@ $(document).ready(function() {
         $(window).unbind();
     });
 
+    $('a[href="#"]').on('click', function(e) {
+        e.preventDefault();
+    });
+
+    $('[data-btn="toggleLang"]').on('click', function(e) {
+        e.preventDefault();
+        $('.menu-lang').toggleClass('menu-lang-show');
+    });
+
+    $(document).on('click', function(e) {
+        if (
+            $('[data-btn="toggleLang"]').is(':visible') &&
+            !$(e.target).closest('.menu-lang').length &&
+            !$(e.target).closest('[data-btn="toggleLang"]').length &&
+            !$(e.target).closest('.dropdown-backdrop').length
+        ) {
+            $('.menu-lang').removeClass('menu-lang-show');
+        }
+    });
+
     // Bootstrap tooltip
     $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 });

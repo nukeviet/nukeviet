@@ -14,13 +14,18 @@
 
 <div class="clearfix">
     <ul class="nav nav-tabs setting-tabnav" role="tablist" id="settingTabs">
+        <!-- BEGIN: sys_tabs -->
         <li role="presentation" class="{TAB0_ACTIVE}"><a href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-toggle="tab">{LANG.security}</a></li>
         <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab">{LANG.flood_blocker}</a></li>
         <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab">{LANG.captcha}</a></li>
         <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab">{LANG.banip}</a></li>
         <li role="presentation" class="{TAB4_ACTIVE}"><a href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-toggle="tab">{LANG.cors}</a></li>
+        <!-- END: sys_tabs -->
+        <li role="presentation" class="{TAB5_ACTIVE}"><a href="#settingCSP" aria-controls="settingCSP" aria-offsets="5" role="tab" data-toggle="tab">{LANG.csp}</a></li>
+        <li role="presentation" class="{TAB6_ACTIVE}"><a href="#settingRP" aria-controls="settingRP" aria-offsets="6" role="tab" data-toggle="tab">{LANG.rp}</a></li>
     </ul>
     <div class="tab-content">
+        <!-- BEGIN: sys_contents -->
         <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
@@ -560,6 +565,19 @@
                                         <div class="form-text text-muted">{LANG.cors_valid_ips_help}</div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.allow_null_origin}</strong></td>
+                                    <td>
+                                        <input type="checkbox" value="1" name="allow_null_origin" {CONFIG_CROSS.allow_null_origin}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.ip_allow_null_origin}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="ip_allow_null_origin">{CONFIG_CROSS.ip_allow_null_origin}</textarea>
+                                        <div class="form-text text-muted">{LANG.ip_allow_null_origin_help}</div>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -572,6 +590,116 @@
                         </table>
                     </div>
                     <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                </form>
+            </div>
+        </div>
+        <!-- END: sys_contents -->
+        <div role="tabpanel" class="tab-pane{TAB5_ACTIVE}" id="settingCSP">
+            <div class="setting-tabcontent clearfix">
+                <form action="{FORM_ACTION}" method="post">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover table-first">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">{LANG.csp_desc} <a href="https://content-security-policy.com/" target="_blank">{LANG.csp_details}</a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.csp_act}</strong></td>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="1" name="nv_csp_act" {CSP_ACT} />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <!-- BEGIN: csp_directive -->
+                                <tr>
+                                    <td><strong>{DIRECTIVE.name}</strong><br />{DIRECTIVE.desc}</td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="directives[{DIRECTIVE.name}]">{DIRECTIVE.value}</textarea>
+                                        <div class="form-text text-muted">{LANG.csp_note}</div>
+                                    </td>
+                                </tr>
+                                <!-- END: csp_directive -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
+                                        <input type="submit" value="{GLANG.submit}" name="submitcsp" class="btn btn-primary w100" />
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}" />
+                </form>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane{TAB6_ACTIVE}" id="settingRP">
+            <div class="setting-tabcontent clearfix">
+                <form action="{FORM_ACTION}" method="post">
+                    <div>
+                        <div class="well-sm">
+                            {LANG.rp_desc} <a href="https://www.w3.org/TR/referrer-policy/" target="_blank">{LANG.rp_details}</a>.<br />
+                            {LANG.rp_desc2}
+                        </div>
+
+                        <strong>{LANG.rp_directives}:</strong>
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <!-- BEGIN: rp_directive -->
+                            <div class="panel panel-default">
+                                <a role="button" class="panel-heading btn-block" data-toggle="collapse" data-parent="#accordion" href="#collapse-{RP_DIRECTIVE.name}" aria-expanded="false" aria-controls="collapse-{RP_DIRECTIVE.name}">
+                                    {RP_DIRECTIVE.name}
+                                </a>
+                                <div id="collapse-{RP_DIRECTIVE.name}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{RP_DIRECTIVE.name}">
+                                    <div class="panel-body">
+                                        <code><strong>{RP_DIRECTIVE.name}</strong></code>: {RP_DIRECTIVE.desc}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END: rp_directive -->
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover table-first border-top">
+                            <colgroup>
+                                <col style="width: 30%" />
+                                <col style="width: 70%" />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">{LANG.rp_note}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>{LANG.rp_act}</strong>
+                                    </td>
+                                    <td><input type="checkbox" value="1" name="nv_rp_act" {RP_ACT} /></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>{LANG.rp_directives}</strong>
+                                    </td>
+                                    <td>
+                                        <input class="form-control pull-left" type="text" value="{RP}" name="nv_rp" maxlength="500" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
+                                        <input type="submit" value="{GLANG.submit}" name="submitrp" class="btn btn-primary w100" />
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}" />
                 </form>
             </div>
         </div>

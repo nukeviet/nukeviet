@@ -113,7 +113,7 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
 
 $currentpath = str_replace(NV_ROOTDIR . '/', '', $upload_real_dir_page);
 $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload;
-if (!defined('NV_IS_SPADMIN') and strpos($structure_upload, 'username') !== false) {
+if (!defined('NV_IS_SPADMIN') and str_contains($structure_upload, 'username')) {
     $array_currentpath = explode('/', $currentpath);
     if ($array_currentpath[2] == $username_alias) {
         $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $username_alias;
@@ -731,7 +731,8 @@ if ($is_submit_form) {
 
         // Xử lý lưu vào CSDL khi đăng mới hoặc sao chép
         if ($rowcontent['id'] == 0 or $copy) {
-            if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
+            // Toàn quyền module trở lên được đăng bài lùi về sau
+            if (!$NV_IS_ADMIN_FULL_MODULE and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
                 $rowcontent['publtime'] = NV_CURRENTTIME;
             }
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
@@ -868,7 +869,8 @@ if ($is_submit_form) {
                 $rowcontent['status'] = 4;
             }
 
-            if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
+            // Toàn quyền module trở lên được sửa thời gian đăng bài lùi về sau
+            if (!$NV_IS_ADMIN_FULL_MODULE and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
                 $rowcontent['publtime'] = $rowcontent_old['addtime'];
             }
 

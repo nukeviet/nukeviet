@@ -33,7 +33,7 @@ function nv_add_element( idElment, key, value ){
 
 function nv_timer_check_takeover(id) {
     clearTimeout(timer_check_takeover);
-    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'id=' + id + '&check_edit=1', function(res) {
+    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'id=' + id + '&check_edit=1', function(res) {
         res = res.split("_");
         if (res[0] != 'OK') {
             // Thông báo bị chiếm quyền sửa
@@ -110,7 +110,7 @@ $(document).ready(function() {
                 response(cachetopic[term]);
                 return;
             }
-            $.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=topicajax", request, function(data, status, xhr) {
+            $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=topicajax", request, function(data, status, xhr) {
                 cachetopic[term] = data;
                 response(data);
             });
@@ -127,7 +127,7 @@ $(document).ready(function() {
                 response(cachesource[term]);
                 return;
             }
-            $.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax", request, function(data, status, xhr) {
+            $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax", request, function(data, status, xhr) {
                 cachesource[term] = data;
                 response(data);
             });
@@ -152,7 +152,7 @@ $(document).ready(function() {
 
     }).autocomplete({
         source : function(request, response) {
-            $.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
+            $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
                 term : extractLast(request.term)
             }, response);
         },
@@ -221,7 +221,7 @@ $(document).ready(function() {
 
     }).autocomplete({
         source : function(request, response) {
-            $.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
+            $.getJSON(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
                 term : extractLast(request.term)
             }, response);
         },
@@ -299,7 +299,7 @@ $(document).ready(function() {
     $("#topicid").select2({
         language: "vi",
         ajax: {
-        url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&get_topic_json=1',
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&get_topic_json=1',
             dataType: 'json',
             delay: 250,
             data: function (params) {

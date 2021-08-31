@@ -77,6 +77,7 @@ $lang_module['search_on_nuke'] = 'Tìm trong site';
 $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên quan đến';
 $lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 trường tìm kiếm';
 $lang_module['search_in_module'] = 'trong mục';
+$lang_module['search_catid_error'] = 'Lỗi: Chủ đề bạn đã chọn không tồn tại.';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';
 $lang_module['time_update'] = 'Thời gian đăng tin';

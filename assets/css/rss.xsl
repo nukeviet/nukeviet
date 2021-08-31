@@ -6,6 +6,8 @@
     <xsl:template match="/">
 		<html>
 			<head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
 				<title><xsl:value-of select="$title"/></title>	
 				<style type="text/css">
 				body{background:#fff;border:0px;margin:10px;font:normal 80% Verdana,Arial,Helvetica;color:#000}
@@ -19,12 +21,12 @@
 				.footerbox{clear:both;width:100%;border-top:1px solid #000}
 				.item ul{list-style:none;margin:0px;padding:0px;border:none}
 				.item li,.fltclear{clear:both}
-                .item li img{margin-right:10px}
+                .item li img{width:100px;margin-right:10px;float:left}
 				.paditembox{padding:0 5px 10px 10px}
 				.mvb{margin-bottom:5px}
 				.display-table{display:table;height:60px}
                 .display-table > div{display:table-row}
-                .display-table > div > a{display:table-cell;font-size:18px;font-weight:bold;color:#205FA0;text-decoration:none}
+                .display-table > div > a{display:table-cell;font-size:18px;font-weight:bold;color:#205FA0;text-decoration:none;vertical-align:middle}
                 .logo{padding:8px 10px;}
                 .middle{vertical-align:middle}
 				</style>
@@ -58,19 +60,29 @@
 		</body>
 	</xsl:template>
 	<xsl:template match="item">
+        <xsl:variable name="item_title" select="title" />
+        <xsl:variable name="item_desc" select="substring-after(description, '&gt;')" />
+        <xsl:variable name="item_image" select="substring-before(substring-after(description, 'src=&quot;'), '&quot;')" />
 		<div class="item">
 			<ul>
 			   <li>
 					<div class="mvb">
-						<a href="{link}" class="itemTitle">
-							<xsl:value-of disable-output-escaping="yes" select="title"/>
-						</a>
-					</div>
-					<div>
-						<xsl:value-of disable-output-escaping="yes" select="description" />
-					</div>
-					<div class="fltclear"></div>
-					<hr />
+                        <a href="{link}" class="itemTitle">
+                            <xsl:value-of select="$item_title" />
+                        </a>
+                    </div>
+                    <div>
+                        <xsl:if test="$item_image!=''">
+                            <a href="{link}" title="{$item_title}"><img src="{$item_image}" alt="{$item_title}" /></a>
+                            <xsl:value-of select="$item_desc" />
+                        </xsl:if>
+                        <xsl:if test="$item_image=''">
+                            <xsl:value-of disable-output-escaping="yes" select="description" />
+                        </xsl:if>
+
+                    </div>
+                    <div class="fltclear"></div>
+                    <hr />
 				</li>
 			</ul>
 		</div>

@@ -17,6 +17,14 @@ if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
+// Chuyen trang dang ki neu tich hop dien dan
+if (defined('NV_IS_USER_FORUM')) {
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/register.php';
+    exit();
+}
+
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
     $page_title = $lang_module['register'];
@@ -25,6 +33,8 @@ if (!$global_config['allowuserreg']) {
 
     $contents = user_info_exit($lang_module['no_allowuserreg']);
     $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -43,6 +53,9 @@ if ($global_config['max_user_number'] > 0) {
         } else {
             $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
             $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+            $canonicalUrl = getCanonicalUrl($page_url);
+
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_site_theme($contents);
             include NV_ROOTDIR . '/includes/footer.php';
@@ -53,18 +66,9 @@ if ($global_config['max_user_number'] > 0) {
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
-}
-elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
-    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
-    if (!empty($sso_redirect)) {
-        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $page_url .= '&nv_redirect=' . $nv_redirect;
     }
-}
-
-// Chuyen trang dang ki neu tich hop dien dan
-if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/register.php';
-    exit();
 }
 
 /**
@@ -90,14 +94,24 @@ function nv_check_username_reg($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE md5username= :md5username');
+    // MySQL không phân biệt chữ có dấu và không dấu của các chữ cái unicode, nhưng md5 của chúng lại khác nhau.
+    // Vì thế cần kiểm tra cả username nếu không sẽ sinh ra lỗi trùng username (UNIQUE INDEX `login` (`username`))
+    // Ví dụ: "Anh Tú/Anh Tứ" khi đối chiếu là như nhau, nhưng md5 của chúng khác nhau
+    //
+    // Khi đối chiếu, MySQL phân biệt chữ hoa-thường, nhưng khi thực thi thì không phân biệt yếu tố trên.
+    // Vì thế khi kiểm tra username cần cho về cùng định dạng LOWER hoặc UPPER,
+    // nếu không sẽ sinh ra lỗi khi thêm tài khoản có cùng username
+    // Ví dụ: "Anh Tu/anh tu" khi đối chiếu là khác nhau, nhưng khi thực thi lại giống nhau.
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE LOWER(username)=:username OR md5username= :md5username');
+    $stmt->bindValue(':username', nv_strtolower($login), PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE md5username= :md5username');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=:username OR md5username= :md5username');
+    $stmt->bindValue(':username', nv_strtolower($login), PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -173,20 +187,20 @@ function reg_result($array)
 }
 
 // Cau hoi lay lai mat khau
-$data_questions = array();
-$sql = "SELECT qid, title FROM " . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+$data_questions = [];
+$sql = 'SELECT qid, title FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
-    $data_questions[$row['qid']] = array(
+    $data_questions[$row['qid']] = [
         'qid' => $row['qid'],
         'title' => $row['title']
-    );
+    ];
 }
 
 // Captcha
-$gfx_chk = (in_array($global_config['gfx_chk'], array(3, 4, 6, 7))) ? 1 : 0;
+$gfx_chk = (in_array($global_config['gfx_chk'], [3, 4, 6, 7])) ? 1 : 0;
 
-$array_register = array();
+$array_register = [];
 $array_register['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $array_register['nv_redirect'] = $nv_redirect;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
@@ -196,15 +210,15 @@ if ($nv_Request->isset_request('checkMail', 'post') and $checkss == $array_regis
     $email = nv_strtolower(nv_substr($nv_Request->get_title('email', 'post', '', 1), 0, 100));
     $check_email = nv_check_email_reg($email);
     if (!empty($check_email)) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'mess' => $check_email
-        ));
+        ]);
     }
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'success',
         'mess' => 'OK'
-    ));
+    ]);
 }
 
 //Check Login for AJAX
@@ -212,15 +226,15 @@ if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_regi
     $login = $nv_Request->get_title('login', 'post', '', 1);
     $check_login = nv_check_username_reg($login);
     if (!empty($check_login)) {
-        nv_jsonOutput(array(
+        nv_jsonOutput([
             'status' => 'error',
             'mess' => $check_login
-        ));
+        ]);
     }
-    nv_jsonOutput(array(
+    nv_jsonOutput([
         'status' => 'success',
         'mess' => 'OK'
-    ));
+    ]);
 }
 
 if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
@@ -233,7 +247,7 @@ $page_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['register'];
 
-$array_field_config = array();
+$array_field_config = [];
 $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language']);
@@ -297,55 +311,55 @@ if ($checkss == $array_register['checkss']) {
     $check_seccode = !$gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
     if (!$check_seccode) {
-        reg_result(array(
+        reg_result([
             'status' => 'error',
             'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
             'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
-        ));
+        ]);
     }
 
     if ((($check_login = nv_check_username_reg($array_register['username']))) != '') {
-        reg_result(array(
+        reg_result([
             'status' => 'error',
             'input' => 'username',
             'mess' => $check_login
-        ));
+        ]);
     }
 
     if (($check_email = nv_check_email_reg($array_register['email'])) != '') {
-        reg_result(array(
+        reg_result([
             'status' => 'error',
             'input' => 'email',
             'mess' => $check_email
-        ));
+        ]);
     }
 
     if (($check_pass = nv_check_valid_pass($array_register['password'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
-        reg_result(array(
+        reg_result([
             'status' => 'error',
             'input' => 'password',
             'mess' => $check_pass
-        ));
+        ]);
     }
 
     if ($array_register['password'] != $array_register['re_password']) {
-        reg_result(array(
+        reg_result([
             'status' => 'error',
             'input' => 're_password',
             'mess' => $lang_global['passwordsincorrect']
-        ));
+        ]);
     }
 
     if (empty($array_register['agreecheck']) and !defined('ACCESS_ADDUS')) {
-        reg_result(array(
+        reg_result([
             'status' => 'error',
             'input' => 'agreecheck',
             'mess' => $lang_global['agreecheck_empty']
-        ));
+        ]);
     }
 
     // Kiểm tra trường dữ liệu
-    $query_field = array('userid' => 0);
+    $query_field = ['userid' => 0];
     $userid = 0;
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
@@ -357,7 +371,7 @@ if ($checkss == $array_register['checkss']) {
     }
 
     if (!defined('ACCESS_ADDUS') and ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3)) {
-        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_reg (
             username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate, question, answer, checknum, users_info, idsite
         ) VALUES (
             :username,
@@ -369,15 +383,15 @@ if ($checkss == $array_register['checkss']) {
             :gender,
             :birthday,
             :sig,
-            " . NV_CURRENTTIME . ",
+            ' . NV_CURRENTTIME . ',
             :question,
             :answer,
             :checknum,
             :users_info,
             :idsite
-        )";
+        )';
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['username'] = $array_register['username'];
         $data_insert['md5username'] = nv_md5safe($array_register['username']);
         $data_insert['password'] = $password;
@@ -395,18 +409,19 @@ if ($checkss == $array_register['checkss']) {
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
-            reg_result(array(
+            reg_result([
                 'status' => 'error',
                 'input' => '',
                 'mess' => $lang_module['err_no_save_account']
-            ));
+            ]);
         } else {
             if ($global_config['allowuserreg'] == 2) {
                 $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
                 $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
                 $subject = $lang_module['account_active'];
-                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, true);
+                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], $_url, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                 $send = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
 
                 if ($send) {
@@ -430,29 +445,20 @@ if ($checkss == $array_register['checkss']) {
                 nv_insert_notification($module_name, 'contact_new', ['title' => $array_register['username']], $userid, 0, 0, 1);
             }
 
-            $array = array(
+            $nv_redirect = '';
+            reg_result([
                 'status' => 'ok',
                 'input' => '',
                 'mess' => $info
-            );
-            if (defined('SSO_REGISTER_SECRET')) {
-                $sso_redirect_users = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
-                $iv = substr(SSO_REGISTER_SECRET, 0, 16);
-                $sso_redirect_users = strtr($sso_redirect_users, '-_,', '+/=');
-                $sso_redirect_users = openssl_decrypt($sso_redirect_users, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
-                if (!empty($sso_redirect_users)) {
-                    $array['input'] = $sso_redirect_users;
-                }
-            }
-            nv_jsonOutput($array);
+            ]);
         }
     } else {
-        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig, regdate,
             question, answer, passlostkey, view_mail, remember, in_groups,
             active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
         ) VALUES (
-            " . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . ",
+            ' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . ",
             :username,
             :md5username,
             :password,
@@ -471,7 +477,7 @@ if ($checkss == $array_register['checkss']) {
             1, '', 0, '', '', '', " . $global_config['idsite'] . ", -1, 'SYSTEM'
         )";
 
-        $data_insert = array();
+        $data_insert = [];
         $data_insert['username'] = $array_register['username'];
         $data_insert['md5username'] = nv_md5safe($array_register['username']);
         $data_insert['password'] = $password;
@@ -487,11 +493,11 @@ if ($checkss == $array_register['checkss']) {
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
-            reg_result(array(
+            reg_result([
                 'status' => 'error',
                 'input' => '',
                 'mess' => $lang_module['err_no_save_account']
-            ));
+            ]);
         } else {
             $query_field['userid'] = $userid;
             $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
@@ -506,25 +512,22 @@ if ($checkss == $array_register['checkss']) {
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
             $subject = $lang_module['account_register'];
-            $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-            if (strpos($_url, NV_MY_DOMAIN) !== 0) {
-                $_url = NV_MY_DOMAIN . $_url;
-            }
+            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
             $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
             nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
 
             if (defined('ACCESS_ADDUS')) {
                 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups/' . $group_id;
-            } else if (!empty($global_config['auto_login_after_reg'])) {
+            } elseif (!empty($global_config['auto_login_after_reg'])) {
                 // Auto login
-                $array_user = array(
+                $array_user = [
                     'userid' => $userid,
                     'username' => $array_register['username'],
                     'last_agent' => '',
                     'last_ip' => '',
                     'last_login' => 0,
                     'last_openid' => ''
-                );
+                ];
                 validUserLog($array_user, 1, '');
 
                 $nv_redirect = nv_redirect_decrypt($nv_redirect);
@@ -543,11 +546,11 @@ if ($checkss == $array_register['checkss']) {
             }
 
             $nv_redirect = '';
-            reg_result(array(
+            reg_result([
                 'status' => 'ok',
                 'input' => nv_url_rewrite($url, true),
                 'mess' => $lang_module['register_ok']
-            ));
+            ]);
         }
     }
 }
@@ -559,6 +562,8 @@ if ($nv_Request->isset_request('get_usage_terms', 'post')) {
 }
 
 $contents = user_register($gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields, $group_id);
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

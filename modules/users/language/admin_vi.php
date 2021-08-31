@@ -304,6 +304,7 @@ $lang_module['field_options_text'] = 'Các tùy chọn cho khác';
 $lang_module['field_match_type'] = 'Yêu cầu kiểm tra với giá trị:';
 $lang_module['field_match_type_none'] = 'Không kiểm tra';
 $lang_module['field_match_type_alphanumeric'] = 'Chỉ được dùng các ký tự A-Z, 0-9 và gạch dưới';
+$lang_module['field_match_type_unicodename'] = 'Tên người (Các chữ cái unicode, dấu gạch ngang, dấu nháy đơn và dấu cách)';
 $lang_module['field_match_type_date'] = 'Ngày tháng cần nhập theo định dạng dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Biểu thức quy tắc';
@@ -511,6 +512,8 @@ $lang_module['active_obj_3'] = 'Kích hoạt qua Oauth %s';
 $lang_module['active_obj_4'] = 'Quản trị <strong title="%s">%s</strong> kích hoạt';
 $lang_module['is_email_verified'] = 'Xác minh email';
 $lang_module['is_email_verified1'] = 'Nếu chọn vào đây, trạng thái email của tài khoản là không cần xác minh. Nếu không, trạng thái email tài khoản là chưa xác minh';
+$lang_module['auto_assign_oauthuser'] = 'Tự động xử lý trùng email Oauth';
+$lang_module['auto_assign_oauthuser_note'] = 'Khi bật tùy chọn này, nếu đăng nhập qua Oauth mà email đã được sử dụng thì hệ thống sẽ tự động gán Oauth vào tài khoản đó mà không cần nhập mật khẩu để xác nhận';
 
 $lang_module['account_active'] = 'Thông tin kích hoạt tài khoản';
 $lang_module['account_active_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4$s<br />Email: %5$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %6$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site';

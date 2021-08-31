@@ -16,7 +16,7 @@ $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 $set_view_page = ($page > 1 and substr($viewcat, 0, 13) == 'viewcat_main_') ? true : false;
-$base_url = $global_array_cat[$catid]['link'];
+$page_url = $base_url = $global_array_cat[$catid]['link'];
 $no_generate = ['viewcat_two_column'];
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
@@ -30,10 +30,19 @@ if (!defined('NV_IS_MODADMIN') and $page < 5) {
     }
 }
 
-// Kiểm tra và chặn đánh tùy ý các op
-if (($page < 2 and isset($array_op[1])) or isset($array_op[2]) or ($page > 1 and in_array($viewcat, $no_generate))) {
-    nv_redirect_location($base_url);
+if ($page > 1) {
+    $page_url .= '/page-' . $page;
+
+    /**
+     * @link https://github.com/nukeviet/nukeviet/issues/2990
+     * Một số kiểu hiển thị không được đánh page
+     */
+    if (in_array($viewcat, $no_generate)) {
+        nv_redirect_location($base_url);
+    }
 }
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $page_title = (!empty($global_array_cat[$catid]['titlesite'])) ? $global_array_cat[$catid]['titlesite'] : $global_array_cat[$catid]['title'];
 $key_words = $global_array_cat[$catid]['keywords'];
@@ -58,6 +67,9 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, weight, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
@@ -116,11 +128,6 @@ if (empty($contents)) {
             $weight_publtime = ($order_articles) ? $item['weight'] : $item['publtime'];
         }
 
-        // Không cho tùy ý đánh số page
-        if ($page > 1 and empty($array_catpage)) {
-            nv_redirect_location($base_url);
-        }
-
         if ($st_links > 0) {
             $db_slave->sqlreset()
                 ->select('id, listcatid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
@@ -152,6 +159,9 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
 
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
@@ -211,11 +221,6 @@ if (empty($contents)) {
             $array_catcontent[] = $item;
         }
         unset($sql, $result);
-
-        // Không cho tùy ý đánh số page
-        if ($page > 1 and empty($array_catcontent)) {
-            nv_redirect_location($base_url);
-        }
 
         $array_cat_other = [];
 
@@ -451,6 +456,9 @@ if (empty($contents)) {
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
 
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
+
         $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
@@ -479,11 +487,6 @@ if (empty($contents)) {
             $array_catpage[] = $item;
         }
 
-        // Không cho tùy ý đánh số page
-        if ($page > 1 and empty($array_catpage)) {
-            nv_redirect_location($base_url);
-        }
-
         $viewcat = 'viewcat_grid_new';
         $featured = $global_array_cat[$catid]['featured'];
         $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
@@ -499,6 +502,10 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())
             ->fetchColumn();
+
+        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
+
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {
             $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')->where('id=' . $global_array_cat[$catid]['featured']);
@@ -554,11 +561,6 @@ if (empty($contents)) {
             $item['newday'] = $global_array_cat[$catid]['newday'];
             $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
-        }
-
-        // Không cho tùy ý đánh số page
-        if ($page > 1 and empty($array_catpage)) {
-            nv_redirect_location($base_url);
         }
 
         $viewcat = 'viewcat_list_new';

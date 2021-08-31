@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2018 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC <contact@vinades.vn>
+ * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
@@ -149,6 +149,16 @@ $lang_module['live_session_time'] = 'Le temps de vie de la session';
 $lang_module['live_session_time0'] = '=0 Vivre jusqu\'à ce que le navigateur soit fermé';
 $lang_module['cookie_secure'] = 'cookie secure';
 $lang_module['cookie_httponly'] = 'cookie http seul';
+$lang_module['cookie_SameSite'] = 'cookie SameSite';
+$lang_module['cookie_secure_note'] = 'Un cookie sécurisé est envoyé uniquement si la requête est faite en https:, sauf pour localhost';
+$lang_module['cookie_httponly_note'] = 'Empêche JavaScript d\'accéder au, par exemple, au travers de la propriété Document.cookie';
+$lang_module['cookie_SameSite_note'] = 'Contrôle si un cookie est envoyé avec les requêtes d\'origine croisée';
+$lang_module['cookie_SameSite_note2'] = 'Cet attribut ne prend effet que lorsque la version php du serveur >= 7.3';
+$lang_module['cookie_SameSite_Empty'] = 'Dépend du navigateur';
+$lang_module['cookie_SameSite_Lax'] = 'Les cookies ne sont pas envoyés lors de sous-requêtes intersites normales (par exemple pour charger des images), mais sont envoyés lorsqu\'un utilisateur navigue vers le site d\'origine';
+$lang_module['cookie_SameSite_Strict'] = 'Les cookies ne seront envoyés qu\'avec les requêtes effectuées sur le domaine de même niveau, et ne seront pas envoyées sur les requêtes vers des sites tiers';
+$lang_module['cookie_SameSite_None'] = 'Les cookies seront envoyés dans tous les contextes (l\'attribut cookie Secure doit être défini)';
+
 $lang_module['is_user_forum'] = 'Confier la gestion d\'utilisateurs au forum';
 $lang_module['banip'] = 'IPs interdits';
 $lang_module['banip_ip'] = 'IP';
@@ -227,11 +237,11 @@ $lang_module['closed_site_0'] = 'Mode normal';
 $lang_module['closed_site_1'] = 'Fermeture du site, seulement l\'administrateur suprême peut se connecter';
 $lang_module['closed_site_2'] = 'Fermeture du site - les administrateurs générales peuvent se connecter';
 $lang_module['closed_site_3'] = 'Fermeture du site - les administrateur peuvent se connecter';
-$lang_module['ssl_https'] = 'Activez le mode d\'utilisation SSL';
+$lang_module['ssl_https'] = 'Rediriger les requêtes HTTP vers HTTPS';
 $lang_module['ssl_https_module'] = 'Les modules activés avec SSL';
-$lang_module['ssl_https_0'] = 'Eteindre SSL';
-$lang_module['ssl_https_1'] = 'Activer le site global';
-$lang_module['ssl_https_2'] = 'Activer le zone d\'admin';
+$lang_module['ssl_https_0'] = 'Désactivé';
+$lang_module['ssl_https_1'] = 'Postulez sur l\'ensemble du site';
+$lang_module['ssl_https_2'] = 'Appliquer dans la zone d\'administration';
 $lang_module['note_ssl'] = 'Etes-vous certain que votre site soutien https? Sinon vous ne pouvez pas entrer dans le site après la sauvegarde.';
 $lang_module['timezoneAuto'] = 'Selon l\'ordinateur du visiteur';
 $lang_module['timezoneByCountry'] = 'Selon le pays du visiteur';
@@ -242,6 +252,9 @@ $lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter
 $lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';
 $lang_module['ftp_error_support'] = 'Votre hébergeur a bloqué FTP, veuillez leur contacter pour l\'activer';
 $lang_module['cdn_url'] = 'Hosting CDN pour javascript, css';
+$lang_module['remote_api_access'] = 'Activer l\'API à distance';
+$lang_module['remote_api_access_help'] = 'La désactivation de tous les accès API de l\'extérieur sera bloquée. Les API internes sont toujours utilisées normalement';
+$lang_module['remote_api_log'] = 'Activer la journalisation d\'API à distance';
 $lang_module['plugin'] = 'Configuration du Plugin';
 $lang_module['plugin_info'] = 'Plugin doit être un fichier php se situé dans le dossier &ldquo;<strong>includes/plugin/</strong>&rdquo;. Ces Plugin exécutent toujours avec le système en cas d\'activation';
 $lang_module['plugin_file'] = 'Fichier Plugin';
@@ -288,6 +301,42 @@ $lang_module['cors_admin_valid_domains'] = 'Domaine valide pour la zone d\'admin
 $lang_module['cors_admin_valid_ips'] = 'IP valide pour la zone d\'administration';
 $lang_module['cors_valid_domains_help'] = 'Entrez un domaine par ligne (veuillez entrer le formulaire complet http://votredomaine.com), les demandes de publication de ces domaines sont autorisées';
 $lang_module['cors_valid_ips_help'] = 'Entrez une adresse IP par ligne, la demande de publication de ces adresses IP est autorisée';
+$lang_module['allow_null_origin'] = 'Autoriser POST avec une origine NULL';
+$lang_module['ip_allow_null_origin'] = 'Les adresses IP sont autorisées à POST avec une origine NULL';
+$lang_module['ip_allow_null_origin_help'] = 'Entrez une adresse IP par ligne, si ce champ est laissé vide, toutes les adresses IP sont autorisées';
 $lang_module['admin_2step_opt'] = 'Les méthodes de vérification en deux étapes sont autorisées dans l\'administration';
 $lang_module['admin_2step_default'] = 'La méthode de vérification en deux étapes par défaut dans l\'administration';
 $lang_module['admin_2step_appconfig'] = 'Configurez l\'application ici';
+
+$lang_module['csp'] = 'Paramètre CSP';
+$lang_module['csp_desc'] = 'Content-Security-Policy (CSP) est le nom d\'un en-tête de réponse HTTP que les navigateurs modernes utilisent pour améliorer la sécurité de la page Web. Le CSP vous permet de restreindre la façon dont les ressources telles que JavaScript, CSS ou à peu près tout ce que le navigateur charge.';
+$lang_module['csp_details'] = 'Des détails';
+$lang_module['csp_note'] = 'Entrez une valeur par ligne. Si la valeur n\'est pas une URL, placez-la entre guillemets simples (ex: &#039;self&#039;)';
+$lang_module['csp_default_src'] = 'Politique par défaut, utilisée dans tous les cas sauf si elle est remplacée par une directive plus précise.';
+$lang_module['csp_script_src'] = 'Politique dédiée aux scripts';
+$lang_module['csp_object_src'] = 'Politique dédiée aux plugins (object, embed ou applet)';
+$lang_module['csp_style_src'] = 'Politique dédiée aux styles (CSS)';
+$lang_module['csp_img_src'] = 'Politique dédiée aux images (img, mais aussi url() ou image() de CSS, ou élément de lien lié à un type d\'image (ex: rel=”icon”)';
+$lang_module['csp_media_src'] = 'Politique dédiée aux médias (video, audio, source ou track)';
+$lang_module['csp_frame_src'] = 'Politique dédiée aux frames (iframe ou frame)';
+$lang_module['csp_font_src'] = 'Politique dédiée aux polices';
+$lang_module['csp_connect_src'] = 'Politique dédiée aux connexions depuis un objet XMLHttpRequest ou un WebSocket';
+$lang_module['csp_form_action'] = 'Définit les sources valides qui peuvent être utilisées comme action de formulaire.';
+$lang_module['csp_base_uri'] = 'Politique de sécurité limitant les valeurs possibles d\'un élément &lt;base&gt;.';
+$lang_module['csp_act'] = 'Activer CSP';
+
+$lang_module['rp'] = 'Paramètre RP';
+$lang_module['rp_desc'] = 'Referrer-Policy (RP) est le nom d\'un en-tête HTTP que les navigateurs modernes utilisent pour contrôler la quantité d\'informations de référent (envoyées via l\'en-tête Referer).';
+$lang_module['rp_desc2'] = 'Types d\'informations sur le référent (peuvent être envoyées via l\'en-tête Referer):<ul><li>Origin: inclut le scheme (ex: http, https), host (ex: nukeviet.vn) et le port (ex: 80, 443)</li><li>Path (chemin absolu sur le serveur, ex: thumuc1/index.php)</li><li>Querystring (ex: ?name=ferret&color=purple)</li></ul>';
+$lang_module['rp_details'] = 'Des détails';
+$lang_module['rp_act'] = 'Activer RP';
+$lang_module['rp_no_referrer'] = 'L\'en-tête Referer sera entièrement omis. Aucune information de référent n\'est envoyée avec les demandes.<br/>Le système NukeViet ne prend pas en charge cette directive!';
+$lang_module['rp_no_referrer_when_downgrade'] = 'L\'origin, le path, et la querystring de l\'URL sont envoyés comme référent quand le niveau de sécurité du protocole reste le même (HTTP vers HTTP, HTTPS vers HTTPS) ou s\'améliore (HTTP vers HTTPS) mais ne sont pas envoyés quand si la destination est moins sécurisée (HTTPS vers HTTP)';
+$lang_module['rp_origin'] = 'N\'envoie que l\'origin du document comme référent. Par exemple, un document à l\'adresse https://example.com/page.html enverra le référent https://example.com/.';
+$lang_module['rp_origin_when_cross_origin'] = 'Envoie l\'origine, le chemin et les paramètres de requête pour les requêtes same-origin et seulement l\'origine du document dans les autres cas.';
+$lang_module['rp_same_origin'] = 'Un référent sera envoyé aux page de même origine, mais des requêtes vers des adresses externes n\'enverront aucune information sur le référent.';
+$lang_module['rp_strict_origin'] = 'N\'envoie que l\'origine du document comme référent quand le niveau de sécurité du protocole reste le même (HTTPS vers HTTPS) mais n\'envoie rien si la destination est moins sécurisée (HTTPS vers HTTP).';
+$lang_module['rp_strict_origin_when_cross_origin'] = 'Envoie l\'origine, le chemin et les paramètres de requête pour les requêtes de même origine, n\'envoie que l\'origine quand le niveau de sécurité du protocole reste le même pour les requêtes vers des adresses externes (HTTPS vers HTTPS) et n\'envoie rien si la destination est moins sécurisée (HTTPS vers HTTP).';
+$lang_module['rp_unsafe_url'] = 'Envoie l\'origine, le chemin et les paramètres de requête pour toutes les requêtes sans tenir compte du niveau de sécurité. Cette valeur divulgera des informations potentiellement confidentielles de la part des URL de ressources HTTPS vers des origines non sécurisées. Considérez les conséquences de ce paramétrage avant de vous en servir.';
+$lang_module['rp_note'] = 'Si vous voulez spécifier une règle à appliquer par défaut dans les où la règle voulue n\'est pas supportée par les navigateurs, utilisez un liste de valeurs séparées par des virgules avec la règle voulue fournie en dernière position: Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. Ici, no-referrer-when-downgrade ne sera utilisée que si strict-origin-when-cross-origin n\'est pas supportée par le navigateur.';
+$lang_module['rp_directives'] = 'Referrer-Policy directives';

@@ -8,7 +8,7 @@ use OAuth\OAuth1\Token\StdOAuth1Token;
 class Tumblr extends AbstractService
 {
 
-    protected $baseApiUri = 'https://api.tumblr.com/v2/';
+    protected $baseApiUri = 'https://api.tumblr.com/v2';
     protected $requestTokenEndpoint = 'https://www.tumblr.com/oauth/request_token';
     protected $authorizationEndpoint = 'https://www.tumblr.com/oauth/authorize';
     protected $accessTokenEndpoint = 'https://www.tumblr.com/oauth/access_token';
