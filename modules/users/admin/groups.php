@@ -34,6 +34,24 @@ while ($row = $result->fetch()) {
     $groupsList[$row['group_id']] = $row;
 }
 
+if (!empty($global_config['idsite'])) {
+    // Thành viên mới của site
+    $db->sqlreset()
+    ->select('COUNT(userid)')
+    ->from(NV_MOD_TABLE)
+    ->where('idsite = ' . $global_config['idsite'] . ' AND (group_id=7 OR FIND_IN_SET(7, in_groups))');
+    $groupsList[7]['numbers'] = $db->query($db->sql())->fetchColumn();
+
+    // Thành viên chính thức của site
+    $db->sqlreset()
+    ->select('COUNT(userid)')
+    ->from(NV_MOD_TABLE)
+    ->where('idsite = ' . $global_config['idsite']);
+    $all_member = $db->query($db->sql())->fetchColumn();
+    $groupsList[4]['numbers'] = $all_member - $groupsList[7]['numbers'];
+}
+$groupsList[5]['numbers'] = '-';
+$groupsList[6]['numbers'] = '-';
 // Neu khong co nhom => chuyen den trang tao nhom
 if (!$checkEmptyGroup and !$nv_Request->isset_request('add', 'get')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add');
@@ -847,7 +865,7 @@ foreach ($groupsList as $group_id => $values) {
         'title' => ($group_id < 10) ? $lang_global['level' . $group_id] : $values['title'],
         'add_time' => nv_date('d/m/Y H:i', $values['add_time']),
         'exp_time' => !empty($values['exp_time']) ? nv_date('d/m/Y H:i', $values['exp_time']) : $lang_global['unlimited'],
-        'number' => number_format($values['numbers']),
+        'number' => is_numeric($values['numbers']) ? number_format($values['numbers']) : $values['numbers'],
         'act' => $values['act'] ? ' checked="checked"' : '',
         'disabled' => ($group_id < 10 or !defined('NV_IS_SPADMIN') or $values['idsite'] != $global_config['idsite']) ? ' disabled="disabled"' : '',
         'link_userlist' => $link_userlist
