@@ -34,7 +34,6 @@ while ($row = $result->fetch()) {
     $groupsList[$row['group_id']] = $row;
 }
 
-// Cập nhật thống kê số thành viên các nhóm ở các site con
 if (!empty($global_config['idsite'])) {
     // Thành viên mới của site
     $db->sqlreset()
