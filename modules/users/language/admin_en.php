@@ -544,3 +544,8 @@ $lang_module['pass_timeout'] = 'User must change password every';
 $lang_module['days'] = 'days (0 = Not applicable)';
 $lang_module['oldpass_num'] = 'Number of old passwords stored in the database';
 $lang_module['send_password'] = 'Send password information to user email';
+
+//for api
+
+$lang_module['api_users'] = 'Users';
+$lang_module['api_users_Login'] = 'API Login';
