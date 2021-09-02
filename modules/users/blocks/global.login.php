@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_login')) {
     /**
      * nv_block_config_login()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_login($module, $data_block, $lang_block)
     {
@@ -28,7 +29,7 @@ if (!nv_function_exists('nv_block_login')) {
         $html .= '  <label class="control-label col-sm-6">' . $lang_block['display_mode'] . ':</label>';
         $html .= '  <div class="col-sm-9"><select class="form-control" name="config_display_mode">';
 
-        for ($i = 0; $i <= 1; $i++) {
+        for ($i = 0; $i <= 1; ++$i) {
             $html .= '  <option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['display_mode' . $i] . '</option>';
         }
 
@@ -38,21 +39,22 @@ if (!nv_function_exists('nv_block_login')) {
         $html .= '  <label class="control-label col-sm-6">' . $lang_block['popup_register'] . ':</label>';
         $html .= '  <div class="col-sm-9"><select class="form-control" name="config_popup_register">';
 
-        for ($i = 0; $i <= 1; $i++) {
+        for ($i = 0; $i <= 1; ++$i) {
             $html .= '  <option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['popup_register' . $i] . '</option>';
         }
 
         $html .= '  </select></div>';
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * nv_block_config_login_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_config_login_submit($module, $lang_block)
     {
@@ -62,18 +64,19 @@ if (!nv_function_exists('nv_block_login')) {
         $return['config'] = [];
         $return['config']['display_mode'] = $nv_Request->get_int('config_display_mode', 'post', 0);
         $return['config']['popup_register'] = $nv_Request->get_int('config_popup_register', 'post', 0);
+
         return $return;
     }
 
     /**
      * nv_block_login()
      *
-     * @param mixed $block_config
-     * @return void
+     * @param array $block_config
+     * @return string
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $module_file, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config, $my_head;
+        global $client_info, $global_config, $module_name, $module_file, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config, $my_head, $page_url, $nv_redirect;
 
         $content = '';
         $module = $block_config['module'];
@@ -202,7 +205,7 @@ if (!nv_function_exists('nv_block_login')) {
                 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
                 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
-                if (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk)) {
+                if (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) {
                     if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
                         $xtpl->parse('main.' . $display_layout . '.recaptcha3');
                     } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
@@ -215,7 +218,7 @@ if (!nv_function_exists('nv_block_login')) {
                     }
                 }
 
-                if (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk)) {
+                if (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk, true)) {
                     if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
                         $xtpl->parse('main.allowuserreg.reg_recaptcha3');
                     } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
@@ -233,9 +236,15 @@ if (!nv_function_exists('nv_block_login')) {
                         'google' => 'google-plus',
                         'facebook' => 'facebook'
                     ];
+                    $default_redirect = nv_redirect_encrypt(NV_MY_DOMAIN . (empty($page_url) ? '' : nv_url_rewrite(str_replace('&amp;', '&', $page_url), true)));
                     foreach ($global_config['openid_servers'] as $server) {
                         $assigns = [];
-                        $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']);
+                        $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
+                        if (!empty($nv_redirect)) {
+                            $assigns['href'] .= '&amp;nv_redirect=' . $nv_redirect;
+                        } else {
+                            $assigns['href'] .= '&amp;nv_redirect=' . $default_redirect;
+                        }
                         $assigns['title'] = ucfirst($server);
                         $assigns['server'] = $server;
                         $assigns['icon'] = $icons[$server];
@@ -326,7 +335,7 @@ if (!nv_function_exists('nv_block_login')) {
                                             $row['value'] = $row['default_value'];
                                         } else {
                                             $temp = array_keys($row['field_choices']);
-                                            $tempkey = intval($row['default_value']) - 1;
+                                            $tempkey = (int) ($row['default_value']) - 1;
                                             $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
                                         }
                                     } else {
@@ -426,7 +435,7 @@ if (!nv_function_exists('nv_block_login')) {
                                                 $xtpl->assign('FIELD_CHOICES', [
                                                     'id' => $row['fid'] . '_' . $number++,
                                                     'key' => $key,
-                                                    'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
+                                                    'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                                                     'value' => $value
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.checkbox.loop');
@@ -437,7 +446,7 @@ if (!nv_function_exists('nv_block_login')) {
                                             foreach ($row['field_choices'] as $key => $value) {
                                                 $xtpl->assign('FIELD_CHOICES', [
                                                     'key' => $key,
-                                                    'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
+                                                    'selected' => (in_array($key, $valueselect, true)) ? ' selected="selected"' : '',
                                                     'value' => $value
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.multiselect.loop');

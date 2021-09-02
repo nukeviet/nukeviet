@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 4/12/2010, 17:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_SYSTEM', true);
-define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __file__), PATHINFO_DIRNAME));
+define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
@@ -83,7 +84,7 @@ $contents[] = 'Sitemap: http' . ($global_config['ssl_https'] == 1 ? 's' : '') . 
 $contents = implode("\n", $contents);
 
 header('Content-Type: text/plain; charset=utf-8');
-header('Cache-Control: public; max-age=' . $maxAge);
+header('Cache-Control: public, max-age=' . $maxAge);
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $createTime) . ' GMT');
 header('expires: ' . gmdate('D, d M Y H:i:s', $expTme) . ' GMT');
 header('X-Frame-Options: SAMEORIGIN');

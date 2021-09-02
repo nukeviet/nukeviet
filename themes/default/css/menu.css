@@ -1,4 +1,14 @@
-#navbar_menu, #navbar_menu ul {
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+#navbar_menu,
+#navbar_menu ul {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -10,7 +20,11 @@
     border: 1px solid #222;
     background-color: #111;
     background-image: -moz-linear-gradient(#444, #111);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#444), to(#111));
+    background-image: -webkit-gradient(linear,
+            left top,
+            left bottom,
+            from(#444),
+            to(#111));
     background-image: -webkit-linear-gradient(#444, #111);
     background-image: -o-linear-gradient(#444, #111);
     background-image: -ms-linear-gradient(#444, #111);
@@ -23,8 +37,9 @@
     box-shadow: 0 1px 1px #777, 0 1px 0 #666 inset;
 }
 
-#navbar_menu:before, #navbar_menu:after {
-    content: "";
+#navbar_menu:before,
+#navbar_menu:after {
+    content: '';
     display: table;
 }
 
@@ -56,7 +71,7 @@
     text-shadow: 0 1px 0 #000;
 }
 
-#navbar_menu li:hover>a {
+#navbar_menu li:hover > a {
     color: #fafafa;
 }
 
@@ -76,28 +91,32 @@
     z-index: 1;
     background: #444;
     background: -moz-linear-gradient(#444, #111);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#444), to(#111));
+    background-image: -webkit-gradient(linear,
+            left top,
+            left bottom,
+            from(#444),
+            to(#111));
     background: -webkit-linear-gradient(#444, #111);
     background: -o-linear-gradient(#444, #111);
     background: -ms-linear-gradient(#444, #111);
     background: linear-gradient(#444, #111);
-    -moz-box-shadow: 0 -1px rgba(255, 255, 255, .3);
-    -webkit-box-shadow: 0 -1px 0 rgba(255, 255, 255, .3);
-    box-shadow: 0 -1px 0 rgba(255, 255, 255, .3);
+    -moz-box-shadow: 0 -1px rgba(255, 255, 255, 0.3);
+    -webkit-box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.3);
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
 }
 
 .enable-animate #navbar_menu ul {
-    -webkit-transition: all .2s ease-in-out;
-    -moz-transition: all .2s ease-in-out;
-    -ms-transition: all .2s ease-in-out;
-    -o-transition: all .2s ease-in-out;
-    transition: all .2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
-#navbar_menu li:hover>ul {
+#navbar_menu li:hover > ul {
     opacity: 1;
     visibility: visible;
     margin: 0;
@@ -109,9 +128,9 @@
     margin: 0 0 0 20px;
     _margin: 0;
     /*IE6 only*/
-    -moz-box-shadow: -1px 0 0 rgba(255, 255, 255, .3);
-    -webkit-box-shadow: -1px 0 0 rgba(255, 255, 255, .3);
-    box-shadow: -1px 0 0 rgba(255, 255, 255, .3);
+    -moz-box-shadow: -1px 0 0 rgba(255, 255, 255, 0.3);
+    -webkit-box-shadow: -1px 0 0 rgba(255, 255, 255, 0.3);
+    box-shadow: -1px 0 0 rgba(255, 255, 255, 0.3);
 }
 
 #navbar_menu ul li {
@@ -145,20 +164,24 @@
 #navbar_menu ul a:hover {
     background-color: #0186ba;
     background-image: -moz-linear-gradient(#04acec, #0186ba);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#04acec), to(#0186ba));
+    background-image: -webkit-gradient(linear,
+            left top,
+            left bottom,
+            from(#04acec),
+            to(#0186ba));
     background-image: -webkit-linear-gradient(#04acec, #0186ba);
     background-image: -o-linear-gradient(#04acec, #0186ba);
     background-image: -ms-linear-gradient(#04acec, #0186ba);
     background-image: linear-gradient(#04acec, #0186ba);
 }
 
-#navbar_menu ul li:first-child>a {
+#navbar_menu ul li:first-child > a {
     -moz-border-radius: 3px 3px 0 0;
     -webkit-border-radius: 3px 3px 0 0;
     border-radius: 3px 3px 0 0;
 }
 
-#navbar_menu ul li:first-child>a:after {
+#navbar_menu ul li:first-child > a:after {
     content: '';
     position: absolute;
     left: 40px;
@@ -187,7 +210,7 @@
     border-bottom-color: transparent;
 }
 
-#navbar_menu ul li:last-child>a {
+#navbar_menu ul li:last-child > a {
     -moz-border-radius: 0 0 3px 3px;
     -webkit-border-radius: 0 0 3px 3px;
     border-radius: 0 0 3px 3px;
@@ -200,15 +223,18 @@
 }
 
 @media screen and (max-width: 600px) {
+
     /* nav-wrap */
     #menu-wrap {
         position: relative;
     }
+
     #menu-wrap * {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
+
     /* menu icon */
     #menu-trigger {
         display: block;
@@ -228,6 +254,7 @@
         -webkit-box-shadow: 0 1px 1px #777, 0 1px 0 #666 inset;
         box-shadow: 0 1px 1px #777, 0 1px 0 #666 inset;
     }
+
     /* main nav */
     #navbar_menu {
         margin: 0;
@@ -242,6 +269,7 @@
         -webkit-box-shadow: none;
         box-shadow: none;
     }
+
     #navbar_menu:after {
         content: '';
         position: absolute;
@@ -251,6 +279,7 @@
         border-right: 8px solid transparent;
         border-bottom: 8px solid #444;
     }
+
     #navbar_menu ul {
         position: static;
         visibility: visible;
@@ -261,12 +290,14 @@
         -webkit-box-shadow: none;
         box-shadow: none;
     }
+
     #navbar_menu ul ul {
         margin: 0 0 0 20px !important;
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
     }
+
     #navbar_menu li {
         position: static;
         display: block;
@@ -277,29 +308,36 @@
         -webkit-box-shadow: none;
         box-shadow: none;
     }
+
     #navbar_menu ul li {
         margin-left: 20px;
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
     }
+
     #navbar_menu a {
         display: block;
         float: none;
         padding: 0;
         color: #999;
     }
+
     #navbar_menu a:hover {
         color: #fafafa;
     }
+
     #navbar_menu ul a {
         padding: 0;
         width: auto;
     }
+
     #navbar_menu ul a:hover {
         background: none;
     }
-    #navbar_menu ul li:first-child a:after, #navbar_menu ul ul li:first-child a:after {
+
+    #navbar_menu ul li:first-child a:after,
+    #navbar_menu ul ul li:first-child a:after {
         border: 0;
     }
 }
@@ -323,6 +361,6 @@
     display: none;
 }
 
-#navbar_menu li:hover>.no-transition {
+#navbar_menu li:hover > .no-transition {
     display: block;
 }

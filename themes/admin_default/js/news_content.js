@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 9 - 8 - 2013 15 : 40
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var timer_check_takeover = 0;
@@ -284,7 +285,10 @@ $(document).ready(function() {
                 url: script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=authors&searchAjax=1",
                 type: 'GET',
                 dataType: 'json',
-                data: { term: extractLast(request.term), aids: aIDs },
+                data: {
+                    term: extractLast(request.term),
+                    aids: aIDs
+                },
                 success: function(data) {
                     response($.map(data, function(value, key) {
                         return {
@@ -365,7 +369,9 @@ $(document).ready(function() {
             },
             cache: true
         },
-        escapeMarkup: function(markup) { return markup; }, // let our custom formatter work
+        escapeMarkup: function(markup) {
+            return markup;
+        }, // let our custom formatter work
         minimumInputLength: 3,
         templateResult: formatRepo, // omitted for brevity, see the source of this page
         templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
@@ -374,11 +380,15 @@ $(document).ready(function() {
     // Control content adv tab
     $('#adv-form').on('hidden.bs.collapse', function() {
         $('#adv-form-arrow').removeClass('fa-angle-double-up').addClass('fa-angle-double-down');
-        $.cookie(nv_module_name + '_advtabcontent', 'HIDE', { expires: 7 });
+        $.cookie(nv_module_name + '_advtabcontent', 'HIDE', {
+            expires: 7
+        });
     });
     $('#adv-form').on('shown.bs.collapse', function() {
         $('#adv-form-arrow').removeClass('fa-angle-double-down').addClass('fa-angle-double-up');
-        $.cookie(nv_module_name + '_advtabcontent', 'SHOW', { expires: 7 });
+        $.cookie(nv_module_name + '_advtabcontent', 'SHOW', {
+            expires: 7
+        });
     });
     if ($.cookie(nv_module_name + '_advtabcontent') == 'SHOW') {
         $('#adv-form').collapse('show');
@@ -401,11 +411,13 @@ $(document).ready(function() {
         }, 10000);
     }
 });
+
 function nv_validCheck(a) {
     b = $(a).val();
     if ("" == b) return 0;
     return 1;
 }
+
 function nv_validErrorShow(a) {
     $(a).parent().parent().addClass("has-error");
     $("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
@@ -416,9 +428,11 @@ function nv_validErrorShow(a) {
     });
     $(a).focus().tooltip("show")
 }
+
 function nv_validErrorHidden(a) {
     $(a).parent().parent().removeClass("has-error")
 }
+
 function nv_validForm(a, module_data, error_bodytext, error_cat) {
     $(".has-error", a).removeClass("has-error");
     var c = 0;
@@ -433,8 +447,8 @@ function nv_validForm(a, module_data, error_bodytext, error_cat) {
             $(a).find("#show_error").css('display', 'block');
             $("#show_error", a).html(error_bodytext);
             $('html,body').animate({
-                scrollTop: $("#show_error").offset().top
-            },
+                    scrollTop: $("#show_error").offset().top
+                },
                 'slow');
             return !1;
         } else {
@@ -443,8 +457,8 @@ function nv_validForm(a, module_data, error_bodytext, error_cat) {
                 $(a).find("#show_error").css('display', 'block');
                 $("#show_error", a).html(error_cat);
                 $('html,body').animate({
-                    scrollTop: $("#show_error").offset().top
-                },
+                        scrollTop: $("#show_error").offset().top
+                    },
                     'slow');
                 return !1;
             }

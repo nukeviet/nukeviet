@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_USER_FORUM')) {
@@ -30,8 +31,8 @@ if (!defined('NV_IS_ADMIN')) {
 /**
  * updateAvatar()
  *
- * @param mixed $file
- * @return void
+ * @param string $file
+ * @throws PDOException
  */
 function updateAvatar($file)
 {
@@ -68,7 +69,7 @@ function updateAvatar($file)
 /**
  * deleteAvatar()
  *
- * @return void
+ * @throws PDOException
  */
 function deleteAvatar()
 {
@@ -91,7 +92,6 @@ function deleteAvatar()
 
 $page_title = $lang_module['avatar_pagetitle'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
 
 $array = [];
 $array['success'] = 0;
@@ -100,10 +100,14 @@ $array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] ==
 $array['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_editinfo_' . $user_info['userid']);
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
+if (!empty($array['u'])) {
+    $page_url .= '/' . $array['u'];
+}
+
 if (defined('SSO_CLIENT_DOMAIN')) {
     $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
     $array['client'] = $nv_Request->get_title('client', 'get,post', '');
-    if (!empty($array['client']) and !in_array($array['client'], $allowed_client_origin)) {
+    if (!empty($array['client']) and !in_array($array['client'], $allowed_client_origin, true)) {
         // 406 Not Acceptable
         nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
     }
@@ -180,6 +184,8 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
         }
     }
 }
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = nv_avatar($array);
 

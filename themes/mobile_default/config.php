@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $config_theme = [];
@@ -205,7 +206,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->execute();
 
     if (isset($global_config['sitetimestamp'])) {
-        $sitetimestamp = intval($global_config['sitetimestamp']) + 1;
+        $sitetimestamp = (int) ($global_config['sitetimestamp']) + 1;
         $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $sitetimestamp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'sitetimestamp'");
     } else {
         try {

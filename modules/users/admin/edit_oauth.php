@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $userid = $nv_Request->get_int('userid', 'get,post', 0);
@@ -73,7 +74,7 @@ if (empty($array_oauth)) {
     // Xóa OpenID của thành viên
     if ($nv_Request->isset_request('del', 'post')) {
         if (!defined('NV_IS_AJAX')) {
-            die('Wrong URL');
+            exit('Wrong URL');
         }
 
         $opid = $nv_Request->get_title('opid', 'post', '');
@@ -83,25 +84,25 @@ if (empty($array_oauth)) {
             $stmt->execute();
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_delete_one_openid', 'userid ' . $row['userid'], $admin_info['userid']);
             $nv_Cache->delMod($module_name);
-            die('OK');
+            exit('OK');
         }
 
-        die('NO');
+        exit('NO');
     }
 
     // Xóa tất cả các OpenID của thành viên
     if ($nv_Request->isset_request('delall', 'post')) {
         if (!defined('NV_IS_AJAX')) {
-            die('Wrong URL');
+            exit('Wrong URL');
         }
 
         if ($db->exec('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'])) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_delete_all_openid', 'userid ' . $row['userid'], $admin_info['userid']);
             $nv_Cache->delMod($module_name);
-            die('OK');
+            exit('OK');
         }
 
-        die('NO');
+        exit('NO');
     }
 
     foreach ($array_oauth as $oauth) {

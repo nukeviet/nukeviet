@@ -1,10 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author Mr.Thang (kid.apt@gmail.com)
- * @License GNU/GPL version 2 or any later version
- * @Createdate 16-03-2015 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 $mod_name = $nv_Request->get_title('module_name', 'post', '');
@@ -14,7 +16,7 @@ $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 $data = $nv_Request->get_string('data', 'post', '');
 
-if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_info['allow_files_type']) and preg_match_all('/<\s*img [^\>]*src\s*=\s*([\""\']?)([^\""\'>]*)([\""\']?)/i', $data, $matches_all)) {
+if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_info['allow_files_type'], true) and preg_match_all('/<\s*img [^\>]*src\s*=\s*([\""\']?)([^\""\'>]*)([\""\']?)/i', $data, $matches_all)) {
     $imageMatch = array_unique($matches_all[2]);
 
     $pathsave = $nv_Request->get_title('pathsave', 'post', '');
@@ -64,7 +66,7 @@ if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_
                 $i = 1;
                 while (file_exists($upload_real_dir_page . '/' . $thumb_basename)) {
                     $thumb_basename = preg_replace('/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename);
-                    $i++;
+                    ++$i;
                 }
 
                 $_image->save($upload_real_dir_page, $thumb_basename);

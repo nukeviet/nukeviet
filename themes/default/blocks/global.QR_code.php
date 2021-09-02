@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 04 May 2014 12:41:32 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_qr_code')) {
     /**
      * nv_block_qr_code_config()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_qr_code_config($module, $data_block, $lang_block)
     {
@@ -55,7 +56,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_pixel_per_point">';
 
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 12; ++$i) {
             $html .= '		<option value="' . $i . '"' . ($i == $data_block['pixel_per_point'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
         }
 
@@ -68,7 +69,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select class="form-control" name="config_outer_frame">';
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $html .= '		<option value="' . $i . '"' . ($i == $data_block['outer_frame'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
         }
 
@@ -82,9 +83,9 @@ if (!nv_function_exists('nv_block_qr_code')) {
     /**
      * nv_block_qr_code_config_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_qr_code_config_submit($module, $lang_block)
     {
@@ -94,14 +95,15 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $return['config']['level'] = $nv_Request->get_title('config_level', 'post');
         $return['config']['pixel_per_point'] = $nv_Request->get_int('config_pixel_per_point', 'post', 4);
         $return['config']['outer_frame'] = $nv_Request->get_int('config_outer_frame', 'post', 1);
+
         return $return;
     }
 
     /**
      * nv_block_qr_code()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string
      */
     function nv_block_qr_code($block_config)
     {
@@ -137,6 +139,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         $xtpl->assign('QRCODE', $block_config);
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

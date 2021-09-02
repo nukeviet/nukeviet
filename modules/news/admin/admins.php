@@ -1,18 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 27-11-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!function_exists('nv_array_cat_admin')) {
+    /**
+     * nv_array_cat_admin()
+     *
+     * @return array
+     */
     function nv_array_cat_admin()
     {
         global $db, $module_data;
@@ -22,6 +28,7 @@ if (!function_exists('nv_array_cat_admin')) {
         while ($row = $result->fetch()) {
             $array_cat_admin[$row['userid']][$row['catid']] = $row;
         }
+
         return $array_cat_admin;
     }
 }
@@ -29,10 +36,10 @@ if (!function_exists('nv_array_cat_admin')) {
 $is_refresh = false;
 $array_cat_admin = nv_array_cat_admin();
 
-$module_admin = explode(',', $module_info['admins']);
+$module_admin = array_map('intval', explode(',', $module_info['admins']));
 // Xoa cac dieu hanh vien khong co quyen tai module
 foreach ($array_cat_admin as $userid_i => $value) {
-    if (!in_array($userid_i, $module_admin)) {
+    if (!in_array((int) $userid_i, $module_admin, true)) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid = ' . $userid_i);
         $is_refresh = true;
     }
@@ -46,7 +53,7 @@ if (empty($module_info['admins'])) {
 }
 
 foreach ($module_admin as $userid_i) {
-    $userid_i = intval($userid_i);
+    $userid_i = (int) $userid_i;
     if ($userid_i > 0 and !isset($array_cat_admin[$userid_i])) {
         // Them nguoi dieu hanh chung, voi quyen han Quan ly module
         $sql = 'SELECT userid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid=' . $userid_i . ' AND catid=0';
@@ -66,9 +73,10 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         'userid',
         'username',
         'full_name',
-        'email'];
+        'email'
+    ];
 
-    $orderby = $nv_Request->get_string('sortby', 'get', 'userid');//die($orderby);
+    $orderby = $nv_Request->get_string('sortby', 'get', 'userid'); //die($orderby);
     $ordertype = $nv_Request->get_string('sorttype', 'get', 'DESC');
     if ($ordertype != 'ASC') {
         $ordertype = 'DESC';
@@ -103,7 +111,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
             $sql = 'SELECT catid, title, subcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
             $result_cat = $db->query($sql);
             while ($row = $result_cat->fetch()) {
-                $admin_i = (in_array($row['catid'], $array_admin)) ? 1 : 0;
+                $admin_i = (in_array((int) $row['catid'], $array_admin, true)) ? 1 : 0;
                 if ($admin_i) {
                     $add_content_i = $pub_content_i = $edit_content_i = $del_content_i = $app_content_i = 1;
                     if (!empty($row['subcatid'])) {
@@ -113,11 +121,11 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
                         }
                     }
                 } else {
-                    $add_content_i = (in_array($row['catid'], $array_add_content)) ? 1 : 0;
-                    $pub_content_i = (in_array($row['catid'], $array_pub_content)) ? 1 : 0;
-                    $edit_content_i = (in_array($row['catid'], $array_edit_content)) ? 1 : 0;
-                    $del_content_i = (in_array($row['catid'], $array_del_content)) ? 1 : 0;
-                    $app_content_i = (in_array($row['catid'], $array_app_content)) ? 1 : 0;
+                    $add_content_i = (in_array((int) $row['catid'], $array_add_content, true)) ? 1 : 0;
+                    $pub_content_i = (in_array((int) $row['catid'], $array_pub_content, true)) ? 1 : 0;
+                    $edit_content_i = (in_array((int) $row['catid'], $array_edit_content, true)) ? 1 : 0;
+                    $del_content_i = (in_array((int) $row['catid'], $array_del_content, true)) ? 1 : 0;
+                    $app_content_i = (in_array((int) $row['catid'], $array_app_content, true)) ? 1 : 0;
                     if (!empty($row['subcatid'])) {
                         $array_subcatid_i = explode(',', $row['subcatid']);
                         foreach ($array_subcatid_i as $value) {
@@ -148,15 +156,15 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
     $users_list = [];
     if (!empty($module_info['admins'])) {
         $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' where userid IN (' . $module_info['admins'] . ')';
-        if (!empty($orderby) and in_array($orderby, $orders)) {
+        if (!empty($orderby) and in_array($orderby, $orders, true)) {
             $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
             $sql .= ' ORDER BY ' . $orderby_sql . ' ' . $ordertype;
             $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
         }
         $result = $db->query($sql);
         while ($row = $result->fetch()) {
-            $userid_i = ( int )$row['userid'];
-            $admin_module = (isset($array_cat_admin[$userid_i][0])) ? intval($array_cat_admin[$userid_i][0]['admin']) : 0;
+            $userid_i = (int) $row['userid'];
+            $admin_module = (isset($array_cat_admin[$userid_i][0])) ? (int) ($array_cat_admin[$userid_i][0]['admin']) : 0;
             $admin_module_cat = $array_permissions_mod[$admin_module];
             $is_edit = true;
             if ($admin_module == 2 and !defined('NV_IS_SPADMIN')) {
@@ -165,9 +173,9 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
 
             $users_list[$row['userid']] = [
                 'userid' => $userid_i,
-                'username' => ( string )$row['username'],
+                'username' => (string) $row['username'],
                 'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
-                'email' => ( string )$row['email'],
+                'email' => (string) $row['email'],
                 'admin_module_cat' => $admin_module_cat,
                 'is_edit' => $is_edit];
         }
@@ -211,7 +219,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
         }
 
         if ($userid > 0 and $userid != $admin_id) {
-            $admin_module = (isset($array_cat_admin[$userid][0])) ? intval($array_cat_admin[$userid][0]['admin']) : 0;
+            $admin_module = (isset($array_cat_admin[$userid][0])) ? (int) ($array_cat_admin[$userid][0]['admin']) : 0;
             $is_edit = true;
             if ($admin_module == 2 and !defined('NV_IS_SPADMIN')) {
                 $is_edit = false;
@@ -242,7 +250,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
                 while ($row = $result_cat->fetch()) {
                     $xtitle_i = '';
                     if ($row['lev'] > 0) {
-                        for ($i = 1; $i <= $row['lev']; $i++) {
+                        for ($i = 1; $i <= $row['lev']; ++$i) {
                             $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         }
                     }
@@ -299,7 +307,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE')) {
             if ($check_show) {
                 $xtitle_i = '';
                 if ($row['lev'] > 0) {
-                    for ($i = 1; $i <= $row['lev']; $i++) {
+                    for ($i = 1; $i <= $row['lev']; ++$i) {
                         $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                     }
                 }

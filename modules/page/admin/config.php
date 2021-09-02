@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['config'];
@@ -27,7 +28,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $array_config['alias_lower'] = $nv_Request->get_int('alias_lower', 'post', 0);
     $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
     $array_config['socialbutton'] = array_intersect($array_config['socialbutton'], $socialbuttons);
-    if (in_array('zalo', $array_config['socialbutton']) and empty($global_config['zaloOfficialAccountID'])) {
+    if (in_array('zalo', $array_config['socialbutton'], true) and empty($global_config['zaloOfficialAccountID'])) {
         $array_config['socialbutton'] = array_diff($array_config['socialbutton'], ['zalo']);
     }
     $array_config['socialbutton'] = !empty($array_config['socialbutton']) ? implode(',', $array_config['socialbutton']) : '';
@@ -102,7 +103,7 @@ foreach ($socialbuttons as $socialbutton) {
     $array = [
         'key' => $socialbutton,
         'title' => ucfirst($socialbutton),
-        'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons)) ? ' checked="checked"' : ''
+        'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons, true)) ? ' checked="checked"' : ''
     ];
     if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
         $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system">' . $lang_module['socialbutton_zalo_note'] . '</a>)';

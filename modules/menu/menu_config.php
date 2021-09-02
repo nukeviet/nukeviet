@@ -1,17 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
+/**
+ * nv_block_config_menu()
+ *
+ * @param string $module
+ * @param array  $data_block
+ * @param array  $lang_block
+ * @return string
+ */
 function nv_block_config_menu($module, $data_block, $lang_block)
 {
     global $nv_Cache;
@@ -45,9 +54,9 @@ function nv_block_config_menu($module, $data_block, $lang_block)
 /**
  * nv_block_config_menu_submit()
  *
- * @param mixed $module
- * @param mixed $lang_block
- * @return
+ * @param string $module
+ * @param array  $lang_block
+ * @return array
  */
 function nv_block_config_menu_submit($module, $lang_block)
 {
@@ -57,5 +66,6 @@ function nv_block_config_menu_submit($module, $lang_block)
     $return['config'] = [];
     $return['config']['menuid'] = $nv_Request->get_int('menuid', 'post', 0);
     $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 24);
+
     return $return;
 }

@@ -1,12 +1,12 @@
-/* *
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-// NukeViet Default Custom JS
 var myTimerPage = "",
     myTimersecField = "",
     gEInterval,
@@ -85,11 +85,11 @@ function checkWidthMenu() {
         $("ul li a.dropdown-toggle", siteMenu).addClass("dropdown-mobile"),
         $("li.dropdown ul li a", siteMenu).removeClass("dropdown-mobile")
     ) : (
-            $("li.dropdown ul", siteMenu).addClass("dropdown-menu").removeClass("dropdown-submenu"),
-            $("li.dropdown a", siteMenu).removeClass("dropdown-mobile"),
-            $("li.dropdown ul li a", siteMenu).removeClass("dropdown-mobile"),
-            $("ul li a.dropdown-toggle", siteMenu).removeClass("dropdown-mobile")
-        )
+        $("li.dropdown ul", siteMenu).addClass("dropdown-menu").removeClass("dropdown-submenu"),
+        $("li.dropdown a", siteMenu).removeClass("dropdown-mobile"),
+        $("li.dropdown ul li a", siteMenu).removeClass("dropdown-mobile"),
+        $("ul li a.dropdown-toggle", siteMenu).removeClass("dropdown-mobile")
+    )
 }
 
 function checkAll(a) {
@@ -274,13 +274,17 @@ function modalShow(a, b, callback) {
         }
     }
     if (scrollTop) {
-        $("html,body").animate({ scrollTop: 0 }, 200, function() {
+        $("html,body").animate({
+            scrollTop: 0
+        }, 200, function() {
             $("#sitemodal").modal({
                 backdrop: "static"
             });
         });
         $('#sitemodal').on('hide.bs.modal', function() {
-            $("html,body").animate({ scrollTop: scrollTop }, 200);
+            $("html,body").animate({
+                scrollTop: scrollTop
+            }, 200);
         });
     } else {
         $("#sitemodal").modal({
@@ -367,47 +371,68 @@ function isRecaptchaCheck() {
 
 function reCaptcha2Recreate(obj) {
     $('[data-toggle=recaptcha]', $(obj)).each(function() {
-        var pnum = $(this).data('pnum'),
+        var callFunc = $(this).data('callback'),
+            pnum = $(this).data('pnum'),
             btnselector = $(this).data('btnselector'),
             size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
         var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
-        $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>');
+        if (callFunc) {
+            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-callback="' + callFunc + '" data-size="' + size + '"></div>');
+        } else {
+            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>')
+        }
     })
 }
 
 var reCaptcha2OnLoad = function() {
     $('[data-toggle=recaptcha]').each(function() {
         var id = $(this).attr('id'),
-            pnum = parseInt($(this).data('pnum')),
-            btnselector = $(this).data('btnselector'),
-            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '',
-            btn = $('#' + id),
-            k = 1;
-        for (k; k <= pnum; k++) {
-            btn = btn.parent();
-        }
-        btn = $(btnselector, btn);
-        if (btn.length) {
-            btn.prop('disabled', true);
-        }
+            callFunc = $(this).data('callback'),
+            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
 
-        if (typeof reCapIDs[id] === "undefined") {
-            reCapIDs[id] = grecaptcha.render(id, {
-                'sitekey': nv_recaptcha_sitekey,
-                'type': nv_recaptcha_type,
-                'size': size,
-                'callback': function() {
-                    reCaptcha2Callback(id, false)
-                },
-                'expired-callback': function() {
-                    reCaptcha2Callback(id, true)
-                },
-                'error-callback': function() {
-                    reCaptcha2Callback(id, true)
-                }
-            })
+        if (typeof window[callFunc] === 'function') {
+            if (typeof reCapIDs[id] === "undefined") {
+                reCapIDs[id] = grecaptcha.render(id, {
+                    'sitekey': nv_recaptcha_sitekey,
+                    'type': nv_recaptcha_type,
+                    'size': size,
+                    'callback': callFunc
+                })
+            } else {
+                grecaptcha.reset(reCapIDs[id])
+            }
         } else {
-            grecaptcha.reset(reCapIDs[id])
+            var pnum = parseInt($(this).data('pnum')),
+                btnselector = $(this).data('btnselector'),
+                btn = $('#' + id),
+                k = 1;
+
+            for (k; k <= pnum; k++) {
+                btn = btn.parent();
+            }
+            btn = $(btnselector, btn);
+            if (btn.length) {
+                btn.prop('disabled', true);
+            }
+
+            if (typeof reCapIDs[id] === "undefined") {
+                reCapIDs[id] = grecaptcha.render(id, {
+                    'sitekey': nv_recaptcha_sitekey,
+                    'type': nv_recaptcha_type,
+                    'size': size,
+                    'callback': function() {
+                        reCaptcha2Callback(id, false)
+                    },
+                    'expired-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    },
+                    'error-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    }
+                })
+            } else {
+                grecaptcha.reset(reCapIDs[id])
+            }
         }
     })
 }
@@ -475,7 +500,10 @@ $(function() {
     });
 
     // Add rel="noopener noreferrer nofollow" to all external links
-    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({ target: "_blank", rel: "noopener noreferrer nofollow" });
+    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({
+        target: "_blank",
+        rel: "noopener noreferrer nofollow"
+    });
 
     // Smooth scroll to top
     $("#totop,#bttop,.bttop").click(function() {
@@ -629,7 +657,9 @@ $(function() {
 
     //Change Localtion
     $("[data-location]").on("click", function() {
-        locationReplace($(this).data("location"))
+        if (window.location.origin + $(this).data("location") != window.location.href) {
+            locationReplace($(this).data("location"))
+        }
     });
 
     // Chọn giao diện

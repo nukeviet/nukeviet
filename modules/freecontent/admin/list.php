@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24-06-2011 10:35
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $bid = $nv_Request->get_int('bid', 'get', '');
@@ -34,7 +35,7 @@ $allow_editor = (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) ? t
 
 if (!defined('CKEDITOR') and $allow_editor) {
     define('CKEDITOR', true);
-    $my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
+    $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
 }
 
 $xtpl->assign('EDITOR', $allow_editor ? 'true' : 'false');

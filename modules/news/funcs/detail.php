@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $contents = '';
@@ -179,21 +180,35 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
 
         foreach ($files as $file_id => $file) {
             $is_localfile = (!nv_is_url($file));
-            $file_title = $is_localfile ? basename($file) : $lang_module['click_to_download'];
-            $news_contents['files'][] = [
+            $basename = basename($file);
+            $file_title = $is_localfile ? $basename : $lang_module['click_to_download'];
+            $news_contents['files'][$file_id] = [
+                'is_localfile' => $is_localfile,
                 'title' => $file_title,
                 'key' => md5($file_id . $file_title),
-                'ext' => nv_getextension($file_title),
+                'ext' => nv_getextension($basename),
                 'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                 'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
-                'url' => $is_localfile ? ($page_url . '&amp;download=1&amp;id=' . $file_id) : $file,
-                'urlpdf' => $page_url . '&amp;pdf=1&amp;id=' . $file_id,
-                'urldoc' => $is_localfile ? $file : ('https://docs.google.com/viewer?embedded=true&url=' . NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file)
+                'url' => $is_localfile ? ($page_url . '&amp;download=1&amp;id=' . $file_id) : $file
             ];
+            if ($news_contents['files'][$file_id]['ext'] == 'pdf') {
+                if ($is_localfile) {
+                    $news_contents['files'][$file_id]['urlfile'] = $page_url . '&amp;pdf=1&amp;id=' . $file_id;
+                } else {
+                    $news_contents['files'][$file_id]['urlfile'] = 'https://docs.google.com/viewerng/viewer?embedded=true&url=' . urlencode($file);
+                }
+            } elseif (in_array($news_contents['files'][$file_id]['ext'], ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'], true)) {
+                if (!$is_localfile) {
+                    $news_contents['files'][$file_id]['urlfile'] = 'https://view.officeapps.live.com/op/embed.aspx?src=' . urlencode($file);
+                } elseif (!$ips->is_localhost()) {
+                    $url = NV_MY_DOMAIN . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file;
+                    $news_contents['files'][$file_id]['urlfile'] = 'https://view.officeapps.live.com/op/embed.aspx?src=' . urlencode($url);
+                }
+            }
         }
     }
 
-    $publtime = intval($news_contents['publtime']);
+    $publtime = (int) ($news_contents['publtime']);
     $meta_property['og:type'] = 'article';
     $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $publtime);
     $meta_property['article:modified_time'] = date('Y-m-dTH:i:s', $news_contents['edittime']);

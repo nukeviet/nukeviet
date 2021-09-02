@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/15/2010 15:32
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+    exit('Wrong URL');
 }
 
 $id = $nv_Request->get_int('id', 'post', 0);
@@ -34,7 +35,7 @@ if (empty($plan)) {
     nv_htmlOutput('NO|act_' . $id);
 }
 
-$act = intval($row['act']);
+$act = (int) ($row['act']);
 $publ_time = $row['publ_time'];
 $exp_time = $row['exp_time'];
 
@@ -69,7 +70,7 @@ if ($act == 1) {
 // Xác định lại weight của banner khi duyệt, đăng lại banner hết hạn
 if ($row['act'] == 2 or $row['act'] == 4) {
     $weight = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE pid=' . $row['pid'] . ' AND act IN(0,1,3)')->fetchColumn();
-    $weight++;
+    ++$weight;
 } else {
     $weight = $row['weight'];
 }

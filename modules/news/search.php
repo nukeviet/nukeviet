@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 03-05-2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_SEARCH')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
@@ -28,7 +29,7 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
                     'unsigned_title',
                     'unsigned_hometext',
                     'unsigned_bodyhtml'
-                ], // tim kiem theo 3 truong m?c d?nh l� ho?c
+                ],
                 'minimum_should_match' => [
                     '50%'
                 ]

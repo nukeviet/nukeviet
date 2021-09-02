@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:24
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['api_cr'];
@@ -58,7 +59,7 @@ while ($row = $result->fetch()) {
 // Xóa API Credential
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL!!!');
+        exit('Wrong URL!!!');
     }
 
     $credential_ident = $nv_Request->get_title('credential_ident', 'post', '');
@@ -239,7 +240,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
 
     // Xuất các role
     foreach ($global_array_roles as $role) {
-        $role['checked'] = in_array($role['role_id'], $array_post['api_roles']) ? ' checked="checked"' : '';
+        $role['checked'] = in_array((int) $role['role_id'], array_map('intval', $array_post['api_roles']), true) ? ' checked="checked"' : '';
 
         $xtpl->assign('ROLE', $role);
         $xtpl->parse('content.role');

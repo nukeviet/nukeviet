@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_COMMENT')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 function _loadContents($contents)
@@ -47,7 +48,7 @@ if (!nv_user_in_groups($allowed)) {
 }
 
 // kiểm tra captcha
-$captcha = intval($module_config[$module]['captcha_area_comm']);
+$captcha = (int) ($module_config[$module]['captcha_area_comm']);
 $show_captcha = true;
 if ($captcha == 0) {
     $show_captcha = false;
@@ -57,8 +58,8 @@ if ($captcha == 0) {
     if (defined('NV_IS_SPADMIN')) {
         $show_captcha = false;
     } else {
-        $adminscomm = explode(',', $module_config[$module]['adminscomm']);
-        if (in_array($admin_info['admin_id'], $adminscomm)) {
+        $adminscomm = array_map('intval', explode(',', $module_config[$module]['adminscomm']));
+        if (in_array((int) $admin_info['admin_id'], $adminscomm, true)) {
             $show_captcha = false;
         }
     }
@@ -116,7 +117,7 @@ if (empty($content)) {
 
 $status = $module_config[$module]['auto_postcomm'];
 $timeout = $nv_Request->get_int($site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, 'cookie', 0);
-$difftimeout = isset($module_config[$module]['timeoutcomm']) ? intval($module_config[$module]['timeoutcomm']) : 360;
+$difftimeout = isset($module_config[$module]['timeoutcomm']) ? (int) ($module_config[$module]['timeoutcomm']) : 360;
 if (($status == 2 and !defined('NV_IS_USER')) or $status == 0) {
     $status = 0;
 } else {

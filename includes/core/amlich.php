@@ -1,24 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 18/10/2011, 9:45
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * jdFromDate()
  *
- * @param mixed $dd
- * @param mixed $mm
- * @param mixed $yy
- * @return
+ * @param int $dd
+ * @param int $mm
+ * @param int $yy
+ * @return float
  */
 function jdFromDate($dd, $mm, $yy)
 {
@@ -29,14 +30,15 @@ function jdFromDate($dd, $mm, $yy)
     if ($jd < 2299161) {
         $jd = $dd + floor((153 * $m + 2) / 5) + 365 * $y + floor($y / 4) - 32083;
     }
+
     return $jd;
 }
 
 /**
  * jdToDate()
  *
- * @param mixed $jd
- * @return
+ * @param string $jd
+ * @return array
  */
 function jdToDate($jd)
 {
@@ -61,9 +63,9 @@ function jdToDate($jd)
 /**
  * getNewMoonDay()
  *
- * @param mixed $k
- * @param mixed $timeZone
- * @return
+ * @param int $k
+ * @param int $timeZone
+ * @return float
  */
 function getNewMoonDay($k, $timeZone)
 {
@@ -92,7 +94,7 @@ function getNewMoonDay($k, $timeZone)
         $deltat = 0.001 + 0.000839 * $T + 0.0002261 * $T2 - 0.00000845 * $T3 - 0.000000081 * $T * $T3;
     } else {
         $deltat = -0.000278 + 0.000265 * $T + 0.000262 * $T2;
-    };
+    }
     $JdNew = $Jd1 + $C1 - $deltat;
 
     return floor($JdNew + 0.5 + $timeZone / 24);
@@ -101,9 +103,9 @@ function getNewMoonDay($k, $timeZone)
 /**
  * getSunLongitude()
  *
- * @param mixed $jdn
- * @param mixed $timeZone
- * @return
+ * @param int $jdn
+ * @param int $timeZone
+ * @return float
  */
 function getSunLongitude($jdn, $timeZone)
 {
@@ -129,9 +131,9 @@ function getSunLongitude($jdn, $timeZone)
 /**
  * getLunarMonth11()
  *
- * @param mixed $yy
- * @param mixed $timeZone
- * @return
+ * @param int $yy
+ * @param int $timeZone
+ * @return float
  */
 function getLunarMonth11($yy, $timeZone)
 {
@@ -143,15 +145,16 @@ function getLunarMonth11($yy, $timeZone)
     if ($sunLong >= 9) {
         $nm = getNewMoonDay($k - 1, $timeZone);
     }
+
     return $nm;
 }
 
 /**
  * getLeapMonthOffset()
  *
- * @param mixed $a11
- * @param mixed $timeZone
- * @return
+ * @param int $a11
+ * @param int $timeZone
+ * @return int
  */
 function getLeapMonthOffset($a11, $timeZone)
 {
@@ -165,17 +168,18 @@ function getLeapMonthOffset($a11, $timeZone)
         $i = $i + 1;
         $arc = getSunLongitude(getNewMoonDay($k + $i, $timeZone), $timeZone);
     } while ($arc != $last and $i < 14);
+
     return $i - 1;
 }
 
 /**
  * convertSolar2Lunar()
  *
- * @param mixed $dd
- * @param mixed $mm
- * @param mixed $yy
- * @param mixed $timeZone
- * @return
+ * @param int $dd
+ * @param int $mm
+ * @param int $yy
+ * @param int $timeZone
+ * @return array
  */
 function convertSolar2Lunar($dd, $mm, $yy, $timeZone)
 {
@@ -211,20 +215,21 @@ function convertSolar2Lunar($dd, $mm, $yy, $timeZone)
         $lunarMonth = $lunarMonth - 12;
     }
     if ($lunarMonth >= 11 and $diff < 4) {
-        $lunarYear -= 1;
+        --$lunarYear;
     }
+
     return [$lunarDay, $lunarMonth, $lunarYear, $lunarLeap];
 }
 
 /**
  * convertLunar2Solar()
  *
- * @param mixed $lunarDay
- * @param mixed $lunarMonth
- * @param mixed $lunarYear
- * @param mixed $lunarLeap
- * @param mixed $timeZone
- * @return
+ * @param int $lunarDay
+ * @param int $lunarMonth
+ * @param int $lunarYear
+ * @param int $lunarLeap
+ * @param int $timeZone
+ * @return array
  */
 function convertLunar2Solar($lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $timeZone)
 {
@@ -248,18 +253,20 @@ function convertLunar2Solar($lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $tim
         }
         if ($lunarLeap != 0 and $lunarMonth != $leapMonth) {
             return [0, 0, 0];
-        } elseif ($lunarLeap != 0 or $off >= $leapOff) {
-            $off += 1;
+        }
+        if ($lunarLeap != 0 or $off >= $leapOff) {
+            ++$off;
         }
     }
     $monthStart = getNewMoonDay($k + $off, $timeZone);
+
     return jdToDate($monthStart + $lunarDay - 1);
 }
 
 /**
  * alhn()
  *
- * @return
+ * @return string
  */
 function alhn()
 {
@@ -269,5 +276,6 @@ function alhn()
     $arr[0] = str_pad($arr[0], 2, '0', STR_PAD_LEFT);
     $arr[1] = str_pad($arr[1], 2, '0', STR_PAD_LEFT);
     $arr[2] = $CAN[($arr[2] + 6) % 10] . ' ' . $CHI[($arr[2] + 8) % 12];
+
     return 'Âm lịch: ngày ' . $arr[0] . ' tháng ' . $arr[1] . ' năm ' . $arr[2];
 }

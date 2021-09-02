@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24/8/2010, 2:0
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_SEARCH')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_mod = LoadModulesSearch();
@@ -69,7 +70,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         $page_url .= '&page=' . $search['page'];
     }
 
-    $canonicalUrl = getCanonicalUrl($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
     if ($search['len_key'] < NV_MIN_SEARCH_LENGTH) {
         $search['is_error'] = true;
@@ -116,7 +117,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
     }
 } else {
-    $canonicalUrl = getCanonicalUrl($page_url, true);
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 }
 
 $contents = search_main_theme($is_search, $search, $array_mod);

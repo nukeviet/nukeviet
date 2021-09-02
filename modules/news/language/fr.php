@@ -1,21 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language Français
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 21, 2010, 12:30:00 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
-$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
+$lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -81,6 +81,7 @@ $lang_module['search_none'] = 'Aucun résultat';
 $lang_module['empty_data_search'] = 'Vous devez choisir au moins une lexique de recherche';
 $lang_module['search_word_short'] = 'Le mot de recherche est trop court. Veuillez saisir au moins %d caractères';
 $lang_module['search_in_module'] = 'dans la section';
+$lang_module['search_catid_error'] = 'Erreur : La catégorie que vous avez sélectionnée n\'existe pas.';
 $lang_module['view_all_title'] = 'Voir tous les résultats';
 $lang_module['pages_title'] = 'Page';
 $lang_module['time_update'] = 'Horaire de publication';
@@ -163,7 +164,7 @@ $lang_module['click_to_download'] = 'Cliquez pour télécharger';
 $lang_module['files'] = 'Joindre des fichiers';
 $lang_module['default_layout'] = 'Par défaut';
 $lang_module['download'] = 'Fichier';
-$lang_module['quick_view_pdf'] = 'Aperçu';
+$lang_module['preview'] = 'Aperçu';
 $lang_module['author_info_save'] = 'Sauvegarder';
 $lang_module['author_pseudonym'] = 'Pseudonyme';
 $lang_module['author_description'] = 'La description';

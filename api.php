@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jul 2, 2017 2:06:56 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_SYSTEM', true);
@@ -25,8 +26,8 @@ $apiresults = new ApiResult();
 // Kiểm tra tắt Remote API
 if (empty($global_config['remote_api_access'])) {
     $apiresults->setCode(ApiResult::CODE_REMOTE_OFF)
-    ->setMessage('Remote is off!!!')
-    ->returnResult();
+        ->setMessage('Remote is off!!!')
+        ->returnResult();
 }
 
 $api_credential = [];
@@ -37,8 +38,8 @@ $api_credential['hashsecret'] = $nv_Request->get_string('hashsecret', 'post', ''
 if ($api_credential['timestamp'] + 5 < NV_CURRENTTIME or $api_credential['timestamp'] - 5 > NV_CURRENTTIME) {
     // Sai lệch thời gian hơn 5 giây
     $apiresults->setCode(ApiResult::CODE_MISSING_TIME)
-    ->setMessage('Incorrect API time: ' . date('H:i:s d/m/Y', $api_credential['timestamp']) . ', Server time: ' . date('H:i:s d/m/Y', NV_CURRENTTIME))
-    ->returnResult();
+        ->setMessage('Incorrect API time: ' . date('H:i:s d/m/Y', $api_credential['timestamp']) . ', Server time: ' . date('H:i:s d/m/Y', NV_CURRENTTIME))
+        ->returnResult();
 }
 
 // Kiểm tra thông tin xác thực
@@ -54,30 +55,30 @@ try {
     $credential_data = $sth->fetch();
 } catch (Exception $e) {
     $apiresults->setCode(ApiResult::CODE_SYS_ERROR)
-    ->setMessage('System error, please try again later !!!')
-    ->returnResult();
+        ->setMessage('System error, please try again later !!!')
+        ->returnResult();
 }
 
 if (empty($credential_data)) {
     $apiresults->setCode(ApiResult::CODE_NO_CREDENTIAL_FOUND)
-    ->setMessage('No Api Credential found !!!')
-    ->returnResult();
+        ->setMessage('No Api Credential found !!!')
+        ->returnResult();
 }
 
 if (!empty($credential_data['credential_ips'])) {
     $credential_ips = json_decode($credential_data['credential_ips'], true);
-    if (!in_array(NV_CLIENT_IP, $credential_ips)) {
+    if (!in_array(NV_CLIENT_IP, $credential_ips, true)) {
         $apiresults->setCode(ApiResult::CODE_MISSING_IP)
-        ->setMessage('Api IP fail !!! ')
-        ->returnResult();
+            ->setMessage('Api IP fail !!! ')
+            ->returnResult();
     }
 }
 
 $apisecret = $crypt->decrypt($credential_data['credential_secret']);
 if (!password_verify($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])) {
     $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
-    ->setMessage('Api Authentication fail !!! ')
-    ->returnResult();
+        ->setMessage('Api Authentication fail !!! ')
+        ->returnResult();
 }
 
 // Cập nhật lại lần cuối sử dụng
@@ -100,12 +101,12 @@ $api_request['language'] = $nv_Request->get_title(NV_LANG_VARIABLE, 'post', '');
 // Nếu site đa ngôn ngữ bắt buộc phải truyền tham số language
 if (sizeof($global_config['allow_sitelangs']) > 1 and empty($api_request['language'])) {
     $apiresults->setCode(ApiResult::CODE_MISSING_LANG)
-    ->setMessage('Lang Data is required for multi-language website!!!')
-    ->returnResult();
+        ->setMessage('Lang Data is required for multi-language website!!!')
+        ->returnResult();
 } elseif (!empty($api_request['language']) and NV_LANG_DATA != $api_request['language']) {
     $apiresults->setCode(ApiResult::CODE_WRONG_LANG)
-    ->setMessage('Wrong Lang Data!!!')
-    ->returnResult();
+        ->setMessage('Wrong Lang Data!!!')
+        ->returnResult();
 }
 
 // Xác định các quyền được thiết lập trong CSDL
@@ -138,30 +139,30 @@ if (!empty($credential_data['api_roles'])) {
 
 if (empty($api_request['action'])) {
     $apiresults->setCode(ApiResult::CODE_MISSING_REQUEST_CMD)
-    ->setMessage('Missing Api Command!!!')
-    ->returnResult();
+        ->setMessage('Missing Api Command!!!')
+        ->returnResult();
 } elseif (empty($api_request['module'])) {
     // Api hệ thống
-    if (!in_array($api_request['action'], $credential_data['api_allowed'][''])) {
+    if (!in_array($api_request['action'], $credential_data['api_allowed'][''], true)) {
         $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)
-        ->setMessage('Api Command Not Found!!!')
-        ->returnResult();
+            ->setMessage('Api Command Not Found!!!')
+            ->returnResult();
     }
     $classname = 'NukeViet\\Api\\' . $api_request['action'];
 } else {
     // Api module theo ngôn ngữ
     if (!isset($credential_data['api_allowed'][NV_LANG_DATA])) {
         $apiresults->setCode(ApiResult::CODE_LANG_NOT_EXISTS)
-        ->setMessage('Api Lang Not Found!!!')
-        ->returnResult();
+            ->setMessage('Api Lang Not Found!!!')
+            ->returnResult();
     } elseif (!isset($credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']]) or !isset($sys_mods[$api_request['module']])) {
         $apiresults->setCode(ApiResult::CODE_MODULE_NOT_EXISTS)
-        ->setMessage('Api Module Not Found!!!')
-        ->returnResult();
-    } elseif (!in_array($api_request['action'], $credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']])) {
+            ->setMessage('Api Module Not Found!!!')
+            ->returnResult();
+    } elseif (!in_array($api_request['action'], $credential_data['api_allowed'][NV_LANG_DATA][$api_request['module']], true)) {
         $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)
-        ->setMessage('Api Command Not Found!!!')
-        ->returnResult();
+            ->setMessage('Api Command Not Found!!!')
+            ->returnResult();
     }
 
     $module_info = $sys_mods[$api_request['module']];
@@ -183,8 +184,8 @@ if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin
 // Class tồn tại
 if (!class_exists($classname)) {
     $apiresults->setCode(ApiResult::CODE_API_NOT_EXISTS)
-    ->setMessage('API not exists!!!')
-    ->returnResult();
+        ->setMessage('API not exists!!!')
+        ->returnResult();
 }
 
 if (!empty($api_request['module'])) {
@@ -192,17 +193,17 @@ if (!empty($api_request['module'])) {
      * Nếu API của module kiểm tra xem admin có phải là Admin module không
      * Nếu quản trị tối cao và điều hành chung thì nghiễm nhiên có quyền quản trị module
      */
-    if ($credential_data['lev'] > 2 and !in_array($credential_data['admin_id'], explode(',', $module_info['admins']))) {
+    if ($credential_data['lev'] > 2 and !in_array($credential_data['admin_id'], array_map('intval', explode(',', $module_info['admins'])), true)) {
         $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)
-        ->setMessage('Admin do not have the right to manage this module!!!')
-        ->returnResult();
+            ->setMessage('Admin do not have the right to manage this module!!!')
+            ->returnResult();
     }
 
     // Kiểm tra quyền thực thi API theo quy định của API
     if ($classname::getAdminLev() < $credential_data['lev']) {
         $apiresults->setCode(NukeViet\Api\ApiResult::CODE_ADMINLEV_NOT_ENOUGH)
-        ->setMessage('Admin level not enough to perform this api!!!')
-        ->returnResult();
+            ->setMessage('Admin level not enough to perform this api!!!')
+            ->returnResult();
     }
 
     Api::setModuleName($api_request['module']);
@@ -235,16 +236,16 @@ $return = $api->execute();
 
 Api::reset();
 
-Header('Cache-Control: no-cache, must-revalidate');
-Header('Content-type: application/json');
+header('Cache-Control: no-cache, must-revalidate');
+header('Content-type: application/json');
 
 if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-    Header('X-Frame-Options: SAMEORIGIN');
+    header('X-Frame-Options: SAMEORIGIN');
 }
 
-Header('X-Content-Type-Options: nosniff');
-Header('X-XSS-Protection: 1; mode=block');
-Header('X-Robots-Tag: noindex, nofollow');
+header('X-Content-Type-Options: nosniff');
+header('X-XSS-Protection: 1; mode=block');
+header('X-Robots-Tag: noindex, nofollow');
 
 ob_start('ob_gzhandler');
 echo $return;

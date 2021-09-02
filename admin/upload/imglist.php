@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $per_page = 50;
@@ -118,7 +119,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
             $file['data'] .= '|' . $file['mtime'];
 
             $file['is_img'] = $file['type'] == 'image' ? 'true' : 'false';
-            $file['sel'] = in_array($file['title'], $selectfile) ? ' imgsel' : '';
+            $file['sel'] = in_array($file['title'], $selectfile, true) ? ' imgsel' : '';
             $file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];
 
             $file['nameLong'] = substr($file['title'], 0, 0 - strlen($file['ext']) - 1);

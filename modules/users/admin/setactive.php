@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!defined('NV_IS_AJAX')) {
-    die('Wrong URL');
+    exit('Wrong URL');
 }
 
 $userids = $nv_Request->get_title('userid', 'post', '');
@@ -33,7 +34,7 @@ if (!defined('NV_IS_USER_FORUM') and md5(NV_CHECK_SESSION . '_' . $module_name .
             list($username, $active, $idsite) = $db->query($sql)->fetch(3);
         } else {
             list($level, $username, $active, $idsite) = $row;
-            $level = (int)$level;
+            $level = (int) $level;
         }
 
         if (empty($level) or $admin_info['level'] < $level) {

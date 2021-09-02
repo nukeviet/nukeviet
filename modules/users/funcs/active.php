@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_USER_FORUM')) {
@@ -39,8 +40,7 @@ if (empty($row)) {
 
 $page_title = $mod_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&userid=' . $userid . '&checknum=' . $checknum;
 
 $check_update_user = false;
 $is_change_email = false;
@@ -49,7 +49,7 @@ if ($checknum == $row['checknum']) {
     if (empty($row['password']) and substr($row['username'], 0, 20) == 'CHANGE_EMAIL_USERID_') {
         $is_change_email = true;
 
-        $userid_change_email = intval(substr($row['username'], 20));
+        $userid_change_email = (int) (substr($row['username'], 20));
         $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email=:email, email_verification_time=' . NV_CURRENTTIME . ' WHERE userid=' . $userid_change_email);
         $stmt->bindParam(':email', $row['email'], PDO::PARAM_STR);
         if ($stmt->execute()) {
@@ -99,7 +99,7 @@ if ($checknum == $row['checknum']) {
                     continue;
                 }
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                    $default_value = floatval($row_f['default_value']);
+                    $default_value = (float) ($row_f['default_value']);
                 } else {
                     $default_value = $db->quote($row_f['default_value']);
                 }
@@ -161,6 +161,8 @@ $info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] 
 
 $contents = user_info_exit($info);
 $contents .= '<meta http-equiv="refresh" content="5;url=' . $nv_redirect . '" />';
+
+$canonicalUrl = getCanonicalUrl($page_url, true);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

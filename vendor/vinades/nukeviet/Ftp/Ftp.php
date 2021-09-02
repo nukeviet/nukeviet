@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 9:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Ftp;
@@ -32,16 +33,16 @@ if (!defined('FTP_ASCII')) {
 }
 
 /**
+ * NukeViet\Ftp\Ftp
  *
- * @package NukeViet
- * @author VINADES.,JSC
- * @copyright VINADES.,JSC
- * @version 2012
+ * @package NukeViet\Ftp
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
  * @access public
  */
 class Ftp
 {
-
     // Thong tin dang nhap
     private $host = 'localhost';
 
@@ -52,14 +53,14 @@ class Ftp
     private $pass = '';
 
     // Du lieu FTP connect
-    private $conn_id = null;
+    private $conn_id;
 
     // Cau hinh chung
-    private $config = array(
+    private $config = [
         'timeout' => 90, // Thoi gian het han ket noi
         'type' => FTP_BINARY, // Kieu
         'os' => 'UNIX' // He dieu hanh
-    );
+    ];
 
     // Du lieu xuat ra, du lieu kiem tra
     public $error = '';
@@ -67,7 +68,7 @@ class Ftp
     public $logined = false;
 
     // Loai file xac nhan trong mode FTP_AUTOASCII
-    private $AutoAscii = array(
+    private $AutoAscii = [
         'asp',
         'bat',
         'c',
@@ -89,27 +90,29 @@ class Ftp
         'txt',
         'xhtml',
         'xml'
-    );
+    ];
 
     /**
+     * __construct()
      *
      * @param string $host
      * @param string $user
      * @param string $pass
-     * @param integer $port
-     * @param mixed $config
-     * @return
+     * @param array  $config
+     * @param int    $port
+     * @return false|void
      */
-    public function __construct($host = '', $user = 'root', $pass = '', $config = array(), $port = 21)
+    public function __construct($host = '', $user = 'root', $pass = '', $config = [], $port = 21)
     {
         // Kiem tra thu vien FTP hoat dong
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
+        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : [];
         if (extension_loaded('suhosin')) {
             $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
         }
 
         if (!(extension_loaded('ftp') and (empty($disable_functions) or (!empty($disable_functions) and !preg_grep('/^ftp\_/', $disable_functions))))) {
             $this->error = NV_FTP_ERR_DISABLED_FTP;
+
             return false;
         }
         unset($disable_functions);
@@ -129,24 +132,24 @@ class Ftp
 
         // Xac dinh thoi gian het han
         if (!empty($config['timeout']) and $config['timeout'] > 0) {
-            $this->config['timeout'] = intval($config['timeout']);
+            $this->config['timeout'] = (int) ($config['timeout']);
         }
 
         // Xac dinh phuong thuc
-        if (isset($config['type']) and in_array($config['type'], array(
+        if (isset($config['type']) and in_array($config['type'], [
             FTP_BINARY,
             FTP_AUTOASCII,
             FTP_ASCII
-        ))) {
+        ], true)) {
             $this->config['type'] = $config['type'];
         }
 
         // Xac dinh he hieu hanh
-        if (!empty($config['os']) and in_array($config['os'], array(
+        if (!empty($config['os']) and in_array($config['os'], [
             'WIN',
             'UNIX',
             'MAC'
-        ))) {
+        ], true)) {
             $this->config['os'] = $config['os'];
         } else {
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -164,6 +167,7 @@ class Ftp
 
             if ($this->conn_id === false) {
                 $this->error = NV_FTP_ERR_CONNECT;
+
                 return false;
             }
 
@@ -173,34 +177,36 @@ class Ftp
         // Dang nhap
         if (ftp_login($this->conn_id, $this->user, $this->pass) === false) {
             $this->error = NV_FTP_ERR_LOGIN;
+
             return false;
-        } else {
-            $this->logined = true;
         }
+        $this->logined = true;
     }
 
     /**
+     * check_login()
      *
-     * @return
+     * @return bool
      */
     private function check_login()
     {
         if (is_resource($this->conn_id) and $this->logined) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
+     * detectFtpRoot()
      *
-     * @param mixed $list_valid
+     * @param array  $list_valid
      * @param string $path_root
-     * @param bool $read_buffer
+     * @param bool   $read_buffer
      * @param string $read_file
-     * @return
+     * @return mixed
      */
-    public function detectFtpRoot($list_valid = array(), $path_root = '', $read_buffer = true, $read_file = 'index.php')
+    public function detectFtpRoot($list_valid = [], $path_root = '', $read_buffer = true, $read_file = 'index.php')
     {
         if (!$this->check_login()) {
             return false;
@@ -221,12 +227,12 @@ class Ftp
         }
 
         if (!is_array($list_valid)) {
-            $list_valid = array(
+            $list_valid = [
                 $list_valid
-            );
+            ];
         }
 
-        $paths = array();
+        $paths = [];
 
         // Neu cac file kiem tra dat ngay thu muc dang tro den
         if (sizeof(array_diff($list_valid, $list_folder)) == 0) {
@@ -240,7 +246,7 @@ class Ftp
         for ($i = sizeof($parts) - 1; $i >= 0; --$i) {
             $tmp = '/' . $parts[$i] . $tmp;
 
-            if (in_array($parts[$i], $list_folder)) {
+            if (in_array($parts[$i], $list_folder, true)) {
                 $paths[] = $cwd . $tmp;
             }
         }
@@ -262,16 +268,18 @@ class Ftp
             }
 
             return $return_path;
-        } else {
-            return $paths[0];
         }
+
+        return $paths[0];
     }
 
     /**
+     * listDetail()
      *
-     * @param mixed $path
-     * @param string $type
-     * @return
+     * @param mixed|null $path
+     * @param string     $type
+     * @param bool       $show_hidden
+     * @return array|false
      */
     public function listDetail($path = null, $type = 'raw', $show_hidden = false)
     {
@@ -282,6 +290,7 @@ class Ftp
         // Bat passive mode
         if (ftp_pasv($this->conn_id, true) === false) {
             $this->error = NV_FTP_ERR_PASSIVE_ON;
+
             return false;
         }
 
@@ -291,10 +300,11 @@ class Ftp
 
         if ($list_detail === false) {
             $this->error = NV_FTP_ERR_RAWLIST;
+
             return false;
         }
 
-        $dir_list = array();
+        $dir_list = [];
 
         if ($type == 'raw') {
             return $list_detail;
@@ -311,11 +321,11 @@ class Ftp
         }
 
         // Xac dinh chuan dinh dang cua 3 he dieu hanh
-        $regexps = array(
+        $regexps = [
             'UNIX' => '#([-dl][rwxstST-]+).* ([0-9]*) ([a-zA-Z0-9]+).* ([a-zA-Z0-9]+).* ([0-9]*) ([a-zA-Z]+[0-9: ]*[0-9])[ ]+(([0-9]{1,2}:[0-9]{2})|[0-9]{4}) (.+)#',
             'MAC' => '#([-dl][rwxstST-]+).* ?([0-9 ]*)?([a-zA-Z0-9]+).* ([a-zA-Z0-9]+).* ([0-9]*) ([a-zA-Z]+[0-9: ]*[0-9])[ ]+(([0-9]{2}:[0-9]{2})|[0-9]{4}) (.+)#',
             'WIN' => '#([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)#'
-        );
+        ];
 
         // Xac dinh he dieu hanh thich hop
         $osType = null;
@@ -330,6 +340,7 @@ class Ftp
 
         if (!$osType) {
             $this->error = NV_FTP_ERR_LISTDETAIL_NOTRECONIZE;
+
             return false;
         }
 
@@ -433,10 +444,11 @@ class Ftp
     }
 
     /**
+     * read()
      *
      * @param mixed $remote
      * @param mixed $buffer
-     * @return
+     * @return bool
      */
     public function read($remote, &$buffer)
     {
@@ -445,10 +457,11 @@ class Ftp
         // Bat passive mode on
         if (ftp_pasv($this->conn_id, true) === false) {
             $this->error = NV_FTP_ERR_PASSIVE_ON;
+
             return false;
         }
 
-        if (!in_array('nvbuffer', stream_get_wrappers())) {
+        if (!in_array('nvbuffer', stream_get_wrappers(), true)) {
             stream_wrapper_register('nvbuffer', 'NukeViet\Ftp\Buffer');
         }
 
@@ -456,6 +469,7 @@ class Ftp
         if (ftp_fget($this->conn_id, $tmp, $remote, $mode) === false) {
             fclose($tmp);
             $this->error = NV_FTP_ERR_FGET;
+
             return false;
         }
 
@@ -472,8 +486,9 @@ class Ftp
     }
 
     /**
+     * pwd()
      *
-     * @return
+     * @return false|string
      */
     public function pwd()
     {
@@ -485,8 +500,10 @@ class Ftp
     }
 
     /**
+     * mkdir()
      *
-     * @return
+     * @param mixed $dir
+     * @return false|string
      */
     public function mkdir($dir)
     {
@@ -498,8 +515,10 @@ class Ftp
     }
 
     /**
+     * unlink()
      *
-     * @return
+     * @param mixed $file
+     * @return bool
      */
     public function unlink($file)
     {
@@ -511,8 +530,10 @@ class Ftp
     }
 
     /**
+     * rmdir()
      *
-     * @return
+     * @param mixed $dir
+     * @return bool
      */
     public function rmdir($dir)
     {
@@ -524,8 +545,11 @@ class Ftp
     }
 
     /**
+     * rename()
      *
-     * @return
+     * @param mixed $old
+     * @param mixed $new
+     * @return bool
      */
     public function rename($old, $new)
     {
@@ -537,9 +561,10 @@ class Ftp
     }
 
     /**
+     * chdir()
      *
      * @param mixed $path
-     * @return
+     * @return bool
      */
     public function chdir($path)
     {
@@ -550,12 +575,14 @@ class Ftp
         if (ftp_chdir($this->conn_id, $path) === false) {
             return false;
         }
+
         return true;
     }
 
     /**
+     * close()
      *
-     * @return
+     * @return false|void
      */
     public function close()
     {
@@ -567,9 +594,10 @@ class Ftp
     }
 
     /**
+     * DetectedMode()
      *
      * @param mixed $fileName
-     * @return
+     * @return int
      */
     protected function DetectedMode($fileName)
     {
@@ -577,7 +605,7 @@ class Ftp
             $dot = strrpos($fileName, '.') + 1;
             $ext = substr($fileName, $dot);
 
-            if (in_array($ext, $this->AutoAscii)) {
+            if (in_array($ext, $this->AutoAscii, true)) {
                 $mode = FTP_ASCII;
             } else {
                 $mode = FTP_BINARY;

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['block'];
@@ -19,6 +20,7 @@ $result = $db_slave->query($sql);
 
 $array_block = [];
 while (list($bid_i, $title_i) = $result->fetch(3)) {
+    $bid_i = (int) $bid_i;
     $array_block[$bid_i] = $title_i;
 }
 if (empty($array_block)) {
@@ -31,7 +33,7 @@ if (empty($cookie_bid) or !isset($array_block[$cookie_bid])) {
 }
 
 $bid = $nv_Request->get_int('bid', 'get,post', $cookie_bid);
-if (!in_array($bid, array_keys($array_block))) {
+if (!in_array($bid, array_keys($array_block), true)) {
     $bid_array_id = array_keys($array_block);
     $bid = $bid_array_id[0];
 }
@@ -46,12 +48,12 @@ if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_s
     $result = $db_slave->query($sql);
     $_id_array_exit = [];
     while (list($_id) = $result->fetch(3)) {
-        $_id_array_exit[] = $_id;
+        $_id_array_exit[] = (int) $_id;
     }
 
     $id_array = array_map('intval', $nv_Request->get_array('idcheck', 'post'));
     foreach ($id_array as $id) {
-        if (!in_array($id, $_id_array_exit)) {
+        if (!in_array($id, $_id_array_exit, true)) {
             try {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)');
             } catch (PDOException $e) {
@@ -108,7 +110,7 @@ if ($listid == '' and $bid) {
 
     while (list($id, $title) = $result->fetch(3)) {
         $xtpl->assign('ROW', [
-            'checked' => in_array($id, $id_array) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $id, $id_array, true) ? ' checked="checked"' : '',
             'title' => $title,
             'id' => $id
         ]);

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $errormess = '';
@@ -26,8 +27,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global = [];
     $array_config_global['cookie_prefix'] = nv_substr($nv_Request->get_title('cookie_prefix', 'post', '', 0, $preg_replace), 0, 255);
     $array_config_global['session_prefix'] = nv_substr($nv_Request->get_title('session_prefix', 'post', '', 0, $preg_replace), 0, 255);
-    $array_config_global['cookie_secure'] = (int)$nv_Request->get_bool('cookie_secure', 'post', 0);
-    $array_config_global['cookie_httponly'] = (int)$nv_Request->get_bool('cookie_httponly', 'post', 0);
+    $array_config_global['cookie_secure'] = (int) $nv_Request->get_bool('cookie_secure', 'post', 0);
+    $array_config_global['cookie_httponly'] = (int) $nv_Request->get_bool('cookie_httponly', 'post', 0);
     $array_config_global['cookie_SameSite'] = $nv_Request->get_title('cookie_SameSite', 'post', '');
     if (!empty($array_config_global['cookie_SameSite']) and !isset($sameSite_array[$array_config_global['cookie_SameSite']])) {
         $array_config_global['cookie_SameSite'] = '';

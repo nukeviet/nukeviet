@@ -1,20 +1,31 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
+/**
+ * nv_mailHTML()
+ *
+ * @param string $title
+ * @param string $content
+ * @param string $footer
+ * @return string
+ */
 function nv_mailHTML($title, $content, $footer = '')
 {
     global $global_config, $lang_global;
+
+    $title = nv_autoLinkDisable($title);
 
     $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
     $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
@@ -29,14 +40,15 @@ function nv_mailHTML($title, $content, $footer = '')
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_get_submenu()
  *
- * @param mixed $mod
- * @return
+ * @param string $mod
+ * @return array
  */
 function nv_get_submenu($mod)
 {
@@ -64,8 +76,8 @@ function nv_get_submenu($mod)
 /**
  * nv_get_submenu_mod()
  *
- * @param mixed $module_name
- * @return
+ * @param string $module_name
+ * @return array
  */
 function nv_get_submenu_mod($module_name)
 {
@@ -90,15 +102,16 @@ function nv_get_submenu_mod($module_name)
             unset($lang_module);
         }
     }
+
     return $submenu;
 }
 
 /**
  * nv_admin_theme()
  *
- * @param mixed $contents
- * @param integer $head_site
- * @return
+ * @param string $contents
+ * @param int    $head_site
+ * @return string
  */
 function nv_admin_theme($contents, $head_site = 1)
 {
@@ -145,7 +158,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
     $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . NV_TITLEBAR_DEFIS . $lang_global['admin_page'] . NV_TITLEBAR_DEFIS . $module_info['custom_title']);
     $xtpl->assign('SITE_DESCRIPTION', empty($global_config['site_description']) ? $page_title : $global_config['site_description']);
-    $xtpl->assign('NV_CHECK_PASS_MSTIME', (intval($global_config['admin_check_pass_time']) - 62) * 1000);
+    $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['admin_check_pass_time']) - 62) * 1000);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMINDIR', NV_ADMINDIR);
     $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);

@@ -1,20 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24/10/2013, 22:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Japanese
-
-// @formatter:off
 $utf8_lookup_lang = [
     // Japanese hiragana
     'あ' => 'a', 'え' => 'e', 'い' => 'i', 'お' => 'o', 'う' => 'u', 'ば' => 'ba', 'べ' => 'be', 'び' => 'bi', 'ぼ' => 'bo', 'ぶ' => 'bu',
@@ -71,5 +70,3 @@ $utf8_lookup_lang = [
     'ウォ' => 'who', 'ウゥ' => 'whu', 'ヱ' => 'wye', 'ヰ' => 'wyi', 'ジャ' => 'zha', 'ジェ' => 'zhe', 'ジィ' => 'zhi', 'ジョ' => 'zho', 'ジュ' => 'zhu',
     'ジャ' => 'zya', 'ジェ' => 'zye', 'ジィ' => 'zyi', 'ジョ' => 'zyo', 'ジュ' => 'zyu'
 ];
-
-// @formatter:on

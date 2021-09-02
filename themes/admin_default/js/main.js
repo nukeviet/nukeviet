@@ -1,3 +1,12 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 var myTimerPage = '';
 var myTimersecField = '';
 
@@ -41,9 +50,10 @@ function timeoutsessrun() {
                     $.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&system=1&nocache=" + (new Date).getTime(), function(re) {
                         window.location.reload();
                     });
-                }
-                else {
-                    myTimerPage = setTimeout(function() { timeoutsessrun(); }, json.check_pass_time);
+                } else {
+                    myTimerPage = setTimeout(function() {
+                        timeoutsessrun();
+                    }, json.check_pass_time);
                 }
             });
         }
@@ -107,7 +117,10 @@ $(document).ready(function() {
     });
 
     // Add rel="noopener noreferrer nofollow" to all external links
-    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({ target: "_blank", rel: "noopener noreferrer nofollow" });
+    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({
+        target: "_blank",
+        rel: "noopener noreferrer nofollow"
+    });
 
 
     // Show submenu
@@ -170,5 +183,7 @@ $(document).ready(function() {
     });
 
     // Bootstrap tooltip
-    $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
+    $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+    });
 });

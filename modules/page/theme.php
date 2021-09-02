@@ -1,23 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jul 11, 2010 8:43:46 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_PAGE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_page_main()
  *
- * @param mixed $row
- * @param mixed $ab_links
- * @return
+ * @param array  $row
+ * @param array  $ab_links
+ * @param string $content_comment
+ * @return string
  */
 function nv_page_main($row, $ab_links, $content_comment)
 {
@@ -110,14 +112,16 @@ function nv_page_main($row, $ab_links, $content_comment)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_page_main_list()
  *
- * @param mixed $array_data
- * @return
+ * @param array  $array_data
+ * @param string $generate_page
+ * @return string
  */
 function nv_page_main_list($array_data, $generate_page)
 {
@@ -159,5 +163,6 @@ function nv_page_main_list($array_data, $generate_page)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $module_info['funcs'][$op]['func_site_title'];
@@ -19,7 +20,7 @@ $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 
 if (!nv_user_in_groups($global_config['whoviewuser'])) {
     header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name));
-    die();
+    exit();
 }
 
 // Them vao tieu de
@@ -31,14 +32,13 @@ $array_mod_title[] = [
 
 // Xem chi tiet thanh vien
 if (isset($array_op[1]) and !empty($array_op[1])) {
+    $page_url .= '/' . $array_op[1];
+
     $md5 = '';
     unset($matches);
     if (preg_match('/^(.*)\-([a-z0-9]{32})$/', $array_op[1], $matches)) {
         $md5 = $matches[2];
     }
-
-    $page_url .= '/' . $array_op[1];
-    $canonicalUrl = getCanonicalUrl($page_url);
 
     if (!empty($md5)) {
         $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username = :md5' . (defined('NV_IS_ADMIN') ? '' : ' AND active=1'));
@@ -96,6 +96,8 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         }
     }
 
+    $canonicalUrl = getCanonicalUrl($page_url);
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -112,10 +114,10 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         'username',
         'gender',
         'regdate'
-    ])) or (!empty($sortby) and !in_array($sortby, [
+    ], true)) or (!empty($sortby) and !in_array($sortby, [
         'DESC',
         'ASC'
-    ]))) {
+    ], true))) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
@@ -144,6 +146,9 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
 
     $num_items = $db->query($db->sql())
         ->fetchColumn();
+    
+    $urlappend = '&page=';
+    betweenURLs($page, ceil($num_items/$per_page), $base_url, $urlappend, $prevPage, $nextPage);
 
     $db->select('userid, username, md5username, first_name, last_name, photo, gender, regdate')
         ->order($orderby . ' ' . $sortby)
@@ -169,11 +174,6 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         $users_array[$item['userid']] = $item;
     }
     $result->closeCursor();
-
-    // Khong cho dat trang tuy tien
-    if (empty($users_array) and $page > 0) {
-        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-    }
 
     // Them vao tieu de trang
     if (!empty($orderby)) {

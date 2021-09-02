@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['rpc_setting'];
@@ -42,11 +43,11 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
 
     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
     foreach ($services as $key => $service) {
-        $a++;
+        ++$a;
         $xtpl->assign('SERVICE', [
             'id' => $key,
             'title' => $service[1],
-            'checked' => (!isset($module_config[$module_name]['prcservice']) or in_array($service[1], $prcservice)) ? 'checked="checked"' : '',
+            'checked' => (!isset($module_config[$module_name]['prcservice']) or in_array($service[1], $prcservice, true)) ? 'checked="checked"' : '',
             'icon' => (isset($service[3]) ? $service[3] : '')
         ]);
         if (isset($service[3]) and !empty($service[3])) {

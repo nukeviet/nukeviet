@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/12/2010 22:1
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'get', 0);
@@ -30,7 +31,7 @@ unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[5], $group
 if ($nv_Request->get_int('save', 'post') == '1') {
     $blang = strip_tags($nv_Request->get_string('blang', 'post', ''));
 
-    if (!empty($blang) and !in_array($blang, $global_config['allow_sitelangs'])) {
+    if (!empty($blang) and !in_array($blang, $global_config['allow_sitelangs'], true)) {
         $blang = '';
     }
 
@@ -38,7 +39,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $description = defined('NV_EDITOR') ? $nv_Request->get_string('description', 'post', '') : strip_tags($nv_Request->get_string('description', 'post', ''));
     $form = $nv_Request->get_string('form', 'post', 'sequential');
     $require_image = $nv_Request->get_int('require_image', 'post', '0');
-    if (!in_array($form, $forms)) {
+    if (!in_array($form, $forms, true)) {
         $form = 'sequential';
     }
 
@@ -73,7 +74,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $description = defined('NV_EDITOR') ? nv_nl2br($description, '') : nv_nl2br(nv_htmlspecialchars($description), '<br />');
         }
 
-        list($blang_old, $form_old) = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . intval($id))->fetch(3);
+        list($blang_old, $form_old) = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int) $id)->fetch(3);
 
         $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_plans SET
             blang= :blang, title= :title, description= :description, form= :form, require_image= :require_image, width=' . $width . ', height=' . $height . ',

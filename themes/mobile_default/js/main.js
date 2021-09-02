@@ -1,9 +1,10 @@
-/* *
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var gEInterval,
@@ -53,7 +54,10 @@ function winHelpShow() {
     winHelp && winHelpHide();
     tip_active && tipHide();
     ftip_active && ftipHide();
-    $("body").css({ 'padding-right': '17px', 'overflow': 'hidden' });
+    $("body").css({
+        'padding-right': '17px',
+        'overflow': 'hidden'
+    });
     $("#winHelp").find(".logo-small").html($(".logo").html());
     $("#winHelp").show(0);
     winHelp = !0
@@ -62,7 +66,10 @@ function winHelpShow() {
 function winHelpHide() {
     winHelp = !1;
     $("#winHelp").hide();
-    $("body").css({ 'padding-right': '', 'overflow': '' })
+    $("body").css({
+        'padding-right': '',
+        'overflow': ''
+    })
 }
 
 function contentScrt() {
@@ -324,11 +331,12 @@ function nvbreadcrumbs() {
         d = [],
         e = !1,
         f;
-    if (a.length && subbreadcrumbs.length && tempbreadcrumbs.length) for (a.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
-        d.push([$(this).attr("title"), $(this).attr("href")])
-    }), i = d.length - 1; 0 <= i; i--) e || (f = 0, a.prepend('<li id="brcr_' + i + '"><a href="' + d[i][1] + '"><span>' + d[i][0] + "</span></a></li>"), a.find("li").each(function() {
-        f += $(this).outerWidth(!0)
-    }), f > c && ($("#brcr_" + i, a).remove(), e = !0)), e ? (b.show(), subbreadcrumbs.append('<li><a href="' + d[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + d[i][0] + "</span></a></li>")) : b.hide()
+    if (a.length && subbreadcrumbs.length && tempbreadcrumbs.length)
+        for (a.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
+                d.push([$(this).attr("title"), $(this).attr("href")])
+            }), i = d.length - 1; 0 <= i; i--) e || (f = 0, a.prepend('<li id="brcr_' + i + '"><a href="' + d[i][1] + '"><span>' + d[i][0] + "</span></a></li>"), a.find("li").each(function() {
+            f += $(this).outerWidth(!0)
+        }), f > c && ($("#brcr_" + i, a).remove(), e = !0)), e ? (b.show(), subbreadcrumbs.append('<li><a href="' + d[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + d[i][0] + "</span></a></li>")) : b.hide()
 }
 
 function locationReplace(a) {
@@ -352,42 +360,71 @@ function isRecaptchaCheck() {
     return "" == nv_recaptcha_sitekey ? 0 : 2 == nv_recaptcha_ver || 3 == nv_recaptcha_ver ? nv_recaptcha_ver : 0
 }
 
-function reCaptcha2Recreate(a) {
-    $("[data-toggle=recaptcha]", $(a)).each(function() {
-        var b = $(this).data("pnum"),
-            c = $(this).data("btnselector"),
-            d = $(this).data("size") && "compact" == $(this).data("size") ? "compact" : "",
-            e = "recaptcha" + (new Date).getTime() + nv_randomPassword(8);
-        $(this).replaceWith('<div id="' + e + '" data-toggle="recaptcha" data-pnum="' + b + '" data-btnselector="' + c + '" data-size="' + d + '"></div>')
+function reCaptcha2Recreate(obj) {
+    $('[data-toggle=recaptcha]', $(obj)).each(function() {
+        var callFunc = $(this).data('callback'),
+            pnum = $(this).data('pnum'),
+            btnselector = $(this).data('btnselector'),
+            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
+        var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
+        if (callFunc) {
+            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-callback="' + callFunc + '" data-size="' + size + '"></div>');
+        } else {
+            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>')
+        }
     })
 }
 
 var reCaptcha2OnLoad = function() {
-    $("[data-toggle=recaptcha]").each(function() {
-        var id = $(this).attr("id"),
-            pnum = parseInt($(this).data("pnum")),
-            btnselector = $(this).data("btnselector"),
-            size = $(this).data("size") && $(this).data("size") == "compact" ? "compact" : "",
-            btn = $("#" + id),
-            k;
-        for (k = 1; k <= pnum; k++) btn = btn.parent();
-        btn = $(btnselector, btn);
-        if (btn.length) btn.prop("disabled", true);
-        if (typeof reCapIDs[id] === "undefined") reCapIDs[id] = grecaptcha.render(id, {
-            "sitekey": nv_recaptcha_sitekey,
-            "type": nv_recaptcha_type,
-            "size": size,
-            "callback": function() {
-                reCaptcha2Callback(id, false)
-            },
-            "expired-callback": function() {
-                reCaptcha2Callback(id, true)
-            },
-            "error-callback": function() {
-                reCaptcha2Callback(id, true)
+    $('[data-toggle=recaptcha]').each(function() {
+        var id = $(this).attr('id'),
+            callFunc = $(this).data('callback'),
+            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
+
+        if (typeof window[callFunc] === 'function') {
+            if (typeof reCapIDs[id] === "undefined") {
+                reCapIDs[id] = grecaptcha.render(id, {
+                    'sitekey': nv_recaptcha_sitekey,
+                    'type': nv_recaptcha_type,
+                    'size': size,
+                    'callback': callFunc
+                })
+            } else {
+                grecaptcha.reset(reCapIDs[id])
             }
-        });
-        else grecaptcha.reset(reCapIDs[id])
+        } else {
+            var pnum = parseInt($(this).data('pnum')),
+                btnselector = $(this).data('btnselector'),
+                btn = $('#' + id),
+                k = 1;
+
+            for (k; k <= pnum; k++) {
+                btn = btn.parent();
+            }
+            btn = $(btnselector, btn);
+            if (btn.length) {
+                btn.prop('disabled', true);
+            }
+
+            if (typeof reCapIDs[id] === "undefined") {
+                reCapIDs[id] = grecaptcha.render(id, {
+                    'sitekey': nv_recaptcha_sitekey,
+                    'type': nv_recaptcha_type,
+                    'size': size,
+                    'callback': function() {
+                        reCaptcha2Callback(id, false)
+                    },
+                    'expired-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    },
+                    'error-callback': function() {
+                        reCaptcha2Callback(id, true)
+                    }
+                })
+            } else {
+                grecaptcha.reset(reCapIDs[id])
+            }
+        }
     })
 }
 
@@ -448,12 +485,17 @@ $(function() {
     $('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
 
     // Add rel="noopener noreferrer nofollow" to all external links
-    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({ target: "_blank", rel: "noopener noreferrer nofollow" });
+    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({
+        target: "_blank",
+        rel: "noopener noreferrer nofollow"
+    });
 
     // Smooth scroll to top
     $(".bttop").click(function() {
         if ($(this).find("em").is(".fa-chevron-up")) {
-            $('html,body').animate({ scrollTop: 0 }, 200);
+            $('html,body').animate({
+                scrollTop: 0
+            }, 200);
         } else if ($(this).find("em").is(".fa-refresh")) {
             window.location.href = window.location.href
         }
@@ -553,7 +595,9 @@ $(function() {
     });
     //Change Localtion
     $("[data-location]").on("click", function() {
-        locationReplace($(this).data("location"))
+        if (window.location.origin + $(this).data("location") != window.location.href) {
+            locationReplace($(this).data("location"))
+        }
     });
 });
 

@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:14
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_src_href_callback()
  *
- * @param mixed $matches
- * @return
+ * @param array $matches
+ * @return string
  */
 function nv_src_href_callback($matches)
 {
@@ -28,6 +29,7 @@ function nv_src_href_callback($matches)
         }
         $matches[2] = $_url . $matches[2];
     }
+
     return $matches[1] . '="' . $matches[2] . '"';
 }
 
@@ -35,7 +37,7 @@ $id = $catid = 0;
 if (isset($array_op[2])) {
     $alias_cat_url = $array_op[1];
     $array_page = explode('-', $array_op[2]);
-    $id = intval(end($array_page));
+    $id = (int) (end($array_page));
 }
 foreach ($global_array_cat as $catid_i => $array_cat_i) {
     if ($alias_cat_url == $array_cat_i['alias']) {

@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 4/13/2010 20:00
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_error_info()
  *
- * @return
+ * @return string|void
  */
 function nv_error_info()
 {
@@ -121,6 +122,7 @@ function nv_error_info()
     }
 
     $xtpl->parse('error_info');
+
     return $xtpl->text('error_info');
 }
 
@@ -128,14 +130,14 @@ function nv_error_info()
  * nv_info_die()
  *
  * @param string $page_title
- * @param mixed $info_title
- * @param mixed $info_content
+ * @param string $info_title
+ * @param string $info_content
+ * @param int    $error_code
  * @param string $admin_link
  * @param string $admin_title
  * @param string $site_link
  * @param string $site_title
- * @param array $http_headers
- * @return
+ * @param array  $http_headers
  */
 function nv_info_die($page_title, $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '', $http_headers = [])
 {
@@ -152,10 +154,10 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
                 $replace = true;
                 if (is_string($header[0]) and !empty($header[0])) {
                     if (isset($header[1])) {
-                        $replace = boolval($header[1]);
+                        $replace = (bool) ($header[1]);
                     }
                     if (isset($header[2])) {
-                        $response_code = intval($header[2]);
+                        $response_code = (int) ($header[2]);
                     }
                     header($header[0], $replace, $response_code);
                 }
@@ -228,6 +230,7 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
 }
 
 /**
+ * nv_htmlOutput()
  *
  * @param string $html
  * @param string $type
@@ -285,7 +288,7 @@ function nv_htmlOutput($html, $type = 'html')
 
         foreach ($value as $val) {
             $replace = ($key != 'link') ? true : false;
-            Header($key . ': ' . $val, $replace);
+            header($key . ': ' . $val, $replace);
         }
     }
 
@@ -295,6 +298,7 @@ function nv_htmlOutput($html, $type = 'html')
 }
 
 /**
+ * nv_jsonOutput()
  *
  * @param array $array_data
  */
@@ -307,8 +311,7 @@ function nv_jsonOutput($array_data)
  * nv_xmlOutput()
  *
  * @param string $content
- * @param mixed $lastModified
- * @return void
+ * @param int    $lastModified
  */
 function nv_xmlOutput($content, $lastModified)
 {
@@ -328,24 +331,19 @@ function nv_xmlOutput($content, $lastModified)
         $content = trim($content);
     }
 
-    @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-    @Header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
-    @Header('Content-Type: text/xml; charset=utf-8');
-
-    if (!empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
-        @Header('Cache-Control: no-cache, pre-check=0, post-check=0');
-    } else {
-        @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
-    }
+    @header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+    @header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+    @header('Content-Type: text/xml; charset=utf-8');
+    @header('Cache-Control: no-store, max-age=0');
 
     if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
-        Header('X-Frame-Options: SAMEORIGIN');
+        header('X-Frame-Options: SAMEORIGIN');
     }
 
-    Header('X-Content-Type-Options: nosniff');
-    Header('X-XSS-Protection: 1; mode=block');
+    header('X-Content-Type-Options: nosniff');
+    header('X-XSS-Protection: 1; mode=block');
 
-    @Header('Pragma: no-cache');
+    @header('Pragma: no-cache');
 
     $encoding = 'none';
 
@@ -354,7 +352,7 @@ function nv_xmlOutput($content, $lastModified)
 
         if ($encoding != 'none') {
             if (!strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') and preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
-                $version = floatval($matches[1]);
+                $version = (float) ($matches[1]);
 
                 if ($version < 6 or ($version == 6 and !strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
                     $encoding = 'none';
@@ -377,12 +375,11 @@ function nv_xmlOutput($content, $lastModified)
 /**
  * nv_rss_generate()
  *
- * @param mixed $channel
- * @param mixed $items
- * @param mixed $atomlink
+ * @param string $channel
+ * @param array  $items
+ * @param string $atomlink
  * @param string $timemode
- * @param bool $noindex
- * @return void
+ * @param bool   $noindex
  */
 function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noindex = true)
 {
@@ -422,7 +419,7 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
                 $item['title'] = nv_htmlspecialchars($item['title']);
 
                 if (isset($item['pubdate']) and !empty($item['pubdate'])) {
-                    $item['pubdate'] = intval($item['pubdate']);
+                    $item['pubdate'] = (int) ($item['pubdate']);
                     $channel['pubDate'] = max($channel['pubDate'], $item['pubdate']);
                     if ($timemode == 'ISO8601') {
                         $item['pubdate'] = date('c', $item['pubdate']);
@@ -547,8 +544,9 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
 }
 
 /**
+ * nv_xmlSitemap_generate()
  *
- * @param array $url
+ * @param string $url
  * @param string $changefreq
  * @param string $priority
  */
@@ -582,6 +580,7 @@ function nv_xmlSitemap_generate($url, $changefreq = 'daily', $priority = '0.8')
 }
 
 /**
+ * nv_xmlSitemapCat_generate()
  *
  * @param array $url
  */
@@ -618,8 +617,6 @@ function nv_xmlSitemapCat_generate($url)
 
 /**
  * nv_xmlSitemapIndex_generate()
- *
- * @return void
  */
 function nv_xmlSitemapIndex_generate()
 {
@@ -693,9 +690,9 @@ function nv_xmlSitemapIndex_generate()
 /**
  * nv_css_setproperties()
  *
- * @param mixed $tag
- * @param mixed $property_array
- * @return
+ * @param string $tag
+ * @param mixed  $property_array
+ * @return mixed
  */
 function nv_css_setproperties($tag, $property_array)
 {
@@ -722,19 +719,20 @@ function nv_css_setproperties($tag, $property_array)
         }
     }
     !empty($css) and $css = $tag . '{' . $css . '}';
+
     return $css;
 }
 
 /**
  * nv_theme_alert()
  *
- * @param mixed $message_title
- * @param mixed $message_content
- * @param mixed $type
- * @param mixed $url_back
- * @param mixed $lang_back
- * @param mixed $time_back
- * @return
+ * @param string $message_title
+ * @param string $message_content
+ * @param string $type
+ * @param string $url_back
+ * @param string $lang_back
+ * @param int    $time_back
+ * @return string
  */
 function nv_theme_alert($message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5)
 {
@@ -788,14 +786,12 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
-// Disable site
 /**
  * nv_disable_site()
- *
- * @return void
  */
 function nv_disable_site()
 {

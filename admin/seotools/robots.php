@@ -1,15 +1,18 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 5/12/2010, 1:34
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
+
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
@@ -19,13 +22,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $robots_other = [];
     foreach ($fileother as $key => $value) {
         if (!empty($value)) {
-            $robots_other[$value] = intval($optionother[$key]);
+            $robots_other[$value] = (int) ($optionother[$key]);
         }
     }
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if (!defined('NV_MAINFILE'))\n    die('Stop!!!');\n\n";
+    $content_config .= "if (!defined('NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
     $content_config .= "\$cache = '" . serialize($robots_data) . "';\n\n";
     $content_config .= "\$cache_other = '" . serialize($robots_other) . "';\n";
 
@@ -122,7 +125,7 @@ foreach ($files as $file) {
 
         $type = isset($robots_data[$file]) ? $robots_data[$file] : 1;
 
-        for ($i = 0; $i <= 2; $i++) {
+        for ($i = 0; $i <= 2; ++$i) {
             $option = [
                 'value' => $i,
                 'title' => $lang_module['robots_type_' . $i],
@@ -144,7 +147,7 @@ foreach ($robots_other as $file => $value) {
     ];
     $xtpl->assign('DATA', $data);
 
-    for ($i = 0; $i <= 2; $i++) {
+    for ($i = 0; $i <= 2; ++$i) {
         $option = [
             'value' => $i,
             'title' => $lang_module['robots_type_' . $i],

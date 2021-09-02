@@ -1,29 +1,30 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['delete_file'])) {
-    die('ERROR#' . $lang_module['notlevel']);
+    exit('ERROR#' . $lang_module['notlevel']);
 }
 
 $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_QUOTES);
 $file = basename($file);
 
 if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-    die('ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file);
+    exit('ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file);
 }
 
 if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x', 'post') and $nv_Request->isset_request('y', 'post')) {
@@ -45,7 +46,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
             $file_add = '-' . $config_logo['w'] . 'x' . $config_logo['h'];
             $i = 0;
             while (file_exists(NV_ROOTDIR . '/' . $path . '/' . $file . $file_add . '.' . $file_ext)) {
-                $i++;
+                ++$i;
                 $file = $file_old . 'v' . $i;
             }
             $file = $file . $file_add . '.' . $file_ext;
@@ -89,10 +90,9 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
             }
         }
 
-        die('OK#' . basename($file));
-    } else {
-        die('ERROR#' . $lang_module['notlevel']);
+        exit('OK#' . basename($file));
     }
+    exit('ERROR#' . $lang_module['notlevel']);
 }
 
-die('ERROR#Error Access!!!');
+exit('ERROR#Error Access!!!');

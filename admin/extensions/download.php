@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $contents = '';
@@ -23,8 +24,8 @@ if ($array and is_serialized_string($array)) {
 }
 
 $request = [];
-$request['id'] = isset($array['id']) ? intval($array['id']) : 0;
-$request['fid'] = isset($array['compatible']['id']) ? intval($array['compatible']['id']) : 0;
+$request['id'] = isset($array['id']) ? (int) ($array['id']) : 0;
+$request['fid'] = isset($array['compatible']['id']) ? (int) ($array['compatible']['id']) : 0;
 
 // Fixed request
 $request['lang'] = NV_LANG_INTERFACE;

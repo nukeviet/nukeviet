@@ -1,17 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 6/5/2010 2:18
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Xml;
 
 use DOMDocument;
 
+/**
+ * NukeViet\Xml\Array2XML
+ *
+ * @package NukeViet\Xml
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Array2XML
 {
     private $rootname_default = 'root';
@@ -19,29 +29,29 @@ class Array2XML
     private $xml;
 
     /**
-     *
-     * @return
+     * __construct()
      */
     public function __construct()
     {
     }
 
     /**
+     * checkArray()
      *
      * @param mixed $array
-     * @return
+     * @return bool
      */
     private function checkArray($array)
     {
-        $return = (is_array($array) and ! empty($array)) ? true : false;
-        return $return;
+        return (is_array($array) and !empty($array)) ? true : false;
     }
 
     /**
+     * setRootName()
      *
      * @param mixed $array
      * @param mixed $rootname
-     * @return
+     * @return mixed
      */
     private function setRootName($array, $rootname)
     {
@@ -51,22 +61,21 @@ class Array2XML
 
         if (sizeof($array) > 1) {
             return $rootname;
-        } else {
-            $key = key($array);
-            if (preg_match('/^[0-9](.*)$/', $key)) {
-                return $rootname;
-            } else {
-                return $key;
-            }
         }
+        $key = key($array);
+        if (preg_match('/^[0-9](.*)$/', $key)) {
+            return $rootname;
+        }
+
+        return $key;
     }
 
     /**
+     * addArray()
      *
      * @param mixed $array
      * @param mixed $root
      * @param mixed $lastname
-     * @return
      */
     private function addArray($array, &$root, $lastname)
     {
@@ -90,17 +99,18 @@ class Array2XML
     }
 
     /**
+     * createXML()
      *
-     * @param mixed $array
-     * @param mixed $rootname
+     * @param mixed  $array
+     * @param mixed  $rootname
      * @param string $encoding
-     * @param bool $is_save
+     * @param bool   $is_save
      * @param string $file
-     * @return
+     * @return bool|string
      */
     private function createXML($array, $rootname, $encoding = 'utf-8', $is_save = false, $file = '')
     {
-        if (! $this->checkArray($array)) {
+        if (!$this->checkArray($array)) {
             return false;
         }
 
@@ -120,21 +130,22 @@ class Array2XML
         if ($is_save) {
             if ($this->xml->save($file) == 0) {
                 return false;
-            } else {
-                return true;
             }
-        } else {
-            return $this->xml->saveXML();
+
+            return true;
         }
+
+        return $this->xml->saveXML();
     }
 
     /**
+     * saveXML()
      *
-     * @param mixed $array
-     * @param mixed $rootname
-     * @param mixed $file
+     * @param mixed  $array
+     * @param mixed  $rootname
+     * @param mixed  $file
      * @param string $encoding
-     * @return
+     * @return bool|string
      */
     public function saveXML($array, $rootname, $file, $encoding = '')
     {
@@ -142,11 +153,12 @@ class Array2XML
     }
 
     /**
+     * showXML()
      *
-     * @param mixed $array
-     * @param mixed $rootname
+     * @param mixed  $array
+     * @param mixed  $rootname
      * @param string $encoding
-     * @return
+     * @return bool|string
      */
     public function showXML($array, $rootname, $encoding = '')
     {
@@ -156,16 +168,12 @@ class Array2XML
             return $content;
         }
 
-        @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT');
-        @Header('Content-Type: text/xml; charset=' . $encoding);
-        if (! empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
-            @Header('Cache-Control: no-cache, pre-check=0, post-check=0');
-        } else {
-            @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
-        }
-        @Header('Expires: 0');
-        @Header('Pragma: no-cache');
-        Header('Content-Encoding: none');
+        @header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT');
+        @header('Content-Type: text/xml; charset=' . $encoding);
+        @header('Cache-Control: no-store, max-age=0');
+        @header('Expires: 0');
+        @header('Pragma: no-cache');
+        header('Content-Encoding: none');
         exit($content);
     }
 }

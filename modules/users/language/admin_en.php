@@ -1,21 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2019 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate May 30, 2010, 05:07:00 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
-$lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = 'Copyright (C) 2009-2021 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -33,7 +33,7 @@ $lang_module['search_name'] = 'Member\'s name';
 $lang_module['search_mail'] = 'Member\'s email';
 $lang_module['search_key'] = 'Keyword search';
 $lang_module['search_note'] = 'Keyword maximum length is 64 characters, html isn\'t allowed';
-$lang_module['submit'] = 'Searcg';
+$lang_module['submit'] = 'Search';
 $lang_module['members_list'] = 'Member list';
 $lang_module['main_title'] = 'Manage member';
 $lang_module['userid'] = 'ID';

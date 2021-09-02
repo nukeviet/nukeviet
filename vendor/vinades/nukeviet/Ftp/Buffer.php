@@ -1,40 +1,54 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2/3/2012, 19:53
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Ftp;
 
+/**
+ * NukeViet\Ftp\Buffer
+ *
+ * @package NukeViet\Ftp
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class Buffer
 {
     public $position = 0;
 
-    public $varname = null;
+    public $varname;
 
     /**
-     * @param mixed $path
-     * @param mixed $mode
-     * @param mixed $options
-     * @param mixed $opened_path
-     * @return
+     * stream_open()
+     *
+     * @param string $path
+     * @param mixed  $mode
+     * @param mixed  $options
+     * @param mixed  $opened_path
+     * @return true
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
         $url = parse_url($path);
-        $this->varname = $url["host"];
+        $this->varname = $url['host'];
         $this->position = 0;
 
         return true;
     }
 
     /**
-     * @param mixed $count
-     * @return
+     * stream_read()
+     *
+     * @param int $count
+     * @return string
      */
     public function stream_read($count)
     {
@@ -45,9 +59,10 @@ class Buffer
     }
 
     /**
+     * stream_write()
      *
      * @param mixed $data
-     * @return
+     * @return int
      */
     public function stream_write($data)
     {
@@ -64,8 +79,9 @@ class Buffer
     }
 
     /**
+     * stream_tell()
      *
-     * @return
+     * @return int
      */
     public function stream_tell()
     {
@@ -73,8 +89,9 @@ class Buffer
     }
 
     /**
+     * stream_eof()
      *
-     * @return
+     * @return bool
      */
     public function stream_eof()
     {
@@ -82,10 +99,11 @@ class Buffer
     }
 
     /**
+     * stream_seek()
      *
-     * @param mixed $offset
-     * @param mixed $whence
-     * @return
+     * @param int    $offset
+     * @param string $whence
+     * @return bool
      */
     public function stream_seek($offset, $whence)
     {
@@ -93,50 +111,48 @@ class Buffer
             case SEEK_SET:
                 if ($offset < strlen($GLOBALS[$this->varname]) and $offset >= 0) {
                     $this->position = $offset;
+
                     return true;
-                } else {
-                    return false;
                 }
 
+                    return false;
                 break;
-
             case SEEK_CUR:
                 if ($offset >= 0) {
                     $this->position += $offset;
+
                     return true;
-                } else {
-                    return false;
                 }
 
+                    return false;
                 break;
-
             case SEEK_END:
                 if (strlen($GLOBALS[$this->varname]) + $offset >= 0) {
                     $this->position = strlen($GLOBALS[$this->varname]) + $offset;
+
                     return true;
-                } else {
-                    return false;
                 }
 
+                    return false;
                 break;
-
             default:
                 return false;
         }
     }
 
     /**
+     * stream_metadata()
      *
-     * @param mixed $path
-     * @param mixed $option
-     * @param mixed $var
-     * @return
+     * @param string $path
+     * @param string $option
+     * @param mixed  $var
+     * @return bool
      */
     public function stream_metadata($path, $option, $var)
     {
         if ($option == STREAM_META_TOUCH) {
             $url = parse_url($path);
-            $varname = $url["host"];
+            $varname = $url['host'];
 
             if (!isset($GLOBALS[$varname])) {
                 $GLOBALS[$varname] = '';
@@ -144,6 +160,7 @@ class Buffer
 
             return true;
         }
+
         return false;
     }
 }

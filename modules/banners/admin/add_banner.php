@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/12/2010 12:11
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['add_banner'];
@@ -149,7 +150,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $_weight = 0;
         if ($plans_form[$pid] == 'sequential' and $act != 2) {
             $_weight = $db->query('SELECT COUNT(*) FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE act IN(0,1,3) AND pid=' . $pid)->fetchColumn();
-            $_weight = intval($_weight) + 1;
+            $_weight = (int) $_weight + 1;
         }
 
         // Upload ảnh trên mobile

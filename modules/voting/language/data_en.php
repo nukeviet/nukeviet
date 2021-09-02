@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-10-2010 20:59
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -17,7 +18,6 @@ if (!defined('NV_ADMIN')) {
  * 	- Module var is: $lang, $module_file, $module_data, $module_upload, $module_theme, $module_name
  * 	- Accept global var: $db, $db_config, $global_config
  */
-
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . " VALUES (:vid, :question, '', 1, 0, 1, '6', " . NV_CURRENTTIME . ', 0, 1, 0)');
 $sth->bindValue(':vid', 2, PDO::PARAM_INT);
 $sth->bindValue(':question', 'Do you know about Nukeviet 3?', PDO::PARAM_STR);

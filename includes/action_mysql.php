@@ -1,21 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jun 20, 2010 8:59:32 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification');
 
 /**
- *
  * @param string $table_des
  * @param string $table_src
  * @return number
@@ -24,11 +24,11 @@ function nv_copy_structure_table($table_des, $table_src)
 {
     global $db;
     $db->exec('DROP TABLE IF EXISTS ' . $table_des);
+
     return $db->exec('CREATE TABLE ' . $table_des . ' LIKE ' . $table_src);
 }
 
 /**
- *
  * @param string $lang
  * @return string[]
  */
@@ -50,7 +50,6 @@ function nv_delete_table_sys($lang)
 }
 
 /**
- *
  * @param string $lang
  * @return string[]
  */
@@ -174,21 +173,21 @@ function nv_create_table_sys($lang)
         title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file,
         theme, mobile, description, keywords, groups_view, weight, act, admins, rss, sitemap
     ) VALUES
-         ('about', 'page', 'about', 'about', 'page', 'About', '', 1624352400, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 1),
-         ('news', 'news', 'news', 'news', 'news', 'News', '', 1624352400, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 1),
-         ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1624352400, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 1),
-         ('contact', 'contact', 'contact', 'contact', 'contact', 'Contact', '', 1624352400, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1),
-         ('statistics', 'statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1624352400, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 1),
-         ('voting', 'voting', 'voting', 'voting', 'voting', 'Voting', '', 1624352400, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 1),
-         ('banners', 'banners', 'banners', 'banners', 'banners', 'Banners', '', 1624352400, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 1),
-         ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1624352400, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 1),
-         ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1624352400, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 1),
-         ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1624352400, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 1),
-         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1624352400, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
-         ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1624352400, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1),
-         ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1624352400, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 1),
-         ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1624352400, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 1),
-         ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1624352400, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 1)";
+         ('about', 'page', 'about', 'about', 'page', 'About', '', 1626512400, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 1),
+         ('news', 'news', 'news', 'news', 'news', 'News', '', 1626512400, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 1),
+         ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1626512400, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 1),
+         ('contact', 'contact', 'contact', 'contact', 'contact', 'Contact', '', 1626512400, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1),
+         ('statistics', 'statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1626512400, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 1),
+         ('voting', 'voting', 'voting', 'voting', 'voting', 'Voting', '', 1626512400, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 1),
+         ('banners', 'banners', 'banners', 'banners', 'banners', 'Banners', '', 1626512400, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 1),
+         ('seek', 'seek', 'seek', 'seek', 'seek', 'Search', '', 1626512400, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 1),
+         ('menu', 'menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1626512400, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 1),
+         ('feeds', 'feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1626512400, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 1),
+         ('page', 'page', 'page', 'page', 'page', 'Page', '', 1626512400, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
+         ('comment', 'comment', 'comment', 'comment', 'comment', 'Comment', '', 1626512400, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 1),
+         ('siteterms', 'page', 'siteterms', 'siteterms', 'page', 'Siteterms', '', 1626512400, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 1),
+         ('freecontent', 'freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1626512400, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 1),
+         ('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'two_step_verification', 'Two-Step Verification', '', 1626512400, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 1)";
 
     $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
          ('" . $lang . "', 'global', 'site_domain', ''),

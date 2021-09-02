@@ -1,17 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @copyright 2010
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/20/2010 20:48
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
+/**
+ * dumpsave
+ *
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class dumpsave
 {
     public $savetype;
@@ -21,10 +30,10 @@ class dumpsave
     public $fp = false;
 
     /**
+     * __construct()
      *
-     * @param mixed $save_type
-     * @param mixed $filesave_name
-     * @return
+     * @param string $save_type
+     * @param string $filesave_name
      */
     public function __construct($save_type, $filesave_name)
     {
@@ -39,34 +48,36 @@ class dumpsave
     }
 
     /**
-     * dumpsave::open()
+     * open()
      *
-     * @return
+     * @return mixed
      */
     public function open()
     {
         $this->fp = call_user_func_array(($this->savetype == 'gz') ? 'gzopen' : 'fopen', [$this->filesavename, $this->mode]);
+
         return $this->fp;
     }
 
     /**
-     * dumpsave::write()
+     * write()
      *
      * @param mixed $content
-     * @return
+     * @return bool
      */
     public function write($content)
     {
         if ($this->fp) {
             return @call_user_func_array(($this->savetype == 'gz') ? 'gzwrite' : 'fwrite', [$this->fp, $content]);
         }
+
         return false;
     }
 
     /**
-     * dumpsave::close()
+     * close()
      *
-     * @return
+     * @return bool
      */
     public function close()
     {
@@ -74,9 +85,11 @@ class dumpsave
             $return = @call_user_func(($this->savetype == 'gz') ? 'gzclose' : 'fclose', $this->fp);
             if ($return) {
                 @chmod($this->filesavename, 0666);
+
                 return true;
             }
         }
+
         return false;
     }
 }
@@ -84,8 +97,8 @@ class dumpsave
 /**
  * nv_dump_save()
  *
- * @param mixed $params
- * @return
+ * @param array $params
+ * @return array|false
  */
 function nv_dump_save($params)
 {
@@ -106,19 +119,19 @@ function nv_dump_save($params)
     $a = 0;
     while ($item = $result->fetch()) {
         unset($m);
-        if (in_array($item['name'], $params['tables'])) {
+        if (in_array($item['name'], $params['tables'], true)) {
             if ($item['engine'] != 'MyISAM') {
                 $item['rows'] = $db->query('SELECT COUNT(*) FROM ' . $item['name'])->fetchColumn();
             }
             $tables[$a] = [];
             $tables[$a]['name'] = $item['name'];
-            $tables[$a]['size'] = intval($item['data_length']) + intval($item['index_length']);
+            $tables[$a]['size'] = (int) ($item['data_length']) + (int) ($item['index_length']);
             $tables[$a]['limit'] = 1 + round(1048576 / ($item['avg_row_length'] + 1));
             $tables[$a]['numrow'] = $item['rows'];
             $tables[$a]['charset'] = (preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
             $tables[$a]['type'] = isset($item['engine']) ? $item['engine'] : $item['t'];
             ++$a;
-            $dbsize += intval($item['data_length']) + intval($item['index_length']);
+            $dbsize += (int) ($item['data_length']) + (int) ($item['index_length']);
         }
     }
     $result->closeCursor();
@@ -224,9 +237,16 @@ function nv_dump_save($params)
     if (!$dumpsave->close()) {
         return false;
     }
+
     return [$params['filename'], $dbsize];
 }
 
+/**
+ * nv_dump_restore()
+ *
+ * @param string $file
+ * @return bool
+ */
 function nv_dump_restore($file)
 {
     global $db, $db_config, $sys_info;
@@ -258,43 +278,43 @@ function nv_dump_restore($file)
 
         if (empty($st) or preg_match('/^(#|--|\/\*\!)/', $st)) {
             continue;
-        } else {
-            $query_len += strlen($st);
+        }
+        $query_len += strlen($st);
 
-            unset($m);
-            if (empty($insert) and preg_match('/^(INSERT INTO `?[^` ]+`? .*?VALUES)(.*)$/i', $st, $m)) {
-                $insert = $m[1] . ' ';
-                $sql .= $m[2];
-            } else {
-                $sql .= $st;
+        unset($m);
+        if (empty($insert) and preg_match('/^(INSERT INTO `?[^` ]+`? .*?VALUES)(.*)$/i', $st, $m)) {
+            $insert = $m[1] . ' ';
+            $sql .= $m[2];
+        } else {
+            $sql .= $st;
+        }
+
+        if ($sql) {
+            if (preg_match("/;\s*$/", $st) and (empty($insert) or (!((substr_count($sql, '\'') - substr_count($sql, '\\\'')) % 2)))) {
+                $sql = rtrim($insert . $sql, ';');
+                $insert = '';
+                $execute = true;
             }
 
-            if ($sql) {
-                if (preg_match("/;\s*$/", $st) and (empty($insert) or (!((substr_count($sql, '\'') - substr_count($sql, '\\\'')) % 2)))) {
-                    $sql = rtrim($insert . $sql, ';');
-                    $insert = '';
-                    $execute = true;
+            if ($query_len >= 65536 and preg_match("/,\s*$/", $st)) {
+                $sql = rtrim($insert . $sql, ',');
+                $execute = true;
+            }
+
+            if ($execute) {
+                $sql = preg_replace(["/\{\|prefix\|\}/", "/\{\|lang\|\}/"], [$db_config['prefix'], NV_LANG_DATA], $sql);
+                try {
+                    $db->query($sql);
+                } catch (PDOException $e) {
+                    return false;
                 }
 
-                if ($query_len >= 65536 and preg_match("/,\s*$/", $st)) {
-                    $sql = rtrim($insert . $sql, ',');
-                    $execute = true;
-                }
-
-                if ($execute) {
-                    $sql = preg_replace(["/\{\|prefix\|\}/", "/\{\|lang\|\}/"], [$db_config['prefix'], NV_LANG_DATA], $sql);
-                    try {
-                        $db->query($sql);
-                    } catch (PDOException $e) {
-                        return false;
-                    }
-
-                    $sql = '';
-                    $query_len = 0;
-                    $execute = false;
-                }
+                $sql = '';
+                $query_len = 0;
+                $execute = false;
             }
         }
     }
+
     return true;
 }

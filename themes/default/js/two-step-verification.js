@@ -1,16 +1,17 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3 / 25 / 2010 18 : 6
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function validErrorShow(a) {
     $(a).parent().parent().addClass("has-error");
     $("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
     $(a).tooltip({
-       container: "body",
+        container: "body",
         placement: "bottom",
         title: function() {
             return "" != $(a).attr("data-current-mess") ? $(a).attr("data-current-mess") : nv_required
@@ -34,9 +35,10 @@ function validCheck(a) {
             if (!$("[type=radio]:checked", a).length) return !1
         } else if ("DIV" == b && $(a).is(".check-box")) {
             if (!$("[type=checkbox]:checked", a).length) return !1
-        } else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
-            if ("" == d) return !1
-        } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
+        } else if ("INPUT" == b || "TEXTAREA" == b)
+            if ("undefined" == typeof c || "" == c) {
+                if ("" == d) return !1
+            } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
     }
     return !0
 }
@@ -87,13 +89,13 @@ function confirmpass_validForm(a) {
             b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
-                $(".tooltip-current", a).removeClass("tooltip-current"),
-                "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
-                    $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
-                    validErrorShow(this)
-                }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                    $("[type=submit]", a).prop("disabled", !1)
-                }, 1E3)
+                    $(".tooltip-current", a).removeClass("tooltip-current"),
+                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
+                        $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
+                        validErrorShow(this)
+                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
+                        $("[type=submit]", a).prop("disabled", !1)
+                    }, 1E3)
             } else {
                 window.location.href = window.location.href;
             }
@@ -121,13 +123,13 @@ function opt_validForm(a) {
             b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
-                $(".tooltip-current", a).removeClass("tooltip-current"),
-                "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
-                    $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
-                    validErrorShow(this)
-                }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                    $("[type=submit]", a).prop("disabled", !1)
-                }, 1E3)
+                    $(".tooltip-current", a).removeClass("tooltip-current"),
+                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
+                        $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
+                        validErrorShow(this)
+                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
+                        $("[type=submit]", a).prop("disabled", !1)
+                    }, 1E3)
             } else {
                 window.location.href = (typeof d.redirect != 'undefined' && d.redirect != '') ? d.redirect : window.location.href;
             }

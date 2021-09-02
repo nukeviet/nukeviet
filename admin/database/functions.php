@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $menu_top = [
@@ -43,8 +44,6 @@ $array_url_instruction['sampledata'] = 'https://wiki.nukeviet.vn/nukeviet4:admin
 
 /**
  * nv_show_tables()
- *
- * @return void
  */
 function nv_show_tables()
 {
@@ -60,7 +59,7 @@ function nv_show_tables()
 
     $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
     while ($item = $result->fetch()) {
-        $tables_size = floatval($item['data_length']) + floatval($item['index_length']);
+        $tables_size = (float) ($item['data_length']) + (float) ($item['index_length']);
 
         if ($item['engine'] != 'MyISAM') {
             if ($item['rows'] < 100000) {
@@ -73,16 +72,16 @@ function nv_show_tables()
             $item['rows'] = number_format($item['rows']);
         }
         $tables[$item['name']]['table_size'] = nv_convertfromBytes($tables_size);
-        $tables[$item['name']]['table_max_size'] = !empty($item['max_data_length']) ? nv_convertfromBytes(floatval($item['max_data_length'])) : 0;
-        $tables[$item['name']]['table_datafree'] = !empty($item['data_free']) ? nv_convertfromBytes(floatval($item['data_free'])) : 0;
+        $tables[$item['name']]['table_max_size'] = !empty($item['max_data_length']) ? nv_convertfromBytes((float) ($item['max_data_length'])) : 0;
+        $tables[$item['name']]['table_datafree'] = !empty($item['data_free']) ? nv_convertfromBytes((float) ($item['data_free'])) : 0;
         $tables[$item['name']]['table_numrow'] = $item['rows'];
         $tables[$item['name']]['table_charset'] = (!empty($item['collation']) and preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
         $tables[$item['name']]['table_type'] = (isset($item['engine'])) ? $item['engine'] : $item['type'];
-        $tables[$item['name']]['table_auto_increment'] = (isset($item['auto_increment'])) ? intval($item['auto_increment']) : 'n/a';
+        $tables[$item['name']]['table_auto_increment'] = (isset($item['auto_increment'])) ? (int) ($item['auto_increment']) : 'n/a';
         $tables[$item['name']]['table_create_time'] = !empty($item['create_time']) ? strftime('%H:%M %d/%m/%Y', strtotime($item['create_time'])) : 'n/a';
         $tables[$item['name']]['table_update_time'] = !empty($item['update_time']) ? strftime('%H:%M %d/%m/%Y', strtotime($item['update_time'])) : 'n/a';
         $db_size += $tables_size;
-        $db_totalfree += floatval($item['data_free']);
+        $db_totalfree += (float) ($item['data_free']);
         ++$db_tables_count;
     }
     $result->closeCursor();
@@ -144,7 +143,7 @@ function nv_show_tables()
 /**
  * nv_highlight_string()
  *
- * @param mixed $tab
+ * @param mixed  $tab
  * @param string $type
  * @return
  */
@@ -159,15 +158,13 @@ function nv_highlight_string($tab, $type = 'sql')
 
     if ($type == 'sql') {
         return highlight_string($show . ';', 1);
-    } else {
-        return highlight_string("<?php\n\n\$sql = \"" . $show . "\";\n\n?>", 1);
     }
+
+    return highlight_string("<?php\n\n\$sql = \"" . $show . "\";\n\n?>", 1);
 }
 
 /**
  * nv_show_tab()
- *
- * @return void
  */
 function nv_show_tab()
 {
@@ -187,7 +184,7 @@ function nv_show_tab()
     if (in_array($nv_Request->get_title('show_highlight', 'post'), [
         'php',
         'sql'
-    ])) {
+    ], true)) {
         $content = nv_highlight_string($tab, $nv_Request->get_title('show_highlight', 'post'));
         include NV_ROOTDIR . '/includes/header.php';
         echo $content;
@@ -215,15 +212,15 @@ function nv_show_tab()
     ];
     $contents['table']['info']['data_length'] = [
         $lang_module['table_size'],
-        nv_convertfromBytes(intval($item['data_length']) + intval($item['index_length']))
+        nv_convertfromBytes((int) ($item['data_length']) + (int) ($item['index_length']))
     ];
     $contents['table']['info']['max_data_length'] = [
         $lang_module['table_max_size'],
-        (!empty($item['max_data_length']) ? nv_convertfromBytes(floatval($item['max_data_length'])) : 'n/a')
+        (!empty($item['max_data_length']) ? nv_convertfromBytes((float) ($item['max_data_length'])) : 'n/a')
     ];
     $contents['table']['info']['data_free'] = [
         $lang_module['table_datafree'],
-        (!empty($item['data_free']) ? nv_convertfromBytes(intval($item['data_free'])) : 0)
+        (!empty($item['data_free']) ? nv_convertfromBytes((int) ($item['data_free'])) : 0)
     ];
     $contents['table']['info']['rows'] = [
         $lang_module['table_numrow'],
@@ -231,7 +228,7 @@ function nv_show_tab()
     ];
     $contents['table']['info']['auto_increment'] = [
         $lang_module['table_auto_increment'],
-        ((isset($item['auto_increment'])) ? intval($item['auto_increment']) : 'n/a')
+        ((isset($item['auto_increment'])) ? (int) ($item['auto_increment']) : 'n/a')
     ];
     $contents['table']['info']['create_time'] = [
         $lang_module['table_create_time'],
@@ -305,6 +302,7 @@ function main_theme($contents)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -372,6 +370,7 @@ function nv_show_tables_theme($contents)
     $xtpl->assign('THIRD', $contents['third']);
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -416,5 +415,6 @@ function nv_show_tab_theme($contents)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

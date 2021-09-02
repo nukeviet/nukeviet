@@ -1,17 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/29/2009 20:7
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
+/**
+ * nv_stat_update()
+ *
+ * @throws PDOException
+ */
 function nv_stat_update()
 {
     global $db, $client_info, $global_config;
@@ -83,4 +89,6 @@ function nv_stat_update()
 }
 
 nv_stat_update();
-$nv_Request->set_Cookie('statistic_' . NV_LANG_DATA, NV_CURRENTTIME, 1800);// Đếm lại sau 30 phút khách truy cập không hoạt động
+
+// Đếm lại sau 30 phút khách truy cập không hoạt động
+$nv_Request->set_Cookie('statistic_' . NV_LANG_DATA, NV_CURRENTTIME, 1800);

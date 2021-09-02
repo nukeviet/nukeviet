@@ -1,6 +1,14 @@
-/* Base CSS */
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
 
-.moxie-shim input, .moxie-shim-html5 input {
+.moxie-shim input,
+.moxie-shim-html5 input {
     cursor: pointer;
 }
 
@@ -19,7 +27,7 @@
 }
 
 .content {
-    background: #FFF;
+    background: #fff;
     height: 100%;
     padding: 0 5px 40px 5px;
 }
@@ -41,13 +49,13 @@
 }
 
 .imgfolder {
-    background: #FFF;
+    background: #fff;
     height: 100%;
     overflow: auto;
 }
 
 .filebrowse {
-    background: #F5F5F5;
+    background: #f5f5f5;
     height: 100%;
     overflow: auto;
 }
@@ -64,25 +72,32 @@
         height: auto;
         padding-bottom: 0;
     }
+
     .upload-wrap {
         height: auto;
     }
+
     .imgfolder {
         height: auto;
         max-height: 300px;
     }
+
     .filebrowse {
         height: auto;
     }
+
     .footer {
         position: inherit;
         height: auto;
         border-top: 1px #dadada solid;
     }
+
     .footer .form-control {
         margin-bottom: 10px;
     }
-    .footer .refresh, .footer .search {
+
+    .footer .refresh,
+    .footer .search {
         text-align: center;
     }
 }
@@ -177,7 +192,7 @@
     text-align: center;
 }
 
-#filemove input[type="checkbox"] {
+#filemove input[type='checkbox'] {
     position: relative;
     top: 6px;
 }
@@ -311,7 +326,7 @@ img.watermark:hover {
 }
 
 .w50 {
-    width: 50px!important;
+    width: 50px !important;
 }
 
 /* List files (thumbnail) */
@@ -323,7 +338,7 @@ img.watermark:hover {
 
 .imgcontent {
     background: #fff;
-    border: 2px solid #EAEAEA;
+    border: 2px solid #eaeaea;
     color: #666;
     cursor: pointer;
     float: left;
@@ -333,19 +348,19 @@ img.watermark:hover {
     margin-right: 2px;
     padding: 5px;
     text-align: center;
-    width: 100px
+    width: 100px;
 }
 
 .imgcontent:hover {
-    background: #F2F9FC;
-    border: 2px solid #DDEFF8;
-    color: #333
+    background: #f2f9fc;
+    border: 2px solid #ddeff8;
+    color: #333;
 }
 
 .imgInfo {
     font-size: 10px;
     line-height: 12px;
-    height: 30px
+    height: 30px;
 }
 
 .imgInfo .nameLong {
@@ -363,31 +378,32 @@ img.watermark:hover {
     vertical-align: middle;
 }
 
-.imgsel, .imgtempsel {
+.imgsel,
+.imgtempsel {
     /* Selected file */
-    background: #fd8!important;
+    background: #fd8 !important;
     border-color: #fb0;
     color: #333;
 }
 
 .imgcontent.imgsel:hover {
-    background: #fb0!important;
-    border-color: #EEAF00;
-    color: #333
+    background: #fb0 !important;
+    border-color: #eeaf00;
+    color: #333;
 }
 
 .imgtempunsel {
-    background: #fff!important;
-    border-color: #EAEAEA!important;
-    color: #666!important;
+    background: #fff !important;
+    border-color: #eaeaea !important;
+    color: #666 !important;
 }
 
 img.previewimg {
-    background: #FFF;
-    border: 2px solid #F0F0F0;
+    background: #fff;
+    border: 2px solid #f0f0f0;
     max-height: 80px;
     max-width: 80px;
-    padding: 2px
+    padding: 2px;
 }
 
 /* List files (detail) */
@@ -395,7 +411,7 @@ img.previewimg {
 .view-detail .imgcontent {
     background: #fff;
     border: 0;
-    border-bottom: 1px #EAEAEA solid;
+    border-bottom: 1px #eaeaea solid;
     color: #666;
     cursor: pointer;
     float: none;
@@ -426,11 +442,11 @@ img.previewimg {
 }
 
 .view-detail img.previewimg {
-    background: #FFF!important;
-    border: 0!important;
-    width: 16px!important;
-    height: auto!important;
-    padding: 2px
+    background: #fff !important;
+    border: 0 !important;
+    width: 16px !important;
+    height: auto !important;
+    padding: 2px;
 }
 
 .view-detail .imgInfo {
@@ -456,9 +472,9 @@ img.previewimg {
 /* Info error */
 
 #errorInfo {
-    color: #F00;
+    color: #f00;
     font-size: 12px;
-    padding: 15px
+    padding: 15px;
 }
 
 /* Crop image */
@@ -470,7 +486,7 @@ img.previewimg {
 
 #cropimage .crop-content {
     margin: 0 auto 10px auto;
-    border: 2px solid #F0F0F0;
+    border: 2px solid #f0f0f0;
 }
 
 #cropimage .crop-content img {
@@ -478,9 +494,9 @@ img.previewimg {
 }
 
 .ui-dialog .ui-resizable-se {
-    background-position: -64px -224px!important;
-    right: 1px!important;
-    bottom: 1px!important;
+    background-position: -64px -224px !important;
+    right: 1px !important;
+    bottom: 1px !important;
 }
 
 /* Add logo */
@@ -492,7 +508,7 @@ img.previewimg {
 
 #addlogo .addlogo-content {
     margin: 0 auto 10px auto;
-    border: 2px solid #F0F0F0;
+    border: 2px solid #f0f0f0;
 }
 
 #addlogo .addlogo-content img {

@@ -1,22 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 07/30/2013 10:27
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!function_exists('nv_news_array_cat_admin')) {
     /**
      * nv_news_array_cat_admin()
      *
-     * @return
+     * @param string $module_data
+     * @return array
      */
     function nv_news_array_cat_admin($module_data)
     {
@@ -59,7 +61,7 @@ if (defined('NV_IS_SPADMIN')) {
 } else {
     if (isset($array_cat_admin[$admin_id][0])) {
         $NV_IS_ADMIN_MODULE = true;
-        if (intval($array_cat_admin[$admin_id][0]['admin']) == 2) {
+        if ((int) ($array_cat_admin[$admin_id][0]['admin']) == 2) {
             $NV_IS_ADMIN_FULL_MODULE = true;
         }
     }

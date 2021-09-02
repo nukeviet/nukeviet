@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_logo_position = [
@@ -45,7 +46,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $autologomod = $nv_Request->get_array('autologomod', 'post');
 
-    if ((in_array('all', $autologomod))) {
+    if ((in_array('all', $autologomod, true))) {
         $autologomod = 'all';
     } else {
         $autologomod = array_intersect($autologomod, array_keys($site_mods));
@@ -105,7 +106,7 @@ foreach ($site_mods as $mod => $value) {
     if (is_dir(NV_UPLOADS_REAL_DIR . '/' . $value['module_upload'])) {
         ++$a;
         $xtpl->assign('MOD_VALUE', $mod);
-        $xtpl->assign('LEV_CHECKED', (in_array($mod, $autologomod)) ? 'checked="checked"' : '');
+        $xtpl->assign('LEV_CHECKED', (in_array($mod, $autologomod, true)) ? 'checked="checked"' : '');
         $xtpl->assign('CUSTOM_TITLE', $value['custom_title']);
         $xtpl->parse('main.loop1.loop2');
 
@@ -115,7 +116,7 @@ foreach ($site_mods as $mod => $value) {
     }
 }
 
-$a++;
+++$a;
 $xtpl->assign('MOD_VALUE', 'all');
 $xtpl->assign('LEV_CHECKED', ($global_config['autologomod'] == 'all') ? 'checked="checked"' : '');
 $xtpl->assign('CUSTOM_TITLE', '<strong>' . $lang_module['autologomodall'] . '</strong>');

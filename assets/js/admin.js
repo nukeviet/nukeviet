@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 9:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_admin_logout() {
@@ -12,6 +13,7 @@ function nv_admin_logout() {
     });
     return !1
 }
+
 function nv_sh(b, a) {
     3 == $("#" + b).val() ? nv_show_hidden(a, 1) : nv_show_hidden(a, 0);
     return !1

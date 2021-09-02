@@ -1,21 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -81,6 +81,7 @@ $lang_module['search_none'] = 'No result match';
 $lang_module['empty_data_search'] = 'Empty search data';
 $lang_module['search_word_short'] = 'The search word is too short. Please enter at least %d characters';
 $lang_module['search_in_module'] = 'Search in module';
+$lang_module['search_catid_error'] = 'Error: The category you selected does not exist.';
 $lang_module['view_all_title'] = 'View all results';
 $lang_module['pages_title'] = 'Page';
 $lang_module['time_update'] = 'Time publish';
@@ -163,7 +164,7 @@ $lang_module['pick_layout'] = 'Choose layout';
 $lang_module['click_to_download'] = 'Click to download';
 $lang_module['default_layout'] = 'Default';
 $lang_module['download'] = 'File';
-$lang_module['quick_view_pdf'] = 'Preview';
+$lang_module['preview'] = 'Preview';
 $lang_module['files'] = 'Attach files';
 $lang_module['author_info_save'] = 'Save';
 $lang_module['author_pseudonym'] = 'Pseudonym';

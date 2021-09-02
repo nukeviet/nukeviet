@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $dirlang_old = $nv_Request->get_string('dirlang', 'cookie', NV_LANG_DATA);
@@ -30,7 +31,7 @@ foreach ($columns_array as $row) {
     }
 }
 
-if (empty($array_lang_exit) or !in_array($dirlang, $array_lang_exit)) {
+if (empty($array_lang_exit) or !in_array($dirlang, $array_lang_exit, true)) {
     $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5('readallfile' . NV_CHECK_SESSION));
 
     $xtpl->parse('empty');
@@ -46,7 +47,7 @@ foreach ($array_lang_exit as $langkey) {
     $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $langkey] = $language_array[$langkey]['name'];
 }
 
-if (!in_array($dirlang, $array_lang_exit)) {
+if (!in_array($dirlang, $array_lang_exit, true)) {
     $dirlang = $global_config['site_lang'];
 }
 
@@ -91,7 +92,7 @@ while (list($idfile, $module, $admin_file, $langtype, $author_lang) = $result->f
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5($idfile . NV_CHECK_SESSION),
         'url_export' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=write&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5($idfile . NV_CHECK_SESSION)
     ]);
-    if (in_array('write', $allow_func)) {
+    if (in_array('write', $allow_func, true)) {
         $xtpl->parse('main.loop.write');
     }
     $xtpl->parse('main.loop');

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/30/2009 1:31
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Kiểm tra IP
@@ -53,7 +54,7 @@ $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
 $error = '';
 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk)) {
+if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk, true)) {
     $gfx_chk = 1;
 } else {
     $gfx_chk = 0;
@@ -72,24 +73,24 @@ $cfg_2step = [];
 if (!empty($admin_pre_data)) {
     $cfg_2step['opts'] = []; // Các hình thức xác thực được phép
     $cfg_2step['default'] = $global_config['admin_2step_default']; // Hình thức mặc định
-    $cfg_2step['active_code'] = boolval($admin_pre_data['active2step']); // Đã bật xác thực 2 bước bằng ứng dụng hay chưa
+    $cfg_2step['active_code'] = (bool) ($admin_pre_data['active2step']); // Đã bật xác thực 2 bước bằng ứng dụng hay chưa
     $cfg_2step['active_facebook'] = false; // Đã login bằng Facebook hay chưa
     $cfg_2step['active_google'] = false; // Đã login bằng Google hay chưa
     $_2step_opt = explode(',', $global_config['admin_2step_opt']);
-    if (in_array('code', $_2step_opt)) {
+    if (in_array('code', $_2step_opt, true)) {
         $cfg_2step['opts'][] = 'code';
     }
-    if (in_array('facebook', $_2step_opt) and !empty($global_config['facebook_client_id']) and !empty($global_config['facebook_client_secret'])) {
+    if (in_array('facebook', $_2step_opt, true) and !empty($global_config['facebook_client_id']) and !empty($global_config['facebook_client_secret'])) {
         $cfg_2step['opts'][] = 'facebook';
         $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='facebook'";
-        $cfg_2step['active_facebook'] = boolval($db->query($sql)->fetchColumn());
+        $cfg_2step['active_facebook'] = (bool) ($db->query($sql)->fetchColumn());
     }
-    if (in_array('google', $_2step_opt) and !empty($global_config['google_client_id']) and !empty($global_config['google_client_secret'])) {
+    if (in_array('google', $_2step_opt, true) and !empty($global_config['google_client_id']) and !empty($global_config['google_client_secret'])) {
         $cfg_2step['opts'][] = 'google';
         $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='google'";
-        $cfg_2step['active_google'] = boolval($db->query($sql)->fetchColumn());
+        $cfg_2step['active_google'] = (bool) ($db->query($sql)->fetchColumn());
     }
-    if (empty($cfg_2step['default']) or !in_array($cfg_2step['default'], $cfg_2step['opts'])) {
+    if (empty($cfg_2step['default']) or !in_array($cfg_2step['default'], $cfg_2step['opts'], true)) {
         $cfg_2step['default'] = current($cfg_2step['opts']);
     }
     /*
@@ -110,7 +111,7 @@ if (!empty($admin_pre_data)) {
  * - Có thể chưa kích hoạt: Điều kiện là chưa có phương thức xác thực nào
  * - Có thể đã kích hoạt rồi
  */
-if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 'get', '')), $cfg_2step['opts']) and ((!$cfg_2step['active_' . $opt] and $cfg_2step['count_active'] < 1) or $cfg_2step['active_' . $opt])) {
+if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 'get', '')), $cfg_2step['opts'], true) and ((!$cfg_2step['active_' . $opt] and $cfg_2step['count_active'] < 1) or $cfg_2step['active_' . $opt])) {
     if ($opt == 'code') {
         // Login bằng tài khoản user 1 step để chuyển sang trang kích hoạt
         $checknum = md5(nv_genpass(10));
@@ -124,7 +125,7 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
             'current_ip' => NV_CLIENT_IP,
             'last_ip' => $admin_pre_data['user_last_ip'],
             'current_login' => NV_CURRENTTIME,
-            'last_login' => intval($admin_pre_data['user_last_login']),
+            'last_login' => (int) ($admin_pre_data['user_last_login']),
             'last_openid' => $admin_pre_data['user_last_openid'],
             'current_openid' => ''
         ];
@@ -192,7 +193,7 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
 }
 
 // Login bước 2 bằng mã xác nhận từ ứng dụng
-if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION and $cfg_2step['active_code'] and in_array('code', $cfg_2step['opts'])) {
+if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION and $cfg_2step['active_code'] and in_array('code', $cfg_2step['opts'], true)) {
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
 
@@ -293,7 +294,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
             $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
             $error = $lang_global['loginincorrect'];
         } else {
-            $row['admin_lev'] = intval($row['admin_lev']);
+            $row['admin_lev'] = (int) ($row['admin_lev']);
 
             // Kiểm tra quyền đăng nhập (do cấu hình hệ thống quy định)
             if (!defined('ADMIN_LOGIN_MODE')) {
@@ -302,7 +303,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
             if (ADMIN_LOGIN_MODE == 2 and !in_array($row['admin_lev'], [
                 1,
                 2
-            ])) {
+            ], true)) {
                 // Điều hành chung + Tối cao được đăng nhập
                 $error = $lang_global['admin_access_denied2'];
             } elseif (ADMIN_LOGIN_MODE == 1 and $row['admin_lev'] != 1) {
@@ -318,10 +319,10 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
              * Nếu có lưu lại thông tin xác thực bước 1 và load lại trang để kiểm tra xử lý tiếp
              */
             // Kiểm tra cấu hình toàn hệ thống
-            $_2step_require = in_array($global_config['two_step_verification'], [
+            $_2step_require = in_array((int) $global_config['two_step_verification'], [
                 1,
                 3
-            ]);
+            ], true);
             if (!$_2step_require) {
                 // Nếu toàn hệ thống không bắt buộc thì kiểm tra nhóm thành viên
                 $manual_groups = [
@@ -340,7 +341,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
             if ($_2step_require or $row['active2step']) {
                 // Ghi nhận thông tin bước 1, lưu lại và chuyển đến bước 2
                 nv_insert_logs(NV_LANG_DATA, 'Pre login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0);
-                $admin_id = intval($row['admin_id']);
+                $admin_id = (int) ($row['admin_id']);
                 $checknum = md5(nv_genpass(10));
                 $array_admin = [
                     'admin_id' => $admin_id,
@@ -382,7 +383,7 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
 // Đăng nhập admin hoàn toàn thành công
 if ($admin_login_success === true) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $row['username'] . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0);
-    $admin_id = intval($row['admin_id']);
+    $admin_id = (int) ($row['admin_id']);
     $checknum = md5(nv_genpass(10));
     $array_admin = [
         'admin_id' => $admin_id,
@@ -392,7 +393,7 @@ if ($admin_login_success === true) {
         'current_ip' => NV_CLIENT_IP,
         'last_ip' => $row['admin_last_ip'],
         'current_login' => NV_CURRENTTIME,
-        'last_login' => intval($row['admin_last_login'])
+        'last_login' => (int) ($row['admin_last_login'])
     ];
     $admin_encode = json_encode($array_admin);
 
@@ -426,7 +427,7 @@ if ($admin_login_success === true) {
 
     $nv_Request->unset_request('admin_pre', 'session');
     nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . '" />');
-    die();
+    exit();
 }
 
 $dir_template = '';

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 5:53
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $menu_top = [
@@ -82,7 +83,7 @@ function nv_fix_subweight($mod)
  * nv_setup_block_module()
  *
  * @param mixed $mod
- * @param integer $func_id
+ * @param int   $func_id
  * @return
  */
 function nv_setup_block_module($mod, $func_id = 0)
@@ -141,7 +142,7 @@ function nv_setup_block_module($mod, $func_id = 0)
  *
  * @param mixed $lang
  * @param mixed $module_name
- * @param integer $sample
+ * @param int   $sample
  * @return
  */
 function nv_setup_data_module($lang, $module_name, $sample = 0)
@@ -191,6 +192,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                         $db->query($sql);
                     } catch (PDOException $e) {
                         trigger_error(print_r($e, true));
+
                         return $return;
                     }
                 }
@@ -224,7 +226,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             for ($i = 0, $count = sizeof($layout); $i < $count; ++$i) {
                 $layout_name = (string) $layout[$i]->name;
 
-                if (in_array($layout_name, $layout_array)) {
+                if (in_array($layout_name, $layout_array, true)) {
                     $layout_funcs = $layout[$i]->xpath('funcs');
                     for ($j = 0, $count2 = sizeof($layout_funcs); $j < $count2; ++$j) {
                         $mo_funcs = (string) $layout_funcs[$j];
@@ -269,7 +271,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             foreach ($array_keys as $func) {
                 $show_func = 0;
                 $weight = 0;
-                $in_submenu = (in_array($func, $array_submenu)) ? 1 : 0;
+                $in_submenu = (in_array($func, $array_submenu, true)) ? 1 : 0;
                 if (isset($arr_func_id_old[$func]) and isset($arr_func_id_old[$func]) > 0) {
                     $arr_func_id[$func] = $arr_func_id_old[$func];
                     $db->query('UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', in_submenu=' . $in_submenu . ', subweight=0 WHERE func_id=' . $arr_func_id[$func]);
@@ -396,6 +398,7 @@ function main_theme($contents)
     $xtpl->assign('CONTENT', $contents);
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -514,6 +517,7 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
@@ -542,40 +546,7 @@ function show_funcs_theme($contents)
     }
 
     $xtpl->parse('main');
-    return $xtpl->text('main');
-}
 
-/**
- * change_custom_name_theme()
- *
- * @param mixed $contents
- * @return
- */
-function change_custom_name_theme($contents)
-{
-    global $global_config, $module_file;
-
-    $xtpl = new XTemplate('change_custom_name_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENT', $contents);
-
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
- * change_site_title_theme()
- *
- * @param mixed $contents
- * @return
- */
-function change_site_title_theme($contents)
-{
-    global $global_config, $module_file;
-
-    $xtpl = new XTemplate('change_site_title_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENT', $contents);
-
-    $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
@@ -636,5 +607,6 @@ function setup_modules($array_head, $array_modules, $array_virtual_head, $array_
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }

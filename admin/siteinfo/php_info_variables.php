@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:4
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SITEINFO')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
@@ -38,7 +39,7 @@ if (!empty($array['PHP Variables'])) {
     $array_key_no_show[] = '_SERVER["AUTH_PASSWORD"]';
 
     foreach ($array['PHP Variables'] as $key => $value) {
-        if (substr($key, 0, 7) != '_COOKIE' and !in_array($key, $array_key_no_show)) {
+        if (substr($key, 0, 7) != '_COOKIE' and !in_array($key, $array_key_no_show, true)) {
             $xtpl->assign('KEY', $key);
             $xtpl->assign('VALUE', $value);
             $xtpl->parse('main.loop');

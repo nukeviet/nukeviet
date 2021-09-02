@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_USER')) {
@@ -24,8 +25,7 @@ if (defined('NV_IS_USER_FORUM')) {
 /**
  * lost_pass_sendMail()
  *
- * @param mixed $row
- * @return void
+ * @param array $row
  */
 function lost_pass_sendMail($row)
 {
@@ -70,13 +70,19 @@ function lost_pass_sendMail($row)
     }
 }
 
+$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $page_url .= '&nv_redirect=' . $nv_redirect;
+    }
 }
 
 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-$gfx_chk = (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk)) ? 1 : 0;
+$gfx_chk = (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) ? 1 : 0;
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 $data = [];
@@ -328,7 +334,7 @@ if ($mailer_mode != 'smtp' and defined('NV_REGISTER_DOMAIN') and $global_config[
 
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+
 $canonicalUrl = getCanonicalUrl($page_url);
 
 $contents = user_lostpass($data);

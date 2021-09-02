@@ -1,14 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 11-10-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
+
 if (!defined('NV_IS_FILE_SITEINFO')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Delete all log
@@ -18,10 +20,9 @@ if ($nv_Request->get_title('checksess', 'post') == md5('siteinfo_' . NV_CHECK_SE
         if ($db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_logs')) {
             $nv_Cache->delMod($module_name);
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['log_empty_log'], 'All', $admin_info['userid']);
-            die('OK');
-        } else {
-            die($lang_module['log_del_error']);
+            exit('OK');
         }
+        exit($lang_module['log_del_error']);
     }
 
     $id = $nv_Request->get_int('id', 'post,get', 0);

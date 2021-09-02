@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_IS_MOD_PAGE', true);
@@ -29,7 +30,7 @@ $page = 1;
 if ($page_config['viewtype'] != 2) {
     $alias = (!empty($array_op) and !empty($array_op[0])) ? $array_op[0] : '';
     if (substr($alias, 0, 5) == 'page-') {
-        $page = intval(substr($array_op[0], 5));
+        $page = (int) (substr($array_op[0], 5));
         $id = 0;
         $alias = '';
     } elseif (empty($alias) and empty($page_config['viewtype'])) {

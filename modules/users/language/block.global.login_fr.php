@@ -1,21 +1,21 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC <contact@vinades.vn>
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Nov 06, 2017, 10:37:46 AM
-*/
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$lang_translator['author'] = '';
-$lang_translator['createdate'] = '';
-$lang_translator['copyright'] = '';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
+$lang_translator['createdate'] = '31/05/2010, 00:07';
+$lang_translator['copyright'] = 'Copyright (C) 2009-2021 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 

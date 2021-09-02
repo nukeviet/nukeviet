@@ -1,23 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 5/12/2010, 1:34
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_sitemapPing()
  *
- * @param mixed $module
- * @param mixed $link
- * @return
+ * @param string $module
+ * @param string $link
+ * @return string
  */
 function nv_sitemapPing($module, $link)
 {
@@ -72,7 +73,7 @@ function nv_sitemapPing($module, $link)
             $url_parts['path'] = '/';
         }
 
-        $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? ( int )$url_parts['port'] : 80), $errno, $errstr, 3);
+        $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? (int) $url_parts['port'] : 80), $errno, $errstr, 3);
         if (!$sock) {
             return $lang_module['PingNotSupported'];
         }
@@ -139,7 +140,7 @@ if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_co
     foreach ($searchEngineName as $key => $name) {
         $name = trim(strip_tags($name));
         $value = trim(strip_tags($searchEngineValue[$key]));
-        $active = intval($searchEngineActive[$key]);
+        $active = (int) ($searchEngineActive[$key]);
 
         if (!empty($name) and !empty($value)) {
             $searchEngines['searchEngine'][] = [

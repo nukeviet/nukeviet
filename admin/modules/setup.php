@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_MODULES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $array_site_cat_module = [];
@@ -35,12 +36,12 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
         $modrow = $sth->fetch();
 
         if (!empty($modrow)) {
-            if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module)) {
+            if (!empty($array_site_cat_module) and !in_array($modrow['basename'], $array_site_cat_module, true)) {
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             }
 
             $weight = $db->query('SELECT MAX(weight) FROM ' . NV_MODULES_TABLE)->fetchColumn();
-            $weight = intval($weight) + 1;
+            $weight = (int) $weight + 1;
 
             $module_version = [];
             $custom_title = preg_replace('/(\W+)/i', ' ', $setmodule);
@@ -155,7 +156,7 @@ foreach ($arr_module_news as $module_name_i => $arr) {
             ];
         }
 
-        $date_ver = intval(strtotime($module_version['date']));
+        $date_ver = (int) (strtotime($module_version['date']));
 
         if ($date_ver == 0) {
             $date_ver = NV_CURRENTTIME;
@@ -170,7 +171,7 @@ foreach ($arr_module_news as $module_name_i => $arr) {
         $module_version['virtual'] = ($module_version['virtual'] == 1) ? 1 : 0;
 
         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (
-			\'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
+			\'module\', :title, ' . (int) ($module_version['is_sysmod']) . ', ' . (int) ($module_version['virtual']) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
 
         $sth->bindParam(':title', $module_name_i, PDO::PARAM_STR);
         $sth->bindParam(':basename', $module_name_i, PDO::PARAM_STR);
@@ -208,7 +209,7 @@ $array_modules = $array_virtual_modules = $mod_virtual = [];
 
 foreach ($modules_data as $row) {
     if (array_key_exists($row['basename'], $modules_exit)) {
-        if (!empty($array_site_cat_module) and !in_array($row['basename'], $array_site_cat_module)) {
+        if (!empty($array_site_cat_module) and !in_array($row['basename'], $array_site_cat_module, true)) {
             continue;
         }
 

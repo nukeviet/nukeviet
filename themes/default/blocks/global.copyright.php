@@ -1,22 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_copyright_info')) {
     /**
      * nv_copyright_info_config()
      *
-     * @return
+     * @return string
      */
     function nv_copyright_info_config()
     {
@@ -49,7 +50,7 @@ if (!nv_function_exists('nv_copyright_info')) {
     /**
      * nv_copyright_info_submit()
      *
-     * @return
+     * @return array
      */
     function nv_copyright_info_submit()
     {
@@ -62,14 +63,15 @@ if (!nv_function_exists('nv_copyright_info')) {
         $return['config']['design_by'] = $nv_Request->get_title('design_by', 'post');
         $return['config']['design_url'] = $nv_Request->get_title('design_url', 'post');
         $return['config']['siteterms_url'] = $nv_Request->get_title('siteterms_url', 'post');
+
         return $return;
     }
 
     /**
-     * nv_menu_theme_default_footer()
+     * nv_copyright_info()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string
      */
     function nv_copyright_info($block_config)
     {
@@ -112,6 +114,7 @@ if (!nv_function_exists('nv_copyright_info')) {
             $xtpl->parse('main.memory_time_usage');
         }
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

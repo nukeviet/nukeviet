@@ -1,21 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_STATISTICS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_theme_statistics_referer()
  *
- * @return
+ * @param array $cts
+ * @param int   $total
+ * @return string
  */
 function nv_theme_statistics_referer($cts, $total)
 {
@@ -53,13 +56,17 @@ function nv_theme_statistics_referer($cts, $total)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_statistics_allreferers()
  *
- * @return
+ * @param int   $num_items
+ * @param array $cts
+ * @param mixed $host_list
+ * @return string
  */
 function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
 {
@@ -100,13 +107,17 @@ function nv_theme_statistics_allreferers($num_items, $cts, $host_list)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_statistics_allbots()
  *
- * @return
+ * @param int   $num_items
+ * @param mixed $bot_list
+ * @param array $cts
+ * @return string
  */
 function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
 {
@@ -147,13 +158,17 @@ function nv_theme_statistics_allbots($num_items, $bot_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_statistics_allos()
  *
- * @return
+ * @param int   $num_items
+ * @param mixed $os_list
+ * @param array $cts
+ * @return string
  */
 function nv_theme_statistics_allos($num_items, $os_list, $cts)
 {
@@ -196,13 +211,17 @@ function nv_theme_statistics_allos($num_items, $os_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_statistics_allbrowsers()
  *
- * @return
+ * @param int   $num_items
+ * @param mixed $browsers_list
+ * @param array $cts
+ * @return string
  */
 function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
 {
@@ -246,13 +265,17 @@ function nv_theme_statistics_allbrowsers($num_items, $browsers_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_statistics_allcountries()
  *
- * @return
+ * @param int   $num_items
+ * @param mixed $countries_list
+ * @param array $cts
+ * @return string
  */
 function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
 {
@@ -296,13 +319,22 @@ function nv_theme_statistics_allcountries($num_items, $countries_list, $cts)
     }
 
     $xtpl->parse('main');
+
     return $xtpl->text('main');
 }
 
 /**
  * nv_theme_statistics_main()
  *
- * @return
+ * @param array $ctsy
+ * @param array $ctsm
+ * @param array $ctsdm
+ * @param array $ctsdw
+ * @param array $ctsc
+ * @param array $ctsb
+ * @param array $ctso
+ * @param array $ctsh
+ * @return string
  */
 function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh)
 {

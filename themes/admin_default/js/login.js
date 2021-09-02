@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 19/3/2010 22:58
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var seccodecheck = /^([a-zA-Z0-9])+$/;
@@ -17,7 +18,9 @@ jsi[2] || (jsi[2] = 0);
 jsi[3] || (jsi[3] = 6);
 var strHref = window.location.href;
 if (-1 < strHref.indexOf("?")) {
-    var strHref_split = strHref.split("?"), script_name = strHref_split[0], query_string = strHref_split[1];
+    var strHref_split = strHref.split("?"),
+        script_name = strHref_split[0],
+        query_string = strHref_split[1];
 } else {
     script_name = strHref, query_string = "";
 }
@@ -54,7 +57,9 @@ function nv_change_captcha() {
 };
 
 function login2step_change(ele) {
-    var ele = $(ele), form = ele, i = 0;
+    var ele = $(ele),
+        form = ele,
+        i = 0;
     while (!form.is('form')) {
         if (i++ > 100) {
             break;

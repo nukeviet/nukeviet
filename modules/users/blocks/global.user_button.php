@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/25/2010 18:6
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-global $site_mods, $client_info, $global_config, $module_file, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
+global $site_mods, $client_info, $global_config, $module_file, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID, $page_url;
 
 $content = '';
 
@@ -113,6 +114,7 @@ if ($global_config['allowuserlogin']) {
         $xtpl->parse('signed');
         $content = $xtpl->text('signed');
     } else {
+        $xtpl->assign('NV_REDIRECT', nv_redirect_encrypt(NV_MY_DOMAIN . (empty($page_url) ? '' : nv_url_rewrite(str_replace('&amp;', '&', $page_url), true))));
         $xtpl->parse('main');
         $content = $xtpl->text('main');
     }

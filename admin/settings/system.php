@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SETTINGS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $adminThemes = [''];
@@ -41,7 +42,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_site = [];
 
     $admin_theme = $nv_Request->get_string('admin_theme', 'post');
-    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes)) {
+    if (!empty($admin_theme) and in_array($admin_theme, $adminThemes, true)) {
         $array_config_site['admin_theme'] = $admin_theme;
     } else {
         $array_config_site['admin_theme'] = '';
@@ -87,7 +88,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     if (defined('NV_IS_GODADMIN')) {
         $array_config_global = [];
         $site_timezone = $nv_Request->get_title('site_timezone', 'post', '', 0);
-        if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array) or $site_timezone == 'byCountry'))) {
+        if (empty($site_timezone) or (!empty($site_timezone) and (in_array($site_timezone, $timezone_array, true) or $site_timezone == 'byCountry'))) {
             $array_config_global['site_timezone'] = $site_timezone;
         }
         $my_domains = $nv_Request->get_title('my_domains', 'post', '');
@@ -122,7 +123,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
 
         $site_lang = $nv_Request->get_title('site_lang', 'post', '', 1);
-        if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs)) {
+        if (!empty($site_lang) and in_array($site_lang, $allow_sitelangs, true)) {
             $array_config_global['site_lang'] = $site_lang;
         }
 
@@ -211,7 +212,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
 
         // Cấu hình ghi ra hằng
-        $array_config_define['nv_debug'] = (int)$nv_Request->get_bool('nv_debug', 'post');
+        $array_config_define['nv_debug'] = (int) $nv_Request->get_bool('nv_debug', 'post');
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name");
         foreach ($array_config_define as $config_name => $config_value) {
@@ -262,7 +263,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
-for ($i = 0; $i <= 2; $i++) {
+for ($i = 0; $i <= 2; ++$i) {
     $ssl_https = [
         'key' => $i,
         'title' => $lang_module['ssl_https_' . $i],

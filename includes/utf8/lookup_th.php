@@ -1,20 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 24/10/2013, 22:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Thai
-
-// @formatter:off
 $utf8_lookup_lang = [
     'ก' => 'k', 'ข' => 'kh', 'ฃ' => 'kh', 'ค' => 'kh', 'ฅ' => 'kh', 'ฆ' => 'kh', 'ง' => 'ng', 'จ' => 'ch', 'ฉ' => 'ch', 'ช' => 'ch',
     'ซ' => 's', 'ฌ' => 'ch', 'ญ' => 'y', 'ฎ' => 'd', 'ฏ' => 't', 'ฐ' => 'th', 'ฑ' => 'd', 'ฒ' => 'th', 'ณ' => 'n', 'ด' => 'd',
@@ -28,5 +27,3 @@ $utf8_lookup_lang = [
     'โย' => 'oi', 'อย' => 'oi', 'เย' => 'oei', 'เ–ือย' => 'ueai', 'วย' => 'uai', '–ิว' => 'io', 'เ–็ว' => 'eo', 'เว' => 'eo',
     'แ–็ว' => 'aeo', 'แว' => 'aeo', 'เ–ียว' => 'iao'
 ];
-
-// @formatter:on

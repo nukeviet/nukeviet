@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_DATABASE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_global['mod_settings'];
@@ -27,7 +28,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global['dump_autobackup'] = $nv_Request->get_int('dump_autobackup', 'post');
     $array_config_global['dump_backup_day'] = $nv_Request->get_int('dump_backup_day', 'post');
     $array_config_global['dump_interval'] = $nv_Request->get_int('dump_interval', 'post', 1);
-    $array_config_global['dump_backup_ext'] = (in_array($array_config_global['dump_backup_ext'], $array_sql_ext)) ? $array_config_global['dump_backup_ext'] : $array_sql_ext[0];
+    $array_config_global['dump_backup_ext'] = (in_array($array_config_global['dump_backup_ext'], $array_sql_ext, true)) ? $array_config_global['dump_backup_ext'] : $array_sql_ext[0];
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {

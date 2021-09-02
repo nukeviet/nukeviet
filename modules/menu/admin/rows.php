@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 21-04-2011 11:17
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($nv_Request->isset_request('reload', 'post,get')) {
@@ -24,7 +25,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
     $mod_file = $site_mods[$rows['module_name']]['module_file'];
 
     if (empty($rows)) {
-        die('NO_' . $lang_module['action_menu_reload_none_success']);
+        exit('NO_' . $lang_module['action_menu_reload_none_success']);
     }
 
     // Xoa menu cu
@@ -73,7 +74,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
         menu_fix_order($mid, $id);
         $nv_Cache->delMod($module_name);
     }
-    die('OK_' . $lang_module['action_menu_reload_success']);
+    exit('OK_' . $lang_module['action_menu_reload_success']);
 }
 
 // Default variable
@@ -105,7 +106,7 @@ if ($post['id'] != 0) {
     $result = $db->query($sql);
     $post = $result->fetch();
     if (!empty($post)) {
-        $post['groups_view'] = explode(',', $post['groups_view']);
+        $post['groups_view'] = array_map('intval', explode(',', $post['groups_view']));
         $post['link'] = nv_htmlspecialchars($post['link']);
     } else {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid']);
@@ -165,7 +166,7 @@ foreach ($groups_list as $key => $title) {
         $array['groups_view'][] = [
             'key' => $key,
             'title' => $title,
-            'checked' => in_array($key, $groups_view) ? ' checked="checked"' : ''
+            'checked' => in_array((int) $key, $groups_view, true) ? ' checked="checked"' : ''
         ];
     } else {
         $array['groups_view'][] = [
@@ -234,13 +235,13 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     if (empty($post['title'])) {
         $error = $lang_module['error_menu_name'];
     } elseif ($post['id'] == 0) {
-        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
-        $weight = intval($weight) + 1;
+        $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . (int) ($post['mid']) . ' AND parentid=' . (int) ($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
+        $weight = (int) $weight + 1;
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
             (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view,
             module_name, op, target, css, active_type, status) VALUES
-            (' . intval($post['parentid']) . ', ' . intval($post['mid']) . ', :title, :link, :icon, :image, :note, ' . intval($weight) . ", 0, 0, '',
-            :groups_view, :module_name, :op, " . intval($post['target']) . ', :css, ' . intval($post['active_type']) . ', 1
+            (' . (int) ($post['parentid']) . ', ' . (int) ($post['mid']) . ', :title, :link, :icon, :image, :note, ' . (int) $weight . ", 0, 0, '',
+            :groups_view, :module_name, :op, " . (int) ($post['target']) . ', :css, ' . (int) ($post['active_type']) . ', 1
         )';
 
         $data_insert = [];
@@ -280,8 +281,8 @@ if ($nv_Request->isset_request('submit1', 'post')) {
         }
     } else {
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
-            parentid=' . intval($post['parentid']) . ',
-            mid=' . intval($post['mid']) . ',
+            parentid=' . (int) ($post['parentid']) . ',
+            mid=' . (int) ($post['mid']) . ',
             title= :title,
             link= :link,
             icon= :icon,
@@ -290,10 +291,10 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             groups_view= :groups_view,
             module_name= :module_name,
             op= :op,
-            target=' . intval($post['target']) . ',
+            target=' . (int) ($post['target']) . ',
             css= :css,
-            active_type=' . intval($post['active_type']) . '
-        WHERE id=' . intval($post['id']));
+            active_type=' . (int) ($post['active_type']) . '
+        WHERE id=' . (int) ($post['id']));
 
         $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
         $stmt->bindParam(':link', $post['link'], PDO::PARAM_STR);
@@ -307,10 +308,10 @@ if ($nv_Request->isset_request('submit1', 'post')) {
 
         if ($stmt->execute()) {
             if ($pa_old != $post['parentid']) {
-                $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' '))->fetchColumn();
-                $weight = intval($weight) + 1;
+                $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . (int) ($post['mid']) . ' AND parentid=' . (int) ($post['parentid'] . ' '))->fetchColumn();
+                $weight = (int) $weight + 1;
 
-                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . intval($weight) . ' WHERE id=' . intval($post['id']);
+                $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . (int) $weight . ' WHERE id=' . (int) ($post['id']);
                 $db->query($sql);
             }
 
@@ -484,7 +485,7 @@ if (!empty($arr_table)) {
             $mod_file = $mod_site['module_file'];
             foreach ($mod_site['funcs'] as $funcs) {
                 if ($funcs['in_submenu']) {
-                    $func_menu++;
+                    ++$func_menu;
                 }
             }
 

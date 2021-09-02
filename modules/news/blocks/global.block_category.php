@@ -1,25 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_news_category')) {
     /**
      * nv_block_config_news_category()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_config_news_category($module, $data_block, $lang_block)
     {
@@ -65,15 +66,16 @@ if (!nv_function_exists('nv_news_category')) {
         $html .= "</select>\n";
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * nv_block_config_news_category_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_config_news_category_submit($module, $lang_block)
     {
@@ -83,14 +85,15 @@ if (!nv_function_exists('nv_news_category')) {
         $return['config'] = [];
         $return['config']['catid'] = $nv_Request->get_int('config_catid', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 0);
+
         return $return;
     }
 
     /**
      * nv_news_category()
      *
-     * @param mixed $block_config
-     * @return
+     * @param array $block_config
+     * @return string|void
      */
     function nv_news_category($block_config)
     {
@@ -110,7 +113,7 @@ if (!nv_function_exists('nv_news_category')) {
             $xtpl->assign('BLOCK_ID', $block_config['bid']);
             $xtpl->assign('TEMPLATE', $block_theme);
             foreach ($module_array_cat as $cat) {
-                if (in_array($cat['status'], [1, 2]) and ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid']))) {
+                if (in_array((int) $cat['status'], [1, 2], true) and ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid']))) {
                     $cat['title0'] = nv_clean60($cat['title'], $title_length);
 
                     $xtpl->assign('CAT', $cat);
@@ -125,6 +128,7 @@ if (!nv_function_exists('nv_news_category')) {
             $xtpl->assign('MENUID', $block_config['bid']);
 
             $xtpl->parse('main');
+
             return $xtpl->text('main');
         }
     }
@@ -132,10 +136,10 @@ if (!nv_function_exists('nv_news_category')) {
     /**
      * nv_news_sub_category()
      *
-     * @param mixed $list_sub
-     * @param mixed $title_length
-     * @param mixed $block_theme
-     * @return
+     * @param string $list_sub
+     * @param int    $title_length
+     * @param string $block_theme
+     * @return string
      */
     function nv_news_sub_category($list_sub, $title_length, $block_theme)
     {
@@ -143,25 +147,25 @@ if (!nv_function_exists('nv_news_category')) {
 
         if (empty($list_sub)) {
             return '';
-        } else {
-            $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
-
-            $list = explode(',', $list_sub);
-            foreach ($list as $catid) {
-                $subcat = $module_array_cat[$catid];
-                $subcat['title0'] = nv_clean60($subcat['title'], $title_length);
-
-                $xtpl->assign('SUBCAT', $subcat);
-
-                if (!empty($subcat['subcatid'])) {
-                    $xtpl->assign('SUB', nv_news_sub_category($subcat['subcatid'], $title_length, $block_theme));
-                    $xtpl->parse('subcat.loop.sub');
-                }
-                $xtpl->parse('subcat.loop');
-            }
-            $xtpl->parse('subcat');
-            return $xtpl->text('subcat');
         }
+        $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
+
+        $list = explode(',', $list_sub);
+        foreach ($list as $catid) {
+            $subcat = $module_array_cat[$catid];
+            $subcat['title0'] = nv_clean60($subcat['title'], $title_length);
+
+            $xtpl->assign('SUBCAT', $subcat);
+
+            if (!empty($subcat['subcatid'])) {
+                $xtpl->assign('SUB', nv_news_sub_category($subcat['subcatid'], $title_length, $block_theme));
+                $xtpl->parse('subcat.loop.sub');
+            }
+            $xtpl->parse('subcat.loop');
+        }
+        $xtpl->parse('subcat');
+
+        return $xtpl->text('subcat');
     }
 }
 

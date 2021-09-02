@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:24
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['api_roles'];
@@ -44,7 +45,7 @@ while ($row = $result->fetch()) {
                 ];
             }
             $row['apis'][''][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
-            $row['apitotal']++;
+            ++$row['apitotal'];
         }
     }
     if (!empty($row['role_data'][NV_LANG_DATA])) {
@@ -62,7 +63,7 @@ while ($row = $result->fetch()) {
                         ];
                     }
                     $row['apis'][NV_LANG_DATA][$mod_title][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
-                    $row['apitotal']++;
+                    ++$row['apitotal'];
                 }
             }
         }
@@ -74,7 +75,7 @@ while ($row = $result->fetch()) {
 // Xóa API Role
 if ($nv_Request->isset_request('del', 'post')) {
     if (!defined('NV_IS_AJAX')) {
-        die('Wrong URL!!!');
+        exit('Wrong URL!!!');
     }
 
     $role_id = $nv_Request->get_int('role_id', 'post', 0);
@@ -224,7 +225,7 @@ foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
 
     // Lev 2: Các cat của hệ thống hoặc các module, trong HTML đối xử ngang nhau
     foreach ($sysmodule_data as $catkey => $catapis) {
-        $cat_order++;
+        ++$cat_order;
 
         if (!empty($catkey)) {
             $cat2_key = $keysysmodule . '_' . $catkey;
@@ -246,7 +247,7 @@ foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
             ];
 
             foreach ($catapis['apis'] as $api) {
-                $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $array_post['role_data']['sys'])) or (!empty($keysysmodule) and isset($array_post['role_data'][NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $array_post['role_data'][NV_LANG_DATA][$keysysmodule])));
+                $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $array_post['role_data']['sys'], true)) or (!empty($keysysmodule) and isset($array_post['role_data'][NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $array_post['role_data'][NV_LANG_DATA][$keysysmodule], true)));
                 $total_api_enabled += $api_checked ? 1 : 0;
                 $cat2_total_api += $api_checked ? 1 : 0;
 
@@ -267,7 +268,7 @@ foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
             ];
 
             foreach ($catapis['apis'] as $api) {
-                $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $array_post['role_data']['sys'])) or (!empty($keysysmodule) and isset($array_post['role_data'][NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $array_post['role_data'][NV_LANG_DATA][$keysysmodule])));
+                $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $array_post['role_data']['sys'], true)) or (!empty($keysysmodule) and isset($array_post['role_data'][NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $array_post['role_data'][NV_LANG_DATA][$keysysmodule], true)));
                 $total_api_enabled += $api_checked ? 1 : 0;
                 $cat1_total_api += $api_checked ? 1 : 0;
 

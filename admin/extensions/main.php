@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_global['mod_extensions'];
@@ -25,9 +26,9 @@ $request['lang'] = NV_LANG_INTERFACE;
 $request['basever'] = $global_config['version'];
 
 // Mode filter
-if (!in_array($request['mode'], ['search', 'newest', 'popular', 'featured', 'downloaded', 'favorites'])) {
+if (!in_array($request['mode'], ['search', 'newest', 'popular', 'featured', 'downloaded', 'favorites'], true)) {
     header('Location:' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=manage');
-    die();
+    exit();
 }
 
 if ($request['mode'] != 'search') {
@@ -87,7 +88,7 @@ if (!empty($error)) {
 
     foreach ($array['data'] as $row) {
         $row['rating_avg'] = ceil($row['rating_avg']);
-        $row['type'] = $lang_module['types_' . intval($row['tid'])];
+        $row['type'] = $lang_module['types_' . (int) ($row['tid'])];
         $row['compatible_class'] = empty($row['compatible']) ? 'text-danger' : 'text-success';
         $row['compatible_title'] = empty($row['compatible']) ? $lang_module['incompatible'] : $lang_module['compatible'];
 
@@ -102,7 +103,7 @@ if (!empty($error)) {
         $xtpl->assign('ROW', $row);
 
         // Parse rating
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $xtpl->assign('STAR', $row['rating_avg'] == $i ? ' active' : '');
             $xtpl->parse('main.data.loop.star');
         }
@@ -117,7 +118,7 @@ if (!empty($error)) {
 
     if (!empty($array['pagination']['all_page'])) {
         $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;mode=' . $request['mode'] . '&amp;q=' . urlencode($request['q']);
-        $generate_page = nv_generate_page($base_url, intval($array['pagination']['all_page']), $request['per_page'], $request['page']);
+        $generate_page = nv_generate_page($base_url, (int) ($array['pagination']['all_page']), $request['per_page'], $request['page']);
 
         if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);

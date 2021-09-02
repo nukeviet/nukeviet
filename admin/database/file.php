@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_DATABASE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
@@ -27,7 +28,7 @@ $files = scandir($log_dir);
 foreach ($files as $file) {
     if (preg_match('/^([a-zA-Z0-9]+)\_([a-zA-Z0-9\-\_]+)\.(sql|sql\.gz)+$/', $file, $mc)) {
         $filesize = filesize($log_dir . '/' . $file);
-        $filetime = intval(filemtime($log_dir . '/' . $file));
+        $filetime = (int) (filemtime($log_dir . '/' . $file));
         $array_time[] = $filetime;
 
         $array_content[$filetime] = [

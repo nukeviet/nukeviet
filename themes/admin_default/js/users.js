@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function user_validForm(a) {
@@ -28,7 +29,7 @@ function user_validForm(a) {
                 alert(b.mess);
                 $("[name=\"" + b.input + "\"]", a).focus();
             } else {
-                location_href = typeof (b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
+                location_href = typeof(b.nv_redirect) != "undefined" && b.nv_redirect != '' ? b.nv_redirect : (script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable);
                 if (b.admin_add == "yes") {
                     if (confirm(b.mess)) {
                         location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
@@ -235,7 +236,11 @@ function nv_group_change_status(group_id) {
         var sl = document.getElementById('select_' + r_split[1]);
         if (r_split[0] != 'OK') {
             alert(nv_is_change_act_confirm[2]);
-            if (sl.checked == true) { sl.checked = false; } else { sl.checked = true; }
+            if (sl.checked == true) {
+                sl.checked = false;
+            } else {
+                sl.checked = true;
+            }
             clearTimeout(nv_timer);
             sl.disabled = true;
             return;

@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 // Config logo
@@ -96,7 +97,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: MODULE_URL + "=activatetheme",
-            data : "theme=" + theme + "&checkss=" + $(this).data("checkss"),
+            data: "theme=" + theme + "&checkss=" + $(this).data("checkss"),
             success: function(data) {
                 if (data != "OK_" + theme) {
                     alert(data);
@@ -111,7 +112,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: MODULE_URL + "=deletetheme",
-                data : "theme=" + theme + "&checkss=" + $(this).data("checkss"),
+                data: "theme=" + theme + "&checkss=" + $(this).data("checkss"),
                 success: function(data) {
                     alert(data);
                     window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name;
@@ -176,7 +177,7 @@ $(document).ready(function() {
                 $this.find('i').addClass('hidden');
             }
         });
-        $('#sitemodal').on('hidden.bs.modal', function (e) {
+        $('#sitemodal').on('hidden.bs.modal', function(e) {
             window.location.href = window.location.href.replace(/#(.*)/, "");
         });
 

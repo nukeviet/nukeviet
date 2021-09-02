@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_USER')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Dang nhap thanh vien thi khong duoc truy cap
@@ -18,7 +19,9 @@ if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
 }
 
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
+if (defined('ACCESS_ADDUS')) {
+    $page_url .= '/'. $group_id;
+}
 
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
@@ -28,6 +31,8 @@ if (!$global_config['allowuserreg']) {
 
     $contents = user_info_exit($lang_module['no_allowuserreg']);
     $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -46,6 +51,9 @@ if ($global_config['max_user_number'] > 0) {
         } else {
             $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
             $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+            $canonicalUrl = getCanonicalUrl($page_url);
+
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_site_theme($contents);
             include NV_ROOTDIR . '/includes/footer.php';
@@ -56,10 +64,14 @@ if ($global_config['max_user_number'] > 0) {
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $page_url .= '&nv_redirect=' . $nv_redirect;
+    }
 } elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
     $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
     if (!empty($sso_redirect)) {
         $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+        $page_url .= '&sso_redirect=' . $sso_redirect;
     }
 }
 
@@ -197,7 +209,7 @@ while ($row = $result->fetch()) {
 
 // Captcha
 $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-$gfx_chk = (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk)) ? 1 : 0;
+$gfx_chk = (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk, true)) ? 1 : 0;
 $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 $array_register = [];
@@ -406,7 +418,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['first_name'] = $array_register['first_name'];
         $data_insert['last_name'] = $array_register['last_name'];
         $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = intval($array_register['birthday']);
+        $data_insert['birthday'] = (int) ($array_register['birthday']);
         $data_insert['sig'] = $array_register['sig'];
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
@@ -427,7 +439,8 @@ if ($checkss == $array_register['checkss']) {
                 $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
                 $subject = $lang_module['account_active'];
-                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, true);
+                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], $_url, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                 $send = nv_sendmail([
                     $global_config['site_name'],
                     $global_config['site_email']
@@ -441,7 +454,7 @@ if ($checkss == $array_register['checkss']) {
                     // Thêm thông báo vào hệ thống
                     $access_admin = unserialize($global_users_config['access_admin']);
                     if (isset($access_admin['access_waiting'])) {
-                        for ($i = 1; $i <= 3; $i++) {
+                        for ($i = 1; $i <= 3; ++$i) {
                             if (!empty($access_admin['access_waiting'][$i])) {
                                 $admin_view_allowed = $i == 3 ? 0 : $i;
                                 nv_insert_notification($module_name, 'send_active_link_fail', [
@@ -509,7 +522,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['gender'] = $array_register['gender'];
-        $data_insert['birthday'] = intval($array_register['birthday']);
+        $data_insert['birthday'] = (int) ($array_register['birthday']);
         $data_insert['sig'] = $array_register['sig'];
 
         $userid = $db->insert_id($sql, 'userid', $data_insert);
@@ -534,10 +547,7 @@ if ($checkss == $array_register['checkss']) {
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
             $subject = $lang_module['account_register'];
-            $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-            if (!str_starts_with($_url, NV_MY_DOMAIN)) {
-                $_url = NV_MY_DOMAIN . $_url;
-            }
+            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
             $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
             nv_sendmail([
                 $global_config['site_name'],
@@ -590,6 +600,8 @@ if ($nv_Request->isset_request('get_usage_terms', 'post')) {
 }
 
 $contents = user_register($gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields, $group_id);
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

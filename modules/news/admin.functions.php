@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 2:29
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($NV_IS_ADMIN_MODULE) {
@@ -75,9 +76,9 @@ while ($row = $result->fetch()) {
 /**
  * nv_fix_cat_order()
  *
- * @param integer $parentid
- * @param integer $order
- * @param integer $lev
+ * @param int $parentid
+ * @param int $order
+ * @param int $lev
  * @return
  */
 function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
@@ -100,7 +101,7 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
     foreach ($array_cat_order as $catid_i) {
         ++$order;
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE catid=' . intval($catid_i);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE catid=' . (int) $catid_i;
         $db->query($sql);
         $order = nv_fix_cat_order($catid_i, $order, $lev);
     }
@@ -112,9 +113,10 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
         } else {
             $sql .= ",subcatid='" . implode(',', $array_cat_order) . "'";
         }
-        $sql .= ' WHERE catid=' . intval($parentid);
+        $sql .= ' WHERE catid=' . (int) $parentid;
         $db->query($sql);
     }
+
     return $order;
 }
 
@@ -131,7 +133,7 @@ function nv_fix_topic()
     $weight = 0;
     while ($row = $result->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . intval($row['topicid']);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . (int) ($row['topicid']);
         $db->query($sql);
     }
     $result->closeCursor();
@@ -150,7 +152,7 @@ function nv_fix_block_cat()
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . intval($row['bid']);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . (int) ($row['bid']);
         $db->query($sql);
     }
     $result->closeCursor();
@@ -169,7 +171,7 @@ function nv_fix_source()
     $weight = 0;
     while ($row = $result->fetch()) {
         ++$weight;
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . intval($row['sourceid']);
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . (int) ($row['sourceid']);
         $db->query($sql);
     }
     $result->closeCursor();
@@ -179,13 +181,13 @@ function nv_fix_source()
  * nv_news_fix_block()
  *
  * @param mixed $bid
- * @param bool $repairtable
+ * @param bool  $repairtable
  * @return
  */
 function nv_news_fix_block($bid, $repairtable = true)
 {
     global $db, $module_data;
-    $bid = intval($bid);
+    $bid = (int) $bid;
     if ($bid > 0) {
         $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $bid . ' ORDER BY weight ASC';
         $result = $db->query($sql);
@@ -209,7 +211,7 @@ function nv_news_fix_block($bid, $repairtable = true)
 /**
  * nv_show_cat_list()
  *
- * @param integer $parentid
+ * @param int $parentid
  * @return
  */
 function nv_show_cat_list($parentid = 0)
@@ -297,7 +299,7 @@ function nv_show_cat_list($parentid = 0)
             $array_viewcat = ($numsubcat > 0) ? $array_viewcat_full : $array_viewcat_nosub;
             if (!array_key_exists($viewcat, $array_viewcat)) {
                 $viewcat = 'viewcat_page_new';
-                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . intval($catid));
+                $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . (int) $catid);
                 $stmt->bindParam(':viewcat', $viewcat, PDO::PARAM_STR);
                 $stmt->execute();
             }
@@ -462,6 +464,7 @@ function nv_show_topics_list($page = 1)
     } else {
         $contents = '&nbsp;';
     }
+
     return $contents;
 }
 
@@ -662,6 +665,7 @@ function nv_show_block_list($bid)
     } else {
         $contents = '&nbsp;';
     }
+
     return $contents;
 }
 
@@ -691,6 +695,7 @@ function GetCatidInParent($catid)
             }
         }
     }
+
     return array_unique($array_cat);
 }
 
@@ -699,7 +704,7 @@ function GetCatidInParent($catid)
  *
  * @param string $msg1
  * @param string $msg2
- * @param mixed $nv_redirect
+ * @param mixed  $nv_redirect
  * @return
  */
 function redriect($msg1, $msg2, $nv_redirect, $autoSaveKey = '', $go_back = '')
@@ -745,9 +750,9 @@ function redriect($msg1, $msg2, $nv_redirect, $autoSaveKey = '', $go_back = '')
 /**
  * get_mod_alias()
  *
- * @param mixed $title
+ * @param mixed  $title
  * @param string $mod
- * @param integer $id
+ * @param int    $id
  * @return
  */
 function get_mod_alias($title, $mod = '', $id = 0)
@@ -762,7 +767,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
     if ($module_config[$module_name]['alias_lower']) {
         $alias = strtolower($alias);
     }
-    $id = intval($id);
+    $id = (int) $id;
 
     if ($mod == 'cat') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
@@ -773,7 +778,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(catid) FROM ' . $tab)->fetchColumn();
 
-            $alias .= '-' . (intval($nb) + 1);
+            $alias .= '-' . ((int) $nb + 1);
         }
     } elseif ($mod == 'topics') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_topics';
@@ -784,7 +789,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(topicid) FROM ' . $tab)->fetchColumn();
 
-            $alias .= '-' . (intval($nb) + 1);
+            $alias .= '-' . ((int) $nb + 1);
         }
     } elseif ($mod == 'blockcat') {
         $tab = NV_PREFIXLANG . '_' . $module_data . '_block_cat';
@@ -795,7 +800,7 @@ function get_mod_alias($title, $mod = '', $id = 0)
         if (!empty($nb)) {
             $nb = $db_slave->query('SELECT MAX(bid) FROM ' . $tab)->fetchColumn();
 
-            $alias .= '-' . (intval($nb) + 1);
+            $alias .= '-' . ((int) $nb + 1);
         }
     }
 
@@ -812,5 +817,6 @@ function nv_get_mod_countrows()
     global $module_data, $nv_Cache, $module_name;
     $sql = 'SELECT COUNT(*) totalnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows';
     $list = $nv_Cache->db($sql, '', $module_name);
+
     return $list[0]['totalnews'];
 }

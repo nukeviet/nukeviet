@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $ini = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
@@ -68,6 +69,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $mime = $nv_Request->get_typed_array('mime', 'post', 'int');
     $mime = array_flip($mime);
     $mime = array_intersect_key($myini['mimes'], $mime);
+    $mime[] = 'application/x-httpd-php';
+    $mime[] = 'application/x-httpd-php-source';
+    $mime[] = 'application/php';
+    $mime[] = 'application/x-php';
+    $mime[] = 'text/php';
+    $mime[] = 'text/x-php';
+    $mime = array_unique($mime);
     $mime = implode(',', $mime);
 
     $upload_checking_mode = $nv_Request->get_string('upload_checking_mode', 'post', '');
@@ -77,7 +85,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
     $nv_max_size = $nv_Request->get_float('nv_max_size', 'post', $global_config['nv_max_size']);
     $nv_max_size = min(nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')), $nv_max_size);
-    $nv_auto_resize = (int)$nv_Request->get_bool('nv_auto_resize', 'post', 0);
+    $nv_auto_resize = (int) $nv_Request->get_bool('nv_auto_resize', 'post', 0);
 
     $upload_chunk_size = $nv_Request->get_float('upload_chunk_size', 'post', 0);
     $upload_chunk_size_text = $nv_Request->get_title('upload_chunk_size_text', 'post', '');
@@ -140,8 +148,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $sth->execute();
 
     $array_config_define = [];
-    $array_config_define['upload_alt_require'] = (int)$nv_Request->get_bool('upload_alt_require', 'post', 0);
-    $array_config_define['upload_auto_alt'] = (int)$nv_Request->get_bool('upload_auto_alt', 'post', 0);
+    $array_config_define['upload_alt_require'] = (int) $nv_Request->get_bool('upload_alt_require', 'post', 0);
+    $array_config_define['upload_auto_alt'] = (int) $nv_Request->get_bool('upload_auto_alt', 'post', 0);
 
     $sth->bindValue(':config_name', 'upload_alt_require', PDO::PARAM_STR);
     $sth->bindValue(':config_value', $array_config_define['upload_alt_require'], PDO::PARAM_STR);
@@ -274,7 +282,7 @@ foreach ($myini['types'] as $key => $name) {
     $xtpl->assign('TYPES', [
         'key' => $key,
         'title' => $name,
-        'checked' => in_array($name, $global_config['file_allowed_ext']) ? ' checked="checked"' : ''
+        'checked' => in_array($name, $global_config['file_allowed_ext'], true) ? ' checked="checked"' : ''
     ]);
     $xtpl->parse('main.types');
 }
@@ -283,7 +291,7 @@ foreach ($myini['exts'] as $key => $name) {
     $xtpl->assign('EXTS', [
         'key' => $key,
         'title' => $name,
-        'checked' => in_array($name, $global_config['forbid_extensions']) ? ' checked="checked"' : ''
+        'checked' => in_array($name, $global_config['forbid_extensions'], true) ? ' checked="checked"' : ''
     ]);
     $xtpl->parse('main.exts');
 }
@@ -292,7 +300,7 @@ foreach ($myini['mimes'] as $key => $name) {
     $xtpl->assign('MIMES', [
         'key' => $key,
         'title' => $name,
-        'checked' => in_array($name, $global_config['forbid_mimes']) ? ' checked="checked"' : ''
+        'checked' => in_array($name, $global_config['forbid_mimes'], true) ? ' checked="checked"' : ''
     ]);
     $xtpl->parse('main.mimes');
 }

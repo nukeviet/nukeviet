@@ -1,18 +1,22 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 $(document).ready(function() {
-    // Xem PDF đính kèm
-    $('[data-toggle="collapsepdf"]').each(function() {
-        $('#' + $(this).attr('id')).on('shown.bs.collapse', function() {
-            $(this).find('iframe').attr('src', $(this).data('src'));
-        });
-    });
+    // Xem file đính kèm
+    $('[data-toggle="collapsefile"]').each(function() {
+        $('#' + $(this).attr('id')).on('show.bs.collapse', function() {
+            if ('false' == $(this).attr('data-loaded')) {
+                $(this).attr('data-loaded', 'true')
+                $(this).find('iframe').attr('src', $(this).data('src'))
+            }
+        })
+    })
 
     // Xem ảnh đính kèm
     $('[data-toggle="newsattachimage"]').click(function(e) {
@@ -71,7 +75,8 @@ function get_alias(op) {
 }
 
 function fix_news_image() {
-    var news = $('#news-bodyhtml'), newsW, w, h;
+    var news = $('#news-bodyhtml'),
+        newsW, w, h;
     if (news.length) {
         var newsW = news.innerWidth();
         $.each($('img', news), function() {

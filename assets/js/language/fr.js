@@ -1,8 +1,10 @@
 /**
- * @Project NUKEVIET 3.0
- * @Author  VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
- * @Createdate 3-13-2010 15:24
+ * NUKEVIET Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 var nv_aryDayName = "Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi".split(" "),
@@ -60,9 +62,9 @@ var nv_aryDayName = "Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi".split(
     nv_content = "Contenu vide.",
     nv_code = "Code de sécurité incorrect.",
     // Message before unload
-	nv_msgbeforeunload = "Les données ne sont pas enregistrées. Vous perdrez toutes les données si vous quittez cette page. Veux-tu partir?",
+    nv_msgbeforeunload = "Les données ne sont pas enregistrées. Vous perdrez toutes les données si vous quittez cette page. Veux-tu partir?",
     // ErrorMessage
-	NVJL = [];
+    NVJL = [];
 NVJL.errorRequest = "Il y a eu une erreur avec la demande.";
 NVJL.errortimeout = "La demande a expiré.";
 NVJL.errornotmodified = "La requête n'a pas été modifiée mais n'a pas été extraite du cache.";

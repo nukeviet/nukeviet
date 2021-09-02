@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 $(document).ready(function() {
@@ -24,6 +25,7 @@ function mark_as_unread() {
     });
     return !1
 }
+
 function mark_toogle_process() {
     $.ajax({
         type: "POST",
@@ -36,6 +38,7 @@ function mark_toogle_process() {
     });
     return !1
 }
+
 function mark_as_processed(a, b) {
     $.ajax({
         type: "POST",
@@ -48,6 +51,7 @@ function mark_as_processed(a, b) {
     });
     return !1
 }
+
 function multimark(a, b) {
     "unread" != b && (b = "read");
     $.ajax({
@@ -86,14 +90,16 @@ function nv_del_department(a) {
     });
     return !1
 }
+
 function nv_del_submit(a, b) {
     var c = 0;
-    if (a[b].length) for (var d = 0; d < a[b].length; d++) {
-        if (1 == a[b][d].checked) {
-            c = 1;
-            break
-        }
-    } else 1 == a[b].checked && (c = 1);
+    if (a[b].length)
+        for (var d = 0; d < a[b].length; d++) {
+            if (1 == a[b][d].checked) {
+                c = 1;
+                break
+            }
+        } else 1 == a[b].checked && (c = 1);
     c && confirm(nv_is_del_confirm[0]) && a.submit();
     return !1
 }
@@ -102,6 +108,7 @@ function nv_delall_submit() {
     confirm(nv_is_del_confirm[0]) && (window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&t=3");
     return !1
 }
+
 function nv_del_mess(a) {
     confirm(nv_is_del_confirm[0]) && (window.location.href = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del&t=1&id=" + a);
     return !1

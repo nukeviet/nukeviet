@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Ket noi ngon ngu
@@ -39,7 +40,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                     $services_active = [];
                     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
                     foreach ($services as $key => $service) {
-                        if (in_array($service[1], $prcservice)) {
+                        if (in_array($service[1], $prcservice, true)) {
                             $services_active[] = $service;
                         }
                     }
@@ -88,9 +89,9 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                             $timeout = nv_convertfromSec($timeout);
                             $finish->nodeValue = 'glb|' . sprintf($lang_module['rpc_error_timeout'], $timeout);
                             $content = $xml2->saveXML();
-                            @Header('Content-Type: text/xml; charset=utf-8');
+                            @header('Content-Type: text/xml; charset=utf-8');
                             print_r($content);
-                            die();
+                            exit();
                         }
 
                         $listcatid_arr = explode(',', $news_contents['listcatid']);
@@ -158,9 +159,9 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
 
                         $content = $xml2->saveXML();
 
-                        @Header('Content-Type: text/xml; charset=utf-8');
+                        @header('Content-Type: text/xml; charset=utf-8');
                         print_r($content);
-                        die();
+                        exit();
                     }
                 } else {
                     $msg1 = $lang_module['content_saveok'];

@@ -1,9 +1,14 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.01
+- All modules: Fix $page_url definition
+- System: Fix error in getCanonicalUrl function
+
 NUKEVIET 4.5.00
+- Configure variable "page_title" relative to func_site_title
 - Update Browser class to v1.9.6
 - Update Chart.js to v3.3.2, jquery.js to v3.6, jQuery Validation Plugin to v1.19.3, clipboard.js to v2.0.8, Select2.js to v.4.1.0-rc.0, jquery.timeago.js to version 1.6.7, CKeditor to v4.16.1
-- System package updates: polyfill-mbstring (v1.3.0 => v1.23.0), gregwar/cache (v1.0.12 => v1.0.13), gregwar/image (v2.0.21 => v2.0.28), and/oauth (dev-master 48fa6e7 => dev-master 700b769), symfony/options-resolver (v3.2.6 => v3.4.47), endroid/qrcode (1.9.1 => 1.9.3), phpmailer/phpmailer (v6.1.6 => v6.4.1)
+- System package updates: polyfill-mbstring (v1.3.0 => v1.23.0), gregwar/cache (v1.0.12 => v1.0.13), gregwar/image (v2.0.21 => v2.0.28), and/oauth (dev-master 48fa6e7 => dev-master 700b769), symfony/options-resolver (v3.2.6 => v3.4.47), endroid/qrcode (1.9.1 => 1.9.3), phpmailer/phpmailer (v6.1.6 => v6.5.0)
 - System: Removed non-standard property "zoom" in CSS
 - System: Disable email engines from automatically hyperlinking a URL
 - Module News: Redesigned "Recommend article to your friend" tool

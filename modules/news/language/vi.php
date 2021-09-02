@@ -1,21 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 03:22:00 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
+$lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -81,6 +81,7 @@ $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên qua
 $lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 trường tìm kiếm';
 $lang_module['search_word_short'] = 'Từ tìm kiếm quá ngắn. Vui lòng nhập ít nhất %d ký tự';
 $lang_module['search_in_module'] = 'trong mục';
+$lang_module['search_catid_error'] = 'Lỗi: Chủ đề bạn đã chọn không tồn tại.';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';
 $lang_module['time_update'] = 'Thời gian đăng tin';
@@ -165,7 +166,7 @@ $lang_module['click_to_download'] = 'Nhấn vào để tải file.';
 $lang_module['files'] = 'File đính kèm';
 $lang_module['default_layout'] = 'Mặc định';
 $lang_module['download'] = 'Tập tin';
-$lang_module['quick_view_pdf'] = 'Xem trước';
+$lang_module['preview'] = 'Xem trước';
 $lang_module['author_info_save'] = 'Lưu thông tin';
 $lang_module['author_pseudonym'] = 'Bút danh';
 $lang_module['author_description'] = 'Giới thiệu';

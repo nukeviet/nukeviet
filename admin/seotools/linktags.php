@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 27/05/2021, 18:05
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if ($global_config['idsite']) {
@@ -36,12 +37,12 @@ if ($nv_Request->isset_request('add', 'post') and $checkss == $nv_Request->get_s
     $key = $nv_Request->get_string('key', 'post', '');
     $linktags_key = -1;
     if (!empty($key)) {
-        $linktags_key = intval(substr($key, 2));
+        $linktags_key = (int) (substr($key, 2));
     }
     $attributes = $nv_Request->get_typed_array('linktags_attribute', 'post', 'title');
     $values = $nv_Request->get_typed_array('linktags_value', 'post', 'title');
 
-    $rel_key = array_search('rel', $attributes);
+    $rel_key = array_search('rel', $attributes, true);
     if ($rel_key === false or empty($values[$rel_key])) {
         nv_jsonOutput([
             'status' => 'error',
@@ -80,7 +81,7 @@ if ($nv_Request->isset_request('add', 'post') and $checkss == $nv_Request->get_s
 
 if ($nv_Request->isset_request('del,key', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $key = $nv_Request->get_string('key', 'post', '');
-    $key = intval(substr($key, 2));
+    $key = (int) (substr($key, 2));
     if (isset($linktags['link'][$key])) {
         unset($linktags['link'][$key]);
 

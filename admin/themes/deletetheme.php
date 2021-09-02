@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 30 Nov 2014 01:54:12 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $theme = $nv_Request->get_title('theme', 'post', '', 1);
 if (md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'] . '_' . $theme) != $nv_Request->get_string('checkss', 'post') or empty($theme) or !(preg_match($global_config['check_theme'], $theme) or preg_match($global_config['check_theme_mobile'], $theme))) {
-    die();
+    exit();
 }
 try {
     $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 AND theme= :theme');
@@ -55,5 +56,5 @@ try {
         echo $lang_module['theme_delete_unsuccess'];
     }
 } catch (PDOException $e) {
-    die($e->getMessage());
+    exit($e->getMessage());
 }

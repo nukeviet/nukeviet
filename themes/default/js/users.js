@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1 - 31 - 2010 5 : 12
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function addpass() {
@@ -115,7 +116,9 @@ function usageTermsShow(t) {
                 $('#sitemodalTerm').on('hidden.bs.modal', function() {
                     $("#sitemodalTerm .modal-content").find(".modal-header").remove()
                 });
-                $("#sitemodalTerm").modal({ backdrop: "static" })
+                $("#sitemodalTerm").modal({
+                    backdrop: "static"
+                })
             } else {
                 alert(strip_tags(e))
             }
@@ -176,9 +179,10 @@ function validCheck(a) {
             if (!$("[type=radio]:checked", a).length) return !1
         } else if ("DIV" == b && $(a).is(".check-box")) {
             if (!$("[type=checkbox]:checked", a).length) return !1
-        } else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
-            if ("" == d) return !1
-        } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
+        } else if ("INPUT" == b || "TEXTAREA" == b)
+            if ("undefined" == typeof c || "" == c) {
+                if ("" == d) return !1
+            } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
     }
     return !0
 }
@@ -291,20 +295,20 @@ function reg_validForm(a) {
             d && d.click();
             "error" == b.status ? ($("input,button,select,textarea",
                 a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find('[name="' + b.input + '"]').each(function() {
-                    $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-                    validErrorShow(this)
-                }) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
+                $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+                validErrorShow(this)
+            }) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
+                scrollTop: $(".nv-info", a).offset().top
+            }, 800)), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
+                "ok" == b.input ? setTimeout(function() {
+                    $(".nv-info", a).fadeOut();
+                    $("input,button,select,textarea", a).prop("disabled", !1);
+                    $("[onclick*=validReset]", a).click()
+                }, 6E3) : ($("html, body").animate({
                     scrollTop: $(".nv-info", a).offset().top
-                }, 800)), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
-                    "ok" == b.input ? setTimeout(function() {
-                        $(".nv-info", a).fadeOut();
-                        $("input,button,select,textarea", a).prop("disabled", !1);
-                        $("[onclick*=validReset]", a).click()
-                    }, 6E3) : ($("html, body").animate({
-                        scrollTop: $(".nv-info", a).offset().top
-                    }, 800), $(".form-detail", a).hide(), setTimeout(function() {
-                        window.location.href = "" != b.input ? b.input : window.location.href
-                    }, 6E3)))
+                }, 800), $(".form-detail", a).hide(), setTimeout(function() {
+                    window.location.href = "" != b.input ? b.input : window.location.href
+                }, 6E3)))
         },
         error: function(b, d, f) {
             window.console.log ? console.log(b.status + ": " + f) : alert(b.status + ": " + f)
@@ -421,7 +425,9 @@ function bt_logout(a) {
 }
 
 function login2step_change(ele) {
-    var ele = $(ele), form = ele, i = 0;
+    var ele = $(ele),
+        form = ele,
+        i = 0;
     while (!form.is('form')) {
         if (i++ > 10) {
             break;

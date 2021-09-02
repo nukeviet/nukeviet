@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * cron_dump_autobackup()
  *
- * @return
+ * @return bool
  */
 function cron_dump_autobackup()
 {
@@ -37,7 +38,7 @@ function cron_dump_autobackup()
         if ($dh = opendir($log_dir)) {
             while (($file = readdir($dh)) !== false) {
                 if (preg_match('/^([a-zA-Z0-9]+)\_([0-9]+)\.(' . nv_preg_quote($file_ext) . ')/', $file, $m)) {
-                    if (intval($m[2]) > 0 and intval($m[2]) < $w_day) {
+                    if ((int) ($m[2]) > 0 and (int) ($m[2]) < $w_day) {
                         @unlink($log_dir . '/' . $file);
                     }
                 }

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3-6-2010 0:33
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_VOTING')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -157,6 +158,8 @@ if (empty($vid)) {
     }
 
     $lid = $nv_Request->get_title('lid', 'get', '');
+    $checkss = $nv_Request->get_title('checkss', 'get', '');
+    $captcha = $nv_Request->get_title('captcha', 'get', '');
 
     $array_id = explode(',', $lid);
     $array_id = array_map('intval', $array_id);
@@ -168,15 +171,12 @@ if (empty($vid)) {
     $note = '';
 
     if ($count) {
-        $checkss = $nv_Request->get_title('checkss', 'get', '');
-        $captcha = $nv_Request->get_title('captcha', 'get', '');
-
         if ($checkss != md5($vid . NV_CHECK_SESSION)) {
             nv_redirect_location(nv_url_rewrite($page_url, true));
         }
 
         if ($row['active_captcha'] and ($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($captcha, $module_config[$module_name]['captcha_type'])) {
-            die('ERROR|' . $lang_global['securitycodeincorrect']);
+            exit('ERROR|' . $lang_global['securitycodeincorrect']);
         }
 
         $acceptcm = (int) $row['acceptcm'];
@@ -252,7 +252,10 @@ if (empty($vid)) {
     $contents = voting_result($voting);
 
     $page_title = $row['question'];
-    $page_url .= '&amp;vid=' . $vid;
+    $page_url .= '&amp;vid=' . $vid . '&amp;checkss=' . $checkss . '&amp;lid=' . $lid;
+    if ($row['active_captcha'] and ($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+        $page_url .= 'captcha=' . $captcha;
+    }
     $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';

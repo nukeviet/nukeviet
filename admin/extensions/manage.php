@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 22:5
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_EXTENSIONS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['manage'];
@@ -39,7 +40,7 @@ $array_theme_admin = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_th
 // Package extensions (Odd feature: Package module, theme)
 if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_SESSION) == $request['checksess']) {
     // Kiem tra ung dung ton tai
-    if (($request['type'] == 'module' and in_array($request['title'], $array_module_admin)) or ($request['type'] == 'theme' and in_array($request['title'], $array_theme_admin))) {
+    if (($request['type'] == 'module' and in_array($request['title'], $array_module_admin, true)) or ($request['type'] == 'theme' and in_array($request['title'], $array_theme_admin, true))) {
         $row = [
             0 => [
                 'id' => 0,
@@ -151,7 +152,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             }
         } elseif ($row['type'] == 'theme') {
             $list = scandir(NV_ROOTDIR . '/themes/' . $row['basename']);
-            $array_no_zip = in_array($row['basename'], $array_theme_admin) ? [
+            $array_no_zip = in_array($row['basename'], $array_theme_admin, true) ? [
                 '.',
                 '..'
             ] : [
@@ -161,12 +162,12 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK
             ];
 
             foreach ($list as $file_i) {
-                if (!in_array($file_i, $array_no_zip)) {
+                if (!in_array($file_i, $array_no_zip, true)) {
                     $files_folders[] = NV_ROOTDIR . '/themes/' . $row['basename'] . '/' . $file_i;
                 }
             }
 
-            if (!in_array($row['basename'], $array_theme_admin)) {
+            if (!in_array($row['basename'], $array_theme_admin, true)) {
                 if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $row['basename'] . '/config.ini')) {
                     $info = $xml->xpath('info');
                     $layoutdefault = (string) $xml->layoutdefault;
@@ -441,34 +442,33 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
             }
 
             if (!empty($lang_module_array)) {
-                die('ERROR_' . printf($lang_module['delele_ext_theme_note_module'], implode('; ', $lang_module_array)));
-            } else {
-                nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $request['title'], $admin_info['userid']);
-                nv_deletefile(NV_ROOTDIR . '/themes/' . $request['title'], true);
+                exit('ERROR_' . printf($lang_module['delele_ext_theme_note_module'], implode('; ', $lang_module_array)));
+            }
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $request['title'], $admin_info['userid']);
+            nv_deletefile(NV_ROOTDIR . '/themes/' . $request['title'], true);
 
-                if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
-                    $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-                    while (list($_lang) = $result->fetch(3)) {
-                        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
-                        $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
-                        $sth->execute();
+            if (!file_exists(NV_ROOTDIR . '/themes/' . $request['title'])) {
+                $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
+                while (list($_lang) = $result->fetch(3)) {
+                    $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme');
+                    $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                    $sth->execute();
 
-                        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)');
-                        $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
-                        $sth->execute();
+                    $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)');
+                    $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                    $sth->execute();
 
-                        $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme');
-                        $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
-                        $sth->execute();
-                    }
-                    $nv_Cache->delMod('themes');
-
-                    $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes');
-                    $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');
-                    $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups');
-                } else {
-                    die('ERROR_' . $lang_module['delele_ext_unsuccess']);
+                    $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme');
+                    $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
+                    $sth->execute();
                 }
+                $nv_Cache->delMod('themes');
+
+                $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes');
+                $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');
+                $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups');
+            } else {
+                exit('ERROR_' . $lang_module['delele_ext_unsuccess']);
             }
         }
 
@@ -518,10 +518,10 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
         $sth->bindValue(':title', $request['title']);
         $sth->execute();
 
-        die('OK_' . $lang_module['delele_ext_success']);
+        exit('OK_' . $lang_module['delele_ext_success']);
     }
 
-    die('ERROR_' . $lang_module['delele_ext_unsuccess']);
+    exit('ERROR_' . $lang_module['delele_ext_unsuccess']);
 }
 
 $array_extType = [
@@ -546,7 +546,7 @@ if ($nv_Request->isset_request('selecttype', 'get') and empty($selecttype)) {
     $selecttype = $selecttype_old;
 }
 
-if (!in_array($selecttype, $array_extType)) {
+if (!in_array($selecttype, $array_extType, true)) {
     $selecttype = '';
 }
 
@@ -618,7 +618,7 @@ foreach ($array_langs as $lang) {
 
 // List extensions
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename';
-if (in_array($selecttype, $array_extType)) {
+if (in_array($selecttype, $array_extType, true)) {
     $sql .= ' AND type = ' . $db->quote($selecttype);
     $page_title .= ': ' . $lang_module['extType_' . $selecttype];
 }
@@ -687,7 +687,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
     $theme_mobile_list = nv_scandir(NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile']);
     $theme_list = array_merge($theme_list, $theme_mobile_list);
     foreach ($theme_list as $_theme) {
-        if (!in_array($_theme, $array_themes_indb) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
+        if (!in_array($_theme, $array_themes_indb, true) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
             if ($xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $_theme . '/config.ini')) {
                 $info = $xml->xpath('info');
                 $table_prefix = preg_replace('/(\W+)/i', '_', $_theme);

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die();
+    exit();
 }
 
 $db_config['dbhost'] = 'localhost';
@@ -34,8 +35,8 @@ $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
-$global_config['unofficial_mode'] = 1; // Cảnh báo bản thử nghiệm
-$global_config['version'] = '4.5.00 OpenBeta 1'; // NukeViet 4.5 OpenBeta 1
+$global_config['unofficial_mode'] = 0; // Cảnh báo bản thử nghiệm
+$global_config['version'] = '4.5.00'; // NukeViet 4.5
 $global_config['site_email'] = '';
 $global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;

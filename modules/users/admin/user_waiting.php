@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 //Xoa thanh vien
@@ -22,10 +23,10 @@ if ($nv_Request->isset_request('del', 'post')) {
         }
         if ($db->exec($sql)) {
             nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
-            die('OK');
+            exit('OK');
         }
     }
-    die('NO');
+    exit('NO');
 }
 
 //Kich hoat thanh vien
@@ -115,7 +116,7 @@ if ($nv_Request->isset_request('act', 'get')) {
                 continue;
             }
             if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                $default_value = floatval($row_f['default_value']);
+                $default_value = (float) ($row_f['default_value']);
             } else {
                 $default_value = $db->quote($row_f['default_value']);
             }
@@ -142,17 +143,10 @@ if ($nv_Request->isset_request('act', 'get')) {
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $subject = $lang_module['adduser_register'];
 
+            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
             if (!empty($row['openid_info'])) {
-                $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
-                if (!str_starts_with($_url, NV_MY_DOMAIN)) {
-                    $_url = NV_MY_DOMAIN . $_url;
-                }
                 $message = sprintf($lang_module['adduser_register_openid_info'], $full_name, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
             } else {
-                $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-                if (!str_starts_with($_url, NV_MY_DOMAIN)) {
-                    $_url = NV_MY_DOMAIN . $_url;
-                }
                 $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
             }
 
@@ -238,7 +232,7 @@ $db->select('*')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
 
-if (!empty($orderby) and in_array($orderby, $orders)) {
+if (!empty($orderby) and in_array($orderby, $orders, true)) {
     $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_LANG')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['countries'];
@@ -20,7 +21,7 @@ $array_lang_setup[] = ['', $lang_module['site_lang']];
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $result = $db->query($sql);
 while (list($lang_i) = $result->fetch(3)) {
-    if (in_array($lang_i, $global_config['allow_sitelangs'])) {
+    if (in_array($lang_i, $global_config['allow_sitelangs'], true)) {
         $array_lang_setup[$lang_i] = [$lang_i, $language_array[$lang_i]['name']];
     }
 }
@@ -30,11 +31,11 @@ if ($nv_Request->isset_request('countries', 'post') == 1) {
 
     $content_config = "<?php\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
-    $content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
-    $content_config .= "\$config_geo = array();\n";
+    $content_config .= "if (!defined( 'NV_MAINFILE')) {\n    exit('Stop!!!');\n}\n\n";
+    $content_config .= "\$config_geo = [];\n";
 
     foreach ($countries as $key => $value) {
-        if (in_array($post[$key], $global_config['allow_sitelangs'])) {
+        if (in_array($post[$key], $global_config['allow_sitelangs'], true)) {
             $content_config .= "\$config_geo['" . $key . "'] = '" . $post[$key] . "';\n";
         }
     }

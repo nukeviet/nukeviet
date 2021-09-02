@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/12/2010 12:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $forms = nv_scandir(NV_ROOTDIR . '/modules/' . $module_name . '/forms', '/^form\_([a-zA-Z0-9\_\-]+)\.php$/');
@@ -22,7 +23,7 @@ unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[5], $group
 if ($nv_Request->get_int('save', 'post') == '1') {
     $blang = strip_tags($nv_Request->get_string('blang', 'post', ''));
 
-    if (!empty($blang) and !in_array($blang, $global_config['allow_sitelangs'])) {
+    if (!empty($blang) and !in_array($blang, $global_config['allow_sitelangs'], true)) {
         $blang = '';
     }
 
@@ -30,7 +31,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $description = defined('NV_EDITOR') ? $nv_Request->get_string('description', 'post', '') : strip_tags($nv_Request->get_string('description', 'post', ''));
     $form = $nv_Request->get_string('form', 'post', 'sequential');
     $require_image = $nv_Request->get_int('require_image', 'post', 0);
-    if (!in_array($form, $forms)) {
+    if (!in_array($form, $forms, true)) {
         $form = 'sequential';
     }
 

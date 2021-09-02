@@ -1,44 +1,53 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
 .idinfo {
     vertical-align: top;
-    width: 50px
+    width: 50px;
 }
 
 .ninfo {
-    cursor: pointer
+    cursor: pointer;
 }
 
 .tooltip {
     font: 11px Tahoma, Arial, Verdana, sans-serif;
     cursor: pointer;
-    display: none
+    display: none;
 }
 
 .tooltiptitle {
     font: 800 12px Tahoma, Arial, Verdana, sans-serif;
-    margin-bottom: 10px
+    margin-bottom: 10px;
 }
 
 .author {
     vertical-align: top;
-    width: 100px
+    width: 100px;
 }
 
 .updated {
     vertical-align: top;
     text-align: right;
     white-space: nowrap;
-    width: 100px
+    width: 100px;
 }
 
 .newVesionInfo {
-    background: #EF3805;
+    background: #ef3805;
     font: 800 12px/30px Tahoma, Arial, Verdana, sans-serif;
     color: #fff;
-    text-align: center
+    text-align: center;
 }
 
 .newVesionInfo a {
-    color: #fff
+    color: #fff;
 }
 
 .orderasc {
@@ -46,7 +55,7 @@
     padding-left: 16px;
     background-repeat: no-repeat;
     background-position: left center;
-    background-image: url('../images/arrows/tall-up-arrow.gif')
+    background-image: url('../images/arrows/tall-up-arrow.gif');
 }
 
 .orderdesc {
@@ -54,7 +63,7 @@
     padding-left: 16px;
     background-repeat: no-repeat;
     background-position: left center;
-    background-image: url('../images/arrows/tall-down-arrow.gif')
+    background-image: url('../images/arrows/tall-down-arrow.gif');
 }
 
 .orderno {
@@ -62,11 +71,11 @@
     padding-left: 16px;
     background-repeat: no-repeat;
     background-position: left center;
-    background-image: url('../images/collapse-all.gif')
+    background-image: url('../images/collapse-all.gif');
 }
 
 .pointer {
-    cursor: pointer
+    cursor: pointer;
 }
 
 /* Notification lists */

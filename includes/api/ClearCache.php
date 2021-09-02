@@ -1,30 +1,35 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jun 20, 2010 8:59:32 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Api;
 
-use NukeViet\Api\Api;
-use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
-
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
+/**
+ * @package NukeViet\Api
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2010-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
+ * @access public
+ */
 class ClearCache implements IApi
 {
     private $result;
 
     /**
+     * getAdminLev()
      *
-     * @return number
+     * @return int
      */
     public static function getAdminLev()
     {
@@ -32,6 +37,7 @@ class ClearCache implements IApi
     }
 
     /**
+     * getCat()
      *
      * @return string
      */
@@ -41,9 +47,7 @@ class ClearCache implements IApi
     }
 
     /**
-     *
-     * {@inheritdoc}
-     * @see \NukeViet\Api\IApi::setResultHander()
+     * setResultHander()
      */
     public function setResultHander(ApiResult $result)
     {
@@ -51,9 +55,9 @@ class ClearCache implements IApi
     }
 
     /**
+     * execute()
      *
-     * {@inheritdoc}
-     * @see \NukeViet\Api\IApi::execute()
+     * @return mixed
      */
     public function execute()
     {
@@ -73,9 +77,17 @@ class ClearCache implements IApi
         nv_save_file_config_global();
 
         $this->result->setSuccess();
+
         return $this->result->getResult();
     }
 
+    /**
+     * nv_clear_files()
+     *
+     * @param string $dir
+     * @param string $base
+     * @return array
+     */
     private function nv_clear_files($dir, $base)
     {
         $dels = [];
@@ -92,6 +104,7 @@ class ClearCache implements IApi
         if (!file_exists($dir . '/index.html')) {
             file_put_contents($dir . '/index.html', '');
         }
+
         return $dels;
     }
 }

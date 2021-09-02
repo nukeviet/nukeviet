@@ -1,26 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 10, 2011 6:04:54 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!nv_function_exists('nv_block_data_config_rss')) {
     /**
      * nv_block_data_config_rss()
      *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
-     *
+     * @param string $module
+     * @param array  $data_block
+     * @param array  $lang_block
+     * @return string
      */
     function nv_block_data_config_rss($module, $data_block, $lang_block)
     {
@@ -39,7 +39,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         $html .= "</select>\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['number'] . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
-        $data_block['title_length'] = isset($data_block['title_length']) ? intval($data_block['title_length']) : 0;
+        $data_block['title_length'] = isset($data_block['title_length']) ? (int) ($data_block['title_length']) : 0;
         $html = "<select class=\"form-control\" name=\"config_title_length\">\n";
         for ($index = 0; $index <= 255; ++$index) {
             $sel = ($index == $data_block['title_length']) ? ' selected' : '';
@@ -48,19 +48,19 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         $html .= "</select>\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
-        $sel = (intval($data_block['isdescription']) == 1) ? 'checked="checked"' : '';
+        $sel = ((int) ($data_block['isdescription']) == 1) ? 'checked="checked"' : '';
         $html = '<input type="checkbox" name="config_isdescription" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['isdescription'] . '</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
-        $sel = (intval($data_block['ishtml']) == 1) ? 'checked="checked"' : '';
+        $sel = ((int) ($data_block['ishtml']) == 1) ? 'checked="checked"' : '';
         $html = '<input type="checkbox" name="config_ishtml" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['ishtml'] . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
-        $sel = (intval($data_block['ispubdate']) == 1) ? 'checked="checked"' : '';
+        $sel = ((int) ($data_block['ispubdate']) == 1) ? 'checked="checked"' : '';
         $html = '<input type="checkbox" name="config_ispubdate" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['ispubdate'] . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
 
-        $sel = (intval($data_block['istarget']) == 1) ? 'checked="checked"' : '';
+        $sel = ((int) ($data_block['istarget']) == 1) ? 'checked="checked"' : '';
         $html = '<input type="checkbox" name="config_istarget" value="1" ' . $sel . ' /> ' . $lang_module['block_yes'] . "\n";
 
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['istarget'] . ':</label><div class="col-sm-18"><div class="checkbox"><label>' . $html . '</label></div></div></div>';
@@ -71,10 +71,9 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
     /**
      * nv_block_data_config_rss_submit()
      *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
-     *
+     * @param string $module
+     * @param array  $lang_block
+     * @return array
      */
     function nv_block_data_config_rss_submit($module, $lang_block)
     {
@@ -92,15 +91,15 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         if (!nv_is_url($return['config']['url'])) {
             $return['error'][] = $lang_block['error_url'];
         }
+
         return $return;
     }
 
     /**
      * nv_get_rss()
      *
-     * @param mixed $url
-     * @return
-     *
+     * @param string $url
+     * @return array
      */
     function nv_get_rss($url)
     {
@@ -139,15 +138,15 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
             $cache = serialize($array_data);
             $nv_Cache->setItem('rss', $cache_file, $cache);
         }
+
         return $array_data;
     }
 
     /**
      * nv_block_global_rss()
      *
-     * @param mixed $block_config
-     * @return
-     *
+     * @param array $block_config
+     * @return string
      */
     function nv_block_global_rss($block_config)
     {
@@ -164,7 +163,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         $a = 1;
         $xtpl = new XTemplate('global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/feeds');
         $array_rrs = nv_get_rss($block_config['url']);
-        $title_length = isset($block_config['title_length']) ? intval($block_config['title_length']) : 0;
+        $title_length = isset($block_config['title_length']) ? (int) ($block_config['title_length']) : 0;
         foreach ($array_rrs as $item) {
             if ($a <= $block_config['number']) {
                 $item['description'] = ($block_config['ishtml']) ? $item['description'] : strip_tags($item['description']);
@@ -189,6 +188,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
             }
         }
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 }

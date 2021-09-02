@@ -1,20 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/9/2010, 3:21
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Seo;
 
 /**
+ * NukeViet\Seo\BotManager
+ *
+ * @package NukeViet\Seo
  * @author VINADES.,JSC <contact@vinades.vn>
- *
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @version 4.5.00
  * @since 4.3.08
- *
+ * @access public
  */
 class BotManager
 {
@@ -38,7 +43,9 @@ class BotManager
     private $modes = [];
 
     /**
-     * @param number $private_website
+     * __construct()
+     *
+     * @param int $private_website
      */
     public function __construct($private_website = 0)
     {
@@ -47,7 +54,9 @@ class BotManager
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * reset()
+     *
+     * @return $this
      */
     public function reset()
     {
@@ -56,11 +65,14 @@ class BotManager
         if ($this->privateWebsite) {
             $this->setPrivate();
         }
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setAll()
+     *
+     * @return $this
      */
     public function setAll()
     {
@@ -69,14 +81,16 @@ class BotManager
                 'all' => 'all'
             ];
         }
+
         return $this;
     }
 
     /**
+     * setPrivate()
      * Chặn lập chỉ mục theo cấu hình => Cho phép follow các liên kết
      * tuy nhiên không đánh chỉ mục
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function setPrivate()
     {
@@ -84,11 +98,14 @@ class BotManager
             'noindex' => 'noindex',
             'follow' => 'follow'
         ];
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setNone()
+     *
+     * @return $this
      */
     public function setNone()
     {
@@ -97,11 +114,14 @@ class BotManager
                 'none' => 'none'
             ];
         }
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setIndex()
+     *
+     * @return $this
      */
     public function setIndex()
     {
@@ -109,11 +129,14 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['noindex']);
             $this->modes['index'] = 'index';
         }
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setNoIndex()
+     *
+     * @return $this
      */
     public function setNoIndex()
     {
@@ -121,37 +144,44 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['index']);
             $this->modes['noindex'] = 'noindex';
         }
+
         return $this;
     }
 
     /**
+     * setImageIndex()
      * Google BOT only
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function setImageIndex()
     {
         if (!$this->privateWebsite) {
             unset($this->modes['noimageindex']);
         }
+
         return $this;
     }
 
     /**
+     * setNoImageIndex()
      * Google BOT only
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function setNoImageIndex()
     {
         if (!$this->privateWebsite) {
             $this->modes['noimageindex'] = 'noimageindex';
         }
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setFollow()
+     *
+     * @return $this
      */
     public function setFollow()
     {
@@ -159,11 +189,14 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['nofollow']);
             $this->modes['follow'] = 'follow';
         }
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setNoFollow()
+     *
+     * @return $this
      */
     public function setNoFollow()
     {
@@ -171,11 +204,14 @@ class BotManager
             unset($this->modes['all'], $this->modes['none'], $this->modes['follow']);
             $this->modes['nofollow'] = 'nofollow';
         }
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setArchive()
+     *
+     * @return $this
      */
     public function setArchive()
     {
@@ -183,11 +219,14 @@ class BotManager
             unset($this->modes['noarchive']);
             $this->modes['archive'] = 'archive';
         }
+
         return $this;
     }
 
     /**
-     * @return \NukeViet\Seo\BotManager
+     * setNoArchive()
+     *
+     * @return $this
      */
     public function setNoArchive()
     {
@@ -195,66 +234,76 @@ class BotManager
             unset($this->modes['archive']);
             $this->modes['noarchive'] = 'noarchive';
         }
+
         return $this;
     }
 
     /**
+     * setSnippet()
      * Google BOT only
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function setSnippet()
     {
         if (!$this->privateWebsite) {
             unset($this->modes['nosnippet']);
         }
+
         return $this;
     }
 
     /**
+     * setNoSnippet()
      * Google BOT only
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function setNoSnippet()
     {
         if (!$this->privateWebsite) {
             $this->modes['nosnippet'] = 'nosnippet';
         }
+
         return $this;
     }
 
     /**
+     * setTranslate()
      * Google BOT only
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function setTranslate()
     {
         if (!$this->privateWebsite) {
             unset($this->modes['notranslate']);
         }
+
         return $this;
     }
 
     /**
+     * setNoTranslate()
      * Google BOT only
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function setNoTranslate()
     {
         if (!$this->privateWebsite) {
             $this->modes['notranslate'] = 'notranslate';
         }
+
         return $this;
     }
 
     /**
+     * setUnavailableAfter()
      * Google BOT only
      *
-     * @param int $time
-     * @return \NukeViet\Seo\BotManager
+     * @param mixed $time
+     * @return $this
      */
     public function setUnavailableAfter($time)
     {
@@ -262,25 +311,30 @@ class BotManager
             // RFC 850 date
             $this->modes['unavailable_after'] = 'unavailable_after: ' . gmdate('d-M-y H:i:s', $time) . ' GMT';
         }
+
         return $this;
     }
 
     /**
+     * removeUnavailableAfter()
      * Google BOT only
      *
-     * @return \NukeViet\Seo\BotManager
+     * @return $this
      */
     public function removeUnavailableAfter()
     {
         if (!$this->privateWebsite) {
             unset($this->modes['unavailable_after']);
         }
+
         return $this;
     }
 
     /**
-     * @param boolean $html
-     * @return string[][]
+     * getMetaTags()
+     *
+     * @param bool $html
+     * @return array|string
      */
     public function getMetaTags($html = false)
     {
@@ -300,14 +354,17 @@ class BotManager
         }
         $res = '';
         foreach ($return as $link) {
-            $res .= "<meta " . $link['name'] . "=\"" . $link['value'] . "\" content=\"" . $link['content'] . "\" />" . PHP_EOL;
+            $res .= '<meta ' . $link['name'] . '="' . $link['value'] . '" content="' . $link['content'] . '" />' . PHP_EOL;
         }
+
         return $res;
     }
 
     /**
-     * @param array $headers
-     * @param array $sys_info
+     * outputToHeaders()
+     *
+     * @param mixed $headers
+     * @param mixed $sys_info
      */
     public function outputToHeaders(&$headers, &$sys_info)
     {
@@ -319,13 +376,13 @@ class BotManager
     }
 
     /**
-     *
+     * printToHeaders()
      */
     public function printToHeaders()
     {
         $mode = array_intersect_key($this->modes, array_flip($this->allBotsModes[$this->headerBotName]));
         if (!empty($mode)) {
-            @Header('X-Robots-Tag: ' . implode(', ', $mode));
+            @header('X-Robots-Tag: ' . implode(', ', $mode));
         }
     }
 }

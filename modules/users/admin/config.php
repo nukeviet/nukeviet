@@ -1,23 +1,23 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * valid_name_config()
  *
- * @param mixed $array_name
- * @return
- *
+ * @param array $array_name
+ * @return array
  */
 function valid_name_config($array_name)
 {
@@ -28,6 +28,7 @@ function valid_name_config($array_name)
             $array_retutn[] = $v;
         }
     }
+
     return $array_retutn;
 }
 
@@ -54,7 +55,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         // Kiểm tra cấu trúc thư mục diễn đàn mới cho lưu
         if ($array_config['dir_forum']) {
             $forum_files = @scandir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet');
-            if (empty($forum_files) or !in_array('is_user.php', $forum_files) or !in_array('changepass.php', $forum_files) or !in_array('editinfo.php', $forum_files) or !in_array('login.php', $forum_files) or !in_array('logout.php', $forum_files) or !in_array('lostpass.php', $forum_files) or !in_array('register.php', $forum_files)) {
+            if (empty($forum_files) or !in_array('is_user.php', $forum_files, true) or !in_array('changepass.php', $forum_files, true) or !in_array('editinfo.php', $forum_files, true) or !in_array('login.php', $forum_files, true) or !in_array('logout.php', $forum_files, true) or !in_array('lostpass.php', $forum_files, true) or !in_array('register.php', $forum_files, true)) {
                 $array_config['is_user_forum'] = 0;
                 $array_config['dir_forum'] = '';
             }
@@ -259,14 +260,14 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $xtpl->assign('DATA', $array_config);
     $xtpl->assign('USER_CHECK_PASS_TIME', round($global_config['user_check_pass_time'] / 60));
 
-    if (!in_array($global_config['dir_forum'], $ignorefolders) and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet')) {
+    if (!in_array($global_config['dir_forum'], $ignorefolders, true) and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet')) {
         $forum_files = @scandir(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet');
-        if (!empty($forum_files) and in_array('is_user.php', $forum_files) and in_array('changepass.php', $forum_files) and in_array('editinfo.php', $forum_files) and in_array('login.php', $forum_files) and in_array('logout.php', $forum_files) and in_array('lostpass.php', $forum_files) and in_array('register.php', $forum_files)) {
+        if (!empty($forum_files) and in_array('is_user.php', $forum_files, true) and in_array('changepass.php', $forum_files, true) and in_array('editinfo.php', $forum_files, true) and in_array('login.php', $forum_files, true) and in_array('logout.php', $forum_files, true) and in_array('lostpass.php', $forum_files, true) and in_array('register.php', $forum_files, true)) {
             $xtpl->parse('main.user_forum');
         }
     }
 
-    for ($id = 3; $id < 20; $id++) {
+    for ($id = 3; $id < 20; ++$id) {
         $array = [
             'id' => $id,
             'select' => ($global_config['nv_unickmin'] == $id) ? ' selected="selected"' : '',
@@ -275,7 +276,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unickmin');
     }
-    for ($id = 20; $id < 100; $id++) {
+    for ($id = 20; $id < 100; ++$id) {
         $array = [
             'id' => $id,
             'select' => ($global_config['nv_unickmax'] == $id) ? ' selected="selected"' : '',
@@ -286,7 +287,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     }
 
     $lang_global['unick_type_0'] = $lang_module['unick_type_0'];
-    for ($id = 0; $id < 5; $id++) {
+    for ($id = 0; $id < 5; ++$id) {
         $array = [
             'id' => $id,
             'select' => ($global_config['nv_unick_type'] == $id) ? ' selected="selected"' : '',
@@ -296,7 +297,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.nv_unick_type');
     }
 
-    for ($id = 5; $id < 20; $id++) {
+    for ($id = 5; $id < 20; ++$id) {
         $array = [
             'id' => $id,
             'select' => ($global_config['nv_upassmin'] == $id) ? ' selected="selected"' : '',
@@ -305,7 +306,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_upassmin');
     }
-    for ($id = 20; $id < 255; $id++) {
+    for ($id = 20; $id < 255; ++$id) {
         $array = [
             'id' => $id,
             'select' => ($global_config['nv_upassmax'] == $id) ? ' selected="selected"' : '',
@@ -316,7 +317,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     }
 
     $lang_global['upass_type_0'] = $lang_module['upass_type_0'];
-    for ($id = 0; $id < 5; $id++) {
+    for ($id = 0; $id < 5; ++$id) {
         $array = [
             'id' => $id,
             'select' => ($global_config['nv_upass_type'] == $id) ? ' selected="selected"' : '',
@@ -339,7 +340,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $nv_files = @scandir(NV_ROOTDIR);
     $i = 0;
     foreach ($nv_files as $value) {
-        if (!in_array($value, $ignorefolders) and is_dir(NV_ROOTDIR . '/' . $value)) {
+        if (!in_array($value, $ignorefolders, true) and is_dir(NV_ROOTDIR . '/' . $value)) {
             if (is_dir(NV_ROOTDIR . '/' . $value . '/nukeviet')) {
                 $array = [
                     'id' => $value,
@@ -404,11 +405,11 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.recaptcha_note_hide');
     }
 
-    $array_config['whoviewuser'] = explode(',', $array_config['whoviewuser']);
+    $array_config['whoviewuser'] = array_map('intval', explode(',', $array_config['whoviewuser']));
     foreach ($groups_list as $group_id => $group_name) {
         $whoview = [
             'key' => $group_id,
-            'checked' => in_array($group_id, $array_config['whoviewuser']) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $group_id, $array_config['whoviewuser'], true) ? ' checked="checked"' : '',
             'title' => $group_name
         ];
         $xtpl->assign('WHOVIEW', $whoview);
@@ -431,7 +432,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $openid_files = @scandir(NV_ROOTDIR . '/modules/users/login');
     foreach ($openid_files as $server) {
         if (preg_match('/^(cas|oauth)\-([a-z0-9\-\_]+)\.php$/', $server, $m)) {
-            $checked = (!empty($servers) and in_array($m[2], $servers)) ? ' checked="checked"' : '';
+            $checked = (!empty($servers) and in_array($m[2], $servers, true)) ? ' checked="checked"' : '';
             $disabled = '';
 
             if ($server == 'cas-single-sign-on.php' and !isset($global_config['config_sso'])) {

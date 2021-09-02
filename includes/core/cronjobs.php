@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @copyright 2010
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1/23/2010 16:10
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Duyệt tất cả các cron đến giờ chạy
@@ -98,7 +99,7 @@ while ($cron_row = $cron_result->fetch()) {
 }
 
 $image = imagecreate(1, 1);
-Header('Content-type: image/jpg');
+header('Content-type: image/jpg');
 imagejpeg($image, null, 80);
 imagedestroy($image);
-die();
+exit();

@@ -1,27 +1,28 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/19/2010 12:19
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $bid = $nv_Request->get_int('bid', 'get', 0);
 
 if (empty($bid)) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $row = $db->query('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_rows WHERE id=' . $bid)->fetch();
 
 if (empty($row)) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $current_day = date('d');
@@ -56,7 +57,7 @@ $caption = sprintf($lang_module['show_list_stat1'], nv_monthname($data_month), $
 
 $data_ext = $data_val = '';
 
-if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'browse', 'os'])) {
+if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'browse', 'os'], true)) {
     switch ($nv_Request->get_string('ext', 'get')) {
         case 'day':
             if ($nv_Request->isset_request('val', 'get') and preg_match('/^[0-9]+$/', $nv_Request->get_string('val', 'get')) and $nv_Request->get_int('val', 'get', 0) <= $day_max and $nv_Request->get_int('val', 'get', 0) >= $day_min) {
@@ -69,7 +70,6 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $caption = sprintf($lang_module['show_list_stat2'], str_pad($data_val, 2, '0', STR_PAD_LEFT), nv_monthname($data_month), $current_year);
             }
             break;
-
         case 'country':
             if ($nv_Request->isset_request('val', 'get') and ($nv_Request->get_string('val', 'get') == 'Unknown' or preg_match('/^[A-Z]{2}$/', $nv_Request->get_string('val', 'get')))) {
                 $data_ext = 'country';
@@ -79,7 +79,6 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $caption = sprintf($lang_module['show_list_stat3'], (isset($countries[$data_val]) ? $countries[$data_val][1] : $data_val), nv_monthname($data_month), $current_year);
             }
             break;
-
         case 'browse':
             if ($nv_Request->isset_request('val', 'get') and preg_match('/^[a-zA-Z0-9]+$/', $nv_Request->get_string('val', 'get'))) {
                 $data_ext = 'browse';
@@ -89,7 +88,6 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $caption = sprintf($lang_module['show_list_stat4'], '{pattern}', nv_monthname($data_month), $current_year);
             }
             break;
-
         case 'os':
             if ($nv_Request->isset_request('val', 'get') and preg_match('/^[a-zA-Z0-9-\\s]+$/', $nv_Request->get_string('val', 'get'))) {
                 $data_ext = 'os';
@@ -106,13 +104,13 @@ $db->sqlreset()
     ->select('COUNT(*)')->from(NV_BANNERS_GLOBALTABLE . '_click')
     ->where($where);
 
-$stmt = $db->prepare($db->sql()) ;
+$stmt = $db->prepare($db->sql());
 $stmt->bindParam(1, $data_val, PDO::PARAM_STR, strlen($data_val));
 $stmt->execute();
 
 $num_items = $stmt->fetchColumn();
 if (empty($num_items)) {
-    die('Wrong URL');
+    exit('Wrong URL');
 }
 
 $page = $nv_Request->get_int('page', 'get', 1);

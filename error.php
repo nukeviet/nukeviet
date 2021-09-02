@@ -1,23 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jul 2, 2017 2:06:56 PM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 define('NV_SYSTEM', true);
 
 // Xac dinh thu muc goc cua site
-define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __file__), PATHINFO_DIRNAME));
+define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
 // Xac dinh kieu giao dien mac dinh
 $global_config['current_theme_type'] = $nv_Request->get_string('nv' . NV_LANG_DATA . 'themever', 'cookie', '');
-if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'])) {
+if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'], true)) {
     $global_config['current_theme_type'] = '';
     $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', '', NV_LIVE_COOKIE_TIME);
 }
@@ -61,20 +62,20 @@ if (($cache = $nv_Cache->getItem('themes', $cache_file)) != false) {
 } else {
     $_themeConfig = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/themes/' . $site_theme . '/config.ini'));
     if (isset($_themeConfig['positions']['position']['name'])) {
-        $theme_config_positions = array(
+        $theme_config_positions = [
             $_themeConfig['positions']['position']
-        );
+        ];
     } elseif (isset($_themeConfig['positions']['position'])) {
         $theme_config_positions = $_themeConfig['positions']['position'];
     } else {
-        $theme_config_positions = array();
+        $theme_config_positions = [];
         $_ini_file = file_get_contents(NV_ROOTDIR . '/themes/' . $site_theme . '/config.ini');
         if (preg_match_all('/<position>[\t\n\s]+<name>(.*?)<\/name>[\t\n\s]+<tag>(\[[a-zA-Z0-9_]+\])<\/tag>[\t\n\s]+<\/position>/s', $_ini_file, $_m)) {
             foreach ($_m[1] as $_key => $value) {
-                $theme_config_positions[] = array(
+                $theme_config_positions[] = [
                     'name' => $value,
                     'tag' => $_m[2][$_key]
-                );
+                ];
             }
         }
     }

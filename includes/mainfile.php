@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM') and !defined('NV_ADMIN') and !defined('NV_WYSIWYG')) {
-    Header('Location: index.php');
+    header('Location: index.php');
     exit();
 }
 
@@ -43,9 +44,9 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
     require realpath(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME);
 } else {
     if (file_exists(NV_ROOTDIR . '/install/index.php')) {
-        Header('Location: ' . NV_BASE_SITEURL . 'install/index.php');
+        header('Location: ' . NV_BASE_SITEURL . 'install/index.php');
     }
-    die();
+    exit();
 }
 
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
@@ -81,7 +82,7 @@ define('NV_GROUPSDETAIL_GLOBALTABLE', $db_config['prefix'] . '_users_groups_deta
 
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
-    die('Error: Your IP address is not correct');
+    exit('Error: Your IP address is not correct');
 }
 
 // Xac dinh Quoc gia
@@ -162,7 +163,7 @@ require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
-if (!in_array(NV_SERVER_NAME, $global_config['my_domains'])) {
+if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
 }
 // Ket noi Cache
@@ -248,7 +249,7 @@ $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
 // Ket noi voi class chong flood
 if (
-    $global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and //
+    $global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and
     (!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))
 ) {
     require NV_ROOTDIR . '/includes/core/flood_blocker.php';
@@ -332,7 +333,7 @@ $global_config['array_theme_type'] = !empty($global_config['theme_type']) ? expl
 $global_config['array_preview_theme'] = !empty($global_config['preview_theme']) ? explode(',', $global_config['preview_theme']) : [];
 $global_config['array_user_allowed_theme'] = empty($global_config['user_allowed_theme']) ? [] : json_decode($global_config['user_allowed_theme'], true);
 
-define('NV_MAIN_DOMAIN', (!empty($global_config['site_domain']) and in_array($global_config['site_domain'], $global_config['my_domains'])) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
+define('NV_MAIN_DOMAIN', (!empty($global_config['site_domain']) and in_array($global_config['site_domain'], $global_config['my_domains'], true)) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
 $global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
@@ -342,7 +343,7 @@ if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['
     'mild',
     'lite',
     'none'
-])) {
+], true)) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
@@ -388,7 +389,7 @@ if (!empty($admin_cookie)) {
 // Dinh chi hoat dong cua site
 if (!defined('NV_IS_ADMIN')) {
     $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', NV_LANG_DATA);
-    if (!in_array($site_lang, $global_config['allow_sitelangs'])) {
+    if (!in_array($site_lang, $global_config['allow_sitelangs'], true)) {
         $global_config['closed_site'] = 1;
     }
 }
@@ -400,7 +401,7 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
     if (!empty($global_config['closed_site'])) {
         nv_disable_site();
-    } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
+    } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'], true)) {
         nv_redirect_location(NV_BASE_SITEURL);
     }
 }

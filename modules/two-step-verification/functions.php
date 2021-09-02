@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 10/03/2010 10:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 define('NV_MOD_2STEP_VERIFICATION', true);
@@ -27,7 +28,7 @@ $nv_BotManager->setPrivate();
 /**
  * nv_get_user_secretkey()
  *
- * @return
+ * @return string
  */
 function nv_get_user_secretkey()
 {
@@ -44,9 +45,8 @@ function nv_get_user_secretkey()
                 if ($db->exec('UPDATE ' . $module_data . ' SET secretkey=' . $db->quote($_secretkey) . ' WHERE userid=' . $user_info['userid'])) {
                     $secretkey = $_secretkey;
                     break;
-                } else {
-                    trigger_error('Error creat user secretkey!!!', 256);
                 }
+                trigger_error('Error creat user secretkey!!!', 256);
             }
         }
     }
@@ -56,8 +56,6 @@ function nv_get_user_secretkey()
 
 /**
  * nv_creat_backupcodes()
- *
- * @return void
  */
 function nv_creat_backupcodes()
 {
@@ -69,7 +67,7 @@ function nv_creat_backupcodes()
     $new_code = [];
     while (sizeof($new_code) < 10) {
         $code = nv_strtolower(nv_genpass(8, 0));
-        if (!in_array($code, $new_code)) {
+        if (!in_array($code, $new_code, true)) {
             $new_code[] = $code;
         }
     }
@@ -89,5 +87,5 @@ $tokend = md5(NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
 
 if ($tokend_confirm_password != $tokend and $op != 'confirm') {
     header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['confirm'] . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']), true));
-    die();
+    exit();
 }

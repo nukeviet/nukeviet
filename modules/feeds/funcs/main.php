@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Apr 20, 2010 10:47:41 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_RSS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * nv_get_rss_link()
  *
- * @return
+ * @return string
  */
 function nv_get_rss_link()
 {
@@ -49,16 +50,16 @@ function nv_get_rss_link()
             }
         }
     }
+
     return $contentrss;
 }
 
 /**
  * nv_get_sub_rss_link()
  *
- * @param mixed $rssarray
- * @param mixed $id
- * @param mixed $image
- * @return
+ * @param array $rssarray
+ * @param int   $id
+ * @return string
  */
 function nv_get_sub_rss_link($rssarray, $id)
 {
@@ -75,6 +76,7 @@ function nv_get_sub_rss_link($rssarray, $id)
         }
     }
     $content .= '</ul>';
+
     return $content;
 }
 

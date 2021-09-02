@@ -1,9 +1,10 @@
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 function nv_comment_reset(event, form) {
@@ -16,11 +17,10 @@ function nv_comment_reset(event, form) {
     }
     $("[name=pid]", form).val(0);
     $(form)[0].reset();
-    if ($('#formcomment form').data().editor) {
-        for (instance in CKEDITOR.instances) {
-            CKEDITOR.instances[instance].updateElement();
-        }
-        CKEDITOR.instances[instance].setData('');
+    if ($(form).data('editor')) {
+        CKEDITOR.instances['commentcontent'].setData('', function() {
+            this.updateElement()
+        })
     }
 }
 
@@ -105,6 +105,9 @@ function nv_comment_submit(form) {
         alert(nv_error_email);
         $("[name=email]", form).focus();
         return !1
+    }
+    if ($(form).data('editor')) {
+        CKEDITOR.instances['commentcontent'].updateElement()
     }
     var content = strip_tags(trim($("[name=content]", form).val()));
     $("[name=content]", form).val(content);

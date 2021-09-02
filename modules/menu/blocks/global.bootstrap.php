@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate Jan 17, 2011 11:34:27 AM
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (defined('NV_IS_FILE_THEMES')) {
@@ -21,10 +22,9 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
     /**
      * nv_menu_bootstrap_check_current()
      *
-     * @param mixed $url
-     * @param integer $type
-     * @return
-     *
+     * @param string $url
+     * @param int    $type
+     * @return bool
      */
     function nv_menu_bootstrap_check_current($url, $type = 0)
     {
@@ -37,7 +37,8 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
 
         if ($home and ($url == nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA) or $url == NV_BASE_SITEURL . 'index.php' or $url == NV_BASE_SITEURL)) {
             return true;
-        } elseif ($url != NV_BASE_SITEURL) {
+        }
+        if ($url != NV_BASE_SITEURL) {
             $_curr_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
             if ($type == 2) {
                 if (preg_match('#' . preg_quote($url, '#') . '#', $_curr_url)) {
@@ -51,15 +52,15 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * nv_menu_bootstrap()
      *
-     * @param mixed $block_config
-     * @return
-     *
+     * @param array $block_config
+     * @return string
      */
     function nv_menu_bootstrap($block_config)
     {
@@ -143,13 +144,16 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
         }
 
         $xtpl->parse('main');
+
         return $xtpl->text('main');
     }
 
     /**
-     * @param int $id
-     * @param array $array_menu
-     * @param bool $submenu_active
+     * nv_get_bootstrap_submenu()
+     *
+     * @param int    $id
+     * @param int    $array_menu
+     * @param array  $submenu_active
      * @param string $block_theme
      * @return string
      */
@@ -179,6 +183,7 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
             }
             $xtpl->parse('submenu');
         }
+
         return $xtpl->text('submenu');
     }
 }

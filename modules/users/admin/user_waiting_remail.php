@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 04/05/2010
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_ADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['userwait_resend_email'];
@@ -20,6 +21,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
     $offset = $nv_Request->get_int('offset', 'post', 0);
     $tokend = $nv_Request->get_title('tokend', 'post', '');
     $useriddel = array_unique(array_filter(array_map('trim', explode(',', $nv_Request->get_title('useriddel', 'post', '')))));
+    $useriddel = array_map('intval', $useriddel);
 
     $respon = [
         'continue' => false,
@@ -40,7 +42,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                 // Kiểm tra xem email đã tồn tại chưa nếu có xóa đi
                 if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email=' . $db->quote($row['email']))->fetchColumn()) {
                     $respon['messages'][] = $row['email'] . ': ' . $lang_module['userwait_resend_delete'];
-                    if (!in_array($row['userid'], $useriddel)) {
+                    if (!in_array((int) $row['userid'], $useriddel, true)) {
                         $useriddel[] = $row['userid'];
                     }
                 } else {
@@ -48,7 +50,8 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                     $_full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
 
                     $subject = $lang_module['account_active'];
-                    $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $row['checknum'], $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                    $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $row['checknum'], true);
+                    $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], $_url, $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                     $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
 
                     if ($checkSend) {

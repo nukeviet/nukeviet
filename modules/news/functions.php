@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 12/31/2009 0:51
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_SYSTEM')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 // Không cho truy cập trực tiếp vào op viewcat, detail
-if (!in_array($op, ['viewcat', 'detail'])) {
+if (!in_array($op, ['viewcat', 'detail'], true)) {
     define('NV_IS_MOD_NEWS', true);
 }
 
@@ -100,19 +101,19 @@ if (!empty($array_op) and $op == 'main') {
             // Trang chủ
             $contents = $lang_module['nocatpage'] . $array_op[0];
             if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
-                $page = intval(substr($array_op[0], 5));
+                $page = (int) (substr($array_op[0], 5));
             }
         } else {
             // Xem chuyên mục
             $op = 'viewcat';
             if (isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-') {
-                $page = intval(substr($array_op[1], 5));
+                $page = (int) (substr($array_op[1], 5));
             }
         }
     } elseif ($count_op == 2) {
         // Chi tiết tin
         $array_page = explode('-', $array_op[1]);
-        $id = intval(end($array_page));
+        $id = (int) (end($array_page));
         $number = strlen($id) + 1;
         $alias_url = substr($array_op[1], 0, -$number);
         if ($id > 0 and $alias_url != '') {

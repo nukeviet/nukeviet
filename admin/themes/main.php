@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-2-2010 12:55
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $page_title = $lang_module['theme_manager'];
@@ -54,9 +55,9 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
         'message' => ''
     ];
     $theme = $nv_Request->get_title('theme', 'post', '');
-    if (in_array($theme, $theme_list)) {
+    if (in_array($theme, $theme_list, true)) {
         $array['status'] = 'SUCCESS';
-        if (in_array($theme, $array_allow_preview)) {
+        if (in_array($theme, $array_allow_preview, true)) {
             $array['mode'] = 'disable';
             $array['spantext'] = $lang_module['preview_theme_on'];
             $array_allow_preview = array_flip($array_allow_preview);
@@ -82,7 +83,7 @@ foreach ($theme_list as $value) {
         continue;
     }
     // Kiem tra giao dien co danh cho subsite hay ko
-    if ($global_config['idsite'] and !in_array($value, $array_site_cat_theme)) {
+    if ($global_config['idsite'] and !in_array($value, $array_site_cat_theme, true)) {
         continue;
     }
 
@@ -97,11 +98,11 @@ foreach ($theme_list as $value) {
     }
 
     $xtpl->assign('ROW', [
-        'name' => (string)$info[0]->name,
-        'website' => (string)$info[0]->website,
-        'author' => (string)$info[0]->author,
-        'thumbnail' => (string)$info[0]->thumbnail,
-        'description' => (string)$info[0]->description,
+        'name' => (string) $info[0]->name,
+        'website' => (string) $info[0]->website,
+        'author' => (string) $info[0]->author,
+        'thumbnail' => (string) $info[0]->thumbnail,
+        'description' => (string) $info[0]->description,
         'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $admin_info['userid'] . '_' . $value),
         'value' => $value
     ]);
@@ -119,23 +120,23 @@ foreach ($theme_list as $value) {
     $actions = 0;
     if ($global_config['site_theme'] != $value) {
         $allow_preview = false;
-        if (in_array($value, $array_site_theme)) {
+        if (in_array($value, $array_site_theme, true)) {
             if ($value != 'default') {
                 $xtpl->parse('main.loop.actions.link_delete');
-                $actions++;
+                ++$actions;
             }
-            if (!in_array($value, $theme_mobile_list)) {
+            if (!in_array($value, $theme_mobile_list, true)) {
                 $xtpl->parse('main.loop.actions.link_active');
-                $actions++;
+                ++$actions;
             }
             $allow_preview = true;
         } else {
             $xtpl->parse('main.loop.actions.link_setting');
-            $actions++;
+            ++$actions;
         }
 
         if ($allow_preview) {
-            if (in_array($value, $array_allow_preview)) {
+            if (in_array($value, $array_allow_preview, true)) {
                 $xtpl->assign('SHOW_PREVIEW1', '');
                 $xtpl->assign('SHOW_PREVIEW2', '');
                 $xtpl->assign('TEXT_PREVIEW', $lang_module['preview_theme_off']);

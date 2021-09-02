@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 1-27-2010 5:25
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
@@ -128,7 +129,7 @@ function nv_admin_checkdata($adm_session_value)
         ($array_admin['checknum'] !== $admin_info['check_num']) // Check_num
         or !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or ($array_admin['current_agent'] !== $admin_info['current_agent']) // User_agent
         or !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or ($array_admin['current_ip'] !== $admin_info['current_ip']) // IP
-        or !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== intval($admin_info['current_login'])) // Current_login
+        or !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== (int) ($admin_info['current_login'])) // Current_login
     ) {
         return [];
     }
@@ -153,13 +154,13 @@ function nv_admin_checkdata($adm_session_value)
 
     $admin_info['avata'] = !empty($admin_info['photo']) ? NV_BASE_SITEURL . $admin_info['photo'] : '';
     $admin_info['level'] = $admin_info['lev'];
-    $admin_info['last_login'] = intval($array_admin['last_login']);
+    $admin_info['last_login'] = (int) ($array_admin['last_login']);
     $admin_info['last_agent'] = $array_admin['last_agent'];
     $admin_info['last_ip'] = $array_admin['last_ip'];
     $admin_info['allow_files_type'] = $allow_files_type;
-    $admin_info['allow_modify_files'] = intval($allow_modify_files);
-    $admin_info['allow_create_subdirectories'] = intval($allow_create_subdirectories);
-    $admin_info['allow_modify_subdirectories'] = intval($allow_modify_subdirectories);
+    $admin_info['allow_modify_files'] = (int) $allow_modify_files;
+    $admin_info['allow_create_subdirectories'] = (int) $allow_create_subdirectories;
+    $admin_info['allow_modify_subdirectories'] = (int) $allow_modify_subdirectories;
 
     if (empty($admin_info['first_name'])) {
         $admin_info['first_name'] = $admin_info['username'];
@@ -245,7 +246,7 @@ function nv_admin_check_predata($adm_session_value)
         ($array_admin['checknum'] !== $admin_info['check_num']) // Check_num
         or !isset($array_admin['current_agent']) or empty($array_admin['current_agent']) or ($array_admin['current_agent'] !== $admin_info['current_agent']) // User_agent
         or !isset($array_admin['current_ip']) or empty($array_admin['current_ip']) or ($array_admin['current_ip'] !== $admin_info['current_ip']) // IP
-        or !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== intval($admin_info['current_login'])) // Current_login
+        or !isset($array_admin['current_login']) or empty($array_admin['current_login']) or ($array_admin['current_login'] !== (int) ($admin_info['current_login'])) // Current_login
         or $array_admin['current_login'] < (NV_CURRENTTIME - 300) // Trạng thái chờ xác thực 2 bước duy trì 5 phút
     ) {
         return [];
