@@ -549,3 +549,4 @@ $lang_module['send_password'] = 'Envoyer les informations de mot de passe à l\'
 
 $lang_module['api_users'] = 'Users';
 $lang_module['api_users_Login'] = 'API Login';
+$lang_module['api_users_UsersInfo'] = 'Member Info';
