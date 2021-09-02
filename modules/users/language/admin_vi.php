@@ -568,3 +568,4 @@ $lang_module['send_password'] = 'Gửi thông tin mật khẩu đến email ngư
 
 $lang_module['api_users'] = 'Thành viên';
 $lang_module['api_users_Login'] = 'Đăng nhập';
+$lang_module['api_users_UsersInfo'] = 'Thông tin thành viên';
