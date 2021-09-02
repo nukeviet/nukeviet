@@ -262,6 +262,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
 
         if (!empty($array_user)) {
             foreach ($array_user as $row) {
+                $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
                 $row['regdate'] = nv_date('d/m/Y H:i', $row['regdate']);
                 $row['return'] = $row[$return];
                 $xtpl->assign('ROW', $row);
@@ -774,7 +775,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
         foreach ($group_users as $_type => $arr_userids) {
-            $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
+            $xtpl->assign('PTITLE', $lang_module[$_type . '_in_group_caption']);
             $stt = 1;
             foreach ($arr_userids as $_userid) {
                 $row = $array_userid[$_userid];

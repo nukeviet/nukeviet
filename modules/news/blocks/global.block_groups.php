@@ -183,6 +183,12 @@ if (!nv_function_exists('nv_block_news_groups')) {
                 if (!empty($l['thumb'])) {
                     $xtpl->parse('main.loop.img');
                 }
+
+                // Bootstrap 4/5
+                if ($block_config['showtooltip']) {
+                    $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
+                    $xtpl->parse('main.loop.tooltip');
+                }
                 $xtpl->parse('main.loop');
             }
 

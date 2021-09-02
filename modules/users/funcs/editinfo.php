@@ -627,6 +627,14 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $nv_verikeysend = 1;
     }
 
+    if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'password',
+            'mess' => $lang_global['incorrect_password']
+        ]);
+    }
+
     $checkemail = nv_check_email_change($nv_email, $edit_userid);
     if (!empty($checkemail)) {
         nv_jsonOutput([
@@ -641,14 +649,6 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             'status' => 'error',
             'input' => 'email',
             'mess' => $lang_module['email_not_change']
-        ]);
-    }
-
-    if (!empty($row['password']) and !$crypt->validate_password($nv_password, $row['password'])) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'input' => 'password',
-            'mess' => $lang_global['incorrect_password']
         ]);
     }
 

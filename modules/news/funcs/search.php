@@ -174,11 +174,11 @@ $contents = call_user_func('search_theme', $key, $choose, $date_array, $array_ca
 $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
-    // $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
+    // $contents .= '<script>$(function(){alert(\'' . $lang_module['empty_data_search'] . '\')})</script>';
 } elseif (!empty($key) and nv_strlen($key) < NV_MIN_SEARCH_LENGTH) {
-    $contents .= '<div class="alert alert-danger">' . sprintf($lang_module['search_word_short'], NV_MIN_SEARCH_LENGTH) . '</div>';
+    $contents .= '<script>$(function(){alert(\'' . sprintf($lang_module['search_word_short'], NV_MIN_SEARCH_LENGTH) . '\')})</script>';
 } elseif (!empty($catid) and !isset($array_cat_search[$catid])) {
-    $contents .= '<div class="alert alert-danger">' . $lang_module['search_catid_error'] . '</div>';
+    $contents .= '<script>$(function(){alert(\'' . $lang_module['search_catid_error'] . '\')})</script>';
 } else {
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);

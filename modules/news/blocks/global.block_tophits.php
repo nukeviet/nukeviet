@@ -209,6 +209,12 @@ if (!nv_function_exists('nv_news_block_tophits')) {
                 $xtpl->assign('TITLE', 'title="' . $array_news['title'] . '"');
             }
 
+            // Bootstrap 4/5
+            if ($block_config['showtooltip']) {
+                $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
+                $xtpl->parse('main.newloop.tooltip');
+            }
+
             $xtpl->parse('main.newloop');
         }
 

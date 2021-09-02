@@ -127,6 +127,10 @@
                         <div class="col-sm-13 col-md-12">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
                             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <!-- BEGIN: return_group_manage -->
+                            <br/><br/>
+                            <a href="{GROUP_MANAGE.link}"><em class="fa fa-caret-right margin-right-sm"></em>{GROUP_MANAGE.title}</a>
+                            <!-- END: return_group_manage -->
                         </div>
                     </div>
                 </div>
@@ -268,6 +272,10 @@
                         <div class="col-md-10">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
                             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <!-- BEGIN: return_group_manage -->
+                            <br/><br/>
+                            <a href="{GROUP_MANAGE.link}"><em class="fa fa-caret-right margin-right-sm"></em>{GROUP_MANAGE.title}</a>
+                            <!-- END: return_group_manage -->
                         </div>
                     </div>
                 </div>
@@ -559,6 +567,10 @@
                         <div class="col-md-10">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
                             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <!-- BEGIN: return_group_manage -->
+                            <br/><br/>
+                            <a href="{GROUP_MANAGE.link}"><em class="fa fa-caret-right margin-right-sm"></em>{GROUP_MANAGE.title}</a>
+                            <!-- END: return_group_manage -->
                         </div>
                     </div>
                 </div>

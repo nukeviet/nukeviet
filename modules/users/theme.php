@@ -676,7 +676,7 @@ function user_lostactivelink($data, $question)
  */
 function user_info($data, $array_field_config, $custom_fields, $types, $data_questions, $data_openid, $groups, $pass_empty)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders, $is_custom_field, $user_info;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders, $is_custom_field, $user_info, $global_users_config, $group_lists, $group_id;
 
     $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -690,7 +690,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('AVATAR_DEFAULT', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/src', true));
-
+    $xtpl->assign('TEMPLATE', $module_info['template']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
@@ -704,13 +704,25 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
     $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+    $password_pattern = "/^";
+    if ($global_config['nv_upass_type'] == 1) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 2) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W\_])";
+    } elseif ($global_config['nv_upass_type'] == 3) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 4) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_])";
+    }
+    $password_pattern .= "(.){" . $global_config['nv_upassmin'] . "," . $global_config['nv_upassmax'] . "}$/";
 
+    $xtpl->assign('PASSWORD_PATTERN', $password_pattern);
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
 
     $xtpl->assign('DATA', $data);
     if ($pass_empty) {
-        $xtpl->assign('FORM_HIDDEN', ' hidden');
+        $xtpl->assign('FORM_HIDDEN', ' hidden d-none');
     }
 
     if ((int) $user_info['pass_reset_request'] == 2 and $data['type'] != 'password') {
@@ -726,6 +738,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         'birthday',
         'sig'
     ];
+    $datepicker = false;
     foreach ($array_basic_key as $key) {
         // Không tồn tại có nghĩa là không cho phép sửa
         if (isset($array_field_config[$key])) {
@@ -734,6 +747,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $row['required'] = ($row['required']) ? 'required' : '';
             if ($row['field'] == 'birthday') {
                 $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                $row['min_old_user'] = $global_users_config['min_old_user'];
+                $datepicker = true;
             } elseif ($row['field'] == 'sig') {
                 $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
             }
@@ -763,6 +778,13 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     $xtpl->parse('main.' . $show_key . '.gender');
                 }
             }
+            if ($row['field'] == 'birthday') {
+                if (!empty($global_users_config['min_old_user'])) {
+                    $xtpl->parse('main.' . $show_key . '.min_old_user');
+                } else {
+                    $xtpl->parse('main.' . $show_key . '.not_min_old_user');
+                }
+            }
             if ($row['description']) {
                 $xtpl->parse('main.' . $show_key . '.description');
             }
@@ -775,6 +797,40 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     $xtpl->assign(strtoupper($data['type']) . '_ACTIVE', 'active');
     $xtpl->assign(strtoupper('TAB_' . $data['type']) . '_ACTIVE', 'in active');
+    $xtpl->assign(strtoupper('TAB5_' . $data['type']) . '_ACTIVE', 'show active'); // For bootstrap 4/5
+
+    $item_active = [
+        'name' => $data['type']
+    ];
+    if ($data['type'] == 'avatar')
+        $item_active['title'] = $lang_module['edit_avatar'];
+    elseif ($data['type'] == 'username')
+        $item_active['title'] = $lang_module['edit_login'];
+    elseif ($data['type'] == 'email')
+        $item_active['title'] = $lang_module['edit_email'];
+    elseif ($data['type'] == 'password')
+        $item_active['title'] = $lang_module['edit_password'];
+    elseif ($data['type'] == 'question')
+        $item_active['title'] = $lang_module['edit_question'];
+    elseif ($data['type'] == 'openid')
+        $item_active['title'] = $lang_module['openid_administrator'];
+    elseif ($data['type'] == 'group')
+        $item_active['title'] = $lang_module['group'];
+    elseif ($data['type'] == 'others')
+        $item_active['title'] = $lang_module['edit_others'];
+    elseif ($data['type'] == 'safemode')
+        $item_active['title'] = $lang_module['safe_mode'];
+    else
+        $item_active['title'] = $lang_module['edit_basic'];
+    $xtpl->assign('ITEM_ACTIVE', $item_active);
+
+    if (defined('ACCESS_EDITUS')) {
+        $xtpl->assign('GROUP_MANAGE', [
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $group_id,
+            'title' => sprintf($lang_module['return_group_manage'], $group_lists[$group_id]['title'])
+        ]);
+        $xtpl->parse('main.return_group_manage');
+    }
 
     // Tab đổi tên đăng nhập
     if (in_array('username', $types, true)) {
@@ -791,6 +847,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->parse('main.tab_edit_password.is_old_pass');
         }
         $xtpl->parse('main.edit_password');
+
+        if (defined('ACCESS_EDITUS')) {
+            $xtpl->assign('GROUP_MANAGE', [
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $group_id,
+                'title' => sprintf($lang_module['return_group_manage'], $group_lists[$group_id]['title'])
+            ]);
+            $xtpl->parse('main.tab_edit_password.return_group_manage');
+        }
         $xtpl->parse('main.tab_edit_password');
     }
 
@@ -836,6 +900,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
         foreach ($global_config['openid_servers'] as $server) {
             $assigns = [];
+            $assigns['server'] = $server;
             $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
             $assigns['title'] = ucfirst($server);
             $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
@@ -854,6 +919,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $group_check_all_checked = 1;
         $count = 0;
         foreach ($groups as $group) {
+            $group['isChecked'] = !empty($group['checked']) ? 1 : 0;
             $group['status_mess'] = $lang_module['group_status_' . $group['status']];
             $group['group_type_mess'] = $lang_module['group_type_' . $group['group_type']];
             $group['group_type_note'] = !empty($lang_module['group_type_' . $group['group_type'] . '_note']) ? $lang_module['group_type_' . $group['group_type'] . '_note'] : '';
@@ -924,7 +990,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     $xtpl->parse('main.tab_edit_others.loop.textbox');
                 } elseif ($row['field_type'] == 'date') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                    $datepicker = true;
                     $xtpl->assign('FIELD', $row);
+                    if (!empty($row['min_length'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.date.minDate');
+                    }
+                    if (!empty($row['max_length'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.date.maxDate');
+                    }
                     $xtpl->parse('main.tab_edit_others.loop.date');
                 } elseif ($row['field_type'] == 'textarea') {
                     $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
@@ -954,6 +1027,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     $xtpl->parse('main.tab_edit_others.loop.select');
                 } elseif ($row['field_type'] == 'radio') {
                     $number = 0;
+                    $count = count($row['field_choices']);
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', [
                             'id' => $row['fid'] . '_' . $number++,
@@ -963,9 +1037,13 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.radio.loop');
                     }
+                    if ($number == $count) {
+                        $xtpl->parse('main.tab_edit_others.loop.radio.loop.invalidtooltip');
+                    }
                     $xtpl->parse('main.tab_edit_others.loop.radio');
                 } elseif ($row['field_type'] == 'checkbox') {
                     $number = 0;
+                    $count = count($row['field_choices']);
                     $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
 
                     foreach ($row['field_choices'] as $key => $value) {
@@ -976,6 +1054,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                             'value' => $value
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.checkbox.loop');
+                    }
+                    if ($number == $count) {
+                        $xtpl->parse('main.tab_edit_others.loop.checkbox.loop.invalidtooltip');
                     }
                     $xtpl->parse('main.tab_edit_others.loop.checkbox');
                 } elseif ($row['field_type'] == 'multiselect') {
@@ -998,6 +1079,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->parse('main.tab_edit_others.ckeditor');
         }
         $xtpl->parse('main.edit_others');
+
+        if (defined('ACCESS_EDITUS')) {
+            $xtpl->assign('GROUP_MANAGE', [
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $group_id,
+                'title' => sprintf($lang_module['return_group_manage'], $group_lists[$group_id]['title'])
+            ]);
+            $xtpl->parse('main.tab_edit_others.return_group_manage');
+        }
         $xtpl->parse('main.tab_edit_others');
     }
 
@@ -1071,6 +1160,10 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->assign('NAVBAR', $li);
             $xtpl->parse('main.navbar');
         }
+    }
+
+    if ($datepicker) {
+        $xtpl->parse('main.datepicker');
     }
 
     $xtpl->parse('main');
