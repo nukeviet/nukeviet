@@ -388,7 +388,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (empty($nv_password)) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_module['password_empty']
+                'mess' => $lang_global['password_empty']
             ]);
         }
 
