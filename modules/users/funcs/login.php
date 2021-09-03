@@ -374,7 +374,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (!$check_seccode) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_module['securitycodeincorrect']
+                'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
             ]);
         }
 
