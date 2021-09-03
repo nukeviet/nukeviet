@@ -48,7 +48,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
 
     $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
     $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
-    $password_pattern = "/^";
+    $password_pattern = '/^';
     if ($global_config['nv_upass_type'] == 1) {
         $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)";
     } elseif ($global_config['nv_upass_type'] == 2) {
@@ -58,7 +58,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     } elseif ($global_config['nv_upass_type'] == 4) {
         $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_])";
     }
-    $password_pattern .= "(.){" . $global_config['nv_upassmin'] . "," . $global_config['nv_upassmax'] . "}$/";
+    $password_pattern .= '(.){' . $global_config['nv_upassmin'] . ',' . $global_config['nv_upassmax'] . '}$/';
 
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
@@ -704,7 +704,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
     $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
-    $password_pattern = "/^";
+    $password_pattern = '/^';
     if ($global_config['nv_upass_type'] == 1) {
         $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)";
     } elseif ($global_config['nv_upass_type'] == 2) {
@@ -714,7 +714,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     } elseif ($global_config['nv_upass_type'] == 4) {
         $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_])";
     }
-    $password_pattern .= "(.){" . $global_config['nv_upassmin'] . "," . $global_config['nv_upassmax'] . "}$/";
+    $password_pattern .= '(.){' . $global_config['nv_upassmin'] . ',' . $global_config['nv_upassmax'] . '}$/';
 
     $xtpl->assign('PASSWORD_PATTERN', $password_pattern);
     $xtpl->assign('USERNAME_RULE', $username_rule);
@@ -802,26 +802,27 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $item_active = [
         'name' => $data['type']
     ];
-    if ($data['type'] == 'avatar')
+    if ($data['type'] == 'avatar') {
         $item_active['title'] = $lang_module['edit_avatar'];
-    elseif ($data['type'] == 'username')
+    } elseif ($data['type'] == 'username') {
         $item_active['title'] = $lang_module['edit_login'];
-    elseif ($data['type'] == 'email')
+    } elseif ($data['type'] == 'email') {
         $item_active['title'] = $lang_module['edit_email'];
-    elseif ($data['type'] == 'password')
+    } elseif ($data['type'] == 'password') {
         $item_active['title'] = $lang_module['edit_password'];
-    elseif ($data['type'] == 'question')
+    } elseif ($data['type'] == 'question') {
         $item_active['title'] = $lang_module['edit_question'];
-    elseif ($data['type'] == 'openid')
+    } elseif ($data['type'] == 'openid') {
         $item_active['title'] = $lang_module['openid_administrator'];
-    elseif ($data['type'] == 'group')
+    } elseif ($data['type'] == 'group') {
         $item_active['title'] = $lang_module['group'];
-    elseif ($data['type'] == 'others')
+    } elseif ($data['type'] == 'others') {
         $item_active['title'] = $lang_module['edit_others'];
-    elseif ($data['type'] == 'safemode')
+    } elseif ($data['type'] == 'safemode') {
         $item_active['title'] = $lang_module['safe_mode'];
-    else
+    } else {
         $item_active['title'] = $lang_module['edit_basic'];
+    }
     $xtpl->assign('ITEM_ACTIVE', $item_active);
 
     if (defined('ACCESS_EDITUS')) {
@@ -1484,11 +1485,13 @@ function user_openid_administrator($data)
  * nv_memberslist_theme()
  *
  * @param array  $users_array
+ * @param string $orderby
+ * @param string $sortby
  * @param array  $array_order_new
  * @param string $generate_page
  * @return string
  */
-function nv_memberslist_theme($users_array, $array_order_new, $generate_page)
+function nv_memberslist_theme($users_array, $orderby, $sortby, $array_order_new, $generate_page)
 {
     global $module_info, $module_name, $global_config, $lang_module, $op;
 
@@ -1498,6 +1501,9 @@ function nv_memberslist_theme($users_array, $array_order_new, $generate_page)
     foreach ($array_order_new as $key => $link) {
         $xtpl->assign($key, $link);
     }
+
+    $sortby = strtolower($sortby);
+    $xtpl->parse('main.sort_' . $orderby . '_' . $sortby);
 
     foreach ($users_array as $user) {
         $xtpl->assign('USER', $user);
@@ -1545,9 +1551,10 @@ function nv_memberslist_theme($users_array, $array_order_new, $generate_page)
  * @param array $item
  * @param array $array_field_config
  * @param array $custom_fields
+ * @param bool  $full
  * @return string
  */
-function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
+function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields, $full)
 {
     global $module_info, $lang_module, $lang_global, $module_name, $global_config, $op;
 
@@ -1571,7 +1578,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
 
     $xtpl->assign('USER', $item);
 
-    if ($item['is_admin']) {
+    if ($item['is_admin'] and $full) {
         if ($item['allow_edit']) {
             $xtpl->assign('LINK_EDIT', $item['link_edit']);
             $xtpl->parse('main.for_admin.edit');

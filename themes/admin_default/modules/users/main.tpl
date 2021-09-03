@@ -66,7 +66,7 @@
                             <!-- BEGIN: is_admin -->
                             <img style="vertical-align:middle;" alt="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
                             <!-- END: is_admin -->
-                            <!-- BEGIN: view --><a href="{CONTENT_TD.link}" target="_blank">{CONTENT_TD.username}</a><!-- END: view -->
+                            <!-- BEGIN: view --><a href="javascript:void(0);" onclick="viewUser('{CONTENT_TD.link}')">{CONTENT_TD.username}</a><!-- END: view -->
                             <!-- BEGIN: show -->{CONTENT_TD.username}<!-- END: show -->
                             <div class="mt-1">{CONTENT_TD.full_name}</div>
                         </td>

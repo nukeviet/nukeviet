@@ -167,7 +167,7 @@ while ($row = $result2->fetch()) {
         'info_verify' => $info_verify,
         'active_obj' => $row['active_obj'],
         'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'], true)),
-        'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username']
+        'link' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username'], true)
     ];
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
         $users_list[$row['userid']]['is_edit'] = false;

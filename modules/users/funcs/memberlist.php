@@ -33,6 +33,11 @@ $array_mod_title[] = [
 // Xem chi tiet thanh vien
 if (isset($array_op[1]) and !empty($array_op[1])) {
     $page_url .= '/' . $array_op[1];
+    $full = true;
+    if (isset($array_op[2]) and $array_op[2] == 's') {
+        $page_url .= '/s';
+        $full = false;
+    }
 
     $md5 = '';
     unset($matches);
@@ -90,7 +95,7 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
                 unset($access_admin, $check_admin);
             }
 
-            $contents = nv_memberslist_detail_theme($item, $array_field_config, $custom_fields);
+            $contents = nv_memberslist_detail_theme($item, $array_field_config, $custom_fields, $full);
         } else {
             nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         }
@@ -98,16 +103,22 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
 
     $canonicalUrl = getCanonicalUrl($page_url);
 
+    if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
+        exit(nv_url_rewrite($contents, true));
+    }
+
     include NV_ROOTDIR . '/includes/header.php';
-    echo nv_site_theme($contents);
+    echo nv_site_theme($contents, $full);
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
     // danh sach thanh vien
     $orderby = $nv_Request->get_string('orderby', 'get', 'username');
-    $sortby = $nv_Request->get_string('sortby', 'get', 'DESC');
+    $sortby = $nv_Request->get_string('sortby', 'get', 'ASC');
     $page = $nv_Request->get_int('page', 'get', 1);
 
-    $page_url .= '&orderby=' . $orderby . '&sortby=' . $sortby;
+    if (!($orderby == 'username' and $sortby == 'ASC')) {
+        $page_url .= '&orderby=' . $orderby . '&sortby=' . $sortby;
+    }
 
     // Kiem tra du lieu hop chuan
     if ((!empty($orderby) and !in_array($orderby, [
@@ -190,9 +201,9 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
 
     unset($result, $item);
 
-    $contents = nv_memberslist_theme($users_array, $array_order_new, $generate_page);
+    $contents = nv_memberslist_theme($users_array, $orderby, $sortby, $array_order_new, $generate_page);
 
-    $canonicalUrl = getCanonicalUrl($page_url);
+    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

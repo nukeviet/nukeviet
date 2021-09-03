@@ -699,6 +699,8 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     $xtpl->assign('GID', $group_id);
     $title = ($group_id < 10) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
 
+    $viewuser = nv_user_in_groups($global_config['whoviewuser']);
+
     $array_userid = [];
     $array_number = [];
     $group_users = [];
@@ -767,10 +769,11 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     }
 
     if (!empty($group_users)) {
-        $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid IN (' . implode(',', $array_userid) . ')';
+        $sql = 'SELECT userid, username, md5username, first_name, last_name, email, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid IN (' . implode(',', $array_userid) . ')';
         $result = $db->query($sql);
         $array_userid = [];
         while ($row = $result->fetch()) {
+            $row['viewuser_link'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username'], true);
             $array_userid[$row['userid']] = $row;
         }
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
@@ -782,6 +785,10 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                 $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
                 $row['stt'] = $stt;
                 $xtpl->assign('LOOP', $row);
+
+                if ($viewuser and $_type != 'pending') {
+                    $xtpl->parse('listUsers.' . $_type . '.loop.viewuser');
+                }
 
                 if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite']) and $_type != 'leaders') {
                     if ($user_info['userid'] != $_userid) {

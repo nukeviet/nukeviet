@@ -614,6 +614,11 @@ function passResetRequestSubmit(event, obj, type) {
     });
 }
 
+function viewUser(link) {
+    nv_open_browse(link + '/s', "VIEWUSER", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+    return !1
+}
+
 $(document).ready(function() {
     // List user main
     $('#mainusersaction').click(function() {
