@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<link rel="StyleSheet" href="{NV_STATIC_URL}themes/{BLOCK_CSS}/css/users.css">
 <!-- BEGIN: display_button -->
 <div id="nv-block-login" class="text-center">
     <button type="button" class="login btn btn-success btn-sm" onclick="modalShowByObj('#guestLogin_{BLOCKID}', 'recaptchareset')">

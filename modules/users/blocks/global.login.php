@@ -113,7 +113,6 @@ if (!nv_function_exists('nv_block_login')) {
                 } else {
                     include NV_ROOTDIR . '/modules/users/language/vi.php';
                 }
-                $my_head .= '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $block_css . '/css/users.css">';
             } else {
                 global $lang_module;
             }
