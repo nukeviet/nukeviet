@@ -111,8 +111,8 @@ function newsSendMailModal(fm, url, sess) {
                 if ($('[data-toggle=recaptcha]', $(fm)).length) {
                     reCaptcha2Recreate($(fm));
                     "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", $(fm)).length) {
-                    "undefined" != typeof grecaptcha ? reCaptcha3OnLoad() : reCaptcha3ApiLoad()
+                } else if ($("[data-recaptcha3]", $(fm)).length && "undefined" === typeof grecaptcha) {
+                    reCaptcha3ApiLoad()
                 }
                 $(fm).attr('data-loaded', 'true');
                 $(fm).modal('show')
