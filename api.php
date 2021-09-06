@@ -75,7 +75,12 @@ if (!empty($credential_data['credential_ips'])) {
 }
 
 $apisecret = $crypt->decrypt($credential_data['credential_secret']);
-if (!hash_equals($api_credential['hashsecret'], crypt($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])) {
+if($credential_data['credential_method'] == 'hash_equals_and_crypt'){
+    $password_verify= hash_equals($api_credential['hashsecret'], crypt($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret']);
+}else{
+    $password_verify= password_verify($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])
+}
+if (!$password_verify) {
     $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
         ->setMessage('Api Authentication fail !!! ')
         ->returnResult();
