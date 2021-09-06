@@ -362,6 +362,9 @@ function lostpass_validForm(a) {
                             change_captcha();
                             $("[name=gcaptcha_session]", a).val('');
                         }
+                    } else {
+                        $('[data-toggle=recaptcha]', $(a)).length && $('[data-toggle=recaptcha]', $(a)).remove();
+                        $("[data-recaptcha3]", $(a).parent()).length && $(a).data('recaptcha3', null);
                     }
                 } else {
                     $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
