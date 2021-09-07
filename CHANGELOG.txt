@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.00
+- System: Centralized Captcha Management #3348
 - System: Add ability to exclude connection to js files of Default theme
 - System: Allows saving cookie/session with array values
 - Module Users: Manage changing user account password (Impact on interface)
