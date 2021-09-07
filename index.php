@@ -119,7 +119,7 @@ try {
             $module_file = $module_info['module_file'];
             $module_data = $module_info['module_data'];
             $module_upload = $module_info['module_upload'];
-            $module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : $module_config[$module_name]['captcha_type'];
+            $module_captcha = $module_name == 'users' ? $global_config['captcha_type'] : (!empty($module_config[$module_name]['captcha_type']) ? $module_config[$module_name]['captcha_type'] : '');
             if (!(empty($module_captcha) or in_array($module_captcha, ['captcha', 'recaptcha'], true)) or ($module_captcha == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey'])))) {
                 $module_captcha = 'captcha';
             }
