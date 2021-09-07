@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.01
+- System: Centralized Captcha Management #3348
 - All modules: Fix $page_url definition
 - System: Fix error in getCanonicalUrl function
 
