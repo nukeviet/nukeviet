@@ -131,12 +131,15 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 if ($voting_array['active_captcha']) {
-                    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+                    $captcha_type = (empty($module_config[$module]['captcha_type']) or in_array($module_config[$module]['captcha_type'], ['captcha', 'recaptcha'], true)) ? $module_config[$module]['captcha_type'] : 'captcha';
+                    if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
+                        $captcha_type = 'captcha';
+                    }
 
-                    if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                    if ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
                         $xtpl->parse('main.recaptcha3');
-                    } elseif (($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module]['captcha_type'] == 'captcha') {
-                        if ($module_config[$module]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                    } elseif (($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 2) or $captcha_type == 'captcha') {
+                        if ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
                             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                             $xtpl->parse('main.has_captcha.recaptcha');

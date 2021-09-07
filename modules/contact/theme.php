@@ -227,7 +227,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
  */
 function contact_form_theme($array_content, $catsName, $base_url, $checkss)
 {
-    global $lang_global, $lang_module, $module_info, $global_config, $module_config, $module_name;
+    global $lang_global, $lang_module, $module_info, $global_config, $module_config, $module_name, $module_captcha;
 
     $xtpl = new XTemplate('form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('CONTENT', $array_content);
@@ -240,19 +240,16 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
         $xtpl->parse('main.sendcopy');
     }
 
-    // Xác định có áp dụng reCaptcha hay không
-    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
-
     // Nếu dùng reCaptcha v3
-    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
     }
     // Nếu dùng reCaptcha v2
-    elseif ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
-    } elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+    } elseif ($module_captcha == 'captcha') {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);

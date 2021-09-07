@@ -15,13 +15,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $mod_name = $nv_Request->get_title('mod_name', 'post,get', '');
 
-$captcha_array = [
-    0 => $lang_module['captcha_0'],
-    1 => $lang_module['captcha_1'],
-    2 => $lang_module['captcha_2'],
-    3 => $lang_module['captcha_3']
-];
-
 $groups_list = nv_groups_list();
 
 if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_name])) {
@@ -30,8 +23,6 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
     $array_config['auto_postcomm'] = $nv_Request->get_int('auto_postcomm', 'post', 0);
     $array_config['activecomm'] = $nv_Request->get_int('activecomm', 'post', 0);
     $array_config['sortcomm'] = $nv_Request->get_int('sortcomm', 'post', 0);
-    $array_config['captcha_area_comm'] = $nv_Request->get_int('captcha_area_comm', 'post', 0);
-    $array_config['captcha_type_comm'] = $nv_Request->get_string('captcha_type_comm', 'post', '');
     $array_config['perpagecomm'] = $nv_Request->get_int('perpagecomm', 'post', 0);
     $array_config['timeoutcomm'] = $nv_Request->get_int('timeoutcomm', 'post', 0);
     $array_config['allowattachcomm'] = ($nv_Request->get_int('allowattachcomm', 'post', 0) == 1 ? 1 : 0);
@@ -169,37 +160,6 @@ if (!empty($mod_name)) {
             'selected' => $i == $module_config[$mod_name]['sortcomm'] ? ' selected="selected"' : ''
         ]);
         $xtpl->parse('main.config.sortcomm');
-    }
-
-    // Thao luan mac dinh khi tao bai viet moi
-    foreach ($captcha_array as $i => $title_i) {
-        $xtpl->assign('OPTION', [
-            'key' => $i,
-            'title' => $title_i,
-            'selected' => $i == $module_config[$mod_name]['captcha_area_comm'] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.config.captcha_area_comm');
-    }
-
-    $captcha_types = [
-        'captcha',
-        'recaptcha'
-    ];
-    foreach ($captcha_types as $type) {
-        $captcha_type = [
-            'key' => $type,
-            'selected' => $module_config[$mod_name]['captcha_type_comm'] == $type ? ' selected="selected"' : '',
-            'title' => $lang_module['captcha_type_' . $type]
-        ];
-        $xtpl->assign('CAPTCHATYPE', $captcha_type);
-        $xtpl->parse('main.config.captcha_type_comm');
-    }
-
-    $is_recaptcha_note = empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']);
-    $xtpl->assign('IS_RECAPTCHA_NOTE', (int) $is_recaptcha_note);
-    $xtpl->assign('RECAPTCHA_NOTE', $is_recaptcha_note ? sprintf($lang_module['captcha_type_recaptcha_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=security&amp;selectedtab=2') : '');
-    if (!$is_recaptcha_note or $module_config[$mod_name]['captcha_type_comm'] != 'recaptcha') {
-        $xtpl->parse('main.config.recaptcha_note_hide');
     }
 
     $xtpl->parse('main.config');

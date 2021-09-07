@@ -47,7 +47,6 @@ if (!empty($savesetting)) {
 
     $array_config['facebookappid'] = $nv_Request->get_title('facebookappid', 'post', '');
     $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
-    $array_config['scaptcha_type'] = $nv_Request->get_string('scaptcha_type', 'post', '');
     $array_config['show_no_image'] = $nv_Request->get_title('show_no_image', 'post', '', 0);
     $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
     $array_config['config_source'] = $nv_Request->get_int('config_source', 'post', 0);
@@ -240,29 +239,6 @@ if (!empty($module_config[$module_name]['instant_articles_password'])) {
     $xtpl->assign('INSTANT_ARTICLES_PASSWORD', '');
 }
 
-$is_recaptcha_note = empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']);
-$xtpl->assign('IS_RECAPTCHA_NOTE', (int) $is_recaptcha_note);
-$xtpl->assign('RECAPTCHA_NOTE', $is_recaptcha_note ? sprintf($lang_module['captcha_type_recaptcha_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=security&amp;selectedtab=2') : '');
-$captcha_types = [
-    '',
-    'captcha',
-    'recaptcha'
-];
-
-foreach ($captcha_types as $type) {
-    $captcha_type = [
-        'key' => $type,
-        'selected' => $module_config[$module_name]['scaptcha_type'] == $type ? ' selected="selected"' : '',
-        'title' => $lang_module['captcha_type_' . $type]
-    ];
-    $xtpl->assign('SCAPTCHATYPE', $captcha_type);
-    $xtpl->parse('main.scaptcha_type');
-}
-
-if (!$is_recaptcha_note or $module_config[$module_name]['scaptcha_type'] != 'recaptcha') {
-    $xtpl->parse('main.srecaptcha_note_hide');
-}
-
 $array_structure_image = [];
 $array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_upload;
 $array_structure_image['Y'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y');
@@ -357,7 +333,6 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
 
         $array_config['frontend_edit_alias'] = $nv_Request->get_int('frontend_edit_alias', 'post', 0);
         $array_config['frontend_edit_layout'] = $nv_Request->get_int('frontend_edit_layout', 'post', 0);
-        $array_config['ucaptcha_type'] = $nv_Request->get_string('ucaptcha_type', 'post', '');
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
@@ -428,20 +403,6 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
         ]);
 
         $xtpl->parse('main.admin_config_post.loop');
-    }
-
-    foreach ($captcha_types as $type) {
-        $captcha_type = [
-            'key' => $type,
-            'selected' => $module_config[$module_name]['ucaptcha_type'] == $type ? ' selected="selected"' : '',
-            'title' => $lang_module['captcha_type_' . $type]
-        ];
-        $xtpl->assign('CAPTCHATYPE', $captcha_type);
-        $xtpl->parse('main.admin_config_post.captcha_type');
-    }
-
-    if (!$is_recaptcha_note or $module_config[$module_name]['ucaptcha_type'] != 'recaptcha') {
-        $xtpl->parse('main.admin_config_post.recaptcha_note_hide');
     }
 
     $xtpl->parse('main.admin_config_post');

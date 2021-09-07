@@ -84,8 +84,6 @@ if (defined('NV_IS_USER')) {
     $fphone = isset($user_info['phone']) ? $user_info['phone'] : '';
 }
 
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
-
 /*
  * Nhan thong tin va gui den admin
  */
@@ -116,20 +114,20 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     unset($fcaptcha);
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass) {
+    if ($module_captcha == 'recaptcha') {
         $fcaptcha = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($module_config[$module_name]['captcha_type'] == 'captcha') {
+    elseif ($module_captcha == 'captcha') {
         $fcaptcha = $nv_Request->get_title('fcode', 'post', '');
     }
 
     // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_config[$module_name]['captcha_type'])) {
+    if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_captcha)) {
         nv_jsonOutput([
             'status' => 'error',
-            'input' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? '' : 'fcode',
-            'mess' => ($module_config[$module_name]['captcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'input' => ($module_captcha == 'recaptcha') ? '' : 'fcode',
+            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }
 

@@ -65,20 +65,23 @@ if ($captcha == 0) {
     }
 }
 
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+$captcha_type = (empty($module_config['comment']['captcha_type']) or in_array($module_config['comment']['captcha_type'], ['captcha', 'recaptcha'], true)) ? $module_config['comment']['captcha_type'] : 'captcha';
+if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
+    $captcha_type = 'captcha';
+}
 
 unset($code);
 // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-if ($show_captcha and $reCaptchaPass and $module_config[$module]['captcha_type_comm'] == 'recaptcha') {
+if ($show_captcha and $captcha_type == 'recaptcha') {
     $code = $nv_Request->get_title('g-recaptcha-response', 'post', '');
 }
 // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-elseif ($show_captcha and $module_config[$module]['captcha_type_comm'] == 'captcha') {
+elseif ($show_captcha and $captcha_type == 'captcha') {
     $code = $nv_Request->get_title('code', 'post', '');
 }
 
 // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-if (isset($code) and !nv_capcha_txt($code, $module_config[$module]['captcha_type_comm'])) {
+if (isset($code) and !nv_capcha_txt($code, $captcha_type)) {
     _loadContents('ERR_code_' . $lang_global['securitycodeincorrect']);
 }
 

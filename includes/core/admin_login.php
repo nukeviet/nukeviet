@@ -53,13 +53,16 @@ $rules = [
 $blocker->trackLogin($rules, $global_config['is_login_blocker']);
 
 $error = '';
-$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 if (!empty($array_gfx_chk) and in_array('a', $array_gfx_chk, true)) {
     $gfx_chk = 1;
 } else {
     $gfx_chk = 0;
 }
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+$captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha'], true)) ? $global_config['captcha_type'] : 'captcha';
+if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
+    $captcha_type = 'captcha';
+}
 $admin_login_success = false;
 
 // Đăng xuất tài khoản login bước 1 để login lại
@@ -238,11 +241,11 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
 
     unset($nv_seccode);
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+    if ($captcha_type == 'recaptcha') {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($global_config['ucaptcha_type'] == 'captcha') {
+    elseif ($captcha_type == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
@@ -254,8 +257,8 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
         $error = $lang_global['password_empty'];
     }
     // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-    elseif ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type'])) {
-        $error = ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+    elseif ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $captcha_type)) {
+        $error = ($captcha_type == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
     } else {
         // Đăng nhập khi kích hoạt diễn đàn
         if (defined('NV_IS_USER_FORUM')) {
@@ -485,7 +488,7 @@ if (empty($admin_pre_data)) {
 
     // Kích hoạt mã xác nhận
     if ($gfx_chk) {
-        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+        if ($captcha_type == 'recaptcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
             $xtpl->assign('RECAPTCHA_TYPE', $global_config['recaptcha_type']);
@@ -496,7 +499,7 @@ if (empty($admin_pre_data)) {
                 $xtpl->parse('main.pre_form.recaptcha.recaptcha3');
             }
             $xtpl->parse('main.pre_form.recaptcha');
-        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        } elseif ($captcha_type == 'captcha') {
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);

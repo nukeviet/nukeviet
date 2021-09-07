@@ -412,16 +412,19 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             }
         }
 
-        $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+        $captcha_type = (empty($module_config['comment']['captcha_type']) or in_array($module_config['comment']['captcha_type'], ['captcha', 'recaptcha'], true)) ? $module_config['comment']['captcha_type'] : 'captcha';
+        if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
+            $captcha_type = 'captcha';
+        }
 
         if ($show_captcha) {
-            if ($module_config[$module]['captcha_type_comm'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+            if ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
                 $xtpl->parse('main.allowed_comm.recaptcha3');
-            } elseif ($module_config[$module]['captcha_type_comm'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+            } elseif ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('GFX_NUM', -1);
                 $xtpl->parse('main.allowed_comm.recaptcha');
-            } elseif ($module_config[$module]['captcha_type_comm'] == 'captcha') {
+            } elseif ($captcha_type == 'captcha') {
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
                 $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
                 $xtpl->assign('GFX_NUM', NV_GFX_NUM);

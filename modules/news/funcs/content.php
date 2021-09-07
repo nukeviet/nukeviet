@@ -339,7 +339,6 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
 
     $selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
     $layouts = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
-    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
     $error = '';
 
     if ($nv_Request->isset_request('save', 'post')) {
@@ -351,11 +350,11 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
 
         unset($fcode);
         // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-        if ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+        if ($module_captcha == 'recaptcha') {
             $fcode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
         }
         // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-        elseif ($module_config[$module_name]['ucaptcha_type'] == 'captcha') {
+        elseif ($module_captcha == 'captcha') {
             $fcode = $nv_Request->get_title('fcode', 'post', '');
         }
 
@@ -402,8 +401,8 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
             $error = $lang_module['error_cat'];
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $lang_module['error_bodytext'];
-        } elseif (isset($fcode) and !nv_capcha_txt($fcode, $module_config[$module_name]['ucaptcha_type'])) {
-            $error = ($module_config[$module_name]['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+        } elseif (isset($fcode) and !nv_capcha_txt($fcode, $module_captcha)) {
+            $error = ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
         } else {
             $rowcontent['catid'] = in_array((int) $rowcontent['catid'], $catids, true) ? $rowcontent['catid'] : $catids[0];
             $rowcontent['sourceid'] = 0;

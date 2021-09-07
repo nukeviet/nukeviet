@@ -82,9 +82,8 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     }
 }
 
-$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 $gfx_chk = (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) ? 1 : 0;
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 $data = [];
 $data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
@@ -98,24 +97,24 @@ if ($checkss == $data['checkss']) {
 
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
-    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+    if ($module_captcha == 'recaptcha') {
         $data['nv_seccode'] = $nv_Request->get_title('gcaptcha_session', 'post', '');
-    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+    } elseif ($module_captcha == 'captcha') {
         $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
     $check_seccode = true;
-    if ($gfx_chk and ($global_config['ucaptcha_type'] == 'captcha' or ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass))) {
-        $check_seccode = ((!empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $global_config['ucaptcha_type']));
+    if ($gfx_chk and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha')) {
+        $check_seccode = ((!empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $module_captcha));
     }
 
     if (!$check_seccode) {
         $nv_Request->set_Session('lostpass_seccode', '');
         nv_jsonOutput([
             'status' => 'error',
-            'input' => ($global_config['ucaptcha_type'] == 'recaptcha') ? '' : 'nv_seccode',
+            'input' => ($module_captcha == 'recaptcha') ? '' : 'nv_seccode',
             'step' => 'step1',
-            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }
 

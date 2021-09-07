@@ -42,9 +42,8 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     }
 }
 
-$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 : 0;
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 /**
  * login_result()
@@ -281,16 +280,16 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
                 unset($nv_seccode);
                 // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-                if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+                if ($module_captcha == 'recaptcha') {
                     $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                 }
                 // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-                elseif ($global_config['ucaptcha_type'] == 'captcha') {
+                elseif ($module_captcha == 'captcha') {
                     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
                 }
 
                 // Kiểm tra tính hợp lệ của captcha nhập vào
-                $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
+                $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
 
                 $nv_Request->unset_request('openid_attribs', 'session');
                 if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php')) {
@@ -365,21 +364,21 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         unset($nv_seccode);
         // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+        if ($module_captcha == 'recaptcha') {
             $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
         }
         // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-        elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        elseif ($module_captcha == 'captcha') {
             $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
         }
 
         // Kiểm tra tính hợp lệ của captcha nhập vào
-        $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
+        $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
 
         if (!$check_seccode) {
             opidr_login([
                 'status' => 'error',
-                'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+                'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
             ]);
         }
 
@@ -688,23 +687,23 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
     unset($nv_seccode);
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+    if ($module_captcha == 'recaptcha') {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($global_config['ucaptcha_type'] == 'captcha') {
+    elseif ($module_captcha == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
     $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
     // Kiểm tra tính hợp lệ của captcha nhập vào
-    $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
+    $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
 
     if (!$check_seccode) {
         signin_result([
             'status' => 'error',
-            'input' => ($global_config['ucaptcha_type'] == 'recaptcha') ? '' : 'nv_seccode',
-            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'input' => ($module_captcha == 'recaptcha') ? '' : 'nv_seccode',
+            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }
 

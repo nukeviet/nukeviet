@@ -24,8 +24,6 @@ foreach ($global_array_cat as $catid_i => $array_cat_i) {
     }
 }
 
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
-
 if ($id > 0 and $catid > 0) {
     $sql = 'SELECT id, title, alias, hometext FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id . ' AND status=1';
     $result = $db_slave->query($sql);
@@ -46,16 +44,16 @@ if ($id > 0 and $catid > 0) {
                 if ($nv_Request->isset_request('send', 'post')) {
                     unset($nv_seccode);
                     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-                    if ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+                    if ($module_captcha == 'recaptcha') {
                         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
                     }
                     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-                    elseif ($module_config[$module_name]['scaptcha_type'] == 'captcha') {
+                    elseif ($module_captcha == 'captcha') {
                         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
                     }
 
                     // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-                    if (isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $module_config[$module_name]['scaptcha_type'])) {
+                    if (isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $module_captcha)) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'input' => 'nv_seccode',
