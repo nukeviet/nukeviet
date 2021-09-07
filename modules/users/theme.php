@@ -1808,6 +1808,22 @@ function theme_changePass($pass_timeout, $pass_empty, $checkss)
 
     $xtpl->assign('CHANGEPASS_INFO', $pass_timeout ? sprintf($lang_module['pass_reset3_info'], floor($global_config['pass_timeout'] / 86400)) : $lang_module['pass_reset1_info']);
 
+    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
+    $password_pattern = '/^';
+    if ($global_config['nv_upass_type'] == 1) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 2) {
+        $password_pattern .= "(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W\_])";
+    } elseif ($global_config['nv_upass_type'] == 3) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)";
+    } elseif ($global_config['nv_upass_type'] == 4) {
+        $password_pattern .= "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_])";
+    }
+    $password_pattern .= '(.){' . $global_config['nv_upassmin'] . ',' . $global_config['nv_upassmax'] . '}$/';
+
+    $xtpl->assign('PASSWORD_PATTERN', $password_pattern);
+    $xtpl->assign('PASSWORD_RULE', $password_rule);
+
     if (!$pass_empty) {
         $xtpl->parse('main.is_old_pass');
     }

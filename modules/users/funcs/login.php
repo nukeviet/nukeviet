@@ -304,7 +304,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                             'mess' => $lang_module['openid_confirm_failed']
                         ]);
                     }
-                } elseif (!$crypt->validate_password($password, $nv_row['password']) or !$check_seccode) {
+                } elseif (!$check_seccode) {
+                    opidr_login([
+                        'status' => 'error',
+                        'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+                    ]);
+                } elseif (!$crypt->validate_password($password, $nv_row['password'])) {
                     opidr_login([
                         'status' => 'error',
                         'mess' => $lang_module['openid_confirm_failed']

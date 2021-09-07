@@ -179,7 +179,8 @@ if (isset($array_op[1]) and !empty($array_op[1])) {
         }
 
         $item['regdate'] = nv_date('d/m/Y', $item['regdate']);
-        $item['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=memberlist/' . change_alias($item['username']) . '-' . $item['md5username'];
+        $item['user'] = change_alias($item['username']) . '-' . $item['md5username'];
+        $item['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=memberlist/' . $item['user'];
         $item['gender'] = ($item['gender'] == 'M') ? $lang_module['male'] : ($item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na']);
 
         $users_array[$item['userid']] = $item;

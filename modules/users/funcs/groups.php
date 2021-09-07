@@ -773,7 +773,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         $result = $db->query($sql);
         $array_userid = [];
         while ($row = $result->fetch()) {
-            $row['viewuser_link'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username'], true);
+            $row['user'] = change_alias($row['username']) . '-' . $row['md5username'];
             $array_userid[$row['userid']] = $row;
         }
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];

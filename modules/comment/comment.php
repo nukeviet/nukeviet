@@ -53,7 +53,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
 
     if ($num_items) {
         $emailcomm = $module_config[$module]['emailcomm'];
-        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.email, b.first_name, b.last_name, b.photo, b.view_mail')
+        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.md5username, b.email, b.first_name, b.last_name, b.photo, b.view_mail')
             ->limit($per_page_comment)
             ->offset(($page - 1) * $per_page_comment);
 
@@ -78,6 +78,7 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
             if (!empty($row['attach'])) {
                 $row['attach'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&amp;' . NV_OP_VARIABLE . '=down&cid=' . $row['cid'] . '&amp;tokend=' . md5($row['cid'] . '_' . NV_CHECK_SESSION);
             }
+            $row['user'] = !empty($row['username']) ? change_alias($row['username']) . '-' . $row['md5username'] : '';
             $comment_array[$row['cid']] = $row;
         }
         if (!empty($comment_list_id)) {
@@ -123,7 +124,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
         ->fetchColumn();
     if ($num_items_sub) {
         $emailcomm = $module_config[$module]['emailcomm'];
-        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail');
+        $db_slave->select('a.cid, a.pid, a.content, a.attach, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.username, b.md5username, b.email, b.first_name, b.last_name, b.photo, b.view_mail');
 
         if ($sortcomm == 1) {
             $db_slave->order('a.cid ASC');
@@ -140,6 +141,7 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
             if (!empty($row['attach'])) {
                 $row['attach'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&amp;' . NV_OP_VARIABLE . '=down&cid=' . $row['cid'] . '&amp;tokend=' . md5($row['cid'] . '_' . NV_CHECK_SESSION);
             }
+            $row['user'] = !empty($row['username']) ? change_alias($row['username']) . '-' . $row['md5username'] : '';
             $data_reply_comment[$row['cid']] = $row;
             $data_reply_comment[$row['cid']]['subcomment'] = nv_comment_get_reply($row['cid'], $module, $session_id, $sortcomm);
         }
@@ -482,6 +484,8 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
             $xtpl->parse('main.comment_result');
         }
 
+        $viewuser = nv_user_in_groups($global_config['whoviewuser']);
+
         foreach ($comment_array['comment'] as $comment_array_i) {
             if (!empty($comment_array_i['subcomment'])) {
                 $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed_comm);
@@ -503,6 +507,11 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
             }
 
             $xtpl->assign('COMMENT', $comment_array_i);
+
+            if ($viewuser and !empty($comment_array_i['user'])) {
+                $xtpl->parse('main.detail.viewuser');
+                $xtpl->parse('main.detail.viewuser2');
+            }
 
             if ($module_config[$module]['emailcomm'] and !empty($comment_array_i['post_email'])) {
                 $xtpl->parse('main.detail.emailcomm');
@@ -552,6 +561,8 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allo
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('LANG', $lang_module_comment);
 
+    $viewuser = nv_user_in_groups($global_config['whoviewuser']);
+
     foreach ($comment_array as $comment_array_i) {
         if (!empty($comment_array_i['subcomment'])) {
             $comment_array_reply = nv_comment_module_data_reply($module, $comment_array_i['subcomment'], $is_delete, $allowed_comm);
@@ -571,6 +582,10 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allo
         }
 
         $xtpl->assign('COMMENT', $comment_array_i);
+
+        if ($viewuser and !empty($comment_array_i['user'])) {
+            $xtpl->parse('children.detail.viewuser');
+        }
 
         if ($module_config[$module]['emailcomm'] and !empty($comment_array_i['post_email'])) {
             $xtpl->parse('children.detail.emailcomm');
