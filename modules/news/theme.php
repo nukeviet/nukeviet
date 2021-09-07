@@ -1172,7 +1172,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
  */
 function sendmail_themme($sendmail)
 {
-    global $module_info, $global_config, $lang_module, $lang_global, $module_config, $module_name;
+    global $module_info, $global_config, $lang_module, $lang_global, $module_config, $module_name, $module_captcha;
 
     $xtpl = new XTemplate('sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('SENDMAIL', $sendmail);
@@ -1184,19 +1184,16 @@ function sendmail_themme($sendmail)
         $xtpl->parse('main.sender_is_user');
     }
 
-    // Xác định có áp dụng reCaptcha hay không
-    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
-
     // Nếu dùng reCaptcha v3
-    if ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
         $xtpl->parse('main.recaptcha3');
     }
     // Nếu dùng reCaptcha v2
-    elseif ($module_config[$module_name]['scaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+    elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
-    } elseif ($module_config[$module_name]['scaptcha_type'] == 'captcha') {
+    } elseif ($module_captcha == 'captcha') {
         $xtpl->assign('GFX_NUM', NV_GFX_NUM);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
         $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');

@@ -91,16 +91,6 @@ $lang_module['sortcomm_0'] = 'Mới trước';
 $lang_module['sortcomm_1'] = 'Cũ trước';
 $lang_module['sortcomm_2'] = 'Like nhiều trước';
 
-$lang_module['captcha'] = 'Cấu hình hiển thị captcha';
-$lang_module['captcha_0'] = 'Không hiển thị';
-$lang_module['captcha_1'] = 'Nếu không phải là thành viên';
-$lang_module['captcha_2'] = 'Nếu không phải người quản lý bình luận';
-$lang_module['captcha_3'] = 'Hiển thị trong mọi trường hợp';
-$lang_module['captcha_type'] = 'Kiểu captcha';
-$lang_module['captcha_type_captcha'] = 'Captcha hình';
-$lang_module['captcha_type_recaptcha'] = 'reCaptcha';
-$lang_module['captcha_type_recaptcha_note'] = 'Captcha sẽ không chạy cho đến khi bạn <a href="%s">định cấu hình reCaptcha</a>';
-
 $lang_module['siteinfo_queue_comments'] = 'Số bình luận chờ duyệt';
 $lang_module['notification_comment_queue'] = 'Kiểm duyệt bình luận gửi bởi %s<br /><em>%s</em>';
 $lang_module['attach'] = 'Đính kèm file';

@@ -202,30 +202,33 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('USERNAME_RULE', $username_rule);
                 $xtpl->assign('PASSWORD_RULE', $password_rule);
 
-                $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-                $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+                $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
+                $captcha_type = (empty($global_config['captcha_type']) or in_array($global_config['captcha_type'], ['captcha', 'recaptcha'], true)) ? $global_config['captcha_type'] : 'captcha';
+                if ($captcha_type == 'recaptcha' and (empty($global_config['recaptcha_sitekey']) or empty($global_config['recaptcha_secretkey']))) {
+                    $captcha_type = 'captcha';
+                }
 
                 if (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) {
-                    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                    if ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
                         $xtpl->parse('main.' . $display_layout . '.recaptcha3');
-                    } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                    } elseif ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->parse('main.' . $display_layout . '.recaptcha.compact');
                         $xtpl->parse('main.' . $display_layout . '.recaptcha.smallbtn');
                         $xtpl->parse('main.' . $display_layout . '.recaptcha');
-                    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+                    } elseif ($captcha_type == 'captcha') {
                         $xtpl->parse('main.' . $display_layout . '.captcha');
                     }
                 }
 
                 if (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk, true)) {
-                    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                    if ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
                         $xtpl->parse('main.allowuserreg.reg_recaptcha3');
-                    } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                    } elseif ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                         $xtpl->parse('main.allowuserreg.reg_recaptcha');
-                    } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+                    } elseif ($captcha_type == 'captcha') {
                         $xtpl->parse('main.allowuserreg.reg_captcha');
                     }
                 }

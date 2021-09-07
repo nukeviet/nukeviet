@@ -20,7 +20,15 @@ $proxy_blocker_array = [
     3 => $lang_module['proxy_blocker_3']
 ];
 
+$captcha_opts = ['', 'captcha', 'recaptcha'];
+$captcha_area_list = ['a', 'l', 'r', 'm', 'p'];
 $recaptcha_vers = [2, 3];
+$captcha_comm_list = [
+    0 => $lang_module['captcha_comm_0'],
+    1 => $lang_module['captcha_comm_1'],
+    2 => $lang_module['captcha_comm_2'],
+    3 => $lang_module['captcha_comm_3']
+];
 
 $recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
 $admin_2step_array = ['code', 'facebook', 'google'];
@@ -224,6 +232,63 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcaptcha', 'p
     $array_define_captcha['nv_gfx_num'] = NV_GFX_NUM;
     $array_define_captcha['nv_gfx_width'] = NV_GFX_WIDTH;
     $array_define_captcha['nv_gfx_height'] = NV_GFX_HEIGHT;
+}
+
+// Cấu hình hiển thị captcha cho từng module
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('modcapt', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $mod_capts = $nv_Request->get_typed_array('captcha_type', 'post', 'title', '');
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = :lang AND module = :module AND config_name = 'captcha_type'");
+    foreach ($mod_capts as $mod => $type) {
+        unset($lg, $modl);
+        if (empty($type) or in_array($type, $captcha_opts, true)) {
+            if ($mod == 'users' and $type != $global_config['captcha_type']) {
+                $lg = 'sys';
+                $modl = 'site';
+            } elseif ($mod == 'banners' and $type != $module_config['banners']['captcha_type']) {
+                $lg = 'sys';
+                $modl = 'banners';
+            } elseif (isset($module_config[$mod]['captcha_type']) and $type != $module_config[$mod]['captcha_type']) {
+                $lg = NV_LANG_DATA;
+                $modl = $mod;
+            }
+        }
+        if (isset($lg, $modl)) {
+            $sth->bindParam(':config_value', $type, PDO::PARAM_STR);
+            $sth->bindParam(':lang', $lg, PDO::PARAM_STR);
+            $sth->bindParam(':module', $modl, PDO::PARAM_STR);
+            $sth->execute();
+        }
+    }
+
+    $nv_Cache->delMod('settings');
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+}
+
+// Khu vực sử dụng captcha của module Thành viên
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captarea', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $captcha_areas = $nv_Request->get_typed_array('captcha_area', 'post', 'string');
+    $captcha_areas = !empty($captcha_areas) ? implode(',', $captcha_areas) : '';
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'captcha_area'");
+    $sth->bindParam(':config_value', $captcha_areas, PDO::PARAM_STR);
+    $sth->execute();
+    $nv_Cache->delMod('settings');
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
+}
+
+// Đối tượng áp dụng captcha khi tham gia Bình luận
+if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('captcommarea', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $captcha_areas_comm = $nv_Request->get_typed_array('captcha_area_comm', 'post', 'int', 0);
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module AND config_name = 'captcha_area_comm'");
+    foreach ($captcha_areas_comm as $mod => $area) {
+        if (isset($module_config[$mod]['captcha_area_comm'], $module_config[$mod]['activecomm'], $captcha_comm_list[$area])) {
+            $sth->bindParam(':config_value', $area, PDO::PARAM_STR);
+            $sth->bindParam(':module', $mod, PDO::PARAM_STR);
+            $sth->execute();
+        }
+    }
+
+    $nv_Cache->delMod('settings');
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
 }
 
 $lang_module['two_step_verification_note'] = sprintf($lang_module['two_step_verification_note'], $lang_module['two_step_verification0'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups');
@@ -851,6 +916,66 @@ if (defined('NV_IS_GODADMIN')) {
         ];
         $xtpl->assign('ADMIN_2STEP_DEFAULT', $admin_2step_default);
         $xtpl->parse('main.sys_contents.admin_2step_default');
+    }
+
+    // Cấu hình hiển thị captcha cho từng module
+    foreach ($site_mods as $title => $mod) {
+        if ($title == 'users' or isset($module_config[$title]['captcha_type'])) {
+            $mod['title'] = $title;
+            $xtpl->assign('MOD', $mod);
+
+            $captcha_type = $title == 'users' ? $global_config['captcha_type'] : $module_config[$title]['captcha_type'];
+            foreach ($captcha_opts as $val) {
+                $xtpl->assign('OPT', [
+                    'val' => $val,
+                    'sel' => (!empty($captcha_type) and $captcha_type == $val) ? ' selected="selected"' : '',
+                    'title' => $lang_module['captcha_' . $val]
+                ]);
+                $xtpl->parse('main.sys_contents.mod.opt');
+            }
+
+            if ($captcha_type != 'recaptcha' or ($captcha_type == 'recaptcha' and !empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']))) {
+                $xtpl->parse('main.sys_contents.mod.dnone');
+            }
+            $xtpl->parse('main.sys_contents.mod');
+        }
+    }
+
+    // Khu vực sử dụng captcha của module Thành viên
+    foreach ($captcha_area_list as $area) {
+        $captcha_area = [
+            'key' => $area,
+            'checked' => str_contains($global_config['captcha_area'], $area) ? ' checked="checked"' : '',
+            'title' => $lang_module['captcha_area_' . $area]
+        ];
+        $xtpl->assign('CAPTCHAAREA', $captcha_area);
+        $xtpl->parse('main.sys_contents.captcha_area');
+    }
+
+    // Đối tượng áp dụng captcha khi tham gia Bình luận
+    foreach ($captcha_comm_list as $i => $title_i) {
+        $xtpl->assign('OPTALL', [
+            'val' => $i,
+            'title' => $title_i
+        ]);
+        $xtpl->parse('main.sys_contents.optAll');
+    }
+
+    foreach ($site_mods as $title => $mod) {
+        if (isset($module_config[$title]['captcha_area_comm'], $module_config[$title]['activecomm'])) {
+            $mod['title'] = $title;
+            $xtpl->assign('MOD', $mod);
+
+            foreach ($captcha_comm_list as $i => $title_i) {
+                $xtpl->assign('OPT', [
+                    'val' => $i,
+                    'title' => $title_i,
+                    'sel' => $i == $module_config[$title]['captcha_area_comm'] ? ' selected="selected"' : ''
+                ]);
+                $xtpl->parse('main.sys_contents.modcomm.opt');
+            }
+            $xtpl->parse('main.sys_contents.modcomm');
+        }
     }
 
     $xtpl->parse('main.sys_contents');

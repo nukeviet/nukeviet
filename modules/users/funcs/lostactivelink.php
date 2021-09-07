@@ -30,19 +30,18 @@ $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
-$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 $gfx_chk = (!empty($array_gfx_chk) and in_array('m', $array_gfx_chk, true)) ? 1 : 0;
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 $data = [];
 $data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
 $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
 $data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
 $data['send'] = $nv_Request->get_bool('send', 'post', false);
-if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+if ($module_captcha == 'recaptcha') {
     $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
-} elseif ($global_config['ucaptcha_type'] == 'captcha') {
+} elseif ($module_captcha == 'captcha') {
     $data['nv_seccode'] = $data['nv_seccode2'] = $nv_Request->get_title('nv_seccode', 'post', '');
 }
 $checkss = $nv_Request->get_title('checkss', 'post', '');
@@ -53,7 +52,7 @@ $step = 1;
 $error = $question = '';
 
 if ($checkss == $data['checkss']) {
-    $check_seccode = ($gfx_chk and isset($data['nv_seccode'])) ? ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $global_config['ucaptcha_type'])) : true;
+    $check_seccode = ($gfx_chk and isset($data['nv_seccode'])) ? ((!empty($seccode) and md5($data['nv_seccode2']) == $seccode) or nv_capcha_txt($data['nv_seccode'], $module_captcha)) : true;
     if ($check_seccode) {
         if (!empty($data['userField'])) {
             $check_email = nv_check_valid_email($data['userField'], true);

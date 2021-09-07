@@ -26,7 +26,7 @@ if (!defined('NV_IS_MOD_USER')) {
  */
 function user_register($gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields, $group_id)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect, $global_array_genders;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $module_captcha, $op, $nv_redirect, $global_array_genders;
 
     $xtpl = new XTemplate('register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
@@ -226,16 +226,14 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
         $xtpl->parse('main.datepicker');
     }
 
-    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
-
     if ($gfx_chk) {
-        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.reg_recaptcha3');
-        } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.reg_recaptcha');
-        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -298,7 +296,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
  */
 function user_login($is_ajax = false)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_header, $nv_redirect, $page_url;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $module_captcha, $op, $nv_header, $nv_redirect, $page_url;
 
     if ($is_ajax) {
         $xtpl = new XTemplate('ajax_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
@@ -312,22 +310,20 @@ function user_login($is_ajax = false)
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('TEMPLATE', $module_info['template']);
 
-    $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+    $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
     $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 : 0;
-    // Xác định có áp dụng reCaptcha hay không
-    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
     if ($gfx_chk) {
         // Nếu dùng reCaptcha v3
-        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
         }
         // Nếu dùng reCaptcha v2
-        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->parse('main.recaptcha.default');
             $xtpl->parse('main.recaptcha');
-        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -420,7 +416,7 @@ function user_login($is_ajax = false)
  */
 function user_openid_login($gfx_chk, $attribs)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $nv_redirect;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $module_captcha, $nv_redirect;
 
     $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
 
@@ -430,19 +426,17 @@ function user_openid_login($gfx_chk, $attribs)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    // Xác định có áp dụng reCaptcha hay không
-    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
     if ($gfx_chk) {
         // Nếu dùng reCaptcha v3
-        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
         }
         // Nếu dùng reCaptcha v2
-        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
-        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
             $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
@@ -483,7 +477,7 @@ function user_openid_login($gfx_chk, $attribs)
  */
 function user_lostpass($data)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $module_captcha, $op, $nv_redirect;
 
     $xtpl = new XTemplate('lostpass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -492,21 +486,19 @@ function user_lostpass($data)
     $xtpl->assign('DATA', $data);
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
 
-    $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-    // Xác định có áp dụng reCaptcha hay không
-    $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+    $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 
     if (!empty($array_gfx_chk) and in_array('p', $array_gfx_chk, true)) {
         // Nếu dùng reCaptcha v3
-        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
         }
         // Nếu dùng reCaptcha v2
-        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
-        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -560,7 +552,7 @@ function user_lostpass($data)
  */
 function user_lostactivelink($data, $question)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $module_captcha, $op;
 
     $xtpl = new XTemplate('lostactivelink.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -574,17 +566,16 @@ function user_lostactivelink($data, $question)
     } else {
         $xtpl->assign('FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink');
 
-        $array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
-        $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
+        $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 
         if (!empty($array_gfx_chk) and in_array('m', $array_gfx_chk, true)) {
-            if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+            if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
                 $xtpl->parse('main.step1.recaptcha3');
-            } elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+            } elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
                 $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                 $xtpl->parse('main.step1.recaptcha');
-            } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+            } elseif ($module_captcha == 'captcha') {
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
                 $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -1242,7 +1233,7 @@ function user_info_exit($info, $error = false)
  */
 function openid_account_confirm($gfx_chk, $attribs, $user)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $nv_redirect, $global_config;
+    global $lang_global, $lang_module, $module_info, $module_name, $module_captcha, $nv_redirect, $global_config;
 
     $xtpl = new XTemplate('confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -1253,18 +1244,16 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
 
     if ($gfx_chk) {
-        // Xác định có áp dụng reCaptcha hay không
-        $reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
         // Nếu dùng reCaptcha v3
-        if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
             $xtpl->parse('main.recaptcha3');
         }
         // Nếu dùng reCaptcha v2
-        elseif ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
             $xtpl->parse('main.recaptcha');
-        } elseif ($global_config['ucaptcha_type'] == 'captcha') {
+        } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);

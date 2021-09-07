@@ -185,31 +185,7 @@
                     </td>
                 </tr>
                 <!-- END: dir_forum -->
-                <tr>
-                    <td>{LANG.captcha_area}</td>
-                    <td>
-                        <div class="clearfix">
-                            <!-- BEGIN: captcha_area -->
-                            <p>
-                                <input type="checkbox" id="captcha_area{CAPTCHAAREA.key}" name="ucaptcha_area[]" value="{CAPTCHAAREA.key}"{CAPTCHAAREA.checked}/>
-                                <label for="captcha_area{CAPTCHAAREA.key}">{CAPTCHAAREA.title}</label>
-                            </p>
-                            <!-- END: captcha_area -->
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>{LANG.captcha_type}</td>
-                    <td>
-                        <select class="form-control w200" name="ucaptcha_type" data-recaptcha-note="{IS_RECAPTCHA_NOTE}">
-                            <!-- BEGIN: captcha_type -->
-                            <option value="{CAPTCHATYPE.key}"{CAPTCHATYPE.selected}>{CAPTCHATYPE.title}</option>
-                            <!-- END: captcha_type -->
-                        </select>
-                        <span class="recaptcha_note"<!-- BEGIN: recaptcha_note_hide --> style="display:none"<!-- END: recaptcha_note_hide -->>{RECAPTCHA_NOTE}</span>
-                    </td>
-                </tr>
-                
+
                 <tr>
                     <td>{LANG.whoviewlistuser}</td>
                     <td>
@@ -305,17 +281,4 @@
         </table>
     </div>
 </form>
-<script>
-$(function() {
-    $("[name=ucaptcha_type]").on('change', function(e) {
-        var v = $(this).val(),
-            is_recaptcha_note = $(this).data('recaptcha-note');
-        if (is_recaptcha_note && v == 'recaptcha') {
-            $(".recaptcha_note").show()
-        } else {
-            $(".recaptcha_note").hide()
-        }
-    })
-});
-</script>
 <!-- END: main -->

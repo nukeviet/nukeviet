@@ -31,8 +31,7 @@ $allow_func = [
     'info_banner',
     'show_stat',
     'show_list_stat',
-    'del_banner',
-    'setting'
+    'del_banner'
 ];
 define('NV_IS_FILE_ADMIN', true);
 

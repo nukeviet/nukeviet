@@ -208,9 +208,8 @@ while ($row = $result->fetch()) {
 }
 
 // Captcha
-$array_gfx_chk = !empty($global_config['ucaptcha_area']) ? explode(',', $global_config['ucaptcha_area']) : [];
+$array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
 $gfx_chk = (!empty($array_gfx_chk) and in_array('r', $array_gfx_chk, true)) ? 1 : 0;
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
 
 $array_register = [];
 $array_register['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
@@ -316,22 +315,22 @@ if ($checkss == $array_register['checkss']) {
 
     unset($nv_seccode);
     // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-    if ($global_config['ucaptcha_type'] == 'recaptcha' and $reCaptchaPass) {
+    if ($module_captcha == 'recaptcha') {
         $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
     }
     // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($global_config['ucaptcha_type'] == 'captcha') {
+    elseif ($module_captcha == 'captcha') {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
 
     // Kiểm tra tính hợp lệ của captcha nhập vào
-    $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $global_config['ucaptcha_type']) : true;
+    $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
 
     if (!$check_seccode) {
         reg_result([
             'status' => 'error',
-            'input' => ($global_config['ucaptcha_type'] == 'recaptcha') ? '' : 'nv_seccode',
-            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'input' => ($module_captcha == 'recaptcha') ? '' : 'nv_seccode',
+            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }
 

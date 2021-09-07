@@ -17,8 +17,6 @@ $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 
 $vid = $nv_Request->get_int('vid', 'get', 0);
 
-$reCaptchaPass = (!empty($global_config['recaptcha_sitekey']) and !empty($global_config['recaptcha_secretkey']) and ($global_config['recaptcha_ver'] == 2 or $global_config['recaptcha_ver'] == 3));
-
 if (empty($vid)) {
     $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
@@ -85,10 +83,10 @@ if (empty($vid)) {
             }
 
             if ($voting_array['active_captcha']) {
-                if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 3) {
+                if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
                     $xtpl->parse('main.loop.recaptcha3');
-                } elseif (($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) or $module_config[$module_name]['captcha_type'] == 'captcha') {
-                    if ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass and $global_config['recaptcha_ver'] == 2) {
+                } elseif (($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) or $module_captcha == 'captcha') {
+                    if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
                         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
                         $xtpl->parse('main.loop.has_captcha.recaptcha');
@@ -175,7 +173,7 @@ if (empty($vid)) {
             nv_redirect_location(nv_url_rewrite($page_url, true));
         }
 
-        if ($row['active_captcha'] and ($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass)) and !nv_capcha_txt($captcha, $module_config[$module_name]['captcha_type'])) {
+        if ($row['active_captcha'] and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha') and !nv_capcha_txt($captcha, $module_captcha)) {
             exit('ERROR|' . $lang_global['securitycodeincorrect']);
         }
 
@@ -253,7 +251,7 @@ if (empty($vid)) {
 
     $page_title = $row['question'];
     $page_url .= '&amp;vid=' . $vid . '&amp;checkss=' . $checkss . '&amp;lid=' . $lid;
-    if ($row['active_captcha'] and ($module_config[$module_name]['captcha_type'] == 'captcha' or ($module_config[$module_name]['captcha_type'] == 'recaptcha' and $reCaptchaPass))) {
+    if ($row['active_captcha'] and ($module_captcha == 'captcha' or $module_captcha == 'recaptcha')) {
         $page_url .= 'captcha=' . $captcha;
     }
     $canonicalUrl = getCanonicalUrl($page_url);
