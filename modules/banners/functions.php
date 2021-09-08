@@ -28,7 +28,7 @@ $global_array_uplans = [];
 // Kiểm tra quyền đăng quảng cáo
 if (defined('NV_IS_USER')) {
     foreach ($global_array_plans as $plan) {
-        if (nv_user_in_groups($plan['uploadgroup'])) {
+        if (nv_user_in_groups($plan['uploadgroup']) and (!$plan['require_image'] or ($plan['require_image'] and !empty($plan['uploadtype'])))) {
             $global_array_uplans[$plan['id']] = $plan;
         }
     }

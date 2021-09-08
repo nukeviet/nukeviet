@@ -50,6 +50,9 @@ function nv_banner_theme_main($contents, $manament)
             } else {
                 $xtpl->parse('main.if_banner_plan.banner_plan.notallowed');
             }
+            if (!empty($row['description'][1])) {
+                $xtpl->parse('main.if_banner_plan.banner_plan.desc');
+            }
             $xtpl->parse('main.if_banner_plan.banner_plan');
         }
 

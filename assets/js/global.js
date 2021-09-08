@@ -43,8 +43,7 @@ void 0 === nv_check_pass_mstime && (nv_check_pass_mstime = 1738E3);
 void 0 === theme_responsive && (theme_responsive = 0);
 void 0 === nv_safemode && (nv_safemode = 0);
 
--
-1 < strHref.indexOf("?") && ([script_name, query_string] = strHref.split("?"));
+-1 < strHref.indexOf("?") && ([script_name, query_string] = strHref.split("?"));
 
 function nv_email_check(field_id) {
     return 7 <= field_id.value.length && nv_mailfilter.test(field_id.value)

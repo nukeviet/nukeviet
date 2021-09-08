@@ -12,34 +12,93 @@ var type = "",
     ads = '';
 var charturl;
 
-$(document).ready(function() {
-    // Add banner
-    $('#banner_plan').change(function() {
-        var typeimage = $('option:selected', $(this)).data('image');
-        var uploadtype = $('option:selected', $(this)).data('uploadtype');
-        if (typeimage) {
-            $('#banner_uploadimage').show();
-            $('#banner_imagealt').show();
-            $('#banner_urlrequired').hide();
-            if (uploadtype == "") {
-                $('#banner_uploadtype').hide();
-                if (!$('#clinfomessage').data('dmessage')) {
-                    $('#clinfomessage').data('dmessage', $('#clinfomessage').html());
+function errorHidden(obj) {
+    $(obj).parent().removeClass("has-error")
+}
+
+function afSubmit(event, form) {
+    event.preventDefault();
+    $(".has-error", form).removeClass("has-error");
+    if ($('[name=title]', form).val().length < 3) {
+        $('[name=title]', form).parent().addClass('has-error');
+        alert($('[name=title]', form).data('mess'));
+        $('[name=title]', form).focus();
+        return !1
+    }
+    
+    if ($('[name=image]', form).is('.required') && !$('[name=image]', form).val()) {
+        $('[name=image]', form).parent().addClass('has-error');
+        alert($('[name=image]', form).data('mess'));
+        $('[name=image]', form).focus();
+        return !1
+    }
+
+    if ($('[name=url]', form).is('.required') && $('[name=url]', form).val().length < 3) {
+        $('[name=url]', form).parent().addClass('has-error');
+        alert($('[name=url]', form).data('mess'));
+        $('[name=url]', form).focus();
+        return !1
+    }
+
+    if ($('[name=captcha]', form).length && $('[name=captcha]', form).val().length < parseInt($('[name=captcha]', form).attr('maxlength'))) {
+        $('[name=captcha]', form).parent().addClass('has-error');
+        alert($('[name=captcha]', form).data('mess'));
+        $('[name=captcha]', form).focus();
+        return !1
+    }
+
+    var data = new FormData(form);
+    $("input,button,select", form).prop("disabled", !0);
+    $.ajax({
+        type: 'POST',
+        cache: !0,
+        url: $(form).prop("action"),
+        data: data,
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        success: function(d) {
+            alert(d.mess);
+            if (d.status == "error") {
+                $("input,button,select", form).prop("disabled", !1);
+                var b = $("[onclick*='change_captcha']", form);
+                b.length && b.click();
+                if ($('[data-toggle=recaptcha]', form).length || $("[data-recaptcha3]", $(form).parent()).length) {
+                    change_captcha()
                 }
-                $('#clinfomessage').html($('#banner_plan').data('blocked'));
+                if ("" != d.input) {
+                    $("[name=" + d.input + "]", form).parent().addClass('has-error');
+                    $("[name=" + d.input + "]", form).focus()
+                }
             } else {
-                $('#banner_uploadtype').html(' (' + uploadtype + ')').show();
-                if ($('#clinfomessage').data('dmessage')) {
-                    $('#clinfomessage').html($('#clinfomessage').data('dmessage'));
-                }
+                window.location.href = d.redirect;
             }
-        } else {
-            $('#banner_urlrequired').show();
-            $('#banner_uploadimage').hide();
-            $('#banner_imagealt').hide();
         }
     });
-    $('#banner_plan').change();
+    return !1
+}
+
+$(document).ready(function() {
+    // Add banner
+    if ($('#banner_plan').length) {
+        $('#banner_plan').change(function() {
+            var typeimage = $('option:selected', $(this)).data('image'),
+                uploadtype = $('option:selected', $(this)).data('uploadtype'),
+                form = $(this).parents('form');
+            if (!!typeimage) {
+                $('#banner_uploadtype').text(' (' + uploadtype + ')').show();
+                $('#banner_uploadimage').show();
+                $('.file', form).addClass('required');
+                $('.url', form).removeClass('required');
+            } else {
+                $('#banner_uploadimage').hide();
+                $('.file', form).removeClass('required');
+                $('.url', form).addClass('required');
+            }
+        });
+        $('#banner_plan').trigger('change')
+    }
+
     // Statistics
     $('#adsstat-ads a').click(function() {
         ads = $(this).attr('rel');
