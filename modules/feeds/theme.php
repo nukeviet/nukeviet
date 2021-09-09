@@ -21,7 +21,7 @@ if (!defined('NV_IS_MOD_RSS')) {
  */
 function nv_rss_main_theme($array)
 {
-    $array .= '<div class="tree well"><ul>';
+    $array .= '<div class="tree"><ul>';
     $array .= nv_get_rss_link();
     $array .= '</ul></div>';
 

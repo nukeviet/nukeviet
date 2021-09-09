@@ -21,14 +21,14 @@
 
 .tree li::before,
 .tree li::after {
-    content: '';
+    content: "";
     left: -20px;
     position: absolute;
     right: auto;
 }
 
 .tree li::before {
-    border-left: 1px solid #999;
+    border-left: 1px solid #6c757d;
     bottom: 50px;
     height: 100%;
     top: 0;
@@ -36,38 +36,41 @@
 }
 
 .tree li::after {
-    border-top: 1px solid #999;
+    border-top: 1px solid #6c757d;
     height: 20px;
     top: 25px;
     width: 25px;
-}
-
-.tree li span {
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 1px solid #999;
-    border-radius: 5px;
-    display: inline-block;
-    padding: 3px 8px;
-    text-decoration: none;
-}
-
-.tree li.parent_li > span {
-    cursor: pointer;
-}
-
-.tree > ul > li::before,
-.tree > ul > li::after {
-    border: 0;
 }
 
 .tree li:last-child::before {
     height: 30px;
 }
 
-.tree li.parent_li > span:hover,
-.tree li.parent_li > span:hover + ul li span {
-    background: #eee;
-    border: 1px solid #94a0b4;
-    color: #000;
+.tree li a {
+    border: 1px solid #6c757d;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 3px 8px;
+    text-decoration: none;
+    color: #343a40;
+}
+
+.tree li a::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 2px;
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='-28.364 -29.444 42.324 42.822'%3e%3cpath fill='%23ff9900' d='M-17.392 7.875c0 3.025-2.46 5.485-5.486 5.485s-5.486-2.46-5.486-5.485c0-3.026 2.46-5.486 5.486-5.486s5.486 2.461 5.486 5.486zm31.351 5.486C14.042.744 8.208-11.757-1.567-19.736c-7.447-6.217-17.089-9.741-26.797-9.708v9.792C-16.877-19.785-5.556-13.535.344-3.66a32.782 32.782 0 014.788 17.004h8.827v.017zm-14.96 0C-.952 5.249-4.808-2.73-11.108-7.817c-4.821-3.956-11.021-6.184-17.255-6.15v8.245c6.782-.083 13.432 3.807 16.673 9.774a19.296 19.296 0 012.411 9.326h8.278v-.017z'/%3e%3c/svg%3e") bottom center no-repeat;
+}
+
+.tree li a:hover {
+    color: #212529;
+    background-color: #e9ecef;
+}
+
+.tree > ul > li::before,
+.tree > ul > li::after {
+    border: 0;
+    width: 0;
 }
