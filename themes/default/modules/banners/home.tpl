@@ -8,37 +8,20 @@
 <!-- END: management -->
 <!-- BEGIN: if_banner_plan -->
 <!-- BEGIN: info -->
-<div class="well">{MAIN_PAGE_INFO}:</div>
+<div class="m-bottom">{MAIN_PAGE_INFO}:</div>
 <!-- END: info -->
-<div class="table-responsive">
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <td class="min-w100">{LANG.plan_title}</td>
-                <td class="min-w100">{LANG.plan_info}</td>
-                <td class="min-w100">{LANG.description}</td>
-                <td class="min-w100 text-center">{LANG.plan_allowed}</td>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- BEGIN: banner_plan -->
-            <tr>
-                <td>{PLAN_TITLE}</td>
-                <td><strong>{PLAN_LANG_TITLE}</strong>: {PLAN_LANG_NAME}, <strong>{PLAN_SIZE_TITLE}</strong>: {PLAN_SIZE_NAME}, <strong>{PLAN_FORM_TITLE}</strong>: {PLAN_FORM_NAME}</td>
-                <td>{PLAN_DESCRIPTION_NAME}</td>
-                <td class="text-center">
-                    <!-- BEGIN: allowed -->
-                    <a class="btn btn-xs btn-success">{LANG.plan_allowed_yes}</a>
-                    <!-- END: allowed -->
-                    <!-- BEGIN: notallowed -->
-                    <a class="btn btn-xs btn-danger">{LANG.plan_allowed_no}</a>
-                    <!-- END: notallowed -->
-                </td>
-            </tr>
-            <!-- END: banner_plan -->
-        </tbody>
-    </table>
+<!-- BEGIN: banner_plan -->
+<div class="panel panel-primary">
+    <div class="panel-heading">{LANG.plan_title}: <strong>{PLAN_TITLE}</strong></div>
+    <ul class="list-group">
+        <li class="list-group-item">{PLAN_LANG_TITLE}: {PLAN_LANG_NAME}</li>
+        <li class="list-group-item">{PLAN_SIZE_TITLE}: {PLAN_SIZE_NAME}</li>
+        <li class="list-group-item">{PLAN_FORM_TITLE}: {PLAN_FORM_NAME}</li>
+        <li class="list-group-item">{LANG.plan_allowed}: <!-- BEGIN: allowed -->{LANG.plan_allowed_yes}<!-- END: allowed --><!-- BEGIN: notallowed -->{LANG.plan_allowed_no}<!-- END: notallowed --></li>
+        <!-- BEGIN: desc --><li class="list-group-item">{PLAN_DESCRIPTION_NAME}</li><!-- END: desc -->
+    </ul>
 </div>
+<!-- END: banner_plan -->
 <!-- END: if_banner_plan -->
 <!-- BEGIN: login_check -->
 <div class="alert alert-info">

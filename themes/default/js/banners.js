@@ -7,11 +7,6 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var type = "",
-    month = '',
-    ads = '';
-var charturl;
-
 function errorHidden(obj) {
     $(obj).parent().removeClass("has-error")
 }
@@ -78,6 +73,25 @@ function afSubmit(event, form) {
     return !1
 }
 
+function loadStat() {
+    var type = $('#adsstat-type').val(),
+        month = $('#adsstat-month').val(),
+        ads = $('#adsstat-ads').val(),
+        charturl = nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=viewmap';
+    if (!!type && !!month && !!ads) {
+        $('#chartdata').html('<span class="load-bar"></span>').show();
+        var width = Math.floor($('#chartdata').width()) > 500 ? 700 : 500;
+        charturl += '&type=' + type + '&month=' + month + '&ads=' + ads + '&width=' + width;
+        var img = new Image();
+        $(img).on('load', function() {
+            $('#chartdata').html('<img src="' + img.src + '" style="width:100%"/>');
+        });
+        img.src = charturl;
+    } else {
+        $('#chartdata').hide()
+    }
+}
+
 $(document).ready(function() {
     // Add banner
     if ($('#banner_plan').length) {
@@ -98,27 +112,4 @@ $(document).ready(function() {
         });
         $('#banner_plan').trigger('change')
     }
-
-    // Statistics
-    $('#adsstat-ads a').click(function() {
-        ads = $(this).attr('rel');
-        $('#text-ads').html($(this).text());
-        if (type != "" && month != "" & ads != "") {
-            $('#chartdata').html('<img src="' + charturl + '&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
-        }
-    });
-    $('#adsstat-type a').click(function() {
-        type = $(this).attr('rel');
-        $('#text-type').html($(this).text());
-        if (type != "" && month != "" & ads != "") {
-            $('#chartdata').html('<img src="' + charturl + '&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
-        }
-    });
-    $('#adsstat-month a').click(function() {
-        month = $(this).attr('rel');
-        $('#text-month').html($(this).text());
-        if (type != "" && month != "" & ads != "") {
-            $('#chartdata').html('<img src="' + charturl + '&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
-        }
-    });
 });

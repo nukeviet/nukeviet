@@ -6,46 +6,34 @@
     <li class="active"><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
 </ul>
 <!-- END: management -->
-<div id="clinfo">
-    <div class="m-bottom">
-        {LANG.stats_views_ads}
-        <div class="btn-group">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                <span id="text-ads">{LANG.stats_views_select}</span>&nbsp;<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="adsstat-ads">
-                <!-- BEGIN: ads -->
-                <li><a href="#" rel="{ads.id}">{ads.title}</a></li>
-                <!-- END: ads -->
-            </ul>
-        </div>
-        {LANG.stats_views}
-        <div class="btn-group">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                <span id="text-type">{LANG.stats_views_select}</span>&nbsp;<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="adsstat-type">
-                <li><a href="#" rel="country">Country</a></li>
-                <li><a href="#" rel="browser">Browser</a></li>
-                <li><a href="#" rel="date">Date</a></li>
-                <li><a href="#" rel="os">Operating System</a></li>
-            </ul>
-        </div>
-        {LANG.stats_views_month}
-        <div class="btn-group">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                <span id="text-month">{LANG.stats_views_select}</span>&nbsp;<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="adsstat-month">
-                <!-- BEGIN: month -->
-                <li><a href="#" rel="{month}">{month}</a></li>
-                <!-- END: month -->
-            </ul>
-        </div>
+<div class="row m-bottom">
+    <div class="col-xs-24 col-sm-10 m-bottom">
+        <select class="form-control" id="adsstat-ads" onchange="loadStat()">
+            <option value="">{LANG.stats_views_ads}</option>
+            <!-- BEGIN: ads -->
+            <option value="{ads.id}">{ads.title}</option>
+            <!-- END: ads -->
+        </select>
     </div>
-    <script type="text/javascript">
-        charturl = '{charturl}';
-    </script>
+
+    <div class="col-xs-18 col-sm-8 m-bottom">
+        <select class="form-control" id="adsstat-type" onchange="loadStat()">
+            <option value="">{LANG.stats_views}</option>
+            <option value="country">{LANG.stats_type_country}</option>
+            <option value="browser">{LANG.stats_type_browser}</option>
+            <option value="os">{LANG.stats_type_os}</option>
+            <option value="date">{LANG.stats_type_date}</option>
+        </select>
+    </div>
+
+    <div class="col-xs-6 col-sm-6 m-bottom">
+        <select class="form-control" id="adsstat-month" onchange="loadStat()">
+            <option value="">{LANG.stats_views_month}</option>
+            <!-- BEGIN: month -->
+            <option value="{month}">{month}</option>
+            <!-- END: month -->
+        </select>
+    </div>
 </div>
-<div id="chartdata"></div>
+<div class="text-center m-bottom" id="chartdata" style="display:none"></div>
 <!-- END: main -->

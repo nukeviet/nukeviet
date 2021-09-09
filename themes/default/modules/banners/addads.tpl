@@ -12,7 +12,7 @@
         <div class="col-sm-18">
             <select name="block" id="banner_plan" class="form-control">
                 <!-- BEGIN: blockitem -->
-                <option value="{blockitem.id}" data-image="{blockitem.typeimage}" data-uploadtype="{blockitem.uploadtype}" {blockitem.selected}>{blockitem.title}</option>
+                <option value="{blockitem.id}" data-image="{blockitem.typeimage}" data-uploadtype="{blockitem.uploadtype}">{blockitem.title}</option>
                 <!-- END: blockitem -->
             </select>
         </div>
@@ -64,7 +64,7 @@
     <div class="form-group">
         <div class="col-sm-offset-6 col-sm-18">
             <input type="hidden" name="confirm" value="1" />
-            <input type="submit" value="{LANG.addads_confirm}" class="btn btn-primary" onclick="btnClickSubmit(event,this.form);" />
+            <input type="submit" value="{LANG.add_banner}" class="btn btn-primary" onclick="btnClickSubmit(event,this.form);" />
         </div>
     </div>
 </form>

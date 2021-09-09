@@ -32,7 +32,7 @@ $page_title = $module_info['site_title'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
-$contents = nv_banner_theme_main($contents, $manament);
+$contents = nv_banner_theme_main($contents);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
