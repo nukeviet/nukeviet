@@ -113,7 +113,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
 
         if (empty($search['content'])) {
-            $search['content'] = $lang_module['search_none'] . ' &quot;' . $search['key'] . '&quot;';
+            $search['content'] = $lang_module['search_none'];
         }
     }
 } else {
