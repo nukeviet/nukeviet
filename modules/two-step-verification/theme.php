@@ -106,9 +106,10 @@ function nv_theme_confirm_password($is_pass_valid)
     global $module_info, $lang_global, $lang_module, $op, $module_name;
 
     $xtpl = new XTemplate('confirm_password.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+
     if ($is_pass_valid) {
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
         $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
         $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
