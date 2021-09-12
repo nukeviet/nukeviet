@@ -373,7 +373,7 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
         $xtpl->parse('main.uploadtype');
     }
 
-    $uploadgroup = explode(',', $contents['uploadgroup']);
+    $uploadgroup = array_map('intval', explode(',', $contents['uploadgroup']));
     foreach ($groups_list as $_group_id => $_title) {
         $xtpl->assign('UPLOADGROUP', [
             'key' => $_group_id,
