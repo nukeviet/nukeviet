@@ -16,17 +16,24 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 $page_title = $lang_module['country'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['country'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url, true, true);
+$page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'];
+$contents = '';
 
 $sql = 'SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country' AND c_count!=0";
 $result = $db->query($sql);
 list($num_items, $max) = $result->fetch(3);
 
 if ($num_items) {
+    $base_url = $page_url;
     $page = $nv_Request->get_int('page', 'get', 1);
     $per_page = 50;
-    $base_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'];
+    
+    if ($page > 1) {
+        $page_url .= '&amp;page=' . $page;
+    }
+
+    // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+    betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
 
     $db->sqlreset()
         ->select('c_val,c_count, last_update')
@@ -57,6 +64,8 @@ if ($num_items) {
 
     $contents = nv_theme_statistics_allcountries($num_items, $countries_list, $cts);
 }
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
