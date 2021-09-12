@@ -45,7 +45,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading"><i class="fa fa-line-chart fa-fw"></i> {CTSY.caption}</div>
     <div class="panel-body">
-        <canvas style="max-width:100%" id="canvas_year" data-chart-type="line" data-xtitle="{LANG.year}" data-ytitle="{LANG.access_times}" data-bg="54, 162, 235" data-border="54, 162, 235" data-labels="{CTSY.dataLabel}" data-values="{CTSY.dataValue}"></canvas>
+        <canvas style="max-width:100%" id="canvas_year" data-chart-type="bar" data-xtitle="{LANG.year}" data-ytitle="{LANG.access_times}" data-bg="54, 162, 235" data-border="54, 162, 235" data-labels="{CTSY.dataLabel}" data-values="{CTSY.dataValue}"></canvas>
     </div>
     <div class="panel-footer">
         {LANG.hits_total}: <strong>{CTSY.total}</strong>
