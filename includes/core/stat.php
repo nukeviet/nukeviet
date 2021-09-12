@@ -43,6 +43,11 @@ function nv_stat_update()
     }
 
     if ($last_year != $current_year) {
+        $year_exists = $db->query('SELECT COUNT(*) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' AND c_val='" . $current_year . "'")->fetchColumn();
+        if (!$year_exists) {
+            $db->query('INSERT INTO ' . NV_COUNTER_GLOBALTABLE . " (c_type, c_val) VALUES ('year', '" . $current_year . "')");
+        }
+
         $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET c_count= 0, " . NV_LANG_DATA . "_count= 0 WHERE (c_type='month' OR c_type='day' OR c_type='hour')");
     } elseif ($last_month != $current_month) {
         $db->query("UPDATE " . NV_COUNTER_GLOBALTABLE . " SET c_count= 0, " . NV_LANG_DATA . "_count= 0 WHERE (c_type='day' OR c_type='hour')");
