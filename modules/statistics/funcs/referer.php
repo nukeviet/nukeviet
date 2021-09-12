@@ -31,7 +31,7 @@ if (empty($row)) {
 $contents = '';
 $mod_title = $page_title = sprintf($lang_module['refererbysite'], $host);
 $key_words = $module_info['keywords'];
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host;
+$page_url = NV_BASE_MOD_URL . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host;
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $cts = [];
@@ -51,21 +51,20 @@ $cts['rows']['Nov'] = ['fullname' => $lang_global['november'], 'count' => $row['
 $cts['rows']['Dec'] = ['fullname' => $lang_global['december'], 'count' => $row['month12']];
 
 $total = 0;
-$max = 0;
+$data_label = [];
+$data_value = [];
 foreach ($cts['rows'] as $key => $month) {
-    $total = $total + $month['count'];
-    if ($month['count'] > $max) {
-        $max = $month['count'];
-    }
+    $data_label[] = $month['fullname'];
+    $data_value[] = $month['count'];
+
+    $total += $month['count'];
 }
 
-if ($total) {
-    $cts['current_month'] = date('M', NV_CURRENTTIME);
-    $cts['max'] = $max;
-    $cts['total'] = [$lang_global['total'], number_format($total)];
-}
+$cts['total'] = $total ? number_format($total, 0, ',', '.') : 0;
+$cts['dataLabel'] = implode('_', $data_label);
+$cts['dataValue'] = implode('_', $data_value);
 
-$contents = nv_theme_statistics_referer($cts, $total);
+$contents = nv_theme_statistics_referer($cts);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

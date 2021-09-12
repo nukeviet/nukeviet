@@ -32,3 +32,6 @@ $lang_module['clear_success'] = 'Mis en œuvre avec succès';
 $lang_module['clear_confirm'] = 'Êtes-vous sûr de vouloir effectuer? Les statistiques sont établies depuis longtemps et ne seront pas en mesure de récupérer après la suppression!';
 $lang_module['clear_alllang'] = 'Supprimer dans toutes les langues';
 $lang_module['clear_alllang_msg'] = 'Si vous ne sélectionnez pas supprimer dans toutes les langues, le système supprime uniquement les statistiques <strong>%s</strong>';
+$lang_module['statbyyear_caption'] = 'Statistiques de visites de %d à %d';
+$lang_module['statbymonth_caption'] = 'Statistiques de visites de l\'année %d';
+$lang_module['statby_caption'] = 'Statistiques de visites de %s';

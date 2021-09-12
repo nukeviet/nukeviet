@@ -81,16 +81,16 @@ function nv_referer_update()
             $_numrow = $db->query('SELECT COUNT(*) FROM ' . NV_REFSTAT_TABLE . ' WHERE host=' . $db->quote($host))->fetchColumn();
             if ($_numrow > 0) {
                 $sth = $db->prepare('UPDATE ' . NV_REFSTAT_TABLE . ' SET
-    				total=total+1,
-    				month' . date('m', NV_CURRENTTIME) . '=month' . date('m', NV_CURRENTTIME) . '+1,
-    				last_update=' . NV_CURRENTTIME . '
-    				WHERE host= :host');
+                    total=total+1,
+                    month' . date('m', NV_CURRENTTIME) . '=month' . date('m', NV_CURRENTTIME) . '+1,
+                    last_update=' . NV_CURRENTTIME . '
+                    WHERE host= :host');
                 $sth->bindParam(':host', $host, PDO::PARAM_STR);
                 $sth->execute();
             } else {
                 $sth = $db->prepare('INSERT INTO ' . NV_REFSTAT_TABLE . '
-					(host, total, month' . date('m', NV_CURRENTTIME) . ', last_update)
-					VALUES ( :host, 1, 1,' . NV_CURRENTTIME . ')');
+                    (host, total, month' . date('m', NV_CURRENTTIME) . ', last_update)
+                    VALUES ( :host, 1, 1,' . NV_CURRENTTIME . ')');
                 $sth->bindParam(':host', $host, PDO::PARAM_STR);
                 $sth->execute();
             }

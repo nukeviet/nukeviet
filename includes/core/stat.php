@@ -49,6 +49,11 @@ function nv_stat_update()
     }
 
     if ($last_year != $current_year) {
+        $year_exists = $db->query('SELECT COUNT(*) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' AND c_val='" . $current_year . "'")->fetchColumn();
+        if (!$year_exists) {
+            $db->query('INSERT INTO ' . NV_COUNTER_GLOBALTABLE . " (c_type, c_val) VALUES ('year', '" . $current_year . "')");
+        }
+
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET c_count= 0, ' . NV_LANG_DATA . "_count= 0 WHERE (c_type='month' OR c_type='day' OR c_type='hour')");
     } elseif ($last_month != $current_month) {
         $db->query('UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET c_count= 0, ' . NV_LANG_DATA . "_count= 0 WHERE (c_type='day' OR c_type='hour')");
@@ -68,16 +73,16 @@ function nv_stat_update()
 
     $sth = $db->prepare(
         'UPDATE ' . NV_COUNTER_GLOBALTABLE . ' SET last_update=' . NV_CURRENTTIME . ', c_count=c_count + 1, ' . NV_LANG_DATA . '_count= ' . NV_LANG_DATA . "_count + 1 WHERE
-		(c_type='total' AND c_val='hits') OR
-		(c_type='year' AND c_val='" . $current_year . "') OR
-		(c_type='month' AND c_val='" . $current_month . "') OR
-		(c_type='day' AND c_val='" . $current_day . "') OR
-		(c_type='dayofweek' AND c_val='" . $current_week . "') OR
-		(c_type='hour' AND c_val='" . $current_hour . "') OR
-		(c_type='bot' AND c_val= :bot_name) OR
-		(c_type='browser' AND c_val= :browser) OR
-		(c_type='os' AND c_val= :client_os) OR
-		(c_type='country' AND c_val= :country)"
+        (c_type='total' AND c_val='hits') OR
+        (c_type='year' AND c_val='" . $current_year . "') OR
+        (c_type='month' AND c_val='" . $current_month . "') OR
+        (c_type='day' AND c_val='" . $current_day . "') OR
+        (c_type='dayofweek' AND c_val='" . $current_week . "') OR
+        (c_type='hour' AND c_val='" . $current_hour . "') OR
+        (c_type='bot' AND c_val= :bot_name) OR
+        (c_type='browser' AND c_val= :browser) OR
+        (c_type='os' AND c_val= :client_os) OR
+        (c_type='country' AND c_val= :country)"
     );
     $sth->bindParam(':bot_name', $bot_name, PDO::PARAM_STR);
     $sth->bindParam(':browser', $browser, PDO::PARAM_STR);

@@ -1,33 +1,14 @@
 <!-- BEGIN: main -->
-<div class="statistics-responsive">
-    <table class="table table-bordered table-striped statistics" summary="{CTS.caption}">
-        <caption>{CTS.caption}</caption>
-        <tbody>
-            <tr>
-                <!-- BEGIN: loop -->
-                <td class="data">
-                    <!-- BEGIN: img -->
-                    {M.count}
-                    <br />
-                    <img width="10" height="{HEIGHT}" src="{SRC}" alt="Statistics image" />
-                </td>
-                <!-- END: loop -->
-                <!-- END: img -->
-            </tr>
-            <tr>
-                <!-- BEGIN: loop_1 -->
-                <!-- BEGIN: m_c -->
-                <th class="text-center"><span class="label label-primary">{M.fullname}</span></th>
-                <!-- END: m_c -->
-                <!-- BEGIN: m_o -->
-                <th class="text-center">{M.fullname}</th>
-                <!-- END: m_o -->
-                <!-- END: loop_1 -->
-            </tr>
-            <tr>
-                <td class="text-right" colspan="12"> {CTS.total.0}: <strong>{CTS.total.1}</strong></td>
-            </tr>
-        </tbody>
-    </table>
+<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/chart/chart.min.js"></script>
+<script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/chartstat.js"></script>
+
+<div class="panel panel-primary">
+    <div class="panel-heading"><i class="fa fa-line-chart fa-fw me-1"></i>{CTS.caption}</div>
+    <div class="panel-body">
+        <canvas style="max-width:100%" id="canvas_month" data-chart-type="line" data-caption="{CTS.chart_caption}" data-xtitle="{LANG.month}" data-ytitle="{LANG.access_times}" data-bg="54, 162, 235" data-border="54, 162, 235" data-labels="{CTS.dataLabel}" data-values="{CTS.dataValue}"></canvas>
+    </div>
+    <div class="panel-footer">
+        {LANG.hits_total}: <strong>{CTS.total}</strong>
+    </div>
 </div>
 <!-- END: main -->
