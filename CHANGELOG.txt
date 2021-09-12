@@ -1,6 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.00
+- Update Chart.js to v3.5.1
+- Module Statistics: Improve the Statistics module
 - System: Add ability to exclude connection to js files of Default theme
 - System: Allows saving cookie/session with array values
 - Module Users: Manage changing user account password (Impact on interface)
