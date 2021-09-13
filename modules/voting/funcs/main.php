@@ -167,6 +167,7 @@ if (empty($vid)) {
 
     $count = sizeof($array_id);
     $note = '';
+    $is_error = false;
 
     if ($count) {
         if ($checkss != md5($vid . NV_CHECK_SESSION)) {
@@ -189,8 +190,10 @@ if (empty($vid)) {
 
             if ($is_voted) {
                 $note = $lang_module['limit_vote_msg'];
+                $is_error = true;
             } elseif ($count > $acceptcm) {
                 $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
+                $is_error = true;
             } else {
                 $in = implode(',', $array_id);
                 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
@@ -208,8 +211,10 @@ if (empty($vid)) {
                 $timeout = filemtime($dir . '/' . $logfile);
                 $timeout = ceil(($difftimeout - NV_CURRENTTIME + $timeout) / 60);
                 $note = sprintf($lang_module['timeoutmsg'], $timeout);
+                $is_error = true;
             } elseif ($count > $acceptcm) {
                 $note = ($acceptcm > 1) ? sprintf($lang_module['voting_warning_all'], $acceptcm) : $lang_module['voting_warning_accept1'];
+                $is_error = true;
             } else {
                 $in = implode(',', $array_id);
                 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
@@ -232,7 +237,7 @@ if (empty($vid)) {
         $vrow[] = $row2;
     }
 
-    $pubtime = nv_date('l - d/m/Y H:i', $row['publ_time']);
+    $pubtime = nv_date('d/m/Y H:i', $row['publ_time']);
     $lang = [
         'total' => $lang_module['voting_total'],
         'counter' => $lang_module['voting_counter'],
@@ -244,7 +249,8 @@ if (empty($vid)) {
         'pubtime' => $pubtime,
         'row' => $vrow,
         'lang' => $lang,
-        'note' => $note
+        'note' => $note,
+        'is_error' => $is_error
     ];
 
     $contents = voting_result($voting);

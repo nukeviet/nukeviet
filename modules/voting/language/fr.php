@@ -34,6 +34,7 @@ $lang_module['errormsg'] = 'Vous devez choisir une réponse!';
 $lang_module['errorupdate'] = 'Erreur de mise à jour du compteur';
 $lang_module['goback'] = 'Retourner';
 $lang_module['voting_total'] = 'Totale';
+$lang_module['voting_total2'] = 'Nombre de votes du %s à aujourd\'hui';
 $lang_module['voting_counter'] = 'votes';
 $lang_module['voting_pubtime'] = 'depuis';
 $lang_module['enter_captcha'] = 'Entrez le code de vérification';

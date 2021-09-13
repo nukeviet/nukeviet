@@ -21,7 +21,7 @@ if (!defined('NV_IS_MOD_VOTING')) {
  */
 function voting_result($voting)
 {
-    global $module_info;
+    global $module_info, $lang_module;
 
     $xtpl = new XTemplate('result.voting.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('PUBLTIME', $voting['pubtime']);
@@ -30,6 +30,12 @@ function voting_result($voting)
 
     if (!empty($voting['note'])) {
         $xtpl->assign('VOTINGNOTE', $voting['note']);
+        $xtpl->assign('VOTINGVID', $voting['row'][0]['vid']);
+        if ($voting['is_error']) {
+            $xtpl->parse('main.note.error');
+        } else {
+            $xtpl->parse('main.note.info');
+        }
         $xtpl->parse('main.note');
     }
     if (isset($voting['row'])) {
@@ -52,6 +58,7 @@ function voting_result($voting)
             $xtpl->assign('ID', $a);
             $xtpl->assign('WIDTH', $width);
             $xtpl->assign('TOTAL', $voting['total']);
+            $xtpl->assign('TOTAL_TITLE', sprintf($lang_module['voting_total2'], $voting['pubtime']));
             if ($voting_i['title']) {
                 $xtpl->parse('main.result');
             }
