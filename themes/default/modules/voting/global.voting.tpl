@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/voting.js"></script>
+
 <form action="{NV_BASE_SITEURL}" method="get"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
     <h4>{VOTING.question}</h4>
     <div>

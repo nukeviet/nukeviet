@@ -96,10 +96,6 @@ if (!nv_function_exists('nv_block_voting_select')) {
                     $block_theme = 'default';
                 }
 
-                if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/voting.js')) {
-                    $my_footer .= '<script type="text/javascript" src="' . NV_STATIC_URL . 'themes/' . $block_theme . "/js/voting.js\"></script>\n";
-                }
-
                 $action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
 
                 $voting_array = [
@@ -117,6 +113,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
                 $xtpl->assign('VOTING', $voting_array);
                 $xtpl->assign('LANG', $lang_module);
+                $xtpl->assign('TEMPLATE', $block_theme);
 
                 foreach ($list as $row) {
                     if (!empty($row['url'])) {
