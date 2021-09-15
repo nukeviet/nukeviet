@@ -6,7 +6,7 @@
  * @Createdate 19/3/2010 22:58
  */
 
-var nv_base_siteurl, nv_lang_data, nv_name_variable, nv_fc_variable, nv_lang_variable, nv_module_name, nv_func_name, nv_is_user, nv_area_admin, nv_my_ofs, nv_my_dst, nv_my_abbr, nv_cookie_prefix, nv_check_pass_mstime, theme_responsive, nv_safemode;
+var nv_base_siteurl, nv_lang_data, nv_lang_interface, nv_name_variable, nv_fc_variable, nv_lang_variable, nv_module_name, nv_func_name, nv_is_user, nv_area_admin, nv_my_ofs, nv_my_dst, nv_my_abbr, nv_cookie_prefix, nv_check_pass_mstime, theme_responsive, nv_safemode;
 var OP = -1 != navigator.userAgent.indexOf("Opera"),
     IE = -1 != navigator.userAgent.indexOf("MSIE") && !OP,
     GK = -1 != navigator.userAgent.indexOf("Gecko"),
@@ -28,6 +28,7 @@ var OP = -1 != navigator.userAgent.indexOf("Opera"),
 
 void 0 === nv_base_siteurl && (nv_base_siteurl = "/");
 void 0 === nv_lang_data && (nv_lang_data = "en");
+void 0 === nv_lang_interface && (nv_lang_interface = "en");
 void 0 === nv_name_variable && (nv_name_variable = "nv");
 void 0 === nv_fc_variable && (nv_fc_variable = "op");
 void 0 === nv_lang_variable && (nv_lang_variable = "language");
