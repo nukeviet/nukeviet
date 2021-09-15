@@ -12,24 +12,33 @@ if (!defined('NV_IS_MOD_LAWS')) {
     die('Stop!!!');
 }
 
-$lawalias = $alias = isset($array_op[1]) ? $array_op[1] : '';
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$lawalias = isset($array_op[1]) ? $array_op[1] : '';
+$id = 0;
 
-if (!preg_match('/^([a-z0-9\-\_\.]+)$/i', $alias)) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+unset($m);
+if (!preg_match('/^([a-z0-9\-]+)\-([0-9]+)$/i', $lawalias, $m) or isset($array_op[2])) {
+    nv_redirect_location($base_url);
+}
+$id = intval($m[2]);
+if ($id <= 0) {
+    nv_redirect_location($base_url);
+}
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id=' . $id . ' AND status=1';
+$row = $db->query($sql)->fetch();
+if (empty($row)) {
+    nv_redirect_location($base_url);
 }
 
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE alias=' . $db->quote($alias) . ' AND status=1';
-if (($result = $db->query($sql)) === false) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-}
+// Kiểm tra URL, không cho đánh tùy ý phần alias
+$base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $row['alias'];
+$base_url_rewrite = nv_url_rewrite($base_url, true);
+$base_url_check = str_replace('&amp;', '&', $base_url_rewrite);
 
-if (($row = $result->fetch()) === false) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+if (strpos($_SERVER['REQUEST_URI'], $base_url_check) !== 0 and strpos(NV_MY_DOMAIN . $_SERVER['REQUEST_URI'], $base_url_check) !== 0) {
+    nv_redirect_location($base_url_rewrite);
 }
-
-if (isset($array_op[2])) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=detail/' . $array_op[1], true);
-}
+$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
 $row['edit_link'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . $row['id'];
 
