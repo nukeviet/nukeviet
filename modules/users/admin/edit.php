@@ -139,7 +139,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         ]);
     }
 
-    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND (LOWER(username)=' . $db->quote(nv_strtolower($_user['username'])) . ' OR md5username=' . $db->quote(nv_md5safe($_user['username'])) . ')')->fetchColumn()) {
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND (username LIKE ' . $db->quote($_user['username']) . ' OR md5username=' . $db->quote(nv_md5safe($_user['username'])) . ')')->fetchColumn()) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
@@ -147,7 +147,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         ]);
     }
 
-    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=' . $db->quote(nv_strtolower($_user['username'])) . ' OR md5username=' . $db->quote(nv_md5safe($_user['username'])))->fetchColumn()) {
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE ' . $db->quote($_user['username']) . ' OR md5username=' . $db->quote(nv_md5safe($_user['username'])))->fetchColumn()) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',

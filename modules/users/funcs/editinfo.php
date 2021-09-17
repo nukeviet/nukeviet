@@ -43,12 +43,12 @@ function nv_check_username_change($login, $edit_userid)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND (LOWER(username)=' . $db->quote(nv_strtolower($login)) . ' OR md5username=' . $db->quote(nv_md5safe($login)) . ')';
+    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND (username LIKE ' . $db->quote($login) . ' OR md5username=' . $db->quote(nv_md5safe($login)) . ')';
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=' . $db->quote(nv_strtolower($login)) . ' OR md5username=' . $db->quote(nv_md5safe($login));
+    $sql = 'SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE ' . $db->quote($login) . ' OR md5username=' . $db->quote(nv_md5safe($login));
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
