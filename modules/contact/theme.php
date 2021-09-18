@@ -233,6 +233,7 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     $xtpl->assign('CONTENT', $array_content);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('TEMPLATE', $module_info['template']);
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
 

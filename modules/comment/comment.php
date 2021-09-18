@@ -474,12 +474,14 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
 {
     global $global_config, $module_config, $lang_module_comment;
 
-    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
-
     if (!empty($comment_array['comment'])) {
+        $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
+        $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
+
         $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
         $xtpl->assign('TEMPLATE', $template);
         $xtpl->assign('LANG', $lang_module_comment);
+        $xtpl->assign('TEMPLATE_JS', $templateJS);
 
         if (!empty($status_comment)) {
             $status_comment = nv_base64_decode($status_comment);
@@ -559,9 +561,11 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allo
     global $global_config, $module_file, $module_config, $lang_module_comment;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
+    $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
 
     $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('TEMPLATE', $template);
+    $xtpl->assign('TEMPLATE_JS', $templateJS);
     $xtpl->assign('LANG', $lang_module_comment);
 
     $viewuser = nv_user_in_groups($global_config['whoviewuser']);

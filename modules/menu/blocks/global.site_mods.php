@@ -132,7 +132,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
                         $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat')->where('parentid=0 AND ' . ($modvalues['module_file'] == 'news' ? 'status=1' : 'inhome=1'))->order('weight ASC')->limit(10);
                         $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
-                            $is_active = ($modname == $module_name and $l['alias'] == $array_op[0]) ? true : false;
+                            $is_active = ($modname == $module_name and !empty($array_op) and $l['alias'] == $array_op[0]) ? true : false;
                             if ($is_active) {
                                 $classcurrent[] = 'active';
                                 $aclass[] = 'active';
