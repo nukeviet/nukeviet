@@ -771,9 +771,9 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('NEWSID', $news_contents['id']);
     $xtpl->assign('NEWSCHECKSS', $news_contents['newscheckss']);
     $xtpl->assign('DETAIL', $news_contents);
+    $xtpl->assign('CHECKSESSION', md5($news_contents['id'] . NV_CHECK_SESSION));
 
     if ($news_contents['allowed_send'] == 1) {
-        $xtpl->assign('CHECKSESSION', md5($news_contents['id'] . NV_CHECK_SESSION));
         $xtpl->assign('URL_SENDMAIL', $news_contents['url_sendmail']);
         $xtpl->parse('main.allowed_send');
     }
@@ -790,6 +790,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
     if ($news_contents['allowed_rating'] == 1) {
         $xtpl->assign('STRINGRATING', $news_contents['stringrating']);
+        $xtpl->assign('RATINGFEEDBACK', !$news_contents['disablerating'] ? $lang_module['star_note'] : '');
 
         foreach ($news_contents['stars'] as $star) {
             $xtpl->assign('STAR', $star);
@@ -877,6 +878,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
     if (defined('NV_IS_MODADMIN')) {
         $xtpl->assign('ADMINLINK', nv_link_edit_page($news_contents['id']) . ' ' . nv_link_delete_page($news_contents['id'], 1));
+        $xtpl->assign('EDITLINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $news_contents['id']);
         $xtpl->parse('main.adminlink');
     }
 
@@ -1588,6 +1590,7 @@ function content_list($articles, $my_author_detail, $base_url, $generate_page)
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG_GLOBAL', $lang_global);
     $xtpl->assign('BASE_URL', $base_url);
     $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));
     $xtpl->assign('AUTHOR_PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $my_author_detail['alias']);
@@ -1610,6 +1613,14 @@ function content_list($articles, $my_author_detail, $base_url, $generate_page)
 
         if (!empty($array_link_content)) {
             $xtpl->assign('ADMINLINK', implode('&nbsp;-&nbsp;', $array_link_content));
+            if ($array_row_i['is_edit_content']) {
+                $xtpl->assign('EDITLINK', $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;checkss=' . $checkss);
+                $xtpl->parse('your_articles.news.adminlink.edit');
+            }
+            if ($array_row_i['is_del_content']) {
+                $xtpl->assign('DELLINK', $base_url . '&amp;contentid=' . $array_row_i['id'] . '&amp;delcontent=1&amp;checkss=' . $checkss);
+                $xtpl->parse('your_articles.news.adminlink.del');
+            }
             $xtpl->parse('your_articles.news.adminlink');
         }
 

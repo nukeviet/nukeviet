@@ -34,15 +34,19 @@ function nv_menu_blocks($block_config)
                 switch ($row['target']) {
                     case 1:
                         $row['target'] = '';
+                        $row['datatarget'] = '';
                         break;
                     case 3:
                         $row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
+                        $row['datatarget'] = ' data-toggle="winCMD" data-cmd="open" data-url="' . $row['link'] . '" data-win-name="targetWindow" data-win-opts="toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes"';
                         break;
                     default:
                         $row['target'] = ' onclick="this.target=\'_blank\'"';
+                        $row['datatarget'] = ' data-target="_blank"';
                 }
             } else {
                 $row['target'] = '';
+                $row['datatarget'] = '';
             }
 
             if (!empty($row['icon']) and file_exists(NV_UPLOADS_REAL_DIR . '/menu/' . $row['icon'])) {
@@ -57,6 +61,7 @@ function nv_menu_blocks($block_config)
                 'title' => $row['title'],
                 'title_trim' => nv_clean60($row['title'], $block_config['title_length']),
                 'target' => $row['target'],
+                'datatarget' => $row['datatarget'],
                 'note' => empty($row['note']) ? $row['title'] : $row['note'],
                 'link' => $row['link'],
                 'icon' => $row['icon'],

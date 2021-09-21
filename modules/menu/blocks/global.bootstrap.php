@@ -79,15 +79,19 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
         $list = $nv_Cache->db($sql, '', $block_config['module']);
         foreach ($list as $row) {
             if (nv_user_in_groups($row['groups_view'])) {
+                $link = nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true);
                 switch ($row['target']) {
                     case 1:
                         $row['target'] = '';
+                        $row['datatarget'] = '';
                         break;
                     case 3:
                         $row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
+                        $row['datatarget'] = ' data-toggle="winCMD" data-cmd="open" data-url="' . $link . '" data-win-name="targetWindow" data-win-opts="toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes"';
                         break;
                     default:
                         $row['target'] = ' onclick="this.target=\'_blank\'"';
+                        $row['datatarget'] = ' data-target="_blank"';
                 }
 
                 $array_menu[$row['parentid']][$row['id']] = [
@@ -95,8 +99,9 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
                     'title' => $row['title'],
                     'title_trim' => nv_clean60($row['title'], $block_config['title_length']),
                     'target' => $row['target'],
+                    'datatarget' => $row['datatarget'],
                     'note' => empty($row['note']) ? $row['title'] : $row['note'],
-                    'link' => nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true),
+                    'link' => $link,
                     'icon' => (empty($row['icon'])) ? '' : NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'],
                     'css' => $row['css'],
                     'active_type' => $row['active_type']

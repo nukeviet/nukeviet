@@ -18,6 +18,12 @@ function nv_sh(b, a) {
     return !1
 }
 $(function() {
+    // Admin logout
+    $('[data-toggle=nv_admin_logout]').on('click', function(e) {
+        e.preventDefault();
+        nv_admin_logout()
+    });
+
     if ("undefined" != typeof drag_block && 0 != drag_block) {
         $("a.delblock").click(function() {
             confirm(block_delete_confirm) && $.post(post_url + "blocks_del", "bid=" + $(this).attr("name") + "&checkss=" + $(this).data("checkss"), function(a) {
