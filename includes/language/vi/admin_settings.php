@@ -390,6 +390,8 @@ $lang_module['csp_frame_ancestors'] = 'Chỉ định nguồn cha hợp lệ có 
 $lang_module['csp_manifest_src'] = 'Chỉ định các nguồn hợp lệ của tệp kê khai ứng dụng.';
 $lang_module['csp_prefetch_src'] = 'Chỉ định các nguồn hợp lệ được tìm nạp trước hoặc hiển thị trước.';
 $lang_module['csp_act'] = 'Kích hoạt CSP';
+$lang_module['csp_script_nonce'] = 'Kích hoạt thuộc tính nonce cho script';
+$lang_module['csp_script_nonce_note'] = 'Nếu kích hoạt, các thuộc tính xử lý sự kiện nội tuyến như onclick, onload... của thẻ HTML sẽ bị vô hiệu';
 
 $lang_module['rp'] = 'Thiết lập RP';
 $lang_module['rp_desc'] = 'Referrer-Policy (RP) là tên của tiêu đề HTTP (HTTP response header) mà các trình duyệt hiện đại sử dụng để kiểm soát lượng thông tin liên kết nguồn (được gửi qua header &quot;Referer&quot; đến trang đích).';

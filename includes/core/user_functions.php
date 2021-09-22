@@ -726,24 +726,11 @@ function nv_html_site_rss($html = true)
 /**
  * nv_html_site_js()
  *
- * @param bool $html
- *                   Xuất ra dạng string (html) hay để nguyên dạng array
- *                   Mặc định true
- *
- * @param array $other_js
- *                        Thêm js vào ngay sau global.js
- *                        Mặc định rỗng
- *
- * @param bool $language_js
- *                          Có kết nối với file ngôn ngữ JS hay không
- *
- * @param bool $global_js
- *                        Có kết nối với file global.js hay không
- *
- * @param bool $default_js
- *                         Có kết nối với file JS của theme Default hay không
- *                         Khi thiếu file tương ứng ở theme đang sử dụng
- *
+ * @param bool  $html        Xuất ra dạng string (html) hay để nguyên dạng array, Mặc định true
+ * @param array $other_js    Thêm js vào ngay sau global.js, Mặc định rỗng
+ * @param bool  $language_js Có kết nối với file ngôn ngữ JS hay không
+ * @param bool  $global_js   Có kết nối với file global.js hay không
+ * @param bool  $default_js  Có kết nối với file JS của theme Default hay không khi thiếu file tương ứng ở theme đang sử dụng
  * @return array|string
  */
 function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
@@ -752,6 +739,9 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
 
     $safemode = defined('NV_IS_USER') ? $user_info['safemode'] : 0;
     $jsDef = 'var nv_base_siteurl="' . NV_BASE_SITEURL . '",nv_lang_data="' . NV_LANG_INTERFACE . '",nv_lang_interface="' . NV_LANG_INTERFACE . '",nv_name_variable="' . NV_NAME_VARIABLE . '",nv_fc_variable="' . NV_OP_VARIABLE . '",nv_lang_variable="' . NV_LANG_VARIABLE . '",nv_module_name="' . $module_name . '",nv_func_name="' . $op . '",nv_is_user=' . ((int) defined('NV_IS_USER')) . ', nv_my_ofs=' . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ',nv_my_abbr="' . nv_date('T', NV_CURRENTTIME) . '",nv_cookie_prefix="' . $global_config['cookie_prefix'] . '",nv_check_pass_mstime=' . (((int) ($global_config['user_check_pass_time']) - 62) * 1000) . ',nv_area_admin=0,nv_safemode=' . $safemode . ',theme_responsive=' . ((int) ($global_config['current_theme_type'] == 'r'));
+    if (defined('NV_SCRIPT_NONCE')) {
+        $jsDef .= ',site_nonce="' . NV_SCRIPT_NONCE . '"';
+    }
 
     if (defined('NV_IS_DRAG_BLOCK')) {
         $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';

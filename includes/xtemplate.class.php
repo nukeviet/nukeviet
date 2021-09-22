@@ -1371,6 +1371,14 @@ class XTemplate
             $text = preg_replace($this->preg_delimiter . preg_quote($res[0]) . $this->preg_delimiter, $text2, $text);
         }
 
+        /**
+         * @author NukeViet
+         * @since 22/09/2021
+        */
+        if (defined('NV_SCRIPT_NONCE')) {
+            $text = str_replace('<script', '<script nonce="' . NV_SCRIPT_NONCE . '"', $text);
+        }
+
         return $text;
     }
 

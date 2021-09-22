@@ -722,6 +722,17 @@
                                         <div class="form-text text-muted">{LANG.csp_note}</div>
                                     </td>
                                 </tr>
+                                <!-- BEGIN: csp_script_nonce -->
+                                <tr>
+                                    <td><strong>{LANG.csp_script_nonce}</strong></td>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" value="1" name="nv_csp_script_nonce"{CSP_SCRIPT_NONCE}/>
+                                        </label>
+                                        ({LANG.csp_script_nonce_note})
+                                    </td>
+                                </tr>
+                                <!-- END: csp_script_nonce -->
                                 <!-- END: csp_directive -->
                             </tbody>
                             <tfoot>

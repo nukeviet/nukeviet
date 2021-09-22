@@ -378,6 +378,7 @@ if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request-
         }
     }
     $array_config_csp['nv_csp_act'] = (int) $nv_Request->get_bool('nv_csp_act', 'post', false);
+    $array_config_csp['nv_csp_script_nonce'] = (int) $nv_Request->get_bool('nv_csp_script_nonce', 'post', false);
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_csp as $config_name => $config_value) {
@@ -1006,6 +1007,12 @@ foreach ($csp_directives as $name => $desc) {
     ];
     $xtpl->assign('DIRECTIVE', $direct);
     $xtpl->assign('CSP_ACT', $global_config['nv_csp_act'] ? ' checked="checked"' : '');
+
+    if ($name == 'script-src') {
+        $xtpl->assign('CSP_SCRIPT_NONCE', $global_config['nv_csp_script_nonce'] ? ' checked="checked"' : '');
+        $xtpl->parse('main.csp_directive.csp_script_nonce');
+    }
+
     $xtpl->parse('main.csp_directive');
 }
 

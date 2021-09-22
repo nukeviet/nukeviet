@@ -48,6 +48,9 @@ if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
 
 if (!defined('NV_ADMIN') and !empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
     $html_headers['Content-Security-Policy'] = nv_unhtmlspecialchars($global_config['nv_csp']);
+    if (defined('NV_SCRIPT_NONCE')) {
+        $html_headers['Content-Security-Policy'] = preg_replace('/(script\-src[^\;]*)[\s]*\;/', "\\1 'nonce-" . NV_SCRIPT_NONCE . "' 'strict-dynamic';", $html_headers['Content-Security-Policy']);
+    }
 }
 
 if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {

@@ -309,6 +309,10 @@ foreach ($list as $row) {
     }
 }
 
+if (!empty($global_config['nv_csp_script_nonce'])) {
+    define('NV_SCRIPT_NONCE', bin2hex(openssl_random_pseudo_bytes(10)));
+}
+
 // Check https
 if (empty($sys_info['http_only']) and (($global_config['ssl_https'] == 1 or ($global_config['ssl_https'] == 2 and defined('NV_ADMIN'))) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off'))) {
     nv_redirect_location('https://' . NV_SERVER_NAME . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);

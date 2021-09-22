@@ -379,6 +379,8 @@ $lang_module['csp_frame_ancestors'] = 'Définit les parent valides qui peuvent i
 $lang_module['csp_manifest_src'] = 'Définit les sources valides pour les fichiers de manifeste d\'application.';
 $lang_module['csp_prefetch_src'] = 'Spécifie les ressources pouvant être préchargées ou préaffichées.';
 $lang_module['csp_act'] = 'Activer CSP';
+$lang_module['csp_script_nonce'] = 'Activer l\'attribut nonce pour le script';
+$lang_module['csp_script_nonce_note'] = 'Si cette option est activée, les gestionnaires d\'événements en ligne tels que onclick, onload... des balises HTML seront désactivés';
 
 $lang_module['rp'] = 'Paramètre RP';
 $lang_module['rp_desc'] = 'Referrer-Policy (RP) est le nom d\'un en-tête HTTP que les navigateurs modernes utilisent pour contrôler la quantité d\'informations de référent (envoyées via l\'en-tête Referer).';
