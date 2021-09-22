@@ -16,7 +16,7 @@ if (!defined('NV_IS_MOD_COMMENT')) {
 function _loadContents($contents)
 {
     include NV_ROOTDIR . '/includes/header.php';
-    echo '<script type="text/javascript">parent.nv_commment_reload("' . str_replace('"', '\"', $contents) . '");</script>';
+    echo '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>parent.nv_commment_reload("' . str_replace('"', '\"', $contents) . '");</script>';
     include NV_ROOTDIR . '/includes/footer.php';
     exit(0);
 }

@@ -44,7 +44,7 @@ if ($id > 0) {
 include NV_ROOTDIR . '/includes/header.php';
 
 http_response_code(301);
-echo '<script type="text/javascript">';
+echo '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>';
 echo '		window.location.href="' . $links . '";';
 echo '</script>';
 echo '<noscript>';

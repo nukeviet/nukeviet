@@ -220,7 +220,7 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
 
 if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {
     $alert = sprintf($lang_module['status_alert'], $lang_module['status_' . $news_contents['status']]);
-    $my_footer .= "<script type=\"text/javascript\">alert('" . $alert . "')</script>";
+    $my_footer .= "<script" . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">alert('" . $alert . "')</script>";
     $news_contents['allowed_send'] = 0;
     $module_config[$module_name]['socialbutton'] = 0;
 }

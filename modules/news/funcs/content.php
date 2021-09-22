@@ -293,7 +293,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
     } elseif (!nv_function_exists('nv_aleditor') and file_exists(NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor.js')) {
         define('NV_EDITOR', true);
         define('NV_IS_CKEDITOR', true);
-        $my_head .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/ckeditor.js"></script>';
+        $my_head .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ' src="' . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/ckeditor.js"></script>';
 
         /**
          * nv_aleditor()
@@ -309,7 +309,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         {
             global $module_data;
             $return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
-            $return .= "<script type=\"text/javascript\">
+            $return .= "<script" . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">
             CKEDITOR.replace( '" . $module_data . '_' . $textareaname . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',removePlugins: 'uploadfile,uploadimage'});
             </script>";
 
@@ -614,7 +614,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
     }
 
     if (!empty($error)) {
-        $my_head .= "<script>\n";
+        $my_head .= "<script" . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">\n";
         $my_head .= "   alert('" . $error . "')\n";
         $my_head .= "</script>\n";
     }
@@ -622,7 +622,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
     $contents = content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_status, $layouts, $base_url);
 
     if (empty($rowcontent['alias'])) {
-        $contents .= "<script>\n";
+        $contents .= "<script" . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">\n";
         $contents .= '$("#idtitle").change(function () {
         get_alias("' . $module_info['alias']['content'] . '");
         });';

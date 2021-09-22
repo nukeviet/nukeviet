@@ -828,9 +828,9 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     $res = '';
     foreach ($return as $js) {
         if ($js['ext'] == 1) {
-            $res .= '<script src="' . $js['content'] . '"></script>' . PHP_EOL;
+            $res .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ' src="' . $js['content'] . '"></script>' . PHP_EOL;
         } else {
-            $res .= '<script>' . PHP_EOL;
+            $res .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>' . PHP_EOL;
             $res .= $js['content'] . PHP_EOL;
             $res .= '</script>' . PHP_EOL;
         }
