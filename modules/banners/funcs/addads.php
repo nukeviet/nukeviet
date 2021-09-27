@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     if (isset($post['captcha']) and !nv_capcha_txt($post['captcha'], $module_captcha)) {
         nv_jsonOutput([
             'status' => 'error',
-            'input' => 'captcha',
+            'input' => '',
             'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }

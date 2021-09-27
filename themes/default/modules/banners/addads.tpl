@@ -20,14 +20,14 @@
     <div class="form-group">
         <label for="title" class="col-sm-6 control-label">{LANG.addads_title}:</label>
         <div class="col-sm-18">
-            <input class="required form-control" type="text" name="title" id="title" value="{DATA.title}" maxlength="240" data-toggle="errorHidden" data-mess="{LANG.title_empty}" />
+            <input class="required form-control" type="text" name="title" id="title" value="{DATA.title}" maxlength="240" data-toggle="errorHidden" data-event="keypress" data-mess="{LANG.title_empty}" />
         </div>
     </div>
     <div id="banner_uploadimage" style="display: none;">
         <div class="form-group">
             <label class="col-sm-6 control-label">{LANG.addads_adsdata}:</label>
             <div class="col-sm-18">
-                <input type="file" name="image" id="image" value="" class="file form-control" data-toggle="errorHidden" data-mess="{LANG.file_upload_empty}" />
+                <input type="file" name="image" id="image" value="" class="file form-control" data-toggle="errorHidden" data-event="change" data-mess="{LANG.file_upload_empty}" />
                 <div id="banner_uploadtype"></div>
             </div>
         </div>
@@ -41,7 +41,7 @@
     <div class="form-group">
         <label for="url" class="col-sm-6 control-label">{LANG.addads_url}:</label>
         <div class="col-sm-18">
-            <input class="url form-control" type="text" name="url" id="url" value="{DATA.url}" maxlength="240" data-toggle="errorHidden" data-mess="{LANG.click_url_invalid}" />
+            <input class="url form-control" type="text" name="url" id="url" value="{DATA.url}" maxlength="240" data-toggle="errorHidden" data-event="keypress" data-mess="{LANG.click_url_invalid}" />
         </div>
     </div>
     <div class="form-group">

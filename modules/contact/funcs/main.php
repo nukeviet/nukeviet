@@ -126,7 +126,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     if (isset($fcaptcha) and !nv_capcha_txt($fcaptcha, $module_captcha)) {
         nv_jsonOutput([
             'status' => 'error',
-            'input' => ($module_captcha == 'recaptcha') ? '' : 'fcode',
+            'input' => '',
             'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }

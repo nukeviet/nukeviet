@@ -56,7 +56,7 @@ if ($id > 0 and $catid > 0) {
                     if (isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $module_captcha)) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'input' => 'nv_seccode',
+                            'input' => '',
                             'mess' => $lang_global['securitycodeincorrect']
                         ]);
                     }

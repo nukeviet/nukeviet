@@ -108,7 +108,12 @@ $(function() {
         afSubmit(this)
     });
 
-    $('body').on('keypress', '[data-toggle=errorHidden]', function(e) {
+    $('body').on('keypress', '[data-toggle=errorHidden][data-event=keypress]', function(e) {
+        e.preventDefault();
+        $(this).parent().removeClass("has-error")
+    });
+
+    $('body').on('change', '[data-toggle=errorHidden][data-event=change]', function(e) {
         e.preventDefault();
         $(this).parent().removeClass("has-error")
     });

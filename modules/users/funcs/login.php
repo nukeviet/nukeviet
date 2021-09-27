@@ -702,7 +702,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     if (!$check_seccode) {
         signin_result([
             'status' => 'error',
-            'input' => ($module_captcha == 'recaptcha') ? '' : 'nv_seccode',
+            'input' => '',
             'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }

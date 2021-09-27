@@ -112,7 +112,7 @@ if ($checkss == $data['checkss']) {
         $nv_Request->set_Session('lostpass_seccode', '');
         nv_jsonOutput([
             'status' => 'error',
-            'input' => ($module_captcha == 'recaptcha') ? '' : 'nv_seccode',
+            'input' => '',
             'step' => 'step1',
             'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);

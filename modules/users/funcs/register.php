@@ -321,7 +321,7 @@ if ($checkss == $array_register['checkss']) {
     if (!$check_seccode) {
         reg_result([
             'status' => 'error',
-            'input' => ($module_captcha == 'recaptcha') ? '' : 'nv_seccode',
+            'input' => '',
             'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
         ]);
     }
