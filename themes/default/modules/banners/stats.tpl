@@ -8,7 +8,7 @@
 <!-- END: management -->
 <div class="row m-bottom">
     <div class="col-xs-24 col-sm-10 m-bottom">
-        <select class="form-control" id="adsstat-ads" onchange="loadStat()">
+        <select class="form-control" id="adsstat-ads" data-toggle="loadStat">
             <option value="">{LANG.stats_views_ads}</option>
             <!-- BEGIN: ads -->
             <option value="{ads.id}">{ads.title}</option>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="col-xs-18 col-sm-8 m-bottom">
-        <select class="form-control" id="adsstat-type" onchange="loadStat()">
+        <select class="form-control" id="adsstat-type" data-toggle="loadStat">
             <option value="">{LANG.stats_views}</option>
             <option value="country">{LANG.stats_type_country}</option>
             <option value="browser">{LANG.stats_type_browser}</option>
@@ -27,7 +27,7 @@
     </div>
 
     <div class="col-xs-6 col-sm-6 m-bottom">
-        <select class="form-control" id="adsstat-month" onchange="loadStat()">
+        <select class="form-control" id="adsstat-month" data-toggle="loadStat">
             <option value="">{LANG.stats_views_month}</option>
             <!-- BEGIN: month -->
             <option value="{month}">{month}</option>

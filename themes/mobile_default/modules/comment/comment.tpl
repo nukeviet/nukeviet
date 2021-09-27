@@ -21,13 +21,13 @@
                 </div>
                 <ul class="comment-tool clearfix">
                     <!-- BEGIN: delete -->
-                    <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li>
+                    <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" data-toggle="commDelete" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}">{LANG.delete}</a></li>
                     <!-- END: delete -->
                     <!-- BEGIN: allowed_comm -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback(event, {COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+                    <li><em class="fa fa-reply">&nbsp;</em> <a href="#" data-toggle="commFeedback" data-cid="{COMMENT.cid}" data-postname="{COMMENT.post_name}">{LANG.feedback}</a></li>
                     <!-- END: allowed_comm -->
-                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
+                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="1">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
+                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="-1">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
                     <!-- BEGIN: attach -->
                     <li><a href="{COMMENT.attach}" rel="nofollow"><i class="fa fa-fw fa-download"></i>{LANG.attachdownload}</a></li>
                     <!-- END: attach -->
@@ -58,13 +58,13 @@
                 </div>
                 <ul class="comment-tool">
                     <!-- BEGIN: delete -->
-                    <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li>
+                    <li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" data-toggle="commDelete" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}">{LANG.delete}</a></li>
                     <!-- END: delete -->
                     <!-- BEGIN: allowed_comm -->
-                    <li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback(event, {COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+                    <li><em class="fa fa-reply">&nbsp;</em> <a href="#" data-toggle="commFeedback" data-cid="{COMMENT.cid}" data-postname="{COMMENT.post_name}">{LANG.feedback}</a></li>
                     <!-- END: allowed_comm -->
-                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like(event, {COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
+                    <li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="1">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
+                    <li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="#" data-toggle="commLike" data-cid="{COMMENT.cid}" data-checkss="{COMMENT.check_like}" data-like="-1">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
                     <!-- BEGIN: attach -->
                     <li><a href="{COMMENT.attach}" rel="nofollow"><i class="fa fa-fw fa-download"></i>{LANG.attachdownload}</a></li>
                     <!-- END: attach -->

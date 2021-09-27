@@ -69,7 +69,7 @@
                                     <!-- BEGIN: breadcrumbs -->
                                     <div class="breadcrumbs-wrap">
                                         <div class="display">
-                                            <a class="show-subs-breadcrumbs hidden" href="#" onclick="showSubBreadcrumbs(this, event);"><em class="fa fa-lg fa-angle-right"></em></a>
+                                            <a class="show-subs-breadcrumbs hidden" href="#" data-toggle="showSubBreadcrumbs"><em class="fa fa-lg fa-angle-right"></em></a>
                                             <ul class="breadcrumbs list-none"></ul>
                                         </div>
                                         <ul class="subs-breadcrumbs"></ul>

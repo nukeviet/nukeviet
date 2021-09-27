@@ -11,7 +11,7 @@
     <a class="btn btn-primary" href="{BASE_URL}&amp;contentid=0&checkss={ADD_CONTENT_CHECK_SESSION}">{LANG.add_content}</a>
 </div>
 <h2 class="text-center">{LANG.author_info}</h2>
-<form action="{FORM_ACTION}" method="post" onsubmit="formSubmit(event, this)">
+<form action="{FORM_ACTION}" method="post" data-toggle="authorEditSubmit">
     <input type="hidden" name="save" value="1" />
     <div class="table-responsive">
         <table id="edit" class="table table-striped table-bordered table-hover">
@@ -39,8 +39,10 @@
     </div>
 </form>
 <script>
-    function formSubmit(event, form) {
+$(function() {
+    $('[data-toggle=authorEditSubmit]').on('submit', function(event) {
         event.preventDefault();
+        var form = this;
         $(".has-error", form).removeClass("has-error");
         var pseudonym = $("[name=pseudonym]", form).val();
         pseudonym = strip_tags(trim(pseudonym));
@@ -73,7 +75,8 @@
                 }
             })
         }
-    }
+    })
+})
 </script>
 <!-- END: author_info -->
 
@@ -111,7 +114,8 @@
             {CONTENT.hometext}
             <!-- BEGIN: adminlink -->
             <p class="text-right">
-                {ADMINLINK}
+                <!-- BEGIN: edit --><a class="btn btn-primary btn-xs" href="{EDITLINK}"><em class="fa fa-edit"></em> {LANG_GLOBAL.edit}</a><!-- END: edit -->
+                <!-- BEGIN: del --><a class="btn btn-outline-main btn-sm" href="#" data-toggle="author_del_content" data-href="{DELLINK}"><em class="fa fa-trash-o"></em> {LANG_GLOBAL.delete}</a><!-- END: del -->
             </p>
             <!-- END: adminlink -->
         </div>
@@ -135,7 +139,7 @@
 </div>
 <!-- END: if_user -->
 <h2 class="text-center">{ADD_OR_UPDATE}</h2>
-<form action="{CONTENT_URL}" method="post" class="form-horizontal"<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+<form action="{CONTENT_URL}" method="post" class="form-horizontal"<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
 
     <div class="form-group">
         <label class="col-sm-8 control-label text-normal">{LANG.name} <span class="txtrequired">(*)</span>:</label>
@@ -149,7 +153,7 @@
         <label class="col-sm-8 control-label text-normal">{LANG.alias}:</label>
         <div class="col-sm-16">
             <input type="text" class="form-control pull-left" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" style="width: 94%;" />
-            <em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" onclick="get_alias('{OP}');" alt="Click">&nbsp;</em>
+            <em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" data-toggle="get_alias" data-op="{OP}"></em>
         </div>
     </div>
     <!-- END: alias -->
@@ -245,27 +249,6 @@
         </div>
     </div>
 
-    <!-- BEGIN: captcha -->
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.captcha} <span class="txtrequired">(*)</span></label>
-        <div class="col-sm-16">
-            <input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 150px;" />
-            <img height="32" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" class="captchaImg" />
-            <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="change_captcha('#fcode_iavim');" />
-        </div>
-    </div>
-    <!-- END: captcha -->
-
-    <!-- BEGIN: recaptcha -->
-    <div class="form-group">
-        <div class="col-24">
-            <div class="nv-recaptcha-default">
-                <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
-            </div>
-        </div>
-    </div>
-    <!-- END: recaptcha -->
-
     <div class="form-inline text-center">
         <div class="form-group">
             <select class="form-control" name="status" style="width: auto">
@@ -273,8 +256,8 @@
                 <option value="{SAVE_STATUS.val}"{SAVE_STATUS.sel}>{SAVE_STATUS.name}</option>
                 <!-- END: save_status -->
             </select>
-            <input type="hidden" name="save" value="1" />
-            <input type="submit" class="btn btn-primary" value="{GLANG.submit}" onclick="btnClickSubmit(event,this.form);">
+            <input type="hidden" name="save" value="1"/>
+            <input type="submit" class="btn btn-primary" value="{GLANG.submit}"/>
         </div>
     </div>
     <br/>

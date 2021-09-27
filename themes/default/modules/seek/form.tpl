@@ -35,7 +35,7 @@
         <!-- BEGIN: search_engine_unique_ID -->
         <script async src="//cse.google.com/cse.js?cx={SEARCH_ENGINE_UNIQUE_ID}"></script>
         <div class="text-center margin-bottom-lg search_adv">
-            <a href="javascript:void(0);" class="IntSearch"><i class="fa fa-eye" aria-hidden="true"></i> {LANG.search_adv_internet}</a>
+            <a href="#" class="IntSearch"><i class="fa fa-eye" aria-hidden="true"></i> {LANG.search_adv_internet}</a>
         </div>
         <div id="gcse" class="hidden">
             <div class="gcse-search"></div>

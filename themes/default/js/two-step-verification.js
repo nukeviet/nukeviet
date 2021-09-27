@@ -85,8 +85,6 @@ function confirmpass_validForm(a) {
         data: b.data,
         dataType: "json",
         success: function(d) {
-            var b = $("[onclick*='change_captcha']", a);
-            b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
                     $(".tooltip-current", a).removeClass("tooltip-current"),
@@ -119,8 +117,6 @@ function opt_validForm(a) {
         data: b.data,
         dataType: "json",
         success: function(d) {
-            var b = $("[onclick*='change_captcha']", a);
-            b && b.click();
             if (d.status == "error") {
                 $("input,button", a).not("[type=submit]").prop("disabled", !1),
                     $(".tooltip-current", a).removeClass("tooltip-current"),
@@ -138,7 +134,7 @@ function opt_validForm(a) {
     return !1
 }
 
-$(document).ready(function() {
+$(function() {
     // View secretkey
     $('[data-toggle="manualsecretkey"]').click(function(e) {
         e.preventDefault();
@@ -165,6 +161,19 @@ $(document).ready(function() {
             }
         );
     });
+
+    $('[data-toggle=opt_validForm]').on('submit', function() {
+        return opt_validForm(this)
+    });
+
+    $('[data-toggle=confirmpass_validForm]').on('submit', function() {
+        return confirmpass_validForm(this)
+    });
+
+    $('[data-toggle=validErrorHidden]').on('keypress', function() {
+        $(this).data('parents') ? validErrorHidden(this, $(this).data('parents')) : validErrorHidden(this)
+    });
+
     // Đổi mã
     $('[data-toggle="changecode2step"]').click(function() {
         $(this).prop('disabled', true);

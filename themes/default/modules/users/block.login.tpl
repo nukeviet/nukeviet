@@ -2,11 +2,11 @@
 <link rel="StyleSheet" href="{NV_STATIC_URL}themes/{BLOCK_CSS}/css/users.css">
 <!-- BEGIN: display_button -->
 <div id="nv-block-login" class="text-center">
-    <button type="button" class="login btn btn-success btn-sm" onclick="modalShowByObj('#guestLogin_{BLOCKID}', 'recaptchareset')">
+    <button type="button" class="login btn btn-success btn-sm" data-toggle="modalShowByObj" data-obj="#guestLogin_{BLOCKID}" data-callback="recaptchareset">
         {GLANG.signin}
     </button>
     <!-- BEGIN: allowuserreg2 -->
-    <button type="button" class="register btn btn-primary btn-sm" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">
+    <button type="button" class="register btn btn-primary btn-sm" data-toggle="modalShowByObj" data-obj="#guestReg_{BLOCKID}" data-callback="recaptchareset">
         {GLANG.register}
     </button>
     <!-- END: allowuserreg2 -->
@@ -61,7 +61,7 @@
         <h3 class="text-center margin-bottom-lg"><span class="lev-{LEVEL} text-normal margin-right">{WELCOME}:</span>{USER.full_name}</h3>
         <div class="row margin-bottom-lg">
             <div class="col-xs-8 text-center">
-                <a title="{LANG.edituser}" href="#" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
+                <a title="{LANG.edituser}" href="#" data-toggle="changeAvatar" data-url="{URL_AVATAR}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
             </div>
             <div class="col-xs-16">
                 <ul class="nv-list-item sm">
@@ -112,7 +112,7 @@
                 <em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
             </div>
             <div class="col-xs-8 text-right">
-                <button type="button" class="btn btn-default btn-sm active" onclick="{URL_LOGOUT}(this);">
+                <button type="button" class="btn btn-default btn-sm active" data-toggle="{URL_LOGOUT}">
                     <em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;
                 </button>
             </div>

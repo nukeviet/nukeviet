@@ -1,6 +1,4 @@
 <!-- BEGIN: main -->
-<link  type="text/css"href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
 <div class="users-av-wraper">
     <form id="upload-form" method="post" enctype="multipart/form-data" action="{NV_AVATAR_UPLOAD}">
         <div class="col-xs-16">
@@ -31,7 +29,7 @@
                 </div>
              </div>
             <div class="exit-bt">
-                <button class="btn btn-primary btn-sm" onclick=" window.close();return!1">{GLANG.cancel}</button>
+                <button class="btn btn-primary btn-sm" data-toggle="winCMD" data-cmd="close">{GLANG.cancel}</button>
             </div>
         </div>
         <input type="hidden" name="client" value="{DATA.client}">
@@ -42,18 +40,12 @@
         <input type="file" name="image_file" id="image_file" class="hide"/>
     </form>
 </div>
-<script type="text/javascript">
-    UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
-    UAV.config.avatar_width = {NV_AVATAR_WIDTH};
-    UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
-    UAV.lang.bigsize = '{LANG.avatar_bigsize}';
-    UAV.lang.smallsize = '{LANG.avatar_smallsize}';
-    UAV.lang.filetype = '{LANG.avatar_filetype}';
-    UAV.lang.bigfile = '{LANG.avatar_bigfile}';
-    UAV.lang.upload = '{LANG.avatar_upload}';
-    $(document).ready(function() {
+<script>
+    $(function() {
         <!-- BEGIN: complete -->
-        $("#avatar", opener.document).val('{FILENAME}');
+        $(window).on("unload", function() {
+            $("#avatar", opener.document).val('{FILENAME}')
+        });
         window.close();
         <!-- END: complete -->
         <!-- BEGIN: complete2 -->
@@ -67,11 +59,25 @@
         window.close();
         <!-- END: complete2 -->
         <!-- BEGIN: complete3 -->
-        $("#myavatar", opener.document).attr('src', '{FILENAME}');
-        $("#delavatar", opener.document).prop("disabled",!1);
+        $(window).on("unload", function() {
+            $("#myavatar", opener.document).attr('src', '{FILENAME}');
+            $("#delavatar", opener.document).prop("disabled",!1)
+        });
         window.close();
         <!-- END: complete3 -->
-        <!-- BEGIN: init -->UAV.init();<!-- END: init -->
+        <!-- BEGIN: init -->
+        getFiles(['{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css','{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js','{NV_STATIC_URL}themes/{TEMPLATE}/js/avatar.js'], function(){
+            UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
+            UAV.config.avatar_width = {NV_AVATAR_WIDTH};
+            UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
+            UAV.lang.bigsize = '{LANG.avatar_bigsize}';
+            UAV.lang.smallsize = '{LANG.avatar_smallsize}';
+            UAV.lang.filetype = '{LANG.avatar_filetype}';
+            UAV.lang.bigfile = '{LANG.avatar_bigfile}';
+            UAV.lang.upload = '{LANG.avatar_upload}';
+            UAV.init()
+        });
+        <!-- END: init -->
         <!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
     });
 </script>

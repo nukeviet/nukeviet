@@ -1,7 +1,4 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.pack.js"></script>
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
-<link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
 <link href="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <div class="news_column panel panel-default" itemtype="http://schema.org/NewsArticle" itemscope>
     <div class="panel-body">
@@ -88,7 +85,7 @@
                 <!-- END: content_quick_viewfile -->
                 <!-- BEGIN: show_quick_viewimg -->
                 <span class="badge">
-                    <a href="javascript:void(0)" data-src="{FILE.src}" data-toggle="newsattachimage">
+                    <a href="#" data-src="{FILE.src}" data-toggle="newsattachimage">
                         <i class="fa fa-eye" data-rel="tooltip" data-content="{LANG.preview}"></i>
                     </a>
                 </span>
@@ -130,7 +127,7 @@
         <!-- END: adminlink -->
         <div class="clear">&nbsp;</div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 margin-bottom">
                 <!-- BEGIN: keywords -->
                 <div class="keywords">
                     <em class="fa fa-tags">&nbsp;</em><strong>{LANG.tags}: </strong>
@@ -140,63 +137,37 @@
                 </div>
                 <!-- END: keywords -->
             </div>
-            <div class="col-md-12">
-            <!-- BEGIN: allowed_rating -->
-            <br />
-                <form id="form3B" action="">
-                    <div class="clearfix">
-                        <p id="stringrating">{STRINGRATING}</p>
+            <div class="col-md-12 margin-bottom">
+                <!-- BEGIN: allowed_rating -->
+                <form id="form3B" action="" data-toggle="rating" data-id="{NEWSID}" data-checkss="{NEWSCHECKSS}" data-checked="{DETAIL.numberrating_star}">
+                    <div class="margin-bottom">
+                        <section class="rating<!-- BEGIN: disablerating --> disabled<!-- END: disablerating -->">
+                            <input type="radio" id="rat_5" name="rate" value="5"/>
+                            <label for="rat_5" data-title="{LANG.star_verygood}"></label>
+                            <input type="radio" id="rat_4" name="rate" value="4"/>
+                            <label for="rat_4" data-title="{LANG.star_good}"></label>
+                            <input type="radio" id="rat_3" name="rate" value="3"/>
+                            <label for="rat_3" data-title="{LANG.star_ok}"></label>
+                            <input type="radio" id="rat_2" name="rate" value="2"/>
+                            <label for="rat_2" data-title="{LANG.star_poor}"></label>
+                            <input type="radio" id="rat_1" name="rate" value="1"/>
+                            <label for="rat_1" data-title="{LANG.star_verypoor}"></label>
+                        </section>
+                        <span class="feedback small" data-default="{RATINGFEEDBACK}" data-success="{LANG.rating_success}">{RATINGFEEDBACK}</span>
+                    </div>
+                    <div class="ratingInfo margin-top hidden">
+                        <div id="stringrating">{STRINGRATING}</div>
                         <!-- BEGIN: data_rating -->
-                        <span itemscope itemtype="https://schema.org/AggregateRating">
-                            <span class="hidden d-none hide" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries">
-                                <span class="hidden d-none hide" itemprop="name">{DETAIL.title}</span>
-                            </span>
-                           {LANG.rating_average}:
-                           <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> -
-                           <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count}
-                            <span class="hidden d-none hide" itemprop="bestRating">5</span>
-                        </span>
-                        <!-- END: data_rating -->
-                        <div style="padding: 5px;">
-                            <!-- BEGIN: star --><input class="hover-star required" type="radio" value="{STAR.val}" title="{STAR.title}"{STAR.checked}/><!-- END: star -->
-                            <span id="hover-test" style="margin: 0 0 0 20px;">{LANG.star_note}</span>
+                        <div>
+                            <span itemscope itemtype="https://schema.org/AggregateRating"> <span class="hidden" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries"><span class="hidden" itemprop="name">{DETAIL.title}</span></span>{LANG.rating_average}: <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> / <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count} <span class="hidden" itemprop="bestRating">5</span></span>
                         </div>
+                        <!-- END: data_rating -->
                     </div>
                 </form>
-                <script type="text/javascript">
-                $(function() {
-                    var isDisable = false;
-                    $('.hover-star').rating({
-                        focus : function(value, link) {
-                            var tip = $('#hover-test');
-                            if (!isDisable) {
-                                tip[0].data = tip[0].data || tip.html();
-                                tip.html(link.title || 'value: ' + value)
-                            }
-                        },
-                        blur : function(value, link) {
-                            var tip = $('#hover-test');
-                            if (!isDisable) {
-                                $('#hover-test').html(tip[0].data || '')
-                            }
-                        },
-                        callback : function(value, link) {
-                            if (!isDisable) {
-                                isDisable = true;
-                                $('.hover-star').rating('disable');
-                                sendrating('{NEWSID}', value, '{NEWSCHECKSS}');
-                            }
-                        }
-                    });
-                    <!-- BEGIN: disablerating -->
-                    $(".hover-star").rating('disable');
-                    isDisable = true;
-                    <!-- END: disablerating -->
-                })
-                </script>
                 <!-- END: allowed_rating -->
             </div>
         </div>
+        <div class="clear">&nbsp;</div>
 
     <!-- BEGIN: comment -->
     {CONTENT_COMMENT}

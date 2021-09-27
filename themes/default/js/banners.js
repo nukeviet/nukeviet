@@ -7,12 +7,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-function errorHidden(obj) {
-    $(obj).parent().removeClass("has-error")
-}
-
-function afSubmit(event, form) {
-    event.preventDefault();
+function afSubmit(form) {
     $(".has-error", form).removeClass("has-error");
     if ($('[name=title]', form).val().length < 3) {
         $('[name=title]', form).parent().addClass('has-error');
@@ -56,21 +51,16 @@ function afSubmit(event, form) {
             alert(d.mess);
             if (d.status == "error") {
                 $("input,button,select", form).prop("disabled", !1);
-                var b = $("[onclick*='change_captcha']", form);
-                b.length && b.click();
-                if ($('[data-toggle=recaptcha]', form).length || $("[data-recaptcha3]", $(form).parent()).length) {
-                    change_captcha()
-                }
-                if ("" != d.input) {
-                    $("[name=" + d.input + "]", form).parent().addClass('has-error');
-                    $("[name=" + d.input + "]", form).focus()
+                formChangeCaptcha(form);
+                if ("" != d.input && $("[name=" + d.input + "]:visible", form).length) {
+                    $("[name=" + d.input + "]:visible", form).parent().addClass('has-error');
+                    $("[name=" + d.input + "]:visible", form).focus()
                 }
             } else {
                 window.location.href = d.redirect;
             }
         }
-    });
-    return !1
+    })
 }
 
 function loadStat() {
@@ -92,7 +82,7 @@ function loadStat() {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     // Add banner
     if ($('#banner_plan').length) {
         $('#banner_plan').change(function() {
@@ -112,4 +102,19 @@ $(document).ready(function() {
         });
         $('#banner_plan').trigger('change')
     }
+
+    $('body').on('submit', '[data-toggle=afSubmit]', function(e) {
+        e.preventDefault();
+        afSubmit(this)
+    });
+
+    $('body').on('keypress', '[data-toggle=errorHidden]', function(e) {
+        e.preventDefault();
+        $(this).parent().removeClass("has-error")
+    });
+
+    $('body').on('change', '[data-toggle=loadStat]', function(e) {
+        e.preventDefault();
+        loadStat()
+    });
 });

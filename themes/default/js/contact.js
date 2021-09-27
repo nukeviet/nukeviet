@@ -11,8 +11,7 @@ function nv_validReset(a) {
     $(".has-error", a).removeClass("has-error");
     $("[data-mess]", a).tooltip("destroy");
     $(a)[0].reset();
-    var b = $("[onclick*='change_captcha']", a);
-    b.length ? b.click() : ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()
+    formChangeCaptcha(a);
 }
 
 function nv_validErrorShow(a) {
@@ -24,10 +23,6 @@ function nv_validErrorShow(a) {
         }
     });
     $(a).focus().tooltip("show")
-}
-
-function nv_validErrorHidden(a) {
-    $(a).parent().parent().removeClass("has-error")
 }
 
 function nv_uname_check(val) {
@@ -61,57 +56,94 @@ function nv_validForm(a) {
         data: $(a).serialize(),
         dataType: "json",
         success: function(b) {
-            change_captcha('.fcode');
-            "error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
-                $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-                nv_validErrorShow(this)
-            }), setTimeout(function() {
-                $(a).find("[type='submit']").prop("disabled", !1)
-            }, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(a).next().html(b.mess).removeClass("alert-info").addClass("alert-danger").show() : $(a).next().html(b.mess).removeClass("alert-danger").addClass("alert-info").show(), $("[data-mess]").tooltip("destroy"), setTimeout(function() {
-                $(a).next().hide();
-                $("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
-                nv_validReset(a)
-            }, 5E3))
+            formChangeCaptcha(a);
+            if ("error" == b.status) {
+                setTimeout(function() {
+                    $(a).find("[type='submit']").prop("disabled", !1)
+                }, 1E3);
+                if ("" != b.input && $("[name=" + b.input + "]:visible", a).length) {
+                    $(".tooltip-current", a).removeClass("tooltip-current");
+                    $(a).find("[name=" + b.input + "]:visible").each(function() {
+                        $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+                        nv_validErrorShow(this)
+                    })
+                } else {
+                    $(a).next().html(b.mess).removeClass("alert-info").addClass("alert-danger").show();
+                    $("[data-mess]").tooltip("destroy");
+                    setTimeout(function() {
+                        $(a).next().hide()
+                    }, 5E3);
+                }
+            } else {
+                $(a).next().html(b.mess).removeClass("alert-danger").addClass("alert-info").show();
+                $("[data-mess]").tooltip("destroy");
+                setTimeout(function() {
+                    $(a).next().hide();
+                    $(a).find("[type='submit']").prop("disabled", !1)
+                    nv_validReset(a)
+                }, 5E3)
+
+            }
         }
     }));
     return !1
 };
 $(function() {
-    var a = $("#contactButton");
-    if (a) {
-        var b = $(".ctb", a),
+    if ($("#contactButton").length) {
+        var a = $("#contactButton"),
+            b = $(".ctb", a),
             c = $(".panel", a),
-            d = function() {
-                c.hide();
-                b.removeClass("fs").show()
-            },
             e = $("[data-cs]", a);
-        $(document).on("keydown", function(a) {
-            27 === a.keyCode && b.is(".fs") && d()
-        });
-        $(document).on("click", function() {
-            b.is(".fs") && d()
-        });
-        c.on("click", function(a) {
-            a.stopPropagation()
+        $(document).click(function(event) {
+            if (b.is(".fs")) {
+                if (!($(event.target).closest("#contactButton").length || $(event.target).closest(".modal").length)) {
+                    c.hide();
+                    b.removeClass("fs").show()
+                }
+            }
         });
         $(".close", a).on("click", function() {
-            d()
+            c.hide();
+            b.removeClass("fs").show()
         });
-        b.on("click", function() {
-            return b.is(".ld") ? (b.addClass("fs").hide(), c.fadeIn(), !1) : ($.ajax({
-                type: "POST",
-                cache: !1,
-                url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b.attr("data-module"),
-                data: "loadForm=1&checkss=" + e.data("cs"),
-                dataType: "html",
-                success: function(a) {
-                    e.html(a);
-                    b.addClass("ld fs").hide();
-                    c.fadeIn();
-                    change_captcha()
-                }
-            }), !1)
+        b.off('click').on("click", function(event) {
+            event.preventDefault();
+            if (b.is(".ld")) {
+                b.addClass("fs").hide();
+                c.fadeIn();
+                return !1
+            } else {
+                $.ajax({
+                    type: "POST",
+                    cache: !1,
+                    url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b.attr("data-module"),
+                    data: "loadForm=1&checkss=" + e.data("cs"),
+                    dataType: "html",
+                    success: function(a) {
+                        e.html(a);
+                        b.addClass("ld fs").hide();
+                        c.fadeIn();
+                        formChangeCaptcha($('form', e))
+                    }
+                })
+            }
         })
     }
+
+    // Form submit
+    $('body').on('submit', '[data-toggle=feedback]', function(e) {
+        e.preventDefault();
+        nv_validForm(this)
+    });
+
+    // Form reset
+    $('body').on('click', '[data-toggle=fb_validReset]', function(e) {
+        e.preventDefault();
+        nv_validReset($(this).parents('form'))
+    });
+
+    // validErrorHidden
+    $('body').on('keypress', '[data-toggle=fb_validErrorHidden]', function() {
+        $(this).parent().parent().removeClass("has-error")
+    });
 });

@@ -30,7 +30,7 @@
         <!-- END: socialbutton -->
 
         <!-- BEGIN: imageleft -->
-        <figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
+        <figure class="article left pointer" data-toggle="modalShowByObj" data-obj="#imgpreview">
             <div style="width:{CONTENT.thumb.width}px;">
                 <img alt="{CONTENT.title}" src="{CONTENT.thumb.src}" class="img-thumbnail" />
                 <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
@@ -46,7 +46,7 @@
         <!-- END: description -->
 
         <!-- BEGIN: imagecenter -->
-        <figure class="article center pointer" onclick="modalShowByObj(this);">
+        <figure class="article center pointer" data-toggle="modalShowByObj">
             <p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.img.src}" srcset="{CONTENT.img.srcset}" width="{CONTENT.img.width}" class="img-thumbnail" /></p>
             <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
         </figure>
@@ -62,7 +62,7 @@
 <!-- BEGIN: adminlink -->
 <p class="text-center margin-bottom-lg">
     <a class="btn btn-primary" href="{ADMIN_EDIT}"><em class="fa fa-edit fa-lg">&nbsp;</em>{GLANG.edit}</a>
-    <a class="btn btn-danger" href="javascript:void(0);" onclick="nv_del_content({CONTENT.id}, '{ADMIN_CHECKSS}','{NV_BASE_ADMINURL}')"><em class="fa fa-trash-o fa-lg">&nbsp;</em>{GLANG.delete}</a>
+    <a class="btn btn-danger" href="#" data-toggle="nv_del_content" data-id="{CONTENT.id}" data-ss="{ADMIN_CHECKSS}" data-adminurl="{NV_BASE_ADMINURL}"><em class="fa fa-trash-o fa-lg">&nbsp;</em>{GLANG.delete}</a>
 </p>
 <!-- END: adminlink -->
 <!-- BEGIN: comment -->

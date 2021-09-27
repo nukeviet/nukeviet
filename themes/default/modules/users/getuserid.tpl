@@ -86,7 +86,7 @@
                 <td>{ROW.email}</td>
                 <td>{ROW.regdate}</td>
                 <td class="text-center">
-                    <a title="" onclick="nv_active('{ROW.userid}');" href="javascript:void(0);">
+                    <a title="" data-toggle="nv_active" data-userid="{ROW.userid}" href="#">
                         <em class="fa fa-edit fa-lg">&nbsp;</em> {LANG.active}
                     </a>
                 </td>
@@ -95,13 +95,13 @@
         </tbody>
     </table>
 </div>
-<script type="text/javascript">
-    //<![CDATA[
-    function nv_active(userid) {
+<script>
+$(function() {
+    $('[data-toggle=nv_active][data-userid]').on('click', function() {
         $.ajax({
             type: "POST",
             url : "{FORM_ACTION}",
-            data: "act=1&userid=" + userid,
+            data: "act=1&userid=" + $(this).data('userid'),
             success: function(a) {
                 if (a == "OK") {
                     alert('{LANG.actived_users}');
@@ -112,8 +112,8 @@
                 }
             }
         });
-    }
-    //]]>
+    })
+})
 </script>
 <!-- END: data -->
 <!-- BEGIN: nodata -->

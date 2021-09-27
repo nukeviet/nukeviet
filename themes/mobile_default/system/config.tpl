@@ -39,7 +39,7 @@
                         <div class="input-group input-group-sm">
                             <input type="text" id="body_bg_image" value="{CONFIG_THEME_BODY.background_image}" name="body_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm" />
                             <div class="input-group-btn">
-                                <button onclick="nv_open_filemanage( 'body_bg_image' ); return false;" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+                                <button data-toggle="nv_open_filemanage" data-area="body_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
                             </div>
                         </div>
                     </div>
@@ -129,7 +129,7 @@
                         <div class="input-group input-group-sm">
                             <input type="text" id="block_bg_image" value="{CONFIG_THEME_BLOCK.background_image}" name="block_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm"/>
                             <div class="input-group-btn">
-                                <button onclick="nv_open_filemanage( 'block_bg_image' ); return false;" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+                                <button data-toggle="nv_open_filemanage" data-area="block_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                         <div class="input-group input-group-sm">
                             <input type="text" id="block_heading_bg_image" value="{CONFIG_THEME_BLOCK_HEADING.background_image}" name="block_heading_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm"/>
                             <div class="input-group-btn">
-                                <button onclick="nv_open_filemanage( 'block_heading_bg_image' ); return false;" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+                                <button data-toggle="nv_open_filemanage" data-area="block_heading_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
                             </div>
                         </div>
                     </div>
@@ -201,7 +201,7 @@
                         <div class="input-group input-group-sm">
                             <input type="text" id="header_bg_image" value="{CONFIG_THEME_HEADER.background_image}" name="header_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm"/>
                             <div class="input-group-btn">
-                                <button onclick="nv_open_filemanage( 'header_bg_image' ); return false;" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+                                <button data-toggle="nv_open_filemanage" data-area="header_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
                             </div>
                         </div>
                     </div>
@@ -251,7 +251,7 @@
                         <div class="input-group input-group-sm">
                             <input type="text" id="footer_bg_image" value="{CONFIG_THEME_FOOTER.background_image}" name="footer_background_image" placeholder="{LANG.background_imgage}" class="form-control input-sm"/>
                             <div class="input-group-btn">
-                                <button onclick="nv_open_filemanage( 'footer_bg_image' ); return false;" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
+                                <button data-toggle="nv_open_filemanage" data-area="footer_bg_image" class="btn btn-default btn-sm"><i class="fa fa-folder-open-o"></i></button>
                             </div>
                         </div>
                     </div>
@@ -360,6 +360,13 @@ $(document).ready(function() {
     $('#cfgThemeTabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         $('[name="selectedtab"]').val($(this).attr('aria-offsets'));
     });
+
+    $('[data-toggle=nv_open_filemanage][data-area]').on('click', function(e) {
+        var alt = "backgroundimgalt",
+            path = "{UPLOADS_DIR}",
+            type = "image";
+        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + $(this).data('area') + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no")
+    })
 });
 
 $('#picker_block_header_bg, #picker_body_color, #picker_body_background, #picker_content_background, #picker_link_color, #picker_link_hover_color, #picker_header_background, #picker_footer_background, #picker_block_background').colpick({
@@ -373,14 +380,6 @@ $('#picker_block_header_bg, #picker_body_color, #picker_body_background, #picker
 }).keyup(function() {
     $(this).colpickSetColor(this.value);
 });
-
-function nv_open_filemanage(area) {
-    var alt = "backgroundimgalt";
-    var path = "{UPLOADS_DIR}";
-    var type = "image";
-    nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-    return false;
-}
 //]]>
 </script>
 <!-- END:main -->

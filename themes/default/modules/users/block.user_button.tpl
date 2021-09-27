@@ -37,7 +37,7 @@ function loginFormLoad() {
         <h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>
         <div class="row">
             <div class="col-xs-8 text-center">
-                <a title="{LANG.edituser}" href="javascript:void(0)" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
+                <a title="{LANG.edituser}" href="#" data-toggle="changeAvatar" data-url="{URL_AVATAR}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
             </div>
             <div class="col-xs-16">
                 <ul class="nv-list-item sm">
@@ -70,7 +70,7 @@ function loginFormLoad() {
                 <em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
             </div>
             <div class="col-xs-8 text-right">
-                <button type="button" class="btn btn-default btn-sm active" onclick="{URL_LOGOUT}(this);"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
+                <button type="button" class="btn btn-default btn-sm active" data-toggle="{URL_LOGOUT}"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
             </div>
         </div>
     </div>

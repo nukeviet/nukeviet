@@ -11,7 +11,7 @@
     <h2 class="margin-bottom-lg margin-top-lg">{LANG.editinfo_pagetitle}</h2>
     <ul class="users-menu nav nav-tabs margin-bottom">
         <li class="dropdown active" role="presentation">
-            <a id="myTabEl" href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-controls="funcList" aria-expanded="false"><span class="caret"></span></a>
+            <a id="myTabEl" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-controls="funcList" aria-expanded="false"><span class="caret"></span></a>
             <ul id="funcList" class="dropdown-menu" aria-labelledby="myTabEl">
                 <li class="{BASIC_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/basic" href="#edit_basic">{LANG.edit_basic}</a></li>
                 <!-- BEGIN: edit_avatar -->
@@ -48,7 +48,7 @@
     </ul>
     <div class="tab-content margin-bottom-lg">
         <div id="edit_basic" class="well-lg tab-pane fade {TAB_BASIC_ACTIVE}">
-            <form action="{EDITINFO_FORM}/basic" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/basic" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm" autocomplete="off" novalidate>
                 <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
                 <div class="form-detail">
                     <!-- BEGIN: name_show_0 -->
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <label for="last_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_last_name -->
@@ -64,7 +64,7 @@
                     <div class="form-group">
                         <label for="first_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_first_name -->
@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <label for="first_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_first_name -->
@@ -82,7 +82,7 @@
                     <div class="form-group">
                         <label for="last_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
                         </div>
                     </div>
                     <!-- END: show_last_name -->
@@ -91,7 +91,7 @@
                     <div class="form-group">
                         <label for="gender" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-5 col-md-4">
-                            <select class="form-control {FIELD.required} {FIELD.class}" name="gender" onchange="validErrorHidden(this,5);" data-mess="">
+                            <select class="form-control {FIELD.required} {FIELD.class}" name="gender" data-toggle="validErrorHidden" data-event="change" data-mess="">
                                 <!-- BEGIN: gender -->
                                 <option value="{GENDER.key}"{GENDER.sel}>{GENDER.title}</option>
                                 <!-- END: gender -->
@@ -103,7 +103,7 @@
                     <div class="form-group">
                         <label for="birthday" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-5 col-md-4">
-                            <input type="text" class="form-control calendar-icon datepicker {FIELD.required} {FIELD.class}" name="birthday" value="{FIELD.value}" readonly="readonly" style="background-color: #fff" onfocus="datepickerShow(this);" data-mess="">
+                            <input type="text" class="form-control calendar-icon datepicker {FIELD.required} {FIELD.class}" name="birthday" value="{FIELD.value}" readonly="readonly" style="background-color: #fff" data-focus="datepickerShow" data-mess="">
                         </div>
                     </div>
                     <!-- END: show_birthday -->
@@ -111,7 +111,7 @@
                     <div class="form-group">
                         <label for="birthday" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
-                            <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="sig" onkeypress="validErrorHidden(this);" data-mess="">{FIELD.value}</textarea>
+                            <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="sig" data-toggle="validErrorHidden" data-event="keypress" data-mess="">{FIELD.value}</textarea>
                         </div>
                     </div>
                     <!-- END: show_sig -->
@@ -126,7 +126,7 @@
                         </div>
                         <div class="col-sm-13 col-md-12">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
-                            <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
                             <!-- BEGIN: return_group_manage -->
                             <br/><br/>
                             <a href="{GROUP_MANAGE.link}"><em class="fa fa-caret-right margin-right-sm"></em>{GROUP_MANAGE.title}</a>
@@ -142,8 +142,8 @@
                 <img id="myavatar" alt="My Avatar" class="img-thumbnail bg-gainsboro" src="{DATA.photo}" width="{DATA.photoWidth}" height="{DATA.photoHeight}" data-default="{AVATAR_DEFAULT}" />
             </div>
             <div>
-                <button type="button" class="btn btn-primary btn-xs margin-right-sm" onclick="changeAvatar('{URL_AVATAR}');">{LANG.change_avatar}</button>
-                <button type="button" class="btn btn-danger btn-xs" id="delavatar" onclick="deleteAvatar('#myavatar','{DATA.checkss}',this)"{DATA.imgDisabled}>{GLANG.delete}</button>
+                <button type="button" class="btn btn-primary btn-xs margin-right-sm" data-toggle="changeAvatar" data-url="{URL_AVATAR}">{LANG.change_avatar}</button>
+                <button type="button" class="btn btn-danger btn-xs" id="delavatar" data-toggle="deleteAvatar" data-obj="#myavatar" data-ss="{DATA.checkss}"{DATA.imgDisabled}>{GLANG.delete}</button>
             </div>
         </div>
         <!-- END: tab_edit_avatar -->
@@ -152,10 +152,10 @@
             <!-- BEGIN: username_empty_pass -->
             <div class="alert alert-danger">
                 <em class="fa fa-exclamation-triangle ">&nbsp;</em> {LANG.changelogin_notvalid}
-                <button type="button" class="btn btn-primary btn-xs" onclick="addpass()">{LANG.add_pass}</button>
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="addpass">{LANG.add_pass}</button>
             </div>
             <!-- END: username_empty_pass -->
-            <form action="{EDITINFO_FORM}/username" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/username" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" data-toggle="reg_validForm" autocomplete="off" novalidate>
                 <div class="nv-info margin-bottom" data-default="{LANG.edit_login_warning}">{LANG.edit_login_warning}</div>
                 <div class="form-detail">
                     <div class="form-group">
@@ -167,13 +167,13 @@
                     <div class="form-group">
                         <label for="username" class="control-label col-md-6 text-normal">{LANG.newlogin}</label>
                         <div class="col-md-12">
-                            <input type="text" class="required form-control" placeholder="{LANG.newlogin}" value="" name="username" maxlength="{NICK_MAXLENGTH}" onkeypress="validErrorHidden(this);" data-mess="{USERNAME_RULE}" data-callback="login_check" data-minlength="{NICK_MINLENGTH}" data-type="{LOGINTYPE}">
+                            <input type="text" class="required form-control" placeholder="{LANG.newlogin}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-toggle="validErrorHidden" data-event="keypress" data-mess="{USERNAME_RULE}" data-callback="login_check" data-minlength="{NICK_MINLENGTH}" data-type="{LOGINTYPE}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="password" class="control-label col-md-6 text-normal">{LANG.password}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -181,7 +181,7 @@
                             <input type="hidden" name="checkss" value="{DATA.checkss}" />
                         </div>
                         <div class="col-md-10">
-                            <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" /> <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
+                            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" /> <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
                         </div>
                     </div>
                 </div>
@@ -193,10 +193,10 @@
             <!-- BEGIN: email_empty_pass -->
             <div class="alert alert-danger">
                 <em class="fa fa-exclamation-triangle ">&nbsp;</em> {LANG.changeemail_notvalid}
-                <button type="button" class="btn btn-primary btn-xs" onclick="addpass()">{LANG.add_pass}</button>
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="addpass">{LANG.add_pass}</button>
             </div>
             <!-- END: email_empty_pass -->
-            <form action="{EDITINFO_FORM}/email" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" onsubmit="return changemail_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/email" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" data-toggle="changemail_validForm" autocomplete="off" novalidate>
                 <div class="nv-info" style="margin-bottom:30px">{LANG.edit_email_warning}</div>
                 <div class="nv-info-default hidden">{LANG.edit_email_warning}</div>
                 <div class="form-detail">
@@ -208,21 +208,21 @@
                     <div class="form-group">
                         <label for="password" class="control-label col-md-6 text-normal">{LANG.password}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="email" class="control-label col-md-6 text-normal">{LANG.newemail}</label>
                         <div class="col-md-12">
-                            <input type="email" class="required form-control" placeholder="{LANG.newemail}" value="" name="email" maxlength="100" onkeypress="validErrorHidden(this);" data-mess="{GLANG.email_empty}">
+                            <input type="email" class="required form-control" placeholder="{LANG.newemail}" value="" name="email" maxlength="100" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.email_empty}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="verifykey" class="control-label col-md-6 text-normal">{LANG.verifykey}</label>
                         <div class="col-md-12">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="{LANG.verifykey}" value="" name="verifykey" maxlength="32" data-pattern="/^[a-zA-Z0-9]{32,32}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.verifykey_empty}"> <span class="input-group-btn">
-                                    <button type="button" class="send-bt btn btn-info pointer" onclick="verkeySend(this.form);">{LANG.verifykey_send}</button>
+                                <input type="text" class="form-control" placeholder="{LANG.verifykey}" value="" name="verifykey" maxlength="32" data-pattern="/^[a-zA-Z0-9]{32,32}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.verifykey_empty}"> <span class="input-group-btn">
+                                    <button type="button" class="send-bt btn btn-info pointer" data-toggle="verkeySend">{LANG.verifykey_send}</button>
                                 </span>
                             </div>
                         </div>
@@ -233,7 +233,7 @@
                         </div>
                         <div class="col-md-10">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
-                            <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
                         </div>
                     </div>
                 </div>
@@ -242,27 +242,27 @@
         <!-- END: tab_edit_email -->
         <!-- BEGIN: tab_edit_password -->
         <div id="edit_password" class="well-lg tab-pane fade {TAB_PASSWORD_ACTIVE}">
-            <form action="{EDITINFO_FORM}/password" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/password" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm" autocomplete="off" novalidate>
                 <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
                 <div class="form-detail">
                     <!-- BEGIN: is_old_pass -->
                     <div class="form-group">
                         <label for="nv_password" class="control-label col-md-6 text-normal">{LANG.pass_old}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_old}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_old}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.required}">
                         </div>
                     </div>
                     <!-- END: is_old_pass -->
                     <div class="form-group">
                         <label for="new_password" class="control-label col-md-6 text-normal">{LANG.pass_new}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{PASSWORD_RULE}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{PASSWORD_RULE}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="re_password" class="control-label col-md-6 text-normal">{LANG.pass_new_re}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.re_password_empty}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.re_password_empty}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -271,7 +271,7 @@
                         </div>
                         <div class="col-md-10">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
-                            <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
                             <!-- BEGIN: return_group_manage -->
                             <br/><br/>
                             <a href="{GROUP_MANAGE.link}"><em class="fa fa-caret-right margin-right-sm"></em>{GROUP_MANAGE.title}</a>
@@ -287,16 +287,16 @@
             <!-- BEGIN: question_empty_pass -->
             <div class="alert alert-danger">
                 <em class="fa fa-exclamation-triangle ">&nbsp;</em> {LANG.changequestion_notvalid}
-                <button type="button" class="btn btn-primary btn-xs" onclick="addpass()">{LANG.add_pass}</button>
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="addpass">{LANG.add_pass}</button>
             </div>
             <!-- END: question_empty_pass -->
-            <form action="{EDITINFO_FORM}/question" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/question" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" data-toggle="reg_validForm" autocomplete="off" novalidate>
                 <div class="nv-info" style="margin-bottom:30px" data-default="{LANG.edit_question_warning}">{LANG.edit_question_warning}</div>
                 <div class="form-detail">
                     <div class="form-group">
                         <label for="nv_password" class="control-label col-md-6 text-normal">{LANG.password}</label>
                         <div class="col-md-12">
-                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                            <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
                         </div>
                     </div>
                     <!-- BEGIN: show_question -->
@@ -304,14 +304,14 @@
                         <label for="question" class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-12">
                             <div class="input-group">
-                                <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="question" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
+                                <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="question" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.your_question_empty}">
                                 <div class="input-group-btn" role="group">
                                     <button type="button" class="btn btn-default pointer dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <!-- BEGIN: frquestion -->
-                                        <li><a href="javascript:void(0)" onclick="addQuestion(this);">{QUESTION}</a></li>
+                                        <li><a href="#" data-toggle="addQuestion">{QUESTION}</a></li>
                                         <!-- END: frquestion -->
                                     </ul>
                                 </div>
@@ -323,7 +323,7 @@
                     <div class="form-group">
                         <label for="answer" class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-12">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="answer" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.answer_empty}">
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="answer" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.answer_empty}">
                         </div>
                     </div>
                     <!-- END: show_answer -->
@@ -333,7 +333,7 @@
                         </div>
                         <div class="col-md-10">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
-                            <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
                         </div>
                     </div>
                 </div>
@@ -343,7 +343,7 @@
         <!-- BEGIN: tab_edit_openid -->
         <div id="edit_openid" class="tab-pane fade {TAB_OPENID_ACTIVE}">
             <!-- BEGIN: openid_not_empty -->
-            <form action="{EDITINFO_FORM}/openid" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/openid" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm" autocomplete="off" novalidate>
                 <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
                 <div class="form-detail">
                     <table class="table table-bordered table-striped table-hover">
@@ -354,7 +354,7 @@
                             <tr class="bg-lavender">
                                 <td>
                                     <!-- BEGIN: checkAll -->
-                                    <input type="checkbox" class="checkAll" onclick="checkAll(this.form);" />
+                                    <input type="checkbox" class="checkAll" data-toggle="checkAll" />
                                 <!-- END: checkAll -->
                                 </td>
                                 <td class="text-uppercase">{LANG.openid_server}</td>
@@ -373,7 +373,7 @@
                             <tr>
                                 <th class="text-center">
                                     <!-- BEGIN: is_act -->
-                                    <input name="openid_del[]" type="checkbox" value="{OPENID_LIST.opid}" class="checkSingle" onclick="checkSingle(this.form);" {OPENID_LIST.disabled} />
+                                    <input name="openid_del[]" type="checkbox" value="{OPENID_LIST.opid}" class="checkSingle" data-toggle="checkSingle" {OPENID_LIST.disabled} />
                                 <!-- END: is_act -->
                                     <!-- BEGIN: disabled -->
                                     <em class="fa fa-shield text-danger pointer" title="{LANG.openid_default}"></em>
@@ -393,7 +393,7 @@
                     <div class="margin-bottom-lg">{LANG.openid_add_new}</div>
                     <div>
                         <!-- BEGIN: server -->
-                        <a href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" />{OPENID.title}</a>
+                        <a href="{OPENID.href}" class="openid margin-right" data-toggle="openID_load"><img alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" />{OPENID.title}</a>
                         <!-- END: server -->
                     </div>
                 </div>
@@ -402,7 +402,7 @@
         <!-- END: tab_edit_openid -->
         <!-- BEGIN: tab_edit_group -->
         <div id="edit_group" class="tab-pane fade {TAB_GROUP_ACTIVE}">
-            <form action="{EDITINFO_FORM}/group" method="post" role="form" class="form-horizontal" onsubmit="return edit_group_submit(event,this,'{DATA.old_in_groups}');" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/group" method="post" role="form" class="form-horizontal" data-toggle="edit_group_submit" data-old="{DATA.old_in_groups}" autocomplete="off" novalidate>
                 <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
                 <div class="form-detail">
                     <table class="table table-bordered table-striped table-hover">
@@ -416,7 +416,7 @@
                             <tr class="bg-lavender">
                                 <td>
                                     <!-- BEGIN: checkAll -->
-                                    <input type="checkbox" class="checkAll" onclick="checkAll(this.form);" {CHECK_ALL_CHECKED} />
+                                    <input type="checkbox" class="checkAll" data-toggle="checkAll" {CHECK_ALL_CHECKED} />
                                 <!-- END: checkAll -->
                                 </td>
                                 <td class="text-uppercase">{LANG.group_name}</td>
@@ -432,16 +432,16 @@
                         <tbody>
                             <!-- BEGIN: group_list -->
                             <tr>
-                                <th class="text-center"><!-- BEGIN: is_checkbox --><input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" onclick="checkSingle(this.form);"{GROUP_LIST.checked}<!-- BEGIN: is_disable_checkbox --> disabled="disabled"/><input type="hidden" name="in_groups[]" value="{GROUP_LIST.group_id}"<!-- END: is_disable_checkbox -->/><!-- END: is_checkbox --></th>
+                                <th class="text-center"><!-- BEGIN: is_checkbox --><input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" data-toggle="checkSingle"{GROUP_LIST.checked}<!-- BEGIN: is_disable_checkbox --> disabled="disabled"/><input type="hidden" name="in_groups[]" value="{GROUP_LIST.group_id}"<!-- END: is_disable_checkbox -->/><!-- END: is_checkbox --></th>
                                 <td><a class="pointer" data-toggle="modal" data-target="#modal-{GROUP_LIST.alias}"><strong>{GROUP_LIST.title}</strong><em class="show text-success">{GROUP_LIST.group_type_mess}</em></a>
                                 <!-- BEGIN: is_leader -->
                                     <span class="text-danger"><em class="fa fa-users">&nbsp;</em><a href="{URL_IS_LEADER}" title="">{LANG.group_manage}</a></span>
                                 <!-- END: is_leader --></td>
                                 <td>{GROUP_LIST.description}</td>
                                 <td class="text-right">
-                                    <!-- BEGIN: if_not_joined --><a href="javascript:void(0);" data-toggle="popover" data-container="body" data-placement="left" data-content="{GROUP_LIST.status_mess}"><i class="fa fa-power-off fa-lg text-muted"></i></a><!-- END: if_not_joined -->
-                                    <!-- BEGIN: if_joined --><a href="javascript:void(0);" data-toggle="popover" data-container="body" data-placement="left" data-content="{GROUP_LIST.status_mess}"><i class="fa fa-check fa-lg text-success"></i></a><!-- END: if_joined -->
-                                    <!-- BEGIN: if_waited --><a href="javascript:void(0);" data-toggle="popover" data-container="body" data-placement="left" data-content="{GROUP_LIST.status_mess}"><i class="fa fa-hourglass-half fa-lg text-warning"></i></a><!-- END: if_waited -->
+                                    <!-- BEGIN: if_not_joined --><a href="#" data-toggle="popover" data-container="body" data-placement="left" data-content="{GROUP_LIST.status_mess}"><i class="fa fa-power-off fa-lg text-muted"></i></a><!-- END: if_not_joined -->
+                                    <!-- BEGIN: if_joined --><a href="#" data-toggle="popover" data-container="body" data-placement="left" data-content="{GROUP_LIST.status_mess}"><i class="fa fa-check fa-lg text-success"></i></a><!-- END: if_joined -->
+                                    <!-- BEGIN: if_waited --><a href="#" data-toggle="popover" data-container="body" data-placement="left" data-content="{GROUP_LIST.status_mess}"><i class="fa fa-hourglass-half fa-lg text-warning"></i></a><!-- END: if_waited -->
                                 </td>
                                 <!-- START FORFOOTER -->
                                 <div class="modal fade" id="modal-{GROUP_LIST.alias}" tabindex="-1" role="dialog">
@@ -477,7 +477,7 @@
         <!-- END: tab_edit_group -->
         <!-- BEGIN: tab_edit_others -->
         <div id="edit_others" class="well-lg tab-pane fade {TAB_OTHERS_ACTIVE}">
-            <form action="{EDITINFO_FORM}/others" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/others" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm" autocomplete="off" novalidate>
                 <div class="nv-info" style="margin-bottom:30px" data-default="{GLANG.required}">{GLANG.required}</div>
                 <div class="form-detail">
                     <!-- BEGIN: loop -->
@@ -485,7 +485,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-18">
-                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->/>
+                            <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->/>
                         </div>
                     </div>
                     <!-- END: textbox -->
@@ -493,7 +493,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-4">
-                            <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" style="background-color:#fff" onchange="validErrorHidden(this);" onfocus="datepickerShow(this);" data-mess="" />
+                            <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" style="background-color:#fff" data-toggle="validErrorHidden" data-event="change" data-focus="datepickerShow" data-mess="" />
                         </div>
                     </div>
                     <!-- END: date -->
@@ -501,7 +501,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-18">
-                            <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="custom_fields[{FIELD.field}]" onkeypress="validErrorHidden(this);" data-mess="">{FIELD.value}</textarea>
+                            <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="custom_fields[{FIELD.field}]" data-toggle="validErrorHidden" data-event="keypress" data-mess="">{FIELD.value}</textarea>
                         </div>
                     </div>
                     <!-- END: textarea -->
@@ -515,7 +515,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-18">
-                            <select name="custom_fields[{FIELD.field}]" class="form-control {FIELD.required} {FIELD.class}" onchange="validErrorHidden(this);" data-mess="">
+                            <select name="custom_fields[{FIELD.field}]" class="form-control {FIELD.required} {FIELD.class}" data-toggle="validErrorHidden" data-event="change" data-mess="">
                                 <!-- BEGIN: loop -->
                                 <option value="{FIELD_CHOICES.key}"{FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                                 <!-- END: loop -->
@@ -529,7 +529,7 @@
                         <div class="col-md-18">
                             <div class="radio-box {FIELD.required}" data-mess="">
                                 <!-- BEGIN: loop -->
-                                <label for="lb_{FIELD_CHOICES.id}" class="radio-box" style="vertical-align:middle"> <input type="radio" name="custom_fields[{FIELD.field}]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" onclick="validErrorHidden(this,4);"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br />
+                                <label for="lb_{FIELD_CHOICES.id}" class="radio-box" style="vertical-align:middle"> <input type="radio" name="custom_fields[{FIELD.field}]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" data-toggle="validErrorHidden" data-event="click" data-parents="4"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br />
                                 <!-- END: loop -->
                             </div>
                         </div>
@@ -541,7 +541,7 @@
                         <div class="col-md-18">
                             <div class="check-box {FIELD.required}" data-mess="">
                                 <!-- BEGIN: loop -->
-                                <label for="lb_{FIELD_CHOICES.id}" class="check-box" style="vertical-align:middle"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" style="margin-top: 0" onclick="validErrorHidden(this,4);"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br />
+                                <label for="lb_{FIELD_CHOICES.id}" class="check-box" style="vertical-align:middle"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" style="margin-top: 0" data-toggle="validErrorHidden" data-event="click" data-parents="4"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br />
                                 <!-- END: loop -->
                             </div>
                         </div>
@@ -551,7 +551,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-18">
-                            <select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class} {FIELD.required} form-control" onchange="validErrorHidden(this);" data-mess="">
+                            <select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class} {FIELD.required} form-control" data-toggle="validErrorHidden" data-event="change" data-mess="">
                                 <!-- BEGIN: loop -->
                                 <option value="{FIELD_CHOICES.key}"{FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                                 <!-- END: loop -->
@@ -566,7 +566,7 @@
                         </div>
                         <div class="col-md-10">
                             <input type="submit" class="btn btn-primary" value="{LANG.editinfo_confirm}" />
-                            <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
                             <!-- BEGIN: return_group_manage -->
                             <br/><br/>
                             <a href="{GROUP_MANAGE.link}"><em class="fa fa-caret-right margin-right-sm"></em>{GROUP_MANAGE.title}</a>
@@ -583,10 +583,10 @@
             <!-- BEGIN: safemode_empty_pass -->
             <div class="alert alert-danger">
                 <em class="fa fa-exclamation-triangle">&nbsp;</em> {LANG.safe_deactive_notvalid}
-                <button type="button" class="btn btn-primary btn-xs" onclick="addpass()">{LANG.add_pass}</button>
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="addpass">{LANG.add_pass}</button>
             </div>
             <!-- END: safemode_empty_pass -->
-            <form action="{EDITINFO_FORM}/safemode" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+            <form action="{EDITINFO_FORM}/safemode" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" data-toggle="reg_validForm" autocomplete="off" novalidate>
                 <h2 class="margin-bottom-lg text-center">
                     <em class="fa fa-shield fa-lg margin-right text-danger"></em>{LANG.safe_activate}
                 </h2>
@@ -597,7 +597,7 @@
                         <label for="nv_password" class="control-label col-md-6 text-normal">{GLANG.password}</label>
                         <div class="col-md-14">
                             <div class="input-group">
-                                <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span> <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                                <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span> <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
                             </div>
                         </div>
                     </div>
@@ -606,8 +606,8 @@
                         <div class="col-md-14">
                             <div class="input-group">
                                 <span class="input-group-addon"><em class="fa fa-shield fa-lg"></em></span>
-                                <input type="text" class="required form-control" placeholder="{LANG.safe_key}" value="" name="safe_key" maxlength="32" data-pattern="/^[a-zA-Z0-9]{32,32}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
-                                <span class="input-group-btn"><input type="button" value="{LANG.verifykey_send}" class="safekeySend btn btn-info" onclick="safekeySend(this.form);" /></span>
+                                <input type="text" class="required form-control" placeholder="{LANG.safe_key}" value="" name="safe_key" maxlength="32" data-pattern="/^[a-zA-Z0-9]{32,32}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.required}">
+                                <span class="input-group-btn"><input type="button" value="{LANG.verifykey_send}" class="safekeySend btn btn-info" data-toggle="safekeySend" /></span>
                             </div>
                         </div>
                     </div>
@@ -617,7 +617,7 @@
                         </div>
                         <div class="col-md-10">
                             <button class="bsubmit btn btn-primary" type="submit">{LANG.editinfo_confirm}</button>
-                            <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
                         </div>
                     </div>
                 </div>
@@ -632,27 +632,6 @@
     </ul>
 </div>
 <script>
-    function changeTabTitle() {
-        var n = $("#funcList li.active a").text();
-        n += ' <span class="caret"></span>';
-        $("#myTabEl").html(n)
-    }
-    function edit_group_submit(event, obj, old) {
-        event.preventDefault();
-        var nw = [];
-        if ($('[name^=in_groups]:checked').length) {
-            $('[name^=in_groups]:checked').each(function(){
-                nw.push($(this).val());
-            })
-        }
-
-        nw = nw.join();
-        if (nw == old) {
-            return !1
-        }
-
-        reg_validForm(obj);
-    }
     $(function() {
         $('[data-toggle="popover"]').popover();
         $('.users-menu a[data-toggle="tab"]').on('shown.bs.tab', function(e) {

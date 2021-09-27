@@ -1,7 +1,4 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.pack.js"></script>
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
-<link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
 <link href="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <div class="news_column panel panel-default" itemtype="http://schema.org/NewsArticle" itemscope>
     <div class="panel-body">
@@ -26,7 +23,7 @@
             <div class="col-md-12">
                 <ul class="list-inline text-right">
                     <!-- BEGIN: allowed_send -->
-                    <li><a class="dimgray" title="{LANG.sendmail}" href="javascript:void(0);" onclick="newsSendMailModal('#newsSendMailModal', '{URL_SENDMAIL}', '{CHECKSESSION}');"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+                    <li><a class="dimgray" title="{LANG.sendmail}" href="#" data-toggle="newsSendMailModal" data-obj="#newsSendMailModal" data-url="{URL_SENDMAIL}" data-ss="{CHECKSESSION}"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
                     <!-- START FORFOOTER -->
 <div class="modal fade" id="newsSendMailModal" tabindex="-1" role="dialog" data-loaded="false">
     <div class="modal-dialog" role="document">
@@ -42,7 +39,7 @@
                     <!-- END FORFOOTER -->
                     <!-- END: allowed_send -->
                     <!-- BEGIN: allowed_print -->
-                    <li><a class="dimgray" rel="nofollow" title="{LANG.print}" href="javascript: void(0)" onclick="nv_open_browse('{URL_PRINT}','{TITLE}',840,500,'resizable=yes,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
+                    <li><a class="dimgray" rel="nofollow" title="{LANG.print}" href="#" data-toggle="newsPrint" data-url="{URL_PRINT}"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
                     <!-- END: allowed_print -->
                     <!-- BEGIN: allowed_save -->
                     <li><a class="dimgray" rel="nofollow" title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
@@ -59,7 +56,7 @@
         <div class="clearfix">
             <!-- BEGIN: imgthumb -->
             <!-- BEGIN: note -->
-            <figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
+            <figure class="article left pointer" data-toggle="modalShowByObj" data-obj="#imgpreview">
                 <div style="width:{DETAIL.image.width}px;">
                     <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
                     <figcaption>{DETAIL.image.note}</figcaption>
@@ -71,7 +68,7 @@
             </div>
             <!-- END: note -->
             <!-- BEGIN: empty -->
-            <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj('#imgpreview');">
+            <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" data-toggle="modalShowByObj" data-obj="#imgpreview">
                 <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
             <div id="imgpreview" style="display:none">
@@ -110,7 +107,7 @@
                     <!-- END: show_quick_viewfile -->
                     <!-- BEGIN: show_quick_viewimg -->
                     <span class="badge">
-                        <a href="javascript:void(0)" data-src="{FILE.src}" data-toggle="newsattachimage">
+                        <a href="#" data-src="{FILE.src}" data-toggle="newsattachimage">
                             <i class="fa fa-eye" data-rel="tooltip" data-content="{LANG.preview}"></i>
                         </a>
                     </span>
@@ -170,57 +167,31 @@
 <!-- BEGIN: allowed_rating -->
 <div class="news_column panel panel-default">
     <div class="panel-body">
-        <form id="form3B" action="">
-            <div class="h5 clearfix">
-                <p id="stringrating">{STRINGRATING}</p>
+        <form id="form3B" action="" data-toggle="rating" data-id="{NEWSID}" data-checkss="{NEWSCHECKSS}" data-checked="{DETAIL.numberrating_star}">
+            <div class="margin-bottom">
+                <section class="rating<!-- BEGIN: disablerating --> disabled<!-- END: disablerating -->">
+                    <input type="radio" id="rat_5" name="rate" value="5"/>
+                    <label for="rat_5" data-title="{LANG.star_verygood}"></label>
+                    <input type="radio" id="rat_4" name="rate" value="4"/>
+                    <label for="rat_4" data-title="{LANG.star_good}"></label>
+                    <input type="radio" id="rat_3" name="rate" value="3"/>
+                    <label for="rat_3" data-title="{LANG.star_ok}"></label>
+                    <input type="radio" id="rat_2" name="rate" value="2"/>
+                    <label for="rat_2" data-title="{LANG.star_poor}"></label>
+                    <input type="radio" id="rat_1" name="rate" value="1"/>
+                    <label for="rat_1" data-title="{LANG.star_verypoor}"></label>
+                </section>
+                <span class="feedback small" data-default="{RATINGFEEDBACK}" data-success="{LANG.rating_success}">{RATINGFEEDBACK}</span>
+            </div>
+            <div class="ratingInfo margin-top hidden">
+                <div id="stringrating">{STRINGRATING}</div>
                 <!-- BEGIN: data_rating -->
-                <span itemscope itemtype="https://schema.org/AggregateRating">
-                    <span class="hidden d-none hide" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries">
-                        <span class="hidden d-none hide" itemprop="name">{DETAIL.title}</span>
-                    </span>
-                    {LANG.rating_average}:
-                    <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> -
-                    <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count}
-                    <span class="hidden d-none hide" itemprop="bestRating">5</span>
-                </span>
-                <!-- END: data_rating -->
-                <div style="padding: 5px;">
-                    <!-- BEGIN: star --><input class="hover-star required" type="radio" value="{STAR.val}" title="{STAR.title}"{STAR.checked}/><!-- END: star -->
-                    <span id="hover-test" style="margin: 0 0 0 20px;">{LANG.star_note}</span>
+                <div>
+                    <span itemscope itemtype="https://schema.org/AggregateRating"> <span class="hidden" itemprop="itemReviewed" itemscope itemtype="https://schema.org/CreativeWorkSeries"><span class="hidden" itemprop="name">{DETAIL.title}</span></span>{LANG.rating_average}: <span id="numberrating" itemprop="ratingValue">{DETAIL.numberrating}</span> / <span id="click_rating" itemprop="ratingCount">{DETAIL.click_rating}</span> {LANG.rating_count} <span class="hidden" itemprop="bestRating">5</span></span>
                 </div>
+                <!-- END: data_rating -->
             </div>
         </form>
-        <script type="text/javascript">
-        $(function() {
-            var isDisable = false;
-            $('.hover-star').rating({
-                focus : function(value, link) {
-                    var tip = $('#hover-test');
-                    if (!isDisable) {
-                        tip[0].data = tip[0].data || tip.html();
-                        tip.html(link.title || 'value: ' + value)
-                    }
-                },
-                blur : function(value, link) {
-                    var tip = $('#hover-test');
-                    if (!isDisable) {
-                        $('#hover-test').html(tip[0].data || '')
-                    }
-                },
-                callback : function(value, link) {
-                    if (!isDisable) {
-                        isDisable = true;
-                        $('.hover-star').rating('disable');
-                        sendrating('{NEWSID}', value, '{NEWSCHECKSS}');
-                    }
-                }
-            });
-            <!-- BEGIN: disablerating -->
-            $(".hover-star").rating('disable');
-            isDisable = true;
-            <!-- END: disablerating -->
-        })
-        </script>
     </div>
 </div>
 <!-- END: allowed_rating -->

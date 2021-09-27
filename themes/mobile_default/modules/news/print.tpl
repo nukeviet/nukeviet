@@ -14,8 +14,8 @@
 		<h1>{CONTENT.title}</h1>
 		<ul class="list-inline">
 			<li>{CONTENT.time}</li>
-			<li class="hidden-print txtrequired"><em class="fa fa-print">&nbsp;</em><a title="{LANG.print}" href="javascript:;" onclick="window.print()">{LANG.print}</a></li>
-			<li class="hidden-print txtrequired"><em class="fa fa-power-off">&nbsp;</em><a title="{LANG.print_close}" href="javascript:;" onclick="window.close()">{LANG.print_close}</a></li>
+			<li class="hidden-print txtrequired"><em class="fa fa-print">&nbsp;</em><a title="{LANG.print}" href="#" data-toggle="winCMD" data-cmd="print">{LANG.print}</a></li>
+			<li class="hidden-print txtrequired"><em class="fa fa-power-off">&nbsp;</em><a title="{LANG.print_close}" href="#" data-toggle="winCMD" data-cmd="close">{LANG.print_close}</a></li>
 		</ul>
 		<div class="clear"></div>
 		<!-- BEGIN: no_public -->

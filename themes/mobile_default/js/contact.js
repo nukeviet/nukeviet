@@ -11,18 +11,13 @@ function nv_validReset(a) {
     $(".has-error", a).removeClass("has-error");
     $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
     $(a)[0].reset();
+    formChangeCaptcha(a);
 }
 
 function nv_validErrorShow(a) {
     $(a).parent().parent().addClass("has-error");
     $(a).parent().parent().parent().find(".nv-info").removeClass("success").addClass("error").html($(a).attr("data-current-mess"));
     $(a).focus()
-}
-
-function nv_validErrorHidden(a) {
-    a = $(a).parent().parent().parent();
-    $(".has-error", a).removeClass("has-error");
-    $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"));
 }
 
 function nv_uname_check(val) {
@@ -48,7 +43,7 @@ function nv_validForm(a) {
     var c = 0;
     $(a).find(".required,input[data-callback]").each(function() {
         $(this).val(trim(strip_tags($(this).val())));
-        if (!nv_validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), nv_validErrorShow(this), !1
+        if (!nv_validCheck(this)) return c++, $(this).attr("data-current-mess", $(this).attr("data-mess")), nv_validErrorShow(this), !1
     });
     c || ($(a).find("[type='submit']").prop("disabled", !0), $.ajax({
         type: $(a).prop("method"),
@@ -57,17 +52,52 @@ function nv_validForm(a) {
         data: $(a).serialize(),
         dataType: "json",
         success: function(b) {
-            change_captcha('.fcode');
-            "error" == b.status && "" != b.input ? ($(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
-                $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-                nv_validErrorShow(this)
-            }), setTimeout(function() {
-                $(a).find("[type='submit']").prop("disabled", !1)
-            }, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info", a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info", a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
-                $("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
-                nv_validReset(a)
-            }, 5E3))
+            formChangeCaptcha(a);
+            if ("error" == b.status) {
+                setTimeout(function() {
+                    $(a).find("[type='submit']").prop("disabled", !1)
+                }, 1E3);
+                if ("" != b.input && $("[name=" + b.input + "]:visible", a).length) {
+                    $(a).find("[name=" + b.input + "]:visible").each(function() {
+                        $(this).attr("data-current-mess", b.mess);
+                        nv_validErrorShow(this)
+                    })
+                } else {
+                    $(".nv-info", a).html(b.mess).removeClass("success").addClass("error");
+                    setTimeout(function() {
+                        $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"))
+                    }, 5E3);
+                }
+            } else {
+                $(".nv-info", a).html(b.mess).removeClass("error").addClass("success");
+                setTimeout(function() {
+                    $(a).find("[type='submit']").prop("disabled", !1);
+                    nv_validReset(a)
+                }, 5E3)
+
+            }
         }
     }));
     return !1
 };
+
+$(function() {
+    // Form submit
+    $('body').on('submit', '[data-toggle=feedback]', function(e) {
+        e.preventDefault();
+        nv_validForm(this)
+    });
+
+    // Form reset
+    $('body').on('click', '[data-toggle=fb_validReset]', function(e) {
+        e.preventDefault();
+        nv_validReset($(this).parents('form'))
+    });
+
+    // validErrorHidden
+    $('body').on('keypress', '[data-toggle=fb_validErrorHidden]', function() {
+        var a = $(this).parent().parent().parent();
+        $(".has-error", a).removeClass("has-error");
+        $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"))
+    });
+})

@@ -64,6 +64,7 @@ var nv_aryDayName = "Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi".split(
     // Message before unload
     nv_msgbeforeunload = "Les données ne sont pas enregistrées. Vous perdrez toutes les données si vous quittez cette page. Veux-tu partir?",
     // ErrorMessage
+    verify_not_robot = "Veuillez vérifier que vous n'êtes pas un robot",
     NVJL = [];
 NVJL.errorRequest = "Il y a eu une erreur avec la demande.";
 NVJL.errortimeout = "La demande a expiré.";

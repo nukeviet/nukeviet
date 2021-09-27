@@ -64,6 +64,7 @@ var nv_aryDayName = "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".s
     // Message before unload
     nv_msgbeforeunload = "The data is unsaved. You will lose all data if you leave this page. Do you want to leave?",
     // ErrorMessage
+    verify_not_robot = "Please verify that you are not a robot",
     NVJL = [];
 NVJL.errorRequest = "There was an error with the request.";
 NVJL.errortimeout = "The request timed out.";

@@ -13,7 +13,7 @@
             <!-- BEGIN: adminlink -->
             <p class="text-right adminlink">
                 <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ADMIN_EDIT}">{GLANG.edit}</a>
-                <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_content({DATA.id}, '{ADMIN_CHECKSS}','{NV_BASE_ADMINURL}')">{GLANG.delete}</a>
+                <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" data-toggle="nv_del_content" data-id="{DATA.id}" data-ss="{ADMIN_CHECKSS}" data-adminurl="{NV_BASE_ADMINURL}">{GLANG.delete}</a>
             </p>
             <!-- END: adminlink -->
         </div>

@@ -11,7 +11,7 @@
                 </div>
                 <!-- BEGIN: allowuserreg -->
                 <form action="{USER_LOGIN}" method="post" role="form" class="form-horizontal text-center margin-top-lg margin-bottom-lg">
-                    <span class="btn btn-primary btn-sm margin-right-lg pointer" onclick="$('#loginForm').show();return!1">
+                    <span class="btn btn-primary btn-sm margin-right-lg pointer" data-toggle="loginFormShow">
                         {LANG.openid_note5}
                     </span>
                     <input type="hidden" name="nv_reg" value="1" />
@@ -19,7 +19,7 @@
                 </form>
                 <!-- END: allowuserreg -->
             </div>
-            <form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal margin-bottom-lg"<!-- BEGIN: allowuserreg2 --> style="display:none"<!-- END: allowuserreg2 --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+            <form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal margin-bottom-lg<!-- BEGIN: allowuserreg2 --> hidden<!-- END: allowuserreg2 -->"<!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon">
@@ -38,29 +38,10 @@
                         <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100" />
                     </div>
                 </div>
-                <!-- BEGIN: captcha -->
-                <div class="form-group">
-                    <div class="middle text-center clearfix">
-                        <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{GLANG.securitycode}" title="{GLANG.securitycode}" />
-                        <em class="fa fa-pointer fa-refresh margin-left margin-right" title="{GLANG.captcharefresh}" onclick="change_captcha('.bsec');">
-                        </em>
-                        <input type="text" style="width:100px;" class="bsec required form-control display-inline-block" name="nv_seccode" value="" maxlength="{GFX_MAXLENGTH}" />
-                    </div>
-                </div>
-                <!-- END: captcha -->
-                <!-- BEGIN: recaptcha -->
-                <div class="form-group">
-                    <div class="middle text-center clearfix">
-                        <div class="nv-recaptcha-default">
-                            <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="4" data-btnselector="[type=submit]"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END: recaptcha -->
                 <div class="text-center margin-bottom-lg">
                     <input name="nv_login" value="1" type="hidden" />
                     <input type="reset" value="{GLANG.reset}" class="btn btn-default" />
-                    <button class="bsubmit btn btn-primary" type="submit" onclick="btnClickSubmit(event,this.form);">
+                    <button class="bsubmit btn btn-primary" type="submit">
                         {GLANG.loginsubmit}
                     </button>
                 </div>
@@ -68,4 +49,12 @@
         </div>
     </div>
 </div>
+<script>
+$(function() {
+    $('[data-toggle=loginFormShow]').on('click', function(e) {
+        e.preventDefault();
+        $('#loginForm').toggleClass('hidden')
+    })
+})
+</script>
 <!-- END: main -->

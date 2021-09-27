@@ -29,14 +29,14 @@
         <strong>{LANG.cfg_step2}</strong>
     </div>
     <div class="panel-body">
-        <form action="{FORM_ACTION}" method="post" onsubmit="return opt_validForm(this);" autocomplete="off" novalidate>
+        <form action="{FORM_ACTION}" method="post" data-toggle="opt_validForm" autocomplete="off" novalidate>
             <div class="nv-info margin-bottom" data-default="{LANG.cfg_step2_info2}">{LANG.cfg_step2_info2}</div>
             <div class="form-detail">
                 <div class="step1">
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><em class="fa fa-key fa-lg"></em></span>
-                            <input type="text" class="required form-control" placeholder="123456" value="" name="opt" maxlength="6" data-pattern="/^(.){6,}$/" onkeypress="validErrorHidden(this);" data-mess="">
+                            <input type="text" class="required form-control" placeholder="123456" value="" name="opt" maxlength="6" data-pattern="/^(.){6,}$/" data-toggle="validErrorHidden" data-mess="">
                         </div>
                     </div>
                 </div>

@@ -7,75 +7,73 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var total = 0;
-
-function nv_check_accept_number(form, num, errmsg) {
-    opts = form["option[]"];
-    for (var e = total = 0; e < opts.length; e++)
-        if (opts[e].checked && (total += 1), total > num) return alert(errmsg), !1
-}
-
-function nv_sendvoting(form, id, num, checkss, errmsg, captcha) {
-    var vals = "0";
-    num = parseInt(num);
-    captcha = parseInt(captcha);
-    if (1 == num) {
-        opts = form.option;
-        for (var b = 0; b < opts.length; b++) opts[b].checked && (vals = opts[b].value)
-    } else if (1 < num)
-        for (opts = form["option[]"], b = 0; b < opts.length; b++) opts[b].checked && (vals = vals + "," + opts[b].value);
-
-    if ("0" == vals && 0 < num) {
-        alert(errmsg);
-    } else if (captcha == 0 || "0" == vals) {
-        nv_sendvoting_submit(id, checkss, vals);
-    } else if (captcha == 3) {
-        grecaptcha.execute(nv_recaptcha_sitekey, {
-            action: "formSubmit"
-        }).then(function(a) {
-            nv_sendvoting_submit(id, checkss, vals, a);
-        })
+// Voting functions
+// Gioi han phuong an bau chon
+function votingAcceptNumber(obj) {
+    var form = $(obj).parents('form');
+    if ($('[name*=option]:checked', form).length >= parseInt(form.data('accept'))) {
+        $('[name*=option]', form).not(':checked').prop('disabled', true)
     } else {
-        $('#voting-modal-' + id).data('id', id).data('checkss', checkss).data('vals', vals);
-        modalShowByObj('#voting-modal-' + id, "recaptchareset");
+        $('[name*=option]', form).prop('disabled', false)
     }
-    return !1
 }
 
-function nv_sendvoting_submit(id, checkss, vals, capt) {
+//Voting functions
+function votingSend(form) {
+    var id = $(form).data('id'),
+        checkss = $(form).data('checkss'),
+        num = parseInt($(form).data('accept')),
+        errmsg = $(form).data('errmsg'),
+        vals = "0";
+    $('[name*=option]:checked', form).each(function() {
+        vals = (num == 1) ? $(this).val() : vals + ("," + $(this).val())
+    });
+    if ("0" === vals) {
+        alert(errmsg);
+    } else if ($("[data-recaptcha2],[data-recaptcha3]", $(form).parent()).length) {
+        votingSendSubmit(id, checkss, vals, $('[name=g-recaptcha-response]', form).val());
+    } else if ($("[data-captcha]", $(form).parent()).length) {
+        votingSendSubmit(id, checkss, vals, $('[name=' + $(form).data('captcha') + ']', form).val());
+    } else {
+        votingSendSubmit(id, checkss, vals)
+    }
+}
+
+function votingSendSubmit(id, checkss, vals, capt) {
     $.ajax({
         type: "POST",
         cache: !1,
-        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + id + "&checkss=" + checkss + "&lid=" + vals + (typeof capt != 'undefined' ? '&captcha=' + capt : ''),
+        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + id + "&checkss=" + checkss + "&lid=" + vals + ('undefined' != typeof capt ? '&captcha=' + capt : ''),
         data: "nv_ajax_voting=1",
         dataType: "html",
         success: function(res) {
-            var b = $("[onclick*='change_captcha']");
-            if (b.length) {
-                b.click()
-            } else if ($('[data-toggle=recaptcha]').length || $("[data-recaptcha3]").length) {
+            if ("0" != vals && "undefined" != typeof capt && "" != capt) {
                 change_captcha()
             }
             if (res.match(/^ERROR\|/g)) {
                 alert(res.substring(6));
             } else {
-                modalShow("", res);
+                modalShow('', res)
             }
         }
     });
 }
 
-function nv_sendvoting_captcha(btn, id, msg) {
-    var ctn = $('#voting-modal-' + id);
-    var capt = "";
-    if ($('[name="g-recaptcha-response"]', $(btn).parent()).length) {
-        capt = $('[name="g-recaptcha-response"]', $(btn).parent()).val();
-    } else {
-        capt = $('[name="captcha"]', $(btn).parent()).val();
-    }
-    if (capt == "") {
-        alert(msg);
-    } else {
-        nv_sendvoting_submit(ctn.data('id'), ctn.data('checkss'), ctn.data('vals'), capt);
-    }
-}
+$(function() {
+    // Voting form submit
+    $('body').on('submit', '[data-toggle=votingSend]', function(e) {
+        e.preventDefault();
+        votingSend(this)
+    });
+
+    // Xem kết quả bình chọn
+    $('body').on('click', '[data-toggle=votingResult]', function(e) {
+        e.preventDefault();
+        votingSendSubmit($(this).parents('form').data('id'), $(this).parents('form').data('checkss'), '0')
+    });
+
+    // Giới hạn số phương án bình chọn
+    $('body').on('click', '[data-toggle=votingAcceptNumber]', function() {
+        votingAcceptNumber(this)
+    });
+})

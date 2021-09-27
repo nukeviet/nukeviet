@@ -19,9 +19,17 @@ function nv_sh(b, a) {
 }
 $(function() {
     // Admin logout
-    $('[data-toggle=nv_admin_logout]').on('click', function(e) {
+    $('body').on('click', '[data-toggle=nv_admin_logout]', function(e) {
         e.preventDefault();
         nv_admin_logout()
+    });
+
+    // JS của nv_generate_page
+    $('body').on('click', '[data-toggle=gen-page-js][data-func][data-href][data-obj]', function(e) {
+        e.preventDefault();
+        if ('function' === typeof window[$(this).data('func')]) {
+            window[$(this).data('func')]($(this).data('href'), $(this).data('obj'))
+        }
     });
 
     if ("undefined" != typeof drag_block && 0 != drag_block) {

@@ -6,7 +6,7 @@
 <div id="idcomment" class="nv-fullbg" data-module="{MODULE_COMM}" data-content="{MODULE_DATA}_commentcontent" data-area="{AREA_COMM}" data-id="{ID_COMM}" data-allowed="{ALLOWED_COMM}" data-checkss="{CHECKSS_COMM}">
     <div class="row clearfix margin-bottom-lg">
         <div class="col-xs-12 text-left">
-            <button type="button" class="btn btn-default btn-sm pull-right" onclick="$('.fa', this).toggleClass('fa-eye fa-eye-slash'),nv_show_hidden('showcomment',2);" title="{LANG.comment_hide_show}">
+            <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="commListShow" data-obj="#showcomment" title="{LANG.comment_hide_show}">
                 <em class="fa fa-eye-slash"></em>
             </button>
             <p class="comment-title">
@@ -14,7 +14,7 @@
             </p>
         </div>
         <div class="col-xs-12 text-right">
-            <select class="form-control" onchange="nv_comment_sort_change(event, this)">
+            <select class="form-control" data-toggle="nv_comment_sort_change">
                 <!-- BEGIN: sortcomm -->
                 <option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
                 <!-- END: sortcomm -->
@@ -24,7 +24,7 @@
     <div id="showcomment" class="margin-bottom-lg">{COMMENTCONTENT}</div>
     <div id="formcomment" class="comment-form">
         <!-- BEGIN: allowed_comm -->
-        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" onsubmit="return nv_comment_submit(this);" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"{ENCTYPE}<!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"{ENCTYPE}<!-- BEGIN: captcha --> data-captcha="code"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
             <input type="hidden" name="module" value="{MODULE_COMM}" />
             <input type="hidden" name="area" value="{AREA_COMM}" />
             <input type="hidden" name="id" value="{ID_COMM}" />
@@ -58,28 +58,9 @@
                 </div>
             </div>
             <!-- END: attach -->
-            <!-- BEGIN: captcha -->
-            <div class="form-group clearfix">
-                <label class="hidden-xs">{LANG.comment_seccode}</label>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /> &nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode');">&nbsp;</em>
-                    </div>
-                    <div class="col-xs-12">
-                        <input id="commentseccode" type="text" class="form-control" maxlength="{GFX_NUM}" name="code" />
-                    </div>
-                </div>
-            </div>
-            <!-- END: captcha -->
-            <!-- BEGIN: recaptcha -->
-            <div class="form-group clearfix">
-                <div class="nv-recaptcha-default">
-                    <div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha" data-pnum="3" data-btnselector="[type=submit]"></div>
-                </div>
-            </div>
-            <!-- END: recaptcha -->
             <div class="form-group text-center">
-                <input type="button" value="{GLANG.reset}" class="reset btn btn-default" onclick="nv_comment_reset(event, this.form);" /> <input type="submit" value="{LANG.comment_submit}" class="btn btn-primary" onclick="commentFormSubmit(event, this.form);" />
+                <input type="button" value="{GLANG.reset}" class="reset btn btn-default" data-toggle="commReset"/>
+                <input type="submit" value="{LANG.comment_submit}" class="btn btn-primary"/>
             </div>
         </form>
         <iframe class="hidden" id="submitcommentarea" name="submitcommentarea"></iframe>
@@ -87,7 +68,7 @@
         <!-- BEGIN: form_login-->
         <div class="alert alert-danger fade in">
             <!-- BEGIN: message_login -->
-            <a title="{GLANG.loginsubmit}" href="#" onclick="return loginForm('');">{LOGIN_MESSAGE}</a>
+            <a title="{GLANG.loginsubmit}" href="#" data-toggle="loginForm">{LOGIN_MESSAGE}</a>
             <!-- END: message_login -->
             <!-- BEGIN: message_register_group -->
             {LANG_REG_GROUPS}

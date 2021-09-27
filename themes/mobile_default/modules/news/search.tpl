@@ -49,7 +49,7 @@
                 <div class="col-md-8 text-right">&nbsp;</div>
                 <div class="col-md-16">
                     <input type="submit" class="btn btn-primary" value="{LANG.search_title}" />
-                    <a href="javascript:void(0);" data-href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=seek&amp;q=" onclick="searchOnSite(event,this)">{LANG.search_on_site}</a>
+                    <a href="#" data-href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=seek&amp;q=" data-toggle="searchOnSite">{LANG.search_on_site}</a>
                 </div>
             </div>
 

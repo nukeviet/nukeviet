@@ -72,24 +72,15 @@
                 <label class="col-sm-7 control-label">&nbsp;</label>
                 <div class="col-sm-17">
                     <input type="submit" class="btn btn-primary" value="{LANG.search_title}" />
-                    <a href="javascript:void(0);" data-href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=seek&amp;q=" onclick="searchOnSite(event,this)">{LANG.search_on_site}</a>
+                    <a href="#" data-href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=seek&amp;q=" data-toggle="searchOnSite">{LANG.search_on_site}</a>
                 </div>
             </div>
         </div>
     </div>
 </form>
 
-<script type="text/javascript">
-    function searchOnSite(e, th) {
-        e.preventDefault();
-        var input = $("#fsea input[name=q]"),
-            maxlength = input.attr("maxlength"),
-            minlength = input.attr("data-minlength"),
-            q = strip_tags(trim(input.val()));
-        input.parent().removeClass("has-error");
-        "" == q || q.length < minlength || q.length > maxlength ? (input.parent().addClass("has-error"), input.val(q).focus()) : window.location.href = $(th).data("href") + rawurlencode(q);
-    }
-    $(document).ready(function() {
+<script>
+    $(function() {
         $("#from_date, #to_date").datepicker({
             dateFormat: "dd.mm.yy",
             changeMonth: true,

@@ -216,10 +216,10 @@ function nv_blocks_content($sitecontent)
                         $checkss = md5(NV_CHECK_SESSION . '_' . $_row['bid']);
                         $content = '<div class="portlet" id="bl_' . ($_row['bid']) . '">
                              <div class="tool">
-                                 <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="fa fa-wrench"></em></a>
-                                 <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="fa fa-trash"></em></a>
-                                 <a href="javascript:void(0)" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $lang_global['act_block'] . '" data-deact="' . $lang_global['deact_block'] . '"><em class="' . $act_icon . '" data-act="fa fa-check-square-o" data-deact="fa fa-square-o"></em></a>
-                                 <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="fa fa-share-square-o"></em></a>
+                                 <a href="#" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="fa fa-wrench"></em></a>
+                                 <a href="#" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="fa fa-trash"></em></a>
+                                 <a href="#" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $lang_global['act_block'] . '" data-deact="' . $lang_global['deact_block'] . '"><em class="' . $act_icon . '" data-act="fa fa-check-square-o" data-deact="fa fa-square-o"></em></a>
+                                 <a href="#" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="fa fa-share-square-o"></em></a>
                              </div>
                              <div class="blockct' . $act_class . '">' . $content . '</div>
                              </div>';
@@ -246,7 +246,7 @@ function nv_blocks_content($sitecontent)
                 ''
             ], $__pos);
             $_posReal[$__pos] = '<div class="column" data-id="' . $__pos_name . '" data-checkss="' . md5(NV_CHECK_SESSION . '_' . $__pos_name) . '">' . $_posReal[$__pos];
-            $_posReal[$__pos] .= '<a href="javascript:void(0);" class="add block_content" id="' . $__pos . '" title="' . $lang_global['add_block'] . ' ' . $__pos_name . '" alt="' . $lang_global['add_block'] . '"><em class="fa fa-plus"></em></a>';
+            $_posReal[$__pos] .= '<a href="#" class="add block_content" id="' . $__pos . '" title="' . $lang_global['add_block'] . ' ' . $__pos_name . '" alt="' . $lang_global['add_block'] . '"><em class="fa fa-plus"></em></a>';
             $_posReal[$__pos] .= '</div>';
         }
     }
@@ -772,6 +772,11 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         $return[] = [
             'ext' => 1,
             'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/global.js'
+        ];
+
+        $return[] = [
+            'ext' => 1,
+            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/site.js'
         ];
     }
 

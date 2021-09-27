@@ -86,7 +86,7 @@
                 <td>{ROW.email}</td>
                 <td>{ROW.regdate}</td>
                 <td class="text-center">
-                    <a title="" onclick="nv_active('{ROW.userid}');" href="javascript:void(0);">
+                    <a href="#" title="" data-toggle="nv_active" data-userid="{ROW.userid}">
                         <em class="fa fa-edit fa-lg">&nbsp;</em> {LANG.active}
                     </a>
                 </td>
@@ -96,11 +96,12 @@
     </table>
 </div>
 <script>
-    function nv_active(userid) {
+$(function() {
+    $('[data-toggle=nv_active][data-userid]').on('click', function() {
         $.ajax({
             type: "POST",
             url : "{FORM_ACTION}",
-            data: "act=1&userid=" + userid,
+            data: "act=1&userid=" + $(this).data('userid'),
             success: function(a) {
                 if (a == "OK") {
                     alert('{LANG.actived_users}');
@@ -109,10 +110,10 @@
                 } else {
                     alert('{LANG.not_active}');
                 }
-
             }
         });
-    }
+    })
+})
 </script>
 <!-- END: data -->
 <!-- BEGIN: nodata -->

@@ -334,13 +334,13 @@
 
 <!-- BEGIN: editgroup -->
 <h2 class="margin-bottom-lg margin-top-lg">{LANG.group_edit}</h2>
-<form action="{EDIT_GROUP_URL}" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+<form action="{EDIT_GROUP_URL}" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm" autocomplete="off" novalidate>
     <div class="nv-info" data-default="" style="display:none"></div>
     <div class="form-detail well-lg">
         <div class="form-group">
             <label for="group_title" class="control-label col-sm-7 col-md-6 text-normal">{LANG.group_title}</label>
             <div class="col-sm-17 col-md-18">
-                <input type="text" class="form-control required" placeholder="{LANG.group_title}" value="{DATA.title}" name="group_title" id="group_title" maxlength="240" onkeypress="validErrorHidden(this);" data-mess="">
+                <input type="text" class="form-control required" placeholder="{LANG.group_title}" value="{DATA.title}" name="group_title" id="group_title" maxlength="240" data-toggle="validErrorHidden" data-event="keypress" data-mess="">
             </div>
         </div>
 

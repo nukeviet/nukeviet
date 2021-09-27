@@ -25,7 +25,7 @@
 <!-- END: if_banner_plan -->
 <!-- BEGIN: login_check -->
 <div class="alert alert-info">
-    <a href="javascript:void(0);" onclick="loginForm('');">{LANG.login_to_check}.</a>
+    <a href="#" data-toggle="loginForm">{LANG.login_to_check}.</a>
 </div>
 <!-- END: login_check -->
 <!-- BEGIN: no_permission -->

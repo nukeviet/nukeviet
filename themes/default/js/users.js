@@ -12,12 +12,6 @@ function addpass() {
     return !1
 }
 
-function safe_deactivate_show(a, b) {
-    $(b).hide(0);
-    $(a).fadeIn();
-    return !1
-}
-
 function safekeySend(a) {
     $(".safekeySend", a).prop("disabled", !0);
     $.ajax({
@@ -38,9 +32,9 @@ function safekeySend(a) {
     return !1
 }
 
-function changeAvatar(a) {
+function changeAvatar(url) {
     if (nv_safemode) return !1;
-    nv_open_browse(a, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+    nv_open_browse(url, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
     return !1;
 }
 
@@ -212,12 +206,7 @@ function validReset(a) {
     formErrorHidden(a);
     $("input,button,select,textarea", a).prop("disabled", !1);
     $(a)[0].reset();
-    var b = $("[onclick*='change_captcha']", $(a));
-    if (b.length) {
-        b.click()
-    } else if ($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) {
-        change_captcha()
-    }
+    formChangeCaptcha(a);
 }
 
 function login_validForm(a) {
@@ -235,20 +224,17 @@ function login_validForm(a) {
         data: b.data,
         dataType: "json",
         success: function(d) {
-            var b = $("[onclick*='change_captcha']", a);
-            b && b.click();
+            formChangeCaptcha(a);
             if (d.status == "error") {
-                $("input,button", a).not("[type=submit]").prop("disabled", !1),
-                    $(".tooltip-current", a).removeClass("tooltip-current"),
-                    "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
-                        $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
-                        validErrorShow(this)
-                    }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                        $("[type=submit]", a).prop("disabled", !1);
-                        if ($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) {
-                            change_captcha()
-                        }
-                    }, 1E3)
+                $("input,button", a).not("[type=submit]").prop("disabled", !1);
+                $(".tooltip-current", a).removeClass("tooltip-current");
+                ("" != d.input && $("[name=\"" + d.input + "\"]:visible", a).length) ? $(a).find("[name=\"" + d.input + "\"]:visible").each(function() {
+                    $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
+                    validErrorShow(this)
+                }): $(".nv-info", a).html(d.mess).addClass("error").show();
+                setTimeout(function() {
+                    $("[type=submit]", a).prop("disabled", !1)
+                }, 1E3)
             } else if (d.status == "ok") {
                 $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
                     $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
@@ -291,15 +277,18 @@ function reg_validForm(a) {
         data: c.data,
         dataType: "json",
         success: function(b) {
-            var d = $("[onclick*='change_captcha']", a);
-            d && d.click();
-            "error" == b.status ? ($("input,button,select,textarea",
-                a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find('[name="' + b.input + '"]').each(function() {
-                $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-                validErrorShow(this)
-            }) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
-                scrollTop: $(".nv-info", a).offset().top
-            }, 800)), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(),
+            formChangeCaptcha(a);
+            if ("error" == b.status) {
+                $("input,button,select,textarea", a).prop("disabled", !1);
+                $(".tooltip-current", a).removeClass("tooltip-current");
+                ("" != b.input && $("[name=\"" + b.input + "\"]:visible", a).length) ? $(a).find('[name="' + b.input + '"]:visible').each(function() {
+                    $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+                    validErrorShow(this)
+                }): ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
+                    scrollTop: $(".nv-info", a).offset().top
+                }, 800))
+            } else {
+                $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
                 "ok" == b.input ? setTimeout(function() {
                     $(".nv-info", a).fadeOut();
                     $("input,button,select,textarea", a).prop("disabled", !1);
@@ -308,12 +297,14 @@ function reg_validForm(a) {
                     scrollTop: $(".nv-info", a).offset().top
                 }, 800), $(".form-detail", a).hide(), setTimeout(function() {
                     window.location.href = "" != b.input ? b.input : window.location.href
-                }, 6E3)))
+                }, 6E3))
+            }
         },
         error: function(b, d, f) {
             window.console.log ? console.log(b.status + ": " + f) : alert(b.status + ": " + f)
         }
     }));
+
     return !1
 }
 
@@ -354,22 +345,27 @@ function lostpass_validForm(a) {
                         }
                     } else {
                         if ("error" == b.status) {
-                            $(a).find("[name=\"" + b.input + "\"]").each(function() {
-                                $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
-                                validErrorShow(this);
-                            })
+                            if ($("[name=" + b.input + "]:visible", a).length) {
+                                $(a).find("[name=" + b.input + "]:visible").each(function() {
+                                    $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+                                    validErrorShow(this);
+                                })
+                            } else {
+                                alert(b.mess);
+                            }
                         }
                     }
                     if (b.step == 'step1') {
-                        if ($("[onclick*='change_captcha']", a).length) {
-                            $("[onclick*='change_captcha']", a).click()
-                        } else if ($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) {
-                            change_captcha();
-                            $("[name=gcaptcha_session]", a).val('');
-                        }
-                    } else {
-                        $('[data-toggle=recaptcha]', $(a)).length && $('[data-toggle=recaptcha]', $(a)).remove();
-                        $("[data-recaptcha3]", $(a).parent()).length && $(a).data('recaptcha3', null);
+                        formChangeCaptcha(a);
+                        $("[name=gcaptcha_session]", a).length && $("[name=gcaptcha_session]", a).val('');
+                    } else if ($('[data-toggle=recaptcha]', a).length) {
+                        $('[data-toggle=recaptcha]', a).remove()
+                    } else if ($('[data-captcha]', $(a).parent()).length) {
+                        $(a).data('captcha', null);
+                    } else if ($('[data-recaptcha2]', $(a).parent()).length) {
+                        $(a).data('recaptcha2', null);
+                    } else if ($('[data-recaptcha3]', $(a).parent()).length) {
+                        $(a).data('recaptcha3', null);
                     }
                 } else {
                     $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
@@ -405,7 +401,7 @@ function changemail_validForm(a) {
                 $(this).addClass("tooltip-current").attr("data-current-mess",
                     b.mess);
                 validErrorShow(this)
-            }), ($("[data-toggle=recaptcha]", $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && change_captcha()) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
+            })) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
                 window.location.href = "" != b.input ? b.input : window.location.href
             }, 6E3))
         }
@@ -449,220 +445,29 @@ function login2step_change(ele) {
     return false;
 }
 
-var UAV = {};
-// Default config, replace it with your own
-UAV.config = {
-    inputFile: 'image_file',
-    uploadIcon: 'upload_icon',
-    pattern: /^(image\/jpeg|image\/png)$/i,
-    maxsize: 2097152,
-    avatar_width: 80,
-    avatar_height: 80,
-    target: 'preview',
-    uploadInfo: 'uploadInfo',
-    uploadGuide: 'guide',
-    x: 'crop_x',
-    y: 'crop_y',
-    w: 'crop_width',
-    h: 'crop_height',
-    originalDimension: 'original-dimension',
-    displayDimension: 'display-dimension',
-    imageType: 'image-type',
-    imageSize: 'image-size',
-    btnSubmit: 'btn-submit',
-    btnReset: 'btn-reset',
-    uploadForm: 'upload-form'
-};
-// Default language, replace it with your own
-UAV.lang = {
-    bigsize: 'File too large',
-    smallsize: 'File too small',
-    filetype: 'Only accept jmage file tyle',
-    bigfile: 'File too big',
-    upload: 'Please upload and drag to crop'
-};
-UAV.data = {
-    error: false,
-    busy: false,
-    cropperApi: null
-};
-UAV.tool = {
-    bytes2Size: function(bytes) {
-        var sizes = ['Bytes', 'KB', 'MB'];
-        if (bytes == 0) return 'n/a';
-        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
-    },
-    update: function(e) {
-        $('#' + UAV.config.x).val(e.x);
-        $('#' + UAV.config.y).val(e.y);
-        $('#' + UAV.config.w).val(e.width);
-        $('#' + UAV.config.h).val(e.height);
-    },
-    clear: function() {
-        $('#' + UAV.config.x).val(0);
-        $('#' + UAV.config.y).val(0);
-        $('#' + UAV.config.w).val(0);
-        $('#' + UAV.config.h).val(0);
-    }
-};
-// Please use this package with fengyuanchen/cropper https://fengyuanchen.github.io/cropper
-UAV.common = {
-    read: function(file) {
-        $('#' + UAV.config.uploadIcon).hide();
-        var fRead = new FileReader();
-        fRead.onload = function(e) {
-            $('#' + UAV.config.target).show();
-            $('#' + UAV.config.target).attr('src', e.target.result);
-            $('#' + UAV.config.target).on('load', function() {
-                var img = document.getElementById(UAV.config.target);
-                var boxWidth = $('#' + UAV.config.target).innerWidth();
-                var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);
-                var minCropBoxWidth = UAV.config.avatar_width / (img.naturalWidth / boxWidth);
-                var minCropBoxHeight = UAV.config.avatar_height / (img.naturalHeight / boxHeight);
-                if (img.naturalWidth < UAV.config.avatar_width || img.naturalHeight < UAV.config.avatar_height) {
-                    UAV.common.error(UAV.lang.smallsize);
-                    UAV.data.error = true;
-                    return false;
-                }
-                if (!UAV.data.error) {
-                    // Hide and show data
-                    $('#' + UAV.config.uploadGuide).hide();
-                    $('#' + UAV.config.uploadInfo).show();
-                    $('#' + UAV.config.imageType).html(file.type);
-                    $('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
-                    $('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
+function changeTabTitle() {
+    var n = $("#funcList li.active a").text();
+    n += ' <span class="caret"></span>';
+    $("#myTabEl").html(n)
+}
 
-                    UAV.data.cropperApi = $('#' + UAV.config.target).cropper({
-                        viewMode: 3,
-                        dragMode: 'crop',
-                        aspectRatio: 1,
-                        responsive: true,
-                        modal: true,
-                        guides: false,
-                        highlight: true,
-                        autoCrop: false,
-                        autoCropArea: 0.1,
-                        movable: false,
-                        rotatable: false,
-                        scalable: false,
-                        zoomable: false,
-                        zoomOnTouch: false,
-                        zoomOnWheel: false,
-                        cropBoxMovable: true,
-                        cropBoxResizable: true,
-                        minCropBoxWidth: minCropBoxWidth,
-                        minCropBoxHeight: minCropBoxHeight,
-                        minContainerWidth: 10,
-                        minContainerHeight: 10,
-                        crop: function(e) {
-                            UAV.tool.update(e);
-                        },
-                        built: function() {
-                            var imageData = $(this).cropper('getImageData');
-                            var cropBoxScale = imageData.naturalWidth / imageData.width;
-                            imageData.width = parseInt(Math.floor(imageData.width));
-                            imageData.height = parseInt(Math.floor(imageData.height));
-                            var cropBoxSize = {
-                                width: 80 / cropBoxScale,
-                                height: 80 / cropBoxScale
-                            };
-                            cropBoxSize.left = (imageData.width - cropBoxSize.width) / 2;
-                            cropBoxSize.top = (imageData.height - cropBoxSize.height) / 2;
-                            $(this).cropper('crop');
-                            $(this).cropper('setCropBoxData', {
-                                left: cropBoxSize.left,
-                                top: cropBoxSize.top,
-                                width: cropBoxSize.width,
-                                height: cropBoxSize.height
-                            });
-                            $('#' + UAV.config.w).val(imageData.width);
-                            $('#' + UAV.config.h).val(imageData.height);
-                            $('#' + UAV.config.displayDimension).html(imageData.width + ' x ' + imageData.height);
-                        }
-                    });
-                } else {
-                    $('#' + UAV.config.uploadIcon).show();
-                }
-            });
-        };
-        fRead.readAsDataURL(file);
-    },
-    init: function() {
-        UAV.data.error = false;
-        if ($('#' + UAV.config.inputFile).val() == '') {
-            UAV.data.error = true;
-        }
-        var image = $('#' + UAV.config.inputFile)[0].files[0];
-        // Check ext
-        if (!UAV.config.pattern.test(image.type)) {
-            UAV.common.error(UAV.lang.filetype);
-            UAV.data.error = true;
-        }
-        // Check size
-        if (image.size > UAV.config.maxsize) {
-            UAV.common.error(UAV.lang.bigfile);
-            UAV.data.error = true;
-        }
-        if (!UAV.data.error) {
-            // Read image
-            UAV.common.read(image);
-        }
-    },
-    error: function(e) {
-        UAV.common.reset();
-        alert(e);
-    },
-    reset: function() {
-        if (UAV.data.cropperApi != null) {
-            UAV.data.cropperApi.cropper('destroy');
-            UAV.data.cropperApi = null;
-        }
-        UAV.data.error = false;
-        UAV.data.busy = false;
-        UAV.tool.clear();
-        $('#' + UAV.config.target).removeAttr('src').removeAttr('style').hide();
-        $('#' + UAV.config.uploadIcon).show();
-        $('#' + UAV.config.uploadInfo).hide();
-        $('#' + UAV.config.uploadGuide).show();
-        $('#' + UAV.config.imageType).html('');
-        $('#' + UAV.config.imageSize).html('');
-        $('#' + UAV.config.originalDimension).html('');
-        $('#' + UAV.config.w).val('');
-        $('#' + UAV.config.h).val('');
-        $('#' + UAV.config.displayDimension).html('');
-    },
-    submit: function() {
-        if (!UAV.data.busy) {
-            if ($('#' + UAV.config.w).val() == '' || $('#' + UAV.config.w).val() == '0') {
-                alert(UAV.lang.upload);
-                return false;
-            }
-            UAV.data.busy = true;
-            return true;
-        }
-        return false;
+function edit_group_submit(obj, old) {
+    var nw = [];
+    if ($('[name^=in_groups]:checked').length) {
+        $('[name^=in_groups]:checked').each(function(){
+            nw.push($(this).val());
+        })
     }
-};
-UAV.init = function() {
-    $('#' + UAV.config.uploadIcon).click(function() {
-        $('#' + UAV.config.inputFile).trigger('click');
-    });
-    $('#' + UAV.config.inputFile).change(function() {
-        UAV.common.init();
-    });
-    $('#' + UAV.config.btnReset).click(function() {
-        if (!UAV.data.busy) {
-            UAV.common.reset();
-            $('#' + UAV.config.uploadIcon).trigger('click');
-        }
-    });
-    $('#' + UAV.config.uploadForm).submit(function() {
-        return UAV.common.submit();
-    });
-};
 
-$(document).ready(function() {
+    nw = nw.join();
+    if (nw == old) {
+        return !1
+    }
+
+    reg_validForm(obj);
+}
+
+$(function() {
     // Delete user handler
     $('[data-toggle="admindeluser"]').click(function(e) {
         e.preventDefault();
@@ -682,4 +487,104 @@ $(document).ready(function() {
             });
         }
     });
+
+    $('body').on('submit', '[data-toggle=userLogin]', function(e) {
+        e.preventDefault();
+        login_validForm(this)
+    });
+
+    $('body').on('submit', '[data-toggle=reg_validForm]', function(e) {
+        e.preventDefault();
+        reg_validForm(this)
+    });
+
+    $('body').on('submit', '[data-toggle=lostPass]', function() {
+        return lostpass_validForm(this)
+    });
+
+    $('body').on('submit', '[data-toggle=changemail_validForm]', function() {
+        return changemail_validForm(this)
+    });
+
+    $('body').on('submit', '[data-toggle=edit_group_submit][data-old]', function(e) {
+        e.preventDefault();
+        return edit_group_submit(this, $(this).data('old'))
+    });
+
+    $('body').on('click', '[data-toggle=validReset]', function(e) {
+        e.preventDefault();
+        validReset($(this).parents('form'))
+    })
+
+    $('body').on('keypress', '[data-toggle=validErrorHidden][data-event=keypress]', function() {
+        $('[data-parents]', this) ? validErrorHidden(this, $(this).data('parents')) : validErrorHidden(this)
+    });
+
+    $('body').on('change', '[data-toggle=validErrorHidden][data-event=change]', function() {
+        $('[data-parents]', this) ? validErrorHidden(this, $(this).data('parents')) : validErrorHidden(this)
+    });
+
+    $('body').on('click', '[data-toggle=validErrorHidden][data-event=click]', function() {
+        $('[data-parents]', this) ? validErrorHidden(this, $(this).data('parents')) : validErrorHidden(this)
+    });
+
+    $('body').on('focus', '[data-focus=datepickerShow]', function() {
+        datepickerShow(this)
+    });
+
+    $('body').on('click', '[data-toggle=button_datepickerShow]', function() {
+        button_datepickerShow(this)
+    });
+
+    $('body').on('click', '[data-toggle=addQuestion]', function(e) {
+        e.preventDefault();
+        addQuestion(this)
+    });
+
+    $('body').on('click', '[data-toggle=usageTermsShow]', function(e) {
+        e.preventDefault();
+        usageTermsShow($(this).data('title'))
+    });
+
+    $('body').on('click', '[data-toggle=login2step_change]', function(e) {
+        e.preventDefault();
+        login2step_change(this)
+    });
+
+    $('body').on('click', '[data-toggle=changeAvatar][data-url]', function(e) {
+        e.preventDefault();
+        changeAvatar($(this).data('url'))
+    });
+
+    $('body').on('click', '[data-toggle=deleteAvatar][data-obj][data-ss]', function(e) {
+        e.preventDefault();
+        deleteAvatar($(this).data('obj'), $(this).data('ss'), this)
+    });
+
+    $('body').on('click', '[data-toggle=bt_logout]', function(e) {
+        e.preventDefault();
+        bt_logout(this)
+    });
+
+    $('body').on('click', '[data-toggle=addpass]', function(e) {
+        e.preventDefault();
+        addpass()
+    });
+
+    $('body').on('click', '[data-toggle=verkeySend]', function(e) {
+        e.preventDefault();
+        verkeySend($(this).parents('form'))
+    });
+
+    $('body').on('click', '[data-toggle=safekeySend]', function(e) {
+        e.preventDefault();
+        safekeySend($(this).parents('form'))
+    });
+
+    $('body').on('click', '[data-toggle=safe_deactivate_show][data-hide-obj][data-show-obj]', function(e) {
+        e.preventDefault();
+        $($(this).data('hide-obj')).hide(0);
+        $($(this).data('show-obj')).fadeIn()
+    });
+
 });

@@ -26,7 +26,7 @@
                 <div itemscope itemtype="https://schema.org/BreadcrumbList">
                     <div class="breadcrumbs clearfix">
                         <span class="home-icon" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{THEME_SITE_HREF}" itemprop="item" title="{LANG.Home}"><span itemprop="name"><em class="fa fa-home fa-lg"></em><span class="hidden">{LANG.Home}</span></span></a><i class="hidden" itemprop="position" content="1"></i></span>
-                        <a class="toggle" onclick="showSubBreadcrumbs(this,event);"><em class="fa fa-angle-right"></em></a>
+                        <a class="toggle" href="#" data-toggle="showSubBreadcrumbs"><em class="fa fa-angle-right"></em></a>
                         <ol class="breadcrumb"></ol>
                     </div>
                     <ol class="sub-breadcrumbs"></ol>

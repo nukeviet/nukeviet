@@ -7,10 +7,8 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var tip_active = !1,
-    ftip_active = !1,
-    tip_autoclose = !0,
-    ftip_autoclose = !0,
+var tip_active = false,
+    ftip_active = false,
     winX = 0,
     winY = 0,
     oldWinX = 0,
@@ -32,8 +30,7 @@ var tip_active = !1,
     breadcrumbs = $(".breadcrumbs"),
     subbreadcrumbs = $(".sub-breadcrumbs"),
     tempbreadcrumbs = $(".temp-breadcrumbs"),
-    isSafari = /^((?!chrome).)*safari/i.test(navigator.userAgent),
-    reCapIDs = [];
+    isSafari = /^((?!chrome).)*safari/i.test(navigator.userAgent);
 
 function winResize() {
     oldWinX = winX;
@@ -79,47 +76,16 @@ function contentScrt() {
     Math.abs(scrtRangeY) <= scrtRangeOffset || (scrt > oldScrt && scrt > headerH ? $("header.first-child").removeClass("header-down").addClass("header-up") : scrt + winY < docY && $("header.first-child").removeClass("header-up").addClass("header-down"), docY - (scrt + winY + (isSafari ? 44 : 0)) <= footerH || 0 >= scrt ? $("#footer").removeClass("footer-down").addClass("footer-up") : $("#footer").removeClass("footer-up").addClass("footer-down"), oldScrt = scrt)
 }
 
-function checkAll(a) {
-    $(".checkAll", a).is(":checked") ? $(".checkSingle", a).not(":disabled").each(function() {
-        $(this).prop("checked", !0)
-    }) : $(".checkSingle", a).not(":disabled").each(function() {
-        $(this).prop("checked", !1)
-    });
-    return !1
-}
-
-function checkSingle(a) {
-    var b = 0,
-        c = 0;
-    $(".checkSingle", a).each(function() {
-        $(this).is(":checked") ? b++ : c++
-    });
-    0 != b && 0 == c ? $(".checkAll", a).prop("checked", !0) : $(".checkAll", a).prop("checked", !1);
-    return !1
-}
-
 function tipHide() {
     $("[data-toggle=tip]").attr("data-click", "y").removeClass("active");
     $("#tip").hide();
-    tip_active = !1;
-    tipAutoClose(!0)
+    tip_active = false;
 }
 
 function ftipHide() {
     $("[data-toggle=ftip]").attr("data-click", "y").removeClass("active");
     $("#ftip").hide();
-    ftip_active = !1;
-    ftipAutoClose(!0)
-}
-
-function tipAutoClose(a) {
-    1 != a && (a = !1);
-    tip_autoclose = a
-}
-
-function ftipAutoClose(a) {
-    1 != a && (a = !1);
-    ftip_autoclose = a
+    ftip_active = false;
 }
 
 function tipShow(a, b, callback) {
@@ -128,23 +94,19 @@ function tipShow(a, b, callback) {
     ftip_active && ftipHide();
     $("[data-toggle=tip]").removeClass("active");
     $(a).attr("data-click", "n").addClass("active");
+    $("#tip").attr("data-content", b);
     if (typeof callback != "undefined") {
-        $("#tip").attr("data-content", b).show("fast", function() {
+        $("#tip").show("fast", function() {
             if (callback == "recaptchareset") {
-                if ($('[data-toggle=recaptcha]', this).length) {
-                    reCaptcha2Recreate(this);
-                    "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
-                    reCaptcha3ApiLoad()
-                }
+                loadCaptcha(this)
             } else if (typeof window[callback] === "function") {
                 window[callback]()
             }
         });
     } else {
-        $("#tip").attr("data-content", b).show("fast");
+        $("#tip").show("fast");
     }
-    tip_active = !0
+    tip_active = true
 }
 
 function ftipShow(a, b, callback) {
@@ -159,23 +121,19 @@ function ftipShow(a, b, callback) {
     ftip_active && ftipHide();
     $("[data-toggle=ftip]").removeClass("active");
     $(a).attr("data-click", "n").addClass("active");
+    $("#ftip").attr("data-content", b);
     if (typeof callback != "undefined") {
-        $("#ftip").attr("data-content", b).show("fast", function() {
+        $("#ftip").show("fast", function() {
             if (callback == "recaptchareset") {
-                if ($('[data-toggle=recaptcha]', this).length) {
-                    reCaptcha2Recreate(this);
-                    "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
-                    reCaptcha3ApiLoad()
-                }
+                loadCaptcha(this)
             } else if (typeof window[callback] === "function") {
                 window[callback]()
             }
         });
     } else {
-        $("#ftip").attr("data-content", b).show("fast");
+        $("#ftip").show("fast");
     }
-    ftip_active = !0
+    ftip_active = true
 }
 
 //Contact Button
@@ -196,9 +154,6 @@ function ctbtLoad(a) {
 }
 
 function openID_load(a) {
-    winHelp && winHelpHide();
-    tip_active && tipHide();
-    ftip_active && ftipHide();
     nv_open_browse($(a).attr("href"), "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
     return !1
 }
@@ -233,69 +188,6 @@ function switchTab(a) {
     for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 }
 
-//Form Ajax-login
-function loginForm() {
-    if (1 == nv_is_user) return !1;
-    $.ajax({
-        type: "POST",
-        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=login",
-        cache: !1,
-        data: "&nv_ajax=1",
-        dataType: "html"
-    }).done(function(a) {
-        modalShow("", a)
-    });
-    return !1
-}
-
-// ModalShow
-function modalShow(a, b, callback) {
-    "" != a && 'undefined' != typeof a && $("#sitemodal .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + a + '</h2></div>');
-    $("#sitemodal").find(".modal-title").html(a);
-    $("#sitemodal").find(".modal-body").html(b);
-    var scrollTop = false;
-    if (typeof callback != "undefined") {
-        if (callback == "recaptchareset") {
-            scrollTop = $(window).scrollTop();
-            $('#sitemodal').on('show.bs.modal', function() {
-                if ($('[data-toggle=recaptcha]', this).length) {
-                    reCaptcha2Recreate(this);
-                    "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", this).length && "undefined" == typeof grecaptcha) {
-                    reCaptcha3ApiLoad()
-                }
-            });
-        }
-    }
-    if (scrollTop) {
-        $("html,body").animate({
-            scrollTop: 0
-        }, 200, function() {
-            $("#sitemodal").modal({
-                backdrop: "static"
-            });
-        });
-        $('#sitemodal').on('hide.bs.modal', function() {
-            $("html,body").animate({
-                scrollTop: scrollTop
-            }, 200);
-        });
-    } else {
-        $("#sitemodal").modal({
-            backdrop: "static"
-        });
-    }
-    $('#sitemodal').on('hidden.bs.modal', function() {
-        $("#sitemodal .modal-content").find(".modal-header").remove();
-    });
-}
-
-function modalShowByObj(a, callback) {
-    var b = $(a).attr("title"),
-        c = $(a).html();
-    modalShow(b, c, callback)
-}
-
 function headerSearchSubmit(a) {
     if ("n" == $(a).attr("data-click")) return !1;
     $(a).attr("data-click", "n");
@@ -305,11 +197,6 @@ function headerSearchSubmit(a) {
         e = $(a).attr("data-minlength");
     b.parent().removeClass("has-error");
     "" == d || d.length < e || d.length > c ? (b.parent().addClass("has-error"), b.val(d).focus(), $(a).attr("data-click", "y")) : window.location.href = $(a).attr("data-url") + rawurlencode(d);
-    return !1
-}
-
-function headerSearchKeypress(a) {
-    13 != a.which || a.shiftKey || (a.preventDefault(), $("#tip .headerSearch button").trigger("click"));
     return !1
 }
 
@@ -338,164 +225,9 @@ function nvbreadcrumbs() {
         }), f > c && ($("#brcr_" + i, a).remove(), e = !0)), e ? (b.show(), subbreadcrumbs.append('<li><a href="' + d[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + d[i][0] + "</span></a></li>")) : b.hide()
 }
 
-function locationReplace(a) {
-    history.pushState && history.pushState(null, null, a)
-}
-
-// Hide Cookie Notice Popup
-function cookie_notice_hide() {
-    nv_setCookie(nv_cookie_prefix + '_cn', '1', 365);
-    $(".cookie-notice").hide()
-}
-
-// Change Captcha
-function change_captcha(a) {
-    if ($('[data-toggle=recaptcha]').length) {
-        "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-    } else if ($("[data-recaptcha3]").length && "undefined" == typeof grecaptcha) {
-        reCaptcha3ApiLoad()
-    }
-
-    if ($("img.captchaImg").length) {
-        $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
-        "undefined" != typeof a && "" != a && $(a).val("");
-    }
-    return !1
-}
-
-function isRecaptchaCheck() {
-    if (nv_recaptcha_sitekey == '') return 0;
-    return (nv_recaptcha_ver == 2 || nv_recaptcha_ver == 3) ? nv_recaptcha_ver : 0
-}
-
-function reCaptcha2Recreate(obj) {
-    $('[data-toggle=recaptcha]', $(obj)).each(function() {
-        var callFunc = $(this).data('callback'),
-            pnum = $(this).data('pnum'),
-            btnselector = $(this).data('btnselector'),
-            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
-        var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
-        if (callFunc) {
-            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-callback="' + callFunc + '" data-size="' + size + '"></div>');
-        } else {
-            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>')
-        }
-    })
-}
-
-var reCaptcha2OnLoad = function() {
-    $('[data-toggle=recaptcha]').each(function() {
-        var id = $(this).attr('id'),
-            callFunc = $(this).data('callback'),
-            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
-
-        if (typeof window[callFunc] === 'function') {
-            if (typeof reCapIDs[id] === "undefined") {
-                reCapIDs[id] = grecaptcha.render(id, {
-                    'sitekey': nv_recaptcha_sitekey,
-                    'type': nv_recaptcha_type,
-                    'size': size,
-                    'callback': callFunc
-                })
-            } else {
-                grecaptcha.reset(reCapIDs[id])
-            }
-        } else {
-            var pnum = parseInt($(this).data('pnum')),
-                btnselector = $(this).data('btnselector'),
-                btn = $('#' + id),
-                k = 1;
-
-            for (k; k <= pnum; k++) {
-                btn = btn.parent();
-            }
-            btn = $(btnselector, btn);
-            if (btn.length) {
-                btn.prop('disabled', true);
-            }
-
-            if (typeof reCapIDs[id] === "undefined") {
-                reCapIDs[id] = grecaptcha.render(id, {
-                    'sitekey': nv_recaptcha_sitekey,
-                    'type': nv_recaptcha_type,
-                    'size': size,
-                    'callback': function() {
-                        reCaptcha2Callback(id, false)
-                    },
-                    'expired-callback': function() {
-                        reCaptcha2Callback(id, true)
-                    },
-                    'error-callback': function() {
-                        reCaptcha2Callback(id, true)
-                    }
-                })
-            } else {
-                grecaptcha.reset(reCapIDs[id])
-            }
-        }
-    })
-}
-
-// reCaptcha v2 callback
-var reCaptcha2Callback = function(id, val) {
-    var btn = $('#' + id),
-        pnum = parseInt(btn.data('pnum')),
-        btnselector = btn.data('btnselector'),
-        k = 1;
-    for (k; k <= pnum; k++) {
-        btn = btn.parent();
-    }
-    btn = $(btnselector, btn);
-    if (btn.length) {
-        btn.prop('disabled', val);
-    }
-}
-
-// reCaptcha v2 load
-var reCaptcha2ApiLoad = function() {
-    if (isRecaptchaCheck() == 2) {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.src = "//www.google.com/recaptcha/api.js?hl=" + nv_lang_interface + "&onload=reCaptcha2OnLoad&render=explicit";
-        document.getElementsByTagName("head")[0].appendChild(a)
-    }
-}
-
-// reCaptcha v3: reCaptcha Execute
-var reCaptchaExecute = function(obj, callFunc) {
-    grecaptcha.execute(nv_recaptcha_sitekey, {
-        action: "formSubmit"
-    }).then(function(a) {
-        $("[name=g-recaptcha-response]", obj).length ? $("[name=g-recaptcha-response]", obj).val(a) : (a = $('<input type="hidden" name="g-recaptcha-response" value="' + a + '"/>'), $(obj).append(a));
-        if ("function" === typeof callFunc) {
-            callFunc()
-        } else if ('string' == typeof callFunc && "function" === typeof window[callFunc]) {
-            window[callFunc]()
-        }
-    })
-}
-
-// reCaptcha v3 API load
-var reCaptcha3ApiLoad = function() {
-    if (isRecaptchaCheck() == 3) {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.src = "//www.google.com/recaptcha/api.js?render=" + nv_recaptcha_sitekey;
-        document.getElementsByTagName("head")[0].appendChild(a)
-    }
-}
-
 // NukeViet Default Custom JS
 $(function() {
     winResize();
-    // Modify all empty link
-    $('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
-
-    // Add rel="noopener noreferrer nofollow" to all external links
-    $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({
-        target: "_blank",
-        rel: "noopener noreferrer nofollow"
-    });
 
     // Smooth scroll to top
     $(".bttop").click(function() {
@@ -508,17 +240,14 @@ $(function() {
         }
         return !1
     });
-    $(document).on("keydown", function(a) {
-        27 === a.keyCode && (tip_active && tip_autoclose && tipHide(), ftip_active && ftip_autoclose && ftipHide(), winHelp && winHelpHide())
-    });
-    $("#tip, #ftip, #winHelp .winHelp").bind("click touchstart", function(a) {
-        a.stopPropagation();
-    });
-    $(document).bind("click touchstart", function(e) {
-        tip_active && tip_autoclose && tipHide();
-        ftip_active && ftip_autoclose && ftipHide();
-        if (!$(e.target).is('.modal') && $(e.target).closest('.modal').length <= 0 && $(e.target).closest('[data-toggle=winHelp]').length <= 0) {
-            winHelp && winHelpHide();
+
+    $(document).on('click', function(event) {
+        if (tip_active && !($(event.target).closest("[data-toggle=tip]", this).length || $(event.target).closest("#tip", this).length || $(event.target).closest(".modal").length)) {
+            tipHide()
+        } else if (ftip_active && !($(event.target).closest("[data-toggle=ftip]", this).length || $(event.target).closest("#ftip", this).length || $(event.target).closest(".modal").length)) {
+            ftipHide()
+        } else if (winHelp && !($(event.target).closest("[data-toggle=winHelp]", this).length || $(event.target).closest(".winHelp", this).length || $(event.target).closest(".modal").length)) {
+            winHelpHide()
         }
     });
     $("[data-toggle=tip], [data-toggle=ftip]").click(function() {
@@ -536,6 +265,11 @@ $(function() {
         winHelpShow();
         return !1
     });
+
+    $('body').on('click', '[data-toggle=showSubBreadcrumbs]', function(e) {
+        showSubBreadcrumbs(this, e)
+    });
+
     //Search form
     $(".headerSearch button").on("click", function() {
         if ("n" == $(this).attr("data-click")) {
@@ -565,66 +299,31 @@ $(function() {
     }, 120);
     //FeedBack Button
     if ($('#contactButton').length) {
-        var script = $('<script type="text/javascript">').attr("src", nv_base_siteurl + "themes/mobile_default/js/contact.js");
+        var script = $('<script' + ("undefined" !== typeof site_nonce ? ' nonce="' + site_nonce + '"' : '') + '>').attr("src", nv_base_siteurl + "themes/mobile_default/js/contact.js");
         $("body").append(script)
     }
     // Change site lang
     $(".nv_change_site_lang").change(function() {
         document.location = $(this).val();
     });
-    // Google map
-    if ($('.company-address').length) {
-        $('.company-map-modal').on('shown.bs.modal', function() {
-            var iframe = $(this).find('iframe');
-            if (!iframe.data('loaded')) {
-                iframe.attr('src', iframe.data('src'));
-                iframe.data('loaded', true);
-            }
-        });
-    }
-    // maxLength for textarea
-    $("textarea").on("input propertychange", function() {
-        var a = $(this).prop("maxLength");
-        if (!a || "number" != typeof a) {
-            var a = $(this).attr("maxlength"),
-                b = $(this).val();
-            b.length > a && $(this).val(b.substr(0, a))
-        }
-    });
-    //Alerts
-    $("[data-dismiss=alert]").on("click", function() {
-        $(this).is(".close") && $(this).parent().remove()
-    });
+
     //OpenID
     $("#openidBt").on("click", function() {
         openID_result();
         return !1
     });
-    //Change Localtion
-    $("[data-location]").on("click", function() {
-        if (window.location.origin + $(this).data("location") != window.location.href) {
-            locationReplace($(this).data("location"))
-        }
-    });
-});
 
-// Fix bootstrap multiple modal
-$(document).on({
-    'show.bs.modal': function() {
-        var zIndex = 1040 + (10 * $('.modal:visible').length);
-        $(this).css('z-index', zIndex);
-        setTimeout(function() {
-            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-        }, 0);
-    },
-    'hidden.bs.modal': function() {
-        if ($('.modal:visible').length > 0) {
-            setTimeout(function() {
-                $(document.body).addClass('modal-open');
-            }, 0);
-        }
-    }
-}, '.modal');
+    //Đăng nhập bằng OpenID
+    $('body').on('click', '[data-toggle=openID_load]', function(e) {
+        e.preventDefault();
+        openID_load(this)
+    });
+
+    $('body').on('click', '[data-toggle=headerSearchSubmit]', function(e) {
+        e.preventDefault();
+        headerSearchSubmit(this)
+    })
+});
 
 $(window).on("resize", function() {
     winResize();
@@ -635,29 +334,4 @@ $(window).on("resize", function() {
 // Load Social script - lasest
 $(window).on('load', function() {
     nvbreadcrumbs();
-    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
-        var d = a.getElementsByTagName(b)[0];
-        var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
-        var fb_locale = ($('[property="og:locale"]').length > 0) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data == "vi") ? 'vi_VN' : 'en_US');
-        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
-    }(document, "script", "facebook-jssdk"));
-    0 < $(".twitter-share-button").length && function() {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.src = "//platform.twitter.com/widgets.js";
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
-    }();
-    0 < $(".zalo-share-button, .zalo-follow-only-button, .zalo-follow-button, .zalo-chat-widget").length && function() {
-        var a = document.createElement("script");
-        a.type = "text/javascript";
-        a.src = "//sp.zalo.me/plugins/sdk.js";
-        var b = document.getElementsByTagName("script")[0];
-        b.parentNode.insertBefore(a, b);
-    }();
-    if ($('[data-toggle=recaptcha]').length) {
-        reCaptcha2ApiLoad()
-    } else if ($("[data-recaptcha3]").length) {
-        reCaptcha3ApiLoad()
-    }
 });

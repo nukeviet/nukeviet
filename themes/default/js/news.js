@@ -7,24 +7,6 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-$(document).ready(function() {
-    // Xem file đính kèm
-    $('[data-toggle="collapsefile"]').each(function() {
-        $('#' + $(this).attr('id')).on('show.bs.collapse', function() {
-            if ('false' == $(this).attr('data-loaded')) {
-                $(this).attr('data-loaded', 'true')
-                $(this).find('iframe').attr('src', $(this).data('src'))
-            }
-        })
-    })
-
-    // Xem ảnh đính kèm
-    $('[data-toggle="newsattachimage"]').click(function(e) {
-        e.preventDefault();
-        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width: 100%; height: auto;"/></div>');
-    });
-});
-
 function sendrating(id, point, newscheckss) {
     if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
         $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
@@ -36,7 +18,7 @@ function sendrating(id, point, newscheckss) {
             if (typeof res[2] != 'undefined' && res[2] != '0') {
                 $('#click_rating').html(res[2]);
             }
-        });
+        })
     }
 }
 
@@ -71,7 +53,6 @@ function get_alias(op) {
             }
         });
     }
-    return false;
 }
 
 function fix_news_image() {
@@ -108,12 +89,7 @@ function newsSendMailModal(fm, url, sess) {
             data: 'checkss=' + sess,
             success: function(e) {
                 $('.modal-body', $(fm)).html(e);
-                if ($('[data-toggle=recaptcha]', $(fm)).length) {
-                    reCaptcha2Recreate($(fm));
-                    "undefined" != typeof grecaptcha ? reCaptcha2OnLoad() : reCaptcha2ApiLoad()
-                } else if ($("[data-recaptcha3]", $(fm)).length && "undefined" === typeof grecaptcha) {
-                    reCaptcha3ApiLoad()
-                }
+                loadCaptcha($(fm));
                 $(fm).attr('data-loaded', 'true');
                 $(fm).modal('show')
             }
@@ -123,8 +99,7 @@ function newsSendMailModal(fm, url, sess) {
     }
 }
 
-function newsSendMail(event, form) {
-    event.preventDefault();
+function newsSendMail(form) {
     var a = $("[name=friend_email]", form).val();
     a = trim(strip_tags(a));
     $("[name=friend_email]", form).val(a);
@@ -133,7 +108,7 @@ function newsSendMail(event, form) {
     a = trim(strip_tags(a));
     $("[name=your_name]", form).val(a);
     if ("" == a || !nv_uname_filter.test(a)) return alert($("[name=your_name]", form).data("error")), $("[name=your_name]", form).focus(), !1;
-    if ($("[name=nv_seccode]", form).length && (a = $("[name=nv_seccode]", form).val(), a.length != parseInt($("[name=nv_seccode]", form).attr("maxlength")) || !/^[a-z0-9]+$/i.test(a))) return alert($("[name=nv_seccode]", form).data("error")), $("[name=nv_seccode]", form).focus(), !1;
+    if ($("[name=nv_seccode]:visible", form).length && (a = $("[name=nv_seccode]", form).val(), a.length != parseInt($("[name=nv_seccode]", form).attr("maxlength")) || !/^[a-z0-9]+$/i.test(a))) return alert($("[name=nv_seccode]", form).data("error")), $("[name=nv_seccode]", form).focus(), !1;
     $("[name=your_message]", form).length && $("[name=your_message]", form).val(trim(strip_tags($("[name=your_message]", form).val())));
     a = $(form).serialize();
     $("input,button,textarea", form).prop("disabled", !0);
@@ -145,10 +120,8 @@ function newsSendMail(event, form) {
         dataType: "json",
         success: function(b) {
             $("input,button,textarea", form).prop("disabled", !1);
-            var c = $("[onclick*='change_captcha']", form);
-            c && c.click();
-            ($("[data-toggle=recaptcha]", form).length || $("[data-recaptcha3]", $(form).parent()).length) && change_captcha();
-            "error" == b.status ? (alert(b.mess), b.input && $("[name=" + b.input + "]", form).focus()) : (alert(b.mess), $("[name=friend_email]", form).val(''), $("[name=your_message]", form).length && $("[name=your_message]", form).val(''), $("[data-dismiss=modal]", form).click())
+            formChangeCaptcha(form);
+            "error" == b.status ? (alert(b.mess), b.input && $("[name=" + b.input + "]:visible", form).length && $("[name=" + b.input + "]", form).focus()) : (alert(b.mess), $("[name=friend_email]", form).val(''), $("[name=your_message]", form).length && $("[name=your_message]", form).val(''), $("[data-dismiss=modal]", form).click())
         }
     })
 }
@@ -159,4 +132,110 @@ $(window).on('load', function() {
 
 $(window).on("resize", function() {
     fix_news_image();
+});
+
+$(document).ready(function() {
+    // Xem file đính kèm
+    $('[data-toggle="collapsefile"]').each(function() {
+        $('#' + $(this).attr('id')).on('show.bs.collapse', function() {
+            if ('false' == $(this).attr('data-loaded')) {
+                $(this).attr('data-loaded', 'true')
+                $(this).find('iframe').attr('src', $(this).data('src'))
+            }
+        })
+    })
+
+    // Xem ảnh đính kèm
+    $('[data-toggle="newsattachimage"]').click(function(e) {
+        e.preventDefault();
+        modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width: 100%; height: auto;"/></div>');
+    });
+
+    // Get Alias
+    $('[data-toggle="get_alias"][data-op]').on('click', function(e) {
+        e.preventDefault();
+        get_alias($(this).data('op'));
+    });
+
+    // Send mail form submit
+    $('body').on('submit', '[data-toggle=newsSendMail]', function(e) {
+        e.preventDefault();
+        return newsSendMail(this)
+    });
+
+    $('body').on('click', '[data-toggle=newsSendMailModal][data-obj][data-url][data-ss]', function(e) {
+        e.preventDefault();
+        newsSendMailModal($(this).data('obj'), $(this).data('url'), $(this).data('ss'))
+    });
+
+    // News print
+    $('body').on('click', '[data-toggle="newsPrint"][data-url]', function(e) {
+        e.preventDefault();
+        nv_open_browse($(this).data('url'), 'newsPrint', 840, 500, 'resizable=yes,scrollbars=yes,toolbar=no,location=no,status=no')
+    });
+
+    // searchOnSite
+    $('body').on('click', '[data-toggle=searchOnSite]', function(e) {
+        e.preventDefault();
+        var input = $("#fsea input[name=q]"),
+            maxlength = input.attr("maxlength"),
+            minlength = input.attr("data-minlength"),
+            q = strip_tags(trim(input.val()));
+        input.parent().removeClass("has-error");
+        "" == q || q.length < minlength || q.length > maxlength ? (input.parent().addClass("has-error"), input.val(q).focus()) : window.location.href = $(this).data("href") + rawurlencode(q)
+    });
+
+    // Xóa tin
+    $('body').on('click', '[data-toggle=nv_del_content]', function(e) {
+        e.preventDefault();
+        nv_del_content($(this).data('id'), $(this).data('checkss'), $(this).data('adminurl'), $(this).data('detail'))
+    });
+
+    if ($('[data-toggle=rating]').length) {
+        var rat = $('[data-toggle=rating]'),
+            isDisabled = $('.rating', rat).is('.disabled'),
+            checkLoad = function(v) {
+                $('input[value=' + v + ']', rat).prop('checked', true)
+            },
+            sendrating = function(id, point, newscheckss) {
+                if (point >= 1 && point <= 5) {
+                    $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
+                        res = res.split('|');
+                        if (res[1] != '0' && res[2] != '0') {
+                            $('#stringrating').html(res[0]);
+                            $('#numberrating').text(res[1]);
+                            $('#click_rating').text(res[2]);
+                            checkLoad(Math.round(parseFloat(res[1])));
+                            $(".feedback", rat).text($(".feedback", rat).data('success'));
+                        } else {
+                            checkLoad(rat.data('checked'));
+                            $(".feedback", rat).text(res[0]);
+                        }
+
+                        $('.ratingInfo', rat).removeClass('hidden');
+                    })
+                }
+            };
+        $('label', rat).on("mouseenter", function() {
+            !isDisabled && $(".feedback", rat).text($(this).data('title'))
+        }).on("mouseleave", function() {
+            !isDisabled && $(".feedback", rat).text($(".feedback", rat).data('default'))
+        });
+        $('input', rat).on('click', function() {
+            if (!isDisabled) {
+                var point = $('input:checked', rat).val();
+                $('.rating', rat).addClass('disabled');
+                $('label', rat).off('mouseenter mouseleave click');
+                $(".feedback", rat).html('<span class="load-bar"></span>');
+                sendrating(rat.data('id'), point, rat.data('checkss'))
+            }
+        });
+
+        $('[type=radio]', rat).prop('checked', false);
+        if (!!rat.data('checked')) {
+            $('.ratingInfo', rat).removeClass('hidden');
+            checkLoad(rat.data('checked'))
+        }
+    }
+
 });

@@ -64,6 +64,7 @@ var nv_aryDayName = "Chủ nhật;Thứ Hai;Thứ Ba;Thứ Tư;Thứ Năm;Thứ 
     // Message before unload
     nv_msgbeforeunload = "Dữ liệu chưa được lưu. Bạn sẽ bị mất dữ liệu nếu thoát khỏi trang này. Bạn có đồng ý thoát không?",
     // ErrorMessage
+    verify_not_robot = "Xác minh bạn không phải là robot",
     NVJL = [];
 NVJL.errorRequest = "Đã có lỗi xảy ra trong quá trình truy vấn.";
 NVJL.errortimeout = "Thời gian chờ thực thi yêu cầu đã quá thời lượng cho phép.";

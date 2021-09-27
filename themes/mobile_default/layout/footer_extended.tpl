@@ -56,8 +56,8 @@
 <div id="headerSearch" class="hidden">
 <div class="headerSearch container-fluid margin-bottom">
     <div class="input-group">
-        <input type="text" onkeypress="headerSearchKeypress(event);" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}...">
-        <span class="input-group-btn"><button type="button" onclick="headerSearchSubmit(this);" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
+        <input type="text" data-toggle="enterToEvent" data-obj="#tip .headerSearch button" data-obj-event="click" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}...">
+        <span class="input-group-btn"><button type="button" data-toggle="headerSearchSubmit" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
     </div>
 </div>
 </div>

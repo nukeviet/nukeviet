@@ -167,8 +167,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         foreach ($array_rrs as $item) {
             if ($a <= $block_config['number']) {
                 $item['description'] = ($block_config['ishtml']) ? $item['description'] : strip_tags($item['description']);
-                $item['target'] = ($block_config['istarget']) ? " onclick=\"this.target='_blank'\" " : '';
-                $item['datatarget'] = ($block_config['istarget']) ? ' data-target="_blank"' : '';
+                $item['target'] = ($block_config['istarget']) ? ' data-target="_blank"' : '';
                 $item['class'] = ($a % 2 == 0) ? 'second' : '';
                 if ($title_length > 0) {
                     $item['text'] = nv_clean60($item['title'], $title_length);

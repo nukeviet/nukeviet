@@ -348,6 +348,71 @@ h3.newh3 {
     color: #02659d;
 }
 
+.rating {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 0 4px;
+    line-height: 1;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: #fff;
+    unicode-bidi: bidi-override;
+    direction: rtl
+}
+
+.rating input {
+    display: none
+}
+
+.rating label {
+    width: 18px;
+    height: 20px;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    text-align: center
+}
+
+.rating label::before {
+    font-family: FontAwesome;
+    content: "\f005";
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-decoration: none
+}
+
+.rating.disabled input,
+.rating.disabled label {
+    pointer-events: none
+}
+
+.rating:not(.disabled) input + label {
+    cursor: pointer
+}
+
+.rating:not(.disabled) input + label:hover,
+.rating:not(.disabled) input + label:hover ~ label {
+    color: #dc0312
+}
+
+.rating:not(.disabled) input:checked + label:hover,
+.rating:not(.disabled) input:checked + label:hover ~ label,
+.rating:not(.disabled) input:checked ~ label:hover,
+.rating:not(.disabled) input:checked ~ label:hover ~ label,
+label:hover ~ .rating:not(.disabled) input:checked ~ label {
+    color: #dc0312
+}
+
+.rating input:checked ~ label {
+    color: #02659d
+}
+
 /* Responsive news */
 
 @media (max-width: 499px) {
