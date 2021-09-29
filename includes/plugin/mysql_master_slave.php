@@ -1,5 +1,4 @@
 <?php
-
 /**
  * NukeViet Content Management System
  * @version 4.x
@@ -31,9 +30,15 @@ if (!defined('NV_MAINFILE')) {
  * $db_config['slave'][3]['dbuname'] = 'dbuname_slave';
  * $db_config['slave'][3]['dbpass'] = 'dbpass_slave';*
  */
-if (empty($db_config['slave'])) {
-    $db_slave = $db;
-} else {
+
+nv_add_hook($module_name, 'db_slave_connect', $priority, function ($vars) {
+    $db = $vars[0];
+    $db_config = $vars[1];
+
+    if (empty($db_config['slave'])) {
+        return $db;
+    }
+
     $i = rand(1, sizeof($db_config['slave']));
     $db_config_slave = $db_config['slave'][$i];
     $db_config_slave['dbname'] = $db_config['dbname'];
@@ -47,4 +52,6 @@ if (empty($db_config['slave'])) {
         trigger_error('Sorry! Could not connect to data server slave ' . $db_config_slave['dbhost']);
         $db_slave = $db;
     }
-}
+
+    return $db_slave;
+});

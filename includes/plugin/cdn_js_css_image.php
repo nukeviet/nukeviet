@@ -13,15 +13,19 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-// Gọi global bởi có trường hợp file footer.php include từ trong hàm
-global $global_config, $headers;
+nv_add_hook($module_name, 'change_site_buffer', $priority, function ($vars) {
+    $global_config = $vars[0];
+    $return = $vars[1];
 
-if (defined('NV_SYSTEM') and !empty($global_config['cdn_url'])) {
-    $contents = preg_replace("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!http(s?)\:\/\/)([^\>]*)\.(css|js|jpg|png|gif))['\"]([^\>]*)\>/i", '<\\1\\2\\3="//' . $global_config['cdn_url'] . '\\4?t=' . $global_config['timestamp'] . '"\\8>', $contents);
-} else {
-    $contents = preg_replace("/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", '<\\1\\2\\3="\\4?t=' . $global_config['timestamp'] . '"\\7>', $contents);
-}
+    if (!empty($global_config['cdn_url'])) {
+        $return[0] = preg_replace("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!http(s?)\:\/\/)([^\>]*)\.(css|js|jpg|png|gif))['\"]([^\>]*)\>/i", '<\\1\\2\\3="//' . $global_config['cdn_url'] . '\\4?t=' . $global_config['timestamp'] . '"\\8>', $return[0]);
+    } else {
+        $return[0] = preg_replace("/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", '<\\1\\2\\3="\\4?t=' . $global_config['timestamp'] . '"\\7>', $return[0]);
+    }
 
-if (!empty($headers['link'])) {
-    $headers['link'] = preg_replace("/\<((?!http(s?)\:\/\/).*?\.(js|css))\>/", '<\\1?t=' . $global_config['timestamp'] . '>', $headers['link']);
-}
+    if (!empty($return[1]['link'])) {
+        $return[1]['link'] = preg_replace("/\<((?!http(s?)\:\/\/).*?\.(js|css))\>/", '<\\1?t=' . $global_config['timestamp'] . '>', $return[1]['link']);
+    }
+
+    return $return;
+});

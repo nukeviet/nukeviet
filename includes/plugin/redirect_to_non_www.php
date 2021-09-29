@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-if (substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
-    nv_redirect_location('http' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . '://' . substr($_SERVER['HTTP_HOST'], 4) . $_SERVER['REQUEST_URI']);
-}
+nv_add_hook($module_name, 'check_server', $priority, function () {
+    if (substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
+        nv_redirect_location('http' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . '://' . substr($_SERVER['HTTP_HOST'], 4) . $_SERVER['REQUEST_URI']);
+    }
+});

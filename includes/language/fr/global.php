@@ -341,6 +341,8 @@ $lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés av
 $lang_global['cookie_notice'] = 'Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site web. Lorsque vous utilisez notre site, vous êtes informé que nous utilisons des cookies et que vous pouvez modifier cette utilisation à tout moment. <a href="%s">En savoir plus</a>.';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'De';
+$lang_global['close'] = 'Fermé';
+$lang_global['system'] = 'Système';
 $lang_global['limit_user_number'] = 'Votre site Web est réservé aux utilisateurs %s. Pour ajouter un utilisateur, veuillez contacter l\'administrateur système';
 $lang_global['limit_admin_number'] = 'Votre site Web est limité par l\'administrateur %s, pour ajouter un administrateur, veuillez contacter l\'administrateur système';
 $lang_global['2teplogin'] = 'Authentification à deux facteurs';

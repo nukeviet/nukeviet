@@ -23,7 +23,7 @@ define('NV_START_TIME', microtime(true));
 define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = [];
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = $nv_hooks = $nv_plugins = [];
 $page_title = $key_words = $page_url = $canonicalUrl = $prevPage = $nextPage = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -163,6 +163,21 @@ require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
+// Load các plugin
+foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
+    foreach ($pdatahook as $_parea => $pdata) {
+        foreach ($pdata as $priority => $_plugin) {
+            $module_name = $_phook;
+            $hook_module = $_plugin[1];
+            $pid = $_plugin[2];
+            require NV_ROOTDIR . '/' . $_plugin[0];
+        }
+    }
+}
+unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook, $pid);
+
+nv_apply_hook('', 'check_server');
+
 if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
 }
@@ -257,13 +272,6 @@ if (
 
 $global_config['ftp_user_pass'] = $crypt->decrypt($global_config['ftp_user_pass']);
 
-if (isset($nv_plugin_area[1])) {
-    // Kết nối với các plugin Trước khi kết nối CSDL
-    foreach ($nv_plugin_area[1] as $_fplugin) {
-        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
-    }
-}
-
 // Bat dau phien lam viec cua Database
 $db = $db_slave = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
@@ -273,6 +281,7 @@ if (empty($db->connect)) {
         trigger_error('Sorry! Could not connect to data server', 256);
     }
 }
+$db_slave = nv_apply_hook('', 'db_slave_connect', [$db, $db_config], $db);
 unset($db_config['dbpass']);
 $nv_Cache->SetDb($db);
 
@@ -411,6 +420,8 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
 }
 unset($nv_check_update);
 
+nv_apply_hook('', 'modify_global_config');
+
 $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
     $sys_mods = unserialize($cache);
@@ -464,10 +475,3 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
 }
 
 define('PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/');
-
-if (isset($nv_plugin_area[2])) {
-    // Kết nối với các plugin Trước khi gọi các module
-    foreach ($nv_plugin_area[2] as $_fplugin) {
-        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
-    }
-}

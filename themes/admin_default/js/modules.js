@@ -216,7 +216,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             cache: false,
-            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setup_module_check&nocache=' + new Date().getTime(),
             data: 'module=' + $this.data('title'),
             dataType: 'json',
             success: function(e) {
@@ -273,10 +273,15 @@ $(document).ready(function() {
         var $container = $('#modal-setup-module');
         var link = $this.prop('href');
 
-        $('#modal-setup-module').data('link', link);
+        $container.data('link', link);
+        $('.sample, .checkmodulehook, .messagehook', $container).addClass('hidden');
+        $('.submit', $container).removeClass('hidden');
+        $('.message', $container).text('');
+        $('#hookmodulechoose', $container).text('');
+
 
         if ($this.prev().is('.fa-spin') || link == '' || link == '#' || link.match(/javascript\:void/g)) {
-            return;
+            return!1;
         }
 
         $this.prev().addClass('fa-spin');
@@ -284,19 +289,51 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             cache: false,
-            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setup_module_check&nocache=' + new Date().getTime(),
             data: 'module=' + $this.data('title') + '&setup=1',
             dataType: 'json',
             success: function(e) {
                 $this.prev().removeClass('fa-spin');
 
                 if (e.status == 'success') {
-                    if (e.code == 0) {
+                    if (e.code == 0 && !e.ishook) {
                         window.location = link;
                         return;
                     }
 
-                    $container.find('.message').html(e.message.splice(1, 2).join('. ') + '.');
+                    if (e.code == 1) {
+                        $('.message', $container).html(e.message.splice(1, 2).join('. ') + '.');
+                        $('.sample', $container).removeClass('hidden');
+                    }
+
+                    if (e.ishook) {
+                        $('.checkmodulehook', $container).removeClass('hidden');
+                        if (e.hookerror != '') {
+                            $('.messagehook', $container).html(e.hookerror).removeClass('hidden');
+                            $('.submit', $container).addClass('hidden');
+                        }
+
+                        var hook_files = new Array();
+                        var hook_stt = 0;
+                        $.each(e.hookfiles, function(k, v) {
+                            hook_files.push(k);
+                            hook_stt++;
+                            var html = '<div class="row form-horizontal m-bottom">' +
+                                '<div class="col-sm-12"><label class="control-label" for="choose_hook_' + hook_stt + '">' + e.hookmgs[k] + '</label></div>' +
+                                '<div class="col-sm-12">' +
+                                '<select class="form-control hookmods">';
+                            $.each(v, function(k2, v2) {
+                                html += '<option value="' + v2.title + '">' + v2.custom_title + '</option>';
+                            });
+                            html += '</select></div></div>';
+                            if (v.length) {
+                                $('#hookmodulechoose', $container).append(html);
+                            }
+                        });
+
+                        $('[name="hook_files"]', $container).val(hook_files.join('|'));
+                    }
+
                     $container.modal('show');
                 }
             }
@@ -307,6 +344,18 @@ $(document).ready(function() {
     $('#modal-setup-module .submit').click(function() {
         var $this = $('#modal-setup-module');
         $this.modal('hide');
-        window.location = $this.data('link') + '&sample=' + $this.find('.option').val();
+        var link = $this.data('link');
+        if ($('.sample', $this).is(':visible')) {
+            link += '&sample=' + $this.find('.option').val();
+        }
+        if ($('.checkmodulehook', $this).is(':visible')) {
+            link += '&hook_files=' + encodeURIComponent($('[name="hook_files"]').val());
+            var hook_mods = new Array();
+            $('.hookmods', $this).each(function(k, v) {
+                hook_mods.push($(this).val());
+            });
+            link += '&hook_mods=' + hook_mods.join('|');
+        }
+        window.location = link;
     });
 });

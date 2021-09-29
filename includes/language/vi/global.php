@@ -355,6 +355,8 @@ $lang_global['cookie_notice'] = 'Chúng tôi đang sử dụng cookie để cung
 
 $lang_global['on'] = 'Bật';
 $lang_global['off'] = 'Tắt';
+$lang_global['close'] = 'Đóng';
+$lang_global['system'] = 'Hệ thống';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';

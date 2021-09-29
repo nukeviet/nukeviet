@@ -16,7 +16,7 @@ if ((!defined('NV_SYSTEM') and !defined('NV_ADMIN')) or !defined('NV_MAINFILE'))
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
 
 // Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
-global $db, $nv_Request, $nv_plugin_area, $headers, $lang_global, $nv_BotManager;
+global $db, $nv_Request, $headers, $lang_global, $nv_BotManager;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -31,12 +31,7 @@ if (!defined('NV_IS_AJAX')) {
     }
 }
 
-if (isset($nv_plugin_area[3])) {
-    // Kết nối với các plugin Trước khi website gửi nội dung tới trình duyệt
-    foreach ($nv_plugin_area[3] as $_fplugin) {
-        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
-    }
-}
+list($contents, $headers) = nv_apply_hook('', 'change_site_buffer', [$global_config, [$contents, $headers]], [$contents, $headers]);
 
 //Close the connection by setting the PDO object
 $db = null;

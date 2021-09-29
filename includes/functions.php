@@ -2247,7 +2247,7 @@ function nv_url_rewrite_callback($matches)
             unset($query_array[NV_OP_VARIABLE]);
         }
 
-        $rewrite_string = (defined('NV_IS_REWRITE_OBSOLUTE') ? NV_MY_DOMAIN : '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        $rewrite_string = nv_apply_hook('', 'get_rewrite_domain', [], '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
 
         if (!empty($query_array)) {
             $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
@@ -2847,4 +2847,91 @@ function nv_autoLinkDisable($text)
     $text = str_replace('&#x3A;', '<span>&#58;</span>', $text);
 
     return str_replace(['@', '.', ':'], ['<span>&#64;</span>', '<span>&#46;</span>', '<span>&#58;</span>'], $text);
+}
+
+/**
+ * @param string $module      => Module khởi chạy, để trống là hệ thống
+ * @param mixed  $tag         => Khóa
+ * @param mixed  $args        => Tham số truyền vào
+ * @param mixed  $default     => Dữ liệu mặc định trả về nếu hook không tồn tại
+ * @param mixed  $return_type => Để trống thì dữ liệu trả về là giá trị cuối cùng. 1: Gộp array_merge. 2: Gộp array_merge_recursive
+ * @return
+ */
+function nv_apply_hook($module, $tag, $args = [], $default = null, $return_type = 0)
+{
+    global $nv_hooks, $sys_mods;
+
+    // Kiểm tra module khởi chạy tồn tại
+    if ((!empty($module) and !isset($sys_mods[$module])) or !isset($nv_hooks[$module][$tag])) {
+        return $default;
+    }
+
+    $value = null;
+    foreach ($nv_hooks[$module][$tag] as $priority_funcs) {
+        foreach ($priority_funcs as $func) {
+            // Thông tin module khởi chạy nếu có
+            $from_data = [];
+            if (isset($sys_mods[$module])) {
+                $from_data['module_name'] = $module;
+                $from_data['module_info'] = $sys_mods[$module];
+            }
+
+            // Thông tin module nhận dữ liệu nếu có
+            $receive_data = [];
+            if (isset($sys_mods[$func['module']])) {
+                $receive_data['module_name'] = $func['module'];
+                $receive_data['module_info'] = $sys_mods[$func['module']];
+            }
+
+            // Đưa tham số ID trong CSDL vào các biến
+            $args['pid'] = $func['pid'];
+            $_value = call_user_func_array($func['callback'], [&$args, $from_data, $receive_data]);
+            if (!is_null($_value)) {
+                if (empty($return_type)) {
+                    $value = $_value;
+                } elseif (is_array($_value)) {
+                    if (is_null($value)) {
+                        $value = [];
+                    }
+                    $value = ($return_type == 1 ? array_merge($_value, $value) : array_merge_recursive($_value, $value));
+                }
+            }
+        }
+    }
+    if (is_null($value)) {
+        return $default;
+    }
+
+    return $value;
+}
+
+/**
+ * nv_add_hook()
+ *
+ * @param mixed  $module_name   => Module xảy ra event
+ * @param mixed  $tag           => TAG
+ * @param int    $priority      => Ưu tiên
+ * @param mixed  $callback      => Hàm chạy
+ * @param string $hook_module   => Module sử dụng dữ liệu
+ * @param int    $pid           => ID quản lý trong CSDL
+ */
+function nv_add_hook($module_name, $tag, $priority = 10, $callback, $hook_module = '', $pid = 0)
+{
+    global $nv_hooks;
+
+    if (!isset($nv_hooks[$module_name])) {
+        $nv_hooks[$module_name] = [];
+    }
+    if (!isset($nv_hooks[$module_name][$tag])) {
+        $nv_hooks[$module_name][$tag] = [];
+    }
+    if (!isset($nv_hooks[$module_name][$tag][$priority])) {
+        $nv_hooks[$module_name][$tag][$priority] = [];
+    }
+
+    $nv_hooks[$module_name][$tag][$priority][] = [
+        'callback' => $callback,
+        'module' => $hook_module,
+        'pid' => $pid
+    ];
 }

@@ -257,14 +257,18 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_file (
   KEY type (type)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_plugin (
-  pid tinyint(4) NOT NULL AUTO_INCREMENT,
-  plugin_file varchar(50) NOT NULL,
-  plugin_area tinyint(4) NOT NULL,
-  weight tinyint(4) NOT NULL,
-  PRIMARY KEY (pid),
-  UNIQUE KEY plugin_file (plugin_file)
-) ENGINE=MyISAM';
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_plugins (
+  pid MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+	plugin_lang VARCHAR(3) NOT NULL DEFAULT 'all',
+	plugin_file VARCHAR(50) NOT NULL,
+	plugin_area VARCHAR(50) NOT NULL DEFAULT '',
+	plugin_module_name VARCHAR(50) NOT NULL DEFAULT '',
+	plugin_module_file VARCHAR(50) NOT NULL DEFAULT '',
+	hook_module VARCHAR(50) NOT NULL DEFAULT '',
+	weight TINYINT(4) NOT NULL,
+	PRIMARY KEY (pid),
+	UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
+) ENGINE=MyISAM AUTO_INCREMENT=1001";
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_counter (
    c_type varchar(100) NOT NULL,

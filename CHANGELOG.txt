@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.6.00
+- System: Add Hook, event system (#2481)
 - System: Add nonce attribute management to CSP
 - Update Chart.js to v3.5.1
 - Module Statistics: Improve the Statistics module

@@ -18,13 +18,19 @@ if (!defined('NV_MAINFILE')) {
  Tất cả các tiện ích online của Google và một số mạng xã hội khác đều bị chặn, Vì vậy những site sử dụng NukeViet đều bị "đơ" khi xem từ IP của TQ.
  */
 
-if ($client_info['country'] == 'CN' and defined('NV_SYSTEM')) {
-    // Không dùng reCAPTCHA nếu truy cập từ trung quốc. Khi đó dùng: Cool php captcha
-    $global_config['recaptcha_sitekey'] = '';
-    $global_config['recaptcha_secretkey'] = '';
-    $global_config['recaptcha_ver'] = 0;
+nv_add_hook($module_name, 'modify_global_config', $priority, function () {
+    global $global_config, $client_info;
 
-    // Không load google Analytics khi truy cập từ trung quốc.
-    $global_config['googleAnalyticsID'] = '';
-    $global_config['googleAnalytics4ID'] = '';
-}
+    if ($client_info['country'] == 'CN' and defined('NV_SYSTEM')) {
+        $global_config['recaptcha_sitekey'] = '';
+        $global_config['recaptcha_secretkey'] = '';
+        $global_config['recaptcha_ver'] = 0;
+        $global_config['googleAnalyticsID'] = '';
+        $global_config['googleAnalytics4ID'] = '';
+        $global_config['searchEngineUniqueID'] = '';
+        $global_config['google_client_id'] = '';
+        $global_config['google_client_secret'] = '';
+        $global_config['facebook_client_id'] = '';
+        $global_config['facebook_client_secret'] = '';
+    }
+});

@@ -67,7 +67,7 @@ function nv_mailHTML($title, $content, $footer = '')
  */
 function nv_site_theme($contents, $full = true)
 {
-    global $home, $array_mod_title, $lang_global, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $nv_plugin_area;
+    global $home, $array_mod_title, $lang_global, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op;
 
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
@@ -83,13 +83,6 @@ function nv_site_theme($contents, $full = true)
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
     if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
-    }
-
-    if (isset($nv_plugin_area[4])) {
-        // Kết nối với các plugin sau khi xây dựng nội dung module
-        foreach ($nv_plugin_area[4] as $_fplugin) {
-            include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
-        }
     }
 
     $xtpl = new XTemplate($layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');

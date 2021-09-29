@@ -13,4 +13,6 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-define('NV_IS_REWRITE_OBSOLUTE', true);
+nv_add_hook($module_name, 'get_rewrite_domain', $priority, function () {
+    return NV_MY_DOMAIN;
+});

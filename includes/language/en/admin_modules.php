@@ -84,3 +84,6 @@ $lang_module['site_title'] = 'Value for site title';
 $lang_module['change_func_sitetitle'] = 'Rename site funtion "% s" of module "% s"';
 $lang_module['activate_sitemap'] = 'Activate the sitemap';
 $lang_module['module_groups_view_note'] = 'Super administration, general administration, module administrator are always allowed to view the module';
+$lang_module['error_no_hook_module'] = 'To install this module you need to install the following module or virtual module respectively: <strong>%s</strong>';
+$lang_module['select_hook_module'] = 'Choose hook module %s';
+$lang_module['select_hook_sys'] = 'Connect %s with';
