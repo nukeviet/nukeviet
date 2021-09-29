@@ -1809,6 +1809,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 function getPageUrl($page_url, $query_check, $abs_comp)
 {
     $url_rewrite = nv_url_rewrite($page_url, true);
+    str_starts_with($url_rewrite, NV_MY_DOMAIN) && $url_rewrite = substr($url_rewrite, strlen(NV_MY_DOMAIN));
     $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
     $url_rewrite_check = urldecode($url_rewrite_check);
     $url_rewrite_check = preg_replace_callback('/[^:\/@?&=#]+/usD', function ($matches) {
@@ -1864,8 +1865,12 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
 
     if ($home) {
         $page_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
+        str_starts_with($page_url, NV_MY_DOMAIN) && $page_url = substr($page_url, strlen(NV_MY_DOMAIN));
 
-        if ($_SERVER['REQUEST_URI'] != NV_BASE_SITEURL and $_SERVER['REQUEST_URI'] != $page_url) {
+        $request_uri = nv_url_rewrite($_SERVER['REQUEST_URI'], true);
+        str_starts_with($request_uri, NV_MY_DOMAIN) && $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
+
+        if ($request_uri != NV_BASE_SITEURL and $request_uri != $page_url) {
             nv_redirect_location($page_url);
         }
 
