@@ -339,6 +339,17 @@ $(function() {
         });
     });
 
+    // Google map
+    if ($('.company-address').length) {
+        $('.company-map-modal').on('shown.bs.modal', function() {
+            var iframe = $(this).find('iframe');
+            if (!iframe.data('loaded')) {
+                iframe.attr('src', iframe.data('src'));
+                iframe.data('loaded', true);
+            }
+        });
+    };
+
     // Bật hiệu ứng CSS3
     $('body').addClass('enable-animate');
 });
