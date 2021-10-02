@@ -30,7 +30,7 @@ function timeoutsesscancel() {
 function timeoutsessrun() {
     clearInterval(myTimerPage);
     var Timeout = 60;
-    document.getElementById('secField').innerHTML = Timeout;
+    $('#secField').text(Timeout);
     $("#timeoutsess").show();
     var msBegin = new Date().getTime();
     myTimersecField = setInterval(function() {
@@ -38,7 +38,7 @@ function timeoutsessrun() {
         var msCurrent = new Date().getTime();
         var ms = Timeout - Math.round((msCurrent - msBegin) / 1000);
         if (ms >= 0) {
-            document.getElementById('secField').innerHTML = ms;
+            $('#secField').text(ms);
         } else {
             clearInterval(myTimersecField);
             $("#timeoutsess").hide();

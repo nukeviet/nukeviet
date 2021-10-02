@@ -68,7 +68,7 @@ $admin_login_success = false;
 // Đăng xuất tài khoản login bước 1 để login lại
 if (!empty($admin_pre_data) and $nv_Request->isset_request('pre_logout', 'get') and $nv_Request->get_title('checkss', 'get') == NV_CHECK_SESSION) {
     $nv_Request->unset_request('admin_pre', 'session');
-    nv_redirect_location(NV_BASE_ADMINURL);
+    exit(0);
 }
 
 // Xác định các phương thức xác thực hai bước hệ thống sử dụng
@@ -205,25 +205,31 @@ if (!empty($admin_pre_data) and $nv_Request->isset_request('submit2scode', 'post
 
     if (!empty($nv_totppin)) {
         if (!$GoogleAuthenticator->verifyOpt($admin_pre_data['user_2s_secretkey'], $nv_totppin)) {
-            $error = $lang_global['2teplogin_error_opt'];
-        } else {
-            $step2_isvalid = true;
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => 'nv_totppin',
+                'mess' => $lang_global['2teplogin_error_opt']
+            ]);
         }
-    }
 
-    if (!empty($nv_backupcodepin)) {
+        $step2_isvalid = true;
+    } elseif (!empty($nv_backupcodepin)) {
         $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
         $sth = $db->prepare('SELECT code FROM ' . NV_USERS_GLOBALTABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $admin_pre_data['userid']);
         $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
         $sth->execute();
 
         if ($sth->rowCount() != 1) {
-            $error = $lang_global['2teplogin_error_backup'];
-        } else {
-            $code = $sth->fetchColumn();
-            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $admin_pre_data['userid']);
-            $step2_isvalid = true;
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => 'nv_backupcodepin',
+                'mess' => $lang_global['2teplogin_error_backup']
+            ]);
         }
+
+        $code = $sth->fetchColumn();
+        $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $admin_pre_data['userid']);
+        $step2_isvalid = true;
     }
 
     if ($step2_isvalid) {
@@ -250,132 +256,162 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     }
 
     if (empty($nv_username)) {
-        $error = $lang_global['username_empty'];
-    } elseif ($global_config['login_number_tracking'] and $blocker->is_blocklogin($nv_username)) {
-        $error = sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
-    } elseif (empty($nv_password)) {
-        $error = $lang_global['password_empty'];
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'nv_login',
+            'mess' => $lang_global['username_empty']
+        ]);
     }
+
+    if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($nv_username)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end))
+        ]);
+    }
+
+    if (empty($nv_password)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'nv_password',
+            'mess' => $lang_global['password_empty']
+        ]);
+    }
+
     // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
-    elseif ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $captcha_type)) {
-        $error = ($captcha_type == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+    if ($gfx_chk and isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $captcha_type)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => ($captcha_type == 'recaptcha') ? '' : 'nv_seccode',
+            'mess' => ($captcha_type == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+        ]);
+    }
+
+    // Đăng nhập khi kích hoạt diễn đàn
+    if (defined('NV_IS_USER_FORUM')) {
+        define('NV_IS_MOD_USER', true);
+        require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
+        if (empty($nv_username)) {
+            $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
+        }
+        if (empty($nv_password)) {
+            $nv_password = $nv_Request->get_title('nv_password', 'post', '');
+        }
+    }
+
+    // Kiểm tra đăng nhập bằng email hay username
+    $check_email = nv_check_valid_email($nv_username, true);
+    if ($check_email[0] == '') {
+        $nv_username = $check_email[1];
+        $sql = 't2.email =' . $db->quote($nv_username);
+        $login_email = true;
     } else {
-        // Đăng nhập khi kích hoạt diễn đàn
-        if (defined('NV_IS_USER_FORUM')) {
-            define('NV_IS_MOD_USER', true);
-            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
-            if (empty($nv_username)) {
-                $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
-            }
-            if (empty($nv_password)) {
-                $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-            }
-        }
+        $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
+        $login_email = false;
+    }
 
-        // Kiểm tra đăng nhập bằng email hay username
-        $check_email = nv_check_valid_email($nv_username, true);
-        if ($check_email[0] == '') {
-            $nv_username = $check_email[1];
-            $sql = 't2.email =' . $db->quote($nv_username);
-            $login_email = true;
-        } else {
-            $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
-            $login_email = false;
-        }
-
-        // Lấy thông tin đăng nhập
-        $sql = 'SELECT t1.admin_id admin_id, t1.lev admin_lev, t1.last_agent admin_last_agent, t1.last_ip admin_last_ip, t1.last_login admin_last_login,
+    // Lấy thông tin đăng nhập
+    $sql = 'SELECT t1.admin_id admin_id, t1.lev admin_lev, t1.last_agent admin_last_agent, t1.last_ip admin_last_ip, t1.last_login admin_last_login,
         t2.userid, t2.last_agent, t2.last_ip, t2.last_login, t2.last_openid, t2.username, t2.email, t2.password, t2.active2step, t2.in_groups, t2.secretkey
         FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1, ' . NV_USERS_GLOBALTABLE . ' t2
         WHERE t1.admin_id=t2.userid AND ' . $sql . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1';
 
-        $row = $db->query($sql)->fetch();
+    $row = $db->query($sql)->fetch();
 
-        if (empty($row) or !((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password']))) {
-            // Đăng nhập bước đầu thất bại
-            nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
-            $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
-            $error = $lang_global['loginincorrect'];
-        } else {
-            $row['admin_lev'] = (int) ($row['admin_lev']);
+    if (empty($row) or !((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password']))) {
+        // Đăng nhập bước đầu thất bại
+        nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
+        $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
 
-            // Kiểm tra quyền đăng nhập (do cấu hình hệ thống quy định)
-            if (!defined('ADMIN_LOGIN_MODE')) {
-                define('ADMIN_LOGIN_MODE', 3);
-            }
-            if (ADMIN_LOGIN_MODE == 2 and !in_array($row['admin_lev'], [
-                1,
-                2
-            ], true)) {
-                // Điều hành chung + Tối cao được đăng nhập
-                $error = $lang_global['admin_access_denied2'];
-            } elseif (ADMIN_LOGIN_MODE == 1 and $row['admin_lev'] != 1) {
-                // Tối cao được đăng nhập
-                $error = $lang_global['admin_access_denied1'];
-            }
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $lang_global['loginincorrect']
+        ]);
+    }
+
+    $row['admin_lev'] = (int) ($row['admin_lev']);
+
+    // Kiểm tra quyền đăng nhập (do cấu hình hệ thống quy định)
+    if (!defined('ADMIN_LOGIN_MODE')) {
+        define('ADMIN_LOGIN_MODE', 3);
+    }
+    if (ADMIN_LOGIN_MODE == 2 and !in_array($row['admin_lev'], [1, 2], true)) {
+        // Điều hành chung + Tối cao được đăng nhập
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $lang_global['admin_access_denied2']
+        ]);
+    }
+
+    if (ADMIN_LOGIN_MODE == 1 and $row['admin_lev'] != 1) {
+        // Tối cao được đăng nhập
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $lang_global['admin_access_denied1']
+        ]);
+    }
+
+    /*
+    * Đăng nhập bước đầu thành công, kiểm tra xem hệ thống có bắt xác thực hai bước hay không
+    * Nếu không thì xem như đã thành công.
+    * Nếu có lưu lại thông tin xác thực bước 1 và load lại trang để kiểm tra xử lý tiếp
+    */
+    // Kiểm tra cấu hình toàn hệ thống
+    $_2step_require = in_array((int) $global_config['two_step_verification'], [1, 3], true);
+    if (!$_2step_require) {
+        // Nếu toàn hệ thống không bắt buộc thì kiểm tra nhóm thành viên
+        $manual_groups = [
+            3
+        ];
+        if ($row['admin_lev'] == 1 or $row['admin_lev'] == 2) {
+            $manual_groups[] = 2;
         }
+        if ($row['admin_lev'] == 1 and $global_config['idsite'] == 0) {
+            $manual_groups[] = 1;
+        }
+        $_2step_require = nv_user_groups($row['in_groups'], true, $manual_groups);
+        $_2step_require = $_2step_require[1];
+    }
 
-        if (empty($error)) {
-            /*
-             * Đăng nhập bước đầu thành công, kiểm tra xem hệ thống có bắt xác thực hai bước hay không
-             * Nếu không thì xem như đã thành công.
-             * Nếu có lưu lại thông tin xác thực bước 1 và load lại trang để kiểm tra xử lý tiếp
-             */
-            // Kiểm tra cấu hình toàn hệ thống
-            $_2step_require = in_array((int) $global_config['two_step_verification'], [
-                1,
-                3
-            ], true);
-            if (!$_2step_require) {
-                // Nếu toàn hệ thống không bắt buộc thì kiểm tra nhóm thành viên
-                $manual_groups = [
-                    3
-                ];
-                if ($row['admin_lev'] == 1 or $row['admin_lev'] == 2) {
-                    $manual_groups[] = 2;
-                }
-                if ($row['admin_lev'] == 1 and $global_config['idsite'] == 0) {
-                    $manual_groups[] = 1;
-                }
-                $_2step_require = nv_user_groups($row['in_groups'], true, $manual_groups);
-                $_2step_require = $_2step_require[1];
-            }
+    if ($_2step_require or $row['active2step']) {
+        // Ghi nhận thông tin bước 1, lưu lại và chuyển đến bước 2
+        nv_insert_logs(NV_LANG_DATA, 'Pre login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0);
+        $admin_id = (int) ($row['admin_id']);
+        $checknum = md5(nv_genpass(10));
+        $array_admin = [
+            'admin_id' => $admin_id,
+            'checknum' => $checknum,
+            'current_agent' => NV_USER_AGENT,
+            'current_ip' => NV_CLIENT_IP,
+            'current_login' => NV_CURRENTTIME
+        ];
+        $admin_serialize = json_encode($array_admin);
 
-            if ($_2step_require or $row['active2step']) {
-                // Ghi nhận thông tin bước 1, lưu lại và chuyển đến bước 2
-                nv_insert_logs(NV_LANG_DATA, 'Pre login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0);
-                $admin_id = (int) ($row['admin_id']);
-                $checknum = md5(nv_genpass(10));
-                $array_admin = [
-                    'admin_id' => $admin_id,
-                    'checknum' => $checknum,
-                    'current_agent' => NV_USER_AGENT,
-                    'current_ip' => NV_CLIENT_IP,
-                    'current_login' => NV_CURRENTTIME
-                ];
-                $admin_serialize = json_encode($array_admin);
-
-                $sql = 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET
+        $sql = 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET
                     pre_check_num = :check_num,
                     pre_last_login = ' . NV_CURRENTTIME . ',
                     pre_last_ip = :last_ip,
                     pre_last_agent = :last_agent
                 WHERE admin_id=' . $admin_id;
-                $sth = $db->prepare($sql);
-                $sth->bindValue(':check_num', $checknum, PDO::PARAM_STR);
-                $sth->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
-                $sth->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
-                $sth->execute();
+        $sth = $db->prepare($sql);
+        $sth->bindValue(':check_num', $checknum, PDO::PARAM_STR);
+        $sth->bindValue(':last_ip', NV_CLIENT_IP, PDO::PARAM_STR);
+        $sth->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
+        $sth->execute();
 
-                $nv_Request->set_Session('admin_pre', $admin_serialize);
-                $blocker->reset_trackLogin($nv_username);
-
-                nv_redirect_location(NV_BASE_ADMINURL . 'index.php?rand=' . nv_genpass());
-            }
-
-            $admin_login_success = true;
-        }
+        $nv_Request->set_Session('admin_pre', $admin_serialize);
+        $blocker->reset_trackLogin($nv_username);
+        nv_jsonOutput([
+            'status' => '2step',
+            'input' => '',
+            'mess' => ''
+        ]);
     }
+    $admin_login_success = true;
 } else {
     if (empty($admin_login_redirect)) {
         $nv_Request->set_Session('admin_login_redirect', $nv_Request->request_uri);
@@ -421,14 +457,19 @@ if ($admin_login_success === true) {
     }
 
     define('NV_IS_ADMIN', true);
+    $nv_Request->unset_request('admin_login_redirect', 'session');
+    $nv_Request->unset_request('admin_pre', 'session');
 
-    $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-    if (!empty($admin_login_redirect) and str_starts_with($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification')) {
-        $redirect = $admin_login_redirect;
-        $nv_Request->unset_request('admin_login_redirect', 'session');
+    if ($nv_Request->isset_request('nv_login,nv_password', 'post') or $nv_Request->isset_request('submit2scode', 'post')) {
+        nv_jsonOutput([
+            'status' => 'success',
+            'input' => '',
+            'mess' => $lang_global['admin_loginsuccessfully'],
+            'redirect' => (!empty($admin_login_redirect) and str_starts_with($admin_login_redirect, NV_BASE_ADMINURL)) ? $admin_login_redirect : ''
+        ]);
     }
 
-    $nv_Request->unset_request('admin_pre', 'session');
+    $redirect = (!empty($admin_login_redirect) and str_starts_with($admin_login_redirect, NV_BASE_ADMINURL)) ? $admin_login_redirect : NV_BASE_SITEURL . NV_ADMINDIR;
     nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['admin_loginsuccessfully'] . " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . '" />');
     exit();
 }
@@ -447,44 +488,19 @@ $xtpl->assign('CHARSET', $global_config['site_charset']);
 $xtpl->assign('SITE_NAME', $global_config['site_name']);
 $xtpl->assign('ADMIN_THEME', $global_config['admin_theme']);
 $xtpl->assign('SITELANG', NV_LANG_INTERFACE);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
 $xtpl->assign('CHECK_SC', $gfx_chk ? 1 : 0);
 $xtpl->assign('SITEURL', $global_config['site_url']);
 $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
-$xtpl->assign('NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS);
 $xtpl->assign('LOGIN_ERROR_SECURITY', addslashes(sprintf($lang_global['login_error_security'], NV_GFX_NUM)));
 $xtpl->assign('LANGINTERFACE', $lang_global['langinterface']);
-
-// Logo của site
-if (!empty($global_config['site_logo'])) {
-    $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
-    $xtpl->parse('main.logo');
-}
+$xtpl->assign('ADMIN_LOGIN_TITLE', empty($admin_pre_data) ? $lang_global['adminlogin'] : $lang_global['2teplogin']);
 
 if (empty($admin_pre_data)) {
     // Form đăng nhập bằng tài khoản (bước 1)
-    $xtpl->assign('ADMIN_LOGIN_TITLE', $lang_global['adminlogin']);
     $xtpl->assign('LANGLOSTPASS', $lang_global['lostpass']);
     $xtpl->assign('LINKLOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass');
     $xtpl->assign('V_LOGIN', $nv_username);
     $xtpl->assign('V_PASSWORD', $nv_password);
-
-    // Đa ngôn ngữ giao diện admin
-    if ($global_config['lang_multi'] == 1) {
-        $_language_array = nv_scandir(NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/');
-        foreach ($_language_array as $lang_i) {
-            if (file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php') and file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/admin_global.php')) {
-                $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i);
-                $xtpl->assign('LANGTITLE', $lang_global['langinterface']);
-                $xtpl->assign('SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : '');
-                $xtpl->assign('LANGVALUE', $language_array[$lang_i]['name']);
-                $xtpl->parse('main.pre_form.lang_multi.option');
-            }
-        }
-        $xtpl->parse('main.pre_form.lang_multi');
-    }
 
     // Kích hoạt mã xác nhận
     if ($gfx_chk) {
@@ -494,11 +510,11 @@ if (empty($admin_pre_data)) {
             $xtpl->assign('RECAPTCHA_TYPE', $global_config['recaptcha_type']);
 
             if ($global_config['recaptcha_ver'] == 2) {
-                $xtpl->parse('main.pre_form.recaptcha.recaptcha2');
+                $xtpl->parse('pre_form.recaptcha.recaptcha2');
             } elseif ($global_config['recaptcha_ver'] == 3) {
-                $xtpl->parse('main.pre_form.recaptcha.recaptcha3');
+                $xtpl->parse('pre_form.recaptcha.recaptcha3');
             }
-            $xtpl->parse('main.pre_form.recaptcha');
+            $xtpl->parse('pre_form.recaptcha');
         } elseif ($captcha_type == 'captcha') {
             $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
             $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
@@ -506,15 +522,15 @@ if (empty($admin_pre_data)) {
             $xtpl->assign('GFX_NUM', NV_GFX_NUM);
             $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->parse('main.pre_form.captcha');
+            $xtpl->parse('pre_form.captcha');
         }
     }
 
-    $xtpl->parse('main.pre_form');
+    $xtpl->parse('pre_form');
+    $login_content = $xtpl->text('pre_form');
 } else {
     // Form xác thực hai bước
     $xtpl->assign('ADMIN_PRE_LOGOUT', NV_BASE_ADMINURL . 'index.php?pre_logout=1&amp;checkss=' . NV_CHECK_SESSION);
-    $xtpl->assign('ADMIN_LOGIN_TITLE', $lang_global['2teplogin']);
     $xtpl->assign('ADMIN_2STEP_HELLO', sprintf($lang_global['admin_hello_2step'], $admin_pre_data['full_name']));
 
     if (empty($cfg_2step['opts'])) {
@@ -532,12 +548,12 @@ if (empty($admin_pre_data)) {
                     'link' => NV_BASE_ADMINURL . 'index.php?auth=' . $opt
                 ]);
                 if ($opt != 'code') {
-                    $xtpl->parse('main.2step_form.must_activate.loop.popup');
+                    $xtpl->parse('2step_form.must_activate.loop.popup');
                 }
-                $xtpl->parse('main.2step_form.must_activate.loop');
+                $xtpl->parse('2step_form.must_activate.loop');
             }
         }
-        $xtpl->parse('main.2step_form.must_activate');
+        $xtpl->parse('2step_form.must_activate');
     } else {
         // Xuất các phương thức để xác thực
         $html = [];
@@ -565,12 +581,34 @@ if (empty($admin_pre_data)) {
         unset($html[$key_default]);
         if (!empty($html)) {
             $xtpl->assign('HTML_OTHER', implode(PHP_EOL, $html));
-            $xtpl->parse('main.2step_form.choose_method.others');
+            $xtpl->parse('2step_form.choose_method.others');
         }
-        $xtpl->parse('main.2step_form.choose_method');
+        $xtpl->parse('2step_form.choose_method');
     }
 
-    $xtpl->parse('main.2step_form');
+    $xtpl->parse('2step_form');
+    $login_content = $xtpl->text('2step_form');
+}
+
+// Logo của site
+if (!empty($global_config['site_logo'])) {
+    $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
+    $xtpl->parse('main.logo');
+}
+
+// Đa ngôn ngữ giao diện admin
+if ($global_config['lang_multi'] == 1) {
+    $_language_array = nv_scandir(NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/');
+    foreach ($_language_array as $lang_i) {
+        if (file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php') and file_exists(NV_ROOTDIR . '/includes/language/' . $lang_i . '/admin_global.php')) {
+            $xtpl->assign('LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i);
+            $xtpl->assign('LANGTITLE', $lang_global['langinterface']);
+            $xtpl->assign('SELECTED', ($lang_i == NV_LANG_INTERFACE) ? "selected='selected'" : '');
+            $xtpl->assign('LANGVALUE', $language_array[$lang_i]['name']);
+            $xtpl->parse('main.lang_multi.option');
+        }
+    }
+    $xtpl->parse('main.lang_multi');
 }
 
 if (!empty($error)) {
@@ -581,7 +619,9 @@ if (!empty($error)) {
 }
 
 $xtpl->parse('main');
+$contents = $xtpl->text('main');
+$contents = str_replace('[-CONTENT-]', $login_content, $contents);
 
 include NV_ROOTDIR . '/includes/header.php';
-$xtpl->out('main');
+echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';

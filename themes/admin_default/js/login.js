@@ -7,115 +7,168 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-var seccodecheck = /^([a-zA-Z0-9])+$/;
-
-if ("undefined" == typeof jsi) {
-    var jsi = [];
-}
-jsi[0] || (jsi[0] = "vi");
-jsi[1] || (jsi[1] = "./");
-jsi[2] || (jsi[2] = 0);
-jsi[3] || (jsi[3] = 6);
-var strHref = window.location.href;
-if (-1 < strHref.indexOf("?")) {
-    var strHref_split = strHref.split("?"),
-        script_name = strHref_split[0],
-        query_string = strHref_split[1];
-} else {
-    script_name = strHref, query_string = "";
-}
-
-function nv_checkadminlogin_seccode(a) {
-    return a.value.length == jsi[3] && seccodecheck.test(a.value) ? !0 : !1
-}
-
-function nv_randomPassword(a) {
-    for (var b = "", c = 0; c < a; c++) {
-        b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(62 * Math.random()));
-    }
-    return b;
-}
-
-function nv_checkadminlogin_submit() {
-    if (1 == jsi[2]) {
-        var a = document.getElementById("seccode");
-        if (!nv_checkadminlogin_seccode(a)) {
-            return alert(login_error_security), a.focus(), !1
-        }
-    }
-    var a = document.getElementById("login"),
-        b = document.getElementById("password");
-    return "" == a.value ? (a.focus(), !1) : "" == b.value ? (b.focus(), !1) : !0
-}
-
-function nv_change_captcha() {
-    var a = document.getElementById("vimg");
-    nocache = nv_randomPassword(10);
-    a.src = jsi[1] + "index.php?scaptcha=captcha&nocache=" + nocache;
-    document.getElementById("seccode").value = "";
-    return !1
-};
-
-function login2step_change(ele) {
-    var ele = $(ele),
-        form = ele,
-        i = 0;
-    while (!form.is('form')) {
-        if (i++ > 100) {
-            break;
-        }
-        form = form.parent();
-    }
-    if (form.is('form')) {
-        $('.loginStep2 input[type="text"]', form).val('');
-        $('.loginStep2 > div.stepipt', form).toggleClass('hidden');
-    }
-    return false;
+if ("undefined" == typeof base_siteurl) {
+    var base_siteurl = "./";
 }
 
 $(document).ready(function() {
-    // Submit form
-    $('#admin-login-form').submit(function(e) {
-        var validForm = true;
+    $('body').on('change', '[data-toggle=changeLang]', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url: $(this).val(),
+            cache: false
+        }).done(function() {
+            location.reload()
+        })
+    });
 
-        if ($('.loginStep1', $(this)).is(':visible')) {
-            // Kiểm tra form đăng nhập bước 1
-            var uname = $('#nv_login');
-            var upass = $('#nv_password');
-            var seccode = $('#seccode');
+    $('body').on('click', '[data-toggle=preLogout]', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url: $(this).data('href'),
+            cache: false
+        }).done(function() {
+            location.reload()
+        })
+    });
 
-            if (uname.val() == '') {
-                uname.focus();
-                validForm = false;
-            } else if (upass.val() == '') {
-                upass.focus();
-                validForm = false;
-            } else if (seccode.length && seccode.val() == '') {
-                seccode.focus();
-                validForm = false;
-            }
+    $('body').on('click', '[data-toggle=login2step_change]', function(e) {
+        e.preventDefault();
+        $('input[type="text"]', $(this).parents('form')).val('');
+        $('div.stepipt', $(this).parents('form')).toggleClass('hidden')
+    });
+
+    $('body').on('click', '[data-toggle=nv_change_captcha]', function(e) {
+        e.preventDefault();
+        $('#vimg').attr('src', base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+        $('#seccode').val('')
+    });
+
+    $('[data-toggle=preForm] [type=submit]').on('click', function(e) {
+        e.preventDefault();
+        if (!$('#reCaptcha').length && $("[name=g-recaptcha-response]").length && typeof grecaptcha !== "undefined") {
+            grecaptcha.ready(function() {
+                grecaptcha.execute(sitekey, {
+                    action: 'loginSubmit'
+                }).then(function(token) {
+                    $("[name=g-recaptcha-response]").val(token);
+                    $('[data-toggle=preForm]').submit()
+                })
+            })
         } else {
-            // Kiểm tra form xác thực 2 bước
-            var otp = $('#nv_totppin');
-            var backupcode = $('#nv_backupcodepin');
-
-            if (otp.is(':visible') && otp.val() == '') {
-                otp.focus();
-                validForm = false;
-            } else if (backupcode.is(':visible') && backupcode.val() == '') {
-                backupcode.focus();
-                validForm = false;
-            }
-        }
-        if (!validForm) {
-            e.preventDefault();
+            $('[data-toggle=preForm]').submit()
         }
     });
 
-    // Loaded
-    if ($('#nv_login').length) {
-        $('#nv_login').focus();
-    }
+    // Submit form
+    $('body').on('submit', '[data-toggle=preForm]', function(e) {
+        e.preventDefault();
+        // Kiểm tra form đăng nhập bước 1
+        var uname = $('[name=nv_login]', this),
+            upass = $('[name=nv_password]', this),
+            seccode = $('[name=nv_seccode]', this);
+
+        if (uname.val() == '') {
+            $('.inner-message', form).text(uname.data('error-mess')).removeClass('normal success').addClass('error');
+            uname.focus();
+            return !1
+        }
+        if (upass.val() == '') {
+            $('.inner-message', form).text(upass.data('error-mess')).removeClass('normal success').addClass('error');
+            upass.focus();
+            return !1
+        }
+        if (seccode.length && seccode.val() == '') {
+            $('.inner-message', form).text(seccode.data('error-mess')).removeClass('normal success').addClass('error');
+            seccode.focus();
+            return !1
+        }
+
+        var form = $(this),
+            data = form.serialize();
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: $(this).attr('action'),
+            data: data,
+            dataType: 'json',
+            success: function(e) {
+                if (e.status == 'success') {
+                    $('.form-detail', form).hide();
+                    $('.inner-message', form).text(e.mess).removeClass('normal error').addClass('success');
+                    setTimeout(function() {
+                        window.location.href = e.redirect != '' ? e.redirect : window.location.href
+                    }, 3E3)
+                } else if (e.status == '2step') {
+                    location.reload()
+                } else {
+                    if (typeof reCaptcha2 !== "undefined" && typeof grecaptcha !== "undefined") {
+                        grecaptcha.reset(reCaptcha2);
+                        $('[type=submit]').prop('disabled', true)
+                    } else if ($("[data-toggle=nv_change_captcha]", form).length) {
+                        $("[data-toggle=nv_change_captcha]", form).trigger('click')
+                    }
+                    $('.inner-message', form).text(e.mess).removeClass('normal success').addClass('error');
+                    if (e.input != '') {
+                        $('[name=' + e.input + ']', form).focus()
+                    }
+                }
+            }
+        })
+    });
+
+    $('body').on('submit', '[data-toggle=step2Form]', function(e) {
+        e.preventDefault();
+        // Kiểm tra form xác thực 2 bước
+        var otp = $('#nv_totppin'),
+            backupcode = $('#nv_backupcodepin');
+
+        if (otp.is(':visible') && otp.val() == '') {
+            $('.inner-message', form).text(otp.data('error-mess')).removeClass('normal success').addClass('error');
+            otp.focus();
+            return !1
+        }
+        if (backupcode.is(':visible') && backupcode.val() == '') {
+            $('.inner-message', form).text(backupcode.data('error-mess')).removeClass('normal success').addClass('error');
+            backupcode.focus();
+            return !1
+        }
+
+        var form = $(this),
+            data = form.serialize();
+        $('input,button', form).prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: $(this).attr('action'),
+            data: data,
+            dataType: 'json',
+            success: function(e) {
+                if (e.status == 'success') {
+                    $('.form-detail', form).hide();
+                    $('.inner-message', form).text(e.mess).removeClass('normal error').addClass('success');
+                    setTimeout(function() {
+                        window.location.href = e.redirect != '' ? e.redirect : window.location.href
+                    }, 3E3)
+                } else {
+                    $('input,button', form).prop('disabled', false);
+                    $('.inner-message', form).text(e.mess).removeClass('normal success').addClass('error');
+                    if (e.input != '') {
+                        $('[name=' + e.input + ']', form).focus()
+                    }
+                }
+            }
+        })
+    });
+
+    $('.wrapper').fadeIn(400, function() {
+        // Loaded
+        if ($('#nv_login').length) {
+            $('#nv_login').focus();
+        }
+    });
 
     // Mở popup (chưa sử dụng nhưng để đây phòng về sau)
     $('[data-toggle="popup-oauth"]').on('click', function(e) {
