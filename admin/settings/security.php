@@ -366,17 +366,47 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
 }
 
 // Xử lý thiết lập CSP
+$csp_directives = [
+    'default-src' =>     ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => ''],
+    'script-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => '*.google.com *.google-analytics.com *.googletagmanager.com *.gstatic.com *.facebook.com *.facebook.net *.twitter.com *.zalo.me *.zaloapp.com *.tawk.to'],
+    'style-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'unsafe-inline' => 1, 'hosts' => '*.google.com *.googleapis.com *.tawk.to'],
+    'img-src' =>         ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => '*.twitter.com *.google.com *.googleapis.com *.gstatic.com *.facebook.com tawk.link *.tawk.to static.nukeviet.vn'],
+    'font-src' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => '*.googleapis.com *.gstatic.com *.tawk.to'],
+    'connect-src' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.zalo.me *.tawk.to wss://*.tawk.to'],
+    'media-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.tawk.to'],
+    'object-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
+    'prefetch-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
+    'frame-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.google.com *.youtube.com *.facebook.com *.facebook.net *.twitter.com *.zalo.me'],
+    'frame-ancestors' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
+    'form-action' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.google.com'],
+    'base-uri' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
+    'manifest-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '']
+];
+
 if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
-    $directives = $nv_Request->get_typed_array('directives', 'post', 'textarea');
-    $array_config_csp = [];
-    $array_config_csp['nv_csp'] = '';
-    foreach ($directives as $key => $directive) {
-        $directive = trim(strip_tags($directive));
-        if (!empty($directive)) {
-            $directive = str_replace(["\r\n", "\r", "\n"], ' ', $directive);
-            $array_config_csp['nv_csp'] .= $key . ' ' . preg_replace('/[ ]+/', ' ', $directive) . ';';
+    $_directives = $_POST['directives'];
+    $directives = [];
+    foreach($_directives as $directive => $sources) {
+        $rs = [];
+        foreach($sources as $source => $val) {
+            if (!empty($val)) {
+                if ($source == 'hosts') {
+                    $val = trim(strip_tags($val));
+                    $val = str_replace(["\r\n", "\r", "\n"], ' ', $val);
+                    $val = preg_replace('/[ ]+/', ' ', $val);
+                } else {
+                    $val = 1;
+                }
+                $rs[$source] = $val;
+            }
+        }
+        if (!empty($rs)) {
+            $directives[$directive] = $rs;
         }
     }
+
+    $array_config_csp = [];
+    $array_config_csp['nv_csp'] = json_encode($directives);
     $array_config_csp['nv_csp_act'] = (int) $nv_Request->get_bool('nv_csp_act', 'post', false);
     $array_config_csp['nv_csp_script_nonce'] = (int) $nv_Request->get_bool('nv_csp_script_nonce', 'post', false);
 
@@ -391,13 +421,10 @@ if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request-
 
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());
 } else {
-    $directives = !empty($global_config['nv_csp']) ? nv_unhtmlspecialchars($global_config['nv_csp']) : '';
-    if (!empty($directives)) {
-        $matches = [];
-        preg_match_all("/([a-zA-Z0-9\-]+)[\s]+([^\;]+)/i", $directives, $matches);
-        $directives = [];
-        foreach ($matches[1] as $key => $name) {
-            $directives[$name] = trim($matches[2][$key]);
+    if (!empty($global_config['nv_csp'])) {
+        $directives = json_decode($global_config['nv_csp'], true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $directives = $csp_directives;
         }
     } else {
         $directives = [];
@@ -983,29 +1010,30 @@ if (defined('NV_IS_GODADMIN')) {
 }
 
 //csp_directive
-$csp_directives = [
-    'default-src' => $lang_module['csp_default_src'],
-    'script-src' => $lang_module['csp_script_src'],
-    'object-src' => $lang_module['csp_object_src'],
-    'style-src' => $lang_module['csp_style_src'],
-    'img-src' => $lang_module['csp_img_src'],
-    'media-src' => $lang_module['csp_media_src'],
-    'frame-src' => $lang_module['csp_frame_src'],
-    'font-src' => $lang_module['csp_font_src'],
-    'connect-src' => $lang_module['csp_connect_src'],
-    'form-action' => $lang_module['csp_form_action'],
-    'base-uri' => $lang_module['csp_base_uri'],
-    'frame-ancestors' => $lang_module['csp_frame_ancestors'],
-    'manifest-src' => $lang_module['csp_manifest_src'],
-    'prefetch-src' => $lang_module['csp_prefetch_src']
-];
-foreach ($csp_directives as $name => $desc) {
+foreach ($csp_directives as $name => $sources) {
     $direct = [
         'name' => $name,
-        'desc' => $desc,
-        'value' => !empty($directives[$name]) ? preg_replace("/[\s]+/", "\n", $directives[$name]) : ''
+        'desc' => $lang_module['csp_' . $name]
     ];
     $xtpl->assign('DIRECTIVE', $direct);
+
+    $is_none = !empty($directives[$name]['none']);
+    foreach($sources as $key => $default) {
+        $source = [
+            'key' => $key,
+            'val' => !empty($directives[$name][$key]) ? preg_replace('/[\s]+/', chr(13) . chr(10), $directives[$name][$key]) : '',
+            'checked' => !empty($directives[$name][$key]) ? ' checked="checked"' : '',
+            'disabled' => ($key != 'none' and $is_none) ? ' disabled' : '',
+            'name' => isset($lang_module['csp_source_' . $name . '_' . $key]) ? $lang_module['csp_source_' . $name . '_' . $key] : $lang_module['csp_source_' . $key]
+        ];
+        $xtpl->assign('SOURCE', $source);
+        if ($key != 'hosts') {
+            $xtpl->parse('main.csp_directive.checkbox');
+        } else {
+            $xtpl->parse('main.csp_directive.input');
+        }
+    }
+
     $xtpl->assign('CSP_ACT', $global_config['nv_csp_act'] ? ' checked="checked"' : '');
 
     if ($name == 'script-src') {

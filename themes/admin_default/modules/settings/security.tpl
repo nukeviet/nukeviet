@@ -697,7 +697,7 @@
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover table-first">
+                        <table class="table table-striped table-bordered table-first">
                             <colgroup>
                                 <col style="width: 40%" />
                                 <col style="width: 60%" />
@@ -715,24 +715,34 @@
                                     </td>
                                 </tr>
                                 <!-- BEGIN: csp_directive -->
-                                <tr>
+                                <tr class="directive">
                                     <td><strong>{DIRECTIVE.name}</strong><br />{DIRECTIVE.desc}</td>
                                     <td>
-                                        <textarea rows="3" class="form-control" name="directives[{DIRECTIVE.name}]">{DIRECTIVE.value}</textarea>
-                                        <div class="form-text text-muted">{LANG.csp_note}</div>
+                                        <!-- BEGIN: checkbox -->
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="directives[{DIRECTIVE.name}][{SOURCE.key}]" value="1" data-toggle="{SOURCE.key}"{SOURCE.checked}{SOURCE.disabled}> {SOURCE.key}
+                                            </label>
+                                            <a href="#" data-toggle="popover" data-placement="auto" data-trigger="focus" data-content="{SOURCE.name}"><em class="fa fa-question-circle-o fa-pointer"></em></a>
+                                        </div>
+                                        <!-- END: checkbox -->
+                                        <!-- BEGIN: input -->
+                                        <div class="form-group">
+                                            <label>{SOURCE.name}:</label>
+                                            <a href="#" data-toggle="popover" data-placement="auto" data-trigger="focus" data-content="{LANG.csp_source_hosts_note}"><em class="fa fa-question-circle-o fa-pointer"></em></a>
+                                            <textarea type="text" class="form-control" name="directives[{DIRECTIVE.name}][{SOURCE.key}]"{SOURCE.disabled}>{SOURCE.val}</textarea>
+                                        </div>
+                                        <!-- END: input -->
+                                        <!-- BEGIN: csp_script_nonce -->
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" value="1" name="nv_csp_script_nonce"{CSP_SCRIPT_NONCE}/> {LANG.csp_script_nonce}
+                                            </label>
+                                            <a href="#" data-toggle="popover" data-placement="auto" data-trigger="focus" data-content="{LANG.csp_script_nonce_note}"><em class="fa fa-question-circle-o fa-pointer"></em></a>
+                                        </div>
+                                        <!-- END: csp_script_nonce -->
                                     </td>
                                 </tr>
-                                <!-- BEGIN: csp_script_nonce -->
-                                <tr>
-                                    <td><strong>{LANG.csp_script_nonce}</strong></td>
-                                    <td>
-                                        <label>
-                                            <input type="checkbox" value="1" name="nv_csp_script_nonce"{CSP_SCRIPT_NONCE}/>
-                                        </label>
-                                        ({LANG.csp_script_nonce_note})
-                                    </td>
-                                </tr>
-                                <!-- END: csp_script_nonce -->
                                 <!-- END: csp_directive -->
                             </tbody>
                             <tfoot>
@@ -870,6 +880,22 @@ $(document).ready(function() {
             $('#ip6_mask').removeClass('hidden');
         }
     });
+
+    //CSP
+    $('[data-toggle=none]').on('click', function() {
+        if ($(this).is(':checked')) {
+            var conf = confirm('{LANG.csp_source_none_confirm}');
+            if (conf == true) {
+                $('[name^=directives]', $(this).parents('.directive')).not('[data-toggle=none]').prop('disabled', true)
+            } else {
+                $(this).prop('checked', false)
+            }
+        } else {
+            $('[name^=directives]', $(this).parents('.directive')).prop('disabled', false)
+        }
+    });
+
+    $('[data-toggle="popover"]').popover()
 });
 </script>
 <!-- END: main -->

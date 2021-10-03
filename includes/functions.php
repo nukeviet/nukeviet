@@ -2306,6 +2306,50 @@ function nv_change_buffer($buffer)
 }
 
 /**
+ * parse_csp()
+ * 
+ * @param string $json_csp 
+ * @param string $script_nonce 
+ * @return string 
+ */
+function parse_csp($json_csp, $script_nonce = '')
+{
+    $csp_sources = [
+        'none' => "'none'",
+        'all' => "*",
+        'self' => "'self'",
+        'data' => "data:",
+        'unsafe-inline' => "'unsafe-inline'",
+        'unsafe-eval' => "'unsafe-eval'"
+    ];
+    $_csp = json_decode($json_csp, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $_csp = [];
+    }
+    $csp = [];
+    if (!empty($_csp)) {
+        foreach ($_csp as $directive => $sources) {
+            $csp[$directive] = [];
+            foreach ($sources as $source => $val) {
+                if ($source != 'hosts') {
+                    $csp[$directive][] = $csp_sources[$source];
+                } else {
+                    $csp[$directive][] = $val;
+                }
+            }
+            $csp[$directive] = $directive . ' ' . implode(' ', $csp[$directive]);
+        }
+    }
+
+    if (!empty($script_nonce)) {
+        !isset($csp['script-src']) && $csp['script-src'] = 'script-src';
+        $csp['script-src'] .= " 'nonce-" . $script_nonce . "' 'strict-dynamic'";
+    }
+
+    return implode('; ', $csp) . ';';
+}
+
+/**
  * nv_insert_logs()
  *
  * @param string $lang
