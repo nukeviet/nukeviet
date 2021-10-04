@@ -92,9 +92,12 @@ a.link:hover {
     text-decoration: none !important;
 }
 
-.panel-primary a:hover,
-.panel-primary a:active,
-.panel-primary a:focus {
+.panel-primary .panel-heading a:hover,
+.panel-primary a.panel-heading:hover,
+.panel-primary .panel-heading a:active,
+.panel-primary a.panel-heading:active,
+.panel-primary .panel-heading a:focus,
+.panel-primary a.panel-heading:focus {
  color: #fff;
 }
 
