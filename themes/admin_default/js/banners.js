@@ -149,7 +149,7 @@ function nv_pl_chang_act2(pid) {
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
             } else {
-                nv_plan_info(r_split[2], r_split[3]);
+                window.location.href = window.location.href;
             }
         });
     }
