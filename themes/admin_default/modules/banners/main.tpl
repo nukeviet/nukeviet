@@ -13,16 +13,19 @@
         <input type="submit" value="{GLANG.search}" class="btn btn-primary"/>
     </form>
 </div>
-<!-- BEGIN: loop1 -->
-<div id="{CONTAINERID}">
-    <p class="text-center">
-        <img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading"/>
-    </p>
+<div class="all-list" data-pid="{CONTENTS.pid}" data-keyword="{CONTENTS.keyword}">
+    <!-- BEGIN: loop -->
+    <div class="list m-bottom" id="{LIST.key}">
+        <a href="#" data-toggle="nv_show_banners_list" data-act="{LIST.act}"><em class="fa fa-file-text-o"></em>&nbsp;{LIST.title} <span class="label label-danger">{LIST.num}</span></a>
+    </div>
+    <!-- END: loop -->
 </div>
-<!-- END: loop1 -->
-<!-- BEGIN: loop2 -->
-<script type="text/javascript">
-    {AJ}
+<script>
+$(function(){
+    $('[data-toggle=nv_show_banners_list]').on('click', function(e) {
+        e.preventDefault();
+        nv_show_banners_list($(this).parents('.list').attr('id'), 0, $(this).parents('.all-list').data('pid'), $(this).data('act'), $(this).parents('.all-list').data('keyword'));
+    })
+})
 </script>
-<!-- END: loop2 -->
 <!-- END: main -->
