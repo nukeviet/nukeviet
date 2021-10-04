@@ -134,11 +134,6 @@ function nv_pl_del(pid) {
     return false;
 }
 
-function nv_plan_info(pid, containerid) {
-    $('#' + containerid).load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=info_pl&id=' + pid + '&nocache=' + new Date().getTime());
-    return false;
-}
-
 // ---------------------------------------
 
 function nv_pl_chang_act2(pid) {
@@ -148,7 +143,7 @@ function nv_pl_chang_act2(pid) {
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
             } else {
-                nv_plan_info(r_split[2], r_split[3]);
+                window.location.href = window.location.href;
             }
         });
     }

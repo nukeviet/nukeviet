@@ -21,7 +21,6 @@ $allow_func = array(
     'edit_plan',
     'del_plan',
     'info_plan',
-    'info_pl',
     'banners_list',
     'add_banner',
     'edit_banner',
@@ -387,50 +386,6 @@ function nv_plist_theme($contents)
 }
 
 /**
- * nv_info_plan_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_info_plan_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('info_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
- * nv_info_pl_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_info_pl_theme($contents)
-{
-    global $global_config, $module_file;
-    $xtpl = new XTemplate('info_pl.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('CONTENTS', $contents);
-    $a = 0;
-    foreach ($contents['rows'] as $key => $row) {
-        $xtpl->assign('ROW', $row);
-        if ($key != 'description') {
-            $xtpl->parse('main.loop.t1');
-        } else {
-            $xtpl->parse('main.loop.t2');
-        }
-        $xtpl->parse('main.loop');
-    }
-    if (isset($contents['rows']['description'])) {
-        $xtpl->parse('main.description');
-    }
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
  * nv_add_banner_theme()
  *
  * @param mixed $contents
@@ -776,45 +731,6 @@ function nv_show_list_stat_theme($contents)
     }
     if (!empty($contents['generate_page'])) {
         $xtpl->parse('main.generate_page');
-    }
-    $xtpl->parse('main');
-    return $xtpl->text('main');
-}
-
-/**
- * nv_main_theme()
- *
- * @param mixed $contents
- * @return
- */
-function nv_main_theme($contents)
-{
-    global $global_config, $module_file, $lang_global, $lang_module, $module_name;
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
-    $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-    $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-
-    foreach ($contents['plans'] as $plan) {
-        $plan['selected'] = $plan['id'] == $contents['pid'] ? ' selected="selected"' : '';
-        $xtpl->assign('PLAN', $plan);
-        $xtpl->parse('main.plan');
-    }
-
-    foreach ($contents['containerid'] as $containerid) {
-        $xtpl->assign('CONTAINERID', $containerid);
-        $xtpl->parse('main.loop1');
-    }
-    foreach ($contents['aj'] as $aj) {
-        $xtpl->assign('AJ', $aj);
-        $xtpl->parse('main.loop2');
     }
     $xtpl->parse('main');
     return $xtpl->text('main');
