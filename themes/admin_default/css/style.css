@@ -98,7 +98,7 @@ a.link:hover {
 .panel-primary a.panel-heading:active,
 .panel-primary .panel-heading a:focus,
 .panel-primary a.panel-heading:focus {
- color: #fff;
+    color: #fff;
 }
 
 .bg-gainsboro {

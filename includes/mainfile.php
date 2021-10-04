@@ -164,17 +164,19 @@ require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 // Load các plugin
-foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
-    foreach ($pdatahook as $_parea => $pdata) {
-        foreach ($pdata as $priority => $_plugin) {
-            $module_name = $_phook;
-            $hook_module = $_plugin[1];
-            $pid = $_plugin[2];
-            require NV_ROOTDIR . '/' . $_plugin[0];
+if (!empty($nv_plugins[NV_LANG_DATA])) {
+    foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
+        foreach ($pdatahook as $_parea => $pdata) {
+            foreach ($pdata as $priority => $_plugin) {
+                $module_name = $_phook;
+                $hook_module = $_plugin[1];
+                $pid = $_plugin[2];
+                require NV_ROOTDIR . '/' . $_plugin[0];
+            }
         }
     }
+    unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook, $pid);
 }
-unset($_parea, $_plugin, $pdata, $priority, $module_name, $_phook, $pdatahook, $pid);
 
 nv_apply_hook('', 'check_server');
 
