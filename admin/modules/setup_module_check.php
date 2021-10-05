@@ -14,14 +14,14 @@ if (!defined('NV_IS_FILE_MODULES')) {
 }
 
 if ($nv_Request->isset_request('module', 'post')) {
-    $module_name = $nv_Request->get_title('module', 'post');
+    $modulename = $nv_Request->get_title('module', 'post');
     $is_setup = $nv_Request->get_int('setup', 'post', 0);
 
     $contents = [
         'status' => 'error',
-        'module' => $module_name,
+        'module' => $modulename,
         'message' => ['Module not exists'],
-        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_setup_mod_' . $module_name),
+        'checkss' => md5(NV_CHECK_SESSION . '_' . $module_name . '_setup_mod_' . $modulename),
         'code' => 0,
         'ishook' => false,
         'hookerror' => '',
@@ -29,20 +29,20 @@ if ($nv_Request->isset_request('module', 'post')) {
         'hookmgs' => []
     ];
 
-    if (!empty($module_name) and preg_match($global_config['check_module'], $module_name)) {
+    if (!empty($modulename) and preg_match($global_config['check_module'], $modulename)) {
         $sth = $db->prepare('SELECT module_file FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title= :title');
-        $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
+        $sth->bindParam(':title', $modulename, PDO::PARAM_STR);
         $sth->execute();
         list($module_file) = $sth->fetch(3);
 
         if (empty($module_file)) {
             $sth = $db->prepare('SELECT basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
-            $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
+            $sth->bindParam(':title', $modulename, PDO::PARAM_STR);
             $sth->execute();
             list($module_file) = $sth->fetch(3);
 
-            if (empty($module_file) and file_exists(NV_ROOTDIR . '/modules/' . $module_name . '/version.php')) {
-                $module_file = $module_name;
+            if (empty($module_file) and file_exists(NV_ROOTDIR . '/modules/' . $modulename . '/version.php')) {
+                $module_file = $modulename;
             }
         }
 
@@ -111,4 +111,4 @@ if ($nv_Request->isset_request('module', 'post')) {
     nv_jsonOutput($contents);
 }
 
-nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $modulename);
