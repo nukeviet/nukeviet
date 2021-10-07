@@ -98,8 +98,11 @@ $(document).ready(function() {
                 if (e.status == 'success') {
                     $('.form-detail', form).hide();
                     $('.inner-message', form).text(e.mess).removeClass('normal error').addClass('success');
+                    $('#langinterface').remove();
+                    var hr = e.redirect != '' ? e.redirect : window.location.href;
+                    $('#adm-redirect').attr('href', hr).toggleClass('hidden');
                     setTimeout(function() {
-                        window.location.href = e.redirect != '' ? e.redirect : window.location.href
+                        window.location.href = hr
                     }, 3E3)
                 } else if (e.status == '2step') {
                     location.reload()
@@ -149,8 +152,11 @@ $(document).ready(function() {
                 if (e.status == 'success') {
                     $('.form-detail', form).hide();
                     $('.inner-message', form).text(e.mess).removeClass('normal error').addClass('success');
+                    $('#langinterface').remove();
+                    var hr = e.redirect != '' ? e.redirect : window.location.href;
+                    $('#adm-redirect').attr('href', hr).toggleClass('hidden');
                     setTimeout(function() {
-                        window.location.href = e.redirect != '' ? e.redirect : window.location.href
+                        window.location.href = hr
                     }, 3E3)
                 } else {
                     $('input,button', form).prop('disabled', false);

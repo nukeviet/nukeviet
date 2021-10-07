@@ -88,3 +88,4 @@ $lang_global['admin_oauth_error_getdata'] = 'Erreur: Le système n\'a pas reconn
 $lang_global['admin_oauth_error_email'] = 'Erreur: L\'email de retour n\'est pas valide, vous ne pouvez pas vérifier';
 $lang_global['admin_oauth_error_savenew'] = 'Erreur: Impossible d\'enregistrer les données de vérification';
 $lang_global['admin_oauth_error'] = 'Erreur: La vérification n\'est pas valide, ce compte n\'a pas été autorisé à vérifier';
+$lang_global['acp'] = 'Administration du site';

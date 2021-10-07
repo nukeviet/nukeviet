@@ -29,22 +29,23 @@
             <div class="login-body" id="login-content">
             [-CONTENT-]
             </div>
-            <!-- BEGIN: lang_multi -->
             <div class="login-footer">
                 <div class="row">
                     <div class="col-xs-12">
+                        <!-- BEGIN: lang_multi -->
                         <select id="langinterface" name="langinterface" data-toggle="changeLang" class="form-control input-sm muti-lang">
                             <!-- BEGIN: option -->
                             <option value="{LANGOP}" {SELECTED}>{LANGVALUE} </option>
                             <!-- END: option -->
                         </select>
+                        <!-- END: lang_multi -->
+                        <a id="adm-redirect" class="btn btn-default btn-sm hidden" href="#"><em class="fa fa-star"></em> {GLANG.acp}</a>
                     </div>
                     <div class="col-xs-12 text-right">
                         <a class="btn btn-default btn-sm" href="{SITEURL}"><em class="fa fa-home"></em> {GLANG.go_clientsector}</a>
                     </div>
                 </div>
             </div>
-            <!-- END: lang_multi -->
         </div>
         <div class="copyright">
             <p>Copyright &copy; <a href="{SITEURL}">{SITE_NAME}</a>. All rights reserved.</p>
