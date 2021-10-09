@@ -20,8 +20,8 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['pagetitle'] = 'Cấu hình tag "title"';
-$lang_module['metaTagsConfig'] = 'Cấu hình Meta-Tags';
-$lang_module['linkTagsConfig'] = 'Cấu hình Link-Tags';
+$lang_module['metaTagsConfig'] = 'Cấu hình meta-tags';
+$lang_module['linkTagsConfig'] = 'Cấu hình link-tags';
 $lang_module['sitemapPing'] = 'Sitemap Ping';
 $lang_module['searchEngine'] = 'Máy chủ tìm kiếm';
 $lang_module['searchEngineConfig'] = 'Quản lý Máy chủ tìm kiếm';
@@ -46,19 +46,19 @@ $lang_module['robots_type'] = 'Chế độ';
 $lang_module['robots_type_0'] = 'Cấm truy cập';
 $lang_module['robots_type_1'] = 'Không hiển thị trong file robots.txt';
 $lang_module['robots_type_2'] = 'Cho phép truy cập';
-$lang_module['robots_error_writable'] = 'Lỗi: Hệ thống không ghi được file robots.txt, hãy tạo file robots.txt với nội dung bên dưới và đặt vào thư mục gốc của website';
+$lang_module['robots_error_writable'] = 'Lỗi: Hệ thống không ghi được file robots.txt. Hãy tạo file robots.txt với nội dung bên dưới và đặt vào thư mục gốc của website';
 
 $lang_module['pagetitle2'] = 'Phương án hiển thị tag "title"';
 $lang_module['pagetitleNote'] = '<strong>Chấp nhận các biến:</strong><br /><br />- <strong>pagetitle</strong>: Tiêu đề trang được xác định trong từng trường hợp cụ thể,<br />- <strong>funcname</strong>: Tên function,<br />- <strong>modulename</strong>: Tên module,<br />- <strong>sitename</strong>: Tên của site';
 $lang_module['metaTagsGroupName'] = 'Kiểu Nhóm';
 $lang_module['metaTagsGroupValue'] = 'Tên Nhóm';
-$lang_module['metaTagsNote'] = 'Các Meta-Tags: "%s" được xác định tự động';
+$lang_module['metaTagsNote'] = 'Các meta-tags: "%s" được xác định tự động';
 $lang_module['metaTagsVar'] = 'Chấp nhận các biến';
 $lang_module['metaTagsContent'] = 'Nội dung';
-$lang_module['metaTagsOgp'] = 'Kích hoạt meta-Tag Open Graph protocol';
-$lang_module['metaTagsOgpNote'] = 'Open Graph protocol: là 1 chuẩn dữ liệu để chia sẻ dữ liệu lên facebook, xem chi tiết tại <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
-$lang_module['description_length'] = 'Số ký tự của thẻ meta tag description';
-$lang_module['description_note'] = ' = 0 không giới hạn số ký tự';
+$lang_module['metaTagsOgp'] = 'Kích hoạt meta-tag Open Graph protocol';
+$lang_module['metaTagsOgpNote'] = 'Open Graph protocol là chuẩn dữ liệu được chia sẻ lên facebook. Xem chi tiết tại <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
+$lang_module['description_length'] = 'Số ký tự tối đa cho meta-tag Description';
+$lang_module['description_note'] = ' = 0 - không giới hạn số ký tự';
 $lang_module['private_site'] = 'Chặn các máy chủ tìm kiếm đánh chỉ mục website';
 
 $lang_module['module'] = 'Module';
@@ -84,7 +84,7 @@ $lang_module['rpc_reruslt'] = 'Kết quả';
 $lang_module['rpc_message'] = 'Thông tin';
 $lang_module['rpc_ping'] = 'PING khi cập nhật dữ liệu';
 $lang_module['rpc_ping_page'] = 'PING bài viết';
-$lang_module['rpc_finish'] = 'Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?';
+$lang_module['rpc_finish'] = 'Hoàn thành quá trình PING. Bạn có muốn chuyển về trang quản lý bài viết?';
 $lang_module['ogp_image'] = 'Hình ảnh mặc định cho thẻ Open Graph<br/>(kích thước tốt nhất: 1080px x 1080px)';
 
 $lang_module['linkTags_attribute'] = 'Thuộc tính';

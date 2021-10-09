@@ -331,8 +331,6 @@ $lang_module['error_not_groups'] = 'Empty account. Click <a href="%s">here</a> t
 $lang_module['search_not_result'] = 'Not found any results';
 $lang_module['add_users'] = 'Add account';
 $lang_module['exclude_user2'] = 'Remove';
-$lang_module['promote'] = 'Promote';
-$lang_module['demote'] = 'Demote';
 $lang_module['approved'] = 'Approved';
 $lang_module['denied'] = 'Denied';
 $lang_module['search_id'] = 'Account';

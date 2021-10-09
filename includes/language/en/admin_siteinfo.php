@@ -21,7 +21,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['site_configs_info'] = 'Site informations';
 $lang_module['site_domain'] = 'Site domain';
-$lang_module['site_url'] = 'Site path';
+$lang_module['site_url'] = 'Site URL';
 $lang_module['site_root'] = 'Absolute site path';
 $lang_module['site_script_path'] = 'Directory contains sites';
 $lang_module['site_cookie_domain'] = 'Domain store cookies';
