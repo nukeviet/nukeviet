@@ -855,7 +855,7 @@ if ($nv_Request->isset_request('list', 'get')) {
         $loop = [
             'title' => $values['title'],
             'add_time' => nv_date('d/m/Y H:i', $values['add_time']),
-            'exp_time' => !empty($values['exp_time']) ? nv_date('d/m/Y H:i', $values['exp_time']) : $lang_global['unlimited'],
+            'exp_time' => !empty($values['exp_time']) ? nv_date('d/m/Y H:i', $values['exp_time']) : $lang_global['indefinitely'],
             'number' => number_format($values['numbers']),
             'link_userlist' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id, true)
         ];

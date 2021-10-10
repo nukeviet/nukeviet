@@ -346,6 +346,8 @@ $lang_global['system'] = 'Système';
 $lang_global['limit_user_number'] = 'Votre site Web est réservé aux utilisateurs %s. Pour ajouter un utilisateur, veuillez contacter l\'administrateur système';
 $lang_global['limit_admin_number'] = 'Votre site Web est limité par l\'administrateur %s, pour ajouter un administrateur, veuillez contacter l\'administrateur système';
 $lang_global['2teplogin'] = 'Authentification à deux facteurs';
+$lang_global['indefinitely'] = 'Indéfiniment';
+
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';
