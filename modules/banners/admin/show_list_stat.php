@@ -118,7 +118,7 @@ if (empty($num_items)) {
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 50;
 
-$db->where('*')
+$db->select('*')
     ->order('click_time DESC')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
