@@ -42,7 +42,6 @@ $lang_module['mysendinfo'] = 'Cảm ơn bạn đã gửi thư cho chúng tôi th
 $lang_module['sendinfo2'] = 'Thông tin người gửi';
 $lang_module['mysendinfo2'] = 'Theo yêu cầu của bạn chúng tôi xin gửi bản sao bức thư này với nội dung dưới đây';
 $lang_module['phone'] = 'Điện thoại';
-$lang_module['address'] = 'Địa chỉ';
 $lang_module['fax'] = 'Fax';
 $lang_module['note_s'] = 'Ghi chú';
 $lang_module['department'] = 'Bộ phận';

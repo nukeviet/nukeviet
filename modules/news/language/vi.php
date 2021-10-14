@@ -19,7 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All righ
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['nocatpage'] = 'Lỗi không có chủ đề';
+$lang_module['nocatpage'] = 'Lỗi: không có chủ đề';
 $lang_module['other'] = 'Các tin khác';
 $lang_module['detail'] = 'Chi tiết tin';
 $lang_module['more'] = 'Xem tiếp...';
@@ -162,6 +162,9 @@ $lang_module['status_7'] = 'Đang duyệt bài';
 $lang_module['status_8'] = 'Chuyển đăng bài';
 $lang_module['status_9'] = 'Từ chối đăng bài';
 $lang_module['status_10'] = 'Đang kiểm tra để đăng';
+$lang_module['action_1'] = 'Xuất bản';
+$lang_module['action_4'] = 'Lưu nháp';
+$lang_module['action_5'] = 'Chuyển duyệt bài';
 
 $lang_module['pick_layout'] = 'Chọn bố cục cho bài viết';
 $lang_module['click_to_download'] = 'Nhấn vào để tải file.';

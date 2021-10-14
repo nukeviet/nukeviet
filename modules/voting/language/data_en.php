@@ -19,21 +19,21 @@ if (!defined('NV_ADMIN')) {
  * 	- Accept global var: $db, $db_config, $global_config
  */
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . " VALUES (:vid, :question, '', 1, 0, 1, '6', " . NV_CURRENTTIME . ', 0, 1, 0)');
-$sth->bindValue(':vid', 2, PDO::PARAM_INT);
-$sth->bindValue(':question', 'Do you know about Nukeviet 3?', PDO::PARAM_STR);
+$sth->bindValue(':vid', 1, PDO::PARAM_INT);
+$sth->bindValue(':question', 'What do you know about Nukeviet 4?', PDO::PARAM_STR);
 $sth->execute();
 
-$sth->bindValue(':vid', 3, PDO::PARAM_INT);
-$sth->bindValue(':question', 'What are you interested in open source?', PDO::PARAM_STR);
+$sth->bindValue(':vid', 2, PDO::PARAM_INT);
+$sth->bindValue(':question', 'What interests you about open source?', PDO::PARAM_STR);
 $sth->execute();
 
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows VALUES (?, ?, ?, ?, ?)');
-$sth->execute([5, 2, 'A whole new sourcecode for the web.', '', 0]);
-$sth->execute([6, 2, 'Open source, free to use.', '', 0]);
-$sth->execute([7, 2, 'Use of xHTML, CSS and Ajax support', '', 0]);
-$sth->execute([8, 2, 'All the comments on', '', 0]);
-$sth->execute([9, 3, 'constantly improved, modified by the whole world.', '', 0]);
-$sth->execute([10, 3, 'To use the free of charge.', '', 0]);
-$sth->execute([11, 3, 'The freedom to explore, modify at will.', '', 0]);
-$sth->execute([12, 3, 'Match to learning and research because the freedom to modify at will.', '', 0]);
-$sth->execute([13, 3, 'All comments on', '', 0]);
+$sth->execute([1, 1, 'Brand new source code for the site', '', 0]);
+$sth->execute([2, 1, 'Open source, free to use', '', 0]);
+$sth->execute([3, 1, 'XHTML, CSS and Ajax support', '', 0]);
+$sth->execute([4, 1, 'All of the above', '', 0]);
+$sth->execute([5, 2, 'Constantly improving, modified by the whole world', '', 0]);
+$sth->execute([6, 2, 'Free to use', '', 0]);
+$sth->execute([7, 2, 'Free to explore, change at will', '', 0]);
+$sth->execute([8, 2, 'Suitable for study, research', '', 0]);
+$sth->execute([9, 2, 'All of the above', '', 0]);

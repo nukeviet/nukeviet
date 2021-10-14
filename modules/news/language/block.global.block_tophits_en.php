@@ -19,7 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All righ
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
-$lang_block['number_day'] = 'Number day most recent post';
+$lang_block['number_day'] = 'Posts within the last (days)';
 $lang_block['numrow'] = 'Number aricle';
 $lang_block['showtooltip'] = 'Dipslay tooltip';
 $lang_block['tooltip_position'] = 'Position';

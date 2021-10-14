@@ -160,6 +160,9 @@ $lang_module['status_7'] = 'Checking for Approve';
 $lang_module['status_8'] = 'Send Publish';
 $lang_module['status_9'] = 'Reject Publish';
 $lang_module['status_10'] = 'Checking for Publish';
+$lang_module['action_1'] = 'Publish';
+$lang_module['action_4'] = 'Save as draft';
+$lang_module['action_5'] = 'Submit for approval';
 $lang_module['insrss_not_auth'] = 'The firewall has blocked access to this area';
 
 $lang_module['pick_layout'] = 'Choose layout';

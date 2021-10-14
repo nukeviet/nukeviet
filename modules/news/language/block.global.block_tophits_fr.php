@@ -19,7 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. Tous dro
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
-$lang_block['number_day'] = 'Nombre des derniers jours depuis la dernière mise en ligne d\'article';
+$lang_block['number_day'] = 'Publications au cours des (derniers jours)';
 $lang_block['numrow'] = 'Le nombre d\'articles affichés';
 $lang_block['showtooltip'] = 'Afficher tooltip';
 $lang_block['tooltip_position'] = 'Position';

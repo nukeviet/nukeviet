@@ -1566,7 +1566,7 @@ function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_s
         $xtpl->assign('SAVE_STATUS', [
             'val' => $key,
             'sel' => $rowcontent['status'] == $key ? ' selected="selected"' : '',
-            'name' => $lang_module['status_' . $key]
+            'name' => $lang_module['action_' . $key]
         ]);
         $xtpl->parse('main.save_status');
     }
