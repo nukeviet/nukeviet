@@ -22,12 +22,12 @@ namespace NukeViet\Facebook;
  */
 class InstantArticles
 {
-    public const ERROR_HTML_ELEMENTS = 100;
-    public const ERROR_ARTICLE_NO_CONTENT = 101;
-    public const ERROR_HTML_ELEMENTS_ATTR = 102;
+    const ERROR_HTML_ELEMENTS = 100;
+    const ERROR_ARTICLE_NO_CONTENT = 101;
+    const ERROR_HTML_ELEMENTS_ATTR = 102;
 
-    public const FB_ALLOW_HTML_TAGS = 'figure,figcaption,h1,h2,video,audio,source,img,iframe,ul,ol,li,aside,em,i,a,b,strong,cite,br,p,u,span,blockquote';
-    public const FB_ALLOW_HTML_TAGS_IN_LIST = 'a,b,i,em,u,strong,li,span';
+    const FB_ALLOW_HTML_TAGS = 'figure,figcaption,h1,h2,video,audio,source,img,iframe,ul,ol,li,aside,em,i,a,b,strong,cite,br,p,u,span,blockquote';
+    const FB_ALLOW_HTML_TAGS_IN_LIST = 'a,b,i,em,u,strong,li,span';
 
     private $lang = [];
     private $langPrefix = '';

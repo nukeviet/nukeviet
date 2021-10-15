@@ -21,15 +21,6 @@
       ),
       'reference' => '700b769807affc1c5d04ec5a77be69a10a12e52b',
     ),
-    'endroid/qrcode' => 
-    array (
-      'pretty_version' => '1.9.3',
-      'version' => '1.9.3.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'c9644bec2a9cc9318e98d1437de3c628dcd1ef93',
-    ),
     'gregwar/cache' => 
     array (
       'pretty_version' => 'v1.0.13',
@@ -77,30 +68,39 @@
     ),
     'phpmailer/phpmailer' => 
     array (
-      'pretty_version' => 'v6.5.0',
-      'version' => '6.5.0.0',
+      'pretty_version' => 'v6.5.1',
+      'version' => '6.5.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'a5b5c43e50b7fba655f793ad27303cd74c57363c',
-    ),
-    'symfony/options-resolver' => 
-    array (
-      'pretty_version' => 'v3.4.47',
-      'version' => '3.4.47.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'c7efc97a47b2ebaabc19d5b6c6b50f5c37c92744',
+      'reference' => 'dd803df5ad7492e1b40637f7ebd258fee5ca7355',
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.23.0',
-      'version' => '1.23.0.0',
+      'pretty_version' => 'v1.18.1',
+      'version' => '1.18.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '2df51500adbaebdc4c38dea4c89a2e131c45c8a1',
+      'reference' => 'a6977d63bf9a0ad4c65cd352709e230876f9904a',
+    ),
+    'tecnickcom/tc-lib-barcode' => 
+    array (
+      'pretty_version' => '1.17.6',
+      'version' => '1.17.6.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a8a7183e2be6379e522dc825a3b7a3af5394a9e7',
+    ),
+    'tecnickcom/tc-lib-color' => 
+    array (
+      'pretty_version' => '1.14.6',
+      'version' => '1.14.6.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '83cdb57fd900901c6aa2af8cfd67202518fb69b2',
     ),
     'true/punycode' => 
     array (

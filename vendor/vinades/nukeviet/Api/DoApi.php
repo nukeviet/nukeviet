@@ -72,6 +72,7 @@ class DoApi
     public function setData($array)
     {
         $this->data = array_merge($array, $this->data);
+
         return $this;
     }
 
@@ -82,6 +83,7 @@ class DoApi
     public function setModule($module)
     {
         $this->data['module'] = $module;
+
         return $this;
     }
 
@@ -92,6 +94,7 @@ class DoApi
     public function setAction($action)
     {
         $this->data['action'] = $action;
+
         return $this;
     }
 
@@ -102,6 +105,7 @@ class DoApi
     public function setLang($lang)
     {
         $this->data['language'] = $lang;
+
         return $this;
     }
 
@@ -141,14 +145,17 @@ class DoApi
 
         if (!empty(Http::$error)) {
             $this->error = Http::$error;
+
             return [];
         }
         if (!is_array($responsive)) {
             $this->error = 'Error request API';
+
             return [];
         }
         if (empty($responsive['body'])) {
             $this->error = 'No respon body';
+
             return [];
         }
 
@@ -156,6 +163,7 @@ class DoApi
 
         if (!is_array($res)) {
             $this->error = 'Not Json respon';
+
             return [];
         }
 

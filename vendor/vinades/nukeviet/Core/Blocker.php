@@ -22,12 +22,12 @@ namespace NukeViet\Core;
  */
 class Blocker
 {
-    public const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
-    public const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
+    const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
+    const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
 
-    public const LOGIN_RULE_NUMBER = 0;
-    public const LOGIN_RULE_TIMERANGE = 1;
-    public const LOGIN_RULE_END = 2;
+    const LOGIN_RULE_NUMBER = 0;
+    const LOGIN_RULE_TIMERANGE = 1;
+    const LOGIN_RULE_END = 2;
 
     public $is_flooded;
     public $flood_block_time;

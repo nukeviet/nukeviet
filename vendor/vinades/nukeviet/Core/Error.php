@@ -38,9 +38,9 @@ if (!defined('NV_DEBUG')) {
  */
 class Error
 {
-    public const INCORRECT_IP = 'Incorrect IP address specified';
-    public const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
-    public const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
+    const INCORRECT_IP = 'Incorrect IP address specified';
+    const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
+    const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
 
     private $log_errors_list;
     private $display_errors_list;

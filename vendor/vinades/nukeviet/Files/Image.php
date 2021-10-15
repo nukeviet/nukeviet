@@ -36,12 +36,12 @@ class Image
     public $is_destroy = false;
     public $is_createWorkingImage = false;
 
-    public const ERROR_IMAGE1 = 'The file is not a known image format';
-    public const ERROR_IMAGE2 = 'The file is not readable';
-    public const ERROR_IMAGE3 = 'File is not supplied or is not a file';
-    public const ERROR_IMAGE4 = 'Image type not supported';
-    public const ERROR_IMAGE5 = 'Image mime type not supported';
-    public const ERROR_IMAGE6 = 'Error loading Image';
+    const ERROR_IMAGE1 = 'The file is not a known image format';
+    const ERROR_IMAGE2 = 'The file is not readable';
+    const ERROR_IMAGE3 = 'File is not supplied or is not a file';
+    const ERROR_IMAGE4 = 'Image type not supported';
+    const ERROR_IMAGE5 = 'Image mime type not supported';
+    const ERROR_IMAGE6 = 'Error loading Image';
 
     /**
      * __construct()

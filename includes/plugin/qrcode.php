@@ -17,26 +17,19 @@ nv_add_hook($module_name, 'get_qr_code', $priority, function ($vars) {
     $nv_Request = $vars[0];
     if ($nv_Request->get_string('second', 'get') == 'qr') {
         $url = $nv_Request->get_string('u', 'get', '');
-        $level = $nv_Request->get_title('l', 'get', 'M');
-        $ModuleSize = $nv_Request->get_int('ppp', 'get', 4);
-        $outer_frame = $nv_Request->get_int('of', 'get', 1);
-
-        $_ErrorCorrection = [
-            'L' => 'low',
-            'M' => 'medium',
-            'Q' => 'quartile',
-            'H' => 'high'
-        ];
-        if (!empty($url) and isset($_ErrorCorrection[$level]) and ($ModuleSize > 0 and $ModuleSize < 13) and ($outer_frame > 0 and $outer_frame < 6)) {
-            // Readmore: https://github.com/endroid/QrCode and http://www.qrcode.com/en/about/version.html
-            $qrCode = new Endroid\QrCode\QrCode();
-
-            header('Content-type: image/png');
-            $qrCode->setText($url)
-                ->setErrorCorrection($_ErrorCorrection[$level])
-                ->setModuleSize($ModuleSize)
-                ->setImageType('png')
-                ->render();
+        if (!empty($url)) {
+            // instantiate the barcode class
+            $barcode = new Com\Tecnick\Barcode\Barcode();
+            // generate a barcode
+            $bobj = $barcode->getBarcodeObj(
+                'QRCODE,H',                     // barcode type and additional comma-separated parameters
+                $url,          // data string to encode
+                160,                             // bar width (use absolute or negative value as multiplication factor)
+                160,                             // bar height (use absolute or negative value as multiplication factor)
+                'black',                        // foreground color
+                array(5, 5, 5, 5)           // padding (use absolute or negative values as multiplication factors)
+            )->setBackgroundColor('white'); // background color
+            $bobj->getPng();
         }
         exit();
     }
