@@ -14,90 +14,6 @@ if (!defined('NV_MAINFILE')) {
 
 if (!nv_function_exists('nv_block_qr_code')) {
     /**
-     * nv_block_qr_code_config()
-     *
-     * @param mixed $module
-     * @param mixed $data_block
-     * @param mixed $lang_block
-     * @return
-     */
-    function nv_block_qr_code_config($module, $data_block, $lang_block)
-    {
-        global $selectthemes;
-
-        // Find language file
-        if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php')) {
-            include NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php';
-        }
-
-        $array_levels = [
-            'L',
-            'M',
-            'Q',
-            'H'
-        ];
-
-        $html = '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_level']) ? 'qr_level' : $lang_block['qr_level']) . ':</label>';
-        $html .= '	<div class="col-sm-9">';
-        $html .= '		<select class="form-control" name="config_level">';
-
-        foreach ($array_levels as $level) {
-            $html .= '		<option value="' . $level . '"' . ($level == $data_block['level'] ? ' selected="selected"' : '') . '>' . $level . '</option>';
-        }
-
-        $html .= '		</select>';
-        $html .= '	</div>';
-        $html .= '</div>';
-
-        $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_pixel_per_point']) ? 'qr_pixel_per_point' : $lang_block['qr_pixel_per_point']) . ':</label>';
-        $html .= '	<div class="col-sm-9">';
-        $html .= '		<select class="form-control" name="config_pixel_per_point">';
-
-        for ($i = 1; $i <= 12; $i++) {
-            $html .= '		<option value="' . $i . '"' . ($i == $data_block['pixel_per_point'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
-        }
-
-        $html .= '		</select>';
-        $html .= '	</div>';
-        $html .= '</div>';
-
-        $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . (empty($lang_block['qr_outer_frame']) ? 'qr_outer_frame' : $lang_block['qr_outer_frame']) . ':</label>';
-        $html .= '	<div class="col-sm-9">';
-        $html .= '		<select class="form-control" name="config_outer_frame">';
-
-        for ($i = 1; $i <= 5; $i++) {
-            $html .= '		<option value="' . $i . '"' . ($i == $data_block['outer_frame'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
-        }
-
-        $html .= '		</select>';
-        $html .= '	</div>';
-        $html .= '</div>';
-
-        return $html;
-    }
-
-    /**
-     * nv_block_qr_code_config_submit()
-     *
-     * @param mixed $module
-     * @param mixed $lang_block
-     * @return
-     */
-    function nv_block_qr_code_config_submit($module, $lang_block)
-    {
-        global $nv_Request;
-        $return = [];
-        $return['error'] = [];
-        $return['config']['level'] = $nv_Request->get_title('config_level', 'post');
-        $return['config']['pixel_per_point'] = $nv_Request->get_int('config_pixel_per_point', 'post', 4);
-        $return['config']['outer_frame'] = $nv_Request->get_int('config_outer_frame', 'post', 1);
-        return $return;
-    }
-
-    /**
      * nv_block_qr_code()
      *
      * @param mixed $block_config
@@ -131,8 +47,9 @@ if (!nv_function_exists('nv_block_qr_code')) {
         } else {
             $current_page_url = $page_url;
         }
+        str_starts_with($current_page_url, NV_MY_DOMAIN) && $current_page_url = substr($current_page_url, strlen(NV_MY_DOMAIN));
 
-        $block_config['selfurl'] = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
+        $block_config['selfurl'] = NV_MY_DOMAIN . nv_url_rewrite($current_page_url, true);
         $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ? $page_title : $global_config['site_name']));
         $xtpl->assign('QRCODE', $block_config);
 

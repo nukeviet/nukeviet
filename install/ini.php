@@ -44,8 +44,8 @@ if ($sys_info['ini_set_support']) {
     ini_set('auto_detect_line_endings', 0);
 }
 
-$sys_info['php_required_min'] = '7.1.0';
-$sys_info['php_allowed_max'] = '8.1.0';
+$sys_info['php_required_min'] = '5.6.0';
+$sys_info['php_allowed_max'] = '8.2.0';
 $sys_info['php_version'] = PHP_VERSION;
 $sys_info['php_support'] = (version_compare($sys_info['php_version'], $sys_info['php_required_min']) >= 0 and version_compare($sys_info['php_version'], $sys_info['php_allowed_max']) <= 0) ? 1 : 0;
 $sys_info['opendir_support'] = (function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;

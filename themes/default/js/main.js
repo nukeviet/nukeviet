@@ -261,7 +261,7 @@ function qrcodeLoad(a) {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
-    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
+    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url"))
 };
 
 // Switch tab

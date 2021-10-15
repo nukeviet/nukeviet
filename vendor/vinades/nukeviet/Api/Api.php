@@ -12,9 +12,9 @@ namespace NukeViet\Api;
 
 class Api
 {
-    public const ADMIN_LEV_GOD = 1;
-    public const ADMIN_LEV_SP = 2;
-    public const ADMIN_LEV_MOD = 3;
+    const ADMIN_LEV_GOD = 1;
+    const ADMIN_LEV_SP = 2;
+    const ADMIN_LEV_MOD = 3;
 
     private static $admin_id = 0;
     private static $admin_username = '';

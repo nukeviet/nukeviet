@@ -12,30 +12,30 @@ namespace NukeViet\Api;
 
 class ApiResult
 {
-    public const API_ERROR = 'error';
-    public const API_SUCCESS = 'success';
+    const API_ERROR = 'error';
+    const API_SUCCESS = 'success';
 
-    public const CODE_UNKONW = '0000';
-    public const CODE_REQUIRE_ADMINIDENT = '0001';
-    public const CODE_WRONG_TYPE = '0002';
-    public const CODE_MISSING_FUNCTION = '0003';
-    public const CODE_API_NOT_EXISTS = '0004';
-    public const CODE_MODULE_NOT_EXISTS = '0005';
-    public const CODE_MODULE_INVALID = '0006';
-    public const CODE_NO_ADMIN_IDENT = '0007';
-    public const CODE_NO_ADMIN_FOUND = '0008';
-    public const CODE_NO_MODADMIN_RIGHT = '0009';
-    public const CODE_ADMINLEV_NOT_ENOUGH = '0010';
-    public const CODE_REMOTE_OFF = '0011';
-    public const CODE_SYS_ERROR = '0012';
-    public const CODE_NO_CREDENTIAL_FOUND = '0013';
-    public const CODE_AUTH_FAIL = '0014';
-    public const CODE_MISSING_REQUEST_CMD = '0015';
-    public const CODE_LANG_NOT_EXISTS = '0016';
-    public const CODE_WRONG_LANG = '0017';
-    public const CODE_MISSING_LANG = '0018';
-    public const CODE_MISSING_IP = '0019';
-    public const CODE_MISSING_TIME = '0020';
+    const CODE_UNKONW = '0000';
+    const CODE_REQUIRE_ADMINIDENT = '0001';
+    const CODE_WRONG_TYPE = '0002';
+    const CODE_MISSING_FUNCTION = '0003';
+    const CODE_API_NOT_EXISTS = '0004';
+    const CODE_MODULE_NOT_EXISTS = '0005';
+    const CODE_MODULE_INVALID = '0006';
+    const CODE_NO_ADMIN_IDENT = '0007';
+    const CODE_NO_ADMIN_FOUND = '0008';
+    const CODE_NO_MODADMIN_RIGHT = '0009';
+    const CODE_ADMINLEV_NOT_ENOUGH = '0010';
+    const CODE_REMOTE_OFF = '0011';
+    const CODE_SYS_ERROR = '0012';
+    const CODE_NO_CREDENTIAL_FOUND = '0013';
+    const CODE_AUTH_FAIL = '0014';
+    const CODE_MISSING_REQUEST_CMD = '0015';
+    const CODE_LANG_NOT_EXISTS = '0016';
+    const CODE_WRONG_LANG = '0017';
+    const CODE_MISSING_LANG = '0018';
+    const CODE_MISSING_IP = '0019';
+    const CODE_MISSING_TIME = '0020';
 
     private const CODE_PATTERN = '/^[0-9]{4}$/';
 
