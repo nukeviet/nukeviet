@@ -1,6 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.01
+- System package addition: tecnickcom/tc-lib-barcode (v1.17.6)
+- System package updates: polyfill-mbstring (v1.23.0 => v1.18.1, for PHP ^5.6 support), phpmailer/phpmailer (v6.5.0 => v6.5.1)
+- System package removal: symfony/options-resolver, endroid/qrcode
 - System: Centralized Captcha Management #3348
 - All modules: Fix $page_url definition
 - System: Fix error in getCanonicalUrl function

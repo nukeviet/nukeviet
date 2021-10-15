@@ -240,8 +240,10 @@ function nv_htmlOutput($html, $type = 'html')
     global $global_config, $headers, $nv_BotManager;
 
     // Xuất cấu hình robot vào header
-    $sys_info = [];
-    $nv_BotManager->outputToHeaders($headers, $sys_info);
+    if (is_object($nv_BotManager)) {
+        $sys_info = [];
+        $nv_BotManager->outputToHeaders($headers, $sys_info);
+    }
 
     $html_headers = $global_config['others_headers'];
     if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {

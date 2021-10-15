@@ -22,13 +22,13 @@ namespace NukeViet\Core;
  */
 class Request
 {
-    public const IS_HEADERS_SENT = 'Warning: Headers already sent';
+    const IS_HEADERS_SENT = 'Warning: Headers already sent';
 
-    public const INCORRECT_IP = 'Incorrect IP address specified';
+    const INCORRECT_IP = 'Incorrect IP address specified';
 
-    public const INCORRECT_ORIGIN = 'Incorrect Origin specified';
+    const INCORRECT_ORIGIN = 'Incorrect Origin specified';
 
-    public const REQUEST_BLOCKED = 'Your request is blocked';
+    const REQUEST_BLOCKED = 'Your request is blocked';
 
     public $session_id;
 
@@ -1674,9 +1674,7 @@ class Request
         if (
             !$this->restrictCrossDomain or
             $this->origin_key === 1 or
-            ($this->origin === 'null' and $this->allowNullOrigin and (
-                empty($this->allowNullOriginIps) or in_array($this->remote_ip, $this->allowNullOriginIps, true)
-            )) or
+            ($this->origin === 'null' and $this->allowNullOrigin and (empty($this->allowNullOriginIps) or in_array($this->remote_ip, $this->allowNullOriginIps, true))) or
             in_array($this->origin, $this->validCrossDomains, true)
         ) {
             $this->isOriginValid = true;
