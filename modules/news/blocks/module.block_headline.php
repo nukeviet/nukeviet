@@ -140,7 +140,7 @@ if (!nv_function_exists('nv_block_headline')) {
 
         $xtpl = new XTemplate('block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
-        $xtpl->assign('PIX_IMG', NV_STATIC_URL . NV_ASSETS_DIR . '/images/pix.gif');
+        $xtpl->assign('PIX_IMG', NV_STATIC_URL . NV_ASSETS_DIR . '/images/pix.svg');
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $module_info['template']);
         $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);

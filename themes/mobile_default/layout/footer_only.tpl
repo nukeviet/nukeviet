@@ -8,7 +8,7 @@
                     </div>
                     <div class="modal-body text-center">
                         <div class="margin-bottom">
-                            <img class="captchaImg mr-1" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.gif" width="{NV_GFX_WIDTH}" height="{NV_GFX_HEIGHT}" alt="" title="" /><span class="pointer" data-toggle="change_captcha" data-obj="#modal-captcha-value" title="{LANG.captcharefresh}"><em class="fa fa-refresh"></em></span>
+                            <img class="captchaImg mr-1" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.svg" width="{NV_GFX_WIDTH}" height="{NV_GFX_HEIGHT}" alt="" title="" /><span class="pointer" data-toggle="change_captcha" data-obj="#modal-captcha-value" title="{LANG.captcharefresh}"><em class="fa fa-refresh"></em></span>
                         </div>
                         <div class="margin-bottom">
                             <div>
