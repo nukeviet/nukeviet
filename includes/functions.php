@@ -2346,7 +2346,7 @@ function parse_csp($json_csp, $script_nonce = '')
         $csp['script-src'] .= " 'nonce-" . $script_nonce . "' 'strict-dynamic'";
     }
 
-    return implode('; ', $csp) . ';';
+    return implode('; ', $csp) . '; report-uri ' . NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'reporturi.php;';
 }
 
 /**

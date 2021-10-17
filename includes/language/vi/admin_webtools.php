@@ -24,6 +24,7 @@ $lang_module['clearcache'] = 'Làm sạch cache';
 $lang_module['cleardumpbackup'] = 'Xóa các file backup CSDL';
 $lang_module['clearfiletemp'] = 'Xóa các file tạm';
 $lang_module['clearerrorlogs'] = 'Xóa các thông báo lỗi';
+$lang_module['clearcsp_logs'] = 'Xóa các báo cáo vi phạm của CSP';
 $lang_module['submit'] = 'Thực hiện';
 $lang_module['deletedetail'] = 'Đã xóa thành công các file sau đây';
 $lang_module['checkupdate'] = 'Kiểm tra phiên bản';
