@@ -76,6 +76,10 @@ if (!empty($headers)) {
     $html_headers = array_merge($html_headers, $headers);
 }
 
+if (!empty($global_config['nv_static_url'])) {
+    $html_headers['link'] = '<//' . $global_config['nv_static_url'] . '>; rel=preconnect; crossorigin, <//' . $global_config['nv_static_url'] . '>; rel=dns-prefetch' . (!empty($html_headers['link']) ? ', ' . $html_headers['link'] : '');
+}
+
 if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
     unset($html_headers['Strict-Transport-Security']);
 }

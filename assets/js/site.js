@@ -30,7 +30,11 @@ function getFiles(files, callback) {
                         href: fileurl
                     }).appendTo("head")
                 }
-                if (++progress == files.length) callback()
+                if (++progress == files.length) {
+                    if ("function" === typeof callback) {
+                        callback()
+                    }
+                }
             }
         })
     })
