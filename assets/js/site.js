@@ -6,6 +6,16 @@
  * @Createdate 19/3/2010 22:58
  */
 
+// Ap dung trinh nghe thu dong cho touchstart
+// https://web.dev/uses-passive-event-listeners/?utm_source=lighthouse&utm_medium=devtools
+jQuery.event.special.touchstart = {
+    setup: function(_, ns, handle) {
+        this.addEventListener('touchstart', handle, {
+            passive: !ns.includes('noPreventDefault')
+        });
+    }
+};
+
 var myTimerPage = "",
     myTimersecField = "",
     reCapIDs = [];
