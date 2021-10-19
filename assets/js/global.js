@@ -469,3 +469,20 @@ nv_check_timezone();
         return null
     })
 })();
+
+// Ap dung trinh nghe thu dong cho touchstart
+// https://web.dev/uses-passive-event-listeners/?utm_source=lighthouse&utm_medium=devtools
+var supportsPassive = false;
+try {
+    var opts = Object.defineProperty({}, 'passive', {
+        get: function() {
+            supportsPassive = true;
+        }
+    });
+    window.addEventListener("testPassive", null, opts);
+    window.removeEventListener("testPassive", null, opts);
+} catch (e) {}
+
+document.addEventListener('touchstart', onTouchStart, supportsPassive ? {
+    passive: true
+} : false);
