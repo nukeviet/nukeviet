@@ -276,21 +276,8 @@ if ($st_links > 0) {
 
     $related = $db_slave->query($db_slave->sql());
     while ($row = $related->fetch()) {
-        if ($row['homeimgthumb'] == 1) {
-            // image thumb
-            $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
-        } elseif ($row['homeimgthumb'] == 2) {
-            // image file
-            $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
-        } elseif ($row['homeimgthumb'] == 3) {
-            // image url
-            $row['imghome'] = $row['homeimgfile'];
-        } elseif (!empty($show_no_image)) {
-            // no image
-            $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
-        } else {
-            $row['imghome'] = '';
-        }
+        $row['imghome'] = $row['imgmobile'] = '';
+        get_homeimgfile($row);
 
         $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
         $related_new_array[] = [
@@ -316,21 +303,8 @@ if ($st_links > 0) {
 
     $related = $db_slave->query($db_slave->sql());
     while ($row = $related->fetch()) {
-        if ($row['homeimgthumb'] == 1) {
-            // image thumb
-            $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
-        } elseif ($row['homeimgthumb'] == 2) {
-            // image file
-            $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
-        } elseif ($row['homeimgthumb'] == 3) {
-            // image url
-            $row['imghome'] = $row['homeimgfile'];
-        } elseif (!empty($show_no_image)) {
-            // no image
-            $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
-        } else {
-            $row['imghome'] = '';
-        }
+        $row['imghome'] = $row['imgmobile'] = '';
+        get_homeimgfile($row);
 
         $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
         $related_array[] = [

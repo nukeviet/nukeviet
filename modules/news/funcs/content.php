@@ -672,15 +672,8 @@ if ($num_items) {
     while ($item = $result->fetch()) {
         $item['publtime'] = nv_date('d/m/Y h:i:s A', $item['publtime']);
         $item['status_note'] = $item['status'] != 1 ? sprintf($lang_module['status_alert'], $lang_module['status_' . $item['status']]) : '';
-        if ($item['homeimgthumb'] == 1) {
-            $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
-        } elseif ($item['homeimgthumb'] == 2) {
-            $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
-        } elseif ($item['homeimgthumb'] == 3) {
-            $item['imghome'] = $item['homeimgfile'];
-        } else {
-            $item['imghome'] = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
-        }
+        $item['imghome'] = $item['imgmobile'] = '';
+        get_homeimgfile($item);
 
         $item['is_edit_content'] = ($item['status'] != 1 or $post_level['editcontent']) ? true : false;
         $item['is_del_content'] = ($item['status'] != 1 or $post_level['delcontent']) ? true : false;

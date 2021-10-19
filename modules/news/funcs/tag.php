@@ -70,21 +70,9 @@ if ($tid > 0) {
 
     $result = $db_slave->query($db_slave->sql());
     while ($item = $result->fetch()) {
-        if ($item['homeimgthumb'] == 1) {
-            // image thumb
-            $item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
-        } elseif ($item['homeimgthumb'] == 2) {
-            // image file
-            $item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
-        } elseif ($item['homeimgthumb'] == 3) {
-            // image url
-            $item['src'] = $item['homeimgfile'];
-        } elseif (!empty($show_no_image)) {
-            // no image
-            $item['src'] = NV_BASE_SITEURL . $show_no_image;
-        } else {
-            $item['imghome'] = '';
-        }
+        $item['src'] = $item['imgmobile'] = '';
+        get_homeimgfile($item, 'src', 'imgmobile');
+
         $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
         $item['width'] = $module_config[$module_name]['homewidth'];
 

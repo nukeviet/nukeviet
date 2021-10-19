@@ -556,3 +556,36 @@ function my_author_detail($userid)
 
     return $detail;
 }
+
+/**
+ * get_homeimgfile()
+ * 
+ * @param mixed $item 
+ * @param string $imghome_key 
+ * @param string $imgmobile_key 
+ */
+function get_homeimgfile(&$item, $imghome_key ='imghome', $imgmobile_key = 'imgmobile')
+{
+    global $module_upload;
+
+    if ($item['homeimgthumb'] == 1) {
+        //image thumb
+        $item[$imghome_key] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+        if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'])) {
+            $item[$imgmobile_key] = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+        } else {
+            $item[$imgmobile_key] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+        }
+    } elseif ($item['homeimgthumb'] == 2) {
+        //image file
+        $item[$imghome_key] = $item[$imgmobile_key] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+    } elseif ($item['homeimgthumb'] == 3) {
+        //image url
+        $item[$imghome_key] = $item[$imgmobile_key] = $item['homeimgfile'];
+    } elseif (!empty($show_no_image)) {
+        //no image
+        $item[$imghome_key] = $item[$imgmobile_key] = NV_BASE_SITEURL . $show_no_image;
+    } else {
+        $item[$imghome_key] = $item[$imgmobile_key] = '';
+    }
+}
