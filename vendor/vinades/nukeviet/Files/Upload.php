@@ -1405,6 +1405,13 @@ class Upload
             CURLOPT_FOLLOWLOCATION => true
         ];
 
+        $cainfo = ini_get('curl.cainfo');
+        if (empty($cainfo)) {
+            if (file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem')) {
+                $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+            }
+        }
+
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, $this->url_info['uri']);
         curl_setopt_array($curlHandle, $options);
@@ -1415,6 +1422,11 @@ class Upload
         }
 
         curl_setopt($curlHandle, CURLOPT_FILE, $fp);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, (!empty($cainfo)) ? 2 : false);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, !empty($cainfo) ? true : false);
+        if (!empty($cainfo)) {
+            curl_setopt($curlHandle, CURLOPT_CAINFO, $cainfo);
+        }
         curl_setopt($curlHandle, CURLOPT_BINARYTRANSFER, true);
 
         if (curl_exec($curlHandle) === false) {
