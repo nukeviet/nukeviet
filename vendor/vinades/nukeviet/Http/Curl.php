@@ -111,8 +111,20 @@ class Curl
         }
         */
 
-        $is_local = (isset($args['local']) and $args['local']);
-        $ssl_verify = (isset($args['sslverify']) and $args['sslverify']);
+        //$is_local = (isset($args['local']) and $args['local']);
+        if (!empty($args['sslverify'])) {
+            if (!empty($args['sslcertificates'])) {
+                $cainfo = $args['sslcertificates'];
+            } else {
+                $cainfo = ini_get('curl.cainfo');
+                if (empty($cainfo)) {
+                    $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+                }
+            }
+            $ssl_verify = !empty($cainfo);
+        } else {
+            $ssl_verify = false;
+        }
 
         // CURLOPT_TIMEOUT and CURLOPT_CONNECTTIMEOUT expect integers. Have to use ceil since
         // a value of 0 will allow an unlimited timeout.
@@ -124,7 +136,9 @@ class Curl
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, ($ssl_verify === true) ? 2 : false);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify);
-        curl_setopt($handle, CURLOPT_CAINFO, $args['sslcertificates']);
+        if ($ssl_verify) {
+            curl_setopt($handle, CURLOPT_CAINFO, $cainfo);
+        }
         curl_setopt($handle, CURLOPT_USERAGENT, $args['user-agent']);
 
         // Add Curl referer if not empty
