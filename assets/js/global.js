@@ -410,16 +410,13 @@ function nv_isExternal(url) {
 }
 
 function nv_open_browse(theURL, winName, w, h, features) {
-    LeftPosition = (screen.width) ? (screen.width - w) / 2 : 0;
-    TopPosition = (screen.height) ? (screen.height - h) / 2 : 0;
-    settings = 'height=' + h + ',width=' + w + ',top=' + TopPosition + ',left=' + LeftPosition;
+    var LeftPosition = (screen.width) ? (screen.width - w) / 2 : 0,
+        TopPosition = (screen.height) ? (screen.height - h) / 2 : 0,
+        settings = 'height=' + h + ',width=' + w + ',top=' + TopPosition + ',left=' + LeftPosition;
     if (features != '') {
         settings += ',' + features;
     }
-    if (nv_isExternal(theURL)) {
-        settings += ',noopener,noreferrer'
-    }
-    window.open(theURL, winName, settings).focus();
+    window.open(theURL, winName, settings).focus()
 }
 
 function nv_setIframeHeight(iframeId) {
