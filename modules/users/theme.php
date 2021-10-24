@@ -1274,68 +1274,6 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
 }
 
 /**
- * user_openid_administrator()
- *
- * @param array $data
- * @return string
- */
-function user_openid_administrator($data)
-{
-    global $lang_module, $module_info, $module_name, $global_config;
-
-    $groups_list = nv_groups_list_pub($module_info['module_data']);
-
-    $xtpl = new XTemplate('openid_administrator.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('OPENID_IMG_SRC', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/openid.png');
-    $xtpl->assign('OPENID_IMG_WIDTH', 150);
-    $xtpl->assign('OPENID_IMG_HEIGHT', 60);
-
-    $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
-    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-
-    if (defined('NV_IS_USER_FORUM')) {
-        $xtpl->parse('main.allowopenid');
-    }
-
-    if (!empty($groups_list) and $global_config['allowuserpublic'] == 1) {
-        $xtpl->parse('main.regroups');
-    }
-
-    $xtpl->assign('DATA', $data);
-
-    if (!empty($data['openid_list'])) {
-        $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=openid&amp;del=1');
-
-        foreach ($data['openid_list'] as $key => $openid_list) {
-            if ($key % 2 == 0) {
-                $xtpl->assign('OPENID_CLASS', ' gray');
-            } else {
-                $xtpl->assign('OPENID_CLASS', '');
-            }
-            $xtpl->assign('OPENID_LIST', $openid_list);
-            $xtpl->parse('main.openid_empty.openid_list');
-        }
-        $xtpl->parse('main.openid_empty');
-    }
-
-    $assigns = [];
-    foreach ($global_config['openid_servers'] as $server) {
-        $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
-        $assigns['title'] = ucfirst($server);
-        $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
-        $assigns['img_width'] = $assigns['img_height'] = 24;
-
-        $xtpl->assign('OPENID', $assigns);
-        $xtpl->parse('main.server');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
  * nv_memberslist_theme()
  *
  * @param array  $users_array
