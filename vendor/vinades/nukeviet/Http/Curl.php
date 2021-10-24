@@ -139,10 +139,10 @@ class Curl
         if ($ssl_verify) {
             curl_setopt($handle, CURLOPT_CAINFO, $cainfo);
         }
-        curl_setopt($handle, CURLOPT_USERAGENT, $args['user-agent']);
+        !empty($args['user-agent']) && curl_setopt($handle, CURLOPT_USERAGENT, $args['user-agent']);
 
         // Add Curl referer if not empty
-        if (! is_null($args['referer']) or ! empty($args['referer'])) {
+        if (!empty($args['referer'])) {
             curl_setopt($handle, CURLOPT_AUTOREFERER, true);
             curl_setopt($handle, CURLOPT_REFERER, $args['referer']);
         }
@@ -191,7 +191,7 @@ class Curl
         }
 
         // If streaming to a file open a file handle, and setup our curl streaming handler
-        if ($args['stream']) {
+        if (!empty($args['stream'])) {
             $this->stream_handle = @fopen($args['filename'], 'w+');
 
             if (! $this->stream_handle) {
@@ -279,7 +279,7 @@ class Curl
 
         curl_close($handle);
 
-        if ($args['stream']) {
+        if (!empty($args['stream'])) {
             fclose($this->stream_handle);
         }
 
@@ -288,7 +288,7 @@ class Curl
             'body' => null,
             'response' => $response,
             'cookies' => $theHeaders['cookies'],
-            'filename' => $args['filename']
+            'filename' => !empty($args['filename']) ? $args['filename'] : ''
         );
 
         // Handle redirects
@@ -296,7 +296,7 @@ class Curl
             return $redirect_response;
         }
 
-        if ($args['decompress'] === true and Encoding::should_decode($theHeaders['headers']) === true) {
+        if (!empty($args['decompress']) and Encoding::should_decode($theHeaders['headers']) === true) {
             $theBody = Encoding::decompress($theBody);
         }
 
