@@ -19,7 +19,7 @@
             <!-- BEGIN: oauth -->
             <tr>
                 <td class="twostepp">{OAUTH.openid}</td>
-                <td>{OAUTH.email}</td>
+                <td>{OAUTH.email_or_id}</td>
                 <td class="text-center">
                     <a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="nv_del_oauthone('{OAUTH.opid}', {USERID});"><i class="fa fa-trash-o"></i>&nbsp;{LANG.delete}</a>
                 </td>

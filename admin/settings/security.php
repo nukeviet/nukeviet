@@ -31,7 +31,7 @@ $captcha_comm_list = [
 ];
 
 $recaptcha_type_array = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
-$admin_2step_array = ['code', 'facebook', 'google'];
+$admin_2step_array = ['code', 'facebook', 'google', 'zalo'];
 $array_iptypes = [
     4 => 'IPv4',
     6 => 'IPv6'
@@ -904,6 +904,9 @@ if (defined('NV_IS_GODADMIN')) {
 
         if ($admin_2step == 'facebook' or $admin_2step == 'google') {
             $xtpl->assign('LINK_CONFIG', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=config&amp;oauth_config=' . $admin_2step);
+            $xtpl->parse('main.sys_contents.admin_2step_opt.link_config');
+        } elseif ($admin_2step == 'zalo') {
+            $xtpl->assign('LINK_CONFIG', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings');
             $xtpl->parse('main.sys_contents.admin_2step_opt.link_config');
         }
 

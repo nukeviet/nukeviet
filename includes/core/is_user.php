@@ -81,7 +81,7 @@ if (defined('NV_IS_ADMIN')) {
                             unset($user_info['checknum'], $user_info['password'], $user_info['question'], $user_info['answer'], $check_in_groups);
 
                             if (!empty($user_info['current_openid'])) {
-                                $sth = $db->prepare('SELECT openid, email FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :current_openid');
+                                $sth = $db->prepare('SELECT openid, id, email FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :current_openid');
                                 $sth->bindParam(':current_openid', $user_info['current_openid'], PDO::PARAM_STR);
                                 $sth->execute();
                                 $row = $sth->fetch();
@@ -90,6 +90,7 @@ if (defined('NV_IS_ADMIN')) {
                                     $user_info = [];
                                 } else {
                                     $user_info['openid_server'] = $row['openid'];
+                                    $user_info['openid_id'] = $row['id'];
                                     $user_info['openid_email'] = $row['email'];
                                 }
                             }

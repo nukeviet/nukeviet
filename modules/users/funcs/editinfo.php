@@ -429,15 +429,15 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
 
     $email = isset($attribs['contact/email']) ? $attribs['contact/email'] : '';
     $check_email = nv_check_valid_email($email, true);
-    if (!empty($check_email[0])) {
+    if (!empty($email) and !empty($check_email[0])) {
         opidr(3);
         exit();
     }
 
-    $email = $check_email[1];
+    !empty($check_email[1]) && $email = $check_email[1];
     $opid = $crypt->hash($attribs['id']);
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid ');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid');
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->fetchColumn();
@@ -446,33 +446,36 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
         exit();
     }
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND email= :email ');
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->execute();
-    $count = $stmt->fetchColumn();
-    if ($count) {
-        opidr(5);
-        exit();
-    }
-
-    if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3) {
-        $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_reg WHERE email= :email ';
-        if ($global_config['allowuserreg'] == 2) {
-            $query .= ' AND regdate>' . (NV_CURRENTTIME - 86400);
-        }
-        $stmt = $db->prepare($query);
+    if (!empty($email)) {
+        $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND email= :email ');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         $count = $stmt->fetchColumn();
         if ($count) {
-            opidr(6);
+            opidr(5);
             exit();
+        }
+
+        if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3) {
+            $query = 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_reg WHERE email= :email ';
+            if ($global_config['allowuserreg'] == 2) {
+                $query .= ' AND regdate>' . (NV_CURRENTTIME - 86400);
+            }
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $count = $stmt->fetchColumn();
+            if ($count) {
+                opidr(6);
+                exit();
+            }
         }
     }
 
-    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $edit_userid . ', :openid, :opid, :email )');
+    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $edit_userid . ', :openid, :opid, :id, :email )');
     $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $attribs['id'], PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -1156,6 +1159,7 @@ if (in_array('openid', $types, true)) {
         $data_openid[] = [
             'opid' => $row3['opid'],
             'openid' => $row3['openid'],
+            'id' => $row3['id'],
             'email' => $row3['email'],
             'disabled' => ((!empty($user_info['current_openid']) and $user_info['current_openid'] == $row3['opid']) ? true : false)
         ];

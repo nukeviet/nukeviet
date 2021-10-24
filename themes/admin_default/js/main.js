@@ -116,10 +116,8 @@ $(document).ready(function() {
         NV.fixContentHeight();
     });
 
-    // Add rel="noopener noreferrer nofollow" to all external links
     $('a[href^="http"]').not('a[href*="' + location.hostname + '"]').not('[rel*=dofollow]').attr({
-        target: "_blank",
-        rel: "noopener noreferrer nofollow"
+        target: "_blank"
     });
 
 

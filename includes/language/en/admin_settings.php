@@ -317,7 +317,6 @@ $lang_module['ip_allow_null_origin_help'] = 'Enter one IP per line, if left blan
 $lang_module['admin_2step_opt'] = 'Two-step verification methods are allowed in administration';
 $lang_module['admin_2step_default'] = 'The default two-step verification method in administration';
 $lang_module['admin_2step_appconfig'] = 'Set up the application here';
-$lang_module['zalo_official_account_id'] = 'Zalo Official Account ID';
 $lang_module['cookie_notice_popup'] = 'Enable pop-up cookie notification when a user first visits a website';
 $lang_module['smime_certificate'] = 'Email Signing certificate S/MIME';
 $lang_module['smime_cn'] = 'Certificate common name';

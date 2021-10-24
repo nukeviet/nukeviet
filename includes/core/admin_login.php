@@ -79,6 +79,7 @@ if (!empty($admin_pre_data)) {
     $cfg_2step['active_code'] = (bool) ($admin_pre_data['active2step']); // Đã bật xác thực 2 bước bằng ứng dụng hay chưa
     $cfg_2step['active_facebook'] = false; // Đã login bằng Facebook hay chưa
     $cfg_2step['active_google'] = false; // Đã login bằng Google hay chưa
+    $cfg_2step['active_zalo'] = false; // Đã login bằng Zalo hay chưa
     $_2step_opt = explode(',', $global_config['admin_2step_opt']);
     if (in_array('code', $_2step_opt, true)) {
         $cfg_2step['opts'][] = 'code';
@@ -93,6 +94,11 @@ if (!empty($admin_pre_data)) {
         $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='google'";
         $cfg_2step['active_google'] = (bool) ($db->query($sql)->fetchColumn());
     }
+    if (in_array('zalo', $_2step_opt, true) and !empty($global_config['zaloOfficialAccountID']) and !empty($global_config['zaloAppID']) and !empty($global_config['zaloAppSecretKey'])) {
+        $cfg_2step['opts'][] = 'zalo';
+        $sql = 'SELECT COUNT(oauth_uid) FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE admin_id=' . $admin_pre_data['admin_id'] . " AND oauth_server='zalo'";
+        $cfg_2step['active_zalo'] = (bool) ($db->query($sql)->fetchColumn());
+    }
     if (empty($cfg_2step['default']) or !in_array($cfg_2step['default'], $cfg_2step['opts'], true)) {
         $cfg_2step['default'] = current($cfg_2step['opts']);
     }
@@ -104,7 +110,8 @@ if (!empty($admin_pre_data)) {
     $cfg_2step['count_active'] = sizeof(array_filter([
         $cfg_2step['active_code'],
         $cfg_2step['active_facebook'],
-        $cfg_2step['active_google']
+        $cfg_2step['active_google'],
+        $cfg_2step['active_zalo']
     ]));
     $cfg_2step['count_opts'] = sizeof($cfg_2step['opts']);
 }
@@ -157,7 +164,7 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
         nv_redirect_location($url);
     }
 
-    // Gọi file xử lý chuyển hướng sang google, facebook để kích hoạt
+    // Gọi file xử lý chuyển hướng sang google, facebook, zalo để kích hoạt
     $attribs = [];
     define('NV_ADMIN_ACTIVE_2STEP_OAUTH', true);
     require NV_ROOTDIR . '/includes/core/admin_login_' . $opt . '.php';
@@ -169,10 +176,10 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
         } elseif (!$cfg_2step['active_' . $opt]) {
             // Nếu chưa kích hoạt phương thức này (chưa có gì trong CSDL) thì lưu vào CSDL và xác thực đăng nhập phiên này
             $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_oauth (
-                admin_id, oauth_server, oauth_uid, oauth_email, addtime
+                admin_id, oauth_server, oauth_uid, oauth_email, oauth_id, addtime
             ) VALUES (
                 ' . $admin_pre_data['admin_id'] . ', ' . $db->quote($opt) . ', ' . $db->quote($attribs['full_identity']) . ',
-                ' . $db->quote($attribs['email']) . ', ' . NV_CURRENTTIME . '
+                ' . $db->quote($attribs['email']) . ', ' . $db->quote($attribs['identity']) . ', ' . NV_CURRENTTIME . '
             )';
             if ($db->insert_id($sql, 'id')) {
                 $row = $admin_pre_data;

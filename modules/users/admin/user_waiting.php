@@ -56,6 +56,35 @@ if ($nv_Request->isset_request('act', 'get')) {
     if (empty($row) or md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid) != $nv_Request->get_string('checkss', 'get')) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
+    $row['photo'] = '';
+
+    $reg_attribs = !empty($row['openid_info']) ? unserialize(nv_base64_decode($row['openid_info'])) : [];
+    if (!empty($reg_attribs['photo'])) {
+        $upload = new NukeViet\Files\Upload([
+            'images'
+        ], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $upload->setLanguage($lang_global);
+
+        $upload_info = $upload->save_urlfile($reg_attribs['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false);
+
+        if (empty($upload_info['error'])) {
+            $basename = change_alias($row['username']) . '.' . nv_getextension($upload_info['basename']);
+            $newname = $basename;
+            $fullname = $upload_info['name'];
+
+            $i = 1;
+            while (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname)) {
+                $newname = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $basename);
+                ++$i;
+            }
+
+            $check = nv_renamefile($fullname, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname);
+
+            if ($check[0] == 1) {
+                $row['photo'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $newname;
+            }
+        }
+    }
 
     $sql = 'INSERT INTO ' . NV_MOD_TABLE . " (
         group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,
@@ -71,7 +100,7 @@ if ($nv_Request->isset_request('act', 'get')) {
         :first_name,
         :last_name,
         :gender,
-        '',
+        :photo,
         :birthday,
         :sig,
         " . $row['regdate'] . ",
@@ -89,6 +118,7 @@ if ($nv_Request->isset_request('act', 'get')) {
     $data_insert['first_name'] = $row['first_name'];
     $data_insert['last_name'] = $row['last_name'];
     $data_insert['gender'] = $row['gender'];
+    $data_insert['photo'] = $row['photo'];
     $data_insert['birthday'] = $row['birthday'];
     $data_insert['sig'] = $row['sig'];
     $data_insert['question'] = $row['question'];
@@ -98,11 +128,11 @@ if ($nv_Request->isset_request('act', 'get')) {
 
     if ($userid) {
         // Luu vao bang OpenID
-        if (!empty($row['openid_info'])) {
-            $reg_attribs = unserialize(nv_base64_decode($row['openid_info']));
-            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $userid . ', :server, :opid , :email)');
+        if (!empty($reg_attribs)) {
+            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $userid . ', :server, :opid , :id, :email)');
             $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
             $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
+            $stmt->bindParam(':id', $reg_attribs['openid'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
             $stmt->execute();
         }

@@ -400,19 +400,25 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 $disabled = ' disabled="disabled" ';
             } elseif ($server == 'oauth-google.php' and (empty($global_config['google_client_id']) or empty($global_config['google_client_secret']))) {
                 $disabled = ' disabled="disabled" ';
+            } elseif ($server == 'oauth-zalo.php' and (empty($global_config['zaloOfficialAccountID']) or empty($global_config['zaloAppID']) or empty($global_config['zaloAppSecretKey']))) {
+                $disabled = ' disabled="disabled" ';
             }
 
+            $link_config = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2];
+            if ($server == 'oauth-zalo.php') {
+                $link_config = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings';
+            }
             $openid_assign = [
                 'name' => $m[2],
                 'title' => $m[1] . ' ' . $m[2],
                 'checked' => $checked,
                 'disabled' => $disabled,
-                'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
+                'link_config' => $link_config,
                 'note' => sprintf($lang_module['oauth_config'], $m[1] . ' ' . $m[2])
             ];
 
             $xtpl->assign('OPENID', $openid_assign);
-            if (file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php')) {
+            if ($server == 'oauth-zalo.php' or file_exists(NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php')) {
                 $xtpl->parse('main.openid_servers.config');
             } else {
                 $xtpl->parse('main.openid_servers.noconfig');

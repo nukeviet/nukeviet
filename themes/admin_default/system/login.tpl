@@ -179,3 +179,9 @@
     <a class="btn btn-google btn-block" href="{URL}">{GLANG.admin_2step_opt_google}</a>
 </div>
 <!-- END: google -->
+
+<!-- BEGIN: zalo -->
+<div class="oauth-zalo m-bottom">
+    <a class="btn btn-zalo btn-block" href="{URL}">{GLANG.admin_2step_opt_zalo}</a>
+</div>
+<!-- END: zalo -->

@@ -195,7 +195,7 @@ foreach ($socialbuttons as $socialbutton) {
         'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons, true)) ? ' checked="checked"' : ''
     ];
     if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
-        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=system">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
+        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
         $array['checked'] = ' disabled="disabled"';
     }
     $xtpl->assign('SOCIALBUTTON', $array);
