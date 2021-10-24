@@ -78,6 +78,99 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 }
 
 /**
+ * nv_check_email_reg()
+ * Ham kiem tra email kha dung
+ *
+ * @param mixed $email
+ * @return
+ */
+function nv_check_email_reg(&$email)
+{
+    global $db, $lang_module, $global_users_config;
+
+    $error = nv_check_valid_email($email, true);
+    $email = $error[1];
+    if ($error[0] != '') {
+        return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error[0]));
+    }
+
+    if (!empty($global_users_config['deny_email']) and preg_match('/' . $global_users_config['deny_email'] . '/i', $email)) {
+        return sprintf($lang_module['email_deny_name'], $email);
+    }
+
+    list($left, $right) = explode('@', $email);
+    $left = preg_replace('/[\.]+/', '', $left);
+    $pattern = str_split($left);
+    $pattern = implode('.?', $pattern);
+    $pattern = '^' . $pattern . '@' . $right . '$';
+
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email RLIKE :pattern');
+    $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        return sprintf($lang_module['email_registered_name'], $email);
+    }
+
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email RLIKE :pattern');
+    $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        return sprintf($lang_module['email_registered_name'], $email);
+    }
+
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email RLIKE :pattern');
+    $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        return sprintf($lang_module['email_registered_name'], $email);
+    }
+
+    return '';
+}
+
+/**
+ * nv_check_username_reg()
+ * Ham kiem tra ten dang nhap kha dung
+ *
+ * @param mixed $login
+ * @return
+ */
+function nv_check_username_reg($login)
+{
+    global $db, $lang_module, $global_users_config, $global_config;
+
+    $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
+    if ($error != '') {
+        return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
+    }
+    if ("'" . $login . "'" != $db->quote($login)) {
+        return sprintf($lang_module['account_deny_name'], $login);
+    }
+
+    if (!empty($global_users_config['deny_name']) and preg_match('/' . $global_users_config['deny_name'] . '/i', $login)) {
+        return sprintf($lang_module['account_deny_name'], $login);
+    }
+
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE username LIKE :username OR md5username= :md5username');
+    $stmt->bindValue(':username', $login, PDO::PARAM_STR);
+    $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        return sprintf($lang_module['account_registered_name'], $login);
+    }
+
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE :username OR md5username= :md5username');
+    $stmt->bindValue(':username', $login, PDO::PARAM_STR);
+    $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
+    $stmt->execute();
+    if ($stmt->fetchColumn()) {
+        return sprintf($lang_module['account_registered_name'], $login);
+    }
+
+    return '';
+}
+
+/**
  * nv_del_user()
  *
  * @param int $userid

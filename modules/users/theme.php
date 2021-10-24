@@ -393,7 +393,8 @@ function user_login($is_ajax = false)
         $icons = [
             'single-sign-on' => 'lock',
             'google' => 'google-plus',
-            'facebook' => 'facebook'
+            'facebook' => 'facebook',
+            'zalo' => 'zalo'
         ];
         $default_redirect = nv_redirect_encrypt(NV_MY_DOMAIN . (empty($page_url) ? '' : nv_url_rewrite(str_replace('&amp;', '&', $page_url), true)));
         foreach ($global_config['openid_servers'] as $server) {
@@ -456,9 +457,18 @@ function user_openid_login($gfx_chk, $attribs)
 
     $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
 
+    $reg_username = '';
+    $reg_email = '';
+    if (!empty($attribs['contact/email'])) {
+        $reg_email = $attribs['contact/email'];
+        $reg_username = create_username_from_email($reg_email);
+    }
     $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
+    $xtpl->assign('USER_NAME', $reg_username);
+    $xtpl->assign('USER_EMAIL', $reg_email);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
     $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
@@ -489,6 +499,11 @@ function user_openid_login($gfx_chk, $attribs)
         $info = $lang_module['openid_note2'];
         if (!empty($nv_redirect)) {
             $xtpl->parse('main.allowuserreg.redirect2');
+        }
+        if (!empty($reg_email)) {
+            $xtpl->parse('main.allowuserreg.readonly');
+        } else {
+            $xtpl->parse('main.allowuserreg.email_verify');
         }
         $xtpl->parse('main.allowuserreg');
         $xtpl->parse('main.allowuserreg2');
@@ -870,6 +885,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         if (!empty($data_openid)) {
             $openid_del_al = 0;
             foreach ($data_openid as $openid) {
+                $openid['email_or_id'] = !empty($openid['email']) ? $openid['email'] : $openid['id'];
                 $xtpl->assign('OPENID_LIST', $openid);
                 if (!$openid['disabled']) {
                     $xtpl->parse('main.tab_edit_openid.openid_not_empty.openid_list.is_act');
@@ -1241,7 +1257,7 @@ function user_welcome($array_field_config, $custom_fields)
     if (isset($user_info['current_mode']) and $user_info['current_mode'] == 5) {
         $_user_info['current_mode'] = $lang_module['admin_login'];
     } elseif (isset($user_info['current_mode']) and isset($lang_module['mode_login_' . $user_info['current_mode']])) {
-        $_user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
+        $_user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . (!empty($user_info['openid_email']) ? $user_info['openid_email'] : $user_info['openid_id']) . ')';
     } else {
         $_user_info['current_mode'] = $lang_module['mode_login_1'];
     }

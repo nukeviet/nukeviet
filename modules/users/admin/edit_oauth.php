@@ -64,7 +64,7 @@ $xtpl = new XTemplate('user_oauth.tpl', NV_ROOTDIR . '/themes/' . $global_config
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('USERID', $row['userid']);
 
-$sql = 'SELECT openid, opid, email FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'];
+$sql = 'SELECT openid, opid, id, email FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'];
 $array_oauth = $db->query($sql)->fetchAll();
 
 if (empty($array_oauth)) {
@@ -106,6 +106,7 @@ if (empty($array_oauth)) {
     }
 
     foreach ($array_oauth as $oauth) {
+        $oauth['email_or_id'] = !empty($oauth['email']) ? $oauth['email'] : $oauth['id'];
         $xtpl->assign('OAUTH', $oauth);
         $xtpl->parse('main.oauth');
     }

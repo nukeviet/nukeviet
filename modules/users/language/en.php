@@ -109,7 +109,7 @@ $lang_module['email_deny_name'] = 'Sorry, email %s banned';
 $lang_module['email_registered_name'] = 'Email %s was registered. Using lost password function to reset password';
 $lang_module['account_register'] = 'Your account was created';
 $lang_module['account_register_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s activated. Your login information:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account: %4$s<br /><br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
-$lang_module['account_register_openid_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s activated.<br/>To log into your account please visit the page: <a href="%3$s">%3$s</a> and press the button: Sign in with %4$s.<br /><br /><strong>Important Note:</strong> You haven\'t created a password for your account, so you can\'t sign in to your account in the normal way. Please create a password in your account settings area.<br/><br/>This is email automatic sending from website %2$s.<br /><br />Site administrator';
+$lang_module['account_register_openid_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s activated.<br/>To log into your account please visit the page: <a href="%3$s">%3$s</a> and press the button: Sign in with %4$s.<br /><br /><br/><br/>This is email automatic sending from website %2$s.<br /><br />Site administrator';
 $lang_module['account_register_to_admin'] = 'Your account was created. We\'ll check your register information and notify you soon.';
 $lang_module['account_active'] = 'Activate information';
 $lang_module['account_active_info'] = 'Hi %1$s,<br /><br />Your account at website %2$s waitting to activate. To activate, please click link follow:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account information:<br /><br />Account: %4$s<br />Email: %5$s<br /><br />Activate expired on %6$s<br /><br />This is email automatic sending from website %2$s.<br /><br />Site administrator';
@@ -283,6 +283,7 @@ $lang_module['changequestion_notvalid'] = 'Account  has no password so you can n
 $lang_module['changeemail_notvalid'] = 'Account has no password so you can not change email. Create your login password then return to this  page.';
 $lang_module['add_pass'] = 'Create password';
 $lang_module['openid_server'] = 'Provider';
+$lang_module['openid_email_or_id'] = 'E-mail or ID';
 $lang_module['openid_deleted'] = 'Selected Open ID has been delected from the account';
 $lang_module['openid_choose'] = 'Please choose at least one  openID.';
 $lang_module['openid_default'] = 'OpenID can not be deleted because it is being used to log your account';
@@ -382,3 +383,8 @@ $lang_module['pass_reset2_info'] = 'For security reasons, we recommend that you 
 $lang_module['pass_reset3_info'] = 'It\'s been more than %d days and you haven\'t changed your user account password. For security reasons, please change your password before using the site\'s facilities.';
 $lang_module['password_was_used'] = 'The password is not available because it was used in one of the last %d password changes.';
 $lang_module['another_option'] = 'Another option';
+$lang_module['verify_mail_error'] = 'Error: The e-mail verification code has not been entered or is entered incorrectly.';
+$lang_module['verify_email_title'] = 'New e-mail verification';
+$lang_module['verify_email_mess'] = 'Hello!<br /><br />You have sent a request to verify your email address: %s. Copy the code below and paste it into the Verification code box on the site.<br /><br />Verification code: <span>%s</span><br/><br/>This is email automatic sending from website %s.<br /><br />Site administrator';
+$lang_module['verify_email_sent'] = 'Verification code has been sent to the address you provided above (If you don\'t see it in inbox folder, check SPAM folder). Copy and paste it into the Verification Code box below';
+$lang_module['verify_email_sent_error'] = 'There was a technical error while sending the verification code to your email. Please contact the site administrator about this.';

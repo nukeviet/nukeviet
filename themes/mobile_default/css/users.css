@@ -150,6 +150,40 @@ fieldset[disabled] .openid-google:focus {
     cursor: inherit;
 }
 
+.openid-zalo {
+    color: #ffffff !important;
+    background-color: #0067ff;
+    border-color: #0067ff;
+}
+
+.openid-zalo:focus,
+.openid-zalo:hover,
+.openid-zalo:active {
+    color: #ffffff;
+    background-color: #035adb;
+    border-color: #035adb;
+}
+
+.openid-zalo:active {
+    background-image: none;
+}
+
+.openid-zalo.disabled:hover,
+.openid-zalo[disabled]:hover,
+fieldset[disabled] .openid-zalo:hover,
+.openid-zalo.disabled:focus,
+.openid-zalo[disabled]:focus,
+fieldset[disabled] .openid-zalo:focus {
+    background-color: #035adb;
+    border-color: #035adb;
+    cursor: inherit;
+}
+
+.fa-zalo::before {
+    font: normal normal bold 15px/1 Arial;
+    content: "Z";
+}
+
 .openid-facebook {
     color: #ffffff !important;
     background-color: #428bca;

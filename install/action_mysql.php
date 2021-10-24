@@ -73,6 +73,7 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_oauth (
   oauth_server varchar(50) NOT NULL COMMENT 'Eg: facebook, google...',
   oauth_uid varchar(50) NOT NULL COMMENT 'ID duy nhất ứng với server',
   oauth_email varchar(50) NOT NULL COMMENT 'Email',
+  oauth_id VARCHAR(50) NOT NULL DEFAULT '',
   addtime int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   UNIQUE KEY admin_id (admin_id, oauth_server, oauth_uid),

@@ -128,6 +128,19 @@ body {
     border-color: #f2574b !important;
 }
 
+.btn-zalo {
+    background-color: #0067ff;
+    border-color: #0067ff;
+    color: #fff;
+}
+
+.btn-zalo:hover,
+.btn-zalo:active,
+.btn-zalo:focus {
+    background-color: #035adb !important;
+    border-color: #035adb !important;
+}
+
 .btn-facebook:active,
 .btn-facebook:focus,
 .btn-facebook:active:focus,
@@ -135,7 +148,11 @@ body {
 .btn-google:active,
 .btn-google:focus,
 .btn-google:active:focus,
-.btn-google:hover {
+.btn-google:hover,
+.btn-zalo:active,
+.btn-zalo:focus,
+.btn-zalo:active:focus,
+.btn-zalo:hover {
     color: #fff !important;
 }
 

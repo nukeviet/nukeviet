@@ -358,7 +358,7 @@
                                 <!-- END: checkAll -->
                                 </td>
                                 <td class="text-uppercase">{LANG.openid_server}</td>
-                                <td class="text-uppercase">{LANG.email}</td>
+                                <td class="text-uppercase">{LANG.openid_email_or_id}</td>
                             </tr>
                         </thead>
                         <!-- BEGIN: button -->
@@ -380,7 +380,7 @@
                                 <!-- END: disabled -->
                                 </th>
                                 <td>{OPENID_LIST.openid}</td>
-                                <td>{OPENID_LIST.email}</td>
+                                <td>{OPENID_LIST.email_or_id}</td>
                             </tr>
                             <!-- END: openid_list -->
                         </tbody>

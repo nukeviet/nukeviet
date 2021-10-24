@@ -86,6 +86,9 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
     if (!empty($global_config['google_client_id']) and !empty($global_config['google_client_secret'])) {
         $server_allowed['google'] = 1;
     }
+    if (!empty($global_config['zaloOfficialAccountID']) and !empty($global_config['zaloAppID']) and !empty($global_config['zaloAppSecretKey'])) {
+        $server_allowed['zalo'] = 1;
+    }
 
     // Thêm mới tài khoản Oauth
     if (isset($server_allowed[($opt = $nv_Request->get_title('auth', 'get', ''))])) {
@@ -107,10 +110,10 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
             if (empty($error)) {
                 // Thêm mới vào CSDL
                 $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_oauth (
-                    admin_id, oauth_server, oauth_uid, oauth_email, addtime
+                    admin_id, oauth_server, oauth_uid, oauth_email, oauth_id, addtime
                 ) VALUES (
                     ' . $row['admin_id'] . ', ' . $db->quote($opt) . ', ' . $db->quote($attribs['full_identity']) . ',
-                    ' . $db->quote($attribs['email']) . ', ' . NV_CURRENTTIME . '
+                    ' . $db->quote($attribs['email']) . ', ' . $db->quote($attribs['identity']) . ', ' . NV_CURRENTTIME . '
                 )';
                 if (!$db->insert_id($sql, 'id')) {
                     $error = $lang_global['admin_oauth_error_savenew'];
@@ -134,6 +137,10 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
     if (isset($server_allowed['google'])) {
         $xtpl->assign('LINK_GOOGLE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=2step&amp;auth=google');
         $xtpl->parse('main.add_google');
+    }
+    if (isset($server_allowed['zalo'])) {
+        $xtpl->assign('LINK_ZALO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=2step&amp;auth=zalo');
+        $xtpl->parse('main.add_zalo');
     }
 } elseif ($manager_user_2step and !empty($row_user['active2step'])) {
     // Quản lý 2 bước của tài khoản khác đang bật xác thực
@@ -184,6 +191,7 @@ if (empty($array_oauth)) {
     $xtpl->parse('main.oauth_empty');
 } else {
     foreach ($array_oauth as $oauth) {
+        $oauth['email_or_id'] = !empty($oauth['oauth_email']) ? $oauth['oauth_email'] : $oauth['oauth_id'];
         $oauth['addtime'] = nv_date('H:i d/m/Y', $oauth['addtime']);
         $xtpl->assign('OAUTH', $oauth);
         $xtpl->parse('main.oauth_data.oauth');

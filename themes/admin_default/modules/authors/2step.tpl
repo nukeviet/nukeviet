@@ -33,7 +33,7 @@
             <thead>
                 <tr>
                     <th class="text-nowrap" style=" width:30%;">{LANG.2step_oauth_gate}</th>
-                    <th class="text-nowrap" style=" width:40%;">{LANG.2step_oauth_email}</th>
+                    <th class="text-nowrap" style=" width:40%;">{LANG.2step_oauth_email_or_id}</th>
                     <th class="text-nowrap" style=" width:20%;">{LANG.2step_addtime}</th>
                     <th class="text-nowrap" style=" width:10%;"></th>
                 </tr>
@@ -42,7 +42,7 @@
                 <!-- BEGIN: oauth -->
                 <tr>
                     <td>{OAUTH.oauth_server}</td>
-                    <td>{OAUTH.oauth_email}</td>
+                    <td>{OAUTH.email_or_id}</td>
                     <td class="text-nowrap">{OAUTH.addtime}</td>
                     <td class="text-center text-nowrap">
                         <a href="javascript:void(0);" class="btn btn-danger btn-xs" onclick="nv_del_oauthone('{OAUTH.id}', {USERID}, '{TOKEND}');"><i class="fa fa-trash-o"></i> {GLANG.delete}</a>
@@ -62,6 +62,9 @@
                 <!-- BEGIN: add_google -->
                 <a href="{LINK_GOOGLE}" class="btn btn-google btn-sm" ><i class="fa fa-google" aria-hidden="true"></i> {LANG.2step_add_google}</a>
                 <!-- END: add_google -->
+                <!-- BEGIN: add_zalo -->
+                <a href="{LINK_ZALO}" class="btn btn-zalo btn-sm" ><i class="fa fa-zalo" aria-hidden="true"></i> {LANG.2step_add_zalo}</a>
+                <!-- END: add_zalo -->
             </div>
             <div class="col-sm-10">
                 <!-- BEGIN: delete_btn -->

@@ -109,7 +109,7 @@ $lang_module['email_deny_name'] = 'Rất tiếc, địa chỉ %s đã bị cấm
 $lang_module['email_registered_name'] = 'Rất tiếc, địa chỉ %s đã có người sử dụng. Bạn có thể dùng chức năng Quên mật khẩu để lấy lại mật khẩu';
 $lang_module['account_register'] = 'Tài khoản của bạn đã được tạo';
 $lang_module['account_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />Tên tài khoản: %4$s<br /><br />Bạn hãy click vào đường dẫn dưới đây để đăng nhập và đổi mật khẩu:<br />URL: <a href="%3$s">%3$s</a><br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['account_register_openid_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt.<br/>Để đăng nhập vui lòng truy cập vào trang: <a href="%3$s">%3$s</a> và click vào nút: Đăng nhập với %4$s.<br /><br /><strong>Lưu ý quan trọng:</strong> Bạn chưa tạo mật khẩu của tài khoản nên không thể đăng nhập tài khoản theo cách thông thường. Hãy tiến hành tạo mật khẩu ở khu vực Thiết lập tài khoản.<br/><br/>Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
+$lang_module['account_register_openid_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt.<br/>Để đăng nhập vui lòng truy cập vào trang: <a href="%3$s">%3$s</a> và click vào nút: Đăng nhập với %4$s.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['account_register_to_admin'] = 'Tài khoản của bạn đã được tạo, nhưng chưa qua kiểm duyệt của Quản trị site. Chúng tôi sẽ nhanh chóng tiến hành kiểm tra và thông báo kết quả đến bạn';
 $lang_module['account_active'] = 'Thông tin kích hoạt tài khoản';
 $lang_module['account_active_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4$s<br />Email: %5$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %6$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site';
@@ -284,6 +284,7 @@ $lang_module['changequestion_notvalid'] = 'Tài khoản chưa có mật khẩu n
 $lang_module['changeemail_notvalid'] = 'Tài khoản chưa có mật khẩu nên không thể thay đổi email. Hãy tạo mật khẩu sau đó quay lại trang này.';
 $lang_module['add_pass'] = 'Tạo mật khẩu';
 $lang_module['openid_server'] = 'Nhà cung cấp';
+$lang_module['openid_email_or_id'] = 'E-mail hoặc ID';
 $lang_module['openid_deleted'] = 'OpenID vừa chọn đã được xóa khỏi tài khoản';
 $lang_module['openid_choose'] = 'Hãy chọn ít nhất một openID';
 $lang_module['openid_default'] = 'OpenID này không thể xóa vì nó đang được bạn sử dụng để đăng nhập tài khoản';
@@ -384,3 +385,8 @@ $lang_module['pass_reset2_info'] = 'Vì lý do bảo mật, chúng tôi khuyến
 $lang_module['pass_reset3_info'] = 'Đã hơn %d ngày bạn chưa thay đổi mật khẩu tài khoản người dùng. Vì lý do bảo mật, vui lòng thay đổi mật khẩu trước khi sử dụng các tiện ích của site.';
 $lang_module['password_was_used'] = 'Mật khẩu không khả dụng vì nó đã được sử dụng ở một trong %d lần thay đổi mật khẩu gần đây nhất.';
 $lang_module['another_option'] = 'Lựa chọn khác';
+$lang_module['verify_mail_error'] = 'Lỗi: Mã xác minh e-mail chưa được nhập hoặc nhập không chính xác.';
+$lang_module['verify_email_title'] = 'Thư xác minh e-mail mới';
+$lang_module['verify_email_mess'] = 'Xin chào!<br /><br />Bạn đã gửi yêu cầu xác minh e-mail: %s. Hãy chép mã dưới đây vào ô Mã xác minh trên site.<br /><br />Mã xác minh: <span>%s</span><br/><br/>Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
+$lang_module['verify_email_sent'] = 'Mã xác minh e-mail mới đã được gửi đến địa chỉ mà bạn khai báo trên (Nếu không thấy nó trong thư mục thư đến, hãy kiểm tra trong thư mục SPAM). Hãy chép nó và dán vào ô Mã xác minh dưới đây';
+$lang_module['verify_email_sent_error'] = 'Đã xảy ra lỗi kỹ thuật khi gửi mã xác minh đến e-mail của bạn. Vui lòng liên hệ với quản trị site về vấn đề này.';
