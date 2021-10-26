@@ -237,7 +237,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_openid (
     userid mediumint(8) unsigned NOT NULL DEFAULT '0',
-    openid varchar(255) NOT NULL DEFAULT '',
+    openid char(50) NOT NULL DEFAULT '',
     opid char(50) NOT NULL DEFAULT '',
     id char(50) NOT NULL DEFAULT '',
     email varchar(100) NOT NULL DEFAULT '',
