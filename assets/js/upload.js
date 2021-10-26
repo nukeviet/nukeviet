@@ -1921,30 +1921,36 @@ var NVUPLOAD = {
                         }
                         */
 
-                        $('#upload-start').click(function() {
-                            // Check file before start upload
-                            var allow_start = true;
-                            if (nv_alt_require) {
-                                $.each($('#upload-queue-files .file-alt input'), function() {
-                                    if ($(this).val() == '') {
-                                        allow_start = false;
-                                        return false;
+                        if (!$('#upload-start').data('binded')) {
+                            $('#upload-start').click(function() {
+                                // Check file before start upload
+                                var allow_start = true;
+                                if (nv_alt_require) {
+                                    $.each($('#upload-queue-files .file-alt input'), function() {
+                                        if ($(this).val() == '') {
+                                            allow_start = false;
+                                            return false;
+                                        }
+                                    });
+
+                                    if (allow_start == false) {
+                                        $("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
                                     }
-                                });
-
-                                if (allow_start == false) {
-                                    $("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
                                 }
-                            }
 
-                            if (allow_start) {
-                                NVUPLOAD.uploader.start();
-                            }
-                        });
+                                if (allow_start) {
+                                    NVUPLOAD.uploader.start();
+                                }
+                            });
+                            $('#upload-start').data('binded', true);
+                        }
 
-                        $('#upload-cancel').click(function() {
-                            NVUPLOAD.uploadCancel();
-                        });
+                        if (!$('#upload-cancel').data('binded')) {
+                            $('#upload-cancel').click(function() {
+                                NVUPLOAD.uploadCancel();
+                            });
+                            $('#upload-cancel').data('binded', true);
+                        }
                     },
 
                     // Event on trigger a file upload status
