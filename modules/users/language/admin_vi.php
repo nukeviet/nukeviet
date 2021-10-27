@@ -440,6 +440,8 @@ $lang_module['user_config_memberAttributeUsesDn'] = 'Member attribute uses dn';
 $lang_module['user_config_memberAttributeUsesDn_info'] = 'Optional: Overrides handling of member attribute values, either 0 or 1 ';
 $lang_module['user_config_objectClass'] = 'Object class';
 $lang_module['user_config_objectClass_info'] = 'Tuỳ chọn: Ghi đè lớp đối tượng sử dụng để chỉ định/tìm kiếm người dùng trên kiểu người dùng ldap_user_type. Thông thường bạn không cần thay đổi điều này.';
+$lang_module['user_config_admin_email'] = 'Thông báo các cập nhật tài khoản tới người dùng';
+$lang_module['user_config_admin_email1'] = 'Gửi email cho người dùng khi quản trị thực hiện các thay đổi trên tài khoản của họ';
 
 $lang_module['update_LDAP_config'] = 'Cập nhật dữ liệu từ LDAP xuống website';
 $lang_module['update_LDAP_config_name'] = 'Tên đệm và tên';
