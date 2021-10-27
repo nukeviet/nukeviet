@@ -83,6 +83,13 @@ $(document).ready(function(){
             <td class="alt">{LANG.lang_multi_note}</td>
         </tr>
         <tr>
+            <th scope="row" class="specalt"> {LANG.dev_mode}</th>
+            <td class="alt">
+            <input type="checkbox" value="1" name="dev_mode"{DATA.dev_mode}/>
+            </td>
+            <td class="alt">{LANG.dev_mode_note}</td>
+        </tr>
+        <tr>
             <th class="spec">&nbsp;</th>
             <td class="spec" colspan="2">
             <input class="button" type="submit" value="{LANG.refesh}" />
