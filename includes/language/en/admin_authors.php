@@ -165,6 +165,12 @@ $lang_module['2step_add_facebook'] = 'Add Facebook account';
 $lang_module['2step_delete_all'] = 'Remove all';
 $lang_module['2step_error_oauth_exists'] = 'This account is already in the verification list';
 $lang_module['2step_addtime'] = 'Add time';
+$lang_module['2step_oauth_add_mail_subject'] = 'Configuring 2-step verification using Oauth done';
+$lang_module['2step_oauth_add_mail_content'] = 'Hello, %1$s!<br /><br />Administration of the site %2$s would like to inform:<br />Two-step authentication using Oauth in the admin panel has been successfully installed. You can use the account %3$s of the provider %4$s for authentication when you log into the site admin area.<br /><br />Site administration';
+$lang_module['2step_oauth_del_mail_subject'] = 'Configuring Two-Step Authentication with Oauth has been canceled';
+$lang_module['2step_oauth_del_mail_content'] = 'Hello, %1$s!<br /><br />Administration of the site %2$s would like to inform:<br />At your request, 2-Step Verification using Oauth has been successfully canceled. From now on, you cannot use the account %3$s of the provider %4$s to authenticate in the site admin area.<br /><br />Site administration';
+$lang_module['2step_oauth_dels_mail_content'] = 'Hello, %1$s!<br /><br />Administration of the site %2$s would like to inform:<br />At your request, 2-Step Verification using Oauth has been successfully canceled. From now on, you cannot use the accounts %3$s to authenticate in the site admin area.<br /><br />Site administration';
+
 $lang_module['ip_version'] = 'IP Version';
 $lang_module['api_addtime'] = 'Add time';
 $lang_module['api_edittime'] = 'Edit time';

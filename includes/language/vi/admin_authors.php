@@ -170,6 +170,11 @@ $lang_module['2step_add_facebook'] = 'Thêm tài khoản Facebook';
 $lang_module['2step_delete_all'] = 'Gỡ tất cả';
 $lang_module['2step_error_oauth_exists'] = 'Tài khoản này đã có trong danh sách xác thực';
 $lang_module['2step_addtime'] = 'Thêm lúc';
+$lang_module['2step_oauth_add_mail_subject'] = 'Định cấu hình Xác thực hai bước bằng Oauth đã hoàn tất';
+$lang_module['2step_oauth_add_mail_content'] = 'Xin chào, %1$s!<br /><br />Ban quản trị website %2$s xin thông báo:<br />Việc xác thực đăng nhập quản trị của bạn bằng Oauth đã được thiết lập thành công. Bạn có thể sử dụng tài khoản %3$s của nhà cung cấp %4$s để xác thực mỗi khi đăng nhập vào quản trị hệ thống.<br /><br />Ban quản trị website';
+$lang_module['2step_oauth_del_mail_subject'] = 'Định cấu hình Xác thực hai bước bằng Oauth đã bị hủy';
+$lang_module['2step_oauth_del_mail_content'] = 'Xin chào, %1$s!<br /><br />Ban quản trị website %2$s xin thông báo:<br />Theo yêu cầu của bạn, việc xác thực hai bước bằng Oauth đã hủy thành công. Bạn đã không thể sử dụng tài khoản %3$s của nhà cung cấp %4$s để xác thực đăng nhập vào quản trị hệ thống.<br /><br />Ban quản trị website';
+$lang_module['2step_oauth_dels_mail_content'] = 'Xin chào, %1$s!<br /><br />Ban quản trị website %2$s xin thông báo:<br />Theo yêu cầu của bạn, việc xác thực hai bước bằng Oauth đã hủy thành công. Bạn đã không thể sử dụng các tài khoản %3$s để xác thực đăng nhập vào quản trị hệ thống.<br /><br />Ban quản trị website';
 
 $lang_module['api_addtime'] = 'Tạo lúc';
 $lang_module['api_edittime'] = 'Cập nhật';
