@@ -79,7 +79,6 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['allowuserreg'] = $nv_Request->get_int('allowuserreg', 'post', 0);
         $array_config['openid_servers'] = $nv_Request->get_typed_array('openid_servers', 'post', 'string');
         $array_config['openid_servers'] = !empty($array_config['openid_servers']) ? implode(',', $array_config['openid_servers']) : '';
-        $array_config['openid_processing'] = $nv_Request->get_int('openid_processing', 'post', 0);
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
         $array_config['pass_timeout'] = 86400 * $nv_Request->get_int('pass_timeout', 'post', 0);
@@ -88,6 +87,9 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
         $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', []);
         $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
+
+        $array_config['openid_processing'] = $nv_Request->get_typed_array('openid_processing', 'post', 'string', []);
+        $array_config['openid_processing'] = !empty($array_config['openid_processing']) ? implode(',', $array_config['openid_processing']) : '';
 
         if ($array_config['user_check_pass_time'] < 120) {
             $array_config['user_check_pass_time'] = 120;
@@ -210,6 +212,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['auto_login_after_reg'] = !empty($array_config['auto_login_after_reg']) ? ' checked="checked"' : '';
     $array_config['send_pass'] = !empty($array_config['send_pass']) ? ' checked="checked"' : '';
     $array_config['pass_timeout'] = $array_config['pass_timeout'] / 86400;
+    $array_config['openid_processing'] = !empty($array_config['openid_processing']) ? array_map('trim', explode(',', $array_config['openid_processing'])) : [];
 
     $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . "_config WHERE
         config='deny_email' OR config='deny_name' OR config='password_simple' OR
@@ -241,9 +244,9 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         3 => $lang_module['active_admin_check']
     ];
     $array_openid_processing = [
-        0 => $lang_module['openid_processing_0'],
-        3 => $lang_module['openid_processing_3'],
-        4 => $lang_module['openid_processing_4']
+        'connect' => $lang_module['openid_processing_connect'],
+        'create' => $lang_module['openid_processing_create'],
+        'auto' => $lang_module['openid_processing_auto']
     ];
 
     $ignorefolders = [
@@ -397,14 +400,13 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.oldpass_num');
     }
 
-    foreach ($array_openid_processing as $id => $titleregister) {
-        $select = ($array_config['openid_processing'] == $id) ? ' selected="selected"' : '';
-        $array = [
-            'id' => $id,
-            'select' => $select,
-            'value' => $titleregister
-        ];
-        $xtpl->assign('OPENID_PROCESSING', $array);
+    foreach ($array_openid_processing as $key => $name) {
+        $checked = (!empty($array_config['openid_processing']) and in_array($key, $array_config['openid_processing'], true)) ? ' checked="checked"' : '';
+        $xtpl->assign('OPENID_PROCESSING', [
+            'key' => $key,
+            'checked' => $checked,
+            'name' => $name
+        ]);
         $xtpl->parse('main.openid_processing');
     }
 
