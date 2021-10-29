@@ -34,6 +34,7 @@ $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
+$array_data['dev_mode'] = 0;
 
 $global_config['unofficial_mode'] = 0; // Cảnh báo bản thử nghiệm
 $global_config['version'] = '4.5.00'; // NukeViet 4.5
