@@ -255,11 +255,9 @@
                 <tr>
                     <td>{LANG.openid_processing}</td>
                     <td>
-                        <select class="form-control" name="openid_processing">
-                            <!-- BEGIN: openid_processing -->
-                            <option value="{OPENID_PROCESSING.id}"{OPENID_PROCESSING.select}> {OPENID_PROCESSING.value}</option>
-                            <!-- END: openid_processing -->
-                        </select>
+                        <!-- BEGIN: openid_processing -->
+                        <input name="openid_processing[]" value="{OPENID_PROCESSING.key}" type="checkbox"{OPENID_PROCESSING.checked} /> {OPENID_PROCESSING.name}<br/>
+                        <!-- END: openid_processing -->
                     </td>
                 </tr>
                 <!-- BEGIN: deny_config -->

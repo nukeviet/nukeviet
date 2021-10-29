@@ -410,14 +410,15 @@ function user_login($is_ajax = false)
 
 /**
  * user_openid_login()
- *
- * @param bool  $gfx_chk
- * @param array $attribs
- * @return string
+ * 
+ * @param mixed $gfx_chk 
+ * @param mixed $attribs 
+ * @param array $op_process 
+ * @return string 
  */
-function user_openid_login($gfx_chk, $attribs)
+function user_openid_login($attribs, $op_process)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $module_captcha, $nv_redirect;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $nv_redirect;
 
     $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
 
@@ -436,33 +437,42 @@ function user_openid_login($gfx_chk, $attribs)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    if ($gfx_chk) {
-        // Nếu dùng reCaptcha v3
-        if ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 3) {
-            $xtpl->parse('main.recaptcha3');
+    $op_process_count = count($op_process);
+
+    if ($op_process_count > 1) {
+        foreach($op_process as $process => $val) {
+            $xtpl->assign('ACTION', [
+                'key' => $process,
+                'name' => $lang_module['openid_processing_' . $process]
+            ]);
+            $xtpl->parse('main.choose_action.option');
         }
-        // Nếu dùng reCaptcha v2
-        elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
-            $xtpl->parse('main.recaptcha');
-        } elseif ($module_captcha == 'captcha') {
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-            $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-            $xtpl->parse('main.captcha');
-        }
+        $xtpl->parse('main.choose_action');
     }
 
-    $info = $lang_module['openid_note1'];
+    $first = array_keys($op_process);
+    $first = array_shift($first);
+    $info = $op_process_count > 1 ? $lang_module['openid_note'] : $lang_module['openid_' . $first . '_note'];
+    $xtpl->assign('INFO', $info);
 
     $xtpl->assign('REDIRECT', $nv_redirect);
 
-    if ($global_config['allowuserreg'] != 0) {
-        $info = $lang_module['openid_note2'];
+    if (isset($op_process['connect'])) {
+        if ($first != 'connect') {
+            $xtpl->parse('main.userlogin.isHide');
+        }
         if (!empty($nv_redirect)) {
-            $xtpl->parse('main.allowuserreg.redirect2');
+            $xtpl->parse('main.userlogin.redirect');
+        }
+        $xtpl->parse('main.userlogin');
+    }
+
+    if (isset($op_process['create'])) {
+        if ($first != 'create') {
+            $xtpl->parse('main.allowuserreg.isHide');
+        }
+        if (!empty($nv_redirect)) {
+            $xtpl->parse('main.allowuserreg.redirect');
         }
         if (!empty($reg_email)) {
             $xtpl->parse('main.allowuserreg.readonly');
@@ -470,13 +480,13 @@ function user_openid_login($gfx_chk, $attribs)
             $xtpl->parse('main.allowuserreg.email_verify');
         }
         $xtpl->parse('main.allowuserreg');
-        $xtpl->parse('main.allowuserreg2');
     }
 
-    $xtpl->assign('INFO', $info);
-
-    if (!empty($nv_redirect)) {
-        $xtpl->parse('main.redirect');
+    if (isset($op_process['auto'])) {
+        if (!empty($nv_redirect)) {
+            $xtpl->parse('main.auto.redirect');
+        }
+        $xtpl->parse('main.auto');
     }
 
     $xtpl->parse('main');
