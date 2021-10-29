@@ -77,6 +77,16 @@ if (empty($row['active2step'])) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
         $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='' WHERE userid=" . $row['userid']);
 
+        // Gửi email thông báo
+        if (!empty($global_users_config['admin_email'])) {
+            $url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, true);
+            $message = sprintf($lang_module['security_alert_2stepoff'], $row['username'], $url);
+            nv_sendmail([
+                $global_config['site_name'],
+                $global_config['site_email']
+            ], $row['email'], $lang_module['security_alert'], $message);
+        }
+
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_turnoff_user2step', 'userid ' . $row['userid'], $admin_info['userid']);
         $nv_Cache->delMod($module_name);
 
