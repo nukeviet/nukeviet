@@ -455,6 +455,8 @@ $lang_module['user_config_memberAttributeUsesDn'] = 'Member attribute uses dn';
 $lang_module['user_config_memberAttributeUsesDn_info'] = 'Optional: Overrides handling of member attribute values, either 0 or 1 ';
 $lang_module['user_config_objectClass'] = 'Object class';
 $lang_module['user_config_objectClass_info'] = 'Tuỳ chọn: Ghi đè lớp đối tượng sử dụng để chỉ định/tìm kiếm người dùng trên kiểu người dùng ldap_user_type. Thông thường bạn không cần thay đổi điều này.';
+$lang_module['user_config_admin_email'] = 'Thông báo các cập nhật tài khoản tới người dùng';
+$lang_module['user_config_admin_email1'] = 'Gửi email cho người dùng khi quản trị thực hiện các thay đổi trên tài khoản của họ';
 
 $lang_module['update_LDAP_config'] = 'Cập nhật dữ liệu từ LDAP xuống website';
 $lang_module['update_LDAP_config_name'] = 'Tên đệm và tên';
@@ -532,6 +534,11 @@ $lang_module['is_email_verified'] = 'Xác minh email';
 $lang_module['is_email_verified1'] = 'Nếu chọn vào đây, trạng thái email của tài khoản là không cần xác minh. Nếu không, trạng thái email tài khoản là chưa xác minh';
 $lang_module['auto_assign_oauthuser'] = 'Tự động xử lý trùng email Oauth';
 $lang_module['auto_assign_oauthuser_note'] = 'Khi bật tùy chọn này, nếu đăng nhập qua Oauth mà email đã được sử dụng thì hệ thống sẽ tự động gán Oauth vào tài khoản đó mà không cần nhập mật khẩu để xác nhận';
+
+$lang_module['security_alert'] = 'Thông báo bảo mật';
+$lang_module['security_alert_openid_delete'] = 'OpenID <strong>%s</strong> vừa được gỡ khỏi tài khoản <strong>%s</strong> của bạn bởi quản trị viên. Chúng tôi gửi cho bạn email này để thông tin đến bạn.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý OpenID</a>';
+$lang_module['security_alert_openid_truncate'] = 'Tất cả các OpenID vừa được gỡ khỏi tài khoản <strong>%s</strong> của bạn bởi quản trị viên. Chúng tôi gửi cho bạn email này để thông tin đến bạn.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý OpenID</a>';
+$lang_module['security_alert_2stepoff'] = 'Tài khoản <strong>%s</strong> của bạn vừa được tắt xác thực hai bước bởi quản trị viên. Chúng tôi gửi cho bạn email này để thông tin đến bạn.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý xác thực hai bước</a>';
 
 $lang_module['account_active'] = 'Thông tin kích hoạt tài khoản';
 $lang_module['account_active_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đang chờ kích hoạt. Để kích hoạt, bạn hãy click vào link dưới đây:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Các thông tin cần thiết:<br /><br />Tài khoản: %4$s<br />Email: %5$s<br /><br />Việc kích hoạt tài khoản chỉ có hiệu lực đến %6$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br /><br /><br />Quản trị site';

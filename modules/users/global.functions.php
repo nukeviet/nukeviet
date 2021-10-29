@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+define('NV_2STEP_VERIFICATION_MODULE', 'two-step-verification');
+
 $global_array_genders = [
     'M' => [
         'key' => 'M',

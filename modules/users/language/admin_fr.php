@@ -443,6 +443,8 @@ $lang_module['user_config_memberAttributeUsesDn'] = 'Attribut d\'utilisateur uti
 $lang_module['user_config_memberAttributeUsesDn_info'] = 'Options:';
 $lang_module['user_config_objectClass'] = 'Classe d\'objet';
 $lang_module['user_config_objectClass_info'] = 'Option:';
+$lang_module['user_config_admin_email'] = 'Informer les utilisateurs des mises à jour de compte';
+$lang_module['user_config_admin_email1'] = 'Envoyer des e-mails aux utilisateurs lorsque les administrateurs modifient leurs comptes';
 $lang_module['update_LDAP_config'] = 'Mettre à jour les donnes à partir de LDAP au website';
 $lang_module['update_LDAP_config_name'] = 'Prénom';
 $lang_module['update_LDAP_config_lname'] = 'Nom';
@@ -534,3 +536,7 @@ $lang_module['pass_timeout'] = 'L\'utilisateur doit changer de mot de passe tous
 $lang_module['days'] = 'jours (0 = Non applicable)';
 $lang_module['oldpass_num'] = 'Nombre d\'anciens mots de passe stockés dans la base de données';
 $lang_module['send_password'] = 'Envoyer les informations de mot de passe à l\'e-mail de l\'utilisateur';
+$lang_module['security_alert'] = 'Privacy Notice';
+$lang_module['security_alert_openid_delete'] = 'OpenID <strong>%s</strong> vient d\'être supprimé de votre compte <strong>%s</strong> par un administrateur. Nous vous envoyons cet e-mail pour vous informer.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Gestion OpenID</a>';
+$lang_module['security_alert_openid_truncate'] = 'Tous les OpenID viennent d\'être supprimés de votre compte <strong>%s</strong> par un administrateur. Nous vous envoyons cet e-mail pour vous informer.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Gestion OpenID</a>';
+$lang_module['security_alert_2stepoff'] = 'Votre compte <strong>%s</strong> vient de voir l\'authentification en deux étapes désactivée par votre administrateur. Nous vous envoyons cet e-mail pour vous informer.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Gérer l\'authentification en deux étapes</a>';
