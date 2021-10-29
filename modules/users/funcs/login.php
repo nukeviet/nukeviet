@@ -164,6 +164,180 @@ function set_reg_attribs($attribs, $username)
     return $reg_attribs;
 }
 
+/**
+ * new_openid_user_save()
+ * 
+ * @param mixed $reg_username 
+ * @param mixed $reg_email 
+ * @param mixed $reg_password 
+ * @param mixed $attribs 
+ * @throws ValueError 
+ * @throws PDOException 
+ */
+function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs)
+{
+    global $db, $nv_Cache, $global_config, $global_users_config, $lang_module, $module_name;
+
+    $reg_attribs = set_reg_attribs($attribs, $reg_username);
+    $current_mode = isset($attribs['current_mode']) ? $attribs['current_mode'] : 1;
+
+    /*
+    * Neu dang ky moi va cho dang ky khong can kich hoat hoac kich hoat qua email (allowuserreg = 1, 2)
+    */
+    if ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2) {
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
+                group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
+                question, answer, passlostkey, view_mail, remember, in_groups,
+                active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
+            ) VALUES (
+                ' . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
+                :username,
+                :md5username,
+                :password,
+                :email,
+                :first_name,
+                :last_name,
+                :gender,
+                :photo,
+                0,
+                " . NV_CURRENTTIME . ",
+                '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . (int) ($global_config['idsite']) . ',
+                -1, ' . $db->quote('OAUTH:' . $reg_attribs['server']) . '
+            )';
+
+        $data_insert = [];
+        $data_insert['username'] = $reg_username;
+        $data_insert['md5username'] = nv_md5safe($reg_username);
+        $data_insert['password'] = $reg_password;
+        $data_insert['email'] = $reg_email;
+        $data_insert['first_name'] = $reg_attribs['first_name'];
+        $data_insert['last_name'] = $reg_attribs['last_name'];
+        $data_insert['gender'] = !empty($reg_attribs['gender']) ? ucfirst(substr($reg_attribs['gender'], 0, 1)) : 'N';
+        $data_insert['photo'] = $reg_attribs['photo'];
+
+        $userid = $db->insert_id($sql, 'userid', $data_insert);
+
+        if (!$userid) {
+            opidr_login([
+                'status' => 'error',
+                'mess' => $lang_module['err_no_save_account']
+            ]);
+        }
+
+        // Cap nhat so thanh vien
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($global_users_config['active_group_newusers'] ? 7 : 4));
+
+        $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid . ' AND active=1';
+        $result = $db->query($query);
+        $row = $result->fetch();
+        $result->closeCursor();
+
+        // Luu vao bang thong tin tuy chinh
+        $query_field = [];
+        $query_field['userid'] = $userid;
+        $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
+        while ($row_f = $result_field->fetch()) {
+            if ($row_f['is_system'] == 1) {
+                continue;
+            }
+            $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
+        }
+        $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
+
+        // Luu vao bang OpenID
+        $user_id = (int) ($row['userid']);
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid , :id, :email)');
+        $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
+        $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
+        $stmt->bindParam(':id', $reg_attribs['openid'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Callback sau khi đăng ký
+        if (nv_function_exists('nv_user_register_callback')) {
+            nv_user_register_callback($userid);
+        }
+
+        $subject = $lang_module['account_register'];
+        $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+        $message = sprintf($lang_module['account_register_openid_info'], $reg_attribs['first_name'], $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+        nv_sendmail([
+            $global_config['site_name'],
+            $global_config['site_email']
+        ], $reg_email, $subject, $message);
+
+        $nv_Cache->delMod($module_name);
+
+        if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
+        } else {
+            validUserLog($row, 1, [
+                'id' => $reg_attribs['opid'],
+                'provider' => $reg_attribs['server']
+            ], $current_mode);
+
+            opidr_login([
+                'status' => 'success',
+                'mess' => $lang_module['login_ok']
+            ]);
+        }
+    }
+
+    /*
+    * Neu dang ky moi + phai qua kiem duyet cua admin (allowuserreg = 3)
+    */
+    if ($global_config['allowuserreg'] == 3) {
+        $query_field = [];
+        $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
+        while ($row_f = $result_field->fetch()) {
+            $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
+        }
+
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_reg (
+                username, md5username, password, email, first_name, last_name, birthday, regdate, question, answer, checknum, users_info, openid_info
+            ) VALUES (
+                :username,
+                :md5username,
+                :password,
+                :email,
+                :first_name,
+                :last_name,
+                0,
+                " . NV_CURRENTTIME . ",
+                '',
+                '',
+                '',
+                :users_info,
+                :openid_info
+            )";
+
+        $data_insert = [];
+        $data_insert['username'] = $reg_username;
+        $data_insert['md5username'] = nv_md5safe($reg_username);
+        $data_insert['password'] = $reg_password;
+        $data_insert['email'] = $reg_email;
+        $data_insert['first_name'] = $reg_attribs['first_name'];
+        $data_insert['last_name'] = $reg_attribs['last_name'];
+        $data_insert['users_info'] = nv_base64_encode(serialize($query_field));
+        $data_insert['openid_info'] = nv_base64_encode(serialize($reg_attribs));
+        $userid = $db->insert_id($sql, 'userid', $data_insert);
+
+        if (!$userid) {
+            opidr_login([
+                'status' => 'error',
+                'mess' => $lang_module['err_no_save_account']
+            ]);
+        }
+
+        $nv_Cache->delMod($module_name);
+
+        opidr_login([
+            'status' => 'success',
+            'mess' => $lang_module['account_register_to_admin']
+        ]);
+    }
+}
+
 // Đăng nhập qua Oauth
 if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')) {
     $server = $nv_Request->get_string('server', 'get', '');
@@ -365,33 +539,36 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     /*
      * Neu chua co hoan toan trong CSDL
      */
+    $op_process = !empty($global_config['openid_processing']) ? array_flip(array_map('trim', explode(',', $global_config['openid_processing']))) : [];
+    if (empty($email)) {
+        unset($op_process['auto']);
+        !isset($op_process['create']) && $op_process['create'] = 1;
+    }
+    if (empty($global_config['allowuserreg'])) {
+        unset($op_process['auto'], $op_process['create']);
+    }
+    $op_process_count = count($op_process);
+
+    // Neu khong co hanh dong gi duoc xac dinh
+    if (empty($op_process)) {
+        opidr_login([
+            'status' => 'error',
+            'mess' => $lang_module['openid_not_found']
+        ]);
+    }
+
+    // Neu he thong tu dong tao tai khoan moi va gan Oauth nay vao
+    if (isset($op_process['auto']) and ($op_process_count == 1 or $nv_Request->isset_request('nv_auto', 'post'))) {
+        $reg_username = create_username_from_email($email);
+        new_openid_user_save($reg_username, $email, '', $attribs);
+    }
 
     /*
      * Neu gan OpenID nay vao 1 tai khoan da co
      */
-    if ($nv_Request->isset_request('nv_login', 'post')) {
+    if (isset($op_process['connect']) and $nv_Request->isset_request('nv_login', 'post')) {
         $nv_username = $nv_Request->get_title('login', 'post', '', 1);
         $nv_password = $nv_Request->get_title('password', 'post', '');
-
-        unset($nv_seccode);
-        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-        if ($module_captcha == 'recaptcha') {
-            $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-        }
-        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-        elseif ($module_captcha == 'captcha') {
-            $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
-        }
-
-        // Kiểm tra tính hợp lệ của captcha nhập vào
-        $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
-
-        if (!$check_seccode) {
-            opidr_login([
-                'status' => 'error',
-                'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
-            ]);
-        }
 
         if (empty($nv_username)) {
             opidr_login([
@@ -549,7 +726,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     /*
     * Neu dang ky moi
     */
-    if ($global_config['allowuserreg'] != 0 and $nv_Request->isset_request('nv_reg', 'post')) {
+    if (isset($op_process['create']) and $nv_Request->isset_request('nv_reg', 'post')) {
         $reg_username = $nv_Request->get_title('reg_username', 'post', '', 1);
         if (($check_reg_username = nv_check_username_reg($reg_username)) != '') {
             opidr_login([
@@ -608,175 +785,14 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         $reg_password = $crypt->hash_password($reg_password, $global_config['hashprefix']);
 
-        $reg_attribs = set_reg_attribs($attribs, $reg_username);
-
-        /*
-        * Neu dang ky moi va cho dang ky khong can kich hoat hoac kich hoat qua email (allowuserreg = 1, 2)
-        */
-        if ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2) {
-            $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
-                group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
-                question, answer, passlostkey, view_mail, remember, in_groups,
-                active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
-            ) VALUES (
-                ' . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
-                :username,
-                :md5username,
-                :password,
-                :email,
-                :first_name,
-                :last_name,
-                :gender,
-                :photo,
-                0,
-                " . NV_CURRENTTIME . ",
-                '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . (int) ($global_config['idsite']) . ',
-                -1, ' . $db->quote('OAUTH:' . $reg_attribs['server']) . '
-            )';
-
-            $data_insert = [];
-            $data_insert['username'] = $reg_username;
-            $data_insert['md5username'] = nv_md5safe($reg_username);
-            $data_insert['password'] = $reg_password;
-            $data_insert['email'] = $reg_email;
-            $data_insert['first_name'] = $reg_attribs['first_name'];
-            $data_insert['last_name'] = $reg_attribs['last_name'];
-            $data_insert['gender'] = !empty($reg_attribs['gender']) ? ucfirst(substr($reg_attribs['gender'], 0, 1)) : 'N';
-            $data_insert['photo'] = $reg_attribs['photo'];
-
-            $userid = $db->insert_id($sql, 'userid', $data_insert);
-
-            if (!$userid) {
-                opidr_login([
-                    'status' => 'error',
-                    'mess' => $lang_module['err_no_save_account']
-                ]);
-            }
-
-            // Cap nhat thong tin anh dai dien
-            if (!empty($reg_attribs['photo'])) {
-                $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo=:photo WHERE userid=' . $userid);
-                $stmt->bindParam(':photo', $reg_attribs['photo'], PDO::PARAM_STR);
-                $stmt->execute();
-            }
-
-            // Cap nhat so thanh vien
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($global_users_config['active_group_newusers'] ? 7 : 4));
-
-            $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid . ' AND active=1';
-            $result = $db->query($query);
-            $row = $result->fetch();
-            $result->closeCursor();
-
-            // Luu vao bang thong tin tuy chinh
-            $query_field = [];
-            $query_field['userid'] = $userid;
-            $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
-            while ($row_f = $result_field->fetch()) {
-                if ($row_f['is_system'] == 1) {
-                    continue;
-                }
-                $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
-            }
-            $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
-
-            // Luu vao bang OpenID
-            $user_id = (int) ($row['userid']);
-            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_id . ', :server, :opid , :id, :email)');
-            $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
-            $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
-            $stmt->bindParam(':id', $reg_attribs['openid'], PDO::PARAM_STR);
-            $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
-            $stmt->execute();
-
-            // Callback sau khi đăng ký
-            if (nv_function_exists('nv_user_register_callback')) {
-                nv_user_register_callback($userid);
-            }
-
-            $subject = $lang_module['account_register'];
-            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
-            $message = sprintf($lang_module['account_register_openid_info'], $reg_attribs['first_name'], $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
-            nv_sendmail([
-                $global_config['site_name'],
-                $global_config['site_email']
-            ], $reg_email, $subject, $message);
-
-            $nv_Cache->delMod($module_name);
-
-            if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
-                require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
-            } else {
-                validUserLog($row, 1, [
-                    'id' => $reg_attribs['opid'],
-                    'provider' => $reg_attribs['server']
-                ], $current_mode);
-                opidr_login([
-                    'status' => 'success',
-                    'mess' => $lang_module['login_ok']
-                ]);
-            }
-        }
-
-        /*
-        * Neu dang ky moi + phai qua kiem duyet cua admin (allowuserreg = 3)
-        */
-        if ($global_config['allowuserreg'] == 3) {
-            $query_field = [];
-            $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
-            while ($row_f = $result_field->fetch()) {
-                $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
-            }
-
-            $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_reg (
-                username, md5username, password, email, first_name, last_name, birthday, regdate, question, answer, checknum, users_info, openid_info
-            ) VALUES (
-                :username,
-                :md5username,
-                :password,
-                :email,
-                :first_name,
-                :last_name,
-                0,
-                " . NV_CURRENTTIME . ",
-                '',
-                '',
-                '',
-                :users_info,
-                :openid_info
-            )";
-
-            $data_insert = [];
-            $data_insert['username'] = $reg_username;
-            $data_insert['md5username'] = nv_md5safe($reg_username);
-            $data_insert['password'] = $reg_password;
-            $data_insert['email'] = $reg_email;
-            $data_insert['first_name'] = $reg_attribs['first_name'];
-            $data_insert['last_name'] = $reg_attribs['last_name'];
-            $data_insert['users_info'] = nv_base64_encode(serialize($query_field));
-            $data_insert['openid_info'] = nv_base64_encode(serialize($reg_attribs));
-            $userid = $db->insert_id($sql, 'userid', $data_insert);
-
-            if (!$userid) {
-                opidr_login([
-                    'status' => 'error',
-                    'mess' => $lang_module['err_no_save_account']
-                ]);
-            }
-            $nv_Cache->delMod($module_name);
-
-            opidr_login([
-                'status' => 'success',
-                'mess' => $lang_module['account_register_to_admin']
-            ]);
-        }
+        new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs);
     }
 
     $page_title = $lang_global['openid_login'];
     $key_words = $module_info['keywords'];
     $mod_title = $lang_global['openid_login'];
 
-    $contents .= user_openid_login($gfx_chk, $attribs);
+    $contents .= user_openid_login($attribs, $op_process);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents, false);
