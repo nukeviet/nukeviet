@@ -301,6 +301,14 @@
                     <td><textarea name="password_simple" rows="7" cols="70" class="form-control">{DATA.password_simple}</textarea></td>
                 </tr>
                 <!-- END: deny_config -->
+                <tr>
+                    <td>{LANG.user_config_admin_email}</td>
+                    <td>
+                        <label class="mb-0">
+                            <input type="checkbox" value="1" name="admin_email"{DATA.admin_email}/> <small>{LANG.user_config_admin_email1}</small>
+                        </label>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -308,6 +308,9 @@ function nv_step_6($array_data, $nextstep)
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
     $xtpl->assign('LANG', $lang_module);
+
+    $array_data['dev_mode'] = empty($array_data['dev_mode']) ? '' : ' checked="checked"';
+
     $xtpl->assign('DATA', $array_data);
     $xtpl->assign('ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
     $xtpl->assign('CHECK_LANG_MULTI', ($array_data['lang_multi']) ? ' checked="checked"' : '');

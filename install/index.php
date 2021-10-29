@@ -749,6 +749,7 @@ if ($step == 1) {
     $array_data['nv_password'] = $nv_Request->get_title('nv_password', 'post', $array_data['nv_password']);
     $array_data['re_password'] = $nv_Request->get_title('re_password', 'post', $array_data['re_password']);
     $array_data['lang_multi'] = (int) $nv_Request->get_bool('lang_multi', 'post', $array_data['lang_multi']);
+    $array_data['dev_mode'] = (int) $nv_Request->get_bool('dev_mode', 'post', $array_data['dev_mode']);
 
     $check_email = nv_check_valid_email($array_data['nv_email'], true);
     $array_data['nv_email'] = $check_email[1];
@@ -871,6 +872,12 @@ if ($step == 1) {
                                     $global_config['rewrite_op_mod'] = 'news';
                                     $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = 'news' WHERE lang='sys' AND module = 'global' AND config_name = 'rewrite_op_mod'");
                                 }
+                            }
+                            // Cài site ở chế độ phát triển
+                            if ($array_data['dev_mode']) {
+                                $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value='0' WHERE lang='sys' AND module='global' AND config_name='dump_autobackup'");
+                                $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value='1' WHERE lang='sys' AND module='site' AND config_name='private_site'");
+                                $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value='1' WHERE lang='sys' AND module='define' AND config_name='nv_debug'");
                             }
                         } catch (PDOException $e) {
                             trigger_error($e->getMessage());
