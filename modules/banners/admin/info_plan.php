@@ -47,9 +47,16 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('ROW', $row);
+$xtpl->assign('LOCATION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $id);
 
 if (!empty($row['description'])) {
     $xtpl->parse('main.description');
+}
+
+$accordion = $nv_Request->get_title('accordion', 'get', '');
+if (!empty($accordion) and in_array($accordion, ['list_act', 'list_queue', 'list_timeract', 'list_exp', 'list_deact'], true)) {
+    $xtpl->assign('ACCORDION', $accordion);
+    $xtpl->parse('main.accordion');
 }
 
 $xtpl->parse('main');

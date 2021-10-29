@@ -65,7 +65,7 @@
         <a class="panel-heading d-block" role="tab" id="list_act-title" data-toggle="collapse" data-parent="#accordion" href="#list_act" aria-expanded="false" aria-controls="list_act">
             {LANG.banners_list1}
         </a>
-        <div id="list_act" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_act-title" data-pid="{ROW.id}" data-act="1">
+        <div id="list_act" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_act-title" data-pid="{ROW.id}" data-act="1" data-location="{LOCATION}&amp;accordion=list_act">
             <div id="banners_list_act" class="panel-body">
                 <p class="text-center">
                     <img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading" />
@@ -77,7 +77,7 @@
         <a class="panel-heading d-block" role="tab" id="list_queue-title" data-toggle="collapse" data-parent="#accordion" href="#list_queue" aria-expanded="false" aria-controls="list_queue">
             {LANG.banners_list4}
         </a>
-        <div id="list_queue" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_queue-title" data-pid="{ROW.id}" data-act="4">
+        <div id="list_queue" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_queue-title" data-pid="{ROW.id}" data-act="4" data-location="{LOCATION}&amp;accordion=list_queue">
             <div id="banners_list_queue" class="panel-body">
                 <p class="text-center">
                     <img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading" />
@@ -89,7 +89,7 @@
         <a class="panel-heading d-block" role="tab" id="list_timeract-title" data-toggle="collapse" data-parent="#accordion" href="#list_timeract" aria-expanded="false" aria-controls="list_timeract">
             {LANG.banners_list0}
         </a>
-        <div id="list_timeract" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_timeract-title" data-pid="{ROW.id}" data-act="0">
+        <div id="list_timeract" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_timeract-title" data-pid="{ROW.id}" data-act="0" data-location="{LOCATION}&amp;accordion=list_timeract">
             <div id="banners_list_timeract" class="panel-body">
                 <p class="text-center">
                     <img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading" />
@@ -101,7 +101,7 @@
         <a class="panel-heading d-block" role="tab" id="list_exp-title" data-toggle="collapse" data-parent="#accordion" href="#list_exp" aria-expanded="false" aria-controls="list_exp">
             {LANG.banners_list2}
         </a>
-        <div id="list_exp" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_exp-title" data-pid="{ROW.id}" data-act="2">
+        <div id="list_exp" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_exp-title" data-pid="{ROW.id}" data-act="2" data-location="{LOCATION}&amp;accordion=list_exp">
             <div id="banners_list_exp" class="panel-body">
                 <p class="text-center">
                     <img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading" />
@@ -113,7 +113,7 @@
         <a class="panel-heading d-block" role="tab" id="list_deact-title" data-toggle="collapse" data-parent="#accordion" href="#list_deact" aria-expanded="false" aria-controls="list_deact">
             {LANG.banners_list3}
         </a>
-        <div id="list_deact" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_deact-title" data-pid="{ROW.id}" data-act="3">
+        <div id="list_deact" class="panel-collapse collapse" role="tabpanel" aria-labelledby="list_deact-title" data-pid="{ROW.id}" data-act="3" data-location="{LOCATION}&amp;accordion=list_deact">
             <div id="banners_list_deact" class="panel-body">
                 <p class="text-center">
                     <img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading" />
@@ -123,9 +123,10 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
     $(function() {
         $('#accordion .collapse').on('show.bs.collapse', function() {
+            locationReplace($(this).data("location"));
             $(this).parents('.panel').toggleClass('panel-default panel-primary');
             if (!$(this).data('loaded')) {
                 $(this).data('loaded', true);
@@ -133,7 +134,10 @@
             }
         }).on('hide.bs.collapse', function() {
             $(this).parents('.panel').toggleClass('panel-default panel-primary')
-        })
+        });
+        <!-- BEGIN: accordion -->
+        $('#{ACCORDION}').collapse('show')
+        <!-- END: accordion -->
     })
 </script>
 <!-- END: main -->
