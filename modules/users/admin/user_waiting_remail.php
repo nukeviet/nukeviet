@@ -43,7 +43,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                 if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email=' . $db->quote($row['email']))->fetchColumn()) {
                     $respon['messages'][] = $row['email'] . ': ' . $lang_module['userwait_resend_delete'];
                     if (!in_array((int) $row['userid'], $useriddel, true)) {
-                        $useriddel[] = $row['userid'];
+                        $useriddel[] = (int) $row['userid'];
                     }
                 } else {
                     $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;

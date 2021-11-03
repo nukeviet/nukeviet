@@ -408,7 +408,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     }
 
     foreach ($array_openid_processing as $key => $name) {
-        $checked = (!empty($array_config['openid_processing']) and in_array($key, $array_config['openid_processing'], true)) ? ' checked="checked"' : '';
+        $checked = (!empty($array_config['openid_processing']) and in_array((string) $key, $array_config['openid_processing'], true)) ? ' checked="checked"' : '';
         $xtpl->assign('OPENID_PROCESSING', [
             'key' => $key,
             'checked' => $checked,

@@ -536,7 +536,7 @@ if (defined('NV_IS_USER_FORUM')) {
                         $xtpl->assign('FIELD_CHOICES', [
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
-                            'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
+                            'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                             'value' => $value
                         ]);
                         $xtpl->parse('main.edit_user.field.loop.checkbox');

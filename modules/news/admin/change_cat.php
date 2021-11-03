@@ -40,7 +40,7 @@ if ($catid > 0) {
         nv_fix_cat_order();
         $content = 'OK_' . $parentid;
     } elseif (defined('NV_IS_ADMIN_MODULE') or (isset($array_cat_admin[$admin_id][$catid]) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1)) {
-        if ($mod == 'status' and in_array($new_vid, [0, 1, 2], true) and in_array($curr_status, [0, 1, 2], true) and !(nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS and ($new_vid == 0 or $curr_status == 0))) {
+        if ($mod == 'status' and in_array($new_vid, [0, 1, 2], true) and in_array((int) $curr_status, [0, 1, 2], true) and !(nv_get_mod_countrows() > NV_MIN_MEDIUM_SYSTEM_ROWS and ($new_vid == 0 or $curr_status == 0))) {
             // Đối với các chuyên mục bị khóa bởi chuyên mục cha thì không thay đổi gì
             // Đối với hệ thống lớn thì không thể đình chỉ
             if (($new_vid == 0 or $curr_status == 0) and $new_vid != $curr_status) {

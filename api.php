@@ -193,7 +193,7 @@ if (!empty($api_request['module'])) {
      * Nếu API của module kiểm tra xem admin có phải là Admin module không
      * Nếu quản trị tối cao và điều hành chung thì nghiễm nhiên có quyền quản trị module
      */
-    if ($credential_data['lev'] > 2 and !in_array($credential_data['admin_id'], array_map('intval', explode(',', $module_info['admins'])), true)) {
+    if ($credential_data['lev'] > 2 and !in_array((int) $credential_data['admin_id'], array_map('intval', explode(',', $module_info['admins'])), true)) {
         $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)
             ->setMessage('Admin do not have the right to manage this module!!!')
             ->returnResult();

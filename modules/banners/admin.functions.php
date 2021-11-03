@@ -376,7 +376,7 @@ function nv_edit_plan_theme($contents, $array_uploadtype, $groups_list)
     foreach ($groups_list as $_group_id => $_title) {
         $xtpl->assign('UPLOADGROUP', [
             'key' => $_group_id,
-            'checked' => in_array($_group_id, $uploadgroup, true) ? ' checked="checked"' : '',
+            'checked' => in_array((int) $_group_id, $uploadgroup, true) ? ' checked="checked"' : '',
             'title' => $_title
         ]);
         $xtpl->parse('main.uploadgroup');

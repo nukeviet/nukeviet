@@ -378,11 +378,11 @@ if (!empty($reviewuid)) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
-                        'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
+                        'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                         'value' => $value
                     ]);
                     $xtpl->parse('main.custom.loop.checkbox');
-                    if (in_array($key, $valueold, true)) {
+                    if (in_array((string) $key, $valueold, true)) {
                         $row['valueold'][] = $value;
                     }
                 }
@@ -395,11 +395,11 @@ if (!empty($reviewuid)) {
                 foreach ($row['field_choices'] as $key => $value) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
-                        'selected' => (in_array($key, $valueselect, true)) ? ' selected="selected"' : '',
+                        'selected' => (in_array((string) $key, $valueselect, true)) ? ' selected="selected"' : '',
                         'value' => $value
                     ]);
                     $xtpl->parse('main.custom.loop.multiselect.loop');
-                    if (in_array($key, $valueold, true)) {
+                    if (in_array((string) $key, $valueold, true)) {
                         $row['valueold'][] = $value;
                     }
                 }
