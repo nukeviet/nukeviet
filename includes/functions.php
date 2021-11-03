@@ -2353,7 +2353,7 @@ function nv_site_mods()
              */
             if (defined('NV_IS_SPADMIN')) {
                 $site_mods[$m_title]['is_modadmin'] = true;
-            } elseif (defined('NV_IS_ADMIN') and !empty($row['admins']) and !empty($admin_info['admin_id']) and in_array($admin_info['admin_id'], array_map('intval', explode(',', $row['admins'])), true)) {
+            } elseif (defined('NV_IS_ADMIN') and !empty($row['admins']) and !empty($admin_info['admin_id']) and in_array((int) $admin_info['admin_id'], array_map('intval', explode(',', $row['admins'])), true)) {
                 $site_mods[$m_title]['is_modadmin'] = true;
             } elseif (!nv_user_in_groups($row['groups_view'])) {
                 unset($site_mods[$m_title]);
@@ -2395,7 +2395,7 @@ function nv_site_mods()
         }
     } elseif (defined('NV_ADMIN')) {
         foreach ($site_mods as $m_title => $row) {
-            if (!((defined('NV_IS_SPADMIN')) or (!empty($row['admins']) and in_array($admin_info['admin_id'], array_map('intval', explode(',', $row['admins'])), true)))) {
+            if (!((defined('NV_IS_SPADMIN')) or (!empty($row['admins']) and in_array((int) $admin_info['admin_id'], array_map('intval', explode(',', $row['admins'])), true)))) {
                 unset($site_mods[$m_title]);
             }
         }
@@ -2749,7 +2749,7 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
      * Nếu API của module kiểm tra xem admin có phải là Admin module không
      * Nếu quản trị tối cao và điều hành chung thì nghiễm nhiên có quyền quản trị module
      */
-    if ($module != '' and NukeViet\Api\Api::getAdminLev() > 2 and !in_array(NukeViet\Api\Api::getAdminId(), array_map('intval', explode(',', $sys_mods[$module]['admins'])), true)) {
+    if ($module != '' and NukeViet\Api\Api::getAdminLev() > 2 and !in_array((int) NukeViet\Api\Api::getAdminId(), array_map('intval', explode(',', $sys_mods[$module]['admins'])), true)) {
         $apiresults->setCode(NukeViet\Api\ApiResult::CODE_NO_MODADMIN_RIGHT)->setMessage('Admin do not have the right to manage this module!!!');
 
         return $apiresults->getResult();

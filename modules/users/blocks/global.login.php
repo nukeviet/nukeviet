@@ -438,7 +438,7 @@ if (!nv_function_exists('nv_block_login')) {
                                                 $xtpl->assign('FIELD_CHOICES', [
                                                     'id' => $row['fid'] . '_' . $number++,
                                                     'key' => $key,
-                                                    'checked' => (in_array($key, $valuecheckbox, true)) ? ' checked="checked"' : '',
+                                                    'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
                                                     'value' => $value
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.checkbox.loop');
@@ -449,7 +449,7 @@ if (!nv_function_exists('nv_block_login')) {
                                             foreach ($row['field_choices'] as $key => $value) {
                                                 $xtpl->assign('FIELD_CHOICES', [
                                                     'key' => $key,
-                                                    'selected' => (in_array($key, $valueselect, true)) ? ' selected="selected"' : '',
+                                                    'selected' => (in_array((string) $key, $valueselect, true)) ? ' selected="selected"' : '',
                                                     'value' => $value
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.multiselect.loop');

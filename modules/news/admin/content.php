@@ -476,12 +476,12 @@ if ($is_submit_form) {
     if ($rowcontent['status'] == 1) {
         $array_cat_check_content = array_map('intval', $array_cat_pub_content);
     } elseif ($rowcontent['status'] == 1 and $rowcontent['publtime'] <= NV_CURRENTTIME) {
-        $array_cat_check_content = $array_cat_edit_content;
+        $array_cat_check_content = array_map('intval', $array_cat_edit_content);
     } elseif ($rowcontent['status'] == 0) {
-        $array_cat_check_content = $array_censor_content;
+        $array_cat_check_content = array_map('intval', $array_censor_content);
         $message_error_show = $lang_module['permissions_sendspadmin_error'];
     } else {
-        $array_cat_check_content = $array_cat_add_content;
+        $array_cat_check_content = array_map('intval', $array_cat_add_content);
     }
 
     foreach ($catids as $catid_i) {

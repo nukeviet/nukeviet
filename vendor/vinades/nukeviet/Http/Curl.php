@@ -281,7 +281,7 @@ class Curl
                 return $this;
             }
 
-            if (in_array(curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
+            if (in_array((int) curl_getinfo($handle, CURLINFO_HTTP_CODE), [301, 302], true)) {
                 curl_close($handle);
 
                 Http::set_error(5);
