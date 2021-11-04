@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.4.04:
+- Add sending mail when adding/removing oauth for admin (#3016)
 - System package addition: tecnickcom/tc-lib-barcode (v1.17.6)
 - System package updates: polyfill-mbstring (v1.23.0 => v1.18.1, for PHP ^5.6 support), phpmailer/phpmailer (v6.5.0 => v6.5.1)
 - System package removal: symfony/options-resolver, endroid/qrcode

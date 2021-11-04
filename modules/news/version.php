@@ -19,8 +19,8 @@ $module_version = array(
     'submenu' => 'content,rss,search',
     'is_sysmod' => 0, // 1:0 => Co phai la module he thong hay khong
     'virtual' => 1, // 1:0 => Co cho phep ao hao module hay khong
-    'version' => '4.4.03', // Phien ban cua modle
-    'date' => 'Saturday, July 17, 2021 4:00:00 PM GMT+07:00', // Ngay phat hanh phien ban
+    'version' => '4.4.04', // Phien ban cua modle
+    'date' => 'Saturday, November 6, 2021 16:00:00 GMT+07:00', // Ngay phat hanh phien ban
     'author' => 'VINADES <contact@vinades.vn>', // Tac gia
     'note' => '', // Ghi chu
     'uploads_dir' => array(
