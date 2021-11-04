@@ -1,6 +1,9 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.01
+- Add some security emails (#3016)
+- Add "Development mode" option when installing (#2939)
+- Add Zalo login, two-step authentication with Zalo
 - System package addition: tecnickcom/tc-lib-barcode (v1.17.6)
 - System package updates: polyfill-mbstring (v1.23.0 => v1.18.1, for PHP ^5.6 support), phpmailer/phpmailer (v6.5.0 => v6.5.1)
 - System package removal: symfony/options-resolver, endroid/qrcode
