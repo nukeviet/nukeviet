@@ -68,7 +68,7 @@
             <a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a>,
             <a target="_blank" href="https://github.com/tdfoss">tdfoss</a>,
             <a target="_blank" href="https://github.com/thehung">thehung</a>,
-            khoaij123, dat.huynh,
+            82592373+tmsholdings, tuyenhv.abs, khoaij123, dat.huynh,
             dinhpc86 at gmail.com,
             <a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet</a>,
             <a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp</a>,
@@ -99,6 +99,12 @@
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.5.01</h5>
+                    <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (70 commits)</a>,
+                    82592373+tmsholdings (3 commits),
+                    tuyenhv.abs (3 commits),
+                    <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (1 commits)</a>
+                    <br><br>
                 <h5>{LANG.thanks_other_version} 4.5.00</h5>
                     <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (281 commits)</a>,
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (9 commits)</a>,
