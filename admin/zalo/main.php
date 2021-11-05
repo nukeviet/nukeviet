@@ -13,6 +13,8 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
+nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
+
 $page_title = $lang_module['main'];
 $contents = 'On development stage';
 
