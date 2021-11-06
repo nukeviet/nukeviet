@@ -41,6 +41,7 @@ $lang_global['ok'] = 'OK';
 $lang_global['confirm'] = 'Confirm';
 $lang_global['manage'] = 'Manage';
 $lang_global['cancel'] = 'Cancel';
+$lang_global['copy'] = 'Copy';
 $lang_global['reset'] = 'Reset';
 $lang_global['fail'] = 'Fail';
 $lang_global['firewallsystem'] = 'Administrators Section';

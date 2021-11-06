@@ -41,6 +41,7 @@ $lang_global['ok'] = 'OK';
 $lang_global['confirm'] = 'Xác nhận';
 $lang_global['manage'] = 'Quản lý';
 $lang_global['cancel'] = 'Hủy bỏ';
+$lang_global['copy'] = 'Sao chép';
 $lang_global['reset'] = 'Thiết lập lại';
 $lang_global['fail'] = 'Thất bại';
 $lang_global['firewallsystem'] = 'Administrators Section';
