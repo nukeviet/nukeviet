@@ -55,11 +55,12 @@ if ($nv_Request->isset_request('getMergeFields', 'post')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$emailid = $nv_Request->get_int('emailid', 'post,get', 0);
+$emailid = $nv_Request->get_absint('emailid', 'post,get', 0);
+$copyid = $nv_Request->get_absint('copyid', 'post,get', 0);
 $error = '';
 
-if (!empty($emailid)) {
-    $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = ' . $emailid;
+if ($emailid or $copyid) {
+    $sql = 'SELECT * FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid = ' . ($emailid ? $emailid : $copyid);
     $result = $db->query($sql);
     $array = $result->fetch();
 
@@ -81,9 +82,17 @@ if (!empty($emailid)) {
 
     // Hook xử lý biến $array khi lấy từ CSDL ra
     $array = nv_apply_hook('', 'emailtemplates_content_from_db', [$array], $array);
+}
 
+if ($emailid) {
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;emailid=' . $emailid;
     $page_title = $nv_Lang->getModule('edit_template');
+} elseif ($copyid) {
+    $array['emailid'] = 0;
+    $array['is_system'] = 0;
+
+    $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+    $page_title = $nv_Lang->getModule('add_template');
 } else {
     $array = [
         'emailid' => 0,
