@@ -18,6 +18,7 @@
 
         <script type="text/javascript">
             var  nv_base_siteurl = '{NV_BASE_SITEURL}',
+                 nv_assets_dir = '{NV_ASSETS_DIR}',
                  nv_lang_data = '{NV_LANG_DATA}',
                  nv_lang_interface = '{NV_LANG_INTERFACE}',
                  nv_name_variable = '{NV_NAME_VARIABLE}',
