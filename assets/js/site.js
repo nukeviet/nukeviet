@@ -135,8 +135,9 @@ function checkSingle(a) {
 
 // locationReplace
 function locationReplace(url) {
-    if (history.pushState) {
-        history.pushState(null, null, url);
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
     }
 }
 
@@ -561,7 +562,7 @@ $(function() {
     });
 
     //Change Localtion
-    $("[data-location]").on("click", function() {
+    $("a[data-location]").on("click", function() {
         if (window.location.origin + $(this).data("location") != window.location.href) {
             locationReplace($(this).data("location"))
         }

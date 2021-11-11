@@ -75,8 +75,9 @@ function modalShow(a, b, callback) {
 }
 
 function locationReplace(url) {
-    if (history.pushState) {
-        history.pushState(null, null, url);
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
     }
 }
 
@@ -167,7 +168,7 @@ $(document).ready(function() {
     });
 
     //Change Localtion
-    $("[data-location]").on("click", function() {
+    $("a[data-location]").on("click", function() {
         locationReplace($(this).data("location"))
     });
 
