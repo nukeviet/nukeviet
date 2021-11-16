@@ -44,7 +44,8 @@ void 0 === nv_check_pass_mstime && (nv_check_pass_mstime = 1738E3);
 void 0 === theme_responsive && (theme_responsive = 0);
 void 0 === nv_safemode && (nv_safemode = 0);
 
--1 < strHref.indexOf("?") && ([script_name, query_string] = strHref.split("?"));
+-
+1 < strHref.indexOf("?") && ([script_name, query_string] = strHref.split("?"));
 
 function nv_email_check(field_id) {
     return 7 <= field_id.value.length && nv_mailfilter.test(field_id.value)
@@ -236,6 +237,33 @@ function intval(mixed_var, base) {
     } else {
         return 0;
     }
+}
+
+/**
+ * This function is same as PHP's nl2br() with default parameters.
+ *
+ * @param {string} str Input text
+ * @param {boolean} replaceMode Use replace instead of insert
+ * @param {boolean} isXhtml Use XHTML 
+ * @return {string} Filtered text
+ */
+function nl2br(str, replaceMode, isXhtml) {
+    var breakTag = (isXhtml) ? '<br />' : '<br>';
+    var replaceStr = (replaceMode) ? '$1' + breakTag : '$1' + breakTag + '$2';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, replaceStr);
+}
+
+/**
+ * This function inverses text from PHP's nl2br() with default parameters.
+ *
+ * @param {string} str Input text
+ * @param {boolean} replaceMode Use replace instead of insert
+ * @return {string} Filtered text
+ */
+function br2nl(str, replaceMode) {
+    var replaceStr = (replaceMode) ? "\n" : '';
+    // Includes <br>, <BR>, <br />, </br>
+    return (str + '').replace(/<\s*\/?br\s*[\/]?>/gi, replaceStr);
 }
 
 function nv_is_dst() {
