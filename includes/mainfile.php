@@ -141,6 +141,12 @@ if (defined('NV_SYSTEM')) {
 // Ket noi voi class xu ly request
 $nv_Request = new NukeViet\Core\Request($global_config + ['https_only' => !empty($sys_info['https_only'])], NV_CLIENT_IP, $nv_Server);
 
+$client_info['clid'] = $nv_Request->get_title('clid', 'cookie', '');
+if (!preg_match('/^[a-z0-9]{32}$/', $client_info['clid'])) {
+    $client_info['clid'] = md5(microtime(true) . bin2hex(openssl_random_pseudo_bytes(32)) . $global_config['sitekey']);
+    $nv_Request->set_Cookie('clid', $client_info['clid'], 315360000);
+}
+
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 
