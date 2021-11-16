@@ -15,12 +15,10 @@
 </ul>
 <!-- BEGIN: company_map_modal -->
 <!-- START FORFOOTER -->
-<div class="modal fade company-map-modal" id="company-map-modal-{DATA.bid}" data-trigger="false" data-apikey="{DATA.company_mapapikey}">
+<div class="modal fade company-map-modal" id="company-map-modal-{DATA.bid}" data-src="{DATA.company_mapurl}">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
-                <iframe allowfullscreen class="company-map" id="company-map-{DATA.bid}" data-src="{DATA.company_mapurl}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/index.html" data-loaded="false"></iframe>
-            </div>
+            <div class="modal-body"></div>
         </div>
     </div>
 </div>
