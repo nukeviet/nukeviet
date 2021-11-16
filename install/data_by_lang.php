@@ -38,6 +38,13 @@ $installMods['about'] = [
     ]
 ];
 
+$installMods['zalo'] = [
+    'custom_title' => 'Zalo',
+    'admin_title' => 'Zalo',
+    'admin_file' => 1,
+    'groups_view' => '3'
+];
+
 $installMods['news'] = [
     'custom_title' => $install_lang['modules']['news'],
     'admin_title' => $install_lang['modules']['news_for_acp'],

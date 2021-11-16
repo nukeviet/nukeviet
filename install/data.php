@@ -24,7 +24,6 @@ $sql_create_table[] = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
 $sql_create_table[] = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (9, 'themes', 'mod_themes', 9, 1, 1, 0, '')";
 $sql_create_table[] = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (10, 'extensions', 'mod_extensions', 10, 1, 0, 0, '')";
 $sql_create_table[] = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (11, 'upload', 'mod_upload', 11, 1, 1, 1, '')";
-$sql_create_table[] = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (12, 'zalo', 'mod_zalo', 12, 1, 0, 0, '')";
 
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
 $sql_create_table[] = 'UPDATE ' . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
@@ -61,6 +60,7 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'zaloOAAccessToken', '')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'zaloOARefreshToken', '')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'zaloOAAccessTokenTime', '0')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'zaloOASecretKey', '')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'metaTagsOgp', '1')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'pageTitleMode', 'pagetitle')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'description_length', '170')";
@@ -205,6 +205,7 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, 
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'module', 'about', 0, 0, 'page', 'about', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'module', 'siteterms', 0, 0, 'page', 'siteterms', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (19, 'module', 'banners', 1, 0, 'banners', 'banners', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
+$sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'module', 'zalo', 1, 0, 'zalo', 'zalo', '4.6.00 1637048941', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (20, 'module', 'contact', 0, 1, 'contact', 'contact', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (1, 'module', 'news', 0, 1, 'news', 'news', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (21, 'module', 'voting', 0, 0, 'voting', 'voting', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";

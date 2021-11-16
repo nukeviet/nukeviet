@@ -93,4 +93,5 @@ $lang_global['admin_2step_other'] = 'Phương thức xác thực khác';
 $lang_global['admin_oauth_error_getdata'] = 'Lỗi: Hệ thống nhận dạng được dữ liệu xác thực. Xác thực thất bại!';
 $lang_global['admin_oauth_error_email'] = 'Lỗi: Email trả về không hợp lệ, bạn không thể xác thực';
 $lang_global['admin_oauth_error_savenew'] = 'Lỗi: Không thể lưu thông tin xác thực';
+$lang_global['admin_oauth_error'] = 'Lỗi: Xác minh không hợp lệ. Tài khoản này chưa được ủy quyền để xác minh';
 $lang_global['acp'] = 'Quản lý site';

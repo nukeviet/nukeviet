@@ -320,6 +320,8 @@ foreach ($list as $row) {
     }
 }
 
+nv_apply_hook('', 'zalo_webhook');
+
 if (!empty($global_config['nv_csp_script_nonce'])) {
     define('NV_SCRIPT_NONCE', bin2hex(openssl_random_pseudo_bytes(10)));
 }
