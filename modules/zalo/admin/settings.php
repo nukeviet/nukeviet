@@ -275,8 +275,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
         $zaloWebhookIPs = '';
     }
 
-    $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES 
-    ('sys', 'global', 'zaloWebhookIPs', '" . $zaloWebhookIPs . "') ON DUPLICATE KEY UPDATE config_value=VALUES(config_value)");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'zaloWebhookIPs'");
+    $sth->bindParam(':config_value', $zaloWebhookIPs, PDO::PARAM_STR);
+    $sth->execute();
+
     nv_save_file_config_global();
     nv_jsonOutput([
         'status' => 'success',
@@ -299,8 +301,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
         $zaloWebhookIPs = '';
     }
 
-    $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES 
-    ('sys', 'global', 'zaloWebhookIPs', '" . $zaloWebhookIPs . "') ON DUPLICATE KEY UPDATE config_value=VALUES(config_value)");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'zaloWebhookIPs'");
+    $sth->bindParam(':config_value', $zaloWebhookIPs, PDO::PARAM_STR);
+    $sth->execute();
+
     nv_save_file_config_global();
     nv_jsonOutput([
         'status' => 'success',
@@ -309,8 +313,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
 }
 
 if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'check_zaloip') {
-    $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES 
-    ('sys', 'global', 'check_zaloip_expired', " . NV_CURRENTTIME + 600 . ") ON DUPLICATE KEY UPDATE config_value=VALUES(config_value)");
+    $expired = NV_CURRENTTIME + 600;
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = 'check_zaloip_expired'");
+    $sth->bindParam(':config_value', $expired, PDO::PARAM_STR);
+    $sth->execute();
     nv_save_file_config_global();
     echo 'OK';
     exit();
