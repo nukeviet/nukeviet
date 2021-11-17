@@ -226,7 +226,7 @@ $lang_module['feature_not_to_reply_message'] = 'Tính năng không áp dụng ch
 $lang_module['webhook_setup'] = 'Thiết lập Webhook';
 $lang_module['webhook_setup_note'] = 'Việc thiết lập Webhook chỉ được thực hiện khi bạn đã khai báo OAID, ID ứng dụng và Khóa bí mật của ứng dụng';
 $lang_module['oa_secrect_key'] = 'Khóa bí mật của OA';
-$lang_module['webhook_note'] = '<ul><li>Hãy truy cập <a href="%s">vào đây</a> và kích hoạt plugin <code>zalo_webhook</code> bằng cách click vào nút «Tích hợp»</li><li>Truy cập trang <a href="%s" target="_blank">Quản lý ứng dụng</a>, click vào ứng dụng mà bạn đã khai báo ở khu vực «Cấu hình chung» để đến trang cài đặt, click vào nút «Webhook».</li><li>Tại ô «Webhook URL» click vào nút «Thay đổi», điền giá trị <code>%s</code> và click vào nút «Cập nhật»</li><li>Ở trang vừa được làm mới xuất hiện dòng «OA Secrect Key», hãy chép giá trị của nó vào ô bên</li><li>Ở khu vực «Danh sách sự kiện webhook» hãy bật tất cả các lựa chọn.</li></ul>';
+$lang_module['webhook_note'] = '<ul><li>Hãy truy cập <a href="%s">vào đây</a> và kích hoạt plugin <code>zalo_webhook</code> bằng cách click vào nút «Tích hợp»</li><li>Truy cập trang <a href="%s" target="_blank">Quản lý ứng dụng</a>, click vào ứng dụng mà bạn đã khai báo ở khu vực «Cấu hình chung» để đến trang cài đặt, click vào nút «Webhook».</li><li>Tại ô «Webhook URL» click vào nút «Thay đổi», điền giá trị <code>%s</code> và click vào nút «Cập nhật»</li><li>Ở trang vừa được làm mới xuất hiện dòng «OA Secrect Key», hãy chép giá trị của nó vào ô bên</li><li>Ở khu vực «Danh sách sự kiện webhook» hãy bật tất cả các lựa chọn.</li><li>Việc xác định địa chỉ IP của Zalo Webhook là bắt buộc. Nếu không, hệ thống sẽ chặn truy cập của các webhook này khiến việc cập nhật tin nhắn không được thực hiện tự động.</li></ul>';
 $lang_module['article'] = 'Bài viết';
 $lang_module['article_type'] = 'Loại';
 $lang_module['article_normal'] = 'Bài viết loại thường';
@@ -412,7 +412,7 @@ $lang_module['zalowebhook_ips'] = 'Các địa chỉ IP của Zalo Webhook';
 $lang_module['zalowebhook_ip_check'] = 'Kiểm tra';
 $lang_module['zalowebhook_ip_update'] = 'Cập nhật';
 $lang_module['zalowebhook_ip_check_note'] = '<ul><li>Để lấy thông tin về địa chỉ IP của Zalo webhook, trước tiên bạn cần <a href="%s" target="_blank">vào đây</a>, tìm đến khu vực «Danh sách sự kiện webhook» và nhấn vào một trong các nút «Test».</li><li>Trong cửa sổ bật lên, nhấp vào nút «Gửi sự kiện».</li><li>Nếu bạn nhận được thông báo «Sự kiện đã được gửi đến Webhook», hãy nhấp vào nút «Cập nhật» dưới đây.</li><li>Còn nếu bạn nhận được một thông báo khác, hãy nhấp lại vào nút «Gửi sự kiện»</li></ul>';
-$lang_module['zalowebhook_ip_input_note'] = 'Nhập mỗi giá trị trên một dòng';
+$lang_module['zalowebhook_ip_input_note'] = 'Hãy nhập mỗi giá trị trên một dòng';
 
 $lang_module['error_code'] = 'Mã lỗi';
 $lang_module['error-32'] = 'Mã lỗi -32: Vượt quá giới hạn request/phút';
