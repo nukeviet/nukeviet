@@ -412,6 +412,7 @@ $lang_module['zalowebhook_ips'] = 'Các địa chỉ IP của Zalo Webhook';
 $lang_module['zalowebhook_ip_check'] = 'Kiểm tra';
 $lang_module['zalowebhook_ip_update'] = 'Cập nhật';
 $lang_module['zalowebhook_ip_check_note'] = '<ul><li>Để lấy thông tin về địa chỉ IP của Zalo webhook, trước tiên bạn cần <a href="%s" target="_blank">vào đây</a>, tìm đến khu vực «Danh sách sự kiện webhook» và nhấn vào một trong các nút «Test».</li><li>Trong cửa sổ bật lên, nhấp vào nút «Gửi sự kiện».</li><li>Nếu bạn nhận được thông báo «Sự kiện đã được gửi đến Webhook», hãy nhấp vào nút «Cập nhật» dưới đây.</li><li>Còn nếu bạn nhận được một thông báo khác, hãy nhấp lại vào nút «Gửi sự kiện»</li></ul>';
+$lang_module['zalowebhook_ip_input_note'] = 'Nhập mỗi giá trị trên một dòng';
 
 $lang_module['error_code'] = 'Mã lỗi';
 $lang_module['error-32'] = 'Mã lỗi -32: Vượt quá giới hạn request/phút';

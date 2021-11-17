@@ -412,6 +412,7 @@ $lang_module['zalowebhook_ips'] = 'Les adresses IP de Zalo Webhook';
 $lang_module['zalowebhook_ip_check'] = 'Tester';
 $lang_module['zalowebhook_ip_update'] = 'Rafraîchir';
 $lang_module['zalowebhook_ip_check_note'] = '<ul><li>Pour obtenir des informations sur l\'adresse IP du webhook Zalo, vous devez d\'abord vous <a href="%s" target="_blank">rendre ici</a>, accédez à la zone «Liste des événements webhook» et cliquez sur l\'un des boutons «Test».</li><li>Dans la fenêtre contextuelle, cliquez sur le bouton «Soumettre l\'événement».</li><li>Si vous recevez le message «L\'événement a été envoyé au Webhook», cliquez sur le bouton «Rafraîchir» ci-dessous.</li><li>Si vous recevez un message différent, cliquez à nouveau sur le bouton «Soumettre l\'événement»</li></ul>';
+$lang_module['zalowebhook_ip_input_note'] = 'Entrez chaque valeur sur une ligne';
 
 $lang_module['error_code'] = 'Code d\'erreur';
 $lang_module['error-32'] = 'Code d\'erreur -32 : limite de requête/minute dépassée';

@@ -166,7 +166,7 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td style="width: 50%;"><strong>{LANG.zalowebhook_ips}</strong></td>
+                                            <td style="width: 50%;"><strong>{LANG.zalowebhook_ips}</strong><br/><em>({LANG.zalowebhook_ip_input_note})</em></td>
                                             <td><textarea name="zaloWebhookIPs" class="form-control">{DATA.zaloWebhookIPs_format}</textarea></td>
                                         </tr>
                                         <tr>
