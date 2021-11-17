@@ -13,8 +13,10 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
+$zaloWebhookIPs = !empty($global_config['zaloWebhookIPs']) ? $global_config['zaloWebhookIPs'] : [];
+
 if ($nv_Request->get_string('func', 'get', '') == 'access_token_create') {
-    $result = $zalo->oa_accesstoken_create(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings&func=accesstoken');
+    $result = $zalo->oa_accesstoken_create(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings&func=accesstoken');
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if (empty($result)) {
@@ -246,6 +248,74 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_
     }
 }
 
+if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'access_token_copy') {
+    $result = [
+        'access_token' => $nv_Request->get_title('new_access_token', 'post', ''),
+        'refresh_token' => $nv_Request->get_title('new_refresh_token', 'post', '')
+    ];
+    if (!empty($result['access_token']) and !empty($result['refresh_token'])) {
+        accessTokenUpdate($result);
+    }
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => ''
+    ]);
+}
+
+if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'webhookIPs') {
+    $zaloWebhookIPs = $nv_Request->get_textarea('zaloWebhookIPs', 'post', '');
+    $zaloWebhookIPs = !empty($zaloWebhookIPs) ? array_map('trim', explode("\n", $zaloWebhookIPs)) : [];
+    if (!empty($zaloWebhookIPs)) {
+        $zaloWebhookIPs = array_unique($zaloWebhookIPs);
+        $zaloWebhookIPs = array_filter($zaloWebhookIPs, function ($el) {
+            return filter_var($el, FILTER_VALIDATE_IP) ? true : false;
+        });
+        $zaloWebhookIPs = json_encode($zaloWebhookIPs);
+    } else {
+        $zaloWebhookIPs = '';
+    }
+
+    $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES 
+    ('sys', 'global', 'zaloWebhookIPs', '" . $zaloWebhookIPs . "') ON DUPLICATE KEY UPDATE config_value=VALUES(config_value)");
+    nv_save_file_config_global();
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => ''
+    ]);
+}
+
+if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'zalowebhook_ip_update') {
+    $_long = nv_scandir(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/zalo_logs', '/^[0-9]+\.' . nv_preg_quote(NV_LOGS_EXT) . '$/');
+    if (!empty($_long)) {
+        foreach ($_long as $l) {
+            $zaloWebhookIPs[] = trim(file_get_contents(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/zalo_logs/' . $l));
+        }
+    }
+
+    if (!empty($zaloWebhookIPs)) {
+        $zaloWebhookIPs = array_unique($zaloWebhookIPs);
+        $zaloWebhookIPs = json_encode($zaloWebhookIPs);
+    } else {
+        $zaloWebhookIPs = '';
+    }
+
+    $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES 
+    ('sys', 'global', 'zaloWebhookIPs', '" . $zaloWebhookIPs . "') ON DUPLICATE KEY UPDATE config_value=VALUES(config_value)");
+    nv_save_file_config_global();
+    nv_jsonOutput([
+        'status' => 'success',
+        'mess' => ''
+    ]);
+}
+
+if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'check_zaloip') {
+    $db->query('INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES 
+    ('sys', 'global', 'check_zaloip_expired', " . NV_CURRENTTIME + 600 . ") ON DUPLICATE KEY UPDATE config_value=VALUES(config_value)");
+    nv_save_file_config_global();
+    echo 'OK';
+    exit();
+}
+
 if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->get_string('func', 'post', '') == 'settings') {
     $array_config_site['zaloOfficialAccountID'] = $nv_Request->get_title('zaloOfficialAccountID', 'post', '');
     $array_config_site['zaloOfficialAccountID'] = preg_replace('/[^0-9]/', '', $array_config_site['zaloOfficialAccountID']);
@@ -277,12 +347,18 @@ if (!empty($subdiv_parent) and !isset($provinces[$subdiv_parent])) {
     $subdiv_parent = '';
 }
 
+$global_config['zaloWebhookIPs_format'] = !empty($zaloWebhookIPs) ? implode("\n", $zaloWebhookIPs) : '';
+
+$lang_module['access_token_copy_note'] = sprintf($lang_module['access_token_copy_note'], 'https://developers.zalo.me/tools/explorer/' . $global_config['zaloAppID'], 'https://developers.zalo.me/docs/api/official-account-api/xac-thuc-va-uy-quyen/cach-2-xac-thuc-voi-cong-cu-api-explorer/phuong-thuc-lay-access-token-su-dung-cong-cu-api-explorer-post-5004');
+$lang_module['zalowebhook_ip_check_note'] = sprintf($lang_module['zalowebhook_ip_check_note'], 'https://developers.zalo.me/app/' . $global_config['zaloAppID'] . '/webhook');
+
 $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 $lang_module['oa_create_note'] = sprintf($lang_module['oa_create_note'], 'https://oa.zalo.me/manage/oa?option=create', 'https://oa.zalo.me/manage/oa');
 $lang_module['app_note'] = sprintf($lang_module['app_note'], 'https://developers.zalo.me/createapp', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php', NV_MY_DOMAIN, NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php');
 $lang_module['webhook_note'] = sprintf($lang_module['webhook_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=plugin', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_SITEURL . '?zalo=' . $global_config['zaloAppID']);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);

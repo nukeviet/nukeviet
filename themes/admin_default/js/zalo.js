@@ -355,7 +355,7 @@ $(function() {
         })
     });
 
-    $('[data-toggle=add_follower_tag]').on('submit', function(e) {
+    $('[data-toggle=add_follower_tag], [data-toggle=access_token_copy], [data-toggle=add_tag], [data-toggle=request_form_submit], [data-toggle=list_form_submit], [data-toggle=access_token_copy], [data-toggle=webhookIPs]').on('submit', function(e) {
         e.preventDefault();
         var url = $(this).attr('action'),
             data = $(this).serialize();
@@ -372,13 +372,6 @@ $(function() {
             'user_id': user_id,
             'tag_alias': tag_alias
         })
-    });
-
-    $('[data-toggle=add_tag]').on('submit', function(e) {
-        e.preventDefault();
-        var url = $(this).attr('action'),
-            data = $(this).serialize();
-        ajax_json(url, data)
     });
 
     $('[data-toggle=delete_tag]').on('click', function(e) {
@@ -908,13 +901,6 @@ $(function() {
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + $(this).data('area') + "&alt=&path=" + encodeURIComponent($(this).data('upload-dir')) + "&type=image&currentpath=" + encodeURIComponent($(this).data('upload-dir')), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
     });
 
-    $('[data-toggle=request_form_submit]').on('submit', function(e) {
-        e.preventDefault();
-        var url = $(this).attr('action'),
-            data = $(this).serialize();
-        ajax_json(url, data)
-    });
-
     $('[data-toggle=request_delete]').on('click', function(e) {
         e.preventDefault();
         var form = $(this).parents('form'),
@@ -978,13 +964,6 @@ $(function() {
             subtitle_obj.addClass('hidden');
             icon_obj.removeClass('fa-caret-up').addClass('fa-caret-down')
         }
-    });
-
-    $('[data-toggle=list_form_submit]').on('submit', function(e) {
-        e.preventDefault();
-        var url = $(this).attr('action'),
-            data = $(this).serialize();
-        ajax_json(url, data)
     });
 
     $('body').on('click', '[data-toggle=action_open_modal]', function(e) {
@@ -1650,6 +1629,30 @@ $(function() {
         if (confirm($(this).data('confirm-mess')) === true) {
             $(this).parents('.event').remove()
         }
+    });
+
+    $('[data-toggle=zalowebhookIPs_check]').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: $(this).parents('form').attr('action'),
+            data: 'func=check_zaloip&checkss=' + $('[name=checkss]', $(this).parents('form')).val(),
+            dataType: "html",
+            success: function(b) {
+                $('#zalowebhookIP_autocheck').modal({
+                    backdrop: false,
+                    keyboard: false
+                  }).modal('show')
+            }
+        })
+    });
+
+    $('[data-toggle=zalowebhook_ip_update]').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).parents('form').attr('action'),
+            data = 'func=zalowebhook_ip_update&checkss=' + $('[name=checkss]', $(this).parents('form')).val();
+        ajax_json(url, data)
     })
 
 })

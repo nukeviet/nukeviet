@@ -85,6 +85,22 @@ if (NV_CLIENT_IP == 'none') {
     exit('Error: Your IP address is not correct');
 }
 
+// Xac dinh IP của Zalo-webhook
+if (isset($global_config['check_zaloip_expired'])) {
+    if (
+        (int) $global_config['check_zaloip_expired'] > NV_CURRENTTIME and
+        isset($_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTP_X_ZEVENT_SIGNATURE']) and
+        $_SERVER['HTTP_USER_AGENT'] == 'ZaloWebhook' and
+        !empty($_SERVER['HTTP_X_ZEVENT_SIGNATURE'])
+    ) {
+        include NV_ROOTDIR . '/includes/zalowebhookIP.php';
+    }
+}
+
+if (isset($global_config['zaloWebhookIPs'])) {
+    $global_config['crosssite_valid_ips'] = $global_config['crosssite_valid_ips'] + $global_config['zaloWebhookIPs'];
+}
+
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
 if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {

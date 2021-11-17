@@ -38,7 +38,7 @@
                                             <td>
                                                 <input type="hidden" name="checkss" value="{DATA.checkss}" />
                                                 <input type="hidden" name="func" value="settings" />
-                                                <input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary" />
+                                                <input type="submit" name="submit" value="{GLANG.save}" class="btn btn-primary" />
                                             </td>
                                         </tr>
                                     </tbody>
@@ -54,6 +54,77 @@
             </div>
         </div>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="access_token_create_heading">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#settings" href="#access_token_create" aria-expanded="false" aria-controls="access_token_create">
+                    {LANG.access_token_create}
+                </a>
+            </h4>
+        </div>
+        <div id="access_token_create" class="panel-collapse collapse" role="tabpanel" aria-labelledby="access_token_create_heading" data-location="{PAGE_LINK}&amp;action=access_token_create">
+            <div class="panel-body">
+                <!-- BEGIN: access_token_not_allowed -->
+                <div class="alert alert-warning">{LANG.access_token_create_note}</div>
+                <!-- END: access_token_not_allowed -->
+                <!-- BEGIN: access_token_is_allowed -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#accesstoken_auto_create" aria-controls="accesstoken_auto_create" role="tab" data-toggle="tab">{LANG.access_token_create}</a></li>
+                    <li role="presentation"><a href="#accesstoken_copy" aria-controls="accesstoken_copy" role="tab" data-toggle="tab">{LANG.access_token_copy}</a></li>
+                </ul>
+                <div class="tab-content" style="padding-top: 15px;">
+                    <div role="tabpanel" class="tab-pane active" id="accesstoken_auto_create">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td><strong>{LANG.access_token}</strong></td>
+                                    <td><input id="access_token" type="text" value="{DATA.zaloOAAccessToken}" class="form-control" readonly /></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.refresh_token}</strong></td>
+                                    <td><input id="refresh_token" type="text" value="{DATA.zaloOARefreshToken}" class="form-control" readonly /></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;func=access_token_create" role="button" class="btn btn-primary" data-toggle="access_token_create">{LANG.access_token_create}</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="accesstoken_copy">
+                        <div class="well well-sm">{LANG.access_token_copy_note}</div>
+                        <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" data-toggle="access_token_copy">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>{LANG.access_token}</strong></td>
+                                        <td><input type="text" name="new_access_token" value="" class="form-control" maxlength="500"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>{LANG.refresh_token}</strong></td>
+                                        <td><input name="new_refresh_token" type="text" value="" class="form-control" maxlength="500" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                                            <input type="hidden" name="func" value="access_token_copy" />
+                                            <button type="submit" class="btn btn-primary">{GLANG.save}</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!-- END: access_token_is_allowed -->
+            </div>
+        </div>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="webhook_setup_heading">
             <h4 class="panel-title">
@@ -75,19 +146,56 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td><strong>{LANG.oa_secrect_key}</strong></td>
+                                            <td style="width: 50%;"><strong>{LANG.oa_secrect_key}</strong></td>
                                             <td><input type="text" name="zaloOASecretKey" value="{DATA.zaloOASecretKey}" class="form-control" maxlength="50" /></td>
                                         </tr>
                                         <tr>
-                                            <td></td>
+                                            <td style="width: 50%;"></td>
                                             <td>
                                                 <input type="hidden" name="checkss" value="{DATA.checkss}" />
                                                 <input type="hidden" name="func" value="webhook" />
-                                                <input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary" />
+                                                <input type="submit" name="submit" value="{GLANG.save}" class="btn btn-primary" />
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </form>
+                        <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" data-toggle="webhookIPs">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50%;"><strong>{LANG.zalowebhook_ips}</strong></td>
+                                            <td><textarea name="zaloWebhookIPs" class="form-control">{DATA.zaloWebhookIPs_format}</textarea></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50%;"></td>
+                                            <td>
+                                                <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                                                <input type="hidden" name="func" value="webhookIPs" />
+                                                <input type="submit" name="submit" value="{GLANG.save}" class="btn btn-primary" />
+                                                <button type="button" class="btn btn-default" data-toggle="zalowebhookIPs_check">{LANG.zalowebhook_ip_check}</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="zalowebhookIP_autocheck" tabindex="-1" role="dialog" aria-labelledby="alowebhookIP_autocheckLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="alowebhookIP_autocheckLabel">{LANG.zalowebhook_ip_check}</h4>
+                                        </div>
+                                        <div class="modal-body">{LANG.zalowebhook_ip_check_note}</div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-toggle="zalowebhook_ip_update">{LANG.zalowebhook_ip_update}</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.close}</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -99,42 +207,7 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="access_token_create_heading">
-            <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#settings" href="#access_token_create" aria-expanded="false" aria-controls="access_token_create">
-                    {LANG.access_token_create}
-                </a>
-            </h4>
-        </div>
-        <div id="access_token_create" class="panel-collapse collapse" role="tabpanel" aria-labelledby="access_token_create_heading" data-location="{PAGE_LINK}&amp;action=access_token_create">
-            <div class="panel-body">
-                <!-- BEGIN: access_token_not_allowed -->
-                <div class="alert alert-warning">{LANG.access_token_create_note}</div>
-                <!-- END: access_token_not_allowed -->
-                <!-- BEGIN: access_token_is_allowed -->
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <td><strong>{LANG.access_token}</strong></td>
-                            <td><input id="access_token" type="text" value="{DATA.zaloOAAccessToken}" class="form-control" readonly /></td>
-                        </tr>
-                        <tr>
-                            <td><strong>{LANG.refresh_token}</strong></td>
-                            <td><input id="refresh_token" type="text" value="{DATA.zaloOARefreshToken}" class="form-control" readonly /></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;func=access_token_create" role="button" class="btn btn-default" data-toggle="access_token_create">{LANG.access_token_create}</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- END: access_token_is_allowed -->
-            </div>
-        </div>
-    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="system_check_heading">
             <h4 class="panel-title">

@@ -156,7 +156,7 @@ function nv_save_file_config_global()
     $config_variable['error_send_email'] = $config_variable['error_send_email'];
 
     $config_name_array = ['file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_request_mods', 'config_sso'];
-    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin'];
+    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin', 'zaloWebhookIPs'];
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
         if (in_array($c_config_name, $config_name_array, true)) {
