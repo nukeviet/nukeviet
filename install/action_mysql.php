@@ -94,6 +94,7 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_credentia
   credential_ident varchar(50) NOT NULL DEFAULT '',
   credential_secret varchar(255) NOT NULL DEFAULT '',
   credential_ips varchar(255) NOT NULL DEFAULT '',
+  auth_method ENUM('none','password_verify') NOT NULL DEFAULT 'password_verify' COMMENT 'Phương thức xác thực',
   api_roles varchar(255) NOT NULL DEFAULT '',
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',

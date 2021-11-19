@@ -44,7 +44,7 @@ if ($api_credential['timestamp'] + 5 < NV_CURRENTTIME or $api_credential['timest
 // Kiểm tra thông tin xác thực
 $db->sqlreset()->from(NV_AUTHORS_GLOBALTABLE . '_api_credential tb1');
 $db->join('INNER JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.admin_id=tb2.admin_id INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON tb1.admin_id=tb3.userid');
-$db->select('tb1.admin_id, tb1.credential_secret, tb1.credential_ips, tb1.api_roles, tb2.lev, tb3.username');
+$db->select('tb1.admin_id, tb1.credential_secret, tb1.credential_ips, tb1.auth_method, tb1.api_roles, tb2.lev, tb3.username');
 $db->where('tb1.credential_ident=:credential_ident AND tb2.is_suspend=0 AND tb3.active=1');
 
 try {
@@ -74,7 +74,7 @@ if (!empty($credential_data['credential_ips'])) {
 }
 
 $apisecret = $crypt->decrypt($credential_data['credential_secret']);
-if (!password_verify($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])) {
+if ($credential_data['auth_method'] !== 'none' and !password_verify($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])) {
     $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
         ->setMessage('Api Authentication fail !!! ')
         ->returnResult();
