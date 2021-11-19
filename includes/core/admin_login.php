@@ -454,6 +454,7 @@ if ($admin_login_success === true) {
 
     $nv_Request->set_Session('admin', $admin_encode);
     $nv_Request->set_Session('online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0');
+    $nv_Request->set_Cookie('isal', 1, NV_LIVE_COOKIE_TIME, false);
 
     if ($global_config['lang_multi']) {
         $sql = 'SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=' . $db->quote(NV_LANG_INTERFACE);

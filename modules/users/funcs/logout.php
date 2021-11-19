@@ -22,7 +22,7 @@ $log_userid = $is_system ? 0 : $user_info['userid'];
 
 if (defined('NV_IS_ADMIN')) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $user_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, $log_userid);
-    $nv_Request->unset_request('admin,online', 'session');
+    nv_admin_logout();
 } elseif (!empty($global_users_config['active_user_logs'])) {
     nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $user_info['username'] . '] ' . $lang_module['userlogout'], ' Client IP:' . NV_CLIENT_IP, $log_userid);
 }
