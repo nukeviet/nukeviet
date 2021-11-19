@@ -49,7 +49,8 @@ class ClearCache implements IApi
      */
     public function execute()
     {
-        global $db, $nv_Cache;
+        global $db, $nv_Cache, $global_config;
+
         if ($dh = opendir(NV_ROOTDIR . '/' . NV_CACHEDIR)) {
             while (($modname = readdir($dh)) !== false) {
                 if (preg_match($global_config['check_module'], $modname)) {

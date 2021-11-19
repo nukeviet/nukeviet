@@ -23,6 +23,9 @@ while ($row = $result->fetch()) {
     $global_array_roles[$row['role_id']] = $row;
 }
 
+// Các phương thức xác thực được phép
+$credential_auth_methods = ['password_verify', 'none'];
+
 if (empty($global_array_roles)) {
     $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=api-roles';
     $contents = nv_theme_alert($lang_global['site_info'], $lang_module['api_cr_error_role_empty'], 'info', $url, $lang_module['api_roles_add']);
@@ -34,7 +37,7 @@ if (empty($global_array_roles)) {
 // Lấy tất cả các API Credential
 $db->sqlreset()->from(NV_AUTHORS_GLOBALTABLE . '_api_credential tb1');
 $db->join('INNER JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.admin_id=tb2.admin_id INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON tb1.admin_id=tb3.userid');
-$db->select('tb1.admin_id, tb1.credential_title, tb1.credential_ident, tb1.credential_ips, tb1.api_roles, tb1.addtime, tb1.edittime, tb1.last_access, tb2.lev, tb3.username, tb3.first_name, tb3.last_name');
+$db->select('tb1.admin_id, tb1.credential_title, tb1.credential_ident, tb1.credential_ips, tb1.auth_method, tb1.api_roles, tb1.addtime, tb1.edittime, tb1.last_access, tb2.lev, tb3.username, tb3.first_name, tb3.last_name');
 $db->order('tb1.addtime DESC');
 
 $result = $db->query($db->sql());
@@ -42,7 +45,7 @@ $result = $db->query($db->sql());
 $array = [];
 while ($row = $result->fetch()) {
     $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name']);
-    $row['api_roles'] = array_filter(explode(',', $row['api_roles']));
+    $row['api_roles'] = array_filter(array_map('intval', explode(',', $row['api_roles'])));
 
     $api_roles = [];
     foreach ($row['api_roles'] as $role_id) {
@@ -104,6 +107,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
             'admin_id' => $array[$credential_ident]['admin_id'],
             'credential_title' => $array[$credential_ident]['credential_title'],
             'credential_ips' => implode("\n", $credential_ips),
+            'auth_method' => $array[$credential_ident]['auth_method'],
             'api_roles' => $array[$credential_ident]['api_roles']
         ];
         $caption = $lang_module['api_cr_edit'];
@@ -113,6 +117,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
             'admin_id' => 0,
             'credential_title' => '',
             'credential_ips' => '',
+            'auth_method' => $credential_auth_methods[0],
             'api_roles' => []
         ];
         $caption = $lang_module['api_cr_add'];
@@ -120,6 +125,11 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
 
     if ($nv_Request->isset_request('submit', 'post')) {
         $array_post['credential_title'] = nv_substr($nv_Request->get_title('credential_title', 'post', ''), 0, 255);
+        $array_post['auth_method'] = $nv_Request->get_title('auth_method', 'post', '');
+
+        if (!in_array($array_post['auth_method'], $credential_auth_methods)) {
+            $array_post['auth_method'] = $credential_auth_methods[0];
+        }
 
         $str_ips = $nv_Request->get_textarea('credential_ips', '', NV_ALLOWED_HTML_TAGS, true);
         $str_ips = explode('<br />', strip_tags($str_ips, '<br>'));
@@ -156,9 +166,9 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 }
 
                 $sql = 'INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_api_credential (
-                    admin_id, credential_title, credential_ident, credential_secret, credential_ips, api_roles, addtime
+                    admin_id, credential_title, credential_ident, credential_secret, credential_ips, auth_method, api_roles, addtime
                 ) VALUES (
-                    ' . $array_post['admin_id'] . ', :credential_title, :credential_ident, :credential_secret, :credential_ips, :api_roles, ' . NV_CURRENTTIME . '
+                    ' . $array_post['admin_id'] . ', :credential_title, :credential_ident, :credential_secret, :credential_ips, :auth_method, :api_roles, ' . NV_CURRENTTIME . '
                 )';
                 $sth = $db->prepare($sql);
 
@@ -169,6 +179,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 $sth->bindParam(':credential_ident', $new_credential_ident, PDO::PARAM_STR);
                 $sth->bindParam(':credential_secret', $new_credential_secret_db, PDO::PARAM_STR);
                 $sth->bindParam(':credential_ips', $array_post['credential_ips'], PDO::PARAM_STR);
+                $sth->bindParam(':auth_method', $array_post['auth_method'], PDO::PARAM_STR);
                 $sth->bindParam(':api_roles', $api_roles, PDO::PARAM_STR);
 
                 if ($sth->execute()) {
@@ -192,6 +203,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 $sql = 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_api_credential SET
                     credential_title=:credential_title,
                     credential_ips=:credential_ips,
+                    auth_method=:auth_method,
                     api_roles=:api_roles,
                     edittime=' . NV_CURRENTTIME . '
                 WHERE credential_ident=' . $db->quote($credential_ident);
@@ -199,6 +211,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
                 $api_roles = implode(',', $array_post['api_roles']);
                 $sth->bindParam(':credential_title', $array_post['credential_title'], PDO::PARAM_STR);
                 $sth->bindParam(':credential_ips', $array_post['credential_ips'], PDO::PARAM_STR);
+                $sth->bindParam(':auth_method', $array_post['auth_method'], PDO::PARAM_STR);
                 $sth->bindParam(':api_roles', $api_roles, PDO::PARAM_STR);
                 if ($sth->execute()) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit API Credential', $credential_ident, $admin_info['userid']);
@@ -229,6 +242,16 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
         }
 
         $xtpl->parse('content.for_admin');
+    }
+
+    // Xuất các phương thức xác thực
+    foreach ($credential_auth_methods as $auth_method) {
+        $xtpl->assign('AUTH_METHOD', [
+            'key' => $auth_method,
+            'title' => $lang_module['api_cr_auth_method_' . $auth_method],
+            'checked' => $auth_method == $array_post['auth_method'] ? ' checked="checked"' : ''
+        ]);
+        $xtpl->parse('content.auth_method');
     }
 
     // Xuất lỗi
