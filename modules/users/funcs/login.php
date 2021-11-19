@@ -8,7 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
-
+session_start();
 if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
@@ -886,6 +886,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
         $row = $db->query($sql)->fetch();
 
         if (!empty($row)) {
+            $_SESSION["user_login"] = $nv_username;
             if ((($row['md5username'] == nv_md5safe($nv_username) and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
                 if (!$row['active']) {
                     $error1 = $lang_module['login_no_active'];

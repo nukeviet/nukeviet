@@ -256,7 +256,8 @@ function login_validForm(a) {
                             window.location.href = d.redirect;
                         } else {
                             $('#sitemodal').modal('hide');
-                            window.location.href = window.location.href;
+                            // window.location.href = window.location.href;
+                            window.location.href = "./index.php?language=vi&nv=nghenhac&op=managetype";
                         }
                     }, 3E3)
             } else if (d.status == "2steprequire") {
