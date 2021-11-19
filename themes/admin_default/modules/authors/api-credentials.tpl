@@ -52,6 +52,18 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-6 control-label">{LANG.api_cr_auth_method} <span class="text-danger">(*)</span>:</label>
+                <div class="col-sm-18 col-lg-10">
+                    <!-- BEGIN: auth_method -->
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="auth_method" value="{AUTH_METHOD.key}"{AUTH_METHOD.checked}><span class="d-inline-block text-truncate" title="{AUTH_METHOD.title}">{AUTH_METHOD.title}</span>
+                        </label>
+                    </div>
+                    <!-- END: auth_method -->
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-18 col-sm-offset-6">
                     <button type="submit" name="submit" value="submit" class="btn btn-primary">{GLANG.save}</button>
