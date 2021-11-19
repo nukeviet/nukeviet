@@ -8,7 +8,7 @@
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
-
+session_start();
 if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
@@ -59,7 +59,7 @@ $info .= '[<a href="' . $url_redirect . '">' . $lang_module['redirect_to_back'] 
 
 $contents = user_info_exit($info);
 $contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite($url_redirect) . '" />';
-
+unset($_SESSION['user_login']);
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';
