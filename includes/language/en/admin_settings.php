@@ -261,6 +261,7 @@ $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detect
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
 $lang_module['static_url'] = 'Hosting of static files';
+$lang_module['static_url_note'] = 'Leave it blank or fill in the hosting domain name that is not one of the site\'s domains or their subdomains. The directory structure of this hosting needs to be identical to the site\'s structure';
 $lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
 $lang_module['remote_api_access'] = 'Enable Remote API';
 $lang_module['remote_api_access_help'] = 'Disabling all API access from outside will be blocked. Internal APIs are still used normally';

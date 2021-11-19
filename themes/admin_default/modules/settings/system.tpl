@@ -138,7 +138,12 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.static_url}</strong></td>
-                    <td><input type="text" name="nv_static_url" value="{DATA.nv_static_url}" class="form-control pull-left" style="width: 450px"/></td>
+                    <td>
+                        <div class="m-bottom">
+                            <input type="text" name="nv_static_url" value="{DATA.nv_static_url}" class="form-control" style="width: 450px"/>
+                        </div>
+                        {LANG.static_url_note}
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.cdn_url}</strong></td>

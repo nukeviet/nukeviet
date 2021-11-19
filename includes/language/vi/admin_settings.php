@@ -268,6 +268,7 @@ $lang_module['ftp_error_full'] = 'Hãy nhập đủ các thông số để tự 
 $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số nào phù hợp. Hãy kiểm tra lại tên đăng nhập và mật khẩu';
 $lang_module['ftp_error_support'] = 'Máy chủ của bạn đang chặn hoặc không hỗ trợ thư viện FTP. Hãy liên hệ với nhà cung cấp để được kích hoạt.';
 $lang_module['static_url'] = 'Hosting chứa các tệp tĩnh';
+$lang_module['static_url_note'] = 'Để trống hoặc điền vào tên miền của hosting chứa các tệp tĩnh không phải là một trong các miền hoặc miền phụ của site. Cấu trúc thư mục của hosting này cần phải giống với cấu trúc thư mục của site';
 $lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
 $lang_module['remote_api_access'] = 'Bật Remote API';
 $lang_module['remote_api_access_help'] = 'Nếu tắt toàn bộ quyền truy cập API từ bên ngoài sẽ bị chặn. Các API bên trong vẫn sử dụng bình thường';
