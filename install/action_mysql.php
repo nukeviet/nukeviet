@@ -96,6 +96,7 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_credentia
   credential_ident varchar(50) NOT NULL DEFAULT '',
   credential_secret varchar(250) NOT NULL DEFAULT '',
   credential_ips varchar(255) NOT NULL DEFAULT '',
+  auth_method ENUM('none','password_verify') NOT NULL DEFAULT 'password_verify' COMMENT 'Phương thức xác thực',
   api_roles varchar(255) NOT NULL DEFAULT '',
   addtime int(11) NOT NULL DEFAULT '0',
   edittime int(11) NOT NULL DEFAULT '0',
@@ -260,15 +261,15 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_file (
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_plugins (
   pid MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-	plugin_lang VARCHAR(3) NOT NULL DEFAULT 'all',
-	plugin_file VARCHAR(50) NOT NULL,
-	plugin_area VARCHAR(50) NOT NULL DEFAULT '',
-	plugin_module_name VARCHAR(50) NOT NULL DEFAULT '',
-	plugin_module_file VARCHAR(50) NOT NULL DEFAULT '',
-	hook_module VARCHAR(50) NOT NULL DEFAULT '',
-	weight TINYINT(4) NOT NULL,
-	PRIMARY KEY (pid),
-	UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
+    plugin_lang VARCHAR(3) NOT NULL DEFAULT 'all',
+    plugin_file VARCHAR(50) NOT NULL,
+    plugin_area VARCHAR(50) NOT NULL DEFAULT '',
+    plugin_module_name VARCHAR(50) NOT NULL DEFAULT '',
+    plugin_module_file VARCHAR(50) NOT NULL DEFAULT '',
+    hook_module VARCHAR(50) NOT NULL DEFAULT '',
+    weight TINYINT(4) NOT NULL,
+    PRIMARY KEY (pid),
+    UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
 ) ENGINE=MyISAM AUTO_INCREMENT=1001";
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_counter (
