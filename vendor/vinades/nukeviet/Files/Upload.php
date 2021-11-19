@@ -1073,7 +1073,7 @@ class Upload
             $return['size'] = $this->file_size;
             $return['is_img'] = $this->is_img;
             $return['is_svg'] = $this->is_svg;
-            if ($this->is_img) {
+            if ($this->is_img and function_exists('exif_read_data')) {
                 // Check/fix image rotation
                 // https://stackoverflow.com/questions/34287437/
                 $exif = exif_read_data($savepath . $filename);
