@@ -136,7 +136,7 @@ function nv_site_theme($contents, $full = true)
         'rel' => 'stylesheet',
         'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/font-awesome.min.css'
     ];
-    if ($global_config['current_theme_type'] == 'r') {
+    if ($global_config['current_theme_type'] == '') {
         $html_links[] = [
             'rel' => 'stylesheet',
             'href' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css'
