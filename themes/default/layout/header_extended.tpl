@@ -65,7 +65,7 @@
                         <div class="row">
                             <div class="bg">
                             <div class="clearfix">
-                                <div class="col-xs-24 col-sm-18 col-md-18">
+                                <div class="col-xs-24 col-sm-18 col-md-6 col-lg-6 res-hide">
                                     <!-- BEGIN: breadcrumbs -->
                                     <div class="breadcrumbs-wrap">
                                         <div class="display">
@@ -81,7 +81,12 @@
                                     <!-- END: breadcrumbs -->
                                     <!-- BEGIN: currenttime --><span class="current-time">{NV_CURRENTTIME}</span><!-- END: currenttime -->
                                 </div>
-                                <div class="headerSearch col-xs-24 col-sm-6 col-md-6">
+                                <div class="col-sm-24 col-md-12">
+                                    <h2 style="position:relative; top:5px;">
+                                    [WELCOME]
+                                    </h2>
+                                </div>
+                                <div class="headerSearch col-lg-6 res-hide">
                                     <div class="input-group">
                                         <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}..."><span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
                                     </div>
