@@ -85,7 +85,7 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
  */
 function nv_check_email_reg(&$email)
 {
-    global $db, $lang_module, $global_users_config;
+    global $db, $lang_module, $global_users_config, $global_config;
 
     $error = nv_check_valid_email($email, true);
     $email = $error[1];
@@ -97,31 +97,54 @@ function nv_check_email_reg(&$email)
         return sprintf($lang_module['email_deny_name'], $email);
     }
 
-    list($left, $right) = explode('@', $email);
-    $left = preg_replace('/[\.]+/', '', $left);
-    $pattern = str_split($left);
-    $pattern = implode('.?', $pattern);
-    $pattern = '^' . $pattern . '@' . $right . '$';
+    if (!empty($global_config['email_dot_equivalent'])) {
+        list($left, $right) = explode('@', $email);
+        $left = preg_replace('/[\.]+/', '', $left);
+        $pattern = str_split($left);
+        $pattern = implode('.?', $pattern);
+        $pattern = '^' . $pattern . '@' . $right . '$';
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email RLIKE :pattern');
-    $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
-    $stmt->execute();
-    if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['email_registered_name'], $email);
-    }
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email RLIKE :pattern');
+        $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->fetchColumn()) {
+            return sprintf($lang_module['email_registered_name'], $email);
+        }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email RLIKE :pattern');
-    $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
-    $stmt->execute();
-    if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['email_registered_name'], $email);
-    }
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email RLIKE :pattern');
+        $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->fetchColumn()) {
+            return sprintf($lang_module['email_registered_name'], $email);
+        }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email RLIKE :pattern');
-    $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
-    $stmt->execute();
-    if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['email_registered_name'], $email);
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email RLIKE :pattern');
+        $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->fetchColumn()) {
+            return sprintf($lang_module['email_registered_name'], $email);
+        }
+    } else {
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email = :email');
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->fetchColumn()) {
+            return sprintf($lang_module['email_registered_name'], $email);
+        }
+
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email = :email');
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->fetchColumn()) {
+            return sprintf($lang_module['email_registered_name'], $email);
+        }
+
+        $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email = :email');
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt->fetchColumn()) {
+            return sprintf($lang_module['email_registered_name'], $email);
+        }
     }
 
     return '';

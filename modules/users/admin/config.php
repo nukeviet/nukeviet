@@ -80,6 +80,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['openid_servers'] = $nv_Request->get_typed_array('openid_servers', 'post', 'string');
         $array_config['openid_servers'] = !empty($array_config['openid_servers']) ? implode(',', $array_config['openid_servers']) : '';
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
+        $array_config['email_dot_equivalent'] = $nv_Request->get_int('email_dot_equivalent', 'post', 0);
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
         $array_config['pass_timeout'] = 86400 * $nv_Request->get_int('pass_timeout', 'post', 0);
         $array_config['oldpass_num'] = $nv_Request->get_int('oldpass_num', 'post', 5);
@@ -215,6 +216,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['allowuserlogin'] = !empty($array_config['allowuserlogin']) ? ' checked="checked"' : '';
     $array_config['allowuserloginmulti'] = !empty($array_config['allowuserloginmulti']) ? ' checked="checked"' : '';
     $array_config['is_user_forum'] = !empty($array_config['is_user_forum']) ? ' checked="checked"' : '';
+    $array_config['email_dot_equivalent'] = !empty($array_config['email_dot_equivalent']) ? ' checked="checked"' : '';
     $array_config['auto_login_after_reg'] = !empty($array_config['auto_login_after_reg']) ? ' checked="checked"' : '';
     $array_config['send_pass'] = !empty($array_config['send_pass']) ? ' checked="checked"' : '';
     $array_config['pass_timeout'] = $array_config['pass_timeout'] / 86400;
