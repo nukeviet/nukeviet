@@ -42,7 +42,7 @@ if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
 }
 
 if (!defined('NV_ADMIN') and !empty($global_config['nv_csp_act']) and !empty($global_config['nv_csp'])) {
-    $html_headers['Content-Security-Policy'] = parse_csp($global_config['nv_csp'], defined('NV_SCRIPT_NONCE') ? NV_SCRIPT_NONCE : '');
+    $html_headers['Content-Security-Policy'] = parse_csp($global_config['nv_csp']);
 }
 
 if (!empty($global_config['nv_rp_act']) and !empty($global_config['nv_rp'])) {
@@ -76,7 +76,7 @@ if (!empty($headers)) {
     $html_headers = array_merge($html_headers, $headers);
 }
 
-if (!empty($global_config['nv_static_url'])) {
+if (!empty($global_config['nv_static_url']) and !str_ends_with(NV_MY_DOMAIN, $global_config['nv_static_url'])) {
     $html_headers['link'] = '<//' . $global_config['nv_static_url'] . '>; rel=preconnect; crossorigin, <//' . $global_config['nv_static_url'] . '>; rel=dns-prefetch' . (!empty($html_headers['link']) ? ', ' . $html_headers['link'] : '');
 }
 

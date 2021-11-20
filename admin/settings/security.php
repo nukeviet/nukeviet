@@ -367,20 +367,20 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
 
 // Xử lý thiết lập CSP
 $csp_directives = [
-    'default-src' =>     ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => ''],
-    'script-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => '*.google.com *.google-analytics.com *.googletagmanager.com *.gstatic.com *.facebook.com *.facebook.net *.twitter.com *.zalo.me *.zaloapp.com *.tawk.to'],
-    'style-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'unsafe-inline' => 1, 'hosts' => '*.google.com *.googleapis.com *.tawk.to'],
-    'img-src' =>         ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => '*.twitter.com *.google.com *.googleapis.com *.gstatic.com *.facebook.com tawk.link *.tawk.to static.nukeviet.vn'],
-    'font-src' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => '*.googleapis.com *.gstatic.com *.tawk.to'],
-    'connect-src' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.zalo.me *.tawk.to wss://*.tawk.to'],
-    'media-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.tawk.to'],
-    'object-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
-    'prefetch-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
-    'frame-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.google.com *.youtube.com *.facebook.com *.facebook.net *.twitter.com *.zalo.me'],
-    'frame-ancestors' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
-    'form-action' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '*.google.com'],
-    'base-uri' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ''],
-    'manifest-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => '']
+    'default-src' =>     ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => []],
+    'script-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to']],
+    'style-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'unsafe-inline' => 1, 'hosts' => ['*.google.com', '*.googleapis.com', '*.tawk.to']],
+    'img-src' =>         ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.twitter.com', '*.google.com', '*.googleapis.com', '*.gstatic.com', '*.facebook.com', 'tawk.link', '*.tawk.to', 'static.nukeviet.vn']],
+    'font-src' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.googleapis.com', '*.gstatic.com', '*.tawk.to']],
+    'connect-src' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.zalo.me', '*.tawk.to', 'wss://*.tawk.to']],
+    'media-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.tawk.to']],
+    'object-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
+    'prefetch-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
+    'frame-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.google.com', '*.youtube.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me']],
+    'frame-ancestors' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
+    'form-action' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.google.com']],
+    'base-uri' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
+    'manifest-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []]
 ];
 
 if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
@@ -391,9 +391,9 @@ if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request-
         foreach($sources as $source => $val) {
             if (!empty($val)) {
                 if ($source == 'hosts') {
-                    $val = trim(strip_tags($val));
-                    $val = str_replace(["\r\n", "\r", "\n"], ' ', $val);
-                    $val = preg_replace('/[ ]+/', ' ', $val);
+                    $val = strip_tags($val);
+                    $val = array_map('trim', explode("\n", $val));
+                    $val = array_unique($val);
                 } else {
                     $val = 1;
                 }
@@ -1022,9 +1022,13 @@ foreach ($csp_directives as $name => $sources) {
 
     $is_none = !empty($directives[$name]['none']);
     foreach($sources as $key => $default) {
+        $val = '';
+        if ($key == 'hosts' and !empty($directives[$name][$key])) {
+            $val = is_array($directives[$name][$key]) ? implode(chr(13) . chr(10), $directives[$name][$key]) : preg_replace('/[\s]+/', chr(13) . chr(10), $directives[$name][$key]);
+        }
         $source = [
             'key' => $key,
-            'val' => !empty($directives[$name][$key]) ? preg_replace('/[\s]+/', chr(13) . chr(10), $directives[$name][$key]) : '',
+            'val' => $val,
             'checked' => !empty($directives[$name][$key]) ? ' checked="checked"' : '',
             'disabled' => ($key != 'none' and $is_none) ? ' disabled' : '',
             'name' => isset($lang_module['csp_source_' . $name . '_' . $key]) ? $lang_module['csp_source_' . $name . '_' . $key] : $lang_module['csp_source_' . $key]

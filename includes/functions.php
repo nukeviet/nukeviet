@@ -2327,11 +2327,33 @@ function nv_change_buffer($buffer)
  * parse_csp()
  * 
  * @param string $json_csp 
- * @param string $script_nonce 
  * @return string 
  */
-function parse_csp($json_csp, $script_nonce = '')
+function parse_csp($json_csp)
 {
+    global $global_config, $nv_Cache;
+
+    $script_nonce = defined('NV_SCRIPT_NONCE') ? NV_SCRIPT_NONCE : '';
+
+    $cacheFile = 'csp_' . NV_CACHE_PREFIX . '.cache';
+    if (($cache = $nv_Cache->getItem('settings', $cacheFile)) != false) {
+        $_info = unserialize($cache);
+        if ($_info['static_url'] == $global_config['nv_static_url']) {
+            return preg_replace('/nonce\-([^\']+)/', 'nonce-' . $script_nonce, $_info['content']);
+        }
+    }
+
+    $static_csp = [];
+    if (!empty($global_config['nv_static_url']) and !str_ends_with(NV_MY_DOMAIN, $global_config['nv_static_url'])) {
+        $nv_static_url = str_replace('www.', '', $global_config['nv_static_url']);
+        $static_host_keys = ['default-src', 'script-src', 'style-src', 'img-src', 'font-src', 'connect-src', 'media-src', 'frame-src', 'form-action', 'manifest-src'];
+        foreach ($static_host_keys as $key) {
+            $static_csp[$key] = [
+                'hosts' => [$nv_static_url]
+            ];
+        }
+    }
+
     $csp_sources = [
         'none' => "'none'",
         'all' => "*",
@@ -2344,6 +2366,18 @@ function parse_csp($json_csp, $script_nonce = '')
     if (json_last_error() !== JSON_ERROR_NONE) {
         $_csp = [];
     }
+    $keys = array_keys($_csp);
+    foreach ($keys as $key) {
+        if (!empty($_csp[$key]['hosts'])) {
+            if (is_string($_csp[$key]['hosts'])) {
+                $_csp[$key]['hosts'] = explode(' ', $_csp[$key]['hosts']);
+                $_csp[$key]['hosts'] = array_filter($_csp[$key]['hosts']);
+            }
+        } else {
+            unset($_csp[$key]['hosts']);
+        }
+    }
+    !empty($static_csp) && $_csp = array_merge_recursive($_csp, $static_csp);
     $csp = [];
     if (!empty($_csp)) {
         foreach ($_csp as $directive => $sources) {
@@ -2352,7 +2386,7 @@ function parse_csp($json_csp, $script_nonce = '')
                 if ($source != 'hosts') {
                     $csp[$directive][] = $csp_sources[$source];
                 } else {
-                    $csp[$directive][] = $val;
+                    $csp[$directive][] = !empty($val) ? implode(' ', array_unique($val)) : '';
                 }
             }
             $csp[$directive] = $directive . ' ' . implode(' ', $csp[$directive]);
@@ -2364,7 +2398,10 @@ function parse_csp($json_csp, $script_nonce = '')
         $csp['script-src'] .= " 'nonce-" . $script_nonce . "' 'strict-dynamic'";
     }
 
-    return implode('; ', $csp) . '; report-uri ' . NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'reporturi.php;';
+    $content = implode('; ', $csp) . '; report-uri ' . NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'reporturi.php;';
+    $nv_Cache->setItem('settings', $cacheFile, serialize(['static_url' => $global_config['nv_static_url'], 'content' => $content]));
+
+    return $content;
 }
 
 /**
