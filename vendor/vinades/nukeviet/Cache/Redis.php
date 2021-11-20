@@ -70,8 +70,8 @@ class Redis
         }
 
         $checkOptions = array();
-        $checkOptions[] = $redis->setOption(Redis::OPT_PREFIX, $Cache_Prefix);
-        $checkOptions[] = $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+        $checkOptions[] = $redis->setOption(CRedis::OPT_PREFIX, $Cache_Prefix);
+        $checkOptions[] = $redis->setOption(CRedis::OPT_SERIALIZER, CRedis::SERIALIZER_PHP);
 
         foreach ($checkOptions as $opt) {
             if ($opt !== true) {
