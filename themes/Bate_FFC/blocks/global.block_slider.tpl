@@ -28,43 +28,22 @@
 		<div class="carousel-wrap">
 			<div class="owl-carousel owl-theme">
 				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=1" />
+					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_400-0.jpg" />
 				</div>
 				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=2" />
+					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_400-0.jpg" />
 				</div>
 				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=3" />
+					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_400-0.jpg" />
 				</div>
 				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=4" />
+					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_400-0.jpg" />
 				</div>
 				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=5" />
+					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_400-0.jpg" />
 				</div>
 				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=6" />
-				</div>
-				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=7" />
-				</div>
-				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=8" />
-				</div>
-				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=9" />
-				</div>
-				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=10" />
-				</div>
-				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=11" />
-				</div>
-				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=12" />
-				</div>
-				<div class="item">
-					<img src="https://picsum.photos/640/480?pic=13" />
+					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_400-0.jpg" />
 				</div>
 			</div>
 		</div>

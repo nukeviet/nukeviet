@@ -15,6 +15,17 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-md-24">
+		<div class="row">
+			<div class="col-sm-18 col-md-19 col-sm-push-6 col-md-push-5">
+				[TINTUC]
+			</div>
+			<div class="col-sm-6 col-md-5 col-sm-pull-18 col-md-pull-19">
+				[MENUDOC]
+				[VIDEOS]
+			</div>
+		</div>
+	</div>
 		<!--[TOP]
 		{MODULE_CONTENT}
 		[BOTTOM]-->
