@@ -17,6 +17,50 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
+/**
+ * curl_get_headers()
+ * 
+ * @param mixed $url 
+ * @return array 
+ */
+function curl_get_headers($url)
+{
+    if (!defined('CURL_HTTP_VERSION_2_0')) {
+        define('CURL_HTTP_VERSION_2_0', 3);
+    }
+
+    $headers = [];
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, 1);
+    curl_setopt($ch, CURLOPT_NOBODY, 1);
+    curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $response = curl_exec($ch);
+    if (!empty($response) and !curl_errno($ch)) {
+        $header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
+        $header_text = explode("\r\n", $header_text);
+        foreach ($header_text as $k => $line) {
+            if ($k == 0) {
+                $headers['http_code'] = trim($line);
+            } else {
+                list($key, $value) = explode(': ', $line);
+                $key = strtolower(trim($key));
+                if (!empty($key)) {
+                    $headers[$key] = $value;
+                }
+            }
+        }
+    }
+    curl_close($ch);
+
+    return $headers;
+}
+
 $iniSaveTime = 0;
 $ini_list = ini_get_all(null, false);
 $ini_server = in_array(NV_SERVER_NAME, $global_config['my_domains'], true) ? NV_SERVER_NAME : $global_config['my_domains'][0];
@@ -156,64 +200,44 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config .= "\$sys_info['php_compress_methods'] = [" . $_compress_method . "];\n";
 
     // server_headers
-    if ((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443) {
-        stream_context_set_default([
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false
-            ]
-        ]);
-    } else {
-        stream_context_set_default([
-            'http' => [
-                'method' => 'GET',
-                'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
-            ]
-        ]);
-    }
-
-    $server_headers = get_headers(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
-    unset($server_headers[0], $server_headers['Date'], $server_headers['Expires'], $server_headers['Last-Modified'], $server_headers['Connection'], $server_headers['Set-Cookie'], $server_headers['X-Page-Speed']);
     $sys_info['server_headers'] = [];
+    $sys_info['is_http2'] = false;
+    $sys_info['http_only'] = false;
+    $sys_info['https_only'] = false;
     $_temp = [];
-    foreach ($server_headers as $k => $v) {
-        $k = strtolower($k);
-        $sys_info['server_headers'][$k] = $v;
-        $_temp[] = "'" . addslashes($k) . "' => '" . addslashes($v) . "'";
-    }
-    $_temp = implode(',', $_temp);
-    $content_config .= "\$sys_info['server_headers'] = [" . $_temp . "];\n";
 
-    // https_only and http_only
-    if ((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443) {
-        stream_context_set_default([
-            'http' => [
-                'method' => 'GET',
-                'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
-            ]
-        ]);
-        $host = $nv_Server->getOriginalHost();
-        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
-            $host = '[' . $host . ']';
-        }
-        $server_headers = get_headers('http://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
-        $sys_info['https_only'] = !empty($server_headers['x-is-http']) ? false : true;
-        $sys_info['http_only'] = false;
-    } else {
-        stream_context_set_default([
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false
-            ]
-        ]);
-        $host = $nv_Server->getOriginalHost();
-        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
-            $host = '[' . $host . ']';
-        }
-        $server_headers = get_headers('https://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1', 1);
-        $sys_info['http_only'] = !empty($server_headers['x-is-https']) ? false : true;
-        $sys_info['https_only'] = false;
+    $host = $nv_Server->getOriginalHost();
+    if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+        $host = '[' . $host . ']';
     }
+
+    $unset = ['http_code', 'date', 'expires', 'last-modified', 'connection', 'set-cookie', 'x-page-speed', 'x-is-http', 'x-is-https'];
+    $url = NV_SERVER_PROTOCOL . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1';
+    $headers = curl_get_headers($url);
+    if (!empty($headers['http_code']) and strpos($headers['http_code'], 'HTTP/2') === 0) {
+        $sys_info['is_http2'] = true;
+    }
+    if (!empty($headers)) {
+        foreach ($headers as $key => $value) {
+            if (!in_array($key, $unset, true)) {
+                $sys_info['server_headers'][$key] = $value;
+                $_temp[] = "'" . addslashes($key) . "' => '" . addslashes($value) . "'";
+            }
+        }
+    }
+
+    $proto = NV_SERVER_PROTOCOL == 'https' ? 'http' : 'https';
+    $url2 = $proto . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1';
+    $headers = curl_get_headers($url2);
+    if (NV_SERVER_PROTOCOL == 'https') {
+        $sys_info['https_only'] = !empty($headers['x-is-http']) ? false : true;
+    } else {
+        $sys_info['http_only'] = !empty($headers['x-is-https']) ? false : true;
+    }
+
+    $_temp = !empty($_temp) ? implode(',', $_temp) : '';
+    $content_config .= "\$sys_info['server_headers'] = [" . $_temp . "];\n";
+    $content_config .= "\$sys_info['is_http2'] = " . ($sys_info['is_http2'] ? "true" : "false") . ";\n";
     $content_config .= "\$sys_info['http_only'] = " . ($sys_info['http_only'] ? 'true' : 'false') . ";\n";
     $content_config .= "\$sys_info['https_only'] = " . ($sys_info['https_only'] ? 'true' : 'false') . ";\n";
 
