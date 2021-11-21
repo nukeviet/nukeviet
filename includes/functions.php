@@ -2398,7 +2398,7 @@ function parse_csp($json_csp)
         $csp['script-src'] .= " 'nonce-" . $script_nonce . "' 'strict-dynamic'";
     }
 
-    $content = implode('; ', $csp) . '; report-uri ' . NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'reporturi.php;';
+    $content = implode('; ', $csp);
     $nv_Cache->setItem('settings', $cacheFile, serialize(['static_url' => $global_config['nv_static_url'], 'content' => $content]));
 
     return $content;

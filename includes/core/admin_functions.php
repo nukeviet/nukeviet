@@ -493,7 +493,7 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= '#RewriteBase ' . NV_BASE_SITEURL . "\n";
 
         $rewrite_rule .= "RewriteCond %{REQUEST_METHOD} !^(POST) [NC]\n";
-        $rewrite_rule .= "RewriteRule ^(api|reporturi)\.php(.*?)$ - [F]\n";
+        $rewrite_rule .= "RewriteRule ^(api)\.php(.*?)$ - [F]\n";
 
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]\n";
         $rewrite_rule .= "RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]\n";
