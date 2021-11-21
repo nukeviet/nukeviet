@@ -1,0 +1,319 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+/* Upload, crop avatar */
+.users-av-wraper {
+    position: relative;
+    width: 630px;
+    min-height: 100%;
+    background: #f7f7f7;
+    padding: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+.users-av-wraper > form > div {
+    position: relative;
+    padding: 15px 0 0 15px;
+}
+
+.users-av-wraper > form > div:first-child {
+    background-color: #efefef;
+    min-height: 400px;
+    border: 1px solid #d0d0d0;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    padding: 0;
+}
+
+.users-avupload {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.users-avupload .upload-button {
+    display: table;
+    width: 100%;
+    height: 380px;
+    cursor: pointer;
+}
+
+.users-avupload .upload-button > div {
+    display: table-row;
+}
+
+.users-avupload .upload-button > div > span {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.users-avupload .upload-button > div > span > em {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    font-size: 40px;
+    text-align: center;
+    color: #fff;
+    background-color: #1182c8;
+    line-height: 100px;
+    border-radius: 50px;
+}
+
+.users-avupload .upload-button:hover em {
+    background-color: #205fa0;
+}
+
+.users-avupload .img-area {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+.users-avupload .img-area img {
+    width: 100%;
+}
+
+.users-av-wraper .guide {
+    padding: 8px;
+    background: #d8eaf8;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.users-av-wraper .exit-bt {
+    position: fixed;
+    top: 380px;
+    right: 30px;
+}
+
+/* EDIT INFO */
+#change-photo {
+    display: none;
+}
+
+.users-menu > li > a {
+    padding: 8px 10px !important;
+}
+
+/* LOGIN, REGISTER FORM BOX */
+.login-box {
+    width: 334px;
+}
+
+@media (max-width: 399px) {
+    .login-box {
+        width: 100%;
+    }
+}
+
+.user-reg-form .form-detail .form-group > label {
+    font-weight: 500;
+}
+
+.login-box img.logo {
+    max-width: 100%;
+    height: auto;
+}
+
+.openid-btns {
+    border-top: 1px #fff solid;
+    padding-top: 15px;
+}
+
+.openid-btns .btn-group {
+    display: flex;
+    width: 100%;
+}
+
+.openid-btns .btn-group button.btn {
+    width: 40px;
+    text-align: center;
+}
+
+.openid-btns .btn-group a.btn {
+    flex-grow: 1;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.openid-google {
+    color: #ffffff !important;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.openid-google:focus {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #761c19;
+}
+
+.openid-google:hover {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.openid-google:active {
+    color: #ffffff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.openid-google:active:hover,
+.openid-google:active:focus {
+    color: #ffffff;
+    background-color: #ac2925;
+    border-color: #761c19;
+}
+
+.openid-google:active {
+    background-image: none;
+}
+
+.openid-google.disabled:hover,
+.openid-google[disabled]:hover,
+fieldset[disabled] .openid-google:hover,
+.openid-google.disabled:focus,
+.openid-google[disabled]:focus,
+fieldset[disabled] .openid-google:focus {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    cursor: inherit;
+}
+
+.openid-zalo {
+    color: #ffffff !important;
+    background-color: #0067ff;
+    border-color: #0067ff;
+}
+
+.openid-zalo:focus,
+.openid-zalo:hover,
+.openid-zalo:active {
+    color: #ffffff;
+    background-color: #035adb;
+    border-color: #035adb;
+}
+
+.openid-zalo:active {
+    background-image: none;
+}
+
+.openid-zalo.disabled:hover,
+.openid-zalo[disabled]:hover,
+fieldset[disabled] .openid-zalo:hover,
+.openid-zalo.disabled:focus,
+.openid-zalo[disabled]:focus,
+fieldset[disabled] .openid-zalo:focus {
+    background-color: #035adb;
+    border-color: #035adb;
+    cursor: inherit;
+}
+
+.fa-zalo::before {
+    font: normal normal bold 15px/1 Arial;
+    content: "Z";
+}
+
+.openid-facebook {
+    color: #ffffff !important;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+
+.openid-facebook:focus {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #193c5a;
+}
+
+.openid-facebook:hover {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+
+.openid-facebook:active {
+    color: #ffffff;
+    background-color: #3071a9;
+    border-color: #285e8e;
+}
+
+.openid-facebook:active:hover,
+.openid-facebook:active:focus {
+    color: #ffffff;
+    background-color: #285e8e;
+    border-color: #193c5a;
+}
+
+.openid-facebook:active {
+    background-image: none;
+}
+
+.openid-facebook.disabled:hover,
+.openid-facebook[disabled]:hover,
+.openid-facebook.disabled:focus,
+.openid-facebook[disabled]:focus,
+fieldset[disabled] .openid-facebook:focus {
+    background-color: #428bca;
+    border-color: #357ebd;
+    cursor: inherit;
+}
+
+.openid-single-sign-on {
+    color: #ffffff !important;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.openid-single-sign-on:focus {
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #255625;
+}
+
+.openid-single-sign-on:hover {
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.openid-single-sign-on:active {
+    color: #ffffff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.openid-single-sign-on:active:hover,
+.openid-single-sign-on:active:focus {
+    color: #ffffff;
+    background-color: #398439;
+    border-color: #255625;
+}
+
+.openid-single-sign-on:active {
+    background-image: none;
+}
+
+.openid-single-sign-on.disabled:hover,
+.openid-single-sign-on[disabled]:hover,
+.openid-single-sign-on.disabled:focus,
+.openid-single-sign-on[disabled]:focus,
+fieldset[disabled] .openid-single-sign-on:focus {
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    cursor: inherit;
+}
