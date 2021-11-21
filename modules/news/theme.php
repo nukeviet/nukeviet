@@ -426,7 +426,13 @@ function viewsubcat_main($viewcat, $array_cat)
     $xtpl->assign('IMGWIDTH', $module_config[$module_name]['homewidth']);
 
     // Hien thi cac chu de con
+
+                // echo "<pre>";
+                // print_r($array_cat);
+                // echo "</pre>";
+                // die;
     foreach ($array_cat as $key => $array_row_i) {
+        if ($key == 3) break;
         if (isset($array_cat[$key]['content'])) {
             $array_row_i['rss'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_row_i['alias'];
             $xtpl->assign('CAT', $array_row_i);
@@ -458,15 +464,13 @@ function viewsubcat_main($viewcat, $array_cat)
                     nv_remove_block_botcat_news($array_row_i['catid']);
                 }
             }
-
             if ($array_row_i['subcatid'] != '') {
                 $_arr_subcat = explode(',', $array_row_i['subcatid']);
-                $limit = 0;
+                $limit = 2;
                 foreach ($_arr_subcat as $catid_i) {
                     if ($global_array_cat[$catid_i]['status'] == 1) {
                         $xtpl->assign('SUBCAT', $global_array_cat[$catid_i]);
                         $xtpl->parse('main.listcat.subcatloop');
-                        ++$limit;
                     }
                     if ($limit >= 3) {
                         $more = [

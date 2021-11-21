@@ -1,0 +1,629 @@
+﻿/**
+ * @Project NUKEVIET 4.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
+ */
+
+/* Block Menu */
+.smoothmenu2 {
+    z-index: 1000
+}
+
+.smoothmenu2 ul li a {
+    padding: 5px;
+}
+
+.ddsmoothmenu-v {
+
+}
+
+.ddsmoothmenu-v ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.ddsmoothmenu-v ul li {
+    position: relative;
+    margin-bottom: 0!important;
+}
+
+.ddsmoothmenu-v ul li a {
+    display: block;
+    color: #000000;
+    padding: 5px;
+    white-space: nowrap;
+    border-bottom: 1px dashed #ddd;
+}
+
+.ddsmoothmenu-v > ul > li:last-child a {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.ddsmoothmenu-v > ul > li:first-child a {
+    padding-top: 0;
+}
+
+.ddsmoothmenu-v > ul > li.hsub > a {
+    padding-right: 20px;
+}
+
+.ddsmoothmenu-v > ul > li.hsub .toggle-subs {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    width: 20px;
+    cursor: pointer;
+    height: 20px;
+    line-height: 20px;
+    text-align: right;
+}
+
+.ddsmoothmenu-v > ul > li:first-child.hsub .toggle-subs {
+    top: 0;
+}
+
+.ddsmoothmenu-v ul li img {
+    position: absolute;
+    right: 10px;
+}
+
+.ddsmoothmenu-v ul li a:link,
+.ddsmoothmenu-v ul li a:visited,
+.ddsmoothmenu-v ul li a:active {
+    color: #000000;
+    background: #fff;
+}
+
+.ddsmoothmenu-v ul li a.selected {
+    background: #00A5D5;
+    color: #fff;
+}
+
+.ddsmoothmenu-v ul li a:hover {
+    color: #007da9;
+}
+
+.ddsmoothmenu-v > ul > li ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    display: none;
+}
+
+.ddsmoothmenu-v > ul > li ul li {
+    padding-bottom: 5px;
+}
+
+.ddsmoothmenu-v > ul > li ul li:last-child {
+    padding-bottom: 0;
+}
+
+.ddsmoothmenu-v > ul > li ul li a {
+    border: 0;
+    padding: 0;
+}
+
+/* Flex Responsive Table Laws */
+.flex-table-laws {
+    border: 1px #ddd solid;
+    margin-bottom: 15px;
+}
+
+.flex-table-laws-inline {
+    margin-bottom: 15px;
+}
+
+.flex-table-laws-inline .flex-table-laws {
+    margin-bottom: 0;
+}
+
+.flex-table-laws-inline .flex-table-laws:not(:first-child) {
+    border-bottom: 0;
+    border-top: 0;
+}
+
+.flex-table-heading {
+    border: 1px #ddd solid;
+    padding: 8px;
+    background-color: #d9edf7;
+}
+
+.flex-table-laws > .table-rows {
+    -ms-display: flex;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    border-bottom: 1px #ddd solid;
+}
+
+.flex-table-laws > .table-rows:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+.flex-table-laws > .table-rows:hover:not(.table-head) {
+    background-color: #f5f5f5;
+}
+
+.flex-table-laws > .table-head {
+    border-bottom-width: 2px;
+}
+
+.flex-table-laws > .table-rows:last-child {
+    border-bottom: 0;
+}
+
+.flex-table-laws > .table-rows > div {
+    padding: 7px;
+    -ms-flex-shrink: 0;
+    flex-shrink: 0;
+    border-left: 1px #ddd solid;
+}
+
+.flex-table-laws > .table-rows > div:first-child {
+    border-left: 0;
+}
+
+.flex-table-laws > .table-head > div {
+    font-weight: 700;
+}
+
+.flex-table-laws > .table-rows > div > .label-name {
+    display: none;
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+.flex-table-laws > .table-rows > .a-center {
+    text-align: center;
+}
+
+.flex-table-laws > .table-rows > .c-intro {
+    -ms-flex-grow: 1;
+    flex-grow: 1;
+    -ms-flex-shrink: 1;
+    flex-shrink: 1;
+}
+
+.flex-table-laws > .table-rows > .c-stt {
+    -ms-flex: 0 0 50px;
+    flex: 0 0 50px;
+    max-width: 50px;
+}
+
+.flex-table-laws > .table-rows > .c-code {
+    -ms-flex: 0 0 120px;
+    flex: 0 0 120px;
+    max-width: 120px;
+}
+
+.flex-table-laws > .table-rows > .c-time {
+    -ms-flex: 0 0 120px;
+    flex: 0 0 120px;
+    max-width: 120px;
+}
+
+.flex-table-laws > .table-rows > .c-comtime {
+    -ms-flex: 0 0 160px;
+    flex: 0 0 160px;
+    max-width: 160px;
+}
+
+.flex-table-laws > .table-rows > .c-file {
+    -ms-flex: 0 0 120px;
+    flex: 0 0 120px;
+    max-width: 120px;
+}
+
+.flex-table-laws > .table-rows > .c-comment {
+    -ms-flex: 0 0 90px;
+    flex: 0 0 90px;
+    max-width: 90px;
+}
+
+.flex-table-laws > .table-rows > .c-file ul {
+    margin-bottom: 0;
+}
+
+@media (max-width: 676.98px), (max-width: 940px) and (min-width: 768px) {
+    .flex-table-heading {
+        padding-left: 0;
+        background-color: transparent;
+        border: 0;
+    }
+
+    .flex-table-laws {
+        border: 0;
+        margin-bottom: 0;
+    }
+
+    .flex-table-laws > .table-head {
+        display: none;
+    }
+
+    .flex-table-laws > .table-rows,
+    .flex-table-laws > .table-rows:last-child {
+        margin-bottom: 15px;
+        border: 1px #ddd solid;
+        flex-wrap: wrap;
+        border-radius: 4px;
+    }
+
+    .flex-table-laws > .table-rows > div {
+        border: 0;
+        -ms-order: 99;
+        order: 99;
+        padding-top: 0;
+        padding-bottom: 5px;
+    }
+
+    .flex-table-laws > .table-rows > div > .label-name {
+        display: inline-block;
+    }
+
+    .flex-table-laws > .table-rows > .c-stt,
+    .flex-table-laws > .table-rows > .c-code,
+    .flex-table-laws > .table-rows > .c-time,
+    .flex-table-laws > .table-rows > .c-comtime,
+    .flex-table-laws > .table-rows > .c-file,
+    .flex-table-laws > .table-rows > .c-comment {
+        -ms-flex-basis: inherit;
+        flex-basis: inherit;
+        width: 100%;
+        max-width: 100%;
+
+    }
+
+    .flex-table-laws > .table-rows > .c-stt {
+        display: none;
+    }
+
+    .flex-table-laws > .table-rows > .c-intro {
+        -ms-order: 1;
+        order: 1;
+        padding-top: 5px;
+    }
+
+    .flex-table-laws > .table-rows > .c-intro a:not(.btn) {
+        font-size: 1.15em;
+        font-weight: 700;
+    }
+
+    .flex-table-laws > .table-rows > .a-center {
+        text-align: left;
+    }
+
+    .flex-table-laws > .table-rows > .c-file ul {
+        display: inline-block;
+    }
+
+    .flex-table-laws > .table-rows > .c-file ul li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .flex-table-laws > .table-rows > .c-comment .label-name {
+        position: relative;
+        top: -8px;
+    }
+}
+
+/* Other */
+h3.pagetitle {
+    line-height: 30px;
+    padding: 0px;
+    margin: 8px 0px 8px 0px;
+}
+
+.generate_page {
+    text-align: center;
+    font-weight: bold
+}
+
+/* Style button */
+.style-button {
+    padding: 0px 10px 0px 0px;
+    height: 25px;
+    cursor: pointer;
+    display: inline-block;
+    background-image: url('../images/laws/button.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+}
+
+.style-button:hover {
+    background-image: url('../images/laws/button.png');
+    background-repeat: no-repeat;
+    background-position: right bottom;
+}
+
+.style-button:hover span, .style-button:hover a {
+    background-repeat: no-repeat !important;
+    background-position: left bottom;
+    background-image: url('../images/laws/button.png');
+}
+
+.style-button span, .style-button a {
+    background-position: left top;
+    line-height: 25px;
+    padding-left: 10px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-image: url('../images/laws/button.png');
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+/* big icon */
+.big-icon {
+    height: 32px;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 32px;
+    margin-right: 4px;
+}
+
+.bcourse {
+    background-image: url('../images/laws/big-icon-pack.png');
+}
+
+.bdetail {
+    background-position: -32px 0px;
+    background-image: url('../images/laws/big-icon-pack.png');
+}
+
+.bteacher {
+    background-position: -64px 0px;
+    background-image: url('../images/laws/big-icon-pack.png');
+}
+
+.bcat {
+    background-position: -96px 0px;
+    background-image: url('../images/laws/big-icon-pack.png');
+}
+
+/* small icon */
+.small-icon {
+    height: 16px;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 16px;
+    margin-right: 4px;
+}
+
+.sreg {
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.steacher {
+    background-position: -16px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.ssumary {
+    background-position: -32px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.sdetail {
+    background-position: -48px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.snumc {
+    background-position: -64px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.scv {
+    background-position: -80px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.slession {
+    background-position: -96px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.svideo {
+    background-position: -112px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.sdata {
+    background-position: -128px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+.sfloder {
+    background-position: -144px;
+    background-image: url('../images/laws/small-icon-pack.png');
+}
+
+/* ul list */
+ul.list-item, ul.list-releted-item, ul.list-none {
+    padding: 0px;
+    margin: 0px;
+    list-style-type: none;
+    list-style-image: none;
+}
+
+ul.list-item li {
+    background-repeat: no-repeat;
+    background-position: left 6px;
+    background-image: url('../images/laws/ul-bull.png');
+    padding-left: 10px;
+    line-height: 1.5em;
+}
+
+ul.list-releted-item li {
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: url('../images/laws/ul-bull.png');
+    padding-left: 10px;
+    line-height: 1.5em;
+}
+
+ul.list-none li {
+    line-height: 1.6em;
+}
+
+.center {
+    text-align: center
+}
+
+.infoerror {
+    color: #FF0000;
+}
+
+/* BLOCK TOP AREA CENTER */
+div.blocktop10area {
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+    border: 1px solid #C0C0C0;
+}
+
+div.blocktop10area ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 5px 0px 5px 0px;
+}
+
+div.blocktop10area ul li {
+    font-weight: bold;
+    line-height: 22px;
+    float: left;
+    width: 48%;
+}
+
+/* BLOCK SEARCH */
+.formsearch {
+    padding: 5px 5px 0px 5px;
+    margin: 5px 0px 0px 0px;
+}
+
+table.inner-search, table.inner-search td, table.inner-search tr, table.inner-search tbody {
+    border-style: none;
+    border-width: 0px;
+}
+
+table.inner-search input[type=text], table.inner-search input[type=submit], table.inner-search input[type=button] {
+    border: 1px solid #CCCCCC;
+}
+
+table.inner-search input[type=submit], table.inner-search input[type=button] {
+    background-color: #FFFFFF;
+    cursor: pointer;
+}
+
+/* BLOCK TOP LAW */
+.block-law {
+    padding: 0px 10px;
+}
+
+.block-law ul {
+    padding: 0px;
+    margin: 0px;
+    list-style-type: none;
+}
+
+.block-law ul li {
+    padding: 5px 0px 5px 0px;
+    margin: 0px;
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+    border-bottom-color: #CCCCCC;
+}
+
+.block-law ul li span.small {
+    list-style-type: none;
+    font-size: 11px;
+    color: #666666;
+}
+
+/* DETAIL */
+h3.lawh3 {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #CCCCCC;
+    font-size: 20px;
+    line-height: 25px;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    padding-top: 10px;
+    margin-top: 0px;
+    color: #02659d;
+}
+
+h3.subtitle {
+    font-size: 20px;
+    line-height: 25px;
+    margin-bottom: 5px;
+    padding-top: 10px;
+    margin-top: 0px;
+    color: #02659d;
+}
+
+a#btn-search {
+    display: block;
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.laws-download-file {
+    margin-top: -6px;
+}
+
+.laws-download-file .list-group-item:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.laws-download-file .list-group-item .badge {
+    float: right;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 22px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #5cb85c;
+    border-radius: 15px;
+}
+
+.laws-download-file .list-group-item .badge a {
+    color: #fff;
+}
+
+#advance .form-inline label{
+    width:100%;
+}
+
+#advance .form-inline .form-control {
+    margin-right: 2px;
+}
+
+.send_comm {
+    width: 25px;
+    height: 25px;
+    background: url(../images/laws/comment.png) no-repeat center;
+    background-size: 25px 25px;
+    display: inline-block;
+}
+
+.comm_close {
+    width: 25px;
+    height: 25px;
+    background: url(../images/laws/comment_close.png) no-repeat center;
+    background-size: 20px 20px;
+    display: inline-block;
+}

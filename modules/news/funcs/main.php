@@ -156,11 +156,11 @@ if (empty($contents)) {
                 if ($featured) {
                     $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('status= 1 AND inhome=1 AND id!=' . $featured)
-                        ->limit($array_cat_i['numlinks'] - 1);
+                        ->limit($array_cat_i['numlinks'] - 2);
                 } else {
                     $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $_catid)
                         ->where('status= 1 AND inhome=1')
-                        ->limit($array_cat_i['numlinks']);
+                        ->limit($array_cat_i['numlinks'] - 2);
                 }
 
                 $result = $db_slave->query($db_slave->sql());
@@ -181,11 +181,13 @@ if (empty($contents)) {
                     $item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
                     $array_cat[$key]['content'][] = $item;
                 }
-
+                // echo "<pre>";
+                // print_r($array_cat);
+                // echo "</pre>";
+                // die;
                 ++$key;
             }
         }
-
         $contents = viewsubcat_main($viewcat, $array_cat);
     } elseif ($viewcat == 'viewcat_two_column') {
         // Cac bai viet phan dau

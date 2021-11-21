@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<div class="row">
+<!-- <div class="row">
 	[HEADER]
 </div>
 <div class="row">
@@ -56,7 +56,7 @@
 	<div class="col-sm-6 col-md-5 col-sm-pull-18 col-md-pull-19">
 		[LEFT]
 	</div>
-</div>
+</div> -->
 <div class="row">
 	[FOOTER]
 </div>
