@@ -49,8 +49,13 @@
             <nav class="second-nav" id="menusite">
                 <div class="container">
                     <div class="row">
-                        <div class="bg box-shadow">
+                        <div class="col-xs-24 col-sm-6 col-md-18">
                             [MENU_SITE]
+                        </div>
+                        <div class="headerSearch col-xs-24 col-sm-6 col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}..."><span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -80,11 +85,6 @@
                                     </div>
                                     <!-- END: breadcrumbs -->
                                     <!-- BEGIN: currenttime --><span class="current-time">{NV_CURRENTTIME}</span><!-- END: currenttime -->
-                                </div>
-                                <div class="headerSearch col-xs-24 col-sm-6 col-md-6">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}..."><span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
-                                    </div>
                                 </div>
                             </div>
                             </div>
