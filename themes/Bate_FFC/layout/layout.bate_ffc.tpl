@@ -6,10 +6,18 @@
 </div>
 <div class="row">
 	<div class="col-md-24">
-		[TOP]
-		{MODULE_CONTENT}
-		[BOTTOM]
+		<div class="row">
+			<div class="col-md-16">
+				[SLIDER]
+			</div>
+			<div class="col-md-8">
+				[THAMDOYKIEN]
+			</div>
+		</div>
 	</div>
+		<!--[TOP]
+		{MODULE_CONTENT}
+		[BOTTOM]-->
 </div>
 <div class="row">
 	[FOOTER]
