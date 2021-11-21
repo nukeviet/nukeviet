@@ -368,7 +368,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
 // Xử lý thiết lập CSP
 $csp_directives = [
     'default-src' =>     ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => []],
-    'script-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to']],
+    'script-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to', '*.cloudflareinsights.com']],
     'style-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'unsafe-inline' => 1, 'hosts' => ['*.google.com', '*.googleapis.com', '*.tawk.to']],
     'img-src' =>         ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.twitter.com', '*.google.com', '*.googleapis.com', '*.gstatic.com', '*.facebook.com', 'tawk.link', '*.tawk.to', 'static.nukeviet.vn']],
     'font-src' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.googleapis.com', '*.gstatic.com', '*.tawk.to']],
