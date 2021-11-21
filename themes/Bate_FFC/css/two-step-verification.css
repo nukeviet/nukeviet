@@ -1,0 +1,41 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+/* Login-box */
+.login-box {
+    width: 400px;
+}
+
+@media (max-width: 399px) {
+    .login-box {
+        width: 100%;
+    }
+}
+
+.twostep-qrimg {
+    max-width: 100%;
+}
+
+.twostep-manualsecretkey {
+    width: 400px;
+}
+
+@media (max-width: 399px) {
+    .twostep-manualsecretkey {
+        width: 100%;
+    }
+}
+
+.recovery-code {
+    padding: 7px 0;
+}
+
+.recovery-code span {
+    font-family: 'Courier New';
+}
