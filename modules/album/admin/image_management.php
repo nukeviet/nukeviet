@@ -10,36 +10,37 @@
 if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
-$xtpl = new XTemplate('album_management.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$xtpl = new XTemplate('image_management.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$page_title = "Quản lý ảnh";
 
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('rowcontent', $rowcontent);
-$xtpl->assign('ISCOPY', $copy);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
-$xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('MODULE_DATA', $module_data);
-$xtpl->assign('OP', $op);
+// $xtpl->assign('LANG', $lang_module);
+// $xtpl->assign('GLANG', $lang_global);
+// $xtpl->assign('rowcontent', $rowcontent);
+// $xtpl->assign('ISCOPY', $copy);
+// $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
+// $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+// $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+// $xtpl->assign('MODULE_NAME', $module_name);
+// $xtpl->assign('MODULE_DATA', $module_data);
+// $xtpl->assign('OP', $op);
 
-$page_title = "Quản lý album";
-if($nv_Request->get_title('them', 'post'))
-{
-    $value = $nv_Request->get_title('tenalbum', 'post');
-    $xtpl->assign('tenalbum',$value);  
-    $sql = "INSERT INTO `nv4_vi_album_albums`(`description`, `status`, `userID`, `time`, `name_album`) VALUES (:mota, 'hienthi', 1, :add_time,:tenalbum)";
-    $sth = $db->prepare($sql);
-    $sth->bindParam("tenalbum",$value);
-    $sth->bindValue("add_time",time());
-    $ext = $sth->execute();
-    if($ext)
-    {
-        $err[] = "Thêm thành công";
-    } else {
-        $err[] = "Thêm thất bại";
-    }
-} 
+
+// if($nv_Request->get_title('them', 'post'))
+// {
+//     $value = $nv_Request->get_title('tenalbum', 'post');
+//     $xtpl->assign('tenalbum',$value);  
+//     $sql = "INSERT INTO `nv4_vi_album_albums`(`description`, `status`, `userID`, `time`, `name_album`) VALUES (:mota, 'hienthi', 1, :add_time,:tenalbum)";
+//     $sth = $db->prepare($sql);
+//     $sth->bindParam("tenalbum",$value);
+//     $sth->bindValue("add_time",time());
+//     $ext = $sth->execute();
+//     if($ext)
+//     {
+//         $err[] = "Thêm thành công";
+//     } else {
+//         $err[] = "Thêm thất bại";
+//     }
+// } 
 
 // else if($nv_Request->get_title('sua', 'post'))
 // {
@@ -74,13 +75,13 @@ if($nv_Request->get_title('them', 'post'))
 
 
 
-$sql = "SELECT * FROM nv4_vi_album_albums";
+// $sql = "SELECT * FROM nv4_vi_album_albums";
 
-$result = $db->query($sql);
-while ($res = $result->fetch()) {
-    $xtpl->assign('res',$res);
-    $xtpl->parse('main.album_list');
-}
+// $result = $db->query($sql);
+// while ($res = $result->fetch()) {
+//     $xtpl->assign('res',$res);
+//     $xtpl->parse('main.album_list');
+// }
 
 
 

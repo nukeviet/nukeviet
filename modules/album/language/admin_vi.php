@@ -20,5 +20,5 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['album_management'] = 'Quản lý album';
-// $lang_module['image_management'] = 'Quản lý ảnh';
+$lang_module['image_management'] = 'Quản lý ảnh';
 

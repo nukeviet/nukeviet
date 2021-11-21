@@ -14,10 +14,10 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 
 $allow_func = array(
     'main',
-    'album_management'
-    // 'image_management'
+    'album_management',
+    'image_management'
 );
 $submenu['album_management'] = $lang_module['album_management'];
-// $submenu['image_management'] = $lang_module['image_management'];
+$submenu['image_management'] = $lang_module['image_management'];
 define('NV_IS_FILE_ADMIN', true);
 
