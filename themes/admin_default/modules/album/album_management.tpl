@@ -40,10 +40,10 @@
                                 <td class="text-center">{res.name_album}</td>
                                  <td class="text-center">{res.description}</td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-success btn-update" data-id="" title="Sửa câu hỏi">
+                                    <button type="button" class="btn btn-success btn-update" data-id="" title="Sửa album">
                                         <i class="fa fa-pencil-square-o"></i>
                                     </button>
-                                    <button class="btn btn-danger" name="delete" value="" title="Xoá câu hỏi">
+                                    <button class="btn btn-danger" name="delete" value="" title="Xoá album">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
@@ -58,5 +58,5 @@
 </div>
 
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/manage_type.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/album_management.js"></script>
 <!-- END: main -->
