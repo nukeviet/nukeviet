@@ -8,3 +8,9 @@
  */
 
 /* Các tùy chỉnh CSS của giao diện nên để vào đây */
+.item{
+    width: 300px;
+    /* text-align: center;
+    display: inline-block; */
+    margin-left: 28%;
+}
