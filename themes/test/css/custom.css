@@ -1,10 +1,48 @@
-/**
- * NukeViet Content Management System
- * @version 4.x
- * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
- * @license GNU/GPL version 2 or any later version
- * @see https://github.com/nukeviet The NukeViet CMS GitHub project
- */
+.owl-carousel {
+    max-width: 90%;
+    margin: 0 auto;
+}
 
-/* Các tùy chỉnh CSS của giao diện nên để vào đây */
+.owl-prev,
+.owl-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.owl-prev {
+    left: -3rem;
+}
+
+.owl-next {
+    right: -3rem;
+}   
+@media (min-width: 0) and (max-width: 499px) {
+    .owl-prev,
+    .owl-next {
+    position: absolute;
+    top: 50%;
+    }
+    .owl-prev {
+        left: -2rem;
+    }
+    
+    .owl-next {
+        right: -2rem;
+    }
+}
+
+@media (min-width: 500px) and (max-width: 767px) {
+    .owl-prev,
+    .owl-next {
+    position: absolute;
+    top: 40%;
+    }
+    .owl-prev {
+        left: -3rem;
+    }
+    
+    .owl-next {
+        right: -3rem;
+    }
+}

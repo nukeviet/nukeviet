@@ -25,7 +25,7 @@
 </div> -->
 <div class="row">
     <div class="col-sm-12 col-md-18">
-1
+        [SLIDRER]
     </div>
     <div class="col-sm-12 col-md-6">
         [VOTING]
