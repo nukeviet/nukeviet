@@ -8,3 +8,9 @@
  */
 
 /* Các tùy chỉnh JS của giao diện nên để vào đây */
+$('.laber_trai').on('click',function(){
+    $('.dieuhuong-trai').click();
+});
+$('.laber_phai').on('click',function(){
+    $('.dieuhuong-phai').click();
+});

@@ -13,4 +13,11 @@
     /* text-align: center;
     display: inline-block; */
     margin-left: 28%;
+    margin-bottom: -60px;
+}
+.laber_trai{
+    position: relative; left: -9px; top: 101px;
+}
+.laber_phai{
+    position: relative; left: 5px; top: 101px;
 }

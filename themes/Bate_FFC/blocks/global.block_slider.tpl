@@ -9,7 +9,7 @@
 		$('.owl-carousel').owlCarousel({
             margin: 10,
             nav: true,
-            navText:["<i class='nav-btn prev-slide fa fa-caret-left'></i>","<i class='nav-btn next-slide fa fa-caret-right'></i>"],
+            navText:["<i hidden id='input_left' class='nav-btn prev-slide fa fa-caret-left dieuhuong-trai'></i>","<i hidden id='input_right' class='nav-btn next-slide fa fa-caret-right dieuhuong-phai'></i>"],
             responsive: {
                 0: {
                     items: 1
@@ -21,46 +21,74 @@
 </script>
 	<div class="col-24">
 		<div class="carousel-wrap">
-			<div class="owl-carousel owl-theme">
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+			<div class="owl-carousel owl-theme row">
+				<div class="item ">
+					<div class="col-md-1">
+						<label class="laber_trai"  for="input_left"><i class=' fa fa-caret-left ' ></i></label>
+					</div>
+					<div class="col-md-22">
+						<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+					</div>
+					<div class="col-md-1">
+						<label class="laber_phai" for="input_right"><i class=' fa fa-caret-right '></i></label>
+					</div>
 				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+				<div class="item ">
+					<div class="col-md-1">
+						<label class="laber_trai"  for="input_left"><i class=' fa fa-caret-left '></i></label>
+					</div>
+					<div class="col-md-22">
+						<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+					</div>
+					<div class="col-md-1">
+						<label class="laber_phai" for="input_right"><i class=' fa fa-caret-right '></i></label>
+					</div>
 				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+				<div class="item ">
+					<div class="col-md-1">
+						<label class="laber_trai"  for="input_left"><i class=' fa fa-caret-left '></i></label>
+					</div>
+					<div class="col-md-22">
+						<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+					</div>
+					<div class="col-md-1">
+						<label class="laber_phai" for="input_right"><i class=' fa fa-caret-right '></i></label>
+					</div>
 				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+				<div class="item ">
+					<div class="col-md-1">
+						<label class="laber_trai"  for="input_left"><i class=' fa fa-caret-left '></i></label>
+					</div>
+					<div class="col-md-22">
+						<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+					</div>
+					<div class="col-md-1">
+						<label class="laber_phai" for="input_right"><i class=' fa fa-caret-right '></i></label>
+					</div>
 				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+				<div class="item ">
+					<div class="col-md-1">
+						<label class="laber_trai"  for="input_left"><i class=' fa fa-caret-left '></i></label>
+					</div>
+					<div class="col-md-22">
+						<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+						</div>
+					<div class="col-md-1">
+						<label class="laber_phai" for="input_right"><i class=' fa fa-caret-right '></i></label>
+					</div>
 				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+				<div class="item ">
+					<div class="col-md-1">
+						<label class="laber_trai" for="input_left"><i class=' fa fa-caret-left '></i></label>
+					</div>
+					<div class="col-md-22">
+						<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
+					</div>
+					<div class="col-md-1">
+						<label class="laber_phai" for="input_right"><i class=' fa fa-caret-right '></i></label>
+					</div>
 				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
-				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
-				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
-				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
-				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
-				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
-				</div>
-				<div class="item">
-					<img src="/nukeviet/data/tmp/news_15_chuc-mung-nukeviet-thong-tu-20-bo-tttt_500-0.jpg" />
-				</div>
+				
 			</div>
 		</div>
 	</div>
