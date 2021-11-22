@@ -33,8 +33,8 @@ function curl_get_headers($url)
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADER, 1);
-    curl_setopt($ch, CURLOPT_NOBODY, 1);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
     curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -212,7 +212,8 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     }
 
     $unset = ['http_code', 'date', 'expires', 'last-modified', 'connection', 'set-cookie', 'x-page-speed', 'x-is-http', 'x-is-https'];
-    $url = NV_SERVER_PROTOCOL . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1';
+    $proto = $nv_Server->getOriginalProtocol();
+    $url = $proto . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1';
     $headers = curl_get_headers($url);
     if (!empty($headers['http_code']) and strpos($headers['http_code'], 'HTTP/2') === 0) {
         $sys_info['is_http2'] = true;
@@ -226,8 +227,8 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
         }
     }
 
-    $proto = NV_SERVER_PROTOCOL == 'https' ? 'http' : 'https';
-    $url2 = $proto . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1';
+    $proto2 = $proto == 'https' ? 'http' : 'https';
+    $url2 = $proto2 . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1';
     $headers = curl_get_headers($url2);
     if (NV_SERVER_PROTOCOL == 'https') {
         $sys_info['https_only'] = !empty($headers['x-is-http']) ? false : true;
