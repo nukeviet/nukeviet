@@ -29,13 +29,15 @@ if (empty($vid)) {
     $allowed = [];
     $is_update = [];
 
-    $a = 0;
-    foreach ($list as $row) {
-        if ($row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME) {
-            $is_update[] = $row['vid'];
-        } elseif ($row['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups($row['groups_view'])) {
-            $allowed[$a] = $row;
-            ++$a;
+    if (!empty($list)) {
+        $a = 0;
+        foreach ($list as $row) {
+            if ($row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME) {
+                $is_update[] = $row['vid'];
+            } elseif ($row['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups($row['groups_view'])) {
+                $allowed[$a] = $row;
+                ++$a;
+            }
         }
     }
 
