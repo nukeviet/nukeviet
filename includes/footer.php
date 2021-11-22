@@ -23,7 +23,7 @@ ob_end_clean();
 $contents = nv_url_rewrite($contents);
 if (!defined('NV_IS_AJAX')) {
     $contents = nv_change_buffer($contents);
-    $optimizer = new NukeViet\Core\Optimizer($contents, NV_BASE_SITEURL);
+    $optimizer = new NukeViet\Core\Optimizer($contents, NV_BASE_SITEURL, !empty($sys_info['is_http2']));
     $contents = $optimizer->process();
     $optimizer->headerPreload($headers);
     if (defined('NV_IS_SPADMIN')) {

@@ -36,21 +36,20 @@ class Optimizer
     private $base_siteurl;
     private $eol = "\r\n";
     private $is_http2 = false;
-    private $headerPreloadCss = [];
-    private $headerPreloadJs = [];
-    private $headerPreloadFont = [];
+    private $headerPreloadItems = [];
 
     /**
      * __construct()
-     *
-     * @param string $content
-     * @param string $base_siteurl
+     * 
+     * @param mixed $content 
+     * @param mixed $base_siteurl 
+     * @param bool $is_http2 
      */
-    public function __construct($content, $base_siteurl)
+    public function __construct($content, $base_siteurl, $is_http2 = false)
     {
         $this->_content = $content;
         $this->base_siteurl = $base_siteurl;
-        $this->is_http2 = (!empty($_SERVER['SERVER_PROTOCOL']) and preg_match('/^http\/2/i', $_SERVER['SERVER_PROTOCOL']));
+        $this->is_http2 = (bool) $is_http2;
     }
 
     /**
@@ -66,22 +65,27 @@ class Optimizer
 
         $_jsSrc = [];
         $_linkHref = [];
-        $_linkHrefPreload = '';
+        $_preload = '';
 
-        $_linkHrefPreload .= '<link rel="prefetch" as="font" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2" type="font/woff2" crossorigin="anonymous">' . $this->eol;
-        $_linkHrefPreload .= '<link rel="prefetch" as="font" href="' . NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2" type="font/woff2" crossorigin="anonymous">' . $this->eol;
+        if ($this->is_http2) {
+            $this->headerPreloadItems[NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2'] = '<' . NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2>; rel=preload; as=font; crossorigin';
+            $this->headerPreloadItems[NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2'] = '<' . NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2>; rel=preload; as=font; crossorigin';
+        } else {
+            $_preload .= '<link rel="preload" as="font" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2" as="font" type="font/woff2" crossorigin>' . $this->eol;
+            $_preload .= '<link rel="preload" as="font" href="' . NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2" as="font" type="font/woff2" crossorigin>' . $this->eol;
+        }
 
         // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
         $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
         if ($_isFullBuffer and $jquery) {
             $_jsAfter = '<script src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol;
             if ($this->is_http2) {
-                $this->headerPreloadJs[] = '<' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js>; rel=preload; as=script';
+                $this->headerPreloadItems[NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'] = '<' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js>; rel=preload; as=script';
             } else {
-                $_jsSrcPreload = '<link rel="preload" as="script" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js" type="text/javascript">' . $this->eol;
+                $_preload .= '<link rel="preload" as="script" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js" type="text/javascript">' . $this->eol;
             }
         } else {
-            $_jsAfter = $_jsSrcPreload = '';
+            $_jsAfter = '';
         }
 
         if (preg_match("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $this->_content, $matches)) {
@@ -89,9 +93,9 @@ class Optimizer
             if ($jquery and $_isFullBuffer) {
                 $_jsAfter = $matches[0] . $this->eol;
                 if ($this->is_http2) {
-                    $this->headerPreloadJs[] = '<' . $matches[1] . '>; rel=preload; as=script';
+                    $this->headerPreloadItems[$matches[1]] = '<' . $matches[1] . '>; rel=preload; as=script';
                 } else {
-                    $_jsSrcPreload = '<link rel="preload" as="script" href="' . $matches[1] . '" type="text/javascript">' . $this->eol;
+                    $_preload .= '<link rel="preload" as="script" href="' . $matches[1] . '" type="text/javascript">' . $this->eol;
                 }
             }
         }
@@ -183,9 +187,9 @@ class Optimizer
                             $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
                             $integrity = preg_match("/integrity\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches4) ? $matches4[1] : '';
                             if ($this->is_http2) {
-                                $this->headerPreloadJs[] = '<' . $external . '>; rel=preload; as=script' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
+                                $this->headerPreloadItems[$external] = '<' . $external . '>; rel=preload; as=script' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
                             } else {
-                                $_jsSrcPreload .= '<link rel="preload" as="script" href="' . $external . '" type="text/javascript"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
+                                $_preload .= '<link rel="preload" as="script" href="' . $external . '" type="text/javascript"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
                             }
                             $_jsAfter .= $value . $this->eol;
                             $value = '';
@@ -226,9 +230,9 @@ class Optimizer
                             $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
                             $integrity = preg_match("/integrity\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches4) ? $matches4[1] : '';
                             if ($this->is_http2) {
-                                $this->headerPreloadCss[] = '<' . $external . '>; rel=preload; as=style' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
+                                $this->headerPreloadItems[$external] = '<' . $external . '>; rel=preload; as=style' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
                             } else {
-                                $_linkHrefPreload .= '<link rel="preload" as="style" href="' . $external . '" type="text/css"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
+                                $_preload .= '<link rel="preload" as="style" href="' . $external . '" type="text/css"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
                             }
                         }
                     }
@@ -245,13 +249,10 @@ class Optimizer
             $head .= implode($this->eol, $this->_links) . $this->eol;
         }
 
-        if (!empty($_linkHrefPreload)) {
-            $head .= $_linkHrefPreload;
+        if (!empty($_preload)) {
+            $head .= $_preload;
         }
 
-        if (!empty($_jsSrcPreload)) {
-            $head .= $_jsSrcPreload;
-        }
         if (!empty($this->_cssLinks)) {
             $head .= implode($this->eol, array_unique($this->_cssLinks)) . $this->eol;
         }
@@ -289,18 +290,8 @@ class Optimizer
      */
     public function headerPreload(&$headers)
     {
-        $link = [];
-        if (!empty($this->headerPreloadFont)) {
-            $link[] = implode(', ', $this->headerPreloadFont);
-        }
-        if (!empty($this->headerPreloadCss)) {
-            $link[] = implode(', ', $this->headerPreloadCss);
-        }
-        if (!empty($this->headerPreloadJs)) {
-            $link[] = implode(', ', $this->headerPreloadJs);
-        }
-        if (!empty($link)) {
-            $headers['link'] = implode(', ', $link);
+        if (!empty($this->headerPreloadItems)) {
+            $headers['link'] = implode(', ', $this->headerPreloadItems);
         }
     }
 
