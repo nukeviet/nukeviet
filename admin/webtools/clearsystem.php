@@ -124,15 +124,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
                 $xtpl->parse('main.delfile.loop');
             }
         }
-
-        if (in_array('clearcsp_logs', $deltype, true)) {
-            $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/csp_logs';
-            $files = nv_clear_files($dir, NV_LOGS_DIR . '/csp_logs');
-            foreach ($files as $file) {
-                $xtpl->assign('DELFILE', $file);
-                $xtpl->parse('main.delfile.loop');
-            }
-        }
     }
 
     if (in_array('clearcache', $deltype, true)) {

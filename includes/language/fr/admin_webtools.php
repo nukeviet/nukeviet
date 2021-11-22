@@ -24,7 +24,6 @@ $lang_module['clearcache'] = 'Nettoyer le cache';
 $lang_module['cleardumpbackup'] = 'Supprimer les fichiers backup de base de donnée';
 $lang_module['clearfiletemp'] = 'Supprimer les fichiers temporaires';
 $lang_module['clearerrorlogs'] = 'Supprimer les rapports d\'erreur';
-$lang_module['clearcsp_logs'] = 'Supprimer les rapports de violation de CSP';
 $lang_module['submit'] = 'Effectuer';
 $lang_module['deletedetail'] = 'Suppression réussie des fichiers suivants';
 $lang_module['checkupdate'] = 'Vérifier la version';
