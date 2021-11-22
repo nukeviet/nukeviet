@@ -229,7 +229,7 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $proto2 = $proto == 'https' ? 'http' : 'https';
     $url2 = $proto2 . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1';
     $headers = curl_get_headers($url2);
-    if (NV_SERVER_PROTOCOL == 'https') {
+    if ($proto == 'https') {
         $sys_info['https_only'] = !empty($headers['x-is-http']) ? false : true;
     } else {
         $sys_info['http_only'] = !empty($headers['x-is-https']) ? false : true;
