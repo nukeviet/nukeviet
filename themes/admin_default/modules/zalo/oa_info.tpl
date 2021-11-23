@@ -16,15 +16,15 @@
                                 <!-- END: normal -->
                                 <!-- BEGIN: cover -->
                                 <p><img src="{OA.val}" width="320" alt="" class="img-thumbnail" style="min-height: 180px;" /></p>
-                                <code>{OA.val}</code>
+                                <code style="word-break: break-all;">{OA.val}</code>
                                 <!-- END: cover -->
                                 <!-- BEGIN: avatar -->
                                 <p><img src="{OA.val}" width="150" alt="" class="img-thumbnail" style="min-height: 150px;" /></p>
-                                <code>{OA.val}</code>
+                                <code style="word-break: break-all;">{OA.val}</code>
                                 <!-- END: avatar -->
                                 <!-- BEGIN: qrcode -->
                                 <p><img src="{OA.val}" alt="" width="170px" height="170px"/></p>
-                                <code>{OA.val}</code>
+                                <code style="word-break: break-all;">{OA.val}</code>
                                 <!-- END: qrcode -->
                             </td>
                         </tr>
