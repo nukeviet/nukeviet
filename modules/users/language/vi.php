@@ -388,6 +388,7 @@ $lang_module['2step_status'] = 'Xác thực hai bước';
 $lang_module['2step_link'] = 'Thiết lập';
 $lang_module['delconfirm_email_title'] = 'Thư thông báo xóa tài khoản';
 $lang_module['delconfirm_email_content'] = 'Xin chào %1$s,<br /><br />Chúng tôi rất lấy làm tiếc thông báo về việc tài khoản của bạn đã bị xóa khỏi website %2$s.';
+$lang_module['login'] = 'Đăng nhập';
 $lang_module['pass_reset1_info'] = 'Vì lý do bảo mật, bạn vui lòng thay đổi mật khẩu trước khi sử dụng các tiện ích của site.';
 $lang_module['pass_reset2_info'] = 'Vì lý do bảo mật, chúng tôi khuyến cáo bạn thay đổi mật khẩu trước khi sử dụng các tiện ích của site. Hãy click <a href="%s">vào đây</a> để thay đổi mật khẩu.';
 $lang_module['pass_reset3_info'] = 'Đã hơn %d ngày bạn chưa thay đổi mật khẩu tài khoản người dùng. Vì lý do bảo mật, vui lòng thay đổi mật khẩu trước khi sử dụng các tiện ích của site.';

@@ -16,6 +16,20 @@ if (!defined('NV_MAINFILE')) {
 }
 
 /**
+ * pr()
+ *
+ * @param mixed $a
+ * @return
+ */
+function pr($a)
+{
+    echo "<pre>";
+    print_r($a);
+    echo "</pre>";
+    die();
+}
+
+/**
  * nv_object2array()
  *
  * @param mixed $a

@@ -131,6 +131,7 @@ if (!nv_function_exists('nv_block_news_cat')) {
     function nv_block_news_cat($block_config)
     {
         global $nv_Cache, $module_array_cat, $site_mods, $module_config, $global_config, $db;
+
         $module = $block_config['module'];
         $show_no_image = $module_config[$module]['show_no_image'];
         $blockwidth = $module_config[$module]['blockwidth'];
@@ -160,13 +161,21 @@ if (!nv_function_exists('nv_block_news_cat')) {
             $xtpl = new XTemplate('block_groups.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
             $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
             $xtpl->assign('TEMPLATE', $block_theme);
+            $xtpl->assign('BLOCKWIDTH', $module_config[$module]['blockwidth']);
+            $xtpl->assign('BLOCKHEIGHT', $module_config[$module]['blockheight']);
 
             foreach ($list as $l) {
                 $l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$l['catid']]['alias'] . '/' . $l['alias'] . '-' . $l['id'] . $global_config['rewrite_exturl'];
                 if ($l['homeimgthumb'] == 1) {
                     $l['thumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $l['homeimgfile'];
+                    if (!empty($global_config['cdn_url'])) {
+                        $l['thumb'] = '//' . $global_config['cdn_url'] . $l['thumb'];
+                    }
                 } elseif ($l['homeimgthumb'] == 2) {
                     $l['thumb'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $l['homeimgfile'];
+                    if (!empty($global_config['cdn_url'])) {
+                        $l['thumb'] = '//' . $global_config['cdn_url'] . $l['thumb'];
+                    }
                 } elseif ($l['homeimgthumb'] == 3) {
                     $l['thumb'] = $l['homeimgfile'];
                 } elseif (!empty($show_no_image)) {
@@ -175,7 +184,7 @@ if (!nv_function_exists('nv_block_news_cat')) {
                     $l['thumb'] = '';
                 }
 
-                $l['blockwidth'] = $blockwidth;
+                $l['blockwidth'] = $module_config[$module]['blockwidth'];
 
                 $l['hometext_clean'] = strip_tags($l['hometext']);
                 $l['hometext_clean'] = nv_clean60($l['hometext_clean'], $block_config['tooltip_length'], true);

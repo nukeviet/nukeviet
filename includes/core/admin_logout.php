@@ -21,6 +21,9 @@ if ($js) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, $log_userid);
     nv_admin_logout();
     session_destroy();
+    if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+        require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
+    }
     exit('1');
 }
 
@@ -31,6 +34,9 @@ if ($ok) {
     session_destroy();
     $info = $lang_global['admin_logout_ok'];
     $info .= '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />';
+    if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
+        require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
+    }
 } else {
     $url = ($client_info['referer'] != '') ? $client_info['referer'] : (isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : '');
     $info = $lang_global['admin_logout_question'] . " ?<br /><br />\n";

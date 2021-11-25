@@ -231,6 +231,7 @@ $lang_global['langinterface'] = 'Ngôn ngữ giao diện';
 $lang_global['langdata'] = 'Ngôn ngữ xử lý dữ liệu';
 $lang_global['langsite'] = 'Select language';
 $lang_global['selecttheme'] = 'Chọn giao diện';
+$lang_global['current_theme'] = 'hiện tại';
 $lang_global['detail'] = 'Chi tiết';
 $lang_global['show_picture'] = 'Xem hình';
 $lang_global['flood_page_title'] = 'Hãy đợi...';
@@ -247,6 +248,7 @@ $lang_global['error_sendmail_admin'] = 'Lỗi: Hệ thống không gửi đượ
 $lang_global['error_sendmail_subject'] = 'Cảnh báo từ website %s';
 $lang_global['error_sendmail_content'] = 'Hệ thống đã nhận được một số thông báo. Bạn hãy mở file đính kèm để xem chi tiết';
 $lang_global['search'] = 'Tìm kiếm';
+$lang_global['search_all'] = 'Tìm kiếm toàn bộ website...';
 $lang_global['drag_block'] = 'Bật kéo thả block';
 $lang_global['no_drag_block'] = 'Tắt kéo thả block';
 $lang_global['blocks_saved'] = 'Cấu hình đã được lưu lại !';
@@ -326,7 +328,7 @@ $lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng th�
 $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 
 $lang_global['unknown'] = 'Không xác định';
-$lang_global['joinnow'] = 'Chúng tôi trên mạng xã hội';
+$lang_global['joinnow'] = 'Kết nối';
 $lang_global['contactUs'] = 'Thông tin liên hệ';
 
 $lang_global['company_name'] = 'Tên chính thức';
@@ -358,6 +360,9 @@ $lang_global['off'] = 'Tắt';
 $lang_global['close'] = 'Đóng';
 $lang_global['system'] = 'Hệ thống';
 $lang_global['indefinitely'] = 'Vô thời hạn';
+
+$lang_global['apply'] = 'Áp dụng';
+$lang_global['custom_range'] = 'Khác';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';

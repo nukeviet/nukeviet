@@ -72,7 +72,7 @@ if (!nv_function_exists('nv_block_data_config_html')) {
      */
     function nv_block_global_html($block_config)
     {
-        return $block_config['htmlcontent'];
+        return !empty($block_config['htmlcontent']) ? $block_config['htmlcontent'] : '';
     }
 }
 
