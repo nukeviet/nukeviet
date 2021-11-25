@@ -296,6 +296,9 @@ if (
 
 $global_config['ftp_user_pass'] = $crypt->decrypt($global_config['ftp_user_pass']);
 
+// Hook sector 1
+nv_apply_hook('', 'sector1');
+
 // Bat dau phien lam viec cua Database
 $db = $db_slave = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
@@ -501,3 +504,5 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
 }
 
 define('PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/');
+// Hook sector 2
+nv_apply_hook('', 'sector2');

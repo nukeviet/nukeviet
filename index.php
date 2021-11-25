@@ -47,6 +47,9 @@ if (defined('NV_IS_USER')) {
 }
 require NV_ROOTDIR . '/includes/core/is_user.php';
 
+// Hook sector 5
+nv_apply_hook('', 'sector5');
+
 // Cap nhat trang thai online
 if ($global_config['online_upd'] and !defined('NV_IS_AJAX') and !defined('NV_IS_MY_USER_AGENT')) {
     require NV_ROOTDIR . '/includes/core/online.php';

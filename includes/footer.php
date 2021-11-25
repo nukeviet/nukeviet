@@ -32,6 +32,8 @@ if (!defined('NV_IS_AJAX')) {
 }
 
 list($contents, $headers) = nv_apply_hook('', 'change_site_buffer', [$global_config, [$contents, $headers]], [$contents, $headers]);
+// Hook sector 3
+nv_apply_hook('', 'sector3');
 
 //Close the connection by setting the PDO object
 $db = null;

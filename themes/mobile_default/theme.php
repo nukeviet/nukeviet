@@ -85,6 +85,9 @@ function nv_site_theme($contents, $full = true)
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
     }
 
+    // // Hook sector 4
+    nv_apply_hook('', 'sector4');
+
     $xtpl = new XTemplate($layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
     $xtpl->assign('LANG', $lang_global);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
