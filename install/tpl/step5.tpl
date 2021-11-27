@@ -16,7 +16,7 @@
     <tr>
         <th scope="row" class="spec">{LANG.database_type} <span
             class="highlight_red">*</span></th>
-        <td><select name="dbtype" data-url="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=5">
+        <td><select name="dbtype" data-url="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=5&amp;t={NV_CURRENTTIME}">
             <!-- BEGIN: dbtype -->
             <option value="{DBTYPE.value}" {DBTYPE.selected}>{DBTYPE.text}</option>
             <!-- END: dbtype -->
@@ -66,11 +66,11 @@
 <!-- END: errordata --></form>
 <ul class="control_t fr">
     <li><span class="back_step"><a
-        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=4">{LANG.previous}</a></span>
+        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=4&amp;t={NV_CURRENTTIME}">{LANG.previous}</a></span>
     </li>
     <!-- BEGIN: nextstep -->
     <li><span class="next_step"><a
-        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=6">{LANG.next_step}</a></span>
+        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=6&amp;t={NV_CURRENTTIME}">{LANG.next_step}</a></span>
     </li>
     <!-- END: nextstep -->
 </ul>

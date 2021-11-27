@@ -6,7 +6,7 @@
     {LANG.s2_winhost_info1} <span class="highlight_green">OK</span> {LANG.s2_winhost_info2}.
     <!-- END: infonext -->
     <!-- BEGIN: inforeload -->
-    {LANG.s2_winhost_info3} <a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2">{LANG.s2_winhost_info4}</a> {LANG.s2_winhost_info5}.
+    {LANG.s2_winhost_info3} <a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2&amp;t={NV_CURRENTTIME}">{LANG.s2_winhost_info4}</a> {LANG.s2_winhost_info5}.
     <!-- END: inforeload -->
 </blockquote>
 <div class="clear"></div>
@@ -116,10 +116,10 @@ $(document).ready(function(){
 </table>
 <ul class="control_t fr">
     <li><span class="back_step"><a
-        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=1">{LANG.previous}</a></span></li>
+        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=1&amp;t={NV_CURRENTTIME}">{LANG.previous}</a></span></li>
     <!-- BEGIN: nextstep -->
     <li><span class="next_step"><a
-        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=3">{LANG.next_step}</a></span></li>
+        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=3&amp;t={NV_CURRENTTIME}">{LANG.next_step}</a></span></li>
     <!-- END: nextstep -->
 </ul>
 <!-- END: step -->

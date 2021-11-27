@@ -29,7 +29,7 @@
 <ul class="control_t fr">
     <!-- BEGIN: nextstep -->
     <li>
-        <span class="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=8">{LANG.next_step}</a></span>
+        <span class="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=8&amp;t={NV_CURRENTTIME}">{LANG.next_step}</a></span>
     </li>
     <!-- END: nextstep -->
 </ul>

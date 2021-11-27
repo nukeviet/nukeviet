@@ -24,7 +24,7 @@
                 <ul class="language_body">
                     <!-- BEGIN: looplang -->
                     <li>
-                        <a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}">{LANGNAME} </a>
+                        <a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}&amp;t={NV_CURRENTTIME}">{LANGNAME} </a>
                     </li>
                     <!-- END: looplang -->
                 </ul>
