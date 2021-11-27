@@ -116,10 +116,10 @@ $(document).ready(function(){
 </table>
 <ul class="control_t fr">
     <li><span class="back_step"><a
-        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=1">{LANG.previous}</a></span></li>
+        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=1&t={NV_CURRENTTIME}">{LANG.previous}</a></span></li>
     <!-- BEGIN: nextstep -->
     <li><span class="next_step"><a
-        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=3">{LANG.next_step}</a></span></li>
+        href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=3&t={NV_CURRENTTIME}">{LANG.next_step}</a></span></li>
     <!-- END: nextstep -->
 </ul>
 <!-- END: step -->

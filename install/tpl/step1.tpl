@@ -27,7 +27,7 @@
         </select>
     </p>
     <ul class="control_t fr">
-        <li><span class="next_step" id="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2">{LANG.next_step}</a></span></li>
+        <li><span class="next_step" id="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2&t={NV_CURRENTTIME}">{LANG.next_step}</a></span></li>
     </ul>
 </form>
 <!-- BEGIN: check_supports_rewrite -->
