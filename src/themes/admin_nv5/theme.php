@@ -226,7 +226,7 @@ function nv_admin_theme($contents, $head_site = 1)
                 if (!empty($submenu)) {
                     foreach ($submenu as $_op => $_op_title) {
                         $subs = [];
-                        $subs['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $_op;
+                        $subs['link'] = preg_match('/^\#/', $_op) ? '#' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $_op;
                         $subs['active'] = ((!empty($op) and $op == $_op) or (!empty($set_active_op) and $set_active_op == $_op)) ? true : false;
                         $subs['open'] = false;
                         $subs['subs'] = [];
