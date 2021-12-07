@@ -385,13 +385,22 @@ function nv_xmlOutput($content, $lastModified)
  */
 function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noindex = true)
 {
-    global $global_config, $client_info;
+    global $global_config;
 
     $xsl = NV_STATIC_URL . NV_ASSETS_DIR . '/css/rss.xsl';
     if (!empty($channel['xsltheme'])) {
         $xsl = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rssxsl&amp;theme=' . $channel['xsltheme'];
-        $xsl = NV_MY_DOMAIN . nv_url_rewrite($xsl, true);
+        $xsl = nv_url_rewrite($xsl, true);
+        if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
+            $xsl = NV_MY_DOMAIN . $xsl;
+        }
     }
+
+    $atomlink = nv_url_rewrite($atomlink, true);
+    if (!str_starts_with($atomlink, NV_MY_DOMAIN)) {
+        $atomlink = NV_MY_DOMAIN . $atomlink;
+    }
+
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     $xtpl->assign('CSSPATH', $xsl);
     $xtpl->assign('CHARSET', $global_config['site_charset']);
@@ -399,7 +408,7 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
 
     $channel['generator'] = 'NukeViet v4.0';
     $channel['title'] = nv_htmlspecialchars($channel['title']);
-    $channel['atomlink'] = NV_MY_DOMAIN . nv_url_rewrite($atomlink, true);
+    $channel['atomlink'] = $atomlink;
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
 
