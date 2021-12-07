@@ -40,6 +40,8 @@ function curl_get_headers($url)
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
     $response = curl_exec($ch);
     if (!empty($response) and !curl_errno($ch)) {
         $header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
@@ -351,4 +353,6 @@ if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     $content_config .= "\n";
     $content_config .= '$iniSaveTime = ' . NV_CURRENTTIME . ';';
     @file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX);
+
+    unset($_temp, $host, $unset, $proto, $proto2, $headers, $diff, $content_config);
 }
