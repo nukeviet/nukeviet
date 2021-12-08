@@ -16,14 +16,15 @@ if (!defined('NV_MAINFILE')) {
 /**
  * plural()
  *
- * @param int    $number
+ * @param mixed  $number
  * @param string $word
  * @return string
  */
 function plural($number, $word)
 {
     $wordObj = array_map('trim', explode(',', $word));
-    $word = $number > 1 ? $wordObj[1] : $wordObj[0];
+    $number2 = (int) $number;
+    $word = $number2 > 1 ? $wordObj[1] : $wordObj[0];
 
     return $number . ' ' . $word;
 }

@@ -16,7 +16,7 @@ if (!defined('NV_MAINFILE')) {
 /**
  * plural()
  *
- * @param int    $number
+ * @param mixed  $number
  * @param string $word
  * @return string
  */
