@@ -85,8 +85,14 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $exp_date_m = 0;
     }
 
-    if ($click_url == 'http://') {
-        $click_url = '';
+    $checkurl = $click_url;
+    $click_url_allow = true;
+    if (!empty($checkurl)) {
+        if (!str_starts_with($checkurl, 'http://') or !str_starts_with($checkurl, 'https://')) {
+            $checkurl = NV_MY_DOMAIN . $checkurl;
+        }
+
+        $click_url_allow = nv_is_url($checkurl);
     }
 
     $sql = 'SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE . '_plans where id = ' . $pid;
@@ -114,6 +120,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $error = $error_assign_user;
     } elseif (!is_uploaded_file($_FILES['banner']['tmp_name']) and $array_require_image[0]['require_image'] == 1) {
         $error = $lang_module['file_upload_empty'];
+    } elseif (!$click_url_allow) {
+        $error = $lang_module['click_url_invalid'];
     } else {
         $imageforswf = '';
 

@@ -135,3 +135,4 @@ $lang_module['all_plan'] = 'All plans';
 $lang_module['form_random'] = 'All banners are displayed at 100% frequency, in random order.';
 $lang_module['form_random_one'] = 'Banners are displayed one after another with the same frequency';
 $lang_module['form_sequential'] = 'All banners are displayed with 100% frequency and sequential placement';
+$lang_module['click_url_invalid'] = 'Incorrect destination URL';

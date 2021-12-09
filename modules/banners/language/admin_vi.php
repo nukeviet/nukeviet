@@ -135,3 +135,4 @@ $lang_module['all_plan'] = 'Tất cả các khối';
 $lang_module['form_random'] = 'Tất cả banner được hiển thị với tần suất 100% và vị trí sắp xếp ngẫu nhiên';
 $lang_module['form_random_one'] = 'Các banner được hiển thị lần lượt với tần suất chia đều';
 $lang_module['form_sequential'] = 'Các banner được hiển thị với tần suất 100% và vị trí tuần tự';
+$lang_module['click_url_invalid'] = 'URL đích không chính xác';

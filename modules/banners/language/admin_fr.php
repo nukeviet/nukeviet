@@ -135,3 +135,4 @@ $lang_module['all_plan'] = 'Tous les plans';
 $lang_module['form_random'] = 'Toutes les bannières sont affichées à une fréquence de 100%, dans un ordre aléatoire';
 $lang_module['form_random_one'] = 'Les bannières sont affichées les unes après les autres avec la même fréquence';
 $lang_module['form_sequential'] = 'Toutes les bannières sont affichées avec une fréquence de 100% et un placement séquentiel';
+$lang_module['click_url_invalid'] = 'URL de destination incorrecte';

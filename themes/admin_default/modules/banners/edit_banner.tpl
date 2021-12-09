@@ -1,8 +1,8 @@
 <!-- BEGIN: upload_blocked -->
-<div class="alert alert-info">{CONTENTS.upload_blocked}</div>
+<div class="alert alert-danger">{CONTENTS.upload_blocked}</div>
 <!-- END: upload_blocked -->
 <!-- BEGIN: main -->
-<div class="alert alert-info">{CONTENTS.info}</div>
+<div class="alert alert-danger">{CONTENTS.info}</div>
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
@@ -86,7 +86,7 @@
                 <tr>
                     <td>{CONTENTS.click_url.0}:</td>
                     <td>&nbsp;</td>
-                    <td><input class="w300 url form-control" name="{CONTENTS.click_url.1}" type="text" value="{CONTENTS.click_url.2}" maxlength="{CONTENTS.click_url.3}" /></td>
+                    <td><input class="w300 form-control" name="{CONTENTS.click_url.1}" type="text" value="{CONTENTS.click_url.2}" maxlength="{CONTENTS.click_url.3}" /></td>
                 </tr>
                 <tr>
                     <td>{CONTENTS.target.0}:</td>
