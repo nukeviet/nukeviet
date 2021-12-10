@@ -145,6 +145,7 @@ define('BROWSER_IPOD', 'iPod');
 define('BROWSER_IPAD', 'iPad');
 define('BROWSER_CHROME', 'Chrome');
 define('BROWSER_COCCOC', 'Coc Coc');
+define('BROWSER_COCCOCBOT', 'CoccocBot');
 define('BROWSER_ANDROID', 'Android');
 define('BROWSER_GOOGLEBOT', 'GoogleBot');
 define('BROWSER_CURL', 'cURL');

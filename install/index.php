@@ -976,7 +976,8 @@ if ($step == 1) {
                                 'msnbot',
                                 'bingbot',
                                 'yahooslurp',
-                                'w3cvalidator'
+                                'w3cvalidator',
+                                'coccocbot'
                             ];
                             foreach ($bots as $_bot) {
                                 $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote($_bot) . ', 0, 0, 0)');
@@ -1004,7 +1005,8 @@ if ($step == 1) {
                                 'ipod',
                                 'ipad',
                                 'chrome',
-                                'cococ',
+                                'coccoc',
+                                'coccocbot',
                                 'android',
                                 'googlebot',
                                 'yahooslurp',

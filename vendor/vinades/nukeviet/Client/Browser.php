@@ -152,6 +152,9 @@ class Browser
     // http://en.wikipedia.org/wiki/Googlebot
     const BROWSER_GOOGLEBOT = 'googlebot';
 
+    // http://help.coccoc.com/searchengine
+    const BROWSER_COCCOCBOT = 'coccocbot';
+
     // https://en.wikipedia.org/wiki/CURL
     const BROWSER_CURL = 'curl';
 
@@ -329,6 +332,9 @@ class Browser
 
     // http://en.wikipedia.org/wiki/Googlebot
     const BROWSER_GOOGLEBOT_NAME = 'GoogleBot';
+
+    // http://help.coccoc.com/searchengine
+    const BROWSER_COCCOCBOT_NAME = 'CoccocBot';
 
     // https://en.wikipedia.org/wiki/CURL
     const BROWSER_CURL_NAME = 'cURL';
@@ -899,7 +905,7 @@ class Browser
         // common mobile
         $this->checkBrowserAndroid() or $this->checkBrowseriPad() or $this->checkBrowseriPod() or $this->checkBrowseriPhone() or $this->checkBrowserBlackBerry() or $this->checkBrowserNokia() or 
         // common bots
-        $this->checkBrowserGoogleBot() or $this->checkBrowserMSNBot() or $this->checkBrowserBingBot() or $this->checkBrowserSlurp() or 
+        $this->checkBrowserGoogleBot() or $this->checkBrowserMSNBot() or $this->checkBrowserBingBot() or $this->checkBrowserSlurp() or $this->checkBrowserCoccocBot() or 
         // Yandex bots
         $this->checkBrowserYandexBot() or $this->checkBrowserYandexImageResizerBot() or $this->checkBrowserYandexBlogsBot() or $this->checkBrowserYandexCatalogBot() or $this->checkBrowserYandexDirectBot() or $this->checkBrowserYandexFaviconsBot() or $this->checkBrowserYandexImagesBot() or $this->checkBrowserYandexMediaBot() or $this->checkBrowserYandexMetrikaBot() or $this->checkBrowserYandexNewsBot() or $this->checkBrowserYandexVideoBot() or $this->checkBrowserYandexWebmasterBot() or 
         // check for facebook external hit when loading URL
@@ -988,6 +994,21 @@ class Browser
                 $aversion = explode(' ', $aresult[1]);
                 $this->setVersion(str_replace(';', '', $aversion[0]));
                 $this->setBrowser(self::BROWSER_GOOGLEBOT, self::BROWSER_GOOGLEBOT_NAME);
+                $this->setRobot(true);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function checkBrowserCoccocBot()
+    {
+        if (stripos($this->_agent, 'coccocbot') !== false) {
+            $aresult = explode('/', stristr($this->_agent, 'googlebot'));
+            if (isset($aresult[1])) {
+                $aversion = explode(' ', $aresult[1]);
+                $this->setVersion(str_replace(';', '', $aversion[0]));
+                $this->setBrowser(self::BROWSER_COCCOCBOT, self::BROWSER_COCCOCBOT_NAME);
                 $this->setRobot(true);
                 return true;
             }
