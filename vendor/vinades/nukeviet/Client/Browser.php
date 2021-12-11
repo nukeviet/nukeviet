@@ -1004,7 +1004,7 @@ class Browser
     protected function checkBrowserCoccocBot()
     {
         if (stripos($this->_agent, 'coccocbot') !== false) {
-            $aresult = explode('/', stristr($this->_agent, 'googlebot'));
+            $aresult = explode('/', stristr($this->_agent, 'coccocbot'));
             if (isset($aresult[1])) {
                 $aversion = explode(' ', $aresult[1]);
                 $this->setVersion(str_replace(';', '', $aversion[0]));
