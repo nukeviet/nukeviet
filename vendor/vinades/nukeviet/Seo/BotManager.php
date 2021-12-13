@@ -25,11 +25,12 @@ class BotManager
 {
     private $privateWebsite = 0;
     private $headerBotName = 'robots';
-    private $allBots = ['robots', 'googlebot', 'msnbot'];
+    private $allBots = ['robots', 'googlebot', 'msnbot', 'coccocbot'];
     private $allBotsModes = [
         'robots' => ['all', 'none', 'index', 'noindex', 'follow', 'nofollow', 'archive', 'noarchive'],
         'googlebot' => ['all', 'none', 'index', 'noindex', 'follow', 'nofollow', 'archive', 'noarchive', 'noimageindex', 'nosnippet', 'notranslate', 'unavailable_after'],
         'msnbot' => ['all', 'none', 'index', 'noindex', 'follow', 'nofollow', 'archive', 'noarchive'],
+        'coccocbot' => ['all', 'none', 'index', 'noindex', 'follow', 'nofollow', 'archive', 'noarchive']
     ];
 
     /**
