@@ -144,7 +144,7 @@ class DoApi
         $responsive = $http->post($this->apiurl, $args);
 
         if (!empty(Http::$error)) {
-            $this->error = Http::$error;
+            $this->error = 'Error Code ' . Http::$error['code'] . ': ' . Http::$error['message'];
 
             return [];
         }
