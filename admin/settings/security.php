@@ -108,6 +108,36 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     }
     $array_config_global['admin_2step_opt'] = empty($array_config_global['admin_2step_opt']) ? '' : implode(',', $array_config_global['admin_2step_opt']);
 
+    $array_config_global['request_uri_check'] = $nv_Request->get_title('request_uri_check', 'post', 'page');
+
+    $end_url_variables = $nv_Request->get_typed_array('end_url_variables', 'post', 'title', []);
+    $lowercase_letters = $nv_Request->get_typed_array('lower', 'post', 'bool', []);
+    $uppercase_letters = $nv_Request->get_typed_array('upper', 'post', 'bool', []);
+    $number = $nv_Request->get_typed_array('number', 'post', 'bool', []);
+    $dash = $nv_Request->get_typed_array('dash', 'post', 'bool', []);
+    $underline = $nv_Request->get_typed_array('under', 'post', 'bool', []);
+    $dot = $nv_Request->get_typed_array('dot', 'post', 'bool', []);
+    $at_sign = $nv_Request->get_typed_array('at', 'post', 'bool', []);
+    $_end_url_variables = [];
+    if (!empty($end_url_variables)) {
+        foreach($end_url_variables as $key => $variable) {
+            if (preg_match('/^[a-zA-Z0-9\-]+$/', $variable)) {
+                $vals = [];
+                !empty($lowercase_letters[$key]) && $vals[] = 'lower';
+                !empty($uppercase_letters[$key]) && $vals[] = 'upper';
+                !empty($number[$key]) && $vals[] = 'number';
+                !empty($dash[$key]) && $vals[] = 'dash';
+                !empty($underline[$key]) && $vals[] = 'under';
+                !empty($dot[$key]) && $vals[] = 'dot';
+                !empty($at_sign[$key]) && $vals[] = 'at';
+                if (!empty($vals)) {
+                    $_end_url_variables[$variable] = $vals;
+                }
+            }
+        }
+    }
+    $array_config_global['end_url_variables'] = !empty($_end_url_variables) ? json_encode($_end_url_variables) : '';
+
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -1007,6 +1037,38 @@ if (defined('NV_IS_GODADMIN')) {
             }
             $xtpl->parse('main.sys_contents.modcomm');
         }
+    }
+
+    $uri_check_values = [
+        'page' => $lang_module['request_uri_check_page'],
+        'not' => $lang_module['request_uri_check_not'],
+        'path' => $lang_module['request_uri_check_path'],
+        'query' => $lang_module['request_uri_check_query'],
+        'abs' => $lang_module['request_uri_check_abs']
+    ];
+    foreach ($uri_check_values as $key => $val) {
+        $xtpl->assign('URI_CHECK', [
+            'val' => $key,
+            'name' => $val,
+            'sel' => $key == $array_config_global['request_uri_check'] ? ' selected="selected"' : ''
+        ]);
+        $xtpl->parse('main.sys_contents.request_uri_check');
+    }
+
+    $array_config_global['end_url_variables'][] = [];
+    foreach ($array_config_global['end_url_variables'] as $key => $vals) {
+        $xtpl->assign('VAR', [
+            'key' => !empty($key) ? $key : 'new',
+            'name' => !empty($key) ? $key : '',
+            'lower_checked' => (!empty($vals) and in_array('lower', $vals, true)) ? ' checked="checked"' : '',
+            'upper_checked' => (!empty($vals) and in_array('upper', $vals, true)) ? ' checked="checked"' : '',
+            'number_checked' => (!empty($vals) and in_array('number', $vals, true)) ? ' checked="checked"' : '',
+            'dash_checked' => (!empty($vals) and in_array('dash', $vals, true)) ? ' checked="checked"' : '',
+            'under_checked' => (!empty($vals) and in_array('under', $vals, true)) ? ' checked="checked"' : '',
+            'dot_checked' => (!empty($vals) and in_array('dot', $vals, true)) ? ' checked="checked"' : '',
+            'at_checked' => (!empty($vals) and in_array('at', $vals, true)) ? ' checked="checked"' : ''
+        ]);
+        $xtpl->parse('main.sys_contents.end_url_variable');
     }
 
     $xtpl->parse('main.sys_contents');

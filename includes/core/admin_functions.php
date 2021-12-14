@@ -156,7 +156,7 @@ function nv_save_file_config_global()
     $config_variable['error_send_email'] = $config_variable['error_send_email'];
 
     $config_name_array = ['file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_request_mods', 'config_sso'];
-    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin', 'zaloWebhookIPs'];
+    $config_name_json = ['crosssite_valid_domains', 'crosssite_valid_ips', 'crossadmin_valid_domains', 'crossadmin_valid_ips', 'domains_whitelist', 'ip_allow_null_origin', 'zaloWebhookIPs', 'end_url_variables'];
 
     foreach ($config_variable as $c_config_name => $c_config_value) {
         if (in_array($c_config_name, $config_name_array, true)) {
@@ -168,10 +168,21 @@ function nv_save_file_config_global()
             $content_config .= "\$global_config['" . $c_config_name . "'] = [" . $c_config_value . "];\n";
         } elseif (in_array($c_config_name, $config_name_json, true)) {
             $c_config_value = empty($c_config_value) ? [] : ((array) json_decode($c_config_value, true));
-            if (empty($c_config_value)) {
-                $c_config_value = '';
+            if ($c_config_name == 'end_url_variables') {
+                $_value = [];
+                if (!empty($c_config_value)) {
+                    foreach ($c_config_value as $k => $val) {
+                        $val = "'" . implode("','", $val) . "'";
+                        $_value[] = "'" . $k . "' => [" . $val . "]";
+                    }
+                }
+                $c_config_value = !empty($_value) ? implode(',', $_value) : '';
             } else {
-                $c_config_value = "'" . implode("','", array_map('trim', $c_config_value)) . "'";
+                if (empty($c_config_value)) {
+                    $c_config_value = '';
+                } else {
+                    $c_config_value = "'" . implode("','", array_map('trim', $c_config_value)) . "'";
+                }
             }
             $content_config .= "\$global_config['" . $c_config_name . "'] = [" . $c_config_value . "];\n";
         } else {

@@ -122,6 +122,62 @@
                                         <textarea name="domains_whitelist" class="form-control" rows="5">{DOMAINS_WHITELIST}</textarea>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.request_uri_check}</strong></td>
+                                    <td>
+                                        <select name="request_uri_check" class="form-control w200">
+                                            <!-- BEGIN: request_uri_check -->
+                                            <option value="{URI_CHECK.val}"{URI_CHECK.sel}>{URI_CHECK.name}</option>
+                                            <!-- END: request_uri_check -->
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.end_url_variables}</strong><br/><em class="small">({LANG.end_url_variables_note})</em></td>
+                                    <td>
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td><strong>{LANG.end_url_variable_name}</strong></td>
+                                                    <td><strong>{LANG.end_url_variable_dataformat}</strong></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- BEGIN: end_url_variable -->
+                                                <tr>
+                                                    <td style="width: 40%;">
+                                                        <input type="text" class="form-control" name="end_url_variables[{VAR.key}]" value="{VAR.name}" maxlength="50" />
+                                                        <em class="small">{LANG.end_url_variable_name_note}</em>
+                                                    </td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="lower[{VAR.key}]" value="1"{VAR.lower_checked}> {LANG.lowercase_letters}</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="upper[{VAR.key}]" value="1"{VAR.upper_checked}> {LANG.uppercase_letters}</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="number[{VAR.key}]" value="1"{VAR.number_checked}> {LANG.number}</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="dash[{VAR.key}]" value="1"{VAR.dash_checked}> {LANG.dash}</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="under[{VAR.key}]" value="1"{VAR.under_checked}> {LANG.underline}</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="dot[{VAR.key}]" value="1"{VAR.dot_checked}> {LANG.dot}</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input type="checkbox" name="at[{VAR.key}]" value="1"{VAR.at_checked}> {LANG.at_sign}</label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <!-- END: end_url_variable -->
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>

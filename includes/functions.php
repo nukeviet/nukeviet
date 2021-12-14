@@ -1813,17 +1813,74 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 }
 
 /**
+ * check_endurl_variables()
+ * 
+ * @param mixed $request_query 
+ */
+function check_endurl_variables(&$request_query)
+{
+    global $global_config;
+
+    if (!empty($request_query) and !empty($global_config['end_url_variables'])) {
+        $kl = array_keys($request_query);
+        foreach ($kl as $k) {
+            if (isset($global_config['end_url_variables'][$k])) {
+                $pattern = '';
+                in_array('lower', $global_config['end_url_variables'][$k], true) && $pattern .= 'a-z';
+                in_array('upper', $global_config['end_url_variables'][$k], true) && $pattern .= 'A-Z';
+                in_array('number', $global_config['end_url_variables'][$k], true) && $pattern .= '0-9';
+                in_array('dash', $global_config['end_url_variables'][$k], true) && $pattern .= '\-';
+                in_array('under', $global_config['end_url_variables'][$k], true) && $pattern .= '\_';
+                in_array('dot', $global_config['end_url_variables'][$k], true) && $pattern .= '\.';
+                in_array('at', $global_config['end_url_variables'][$k], true) && $pattern .= '\@';
+                $pattern = '/^[' . $pattern . ']+$/';
+
+                if (preg_match($pattern, $request_query[$k])) {
+                    unset($request_query[$k]);
+                }
+            }
+        }
+    }
+}
+
+/**
  * getPageUrl()
  *
  * @param string $page_url
  * @param bool   $query_check
  * @param bool   $abs_comp
+ * @param string $request_uri
  * @return false|string
  */
-function getPageUrl($page_url, $query_check, $abs_comp)
+function getPageUrl($page_url, $query_check, $abs_comp, &$request_uri)
 {
+    global $global_config;
+
     $url_rewrite = nv_url_rewrite($page_url, true);
     str_starts_with($url_rewrite, NV_MY_DOMAIN) && $url_rewrite = substr($url_rewrite, strlen(NV_MY_DOMAIN));
+
+    if ($global_config['request_uri_check'] == 'not') {
+        return NV_MAIN_DOMAIN . $url_rewrite;
+    }
+
+    $is_query_check = $is_abs_check = false;
+    if ($global_config['request_uri_check'] != 'page') {
+        if ($global_config['request_uri_check'] == 'query') {
+            $is_query_check = true;
+        } elseif ($global_config['request_uri_check'] == 'abs') {
+            $is_query_check = true;
+            $is_abs_check = true;
+        }
+    } else {
+        if (!empty($query_check)) {
+            $is_query_check = true;
+
+            if (!empty($abs_comp)) {
+                $is_abs_check = true;
+            }
+        }
+    }
+
     $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
     $url_rewrite_check = urldecode($url_rewrite_check);
     $url_rewrite_check = preg_replace_callback('/[^:\/@?&=#]+/usD', function ($matches) {
@@ -1843,9 +1900,10 @@ function getPageUrl($page_url, $query_check, $abs_comp)
         return false;
     }
 
-    if ($query_check) {
+    if ($is_query_check) {
         parse_str($url_parts['query'], $url_query_output);
         parse_str($request_parts['query'], $request_query_output);
+        check_endurl_variables($request_query_output);
 
         if (!empty($url_query_output)) {
             $diff = nv_array_diff_assoc($url_query_output, $request_query_output);
@@ -1854,7 +1912,7 @@ function getPageUrl($page_url, $query_check, $abs_comp)
             }
         }
 
-        if ($abs_comp and !empty($request_query_output)) {
+        if ($is_abs_check and !empty($request_query_output)) {
             $diff = nv_array_diff_assoc($request_query_output, $url_query_output);
             if (!empty($diff)) {
                 return false;
@@ -1877,23 +1935,20 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
 {
     global $home;
 
+    $request_uri = '';
+
     if ($home) {
-        $page_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
-        str_starts_with($page_url, NV_MY_DOMAIN) && $page_url = substr($page_url, strlen(NV_MY_DOMAIN));
+        $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+        $url = getPageUrl($page_url, true, true, $request_uri);
 
-        $request_uri = nv_url_rewrite($_SERVER['REQUEST_URI'], true);
-        str_starts_with($request_uri, NV_MY_DOMAIN) && $request_uri = substr($request_uri, strlen(NV_MY_DOMAIN));
-
-        if ($request_uri != NV_BASE_SITEURL and $request_uri != $page_url) {
+        if ($request_uri != NV_BASE_SITEURL and empty($url)) {
             nv_redirect_location($page_url);
         }
-
-        return NV_MAIN_DOMAIN . $page_url;
-    }
-
-    $url = getPageUrl($page_url, $query_check, $abs_comp);
-    if (empty($url)) {
-        nv_redirect_location($page_url);
+    } else {
+        $url = getPageUrl($page_url, $query_check, $abs_comp, $request_uri);
+        if (empty($url)) {
+            nv_redirect_location($page_url);
+        }
     }
 
     return $url;
@@ -2813,7 +2868,7 @@ function post_async($url, $params, $headers = [])
     $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
     $out .= "Content-Length: " . strlen($post_string) . "\r\n";
     if (!empty($headers)) {
-        foreach($headers as $key => $value) {
+        foreach ($headers as $key => $value) {
             $out .= "{$key}: {$value}\r\n";
         }
     }
