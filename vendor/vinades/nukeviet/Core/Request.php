@@ -914,6 +914,9 @@ class Request
         }
 
         $preTag .= $postTag;
+        while (preg_match('/\<script([^\>]*)\>(.*)\<\/script\>/isU', $preTag)) {
+            $preTag = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $preTag);
+        }
         $preTag = str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $preTag);
         return trim(str_replace(['[@{', '}@]', '{@[', ']@}'], ['"', '"', '<', '>'], $preTag));
     }
