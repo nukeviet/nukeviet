@@ -121,7 +121,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     $_end_url_variables = [];
     if (!empty($end_url_variables)) {
         foreach($end_url_variables as $key => $variable) {
-            if (preg_match('/^[a-zA-Z0-9\-]+$/', $variable)) {
+            if (preg_match('/^[a-zA-Z0-9\_]+$/', $variable)) {
                 $vals = [];
                 !empty($lowercase_letters[$key]) && $vals[] = 'lower';
                 !empty($uppercase_letters[$key]) && $vals[] = 'upper';
