@@ -125,7 +125,7 @@
                                 <tr>
                                     <td><strong>{LANG.request_uri_check}</strong></td>
                                     <td>
-                                        <select name="request_uri_check" class="form-control w200">
+                                        <select name="request_uri_check" class="form-control w300">
                                             <!-- BEGIN: request_uri_check -->
                                             <option value="{URI_CHECK.val}"{URI_CHECK.sel}>{URI_CHECK.name}</option>
                                             <!-- END: request_uri_check -->
