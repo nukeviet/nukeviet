@@ -16,7 +16,7 @@ var OP = -1 != navigator.userAgent.indexOf("Opera"),
     nv_mailfilter = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/,
     nv_numcheck = /^([0-9])+$/,
     nv_namecheck = /^([a-zA-Z0-9_-])+$/,
-    nv_uname_filter = /^([\p{L}\p{Mn}\p{Pd}'][\p{L}\p{Mn}\p{Pd}',\s]*)*$/u,
+    nv_uname_filter = /^(.){1,}$/,
     nv_md5check = /^[a-z0-9]{32}$/,
     nv_imgexts = /^.+\.(jpg|gif|png|bmp)$/,
     nv_iChars = "!@#$%^&*()+=-[]\\';,./{}|\":<>?",
@@ -25,6 +25,11 @@ var OP = -1 != navigator.userAgent.indexOf("Opera"),
     strHref = window.location.href,
     script_name = strHref,
     query_string = "";
+if (!IE) {
+    try {
+        nv_uname_filter = new RegExp("/^([\p{L}\p{Mn}\p{Pd}'][\p{L}\p{Mn}\p{Pd}',\s]*)*$/", "gu");
+    } catch (e) {}
+}
 
 void 0 === nv_base_siteurl && (nv_base_siteurl = "/");
 void 0 === nv_assets_dir && (nv_assets_dir = "assets");

@@ -254,15 +254,19 @@ function isRecaptchaCheck() {
 
 function reCaptcha2Recreate(obj) {
     $('[data-toggle=recaptcha]', $(obj)).each(function() {
-        var callFunc = $(this).data('callback'),
-            pnum = $(this).data('pnum'),
-            btnselector = $(this).data('btnselector'),
-            size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '';
-        var id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8);
-        if (callFunc) {
-            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-callback="' + callFunc + '" data-size="' + size + '"></div>');
-        } else {
-            $(this).replaceWith('<div id="' + id + '" data-toggle="recaptcha" data-pnum="' + pnum + '" data-btnselector="' + btnselector + '" data-size="' + size + '"></div>')
+        if (!$('#modal-' + $(this).attr('id')).length) {
+            var callFunc = $(this).data('callback'),
+                pnum = $(this).data('pnum'),
+                btnselector = $(this).data('btnselector'),
+                size = ($(this).data('size') && $(this).data('size') == 'compact') ? 'compact' : '',
+                id = "recaptcha" + (new Date().getTime()) + nv_randomPassword(8),
+                div = '<div id="' + id + '" data-toggle="recaptcha"';
+            callFunc && (div += ' data-callback="' + callFunc + '"');
+            pnum && (div += ' data-pnum="' + pnum + '"');
+            btnselector && (div += ' data-btnselector="' + btnselector + '"');
+            size && (div += ' data-size="' + size + '"');
+            div += '></div>';
+            $(this).replaceWith(div)
         }
     })
 }
@@ -400,8 +404,14 @@ var reCaptcha2Execute = function(obj, callFunc) {
     }
 
     var id = $(obj).attr('data-recaptcha2'),
-        res = $("[name=g-recaptcha-response]", obj).val();
-    if (id.length == 16 && typeof reCapIDs[id] !== "undefined" && !!res && grecaptcha.getResponse(reCapIDs[id]) == res) {
+        res = $("[name=g-recaptcha-response]", obj).val(),
+        isExist = false;
+    if (id.length == 16 && typeof reCapIDs[id] !== "undefined" && $('#' + reCapIDs[id]).length && !!res) {
+        if (grecaptcha.getResponse(reCapIDs[id]) == res) {
+            isExist = true
+        }
+    }
+    if (isExist) {
         captchaCallFuncLoad(callFunc)
     } else {
         if (id.length != 16) {
