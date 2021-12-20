@@ -324,7 +324,7 @@ function lostpass_validForm(a) {
         if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
     });
     if (!d) {
-        if (($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha3]", $(a).parent()).length) && $("[name=step]", a).val() == 'step1') {
+        if (($('[data-toggle=recaptcha]', $(a)).length || $("[data-recaptcha2], [data-recaptcha3]", $(a).parent()).length) && $("[name=step]", a).val() == 'step1') {
             $("[name=gcaptcha_session]", a).val($("[name=g-recaptcha-response]", a).val());
         }
         c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0);
