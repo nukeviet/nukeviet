@@ -5,4 +5,9 @@
     <value>http://www.google.com/webmasters/tools/ping?sitemap=</value>
     <active>1</active>
   </searchEngine_item>
+  <searchEngine_item>
+    <name>Bing</name>
+    <value>http://www.bing.com/ping?sitemap=</value>
+    <active>1</active>
+  </searchEngine_item>
 </searchEngine>
