@@ -16,8 +16,8 @@ var OP = -1 != navigator.userAgent.indexOf("Opera"),
     nv_mailfilter = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/,
     nv_numcheck = /^([0-9])+$/,
     nv_namecheck = /^([a-zA-Z0-9_-])+$/,
-    nv_uname_filter = /^([\p{L}\p{Mn}\p{Pd}'][\p{L}\p{Mn}\p{Pd}',\s]*)*$/u,
-    nv_unicode_login_pattern = /^[\p{L}\p{Mn}0-9]+([\s]+[\p{L}\p{Mn}0-9]+)*$/u,
+    nv_uname_filter = /^(.){1,}$/,
+    nv_unicode_login_pattern = /^(.){1,}$/,
     nv_md5check = /^[a-z0-9]{32}$/,
     nv_imgexts = /^.+\.(jpg|gif|png|bmp)$/,
     nv_iChars = "!@#$%^&*()+=-[]\\';,./{}|\":<>?",
@@ -465,3 +465,33 @@ function nv_setIframeHeight(iframeId) {
 }
 
 nv_check_timezone();
+
+(function() {
+    if (typeof window.CustomEvent === "function") return false; //If not IE
+
+    function CustomEvent(event, params) {
+        params = params || {
+            bubbles: false,
+            cancelable: false,
+            detail: undefined
+        };
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+        return evt;
+    }
+
+    CustomEvent.prototype = window.Event.prototype;
+
+    window.CustomEvent = CustomEvent;
+
+    //closest for IE
+    Element.prototype.matches || (Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector);
+    Element.prototype.closest || (Element.prototype.closest = function(b) {
+        var a = this;
+        do {
+            if (Element.prototype.matches.call(a, b)) return a;
+            a = a.parentElement || a.parentNode
+        } while (null !== a && 1 === a.nodeType);
+        return null
+    })
+})();

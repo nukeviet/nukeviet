@@ -769,10 +769,17 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     }
 
     if ($global_js) {
-        $return[] = [
-            'ext' => 1,
-            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/global.js'
-        ];
+        if ($client_info['browser']['key'] == 'explorer') {
+            $return[] = [
+                'ext' => 1,
+                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/ie-global.js'
+            ];
+        } else {
+            $return[] = [
+                'ext' => 1,
+                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/global.js'
+            ];
+        }
 
         $return[] = [
             'ext' => 1,
