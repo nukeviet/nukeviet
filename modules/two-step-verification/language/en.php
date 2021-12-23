@@ -50,3 +50,5 @@ $lang_module['email_code_renew'] = 'Your <strong>%5$s</strong> account at <a hre
 $lang_module['change_2step_notvalid'] = 'Your account doesn\'t have a password, so Two-Step Authentication can\'t be changed. Please create a password and then return to this page.<br/>Please <a href="%s">click here</a> to create a password';
 $lang_module['deactive_mess'] = 'Do you really want to turn off two-step authentication?';
 $lang_module['setup_2step'] = 'Set up two-step authentication';
+$lang_module['forcedrelogin'] = 'Forced re-login everywhere';
+$lang_module['forcedrelogin_note'] = 'You are signed out of your account. Please login again';

@@ -107,3 +107,13 @@ function passCmp($newpass, $currentpass, $userid)
 
     return true;
 }
+
+function forcedrelogin($userid)
+{
+    global $db;
+
+    $checknum = md5(nv_genpass(10));
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET checknum=:checknum WHERE userid=' . $userid);
+    $stmt->bindParam(':checknum', $checknum, PDO::PARAM_STR);
+    $stmt->execute();
+}

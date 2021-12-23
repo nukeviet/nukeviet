@@ -39,7 +39,10 @@ function nv_json_result($array)
 {
     global $nv_redirect;
 
-    $array['redirect'] = $nv_redirect ? nv_redirect_decrypt($nv_redirect) : '';
+    if (!empty($nv_redirect)) {
+        $array['redirect'] = nv_redirect_decrypt($nv_redirect);
+    }
+
     nv_jsonOutput($array);
 }
 
@@ -103,10 +106,24 @@ if ($checkss == NV_CHECK_SESSION) {
 
     nv_creat_backupcodes();
 
+    if (!empty($global_config['allowuserloginmulti']) and $nv_Request->get_bool('forcedrelogin', 'post', false)) {
+        $checknum = md5(nv_genpass(10));
+        $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET checknum=:checknum WHERE userid=' . $user_info['userid']);
+        $stmt->bindParam(':checknum', $checknum, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $redirect = nv_redirect_encrypt(NV_MY_DOMAIN . (nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true)));
+        $redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . $redirect, true);
+
+        nv_json_result([
+            'status' => 'ok',
+            'mess' => $lang_module['forcedrelogin_note'],
+            'redirect' => $redirect
+        ]);
+    }
+
     nv_json_result([
-        'status' => 'ok',
-        'input' => '',
-        'mess' => ''
+        'status' => 'ok'
     ]);
 }
 

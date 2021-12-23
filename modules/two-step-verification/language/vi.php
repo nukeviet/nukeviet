@@ -53,3 +53,5 @@ $lang_module['email_code_renew'] = 'Tài khoản <strong>%5$s</strong> của b�
 $lang_module['change_2step_notvalid'] = 'Tài khoản của bạn chưa có mật khẩu nên không thể thay đổi tính năng Xác thực hai bước. Vui lòng tạo mật khẩu sau đó quay lại trang này.<br/>Hãy <a href="%s">click vào đây</a> để tạo mật khẩu';
 $lang_module['deactive_mess'] = 'Bạn thực sự muốn tắt xác thực hai bước?';
 $lang_module['setup_2step'] = 'Thiết lập xác thực hai bước';
+$lang_module['forcedrelogin'] = 'Buộc đăng nhập lại ở mọi nơi';
+$lang_module['forcedrelogin_note'] = 'Bạn đã thoát khỏi tài khoản thành viên. Vui lòng đăng nhập lại';

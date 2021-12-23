@@ -44,6 +44,9 @@
                 <!-- BEGIN: edit_safemode -->
                 <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/safemode" href="#edit_safemode">{LANG.safe_mode}</a></li>
                 <!-- END: edit_safemode -->
+                <!-- BEGIN: edit_forcedrelogin -->
+                <li class="{FORCEDRELOGIN_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/forcedrelogin" href="#edit_forcedrelogin">{LANG.forcedrelogin}</a></li>
+                <!-- END: edit_forcedrelogin -->
             </ul></li>
     </ul>
     <div class="tab-content margin-bottom-lg">
@@ -176,6 +179,15 @@
                             <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
                         </div>
                     </div>
+                    <!-- BEGIN: forcedrelogin -->
+                    <div class="form-group">
+                        <div class="col-md-12 col-md-offset-6">
+                            <div class="checkbox">
+                                <label><input type="checkbox" class="form-control" name="forcedrelogin" value="1" style="margin-top:2px"> {LANG.forcedrelogin}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: forcedrelogin -->
                     <div class="form-group">
                         <div class="col-md-6">
                             <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -227,6 +239,15 @@
                             </div>
                         </div>
                     </div>
+                    <!-- BEGIN: forcedrelogin -->
+                    <div class="form-group">
+                        <div class="col-md-12 col-md-offset-6">
+                            <div class="checkbox">
+                                <label><input type="checkbox" class="form-control" name="forcedrelogin" value="1" style="margin-top:2px"> {LANG.forcedrelogin}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: forcedrelogin -->
                     <div class="form-group">
                         <div class="col-md-6">
                             <input type="hidden" name="checkss" value="{DATA.checkss}" /> <input type="hidden" name="vsend" value="0" />
@@ -265,6 +286,15 @@
                             <input type="password" autocomplete="off" class="required form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.re_password_empty}">
                         </div>
                     </div>
+                    <!-- BEGIN: forcedrelogin -->
+                    <div class="form-group">
+                        <div class="col-md-12 col-md-offset-6">
+                            <div class="checkbox">
+                                <label><input type="checkbox" class="form-control" name="forcedrelogin" value="1" style="margin-top:2px"> {LANG.forcedrelogin}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: forcedrelogin -->
                     <div class="form-group">
                         <div class="col-md-6">
                             <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -624,6 +654,31 @@
             </form>
         </div>
         <!-- END: tab_edit_safemode -->
+        <!-- BEGIN: tab_edit_forcedrelogin -->
+        <div id="edit_forcedrelogin" class="well-lg tab-pane fade {TAB_FORCEDRELOGIN_ACTIVE}">
+            <form action="{EDITINFO_FORM}/forcedrelogin" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" data-toggle="reg_validForm" autocomplete="off" novalidate>
+                <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
+                <div class="form-detail">
+                    <div class="form-group">
+                        <label for="nv_password" class="control-label col-md-6 text-normal">{GLANG.password}</label>
+                        <div class="col-md-14">
+                            <div class="input-group">
+                                <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span> <input type="password" autocomplete="off" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{GLANG.password_empty}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                        </div>
+                        <div class="col-md-10">
+                            <button class="bsubmit btn btn-primary" type="submit">{LANG.editinfo_confirm}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- END: tab_edit_forcedrelogin -->
     </div>
     <ul class="nav navbar-nav">
         <!-- BEGIN: navbar -->

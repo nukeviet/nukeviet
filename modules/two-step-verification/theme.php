@@ -78,7 +78,7 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
  */
 function nv_theme_config_2step($secretkey, $nv_redirect)
 {
-    global $module_info, $lang_global, $lang_module, $module_name, $op;
+    global $module_info, $lang_global, $lang_module, $module_name, $op, $global_config;
 
     $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -89,6 +89,10 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
     $xtpl->assign('SECRETKEY', strtolower($secretkey));
     $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/qr-image/' . nv_genpass());
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+
+    if (!empty($global_config['allowuserloginmulti'])) {
+        $xtpl->parse('main.forcedrelogin');
+    }
 
     $xtpl->parse('main');
 

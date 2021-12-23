@@ -50,3 +50,5 @@ $lang_module['email_code_renew'] = 'Votre <strong>%5$s</strong> compte sur <a hr
 $lang_module['change_2step_notvalid'] = 'Votre compte n\'a pas de mot de passe, donc l\'authentification en deux étapes ne peut pas être modifiée. Veuillez créer un mot de passe, puis revenir à cette page.<br/>Veuillez <a href="%s">cliquer ici</a> pour créer un mot de passe';
 $lang_module['deactive_mess'] = 'Voulez-vous vraiment désactiver l\'authentification en deux étapes?';
 $lang_module['setup_2step'] = 'Configurer l\'authentification en deux étapes';
+$lang_module['forcedrelogin'] = 'Reconnexion forcée partout';
+$lang_module['forcedrelogin_note'] = 'Vous êtes déconnecté de votre compte. Veuillez vous reconnecter';

@@ -561,3 +561,5 @@ $lang_module['days'] = 'ngày (0 = Không áp dụng)';
 $lang_module['oldpass_num'] = 'Số mật khẩu cũ lưu trong CSDL';
 $lang_module['send_password'] = 'Gửi thông tin mật khẩu đến email người dùng';
 $lang_module['email_dot_equivalent'] = 'Email có dấu chấm trong phần trước @ là phiên bản của email không có dấu chấm';
+$lang_module['forcedrelogin'] = 'Buộc đăng nhập lại';
+$lang_module['forcedrelogin_note'] = 'Thành viên đã thoát khỏi tài khoản';

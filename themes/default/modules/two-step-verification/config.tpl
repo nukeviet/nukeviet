@@ -30,7 +30,7 @@
     </div>
     <div class="panel-body">
         <form action="{FORM_ACTION}" method="post" data-toggle="opt_validForm" autocomplete="off" novalidate>
-            <div class="nv-info margin-bottom" data-default="{LANG.cfg_step2_info2}">{LANG.cfg_step2_info2}</div>
+            <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
             <div class="form-detail">
                 <div class="step1">
                     <div class="form-group">
@@ -40,6 +40,14 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- BEGIN: forcedrelogin -->
+                <div class="text-center margin-bottom-lg">
+                    <div class="checkbox">
+                        <label><input type="checkbox" class="form-control" name="forcedrelogin" value="1" style="margin-top:2px"> {LANG.forcedrelogin}</label>
+                    </div>
+                </div>
+                <!-- END: forcedrelogin -->
                 
                 <div class="text-center margin-bottom-lg">
                      <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />

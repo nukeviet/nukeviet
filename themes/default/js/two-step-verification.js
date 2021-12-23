@@ -126,7 +126,10 @@ function opt_validForm(a) {
                     }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
                         $("[type=submit]", a).prop("disabled", !1)
                     }, 1E3)
-            } else {
+            } else if (d.status == "ok") {
+                if (typeof d.mess != 'undefined' && d.mess != '') {
+                    alert(d.mess)
+                }
                 window.location.href = (typeof d.redirect != 'undefined' && d.redirect != '') ? d.redirect : window.location.href;
             }
         }

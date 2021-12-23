@@ -94,6 +94,7 @@
                                     <li><a href="{EDIT_OAUTH_URL}">{LANG.user_openid_mamager}</a></li>
                                     <li><a href="{EDIT_2STEP_URL}">{LANG.user_2step_mamager}</a></li>
                                     <li><a href="javascript:void(0);" onclick="passResetRequest({CONTENT_TD.userid});">{LANG.pass_reset_request}</a></li>
+                                    <li><a href="javascript:void(0);" onclick="forcedReLogin({CONTENT_TD.userid});">{LANG.forcedrelogin}</a></li>
                                 </ul>
                             </div>
                             <!-- END: edit -->

@@ -22,6 +22,26 @@ require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 $nv_BotManager->setPrivate();
 
 /**
+ * get_checknum()
+ * 
+ * @param mixed $userid 
+ * @return mixed 
+ */
+function get_checknum($userid)
+{
+    global $db, $global_config;
+
+    if (!empty($global_config['allowuserloginmulti'])) {
+        $checknum = $db->query('SELECT checknum FROM ' . NV_MOD_TABLE . ' WHERE userid = ' . $userid)->fetchColumn();
+        if (!empty($checknum)) {
+            return $checknum;
+        }
+    }
+
+    return md5(nv_genpass(10));
+}
+
+/**
  * validUserLog()
  *
  * @param array $array_user
@@ -35,7 +55,7 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
     global $db, $global_config, $nv_Request, $lang_module, $global_users_config, $module_name, $client_info;
 
     $remember = (int) $remember;
-    $checknum = md5(nv_genpass(10));
+    $checknum = get_checknum($array_user['userid']);
     $opid = empty($oauth_data) ? '' : $oauth_data['id'];
     $user = [
         'userid' => $array_user['userid'],

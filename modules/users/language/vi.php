@@ -399,3 +399,5 @@ $lang_module['verify_email_title'] = 'Thư xác minh e-mail mới';
 $lang_module['verify_email_mess'] = 'Xin chào!<br /><br />Bạn đã gửi yêu cầu xác minh e-mail: %s. Hãy chép mã dưới đây vào ô Mã xác minh trên site.<br /><br />Mã xác minh: <span>%s</span><br/><br/>Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['verify_email_sent'] = 'Mã xác minh e-mail mới đã được gửi đến địa chỉ mà bạn khai báo trên (Nếu không thấy nó trong thư mục thư đến, hãy kiểm tra trong thư mục SPAM). Hãy chép nó và dán vào ô Mã xác minh dưới đây';
 $lang_module['verify_email_sent_error'] = 'Đã xảy ra lỗi kỹ thuật khi gửi mã xác minh đến e-mail của bạn. Vui lòng liên hệ với quản trị site về vấn đề này.';
+$lang_module['forcedrelogin'] = 'Buộc đăng nhập lại ở mọi nơi';
+$lang_module['forcedrelogin_note'] = 'Bạn đã thoát khỏi tài khoản thành viên. Vui lòng đăng nhập lại';

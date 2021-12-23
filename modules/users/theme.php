@@ -836,6 +836,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $item_active['title'] = $lang_module['edit_others'];
     } elseif ($data['type'] == 'safemode') {
         $item_active['title'] = $lang_module['safe_mode'];
+    } elseif ($data['type'] == 'forcedrelogin') {
+        $item_active['title'] = $lang_module['forcedrelogin'];
     } else {
         $item_active['title'] = $lang_module['edit_basic'];
     }
@@ -853,6 +855,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     if (in_array('username', $types, true)) {
         if ($pass_empty) {
             $xtpl->parse('main.tab_edit_username.username_empty_pass');
+        }
+        if (!empty($global_config['allowuserloginmulti'])) {
+            $xtpl->parse('main.tab_edit_username.forcedrelogin');
         }
         $xtpl->parse('main.edit_username');
         $xtpl->parse('main.tab_edit_username');
@@ -872,6 +877,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             ]);
             $xtpl->parse('main.tab_edit_password.return_group_manage');
         }
+        if (!empty($global_config['allowuserloginmulti'])) {
+            $xtpl->parse('main.tab_edit_password.forcedrelogin');
+        }
         $xtpl->parse('main.tab_edit_password');
     }
 
@@ -885,6 +893,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     if (in_array('email', $types, true)) {
         if ($pass_empty) {
             $xtpl->parse('main.tab_edit_email.email_empty_pass');
+        }
+        if (!empty($global_config['allowuserloginmulti'])) {
+            $xtpl->parse('main.tab_edit_email.forcedrelogin');
         }
         $xtpl->parse('main.edit_email');
         $xtpl->parse('main.tab_edit_email');
@@ -1156,6 +1167,12 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         }
         $xtpl->parse('main.edit_safemode');
         $xtpl->parse('main.tab_edit_safemode');
+    }
+
+    // Tab buộc đăng nhập lại
+    if (in_array('forcedrelogin', $types, true)) {
+        $xtpl->parse('main.edit_forcedrelogin');
+        $xtpl->parse('main.tab_edit_forcedrelogin');
     }
 
     // Xuất menu cuối form

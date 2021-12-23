@@ -64,6 +64,15 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+// Yêu cầu đăng nhập lại
+if ($nv_Request->isset_request('forcedrelogin', 'post')) {
+    forcedrelogin($userid);
+    nv_jsonOutput([
+        'status' => 'OK',
+        'mess' => $lang_module['forcedrelogin_note']
+    ]);
+}
+
 // Yêu cầu thay đổi mật khẩu
 if ($nv_Request->isset_request('psr', 'post')) {
     if ($nv_Request->isset_request('type', 'post')) {

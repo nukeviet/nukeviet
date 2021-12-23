@@ -57,7 +57,7 @@ if (defined('NV_IS_ADMIN')) {
                                 $checknum = false;
                             }
                         } else {
-                            $checknum = true;
+                            $checknum = $user['checknum'] === $user_info['checknum'];
                         }
 
                         if ($checknum) {

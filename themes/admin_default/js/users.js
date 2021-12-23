@@ -596,6 +596,19 @@ function passResetRequest(id) {
     });
 }
 
+function forcedReLogin(id) {
+    $.ajax({
+        type: 'POST',
+        cache: !1,
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit&userid=' + id + '&nocache=' + new Date().getTime(),
+        data: 'forcedrelogin=1',
+        dataType: "json",
+        success: function(e) {
+            alert(e.mess)
+        }
+    });
+}
+
 function passResetRequestSubmit(event, obj, type) {
     event.preventDefault();
     var userid = $('#pass-reset-modal .userid').val();

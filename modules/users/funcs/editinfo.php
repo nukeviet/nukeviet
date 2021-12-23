@@ -425,6 +425,11 @@ if ($is_custom_field) {
     $types[] = 'others';
 }
 
+// Buộc thoát ở mọi nơi
+if (!empty($global_config['allowuserloginmulti'])) {
+    $types[] = 'forcedrelogin';
+}
+
 // Trường hợp trưởng nhóm truy cập sửa thông tin member
 if (defined('ACCESS_EDITUS')) {
     $array_data['group_id'] = $group_id;
@@ -668,10 +673,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $global_config['site_email']
     ], $row['email'], $lang_module['edit_mail_subject'], $message);
 
+    $mess = $lang_module['editinfo_ok'];
+    if ($nv_Request->get_bool('forcedrelogin', 'post', false)) {
+        forcedrelogin($edit_userid);
+        $mess .= '. ' . $lang_module['forcedrelogin_note'];
+    }
+
     nv_jsonOutput([
         'status' => 'ok',
         'input' => nv_url_rewrite($page_url . '/username', true),
-        'mess' => $lang_module['editinfo_ok']
+        'mess' => $mess
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
     // Email
@@ -819,10 +830,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             $global_config['site_email']
         ], $row['email'], $lang_module['edit_mail_subject'], $message);
 
+        $mess = $lang_module['editinfo_ok'];
+        if ($nv_Request->get_bool('forcedrelogin', 'post', false)) {
+            forcedrelogin($edit_userid);
+            $mess .= '. ' . $lang_module['forcedrelogin_note'];
+        }
+
         nv_jsonOutput([
             'status' => 'ok',
             'input' => nv_url_rewrite($page_url . '/email', true),
-            'mess' => $lang_module['editinfo_ok']
+            'mess' => $mess
         ]);
     }
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password') {
@@ -898,10 +915,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         ], $row['email'], $lang_module['edit_mail_subject'], $message);
     }
 
+    $mess = $lang_module['editinfo_ok'];
+    if ($nv_Request->get_bool('forcedrelogin', 'post', false)) {
+        forcedrelogin($edit_userid);
+        $mess .= '. ' . $lang_module['forcedrelogin_note'];
+    }
+
     nv_jsonOutput([
         'status' => 'ok',
         'input' => nv_url_rewrite($page_url . '/basic', true),
-        'mess' => $lang_module['editinfo_ok']
+        'mess' => $mess
     ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question') {
     // Question
@@ -1168,6 +1191,22 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'status' => 'ok',
         'input' => nv_url_rewrite($page_url, true),
         'mess' => $lang_module['safe_activate_ok']
+    ]);
+} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'forcedrelogin') {
+    $nv_password = $nv_Request->get_title('nv_password', 'post', '');
+    if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'input' => 'nv_password',
+            'mess' => $lang_global['incorrect_password']
+        ]);
+    }
+
+    forcedrelogin($edit_userid);
+    nv_jsonOutput([
+        'status' => 'ok',
+        'input' => '',
+        'mess' => $lang_module['forcedrelogin_note']
     ]);
 }
 
