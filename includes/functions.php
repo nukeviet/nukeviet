@@ -1847,39 +1847,15 @@ function check_endurl_variables(&$request_query)
  * getPageUrl()
  *
  * @param string $page_url
- * @param bool   $query_check
- * @param bool   $abs_comp
+ * @param bool   $is_query_check
+ * @param bool   $is_abs_check
  * @param string $request_uri
  * @return false|string
  */
-function getPageUrl($page_url, $query_check, $abs_comp, &$request_uri)
+function getPageUrl($page_url, $is_query_check, $is_abs_check, &$request_uri = '')
 {
-    global $global_config;
-
     $url_rewrite = nv_url_rewrite($page_url, true);
     str_starts_with($url_rewrite, NV_MY_DOMAIN) && $url_rewrite = substr($url_rewrite, strlen(NV_MY_DOMAIN));
-
-    if ($global_config['request_uri_check'] == 'not') {
-        return NV_MAIN_DOMAIN . $url_rewrite;
-    }
-
-    $is_query_check = $is_abs_check = false;
-    if ($global_config['request_uri_check'] != 'page') {
-        if ($global_config['request_uri_check'] == 'query') {
-            $is_query_check = true;
-        } elseif ($global_config['request_uri_check'] == 'abs') {
-            $is_query_check = true;
-            $is_abs_check = true;
-        }
-    } else {
-        if (!empty($query_check)) {
-            $is_query_check = true;
-
-            if (!empty($abs_comp)) {
-                $is_abs_check = true;
-            }
-        }
-    }
 
     $url_rewrite_check = str_replace('&amp;', '&', $url_rewrite);
     $url_rewrite_check = urldecode($url_rewrite_check);
@@ -1933,22 +1909,42 @@ function getPageUrl($page_url, $query_check, $abs_comp, &$request_uri)
  */
 function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
 {
-    global $home;
-
-    $request_uri = '';
+    global $home, $global_config;
 
     if ($home) {
         $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-        $url = getPageUrl($page_url, true, true, $request_uri);
+        $query_check = true;
+        $abs_comp = true;
+    }
 
-        if ($request_uri != NV_BASE_SITEURL and empty($url)) {
-            nv_redirect_location($page_url);
+    if ($global_config['request_uri_check'] == 'not') {
+        str_starts_with($page_url, NV_MY_DOMAIN) && $page_url = substr($page_url, strlen(NV_MY_DOMAIN));
+        return NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    }
+
+    $is_query_check = $is_abs_check = false;
+    if ($global_config['request_uri_check'] != 'page') {
+        if ($global_config['request_uri_check'] == 'query') {
+            $is_query_check = true;
+        } elseif ($global_config['request_uri_check'] == 'abs') {
+            $is_query_check = true;
+            $is_abs_check = true;
         }
     } else {
-        $url = getPageUrl($page_url, $query_check, $abs_comp, $request_uri);
-        if (empty($url)) {
-            nv_redirect_location($page_url);
+        if (!empty($query_check)) {
+            $is_query_check = true;
+
+            if (!empty($abs_comp)) {
+                $is_abs_check = true;
+            }
         }
+    }
+
+    $request_uri = '';
+    $url = getPageUrl($page_url, $is_query_check, $is_abs_check, $request_uri);
+
+    if (empty($url) and (!$home or ($home and $request_uri != NV_BASE_SITEURL))) {
+        nv_redirect_location($page_url);
     }
 
     return $url;
