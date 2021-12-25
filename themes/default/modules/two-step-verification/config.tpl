@@ -11,7 +11,7 @@
         <hr />
         {LANG.cfg_step1_manual} <a href="#manualsecretkey" data-toggle="manualsecretkey">{LANG.cfg_step1_manual1}</a> {LANG.cfg_step1_manual2}.
     </div>
-    <div class="hidden" id="manualsecretkey" title="{LANG.secretkey}">
+    <div class="hidden" id="manualsecretkey" title="{LANG.setup_key}">
         <div class="twostep-manualsecretkey">
             <div class="text-center">
                 <strong>{SECRETKEY}</strong>

@@ -19,7 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All righ
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['confirm_password'] = 'Nhập mật khẩu xác nhận để tiếp tục';
+$lang_module['confirm_password'] = 'Nhập mật khẩu để tiếp tục';
 $lang_module['confirm_password_info'] = 'Để thực hiện tính năng này, bạn cần xác nhận lại mật khẩu, điền mật khẩu của bạn vào ô bên dưới và nhấp Xác nhận';
 $lang_module['confirm'] = 'Xác nhận';
 $lang_module['secretkey'] = 'Mã bí mật';
@@ -27,9 +27,9 @@ $lang_module['wrong_confirm'] = 'Mã không chính xác, vui lòng nhập lại'
 
 $lang_module['cfg_step1'] = 'Bước 1: Quét mã QR';
 $lang_module['cfg_step1_manual'] = 'Hãy quét QR-code bằng ứng dụng hỗ trợ xác thực hai bước trên điện thoại của bạn (ví dụ: Google Authenticator). Nếu không thể quét QR-code, hãy';
-$lang_module['cfg_step1_manual1'] = 'nhập đoạn mã này';
-$lang_module['cfg_step1_manual2'] = 'thủ công';
-$lang_module['cfg_step1_note'] = 'Chú ý giữ bí mật mã này';
+$lang_module['cfg_step1_manual1'] = 'click vào đây';
+$lang_module['cfg_step1_manual2'] = 'để nhập Khóa thiết lập thủ công';
+$lang_module['cfg_step1_note'] = 'Chú ý: Bạn nên giữ bí mật khóa này';
 $lang_module['cfg_step2_info'] = 'Nếu thao tác trên thành công, ứng dụng sẽ hiển thị một chuỗi gồm 6 chữ số. Hãy nhập chuỗi đó vào ô bên dưới để xác nhận.';
 $lang_module['cfg_step2_info2'] = 'Mã 6 chữ số';
 $lang_module['cfg_step2'] = 'Bước 2: Nhập mã từ ứng dụng';
@@ -41,8 +41,8 @@ $lang_module['deactive_2step'] = 'Tắt';
 $lang_module['backupcode_2step'] = 'Bạn có <strong>%d</strong> mã dự phòng chưa sử dụng';
 $lang_module['backupcode_2step_view'] = 'Xem mã dự phòng';
 $lang_module['backupcode_2step_note'] = 'Chú ý: Vui lòng lưu trữ mã dự phòng cẩn thận! Nếu bị mất điện thoại, bạn có thể sử dụng chúng để xác minh quyền truy cập tài khoản. Nếu quên mã và mất điện thoại, bạn sẽ không thể đăng nhập vào tài khoản của mình.';
-$lang_module['turnoff2step'] = 'Tắt xác thực hai bước';
-$lang_module['turnon2step'] = 'Bật xác thực hai bước';
+$lang_module['turnoff2step'] = 'Click để tắt xác thực hai bước';
+$lang_module['turnon2step'] = 'Click để bật xác thực hai bước';
 $lang_module['creat_other_code'] = 'Tạo lại mã dự phòng';
 
 $lang_module['email_subject'] = 'Thông báo bảo mật';
@@ -55,3 +55,4 @@ $lang_module['deactive_mess'] = 'Bạn thực sự muốn tắt xác thực hai 
 $lang_module['setup_2step'] = 'Thiết lập xác thực hai bước';
 $lang_module['forcedrelogin'] = 'Buộc đăng nhập lại ở mọi nơi';
 $lang_module['forcedrelogin_note'] = 'Bạn đã thoát khỏi tài khoản thành viên. Vui lòng đăng nhập lại';
+$lang_module['setup_key'] = 'Khóa thiết lập';
