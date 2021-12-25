@@ -40,11 +40,7 @@ if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
 
 $nv_ajax_login = $nv_Request->get_int('nv_ajax_login', 'post', 0);
 if ($nv_ajax_login) {
-    $info = $lang_module['logout_ok'];
-    include NV_ROOTDIR . '/includes/header.php';
-    echo $info;
-    include NV_ROOTDIR . '/includes/footer.php';
-    exit;
+    nv_htmlOutput($lang_module['logout_ok']);
 }
 
 $page_title = $module_info['site_title'];
