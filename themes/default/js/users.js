@@ -548,6 +548,7 @@ $(function() {
 
     $('body').on('click', '[data-toggle=login2step_change]', function(e) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         login2step_change(this)
     });
 

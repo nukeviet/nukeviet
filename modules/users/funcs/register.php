@@ -371,7 +371,7 @@ if ($checkss == $array_register['checkss']) {
 
             $array = [
                 'status' => 'ok',
-                'input' => '',
+                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true),
                 'mess' => $info
             ];
             if (defined('SSO_REGISTER_SECRET')) {
