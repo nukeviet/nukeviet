@@ -371,6 +371,30 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
         $array_config_cross[$cfg_key] = empty($array_config_cross[$cfg_key]) ? '' : json_encode(array_unique($array_config_cross[$cfg_key]));
     }
 
+    // Lấy các request có biến được chấp nhận
+    $crosssite_allowed_variables = $nv_Request->get_textarea('crosssite_allowed_variables', '', NV_ALLOWED_HTML_TAGS, true);
+    $crosssite_allowed_variables = explode('<br />', strip_tags($crosssite_allowed_variables, '<br>'));
+    $res = [];
+    if (!empty($crosssite_allowed_variables)) {
+        foreach ($crosssite_allowed_variables as $variable) {
+            if (!empty($variable)) {
+                parse_str($variable, $result);
+                $_res = [];
+                foreach ($result as $k => $v) {
+                    if (preg_match('/^[a-zA-Z0-9\_]+$/', $k) and (empty($v) or preg_match('/^[a-zA-Z0-9\-\_\.\@]+$/', $v))) {
+                        $_res[$k] = $v;
+                    }
+                }
+
+                if (!empty($_res)) {
+                    $res[] = $_res;
+                }
+            }
+        }
+    }
+
+    $array_config_cross['crosssite_allowed_variables'] = empty($res) ? '' : json_encode($res);
+
     $array_config_cross['allow_null_origin'] = (int) $nv_Request->get_bool('allow_null_origin', 'post', false);
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='sys' AND module='global' AND config_name=:config_name");
@@ -393,6 +417,16 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
     $array_config_cross['crossadmin_valid_ips'] = empty($global_config['crossadmin_valid_ips']) ? '' : implode("\n", $global_config['crossadmin_valid_ips']);
     $array_config_cross['allow_null_origin'] = $global_config['allow_null_origin'];
     $array_config_cross['ip_allow_null_origin'] = empty($global_config['ip_allow_null_origin']) ? '' : implode("\n", $global_config['ip_allow_null_origin']);
+
+    if (!empty($global_config['crosssite_allowed_variables'])) {
+        $res = [];
+        foreach ($global_config['crosssite_allowed_variables'] as $variable) {
+            $res[] = http_build_query($variable);
+        }
+        $array_config_cross['crosssite_allowed_variables'] = implode("\n", $res);
+    } else {
+        $array_config_cross['crosssite_allowed_variables'] = '';
+    }
 }
 
 // Xử lý thiết lập CSP

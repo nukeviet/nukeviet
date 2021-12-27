@@ -668,20 +668,25 @@
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover table-first">
+                        <table class="table table-bordered table-first">
                             <colgroup>
                                 <col style="width: 40%" />
                                 <col style="width: 60%" />
                             </colgroup>
-                            <tbody>
-                                <tr>
+                            <thead>
+                                <tr class="bg-primary">
                                     <td><strong>{LANG.cors_site_restrict}</strong></td>
                                     <td>
-                                        <label>
-                                            <input type="checkbox" value="1" name="crosssite_restrict" {CONFIG_CROSS.crosssite_restrict}>
+                                        <label class="m-bottom-none">
+                                            <input class="form-control" type="checkbox" value="1" name="crosssite_restrict" {CONFIG_CROSS.crosssite_restrict}>
                                             {LANG.cors_site_restrict_help}
                                         </label>
                                     </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background-color:#f9f9f9">
+                                    <td colspan="2"><i class="fa fa-star"></i> <strong>{LANG.cors_exceptions}:</strong></td>
                                 </tr>
                                 <tr>
                                     <td><strong>{LANG.cors_site_valid_domains}</strong></td>
@@ -698,13 +703,33 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><strong>{LANG.cors_site_allowed_variables}</strong></td>
+                                    <td>
+                                        <textarea rows="3" class="form-control" name="crosssite_allowed_variables">{CONFIG_CROSS.crosssite_allowed_variables}</textarea>
+                                        <div class="form-text text-muted">{LANG.cors_site_allowed_variables_note}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <thead>
+                                <tr class="bg-primary">
                                     <td><strong>{LANG.cors_admin_restrict}</strong></td>
                                     <td>
-                                        <label>
-                                            <input type="checkbox" value="1" name="crossadmin_restrict" {CONFIG_CROSS.crossadmin_restrict}>
+                                        <label class="m-bottom-none">
+                                            <input class="form-control" type="checkbox" value="1" name="crossadmin_restrict" {CONFIG_CROSS.crossadmin_restrict}>
                                             {LANG.cors_admin_restrict_help}
                                         </label>
                                     </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background-color:#f9f9f9">
+                                    <td colspan="2"><i class="fa fa-star"></i> <strong>{LANG.cors_exceptions}:</strong></td>
                                 </tr>
                                 <tr>
                                     <td><strong>{LANG.cors_admin_valid_domains}</strong></td>
@@ -720,6 +745,19 @@
                                         <div class="form-text text-muted">{LANG.cors_valid_ips_help}</div>
                                     </td>
                                 </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-striped table-bordered">
+                            <colgroup>
+                                <col style="width: 40%" />
+                                <col style="width: 60%" />
+                            </colgroup>
+                            <thead>
+                                <tr class="bg-primary">
+                                    <td colspan="2"><strong>{LANG.global_config}</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <tr>
                                     <td><strong>{LANG.allow_null_origin}</strong></td>
                                     <td>
@@ -734,17 +772,13 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2" class="text-center">
-                                        <input type="hidden" name="checkss" value="{CHECKSS}" />
-                                        <input type="submit" value="{GLANG.submit}" name="submitcors" class="btn btn-primary w100"/>
-                                    </td>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
-                    <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                    <div class="text-center">
+                        <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
+                        <input type="hidden" name="checkss" value="{CHECKSS}" />
+                        <input type="submit" value="{GLANG.submit}" name="submitcors" class="btn btn-primary w100"/>
+                    </div>
                 </form>
             </div>
         </div>

@@ -204,6 +204,7 @@ class Request
     protected $restrictCrossDomain = true;
     protected $validCrossDomains = [];
     protected $validCrossIPs = [];
+    protected $crossAllowedVariables = [];
 
     protected $isOriginValid = false;
     protected $isRefererValid = false;
@@ -276,14 +277,17 @@ class Request
             $this->restrictCrossDomain = !empty($config['crossadmin_restrict']) ? true : false;
             $this->validCrossDomains = !empty($config['crossadmin_valid_domains']) ? ((array) $config['crossadmin_valid_domains']) : [];
             $this->validCrossIPs = !empty($config['crossadmin_valid_ips']) ? ((array) $config['crossadmin_valid_ips']) : [];
+            $this->crossAllowedVariables = !empty($config['crossadmin_allowed_variables']) ? ((array) $config['crossadmin_allowed_variables']) : [];
         } elseif (defined('NV_REMOTE_API')) {
             $this->restrictCrossDomain = false;
             $this->validCrossDomains = [];
             $this->validCrossIPs = [];
+            $this->crossAllowedVariables = [];
         } else {
             $this->restrictCrossDomain = !empty($config['crosssite_restrict']) ? true : false;
             $this->validCrossDomains = !empty($config['crosssite_valid_domains']) ? ((array) $config['crosssite_valid_domains']) : [];
             $this->validCrossIPs = !empty($config['crosssite_valid_ips']) ? ((array) $config['crosssite_valid_ips']) : [];
+            $this->crossAllowedVariables = !empty($config['crosssite_allowed_variables']) ? ((array) $config['crosssite_allowed_variables']) : [];
         }
 
         $this->isRestrictDomain = !empty($config['domains_restrict']) ? true : false;
@@ -490,7 +494,30 @@ class Request
                 $this->isIpValid = true;
             }
             if (!(($this->isRefererValid and (empty($this->origin) or $this->isOriginValid)) or $this->isIpValid)) {
-                trigger_error(Request::REQUEST_BLOCKED, 256);
+                $crossAllowedVariables = false;
+                if (!empty($this->crossAllowedVariables)) {
+                    foreach ($this->crossAllowedVariables as $variables) {
+                        $intersect = array_intersect_key($variables, $_POST);
+                        if (count($intersect) != count($variables)) {
+                            continue;
+                        }
+                        $allowed = true;
+                        foreach ($intersect as $k => $v) {
+                            if (!empty($v) and $v != $_POST[$k]) {
+                                $allowed = false;
+                                break;
+                            }
+                        }
+                        if ($allowed) {
+                            $crossAllowedVariables = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!$crossAllowedVariables) {
+                    trigger_error(Request::REQUEST_BLOCKED, 256);
+                }
             }
         }
     }
