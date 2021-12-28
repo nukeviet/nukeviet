@@ -39,6 +39,10 @@ if (!defined('NV_DEBUG')) {
 class Error
 {
     const INCORRECT_IP = 'Incorrect IP address specified';
+    const DISPLAY_ERROR_LIST_DEFAULT = E_ALL;
+    const LOG_ERROR_LIST_DEFAULT = E_ALL | E_STRICT;
+    const SEND_ERROR_LIST_DEFAULT = E_USER_ERROR;
+    const ERROR_LOG_PATH_DEFAULT = 'data/logs/error_logs';
     const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
     const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
 
@@ -103,23 +107,14 @@ class Error
      */
     public function __construct($config)
     {
-        $this->log_errors_list = $this->parse_error_num((int) $config['log_errors_list']);
-        $this->display_errors_list = $this->parse_error_num((int) $config['display_errors_list']);
-        $this->send_errors_list = $this->parse_error_num((int) $config['send_errors_list']);
-        $this->error_log_path = $this->get_error_log_path((string) $config['error_log_path']);
-        $this->error_send_mail = (string) $config['error_send_email'];
-        $this->error_set_logs = $config['error_set_logs'];
-
-        if (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) {
-            $this->error_log_filename = $config['error_log_filename'];
-        } else {
-            $this->error_log_filename = Error::LOG_FILE_NAME_DEFAULT;
-        }
-        if (isset($config['error_log_fileext']) and preg_match('/[a-z]+/i', $config['error_log_fileext'])) {
-            $this->error_log_fileext = $config['error_log_fileext'];
-        } else {
-            $this->error_log_fileext = Error::LOG_FILE_EXT_DEFAULT;
-        }
+        $this->log_errors_list = $this->parse_error_num((int) (isset($config['log_errors_list']) ? $config['log_errors_list'] : Error::LOG_ERROR_LIST_DEFAULT));
+        $this->display_errors_list = $this->parse_error_num((int) (isset($config['display_errors_list']) ? $config['display_errors_list'] : Error::DISPLAY_ERROR_LIST_DEFAULT));
+        $this->send_errors_list = $this->parse_error_num((int) (isset($config['send_errors_list']) ? $config['send_errors_list'] : Error::SEND_ERROR_LIST_DEFAULT));
+        $this->error_log_path = $this->get_error_log_path((string) (isset($config['error_log_path']) ? $config['error_log_path'] : Error::ERROR_LOG_PATH_DEFAULT));
+        $this->error_send_mail = !empty($config['error_send_email']) ? (string) $config['error_send_email'] : '';
+        $this->error_set_logs = isset($config['error_set_logs']) ? (bool) $config['error_set_logs'] : true;
+        $this->error_log_filename = (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) ? $config['error_log_filename'] : Error::LOG_FILE_NAME_DEFAULT;
+        $this->error_log_fileext = (isset($config['error_log_fileext']) and preg_match('/[a-z]+/i', $config['error_log_fileext'])) ? $config['error_log_fileext'] : Error::LOG_FILE_EXT_DEFAULT;
 
         /*
          * Prefix của file log
@@ -361,12 +356,6 @@ class Error
             file_put_contents($error_file, $content, FILE_APPEND);
         }
 
-        $strEncodedEmail = '';
-        $strlen = strlen($this->error_send_mail);
-        for ($i = 0; $i < $strlen; ++$i) {
-            $strEncodedEmail .= '&#' . ord(substr($this->error_send_mail, $i)) . ';';
-        }
-
         header('Content-Type: text/html; charset=utf-8');
         if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
             header('X-Frame-Options: SAMEORIGIN');
@@ -387,7 +376,18 @@ class Error
         $_info .= '	<span style="color: #1a264e;font-weight: bold;">' . $this->errstr . "</span><br />\n";
         $_info .= '	<span style="color: #1a264e;">(Code: ' . $error_code2 . ")</span></div>\n";
         $_info .= "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
-        $_info .= '	If you have any questions about this site,<br />please <a href="mailto:' . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
+        $_info .= '	If you have any questions about this site,<br />please ';
+        if (!empty($this->error_send_mail)) {
+            $strEncodedEmail = '';
+            $strlen = strlen($this->error_send_mail);
+            for ($i = 0; $i < $strlen; ++$i) {
+                $strEncodedEmail .= '&#' . ord(substr($this->error_send_mail, $i)) . ';';
+            }
+            $_info .= '<a href="mailto:' . $strEncodedEmail . '">contact</a>';
+        } else {
+            $_info .= 'contact';
+        }
+        $_info .= " the site administrator for more information</div>\n";
         $_info .= "</body>\n";
         $_info .= '</html>';
         exit($_info);

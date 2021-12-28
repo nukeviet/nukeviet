@@ -29,7 +29,13 @@ $editor = false;
 
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
+if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php')) {
+    require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
+}
 require NV_ROOTDIR . '/vendor/autoload.php';
+
+// Ket noi voi class Error_handler
+$ErrorHandler = new NukeViet\Core\Error($global_config);
 
 $nv_Server = new NukeViet\Core\Server();
 
@@ -49,15 +55,10 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
     exit();
 }
 
-require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
-
 if (empty($global_config['my_domains'])) {
-    $global_config['my_domains'] = [
-        NV_SERVER_NAME
-    ];
+    $global_config['my_domains'] = [NV_SERVER_NAME];
 } else {
-    $global_config['my_domains'] = array_map('trim', explode(',', $global_config['my_domains']));
-    $global_config['my_domains'] = array_map('strtolower', $global_config['my_domains']);
+    $global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
 }
 
 define('NV_STATIC_URL', !empty($global_config['nv_static_url']) ? '//' . $global_config['nv_static_url'] . '/' : NV_BASE_SITEURL);
@@ -82,7 +83,7 @@ define('NV_GROUPSDETAIL_GLOBALTABLE', $db_config['prefix'] . '_users_groups_deta
 
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
-    exit('Error: Your IP address is not correct');
+    trigger_error('Error! Your IP address is not correct!', 256);
 }
 
 // Xac dinh IP của Zalo-webhook
@@ -122,9 +123,6 @@ $client_info['ip'] = NV_CLIENT_IP;
 
 // Mui gio
 require NV_ROOTDIR . '/includes/timezone.php';
-
-// Ket noi voi class Error_handler
-$ErrorHandler = new NukeViet\Core\Error($global_config);
 
 if (empty($global_config['allow_sitelangs'])) {
     trigger_error('Error! Language variables is empty!', 256);
