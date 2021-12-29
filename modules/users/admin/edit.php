@@ -79,10 +79,12 @@ if ($nv_Request->isset_request('psr', 'post')) {
         $type = $nv_Request->get_int('type', 'post', 0);
         if ($type == 1 or $type == 2) {
             try {
-                $db->query('UPDATE ' . NV_MOD_TABLE . ' SET pass_reset_request = ' . $type . ' WHERE userid=' . $userid);
+                $db->query('UPDATE ' . NV_MOD_TABLE . ' SET pass_reset_request = ' . $type . ', last_update = ' . NV_CURRENTTIME . ' WHERE userid=' . $userid);
             } catch (PDOException $e) {
                 trigger_error(print_r($e, true));
             }
+
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'Change password request', 'userid ' . $userid, $admin_info['userid']);
 
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $pass_reset_request = $type == 2 ? $lang_module['pass_reset_request2_info'] : $lang_module['pass_reset_request1_info'];

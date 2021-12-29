@@ -75,7 +75,7 @@ if (empty($row['active2step'])) {
     // Tắt xác thực hai bước
     if ($nv_Request->isset_request('turnoff2step', 'post')) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid']);
-        $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='' WHERE userid=" . $row['userid']);
+        $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='', last_update=" . NV_CURRENTTIME . " WHERE userid=" . $row['userid']);
 
         // Gửi email thông báo
         if (!empty($global_users_config['admin_email'])) {

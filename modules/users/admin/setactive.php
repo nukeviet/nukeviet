@@ -49,7 +49,7 @@ if (!defined('NV_IS_USER_FORUM') and md5(NV_CHECK_SESSION . '_' . $module_name .
                 $active = 1;
             }
 
-            $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET active=' . $active . ' WHERE userid=' . $userid;
+            $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET active=' . $active . ', last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $userid;
             $result = $db->query($sql);
 
             $note = ($active) ? $lang_module['active_users'] : $lang_module['unactive_users'];
