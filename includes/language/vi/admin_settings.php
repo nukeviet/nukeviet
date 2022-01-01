@@ -448,3 +448,7 @@ $lang_module['request_uri_check_not'] = 'Không kiểm tra';
 $lang_module['request_uri_check_path'] = 'Chỉ kiểm tra phần path của URL';
 $lang_module['request_uri_check_query'] = 'Kiểm tra các phần path và query của URL';
 $lang_module['request_uri_check_abs'] = 'Kiểm tra URL với độ chính xác tuyệt đối';
+$lang_module['resource_preload'] = 'Áp dụng tải trước tài nguyên';
+$lang_module['resource_preload_not'] = 'Không áp dụng';
+$lang_module['resource_preload_headers'] = 'Thông qua tiêu đề phản hồi HTTP';
+$lang_module['resource_preload_html'] = 'Thông qua thẻ HTML &lt;link&gt;';

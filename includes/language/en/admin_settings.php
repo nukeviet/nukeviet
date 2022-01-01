@@ -439,3 +439,7 @@ $lang_module['request_uri_check_not'] = 'Not check';
 $lang_module['request_uri_check_path'] = 'Check only path part of URL';
 $lang_module['request_uri_check_query'] = 'Check path and query parts of URL';
 $lang_module['request_uri_check_abs'] = 'Check URL with absolute precision';
+$lang_module['resource_preload'] = 'Apply resource preloading';
+$lang_module['resource_preload_not'] = 'Do not apply';
+$lang_module['resource_preload_headers'] = 'Via HTTP response headers';
+$lang_module['resource_preload_html'] = 'Via HTML &lt;link&gt; tag';

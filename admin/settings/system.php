@@ -111,6 +111,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_global['my_domains'] = implode(',', $array_config_global['my_domains']);
 
         $array_config_global['gzip_method'] = $nv_Request->get_int('gzip_method', 'post');
+        $array_config_global['resource_preload'] = $nv_Request->get_int('resource_preload', 'post');
         $array_config_global['lang_multi'] = $nv_Request->get_int('lang_multi', 'post');
 
         $array_config_global['notification_active'] = $nv_Request->get_int('notification_active', 'post');
@@ -357,6 +358,16 @@ if (defined('NV_IS_GODADMIN')) {
         $xtpl->assign('TIMEZONESELECTED', ($site_timezone_i == $array_config_global['site_timezone']) ? "selected='selected'" : '');
         $xtpl->assign('TIMEZONELANGVALUE', $site_timezone_i);
         $xtpl->parse('main.system.opsite_timezone');
+    }
+
+    $preload_opts = [$lang_module['resource_preload_not'], $lang_module['resource_preload_headers'], $lang_module['resource_preload_html']];
+    foreach ($preload_opts as $k => $name) {
+        $xtpl->assign('PRELOAD', [
+            'val' => $k,
+            'sel' => $k == $array_config_global['resource_preload'] ? ' selected="selected"' : '',
+            'name' => $name
+        ]);
+        $xtpl->parse('main.system.resource_preload');
     }
 
     $array_config_define['nv_debug'] = empty($array_config_define['nv_debug']) ? '' : ' checked="checked"';

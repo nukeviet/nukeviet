@@ -133,6 +133,15 @@
                     <td><input type="checkbox" value="1" name="gzip_method" {CHECKED_GZIP_METHOD} /></td>
                 </tr>
                 <tr>
+                    <td><strong>{LANG.resource_preload}</strong></td>
+                    <td>
+                    <select name="resource_preload" class="form-control w300">
+                        <!-- BEGIN: resource_preload -->
+                        <option value="{PRELOAD.val}" {PRELOAD.sel}>{PRELOAD.name}</option>
+                        <!-- END: resource_preload -->
+                    </select></td>
+                </tr>
+                <tr>
                     <td><strong>{LANG.my_domains}</strong></td>
                     <td><input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" style="width: 450px"/></td>
                 </tr>

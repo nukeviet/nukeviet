@@ -99,6 +99,7 @@ $global_config['recaptcha_ver'] = 2;
 $global_config['remote_api_access'] = 0;
 $global_config['remote_api_log'] = 1;
 $global_config['request_uri_check'] = 'page';
+$global_config['resource_preload'] = 1;
 $global_config['rewrite_enable'] = 1;
 $global_config['rewrite_endurl'] = '/';
 $global_config['rewrite_exturl'] = '.html';
