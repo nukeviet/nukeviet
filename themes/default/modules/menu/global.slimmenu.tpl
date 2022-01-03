@@ -3,7 +3,7 @@
     <!-- BEGIN: icon -->
     <img src="{MENUTREE.icon}" alt="{MENUTREE.note}" />&nbsp;
     <!-- END: icon -->
-    <a title="{MENUTREE.note}" href="{MENUTREE.link}" {MENUTREE.target}>{MENUTREE.title_trim}</a>
+    <a title="{MENUTREE.note}" href="{MENUTREE.link}" rel="dofollow" {MENUTREE.target}>{MENUTREE.title_trim}</a>
     <!-- BEGIN: tree_content -->
     <ul>
         {TREE_CONTENT}
@@ -16,14 +16,14 @@
 
 <ul class="slimmenu">
     <li>
-        <a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> <span class="hidden-sm"> {LANG.Home} </span></a>
+        <a title="{LANG.Home}" href="{THEME_SITE_HREF}" rel="dofollow"><em class="fa fa-lg fa-home">&nbsp;</em> <span class="hidden-sm"> {LANG.Home} </span></a>
     </li>
     <!-- BEGIN: loopcat1 -->
     <li {CAT1.class}>
         <!-- BEGIN: icon -->
         <img src="{CAT1.icon}" alt="{CAT1.note}" />&nbsp;
         <!-- END: icon -->
-        <a title="{CAT1.note}" href="{CAT1.link}" {CAT1.target}>{CAT1.title_trim}</a>
+        <a title="{CAT1.note}" href="{CAT1.link}" rel="dofollow" {CAT1.target}>{CAT1.title_trim}</a>
         <!-- BEGIN: cat2 -->
         <ul>
             {HTML_CONTENT}

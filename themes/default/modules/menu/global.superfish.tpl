@@ -1,6 +1,6 @@
 <!-- BEGIN: tree -->
 <li>
-    <a title="{MENUTREE.note}" href="{MENUTREE.link}" class="sf-with-ul" {MENUTREE.target}><strong>{MENUTREE.title}</strong></a>
+    <a title="{MENUTREE.note}" href="{MENUTREE.link}" rel="dofollow" class="sf-with-ul" {MENUTREE.target}><strong>{MENUTREE.title}</strong></a>
     <!-- BEGIN: tree_content -->
     <ul>
         {TREE_CONTENT}
@@ -35,7 +35,7 @@
     <ul id="sample-menu-4" class="sf-menu sf-navbar sf-js-enabled sf-shadow">
         <!-- BEGIN: loopcat1 -->
         <li {CAT1.class}>
-            <a title="{CAT1.note}" class="sf-with-ul" href="{CAT1.link}" {CAT1.target}><strong>{CAT1.title}</strong></a>
+            <a title="{CAT1.note}" class="sf-with-ul" href="{CAT1.link}" rel="dofollow" {CAT1.target}><strong>{CAT1.title}</strong></a>
             <!-- BEGIN: cat2 -->
             <ul>
                 {HTML_CONTENT}

@@ -1,6 +1,6 @@
 <!-- BEGIN: tree -->
 <li>
-    <a title="{MENUTREE.note}" href="{MENUTREE.link}" {MENUTREE.target}>{MENUTREE.title}</a>
+    <a title="{MENUTREE.note}" href="{MENUTREE.link}" rel="dofollow" {MENUTREE.target}>{MENUTREE.title}</a>
     <!-- BEGIN: tree_content -->
     <ul>
         {TREE_CONTENT}
@@ -38,7 +38,7 @@
 <ul id="navigation{MENUID}">
     <!-- BEGIN: loopcat1 -->
     <li {CAT1.class}>
-        <a title="{CAT1.note}" href="{CAT1.link}" {CAT1.target}>{CAT1.title}</a>
+        <a title="{CAT1.note}" href="{CAT1.link}" rel="dofollow" {CAT1.target}>{CAT1.title}</a>
         <!-- BEGIN: cat2 -->
         <ul>
             {HTML_CONTENT}

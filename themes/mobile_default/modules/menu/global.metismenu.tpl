@@ -1,6 +1,6 @@
 <!-- BEGIN: tree -->
 <li>
-    <a title="{MENUTREE.note}" href="{MENUTREE.link}" class="sf-with-ul" {MENUTREE.target}>{MENUTREE.title_trim}</a>
+    <a title="{MENUTREE.note}" href="{MENUTREE.link}" rel="dofollow" class="sf-with-ul" {MENUTREE.target}>{MENUTREE.title_trim}</a>
     <!-- BEGIN: tree_content -->
     <ul>
         {TREE_CONTENT}
@@ -20,7 +20,7 @@
             <nav class="sidebar-nav">
                 <ul>
                     <!-- BEGIN: loopcat1 -->
-                    <li><a title="{CAT1.note}" href="{CAT1.link}" {CAT1.target}>{CAT1.title_trim}</a><!-- BEGIN: expand --><span class="fa arrow expand"></span><!-- END: expand -->
+                    <li><a title="{CAT1.note}" href="{CAT1.link}" rel="dofollow" {CAT1.target}>{CAT1.title_trim}</a><!-- BEGIN: expand --><span class="fa arrow expand"></span><!-- END: expand -->
                         <!-- BEGIN: cat2 -->
                         <ul>
                             {HTML_CONTENT}
