@@ -443,3 +443,5 @@ $lang_module['resource_preload'] = 'Appliquer le préchargement des ressources';
 $lang_module['resource_preload_not'] = 'Ne pas appliquer';
 $lang_module['resource_preload_headers'] = 'Via les en-têtes de réponse HTTP';
 $lang_module['resource_preload_html'] = 'Via la balise HTML &lt;link&gt;';
+$lang_module['XSSsanitize'] = 'Filtrez les codes HTML dangereux avant de soumettre le formulaire dans la zone d\'interaction utilisateur';
+$lang_module['admin_XSSsanitize'] = 'Filtrez les codes HTML dangereux avant de soumettre le formulaire dans la zone d\'administration';

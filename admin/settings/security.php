@@ -66,6 +66,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     $array_config_global['admin_2step_opt'] = $nv_Request->get_typed_array('admin_2step_opt', 'post', 'title', []);
     $array_config_global['admin_2step_default'] = $nv_Request->get_title('admin_2step_default', 'post', '');
     $array_config_global['domains_restrict'] = (int) $nv_Request->get_bool('domains_restrict', 'post', false);
+    $array_config_global['XSSsanitize'] = (int) $nv_Request->get_bool('XSSsanitize', 'post', false);
+    $array_config_global['admin_XSSsanitize'] = (int) $nv_Request->get_bool('admin_XSSsanitize', 'post', false);
 
     $domains = $nv_Request->get_textarea('domains_whitelist', '', NV_ALLOWED_HTML_TAGS, true);
     $domains = explode('<br />', strip_tags($domains, '<br>'));
@@ -808,6 +810,8 @@ if (defined('NV_IS_GODADMIN')) {
 
     $xtpl->assign('IS_LOGIN_BLOCKER', ($array_config_global['is_login_blocker']) ? ' checked="checked"' : '');
     $xtpl->assign('DOMAINS_RESTRICT', ($array_config_global['domains_restrict']) ? ' checked="checked"' : '');
+    $xtpl->assign('XSSSANITIZE', ($array_config_global['XSSsanitize']) ? ' checked="checked"' : '');
+    $xtpl->assign('ADMIN_XSSSANITIZE', ($array_config_global['admin_XSSsanitize']) ? ' checked="checked"' : '');
     $xtpl->assign('LOGIN_NUMBER_TRACKING', $array_config_global['login_number_tracking']);
     $xtpl->assign('LOGIN_TIME_TRACKING', $array_config_global['login_time_tracking']);
     $xtpl->assign('LOGIN_TIME_BAN', $array_config_global['login_time_ban']);

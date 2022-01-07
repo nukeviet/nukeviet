@@ -123,6 +123,18 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><strong>{LANG.XSSsanitize}</strong></td>
+                                    <td>
+                                        <input type="checkbox" name="XSSsanitize" value="1"{XSSSANITIZE}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.admin_XSSsanitize}</strong></td>
+                                    <td>
+                                        <input type="checkbox" name="admin_XSSsanitize" value="1"{ADMIN_XSSSANITIZE}>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td><strong>{LANG.request_uri_check}</strong></td>
                                     <td>
                                         <select name="request_uri_check" class="form-control w300">

@@ -271,8 +271,17 @@ function reCaptcha2Recreate(obj) {
     })
 }
 
+function formXSSsanitize(form) {
+    $(form).find("input, select, textarea").not(":submit, :reset, :image, :disabled").not('[data-sanitize-ignore]').each(function() {
+        $(this).val(DOMPurify.sanitize($(this).val(), {}))
+    })
+}
+
 function btnClickSubmit(event, form) {
     event.preventDefault();
+    if (XSSsanitize) {
+        formXSSsanitize(form)
+    }
     if ($(form).data('recaptcha3')) {
         reCaptchaExecute(form, function() {
             $(form).submit()
@@ -539,8 +548,8 @@ $(function() {
         $(this).data('redirect') ? loginForm($(this).data('redirect')) : loginForm()
     });
 
-    //Captcha
-    $('body').on('click', '[data-captcha] [type=submit], [data-recaptcha2] [type=submit], [data-recaptcha3] [type=submit]', function(e) {
+    //XSSsanitize + Captcha
+    $('body').on('click', '[type=submit]:not([name])', function(e) {
         btnClickSubmit(e, $(this).parents('form'))
     });
 

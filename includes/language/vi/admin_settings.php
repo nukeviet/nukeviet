@@ -452,3 +452,5 @@ $lang_module['resource_preload'] = 'Áp dụng tải trước tài nguyên';
 $lang_module['resource_preload_not'] = 'Không áp dụng';
 $lang_module['resource_preload_headers'] = 'Thông qua tiêu đề phản hồi HTTP';
 $lang_module['resource_preload_html'] = 'Thông qua thẻ HTML &lt;link&gt;';
+$lang_module['XSSsanitize'] = 'Lọc các mã HTML nguy hiểm trước khi gửi biểu mẫu trong khu vực tương tác với người dùng';
+$lang_module['admin_XSSsanitize'] = 'Lọc các mã HTML nguy hiểm trước khi gửi biểu mẫu trong khu vực quản trị';

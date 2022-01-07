@@ -443,3 +443,5 @@ $lang_module['resource_preload'] = 'Apply resource preloading';
 $lang_module['resource_preload_not'] = 'Do not apply';
 $lang_module['resource_preload_headers'] = 'Via HTTP response headers';
 $lang_module['resource_preload_html'] = 'Via HTML &lt;link&gt; tag';
+$lang_module['XSSsanitize'] = 'Filter dangerous HTML codes before submitting the form in the user interaction area';
+$lang_module['admin_XSSsanitize'] = 'Filter dangerous HTML codes before submitting the form in the admin area';
