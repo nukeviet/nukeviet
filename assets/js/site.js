@@ -272,7 +272,7 @@ function reCaptcha2Recreate(obj) {
 }
 
 function formXSSsanitize(form) {
-    $(form).find("input, select, textarea").not(":submit, :reset, :image, :disabled").not('[data-sanitize-ignore]').each(function() {
+    $(form).find("input, textarea").not(":submit, :reset, :image, :file, :disabled").not('[data-sanitize-ignore]').each(function() {
         $(this).val(DOMPurify.sanitize($(this).val(), {}))
     })
 }

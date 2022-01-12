@@ -82,7 +82,7 @@ function locationReplace(url) {
 }
 
 function formXSSsanitize(form) {
-    $(form).find("input, select, textarea").not(":submit, :reset, :image, :disabled").not('[data-sanitize-ignore]').each(function(e) {
+    $(form).find("input, textarea").not(":submit, :reset, :image, :file, :disabled").not('[data-sanitize-ignore]').each(function(e) {
         $(this).val(DOMPurify.sanitize($(this).val(), {}))
     })
 }
