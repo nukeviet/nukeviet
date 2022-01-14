@@ -304,8 +304,9 @@ if (!empty($alias_department)) {
     $page_title = $array_department[$dpDefault]['full_name'];
     if (!empty($array_department[$dpDefault]['note'])) {
         $description = $array_department[$dpDefault]['note'];
-        $array_content['bodytext'] = '';
     }
+
+    $array_content['bodytext'] = '';
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
