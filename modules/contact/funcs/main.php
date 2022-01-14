@@ -282,6 +282,15 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
+$description = $module_config[$module_name]['bodytext'];
+
+$array_content = [
+    'fname' => $fname,
+    'femail' => $femail,
+    'fphone' => $fphone,
+    'sendcopy' => $sendcopy,
+    'bodytext' => $module_config[$module_name]['bodytext']
+];
 
 $full_theme = true;
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -291,17 +300,15 @@ if (!empty($alias_department)) {
         $page_url .= '/0';
         $full_theme = false;
     }
+
+    $page_title = $array_department[$dpDefault]['full_name'];
+    if (!empty($array_department[$dpDefault]['note'])) {
+        $description = $array_department[$dpDefault]['note'];
+        $array_content['bodytext'] = '';
+    }
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
-
-$array_content = [
-    'fname' => $fname,
-    'femail' => $femail,
-    'fphone' => $fphone,
-    'sendcopy' => $sendcopy,
-    'bodytext' => $module_config[$module_name]['bodytext']
-];
 
 $contents = contact_main_theme($array_content, $array_department, $catsName, $page_url, NV_CHECK_SESSION);
 

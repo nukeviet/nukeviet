@@ -1,15 +1,19 @@
 <!-- BEGIN: main -->
 <div class="page">
+    <h1 class="margin-top margin-bottom">{PAGE_TITLE}</h1>
     <!-- BEGIN: bodytext -->
-    <div class="well">{CONTENT.bodytext}</div>
+    <p class="margin-bottom">{CONTENT.bodytext}</p>
     <!-- END: bodytext -->
     <div class="row">
         <div class="col-sm-12 col-md-14">
             <!-- BEGIN: dep -->
             <div class="panel panel-default">
+                <!-- BEGIN: header -->
                 <div class="panel-heading">
-                    <h3>{DEP.full_name}</h3>
+                    <a href="{DEP.url}" class="pull-right text-dark"><i class="fa fa-arrow-right fa-fw"></i></a>
+                    <h2 class="h3">{DEP.full_name}</h2>
                 </div>
+                <!-- END: header -->
                 <div class="panel-body">
                     <!-- BEGIN: image -->
                     <div class="margin-bottom"><img src="{DEP.image}" srcset="{DEP.srcset}" class="img-thumbnail" alt="{DEP.full_name}" /></div>

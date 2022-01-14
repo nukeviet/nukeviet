@@ -25,19 +25,21 @@ if (!defined('NV_IS_MOD_CONTACT')) {
  */
 function contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $alias_url;
+    global $lang_global, $lang_module, $module_info, $module_name, $alias_url, $page_title;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
     $xtpl->assign('CONTENT', $array_content);
+    $xtpl->assign('PAGE_TITLE', $page_title);
 
     if (!empty($array_content['bodytext'])) {
         $xtpl->parse('main.bodytext');
     }
 
     if (!empty($array_department)) {
+        $count = count($array_department);
         foreach ($array_department as $dep) {
             if (empty($alias_url) and $dep['act'] == 2) {
                 // Không hiển thị các bộ phận theo cấu hình trong quản trị
@@ -60,6 +62,10 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
             }
 
             $xtpl->assign('DEP', $dep);
+
+            if ($count > 1) {
+                $xtpl->parse('main.dep.header');
+            }
 
             // Hiển thị hình
             if (!empty($dep['image'])) {
