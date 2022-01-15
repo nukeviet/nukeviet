@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <div class="page">
-    <h1 class="margin-top margin-bottom">{PAGE_TITLE}</h1>
+    <h1 class="hidden">{THEME_PAGE_TITLE}</h1>
+    <div class="margin-bottom"><span class="h1"><strong>{PAGE_TITLE}</strong></span></div>
     <!-- BEGIN: bodytext -->
     <p class="margin-bottom">{CONTENT.bodytext}</p>
     <!-- END: bodytext -->
@@ -8,12 +9,15 @@
         <div class="col-sm-12 col-md-14">
             <!-- BEGIN: dep -->
             <div class="panel panel-default">
-                <!-- BEGIN: header -->
                 <div class="panel-heading">
+                    <!-- BEGIN: header -->
                     <a href="{DEP.url}" class="pull-right text-dark"><i class="fa fa-arrow-right fa-fw"></i></a>
                     <h2 class="h3">{DEP.full_name}</h2>
+                    <!-- END: header -->
+                    <!-- BEGIN: dep_header -->
+                    <h2 class="h3">{LANG.contact_info}</h2>
+                    <!-- END: dep_header -->
                 </div>
-                <!-- END: header -->
                 <div class="panel-body">
                     <!-- BEGIN: image -->
                     <div class="margin-bottom"><img src="{DEP.image}" srcset="{DEP.srcset}" class="img-thumbnail" alt="{DEP.full_name}" /></div>
@@ -119,7 +123,7 @@
         </div>
         <div class="col-sm-12 col-md-10">
             <div class="panel panel-primary">
-                <div class="panel-heading">{GLANG.feedback}</div>
+                <div class="panel-heading"><h3>{GLANG.feedback}</h3></div>
                 <div class="panel-body loadContactForm">{FORM}</div>
             </div>
         </div>

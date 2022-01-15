@@ -49,3 +49,4 @@ $lang_module['sendcontactfailed'] = 'Your feedback was not sent because of techn
 $lang_module['note'] = 'Please complete all required fields.';
 $lang_module['sendcopy'] = 'Send as copy to mail';
 $lang_module['next'] = 'Next';
+$lang_module['contact_info'] = 'Contact Info';

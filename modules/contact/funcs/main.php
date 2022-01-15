@@ -28,6 +28,7 @@ $cats[] = [
 $catsName = [];
 $catsName[] = $lang_module['selectCat'];
 $dpDefault = 0;
+$kw = [];
 if (!empty($array_department)) {
     foreach ($array_department as $k => $department) {
         if ($department['alias'] == $alias_url) {
@@ -44,6 +45,8 @@ if (!empty($array_department)) {
                     $_cats2
                 ];
             }
+
+            $kw = [$department['full_name']];
             break;
         }
 
@@ -61,6 +64,8 @@ if (!empty($array_department)) {
         if ($department['is_default']) {
             $dpDefault = $department['id'];
         }
+
+        $kw[] = $department['full_name'];
     }
 }
 
@@ -280,7 +285,8 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 }
 
 $page_title = $module_info['site_title'];
-$key_words = $module_info['keywords'];
+array_unshift($kw, $module_info['keywords'], $module_info['site_title']);
+$key_words = implode(', ', array_filter($kw));
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 $description = $module_config[$module_name]['bodytext'];
 

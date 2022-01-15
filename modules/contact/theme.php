@@ -33,6 +33,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
     $xtpl->assign('CHECKSS', $checkss);
     $xtpl->assign('CONTENT', $array_content);
     $xtpl->assign('PAGE_TITLE', $page_title);
+    $xtpl->assign('THEME_PAGE_TITLE', nv_html_page_title(false));
 
     if (!empty($array_content['bodytext'])) {
         $xtpl->parse('main.bodytext');
@@ -65,6 +66,8 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
 
             if ($count > 1) {
                 $xtpl->parse('main.dep.header');
+            } else {
+                $xtpl->parse('main.dep.dep_header');
             }
 
             // Hiển thị hình

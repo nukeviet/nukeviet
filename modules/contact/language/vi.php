@@ -49,3 +49,4 @@ $lang_module['sendcontactfailed'] = 'Phản hồi của bạn đã không đư�
 $lang_module['note'] = 'Vui lòng điền vào mẫu dưới đây và chúng tôi sẽ liên lạc với bạn.';
 $lang_module['sendcopy'] = 'Gửi bản sao thư này cho tôi';
 $lang_module['next'] = 'Tiếp theo';
+$lang_module['contact_info'] = 'Thông tin liên hệ';
