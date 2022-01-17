@@ -29,16 +29,17 @@
     width: 100%;
 }
 
-.sliderwrapper .contentdiv h3 {
+.sliderwrapper .contentdiv .content-title {
     bottom: 0;
     left: 0;
     font-size: 14px;
+    font-weight: 700;
     line-height: 20px;
     position: absolute;
     width: 100%;
 }
 
-.sliderwrapper .contentdiv h3 a {
+.sliderwrapper .contentdiv .content-title a {
     background: url(../images/transparent.png) repeat-x;
     color: #fff;
     padding: 5px 3px 4px 3px;
@@ -46,7 +47,7 @@
     margin: 0 3px 5px 3px;
 }
 
-.sliderwrapper .contentdiv h3 a:hover {
+.sliderwrapper .contentdiv .content-title a:hover {
     color: #911e03;
 }
 

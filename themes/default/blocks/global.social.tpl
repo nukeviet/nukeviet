@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <span class="visible-xs-inline-block"><a title="{LANG.joinnow}" class="pointer button" data-toggle="tip" data-target="#socialList" data-click="y"><em class="fa fa-share-alt fa-lg"></em><span class="hidden">{LANG.joinnow}</span></a></span>
 <div id="socialList" class="content">
-    <h3 class="visible-xs-inline-block">{LANG.joinnow}</h3>
+    <strong class="visible-xs-inline-block margin-bottom">{LANG.joinnow}</strong>
     <ul class="socialList">
         <!-- BEGIN: facebook -->
         <li><a href="{DATA.facebook}" target="_blank"><i class="fa fa-facebook"></i></a></li>

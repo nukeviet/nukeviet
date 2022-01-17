@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <a title="{LANG.joinnow}" class="pointer" data-toggle="ftip" data-target="#socialList" data-click="y"><em class="fa fa-share-alt fa-lg mbt"></em><span class="hidden">{LANG.joinnow}</span></a>
 <div id="socialList" class="hidden">
-<h3>{LANG.joinnow}</h3>
+<div class="h3 margin-bottom"><strong>{LANG.joinnow}</strong></div>
 <ul class="list-none socialList">
     <!-- BEGIN: facebook -->
     <li><a href="{DATA.facebook}" target="_blank"><i class="fa fa-facebook">&nbsp;</i></a></li>

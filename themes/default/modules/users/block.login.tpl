@@ -18,9 +18,7 @@
 <div id="guestLogin_{BLOCKID}" class="hidden">
     <div class="page panel panel-default bg-lavender box-shadow">
         <div class="panel-body">
-            <h2 class="text-center margin-bottom-lg">
-                {LANG.login}
-            </h2>
+            <div class="h2 text-center margin-bottom"><strong>{LANG.login}</strong></div>
             {FILE "login_form.tpl"}
         </div>
     </div>
@@ -36,9 +34,7 @@
 <div id="guestReg_{BLOCKID}" class="hidden">
     <div class="page panel panel-default bg-lavender box-shadow">
         <div class="panel-body">
-            <h2 class="text-center margin-bottom-lg">
-                {LANG.register}
-            </h2>
+            <div class="h2 text-center margin-bottom"><strong>{LANG.register}</strong></div>
             {FILE "register_form.tpl"}
         </div>
     </div>
@@ -58,7 +54,7 @@
 <div class="content signed clearfix">
     <div class="nv-info" style="display:none"></div>
     <div class="userBlock">
-        <h3 class="text-center margin-bottom-lg"><span class="lev-{LEVEL} text-normal margin-right">{WELCOME}:</span>{USER.full_name}</h3>
+        <div class="h3 text-center margin-bottom-lg"><span class="lev-{LEVEL} text-normal margin-right">{WELCOME}:</span>{USER.full_name}</div>
         <div class="row margin-bottom-lg">
             <div class="col-xs-8 text-center">
                 <a title="{LANG.edituser}" href="#" data-toggle="changeAvatar" data-url="{URL_AVATAR}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>

@@ -1,8 +1,8 @@
 <!-- BEGIN: main  -->
-<ul class="nv-list-item nv-block-rss lg">
+<ul class="list-unstyled nv-block-rss">
     <!-- BEGIN: loop -->
-    <li class="{DATA.class}">
-        <h3 class="sm"><a {DATA.target} title="{DATA.title}" href="{DATA.link}">{DATA.text}</a></h3>
+    <li class="padding-top padding-bottom {DATA.class}">
+        <a class="list-title" {DATA.target} title="{DATA.title}" href="{DATA.link}">{DATA.text}</a>
         <!-- BEGIN: pubDate -->
         <p class="text-muted">
             <em class="fa fa-calendar">&nbsp;</em> <em>{DATA.pubDate}</em>

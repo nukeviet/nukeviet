@@ -2,7 +2,7 @@
 <script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/voting.js"></script>
 
 <form action="{NV_BASE_SITEURL}" method="get" data-id="{VOTING.vid}" data-accept="{VOTING.accept}" data-errmsg="{VOTING.errsm}" data-checkss="{VOTING.checkss}" data-toggle="votingSend"<!-- BEGIN: has_captcha --><!-- BEGIN: basic --> data-captcha="captcha"<!-- END: basic --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- END: has_captcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
-    <h4>{VOTING.question}</h4>
+    <div class="h4 margin-bottom"><strong>{VOTING.question}</strong></div>
     <div>
         <!-- BEGIN: resultn -->
         <div class="checkbox">

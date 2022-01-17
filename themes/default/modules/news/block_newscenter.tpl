@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-14 margin-bottom-lg">
                     <div class="margin-bottom text-center"><a href="{main.link}" title="{main.title}" {main.target_blank}><img src="{main.imgsource}" alt="{main.title}" width="{main.width}" class="img-thumbnail"/></a></div>
-                    <h2 class="margin-bottom-sm"><a href="{main.link}" title="{main.title}" {main.target_blank}>{main.titleclean60}</a></h2>
+                    <div class="h2 margin-bottom-sm"><a href="{main.link}" title="{main.title}" {main.target_blank}><strong>{main.titleclean60}</strong></a></div>
                     {main.hometext}
                     <p class="text-right"><a href="{main.link}"><em class="fa fa-sign-out"></em>{lang.more}</a></p>
                 </div>

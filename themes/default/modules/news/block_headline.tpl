@@ -12,7 +12,7 @@
                 <!-- BEGIN: loop -->
                 <div class="contentdiv clearfix">
                     <a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}" {HOTSNEWS.target_blank}><img class="img-responsive" id="slImg{HOTSNEWS.imgID}" src="{PIX_IMG}" alt="{HOTSNEWS.image_alt}" /></a>
-                    <h3><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}" {HOTSNEWS.target_blank}>{HOTSNEWS.title}</a></h3>
+                    <div class="content-title"><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}" {HOTSNEWS.target_blank}>{HOTSNEWS.title}</a></div>
                 </div>
                 <!-- END: loop -->
             </div>

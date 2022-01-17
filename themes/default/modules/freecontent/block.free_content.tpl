@@ -4,9 +4,9 @@
         <!-- BEGIN: loop -->
         <div class="row clearfix">
             <!-- BEGIN: title_text -->
-            <h3>{ROW.title}</h3><!-- END: title_text -->
+            <div class="bl-title">{ROW.title}</div><!-- END: title_text -->
             <!-- BEGIN: title_link -->
-            <h3><a href="{ROW.link}" title="{ROW.title}"<!-- BEGIN: target --> target="{ROW.target}"<!-- END: target -->>{ROW.title}</a></h3>
+            <a class="bl-title" href="{ROW.link}" title="{ROW.title}"<!-- BEGIN: target --> target="{ROW.target}"<!-- END: target -->>{ROW.title}</a>
             <!-- END: title_link -->
             <div class="col-xs-24 col-sm-5 col-md-8">
                 <!-- BEGIN: image_only --><img title="{ROW.title}" alt="{ROW.title}" src="{ROW.image}" class="img-thumbnail"><!-- END: image_only -->
