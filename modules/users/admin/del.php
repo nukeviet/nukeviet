@@ -70,6 +70,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_oldpass WHERE userid=' . $userid);
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_login WHERE userid=' . $userid);
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $admin_info['userid']);
 
