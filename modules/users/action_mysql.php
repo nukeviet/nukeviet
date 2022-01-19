@@ -97,6 +97,7 @@ if (in_array($lang, $array_lang_module_setup, true) and $num_module_exists > 1) 
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_question';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_reg';
     $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_edit';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_login';
 }
 
 $sql_create_module = $sql_drop_module;
@@ -291,6 +292,17 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     info_basic text NOT NULL,
     info_custom text NOT NULL,
     PRIMARY KEY (userid)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_login (
+    userid MEDIUMINT(8) UNSIGNED NOT NULL,
+    clid CHAR(32) NOT NULL,
+    logtime INT(11) UNSIGNED NOT NULL,
+    mode TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+    agent VARCHAR(255) NOT NULL,
+    ip CHAR(50) NOT NULL,
+    openid VARCHAR(255) NOT NULL DEFAULT '',
+    UNIQUE KEY userid (userid, clid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_config (config, content, edit_time) VALUES ('access_admin', 'a:8:{s:15:\"access_viewlist\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:17:\"access_editcensor\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462)";

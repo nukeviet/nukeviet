@@ -373,7 +373,7 @@ if ((int) $row['safemode'] > 0) {
 }
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
-$array_data['allowloginchange'] = ($global_config['allowloginchange'] or (!empty($row['last_openid']) and empty($user_info['last_login']) and empty($user_info['last_agent']) and empty($user_info['last_ip']) and empty($user_info['last_openid']))) ? 1 : 0;
+$array_data['allowloginchange'] = ($global_config['allowloginchange'] or (!empty($user_info['current_openid']) and empty($user_info['prev_login']) and empty($user_info['prev_agent']) and empty($user_info['prev_ip']) and empty($user_info['prev_openid']))) ? 1 : 0;
 
 $array_field_config = get_field_config();
 $is_custom_field = $array_field_config[1];

@@ -31,6 +31,7 @@ $url_redirect = !empty($client_info['referer']) ? $client_info['referer'] : (iss
 if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
 } else {
+    $db->query('DELETE FROM ' . NV_MOD_TABLE . '_login WHERE userid=' . $user_info['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
     $nv_Request->unset_request('nvloginhash', 'cookie');
     if ($user_info['current_mode'] == 4 and file_exists(NV_ROOTDIR . '/modules/users/login/cas-' . $user_info['openid_server'] . '.php')) {
         define('CAS_LOGOUT_URL_REDIRECT', $url_redirect);

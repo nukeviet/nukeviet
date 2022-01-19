@@ -84,6 +84,7 @@ $lang_module['login_submit'] = 'Soumettre';
 $lang_module['user_info'] = 'Infos de \'utilisateur';
 $lang_module['regdate'] = 'Date d\'inscription';
 $lang_module['yes'] = 'Oui';
+$lang_module['prev_login'] = 'Connexion précédente';
 $lang_module['last_login'] = 'Dernière connexion';
 $lang_module['register_ok'] = 'Votre compte a été créé avec succès';
 $lang_module['login_ok'] = 'Vous avez réussi à vous connecter';

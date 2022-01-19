@@ -63,12 +63,12 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
         'checknum' => $checknum,
         'checkhash' => md5($array_user['userid'] . $checknum . $global_config['sitekey'] . $client_info['clid']),
         'current_agent' => NV_USER_AGENT,
-        'last_agent' => $array_user['last_agent'],
+        'prev_agent' => $array_user['last_agent'],
         'current_ip' => NV_CLIENT_IP,
-        'last_ip' => $array_user['last_ip'],
+        'prev_ip' => $array_user['last_ip'],
         'current_login' => NV_CURRENTTIME,
-        'last_login' => (int) ($array_user['last_login']),
-        'last_openid' => $array_user['last_openid'],
+        'prev_login' => (int) ($array_user['last_login']),
+        'prev_openid' => $array_user['last_openid'],
         'current_openid' => $opid
     ];
 
@@ -86,8 +86,23 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
     $stmt->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
     $stmt->bindValue(':opid', $opid, PDO::PARAM_STR);
     $stmt->execute();
-    $live_cookie_time = ($remember) ? NV_LIVE_COOKIE_TIME : 0;
 
+    if ($global_config['allowuserloginmulti']) {
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_login WHERE userid=' . $array_user['userid'] . ' AND clid=' . $db->quote($client_info['clid']));
+    } else {
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_login WHERE userid=' . $array_user['userid']);
+    }
+
+    $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_login 
+        (userid, clid, logtime, mode, agent, ip, openid) VALUES 
+        (' . $array_user['userid'] . ', :clid, ' . NV_CURRENTTIME . ', ' . $current_mode . ', :agent, :ip, :openid)');
+    $sth->bindValue(':clid', $client_info['clid'], PDO::PARAM_STR);
+    $sth->bindValue(':agent', NV_USER_AGENT, PDO::PARAM_STR);
+    $sth->bindValue(':ip', NV_CLIENT_IP, PDO::PARAM_STR);
+    $sth->bindValue(':openid', $opid, PDO::PARAM_STR);
+    $sth->execute();
+
+    $live_cookie_time = ($remember) ? NV_LIVE_COOKIE_TIME : 0;
     $nv_Request->set_Cookie('nvloginhash', json_encode($user), $live_cookie_time);
 
     if (!empty($global_users_config['active_user_logs'])) {

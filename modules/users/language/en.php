@@ -84,6 +84,7 @@ $lang_module['login_submit'] = 'Login';
 $lang_module['user_info'] = 'Member information';
 $lang_module['regdate'] = 'Date';
 $lang_module['yes'] = 'Yes';
+$lang_module['prev_login'] = 'Previous login';
 $lang_module['last_login'] = 'Last login';
 $lang_module['register_ok'] = 'Register successfully';
 $lang_module['login_ok'] = 'Login successfully';

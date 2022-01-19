@@ -1276,7 +1276,8 @@ function user_welcome($array_field_config, $custom_fields)
     $_user_info['birthday'] = empty($user_info['birthday']) ? $lang_module['na'] : nv_date('d/m/Y', $user_info['birthday']);
     $_user_info['regdate'] = nv_date('d/m/Y', $user_info['regdate']);
     $_user_info['view_mail'] = empty($user_info['view_mail']) ? $lang_module['no'] : $lang_module['yes'];
-    $_user_info['last_login'] = empty($user_info['last_login']) ? '' : nv_date('l, d/m/Y H:i', $user_info['last_login']);
+    $_user_info['prev_login'] = empty($user_info['prev_login']) ? '' : nv_date('l, d/m/Y H:i', $user_info['prev_login']);
+    $_user_info['last_login'] = nv_date('l, d/m/Y H:i', $user_info['last_login']);
     $_user_info['current_login'] = nv_date('l, d/m/Y H:i', $user_info['current_login']);
     $_user_info['st_login'] = !empty($user_info['st_login']) ? $lang_module['yes'] : $lang_module['no'];
     $_user_info['active2step'] = !empty($user_info['active2step']) ? $lang_global['on'] : $lang_global['off'];
@@ -1295,7 +1296,7 @@ function user_welcome($array_field_config, $custom_fields)
 
     $xtpl->assign('USER', $_user_info);
 
-    if (!$global_config['allowloginchange'] and !empty($user_info['current_openid']) and empty($user_info['last_login']) and empty($user_info['last_agent']) and empty($user_info['last_ip']) and empty($user_info['last_openid'])) {
+    if (!$global_config['allowloginchange'] and !empty($user_info['current_openid']) and empty($user_info['prev_login']) and empty($user_info['prev_agent']) and empty($user_info['prev_ip']) and empty($user_info['prev_openid'])) {
         $xtpl->parse('main.change_login_note');
     }
 
