@@ -1,8 +1,11 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: h1 -->
+<h1 class="hidden d-none">{PAGE_TITLE}</h1>
+<!-- END: h1 -->
 <!-- BEGIN: viewdescription -->
 <div class="news_column">
     <div class="alert alert-info clearfix">
-        <h3>{CONTENT.title}</h3>
+        <h1 class="h2">{CONTENT.title}</h1>
         <!-- BEGIN: image -->
         <img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
         <!-- END: image -->
@@ -54,7 +57,7 @@
     <div class="thumbnail">
         <a title="{CONTENT.title}" href="{CONTENT.link}" {CONTENT.target_blank}><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
         <div class="caption text-center">
-            <h4><a class="show" href="{CONTENT.link}" {CONTENT.target_blank} <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a></h4>
+            <h3 class="h4"><a class="show" href="{CONTENT.link}" {CONTENT.target_blank} <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}"><strong>{CONTENT.title}</strong></a></h3>
             <span>{ADMINLINK}</span>
         </div>
     </div>

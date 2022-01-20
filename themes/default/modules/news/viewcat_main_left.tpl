@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: h1 -->
+<h1 class="hidden d-none">{PAGE_TITLE}</h1>
+<!-- END: h1 -->
 <!-- BEGIN: listcat -->
 <div class="news_column">
     <div class="panel panel-default clearfix">
@@ -7,9 +10,9 @@
             <a class="dimgray pull-right hidden-xs" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a>
             <!-- END: subcatmore -->
             <ul class="list-inline sub-list-icon" style="margin: 0">
-                <li><h4><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h4></li>
+                <li><h2 class="h4"><a title="{CAT.title}" href="{CAT.link}"><strong>{CAT.title}</strong></a></h2></li>
                 <!-- BEGIN: subcatloop -->
-                <li class="hidden-xs"><h4><a class="dimgray" title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h4></li>
+                <li class="hidden-xs"><div class="h4"><a class="dimgray" title="{SUBCAT.title}" href="{SUBCAT.link}"><strong>{SUBCAT.title}</strong></a></div></li>
                 <!-- END: subcatloop -->
             </ul>
         </div>

@@ -14,7 +14,6 @@ if (!defined('NV_IS_MOD_NEWS')) {
 }
 
 $page_title = $module_info['site_title'];
-$key_words = $module_info['keywords'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $contents = '';
@@ -40,11 +39,16 @@ $canonicalUrl = getCanonicalUrl($page_url, true, true);
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $viewcat . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
-        $contents = $cache;
+        $_contents = explode('|', $cache, 3);
+        if (count($_contents) == 3) {
+            list($desc, $kw, $contents) = $_contents;
+        }
     }
 }
 
 if (empty($contents)) {
+    $desc = [];
+    $kw = [];
     $show_no_image = $module_config[$module_name]['show_no_image'];
     $array_catpage = [];
     $array_cat_other = [];
@@ -71,6 +75,7 @@ if (empty($contents)) {
 
         $weight_publtime = 0;
         $result = $db_slave->query($db_slave->sql());
+        $i = 0;
         while ($item = $result->fetch()) {
             $item['imghome'] = $item['imgmobile'] = '';
             get_homeimgfile($item);
@@ -79,6 +84,12 @@ if (empty($contents)) {
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
             $weight_publtime = ($order_articles) ? $item['weight'] : $item['publtime'];
+
+            if ($i < 200) {
+                $desc[] = $item['title'];
+            }
+
+            $i += nv_strlen($item['title']);
         }
 
         if ($st_links > 0) {
@@ -151,6 +162,9 @@ if (empty($contents)) {
                     $array_cat[$key]['content'][] = $item;
                 }
 
+                $desc[] = $array_cat_i['title'];
+                $kw[] = $array_cat_i['title'];
+
                 ++$key;
             }
         }
@@ -205,6 +219,9 @@ if (empty($contents)) {
                     $item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
                     $array_catpage[$key]['content'][] = $item;
                 }
+
+                $desc[] = $array_cat_i['title'];
+                $kw[] = $array_cat_i['title'];
             }
 
             ++$key;
@@ -231,6 +248,7 @@ if (empty($contents)) {
             ->offset(($page - 1) * $per_page);
 
         $result = $db_slave->query($db_slave->sql());
+        $i = 0;
         while ($item = $result->fetch()) {
             $item['imghome'] = $item['imgmobile'] = '';
             get_homeimgfile($item);
@@ -238,6 +256,12 @@ if (empty($contents)) {
             $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
+
+            if ($i < 200) {
+                $desc[] = $item['title'];
+            }
+
+            $i += nv_strlen($item['title']);
         }
 
         $viewcat = 'viewcat_grid_new';
@@ -264,6 +288,7 @@ if (empty($contents)) {
             ->offset(($page - 1) * $per_page);
 
         $result = $db_slave->query($db_slave->sql());
+        $i = 0;
         while ($item = $result->fetch()) {
             $item['imghome'] = $item['imgmobile'] = '';
             get_homeimgfile($item);
@@ -271,6 +296,12 @@ if (empty($contents)) {
             $item['newday'] = $global_array_cat[$item['catid']]['newday'];
             $item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
+
+            if ($i < 200) {
+                $desc[] = $item['title'];
+            }
+
+            $i += nv_strlen($item['title']);
         }
 
         $viewcat = 'viewcat_list_new';
@@ -278,13 +309,25 @@ if (empty($contents)) {
         $contents = call_user_func($viewcat, $array_catpage, 0, ($page - 1) * $per_page, $generate_page);
     }
 
+    $desc = !empty($desc) ? implode(', ', $desc) : '';
+    $kw = !empty($kw) ? implode(', ', $kw) : '';
+
     if (!defined('NV_IS_MODADMIN') and $contents != '' and $cache_file != '') {
-        $nv_Cache->setItem($module_name, $cache_file, $contents);
+        $nv_Cache->setItem($module_name, $cache_file, $desc . '|' . $kw . '|' . $contents);
     }
 }
 
 if ($page > 1) {
     $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+}
+
+if (empty($module_info['description']) and !empty($desc)) {
+    $description = $module_info['site_title'] . ': ' . $desc;
+}
+
+$key_words = $module_info['keywords'];
+if (empty($key_words) and !empty($kw)) {
+    $key_words = $kw;
 }
 
 include NV_ROOTDIR . '/includes/header.php';

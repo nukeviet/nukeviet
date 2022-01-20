@@ -66,7 +66,7 @@ if ($module_info['rss']) {
             // no image
             $rimages = '';
         }
-        $rimages = (!empty($rimages)) ? '<img src="' . $rimages . '" width="100" align="left" border="0">' : '';
+        $rimages = (!empty($rimages)) ? '<img src="' . $rimages . '" width="100" align="left" border="0" alt="' . $title . '">' : '';
 
         $items[] = [
             'title' => $title,

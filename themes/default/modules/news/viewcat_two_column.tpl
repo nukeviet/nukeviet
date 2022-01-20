@@ -1,8 +1,11 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: h1 -->
+<h1 class="hidden d-none">{PAGE_TITLE}</h1>
+<!-- END: h1 -->
 <!-- BEGIN: viewdescription -->
 <div class="news_column">
     <div class="alert alert-info clearfix">
-        <h3>{CONTENT.title}</h3>
+        <h1 class="h3"><strong>{CONTENT.title}</strong></h1>
         <!-- BEGIN: image -->
         <img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
         <!-- END: image -->
@@ -18,12 +21,12 @@
             <!-- BEGIN: image -->
             <a href="{NEWSTOP.link}" title="{NEWSTOP.title}" {NEWSTOP.target_blank}><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
             <!-- END: image -->
-            <h3>
-                <a href="{NEWSTOP.link}" title="{NEWSTOP.title}" {NEWSTOP.target_blank}>{NEWSTOP.title}</a>
+            <h2 class="h3">
+                <a href="{NEWSTOP.link}" title="{NEWSTOP.title}" {NEWSTOP.target_blank}><strong>{NEWSTOP.title}</strong></a>
                 <!-- BEGIN: newday -->
                 <span class="icon_new">&nbsp;</span>
                 <!-- END: newday -->
-            </h3>
+            </h2>
             <div class="text-muted">
                 <ul class="list-unstyled list-inline">
                     <li><em class="fa fa-clock-o">&nbsp;</em> {NEWSTOP.publtime}</li>
@@ -63,7 +66,7 @@
 <div class="news_column two_column col-md-12">
     <div class="panel panel-default clearfix">
         <div class="panel-heading">
-            <h4 class="cat-icon"><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h4>
+            <h2 class="h4 cat-icon"><a title="{CAT.title}" href="{CAT.link}"><strong>{CAT.title}</strong></a></h2>
         </div>
         <div class="panel-body">
             <!-- BEGIN: content -->
