@@ -23,7 +23,7 @@ if (!defined('NV_IS_MOD_NEWS')) {
  */
 function viewcat_grid_new($array_catpage, $catid, $generate_page)
 {
-    global $site_mods, $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page, $home, $page_title;
+    global $site_mods, $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page, $home;
 
     $xtpl = new XTemplate('viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -37,7 +37,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
         }
         $xtpl->parse('main.viewdescription');
     } elseif (!$home) {
-        $xtpl->assign('PAGE_TITLE', $page_title);
+        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
         $xtpl->parse('main.h1');
     }
 
@@ -131,7 +131,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
  */
 function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 {
-    global $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $home, $page_title;
+    global $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $home;
 
     $xtpl = new XTemplate('viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -145,7 +145,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
         }
         $xtpl->parse('main.viewdescription');
     } elseif (!$home) {
-        $xtpl->assign('PAGE_TITLE', $page_title);
+        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
         $xtpl->parse('main.h1');
     }
 
@@ -209,7 +209,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
  */
 function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
-    global $site_mods, $global_array_cat, $module_name, $module_upload, $lang_module, $module_config, $module_info, $catid, $page, $home, $page_title;
+    global $site_mods, $global_array_cat, $module_name, $module_upload, $lang_module, $module_config, $module_info, $catid, $page, $home;
 
     $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -223,7 +223,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
         }
         $xtpl->parse('main.viewdescription');
     } elseif (!$home) {
-        $xtpl->assign('PAGE_TITLE', $page_title);
+        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
         $xtpl->parse('main.h1');
     }
 
@@ -427,13 +427,13 @@ function viewcat_top($array_catcontent, $generate_page)
  */
 function viewsubcat_main($viewcat, $array_cat)
 {
-    global $module_name, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info, $home, $page_title;
+    global $module_name, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info, $home;
 
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
     $xtpl->assign('IMGWIDTH', $module_config[$module_name]['homewidth']);
-    $xtpl->assign('PAGE_TITLE', $page_title);
+    $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
 
     if (!$home) {
         $xtpl->parse('main.h1');
@@ -568,7 +568,7 @@ function viewsubcat_main($viewcat, $array_cat)
  */
 function viewcat_two_column($array_content, $array_catpage)
 {
-    global $site_mods, $module_name, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page, $home, $page_title;
+    global $site_mods, $module_name, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page, $home;
 
     $xtpl = new XTemplate('viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -582,7 +582,7 @@ function viewcat_two_column($array_content, $array_catpage)
         }
         $xtpl->parse('main.viewdescription');
     } elseif (!$home) {
-        $xtpl->assign('PAGE_TITLE', $page_title);
+        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
         $xtpl->parse('main.h1');
     }
 
