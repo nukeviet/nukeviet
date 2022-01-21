@@ -1048,7 +1048,7 @@ function no_permission()
  */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $lang_module, $module_info, $module_name, $module_config, $topicid;
+    global $lang_module, $module_info, $module_name, $module_config, $topicid, $home;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -1061,7 +1061,11 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
             $xtpl->parse('main.topicdescription.image');
         }
         $xtpl->parse('main.topicdescription');
+    } elseif (!$home) {
+        $xtpl->assign('PAGE_TITLE', nv_html_page_title(false));
+        $xtpl->parse('main.h1');
     }
+
     if (!empty($topic_array)) {
         foreach ($topic_array as $topic_array_i) {
             if (!empty($topic_array_i['external_link'])) {

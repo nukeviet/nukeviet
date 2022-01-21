@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: h1 -->
+<h1 class="hidden d-none">{PAGE_TITLE}</h1>
+<!-- END: h1 -->
 <!-- BEGIN: topicdescription -->
 <div class="news_column">
     <div class="alert alert-info clearfix">
@@ -17,7 +20,7 @@
         <!-- BEGIN: homethumb -->
         <a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
         <!-- END: homethumb -->
-        <h3><a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>{TOPIC.title}</a></h3>
+        <h2 class="h3"><a href="{TOPIC.link}" title="{TOPIC.title}" {TOPIC.target_blank}>{TOPIC.title}</a></h2>
         <p>
             <em class="fa fa-clock-o">&nbsp;</em><em>{TIME} {DATE}</em>
         </p>
