@@ -208,5 +208,7 @@ $lang_module['api_cr_notice'] = 'Chú ý: Giữ an toàn cho mã bí mật và k
 
 $lang_module['api_System'] = 'Các chức năng hệ thống';
 $lang_module['api_System_SendMail'] = 'Gửi email';
+$lang_module['api_webtools'] = 'Các công cụ web';
+$lang_module['api_webtools_ClearCache'] = 'Dọn dẹp cache';
 
 $lang_module['other_info'] = 'Thông tin khác';

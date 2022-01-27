@@ -200,4 +200,6 @@ $lang_module['api_cr_back'] = 'Fait copié';
 $lang_module['api_cr_notice'] = 'Note: Gardez votre code secret secret et vos clés d\'accès spéciales secrètes. Si le code secret et la clé d\'accès sont exposés, les saboteurs peuvent effectuer des opérations indésirables';
 $lang_module['api_System'] = 'Fonctions du système';
 $lang_module['api_System_SendMail'] = 'Envoyer un email';
+$lang_module['api_webtools'] = 'Outils Web';
+$lang_module['api_webtools_ClearCache'] = 'Vider le cache';
 $lang_module['other_info'] = 'Autres informations';
