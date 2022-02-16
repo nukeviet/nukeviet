@@ -622,12 +622,6 @@ if ($is_submit_form) {
     $rowcontent['tags'] = $nv_Request->get_typed_array('tags', 'post', 'title', []);
     $rowcontent['tags'] = implode(',', $rowcontent['tags']);
 
-    if (empty($rowcontent['keywords'])) {
-        $rowcontent['keywords'] = nv_get_keywords($rowcontent['hometext'] . ' ' . $rowcontent['bodyhtml']);
-        print_r($rowcontent['keywords']);
-        exit;
-    }
-
     // Tu dong xac dinh tags
     if ($rowcontent['tags'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
         $ct = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] . ' ' . $rowcontent['bodyhtml'] : $rowcontent['bodyhtml'];
