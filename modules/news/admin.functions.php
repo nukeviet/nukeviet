@@ -820,3 +820,96 @@ function nv_get_mod_countrows()
 
     return $list[0]['totalnews'];
 }
+
+/**
+ * nv_get_mod_tags()
+ * Tìm tags cho bài viết dựa vào thư viện tags
+ * 
+ * @param mixed $content 
+ * @return array 
+ */
+function nv_get_mod_tags($content)
+{
+    global $db, $module_data;
+
+    $content = strip_tags($content);
+    $content = nv_unhtmlspecialchars($content);
+    $content = strip_punctuation($content);
+    $content = trim($content);
+    $content = nv_strtolower($content);
+    $ts = explode(' ', $content);
+    $ts = array_map('trim', $ts);
+    $ts = array_filter($ts);
+    $ts = array_unique($ts);
+    $ts = array_map(function($t) {
+        return preg_replace( '/([\W])/', '\\\\\\\\$1', $t);
+    }, $ts);
+    $ts = implode('|', $ts);
+
+    $db->sqlreset()
+    ->select('keywords')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_tags')
+    ->where("keywords REGEXP '^" . $ts . "$' OR keywords REGEXP '^" . $ts . ",' OR keywords REGEXP '," . $ts . ",' OR keywords REGEXP '," . $ts . "$'");
+
+    $result = $db->query($db->sql());
+    $ts = [];
+    while (list($keyword) = $result->fetch(3)) {
+        $keyword = array_map('trim', explode(',', $keyword));
+        $keyword = array_map('nv_preg_quote', $keyword);
+        $ts = array_merge($ts, $keyword);
+    }
+
+    $tags = [];
+    if (!empty($ts)) {
+        $ts = implode('|', $ts);
+        unset($matches);
+        preg_match_all('/(' . $ts . ')/', $content, $matches);
+        if (!empty($matches[1])) {
+            $tags = array_unique($matches[1]);
+        }
+    }
+
+    return !empty($tags) ? array_values($tags) : [];
+}
+
+/**
+ * setTagAlias()
+ * 
+ * @param mixed $keywords 
+ * @param int $tid 
+ * @param int $dbexist 
+ * @return string|null 
+ * @throws PDOException 
+ */
+function setTagAlias($keywords, $tid = 0, &$dbexist = 0)
+{
+    global $db, $module_data, $module_config, $module_name;
+
+    $alias = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($keywords) : change_alias_tags($keywords);
+    $dbexist = (bool) $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias=' . $db->quote($alias) . ' AND tid!=' . $tid)->fetchColumn();
+
+    return $alias;
+}
+
+/**
+ * setTagKeywords()
+ * 
+ * @param mixed $keywords 
+ * @param bool $isArr 
+ * @return array|string 
+ */
+function setTagKeywords($keywords, $isArr = false)
+{
+    $keywords = nv_strtolower($keywords);
+    $keywords = explode(',', $keywords);
+    $keywords = array_map('trim', $keywords);
+    $keywords = array_filter($keywords);
+    $keywords = array_unique($keywords);
+    sort($keywords);
+
+    if ($isArr) {
+        return $keywords;
+    }
+
+    return implode(',', $keywords);
+}

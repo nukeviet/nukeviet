@@ -57,6 +57,19 @@ if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('che
     nv_htmlOutput($return);
 }
 
+// Lấy keywords từ nội dung bài viết
+if ($nv_Request->isset_request('getKeywordsFromContent', 'post')) {
+    $content = $nv_Request->get_title('content', 'post', '');
+    $keywords = nv_get_mod_tags($content);
+    $size = sizeof($keywords);
+    if ($size < 20) {
+        $keywords = array_merge($keywords, nv_get_keywords($content, 20 - $size, true));
+    }
+    $keywords = array_unique($keywords);
+    $keywords = array_values($keywords);
+    nv_jsonOutput($keywords);
+}
+
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
@@ -277,7 +290,7 @@ if ($rowcontent['id'] == 0) {
     while ($row = $_query->fetch()) {
         $array_tags_old[$row['tid']] = $row['keyword'];
     }
-    $rowcontent['tags'] = implode(', ', $array_tags_old);
+    $rowcontent['tags'] = implode(',', $array_tags_old);
     $rowcontent['tags_old'] = $rowcontent['tags'];
 
     // Lấy danh sach tac gia của bài viết
@@ -607,39 +620,20 @@ if ($is_submit_form) {
     $rowcontent['keywords'] = $nv_Request->get_array('keywords', 'post', '');
     $rowcontent['keywords'] = trim(nv_substr(implode(', ', $rowcontent['keywords']), 0, 255), ", \t\n\r\0\x0B");
     $rowcontent['tags'] = $nv_Request->get_typed_array('tags', 'post', 'title', []);
-    $rowcontent['tags'] = implode(', ', $rowcontent['tags']);
+    $rowcontent['tags'] = implode(',', $rowcontent['tags']);
+
+    if (empty($rowcontent['keywords'])) {
+        $rowcontent['keywords'] = nv_get_keywords($rowcontent['hometext'] . ' ' . $rowcontent['bodyhtml']);
+        print_r($rowcontent['keywords']);
+        exit;
+    }
 
     // Tu dong xac dinh tags
     if ($rowcontent['tags'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
-        $tags = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] : $rowcontent['bodyhtml'];
-        $tags = nv_get_keywords($tags, 100);
-        $tags = explode(',', $tags);
-
-        // Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
-        $tags_return = [];
-        foreach ($tags as $tag_i) {
-            $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id where keyword = :keyword');
-            $sth->bindParam(':keyword', $tag_i, PDO::PARAM_STR);
-            $sth->execute();
-            if ($sth->fetchColumn()) {
-                $tags_return[] = $tag_i;
-                if (sizeof($tags_return) > 20) {
-                    break;
-                }
-            }
-        }
-
-        if (sizeof($tags_return) < 20) {
-            foreach ($tags as $tag_i) {
-                if (!in_array($tag_i, $tags_return, true)) {
-                    $tags_return[] = $tag_i;
-                    if (sizeof($tags_return) > 20) {
-                        break;
-                    }
-                }
-            }
-        }
-        $rowcontent['tags'] = implode(',', $tags_return);
+        $ct = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] . ' ' . $rowcontent['bodyhtml'] : $rowcontent['bodyhtml'];
+        $tags = nv_get_mod_tags($ct);
+        $tags = array_slice($tags, 0, 20, true);
+        $rowcontent['tags'] = implode(',', $tags);
     }
 
     if (empty($rowcontent['title'])) {
@@ -1038,12 +1032,7 @@ if ($is_submit_form) {
             }
 
             if ($rowcontent['tags'] != $rowcontent['tags_old'] or $copy) {
-                $tags = explode(',', $rowcontent['tags']);
-                $tags = array_map('trim', $tags);
-                $tags = array_diff($tags, [
-                    ''
-                ]);
-                $tags = array_unique($tags);
+                $tags = setTagKeywords($rowcontent['tags'], true);
                 foreach ($tags as $_tag) {
                     if (!in_array($_tag, $array_tags_old, true)) {
                         $alias_i = ($module_config[$module_name]['tags_alias']) ? get_mod_alias($_tag) : change_alias_tags($_tag);

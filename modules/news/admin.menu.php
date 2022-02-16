@@ -79,7 +79,7 @@ $allow_func = [
     'rpc',
     'del_content',
     'alias',
-    'alias_tag',
+    'keywordsajax',
     'topicajax',
     'sourceajax',
     'tagsajax'

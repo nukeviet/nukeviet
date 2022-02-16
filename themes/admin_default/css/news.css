@@ -344,3 +344,37 @@ input {
     text-decoration: none;
     background-color: #f5f5f5;
 }
+
+.keyword {
+    display: inline-block;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #3c763d;
+    border-radius: 4px;
+    padding: 2px 5px;
+    background-color: #dff0d8;
+}
+
+.keyword.invalid {
+    border-color: #a94442;
+    background-color: #f2dede !important;
+}
+
+.keyword::before {
+    display: inline-block;
+    margin-right: 3px;
+    font-family: FontAwesome;
+    content: '\f00c';
+    color: #3c763d;
+}
+
+.keyword.invalid::before {
+    content: '\f071' !important;
+    color: #a94442;
+}
+
+.ui-menu {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -71,18 +71,20 @@ $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_d
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_sources VALUES (1, 'Wikipedia', 'http://www.wikipedia.org', '', 1, 1277691366, 1277691366) ");
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_sources VALUES (2, 'Enlightened Website Development', 'http://www.etianen.com', '', 2, 1277691851, 1277691851)");
 
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags (tid, numnews, alias, image, description, keywords) VALUES (?, ?, ?, ?, ?, ?)');
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags (tid, numnews, title, alias, image, description, keywords) VALUES (?, ?, ?, ?, ?, ?, ?)');
 $sth->execute([
     1,
     0,
+    'VINADES',
     'vinades',
     '',
     '',
-    'VINADES'
+    'vinades'
 ]);
 $sth->execute([
     2,
     0,
+    'Web',
     'web',
     '',
     '',
@@ -91,63 +93,66 @@ $sth->execute([
 $sth->execute([
     3,
     0,
+    'HTML5',
     'html5',
     '',
     '',
-    'HTML5'
+    'html5'
 ]);
 $sth->execute([
     4,
     0,
+    'Nguyen Anh Tu',
     'nguyen-anh-tu',
     '',
     '',
-    'Nguyen Anh Tu'
+    'nguyen anh tu'
 ]);
 $sth->execute([
     5,
     0,
+    'NukeViet',
     'nukeviet',
     '',
     '',
-    'NukeViet'
+    'nukeviet'
 ]);
 
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (?, ?, ?)');
 $sth->execute([
     1,
     1,
-    'VINADES'
+    'vinades'
 ]);
 $sth->execute([
     2,
     2,
-    'Web'
+    'web'
 ]);
 $sth->execute([
     3,
     3,
-    'HTML5'
+    'html5'
 ]);
 $sth->execute([
     4,
     1,
-    'VINADES'
+    'vinades'
 ]);
 $sth->execute([
     4,
     4,
-    'Nguyen Anh Tu'
+    'nguyen anh tu'
 ]);
 $sth->execute([
     5,
     5,
-    'NukeViet'
+    'nukeviet'
 ]);
 $sth->execute([
     5,
     1,
-    'VINADES'
+    'vinades'
 ]);
 
 $copyright = 'Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement';

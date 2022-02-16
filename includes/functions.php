@@ -1135,12 +1135,13 @@ function nv_editor_br2nl($text)
 
 /**
  * nv_get_keywords()
- *
- * @param string $content
- * @param int    $keyword_limit
- * @return string
+ * 
+ * @param mixed $content 
+ * @param int $keyword_limit 
+ * @param bool $isArr 
+ * @return array|string
  */
-function nv_get_keywords($content, $keyword_limit = 20)
+function nv_get_keywords($content, $keyword_limit = 20, $isArr = false)
 {
     $content = strip_tags($content);
     $content = nv_unhtmlspecialchars($content);
@@ -1216,6 +1217,10 @@ function nv_get_keywords($content, $keyword_limit = 20)
         }
 
         $keywords_return = array_unique($keywords_return);
+    }
+
+    if ($isArr) {
+        return $keywords_return;
     }
 
     return implode(',', $keywords_return);

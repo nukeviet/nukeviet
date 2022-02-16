@@ -297,20 +297,6 @@ function nv_del_content_result(res) {
     return false;
 }
 
-function get_alias_tags() {
-    var title = strip_tags(document.getElementById('idtitle').value);
-    if (title != '') {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias_tag&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title), function(res) {
-            if (res != "") {
-                document.getElementById('idalias').value = res;
-            } else {
-                document.getElementById('idalias').value = '';
-            }
-        });
-    }
-    return false;
-}
-
 function get_alias(mod, id) {
     var title = strip_tags(document.getElementById('idtitle').value);
     if (title != '') {
@@ -321,43 +307,6 @@ function get_alias(mod, id) {
                 document.getElementById('idalias').value = '';
             }
         });
-    }
-    return false;
-}
-
-function nv_search_tag(tid) {
-    $("#module_show_list").html('<p class="text-center"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10));
-    return false;
-}
-
-function nv_del_tags(tid) {
-    if (confirm(nv_is_del_confirm[0])) {
-        $("#module_show_list").html('<p class="text-center"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&del_tid=" + tid + "&num=" + nv_randomPassword(10));
-    }
-    return false;
-}
-
-function nv_del_check_tags(oForm, checkss, msgnocheck) {
-    var fa = oForm['idcheck[]'];
-    var listid = '';
-    if (fa.length) {
-        for (var i = 0; i < fa.length; i++) {
-            if (fa[i].checked) {
-                listid = listid + fa[i].value + ',';
-            }
-        }
-    } else {
-        if (fa.checked) {
-            listid = listid + fa.value + ',';
-        }
-    }
-
-    if (listid != '') {
-        if (confirm(nv_is_del_confirm[0])) {
-            $("#module_show_list").html('<p class="text-center"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&q=" + rawurlencode($("#q").val()) + "&del_listid=" + listid + "&checkss=" + checkss + "&num=" + nv_randomPassword(10));
-        }
-    } else {
-        alert(msgnocheck);
     }
     return false;
 }
@@ -436,7 +385,7 @@ function check_admin_second() {
     $("input[name='admin_content[]']:checkbox").prop("checked", false);
 }
 
-$(document).ready(function() {
+$(function() {
     $('#checkall').click(function() {
         $('input:checkbox').each(function() {
             $(this).attr('checked', 'checked');
@@ -482,14 +431,93 @@ $(document).ready(function() {
         return false;
     });
 
-    // Tags
-    $("#select-img-tag").click(function() {
-        var area = "image";
-        var path = CFG.upload_path;
-        var currentpath = CFG.upload_current;
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
+    // Tag Search
+    $('[data-toggle=nv_search_tag]').on('submit', function(e) {
+        e.preventDefault();
+        var q = $('[name=q]', this).val(),
+            url = $(this).attr('action');
+        q = trim(strip_tags(q));
+        $('[name=q]', this).val(q);
+        if (q.length < 3) {
+            window.location.href = url
+        } else {
+            window.location.href = url + "&q=" + rawurlencode(q)
+        }
+    });
+
+    // Add Tag
+    $('[data-toggle=add_tags]').on('click', function(e) {
+        e.preventDefault();
+        var title = $(this).data('title'),
+            fc = $(this).data('fc'),
+            dat = fc + '=1';
+        if (fc == 'editTag' | fc == 'tagLinks') {
+            dat += '&tid=' + $(this).data('tid')
+        }
+
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + '=tags',
+            data: dat,
+            dataType: "html",
+            success: function(b) {
+                $('#addTag .modal-title').text(title);
+                $('#addTag .modal-body').html(b);
+                $('#addTag').modal({backdrop:'static'})
+            }
+        });
+    });
+
+    // Delete tag
+    $('[data-toggle=nv_del_tag]').on('click', function(e) {
+        e.preventDefault();
+        if (confirm(nv_is_del_confirm[0])) {
+            var tid = $(this).data('tid'),
+                form = $(this).parents('form'),
+                checkss = form.data('checkss');
+            $.ajax({
+                type: 'POST',
+                cache: !1,
+                url: script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + '=tags&num=' + nv_randomPassword(10),
+                data: 'del_tid=' + tid + '&checkss=' + checkss,
+                dataType: "html",
+                success: function(b) {
+                    window.location.href = window.location.href
+                }
+            });
+        }
+    });
+
+    // Delete check tags
+    $('[data-toggle=nv_del_check_tags]').on('click', function(e) {
+        e.preventDefault();
+        var form = $(this).parents('form'),
+            checkss = form.data('checkss'),
+            tids = '';
+        if ($('[name^=idcheck]:checked', form).length) {
+            $('[name^=idcheck]:checked', form).each(function() {
+                if (tids != '') tids += ',';
+                tids += $(this).val()
+            })
+        }
+        if (tids == '') {
+            alert($(this).data('msgnocheck'));
+            return!1
+        }
+
+        if (confirm(nv_is_del_confirm[0])) {
+            $.ajax({
+                type: 'POST',
+                cache: !1,
+                url: script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + '=tags&num=' + nv_randomPassword(10),
+                data: 'del_listid=' + tids + '&checkss=' + checkss,
+                dataType: "html",
+                success: function(b) {
+                    window.location.href = window.location.href
+                }
+            });
+        }
     });
 
     // Sources

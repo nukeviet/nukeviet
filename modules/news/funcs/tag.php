@@ -25,10 +25,10 @@ if (isset($array_op[1])) {
     }
 }
 
-$stmt = $db_slave->prepare('SELECT tid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
+$stmt = $db_slave->prepare('SELECT tid, numnews, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
 $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
 $stmt->execute();
-list($tid, $page_title, $image_tag, $description, $key_words) = $stmt->fetch(3);
+list($tid, $numnews, $page_title, $image_tag, $description, $key_words) = $stmt->fetch(3);
 
 if ($tid > 0) {
     if (empty($page_title)) {
@@ -62,6 +62,11 @@ if ($tid > 0) {
         ->fetchColumn();
     // Không cho tùy ý đánh số page + xác định trang trước, trang sau
     betweenURLs($page, ceil($num_items / $per_page), $base_url, '/page-', $prevPage, $nextPage);
+
+    if ($num_items != $numnews) {
+        $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews=' . $num_items . ' WHERE tid=' . $tid;
+        $db->query($query);
+    }
 
     $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order($order_articles_by . ' DESC')

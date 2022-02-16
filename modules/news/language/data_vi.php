@@ -250,10 +250,11 @@ $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_d
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 1, 7)');
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 2, 8)');
 
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags (tid, numnews, alias, image, description, keywords) VALUES (?, ?, ?, ?, ?, ?)');
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags (tid, numnews, title, alias, image, description, keywords) VALUES (?, ?, ?, ?, ?, ?, ?)');
 $sth->execute([
     1,
     0,
+    'Nguồn mở',
     'nguồn-mở',
     '',
     '',
@@ -262,6 +263,7 @@ $sth->execute([
 $sth->execute([
     2,
     0,
+    'Quen thuộc',
     'quen-thuộc',
     '',
     '',
@@ -270,6 +272,7 @@ $sth->execute([
 $sth->execute([
     3,
     0,
+    'Cộng đồng',
     'cộng-đồng',
     '',
     '',
@@ -278,6 +281,7 @@ $sth->execute([
 $sth->execute([
     4,
     0,
+    'Việt Nam',
     'việt-nam',
     '',
     '',
@@ -286,6 +290,7 @@ $sth->execute([
 $sth->execute([
     5,
     0,
+    'Hoạt động',
     'hoạt-động',
     '',
     '',
@@ -294,6 +299,7 @@ $sth->execute([
 $sth->execute([
     6,
     0,
+    'Tin tức',
     'tin-tức',
     '',
     '',
@@ -302,6 +308,7 @@ $sth->execute([
 $sth->execute([
     7,
     1,
+    'Thương mại điện',
     'thương-mại-điện',
     '',
     '',
@@ -310,6 +317,7 @@ $sth->execute([
 $sth->execute([
     8,
     0,
+    'Điện tử',
     'điện-tử',
     '',
     '',
@@ -318,6 +326,7 @@ $sth->execute([
 $sth->execute([
     9,
     13,
+    'Nukeviet',
     'nukeviet',
     '',
     '',
@@ -326,6 +335,7 @@ $sth->execute([
 $sth->execute([
     10,
     8,
+    'VINADES',
     'vinades',
     '',
     '',
@@ -334,6 +344,7 @@ $sth->execute([
 $sth->execute([
     11,
     3,
+    'Lập trình viên',
     'lập-trình-viên',
     '',
     '',
@@ -342,6 +353,7 @@ $sth->execute([
 $sth->execute([
     12,
     3,
+    'Chuyên viên đồ họa',
     'chuyên-viên-đồ-họa',
     '',
     '',
@@ -350,6 +362,7 @@ $sth->execute([
 $sth->execute([
     13,
     3,
+    'Php',
     'php',
     '',
     '',
@@ -358,6 +371,7 @@ $sth->execute([
 $sth->execute([
     14,
     2,
+    'Mysql',
     'mysql',
     '',
     '',
@@ -366,6 +380,7 @@ $sth->execute([
 $sth->execute([
     15,
     1,
+    'Nhân tài đất Việt 2011',
     'nhân-tài-đất-việt-2011',
     '',
     '',
@@ -374,6 +389,7 @@ $sth->execute([
 $sth->execute([
     16,
     9,
+    'Mã nguồn mở',
     'mã-nguồn-mở',
     '',
     '',
@@ -382,6 +398,7 @@ $sth->execute([
 $sth->execute([
     17,
     2,
+    'Nukeviet4',
     'nukeviet4',
     '',
     '',
@@ -390,6 +407,7 @@ $sth->execute([
 $sth->execute([
     18,
     1,
+    'Mail',
     'mail',
     '',
     '',
@@ -398,6 +416,7 @@ $sth->execute([
 $sth->execute([
     19,
     1,
+    'Fpt',
     'fpt',
     '',
     '',
@@ -406,6 +425,7 @@ $sth->execute([
 $sth->execute([
     20,
     1,
+    'Smtp',
     'smtp',
     '',
     '',
@@ -414,6 +434,7 @@ $sth->execute([
 $sth->execute([
     21,
     1,
+    'Bootstrap',
     'bootstrap',
     '',
     '',
@@ -422,6 +443,7 @@ $sth->execute([
 $sth->execute([
     22,
     1,
+    'Block',
     'block',
     '',
     '',
@@ -430,6 +452,7 @@ $sth->execute([
 $sth->execute([
     23,
     1,
+    'Modules',
     'modules',
     '',
     '',
@@ -438,6 +461,7 @@ $sth->execute([
 $sth->execute([
     24,
     2,
+    'Banner',
     'banner',
     '',
     '',
@@ -446,6 +470,7 @@ $sth->execute([
 $sth->execute([
     25,
     1,
+    'Liên kết',
     'liên-kết',
     '',
     '',
@@ -454,6 +479,7 @@ $sth->execute([
 $sth->execute([
     26,
     2,
+    'Hosting',
     'hosting',
     '',
     '',
@@ -462,6 +488,7 @@ $sth->execute([
 $sth->execute([
     27,
     1,
+    'Hỗ trợ',
     'hỗ-trợ',
     '',
     '',
@@ -470,6 +497,7 @@ $sth->execute([
 $sth->execute([
     28,
     1,
+    'Hợp tác',
     'hợp-tác',
     '',
     '',
@@ -478,6 +506,7 @@ $sth->execute([
 $sth->execute([
     29,
     1,
+    'Tốc độ',
     'tốc-độ',
     '',
     '',
@@ -486,6 +515,7 @@ $sth->execute([
 $sth->execute([
     30,
     2,
+    'Website',
     'website',
     '',
     '',
@@ -494,6 +524,7 @@ $sth->execute([
 $sth->execute([
     31,
     1,
+    'Bảo mật',
     'bảo-mật',
     '',
     '',
@@ -502,6 +533,7 @@ $sth->execute([
 $sth->execute([
     32,
     4,
+    'Giáo dục',
     'giáo-dục',
     '',
     '',
@@ -510,6 +542,7 @@ $sth->execute([
 $sth->execute([
     33,
     1,
+    'Edu gate',
     'edu-gate',
     '',
     '',
@@ -518,6 +551,7 @@ $sth->execute([
 $sth->execute([
     34,
     2,
+    'Lập trình',
     'lập-trình',
     '',
     '',
@@ -526,6 +560,7 @@ $sth->execute([
 $sth->execute([
     35,
     1,
+    'Logo',
     'logo',
     '',
     '',
@@ -534,6 +569,7 @@ $sth->execute([
 $sth->execute([
     36,
     1,
+    'Code',
     'code',
     '',
     '',
@@ -542,6 +578,7 @@ $sth->execute([
 $sth->execute([
     37,
     1,
+    'Thực tập',
     'thực-tập',
     '',
     '',
@@ -550,6 +587,7 @@ $sth->execute([
 $sth->execute([
     38,
     1,
+    'Kinh doanh',
     'kinh-doanh',
     '',
     '',
@@ -558,6 +596,7 @@ $sth->execute([
 $sth->execute([
     39,
     1,
+    'Nhân viên',
     'nhân-viên',
     '',
     '',
@@ -566,14 +605,16 @@ $sth->execute([
 $sth->execute([
     40,
     1,
-    'bộ-gd&đt',
+    'Bộ GD&ĐT',
+    'bộ-gd-đt',
     '',
     '',
-    'Bộ GD&ĐT'
+    'bộ gd&đt'
 ]);
 $sth->execute([
     41,
     1,
+    'Module',
     'module',
     '',
     '',
@@ -582,6 +623,7 @@ $sth->execute([
 $sth->execute([
     42,
     1,
+    'Php Nuke',
     'php-nuke',
     '',
     '',
@@ -747,7 +789,7 @@ $sth->execute([
 $sth->execute([
     6,
     15,
-    'Nhân tài đất Việt 2011'
+    'nhân tài đất việt 2011'
 ]);
 $sth->execute([
     6,
@@ -772,7 +814,7 @@ $sth->execute([
 $sth->execute([
     7,
     40,
-    'Bộ GD&ĐT'
+    'bộ gd&đt'
 ]);
 $sth->execute([
     7,
