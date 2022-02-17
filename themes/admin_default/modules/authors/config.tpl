@@ -46,6 +46,10 @@
                     <td>{LANG.admin_check_pass_time}</td>
                     <td><input class="form-control pull-left" style="width:50px;" type="text" value="{ADMIN_CHECK_PASS_TIME}" name="admin_check_pass_time" maxlength="3"/>({GLANG.min})</td>
                 </tr>
+                <tr>
+                    <td>{LANG.admin_user_logout}</td>
+                    <td><input type="checkbox" value="1" name="admin_user_logout"{DATA.admin_user_logout} /></td>
+                </tr>
             </tbody>
         </table>
     </div>
