@@ -140,13 +140,13 @@
             })
         });
         $('#regForm form').on('submit', function() {
-            var reg_username = $('[name=reg_username]', this).val()
-            reg_email = $('[name=reg_email]', this).val(),
+            var reg_username = $('[name=reg_username]', this).val(),
+                reg_email = $('[name=reg_email]', this).val(),
                 reg_password = $('[name=reg_password]', this).val(),
                 reg_repassword = $('[name=reg_repassword]', this).val(),
                 pass_min = $('[name=reg_password]', this).data('minlength'),
                 pass_max = $('[name=reg_password]', this).attr('maxlength');
-            if (!required_uname_check(reg_username)) {
+            if (reg_username == '') {
                 alert($('[name=reg_username]', this).data('mess'));
                 $('[name=reg_username]', this).focus();
                 return !1
