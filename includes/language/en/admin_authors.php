@@ -220,3 +220,4 @@ $lang_module['api_System'] = 'System functions';
 $lang_module['api_System_SendMail'] = 'Send email';
 $lang_module['other_info'] = 'Other information';
 $lang_module['value_copied'] = 'Value has been copied';
+$lang_module['admin_user_logout'] = 'Forced logout from user account when logged in as administrator';

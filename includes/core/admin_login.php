@@ -468,6 +468,10 @@ if ($admin_login_success === true) {
     $nv_Request->unset_request('admin_login_redirect', 'session');
     $nv_Request->unset_request('admin_pre', 'session');
 
+    if ($global_config['admin_user_logout']) {
+        $nv_Request->unset_request('nvloginhash', 'cookie');
+    }
+
     if ($nv_Request->isset_request('nv_login,nv_password', 'post') or $nv_Request->isset_request('submit2scode', 'post')) {
         nv_jsonOutput([
             'status' => 'success',

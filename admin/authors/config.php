@@ -100,6 +100,7 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
         if ($array_config_global['admin_check_pass_time'] < 120) {
             $array_config_global['admin_check_pass_time'] = 120;
         }
+        $array_config_global['admin_user_logout'] = (int) $nv_Request->get_bool('admin_user_logout', 'post', false);
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
@@ -281,7 +282,8 @@ $xtpl->assign('DATA', [
     'admfirewall' => $global_config['admfirewall'] ? ' checked="checked"' : '',
     'block_admin_ip' => $global_config['block_admin_ip'] ? ' checked="checked"' : '',
     'authors_detail_main' => $global_config['authors_detail_main'] ? ' checked="checked"' : '',
-    'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? ' checked="checked"' : ''
+    'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? ' checked="checked"' : '',
+    'admin_user_logout' => $global_config['admin_user_logout'] ? ' checked="checked"' : ''
 ]);
 
 if (!empty($error)) {
