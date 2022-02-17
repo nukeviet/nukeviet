@@ -90,3 +90,6 @@ $lang_module['linkTags_rel_val_required'] = 'Vous devez déclarer la valeur de l
 $lang_module['linkTags_add'] = 'Ajouter une nouvelle balise de lien';
 $lang_module['linkTags_acceptVars'] = 'Variables acceptées dans la valeur d\'attribut';
 $lang_module['linkTags_del_confirm'] = 'Voulez-vous vraiment supprimer?';
+
+$lang_module['add_opensearch_link'] = 'Activer la balise de lien OpenSearch pour la recherche dans les zones';
+$lang_module['add_opensearch_link_all'] = 'Recherche sur tout le site';

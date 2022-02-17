@@ -336,7 +336,8 @@ $installMods['seek'] = [
             'show_func' => 1,
             'theme_default' => 'left-main-right',
             'theme_mobile' => 'main'
-        ]
+        ],
+        'opensearch' => []
     ]
 ];
 

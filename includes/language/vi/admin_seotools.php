@@ -94,3 +94,6 @@ $lang_module['linkTags_rel_val_required'] = 'Bạn cần khai báo giá trị c�
 $lang_module['linkTags_add'] = 'Thêm thẻ link mới';
 $lang_module['linkTags_acceptVars'] = 'Các biến được chấp nhận trong giá trị thuộc tính';
 $lang_module['linkTags_del_confirm'] = 'Bạn thục sự muốn xoá?';
+
+$lang_module['add_opensearch_link'] = 'Kích hoạt thẻ link OpenSearch cho việc tìm kiếm tại các khu vực';
+$lang_module['add_opensearch_link_all'] = 'Trên toàn site';

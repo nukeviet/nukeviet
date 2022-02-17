@@ -40,3 +40,5 @@ $lang_module['logic_and'] = 'All words';
 $lang_module['logic_or'] = 'At least 1 word';
 $lang_module['searchQueryError'] = 'Please enter a search keyword with at least %s characters';
 $lang_module['chooseModule'] = 'Select the search section';
+$lang_module['opensearch_desc_all'] = 'Search the entire site %s';
+$lang_module['opensearch_desc_mod'] = 'Search in the %1$s area of the %2$s website';

@@ -90,3 +90,6 @@ $lang_module['linkTags_rel_val_required'] = 'You need to declare the value of th
 $lang_module['linkTags_add'] = 'Add new link-tag';
 $lang_module['linkTags_acceptVars'] = 'Variables accepted in attribute value';
 $lang_module['linkTags_del_confirm'] = 'Do you really want to delete?';
+
+$lang_module['add_opensearch_link'] = 'Enable OpenSearch link tag for searching in areas';
+$lang_module['add_opensearch_link_all'] = 'Sitewide search';

@@ -26,7 +26,7 @@ function LoadModulesSearch()
 
     $arrayfolder = [];
     foreach ($site_mods as $mod => $arr_mod) {
-        if (file_exists(NV_ROOTDIR . '/modules/' . $arr_mod['module_file'] . '/search.php')) {
+        if (!empty($arr_mod['is_search'])) {
             $arrayfolder[$mod] = [
                 'module_name' => $mod,
                 'module_file' => $arr_mod['module_file'],

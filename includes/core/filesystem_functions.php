@@ -113,6 +113,27 @@ function nv_scandir($directory, $pattern, $sorting_order = 0)
 }
 
 /**
+ * nv_get_mime_from_ini()
+ * 
+ * @param string $ext 
+ * @return string 
+ */
+function nv_get_mime_from_ini($ext)
+{
+    $mime_types = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini');
+
+    if (array_key_exists($ext, $mime_types)) {
+        if (is_string($mime_types[$ext])) {
+            return $mime_types[$ext];
+        }
+
+        return $mime_types[$ext][0];
+    }
+
+    return '';
+}
+
+/**
  * nv_get_mime_type()
  *
  * @param string $filename
@@ -214,14 +235,9 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
     }
 
     if (empty($mime) or $mime == 'application/octet-stream') {
-        $mime_types = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini');
-
-        if (array_key_exists($ext, $mime_types)) {
-            if (is_string($mime_types[$ext])) {
-                return $mime_types[$ext];
-            }
-
-            return $mime_types[$ext][0];
+        $mime2 = nv_get_mime_from_ini($ext);
+        if (!empty($mime2)) {
+            return $mime2;
         }
     }
 

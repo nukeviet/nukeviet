@@ -449,7 +449,7 @@ unset($nv_check_update);
 
 nv_apply_hook('', 'modify_global_config');
 
-$cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
+$cache_file = NV_LANG_DATA . '_smods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
     $sys_mods = unserialize($cache);
 } else {
@@ -480,6 +480,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'admins' => $row['admins'],
                     'rss' => $row['rss'],
                     'sitemap' => $row['sitemap'],
+                    'is_search' => file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/search.php') ? 1 : 0,
                     'funcs' => []
                 ];
             }

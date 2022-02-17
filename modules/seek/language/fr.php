@@ -40,3 +40,5 @@ $lang_module['logic_and'] = 'Cette expression exacte';
 $lang_module['logic_or'] = 'Au moins un mot';
 $lang_module['searchQueryError'] = 'Veuillez saisir un mot-clé de recherche d\'au moins %s caractères';
 $lang_module['chooseModule'] = 'Sélectionnez la section de recherche';
+$lang_module['opensearch_desc_all'] = 'Rechercher sur tout le site %s';
+$lang_module['opensearch_desc_mod'] = 'Rechercher dans la zone %1$s du site %2$s';

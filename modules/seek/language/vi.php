@@ -40,3 +40,5 @@ $lang_module['logic_and'] = 'Cả cụm từ';
 $lang_module['logic_or'] = 'Tối thiểu 1 từ';
 $lang_module['searchQueryError'] = 'Vui lòng nhập từ khóa tìm kiếm có tối thiểu %s ký tự';
 $lang_module['chooseModule'] = 'Hãy chọn Khu vực tìm kiếm';
+$lang_module['opensearch_desc_all'] = 'Tìm kiếm trên toàn site %s';
+$lang_module['opensearch_desc_mod'] = 'Tìm kiếm tại khu vực %1$s của site %2$s';

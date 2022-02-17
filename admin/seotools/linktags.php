@@ -33,6 +33,17 @@ if (file_exists($file_linktags)) {
 }
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
+if ($nv_Request->isset_request('opensearch', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    $opensearch_link = $nv_Request->get_typed_array('opensearch_link', 'post', 'title', []);
+    $opensearch_link = implode(',', $opensearch_link);
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'opensearch_link' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+    $sth->bindParam(':config_value', $opensearch_link, PDO::PARAM_STR);
+    $sth->execute();
+    $nv_Cache->delAll();
+
+    exit('ok');
+}
+
 if ($nv_Request->isset_request('add', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $key = $nv_Request->get_string('key', 'post', '');
     $linktags_key = -1;
@@ -119,7 +130,7 @@ $acceptVars = [
     '<code>{SITE_NAME}</code> (' . $global_config['site_name'] . ')',
     '<code>{SITE_EMAIL}</code> (' . $global_config['site_email'] . ')'
 ];
-$xtpl->assign('ACCEPTVARS', implode('<br/>', $acceptVars));
+$xtpl->assign('ACCEPTVARS', implode(', ', $acceptVars));
 
 if (!empty($linktags['link'])) {
     foreach ($linktags['link'] as $key => $val) {
@@ -145,6 +156,26 @@ if (!empty($linktags['link'])) {
         $xtpl->parse('main.if_links.item');
     }
     $xtpl->parse('main.if_links');
+}
+
+$opensearch_link = !empty($global_config['opensearch_link']) ? array_map('trim', explode(',', $global_config['opensearch_link'])) : [];
+
+$xtpl->assign('OPENSEARCH', [
+    'val' => 'site',
+    'checked' => (!empty($opensearch_link) and in_array('site', $opensearch_link, true)) ? ' checked="checked"' : '',
+    'title' => $lang_module['add_opensearch_link_all']
+]);
+$xtpl->parse('main.opensearch_link');
+
+foreach ($site_mods as $mod => $arr_mod) {
+    if (!empty($arr_mod['is_search'])) {
+        $xtpl->assign('OPENSEARCH', [
+            'val' => $mod,
+            'checked' => (!empty($opensearch_link) and in_array($mod, $opensearch_link, true)) ? ' checked="checked"' : '',
+            'title' => $arr_mod['custom_title']
+        ]);
+        $xtpl->parse('main.opensearch_link');
+    }
 }
 
 $xtpl->parse('main');

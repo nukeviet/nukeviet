@@ -15,7 +15,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
 
 $module_version = [
     'name' => 'Search',
-    'modfuncs' => 'main',
+    'modfuncs' => 'main,opensearch',
     'is_sysmod' => 1,
     'virtual' => 0,
     'version' => '4.5.00',
