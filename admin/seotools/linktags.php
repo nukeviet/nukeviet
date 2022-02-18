@@ -35,9 +35,19 @@ if (file_exists($file_linktags)) {
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 if ($nv_Request->isset_request('opensearch', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $opensearch_link = $nv_Request->get_typed_array('opensearch_link', 'post', 'title', []);
-    $opensearch_link = implode(',', $opensearch_link);
+    $shortname = $nv_Request->get_typed_array('shortname', 'post', 'title', []);
+    $description = $nv_Request->get_typed_array('description', 'post', 'title', []);
+    $config_value = [];
+    if (!empty($opensearch_link)) {
+        foreach($opensearch_link as $ol) {
+            if (!empty($shortname[$ol])) {
+                $config_value[$ol] = [$shortname[$ol], $description[$ol]];
+            }
+        }
+    }
+    $config_value = !empty($config_value) ? json_encode($config_value) : '';
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'opensearch_link' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
-    $sth->bindParam(':config_value', $opensearch_link, PDO::PARAM_STR);
+    $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
     $sth->execute();
     $nv_Cache->delAll();
 
@@ -158,12 +168,20 @@ if (!empty($linktags['link'])) {
     $xtpl->parse('main.if_links');
 }
 
-$opensearch_link = !empty($global_config['opensearch_link']) ? array_map('trim', explode(',', $global_config['opensearch_link'])) : [];
+$opensearch_link = [];
+if (!empty($global_config['opensearch_link'])) {
+    $opensearch_link = json_decode($global_config['opensearch_link'], true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $opensearch_link = [];
+    }
+}
 
 $xtpl->assign('OPENSEARCH', [
     'val' => 'site',
-    'checked' => (!empty($opensearch_link) and in_array('site', $opensearch_link, true)) ? ' checked="checked"' : '',
-    'title' => $lang_module['add_opensearch_link_all']
+    'checked' => isset($opensearch_link['site']) ? ' checked="checked"' : '',
+    'title' => $lang_module['add_opensearch_link_all'],
+    'shortname' => isset($opensearch_link['site']) ? $opensearch_link['site'][0] : '',
+    'description' => isset($opensearch_link['site']) ? $opensearch_link['site'][1] : ''
 ]);
 $xtpl->parse('main.opensearch_link');
 
@@ -171,8 +189,10 @@ foreach ($site_mods as $mod => $arr_mod) {
     if (!empty($arr_mod['is_search'])) {
         $xtpl->assign('OPENSEARCH', [
             'val' => $mod,
-            'checked' => (!empty($opensearch_link) and in_array($mod, $opensearch_link, true)) ? ' checked="checked"' : '',
-            'title' => $arr_mod['custom_title']
+            'checked' => isset($opensearch_link[$mod]) ? ' checked="checked"' : '',
+            'title' => $arr_mod['custom_title'],
+            'shortname' => isset($opensearch_link[$mod]) ? $opensearch_link[$mod][0] : '',
+            'description' => isset($opensearch_link[$mod]) ? $opensearch_link[$mod][1] : ''
         ]);
         $xtpl->parse('main.opensearch_link');
     }

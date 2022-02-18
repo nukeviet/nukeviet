@@ -95,5 +95,9 @@ $lang_module['linkTags_add'] = 'Thêm thẻ link mới';
 $lang_module['linkTags_acceptVars'] = 'Các biến được chấp nhận trong giá trị thuộc tính';
 $lang_module['linkTags_del_confirm'] = 'Bạn thục sự muốn xoá?';
 
-$lang_module['add_opensearch_link'] = 'Kích hoạt thẻ link OpenSearch cho việc tìm kiếm tại các khu vực';
+$lang_module['add_opensearch_link'] = 'Kích hoạt thẻ link OpenSearch cho plugin tìm kiếm tại các khu vực';
 $lang_module['add_opensearch_link_all'] = 'Trên toàn site';
+$lang_module['ShortName'] = 'Tên ngắn gọn';
+$lang_module['Description'] = 'Mô tả';
+$lang_module['ShortName_note'] = 'Không hơn 16 ký tự';
+$lang_module['Description_note'] = 'Không hơn 1024 ký tự';

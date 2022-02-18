@@ -58,15 +58,30 @@
             </div>
             <div class="panel-body">
                 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" data-toggle="openSearchFormSubmit">
-                    <div class="row m-bottom">
+                    <div class="panel-group">
                         <!-- BEGIN: opensearch_link -->
-                        <div class="col-md-12">
-                            <label>
-                                <input type="checkbox" name="opensearch_link[]" value="{OPENSEARCH.val}" {OPENSEARCH.checked}> {OPENSEARCH.title}
-                            </label>
+                        <div class="panel panel-default item">
+                            <div class="panel-heading">
+                                <label class="m-bottom-none">
+                                    <input type="checkbox" name="opensearch_link[{OPENSEARCH.val}]" value="{OPENSEARCH.val}" {OPENSEARCH.checked}> <strong>{OPENSEARCH.title}</strong>
+                                </label>
+                            </div>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-nowrap text-right" style="width: 30%; vertical-align: middle">{LANG.ShortName}</td>
+                                        <td><input type="text" class="form-control" name="shortname[{OPENSEARCH.val}]" value="{OPENSEARCH.shortname}" placeholder="{LANG.ShortName_note}" maxlength="16"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-nowrap text-right" style="width: 30%; vertical-align: middle">{LANG.Description}</td>
+                                        <td><input type="text" class="form-control" name="description[{OPENSEARCH.val}]" value="{OPENSEARCH.description}" placeholder="{LANG.Description_note}" maxlength="1024"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <!-- END: opensearch_link -->
                     </div>
+
                     <input type="hidden" name="opensearch" value="1" />
                     <input type="hidden" name="checkss" value="{CHECKSS}" />
                     <input type="submit" value="{LANG.submit}" class="btn btn-primary" />
@@ -197,6 +212,24 @@
     $(function() {
         $('[data-toggle=openSearchFormSubmit]').on('submit', function(e) {
             e.preventDefault();
+            $('.has-error', this).removeClass('has-error');
+            var error = false;
+            if ($('[name^=opensearch_link]:checked', this).length) {
+                $('[name^=opensearch_link]:checked', this).each(function(e) {
+                    var item = $(this).parents('.item'),
+                        shortname = trim(strip_tags($('[name^=shortname]', item).val()));
+                    if (shortname == '') {
+                        $('[name^=shortname]', item).parent().addClass('has-error');
+                        error = true;
+                        $('[name^=shortname]', item).focus();
+                        return !1
+                    }
+                })
+            }
+            if (error) {
+                return !1
+            }
+
             var url = $(this).attr('action'),
                 data = $(this).serialize();
             $.ajax({

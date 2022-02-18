@@ -91,5 +91,9 @@ $lang_module['linkTags_add'] = 'Add new link-tag';
 $lang_module['linkTags_acceptVars'] = 'Variables accepted in attribute value';
 $lang_module['linkTags_del_confirm'] = 'Do you really want to delete?';
 
-$lang_module['add_opensearch_link'] = 'Enable OpenSearch link tag for searching in areas';
+$lang_module['add_opensearch_link'] = 'Enable the OpenSearch link tag for the search plugin in the following areas';
 $lang_module['add_opensearch_link_all'] = 'Sitewide search';
+$lang_module['ShortName'] = 'Short name';
+$lang_module['Description'] = 'Description';
+$lang_module['ShortName_note'] = '16 or fewer characters';
+$lang_module['Description_note'] = '1024 or fewer characters';

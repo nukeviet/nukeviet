@@ -126,6 +126,15 @@ try {
                 $module_captcha = 'captcha';
             }
 
+            // OpenSearch Link tag
+            $opensearch_link = [];
+            if (!empty($global_config['opensearch_link'])) {
+                $opensearch_link = json_decode($global_config['opensearch_link'], true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    $opensearch_link = [];
+                }
+            }
+
             $include_file = NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php';
 
             if (file_exists($include_file)) {

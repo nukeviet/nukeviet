@@ -67,7 +67,7 @@ function nv_mailHTML($title, $content, $footer = '')
  */
 function nv_site_theme($contents, $full = true)
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $drag_block;
+    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $drag_block, $opensearch_link;
 
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
@@ -160,15 +160,14 @@ function nv_site_theme($contents, $full = true)
         unset($config_theme, $css_content, $webFontFile, $font, $subset, $gf);
     }
 
-    $opensearch_link = !empty($global_config['opensearch_link']) ? array_map('trim', explode(',', $global_config['opensearch_link'])) : [];
     if (!empty($opensearch_link)) {
-        foreach($opensearch_link as $ol) {
+        foreach ($opensearch_link as $ol => $nd) {
             if ($ol == 'site') {
                 $html_links[] = [
                     'rel' => 'search',
                     'type' => 'application/opensearchdescription+xml',
                     'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=seek&' . NV_OP_VARIABLE . '=opensearch',
-                    'title' => $global_config['site_name']
+                    'title' => $nd[0]
                 ];
             } else {
                 if (!empty($site_mods[$ol]['is_search'])) {
@@ -176,7 +175,7 @@ function nv_site_theme($contents, $full = true)
                         'rel' => 'search',
                         'type' => 'application/opensearchdescription+xml',
                         'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=seek&' . NV_OP_VARIABLE . '=opensearch/' . $ol,
-                        'title' => $global_config['site_name'] . ' - ' . $site_mods[$ol]['custom_title']
+                        'title' => $nd[0]
                     ];
                 }
             }

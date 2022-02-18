@@ -91,5 +91,9 @@ $lang_module['linkTags_add'] = 'Ajouter une nouvelle balise de lien';
 $lang_module['linkTags_acceptVars'] = 'Variables acceptées dans la valeur d\'attribut';
 $lang_module['linkTags_del_confirm'] = 'Voulez-vous vraiment supprimer?';
 
-$lang_module['add_opensearch_link'] = 'Activer la balise de lien OpenSearch pour la recherche dans les zones';
+$lang_module['add_opensearch_link'] = 'Activez la balise de lien OpenSearch pour le plug-in de recherche dans les zones suivantes';
 $lang_module['add_opensearch_link_all'] = 'Recherche sur tout le site';
+$lang_module['ShortName'] = 'Nom court';
+$lang_module['Description'] = 'La description';
+$lang_module['ShortName_note'] = '16 caractères ou moins';
+$lang_module['Description_note'] = '1024 caractères ou moins';
