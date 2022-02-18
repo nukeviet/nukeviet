@@ -160,6 +160,29 @@ function nv_site_theme($contents, $full = true)
         unset($config_theme, $css_content, $webFontFile, $font, $subset, $gf);
     }
 
+    $opensearch_link = !empty($global_config['opensearch_link']) ? array_map('trim', explode(',', $global_config['opensearch_link'])) : [];
+    if (!empty($opensearch_link)) {
+        foreach($opensearch_link as $ol) {
+            if ($ol == 'site') {
+                $html_links[] = [
+                    'rel' => 'search',
+                    'type' => 'application/opensearchdescription+xml',
+                    'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=seek&' . NV_OP_VARIABLE . '=opensearch',
+                    'title' => $global_config['site_name']
+                ];
+            } else {
+                if (!empty($site_mods[$ol]['is_search'])) {
+                    $html_links[] = [
+                        'rel' => 'search',
+                        'type' => 'application/opensearchdescription+xml',
+                        'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=seek&' . NV_OP_VARIABLE . '=opensearch/' . $ol,
+                        'title' => $global_config['site_name'] . ' - ' . $site_mods[$ol]['custom_title']
+                    ];
+                }
+            }
+        }
+    }
+
     foreach ($html_links as $links) {
         foreach ($links as $key => $value) {
             $xtpl->assign('LINKS', ['key' => $key, 'value' => $value]);
