@@ -2773,3 +2773,45 @@ function nv_autoLinkDisable($text)
     $text = str_replace('&#x3A;', '<span>&#58;</span>', $text);
     return str_replace(['@', '.', ':'], ['<span>&#64;</span>', '<span>&#46;</span>', '<span>&#58;</span>'], $text);
 }
+
+/**
+ * Make an asynchronous POST request
+ * Thực hiện yêu cầu POST không đồng bộ trong nội bộ site mà không cần chờ phản hồi
+ * => Không ảnh hưởng, không trì hoãn tiến trình đang chạy
+ * 
+ * post_async()
+ * 
+ * @param mixed $url 
+ * @param mixed $params 
+ * @param array $headers 
+ */
+function post_async($url, $params, $headers = [])
+{
+    ksort($params);
+    $post_string = http_build_query($params);
+    !str_starts_with($url, NV_MY_DOMAIN) && $url = NV_MY_DOMAIN . $url;
+    $parts = parse_url($url);
+
+    $is_https = ($parts['scheme'] === 'https');
+    $url = ($is_https ? 'ssl://' : '') . $parts['host'];
+    $port = isset($parts['port']) ? $parts['port'] : ($is_https ? 443 : 80);
+    $referer = $parts['scheme'] . '://' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : ($is_https ? ':' . 443 : ''));
+
+    $fp = fsockopen($url, $port, $errno, $errstr, 30);
+    $out = "POST " . $parts['path'] . " HTTP/1.1\r\n";
+    $out .= "Host: " . $parts['host'] . "\r\n";
+    $out .= "User-Agent: NUKEVIET\r\n";
+    $out .= "Referer: " . $referer . "\r\n";
+    $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+    $out .= "Content-Length: " . strlen($post_string) . "\r\n";
+    if (!empty($headers)) {
+        foreach ($headers as $key => $value) {
+            $out .= "{$key}: {$value}\r\n";
+        }
+    }
+    $out .= "Connection: Close\r\n\r\n";
+    $out .= $post_string;
+
+    fwrite($fp, $out);
+    fclose($fp);
+}
