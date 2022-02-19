@@ -161,6 +161,14 @@ if (!preg_match('/^[a-z0-9]{32}$/', $client_info['clid'])) {
     $nv_Request->set_Cookie('clid', $client_info['clid'], 315360000);
 }
 
+// Cap nhat thong tin Server
+if ($nv_Request->isset_request('__serverInfoUpdate', 'post')) {
+    require NV_ROOTDIR . '/includes/sinfoUpdate.php';
+}
+if (!$serverInfoUpdated) {
+    post_async(NV_BASE_SITEURL . 'index.php', ['__serverInfoUpdate' => 1]);
+}
+
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 
