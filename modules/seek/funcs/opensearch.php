@@ -34,6 +34,8 @@ if (empty($ShortName) or empty($Description)) {
 $Url = NV_MY_DOMAIN . nv_url_rewrite($Url, true);
 $Url = str_replace('searchTerms', '{searchTerms}', $Url);
 
+$searchForm = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+
 if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
     $icon = $global_config['site_favicon'];
 } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/favicon/favicon.ico')) {
@@ -44,14 +46,22 @@ if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $g
 $icon = NV_MY_DOMAIN . NV_BASE_SITEURL . $icon;
 $type = nv_get_mime_from_ini(nv_getextension($icon));
 
-$contents = '<?xml version="1.0" encoding="utf-8"?>
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-    <ShortName>' . $ShortName . '</ShortName>
-    <Description>' . $Description . '</Description>
-    <InputEncoding>UTF-8</InputEncoding>
-    <Image width="16" height="16" type="' . $type . '">' . $icon . '</Image>
-    <Url type="text/html" method="GET" template="' . $Url . '"/>
-</OpenSearchDescription>';
+$namespace = 'http://www.mozilla.org/2006/browser/search/';
+$openSearchHeader = '<?xml version="1.0" encoding="UTF-8"?><OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="' . $namespace . '"></OpenSearchDescription>';
+$xml = new SimpleXMLElement($openSearchHeader);
+$xml->addChild('ShortName', $ShortName);
+$xml->addChild('Description', $Description);
+$xml->addChild('InputEncoding', 'UTF-8');
+$img = $xml->addChild('Image', $icon);
+$img->addAttribute('width', '16');
+$img->addAttribute('height', '16');
+$img->addAttribute('type', $type);
+$ul = $xml->addChild('Url');
+$ul->addAttribute('type', 'text/html');
+$ul->addAttribute('method', 'get');
+$ul->addAttribute('template', $Url);
+$xml->addChild('SearchForm', $searchForm, $namespace);
 
+$contents = $xml->asXML();
 $lastModified = NV_CURRENTTIME - 86400;
 nv_xmlOutput($contents, $lastModified);
