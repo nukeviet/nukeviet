@@ -141,6 +141,14 @@ if (defined('NV_SYSTEM')) {
 // Ket noi voi class xu ly request
 $nv_Request = new NukeViet\Core\Request($global_config + ['https_only' => !empty($sys_info['https_only'])], NV_CLIENT_IP, $nv_Server);
 
+// Cap nhat thong tin Server
+if ($nv_Request->isset_request('__serverInfoUpdate', 'post')) {
+    require NV_ROOTDIR . '/includes/sinfoUpdate.php';
+}
+if (!$serverInfoUpdated) {
+    post_async(NV_BASE_SITEURL . 'index.php', ['__serverInfoUpdate' => 1]);
+}
+
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 
