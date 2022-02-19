@@ -412,8 +412,11 @@ if (defined('NV_ADMIN')) {
 }
 
 // Cronjobs execute
-if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
+if ($nv_Request->isset_request('__cronjobs', 'post')) {
     require NV_ROOTDIR . '/includes/core/cronjobs.php';
+}
+if (isset($global_config['cronjobs_next_time']) and NV_CURRENTTIME > $global_config['cronjobs_next_time']) {
+    post_async(NV_BASE_SITEURL . 'index.php', ['__cronjobs' => 1]);
 }
 
 // Quản lý thẻ meta, header các máy chủ tìm kiếm

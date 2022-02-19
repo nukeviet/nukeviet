@@ -2400,11 +2400,6 @@ function nv_change_buffer($buffer)
         $buffer = preg_replace('/(<body[^>]*>)/', '$1' . PHP_EOL . '<' . $script . '>if(window.top!==window.self){document.write="";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=""},1);window.self.onload=function(){document.body.innerHTML=""}};</script>', $buffer, 1);
     }
 
-    if (isset($global_config['cronjobs_next_time']) and NV_CURRENTTIME > $global_config['cronjobs_next_time']) {
-        $_body_cronjobs = '<div id="run_cronjobs" style="visibility:hidden;display:none;"><img alt="cron" src="' . NV_BASE_SITEURL . 'index.php?second=cronjobs&amp;p=' . nv_genpass() . '" width="1" height="1" /></div>' . PHP_EOL;
-        $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $_body_cronjobs . '</body>', $buffer, 1);
-    }
-
     return $buffer;
 }
 

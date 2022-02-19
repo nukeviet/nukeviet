@@ -98,8 +98,4 @@ while ($cron_row = $cron_result->fetch()) {
     }
 }
 
-$image = imagecreate(1, 1);
-header('Content-type: image/jpg');
-imagejpeg($image, null, 80);
-imagedestroy($image);
 exit();
