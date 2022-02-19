@@ -988,7 +988,7 @@ function nv_get_plugin_area($file_path)
     $hook_module = '';
     $pid = 0;
 
-    require_once $file_path;
+    require $file_path;
 
     $plugin_area = [];
     foreach ($nv_hooks as $event_module => $data) {
@@ -1015,7 +1015,7 @@ function nv_get_hook_require($file_path)
     $hook_module = '';
     $pid = 0;
 
-    require_once $file_path;
+    require $file_path;
 
     $nv_hooks = $nv_hooks_backup;
     if (!isset($nv_hook_module)) {
@@ -1041,7 +1041,7 @@ function nv_get_hook_revmod($file_path)
     $hook_module = '';
     $pid = 0;
 
-    require_once $file_path;
+    require $file_path;
 
     $nv_hooks = $nv_hooks_backup;
     if (!isset($nv_receive_module)) {
