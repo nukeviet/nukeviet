@@ -703,7 +703,7 @@ class XTemplate {
                 $bname2 = implode('.', $sub);
 
                 // trinary operator eliminates assign error in E_ALL reporting
-                $var = isset($this->parsed_blocks[$bname2]) ? $this->parsed_blocks[$bname2] : null;
+                $var = isset($this->parsed_blocks[$bname2]) ? $this->parsed_blocks[$bname2] : '';
                 $nul = (!isset($this->_null_block[$bname2])) ? $this->_null_block[''] : $this->_null_block[$bname2];
 
                 if ($var === '') {

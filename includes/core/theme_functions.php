@@ -22,10 +22,10 @@ function nv_error_info()
     global $lang_global, $global_config, $error_info;
 
     if (!defined('NV_IS_ADMIN')) {
-        return;
+        return '';
     }
     if (empty($error_info)) {
-        return;
+        return '';
     }
 
     $errortype = [
