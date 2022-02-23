@@ -1508,9 +1508,11 @@ $('[name="uploadremoteFileOK"]').click(function() {
     var fileAlt = $('#uploadremoteFileAlt').val();
     var panel = $('#uploadremote');
     var auto_logo = ($('[name="auto_logo"]', panel).is(':checked') ? 1 : 0);
-    var regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
-
-    if (/^(https?|ftp):\/\//i.test(fileUrl) === false){fileUrl = 'http://' + fileUrl;}
+    // var regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
+    var regex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@|\d{1,3}(?:\.\d{1,3}){3}|(?:(?:[a-z\d\u00a1-\uffff]+-?)*[a-z\d\u00a1-\uffff]+)(?:\.(?:[a-z\d\u00a1-\uffff]+-?)*[a-z\d\u00a1-\uffff]+)*(?:\.[a-z\u00a1-\uffff]{2,6}))(?::\d+)?(?:\/[^\s]*)?$/gm;
+    if (/^(https?|ftp):\/\//i.test(fileUrl) === false) {
+        fileUrl = 'http://' + fileUrl;
+    }
     $("input[name=uploadremoteFile]").val(fileUrl);
 
     if (
