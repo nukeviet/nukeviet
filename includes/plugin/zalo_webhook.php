@@ -34,13 +34,32 @@ nv_add_hook($module_name, 'zalo_webhook', $priority, function () {
                         ksort($params);
                         $post_string = http_build_query($params);
                         $is_https = ($parts['scheme'] === 'https');
-                        $url = ($is_https ? 'ssl://' : '') . $parts['host'];
-                        $port = isset($parts['port']) ? $parts['port'] : ($is_https ? 443 : 80);
-                        $referer = $parts['scheme'] . '://' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : ($is_https ? ':' . 443 : ''));
+                        $referer = $parts['scheme'] . '://' . $parts['host'];
+                        if (!$is_https) {
+                            $port = isset($parts['port']) ? $parts['port'] : 80;
+                            $host = $parts['host'] . ($port != 80 ? ':' . $port : '');
+                            isset($parts['port']) && $referer .= ':' . $parts['port'];
+                            $fp = fsockopen($parts['host'], $port, $errno, $errstr, 30);
+                        } else {
+                            $context = stream_context_create([
+                                "ssl" => [
+                                    "verify_peer" => false,
+                                    "verify_peer_name" => false
+                                ]
+                            ]);
+                            $port = isset($parts['port']) ? $parts['port'] : 443;
+                            $host = $parts['host'] . ($port != 443 ? ':' . $port : '');
+                            $referer .= ':' . (isset($parts['port']) ? $parts['port'] : 443);
+                            $fp = stream_socket_client('ssl://' . $parts['host'] . ':' . $port, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
+                        }
 
-                        $fp = fsockopen($url, $port, $errno, $errstr, 30);
-                        $out = "POST " . $parts['path'] . " HTTP/1.1\r\n";
-                        $out .= "Host: " . $parts['host'] . "\r\n";
+                        $path = isset($parts['path']) ? $parts['path'] : '/';
+                        if (isset($parts['query'])) {
+                            $path .= '?' . $parts['query'];
+                        }
+
+                        $out = "POST " . $path . " HTTP/1.1\r\n";
+                        $out .= "Host: " . $host . "\r\n";
                         $out .= "User-Agent: NUKEVIET\r\n";
                         $out .= "Referer: " . $referer . "\r\n";
                         $out .= "X-Nukeviet-Signature: " . hash("sha256", mb_convert_encoding($post_string, 'UTF-8') . $global_config['zaloOASecretKey'] . $global_config['sitekey']) . "\r\n";
@@ -50,6 +69,10 @@ nv_add_hook($module_name, 'zalo_webhook', $priority, function () {
                         $out .= $post_string;
 
                         fwrite($fp, $out);
+                        if ($is_https) {
+                            stream_set_timeout($fp, 1);
+                            stream_get_contents($fp, -1);
+                        }
                         fclose($fp);
                     }
                 }
