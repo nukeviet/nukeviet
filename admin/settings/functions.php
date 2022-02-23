@@ -117,9 +117,43 @@ function main_theme($contents)
         return '';
     }
 
-    global $global_config, $module_file;
+    global $global_config, $module_name, $module_file, $lang_global, $lang_module;
 
     $xtpl = new XTemplate('cronjobs_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs');
+
+    $url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&loadcron=' . md5('cronjobs' . $global_config['sitekey']), true);
+    if ($global_config['cronjobs_interval'] <= 1 or $global_config['cronjobs_interval'] > 59) {
+        $interval = '*';
+    } else {
+        $interval = '*/' . $global_config['cronjobs_interval'];
+    }
+    $code = $interval . ' * * * *  /usr/bin/wget --spider &quot;' . $url . '&quot;  &gt;/dev/null 2&gt;&amp;1';
+    $xtpl->assign('CRON_CODE', $code);
+
+    if ($global_config['cronjobs_last_time'] > 0) {
+        $xtpl->assign('LAST_CRON', sprintf($lang_module['cron_last_time'], nv_date('d/m/Y H:i:s', $global_config['cronjobs_last_time'])));
+        $xtpl->assign('NEXT_CRON', sprintf($lang_module['cron_next_time'], nv_date('d/m/Y H:i:s', ($global_config['cronjobs_last_time'] + $global_config['cronjobs_interval'] * 60))));
+        $xtpl->parse('main.next_cron');
+    }
+    
+    if (isset($global_config['cronjobs_launcher']) and $global_config['cronjobs_launcher'] == 'server') {
+        $xtpl->parse('main.launcher_server');
+        $xtpl->parse('main.cron_code');
+    } else {
+        $xtpl->parse('main.launcher_system');
+    }
+
+    for ($i = 1; $i < 60; ++$i) {
+        $xtpl->assign('CRON_INTERVAL', [
+            'val' => $i,
+            'sel' => $i == $global_config['cronjobs_interval'] ? ' selected="selected"' : '',
+            'name' => plural($i, $lang_global['plural_min'])
+        ]);
+        $xtpl->parse('main.cronjobs_interval');
+    }
 
     foreach ($contents as $id => $values) {
         $xtpl->assign('DATA', [
@@ -131,13 +165,13 @@ function main_theme($contents)
         ]);
 
         if (!empty($values['edit'][0])) {
-            $xtpl->parse('main.edit');
+            $xtpl->parse('main.crj.edit');
         }
         if (!empty($values['disable'][0])) {
-            $xtpl->parse('main.disable');
+            $xtpl->parse('main.crj.disable');
         }
         if (!empty($values['delete'][0])) {
-            $xtpl->parse('main.delete');
+            $xtpl->parse('main.crj.delete');
         }
 
         foreach ($values['detail'] as $key => $value) {
@@ -146,12 +180,13 @@ function main_theme($contents)
                 'value' => $value
             ]);
 
-            $xtpl->parse('main.loop');
+            $xtpl->parse('main.crj.loop');
         }
 
-        $xtpl->parse('main');
+        $xtpl->parse('main.crj');
     }
 
+    $xtpl->parse('main');
     return $xtpl->text('main');
 }
 

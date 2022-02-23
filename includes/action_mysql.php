@@ -212,7 +212,6 @@ function nv_create_table_sys($lang)
          ('" . $lang . "', 'global', 'autologosize3', '30'),
          ('" . $lang . "', 'global', 'autologomod', ''),
          ('" . $lang . "', 'global', 'name_show', '" . ($lang != 'vi' ? 1 : 0) . "'),
-         ('" . $lang . "', 'global', 'cronjobs_next_time', '" . NV_CURRENTTIME . "'),
          ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!'),
          ('" . $lang . "', 'global', 'opensearch_link', ''),
          ('" . $lang . "', 'seotools', 'prcservice', '')";

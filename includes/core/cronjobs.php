@@ -13,6 +13,10 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+if ($db->exec('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'cronjobs_last_time'")) {
+    $nv_Cache->delMod('settings');
+}
+
 // Duyệt tất cả các cron đến giờ chạy
 $cron_result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE act=1 AND start_time <= ' . NV_CURRENTTIME . ' ORDER BY is_sys DESC');
 while ($cron_row = $cron_result->fetch()) {
@@ -86,11 +90,6 @@ while ($cron_row = $cron_result->fetch()) {
                 $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . $this_time . ', last_result=1 WHERE id=' . $cron_row['id']);
             } else {
                 $db->query('UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET last_time=' . $this_time . ', last_result=1 WHERE id=' . $cron_row['id']);
-
-                $cronjobs_next_time = $this_time + $interval;
-                if ($db->exec('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (CAST(config_value AS UNSIGNED) < " . NV_CURRENTTIME . ' OR CAST(config_value AS UNSIGNED) > ' . $cronjobs_next_time . ')')) {
-                    $nv_Cache->delMod('settings');
-                }
             }
         }
         unlink($check_run_cronjobs);

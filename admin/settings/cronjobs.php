@@ -13,6 +13,32 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
     exit('Stop!!!');
 }
 
+if ($nv_Request->isset_request('cfg, cronjobs_launcher', 'post')) {
+    $array_config_site = [
+        'cronjobs_launcher' => $nv_Request->get_title('cronjobs_launcher', 'post', 'system'),
+        'cronjobs_interval' => $nv_Request->get_int('cronjobs_interval', 'post', 1)
+    ];
+    if ($array_config_site['cronjobs_launcher'] != 'server') {
+        $array_config_site['cronjobs_launcher'] = 'system';
+    }
+    if ($array_config_site['cronjobs_interval'] < 1) {
+        $array_config_site['cronjobs_interval'] = 1;
+    }
+    if ($array_config_site['cronjobs_interval'] > 59) {
+        $array_config_site['cronjobs_interval'] = 59;
+    }
+
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    foreach ($array_config_site as $config_name => $config_value) {
+        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
+        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+        $sth->execute();
+    }
+
+    $nv_Cache->delAll();
+    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs&amp;rand=' . nv_genpass());
+}
+
 $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add'] = $lang_module['nv_admin_add'];
 
 $result = $db->query('SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' ORDER BY is_sys DESC');

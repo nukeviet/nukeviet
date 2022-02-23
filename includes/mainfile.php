@@ -412,11 +412,20 @@ if (defined('NV_ADMIN')) {
 }
 
 // Cronjobs execute
-if ($nv_Request->isset_request('__cronjobs', 'post')) {
-    require NV_ROOTDIR . '/includes/core/cronjobs.php';
+$global_config['cronjobs_next_time'] = (int)$global_config['cronjobs_last_time'] + (int)$global_config['cronjobs_interval'] * 60;
+if ($global_config['cronjobs_launcher'] == 'server' and $nv_Request->isset_request('loadcron', 'get')) {
+    if ($nv_Request->get_title('loadcron', 'get') == md5('cronjobs' . $global_config['sitekey']) and NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
+        require NV_ROOTDIR . '/includes/core/cronjobs.php';
+    }
+    exit();
 }
-if (isset($global_config['cronjobs_next_time']) and NV_CURRENTTIME > $global_config['cronjobs_next_time']) {
-    post_async(NV_BASE_SITEURL . 'index.php', ['__cronjobs' => 1]);
+if ($global_config['cronjobs_launcher'] == 'system') {
+    if ($nv_Request->isset_request('__cronjobs', 'post')) {
+        require NV_ROOTDIR . '/includes/core/cronjobs.php';
+    }
+    if (NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
+        post_async(NV_BASE_SITEURL . 'index.php', ['__cronjobs' => 1]);
+    }
 }
 
 // Quản lý thẻ meta, header các máy chủ tìm kiếm
