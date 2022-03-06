@@ -1,0 +1,339 @@
+.news {
+	text-align: right;
+	margin: 2px 0;
+	clear: both;
+}
+
+.news label {
+	width: 150px;
+	text-align: left;
+	float: left;
+	display: inline;
+	border-bottom: 1px dotted #ccc;
+}
+
+.news input {
+	width: 380px;
+}
+
+.news select {
+	width: 382px;
+}
+
+.news input, .news select, textarea {
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.news_checkbox {
+	width: 18px !important;
+}
+
+.collapse_buttons, .collapse_buttons {
+	width: 280px;
+}
+
+.message_list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.message_list li {
+	padding: 0;
+	margin: 0;
+	background: url(../images/message-bar.gif) no-repeat;
+}
+
+.message_head .timestamp, .show_all_message, .collpase_all_message {
+	color: #666666;
+}
+
+.message_head {
+	padding: 5px 0px;
+	cursor: pointer;
+	position: relative;
+	font-size: 95%;
+}
+
+.message_head .timestamp {
+	position: absolute;
+	right: 10px;
+	top: 5px;
+}
+
+.timestamp {
+	font-size: 85%;
+}
+
+.message_head cite {
+	font-size: 100%;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.message_body {
+	padding: 5px;
+}
+
+.message_body textarea, .message_body select {
+	border: 1px solid #ccc;
+}
+
+.collapse_buttons {
+	text-align: right;
+	border-top: solid 1px #e4e4e4;
+	padding: 5px 0;
+}
+
+.collapse_buttons a {
+	margin-left: 15px;
+	float: right;
+}
+
+.show_all_message {
+	background: url(../images/tall-down-arrow.gif) no-repeat right center;
+	padding-right: 12px;
+}
+
+.collpase_all_message {
+	background: url(../images/collapse-all.gif) no-repeat right center;
+	padding-right: 12px;
+}
+
+table.rows2 {
+	width: 100%;
+	border: 1px solid #b9dcff;
+	padding: 5px;
+}
+
+table.rows {
+	width: 100%;
+	border: 1px solid #b9dcff;
+}
+
+table.rows td {
+	padding: 5px;
+}
+
+table.rows td img {
+	width: 60px;
+	padding: 2px;
+	border: 1px solid #ebebeb;
+	vertical-align: middle;
+}
+
+table.rows tr.bg {
+	background: #f3f3f3;
+}
+
+table.rows tr.bgtop {
+	background: #b9dcff;
+	line-height: 22px;
+}
+
+a {
+	text-decoration: none;
+	color: #0080c0;
+}
+
+.payment {
+	color: #ff0000;
+	font-weight: bold;
+	display: block;
+	margin-top: 10px;
+	border: 1px solid #ff0000;
+	padding: 3px;
+	text-transform: uppercase;
+}
+
+#total {
+	color: #ff0000;
+	font-weight: bold;
+}
+
+.bgview {
+	font-weight: bold;
+	color: #993300
+}
+
+.tab1 {
+	margin: 0;
+}
+
+.spanlink {
+	color: #0066CC
+}
+
+.spanlink:hover {
+	color: #993300
+}
+
+.divbor {
+	border: 1px solid #DADADA;
+	padding: 8px;
+}
+
+.divbor td {
+	padding: 8px;
+}
+
+.gray {
+	background: #F0F0F0;
+	border: 1px solid #DADADA;
+	padding: 0px 4px;
+	margin-bottom: 2px;
+	padding-bottom: 4px;
+}
+
+ul li {
+	list-style: none
+}
+
+.tab1 thead {
+	line-height: 24px
+}
+
+.divbor1 {
+	border: 1px solid #DADADA;
+	padding: 8px;
+	background: #F7F7F7;
+}
+
+table.tab1 caption {
+	font: bold 13px /27px Tahoma, Verdana, sans-serif;
+	text-align: left;
+	text-indent: 18px;
+	background: #F8F8F8 url(../images/icons/add.png) 5px 12px no-repeat;
+}
+
+.error {
+	color: #FF0000;
+	padding: 10px;
+	background: #F8F8F8
+}
+
+.require {
+	color: red;
+}
+
+.tab2 td.top {
+	vertical-align: top;
+}
+
+.tab2 .product-info {
+	font-size: 11px;
+}
+
+.tab2 .product-info .price {
+	color: #FF6600;
+}
+
+.tab2 .product-info .other {
+	color: #666;
+}
+
+/* as fb */
+.uiInlineTokenizer .uiToken {
+    top: 2px;
+}
+
+.uiInlineTokenizer {
+    border: 1px solid #BDC7D8;
+    cursor: text;
+}
+.uiCloseButtonSmall {
+    background-image: url("../images/delfb.png");
+    height: 11px;
+    margin-top: 1px;
+    width: 11px;
+}
+.uiCloseButton {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+.uiTypeahead{
+    border-top: 1px solid #ccc;
+}
+.uiTypeahead .innerWrap {
+    overflow: hidden;
+}
+.uiTypeahead .textInput {
+    background:none !important;
+    border: none!important;
+    border: 0 none;
+    outline: 0 none;
+    -webkit-box-shadow: 0 0 0 #fff;
+    -moz-box-shadow: 0 0 0 #fff;
+    box-shadow: 0 0 0 #fff;
+}
+.uiTypeahead .selected {
+    background-color: #E2E8F6;
+}
+.uiTypeaheadDisabled, .uiTypeaheadDisabled div.wrap {
+    border-color: #CCCCCC;
+}
+.uiTypeaheadDisabled div.wrap {
+    background: none repeat scroll 0 0 #E2E2E2;
+}
+.uiToken {
+    background: #E6E6E6;
+    border: 1px solid #ccc;
+    border-radius: 2px 2px 2px 2px;
+    color: #1C2A47;
+    cursor: default;
+    display: block;
+    float: left;
+    height: 25px;
+	line-height: 24px;
+    margin: 0 4px 4px 0;
+    padding: 0 3px;
+    position: relative;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.uiToken .remove {
+    margin: 2px 0 -2px 1px;
+    outline: medium none;
+}
+.uiTokenSelected {
+    background-color: #6D84B4;
+    border-color: #3B5998;
+    color: #FFFFFF;
+}
+.uiTokenGray {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border-color: gray;
+}
+.uiTokenizer {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.tokenarea {
+    overflow: hidden;
+    padding-left: 3px;
+}
+.uiContextualTypeaheadView {
+    position: static;
+}
+.uiTypeaheadView ul {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #333333 #333333 #293E6A;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    overflow: hidden;
+    padding: 2px 0;
+}
+.uiTypeaheadView .freeform {
+    border-top-color: #DDDDDD;
+    padding: 2px 6px 1px;
+    text-align: center;
+}
