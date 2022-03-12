@@ -470,13 +470,6 @@ if (!empty($global_config['site_logo'])) {
     $xtpl->parse('main.logo');
 }
 
-// Kiểm tra site có dùng SSL không
-if ((!isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'off' or $_SERVER['HTTPS'] !== '1')) or $_SERVER['SERVER_PORT'] !== 443) {
-    $xtpl->assign('TITLE_WARNING_SSL', $lang_global['warning_ssl']);
-    $xtpl->assign('CONTENT_WARNING_SSL', $lang_global['content_ssl']);
-    $xtpl->parse('main.warning_ssl');
-}
-
 if (empty($admin_pre_data)) {
     // Form đăng nhập bằng tài khoản (bước 1)
     $xtpl->assign('ADMIN_LOGIN_TITLE', $lang_global['adminlogin']);
@@ -522,6 +515,13 @@ if (empty($admin_pre_data)) {
             $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
             $xtpl->parse('main.pre_form.captcha');
         }
+    }
+
+    // Kiểm tra site có dùng SSL không
+    if ((!isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'off' or $_SERVER['HTTPS'] !== '1')) or $_SERVER['SERVER_PORT'] !== 443) {
+        $xtpl->assign('TITLE_WARNING_SSL', $lang_global['warning_ssl']);
+        $xtpl->assign('CONTENT_WARNING_SSL', $lang_global['content_ssl']);
+        $xtpl->parse('main.pre_form.warning_ssl');
     }
 
     $xtpl->parse('main.pre_form');

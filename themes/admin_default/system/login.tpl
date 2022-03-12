@@ -104,6 +104,11 @@
                          </script>
                          <!-- END: recaptcha3 -->
                         <!-- END: recaptcha -->
+                        <!-- BEGIN: warning_ssl -->
+                        <div class="inner-message">
+                            <div class="error"><b>{TITLE_WARNING_SSL}:</b> {CONTENT_WARNING_SSL}</div>
+                        </div>
+                        <!-- END: warning_ssl -->
                         <div id="smb">
                             <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">
                             <input class="btn btn-primary" type="submit" value="{GLANG.loginsubmit}">
@@ -138,12 +143,6 @@
                     </div>
                     <!-- END: 2step_form -->
                 </form>
-                
-                <!-- BEGIN: warning_ssl -->
-                <div class="inner-message">
-                    <div class="error"><b>{TITLE_WARNING_SSL}:</b> {CONTENT_WARNING_SSL}</div>
-                </div>
-                <!-- END: warning_ssl -->
             </div>
             <div id="copyright">
                 <p>Copyright &copy; <a href="{SITEURL}">{SITE_NAME}</a>. All rights reserved.</p>
