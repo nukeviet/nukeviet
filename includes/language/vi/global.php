@@ -72,6 +72,7 @@ $lang_global['upass_type_4'] = 'Mật khẩu cần kết hợp số và chữ, y
 $lang_global['upass_type_simple'] = 'Mật khẩu bạn đã sử dụng là mật khẩu dễ đoán, cần nhập mật khẩu phức tạp hơn';
 $lang_global['password_rule_limit'] = 'Mật khẩu không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
 $lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2$d ký tự';
+$lang_global['content_ssl'] = 'Dữ liệu gửi tới trang này hiện không được mã hóa. Tên đăng nhập, mật khẩu hoặc bất kỳ dữ liệu nào bạn gửi đi đều ở dạng nhìn thấy được. Hãy cân nhắc trước khi đăng nhập. Để có thêm thông tin, hãy liên hệ với người quản trị website của bạn!';
 
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['securitycodeincorrect1'] = 'Chưa xác thực không phải là Robot, vui lòng xác thực lại';
@@ -109,6 +110,7 @@ $lang_global['securitycode1'] = 'Xác minh bạn không phải là Robot';
 $lang_global['loginsubmit'] = 'Đăng nhập';
 $lang_global['register'] = 'Đăng ký';
 $lang_global['lostpass'] = 'Quên mật khẩu';
+$lang_global['warning_ssl'] = 'Cảnh báo';
 $lang_global['logininfo'] = 'Hãy đăng nhập thành viên để trải nghiệm đầy đủ các tiện ích trên site';
 $lang_global['adminlogininfo'] = 'Để đăng nhập quản trị, vui lòng khai báo tất cả các ô trống dưới đây';
 $lang_global['site_rss'] = 'RSS - Tin mới';
