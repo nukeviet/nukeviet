@@ -28,7 +28,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
         ->order('alias ASC');
 
     if ($incomplete === true) {
-        $db->where(NV_LANG_DATA . '_description = \'\'');
+        $db->where('description = \'\'');
     }
 
     if (!empty($q)) {
