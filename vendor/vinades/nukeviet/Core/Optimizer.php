@@ -241,13 +241,12 @@ class Optimizer
      */
     private function jsCallback($matches)
     {
-        if (preg_match('/<\s*\bscript\b[^>]*data\-show\=["|\']inline["|\'][^>]*>/is', $matches[0])) {
-            return $matches[0];
-        } else {
-            $this->_jsMatches[] = $matches[0];
-            $num = $this->_jsCount;
-            ++$this->_jsCount;
-            return '{|js_' . $num . '|}';
+        if (preg_match('/<\s*\bscript\b([^>]*)data\-show\=["|\']inline["|\']([^>]*)>(.*)$/isu', $matches[0], $m)) {
+            return ('<script' . rtrim($m[1]) . $m[2] . '>' . $m[3]);
         }
+        $this->_jsMatches[] = $matches[0];
+        $num = $this->_jsCount;
+        ++$this->_jsCount;
+        return '{|js_' . $num . '|}';
     }
 }
