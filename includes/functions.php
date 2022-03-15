@@ -2005,12 +2005,17 @@ function nv_check_domain($domain)
 
 /**
  * nv_is_url()
- *
- * @param string $url
- * @return bool
+ * 
+ * @param string $url 
+ * @param bool $isInternal 
+ * @return bool 
  */
-function nv_is_url($url)
+function nv_is_url($url, $isInternal = false)
 {
+    if ($isInternal and !preg_match('/^(http|https|ftp|gopher)\:\/\//i', $url)) {
+        $url = NV_MY_DOMAIN . $url;
+    }
+
     if (!preg_match('/^(http|https|ftp|gopher)\:\/\//', $url)) {
         return false;
     }

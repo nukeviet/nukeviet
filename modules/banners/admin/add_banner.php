@@ -85,15 +85,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $exp_date_m = 0;
     }
 
-    $checkurl = $click_url;
-    $click_url_allow = true;
-    if (!empty($checkurl)) {
-        if (!str_starts_with($checkurl, 'http://') or !str_starts_with($checkurl, 'https://')) {
-            $checkurl = NV_MY_DOMAIN . $checkurl;
-        }
-
-        $click_url_allow = nv_is_url($checkurl);
-    }
+    $click_url_allow = !empty($click_url) ? nv_is_url($click_url, true) : true;
 
     $sql = 'SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE . '_plans where id = ' . $pid;
     $result = $db->query($sql);

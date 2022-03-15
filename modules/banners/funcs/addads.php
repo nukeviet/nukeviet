@@ -36,15 +36,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $post['captcha'] = $nv_Request->get_title('captcha', 'post', '');
     }
 
-    $checkurl = $post['url'];
-    if (!empty($checkurl)) {
-        if (!str_starts_with($checkurl, 'http://') or !str_starts_with($checkurl, 'https://')) {
-            $checkurl = NV_MY_DOMAIN . $checkurl;
-        }
-
-        if (!nv_is_url($checkurl)) {
-            $post['url'] = '';
-        }
+    if (!empty($post['url']) and !nv_is_url($post['url'], true)) {
+        $post['url'] = '';
     }
 
     // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
