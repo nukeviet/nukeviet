@@ -22,6 +22,8 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('CONTENTS', $contents);
 
+$sql = 'SELECT * FROM nv4_vi_album';
+
 $xtpl->parse('main');
 
 $contents = $xtpl->text('main');

@@ -21,6 +21,8 @@
 /uploads/logo_*
 /assets/logo_*
 /install/default.php
+/data/config/config_global.php
+/data/config/robots.php
 
 composer.lock
 #vendor test ignore 
