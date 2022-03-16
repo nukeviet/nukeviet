@@ -64,7 +64,7 @@
                     <nav class="third-nav">
                         <div class="row">
                             <div class="bg">
-                            <div class="clearfix">
+                            <!--<div class="clearfix">
                                 <div class="col-xs-24 col-sm-18 col-md-18">
                                     <!-- BEGIN: breadcrumbs -->
                                     <div class="breadcrumbs-wrap">
@@ -86,7 +86,7 @@
                                         <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}..."><span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             </div>
                         </div>
                     </nav>
