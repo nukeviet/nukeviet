@@ -11,5 +11,9 @@
             <th>{LANG.action_table}</th>
         </tr>
     </thead>
+    <tbody>
+        <!--BEGIN: loopalbum-->
+        <!--END: loopalbum-->
+    </tbody>
 </table>
 <!-- END: main -->

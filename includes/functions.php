@@ -21,6 +21,12 @@ if (!defined('NV_MAINFILE')) {
  * @param mixed $a
  * @return mixed
  */
+function pr($data)
+{
+    print("<pre>".print_r($data,true)."</pre>");
+    exit();
+}
+
 function nv_object2array($a)
 {
     if (is_object($a)) {

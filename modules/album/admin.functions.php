@@ -22,3 +22,5 @@ $allow_func = [
 ];
 
 define('NV_IS_FILE_ADMIN', true);
+
+

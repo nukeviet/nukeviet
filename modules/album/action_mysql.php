@@ -14,13 +14,24 @@ if (!defined('NV_IS_FILE_MODULES')) {
 }
 
 $sql_drop_module = [];
-
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data;
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_image';
+$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ';';
+$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_image;';
 
 $sql_create_module = $sql_drop_module;
 
-$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_image (
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . " (
+    id mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+    ten_album varchar(245) NOT NULL DEFAULT '',
+    url_album varchar(255) NOT NULL DEFAULT '',
+    mota TEXT NOT NULL,
+    id_user int(11) UNSIGNED NOT NULL DEFAULT '0',
+    time int(11) UNSIGNED NOT NULL DEFAULT '0',
+    trangthai int(11) unsigned NOT NULL DEFAULT '0',
+    INDEX (id_user),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_image (
     id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     ten_anh varchar(245) NOT NULL DEFAULT "",
     id_album int(11) unsigned NOT NULL DEFAULT "0",
@@ -28,18 +39,10 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
     id_user int(11) unsigned NOT NULL DEFAULT "0",
     time int(11) unsigned NOT NULL DEFAULT "0",
     trangthai int(11) unsigned NOT NULL DEFAULT "0",
-    UNIQUE KEY vid (vid)
-) ENGINE=MyISAM";
-
-
-$sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ' (
-    id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-    ten_album varchar(245) NOT NULL DEFAULT '',
-    url_album varchar(255) DEFAULT '',
-    mota TEXT DEFAULT '',
-    id_user int(11) unsigned NOT NULL DEFAULT '0',
-    time int(11) unsigned NOT NULL DEFAULT '0',
-    PRIMARY KEY (id),
-    UNIQUE KEY album (ten_album,url),
-    INDEX (id_user)
+    INDEX (id_album,id_user),
+    PRIMARY KEY (id)
 ) ENGINE=MyISAM';
+
+
+// $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'difftimeout', '3600')";
+// $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha_type', 'captcha')";
