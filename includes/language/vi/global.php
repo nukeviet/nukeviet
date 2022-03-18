@@ -364,6 +364,9 @@ $lang_global['indefinitely'] = 'Vô thời hạn';
 $lang_global['apply'] = 'Áp dụng';
 $lang_global['custom_range'] = 'Khác';
 
+$lang_global['content_ssl'] = 'Trang này không được mã hóa cho việc trao đổi an toàn dữ liệu. Tên người dùng, mật khẩu và bất kỳ thông tin nào khác sẽ được gửi dưới dạng văn bản nhìn thấy được. Hãy cân nhắc trước khi đăng nhập.';
+$lang_global['warning_ssl'] = 'Cảnh báo';
+
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';
 $lang_global['country_AF'] = 'Afghanistan';

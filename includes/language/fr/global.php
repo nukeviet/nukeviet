@@ -349,6 +349,8 @@ $lang_global['limit_user_number'] = 'Votre site Web est réservé aux utilisateu
 $lang_global['limit_admin_number'] = 'Votre site Web est limité par l\'administrateur %s, pour ajouter un administrateur, veuillez contacter l\'administrateur système';
 $lang_global['2teplogin'] = 'Authentification à deux facteurs';
 $lang_global['indefinitely'] = 'Indéfiniment';
+$lang_global['content_ssl'] = 'Cette page n\'est pas cryptée pour une communication sécurisée. Les noms d\'utilisateur, mots de passe et toute autre information seront envoyés en texte clair.';
+$lang_global['warning_ssl'] = 'Avertissement';
 
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';

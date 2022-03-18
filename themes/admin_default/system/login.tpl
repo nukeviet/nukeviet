@@ -112,6 +112,11 @@
         <script>var sitekey = '{RECAPTCHA_SITEKEY}';</script>
         <!-- END: recaptcha3 -->
         <!-- END: recaptcha -->
+        <!-- BEGIN: warning_ssl -->
+        <div class="form-group">
+            <small><strong class="error">{GLANG.warning_ssl}:</strong> {GLANG.content_ssl}</small>
+        </div>
+        <!-- END: warning_ssl -->
         <div class="form-group">
             <div class="col-xs-10 col-xs-offset-9">
                 <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">

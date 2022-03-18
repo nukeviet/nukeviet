@@ -538,6 +538,11 @@ if (empty($admin_pre_data)) {
         }
     }
 
+    // Kiểm tra site có dùng SSL không
+    if (!((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443)) {
+        $xtpl->parse('pre_form.warning_ssl');
+    }
+
     $xtpl->parse('pre_form');
     $login_content = $xtpl->text('pre_form');
 } else {

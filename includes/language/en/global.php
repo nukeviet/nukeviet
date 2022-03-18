@@ -349,6 +349,8 @@ $lang_global['limit_user_number'] = 'Your site is limited to %s users. To add a 
 $lang_global['limit_admin_number'] = 'Your site is limited to %s admins, to add a new admin, please contact your system administrator';
 $lang_global['2teplogin'] = 'Two-factor authentication';
 $lang_global['indefinitely'] = 'Indefinitely';
+$lang_global['content_ssl'] = 'This page is not encrypted for secure communication. User names, passwords, and any other information will be sent in clear text.';
+$lang_global['warning_ssl'] = 'Warning';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'United Arab Emirates';
