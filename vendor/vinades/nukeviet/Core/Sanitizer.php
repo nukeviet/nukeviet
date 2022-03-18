@@ -14,7 +14,7 @@ namespace NukeViet\Core;
 /**
  * NukeViet\Core\Sanitizer
  * Class dùng để lọc mã HTML tải về trước khi lưu CSDL
- * 
+ *
  * $sanitizer = new NukeViet\Core\Sanitizer();
  * $contents = $sanitizer->crawlContentClean($contents, true);
  *
@@ -319,26 +319,7 @@ class Sanitizer
                 $attrContent = preg_replace("/^\'(.*)\'$/", '\\1', $attrContent);
                 $attrContent = str_replace(['"', '&quot;'], "'", $attrContent);
 
-                $value = $this->unhtmlentities($attrContent);
-                $search = [
-                    'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
-                    'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
-                    'script' => '/s\s*c\s*r\s*i\s*p\s*t/si',
-                    'applet' => '/a\s*p\s*p\s*l\s*e\s*t/si',
-                    'alert' => '/a\s*l\s*e\s*r\s*t/si',
-                    'document' => '/d\s*o\s*c\s*u\s*m\s*e\s*n\s*t/si',
-                    'write' => '/w\s*r\s*i\s*t\s*e/si',
-                    'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si',
-                    'window' => '/w\s*i\s*n\s*d\s*o\s*w/si',
-                    'data:' => '/d\s*a\s*t\s*a\s*\:/si'
-                ];
-                $value = preg_replace(array_values($search), array_keys($search), $value);
-
-                if (preg_match('/(expression|javascript|behaviour|vbscript|mocha|livescript)(\:*)/', $value)) {
-                    continue;
-                }
-
-                if (!empty($this->disableCommands) and preg_match('#(' . implode('|', $this->disableCommands) . ')(\s*)\((.*?)\)#si', $value)) {
+                if (!$this->xssValid($attrContent)) {
                     continue;
                 }
             } elseif ($attrContent !== '0') {
@@ -377,6 +358,48 @@ class Sanitizer
         $search = ['&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C'];
 
         return str_ireplace($search, '<', $value);
+    }
+
+    /**
+     * xssValid()
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function xssValid($value)
+    {
+        $value = $this->unhtmlentities($value);
+
+        $search = [
+            'expression' => '/e\s*x\s*p\s*r\s*e\s*s\s*s\s*i\s*o\s*n/si',
+            'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
+            'livescript' => '/l\s*i\s*v\s*e\s*s\s*c\s*r\s*i\s*p\s*t/si',
+            'behavior' => '/b\s*e\s*h\s*a\s*v\s*i\s*o\s*r/si',
+            'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
+            'script' => '/s\s*c\s*r\s*i\s*p\s*t/si',
+            'applet' => '/a\s*p\s*p\s*l\s*e\s*t/si',
+            'alert' => '/a\s*l\s*e\s*r\s*t/si',
+            'document' => '/d\s*o\s*c\s*u\s*m\s*e\s*n\s*t/si',
+            'write' => '/w\s*r\s*i\s*t\s*e/si',
+            'cookie' => '/c\s*o\s*o\s*k\s*i\s*e/si',
+            'window' => '/w\s*i\s*n\s*d\s*o\s*w/si',
+            'data:' => '/d\s*a\s*t\s*a\s*\:/si'
+        ];
+        $value = preg_replace(array_values($search), array_keys($search), $value);
+
+        if (preg_match('/(expression|javascript|behavior|vbscript|mocha|livescript)(\:*)/', $value)) {
+            return false;
+        }
+
+        if (strcasecmp($value, strip_tags($value)) !== 0) {
+            return false;
+        }
+
+        if (!empty($this->disableCommands) and preg_match('#(' . implode('|', $this->disableCommands) . ')(\s*)\((.*?)\)#si', $value)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

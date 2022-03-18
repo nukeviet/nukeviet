@@ -2012,15 +2012,20 @@ function nv_check_domain($domain)
  */
 function nv_is_url($url, $isInternal = false)
 {
-    if ($isInternal and !preg_match('/^(http|https|ftp|gopher)\:\/\//i', $url)) {
+    if ($isInternal and str_starts_with($url, NV_BASE_SITEURL) and !preg_match('/^(http|https|ftp)\:\/\//i', $url)) {
         $url = NV_MY_DOMAIN . $url;
     }
 
-    if (!preg_match('/^(http|https|ftp|gopher)\:\/\//', $url)) {
+    if (!preg_match('/^(http|https|ftp)\:\/\//', $url)) {
         return false;
     }
 
     $url = nv_strtolower($url);
+
+    $sanitizer = new NukeViet\Core\Sanitizer();
+    if (!$sanitizer->xssValid($url)) {
+        return false;
+    }
 
     if (!($parts = parse_url($url))) {
         return false;
