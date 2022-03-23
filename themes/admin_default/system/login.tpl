@@ -106,7 +106,7 @@
                         <!-- END: recaptcha -->
                         <!-- BEGIN: warning_ssl -->
                         <div class="inner-message">
-                            <div class="error"><b>{TITLE_WARNING_SSL}:</b> {CONTENT_WARNING_SSL}</div>
+                            <div class="error"><strong>{GLANG.warning_ssl}:</strong> {GLANG.content_ssl}</div>
                         </div>
                         <!-- END: warning_ssl -->
                         <div id="smb">
