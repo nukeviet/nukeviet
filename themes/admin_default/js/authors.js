@@ -75,17 +75,20 @@ function nv_del_oauthone(id, userid, tokend) {
 
 function apiRoleChanged() {
     var totalApis = 0;
+    var totalAll = 0;
     $('[data-toggle="apicat"]').each(function() {
         var $this = $(this);
         var ctnItem = $($this.attr('href'));
         var total = ctnItem.find('[data-toggle="apiroleit"]:checked').length;
+        var countApi = ctnItem.find('[data-toggle="apiroleit"]').length;
         if (total > 0) {
             totalApis = totalApis + total;
+            totalAll = totalAll + countApi;
             var textEle = $this.find('span');
             if (textEle.length) {
-                textEle.html('(' + total + ')');
+                textEle.html('(' + total + '/'+ totalAll +')');
             } else {
-                $this.append(' <span>(' + total + ')</span>');
+                $this.append(' <span>(' + total + '/'+ totalAll +')</span>');
             }
         } else {
             $this.find('span').remove();

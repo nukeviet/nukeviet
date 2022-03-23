@@ -18,6 +18,7 @@ $array_api_actions = nv_get_api_actions();
 $array_api_cats = $array_api_actions[2];
 $array_api_keys = $array_api_actions[1];
 $array_api_actions = $array_api_actions[0];
+$count_all_api = 0;
 
 $xtpl = new XTemplate('api-roles.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -282,6 +283,8 @@ foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
     }
 
     $array_api_trees[$keysysmodule]['total_api'] = $cat1_total_api;
+    $count_all_api  = $count_all_api + count($array_api_contents);
+    $array_post['count_all_api'] = $count_all_api;
 }
 
 $xtpl->assign('FORM_ACTION', $form_action);
