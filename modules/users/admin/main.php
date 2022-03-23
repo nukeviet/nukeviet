@@ -102,7 +102,7 @@ if (!empty($methodvalue)) {
 
 $group_global = $nv_Request->get_int('group', 'post,get', 6);
 if (!empty($group_global) && $group_global != '6') {
-    $_arr_where[] = "FIND_IN_SET($group_global, in_groups)";
+    $_arr_where[] = '(FIND_IN_SET(' . $group_global . ', in_groups) OR group_id = ' . $group_global . ')';
     $base_url .= '&amp;group=' . $group_global;
 }
 
