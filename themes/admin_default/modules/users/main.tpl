@@ -7,12 +7,12 @@
         <form action="{FORM_ACTION}" method="get">
             <input name="{NV_NAME_VARIABLE}" type="hidden" value="{MODULE_NAME}" />
             <div class="row">
-                <div class="col-xs-12 col-md-6">
+                <div class="col-xs-12 col-md-5">
                     <div class="form-group">
                         <input class="form-control" type="text" name="value" value="{SEARCH_VALUE}" id="f_value" placeholder="{LANG.search_key}" />
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
+                <div class="col-xs-12 col-md-5">
                     <div class="form-group">
                         <select class="form-control" name="method" id="f_method">
                             <option value="">---{LANG.search_type}---</option>
@@ -22,7 +22,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
+                <div class="col-xs-12 col-md-5">
                     <div class="form-group">
                         <select class="form-control" name="usactive">
                             <option value="-1">---{LANG.usactive}---</option>
@@ -33,7 +33,16 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
+                <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                        <select class="form-control" name="group">
+                            <!-- BEGIN: group -->
+                            <option value="{GROUP.group_id}" {GROUP.selected}>{GROUP.title}</option>
+                            <!-- END: group -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4">
                     <div class="form-group">
                         <input class="btn btn-primary" name="search" type="submit" value="{LANG.submit}" />
                     </div>
