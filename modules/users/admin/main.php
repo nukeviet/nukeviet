@@ -100,10 +100,10 @@ if (!empty($methodvalue)) {
 
 // Default group is all
 
-$group_global = $nv_Request->isset_request('group', 'post') ? $nv_Request->get_string('group', 'post', '6') : ($nv_Request->isset_request('group', 'get') ? urldecode($nv_Request->get_string('group', 'get', '6')) : '6');
+$group_global = $nv_Request->get_int('group', 'post,get', 6);
 if (!empty($group_global) && $group_global != '6') {
-    $_arr_where[] = "group_id=$group_global";
-    $base_url .= '&amp;group=' . urlencode($group_global);
+    $_arr_where[] = "FIND_IN_SET($group_global, in_groups)";
+    $base_url .= '&amp;group=' . $group_global;
 }
 
 $page = $nv_Request->get_int('page', 'get', 1);
