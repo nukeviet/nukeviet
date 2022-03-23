@@ -120,7 +120,7 @@
                                 <!-- BEGIN: api_tree -->
                                 <li><a data-toggle="apicat" data-cat="{API_TREE.key}" href="#api-child-{API_TREE.key}"<!-- BEGIN: active --> class="active"<!-- END: active -->>{API_TREE.name}<!-- BEGIN: total_api --> <span>({API_TREE.total_api})</span> <!-- END: total_api --></a></li>
                                 <!-- BEGIN: sub -->
-                                <li><a data-toggle="apicat" data-cat="{SUB.key}" href="#api-child-{SUB.key}"<!-- BEGIN: active --> class="active"<!-- END: active -->> &nbsp; &nbsp; {SUB.name}<!-- BEGIN: total_api --> <span>({SUB.total_api}/{DATA.count_all_api})</span> <!-- END: total_api --></a></li>
+                                <li><a data-toggle="apicat" data-cat="{SUB.key}" href="#api-child-{SUB.key}"<!-- BEGIN: active --> class="active"<!-- END: active -->> &nbsp; &nbsp; {SUB.name}<!-- BEGIN: total_api --> <span>({SUB.total_api}/{SUB.count_all_api})</span> <!-- END: total_api --></a></li>
                                 <!-- END: sub -->
                                 <!-- END: api_tree -->
                             </ul>

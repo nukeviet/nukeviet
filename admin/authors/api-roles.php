@@ -283,8 +283,6 @@ foreach ($array_api_actions as $keysysmodule => $sysmodule_data) {
     }
 
     $array_api_trees[$keysysmodule]['total_api'] = $cat1_total_api;
-    $count_all_api  = $count_all_api + count($array_api_contents);
-    $array_post['count_all_api'] = $count_all_api;
 }
 
 $xtpl->assign('FORM_ACTION', $form_action);
@@ -357,6 +355,8 @@ foreach ($array_api_trees as $api_tree) {
     $xtpl->assign('API_TREE', $api_tree);
 
     foreach ($api_tree['subs'] as $sub) {
+        ++$count_all_api;
+        $sub['count_all_api'] = $count_all_api;
         $xtpl->assign('SUB', $sub);
 
         if (!empty($sub['active'])) {
