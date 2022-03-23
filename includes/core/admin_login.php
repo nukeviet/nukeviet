@@ -518,7 +518,7 @@ if (empty($admin_pre_data)) {
     }
 
     // Kiểm tra site có dùng SSL không
-    if ((!isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'off' or $_SERVER['HTTPS'] !== '1')) or $_SERVER['SERVER_PORT'] !== 443) {
+    if (!((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443)) {
         $xtpl->assign('TITLE_WARNING_SSL', $lang_global['warning_ssl']);
         $xtpl->assign('CONTENT_WARNING_SSL', $lang_global['content_ssl']);
         $xtpl->parse('main.pre_form.warning_ssl');
