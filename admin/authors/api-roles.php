@@ -350,12 +350,19 @@ if (!empty($error)) {
     $xtpl->parse('main.error');
 }
 
+//Tinh tong cac API
+foreach ($array_api_contents as $api_content) {
+    foreach ($api_content['apis'] as $api) {
+        ++$count_all_api;
+    }
+}
+
+
 // Xuất các danh mục API
 foreach ($array_api_trees as $api_tree) {
     $xtpl->assign('API_TREE', $api_tree);
 
     foreach ($api_tree['subs'] as $sub) {
-        ++$count_all_api;
         $sub['count_all_api'] = $count_all_api;
         $xtpl->assign('SUB', $sub);
 

@@ -75,7 +75,6 @@ function nv_del_oauthone(id, userid, tokend) {
 
 function apiRoleChanged() {
     var totalApis = 0;
-    var totalAll = 0;
     $('[data-toggle="apicat"]').each(function() {
         var $this = $(this);
         var ctnItem = $($this.attr('href'));
@@ -83,12 +82,11 @@ function apiRoleChanged() {
         var countApi = ctnItem.find('[data-toggle="apiroleit"]').length;
         if (total > 0) {
             totalApis = totalApis + total;
-            totalAll = totalAll + countApi;
             var textEle = $this.find('span');
             if (textEle.length) {
-                textEle.html('(' + total + '/'+ totalAll +')');
+                textEle.html('(' + total + '/'+ countApi +')');
             } else {
-                $this.append(' <span>(' + total + '/'+ totalAll +')</span>');
+                $this.append(' <span>(' + total + '/'+ countApi +')</span>');
             }
         } else {
             $this.find('span').remove();
