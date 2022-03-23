@@ -104,6 +104,11 @@
                          </script>
                          <!-- END: recaptcha3 -->
                         <!-- END: recaptcha -->
+                        <!-- BEGIN: warning_ssl -->
+                        <div class="inner-message">
+                            <div class="error"><strong>{GLANG.warning_ssl}:</strong> {GLANG.content_ssl}</div>
+                        </div>
+                        <!-- END: warning_ssl -->
                         <div id="smb">
                             <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}">
                             <input class="btn btn-primary" type="submit" value="{GLANG.loginsubmit}">
