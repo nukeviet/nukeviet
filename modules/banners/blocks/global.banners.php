@@ -111,7 +111,8 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
                     $banners['file_ext'] = nv_getextension($banners['file_name']);
                 }
                 $banners['file_alt'] = (!empty($banners['file_alt'])) ? $banners['file_alt'] : $banners['title'];
-                $banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $banners['file_name'];
+//                $banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $banners['file_name'];
+                $banners['file_image'] = NV_BASE_SITEURL . $global_config['site_banner'];
                 $banners['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=banners&amp;' . NV_OP_VARIABLE . '=click&amp;id=' . $banners['id'] . '&amp;s=' . md5($banners['id'] . NV_CHECK_SESSION);
                 if (!empty($banners['bannerhtml'])) {
                     $banners['bannerhtml'] = html_entity_decode($banners['bannerhtml'], ENT_COMPAT | ENT_HTML401, strtoupper($global_config['site_charset']));

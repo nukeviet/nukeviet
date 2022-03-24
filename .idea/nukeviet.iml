@@ -7,19 +7,19 @@
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/vendor/vinades/nukeviet" isTestSource="false" packagePrefix="NukeViet\" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/phpmailer/phpmailer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/vinades/nukeviet" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/vinades/pclzip" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/kriswallsmith/buzz" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/and/oauth" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-color" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-barcode" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/true/punycode" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/gregwar/image" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/gregwar/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-barcode" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/and/oauth" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/vinades/nukeviet" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpmailer/phpmailer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/league/url" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tecnickcom/tc-lib-color" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/gregwar/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/kriswallsmith/buzz" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

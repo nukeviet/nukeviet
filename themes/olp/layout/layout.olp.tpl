@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 {FILE "header_only.tpl"}
-{FILE "header_extended.tpl"}
+
 <div class="row">
     <div class="col-sm-18 col-md-19 col-sm-push-6 col-md-push-5">
         [TOP]
