@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/league/url" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-color" />
+      <path value="$PROJECT_DIR$/vendor/gregwar/cache" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/kriswallsmith/buzz" />
+      <path value="$PROJECT_DIR$/vendor/vinades/pclzip" />
+      <path value="$PROJECT_DIR$/vendor/true/punycode" />
+      <path value="$PROJECT_DIR$/vendor/gregwar/image" />
+      <path value="$PROJECT_DIR$/vendor/tecnickcom/tc-lib-barcode" />
+      <path value="$PROJECT_DIR$/vendor/and/oauth" />
+      <path value="$PROJECT_DIR$/vendor/vinades/nukeviet" />
+      <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+    </include_path>
+  </component>
+</project>
