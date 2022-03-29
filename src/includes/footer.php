@@ -51,6 +51,9 @@ if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {
     unset($html_headers['Strict-Transport-Security']);
 }
 
+$html_headers = nv_apply_hook('', 'change_site_headers', [$html_headers, $sys_info], $html_headers);
+$sys_info = nv_apply_hook('', 'change_site_sys_info', [$sys_info, $html_headers], $sys_info);
+
 foreach ($html_headers as $key => $value) {
     $_key = strtolower($key);
     if (!isset($sys_info['server_headers'][$_key])) {
