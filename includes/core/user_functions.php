@@ -270,9 +270,9 @@ function nv_html_meta_tags($html = true)
 
     $current_page_url = '';
     if (!empty($page_url)) {
-        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+        $current_page_url = urlRewriteWithDomain($page_url, NV_MAIN_DOMAIN);
     } elseif ($home) {
-        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
+        $current_page_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MAIN_DOMAIN);
     }
 
     // Tại trang chủ lấy mô tả của site thay vì mô tả của module chọn làm trang chủ

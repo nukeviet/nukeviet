@@ -36,8 +36,8 @@ if ($nv_Request->isset_request('turnoff2step', 'post')) {
 
     // Gửi email thông báo bảo mật
     $m_time = nv_date('H:i:s d/m/Y', NV_CURRENTTIME);
-    $m_link = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
-    $m_link_manager = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+    $m_link = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN);
+    $m_link_manager = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
     $message = sprintf($lang_module['email_2step_off'], $m_time, NV_CLIENT_IP, NV_USER_AGENT, $m_link_manager, $user_info['username'], $m_link, $global_config['site_name']);
     nv_sendmail('', $user_info['email'], $lang_module['email_subject'], $message);
 
@@ -55,8 +55,8 @@ if ($nv_Request->isset_request('changecode2step', 'post')) {
 
     // Gửi email thông báo bảo mật
     $m_time = nv_date('H:i:s d/m/Y', NV_CURRENTTIME);
-    $m_link = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
-    $m_link_manager = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
+    $m_link = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN);
+    $m_link_manager = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
     $message = sprintf($lang_module['email_code_renew'], $m_time, NV_CLIENT_IP, NV_USER_AGENT, $m_link_manager, $user_info['username'], $m_link, $global_config['site_name']);
     nv_sendmail('', $user_info['email'], $lang_module['email_subject'], $message);
 

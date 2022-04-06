@@ -31,10 +31,10 @@ if (empty($ShortName) or empty($Description)) {
     exit(0);
 }
 
-$Url = NV_MY_DOMAIN . nv_url_rewrite($Url, true);
+$Url = urlRewriteWithDomain($Url, NV_MY_DOMAIN);
 $Url = str_replace('searchTerms', '{searchTerms}', $Url);
 
-$searchForm = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+$searchForm = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
 
 if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
     $icon = $global_config['site_favicon'];

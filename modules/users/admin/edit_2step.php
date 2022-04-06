@@ -79,7 +79,7 @@ if (empty($row['active2step'])) {
 
         // Gửi email thông báo
         if (!empty($global_users_config['admin_email'])) {
-            $url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, true);
+            $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, NV_MY_DOMAIN);
             $message = sprintf($lang_module['security_alert_2stepoff'], $row['username'], $url);
             nv_sendmail([
                 $global_config['site_name'],

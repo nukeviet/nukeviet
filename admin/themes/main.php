@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
             $array_allow_preview[] = $theme;
             $array['mode'] = 'enable';
             $array['spantext'] = $lang_module['preview_theme_off'];
-            $array['link'] = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $theme . '&checksum=' . md5(NV_LANG_DATA . $theme . $global_config['sitekey']), true);
+            $array['link'] = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $theme . '&checksum=' . md5(NV_LANG_DATA . $theme . $global_config['sitekey']), NV_MY_DOMAIN);
         }
         $array_allow_preview = implode(',', array_intersect($array_allow_preview, $theme_list));
         $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value=' . $db->quote($array_allow_preview) . ' WHERE lang=' . $db->quote(NV_LANG_DATA) . ' AND module=\'global\' AND config_name=\'preview_theme\'');
@@ -140,7 +140,7 @@ foreach ($theme_list as $value) {
                 $xtpl->assign('SHOW_PREVIEW1', '');
                 $xtpl->assign('SHOW_PREVIEW2', '');
                 $xtpl->assign('TEXT_PREVIEW', $lang_module['preview_theme_off']);
-                $xtpl->assign('LINK_PREVIEW', NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $value . '&checksum=' . md5(NV_LANG_DATA . $value . $global_config['sitekey']), true));
+                $xtpl->assign('LINK_PREVIEW', urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $value . '&checksum=' . md5(NV_LANG_DATA . $value . $global_config['sitekey']), NV_MY_DOMAIN));
             } else {
                 $xtpl->assign('SHOW_PREVIEW1', ' hidden');
                 $xtpl->assign('SHOW_PREVIEW2', ' style="display: none;"');

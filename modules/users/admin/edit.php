@@ -89,7 +89,7 @@ if ($nv_Request->isset_request('psr', 'post')) {
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $pass_reset_request = $type == 2 ? $lang_module['pass_reset_request2_info'] : $lang_module['pass_reset_request1_info'];
             $subject = $type == 1 ? $lang_module['pass_reset_request_subject1'] : $lang_module['pass_reset_request_subject2'];
-            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+            $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
             $message = $type == 1 ? sprintf($lang_module['pass_reset_request_info1'], $full_name, $global_config['site_name'], $_url) : sprintf($lang_module['pass_reset_request_info2'], $full_name, $global_config['site_name'], $_url);
             @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
         }
@@ -413,7 +413,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
         $pass_reset_request = $_user['pass_reset_request'] == 2 ? $lang_module['pass_reset_request2_info'] : ($_user['pass_reset_request'] == 1 ? $lang_module['pass_reset_request1_info'] : '');
         $subject = $lang_module['adduser_register1'];
-        $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+        $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
         $message = sprintf($lang_module['adduser_register_info2'], $full_name, $global_config['site_name'], $_url, $_user['username']);
         if (!empty($_user['password1'])) {
             $message .= sprintf($lang_module['adduser_register_info3'], $_user['password1']);
