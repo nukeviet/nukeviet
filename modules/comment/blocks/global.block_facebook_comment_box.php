@@ -103,7 +103,7 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
 			</script>";
             define('FACEBOOK_JSSDK', true);
         }
-        $href = !empty($page_url) ? urlRewriteWithDomain($page_url, NV_MAIN_DOMAIN) : '';
+        $href = !empty($page_url) ? NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true) : '';
         $content .= '<div class="fb-comments" data-href="' . $href . '" data-num-posts="' . $block_config['numpost'] . '" data-width="' . $block_config['width'] . '" data-colorscheme="' . $block_config['scheme'] . '"></div>';
 
         return $content;

@@ -50,7 +50,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         }
 
         str_starts_with($current_page_url, NV_MY_DOMAIN) && $current_page_url = substr($current_page_url, strlen(NV_MY_DOMAIN));
-        $block_config['selfurl'] = urlRewriteWithDomain($current_page_url, NV_MY_DOMAIN);
+        $block_config['selfurl'] = NV_MY_DOMAIN . nv_url_rewrite($current_page_url, true);
         $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ? $page_title : $global_config['site_name']));
         $xtpl->assign('QRCODE', $block_config);
 

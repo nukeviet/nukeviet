@@ -528,7 +528,7 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
     $stmt->execute();
 
     // Gửi email thông báo
-    $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
+    $url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', true);
     $message = defined('ACCESS_EDITUS') ? $lang_module['security_alert_openid_add'] : $lang_module['security_alert_openid_add1'];
     $message = sprintf($message, nv_ucfirst($server), $row['username'], $url);
     nv_sendmail([
@@ -987,7 +987,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     // Gửi email thông báo
     if (!empty($openid_mess)) {
-        $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
+        $url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', true);
         $message = defined('ACCESS_EDITUS') ? $lang_module['security_alert_openid_delete'] : $lang_module['security_alert_openid_delete1'];
         $message = sprintf($message, implode(', ', array_unique($openid_mess)), $row['username'], $url);
         nv_sendmail([
@@ -1047,7 +1047,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                                 $global_config['site_name'],
                                 $global_config['site_email']
                             ];
-                            $url_group = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, NV_MY_DOMAIN);
+                            $url_group = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
                             $message = sprintf($lang_module['group_join_queue_message'], $groups_list['all'][$gid]['title'], $user_info['full_name'], $groups_list['all'][$gid]['title'], $url_group);
                             @nv_sendmail($mail_from, $email, $lang_module['group_join_queue'], $message);
                         }

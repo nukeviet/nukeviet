@@ -307,7 +307,7 @@ function nv_show_cat_list($parentid = 0)
             $admin_funcs = [];
             $weight_disabled = $func_cat_disabled = true;
             if (!empty($module_config[$module_name]['instant_articles_active'])) {
-                $admin_funcs[] = '<a title="' . $lang_module['cat_instant_view'] . '" href="' . urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss/' . $alias, NV_MY_DOMAIN) . '" class="btn btn-default btn-xs viewinstantrss" data-toggle="tooltip" data-modaltitle="' . $lang_module['cat_instant_title'] . '"><em class="fa fa-rss"></em><span class="visible-xs-inline-block">&nbsp;' . $lang_module['cat_instant_viewsimple'] . "</span></a>\n";
+                $admin_funcs[] = '<a title="' . $lang_module['cat_instant_view'] . '" href="' . NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss/' . $alias, true) . '" class="btn btn-default btn-xs viewinstantrss" data-toggle="tooltip" data-modaltitle="' . $lang_module['cat_instant_title'] . '"><em class="fa fa-rss"></em><span class="visible-xs-inline-block">&nbsp;' . $lang_module['cat_instant_viewsimple'] . "</span></a>\n";
             }
             if (defined('NV_IS_ADMIN_MODULE') or (isset($array_cat_admin[$admin_id][$catid]) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1)) {
                 $func_cat_disabled = false;
