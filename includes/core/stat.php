@@ -63,7 +63,7 @@ function nv_stat_update()
 
     $bot_name = ($client_info['is_bot'] and !empty($client_info['browser']['name'])) ? $client_info['browser']['name'] : '';
     $browser = $client_info['browser']['key'];
-    if ($browser == 'Unknown') {
+    if ($browser == 'unknown') {
         if ($client_info['is_mobile']) {
             $browser = 'Mobile';
         } elseif (!empty($bot_name)) {
