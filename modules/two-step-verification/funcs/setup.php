@@ -97,7 +97,7 @@ if ($checkss == NV_CHECK_SESSION) {
 
         // Gửi email thông báo bảo mật
         $m_time = nv_date('H:i:s d/m/Y', NV_CURRENTTIME);
-        $m_link = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
+        $m_link = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN);
         $message = sprintf($lang_module['email_2step_on'], $m_time, NV_CLIENT_IP, NV_USER_AGENT, $user_info['username'], $m_link, $global_config['site_name']);
         nv_sendmail('', $user_info['email'], $lang_module['email_subject'], $message);
     } catch (Exception $e) {
@@ -112,7 +112,7 @@ if ($checkss == NV_CHECK_SESSION) {
         $stmt->bindParam(':checknum', $checknum, PDO::PARAM_STR);
         $stmt->execute();
 
-        $redirect = nv_redirect_encrypt(NV_MY_DOMAIN . (nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true)));
+        $redirect = nv_redirect_encrypt(urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN));
         $redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . $redirect, true);
 
         nv_json_result([

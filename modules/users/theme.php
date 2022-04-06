@@ -396,7 +396,7 @@ function user_login($is_ajax = false)
             'facebook' => 'facebook',
             'zalo' => 'zalo'
         ];
-        $default_redirect = nv_redirect_encrypt(NV_MY_DOMAIN . (empty($page_url) ? '' : nv_url_rewrite(str_replace('&amp;', '&', $page_url), true)));
+        $default_redirect = nv_redirect_encrypt(empty($page_url) ? NV_MY_DOMAIN : urlRewriteWithDomain($page_url, NV_MY_DOMAIN));
         foreach ($global_config['openid_servers'] as $server) {
             $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
             if (!empty($nv_redirect)) {

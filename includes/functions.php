@@ -1579,12 +1579,12 @@ function betweenURLs($page, $total, $base_url, $urlappend, &$prevPage, &$nextPag
 
     if ($page > 1) {
         $prev = $page - 1;
-        $prevPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . ($prev > 1 ? ($urlappend . $prev) : ''), true);
+        $prevPage = urlRewriteWithDomain($base_url . ($prev > 1 ? ($urlappend . $prev) : ''), NV_MAIN_DOMAIN);
     }
 
     if ($page >= 1 and $page < $total) {
         $next = $page + 1;
-        $nextPage = NV_MAIN_DOMAIN . nv_url_rewrite($base_url . $urlappend . $next, true);
+        $nextPage = urlRewriteWithDomain($base_url . $urlappend . $next, NV_MAIN_DOMAIN);
     }
 }
 
@@ -1932,7 +1932,7 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
 
     if ($global_config['request_uri_check'] == 'not') {
         str_starts_with($page_url, NV_MY_DOMAIN) && $page_url = substr($page_url, strlen(NV_MY_DOMAIN));
-        return NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+        return urlRewriteWithDomain($page_url, NV_MAIN_DOMAIN);
     }
 
     $is_query_check = $is_abs_check = false;
@@ -2370,6 +2370,33 @@ function nv_url_rewrite_callback($matches)
     }
 
     return $matches[0];
+}
+
+/**
+ * @param string $url 
+ * @param string $domain 
+ * @return string 
+ */
+function urlRewriteWithDomain($url, $domain)
+{
+    global $nv_hooks;
+
+    $url = nv_url_rewrite($url, true);
+
+    if (!isset($nv_hooks['']['get_rewrite_domain'])) {
+        return $domain . $url;
+    }
+
+    if (str_starts_with($url, $domain)) {
+        return $url;
+    }
+
+    str_starts_with($url, NV_MY_DOMAIN) && $url = substr($url, strlen(NV_MY_DOMAIN));
+    if (NV_MAIN_DOMAIN != NV_MY_DOMAIN and str_starts_with($url, NV_MAIN_DOMAIN)) {
+        $url = substr($url, strlen(NV_MAIN_DOMAIN));
+    }
+
+    return $domain . $url;
 }
 
 /**

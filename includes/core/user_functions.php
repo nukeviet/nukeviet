@@ -270,9 +270,9 @@ function nv_html_meta_tags($html = true)
 
     $current_page_url = '';
     if (!empty($page_url)) {
-        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+        $current_page_url = urlRewriteWithDomain($page_url, NV_MAIN_DOMAIN);
     } elseif ($home) {
-        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
+        $current_page_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MAIN_DOMAIN);
     }
 
     // Tại trang chủ lấy mô tả của site thay vì mô tả của module chọn làm trang chủ
@@ -515,36 +515,36 @@ function nv_html_links($html = true)
 
     $return = [];
     if (!empty($canonicalUrl)) {
-        if (substr($canonicalUrl, 0, 4) != 'http') {
+        /*if (substr($canonicalUrl, 0, 4) != 'http') {
             if (substr($canonicalUrl, 0, 1) != '/') {
                 $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
             }
             $canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;
-        }
+        }*/
         $return[] = [
             'rel' => 'canonical',
             'href' => $canonicalUrl
         ];
     }
     if (!empty($prevPage)) {
-        if (substr($prevPage, 0, 4) != 'http') {
+        /*if (substr($prevPage, 0, 4) != 'http') {
             if (substr($prevPage, 0, 1) != '/') {
                 $prevPage = NV_BASE_SITEURL . $prevPage;
             }
             $prevPage = NV_MAIN_DOMAIN . $prevPage;
-        }
+        }*/
         $return[] = [
             'rel' => 'prev',
             'href' => $prevPage
         ];
     }
     if (!empty($nextPage)) {
-        if (substr($nextPage, 0, 4) != 'http') {
+        /*if (substr($nextPage, 0, 4) != 'http') {
             if (substr($nextPage, 0, 1) != '/') {
                 $nextPage = NV_BASE_SITEURL . $nextPage;
             }
             $nextPage = NV_MAIN_DOMAIN . $nextPage;
-        }
+        }*/
         $return[] = [
             'rel' => 'next',
             'href' => $nextPage
