@@ -178,6 +178,12 @@ $(function() {
     $("#catid").select2({
         language : '{NV_LANG_DATA}'
     });
+
+    // Xóa tin
+    $('body').on('click', '[data-toggle=nv_del_content]', function(e) {
+        e.preventDefault();
+        nv_del_content($(this).data('id'), $(this).data('checkss'), $(this).data('adminurl'), $(this).data('detail'))
+    });
 });
 </script>
 <!-- END: main -->
