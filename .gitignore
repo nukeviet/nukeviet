@@ -70,7 +70,6 @@ composer.lock
 !/uploads/banners/vinades.jpg
 !/uploads/banners/vndads___05.jpg
 !/uploads/banners/webnhanh_vn.png
-!/data/cache/.htaccess
 !/data/cache/index.html
 !/data/tmp/index.html
 /.jsbeautifyrc

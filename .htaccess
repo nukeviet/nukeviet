@@ -10,6 +10,11 @@
 
 RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$
 RedirectMatch 404 ^.*\/composer\.json$
+RedirectMatch 404 ^.*\/install/default\.(htaccess|web\.config)\.txt(.*)$
+RedirectMatch 404 ^.*\/install/default\.php(.*)$
+RedirectMatch 404 ^/(data/logs|data/cache|data/certs|data/ip6?|includes|install/tpl|vendor)/.*$
+RedirectMatch 404 ^/admin/.*/.*$
+RedirectMatch 404 ^/(assets|data/config|data/tmp|uploads|modules|themes|install/css|install/images)/.*\.(php|phtml|shtml|inc|asp|aspx|pl|py|jsp|asp|sh|cgi|tpl|xml|sql\.gz|ini).*$
 
 ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1
 ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1
@@ -40,8 +45,8 @@ ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
     Header set X-Robots-Tag "noarchive, nosnippet"
   </FilesMatch>
 
-  <FilesMatch "\.(js|css|jpe?g|png|gif|webp|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?t=[0-9]{9,11})?$">
-    Header set Cache-Control 'public, max-age=2592000, no-cache="set-cookie"'
+  <FilesMatch "\.(js|css|jpe?g|png|gif|webp|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$">
+    Header set Cache-Control 'max-age=2592000, public, no-cache="set-cookie"'
   </FilesMatch>
 </IfModule>
 
@@ -65,6 +70,7 @@ RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
 RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
 RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
 RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
+RewriteRule ^(.*?)install\/(.*)\.rewrite$ install/rewrite.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*)(\/|\.html)$ index.php

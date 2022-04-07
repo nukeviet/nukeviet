@@ -164,3 +164,4 @@ $lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> 
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> đã ngưng hoạt động do lỗi';
 $lang_module['notification_hide'] = 'Ẩn thông báo này';
 $lang_module['notification_email_failure'] = 'Gửi email thất bại. Tiêu đề <strong>%s</strong>, email nhận <strong>%s</strong>';
+$lang_module['server_config_file_changed'] = 'Tập tin cấu hình cho máy chủ web (%s) đã thay đổi';

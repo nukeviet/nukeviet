@@ -163,3 +163,4 @@ $lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> 
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> s\'arrête d\'exécuter à cause d\'erreur';
 $lang_module['notification_hide'] = 'Masquer cette notification';
 $lang_module['notification_email_failure'] = 'E-mail a échoué. Matière <strong>%s</strong>, e-mail reçu <strong>%s</strong>';
+$lang_module['server_config_file_changed'] = 'Fichier de configuration du serveur (%s) modifié';

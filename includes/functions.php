@@ -2651,7 +2651,7 @@ function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_
 
     $new_id = 0;
     if ($global_config['notification_active']) {
-        !empty($content) and $content = serialize($content);
+        $content = !empty($content) ? serialize($content) : '';
 
         $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (
             admin_view_allowed, logic_mode, send_to, send_from, area, language, module, obid, type, content, add_time, view
