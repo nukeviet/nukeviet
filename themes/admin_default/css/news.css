@@ -344,3 +344,7 @@ input {
     text-decoration: none;
     background-color: #f5f5f5;
 }
+
+.mt_25 {
+    margin-top: 22px;
+}

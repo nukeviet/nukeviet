@@ -380,3 +380,7 @@ $lang_module['author_numnews'] = 'Bài viết';
 $lang_module['author_status'] = 'Trạng thái';
 $lang_module['author_status_0'] = 'Vô hiệu';
 $lang_module['author_status_1'] = 'Hiệu lực';
+$lang_module['title_time'] = 'Thời gian đăng';
+$lang_module['title_creator'] = 'Người đăng bài viết';
+$lang_module['title_author'] = 'Tác giả bài viết';
+$lang_module['title_option'] = '----Chọn----';

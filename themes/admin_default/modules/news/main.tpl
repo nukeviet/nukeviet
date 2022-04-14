@@ -35,7 +35,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <select class="form-control" name="sstatus">
                         <option value="-1"> -- {LANG.search_status} -- </option>
@@ -55,9 +55,36 @@
                     </select>
                 </div>
             </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label for="publtime"><b>{LANG.title_time}</b></label>
+                    <input type="date" name="publtime" class="form-control" value="{PUBLTIME}">                      
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="form-group">
+                    <label for="creator"><b>{LANG.title_creator}</b></label>
+                    <select class="form-control" name="creator">
+                        <option value="">{LANG.title_option}</option>
+                        <!-- BEGIN: show_creator -->
+                            <option value="{VALUE.key}" {VALUE.selected}>{VALUE.title}</option>
+                        <!-- END: show_creator -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label for="author"><b>{LANG.title_author}</b></label>
+                    <input type="text" name="author" class="form-control" value="{AUTHOR}">
+                </div>
+            </div>
+
             <div class="col-xs-12 col-md-3">
                 <div class="form-group">
-                    <input class="btn btn-primary" type="submit" value="{LANG.search}" />
+                    <input class="btn btn-primary mt_25" type="submit" value="{LANG.search}" />
                 </div>
             </div>
         </div>
