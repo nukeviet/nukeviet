@@ -348,3 +348,18 @@ input {
 .mt_25 {
     margin-top: 22px;
 }
+
+.font__weight {
+    font-weight: bold;
+}
+
+.group__input_date {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.group__input_date img {
+    height: 16px;
+    margin-left: 2px;
+}

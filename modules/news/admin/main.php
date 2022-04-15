@@ -20,8 +20,8 @@ $catid = $nv_Request->get_int('catid', 'get', 0);
 $per_page_old = $nv_Request->get_int('per_page', 'cookie', 50);
 $per_page = $nv_Request->get_int('per_page', 'get', $per_page_old);
 $num_items = $nv_Request->get_int('num_items', 'get', 0);
-$creator = $nv_Request->get_int('creator', 'get', 0);
-$publtime_search = $nv_Request->get_title('publtime', 'get', "");
+$search_time_to = $nv_Request->get_title('search_time_to', 'get', '');
+$search_time_from = $nv_Request->get_title('search_time_from', 'get', '');
 
 if ($per_page < 1 or $per_page > 500) {
     $per_page = 50;
@@ -33,10 +33,6 @@ if ($per_page_old != $per_page) {
 $q = $nv_Request->get_title('q', 'get', '');
 $q = str_replace('+', ' ', $q);
 $qhtml = nv_htmlspecialchars($q);
-
-$author = $nv_Request->get_title('author', 'get', '');
-$author = str_replace('+', ' ', $author);
-$author_html = nv_htmlspecialchars($author);
 
 $order_articles = 0;
 if ($NV_IS_ADMIN_MODULE and $module_config[$module_name]['order_articles'] and empty($q) and $sstatus == -1) {
@@ -403,74 +399,41 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         }
     }
 
-    if ($creator != 0) {
-        $match[] = [
-            'match' => [
-                'admin_id' => $creator
-            ]
-        ];
-       
-        $result = count($match);
-        if ($result == 0) {
-            $match[] = [
-                'match' => [
-                    'admin_id' => -1
-                ]
-            ];
+    if (!empty($search_time_to) && !empty($search_time_from)) {
+        $timestamp_to = "";
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
+            $timestamp_to = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
         }
-        $search_elastic_user['filter']['or'] = $match;
-        $search_elastic = array_merge($search_elastic, $search_elastic_user);
-    }
 
-    if (!empty($author_html)) {
-        $key_elastic_search_auth = nv_EncString($db_slave->dblikeescape($author));
-        $search_elastic = [
-            'should' => [
-                'match' => [
-                    'unsigned_author' => $key_elastic_search_auth
-                ]
-            ]
-        ];
-
-        // Tim bai viet co internal author trung voi ket qua tim kiem
-        $db->sqlreset()
-            ->select('id')
-            ->from(NV_PREFIXLANG . '_' . $module_data . '_authorlist')
-            ->where('alias LIKE :q_alias OR pseudonym LIKE :q_pseudonym');
-
-        $sth = $db->prepare($db->sql());
-        $sth->bindValue(':q_alias', '%' . $db_slave->dblikeescape($author_html) . '%', PDO::PARAM_STR);
-        $sth->bindValue(':q_pseudonym', '%' . $db_slave->dblikeescape($author_html) . '%', PDO::PARAM_STR);
-        $sth->execute();
-        $match = [];
-        while ($id_search = $sth->fetch(3)) {
-            $match[] = [
-                'match' => [
-                    'id' => $id_search[0]
-                ]
-            ];
+        $timestamp_from = "";
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
+            $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
         }
-        if (empty($match)) {
-            $match[] = [
-                'match' => [
-                    'id' => -1
-                ]
+
+        if (!empty($timestamp_to) && !empty($timestamp_from)) {
+            $match[]['range']['publtime'] = [
+                "gte" => $timestamp_to,
+                "lte" => $timestamp_from
             ];
+
+            $match[]['range']['addtime'] = [
+                "gte" => $timestamp_to,
+                "lte" => $timestamp_from
+            ];
+
+            $match[]['range']['edittime'] = [
+                "gte" => $timestamp_to,
+                "lte" => $timestamp_from
+            ];
+
+            $match[]['range']['exptime'] = [
+                "gte" => $timestamp_to,
+                "lte" => $timestamp_from
+            ];
+
+            $search_elastic_user['filter']['or'] = $match;
+            $search_elastic = array_merge($search_elastic, $search_elastic_user);
         }
-        $search_elastic_user['filter']['or'] = $match;
-        $search_elastic = array_merge($search_elastic, $search_elastic_user);
-    }
-
-    if (!empty($publtime_search)) {
-        $timestamp = mktime(00,00,00, date('m', strtotime($publtime_search)), date('d', strtotime($publtime_search)), date('Y', strtotime($publtime_search)));
-
-        $match[]['range']['publtime'] = [
-            "gte" => $timestamp,
-            "lte" => ($timestamp + 86400)
-        ];
-
-        $search_elastic_user['filter']['or'] = $match;
-        $search_elastic = array_merge($search_elastic, $search_elastic_user);
     }
 
     if ($catid != 0) {
@@ -676,19 +639,23 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                 OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
         }
 
-        if (!empty($author_html)) {
-            $where = " (r.author LIKE '%" . $db_slave->dblikeescape($author_html) . "%'
-                OR a.alias LIKE '%" . $db_slave->dblikeescape($author_html) . "%'
-                OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($author_html) . "%')";
-        }
+        if (!empty($search_time_to) && !empty($search_time_from)) {
+            $timestamp_to = "";
+            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
+                $timestamp_to = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
+            }
 
-        if ($creator != 0) {
-            $where = " r.admin_id = " . $creator;
-        }
+            $timestamp_from = "";
+            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
+                $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
+            }
 
-        if (!empty($publtime_search)) {
-            $timestamp = mktime(00,00,00, date('m', strtotime($publtime_search)), date('d', strtotime($publtime_search)), date('Y', strtotime($publtime_search)));
-            $where = " r.publtime >= " . $timestamp . ' AND r.publtime <= ' . ($timestamp + 86400);
+            if (!empty($timestamp_to) && !empty($timestamp_from)) {
+                $where = " ((r.publtime >= " . $timestamp_to . ' AND r.publtime <= ' . $timestamp_from . ")";
+                $where .= " OR (r.addtime >= " . $timestamp_to . ' AND r.addtime <= ' . $timestamp_from . ")";
+                $where .= " OR (r.edittime >= " . $timestamp_to . ' AND r.edittime <= ' . $timestamp_from . ")";
+                $where .= " OR (r.exptime >= " . $timestamp_to . ' AND r.exptime <= ' . $timestamp_from . "))";
+            }
         }
 
         if ($sstatus != -1) {
@@ -895,9 +862,6 @@ $ord_sql = ' r.' . $ordername . ' ' . $order;
 $array_editdata = [];
 $internal_authors = [];
 
-
-$get_username = $db->query('SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE)->fetchAll();
-
 if (!empty($array_ids)) {
     // Lấy số tags
     $db_slave->sqlreset()
@@ -989,8 +953,12 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('Q', $qhtml);
 
-if (!empty($publtime_search)) {
-    $xtpl->assign('PUBLTIME', $publtime_search);
+if (!empty($search_time_to)) {
+    $xtpl->assign('TIME_TO', $search_time_to);
+}
+
+if (!empty($search_time_from)) {
+    $xtpl->assign('TIME_FROM', $search_time_from);
 }
 
 $xtpl->assign('AUTHOR', $author_html);
@@ -1098,21 +1066,6 @@ foreach ($array_list_action as $action_i => $title_i) {
         $xtpl->parse('main.action');
     }
 }
-
-foreach ($get_username as $value) {
-    $fullname = nv_show_name_user($value['first_name'], $value['last_name'], $value['userid']);
-    $selected = ($value["userid"] == $creator ? 'selected' : "");
-    $action = [
-        'key' => $value["userid"],
-        'title' => $value['username'] . ' (' . $fullname . ')',
-        'selected' => $selected
-    ];
-
-
-    $xtpl->assign('VALUE', $action);
-    $xtpl->parse('main.show_creator');
-}
-
 
 if (!empty($generate_page)) {
     $xtpl->assign('GENERATE_PAGE', $generate_page);
