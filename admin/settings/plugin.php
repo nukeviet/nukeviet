@@ -360,6 +360,7 @@ foreach($array_plugin_area as $area) {
 
 if (!empty($array_search['plugin_area'])) {
     $xtpl->parse('main.not_empty_plugin_area');
+    $xtpl->parse('main.note_plugin_order');
 }
 
 foreach ($array as $row) {
