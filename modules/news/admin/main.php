@@ -400,35 +400,35 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     }
 
     if (!empty($search_time_to) && !empty($search_time_from)) {
-        $timestamp_to = "";
-        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
-            $timestamp_to = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
-        }
-
         $timestamp_from = "";
         if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
-            $timestamp_from = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+            $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
         }
 
+        $timestamp_to = "";
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
+            $timestamp_to = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+        }
+        
         if (!empty($timestamp_to) && !empty($timestamp_from)) {
             $match[]['range']['publtime'] = [
-                "gte" => $timestamp_to,
-                "lte" => $timestamp_from
+                "gte" => $timestamp_from,
+                "lte" => $timestamp_to
             ];
 
             $match[]['range']['addtime'] = [
-                "gte" => $timestamp_to,
-                "lte" => $timestamp_from
+                "gte" => $timestamp_from,
+                "lte" => $timestamp_to
             ];
 
             $match[]['range']['edittime'] = [
-                "gte" => $timestamp_to,
-                "lte" => $timestamp_from
+                "gte" => $timestamp_from,
+                "lte" => $timestamp_to
             ];
 
             $match[]['range']['exptime'] = [
-                "gte" => $timestamp_to,
-                "lte" => $timestamp_from
+                "gte" => $timestamp_from,
+                "lte" => $timestamp_to
             ];
 
             $search_elastic_user['filter']['or'] = $match;
@@ -640,21 +640,21 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         }
 
         if (!empty($search_time_to) && !empty($search_time_from)) {
-            $timestamp_to = "";
-            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
-                $timestamp_to = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
-            }
-
             $timestamp_from = "";
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
-                $timestamp_from = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+                $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
+            }
+
+            $timestamp_to = "";
+            if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
+                $timestamp_to = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
             }
 
             if (!empty($timestamp_to) && !empty($timestamp_from)) {
-                $where = " ((r.publtime >= " . $timestamp_to . ' AND r.publtime <= ' . $timestamp_from . ")";
-                $where .= " OR (r.addtime >= " . $timestamp_to . ' AND r.addtime <= ' . $timestamp_from . ")";
-                $where .= " OR (r.edittime >= " . $timestamp_to . ' AND r.edittime <= ' . $timestamp_from . ")";
-                $where .= " OR (r.exptime >= " . $timestamp_to . ' AND r.exptime <= ' . $timestamp_from . "))";
+                $where = " ((r.publtime >= " . $timestamp_from . ' AND r.publtime <= ' . $timestamp_to . ")";
+                $where .= " OR (r.addtime >= " . $timestamp_from . ' AND r.addtime <= ' . $timestamp_to . ")";
+                $where .= " OR (r.edittime >= " . $timestamp_from . ' AND r.edittime <= ' . $timestamp_to . ")";
+                $where .= " OR (r.exptime >= " . $timestamp_from . ' AND r.exptime <= ' . $timestamp_to . "))";
             }
         }
 

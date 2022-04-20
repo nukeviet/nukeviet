@@ -6,7 +6,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 
 <div class="well">
-    <form action="{NV_BASE_ADMINURL}index.php" method="get">
+    <form action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return check_validate()">
         <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
         <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
         <input type="hidden" name="catid" value="{CATID}" />
@@ -65,7 +65,7 @@
                 <div class="form-group">
                     <label for="publtime" class="font__weight">{LANG.search_time_to}</label>
                     <div class="group__input_date">
-                        <input type="text" name="search_time_to" class="form-control" value="{TIME_TO}" id="search_time_to" maxlength="10">
+                        <input type="text" name="search_time_from" class="form-control" value="{TIME_FROM}" id="search_time_from" maxlength="10">
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <label for="creator" class="font__weight">{LANG.search_time_from}</label>
                     <div class="group__input_date">
-                        <input type="text" name="search_time_from" class="form-control" value="{TIME_FROM}" id="search_time_from" maxlength="10">
+                        <input type="text" name="search_time_to" class="form-control" value="{TIME_TO}" id="search_time_to" maxlength="10">
                     </div>
                 </div>
             </div>
@@ -186,7 +186,33 @@
 </div>
 <!-- END: generate_page -->
 <script type="text/javascript">
+function check_validate() {
+    if ($("#search_time_to").val().trim() != "" && $("#search_time_from").val().trim() == "") {
+        $("#search_time_from").focus();
+        return false;
+    } 
+
+    if ($("#search_time_to").val().trim() == "" && $("#search_time_from").val().trim() != "") {
+        $("#search_time_to").focus();
+        return false;
+    }
+
+    if ($("#search_time_to").val().trim() != "" && $("#search_time_from").val().trim() != "") {
+        arr_date_from = $("#search_time_from").val().trim().split("/");
+        arr_date_to = $("#search_time_to").val().trim().split("/");
+        var d_from = new Date(arr_date_from[2], arr_date_from[1], arr_date_from[0]);
+        var d_to = new Date(arr_date_to[2], arr_date_to[1], arr_date_to[0]);
+        var check_date = d_to < d_from ? false : true;
+        if (!check_date) {
+            $("#search_time_to").focus();
+            return false
+        }
+    }
+    return true;
+}
+
 $(function() {
+
     $( "#order_articles" ).dialog({
         autoOpen: false,
         show: {
