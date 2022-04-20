@@ -407,7 +407,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
 
         $timestamp_from = "";
         if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
-            $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
+            $timestamp_from = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
         }
 
         if (!empty($timestamp_to) && !empty($timestamp_from)) {
@@ -647,7 +647,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
 
             $timestamp_from = "";
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
-                $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
+                $timestamp_from = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
             }
 
             if (!empty($timestamp_to) && !empty($timestamp_from)) {
