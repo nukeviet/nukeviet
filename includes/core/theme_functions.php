@@ -387,13 +387,14 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
 {
     global $global_config;
 
-    $xsl = NV_STATIC_URL . NV_ASSETS_DIR . '/css/rss.xsl';
+    //Chrome chỉ cho phép các file xml kết nối với file xsl có nguồn same-origin
+    $xsl = NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl';
     if (!empty($channel['xsltheme'])) {
         $xsl = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rssxsl&amp;theme=' . $channel['xsltheme'];
         $xsl = nv_url_rewrite($xsl, true);
-        if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
-            $xsl = NV_MY_DOMAIN . $xsl;
-        }
+    }
+    if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
+        $xsl = NV_MY_DOMAIN . $xsl;
     }
 
     if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
@@ -585,8 +586,14 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
  */
 function nv_xmlSitemap_generate($url, $changefreq = 'daily', $priority = '0.8')
 {
+    //Chrome chỉ cho phép các file xml kết nối với file xsl có nguồn same-origin
+    $xsl = NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemap.xsl';
+    if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
+        $xsl = NV_MY_DOMAIN . $xsl;
+    }
+
     $lastModified = time() - 86400;
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $xsl . '"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
     $xml = new SimpleXMLElement($sitemapHeader);
     if (!empty($url)) {
         foreach ($url as $key => $values) {
@@ -621,7 +628,13 @@ function nv_xmlSitemapCat_generate($url)
 {
     global $global_config;
 
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    //Chrome chỉ cho phép các file xml kết nối với file xsl có nguồn same-origin
+    $xsl = NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl';
+    if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
+        $xsl = NV_MY_DOMAIN . $xsl;
+    }
+
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $xsl . '"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
     $lastModified = NV_CURRENTTIME - 86400;
 
@@ -655,7 +668,13 @@ function nv_xmlSitemapIndex_generate()
 {
     global $db_config, $db, $global_config;
 
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    //Chrome chỉ cho phép các file xml kết nối với file xsl có nguồn same-origin
+    $xsl = NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl';
+    if (!str_starts_with($xsl, NV_MY_DOMAIN)) {
+        $xsl = NV_MY_DOMAIN . $xsl;
+    }
+
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $xsl . '"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
 
     $lastModified = NV_CURRENTTIME - 86400;
