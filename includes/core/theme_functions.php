@@ -323,7 +323,7 @@ function nv_xmlOutput($content, $lastModified)
             'output-xml' => true,
             'indent' => true,
             'indent-cdata' => true,
-            'wrap' => false
+            'wrap' => 2000
         ];
         $tidy = new tidy();
         $tidy->parseString($content, $tidy_options, 'utf8');
@@ -383,9 +383,21 @@ function nv_xmlOutput($content, $lastModified)
  * @param string $timemode
  * @param bool   $noindex
  */
-function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noindex = true)
+function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $noindex = true)
 {
-    global $global_config, $client_info;
+    global $global_config;
+
+    if (empty($atomlink)) {
+        global $module_info;
+
+        if (!empty($module_info['alias']['rss'])) {
+            if (preg_match('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', $channel['link'])) {
+                $atomlink = preg_replace('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', '\\1' . $module_info['alias']['rss'] . '/\\3', $channel['link']);
+            } else {
+                $atomlink = $channel['link'] . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'];
+            }
+        }
+    }
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     // Chi co tac dung voi IE6 va Chrome
@@ -398,6 +410,11 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
     $channel['atomlink'] = NV_MY_DOMAIN . nv_url_rewrite($atomlink, true);
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
+
+    if (empty($channel['description'])) {
+        $channel['description'] = $global_config['site_description'];
+    }
+    $channel['description'] = strip_tags(nv_unhtmlspecialchars($channel['description']));
 
     $channel['docs'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true);
     if (!str_starts_with($channel['docs'], NV_MY_DOMAIN)) {

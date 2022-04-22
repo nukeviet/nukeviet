@@ -5,7 +5,7 @@
     <channel>
         <title>{CHANNEL.title}</title>
         <link>{CHANNEL.link}</link>
-        <atom:link href="{CHANNEL.atomlink}" rel="self" type="application/rss+xml" />
+        <atom:link href="{CHANNEL.atomlink}" rel="self" />
         <!-- BEGIN: description -->
         <description>
             <![CDATA[{CHANNEL.description}]]>
