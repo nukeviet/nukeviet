@@ -387,12 +387,18 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
 {
     global $global_config;
 
+    if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
+        $channel['link'] = NV_BASE_SITEURL . $matches[1];
+    }
+
     if (empty($atomlink)) {
         global $module_info;
 
         if (!empty($module_info['alias']['rss'])) {
             if (preg_match('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', $channel['link'])) {
                 $atomlink = preg_replace('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', '\\1' . $module_info['alias']['rss'] . '/\\3', $channel['link']);
+            } else if (preg_match('/((&|&amp;)' . NV_NAME_VARIABLE . '=)([^&]+)/', $channel['link'])) {
+                $atomlink = preg_replace('/((&|&amp;)' . NV_NAME_VARIABLE . '=)([^&]+)/', '\\1\\3' . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'], $channel['link']);
             } else {
                 $atomlink = $channel['link'] . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'];
             }
@@ -401,6 +407,11 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
     $atomlink = nv_url_rewrite($atomlink, true);
     if (!str_starts_with($atomlink, NV_MY_DOMAIN)) {
         $atomlink = NV_MY_DOMAIN . $atomlink;
+    }
+
+    $channel['link'] = nv_url_rewrite($channel['link'], true);
+    if (!str_starts_with($channel['link'], NV_MY_DOMAIN)) {
+        $channel['link'] = NV_MY_DOMAIN . $channel['link'];
     }
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
@@ -423,14 +434,6 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
     $channel['docs'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true);
     if (!str_starts_with($channel['docs'], NV_MY_DOMAIN)) {
         $channel['docs'] = NV_MY_DOMAIN . $channel['docs'];
-    }
-
-    if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
-        $channel['link'] = NV_BASE_SITEURL . $matches[1];
-    }
-    $channel['link'] = nv_url_rewrite($channel['link'], true);
-    if (!str_starts_with($channel['link'], NV_MY_DOMAIN)) {
-        $channel['link'] = NV_MY_DOMAIN . $channel['link'];
     }
 
     $channel['pubDate'] = 0;
