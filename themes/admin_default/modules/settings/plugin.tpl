@@ -21,6 +21,9 @@
                 </div>
             </form>
         </div>
+        <!-- BEGIN: note_plugin_order-->
+        <p class="text-info">{LANG.plugin_note_order}.</p>
+        <!-- END: note_plugin_order-->
         <div class="table-responsive">
             <table class="table table-striped table-hover mb-0">
                 <thead>

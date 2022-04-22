@@ -280,6 +280,7 @@ $lang_module['plugin_integrate'] = 'Integrate';
 $lang_module['plugin_integrated'] = 'Plugin integrated';
 $lang_module['plugin_available'] = 'Other available plugins';
 $lang_module['plugin_note'] = 'If there are multiple plugins with the same hook, see the specific hook to change the priority of each plugin';
+$lang_module['plugin_note_order'] = 'Note: The order of running the plugin is from bottom to top. The plugin on top will run last';
 $lang_module['plugin_type'] = 'Type';
 $lang_module['plugin_type_sys'] = 'System';
 $lang_module['plugin_type_module'] = 'Module';
