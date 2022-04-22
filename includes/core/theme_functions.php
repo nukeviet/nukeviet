@@ -372,6 +372,10 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
             }
         }
     }
+    $atomlink = nv_url_rewrite($atomlink, true);
+    if (!str_starts_with($atomlink, NV_MY_DOMAIN)) {
+        $atomlink = NV_MY_DOMAIN . $atomlink;
+    }
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     // Chi co tac dung voi IE6 va Chrome
@@ -381,7 +385,7 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
 
     $channel['generator'] = 'NukeViet v4.4';
     $channel['title'] = nv_htmlspecialchars($channel['title']);
-    $channel['atomlink'] = NV_MY_DOMAIN . nv_url_rewrite($atomlink, true);
+    $channel['atomlink'] = $atomlink;
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
 
