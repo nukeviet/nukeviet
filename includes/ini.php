@@ -24,7 +24,7 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
  */
 function set_ini_file(&$sys_info)
 {
-    global $config_ini_file, $ini_list, $global_config;
+    global $config_ini_file, $ini_list, $global_config, $isErrorFile;
 
     $content_config = '<?php' . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
@@ -47,38 +47,24 @@ function set_ini_file(&$sys_info)
 
     //Kiem tra ho tro rewrite
     $_server_software = explode('/', $_SERVER['SERVER_SOFTWARE']);
+    $sys_info['supports_rewrite'] = false;
     if (function_exists('apache_get_modules')) {
         $apache_modules = apache_get_modules();
         if (in_array('mod_rewrite', $apache_modules, true)) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-        } else {
-            $sys_info['supports_rewrite'] = false;
         }
     } elseif (strpos($_server_software[0], 'Microsoft-IIS') !== false and $_server_software[1] >= 7) {
         if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
-        } else {
-            $sys_info['supports_rewrite'] = false;
         }
     } elseif (strpos($_server_software[0], 'nginx') !== false) {
         $sys_info['supports_rewrite'] = 'nginx';
-    } else {
-        /*
-         * @since v4.4.01
-         * @link https://github.com/nukeviet/nukeviet/issues/2955
-         *
-         * Khi đổi thư mục install hệ thống gọi qua file error.php status 404 và tiếp tục gọi lại
-         * tiến trình này vô hạn làm treo server do đó trong error.php thêm nvDisableRewriteCheck để không chạy tiến trình này trở lại
-         */
-        if (isset($_GET['nvDisableRewriteCheck'])) {
-            $sys_info['supports_rewrite'] = false;
-        } else {
-            $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
-            if ($_check_rewrite == 'mod_rewrite works') {
-                $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-            } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
-                $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-            }
+    } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
+        $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+    } elseif (!$isErrorFile) {
+        $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'check.rewrite');
+        if (in_array($_check_rewrite, ['rewrite_mode_apache', 'rewrite_mode_iis', 'nginx'], true)) {
+            $sys_info['supports_rewrite'] = $_check_rewrite;
         }
     }
     $content_config .= "\$sys_info['supports_rewrite'] = " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : 'false') . ";\n";
@@ -247,7 +233,9 @@ function set_ini_file(&$sys_info)
     $content_config .= "\$serverInfoUpdated = false;\n";
     $content_config .= '$iniSaveTime = ' . NV_CURRENTTIME . ';';
 
-    @file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX);
+    if (!$isErrorFile) {
+        @file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX);
+    }
 }
 
 $config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', (in_array(NV_SERVER_NAME, $global_config['my_domains'], true) ? NV_SERVER_NAME : $global_config['my_domains'][0])) . '.php';
@@ -258,9 +246,12 @@ $sys_info['is_http2'] = false;
 $sys_info['http_only'] = false;
 $sys_info['https_only'] = false;
 $serverInfoUpdated = false;
+$isErrorFile = (substr($_SERVER['PHP_SELF'], -9, 9) === 'error.php');
 $iniSaveTime = 0;
 
-@include_once $config_ini_file;
+if (!$isErrorFile) {
+    @include_once $config_ini_file;
+}
 
 if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     set_ini_file($sys_info);

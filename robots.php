@@ -34,8 +34,6 @@ if (file_exists($cache_file)) {
     $robots_other = [];
 }
 
-$host = (isset($_GET['action']) and !empty($_GET['action'])) ? $_GET['action'] : $_SERVER['HTTP_HOST'];
-
 $maxAge = 2592000;
 $expTme = $createTime + $maxAge;
 $hash = $createTime . '-' . md5($host);
@@ -46,6 +44,12 @@ if (isset($_SERVER['HTTP_IF_NONE_MATCH']) and stripslashes($_SERVER['HTTP_IF_NON
     http_response_code(304);
     header('Content-Length: 0');
     exit();
+}
+
+$proto = $nv_Server->getOriginalProtocol();
+$host = $nv_Server->getOriginalHost();
+if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+    $host = '[' . $host . ']';
 }
 
 $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
@@ -60,7 +64,7 @@ if (!empty($base_siteurl)) {
 }
 if (!empty($base_siteurl)) {
     $base_siteurl = preg_replace('/^[\/]*(.*)$/', '/\\1', $base_siteurl);
-    $base_siteurl = preg_replace('#/index\.php(.*)$#', '', $base_siteurl);
+    $base_siteurl = preg_replace('#/robots\.php(.*)$#', '', $base_siteurl);
 }
 $base_siteurl .= '/';
 
@@ -80,7 +84,8 @@ foreach ($robots_other as $key => $value) {
         $contents[] = 'Allow: ' . $key;
     }
 }
-$contents[] = 'Sitemap: http' . ($global_config['ssl_https'] == 1 ? 's' : '') . '://' . $host . $base_siteurl . 'sitemap.xml';
+
+$contents[] = 'Sitemap: ' . $proto . '://' . $host . $base_siteurl . 'sitemap.xml';
 $contents = implode("\n", $contents);
 
 header('Content-Type: text/plain; charset=utf-8');

@@ -169,11 +169,6 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     }
 
     nv_save_file_config_global();
-    $save_config = nv_server_config_change($array_config_define);
-
-    if ($save_config[0] !== true) {
-        $errormess = sprintf($lang_module['err_save_sysconfig'], $save_config[1]);
-    }
 
     if (empty($errormess)) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectedtab=' . $selectedtab . '&rand=' . nv_genpass());

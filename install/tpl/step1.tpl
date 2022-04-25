@@ -35,11 +35,11 @@
     $("#next_step").hide();
     var supports_rewrite = '';
     $.ajax({
-        url : '{BASE_SITEURL}install/check.rewrite',
+        url : '{BASE_SITEURL}check.rewrite',
         type : 'GET',
         success : function(theResponse) {
-            if (theResponse == "mod_rewrite works") {
-                supports_rewrite = '{SUPPORTS_REWRITE}';
+            if (theResponse == "rewrite_mode_apache" || theResponse == "rewrite_mode_iis" || theResponse == "nginx") {
+                supports_rewrite = theResponse;
             }
             nv_setCookie("supports_rewrite", supports_rewrite, 86400);
             $("#next_step").show();

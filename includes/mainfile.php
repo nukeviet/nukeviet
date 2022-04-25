@@ -165,7 +165,7 @@ if (!preg_match('/^[a-z0-9]{32}$/', $client_info['clid'])) {
 if ($nv_Request->isset_request('__serverInfoUpdate', 'post')) {
     require NV_ROOTDIR . '/includes/sinfoUpdate.php';
 }
-if (!$serverInfoUpdated) {
+if (!$isErrorFile and !$serverInfoUpdated) {
     post_async(NV_BASE_SITEURL . 'index.php', ['__serverInfoUpdate' => 1]);
 }
 

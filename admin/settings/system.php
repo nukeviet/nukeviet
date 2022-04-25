@@ -89,26 +89,33 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $array_config_global['site_timezone'] = $site_timezone;
         }
         $my_domains = $nv_Request->get_title('my_domains', 'post', '');
-        $array_config_global['my_domains'] = [NV_SERVER_NAME];
-
         if (!empty($my_domains)) {
             $my_domains = array_map('trim', explode(',', $my_domains));
-            foreach ($my_domains as $dm) {
-                $dm = preg_replace('/^(http|https)\:\/\//', '', $dm);
+            $sizeof = sizeof($my_domains);
+            for ($i = 0; $i < $sizeof; $i++) {
+                $dm = preg_replace('/^(http|https)\:\/\//', '', $my_domains[$i]);
                 $dm = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $dm);
                 $_p = '';
-                if (preg_match('/(.*)\:([0-9]+)$/', $dm, $m)) {
+                $m = [];
+                if (preg_match('/(.*)(\:[0-9]+)$/', $dm, $m)) {
                     $dm = $m[1];
-                    $_p = ':' . $m[2];
+                    $_p = $m[2];
                 }
                 $dm = nv_check_domain(nv_strtolower($dm));
                 if (!empty($dm)) {
-                    $array_config_global['my_domains'][] = $dm . $_p;
+                    $my_domains[$i] = $dm . $_p;
+                } else {
+                    unset($my_domains[$i]);
                 }
             }
+        } else {
+            $my_domains = [];
         }
-        $array_config_global['my_domains'] = array_unique($array_config_global['my_domains']);
-        $array_config_global['my_domains'] = implode(',', $array_config_global['my_domains']);
+        array_unshift($my_domains, NV_SERVER_NAME);
+        $my_domains = array_unique($my_domains);
+        $my_domains = array_values($my_domains);
+
+        $array_config_global['my_domains'] = implode(',', $my_domains);
 
         $array_config_global['gzip_method'] = $nv_Request->get_int('gzip_method', 'post');
         $array_config_global['resource_preload'] = $nv_Request->get_int('resource_preload', 'post');
@@ -231,6 +238,15 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $rewrite = nv_rewrite_change($array_config_rewrite);
         if (empty($rewrite[0])) {
             $errormess .= sprintf($lang_module['err_writable'], $rewrite[1]);
+        }
+
+        $diff1 = array_diff($my_domains, $global_config['my_domains']);
+        $diff2 = array_diff($global_config['my_domains'], $my_domains);
+        if (!empty($diff1) or !empty($diff2)) {
+            $save_config = nv_server_config_change($my_domains);
+            if ($save_config[0] !== true) {
+                $errormess .= (!empty($errormess) ? '<br/>' : '') . sprintf($lang_module['err_save_sysconfig'], $save_config[1]);
+            }
         }
     } else {
         $nv_Cache->delAll(false);

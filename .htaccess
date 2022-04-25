@@ -1,83 +1,171 @@
 #nukeviet
 
-<Files ~ "\.(htm|html|css|js|php)$">
-  AddDefaultCharset UTF-8
-</Files>
-
 ##################################################################################
-#nukeviet_config_start //Please do not change the contents of the following lines
+#NUKEVIET_CONFIG_START //Please do not change the contents of the following lines
 ##################################################################################
 
-RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$
-RedirectMatch 404 ^.*\/composer\.json$
-RedirectMatch 404 ^.*\/install/default\.(htaccess|web\.config)\.txt(.*)$
-RedirectMatch 404 ^.*\/install/default\.php(.*)$
-RedirectMatch 404 ^/(data/logs|data/cache|data/certs|data/ip6?|includes|install/tpl|vendor)/.*$
-RedirectMatch 404 ^/admin/.*/.*$
-RedirectMatch 404 ^/(assets|data/config|data/tmp|uploads|modules|themes|install/css|install/images)/.*\.(php|phtml|shtml|inc|asp|aspx|pl|py|jsp|asp|sh|cgi|tpl|xml|sql\.gz|ini).*$
+AddDefaultCharset UTF-8
+DirectoryIndex index.php index.html
+ServerSignature Off
+FileETag None
 
-ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1
-ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1
-ErrorDocument 404 /error.php?code=404&nvDisableRewriteCheck=1
-ErrorDocument 405 /error.php?code=405&nvDisableRewriteCheck=1
-ErrorDocument 408 /error.php?code=408&nvDisableRewriteCheck=1
-ErrorDocument 500 /error.php?code=500&nvDisableRewriteCheck=1
-ErrorDocument 502 /error.php?code=502&nvDisableRewriteCheck=1
-ErrorDocument 503 /error.php?code=503&nvDisableRewriteCheck=1
-ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
+RedirectMatch 404 ^/((.*/)?\.(.*)|(.*/)?composer\.json|(.*/)?web\.config|install/default\.(htaccess\.txt|web\.config\.txt|php)|includes/mainfile\.php|config\.php).*$
+RedirectMatch 404 ^/(data/ip6?|includes|install/tpl|vendor|assets/tpl|data/cache|data/certs|data/logs)/.*$
+RedirectMatch 404 ^/(admin)/.*/.*$
+RedirectMatch 404 ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php|pl|py|sh|sql\.gz|tpl|xml).*$
 
-<IfModule mod_deflate.c>
-  <FilesMatch "\.(css|js|xml|ttf)$">
-    SetOutputFilter DEFLATE
-  </FilesMatch>
+ErrorDocument 400 /error.php?code=400
+ErrorDocument 403 /error.php?code=403
+ErrorDocument 404 /error.php?code=404
+ErrorDocument 405 /error.php?code=405
+ErrorDocument 408 /error.php?code=408
+ErrorDocument 500 /error.php?code=500
+ErrorDocument 502 /error.php?code=502
+ErrorDocument 503 /error.php?code=503
+ErrorDocument 504 /error.php?code=504
+
+<IfModule mod_mime.c>
+  AddType application/json .json
+  AddType application/manifest+json .webmanifest
+  AddType application/rss+xml .rss
+  AddType application/xml .xml
+  AddType font/eot .eot
+  AddType font/otf .otf
+  AddType font/ttf .ttf
+  AddType font/woff .woff
+  AddType font/woff2 .woff2
+  AddType image/bmp .bmp
+  AddType image/gif .gif
+  AddType image/jpeg .jpeg .jpg
+  AddType image/png .png
+  AddType image/svg+xml .svg
+  AddType image/tiff .tif .tiff
+  AddType image/vnd.microsoft.icon .ico
+  AddType image/webp .webp
+  AddType text/css .css
+  AddType text/html .htm .html
+  AddType text/javascript .js .mjs
+  AddType text/plain .txt
+  AddType text/xsl .xsl
+
+  AddCharset UTF-8 .css .htm .html .js .json .mjs .rss .svg .webmanifest .xml .xsl
+</IfModule>
+
+<IfModule mod_autoindex.c>
+  Options -Indexes
 </IfModule>
 
 <IfModule mod_headers.c>
-  <FilesMatch "\.(js|css|xml|ttf|pdf)$">
-    Header append Vary Accept-Encoding
-    Header set Access-Control-Allow-Origin "*"
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-XSS-Protection "1; mode=block"
-  </FilesMatch>
+  Header unset X-Powered-By
+  Header always unset X-Powered-By
+  Header unset ETag
+  Header set Strict-Transport-Security "max-age=2592000; includeSubDomains; preload" env=HTTPS
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "no-referrer-when-downgrade, strict-origin-when-cross-origin"
 
-  <FilesMatch "\.(doc|pdf|swf)$">
-    Header set X-Robots-Tag "noarchive, nosnippet"
-  </FilesMatch>
-
-  <FilesMatch "\.(js|css|jpe?g|png|gif|webp|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$">
-    Header set Cache-Control 'max-age=2592000, public, no-cache="set-cookie"'
-  </FilesMatch>
+  <IfModule mod_setenvif.c>
+    SetEnvIf Origin "https?://(www\.)?(.*)$" cors_origins=$0
+    Header add Access-Control-Allow-Origin %{cors_origins}e env=cors_origins
+    Header merge Vary Origin
+  </IfModule>
 </IfModule>
 
-#nukeviet_config_end
+<IfModule mod_expires.c>
+  ExpiresActive on
+</IfModule>
+
+<FilesMatch "\.(css|htm|html|js|json|mjs|otf|rss|svg|ttf|txt|webmanifest|xml|xsl)($|\?)">
+  <IfModule mod_brotli.c>
+    SetOutputFilter BROTLI_COMPRESS;DEFLATE
+  </IfModule>
+
+  <IfModule !mod_brotli.c>
+    <IfModule mod_deflate.c>
+      SetOutputFilter DEFLATE
+    </IfModule>
+  </IfModule>
+
+  <IfModule mod_headers.c>
+    Header append Vary Accept-Encoding
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(css|js|mjs|xsl)($|\?)">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=2592000, public"
+  </IfModule>
+  <IfModule mod_expires.c>
+    ExpiresDefault "access plus 1 month"
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(bmp|gif|ico|jpeg|jpg|png|svg|tif|tiff|webp)($|\?)">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=31536000, public, no-transform"
+  </IfModule>
+  <IfModule mod_expires.c>
+    ExpiresDefault "access plus 1 year"
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(eot|otf|ttf|woff|woff2)($|\?)">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=15552000, public"
+  </IfModule>
+  <IfModule mod_expires.c>
+    ExpiresDefault "access plus 6 months"
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(doc|pdf|swf)$">
+  <IfModule mod_headers.c>
+    Header set X-Robots-Tag "noarchive, nosnippet"
+  </IfModule>
+</FilesMatch>
+
+#NUKEVIET_CONFIG_END
 ##################################################################################
 
 ##################################################################################
-#nukeviet_rewrite_start //Please do not change the contents of the following lines
+#NUKEVIET_REWRITE_START //Please do not change the contents of the following lines
 ##################################################################################
 
 #Options +FollowSymLinks
 
 <IfModule mod_rewrite.c>
-RewriteEngine On
-#RewriteBase /
-RewriteCond %{REQUEST_METHOD} !^(POST) [NC]
-RewriteRule ^api\.php(.*?)$ - [F]
-RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
-RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]
-RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
-RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
-RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
-RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
-RewriteRule ^(.*?)install\/(.*)\.rewrite$ install/rewrite.php [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (.*)(\/|\.html)$ index.php
-RewriteRule (.*)tag\/([^?]+)$ index.php
-RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /$1/$2/ [L,R=301]
-RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} /api.php$ [NC]
+  RewriteCond %{REQUEST_METHOD} !^(POST) [NC]
+  RewriteRule ^.* - [F]
+
+  RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
+  RewriteRule ^.* robots.php [L]
+
+  RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
+  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
+  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
+  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
+
+  RewriteRule ^(.*?)check\.rewrite$ index.php?rewritesupport=apache [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule (.*)(/|\.html)$ index.php [L]
+
+  RewriteRule (.*)tag\/([^?]+)$ index.php [L]
+  RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /$1/$2/ [L,R=301]
+  RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]
 </IfModule>
 
-#nukeviet_rewrite_end
+#NUKEVIET_REWRITE_END
 ##################################################################################
+
+<FilesMatch "\.(swf|pdf|flv|mp3|mp4)(\?t=[0-9]{9,11})?$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "max-age=2592000, public"
+  </IfModule>
+</FilesMatch>

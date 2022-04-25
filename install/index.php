@@ -64,8 +64,8 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME) and $step < 8) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php');
 }
 if (empty($sys_info['supports_rewrite'])) {
-    if (isset($_COOKIE['supports_rewrite']) and $_COOKIE['supports_rewrite'] == NV_CHECK_SESSION) {
-        $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+    if (isset($_COOKIE['supports_rewrite']) and (in_array($_COOKIE['supports_rewrite'], ['rewrite_mode_apache', 'rewrite_mode_iis', 'nginx'], true))) {
+        $sys_info['supports_rewrite'] = $_COOKIE['supports_rewrite'];
     }
 }
 if ($step == 1) {
@@ -152,7 +152,7 @@ if ($step == 1) {
                 @file_put_contents(NV_ROOTDIR . '/.htaccess', file_get_contents(NV_ROOTDIR . '/install/default.htaccess.txt'));
             }
             $array_dir[] = '.htaccess';
-        } else {
+        } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
             if (!file_exists(NV_ROOTDIR . '/web.config')) {
                 @file_put_contents(NV_ROOTDIR . '/web.config', file_get_contents(NV_ROOTDIR . '/install/default.web.config.txt'));
             }

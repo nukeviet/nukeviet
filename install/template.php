@@ -117,7 +117,6 @@ function nv_step_1()
     }
 
     if (empty($sys_info['supports_rewrite'])) {
-        $xtpl->assign('SUPPORTS_REWRITE', NV_CHECK_SESSION);
         $xtpl->parse('step.check_supports_rewrite');
     }
 

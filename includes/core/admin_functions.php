@@ -421,13 +421,16 @@ function nv_check_rewrite_file()
  * @param array $array_config_global
  * @return mixed
  */
-function nv_rewrite_change($array_config_global)
+function nv_rewrite_change($array_config_global = [])
 {
-    global $sys_info, $module_name;
+    global $sys_info, $module_name, $global_config;
 
     $rewrite_rule = $filename = '';
     $md5_old_file = $md5_new_file = $change_file = '';
-    $endurl = ($array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl']) ? nv_preg_quote($array_config_global['rewrite_endurl']) : nv_preg_quote($array_config_global['rewrite_endurl']) . '|' . nv_preg_quote($array_config_global['rewrite_exturl']);
+    $Sconfig = new NukeViet\Core\Sconfig($global_config);
+    if ((!empty($array_config_global['rewrite_endurl']) and $array_config_global['rewrite_endurl'] != $global_config['rewrite_endurl']) or (!empty($array_config_global['rewrite_exturl']) and $array_config_global['rewrite_exturl'] != $global_config['rewrite_exturl'])) {
+        $Sconfig->setRewriteExts([$array_config_global['rewrite_endurl'], $array_config_global['rewrite_exturl']]);
+    }
 
     if ($sys_info['supports_rewrite'] == 'nginx') {
         return [true, true];
@@ -435,66 +438,8 @@ function nv_rewrite_change($array_config_global)
     if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         $filename = NV_ROOTDIR . '/web.config';
         $change_file = 'web.config';
-        $rulename = 0;
-        $rewrite_rule .= "\n";
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
-        $rewrite_rule .= " <match url=\"^\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " <conditions>\n";
-        $rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" pattern=\"/robots.txt$\" />\n";
-        $rewrite_rule .= " </conditions>\n";
-        $rewrite_rule .= " <action type=\"Rewrite\" url=\"robots.php?action={HTTP_HOST}\" appendQueryString=\"false\" />\n";
-        $rewrite_rule .= " </rule>\n";
 
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
-        $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\.xml$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
-        $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.xml$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . "=SitemapIndex\" appendQueryString=\"false\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
-        $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . '={R:3}&amp;' . NV_OP_VARIABLE . "=sitemap\" appendQueryString=\"false\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
-        $rewrite_rule .= " \t<match url=\"^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . '={R:2}&amp;' . NV_NAME_VARIABLE . '={R:3}&amp;' . NV_OP_VARIABLE . "=sitemap/{R:4}\" appendQueryString=\"false\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\">\n";
-        $rewrite_rule .= " \t<match url=\"^(.*?)install\/(.*)\.rewrite$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"install/rewrite.php\" appendQueryString=\"false\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= " <rule name=\"nv_rule_rewrite\">\n";
-        $rewrite_rule .= ' 	<match url="(.*)(' . $endurl . ")$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " 	<conditions logicalGrouping=\"MatchAll\">\n";
-        $rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsFile\" ignoreCase=\"false\" negate=\"true\" />\n";
-        $rewrite_rule .= " 		<add input=\"{REQUEST_FILENAME}\" matchType=\"IsDirectory\" ignoreCase=\"false\" negate=\"true\" />\n";
-        $rewrite_rule .= " 	</conditions>\n";
-        $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= " <rule name=\"nv_rule_rewrite_tag\">\n";
-        $rewrite_rule .= " 	<match url=\"(.*)tag\/([^?]+)$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\" stopProcessing=\"true\">\n";
-        $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule .= ' <rule name="nv_rule_' . ++$rulename . "\" stopProcessing=\"true\">\n";
-        $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
-        $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/\" />\n";
-        $rewrite_rule .= " </rule>\n";
-
-        $rewrite_rule = nv_rewrite_rule_iis7($rewrite_rule);
+        $rewrite_rule = $Sconfig->iisRewriteRule();
 
         if (file_exists($filename)) {
             $md5_old_file = md5_file($filename);
@@ -502,50 +447,14 @@ function nv_rewrite_change($array_config_global)
     } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         $filename = NV_ROOTDIR . '/.htaccess';
         $change_file = '.htaccess';
-        $htaccess = '';
 
-        $rewrite_rule = "##################################################################################\n";
-        $rewrite_rule .= "#nukeviet_rewrite_start //Please do not change the contents of the following lines\n";
-        $rewrite_rule .= "##################################################################################\n\n";
-        $rewrite_rule .= "#Options +FollowSymLinks\n\n";
-        $rewrite_rule .= "<IfModule mod_rewrite.c>\n";
-        $rewrite_rule .= "RewriteEngine On\n";
-        $rewrite_rule .= '#RewriteBase ' . NV_BASE_SITEURL . "\n";
-
-        $rewrite_rule .= "RewriteCond %{REQUEST_METHOD} !^(POST) [NC]\n";
-        $rewrite_rule .= "RewriteRule ^api\.php(.*?)$ - [F]\n";
-
-        $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]\n";
-        $rewrite_rule .= "RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
-        $rewrite_rule .= "RewriteRule ^(.*?)install\/(.*)\.rewrite$ install/rewrite.php [L]\n";
-
-        // Rewrite for other module's rule
-        $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
-        $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
-        $rewrite_rule .= 'RewriteRule (.*)(' . $endurl . ")\$ index.php\n";
-        $rewrite_rule .= "RewriteRule (.*)tag\/([^?]+)$ index.php\n";
-
-        $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/$2/ [L,R=301]\n";
-        $rewrite_rule .= 'RewriteRule ^([a-zA-Z0-9-]+)$ ' . NV_BASE_SITEURL . "$1/ [L,R=301]\n";
-        $rewrite_rule .= "</IfModule>\n\n";
-        $rewrite_rule .= "#nukeviet_rewrite_end\n";
-        $rewrite_rule .= "##################################################################################\n\n";
+        $rewrite_rule = $Sconfig->apacheRewriteRule();
 
         if (file_exists($filename)) {
             $md5_old_file = md5_file($filename);
-            $htaccess = @file_get_contents($filename);
-            if (!empty($htaccess)) {
-                $htaccess = preg_replace("/[\n\s]*[\#]+[\n\s]+\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end[\n\s]+[\#]+[\n\s]*/s", "\n", $htaccess);
-                $htaccess = trim($htaccess);
-            }
         }
-        $htaccess .= "\n\n" . $rewrite_rule;
-        $rewrite_rule = $htaccess;
     }
+
     $return = true;
     if (!empty($filename) and !empty($rewrite_rule)) {
         try {
@@ -570,86 +479,29 @@ function nv_rewrite_change($array_config_global)
 /**
  * nv_server_config_change()
  *
- * @param array $array_config
+ * @param array $my_domains
  * @return mixed
  */
-function nv_server_config_change($array_config)
+function nv_server_config_change($my_domains = [])
 {
-    global $sys_info, $module_name;
+    global $sys_info, $global_config, $module_name;
 
     $config_contents = $filename = '';
     $md5_old_file = $md5_new_file = $change_file = '';
+    $Sconfig = new NukeViet\Core\Sconfig($global_config);
+    if (!empty($my_domains)) {
+        $Sconfig->setMyDomains($my_domains);
+    }
 
     if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
         $filename = NV_ROOTDIR . '/.htaccess';
         $change_file = '.htaccess';
 
-        $config_contents .= "##################################################################################\n";
-        $config_contents .= "#nukeviet_config_start //Please do not change the contents of the following lines\n";
-        $config_contents .= "##################################################################################\n\n";
-        $config_contents .= "RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$\n";
-        $config_contents .= "RedirectMatch 404 ^.*\/composer\.json$\n";
-        $config_contents .= "RedirectMatch 404 ^.*\/install/default\.(htaccess|web\.config)\.txt(.*)$\n";
-        $config_contents .= "RedirectMatch 404 ^.*\/install/default\.php(.*)$\n";
-        $config_contents .= "RedirectMatch 404 ^/(" . NV_LOGS_DIR . "|" . NV_CACHEDIR . "|" . NV_CERTS_DIR . "|" . NV_IP_DIR . "6?|includes|install/tpl|vendor)/.*$\n";
-        $config_contents .= "RedirectMatch 404 ^/" . NV_ADMINDIR . "/.*/.*$\n";
-        $config_contents .= "RedirectMatch 404 ^/(" . NV_ASSETS_DIR . "|" . NV_DATADIR . "|" . NV_TEMP_DIR . "|" . NV_UPLOADS_DIR . "|modules|themes|install/css|install/images)/.*\.(php|phtml|shtml|inc|asp|aspx|pl|py|jsp|asp|sh|cgi|tpl|xml|sql\.gz|ini).*$\n";
-        $config_contents .= "\n";
-        $config_contents .= "ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 404 /error.php?code=404&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 405 /error.php?code=405&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 408 /error.php?code=408&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 500 /error.php?code=500&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 502 /error.php?code=502&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 503 /error.php?code=503&nvDisableRewriteCheck=1\n";
-        $config_contents .= "ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1\n\n";
-        $config_contents .= "<IfModule mod_deflate.c>\n";
-        $config_contents .= "  <FilesMatch \"\.(css|js|xml|ttf)$\">\n";
-        $config_contents .= "    SetOutputFilter DEFLATE\n";
-        $config_contents .= "  </FilesMatch>\n";
-        $config_contents .= "</IfModule>\n\n";
-        $config_contents .= "<IfModule mod_headers.c>\n";
-        $config_contents .= "  <FilesMatch \"\.(js|css|xml|ttf|pdf)$\">\n";
-        $config_contents .= "    Header append Vary Accept-Encoding\n";
-        $config_contents .= "    Header set Access-Control-Allow-Origin \"*\"\n";
-        if (!empty($array_config['nv_anti_iframe'])) {
-            $config_contents .= "    Header set X-Frame-Options \"SAMEORIGIN\"\n";
-        }
-        $config_contents .= "    Header set X-Content-Type-Options \"nosniff\"\n";
-        $config_contents .= "    Header set X-XSS-Protection \"1; mode=block\"\n";
-        $config_contents .= "  </FilesMatch>\n\n";
-        $config_contents .= "  <FilesMatch \"\.(doc|pdf|swf)$\">\n";
-        $config_contents .= "    Header set X-Robots-Tag \"noarchive, nosnippet\"\n";
-        $config_contents .= "  </FilesMatch>\n\n";
-        $config_contents .= "  <FilesMatch \"\.(js|css|jpe?g|png|gif|webp|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$\">\n";
-        $config_contents .= "    Header set Cache-Control 'max-age=2592000, public, no-cache=\"set-cookie\"'\n";
-        $config_contents .= "  </FilesMatch>\n";
-        $config_contents .= "</IfModule>\n\n";
-        $config_contents .= "#nukeviet_config_end\n";
-        $config_contents .= "##################################################################################\n";
-
-        $htaccess = '';
-        $config_rule_exists = false;
+        $config_contents = $Sconfig->apacheConfigs();
 
         if (file_exists($filename)) {
             $md5_old_file = md5_file($filename);
-            $htaccess = @file_get_contents($filename);
-            if (!empty($htaccess)) {
-                $partten = "/[\n\s]*[\#]+[\n\s]+\#nukeviet\_config\_start(.*)\#nukeviet\_config\_end[\n\s]+[\#]+[\n\s]*/s";
-                if (preg_match($partten, $htaccess)) {
-                    $htaccess = preg_replace($partten, "\n\n" . $config_contents . "\n", $htaccess);
-                    $config_rule_exists = true;
-                }
-                $htaccess = trim($htaccess);
-            }
         }
-
-        if (!$config_rule_exists) {
-            $htaccess .= "\n\n" . $config_contents;
-        }
-
-        $config_contents = $htaccess;
     }
 
     $return = true;
@@ -671,81 +523,6 @@ function nv_server_config_change($array_config)
     }
 
     return [$return, basename($filename)];
-}
-
-/**
- * nv_rewrite_rule_iis7()
- *
- * @param string $rewrite_rule
- * @return false|string
- */
-function nv_rewrite_rule_iis7($rewrite_rule = '')
-{
-    $filename = NV_ROOTDIR . '/web.config';
-    if (!class_exists('DOMDocument')) {
-        return false;
-    }
-
-    // If configuration file does not exist then we create one.
-    if (!file_exists($filename)) {
-        $fp = fopen($filename, 'w');
-        fwrite($fp, '<configuration/>');
-        fclose($fp);
-    }
-
-    $doc = new DOMDocument();
-    $doc->preserveWhiteSpace = false;
-
-    if ($doc->load($filename) === false) {
-        return false;
-    }
-
-    $xpath = new DOMXPath($doc);
-
-    // Check the XPath to the rewrite rule and create XML nodes if they do not exist
-    $xmlnodes = $xpath->query('/configuration/system.webServer/rewrite/rules');
-    if ($xmlnodes->length > 0) {
-        $child = $xmlnodes->item(0);
-        $parent = $child->parentNode;
-        $parent->removeChild($child);
-    }
-    if (!empty($rewrite_rule)) {
-        $rules_node = $doc->createElement('rules');
-
-        $xmlnodes = $xpath->query('/configuration/system.webServer/rewrite');
-        if ($xmlnodes->length > 0) {
-            $rewrite_node = $xmlnodes->item(0);
-            $rewrite_node->appendChild($rules_node);
-        } else {
-            $rewrite_node = $doc->createElement('rewrite');
-            $rewrite_node->appendChild($rules_node);
-
-            $xmlnodes = $xpath->query('/configuration/system.webServer');
-            if ($xmlnodes->length > 0) {
-                $system_webServer_node = $xmlnodes->item(0);
-                $system_webServer_node->appendChild($rewrite_node);
-            } else {
-                $system_webServer_node = $doc->createElement('system.webServer');
-                $system_webServer_node->appendChild($rewrite_node);
-
-                $xmlnodes = $xpath->query('/configuration');
-                if ($xmlnodes->length > 0) {
-                    $config_node = $xmlnodes->item(0);
-                    $config_node->appendChild($system_webServer_node);
-                } else {
-                    $config_node = $doc->createElement('configuration');
-                    $doc->appendChild($config_node);
-                    $config_node->appendChild($system_webServer_node);
-                }
-            }
-        }
-        $rule_fragment = $doc->createDocumentFragment();
-        $rule_fragment->appendXML($rewrite_rule);
-        $rules_node->appendChild($rule_fragment);
-    }
-    $doc->formatOutput = true;
-
-    return $doc->saveXML();
 }
 
 /**
