@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -358,8 +358,8 @@ if (!empty($global_config['nv_csp_script_nonce'])) {
 }
 
 // Check https
-if (empty($sys_info['http_only']) and (($global_config['ssl_https'] == 1 or ($global_config['ssl_https'] == 2 and defined('NV_ADMIN'))) and (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off'))) {
-    nv_redirect_location('https://' . NV_SERVER_NAME . NV_SERVER_PORT . $_SERVER['REQUEST_URI']);
+if (empty($sys_info['http_only']) and (($global_config['ssl_https'] == 1 or ($global_config['ssl_https'] == 2 and defined('NV_ADMIN'))) and ($nv_Server->getOriginalProtocol() !== 'https'))) {
+    nv_redirect_location('https://' . $nv_Server->getOriginalHost() . $nv_Server->getOriginalPort() . $_SERVER['REQUEST_URI']);
 }
 
 if ($global_config['is_user_forum']) {
@@ -412,7 +412,7 @@ if (defined('NV_ADMIN')) {
 }
 
 // Cronjobs execute
-$global_config['cronjobs_next_time'] = (int)$global_config['cronjobs_last_time'] + (int)$global_config['cronjobs_interval'] * 60;
+$global_config['cronjobs_next_time'] = (int) $global_config['cronjobs_last_time'] + (int) $global_config['cronjobs_interval'] * 60;
 if ($global_config['cronjobs_launcher'] == 'server' and $nv_Request->isset_request('loadcron', 'get')) {
     if ($nv_Request->get_title('loadcron', 'get') == md5('cronjobs' . $global_config['sitekey']) and NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
         require NV_ROOTDIR . '/includes/core/cronjobs.php';

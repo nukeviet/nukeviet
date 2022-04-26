@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -363,10 +363,10 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     }
 
     /*
-    * Đăng nhập bước đầu thành công, kiểm tra xem hệ thống có bắt xác thực hai bước hay không
-    * Nếu không thì xem như đã thành công.
-    * Nếu có lưu lại thông tin xác thực bước 1 và load lại trang để kiểm tra xử lý tiếp
-    */
+     * Đăng nhập bước đầu thành công, kiểm tra xem hệ thống có bắt xác thực hai bước hay không
+     * Nếu không thì xem như đã thành công.
+     * Nếu có lưu lại thông tin xác thực bước 1 và load lại trang để kiểm tra xử lý tiếp
+     */
     // Kiểm tra cấu hình toàn hệ thống
     $_2step_require = in_array((int) $global_config['two_step_verification'], [1, 3], true);
     if (!$_2step_require) {
@@ -539,7 +539,7 @@ if (empty($admin_pre_data)) {
     }
 
     // Kiểm tra site có dùng SSL không
-    if (!((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443)) {
+    if ($nv_Server->getOriginalProtocol() !== 'https') {
         $xtpl->parse('pre_form.warning_ssl');
     }
 

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -80,6 +80,22 @@ class Ips
     }
 
     /**
+     * getIp()
+     *
+     * @param string $variable_name
+     * @return false|string
+     */
+    private function getIp($variable_name)
+    {
+        $ip = $this->nv_getenv($variable_name);
+        if ($ip and $this->nv_validip($ip)) {
+            return $ip;
+        }
+
+        return false;
+    }
+
+    /**
      * nv_validip()
      *
      * @param string $ip
@@ -119,9 +135,8 @@ class Ips
      */
     public function server_ip()
     {
-        $serverip = $this->nv_getenv('SERVER_ADDR');
-        if ($this->nv_validip($serverip)) {
-            return $serverip;
+        if (($ip = $this->getIp('SERVER_ADDR')) !== false) {
+            return $ip;
         }
         if ($_SERVER['SERVER_NAME'] == 'localhost') {
             return '127.0.0.1';
@@ -140,19 +155,17 @@ class Ips
      */
     private function nv_get_clientip()
     {
-        $clientip = '';
-        if ($this->nv_getenv('HTTP_CLIENT_IP')) {
-            $clientip = $this->nv_getenv('HTTP_CLIENT_IP');
-        } elseif ($this->nv_getenv('HTTP_VIA')) {
-            $clientip = $this->nv_getenv('HTTP_VIA');
-        } elseif ($this->nv_getenv('HTTP_X_COMING_FROM')) {
-            $clientip = $this->nv_getenv('HTTP_X_COMING_FROM');
-        } elseif ($this->nv_getenv('HTTP_COMING_FROM')) {
-            $clientip = $this->nv_getenv('HTTP_COMING_FROM');
+        if (($ip = $this->getIp('HTTP_CLIENT_IP')) !== false) {
+            return $ip;
         }
-
-        if ($this->nv_validip($clientip)) {
-            return $clientip;
+        if (($ip = $this->getIp('HTTP_VIA')) !== false) {
+            return $ip;
+        }
+        if (($ip = $this->getIp('HTTP_X_COMING_FROM')) !== false) {
+            return $ip;
+        }
+        if (($ip = $this->getIp('HTTP_COMING_FROM')) !== false) {
+            return $ip;
         }
 
         return 'none';
@@ -165,17 +178,17 @@ class Ips
      */
     private function nv_get_forwardip()
     {
-        if ($this->nv_getenv('HTTP_X_FORWARDED_FOR') and $this->nv_validip($this->nv_getenv('HTTP_X_FORWARDED_FOR'))) {
-            return $this->nv_getenv('HTTP_X_FORWARDED_FOR');
+        if (($ip = $this->getIp('HTTP_X_FORWARDED_FOR')) !== false) {
+            return $ip;
         }
-        if ($this->nv_getenv('HTTP_X_FORWARDED') and $this->nv_validip($this->nv_getenv('HTTP_X_FORWARDED'))) {
-            return $this->nv_getenv('HTTP_X_FORWARDED');
+        if (($ip = $this->getIp('HTTP_X_FORWARDED')) !== false) {
+            return $ip;
         }
-        if ($this->nv_getenv('HTTP_FORWARDED_FOR') and $this->nv_validip($this->nv_getenv('HTTP_FORWARDED_FOR'))) {
-            return $this->nv_getenv('HTTP_FORWARDED_FOR');
+        if (($ip = $this->getIp('HTTP_FORWARDED_FOR')) !== false) {
+            return $ip;
         }
-        if ($this->nv_getenv('HTTP_FORWARDED') and $this->nv_validip($this->nv_getenv('HTTP_FORWARDED'))) {
-            return $this->nv_getenv('HTTP_FORWARDED');
+        if (($ip = $this->getIp('HTTP_FORWARDED')) !== false) {
+            return $ip;
         }
 
         return 'none';
@@ -189,8 +202,8 @@ class Ips
      */
     private function nv_get_remote_addr()
     {
-        if ($this->nv_getenv('REMOTE_ADDR') and $this->nv_validip($this->nv_getenv('REMOTE_ADDR'))) {
-            return $this->nv_getenv('REMOTE_ADDR');
+        if (($ip = $this->getIp('REMOTE_ADDR')) !== false) {
+            return $ip;
         }
 
         return 'none';
@@ -203,6 +216,9 @@ class Ips
      */
     private function nv_getip()
     {
+        if (($ip = $this->getIp('HTTP_CF_CONNECTING_IP')) !== false) {
+            return $ip;
+        }
         if ($this->client_ip != 'none') {
             return $this->client_ip;
         }

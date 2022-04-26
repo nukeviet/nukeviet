@@ -225,13 +225,6 @@ function nv_save_file_config_global()
     }
     unset($language_array);
     $content_config .= '$language_array = ' . nv_var_export($tmp_array) . ";\n";
-
-    $global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
-    $global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
-
-    $global_config['rewrite_endurl'] = $config_variable['rewrite_endurl'];
-    $global_config['rewrite_exturl'] = $config_variable['rewrite_exturl'];
-
     $content_config .= "\n";
 
     $nv_plugins = [];
