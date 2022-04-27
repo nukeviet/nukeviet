@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -12,6 +12,8 @@
 if (!defined('NV_IS_FILE_SEOTOOLS')) {
     exit('Stop!!!');
 }
+
+$page_title = $lang_module['robots'];
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
@@ -55,6 +57,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             file_put_contents(NV_ROOTDIR . '/robots.txt', $rbcontents, LOCK_EX);
             $redirect = true;
         } else {
+            $xtpl = new XTemplate('robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
             $xtpl->assign('TITLE', $lang_module['robots_error_writable']);
             $xtpl->assign('CONTENT', str_replace([
                 "\n",
@@ -64,6 +67,12 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 '&nbsp;&nbsp;&nbsp;&nbsp;'
             ], nv_htmlspecialchars($rbcontents)));
             $xtpl->parse('main.nowrite');
+            $xtpl->parse('main');
+            $contents = $xtpl->text('main');
+
+            include NV_ROOTDIR . '/includes/header.php';
+            echo nv_admin_theme($contents);
+            include NV_ROOTDIR . '/includes/footer.php';
         }
     }
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
@@ -162,8 +171,6 @@ foreach ($robots_other as $file => $value) {
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
-
-$page_title = $lang_module['robots'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

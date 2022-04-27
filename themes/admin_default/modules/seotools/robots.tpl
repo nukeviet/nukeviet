@@ -9,7 +9,7 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<colgroup>
-			<col class="w100" />
+				<col class="w100" />
 			</colgroup>
 			<thead>
 				<tr class="text-center">
@@ -29,11 +29,12 @@
 					<td class="text-center">{DATA.number}</td>
 					<td>{DATA.filename}</td>
 					<td>
-					<select name="filename[{DATA.filename}]" class="form-control">
-						<!-- BEGIN: option -->
-						<option value="{OPTION.value}" {OPTION.selected}>{OPTION.title}</option>
-						<!-- END: option -->
-					</select></td>
+						<select name="filename[{DATA.filename}]" class="form-control">
+							<!-- BEGIN: option -->
+							<option value="{OPTION.value}" {OPTION.selected}>{OPTION.title}</option>
+							<!-- END: option -->
+						</select>
+					</td>
 				</tr>
 				<!-- END: loop -->
 				<!-- BEGIN: other -->
@@ -41,10 +42,10 @@
 					<td class="text-center">{DATA.number}</td>
 					<td><input class="form-control" type="text" value="{DATA.filename}" name="fileother[{DATA.number}]" /></td>
 					<td><select name="optionother[{DATA.number}]" class="form-control">
-						<!-- BEGIN: option -->
-						<option value="{OPTION.value}" {OPTION.selected}>{OPTION.title}</option>
-						<!-- END: option -->
-					</select></td>
+							<!-- BEGIN: option -->
+							<option value="{OPTION.value}" {OPTION.selected}>{OPTION.title}</option>
+							<!-- END: option -->
+						</select></td>
 				</tr>
 				<!-- END: other -->
 			</tbody>

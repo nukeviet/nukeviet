@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -173,7 +173,7 @@ function nv_save_file_config_global()
                 if (!empty($c_config_value)) {
                     foreach ($c_config_value as $k => $val) {
                         $val = "'" . implode("','", $val) . "'";
-                        $_value[] = "'" . $k . "' => [" . $val . "]";
+                        $_value[] = "'" . $k . "' => [" . $val . ']';
                     }
                 }
                 $c_config_value = !empty($_value) ? implode(',', $_value) : '';
@@ -390,8 +390,15 @@ function nv_check_rewrite_file()
 
         $htaccess = @file_get_contents(NV_ROOTDIR . '/.htaccess');
 
-        return preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/is', $htaccess);
+        if (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/is', $htaccess)) {
+            return true;
+        }
+
+        $_check_rewrite = @file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'check.rewrite');
+
+        return !empty($_check_rewrite) and $_check_rewrite == 'rewrite_mode_apache';
     }
+
     if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
         if (!file_exists(NV_ROOTDIR . '/web.config')) {
             return false;
@@ -399,10 +406,16 @@ function nv_check_rewrite_file()
 
         $web_config = @file_get_contents(NV_ROOTDIR . '/web.config');
 
-        return preg_match('/<rule name="nv_rule_rewrite">(.*)<\/rule>/is', $web_config);
+        if (preg_match('/\<\!\-\-\s*nukeviet\_rewrite\_start\s*\-\-\>(.*)\<\!\-\-\s*nukeviet\_rewrite\_end\s*\-\-\>/is', $web_config)) {
+            return true;
+        }
+
+        $_check_rewrite = @file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'check.rewrite');
+
+        return !empty($_check_rewrite) and $_check_rewrite == 'rewrite_mode_iis';
     }
 
-    return $global_config['check_rewrite_file'];
+    return (bool) $global_config['check_rewrite_file'];
 }
 
 /**
