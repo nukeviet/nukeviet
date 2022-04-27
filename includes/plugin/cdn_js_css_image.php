@@ -18,13 +18,13 @@ nv_add_hook($module_name, 'change_site_buffer', $priority, function ($vars) {
     $return = $vars[1];
 
     if (!empty($global_config['cdn_url'])) {
-        $return[0] = preg_replace("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!http(s?)\:\/\/)([^\>]*)\.(css|js|jpg|png|gif))['\"]([^\>]*)\>/i", '<\\1\\2\\3="//' . $global_config['cdn_url'] . '\\4?t=' . $global_config['timestamp'] . '"\\8>', $return[0]);
+        $return[0] = preg_replace("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpg|png|gif))['\"]([^\>]*)\>/i", '<\\1\\2\\3="//' . $global_config['cdn_url'] . '\\4?t=' . $global_config['timestamp'] . '"\\8>', $return[0]);
     } else {
-        $return[0] = preg_replace("/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", '<\\1\\2\\3="\\4?t=' . $global_config['timestamp'] . '"\\7>', $return[0]);
+        $return[0] = preg_replace("/\<(script|link)(.*?)(src|href)=['\"]((?!(http(s?)\:)?\/\/).*?\.(js|css))['\"](.*?)\>/", '<\\1\\2\\3="\\4?t=' . $global_config['timestamp'] . '"\\7>', $return[0]);
     }
 
     if (!empty($return[1]['link'])) {
-        $return[1]['link'] = preg_replace("/\<((?!http(s?)\:\/\/).*?\.(js|css))\>/", '<\\1?t=' . $global_config['timestamp'] . '>', $return[1]['link']);
+        $return[1]['link'] = preg_replace("/\<((?!(http(s?)\:)?\/\/).*?\.(js|css))\>/", '<\\1?t=' . $global_config['timestamp'] . '>', $return[1]['link']);
     }
 
     return $return;
