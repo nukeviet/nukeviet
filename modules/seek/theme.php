@@ -37,6 +37,7 @@ function search_main_theme($is_search, $search, $array_modul)
     $xtpl->assign('INVALID_KEY_MESS', sprintf($lang_module['searchQueryError'], NV_MIN_SEARCH_LENGTH));
 
     $search['action'] = NV_BASE_SITEURL . 'index.php';
+    $search['full_action'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
     $search['andChecked'] = $search['logic'] == 1 ? ' checked="checked"' : '';
     $search['orChecked'] = $search['logic'] == 1 ? '' : ' checked="checked"';
 
@@ -47,6 +48,7 @@ function search_main_theme($is_search, $search, $array_modul)
             $m_info['value'] = $m_name;
             $m_info['selected'] = ($m_name == $search['mod']) ? ' selected="selected"' : '';
             $m_info['adv_search'] = $m_info['adv_search'] ? 'true' : 'false';
+            $m_info['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $m_name . '&' . NV_OP_VARIABLE . '=search';
 
             $xtpl->assign('MOD', $m_info);
             $xtpl->parse('main.select_option');

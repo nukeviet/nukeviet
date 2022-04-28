@@ -126,39 +126,35 @@ $key = str_replace('+', ' ', urldecode($key));
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
 
-$page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$canonicalUrl = getCanonicalUrl($page_url, false, false);
+
 if (!empty($key)) {
-    $page_url .= '&q=' . urlencode($key);
+    $base_url .= '&q=' . urlencode($key);
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
 if (!empty($choose)) {
-    $page_url .= '&choose=' . $choose;
+    $base_url .= '&choose=' . $choose;
 }
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 if (!empty($catid)) {
-    $page_url .= '&catid=' . $catid;
+    $base_url .= '&catid=' . $catid;
 }
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
 $date_array['from_date'] = preg_replace('/[^0-9]/', '.', urldecode($from_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'])) {
-    $page_url .= '&from_date=' . urlencode($date_array['from_date']);
+    $base_url .= '&from_date=' . urlencode($date_array['from_date']);
 }
 
 $to_date = $nv_Request->get_title('to_date', 'get', '', 0);
 $date_array['to_date'] = preg_replace('/[^0-9]/', '.', urldecode($to_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'])) {
-    $page_url .= '&to_date=' . urlencode($date_array['to_date']);
+    $base_url .= '&to_date=' . urlencode($date_array['to_date']);
 }
 
-$base_url = $page_url;
 $page = $nv_Request->get_int('page', 'get', 1);
-if ($page > 1) {
-    $page_url .= '&page=' . $page;
-}
-
-$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $array_cat_search = [];
 $array_cat_search[0]['title'] = $lang_module['search_all'];

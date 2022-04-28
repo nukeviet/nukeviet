@@ -27,6 +27,7 @@ $search = [
 ];
 
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+$canonicalUrl = getCanonicalUrl($page_url);
 
 if ($nv_Request->isset_request('q', 'get')) {
     $is_search = true;
@@ -57,20 +58,13 @@ if ($nv_Request->isset_request('q', 'get')) {
         $search['len_key'] = nv_strlen($search['key']);
     }
 
-    $page_url .= '&q=' . urlencode($search['key']);
+    $base_url = $page_url . '&q=' . urlencode($search['key']);
     if ($search['mod'] != 'all') {
-        $page_url .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
+        $base_url .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
     }
     if ($search['logic'] != 1) {
-        $page_url .= '&l=' . $search['logic'];
+        $base_url .= '&l=' . $search['logic'];
     }
-
-    $base_url = $page_url;
-    if ($search['page'] > 1) {
-        $page_url .= '&page=' . $search['page'];
-    }
-
-    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
     if ($search['len_key'] < NV_MIN_SEARCH_LENGTH) {
         $search['is_error'] = true;
@@ -116,8 +110,6 @@ if ($nv_Request->isset_request('q', 'get')) {
             $search['content'] = $lang_module['search_none'];
         }
     }
-} else {
-    $canonicalUrl = getCanonicalUrl($page_url, true, true);
 }
 
 $contents = search_main_theme($is_search, $search, $array_mod);

@@ -3,25 +3,23 @@
     <div class="panel-body">
         <h3 class="text-center margin-bottom-lg">{LANG.info_title}</h3>
         <div id="search-form" class="text-center">
-            <form action="{DATA.action}" name="form_search" method="get" id="form_search" role="form">
-                <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
-                <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+            <form action="{DATA.full_action}" name="form_search" method="get" id="form_search" role="form">
                 <div class="m-bottom">
                     <div class="form-group">
                         <label class="sr-only" for="search_query">{LANG.key_title}</label>
-                        <input class="form-control" id="search_query" name="q" value="{DATA.key}" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.key_title}" />
+                        <input class="form-control" id="search_query" name="q" value="{DATA.key}" maxlength="{NV_MAX_SEARCH_LENGTH}" data-minlength="{NV_MIN_SEARCH_LENGTH}" placeholder="{LANG.key_title}" />
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="search_query_mod">{LANG.type_search}</label>
-                        <select name="m" id="search_query_mod" class="form-control">
+                        <select name="m" id="search_query_mod" class="form-control" data-alert="{LANG.chooseModule}">
                             <option value="all">{LANG.search_on_site}</option>
                             <!-- BEGIN: select_option -->
-                            <option data-adv="{MOD.adv_search}" value="{MOD.value}"{MOD.selected}>{MOD.custom_title}</option>
+                            <option data-adv="{MOD.adv_search}" data-url="{MOD.url}" value="{MOD.value}" {MOD.selected}>{MOD.custom_title}</option>
                             <!-- END: select_option -->
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="submit" id="search_submit" value="{LANG.search_title}" class="btn btn-primary" />
+                        <input type="submit" value="{LANG.search_title}" class="btn btn-primary" />
                         <a href="#" class="advSearch">{LANG.search_title_adv}</a>
                     </div>
                 </div>
@@ -29,7 +27,6 @@
                     <label class="radio-inline"> <input name="l" id="search_logic_and" type="radio" {DATA.andChecked} value="1" /> {LANG.logic_and}</label>
                     <label class="radio-inline"> <input name="l" id="search_logic_or" type="radio" {DATA.orChecked} value="0" /> {LANG.logic_or}</label>
                 </div>
-                <input type="hidden" name="page" value="{PAGE}" />
             </form>
         </div>
         <!-- BEGIN: search_engine_unique_ID -->
@@ -47,46 +44,91 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-function show_advSearch() {
-    var data = $('#search_query_mod').find('option:selected').data();
-    if (data.adv == true) {
-        $("a.advSearch").show();
-    } else if (data.adv == false) {
-        $("a.advSearch").hide();
-    } else {
-        $("a.advSearch").show();
+<script>
+    function show_advSearch() {
+        var data = $('#search_query_mod').find('option:selected').data();
+        if (data.adv == true) {
+            $("a.advSearch").show();
+        } else if (data.adv == false) {
+            $("a.advSearch").hide();
+        } else {
+            $("a.advSearch").show();
+        }
     }
-}
-$(function() {
-    show_advSearch();
-});
-$('#search_query_mod').change(function() {
-    show_advSearch();
-});
-$("a.advSearch").click(function(e) {
-    e.preventDefault();
-    var b = $("#form_search #search_query_mod").val();
-    if ("all" == b) {
-        return alert("{LANG.chooseModule}"), $("#form_search #search_query_mod").focus(), !1
-    }
-    var b = nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = strip_tags(a);
-    {NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
+    $(function() {
+        show_advSearch();
 
-    window.location.href = b;
-});
-$("a.IntSearch").click(function(e) {
-    e.preventDefault();
-    $(".fa", this).toggleClass("fa-eye fa-eye-slash");
-    $("#search-form, #gcse, #search_result").toggleClass("hidden")
-});
-$("#form_search").submit(function() {
-    var a = $("#form_search [name=q]").val(), a = strip_tags(a), b;
-    $("#form_search [name=q]").val(a);
-    if ({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length) {
-        return $("#form_search [name=q]").select(), !1
-    }
-    return true;
-});
+        $("#form_search [type=submit]").on('click', function(e) {
+            e.preventDefault();
+
+            var form = $(this).parents('form'),
+                url = form.attr('action'),
+                query = $('[name=q]', form).val(),
+                mod = $('[name=m]', form).val(),
+                lg = parseInt($('[name=l]:checked', form).val()),
+                min = parseInt($('[name=q]', form).data('minlength')),
+                max = parseInt($('[name=q]', form).attr('maxlength'));
+
+            form.bind('submit',function(e){e.preventDefault();});
+
+            query = strip_tags(trim(query));
+            $('[name=q]', form).val(query);
+            leng = query.length;
+            if (!leng || min > query.length || max < query.length) {
+                $('[name=q]', form).focus();
+                return !1
+            }
+
+            query = 'q=' + rawurlencode(query);
+            if (mod != '' && mod != 'all') {
+                query += '&m=' + rawurlencode(mod);
+            }
+            if (lg != 1) {
+                query += '&l=0';
+            }
+            url = url + ((url.indexOf('?') > -1) ? '&' : '?') + query;
+
+            window.location.href = url;
+        });
+
+        $("a.advSearch").on('click', function(e) {
+            e.preventDefault();
+
+            var form = $(this).parents('form'),
+                b = $('[name=m]', form).val(),
+                query = $('[name=q]', form).val(),
+                min = parseInt($('[name=q]', form).data('minlength')),
+                max = parseInt($('[name=q]', form).attr('maxlength')),
+                url;
+            if ("all" == b) {
+                alert($('[name=m]', form).data('alert'));
+                $('[name=m]', form).focus();
+                return !1
+            }
+
+            query = strip_tags(trim(query));
+            $('[name=q]', form).val(query);
+            leng = query.length;
+            if (!leng || min > query.length || max < query.length) {
+                $('[name=q]', form).focus();
+                return !1
+            }
+
+            url = $('[name=m] option:selected', form).data('url');
+            url = url + ((url.indexOf('?') > -1) ? '&' : '?') + 'q=' + rawurlencode(query);
+
+            window.location.href = url;
+        });
+
+        $('#search_query_mod').on('change', function() {
+            show_advSearch();
+        });
+
+        $("a.IntSearch").on('click', function(e) {
+            e.preventDefault();
+            $(".fa", this).toggleClass("fa-eye fa-eye-slash");
+            $("#search-form, #gcse, #search_result").toggleClass("hidden")
+        });
+    });
 </script>
 <!-- END: main -->

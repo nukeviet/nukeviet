@@ -1310,6 +1310,7 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
     $xtpl->assign('KEY', $key);
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('OP_NAME', 'search');
+    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=search');
 
     foreach ($array_cat_search as $search_cat) {
         $xtpl->assign('SEARCH_CAT', $search_cat);
