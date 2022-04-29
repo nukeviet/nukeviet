@@ -73,14 +73,6 @@ class Optimizer
         $_linkHref = [];
         $_preload = '';
 
-        if ($this->is_http2 and $this->resource_preload === 1) {
-            $this->headerPreloadItems[NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2'] = '<' . NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2>; rel=preload; as=font; crossorigin';
-            $this->headerPreloadItems[NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2'] = '<' . NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2>; rel=preload; as=font; crossorigin';
-        } elseif ($this->resource_preload === 2) {
-            $_preload .= '<link rel="preload" as="font" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2" type="font/woff2" crossorigin>' . $this->eol;
-            $_preload .= '<link rel="preload" as="font" href="' . NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2" type="font/woff2" crossorigin>' . $this->eol;
-        }
-
         // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
         $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
         if ($_isFullBuffer and $jquery) {
