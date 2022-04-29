@@ -19,10 +19,10 @@ nv_add_hook($module_name, 'change_site_buffer', $priority, function ($vars) {
 
     if (!empty($global_config['cdn_url'])) {
         $return[0] = preg_replace("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpe?g|png|gif|webp))['\"]([^\>]*)\>/i", '<\\1\\2\\3="//' . $global_config['cdn_url'] . '\\4?t=' . $global_config['timestamp'] . '"\\9>', $return[0]);
-        $return[1]['link'] = preg_replace("/\<((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpe?g|png|gif|webp))\>/", '<//' . $global_config['cdn_url'] . '\\1?t=' . $global_config['timestamp'] . '>', $return[1]['link']);
+        !empty($return[1]['link']) && $return[1]['link'] = preg_replace("/\<((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpe?g|png|gif|webp))\>/", '<//' . $global_config['cdn_url'] . '\\1?t=' . $global_config['timestamp'] . '>', $return[1]['link']);
     } else {
         $return[0] = preg_replace("/\<(script|link)(.*?)(src|href)=['\"]((?!(http(s?)\:)?\/\/)([^\>]*)\.(js|css))['\"](.*?)\>/", '<\\1\\2\\3="\\4?t=' . $global_config['timestamp'] . '"\\9>', $return[0]);
-        $return[1]['link'] = preg_replace("/\<((?!(http(s?)\:)?\/\/)([^\>]*)\.(js|css))\>/", '<\\1?t=' . $global_config['timestamp'] . '>', $return[1]['link']);
+        !empty($return[1]['link']) && $return[1]['link'] = preg_replace("/\<((?!(http(s?)\:)?\/\/)([^\>]*)\.(js|css))\>/", '<\\1?t=' . $global_config['timestamp'] . '>', $return[1]['link']);
     }
 
     return $return;
