@@ -34,6 +34,12 @@ if (file_exists($cache_file)) {
     $robots_other = [];
 }
 
+$proto = $nv_Server->getOriginalProtocol();
+$host = $nv_Server->getOriginalHost();
+if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+    $host = '[' . $host . ']';
+}
+
 $maxAge = 2592000;
 $expTme = $createTime + $maxAge;
 $hash = $createTime . '-' . md5($host);
@@ -44,12 +50,6 @@ if (isset($_SERVER['HTTP_IF_NONE_MATCH']) and stripslashes($_SERVER['HTTP_IF_NON
     http_response_code(304);
     header('Content-Length: 0');
     exit();
-}
-
-$proto = $nv_Server->getOriginalProtocol();
-$host = $nv_Server->getOriginalHost();
-if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
-    $host = '[' . $host . ']';
 }
 
 $base_siteurl = pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME);
