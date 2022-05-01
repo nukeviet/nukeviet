@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -67,7 +67,7 @@ function nv_mailHTML($title, $content, $footer = '')
  */
 function nv_site_theme($contents, $full = true)
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $drag_block, $opensearch_link;
+    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $drag_block, $opensearch_link, $custom_preloads;
 
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
@@ -110,6 +110,31 @@ function nv_site_theme($contents, $full = true)
         $xtpl->assign('THEME_META_TAGS', $meta);
         $xtpl->parse('main.metatags');
     }
+
+    // XÁC ĐỊNH BIẾN $custom_preloads - TẢI TRƯỚC TẬP TIN (không bắt buộc)
+    // Các tập tin hình ảnh, font chữ được liệt kê trong các file css nguồn
+    // theo mặc định sẽ được tải sau khi trình duyệt đã phân tích xong toàn bộ file css.
+    // Tải trước các tập tin hình ảnh, font chữ này sẽ khiến việc load trang nhanh hơn.
+    // Thuộc tính 'as' và 'href' bắt buộc khai báo, thuộc tính 'type' - không bắt buộc,
+    // thuộc tính 'crossorigin' - bắt buộc nếu tập tin đòi hỏi CORS (ví dụ: font chữ).
+    // Nếu đường dẫn của tập tin trong file css nguồn là tương đối thì giá trị của thuộc tính 'href'
+    // sẽ là đường dẫn đến nó tính từ thư mục gốc của site (tương tự như của file css nguồn).
+    $custom_preloads[] = [
+        'as' => 'font',
+        // File fontawesome-webfont.woff2 được tải từ font-awesome.min.css,
+        // nên đường dẫn đến thư mục của font-awesome.min.css thế nào thì của fontawesome-webfont.woff2 như thế
+        'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2',
+        'type' => 'font/woff2',
+        'crossorigin' => true
+    ];
+    $custom_preloads[] = [
+        'as' => 'font',
+        // File NukeVietIcons.woff2 được tải từ style.css,
+        // nên đường dẫn đến thư mục của style.css thế nào thì của NukeVietIcons.woff2 như thế
+        'href' => NV_STATIC_URL . 'themes/default/fonts/NukeVietIcons.woff2',
+        'type' => 'font/woff2',
+        'crossorigin' => true
+    ];
 
     //Links
     $html_links = [];

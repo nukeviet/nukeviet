@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -16,7 +16,7 @@ if ((!defined('NV_SYSTEM') and !defined('NV_ADMIN')) or !defined('NV_MAINFILE'))
 unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
 
 // Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
-global $db, $nv_Request, $headers, $lang_global, $global_config, $sys_info, $nv_BotManager;
+global $db, $nv_Request, $headers, $lang_global, $global_config, $sys_info, $nv_BotManager, $custom_preloads;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -24,7 +24,7 @@ $contents = nv_url_rewrite($contents);
 if (!defined('NV_IS_AJAX')) {
     $contents = nv_change_buffer($contents);
     $optimizer = new NukeViet\Core\Optimizer($contents, NV_BASE_SITEURL, !empty($sys_info['is_http2']), $global_config['resource_preload']);
-    $contents = $optimizer->process();
+    $contents = $optimizer->process(true, $custom_preloads);
     $optimizer->headerPreload($headers);
     if (defined('NV_IS_SPADMIN')) {
         $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($lang_global['memory_time_usage'], nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
