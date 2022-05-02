@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -113,12 +113,11 @@ if ($nv_Request->isset_request('savetag', 'post')) {
 
     if (empty($added)) {
         exit($lang_module['add_multi_tags_empty']);
-    } else {
-        $added = implode('; ', $added);
-        $aliases = implode('; ', $aliases);
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'add_multi_tags', $aliases, $admin_info['userid']);
-        exit($lang_module['add_multi_tags'] . ': ' . $added);
     }
+    $added = implode('; ', $added);
+    $aliases = implode('; ', $aliases);
+    nv_insert_logs(NV_LANG_DATA, $module_name, 'add_multi_tags', $aliases, $admin_info['userid']);
+    exit($lang_module['add_multi_tags'] . ': ' . $added);
 }
 
 // Thêm tag hoặc sửa tag
@@ -224,7 +223,7 @@ if ($nv_Request->isset_request('tagLinks', 'post')) {
     $xtpl->assign('TID', $tid);
 
     while ($row = $result->fetch()) {
-        $row['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
+        $row['url'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'], true);
         $xtpl->assign('ROW', $row);
 
         if (!in_array($row['keyword'], $keywords, true)) {
@@ -381,7 +380,7 @@ if ($num_items) {
         $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row['alias'];
         $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;tid=' . $row['tid'] . ($incomplete === true ? '&amp;incomplete=1' : '') . '#edit';
         if (empty($row['title'])) {
-            $row['title'] = nv_ucfirst(trim(str_replace('-', ' ', $row['alias'])));
+            $row['title'] = nv_ucfirst($row['keywords']);
             $sths = $db_slave->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET title = :title WHERE tid =' . $row['tid']);
             $sths->bindParam(':title', $row['title'], PDO::PARAM_STR);
             $sths->execute();
