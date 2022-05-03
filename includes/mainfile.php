@@ -61,8 +61,6 @@ if (empty($global_config['my_domains'])) {
     $global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
 }
 
-define('NV_STATIC_URL', !empty($global_config['nv_static_url']) ? '//' . $global_config['nv_static_url'] . '/' : NV_BASE_SITEURL);
-
 require NV_ROOTDIR . '/includes/ini.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
@@ -191,6 +189,7 @@ require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
+$is_cdn_url = false;
 // Load các plugin
 if (!empty($nv_plugins[NV_LANG_DATA])) {
     foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
@@ -199,6 +198,9 @@ if (!empty($nv_plugins[NV_LANG_DATA])) {
                 $module_name = $_phook;
                 $hook_module = $_plugin[1];
                 $pid = $_plugin[2];
+                if ($_plugin[0] == 'includes/plugin/cdn_js_css_image.php') {
+                    $is_cdn_url = true;
+                }
                 require NV_ROOTDIR . '/' . $_plugin[0];
             }
         }
@@ -207,6 +209,25 @@ if (!empty($nv_plugins[NV_LANG_DATA])) {
 }
 
 nv_apply_hook('', 'check_server');
+
+if (is_localhost()) {
+    $global_config['cdn_url'] = $global_config['nv_static_url'] = $global_config['assets_cdn_url'] = '';
+} else {
+    empty($is_cdn_url) && $global_config['cdn_url'] = '';
+    $global_config['assets_cdn_url'] = !empty($global_config['assets_cdn']) ? $global_config['core_cdn_url'] : '';
+    (!empty($global_config['nv_static_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['nv_static_url'])) && $global_config['nv_static_url'] = '//' . $global_config['nv_static_url'];
+    (!empty($global_config['cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['cdn_url'])) && $global_config['cdn_url'] = '//' . $global_config['cdn_url'];
+    (!empty($global_config['assets_cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['assets_cdn_url'])) && $global_config['assets_cdn_url'] = '//' . $global_config['assets_cdn_url'];
+}
+
+// NV_STATIC_URL - URL của host chứa các file tĩnh hoặc đường dẫn tương đối của site
+define('NV_STATIC_URL', (!empty($global_config['nv_static_url']) and empty($global_config['cdn_url'])) ? $global_config['nv_static_url'] . '/' : NV_BASE_SITEURL);
+// ASSETS_STATIC_URL - jsDelivr zone URL đến thư mục assets của dự án trên github.com hoặc đường dẫn tương đối đến thư mục assets của site
+define('ASSETS_STATIC_URL', !empty($global_config['assets_cdn_url']) ? $global_config['assets_cdn_url'] . 'assets' : NV_STATIC_URL . NV_ASSETS_DIR);
+// ASSETS_LANG_STATIC_URL - Cũng là ASSETS_STATIC_URL nhưng chỉ áp dụng cho các file javascript liên quan đến ngôn ngữ Anh, Pháp, Việt
+define('ASSETS_LANG_STATIC_URL', (in_array(NV_LANG_INTERFACE, ['en', 'fr', 'vi'], true)) ? ASSETS_STATIC_URL : NV_STATIC_URL . NV_ASSETS_DIR);
+// AUTO_MINIFIED - Tự thu nhỏ dung lượng file nếu thêm '.min' vào trước phần mở rộng .css, .js (Chỉ áp dụng khi mạng CDN jsDelivr được bật)
+define('AUTO_MINIFIED', !empty($global_config['assets_cdn_url']) ? '.min' : '');
 
 if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');

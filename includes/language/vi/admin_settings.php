@@ -150,8 +150,8 @@ $lang_module['proxy_blocker_2'] = 'Ở cấp độ vừa';
 $lang_module['proxy_blocker_3'] = 'Tuyệt đối';
 $lang_module['str_referer_blocker'] = 'Kích hoạt tiện ích kiểm tra và chuyển hướng các REFERER bên ngoài đến trang chủ';
 $lang_module['my_domains'] = 'Các domain của site, cách nhau bởi dấu phảy';
-$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(Có định dạng kiểu như 000329275761967753447:sr7yxqgv294, <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">xem chi tiết</a>)';
-
+$lang_module['searchEngineUniqueID'] = 'Google search Engine ID';
+$lang_module['searchEngineUniqueID_note'] = 'Có định dạng kiểu như 000329275761967753447:sr7yxqgv294, <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">xem chi tiết</a>';
 $lang_module['variables'] = 'Cấu hình cookie, session';
 $lang_module['cookie_prefix'] = 'Tiến tố cookie';
 $lang_module['session_prefix'] = 'Tiền tố session';
@@ -276,7 +276,11 @@ $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số n�
 $lang_module['ftp_error_support'] = 'Máy chủ của bạn đang chặn hoặc không hỗ trợ thư viện FTP. Hãy liên hệ với nhà cung cấp để được kích hoạt.';
 $lang_module['static_url'] = 'Hosting chứa các tệp tĩnh';
 $lang_module['static_url_note'] = 'Để trống hoặc điền vào tên miền của hosting chứa các tệp tĩnh không phải là một trong các miền hoặc miền phụ của site. Cấu trúc thư mục của hosting này cần phải giống với cấu trúc thư mục của site';
-$lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
+$lang_module['cdn_url'] = 'CDN cho các tệp tĩnh';
+$lang_module['cdn_url_note'] = 'Để trống trường này hoặc nhập zone URL trỏ đến các tệp tĩnh do nhà cung cấp dịch vụ CDN cấp';
+$lang_module['assets_cdn'] = 'Sử dụng các file tĩnh có sẵn trên <a href="https://github.com/nukeviet/nukeviet" target="_blank">Kho mã nguồn NukeViet</a> kết hợp mạng CDN <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr</a>';
+$lang_module['assets_cdn_note'] = 'URL tương đối của các file <strong>js, css, svg, woff, woff2, ttf</strong> trong thư mục<strong> %s</strong> của site sẽ được thay thế bằng URL tuyệt đối đến các file tương ứng trên kho mã nguồn NukeViet (ví dụ, URL: <code>%s</code> sẽ được thay thế bằng: <code>%s</code>)';
+$lang_module['not_apply_to_localhost'] = 'Cấu hình này không có tác dụng trong môi trường localhost';
 $lang_module['remote_api_access'] = 'Bật Remote API';
 $lang_module['remote_api_access_help'] = 'Nếu tắt toàn bộ quyền truy cập API từ bên ngoài sẽ bị chặn. Các API bên trong vẫn sử dụng bình thường';
 $lang_module['remote_api_log'] = 'Ghi lại nhật ký Remote API';
