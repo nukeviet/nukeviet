@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -148,7 +148,8 @@ $lang_module['proxy_blocker_2'] = 'Medium';
 $lang_module['proxy_blocker_3'] = 'High';
 $lang_module['str_referer_blocker'] = 'Activate block referers';
 $lang_module['my_domains'] = 'Domains';
-$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
+$lang_module['searchEngineUniqueID'] = 'Google search Engine ID';
+$lang_module['searchEngineUniqueID_note'] = 'Format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>';
 $lang_module['variables'] = 'Setup cookie session';
 $lang_module['cookie_prefix'] = 'Cookie prefix';
 $lang_module['session_prefix'] = 'Session\'s prefix';
@@ -261,8 +262,12 @@ $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detect
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
 $lang_module['static_url'] = 'Hosting of static files';
-$lang_module['static_url_note'] = 'Leave it blank or fill in the hosting domain name that is not one of the site\'s domains or their subdomains. The directory structure of this hosting needs to be identical to the site\'s structure';
-$lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
+$lang_module['static_url_note'] = 'Leave this field blank or fill in the hosting domain name that is not one of the site\'s domains or their subdomains. The directory structure of this hosting needs to be identical to the site\'s structure';
+$lang_module['cdn_url'] = 'CDN for static Files';
+$lang_module['cdn_url_note'] = 'Leave this field blank or enter the zone URL provided by your CDN provider that points to static files';
+$lang_module['assets_cdn'] = 'Using static files available on <a href="https://github.com/nukeviet/nukeviet" target="_blank">NukeViet source code Repository</a> combined with <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr</a> CDN network';
+$lang_module['assets_cdn_note'] = 'Relative URLs of <strong>js, css, svg, woff, woff2, ttf</strong> files in the <strong>%s</strong> directories will be replaced with the absolute URLs of the corresponding files, which are available in the NukeViet Source Code Repository (e.g. URL: <code>%s</code> will be changed to: <code>%s</code>)';
+$lang_module['not_apply_to_localhost'] = 'This configuration is not available in the localhost environment';
 $lang_module['remote_api_access'] = 'Enable Remote API';
 $lang_module['remote_api_access_help'] = 'Disabling all API access from outside will be blocked. Internal APIs are still used normally';
 $lang_module['remote_api_log'] = 'Enable Remote API Logging';

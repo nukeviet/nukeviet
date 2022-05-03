@@ -34,6 +34,7 @@ $global_config['admin_check_pass_time'] = 1800;
 $global_config['admin_user_logout'] = 0;
 $global_config['allow_null_origin'] = 0;
 $global_config['allow_sitelangs'] = ['vi'];
+$global_config['assets_cdn'] = 1;
 $global_config['authors_detail_main'] = 0;
 $global_config['autocheckupdate'] = 1;
 $global_config['autoupdatetime'] = 24;

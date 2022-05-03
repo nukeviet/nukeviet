@@ -146,17 +146,46 @@
                     <td><input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" style="width: 450px"/></td>
                 </tr>
                 <tr>
-                    <td><strong>{LANG.static_url}</strong></td>
+                    <td><strong>{LANG.static_url}</strong><br/><small>({LANG.not_apply_to_localhost})</small></td>
                     <td>
-                        <div class="m-bottom">
-                            <input type="text" name="nv_static_url" value="{DATA.nv_static_url}" class="form-control" style="width: 450px"/>
+                        <div class="row m-bottom" style="width: 455px">
+                            <div class="col-xs-5">
+                                <select name="nv_static_url_prefix" class="form-control">
+                                    <!-- BEGIN: static_url_prefix -->
+                                    <option value="{PR.val}" {PR.sel}>{PR.val}</option>
+                                    <!-- END: static_url_prefix -->
+                                </select>
+                            </div>
+                            <div class="col-xs-19">
+                                <input type="text" name="nv_static_url" value="{STATIC_URL_VAL}" class="form-control" />
+                            </div>
                         </div>
                         {LANG.static_url_note}
                     </td>
                 </tr>
                 <tr>
-                    <td><strong>{LANG.cdn_url}</strong></td>
-                    <td><input type="text" name="cdn_url" value="{DATA.cdn_url}" class="form-control pull-left" style="width: 450px"/></td>
+                    <td><strong>{LANG.cdn_url}</strong><br/><small>({LANG.not_apply_to_localhost})</small></td>
+                    <td>
+                        <div class="row m-bottom" style="width: 455px">
+                            <div class="col-xs-5">
+                                <select name="cdn_url_prefix" class="form-control">
+                                    <!-- BEGIN: cdn_url_prefix -->
+                                    <option value="{CPR.val}" {CPR.sel}>{CPR.val}</option>
+                                    <!-- END: cdn_url_prefix -->
+                                </select>
+                            </div>
+                            <div class="col-xs-19">
+                                <input type="text" name="cdn_url" value="{CDN_URL_VAL}" class="form-control" />
+                            </div>
+                        </div>
+                        {LANG.cdn_url_note}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.assets_cdn}</strong><br/><small>({LANG.not_apply_to_localhost})</small></td>
+                    <td>
+                        <input type="checkbox" name="assets_cdn" value="1"{ASSETS_CDN.checked}/> {ASSETS_CDN.note}
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.error_set_logs}</strong></td>
@@ -185,7 +214,12 @@
                 <!-- END: system -->
                 <tr>
                     <td><strong>{LANG.searchEngineUniqueID}</strong></td>
-                    <td><input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" class="form-control" style="width: 450px" maxlength="50" /></td>
+                    <td>
+                        <div class="m-bottom">
+                            <input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" class="form-control" style="width: 450px" maxlength="50" />
+                        </div>
+                        {LANG.searchEngineUniqueID_note}
+                    </td>
                 </tr>
             </tbody>
         </table>
