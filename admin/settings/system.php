@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -92,7 +92,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         if (!empty($my_domains)) {
             $my_domains = array_map('trim', explode(',', $my_domains));
             $sizeof = sizeof($my_domains);
-            for ($i = 0; $i < $sizeof; ++$i) {
+            for ($i = 0; $i < $sizeof; $i++) {
                 $dm = preg_replace('/^(http|https)\:\/\//', '', $my_domains[$i]);
                 $dm = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $dm);
                 $_p = '';
@@ -161,37 +161,36 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
         $array_config_global['nv_static_url'] = '';
         $static_url = rtrim($nv_Request->get_string('nv_static_url', 'post'), '/');
-        $static_url_prefix = $nv_Request->get_title('nv_static_url_prefix', 'post');
         if (!empty($static_url)) {
-            $static_url = preg_replace('/^(https?\:)?\/\//', '', $static_url);
+            $static_url = preg_replace('/^(http|https)\:\/\//', '', $static_url);
+            $static_url = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $static_url);
             $_p = '';
             if (preg_match('/(.*)\:([0-9]+)$/', $static_url, $m)) {
                 $static_url = $m[1];
                 $_p = ':' . $m[2];
             }
             $static_url = nv_check_domain(nv_strtolower($static_url));
-            if (!empty($static_url) and array_search($static_url, $my_domains, true) === false) {
-                $array_config_global['nv_static_url'] = $static_url_prefix . $static_url . $_p;
+            if (!empty($static_url)) {
+                $array_config_global['nv_static_url'] = $static_url . $_p;
             }
         }
 
         $array_config_global['cdn_url'] = '';
         $cdn_url = rtrim($nv_Request->get_string('cdn_url', 'post'), '/');
-        $cdn_url_prefix = $nv_Request->get_title('cdn_url_prefix', 'post');
         if (!empty($cdn_url)) {
-            $cdn_url = preg_replace('/^(https?\:)?\/\//', '', $cdn_url);
+            $cdn_url = preg_replace('/^(http|https)\:\/\//', '', $cdn_url);
+            $cdn_url = preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $cdn_url);
             $_p = '';
             if (preg_match('/(.*)\:([0-9]+)$/', $cdn_url, $m)) {
                 $cdn_url = $m[1];
                 $_p = ':' . $m[2];
             }
             $cdn_url = nv_check_domain(nv_strtolower($cdn_url));
-            if (!empty($cdn_url) and array_search($cdn_url, $my_domains, true) === false) {
-                $array_config_global['cdn_url'] = $cdn_url_prefix . $cdn_url . $_p;
+            if (!empty($cdn_url)) {
+                $array_config_global['cdn_url'] = $cdn_url . $_p;
             }
         }
 
-        $array_config_global['assets_cdn'] = (int) $nv_Request->get_bool('assets_cdn', 'post', false);
         $array_config_global['remote_api_access'] = (int) $nv_Request->get_bool('remote_api_access', 'post', false);
         $array_config_global['remote_api_log'] = (int) $nv_Request->get_bool('remote_api_log', 'post', false);
         $array_config_global['cookie_notice_popup'] = (int) $nv_Request->get_bool('cookie_notice_popup', 'post', false);
@@ -230,7 +229,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         nv_save_file_config_global();
 
         $array_config_rewrite = [
-            'rewrite_alias_ext' => $global_config['rewrite_alias_ext'],
             'rewrite_enable' => $array_config_global['rewrite_enable'],
             'rewrite_optional' => $array_config_global['rewrite_optional'],
             'rewrite_endurl' => $global_config['rewrite_endurl'],
@@ -295,23 +293,6 @@ if (defined('NV_IS_GODADMIN')) {
     while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
         $array_config_global[$c_config_name] = $c_config_value;
     }
-    unset($matches);
-    if (preg_match('/^((https?\:)?\/\/)(.+)$/', $array_config_global['nv_static_url'], $matches)) {
-        $array_config_global['nv_static_url_val'] = $matches[3];
-        $array_config_global['nv_static_url_prefix'] = $matches[1];
-    } else {
-        $array_config_global['nv_static_url_val'] = $array_config_global['nv_static_url'];
-        $array_config_global['nv_static_url_prefix'] = '//';
-    }
-    if (preg_match('/^((https?\:)?\/\/)(.+)$/', $array_config_global['cdn_url'], $matches)) {
-        $array_config_global['cdn_url_val'] = $matches[3];
-        $array_config_global['cdn_url_prefix'] = $matches[1];
-    } else {
-        $array_config_global['cdn_url_val'] = $array_config_global['cdn_url'];
-        $array_config_global['cdn_url_prefix'] = '//';
-    }
-    $xtpl->assign('STATIC_URL_VAL', $array_config_global['nv_static_url_val']);
-    $xtpl->assign('CDN_URL_VAL', $array_config_global['cdn_url_val']);
 
     $lang_multi = $array_config_global['lang_multi'];
     $xtpl->assign('CHECKED_GZIP_METHOD', ($array_config_global['gzip_method']) ? ' checked="checked"' : '');
@@ -323,10 +304,6 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_REMOTE_API_ACCESS', ($array_config_global['remote_api_access'] == 1) ? ' checked ' : '');
     $xtpl->assign('CHECKED_REMOTE_API_LOG', ($array_config_global['remote_api_log'] == 1) ? ' checked ' : '');
     $xtpl->assign('CHECKED_COOKIE_NOTICE_POPUP', ($array_config_global['cookie_notice_popup'] == 1) ? ' checked ' : '');
-    $xtpl->assign('ASSETS_CDN', [
-        'checked' => $array_config_global['assets_cdn'] ? ' checked ' : '',
-        'note' => sprintf($lang_module['assets_cdn_note'], NV_ASSETS_DIR . '/css, ' . NV_ASSETS_DIR . '/fonts, ' . NV_ASSETS_DIR . '/images, ' . NV_ASSETS_DIR . '/js', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js', $global_config['core_cdn_url']  . 'assets/js/jquery/jquery.min.js')
-    ]);
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
 
@@ -407,21 +384,6 @@ if (defined('NV_IS_GODADMIN')) {
             'name' => $name
         ]);
         $xtpl->parse('main.system.resource_preload');
-    }
-
-    $prefixs = ['//', 'https://', 'http://'];
-    foreach ($prefixs as $prefix) {
-        $xtpl->assign('PR', [
-            'val' => $prefix,
-            'sel' => $prefix == $array_config_global['nv_static_url_prefix'] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.system.static_url_prefix');
-
-        $xtpl->assign('CPR', [
-            'val' => $prefix,
-            'sel' => $prefix == $array_config_global['cdn_url_prefix'] ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('main.system.cdn_url_prefix');
     }
 
     $array_config_define['nv_debug'] = empty($array_config_define['nv_debug']) ? '' : ' checked="checked"';

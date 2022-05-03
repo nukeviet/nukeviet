@@ -74,15 +74,8 @@ if (!empty($headers)) {
     $html_headers = array_merge($html_headers, $headers);
 }
 
-foreach ([$global_config['cdn_url'], $global_config['nv_static_url'], $global_config['assets_cdn_url']] as $url) {
-    $lks = [];
-    if (!empty($url)) {
-        $lks[] = '<' . $url . '>; rel=preconnect; crossorigin, <' . $url . '>; rel=dns-prefetch';
-    }
-    !empty($html_headers['link']) && $lks[] = $html_headers['link'];
-    if (!empty($lks)) {
-        $html_headers['link'] = implode(', ', $lks);
-    }
+if (!empty($global_config['nv_static_url']) and !str_ends_with(NV_MY_DOMAIN, $global_config['nv_static_url'])) {
+    $html_headers['link'] = '<//' . $global_config['nv_static_url'] . '>; rel=preconnect; crossorigin, <//' . $global_config['nv_static_url'] . '>; rel=dns-prefetch' . (!empty($html_headers['link']) ? ', ' . $html_headers['link'] : '');
 }
 
 if (!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on') {

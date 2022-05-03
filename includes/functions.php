@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,10 +23,10 @@ if (!defined('NV_MAINFILE')) {
  */
 function pr($a)
 {
-    echo '<pre>';
+    echo "<pre>";
     print_r($a);
-    echo '</pre>';
-    exit();
+    echo "</pre>";
+    die();
 }
 
 /**
@@ -1135,10 +1135,10 @@ function nv_editor_br2nl($text)
 
 /**
  * nv_get_keywords()
- *
- * @param mixed $content
- * @param int   $keyword_limit
- * @param bool  $isArr
+ * 
+ * @param mixed $content 
+ * @param int $keyword_limit 
+ * @param bool $isArr 
  * @return array|string
  */
 function nv_get_keywords($content, $keyword_limit = 20, $isArr = false)
@@ -1819,8 +1819,8 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 
 /**
  * check_endurl_variables()
- *
- * @param mixed $request_query
+ * 
+ * @param mixed $request_query 
  */
 function check_endurl_variables(&$request_query)
 {
@@ -1932,7 +1932,6 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
 
     if ($global_config['request_uri_check'] == 'not') {
         str_starts_with($page_url, NV_MY_DOMAIN) && $page_url = substr($page_url, strlen(NV_MY_DOMAIN));
-
         return urlRewriteWithDomain($page_url, NV_MAIN_DOMAIN);
     }
 
@@ -1972,7 +1971,7 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
  */
 function nv_check_domain($domain)
 {
-    if (preg_match("/^([a-z0-9](-*[a-z0-9])*)(\.([a-z0-9](-*[a-z0-9])*))*$/i", $domain) and preg_match('/^.{1,253}$/', $domain) and preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $domain)) {
+    if (preg_match("/^([a-z0-9](-*[a-z0-9])*)(\.([a-z0-9](-*[a-z0-9])*))*$/i", $domain) and preg_match("/^.{1,253}$/", $domain) and preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $domain)) {
         return $domain;
     }
 
@@ -2006,10 +2005,10 @@ function nv_check_domain($domain)
 
 /**
  * nv_is_url()
- *
- * @param string $url
- * @param bool   $isInternal
- * @return bool
+ * 
+ * @param string $url 
+ * @param bool $isInternal 
+ * @return bool 
  */
 function nv_is_url($url, $isInternal = false)
 {
@@ -2249,8 +2248,8 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 
 /**
  * is_localhost()
- *
- * @return bool
+ * 
+ * @return bool 
  */
 function is_localhost()
 {
@@ -2374,9 +2373,9 @@ function nv_url_rewrite_callback($matches)
 }
 
 /**
- * @param string $url
- * @param string $domain
- * @return string
+ * @param string $url 
+ * @param string $domain 
+ * @return string 
  */
 function urlRewriteWithDomain($url, $domain)
 {
@@ -2413,7 +2412,7 @@ function nv_change_buffer($buffer)
     $script = 'script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '');
 
     if (defined('NV_SYSTEM') and (defined('GOOGLE_ANALYTICS_SYSTEM') or (isset($global_config['googleAnalyticsID']) and preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'])))) {
-        $_google_analytics = '<' . $script . " data-show=\"inline\">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
+        $_google_analytics = "<" . $script . " data-show=\"inline\">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
         $_google_analytics .= '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),' . PHP_EOL;
         $_google_analytics .= 'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)' . PHP_EOL;
         $_google_analytics .= "})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
@@ -2430,7 +2429,7 @@ function nv_change_buffer($buffer)
 
     if (defined('NV_SYSTEM') and isset($global_config['googleAnalytics4ID']) and (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalytics4ID']) or preg_match('/^G\-[a-zA-Z0-9]{8,}$/', $global_config['googleAnalytics4ID']))) {
         $_google_analytics4 = '<' . $script . ' async src="https://www.googletagmanager.com/gtag/js?id=' . $global_config['googleAnalytics4ID'] . '"></script>' . PHP_EOL;
-        $_google_analytics4 .= '<' . $script . ">window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date);gtag('config','" . $global_config['googleAnalytics4ID'] . "');</script>" . PHP_EOL;
+        $_google_analytics4 .= "<" . $script . ">window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date);gtag('config','" . $global_config['googleAnalytics4ID'] . "');</script>" . PHP_EOL;
         $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics4 . '$1', $buffer, 1);
     }
 
@@ -2443,56 +2442,40 @@ function nv_change_buffer($buffer)
 
 /**
  * parse_csp()
- *
- * @param string $json_csp
- * @return string
+ * 
+ * @param string $json_csp 
+ * @return string 
  */
 function parse_csp($json_csp)
 {
-    global $nv_Cache, $global_config;
+    global $global_config, $nv_Cache;
 
     $script_nonce = defined('NV_SCRIPT_NONCE') ? NV_SCRIPT_NONCE : '';
-    $md5 = 'static_domains-' . $global_config['cdn_url'] . $global_config['nv_static_url'] . $global_config['assets_cdn_url'];
-    $md5 = md5($md5);
 
     $cacheFile = 'csp_' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem('settings', $cacheFile)) != false) {
         $_info = unserialize($cache);
-        if (!empty($_info['md5']) and $_info['md5'] == $md5) {
+        if ($_info['static_url'] == $global_config['nv_static_url']) {
             return preg_replace('/nonce\-([^\']+)/', 'nonce-' . $script_nonce, $_info['content']);
         }
     }
 
-    $static_domains = array_map(function ($url) {
-        if (empty($url)) {
-            return '';
-        }
-
-        $url = preg_replace('/^(https?\:)?\/\//', '', $url);
-        $url = str_replace('www.', '', $url);
-        $url = parse_url('http://' . $url);
-
-        return !empty($url['host']) ? $url['host'] : '';
-    }, [$global_config['cdn_url'], $global_config['nv_static_url'], $global_config['assets_cdn_url']]);
-    $static_domains = array_filter($static_domains);
-    !empty($static_domains) && $static_domains = array_unique($static_domains);
-
     $static_csp = [];
-    if (!empty($static_domains)) {
-        foreach ($static_domains as $url) {
-            $static_host_keys = ['default-src', 'script-src', 'style-src', 'img-src', 'font-src', 'connect-src', 'media-src', 'frame-src', 'form-action', 'manifest-src'];
-            foreach ($static_host_keys as $key) {
-                !isset($static_csp[$key]['hosts']) && $static_csp[$key]['hosts'] = [];
-                $static_csp[$key]['hosts'][] = $url;
-            }
+    if (!empty($global_config['nv_static_url']) and !str_ends_with(NV_MY_DOMAIN, $global_config['nv_static_url'])) {
+        $nv_static_url = str_replace('www.', '', $global_config['nv_static_url']);
+        $static_host_keys = ['default-src', 'script-src', 'style-src', 'img-src', 'font-src', 'connect-src', 'media-src', 'frame-src', 'form-action', 'manifest-src'];
+        foreach ($static_host_keys as $key) {
+            $static_csp[$key] = [
+                'hosts' => [$nv_static_url]
+            ];
         }
     }
 
     $csp_sources = [
         'none' => "'none'",
-        'all' => '*',
+        'all' => "*",
         'self' => "'self'",
-        'data' => 'data:',
+        'data' => "data:",
         'unsafe-inline' => "'unsafe-inline'",
         'unsafe-eval' => "'unsafe-eval'"
     ];
@@ -2533,7 +2516,7 @@ function parse_csp($json_csp)
     }
 
     $content = implode('; ', $csp);
-    $nv_Cache->setItem('settings', $cacheFile, serialize(['md5' => $md5, 'content' => $content]));
+    $nv_Cache->setItem('settings', $cacheFile, serialize(['static_url' => $global_config['nv_static_url'], 'content' => $content]));
 
     return $content;
 }
@@ -2906,12 +2889,12 @@ function nv_set_authorization()
  * Make an asynchronous POST request
  * Thực hiện yêu cầu POST không đồng bộ trong nội bộ site mà không cần chờ phản hồi
  * => Không ảnh hưởng, không trì hoãn tiến trình đang chạy
- *
+ * 
  * post_async()
- *
- * @param mixed $url
- * @param mixed $params
- * @param array $headers
+ * 
+ * @param mixed $url 
+ * @param mixed $params 
+ * @param array $headers 
  */
 function post_async($url, $params, $headers = [])
 {
@@ -2929,9 +2912,9 @@ function post_async($url, $params, $headers = [])
         $fp = fsockopen($parts['host'], $port, $errno, $errstr, 30);
     } else {
         $context = stream_context_create([
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false
+            "ssl" => [
+                "verify_peer" => false,
+                "verify_peer_name" => false
             ]
         ]);
         $port = isset($parts['port']) ? $parts['port'] : 443;
@@ -2945,12 +2928,12 @@ function post_async($url, $params, $headers = [])
         $path .= '?' . $parts['query'];
     }
 
-    $out = 'POST ' . $path . " HTTP/1.1\r\n";
-    $out .= 'Host: ' . $host . "\r\n";
+    $out = "POST " . $path . " HTTP/1.1\r\n";
+    $out .= "Host: " . $host . "\r\n";
     $out .= "User-Agent: NUKEVIET\r\n";
-    $out .= 'Referer: ' . $referer . "\r\n";
+    $out .= "Referer: " . $referer . "\r\n";
     $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-    $out .= 'Content-Length: ' . strlen($post_string) . "\r\n";
+    $out .= "Content-Length: " . strlen($post_string) . "\r\n";
     if (!empty($headers)) {
         foreach ($headers as $key => $value) {
             $out .= "{$key}: {$value}\r\n";
@@ -3206,12 +3189,12 @@ function nv_apply_hook($module, $tag, $args = [], $default = null, $return_type 
 /**
  * nv_add_hook()
  *
- * @param mixed  $module_name => Module xảy ra event
- * @param mixed  $tag         => TAG
- * @param int    $priority    => Ưu tiên
- * @param mixed  $callback    => Hàm chạy
- * @param string $hook_module => Module sử dụng dữ liệu
- * @param int    $pid         => ID quản lý trong CSDL
+ * @param mixed  $module_name   => Module xảy ra event
+ * @param mixed  $tag           => TAG
+ * @param int    $priority      => Ưu tiên
+ * @param mixed  $callback      => Hàm chạy
+ * @param string $hook_module   => Module sử dụng dữ liệu
+ * @param int    $pid           => ID quản lý trong CSDL
  */
 function nv_add_hook($module_name, $tag, $priority = 10, $callback, $hook_module = '', $pid = 0)
 {
