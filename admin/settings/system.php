@@ -230,7 +230,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         nv_save_file_config_global();
 
         $array_config_rewrite = [
-            'rewrite_alias_ext' => $global_config['rewrite_alias_ext'],
             'rewrite_enable' => $array_config_global['rewrite_enable'],
             'rewrite_optional' => $array_config_global['rewrite_optional'],
             'rewrite_endurl' => $global_config['rewrite_endurl'],
