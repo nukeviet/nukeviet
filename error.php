@@ -92,10 +92,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $site_theme . '/language/' . NV_LANG_I
     require NV_ROOTDIR . '/themes/' . $site_theme . '/language/en.php';
 }
 
-$error_code = http_response_code();
-if (empty($error_code) or !in_array((int) substr($error_code, 0, 1), [4, 5], true)) {
-    $error_code = $nv_Request->get_int('code', 'get', 520);
-}
+$error_code = $nv_Request->get_int('code', 'get', 520);
 
 $error_contents = [
     400 => 'Bad Request',
