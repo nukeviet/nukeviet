@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -143,7 +143,19 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
 {
     global $lang_global, $global_config;
 
-    http_response_code($error_code);
+    // https://www.php.net/manual/en/function.http-response-code.php#114996
+    $php_work_response_codes = [200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 304, 305, 307, 308, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 422, 423, 424, 426, 428, 429, 431, 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, 511];
+    if (in_array((int) $error_code, $php_work_response_codes, true)) {
+        http_response_code($error_code);
+    } else {
+        $phpsapi = substr(php_sapi_name(), 0, 3);
+        if ($phpsapi == 'cgi' || $phpsapi == 'fpm') {
+            header('Status: ' . $error_code . ' ' . $info_content);
+        } else {
+            $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
+            header($protocol . ' ' . $error_code . ' ' . $info_content);
+        }
+    }
 
     if (!empty($http_headers)) {
         foreach ($http_headers as $header) {
@@ -407,7 +419,7 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
         if (!empty($module_info['alias']['rss'])) {
             if (preg_match('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', $channel['link'])) {
                 $atomlink = preg_replace('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', '\\1' . $module_info['alias']['rss'] . '/\\3', $channel['link']);
-            } else if (preg_match('/((&|&amp;)' . NV_NAME_VARIABLE . '=)([^&]+)/', $channel['link'])) {
+            } elseif (preg_match('/((&|&amp;)' . NV_NAME_VARIABLE . '=)([^&]+)/', $channel['link'])) {
                 $atomlink = preg_replace('/((&|&amp;)' . NV_NAME_VARIABLE . '=)([^&]+)/', '\\1\\3' . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'], $channel['link']);
             } else {
                 $atomlink = $channel['link'] . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'];
@@ -741,8 +753,8 @@ function nv_xmlSitemapIndex_generate()
 
 /**
  * nv_rssXsl_generate()
- * 
- * @return never 
+ *
+ * @return never
  */
 function nv_rssXsl_generate()
 {

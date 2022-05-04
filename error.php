@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -92,45 +92,61 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $site_theme . '/language/' . NV_LANG_I
     require NV_ROOTDIR . '/themes/' . $site_theme . '/language/en.php';
 }
 
-$error_code = $nv_Request->get_int('code', 'get', 404);
+$error_code = http_response_code();
+if (empty($error_code) or !in_array((int) substr($error_code, 0, 1), [4, 5], true)) {
+    $error_code = $nv_Request->get_int('code', 'get', 520);
+}
 
-$title = isset($lang_global['error_' . $error_code . '_title']) ? $lang_global['error_' . $error_code . '_title'] : 'Error Code: ' . $error_code;
+$error_contents = [
+    400 => 'Bad Request',
+    401 => 'Unauthorized',
+    402 => 'Payment Required',
+    403 => 'Forbidden',
+    404 => 'Not Found',
+    405 => 'Method Not Allowed',
+    406 => 'Not Acceptable',
+    407 => 'Proxy Authentication Required',
+    408 => 'Request Timeout',
+    409 => 'Conflict',
+    410 => 'Gone',
+    411 => 'Length Required',
+    412 => 'Precondition Failed',
+    413 => 'Payload Too Large',
+    414 => 'URI Too Long',
+    415 => 'Unsupported Media Type',
+    416 => 'Range Not Satisfiable',
+    417 => 'Expectation Failed',
+    418 => 'I\'m a teapot',
+    421 => 'Misdirected Request',
+    422 => 'Unprocessable Entity',
+    423 => 'Locked',
+    424 => 'Failed Dependency',
+    425 => 'Too Early',
+    426 => 'Upgrade Required',
+    428 => 'Precondition Required',
+    429 => 'Too Many Requests',
+    431 => 'Request Header Fields Too Large',
+    451 => 'Unavailable For Legal Reasons',
+    500 => 'Internal Server Error',
+    501 => 'Not Implemented',
+    502 => 'Bad Gateway',
+    503 => 'Service Unavailable',
+    504 => 'Gateway Timeout',
+    505 => 'HTTP Version Not Supported',
+    506 => 'Variant Also Negotiates',
+    507 => 'Insufficient Storage',
+    508 => 'Loop Detected',
+    510 => 'Not Extended',
+    511 => 'Network Authentication Required',
+    520 => 'Something is wrong'
+];
+
+$title = isset($lang_global['error_' . $error_code . '_title']) ? $lang_global['error_' . $error_code . '_title'] : (isset($error_contents[$error_code]) ? 'Error Code: ' . $error_code : 'Unknown Error');
 
 if (isset($lang_global['error_' . $error_code . '_content'])) {
     $content = $lang_global['error_' . $error_code . '_content'];
 } else {
-    switch ($error_code) {
-        case 400:
-            $content = 'Bad Request';
-            break;
-        case 403:
-            $content = 'Forbidden';
-            break;
-        case 404:
-            $content = 'Not Found';
-            break;
-        case 405:
-            $content = 'Method Not Allowed';
-            break;
-        case 408:
-            $content = 'Request Time-out';
-            break;
-        case 500:
-            $content = 'Internal Server Error';
-            break;
-        case 502:
-            $content = 'Bad Gateway';
-            break;
-        case 503:
-            $content = 'Service Temporarily Unavailable';
-            break;
-        case 504:
-            $content = 'Gateway Time-out';
-            break;
-        default:
-            $content = 'Error code: ' . $error_code;
-            break;
-    }
+    $content = isset($error_contents[$error_code]) ? $error_contents[$error_code] : $error_contents[520];
 }
 
 if (function_exists('nv_error_theme')) {
