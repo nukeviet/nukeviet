@@ -526,3 +526,4 @@ $lang_module['change_confirm'] = 'Le contenu du fichier de configuration que vou
 $lang_module['confirm_change'] = 'Confirmer le changement';
 $lang_module['changes_saved'] = 'Les changements ont été enregistrés';
 $lang_module['changes_not_saved'] = 'Les changements n\'ont pas été enregistrés pour des raisons techniques';
+$lang_module['static_noquerystring'] = 'Ne pas ajouter de chaîne de requête à la fin des fichiers statiques';

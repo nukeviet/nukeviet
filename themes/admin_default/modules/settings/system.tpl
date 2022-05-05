@@ -1,9 +1,9 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/select2/select2.min.css">
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <!-- BEGIN: error -->
 <div class="alert alert-danger">
@@ -185,6 +185,12 @@
                     <td><strong>{LANG.assets_cdn}</strong><br/><small>({LANG.not_apply_to_localhost})</small></td>
                     <td>
                         <input type="checkbox" name="assets_cdn" value="1"{ASSETS_CDN.checked}/> {ASSETS_CDN.note}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{LANG.static_noquerystring}</strong></td>
+                    <td>
+                        <input type="checkbox" name="static_noquerystring" value="1"{STATIC_NOQUERYSTRING_CHECKED}/>
                     </td>
                 </tr>
                 <tr>

@@ -534,3 +534,4 @@ $lang_module['change_confirm'] = 'Nội dung trong tệp cấu hình mà bạn m
 $lang_module['confirm_change'] = 'Xác nhận thay đổi';
 $lang_module['changes_saved'] = 'Thay đổi đã được lưu';
 $lang_module['changes_not_saved'] = 'Thay đổi chưa được lưu vì lý do kỹ thuật';
+$lang_module['static_noquerystring'] = 'Không thêm chuỗi truy vấn vào cuối tệp tĩnh';

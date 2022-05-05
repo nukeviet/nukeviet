@@ -526,3 +526,4 @@ $lang_module['change_confirm'] = 'The content in the configuration file that you
 $lang_module['confirm_change'] = 'Confirm Change';
 $lang_module['changes_saved'] = 'Changes have been saved';
 $lang_module['changes_not_saved'] = 'Changes have not been saved for technical reasons';
+$lang_module['static_noquerystring'] = 'Don\'t add query string to the end of static files';

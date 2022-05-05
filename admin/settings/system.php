@@ -192,6 +192,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
 
         $array_config_global['assets_cdn'] = (int) $nv_Request->get_bool('assets_cdn', 'post', false);
+        $array_config_global['static_noquerystring'] = (int) $nv_Request->get_bool('static_noquerystring', 'post', false);
         $array_config_global['remote_api_access'] = (int) $nv_Request->get_bool('remote_api_access', 'post', false);
         $array_config_global['remote_api_log'] = (int) $nv_Request->get_bool('remote_api_log', 'post', false);
         $array_config_global['cookie_notice_popup'] = (int) $nv_Request->get_bool('cookie_notice_popup', 'post', false);
@@ -326,6 +327,7 @@ if (defined('NV_IS_GODADMIN')) {
         'checked' => $array_config_global['assets_cdn'] ? ' checked ' : '',
         'note' => sprintf($lang_module['assets_cdn_note'], NV_ASSETS_DIR . '/css, ' . NV_ASSETS_DIR . '/fonts, ' . NV_ASSETS_DIR . '/images, ' . NV_ASSETS_DIR . '/js', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js', $global_config['core_cdn_url']  . 'assets/js/jquery/jquery.min.js')
     ]);
+    $xtpl->assign('STATIC_NOQUERYSTRING_CHECKED', ($array_config_global['static_noquerystring'] == 1) ? ' checked ' : '');
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
 
