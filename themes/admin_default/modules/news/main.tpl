@@ -14,13 +14,13 @@
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label class="font__weight">{LANG.search_key}</label>
+                    <label><strong>{LANG.search_key}</strong></label>
                     <input class="form-control" type="text" value="{Q}" maxlength="64" name="q"/>
                 </div>
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label class="font__weight">{SEARCH_TYPE.value}</label>
+                    <label><strong>{SEARCH_TYPE.value}</strong></label>
                     <select class="form-control" name="stype">
                         <!-- BEGIN: search_type -->
                         <option value="{SEARCH_TYPE.key}" {SEARCH_TYPE.selected} >{SEARCH_TYPE.value}</option>
@@ -30,7 +30,7 @@
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label class="font__weight">{LANG.content_cat}</label>
+                    <label><strong>{LANG.content_cat}</strong></label>
                     <select class="form-control" name="catid" id="catid">
                         <!-- BEGIN: cat_content -->
                         <option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
@@ -40,7 +40,7 @@
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label class="font__weight">{LANG.search_status}</label>
+                    <label><strong>{LANG.search_status}</strong></label>
                     <select class="form-control" name="sstatus">
                         <option value="-1"> -- {LANG.search_status} -- </option>
                         <!-- BEGIN: search_status -->
@@ -51,7 +51,7 @@
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label class="font__weight">{LANG.search_per_page}</label>
+                    <label><strong>{LANG.search_per_page}</strong></label>
                     <select class="form-control" name="per_page">
                         <option value="">{LANG.search_per_page}</option>
                         <!-- BEGIN: s_per_page -->
@@ -63,25 +63,47 @@
 
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label for="publtime" class="font__weight">{LANG.search_time_to}</label>
-                    <div class="group__input_date">
-                        <input type="text" name="search_time_from" class="form-control" value="{TIME_FROM}" id="search_time_from" maxlength="10">
+                    <label for="creator"><strong>{LANG.kind_of_time}</strong></label>
+                    <select class="form-control" name="type_date">
+                        <!-- BEGIN: search_type_date -->
+                            <option value="{VALUE.key}" {VALUE.selected} >{VALUE.value}</option>
+                        <!-- END: search_type_date -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label for="publtime"><strong>{LANG.search_time_from}</strong></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{TIME_FROM}" name="search_time_from" id="from_date">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="from-btn">
+                                <em class="fa fa-calendar fa-fix">&nbsp;</em>
+                            </button> 
+                        </span>
                     </div>
                 </div>
             </div>
 
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label for="creator" class="font__weight">{LANG.search_time_from}</label>
-                    <div class="group__input_date">
-                        <input type="text" name="search_time_to" class="form-control" value="{TIME_TO}" id="search_time_to" maxlength="10">
+                    <label for="publtime"><strong>{LANG.search_time_to}</strong></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{TIME_TO}" name="search_time_to" id="to_date">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="to-btn">
+                                <em class="fa fa-calendar fa-fix">&nbsp;</em>
+                            </button> 
+                        </span>
                     </div>
+                    <p class="text-danger" id="error_to_date">{ERROR_DATE}</p>
                 </div>
             </div>
            
-            <div class="col-xs-12 col-md-3">
-                <div class="form-group">
-                    <input class="btn btn-primary mt_25" type="submit" value="{LANG.search}" />
+            <div class="col-xs-12 col-md-24">
+                <div class="form-group text-center">
+                    <input class="btn btn-primary" type="submit" value="{LANG.search}" />
                 </div>
             </div>
         </div>
@@ -97,7 +119,7 @@
                 <tr>
                     <th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
                     <th class="text-center"><a href="{base_url_name}">{LANG.name}</a></th>
-                    <th class="text-center"><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
+                    <th class="text-center"><a href="{base_url_publtime}">{LANG.search_public_time}</a></th>
                     <th>{LANG.author}</th>
                     <th>{LANG.status}</th>
                     <th class="text-center"><a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a></th>
@@ -126,7 +148,7 @@
                         <!-- END: text -->
                         <a target="_blank" href="{ROW.link}" id="id_{ROW.id}" title="{ROW.title}">{ROW.title_clean}</a>
                     </td>
-                    <td>{ROW.publtime}</td>
+                    <td class="text-center">{ROW.publtime}</td>
                     <td>{ROW.author}</td>
                     <td title="{ROW.status}">{ROW.status}</td>
                     <td class="text-center">{ROW.hitstotal}</td>
@@ -186,58 +208,52 @@
 </div>
 <!-- END: generate_page -->
 <script type="text/javascript">
-function check_validate() {
-    if ($("#search_time_to").val().trim() != "" && $("#search_time_from").val().trim() == "") {
-        $("#search_time_from").focus();
-        return false;
-    } 
+   
+    function check_validate() {
+        today = new Date();
+        yyyy = today.getFullYear();
+        mm = today.getMonth() + 1;
+        dd = today.getDate();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        var today = yyyy + '/' + mm + '/' + dd;
 
-    if ($("#search_time_to").val().trim() == "" && $("#search_time_from").val().trim() != "") {
-        $("#search_time_to").focus();
-        return false;
+        if ($("#from_date").val() != '' && $("#to_date").val() != '') {
+            if ($("select[name='type_date']").val() == "-") {
+                alert('{LANG.error_select_date}');
+                return false;
+            }
+
+            date_from = $("#from_date").val().split("/");
+            date_from = date_from[2] + '/' + date_from[1] + '/' + date_from[0];
+            
+            date_to = $("#to_date").val().split("/");
+            date_to = date_to[2] + '/' + date_to[1] + '/' + date_to[0];
+            if (date_to < date_from) {
+                $("#to_date").focus();
+                $("#error_to_date").text('{LANG.error_to_date}');
+                return false;
+            }
+        }
+        return true;
     }
 
-    if ($("#search_time_to").val().trim() != "" && $("#search_time_from").val().trim() != "") {
-        arr_date_from = $("#search_time_from").val().trim().split("/");
-        arr_date_to = $("#search_time_to").val().trim().split("/");
-        var d_from = new Date(arr_date_from[2], arr_date_from[1], arr_date_from[0]);
-        var d_to = new Date(arr_date_to[2], arr_date_to[1], arr_date_to[0]);
-        var check_date = d_to < d_from ? false : true;
-        if (!check_date) {
-            $("#search_time_to").focus();
-            return false
-        }
-    }
-    return true;
-}
+    $(function() {
+        $( "#order_articles" ).dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 500
+            },
+            hide: {
+                effect: "explode",
+                duration: 500
+            }
+        });
 
-$(function() {
-
-    $( "#order_articles" ).dialog({
-        autoOpen: false,
-        show: {
-            effect: "blind",
-            duration: 500
-        },
-        hide: {
-            effect: "explode",
-            duration: 500
-        }
+        $("#catid").select2({
+            language : '{NV_LANG_DATA}'
+        });
     });
-
-    $("#catid").select2({
-        language : '{NV_LANG_DATA}'
-    });
-
-    $("#search_time_from, #search_time_to").datepicker({
-        showOn: "both",
-        dateFormat: "dd/mm/yy",
-        changeMonth: true,
-        changeYear: true,
-        showOtherMonths: true,
-        buttonImage: nv_base_siteurl + "assets/images/calendar.gif",
-        buttonImageOnly: true,
-    });
-});
 </script>
 <!-- END: main -->
