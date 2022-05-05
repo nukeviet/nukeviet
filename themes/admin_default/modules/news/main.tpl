@@ -6,7 +6,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 
 <div class="well">
-    <form action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return check_validate()">
+    <form action="{NV_BASE_ADMINURL}index.php" method="get">
         <input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
         <input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
         <input type="hidden" name="catid" value="{CATID}" />
@@ -208,36 +208,6 @@
 </div>
 <!-- END: generate_page -->
 <script type="text/javascript">
-   
-    function check_validate() {
-        today = new Date();
-        yyyy = today.getFullYear();
-        mm = today.getMonth() + 1;
-        dd = today.getDate();
-        if (dd < 10) dd = '0' + dd;
-        if (mm < 10) mm = '0' + mm;
-        var today = yyyy + '/' + mm + '/' + dd;
-
-        if ($("#from_date").val() != '' && $("#to_date").val() != '') {
-            if ($("select[name='type_date']").val() == "-") {
-                alert('{LANG.error_select_date}');
-                return false;
-            }
-
-            date_from = $("#from_date").val().split("/");
-            date_from = date_from[2] + '/' + date_from[1] + '/' + date_from[0];
-            
-            date_to = $("#to_date").val().split("/");
-            date_to = date_to[2] + '/' + date_to[1] + '/' + date_to[0];
-            if (date_to < date_from) {
-                $("#to_date").focus();
-                $("#error_to_date").text('{LANG.error_to_date}');
-                return false;
-            }
-        }
-        return true;
-    }
-
     $(function() {
         $( "#order_articles" ).dialog({
             autoOpen: false,
