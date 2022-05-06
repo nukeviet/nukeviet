@@ -29,6 +29,7 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'plugin';
     $allow_func[] = 'variables';
     $allow_func[] = 'ssettings';
+    $allow_func[] = 'cdn_backendhost';
 }
 
 $menu_top = [
@@ -64,10 +65,10 @@ function nv_admin_add_theme($contents)
     $xtpl = new XTemplate('cronjobs_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
-    $my_head .= '<link type="text/css" href="' . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.css\" rel=\"stylesheet\" />\n";
+    $my_head .= '<link type="text/css" href="' . ASSETS_STATIC_URL . "/js/jquery-ui/jquery-ui.min.css\" rel=\"stylesheet\" />\n";
 
-    $my_footer .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
-    $my_footer .= '<script type="text/javascript" src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/language/jquery.ui.datepicker-' . NV_LANG_INTERFACE . ".js\"></script>\n";
+    $my_footer .= '<script type="text/javascript" src="' . ASSETS_STATIC_URL . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
+    $my_footer .= '<script type="text/javascript" src="' . ASSETS_LANG_STATIC_URL . '/js/language/jquery.ui.datepicker-' . NV_LANG_INTERFACE . ".js\"></script>\n";
 
     if ($contents['is_error']) {
         $xtpl->parse('main.error');

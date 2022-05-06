@@ -35,6 +35,7 @@ if (defined('NV_IS_GODADMIN')) {
     $submenu['plugin'] = $lang_module['plugin'];
     $submenu['cronjobs'] = $lang_global['mod_cronjobs'];
     $submenu['ftp'] = $lang_module['ftp_config'];
+    $submenu['cdn_backendhost'] = $lang_module['cdn_backendhost'];
     $submenu['ssettings'] = $lang_module['ssettings'];
     $submenu['variables'] = $lang_module['variables'];
 }

@@ -189,7 +189,7 @@ require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
-$is_cdn_url = false;
+$cdn_is_enabled = false;
 // Load các plugin
 if (!empty($nv_plugins[NV_LANG_DATA])) {
     foreach ($nv_plugins[NV_LANG_DATA] as $_phook => $pdatahook) {
@@ -199,7 +199,7 @@ if (!empty($nv_plugins[NV_LANG_DATA])) {
                 $hook_module = $_plugin[1];
                 $pid = $_plugin[2];
                 if ($_plugin[0] == 'includes/plugin/cdn_js_css_image.php') {
-                    $is_cdn_url = true;
+                    $cdn_is_enabled = true;
                 }
                 require NV_ROOTDIR . '/' . $_plugin[0];
             }
@@ -210,15 +210,7 @@ if (!empty($nv_plugins[NV_LANG_DATA])) {
 
 nv_apply_hook('', 'check_server');
 
-if (is_localhost()) {
-    $global_config['cdn_url'] = $global_config['nv_static_url'] = $global_config['assets_cdn_url'] = '';
-} else {
-    empty($is_cdn_url) && $global_config['cdn_url'] = '';
-    $global_config['assets_cdn_url'] = !empty($global_config['assets_cdn']) ? $global_config['core_cdn_url'] : '';
-    (!empty($global_config['nv_static_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['nv_static_url'])) && $global_config['nv_static_url'] = '//' . $global_config['nv_static_url'];
-    (!empty($global_config['cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['cdn_url'])) && $global_config['cdn_url'] = '//' . $global_config['cdn_url'];
-    (!empty($global_config['assets_cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['assets_cdn_url'])) && $global_config['assets_cdn_url'] = '//' . $global_config['assets_cdn_url'];
-}
+set_cdn_urls($global_config, $cdn_is_enabled, $client_info['country']);
 
 // NV_STATIC_URL - URL của host chứa các file tĩnh hoặc đường dẫn tương đối của site
 define('NV_STATIC_URL', (!empty($global_config['nv_static_url']) and empty($global_config['cdn_url'])) ? $global_config['nv_static_url'] . '/' : NV_BASE_SITEURL);

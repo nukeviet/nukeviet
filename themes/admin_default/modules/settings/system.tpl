@@ -146,48 +146,6 @@
                     <td><input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" style="width: 450px"/></td>
                 </tr>
                 <tr>
-                    <td><strong>{LANG.static_url}</strong><br/><small>({LANG.not_apply_to_localhost})</small></td>
-                    <td>
-                        <div class="row m-bottom" style="width: 455px">
-                            <div class="col-xs-5">
-                                <select name="nv_static_url_prefix" class="form-control">
-                                    <!-- BEGIN: static_url_prefix -->
-                                    <option value="{PR.val}" {PR.sel}>{PR.val}</option>
-                                    <!-- END: static_url_prefix -->
-                                </select>
-                            </div>
-                            <div class="col-xs-19">
-                                <input type="text" name="nv_static_url" value="{STATIC_URL_VAL}" class="form-control" />
-                            </div>
-                        </div>
-                        {LANG.static_url_note}
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.cdn_url}</strong><br/><small>({LANG.not_apply_to_localhost})</small></td>
-                    <td>
-                        <div class="row m-bottom" style="width: 455px">
-                            <div class="col-xs-5">
-                                <select name="cdn_url_prefix" class="form-control">
-                                    <!-- BEGIN: cdn_url_prefix -->
-                                    <option value="{CPR.val}" {CPR.sel}>{CPR.val}</option>
-                                    <!-- END: cdn_url_prefix -->
-                                </select>
-                            </div>
-                            <div class="col-xs-19">
-                                <input type="text" name="cdn_url" value="{CDN_URL_VAL}" class="form-control" />
-                            </div>
-                        </div>
-                        {LANG.cdn_url_note}
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.assets_cdn}</strong><br/><small>({LANG.not_apply_to_localhost})</small></td>
-                    <td>
-                        <input type="checkbox" name="assets_cdn" value="1"{ASSETS_CDN.checked}/> {ASSETS_CDN.note}
-                    </td>
-                </tr>
-                <tr>
                     <td><strong>{LANG.static_noquerystring}</strong></td>
                     <td>
                         <input type="checkbox" name="static_noquerystring" value="1"{STATIC_NOQUERYSTRING_CHECKED}/>

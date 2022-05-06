@@ -3233,3 +3233,40 @@ function nv_add_hook($module_name, $tag, $priority = 10, $callback, $hook_module
         'pid' => $pid
     ];
 }
+
+/**
+ * set_cdn_urls()
+ *
+ * @param mixed $global_config
+ * @param mixed $cdn_is_enabled
+ * @param mixed $cl_country
+ */
+function set_cdn_urls(&$global_config, $cdn_is_enabled, $cl_country)
+{
+    if (is_localhost()) {
+        $global_config['cdn_url'] = $global_config['nv_static_url'] = $global_config['assets_cdn_url'] = '';
+    } else {
+        if ($cdn_is_enabled and !empty($global_config['cdn_url'])) {
+            if (is_array($global_config['cdn_url'])) {
+                $urls = $global_config['cdn_url'];
+                $global_config['cdn_url'] = '';
+                foreach ($urls as $cdn => $vals) {
+                    if (empty($global_config['cdn_url']) and $vals[0] === 1) {
+                        $global_config['cdn_url'] = $cdn;
+                    } elseif ($vals[0] === 2 and !empty($vals[1]) and !empty($cl_country) and ($cl_country != 'ZZ') and in_array($cl_country, $vals[1], true)) {
+                        $global_config['cdn_url'] = $cdn;
+                        break;
+                    }
+                }
+            }
+        } else {
+            $global_config['cdn_url'] = '';
+        }
+
+        $global_config['assets_cdn_url'] = !empty($global_config['assets_cdn']) ? $global_config['core_cdn_url'] : '';
+
+        (!empty($global_config['nv_static_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['nv_static_url'])) && $global_config['nv_static_url'] = '//' . $global_config['nv_static_url'];
+        (!empty($global_config['cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['cdn_url'])) && $global_config['cdn_url'] = '//' . $global_config['cdn_url'];
+        (!empty($global_config['assets_cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['assets_cdn_url'])) && $global_config['assets_cdn_url'] = '//' . $global_config['assets_cdn_url'];
+    }
+}
