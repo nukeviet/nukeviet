@@ -1,9 +1,9 @@
 <!-- BEGIN: main -->
 <link type="text/css" rel="stylesheet" href="{NV_STATIC_URL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" />
 <link type="text/css" rel="stylesheet" href="{NV_STATIC_URL}themes/{TEMPLATE}/css/contentslider.css" />
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery/jquery.imgpreload.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/jquery/jquery.imgpreload.min.js"></script>
 <script src="{NV_STATIC_URL}themes/default/js/contentslider.js"></script>
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <div id="topnews" class="panel panel-default clearfix" style="display:none">
     <div class="row">
         <!-- BEGIN: hots_news_img -->

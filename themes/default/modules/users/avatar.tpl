@@ -66,7 +66,7 @@
         window.close();
         <!-- END: complete3 -->
         <!-- BEGIN: init -->
-        getFiles(['{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css','{NV_STATIC_URL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js','{NV_STATIC_URL}themes/{TEMPLATE}/js/avatar.js'], function(){
+        getFiles(['{ASSETS_STATIC_URL}/js/cropper/cropper.min.css','{ASSETS_STATIC_URL}/js/cropper/cropper.min.js','{NV_STATIC_URL}themes/{TEMPLATE}/js/avatar.js'], function(){
             UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
             UAV.config.avatar_width = {NV_AVATAR_WIDTH};
             UAV.config.avatar_height = {NV_AVATAR_HEIGHT};

@@ -72,8 +72,8 @@
         </form>
     </div>
 </div>
-<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/select2/select2.min.css">
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/select2/select2.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('[name="admin_id"]').select2();
@@ -82,7 +82,7 @@ $(document).ready(function() {
 <!-- END: content -->
 
 <!-- BEGIN: result -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/clipboard/clipboard.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 <div class="credential-result">
     <div class="panel panel-primary">
         <div class="panel-heading">

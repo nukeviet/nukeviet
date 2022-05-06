@@ -89,11 +89,11 @@ class Optimizer
         // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
         $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
         if ($_isFullBuffer and $jquery) {
-            $_jsAfter = '<script src="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol;
+            $_jsAfter = '<script src="' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js"></script>' . $this->eol;
             if ($this->is_http2 and $this->resource_preload === 1) {
-                $this->headerPreloadItems[NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'] = '<' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js>; rel=preload; as=script';
+                $this->headerPreloadItems[ASSETS_STATIC_URL . '/js/jquery/jquery.min.js'] = '<' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js>; rel=preload; as=script';
             } elseif ($this->resource_preload === 2) {
-                $_preload .= '<link rel="preload" as="script" href="' . NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js" type="text/javascript">' . $this->eol;
+                $_preload .= '<link rel="preload" as="script" href="' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js" type="text/javascript">' . $this->eol;
             }
         } else {
             $_jsAfter = '';

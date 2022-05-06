@@ -1,5 +1,5 @@
 <!-- BEGIN: head -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<link type="text/css" href="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript">
 //<![CDATA[
 var htmlload = '<div class="text-center"><img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif"/></div>';
@@ -187,8 +187,8 @@ var htmlload = '<div class="text-center"><img src="{NV_BASE_SITEURL}{NV_ASSETS_D
     var lang_block_no_func = '{LANG.block_no_func}';
     var lang_block_error_nogroup = '{LANG.block_error_nogroup}';
 </script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/block_content.js"></script>
 </div>
 <!-- END: main -->

@@ -138,7 +138,7 @@ function nv_site_theme($contents, $full = true)
         'as' => 'font',
         // File fontawesome-webfont.woff2 được tải từ font-awesome.min.css,
         // nên đường dẫn đến thư mục của font-awesome.min.css thế nào thì của fontawesome-webfont.woff2 như thế
-        'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/fonts/fontawesome-webfont.woff2',
+        'href' => ASSETS_STATIC_URL . '/fonts/fontawesome-webfont.woff2',
         'type' => 'font/woff2',
         'crossorigin' => true
     ];
@@ -155,7 +155,7 @@ function nv_site_theme($contents, $full = true)
     $html_links = [];
     $html_links[] = [
         'rel' => 'stylesheet',
-        'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/font-awesome.min.css'
+        'href' => ASSETS_STATIC_URL . '/css/font-awesome.min.css'
     ];
     if ($global_config['current_theme_type'] == 'r') {
         $html_links[] = [
@@ -222,7 +222,7 @@ function nv_site_theme($contents, $full = true)
 
             $html_links[] = [
                 'rel' => 'stylesheet',
-                'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css'
+                'href' => NV_STATIC_URL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css'
             ];
         }
 

@@ -23,7 +23,7 @@
                 <input type="hidden" name="id" value="{REQUEST.id}" />
                 <input type="hidden" name="action" value="update" />
                 <div class="panel panel-primary request_form">
-                    <div class="panel-image image-9-16"><img class="panel-image" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.svg" alt="" style="background-image: url({REQUEST.image_url});" /></div>
+                    <div class="panel-image image-9-16"><img class="panel-image" src="{ASSETS_STATIC_URL}/images/pix.svg" alt="" style="background-image: url({REQUEST.image_url});" /></div>
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="input-group">

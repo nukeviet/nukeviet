@@ -12,9 +12,9 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish-navbar.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_STATIC_URL}themes/{BLOCK_THEME}/css/superfish-vertical.css" />
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/superfish/hoverIntent.js"></script>
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/superfish/superfish.js"></script>
-<script type="text/javascript" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/superfish/supersubs.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/superfish/hoverIntent.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/superfish/superfish.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/superfish/supersubs.js"></script>
 <style type="text/css">
     .style_nav {
         position: relative;

@@ -9,7 +9,7 @@
         <title>{PAGE_TITLE}</title>
         <link rel="shortcut icon" href="{SITE_FAVICON}" />
         <link href="{NV_STATIC_URL}themes/{TEMPLATE}/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="{ASSETS_STATIC_URL}/css/font-awesome.min.css" rel="stylesheet" />
         <link href="{NV_STATIC_URL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
         <script type="text/javascript" src="{NV_STATIC_URL}themes/{TEMPLATE}/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{NV_STATIC_URL}themes/{TEMPLATE}/js/main.js"></script>

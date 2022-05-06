@@ -150,7 +150,7 @@
 <div class="panel panel-primary">
     <!-- BEGIN: if_img -->
     <div class="panel-image image-9-16">
-        <img class="panel-image" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.svg" alt="" style="background-image: url({PREVIEW.localfile});" />
+        <img class="panel-image" src="{ASSETS_STATIC_URL}/images/pix.svg" alt="" style="background-image: url({PREVIEW.localfile});" />
     </div>
     <!-- END: if_img -->
     <table class="table table-striped table-bordered">

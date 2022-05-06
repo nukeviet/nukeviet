@@ -195,7 +195,7 @@
 <!-- BEGIN: userlist -->
 <h2 class="margin-bottom-lg margin-top-lg">{LANG.group_manage}</h2>
 <!-- BEGIN: tools -->
-<link rel="stylesheet" href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/select2/select2.min.css">
 <div id="ablist" class="container-fluid margin-bottom">
     <div class="row">
         <div class="col-sm-14 col-md-14 margin-bottom-lg">
@@ -215,8 +215,8 @@
         </div>
     </div>
 </div>
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/select2/select2.min.js"></script>
+<script src="{ASSETS_LANG_STATIC_URL}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script>
     $(document).ready(function() {
         $("#uid").select2({
@@ -268,7 +268,7 @@
 <!-- END: tools -->
 <table class="table table-bordered">
     <tr>
-        <td rowspan="4" style="width:80px;border-top:0"><img title="{DATA.title}" alt="{DATA.title}" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.svg" width="80" height="80" style="background-image:url({DATA.group_avatar});background-repeat:no-repeat;background-size:cover;" /></td>
+        <td rowspan="4" style="width:80px;border-top:0"><img title="{DATA.title}" alt="{DATA.title}" src="{ASSETS_STATIC_URL}/images/pix.svg" width="80" height="80" style="background-image:url({DATA.group_avatar});background-repeat:no-repeat;background-size:cover;" /></td>
         <td class="text-nowrap" style="width:80px;border-top:0"><strong>{LANG.group_title}</strong></td>
         <td style="border-top:0">{DATA.title}
             <!-- BEGIN: group_desc --> ({DATA.description})<!-- END: group_desc -->

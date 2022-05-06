@@ -12,13 +12,13 @@
     <meta name="viewport" content="width=device-width">
     <title>{SITE_NAME} {NV_TITLEBAR_DEFIS} {GLANG.admin_page}</title>
     <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{ASSETS_STATIC_URL}/css/font-awesome.min.css">
     <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/style.css">
     <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
     <script type="text/javascript">
         var base_siteurl = '{NV_BASE_SITEURL}';
     </script>
-    <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
+    <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/global{AUTO_MINIFIED}.js"></script>
     <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/js/login.js"></script>
 </head>
 

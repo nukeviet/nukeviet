@@ -33,7 +33,7 @@
     <!-- END: loopcat1 -->
 </ul>
 <script type="text/javascript" src="{NV_STATIC_URL}themes/{BLOCK_THEME}/js/jquery.slimmenu.js"></script>
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $('ul.slimmenu').slimmenu({
         resizeWidth: (theme_responsive == '1') ? 768 : 0,

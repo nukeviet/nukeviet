@@ -27,7 +27,7 @@
         <div class="col-sm-8">
             <div class="panel panel-primary list" data-idfield="{IDFIELD}" data-clfield="{CLFIELD}">
                 <div class="panel-image image-9-16"<!-- BEGIN: element0_action --> data-toggle="action_open_modal" data-title="{ELEMENT0.default_action_title}" data-content="{ELEMENT0.default_action_content}" style="cursor: pointer;"<!-- END: element0_action -->>
-                    <img class="panel-image" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.svg" alt="" style="background-image: url({ELEMENT0.image_url});" />
+                    <img class="panel-image" src="{ASSETS_STATIC_URL}/images/pix.svg" alt="" style="background-image: url({ELEMENT0.image_url});" />
                 </div>
                 <div class="panel-body"<!-- BEGIN: element0_action2 --> data-toggle="action_open_modal" data-title="{ELEMENT0.default_action_title}" data-content="{ELEMENT0.default_action_content}" style="cursor: pointer;"<!-- END: element0_action2 -->>
                     <p><strong>{ELEMENT0.title}</strong></p>
@@ -39,7 +39,7 @@
                         <span class="d-flex">
                             <span class="flex-shrink-1" style="margin-right:5px; width:70px">
                                 <span class="image-3-4">
-                                    <img class="panel-image" src="{NV_STATIC_URL}{NV_ASSETS_DIR}/images/pix.svg" alt="" style="background-image: url({OTHER.image_url});" />
+                                    <img class="panel-image" src="{ASSETS_STATIC_URL}/images/pix.svg" alt="" style="background-image: url({OTHER.image_url});" />
                                 </span>
                             </span>
                             <span class="align-self-center" style="width:100%">

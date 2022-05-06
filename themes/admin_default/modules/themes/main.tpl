@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/clipboard/clipboard.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 <!-- BEGIN: error -->
 <div id="edit">&nbsp;</div>
 <div class="alert alert-danger"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></div>

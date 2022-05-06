@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/chart/chart.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/chart/chart.min.js"></script>
 <script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/chartstat.js"></script>
 
 <div class="panel panel-primary">

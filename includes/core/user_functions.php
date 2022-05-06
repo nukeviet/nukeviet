@@ -762,13 +762,13 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     ];
     $return[] = [
         'ext' => 1,
-        'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js'
+        'content' => ASSETS_STATIC_URL . '/js/jquery/jquery.min.js'
     ];
 
     if ($language_js) {
         $return[] = [
             'ext' => 1,
-            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/language/' . NV_LANG_INTERFACE . '.js'
+            'content' => ASSETS_LANG_STATIC_URL . '/js/language/' . NV_LANG_INTERFACE . AUTO_MINIFIED . '.js'
         ];
     }
 
@@ -776,25 +776,25 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         if ($global_config['XSSsanitize']) {
             $return[] = [
                 'ext' => 1,
-                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/DOMPurify/purify.js'
+                'content' => ASSETS_STATIC_URL . '/js/DOMPurify/purify.js'
             ];
         }
 
         if ($client_info['browser']['key'] == 'explorer') {
             $return[] = [
                 'ext' => 1,
-                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/ie-global.js'
+                'content' => ASSETS_STATIC_URL . '/js/ie-global' . AUTO_MINIFIED . '.js'
             ];
         } else {
             $return[] = [
                 'ext' => 1,
-                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/global.js'
+                'content' => ASSETS_STATIC_URL . '/js/global' . AUTO_MINIFIED . '.js'
             ];
         }
 
         $return[] = [
             'ext' => 1,
-            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/site.js'
+            'content' => ASSETS_STATIC_URL . '/js/site' . AUTO_MINIFIED . '.js'
         ];
     }
 
@@ -811,7 +811,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     if (defined('NV_IS_ADMIN')) {
         $return[] = [
             'ext' => 1,
-            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/admin.js'
+            'content' => ASSETS_STATIC_URL . '/js/admin' . AUTO_MINIFIED . '.js'
         ];
     }
 
@@ -841,7 +841,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     if (defined('NV_IS_DRAG_BLOCK')) {
         $return[] = [
             'ext' => 1,
-            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/jquery-ui/jquery-ui.min.js'
+            'content' => ASSETS_STATIC_URL . '/js/jquery-ui/jquery-ui.min.js'
         ];
     }
 

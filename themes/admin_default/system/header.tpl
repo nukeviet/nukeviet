@@ -10,7 +10,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="shortcut icon" href="{SITE_FAVICON}">
         <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
-        <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{ASSETS_STATIC_URL}/css/font-awesome.min.css">
         <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/style.css">
         <!-- BEGIN: css_module -->
         <link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css">
@@ -33,13 +33,13 @@
                  nv_area_admin = 1,
                  XSSsanitize = {NV_XSS_SANITIZE};
         </script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_INTERFACE}.js"></script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
+        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/{NV_LANG_INTERFACE}{AUTO_MINIFIED}.js"></script>
+        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/global{AUTO_MINIFIED}.js"></script>
         <!-- BEGIN: XSSsanitize -->
-        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/DOMPurify/purify.js"></script>
+        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/DOMPurify/purify.js"></script>
         <!-- END: XSSsanitize -->
-        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/admin.js"></script>
+        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/admin{AUTO_MINIFIED}.js"></script>
 
         <!-- BEGIN: module_js -->
         <script type="text/javascript" src="{NV_JS_MODULE}"></script>

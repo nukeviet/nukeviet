@@ -2,19 +2,19 @@
 <iframe src="{IFRAME_SRC}" id="uploadframe"></iframe>
 <!-- END: uploadPage -->
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.css" rel="stylesheet" />
-<link  type="text/css"href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
+<link type="text/css" href="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<link type="text/css" href="{ASSETS_STATIC_URL}/js/jquery/jquery.treeview.css" rel="stylesheet" />
+<link  type="text/css"href="{ASSETS_STATIC_URL}/js/cropper/cropper.min.css" rel="stylesheet" />
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.flash.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.lazyload.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jQueryRotate.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/plupload-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/clipboard/clipboard.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/cropper/cropper.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.flash.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.treeview.min.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jQueryRotate{AUTO_MINIFIED}.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/plupload-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 
 <div class="content">
     <div class="row upload-wrap">
@@ -389,7 +389,7 @@ var nv_alt_require = {UPLOAD_ALT_REQUIRE};
 var nv_auto_alt = {UPLOAD_AUTO_ALT};
 //]]>
 </script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/upload.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/upload{AUTO_MINIFIED}.js"></script>
 <script type="text/javascript">
 $(function() {
     $("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));

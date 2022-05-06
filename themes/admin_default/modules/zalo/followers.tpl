@@ -68,9 +68,9 @@
 <!-- END: wait_getfollowers -->
 
 <!-- BEGIN: follower_profile -->
-<link href="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/perfect-scrollbar/style.css" rel="stylesheet" />
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/perfect-scrollbar/min.js" charset="utf-8"></script>
-<script src="{NV_STATIC_URL}{NV_ASSETS_DIR}/js/amr-player/amrnb.js" charset="utf-8"></script>
+<link href="{ASSETS_STATIC_URL}/js/perfect-scrollbar/style{AUTO_MINIFIED}.css" rel="stylesheet" />
+<script src="{ASSETS_STATIC_URL}/js/perfect-scrollbar/min.js" charset="utf-8"></script>
+<script src="{ASSETS_STATIC_URL}/js/amr-player/amrnb.js" charset="utf-8"></script>
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-primary">
