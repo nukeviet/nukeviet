@@ -3243,19 +3243,46 @@ function nv_add_hook($module_name, $tag, $priority = 10, $callback, $hook_module
  */
 function set_cdn_urls(&$global_config, $cdn_is_enabled, $cl_country)
 {
+    global $countries;
+
+    // Không áp dụng CDN ở môi trường localhost
     if (is_localhost()) {
         $global_config['cdn_url'] = $global_config['nv_static_url'] = $global_config['assets_cdn_url'] = '';
     } else {
+        // Chỉ áp dụng CDN khi bật hook và $global_config['cdn_url'] không rỗng
         if ($cdn_is_enabled and !empty($global_config['cdn_url'])) {
+            // Nếu $global_config['cdn_url'] dạng mảng
             if (is_array($global_config['cdn_url'])) {
-                $urls = $global_config['cdn_url'];
-                $global_config['cdn_url'] = '';
-                foreach ($urls as $cdn => $vals) {
-                    if (empty($global_config['cdn_url']) and $vals[0] === 1) {
-                        $global_config['cdn_url'] = $cdn;
-                    } elseif ($vals[0] === 2 and !empty($vals[1]) and !empty($cl_country) and ($cl_country != 'ZZ') and in_array($cl_country, $vals[1], true)) {
-                        $global_config['cdn_url'] = $cdn;
-                        break;
+                // Áp dụng CDN theo quốc gia chỉ trong trường hợp quốc gia được xác định hợp lệ
+                $set_country = false;
+                if (isset($countries[$cl_country]) and ($cl_country != 'ZZ')) {
+                    $set_country = true;
+                }
+                // Nếu quốc gia trong danh sách không kích hoạt CDN => loại trừ
+                $except_countries = '';
+                if (!empty($global_config['cdn_url']['except'][1])) {
+                    $except_countries = is_array($global_config['cdn_url']['except'][1]) ? implode(' ', $global_config['cdn_url']['except'][1]) : $global_config['cdn_url']['except'][1];
+                }
+                if ($set_country and !empty($except_countries) and str_contains($except_countries, $cl_country)) {
+                    $global_config['cdn_url'] = '';
+                } else {
+                    $urls = $global_config['cdn_url'];
+                    unset($urls['except']);
+                    $global_config['cdn_url'] = '';
+                    foreach ($urls as $cdn => $vals) {
+                        // Xác định CDN mặc định nếu nó chưa được định nghĩa
+                        if (empty($global_config['cdn_url']) and !empty($vals[0])) {
+                            $global_config['cdn_url'] = $cdn;
+                        }
+                        // Tìm CDN được chỉ định riêng cho quốc gia,
+                        // nếu tìm ra thì dừng vòng lặp và áp dụng ngay
+                        elseif (!empty($vals[1]) and $set_country) {
+                            $inc_countries = is_array($vals[1]) ? implode(' ', $vals[1]) : $vals[1];
+                            if (str_contains($inc_countries, $cl_country)) {
+                                $global_config['cdn_url'] = $cdn;
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -3263,6 +3290,8 @@ function set_cdn_urls(&$global_config, $cdn_is_enabled, $cl_country)
             $global_config['cdn_url'] = '';
         }
 
+        // Nếu bật CDN jsDelivr thì $global_config['assets_cdn_url']
+        // được gán cho giá trị $global_config['core_cdn_url'] ghi trong constants.php
         $global_config['assets_cdn_url'] = !empty($global_config['assets_cdn']) ? $global_config['core_cdn_url'] : '';
 
         (!empty($global_config['nv_static_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['nv_static_url'])) && $global_config['nv_static_url'] = '//' . $global_config['nv_static_url'];

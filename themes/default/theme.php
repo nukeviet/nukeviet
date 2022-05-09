@@ -311,7 +311,7 @@ function nv_site_theme($contents, $full = true)
     // Header variables
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
     $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-    $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo']);
+    $xtpl->assign('LOGO_SRC', NV_STATIC_URL . $global_config['site_logo']);
 
     if (empty($global_config['site_banner'])) {
         $custom_preloads[] = [
@@ -323,9 +323,9 @@ function nv_site_theme($contents, $full = true)
     } else {
         $custom_preloads[] = [
             'as' => 'image',
-            'href' => NV_BASE_SITEURL . $global_config['site_banner']
+            'href' => NV_STATIC_URL . $global_config['site_banner']
         ];
-        $xtpl->assign('BANNER_SRC', NV_BASE_SITEURL . $global_config['site_banner']);
+        $xtpl->assign('BANNER_SRC', NV_STATIC_URL . $global_config['site_banner']);
     }
 
     if (preg_match("/<h1[^\>]*\>/i", $contents)) {

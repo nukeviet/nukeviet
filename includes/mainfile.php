@@ -219,7 +219,7 @@ define('ASSETS_STATIC_URL', !empty($global_config['assets_cdn_url']) ? $global_c
 // ASSETS_LANG_STATIC_URL - Cũng là ASSETS_STATIC_URL nhưng chỉ áp dụng cho các file javascript liên quan đến ngôn ngữ Anh, Pháp, Việt
 define('ASSETS_LANG_STATIC_URL', (in_array(NV_LANG_INTERFACE, ['en', 'fr', 'vi'], true)) ? ASSETS_STATIC_URL : NV_STATIC_URL . NV_ASSETS_DIR);
 // AUTO_MINIFIED - Tự thu nhỏ dung lượng file nếu thêm '.min' vào trước phần mở rộng .css, .js (Chỉ áp dụng khi mạng CDN jsDelivr được bật)
-define('AUTO_MINIFIED', !empty($global_config['assets_cdn_url']) ? '.min' : '');
+define('AUTO_MINIFIED', (!empty($global_config['assets_cdn_url']) and in_array(NV_LANG_INTERFACE, ['en', 'fr', 'vi'], true)) ? '.min' : '');
 
 if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');

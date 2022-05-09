@@ -19,12 +19,14 @@ nv_add_hook($module_name, 'change_site_buffer', $priority, function ($vars) {
     $static_querystring = (empty($global_config['static_noquerystring']) and !empty($global_config['timestamp'])) ? '?t=' . $global_config['timestamp'] : '';
 
     if (!empty($global_config['cdn_url'])) {
-        $return[0] = preg_replace_callback("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpe?g|png|gif|webp|ttf|woff2?))['\"]([^\>]*)\>/i", function ($matches) use ($global_config, $static_querystring) {
+        $return[0] = preg_replace_callback("/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpe?g|png|gif|webp|svg|ttf|woff2?))['\"]([^\>]*)\>/i", function ($matches) use ($global_config, $static_querystring) {
             return '<' . $matches[1] . $matches[2] . $matches[3] . '="' . $global_config['cdn_url'] . $matches[4] . (($matches[8] == 'css' or $matches[8] == 'js') ? $static_querystring : '') . '"' . $matches[9] . '>';
         }, $return[0]);
 
+        $return[0] = preg_replace("/(background(-image)?\s*\:[^\}]*url\((\"|')?)(?!(http(s?)\:)?\/\/)([^\)]+\.(jpe?g|png|gif|webp|svg))((\"|')?\))/i", '\\1' . $global_config['cdn_url'] . '\\6\\8', $return[0]);
+
         if (!empty($return[1]['link'])) {
-            $return[1]['link'] = preg_replace_callback("/\<((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpe?g|png|gif|webp|ttf|woff2?))\>/", function ($matches) use ($global_config, $static_querystring) {
+            $return[1]['link'] = preg_replace_callback("/\<((?!(http(s?)\:)?\/\/)([^\>]*)\.(css|js|jpe?g|png|gif|webp|svg|ttf|woff2?))\>/", function ($matches) use ($global_config, $static_querystring) {
                 return '<' . $global_config['cdn_url'] . $matches[1] . (($matches[5] == 'css' or $matches[5] == 'js') ? $static_querystring : '') . '>';
             }, $return[1]['link']);
         }

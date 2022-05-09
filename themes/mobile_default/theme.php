@@ -246,7 +246,7 @@ function nv_site_theme($contents, $full = true)
 
     $logo_small = preg_replace('/(\.[a-z]+)$/i', '_small\\1', $global_config['site_logo']);
     $logo = file_exists(NV_ROOTDIR . '/' . $logo_small) ? $logo_small : $global_config['site_logo'];
-    $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $logo);
+    $xtpl->assign('LOGO_SRC', NV_STATIC_URL . $logo);
 
     // Only full theme
     if ($full) {

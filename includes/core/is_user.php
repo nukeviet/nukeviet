@@ -60,7 +60,7 @@ if (defined('NV_IS_ADMIN')) {
 
                         if ($checknum) {
                             $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
-                            $user_info['avata'] = !empty($user_info['photo']) ? NV_BASE_SITEURL . $user_info['photo'] : '';
+                            $user_info['avata'] = !empty($user_info['photo']) ? NV_STATIC_URL . $user_info['photo'] : '';
                             $check_in_groups = nv_user_groups($user_info['in_groups'], true);
                             $user_info['in_groups'] = $check_in_groups[0];
                             $user_info['2step_require'] = $check_in_groups[1];

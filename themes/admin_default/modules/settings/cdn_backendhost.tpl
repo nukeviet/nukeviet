@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
+<form action="{FORM_ACTION}" method="post">
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <col class="w400" />
@@ -18,60 +18,24 @@
                     <td>
                         <div class="cdn-list">
                             <!-- BEGIN: cdn_item -->
-                            <div class="item panel <!-- BEGIN: is_default -->panel-primary<!-- END: is_default --><!-- BEGIN: by_country -->panel-info<!-- END: by_country --><!-- BEGIN: is_secondary -->panel-default<!-- END: is_secondary -->">
-                                <div class="panel-heading">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">{LANG.url}</span>
-                                        <input type="text" name="cdn_url[]" value="{CDN_URL.val}" class="form-control" />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button" data-toggle="remove_cdn" title="{LANG.remove_cdn}"><span class="fa fa-remove"></span></button>
-                                            <button class="btn btn-default" type="button" data-toggle="add_cdn" title="{LANG.add_cdn}"><span class="fa fa-plus"></span></button>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-5">
-                                            <select name="cdn_action[]" class="form-control">
-                                                <!-- BEGIN: action -->
-                                                <option value="{ACTION.val}" {ACTION.sel}>{ACTION.name}</option>
-                                                <!-- END: action -->
-                                            </select>
-                                        </div>
-                                        <div class="col-xs-19">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">{LANG.countries}</span>
-                                                <input type="text" value="{CDN_URL.countries_list}" name="cdn_countries[]" class="form-control cdn_countries" style="background-color: #fff;" readonly />
-                                                <div class="input-group-btn dropdown-toggle">
-                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{LANG.select_countries}"><span class="fa fa-globe"></span></button>
-                                                    <ul class="countrylist dropdown-menu dropdown-menu-right dropdown-menu-checkbox">
-                                                        <li>
-                                                            <div class="checkall">
-                                                                <button type="button" class="btn btn-xs btn-default" data-toggle="removeall">{LANG.removeall}</button>
-                                                            </div>
-                                                        </li>
-                                                        <!-- BEGIN: country_list -->
-                                                        <li>
-                                                            <label>
-                                                                <input type="checkbox" class="cdn_country" value="{COUNTRY.code}" {COUNTRY.checked}> {COUNTRY.name}
-                                                            </label>
-                                                        </li>
-                                                        <!-- END: country_list -->
-                                                        <li>
-                                                            <div class="checkall">
-                                                                <button type="button" class="btn btn-xs btn-default" data-toggle="removeall">{LANG.removeall}</button>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="item form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <label style="margin-bottom: 0"><input type="checkbox" style="background-color:#fff" data-toggle="cdn_default" {CDN_URL.is_default_checked}> {LANG.default}</label>
+                                    </span>
+                                    <input type="text" name="cdn_url[]" value="{CDN_URL.val}" class="form-control" placeholder="{LANG.url}" />
+                                    <input type="hidden" name="cdn_countries[]" value="{CDN_URL.countries}" />
+                                    <input type="hidden" name="cdn_is_default[]" value="{CDN_URL.is_default}" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" data-toggle="remove_cdn" title="{LANG.remove_cdn}"><span class="fa fa-remove"></span></button>
+                                        <button class="btn btn-default" type="button" data-toggle="add_cdn" title="{LANG.add_cdn}"><span class="fa fa-plus"></span></button>
+                                    </span>
                                 </div>
                             </div>
                             <!-- END: cdn_item -->
                         </div>
                         {LANG.cdn_notes}
+                        <a class="btn btn-default active" href="{CDN_BY_COUNTRY_URL}">{LANG.bycountry}</a>
                     </td>
                 </tr>
                 <tr>
@@ -90,18 +54,14 @@
 </form>
 <script>
     $(function() {
-        $('body').on('click', '.countrylist', function(e) {
-            e.stopPropagation()
-        });
         $('body').on('click', '[data-toggle=add_cdn]', function(e) {
             e.preventDefault();
             var cdnlist = $(this).parents('.cdn-list'),
                 item = $(this).parents('.item'),
                 newitem = item.clone();
             $('[name^=cdn_url], [name^=cdn_countries]', newitem).val('');
-            $('[name^=cdn_action] option:selected', newitem).prop('selected', false);
-            $('.cdn_country', newitem).prop('checked', false);
-            newitem.removeClass('panel-primary panel-info').addClass('panel-default');
+            $('[name^=cdn_is_default]', newitem).val('0');
+            $('[data-toggle=cdn_default]', newitem).prop('checked', false);
             newitem.appendTo(cdnlist)
         });
         $('body').on('click', '[data-toggle=remove_cdn]', function(e) {
@@ -112,41 +72,77 @@
                 item.remove()
             } else {
                 $('[name^=cdn_url], [name^=cdn_countries]', item).val('');
-                $('[name^=cdn_action] option:selected', item).prop('selected', false);
-                $('.cdn_country', item).prop('checked', false)
+                $('[name^=cdn_is_default]', item).val('0');
+                $('[data-toggle=cdn_default]', item).prop('checked', false)
             }
         });
-        $('body').on('change', '.cdn_country', function(e) {
-            var item = $(this).parents('.item'),
-                clist = $(this).parents('.countrylist'),
-                cv = '';
-            $('.cdn_country:checked', clist).each(function(e) {
-                if (cv != '') {
-                    cv += ', ';
-                }
-                cv += $(this).val()
-            });
-            $('[name^=cdn_countries]', item).val(cv)
-        });
-        $('body').on('click', '[data-toggle=removeall]', function(e) {
-            e.preventDefault();
+        $('body').on('change', '[data-toggle=cdn_default]', function(e) {
             var item = $(this).parents('.item');
-            $('.cdn_country:checked', item).prop('checked', false);
-            $('[name^=cdn_countries]', item).val('')
-        });
-        $('body').on('change',  '[name^=cdn_action]', function(e) {
-            var cdnlist = $(this).parents('.cdn-list'),
-                item = $(this).parents('.item');
-            if ($(this).val() == '1') {
-                $('.panel-primary', cdnlist).removeClass('panel-primary panel-info').addClass('panel-default');
-                item.removeClass('panel-default panel-info').addClass('panel-primary');
-                $('[name^=cdn_action] option[value=1]:selected', item.siblings()).prop('selected', false)
-            } else if ($(this).val() == '2') {
-                item.removeClass('panel-default panel-primary').addClass('panel-info');
+            if ($(this).is(':checked')) {
+                $('[name^=cdn_is_default]', item).val('1');
+                $('[data-toggle=cdn_default]', item.siblings()).prop('checked', false);
+                $('[name^=cdn_is_default]', item.siblings()).val('0');
             } else {
-                item.removeClass('panel-primary panel-info').addClass('panel-default');
+                $('[name^=cdn_is_default]', item).val('0');
             }
-        })
+        });
+
     })
 </script>
 <!-- END: main -->
+
+<!-- BEGIN: by_country -->
+<style>
+    .c-selected{background-color: #6c757d !important;color: #fff !important;font-weight: 700;}
+</style>
+<form action="{FORM_ACTION}" method="post" class="row" id="cdn-country">
+    <input type="hidden" name="checkss" value="{CHECKSS}" />
+    <div class="col-lg-16 table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr class="bg-primary">
+                    <th colspan="2">{LANG.bycountry}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- BEGIN: country -->
+                <tr class="country <!-- BEGIN: selected -->c-selected<!-- END: selected -->">
+                    <td>{COUNTRY.name}</td>
+                    <td>
+                        <select name="cdn[{COUNTRY.code}]" class="form-control">
+                            <option value="">{LANG.by_default}</option>
+                            <!-- BEGIN: cdn -->
+                            <option value="{CDN.key}" {CDN.sel}>{CDN.url}</option>
+                            <!-- END: cdn -->
+                        </select>
+                    </td>
+                </tr>
+                <!-- END: country -->
+            </tbody>
+        </table>
+    </div>
+</form>
+<script>
+    $(function() {
+        $('#cdn-country').on('submit', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('action'),
+                data = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data
+            })
+        });
+        $('[name^=cdn]').on('change', function(e) {
+            e.preventDefault();
+            if ($(this).val() != '') {
+                $(this).parents('.country').addClass('c-selected')
+            } else {
+                $(this).parents('.country').removeClass('c-selected')
+            }
+            $(this).parents('form').submit()
+        })
+    })
+</script>
+<!-- END: by_country -->
