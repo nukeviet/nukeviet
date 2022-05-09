@@ -339,8 +339,12 @@ function nvbreadcrumbs() {
         }), f > c && ($("#brcr_" + i, a).remove(), e = !0)), e ? (b.show(), subbreadcrumbs.append('<li><a href="' + d[i][1] + '"><span><em class="fa fa-long-arrow-up"></em> ' + d[i][0] + "</span></a></li>")) : b.hide()
 }
 
-function locationReplace(a) {
-    history.pushState && history.pushState(null, null, a)
+// locationReplace
+function locationReplace(url) {
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
+    }
 }
 
 // Hide Cookie Notice Popup
