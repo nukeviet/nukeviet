@@ -69,9 +69,11 @@ function timeoutsessrun() {
     }, 1E3);
 }
 
+// locationReplace
 function locationReplace(url) {
-    if (history.pushState) {
-        history.pushState(null, null, url);
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
     }
 }
 

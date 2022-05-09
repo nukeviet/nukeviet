@@ -452,6 +452,14 @@ function nvbreadcrumbs() {
   }
 }
 
+// locationReplace
+function locationReplace(url) {
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
+    }
+}
+
 var reCaptchaLoadCallback = function() {
     for (i = 0, j = nv_recaptcha_elements.length; i < j; i++) {
         var ele = nv_recaptcha_elements[i];
