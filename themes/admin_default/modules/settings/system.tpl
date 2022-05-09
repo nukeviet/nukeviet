@@ -175,6 +175,13 @@
                     <td><strong>{LANG.error_send_email}</strong></td>
                     <td><input type="email" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
                 </tr>
+                <tr>
+                    <td><strong>{LANG.unsign_vietwords}</strong></td>
+                    <td>
+                        <input type="checkbox" value="1" name="unsign_vietwords" {CHECKED_UNSIGN_VIETWORDS}/>
+                        {LANG.unsign_vietwords_note}
+                    </td>
+                </tr>
                 <!-- END: system -->
                 <tr>
                     <td><strong>{LANG.searchEngineUniqueID}</strong></td>

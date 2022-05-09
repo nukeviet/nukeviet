@@ -545,3 +545,5 @@ $lang_module['cdn_notes'] = '<ul><li>URL cần bắt đầu bằng <code>http://
 $lang_module['add_cdn'] = 'Thêm CDN';
 $lang_module['remove_cdn'] = 'Xóa CDN này';
 $lang_module['select_countries'] = 'Chọn quốc gia';
+$lang_module['unsign_vietwords'] = 'Hỗ trợ tìm kiếm chữ Việt không dấu (vấn đề d/đ)';
+$lang_module['unsign_vietwords_note'] = 'Không nên bật tính năng này nếu cơ sở dữ liệu cho tìm kiếm quá lớn';

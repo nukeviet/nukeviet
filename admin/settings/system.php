@@ -178,6 +178,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $array_config_global['site_reopening_time'] = 0;
         }
 
+        $array_config_global['unsign_vietwords'] = (int) $nv_Request->get_bool('unsign_vietwords', 'post', false);
+
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
             $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -274,6 +276,7 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_REMOTE_API_LOG', ($array_config_global['remote_api_log'] == 1) ? ' checked ' : '');
     $xtpl->assign('CHECKED_COOKIE_NOTICE_POPUP', ($array_config_global['cookie_notice_popup'] == 1) ? ' checked ' : '');
     $xtpl->assign('STATIC_NOQUERYSTRING_CHECKED', ($array_config_global['static_noquerystring'] == 1) ? ' checked ' : '');
+    $xtpl->assign('CHECKED_UNSIGN_VIETWORDS', !empty($array_config_global['unsign_vietwords']) ? ' checked="checked"' : '');
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
 

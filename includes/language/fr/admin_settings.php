@@ -537,3 +537,5 @@ $lang_module['cdn_notes'] = '<ul><li>L\'URL doit commencer par <code>http://</co
 $lang_module['add_cdn'] = 'Ajouter un CDN';
 $lang_module['remove_cdn'] = 'Supprimer ce CDN';
 $lang_module['select_countries'] = 'Sélectionner les pays';
+$lang_module['unsign_vietwords'] = 'Prise en charge de la recherche de mots vietnamiens non signés';
+$lang_module['unsign_vietwords_note'] = 'Cette fonctionnalité ne doit pas être activée si la base de données pour la recherche est trop volumineuse';
