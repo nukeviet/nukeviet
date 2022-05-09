@@ -210,7 +210,11 @@ if (!empty($nv_plugins[NV_LANG_DATA])) {
 
 nv_apply_hook('', 'check_server');
 
-set_cdn_urls($global_config, $cdn_is_enabled, $client_info['country']);
+if (defined('NV_ADMIN')) {
+    $global_config['cdn_url'] = $global_config['nv_static_url'] = $global_config['assets_cdn_url'] = '';
+} else {
+    set_cdn_urls($global_config, $cdn_is_enabled, $client_info['country']);
+}
 
 // NV_STATIC_URL - URL của host chứa các file tĩnh hoặc đường dẫn tương đối của site
 define('NV_STATIC_URL', (!empty($global_config['nv_static_url']) and empty($global_config['cdn_url'])) ? $global_config['nv_static_url'] . '/' : NV_BASE_SITEURL);
