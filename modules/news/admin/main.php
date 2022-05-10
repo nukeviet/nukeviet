@@ -1127,6 +1127,102 @@ $base_url_hitscm = $base_url_mod . '&amp;ordername=hitscm&amp;order=' . $order2 
 $base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
+// Hiển thị lịch sử
+if ($nv_Request->isset_request('loadHistory', 'get')) {
+    $id = $nv_Request->get_int("id_new", "get", 0);
+    $get_history = $db->query("SELECT * FROM " .  NV_PREFIXLANG . '_' . $module_data . "_history WHERE new_id = " . $id . ' ORDER BY active DESC')->fetchAll();
+    if (empty($get_history)) {
+        nv_jsonOutput(array(
+            'res' => 'error',
+            'data' => $lang_module['no_history'],
+        ));  
+    } else {
+        $arr_history = [];
+        $arrUserid = [];
+        foreach ($get_history as $k => $v) {
+            $arrUserid[$v['userid']] = $v['userid'];
+        }
+
+        // Kiểm tra có mảng user mới thực hiện truy vấn CSDL
+        if (!empty($arrUserid)) {
+            $user = $db->query('SELECT userid, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $arrUserid) . ')')->fetchAll();
+            foreach ($user as $key => $value) {
+                $arrUser[$value['userid']] = nv_show_name_user($value['first_name'], $value['last_name'], $value['userid']);
+            }
+            unset($user);
+        }
+
+        foreach ($get_history as $k => $v) {
+            $v['stt'] = $k + 1;
+            $v['time_history'] = nv_date('H:i d/m/Y', $v['time_history']);
+            if (!empty($v['time_backup'])) {
+                $v['time_backup'] = nv_date('H:i d/m/Y', $v['time_backup']);
+            }
+
+            if (isset($arrUser[$v['userid']])) {
+                $v['username'] = $arrUser[$v['userid']];
+            }
+
+            $v['content'] = json_decode($v['content'], true);
+            if ($v['is_backup'] == 1) {
+                $v['is_backup'] = $lang_module['restored'];
+            }
+
+            if ($v['active'] == 1) {
+                $v['title_active'] = $lang_module['version_active'];
+            } else {
+                $v['title_active'] = $lang_module['version_old'];
+            }
+            $v['restore'] = $lang_module['restore'];
+            $arr_history[] = $v;
+        }
+
+        nv_jsonOutput(array(
+            'res' => 'success',
+            'data' => $arr_history
+        ));
+    }
+}
+
+// Khôi phục phiên bản
+if ($nv_Request->isset_request('restore', 'get')) {
+    $id = $nv_Request->get_int('id_backup', 'get', 0);
+    // Khôi phục các bản sau:
+    $get_data_backup = $db->query("SELECT * FROM " .  NV_PREFIXLANG . '_' . $module_data . "_history WHERE id = " . $id)->fetch();
+    $result_update = 0;
+    if (!empty($get_data_backup)) {
+        $data = json_decode($get_data_backup['content'], true);
+        foreach ($data as $k => $v) {
+            $arr_update = [];
+            $table = explode('_', $k)[1];
+            foreach ($v as $k1 => $v1) {
+                $arr_update[] = $k1 . " = " . $db->quote($v1);
+            }
+            $ipl_update = implode(',', $arr_update);
+            try {
+                $result_update = $db->query("UPDATE " .  NV_PREFIXLANG . "_" . $module_data . "_" . $table . " SET " . $ipl_update . " WHERE id = " . $v['id']);
+                // Cập nhật lại trạng thái active của tất cả bài viết về 0
+                $db->query("UPDATE " . NV_PREFIXLANG . '_' . $module_data . "_history SET active = 0 WHERE new_id = " . $get_data_backup['new_id']);
+
+                // Cập nhật lại trạng thái active của tất cả bài viết về 0
+                $db->query("UPDATE " .  NV_PREFIXLANG . '_' . $module_data . "_history SET is_backup = 1, time_backup = " . NV_CURRENTTIME . ", active = 1  WHERE id = " . $id); 
+
+            } catch (PDOException $e) {
+                nv_jsonOutput(array(
+                    'res' => 'error',
+                    'data' => $e
+                ));
+            }
+        }
+
+        nv_jsonOutput(array(
+            'res' => 'success',
+            'title_wait_backup' => $lang_module['title_wait_backup'],
+            'title_success_backup' => $lang_module['title_success_backup'],
+        ));
+    }
+}
+
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);

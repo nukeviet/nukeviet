@@ -688,6 +688,82 @@ $(document).ready(function() {
     $('#from-btn').click(function() {
         $("#from_date").datepicker('show');
     });
+
+    $(".history").click(function loadHistory() {
+        $.ajax({
+            url: window.location.href + "&loadHistory=1&id_new="+$(this).val(),
+            type: 'GET',
+            success: function(data) {
+                if (data['res'] == 'error') {
+                    $("#tbody").html("<tr><td colspan='7' class='text-center'><h3 class='text-warning'>" + data['data'] + "</h3></td></tr>");
+                } else {
+                    html = '';
+                    var data_history = data['data'];
+                    $("#tbody").html(""); 
+                    data['data'].map(function(v, k) {
+                        if (v['active'] == 1) {
+                            $_class ='text-warning';
+                            $_checked = '<i class="fa fa-check-circle" aria-hidden="true"></i>';
+                        } else {
+                            $_class = '';
+                            $_checked = '';
+                        }
+
+                        v['is_backup'] = (v['is_backup'] != 0 ? "<span class='label label-primary fs-12'>" + v['is_backup'] + "</span>" : "NULL");
+                        v['time_backup'] = (v['time_backup'] == 0 ? "" : "");
+
+                        html += `<tr class="${$_class}">
+                            <td>${$_checked}</td>
+                            <td class="text-center">${v['stt']}</td>
+                            <td>${v['content']['news_rows']['title']}</td>
+                            <td>${v['username']}</td>
+                            <td>${v['title_active']}</td>
+                            <td class="text-center"><h4 class="label label-success fs-12">${v['time_history']}</h4></td>
+                            <td class="text-center">${v['is_backup']}<p style="margin: 8px 0">${v['time_backup']}</p></td>
+                            <td class="text-center">
+                                <button type="button" name="restore" class="btn btn-xs btn-warning restore" value="${v['id']}" onclick="return confirm('Bạn có muốn khôi phục phiên bản này không?')">${v['restore']}</button>
+                            </td>
+                        </tr>`;
+                    });
+                    $("#tbody").html(html);
+
+                    $(".restore").click(function(event) {
+                       $.ajax({
+                           url: window.location.href + "&restore=1&id_backup="+$(this).val(),
+                            type: 'GET',
+                            success: function(data) {
+                                if (data['res'] == 'success') {
+                                    html = `<div class="loading_spinner">
+                                            <div class="backup_spinner">
+                                                <i class="fa fa-spinner fa-spin"></i>
+                                                <span>${data['title_wait_backup']}</span>
+                                            </div>
+                                    </div>`;
+                                    $("#loading_backup").html(html);
+                                    setTimeout(function(){
+                                        html = `<div class="loading_spinner">
+                                                <div class="backup_success"><i class="fa fa-check-circle" aria-hidden="true"></i><p>${data['title_success_backup']}</p></div></div>`;
+                                        $("#loading_backup").html(html);
+                                    }, 1000);
+
+                                    setTimeout(function(){ 
+                                        $(".loading_spinner").fadeOut(1500);
+                                    }, 2000);
+
+                                    setTimeout(function(){ 
+                                        location.reload();
+                                    }, 2000);
+                                    
+                                }  else {
+                                    alert(data['res']);
+                                }
+                            }
+                       })
+                    });
+                }
+            }
+        })
+    });
 });
 
 function nv_sort_content(id, w) {

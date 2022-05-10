@@ -556,3 +556,58 @@ function my_author_detail($userid)
 
     return $detail;
 }
+
+/**
+ * nv_add_history_news()
+ *
+ * @param array $data
+ * @return bool
+ */
+function nv_add_history_news($new_id = 0, $content = "", $userid = 0, $time_history = NV_CURRENTTIME)
+{
+    global $admin_info, $db, $module_data;
+    $userid = $admin_info['admin_id'];
+
+    $result = 0;
+    if ($new_id != 0 && $content != '') {
+        try {
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_history SET active = 0 WHERE new_id = ' . $new_id);
+            $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . "_history (id, new_id, content, userid, time_history) VALUES (NULL, :new_id, :content, :userid, " . NV_CURRENTTIME. ')';
+            $data_insert = [];
+            $data_insert['new_id'] = $new_id;
+            $data_insert['content'] = $content;
+            $data_insert['userid'] = $userid;
+
+            $array_history = json_decode($content, true);
+            $check_new = false;
+            foreach ($array_history as $key => $value) {
+                $table = explode('_', $key)[1];
+                $data = $value;
+                unset($value['edittime']);
+
+                $select = [];
+                foreach ($value as $k => $v) {
+                    $select[] = $k;
+                }
+
+                $select = implode(',', $select);
+                $get_table = $db->query('SELECT ' . $select . ' FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $table .' WHERE id = ' . $value['id'])->fetch();
+                unset($get_table['edittime']);
+                
+                $result = array_diff_assoc($value, $get_table);
+                if (!empty($result)) {
+                    $check_new = true;
+                }
+            }
+
+            if ($check_new) {
+                $result = $db->insert_id($_sql, 'id', $data_insert);
+            }
+        } catch (PDOException $e) {
+            print_r($e);
+            exit();
+        }
+    }
+
+    return $result;
+}

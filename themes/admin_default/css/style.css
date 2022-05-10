@@ -440,6 +440,10 @@ h6 {
     line-height: 22px;
 }
 
+.btn {
+    outline: none !important;
+}
+
 .nv-panel-body {
     padding: 10px;
 }
