@@ -577,7 +577,6 @@ function nv_add_history_news($new_id = 0, $content = "", $userid = 0, $time_hist
             $data_insert['new_id'] = $new_id;
             $data_insert['content'] = $content;
             $data_insert['userid'] = $userid;
-
             $array_history = json_decode($content, true);
             $check_new = false;
             foreach ($array_history as $key => $value) {
@@ -591,7 +590,8 @@ function nv_add_history_news($new_id = 0, $content = "", $userid = 0, $time_hist
                 }
 
                 $select = implode(',', $select);
-                $get_table = $db->query('SELECT ' . $select . ' FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $table .' WHERE id = ' . $value['id'])->fetch();
+                $column = ($table == 'sources' ? 'sourceid' : 'id');
+                $get_table = $db->query('SELECT ' . $select . ' FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $table .' WHERE ' . $column . ' = ' . $value[$column])->fetch();
                 unset($get_table['edittime']);
                 
                 $result = array_diff_assoc($value, $get_table);
