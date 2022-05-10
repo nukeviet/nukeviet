@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -38,7 +38,6 @@ if (!defined('NV_DEBUG')) {
  */
 class Error
 {
-    const INCORRECT_IP = 'Incorrect IP address specified';
     const DISPLAY_ERROR_LIST_DEFAULT = E_ALL;
     const LOG_ERROR_LIST_DEFAULT = E_ALL | E_STRICT;
     const SEND_ERROR_LIST_DEFAULT = E_USER_ERROR;
@@ -134,25 +133,7 @@ class Error
          */
         $this->month = gmdate('m-Y', NV_CURRENTTIME);
 
-        $ip = $this->get_Env('REMOTE_ADDR');
-        $this->ip = $ip;
-
-        if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
-            $ip2long = ip2long($ip);
-        } else {
-            if (substr_count($ip, '::')) {
-                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
-            }
-            $ip = explode(':', $ip);
-            $r_ip = '';
-            foreach ($ip as $v) {
-                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
-            }
-            $ip2long = base_convert($r_ip, 2, 10);
-        }
-        if ($ip2long === -1 or $ip2long === false) {
-            exit(Error::INCORRECT_IP);
-        }
+        $this->ip = Ips::$remote_ip;
 
         $request = $this->get_request();
         if (!empty($request)) {

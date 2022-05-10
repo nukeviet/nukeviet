@@ -34,6 +34,12 @@ if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php')) {
 }
 require NV_ROOTDIR . '/vendor/autoload.php';
 
+// Xac dinh IP cua client
+$ips = new NukeViet\Core\Ips();
+define('NV_FORWARD_IP', $ips::$forward_ip);
+define('NV_REMOTE_ADDR', $ips::$remote_addr);
+define('NV_CLIENT_IP', $ips::$remote_ip);
+
 // Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
 
@@ -63,13 +69,6 @@ if (empty($global_config['my_domains'])) {
 
 require NV_ROOTDIR . '/includes/ini.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
-
-// Xac dinh IP cua client
-$ips = new NukeViet\Core\Ips($sys_info);
-// define( 'NV_SERVER_IP', $ips->server_ip );
-define('NV_FORWARD_IP', $ips->forward_ip);
-define('NV_REMOTE_ADDR', $ips->remote_addr);
-define('NV_CLIENT_IP', $ips->remote_ip);
 
 define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
 define('NV_FILES_DIR', NV_ASSETS_DIR);
@@ -140,7 +139,7 @@ if (nv_is_banIp(NV_CLIENT_IP)) {
 
 // Chan proxy
 if ($global_config['proxy_blocker'] != 0) {
-    $client_info['is_proxy'] = $ips->nv_check_proxy();
+    $client_info['is_proxy'] = $ips::nv_check_proxy();
     if (nv_is_blocker_proxy($client_info['is_proxy'], $global_config['proxy_blocker'])) {
         trigger_error('ERROR: You are behind a proxy server. Please disconnect and come again!', 256);
     }

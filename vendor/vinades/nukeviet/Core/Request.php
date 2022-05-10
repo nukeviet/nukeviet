@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,8 +23,6 @@ namespace NukeViet\Core;
 class Request
 {
     const IS_HEADERS_SENT = 'Warning: Headers already sent';
-
-    const INCORRECT_IP = 'Incorrect IP address specified';
 
     const INCORRECT_ORIGIN = 'Incorrect Origin specified';
 
@@ -115,8 +113,6 @@ class Request
     private $SameSite = '';
 
     private $set_cookie_by_options = false;
-
-    private $ip_addr;
 
     private $remote_ip;
 
@@ -268,10 +264,6 @@ class Request
             $this->str_referer_blocker = true;
         }
         $this->engine_allowed = (array) $config['engine_allowed'];
-        if (empty($ip)) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-        $this->remote_ip = $ip;
 
         if (defined('NV_ADMIN')) {
             $this->restrictCrossDomain = !empty($config['crossadmin_restrict']) ? true : false;
@@ -295,24 +287,10 @@ class Request
         $this->allowNullOrigin = !empty($config['allow_null_origin']) ? true : false;
         $this->allowNullOriginIps = !empty($config['ip_allow_null_origin']) ? ((array) $config['ip_allow_null_origin']) : [];
 
-        if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
-            $ip2long = ip2long($ip);
-        } else {
-            if (substr_count($ip, '::')) {
-                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
-            }
-            $ip = explode(':', $ip);
-            $r_ip = '';
-            foreach ($ip as $v) {
-                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
-            }
-            $ip2long = base_convert($r_ip, 2, 10);
+        $this->remote_ip = !empty($ip) ? $ip : Ips::$remote_ip;
+        if (Ips::ip2long($this->remote_ip) === false) {
+            trigger_error(Ips::INCORRECT_IP, 256);
         }
-
-        if ($ip2long == -1 or $ip2long === false) {
-            trigger_error(Request::INCORRECT_IP, 256);
-        }
-        $this->ip_addr = $ip2long;
 
         $this->cookie_key = md5($this->cookie_key);
 
@@ -1218,10 +1196,10 @@ class Request
     /**
      * set_Cookie()
      *
-     * @param string       $name
+     * @param string           $name
      * @param array|int|string $value
-     * @param int          $expire
-     * @param bool         $encode
+     * @param int              $expire
+     * @param bool             $encode
      * @return bool
      */
     public function set_Cookie($name, $value = '', $expire = 0, $encode = true)
@@ -1266,7 +1244,7 @@ class Request
     /**
      * set_Session()
      *
-     * @param string $name
+     * @param string           $name
      * @param array|int|string $value
      * @return bool
      */

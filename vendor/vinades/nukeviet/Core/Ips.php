@@ -22,40 +22,46 @@ namespace NukeViet\Core;
  */
 class Ips
 {
-    public $client_ip;
+    const INCORRECT_IP = 'Incorrect IP address specified';
 
-    public $forward_ip;
+    public static $client_ip;
 
-    public $remote_addr;
+    public static $forward_ip;
 
-    public $remote_ip;
+    public static $remote_addr;
 
-    public $is_proxy = 0;
+    public static $remote_ip;
 
-    private $ip6_support = false;
+    public static $my_ip2long;
+
+    private static $ip6_support = false;
 
     /**
      * __construct()
-     *
-     * @param array $sys
      */
-    public function __construct($sys = [])
+    public function __construct()
     {
-        $this->client_ip = trim($this->nv_get_clientip());
-        $this->forward_ip = trim($this->nv_get_forwardip());
-        $this->remote_addr = trim($this->nv_get_remote_addr());
-        $this->remote_ip = trim($this->nv_getip());
+        self::$client_ip = trim(self::nv_get_clientip());
+        self::$forward_ip = trim(self::nv_get_forwardip());
+        self::$remote_addr = trim(self::nv_get_remote_addr());
+        self::$remote_ip = trim(self::nv_getip());
+        self::$my_ip2long = self::ip2long();
 
-        $this->ip6_support = (bool) $sys['ip6_support'];
+        if (self::$my_ip2long === false) {
+            exit(self::INCORRECT_IP);
+        }
+
+        self::$ip6_support = ((extension_loaded('sockets') and defined('AF_INET6')) or @inet_pton('::1')) ? true : false;
     }
 
     /**
      * nv_getenv()
+     * Hàm tĩnh riêng của class
      *
      * @param string $key
      * @return string
      */
-    private function nv_getenv($key)
+    private static function nv_getenv($key)
     {
         if (isset($_SERVER[$key])) {
             if (strpos($_SERVER[$key], ',')) {
@@ -81,61 +87,27 @@ class Ips
 
     /**
      * getIp()
+     * Hàm tĩnh riêng của class
      *
      * @param string $variable_name
      * @return false|string
      */
-    private function getIp($variable_name)
+    private static function getIp($variable_name)
     {
-        $ip = $this->nv_getenv($variable_name);
-        if ($ip and $this->nv_validip($ip)) {
-            return $ip;
-        }
+        $ip = self::nv_getenv($variable_name);
 
-        return false;
-    }
-
-    /**
-     * nv_validip()
-     *
-     * @param string $ip
-     * @return bool
-     */
-    public function nv_validip($ip)
-    {
-        return filter_var($ip, FILTER_VALIDATE_IP);
-    }
-
-    /**
-     * isIp4()
-     *
-     * @param string $ip
-     * @return bool
-     */
-    public function isIp4($ip)
-    {
-        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
-    }
-
-    /**
-     * isIp6()
-     *
-     * @param string $ip
-     * @return bool
-     */
-    public function isIp6($ip)
-    {
-        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+        return ($ip and filter_var($ip, FILTER_VALIDATE_IP)) ? $ip : false;
     }
 
     /**
      * server_ip()
+     * Hàm tĩnh công cộng của class
      *
      * @return string
      */
-    public function server_ip()
+    public static function server_ip()
     {
-        if (($ip = $this->getIp('SERVER_ADDR')) !== false) {
+        if (($ip = self::getIp('SERVER_ADDR')) !== false) {
             return $ip;
         }
         if ($_SERVER['SERVER_NAME'] == 'localhost') {
@@ -150,21 +122,22 @@ class Ips
 
     /**
      * nv_get_clientip()
+     * Hàm tĩnh riêng của class
      *
      * @return string
      */
-    private function nv_get_clientip()
+    private static function nv_get_clientip()
     {
-        if (($ip = $this->getIp('HTTP_CLIENT_IP')) !== false) {
+        if (($ip = self::getIp('HTTP_CLIENT_IP')) !== false) {
             return $ip;
         }
-        if (($ip = $this->getIp('HTTP_VIA')) !== false) {
+        if (($ip = self::getIp('HTTP_VIA')) !== false) {
             return $ip;
         }
-        if (($ip = $this->getIp('HTTP_X_COMING_FROM')) !== false) {
+        if (($ip = self::getIp('HTTP_X_COMING_FROM')) !== false) {
             return $ip;
         }
-        if (($ip = $this->getIp('HTTP_COMING_FROM')) !== false) {
+        if (($ip = self::getIp('HTTP_COMING_FROM')) !== false) {
             return $ip;
         }
 
@@ -173,21 +146,22 @@ class Ips
 
     /**
      * nv_get_forwardip()
+     * Hàm tĩnh riêng của class
      *
      * @return string
      */
-    private function nv_get_forwardip()
+    private static function nv_get_forwardip()
     {
-        if (($ip = $this->getIp('HTTP_X_FORWARDED_FOR')) !== false) {
+        if (($ip = self::getIp('HTTP_X_FORWARDED_FOR')) !== false) {
             return $ip;
         }
-        if (($ip = $this->getIp('HTTP_X_FORWARDED')) !== false) {
+        if (($ip = self::getIp('HTTP_X_FORWARDED')) !== false) {
             return $ip;
         }
-        if (($ip = $this->getIp('HTTP_FORWARDED_FOR')) !== false) {
+        if (($ip = self::getIp('HTTP_FORWARDED_FOR')) !== false) {
             return $ip;
         }
-        if (($ip = $this->getIp('HTTP_FORWARDED')) !== false) {
+        if (($ip = self::getIp('HTTP_FORWARDED')) !== false) {
             return $ip;
         }
 
@@ -196,13 +170,14 @@ class Ips
 
     /**
      * nv_get_remote_addr()
+     * Hàm tĩnh riêng của class
      * Địa chỉ IP người dùng đang truy cập do máy chủ cung cấp
      *
      * @return string
      */
-    private function nv_get_remote_addr()
+    private static function nv_get_remote_addr()
     {
-        if (($ip = $this->getIp('REMOTE_ADDR')) !== false) {
+        if (($ip = self::getIp('REMOTE_ADDR')) !== false) {
             return $ip;
         }
 
@@ -211,22 +186,23 @@ class Ips
 
     /**
      * nv_getip()
+     * Hàm tĩnh riêng của class
      *
      * @return string
      */
-    private function nv_getip()
+    private static function nv_getip()
     {
-        if (($ip = $this->getIp('HTTP_CF_CONNECTING_IP')) !== false) {
+        if (($ip = self::getIp('HTTP_CF_CONNECTING_IP')) !== false) {
             return $ip;
         }
-        if ($this->client_ip != 'none') {
-            return $this->client_ip;
+        if (self::$client_ip != 'none') {
+            return self::$client_ip;
         }
-        if ($this->forward_ip != 'none') {
-            return $this->forward_ip;
+        if (self::$forward_ip != 'none') {
+            return self::$forward_ip;
         }
-        if ($this->remote_addr != 'none') {
-            return $this->remote_addr;
+        if (self::$remote_addr != 'none') {
+            return self::$remote_addr;
         }
 
         if ($_SERVER['SERVER_NAME'] == 'localhost') {
@@ -238,20 +214,21 @@ class Ips
 
     /**
      * nv_check_proxy()
+     * Hàm tĩnh công cộng của class
      *
      * @return string
      */
-    public function nv_check_proxy()
+    public static function nv_check_proxy()
     {
         $proxy = 'No';
-        if ($this->client_ip != 'none' or $this->forward_ip != 'none') {
+        if (self::$client_ip != 'none' or self::$forward_ip != 'none') {
             $proxy = 'Lite';
         }
-        $host = @gethostbyaddr($this->remote_ip);
+        $host = @gethostbyaddr(self::$remote_ip);
         if (stristr($host, 'proxy')) {
             $proxy = 'Mild';
         }
-        if ($this->remote_ip == $host) {
+        if (self::$remote_ip == $host) {
             $proxy = 'Strong';
         }
 
@@ -259,7 +236,44 @@ class Ips
     }
 
     /**
+     * nv_validip()
+     * Hàm công cộng của class
+     *
+     * @param mixed $ip
+     * @return mixed
+     */
+    public function nv_validip($ip)
+    {
+        return filter_var($ip, FILTER_VALIDATE_IP);
+    }
+
+    /**
+     * isIp4()
+     * Hàm công cộng của class
+     *
+     * @param string $ip
+     * @return bool
+     */
+    public function isIp4($ip)
+    {
+        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+    }
+
+    /**
+     * isIp6()
+     * Hàm công cộng của class
+     *
+     * @param string $ip
+     * @return bool
+     */
+    public function isIp6($ip)
+    {
+        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+    }
+
+    /**
      * checkIp6()
+     * Hàm công cộng của class
      * Kiểm tra xem địa chỉ IP $requestIp có nằm trong dải $ip hoặc bằng với $ip không
      *
      * @param string $requestIp
@@ -268,7 +282,7 @@ class Ips
      */
     public function checkIp6($requestIp, $ip)
     {
-        if (!$this->ip6_support) {
+        if (!self::$ip6_support) {
             // Không hỗ trợ xử lý IPv6 trả về -1
             return -1;
         }
@@ -309,6 +323,7 @@ class Ips
 
     /**
      * is_localhost()
+     * Hàm công cộng của class
      *
      * @param string $ip
      * @return bool
@@ -316,9 +331,40 @@ class Ips
     public function is_localhost($ip = '')
     {
         if (empty($ip)) {
-            $ip = $this->remote_ip;
+            $ip = self::$remote_ip;
         }
 
         return substr($ip, 0, 4) == '127.' or $ip == '::1';
+    }
+
+    /**
+     * ip2long()
+     *
+     * @param string $ip
+     * @return false|int|string
+     */
+    public static function ip2long($ip = '')
+    {
+        empty($ip) && $ip = self::$remote_ip;
+
+        if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
+            $ip2long = ip2long($ip);
+        } else {
+            if (substr_count($ip, '::')) {
+                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
+            }
+            $ip = explode(':', $ip);
+            $r_ip = '';
+            foreach ($ip as $v) {
+                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
+            }
+            $ip2long = base_convert($r_ip, 2, 10);
+        }
+
+        if ($ip2long === -1 or $ip2long === false) {
+            return false;
+        }
+
+        return $ip2long;
     }
 }
