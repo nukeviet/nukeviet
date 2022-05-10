@@ -65,6 +65,17 @@ if (empty($global_config['my_domains'])) {
     $global_config['my_domains'] = [NV_SERVER_NAME];
 } else {
     $global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
+    // Nếu domain truy cập không đúng sẽ chuyển đến domain đúng (Báo mã 301)
+    if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
+        $location = $nv_Server->getOriginalProtocol(). '://' . $global_config['my_domains'][0] . $_SERVER['REQUEST_URI'];
+        if (in_array(substr(php_sapi_name(), 0, 3), ['cgi', 'fpm'], true)) {
+            header('Location: ' . $location);
+            header('Status: 301 Moved Permanently');
+        } else {
+            header('Location: ' . $location, true, 301);
+        }
+        exit(0);
+    }
 }
 
 require NV_ROOTDIR . '/includes/ini.php';
@@ -224,9 +235,6 @@ define('ASSETS_LANG_STATIC_URL', (in_array(NV_LANG_INTERFACE, ['en', 'fr', 'vi']
 // AUTO_MINIFIED - Tự thu nhỏ dung lượng file nếu thêm '.min' vào trước phần mở rộng .css, .js (Chỉ áp dụng khi mạng CDN jsDelivr được bật)
 define('AUTO_MINIFIED', (!empty($global_config['assets_cdn_url']) and in_array(NV_LANG_INTERFACE, ['en', 'fr', 'vi'], true)) ? '.min' : '');
 
-if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
-}
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
     $nv_Cache = new NukeViet\Cache\Memcached(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);
