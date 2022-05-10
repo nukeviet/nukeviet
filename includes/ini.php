@@ -238,7 +238,7 @@ function set_ini_file(&$sys_info)
     }
 }
 
-$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', (in_array(NV_SERVER_NAME, $global_config['my_domains'], true) ? NV_SERVER_NAME : $global_config['my_domains'][0])) . '.php';
+$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', NV_SERVER_NAME) . '.php';
 $ini_list = ini_get_all(null, false);
 
 $sys_info['server_headers'] = [];
