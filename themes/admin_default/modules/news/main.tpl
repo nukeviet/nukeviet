@@ -97,7 +97,6 @@
                             </button> 
                         </span>
                     </div>
-                    <p class="text-danger" id="error_to_date">{ERROR_DATE}</p>
                 </div>
             </div>
            

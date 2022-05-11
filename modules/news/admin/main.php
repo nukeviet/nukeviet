@@ -20,10 +20,9 @@ $catid = $nv_Request->get_int('catid', 'get', 0);
 $per_page_old = $nv_Request->get_int('per_page', 'cookie', 50);
 $per_page = $nv_Request->get_int('per_page', 'get', $per_page_old);
 $num_items = $nv_Request->get_int('num_items', 'get', 0);
-$search_type_date = $nv_Request->get_title('type_date', 'get', '-');
+$search_type_date = $nv_Request->get_title('type_date', 'get', 'addtime');
 $search_time_to = $nv_Request->get_title('search_time_to', 'get', '');
 $search_time_from = $nv_Request->get_title('search_time_from', 'get', '');
-$error_date = '';
 
 if ($per_page < 1 or $per_page > 500) {
     $per_page = 50;
@@ -403,25 +402,24 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
 
     if ($search_type_date == 'addtime' || $search_type_date == 'publtime' || $search_type_date == 'exptime') {
         if (!empty($search_time_from)) {
-            $timestamp_from = "";
+            $timestamp_from = '';
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
                 $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
+                $match[]['range'][$search_type_date] = [
+                    'gte' => $timestamp_from
+                ];
             }
-
-            $match[]['range'][$search_type_date] = [
-                "gte" => $timestamp_from,
-            ];
         }
 
         if (!empty($search_time_to)) {
-            $timestamp_to = "";
+            $timestamp_to = '';
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
                 $timestamp_to = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+                $match[]['range'][$search_type_date] = [
+                    'lte' => $timestamp_to
+                ];
             }
 
-            $match[]['range'][$search_type_date] = [
-                "lte" => $timestamp_to
-            ];
         }
     }
 
@@ -628,30 +626,24 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                 OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
         }
 
-        if ($search_type_date == "addtime" || $search_type_date == "publtime" || $search_type_date == "exptime") {
+        if ($search_type_date == 'addtime' || $search_type_date == 'publtime' || $search_type_date == 'exptime') {
             if (!empty($search_time_from)) {
-                $timestamp_from = "";
+                $timestamp_from = '';
                 if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
                     $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
+                    $column_date = ' r.' . $search_type_date;
+                    $where = $column_date . ' >= ' . $timestamp_from;
                 }
 
-                if ($search_type_date == "addtime") {
-                    $where .= "r.addtime >= " . $timestamp_from;
-                    $where .= " OR r.edittime >= " . $timestamp_from;
-                } else {
-                    $column_date = "r." . $search_type_date;
-                    $where = $column_date . ">= " . $timestamp_from;
-                }
             }
 
             if (!empty($search_time_to)) {
-                $timestamp_to = "";
+                $timestamp_to = '';
                 if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
                     $timestamp_to = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+                    $column_date = ' r.' . $search_type_date;
+                    $where = $column_date . ' <= ' . $timestamp_to;
                 }
-
-                $column_date = "r." . $search_type_date;
-                $where = $column_date . " <= " . $timestamp_to . ")";
             }
         }
 
@@ -854,7 +846,6 @@ foreach ($array_search as $key => $val) {
 }
 
 $arr_search_date = [
-    '-' => $lang_module['search_type_date'],
     'addtime' => $lang_module['content_publ_date'],
     'publtime' => $lang_module['search_public_time'],
     'exptime' => $lang_module['content_exp_date'],
@@ -1087,8 +1078,6 @@ if (!empty($generate_page)) {
     $xtpl->assign('GENERATE_PAGE', $generate_page);
     $xtpl->parse('main.generate_page');
 }
-
-$xtpl->assign('ERROR_DATE', $error_date);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
