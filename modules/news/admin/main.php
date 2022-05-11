@@ -1215,7 +1215,6 @@ if ($nv_Request->isset_request('restore', 'get')) {
                 $db->query('UPDATE ' .  NV_PREFIXLANG . '_' . $module_data . '_history SET is_backup = 1, time_backup = ' . NV_CURRENTTIME . ', active = 1  WHERE id = ' . $id); 
 
             } catch (PDOException $e) {
-            	pr($e);
                 nv_jsonOutput(array(
                     'res' => 'error',
                     'data' => $e
