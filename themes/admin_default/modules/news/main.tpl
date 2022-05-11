@@ -160,7 +160,7 @@
                         {ROW.feature}
 
                         <!-- BEGIN: show_history -->
-                        <button type="button" value="{ROW.id}" class="btn btn-success btn-xs history" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history" aria-hidden="true"></i> {LANG.Lịch sử}</button>
+                        <button type="button" value="{ROW.id}" class="btn btn-success btn-xs history" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history" aria-hidden="true"></i> {LANG.title_action_history}</button>
                         <!-- END: show_history -->
                     </td>
                 </tr>
