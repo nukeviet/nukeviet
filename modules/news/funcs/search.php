@@ -98,6 +98,7 @@ if ($page > 1) {
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $array_cat_search = [];
+$array_cat_search[0]['title'] = $lang_module['search_all'];
 foreach ($global_array_cat as $arr_cat_i) {
     $array_cat_search[$arr_cat_i['catid']] = [
         'catid' => $arr_cat_i['catid'],
@@ -105,8 +106,6 @@ foreach ($global_array_cat as $arr_cat_i) {
         'select' => ($arr_cat_i['catid'] == $catid) ? 'selected' : ''
     ];
 }
-
-$array_cat_search[0]['title'] = $lang_module['search_all'];
 
 $contents = call_user_func('search_theme', $key, $choose, $date_array, $array_cat_search);
 $where = '';
