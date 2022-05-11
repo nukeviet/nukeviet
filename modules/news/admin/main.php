@@ -408,6 +408,8 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                 $match[]['range'][$search_type_date] = [
                     'gte' => $timestamp_from
                 ];
+            } else {
+                $search_time_from = '';
             }
         }
 
@@ -418,6 +420,8 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                 $match[]['range'][$search_type_date] = [
                     'lte' => $timestamp_to
                 ];
+            } else {
+                $search_time_to = '';
             }
 
         }
@@ -633,6 +637,8 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                     $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
                     $column_date = ' r.' . $search_type_date;
                     $where = $column_date . ' >= ' . $timestamp_from;
+                } else {
+                    $search_time_from = '';
                 }
 
             }
@@ -643,6 +649,8 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                     $timestamp_to = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
                     $column_date = ' r.' . $search_type_date;
                     $where = $column_date . ' <= ' . $timestamp_to;
+                } else {
+                    $search_time_to = '';
                 }
             }
         }
