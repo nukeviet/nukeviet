@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -619,16 +619,9 @@ if ($is_submit_form) {
 
     $rowcontent['keywords'] = $nv_Request->get_array('keywords', 'post', '');
     $rowcontent['keywords'] = trim(nv_substr(implode(', ', $rowcontent['keywords']), 0, 255), ", \t\n\r\0\x0B");
-    $rowcontent['tags'] = $nv_Request->get_typed_array('tags', 'post', 'title', []);
-    $rowcontent['tags'] = implode(',', $rowcontent['tags']);
 
-    // Tu dong xac dinh tags
-    if ($rowcontent['tags'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
-        $ct = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] . ' ' . $rowcontent['bodyhtml'] : $rowcontent['bodyhtml'];
-        $tags = nv_get_mod_tags($ct);
-        $tags = array_slice($tags, 0, 20, true);
-        $rowcontent['tags'] = implode(',', $tags);
-    }
+    $tags = $nv_Request->get_typed_array('tags', 'post', 'title', []);
+    $rowcontent['tags'] = !empty($tags) ? implode(',', $tags) : '';
 
     if (empty($rowcontent['title'])) {
         $error[] = $lang_module['error_title'];
@@ -746,6 +739,24 @@ if ($is_submit_form) {
 
         // Xử lý lưu vào CSDL khi đăng mới hoặc sao chép
         if ($rowcontent['id'] == 0 or $copy) {
+            // Tu dong xac dinh tags va keywords khi dang bai viet moi
+            $ct = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] . ' ' . $rowcontent['bodyhtml'] : $rowcontent['bodyhtml'];
+
+            if ($rowcontent['tags'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
+                $tags = nv_get_mod_tags($ct);
+                !empty($tags) && $tags = array_slice($tags, 0, 20, true);
+                $rowcontent['tags'] = !empty($tags) ? implode(',', $tags) : '';
+            }
+
+            if (empty($rowcontent['keywords'])) {
+                $keywords = $tags;
+                if (($size = sizeof($keywords)) < 20) {
+                    $keywords = array_merge($keywords, nv_get_keywords($ct, 20 - $size, true));
+                }
+                !empty($keywords) && $keywords = array_unique($keywords);
+                $rowcontent['keywords'] = !empty($keywords) ? implode(',', $keywords) : '';
+            }
+
             // Toàn quyền module trở lên được đăng bài lùi về sau
             if (!$NV_IS_ADMIN_FULL_MODULE and (int) ($rowcontent['publtime']) < NV_CURRENTTIME) {
                 $rowcontent['publtime'] = NV_CURRENTTIME;
