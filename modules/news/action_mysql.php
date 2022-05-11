@@ -30,7 +30,8 @@ $array_table = [
     'logs',
     'tmp',
     'author',
-    'authorlist'
+    'authorlist',
+    'history'
 ];
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
@@ -282,6 +283,21 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
 	KEY aid (aid),
     KEY alias (alias)
     ) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_history (
+  id int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  new_id int(11) NOT NULL DEFAULT 0 COMMENT 'Id bài viết',
+  content mediumtext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Nội dung dữ liệu của phiên bản cũ dạng JSON',
+  is_backup tinyint(2) NOT NULL DEFAULT 0 COMMENT 'Trạng thái khôi phục:\r\n0: chưa khôi phục\r\n1: Đã khôi phục',
+  time_backup int(11) NOT NULL DEFAULT 0 COMMENT 'Thời gian khôi phục',
+  userid int(11) NOT NULL DEFAULT 0 COMMENT 'Người tạo, sửa đổi phiên bản',
+  time_history int(11) NOT NULL DEFAULT 0 COMMENT 'Thời gian thay đổi',
+  active tinyint(2) NOT NULL DEFAULT 1 COMMENT '1: Đang sử dụng phiên bản\r\n0: Phiên bản cũ',
+  KEY new_id (new_id),
+  KEY time_backup (time_backup),
+  KEY userid (userid),
+  KEY time_history (time_history)
+) ENGINE=MyISAM";
 
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'mobile_indexfile', 'viewcat_page_new')";
