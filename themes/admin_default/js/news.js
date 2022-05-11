@@ -710,12 +710,17 @@ $(document).ready(function() {
                         }
 
                         v['is_backup'] = (v['is_backup'] != 0 ? "<span class='label label-primary fs-12'>" + v['is_backup'] + "</span>" : "NULL");
-                        v['time_backup'] = (v['time_backup'] == 0 ? "" : "");
-
+                        v['time_backup'] = (v['time_backup'] != 0 ? v['time_backup'] : "");
+                        if (v['content']['news_rows'] != undefined) {
+                            title = v['content']['news_rows']['title'];
+                        } else {
+                            title = v['title'];
+                        }
+                        
                         html += `<tr class="${$_class}">
                             <td>${$_checked}</td>
                             <td class="text-center">${v['stt']}</td>
-                            <td>${v['content']['news_rows']['title']}</td>
+                            <td>${title}</td>
                             <td>${v['username']}</td>
                             <td>${v['title_active']}</td>
                             <td class="text-center"><h4 class="label label-success fs-12">${v['time_history']}</h4></td>
@@ -755,7 +760,7 @@ $(document).ready(function() {
                                     }, 2000);
                                     
                                 }  else {
-                                    alert(data['res']);
+                                    console.log['data'];
                                 }
                             }
                        })

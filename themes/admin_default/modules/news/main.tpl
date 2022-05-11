@@ -158,7 +158,10 @@
                         <!-- BEGIN: copy_news --><a href="{URL_COPY}" class="btn btn-success btn-xs" title="{LANG.title_copy_news}" ><i class="fa fa-copy"></i></a><!-- END: copy_news -->
                         <!-- BEGIN: excdata --><a href="{ROW.url_send}" class="btn btn-success btn-xs"><i class="fa fa-paper-plane-o"></i>{LANG.send}</a><!-- END: excdata -->
                         {ROW.feature}
-                        <button type="button" value="{ROW.id}" class="btn btn-success btn-xs history" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history" aria-hidden="true"></i> Lịch sử</button>
+
+                        <!-- BEGIN: show_history -->
+                        <button type="button" value="{ROW.id}" class="btn btn-success btn-xs history" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history" aria-hidden="true"></i> {LANG.Lịch sử}</button>
+                        <!-- END: show_history -->
                     </td>
                 </tr>
                 <!-- END: loop -->

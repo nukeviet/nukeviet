@@ -949,11 +949,9 @@ if ($is_submit_form) {
                 $rowcontent['status'] += ($global_code_defined['row_locked_status'] + 1);
             }
 
-            $get_data_new = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $rowcontent['id'])->fetch();
-            // History
-            if (!empty($get_data_new)) {
-                $array_history['news_rows'] = $get_data_new;
-            }
+            // Lấy phiên bản news_row hiện tại
+            $get_data_new_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $rowcontent['id'])->fetch();
+            unset($get_data_new_old['edittime']);
 
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
                 catid=' . (int) ($rowcontent['catid']) . ',
@@ -993,14 +991,19 @@ if ($is_submit_form) {
             $sth->bindParam(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
 
             if ($sth->execute()) {
+                $get_data_new = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $rowcontent['id'])->fetch();
+                unset($get_data_new['edittime']);
+
+                $result = array_diff_assoc($get_data_new_old, $get_data_new);
+                if (!empty($result)) {
+                    $array_history['news_rows'] = $get_data_new;
+                }
+
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
 
                 // History
-                $get_data_new_detail = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $rowcontent['id'])->fetch();
-                if (!empty($get_data_new_detail)) {
-                    $array_history['news_detail'] = $get_data_new_detail;
-                }
-
+                $get_data_new_detail_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $rowcontent['id'])->fetch();
+                
                 $ct_query = [];
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_detail SET
                     titlesite=:titlesite,
@@ -1027,6 +1030,13 @@ if ($is_submit_form) {
 
                 $ct_query[] = (int) $sth->execute();
 
+                $get_data_new_detail = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $rowcontent['id'])->fetch();
+                
+                $result = array_diff_assoc($get_data_new_detail_old, $get_data_new_detail);
+                if (!empty($result)) {
+                    $array_history['news_detail'] = $get_data_new_detail;
+                }
+
                 if ($rowcontent_old['listcatid'] != $rowcontent['listcatid']) {
                     $array_cat_old = explode(',', $rowcontent_old['listcatid']);
                     $array_cat_new = explode(',', $rowcontent['listcatid']);
@@ -1040,15 +1050,19 @@ if ($is_submit_form) {
 
                 foreach ($catids as $catid) {
                     if (!empty($catid)) {
-                        $get_data_new_detail = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'])->fetch();
-                        // History
-                        if (!empty($get_data_new_detail)) {
-                            $array_history['news_' . $catid] = $get_data_new_detail;
-                        }
-                        
+                        $get_data_new_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'])->fetch();
+                        unset($get_data_new_old['edittime']);
                         $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
                         $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
                         $id = $db->lastInsertId();
+
+                        $get_data_new = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id)->fetch();
+                        unset($get_data_new['edittime']);
+                        
+                        $result = array_diff_assoc($get_data_new_old, $get_data_new);
+                        if (!empty($result)) {
+                            $array_history['news_' . $catid] = $get_data_new;
+                        }
                     }
                 }
 

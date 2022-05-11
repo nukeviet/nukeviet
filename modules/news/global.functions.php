@@ -560,10 +560,13 @@ function my_author_detail($userid)
 /**
  * nv_add_history_news()
  *
- * @param array $data
- * @return bool
+ * @param int $new_id
+ * @param string $content
+ * @param int $userid
+ * @param int $time_history
+ * @return int
  */
-function nv_add_history_news($new_id = 0, $content = "", $userid = 0, $time_history = NV_CURRENTTIME)
+function nv_add_history_news($new_id = 0, $content = '', $userid = 0, $time_history = NV_CURRENTTIME)
 {
     global $admin_info, $db, $module_data;
     $userid = $admin_info['admin_id'];
@@ -578,31 +581,11 @@ function nv_add_history_news($new_id = 0, $content = "", $userid = 0, $time_hist
             $data_insert['content'] = $content;
             $data_insert['userid'] = $userid;
             $array_history = json_decode($content, true);
-            $check_new = false;
-            foreach ($array_history as $key => $value) {
-                $table = explode('_', $key)[1];
-                $data = $value;
-                unset($value['edittime']);
+            foreach ($array_history as $k => $v) {
 
-                $select = [];
-                foreach ($value as $k => $v) {
-                    $select[] = $k;
-                }
-
-                $select = implode(',', $select);
-                $column = ($table == 'sources' ? 'sourceid' : 'id');
-                $get_table = $db->query('SELECT ' . $select . ' FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $table .' WHERE ' . $column . ' = ' . $value[$column])->fetch();
-                unset($get_table['edittime']);
-                
-                $result = array_diff_assoc($value, $get_table);
-                if (!empty($result)) {
-                    $check_new = true;
-                }
             }
 
-            if ($check_new) {
-                $result = $db->insert_id($_sql, 'id', $data_insert);
-            }
+            $result = $db->insert_id($_sql, 'id', $data_insert);
         } catch (PDOException $e) {
             print_r($e);
             exit();
