@@ -1193,7 +1193,6 @@ if ($nv_Request->isset_request('restore', 'get')) {
     $result_update = 0;
     if (!empty($get_data_backup)) {
         $data = json_decode($get_data_backup['content'], true);
-
         foreach ($data as $k => $v) {
             $arr_update = [];
             $table = explode('_', $k)[1];
@@ -1205,7 +1204,10 @@ if ($nv_Request->isset_request('restore', 'get')) {
             $ipl_update = implode(',', $arr_update);
 
             try {
-                $result_update = $db->query('UPDATE ' .  NV_PREFIXLANG . '_' . $module_data . '_' . $table . ' SET ' . $ipl_update . ' WHERE id = ' . $v['id']);
+                $id_tb = ($table == 'sources' ? 'sourceid' : 'id');
+
+                $result_update = $db->query('UPDATE ' .  NV_PREFIXLANG . '_' . $module_data . '_' . $table . ' SET ' . $ipl_update . ' WHERE ' . $id_tb . ' = ' . $v[$id_tb]);
+
                 // Cập nhật lại trạng thái active của tất cả bài viết về 0
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_history SET active = 0 WHERE new_id = ' . $get_data_backup['new_id']);
 
@@ -1213,6 +1215,7 @@ if ($nv_Request->isset_request('restore', 'get')) {
                 $db->query('UPDATE ' .  NV_PREFIXLANG . '_' . $module_data . '_history SET is_backup = 1, time_backup = ' . NV_CURRENTTIME . ', active = 1  WHERE id = ' . $id); 
 
             } catch (PDOException $e) {
+            	pr($e);
                 nv_jsonOutput(array(
                     'res' => 'error',
                     'data' => $e

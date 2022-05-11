@@ -580,11 +580,6 @@ function nv_add_history_news($new_id = 0, $content = '', $userid = 0, $time_hist
             $data_insert['new_id'] = $new_id;
             $data_insert['content'] = $content;
             $data_insert['userid'] = $userid;
-            $array_history = json_decode($content, true);
-            foreach ($array_history as $k => $v) {
-
-            }
-
             $result = $db->insert_id($_sql, 'id', $data_insert);
         } catch (PDOException $e) {
             print_r($e);
