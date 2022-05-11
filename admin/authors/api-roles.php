@@ -353,11 +353,11 @@ if (!empty($error)) {
 
 // Xuất các danh mục API
 foreach ($array_api_trees as $api_tree) {
-    $api_tree['total'] = count($array_api_contents[$api_tree['key']]['apis']);
+    $api_tree['total'] = !empty($array_api_contents[$api_tree['key']]['apis']) ? count($array_api_contents[$api_tree['key']]['apis']) : 0;
     $xtpl->assign('API_TREE', $api_tree);
 
     foreach ($api_tree['subs'] as $sub) {
-        $sub['total'] = count($array_api_contents[$sub['key']]['apis']);
+        $sub['total'] = !empty($array_api_contents[$sub['key']]['apis'])? count($array_api_contents[$sub['key']]['apis']) : 0;
         $xtpl->assign('SUB', $sub);
 
         if (!empty($sub['active'])) {
