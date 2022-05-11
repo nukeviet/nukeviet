@@ -74,6 +74,7 @@
 
 .child-apis .child-apis-item-ctn {
     padding: 0 5px;
+    margin-bottom: 20px;
 }
 
 .root-api-actions ul {
@@ -95,11 +96,13 @@
 .root-api-actions ul li a {
     padding: 8px 0 8px 0;
     text-decoration: none;
-    display: block;
+    color: #333;
+    display: flex;
 }
 
 .root-api-actions ul li a.active {
     font-weight: 700;
+    color: #0074a2;
 }
 
 .child-apis .child-apis-item-tool {
@@ -113,4 +116,22 @@
 .credential-result {
     max-width: 600px;
     margin: 0 auto;
+}
+
+.api-count {
+    background-color: #777;
+    display: inline-block;
+    color: #fff;
+    font-size: 95%;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 50%;
+    margin-left: auto;
+    min-width: 25px;
+    text-align: center;
+}
+
+.left-col {
+    width: 25%;
+    min-width: 200px;
 }

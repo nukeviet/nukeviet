@@ -118,7 +118,7 @@ if ($role_id) {
 }
 
 $is_submit_form = false;
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $is_submit_form = true;
     $current_cat = $nv_Request->get_title('current_cat', 'post', '');
 
@@ -291,7 +291,9 @@ $xtpl->assign('DATA', $array_post);
 
 // Xuất các API role đã có hoặc thông báo rỗng
 if (empty($array)) {
-    $xtpl->parse('main.empty');
+    if (empty($error)) {
+        $xtpl->parse('main.empty');
+    }
 } else {
     foreach ($array as $row) {
         $row['addtime'] = nv_date('H:i d/m/Y', $row['addtime']);
@@ -351,15 +353,17 @@ if (!empty($error)) {
 
 // Xuất các danh mục API
 foreach ($array_api_trees as $api_tree) {
+    $api_tree['total'] = count($array_api_contents[$api_tree['key']]['apis']);
     $xtpl->assign('API_TREE', $api_tree);
 
     foreach ($api_tree['subs'] as $sub) {
+        $sub['total'] = count($array_api_contents[$sub['key']]['apis']);
         $xtpl->assign('SUB', $sub);
 
         if (!empty($sub['active'])) {
             $xtpl->parse('main.api_tree.sub.active');
         }
-        if (!empty($sub['total_api'])) {
+        if (!empty($sub['total'])) {
             $xtpl->parse('main.api_tree.sub.total_api');
         }
 
@@ -369,7 +373,7 @@ foreach ($array_api_trees as $api_tree) {
     if (!empty($api_tree['active'])) {
         $xtpl->parse('main.api_tree.active');
     }
-    if (!empty($api_tree['total_api'])) {
+    if (!empty($api_tree['total'])) {
         $xtpl->parse('main.api_tree.total_api');
     }
 
@@ -406,10 +410,7 @@ if ($is_submit_form or $role_id) {
     $xtpl->parse('main.scrolltop');
 }
 
-if ($total_api_enabled) {
-    $xtpl->assign('TOTAL_API_ENABLED', $total_api_enabled);
-    $xtpl->parse('main.total_api_enabled');
-}
+$xtpl->assign('TOTAL_API_ENABLED', $total_api_enabled);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

@@ -1,12 +1,11 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: empty -->
-<div class="alert alert-info">{LANG.api_roles_empty}.</div>
+<div class="alert alert-info">{LANG.api_roles_empty}</div>
 <!-- END: empty -->
 <!-- BEGIN: data -->
-<div class="alert alert-info">{LANG.api_role_notice}.</div>
 <form>
     <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered">
             <caption><i class="fa fa-file-text-o"></i> {LANG.api_roles_list}</caption>
             <thead>
                 <tr>
@@ -21,7 +20,7 @@
                 <!-- BEGIN: loop -->
                 <tr>
                     <td>
-                        <a href="#apiroledetail{ROW.role_id}" data-toggle="modal">{ROW.role_title}</a> <strong class="text-danger">({ROW.apitotal})</strong>
+                        <a href="#apiroledetail{ROW.role_id}" data-toggle="modal">{ROW.role_title}</a> <span class="api-count">{ROW.apitotal}</span>
                     </td>
                     <td>{ROW.role_description}</td>
                     <td>{ROW.addtime}</td>
@@ -78,98 +77,101 @@
                 <!-- END FORFOOTER -->
                 <!-- END: loop -->
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5"><i class="fa fa-flag" aria-hidden="true"></i>  {LANG.api_role_notice}.</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </form>
 <!-- END: data -->
 <div id="addeditarea">
-    <!-- BEGIN: add_notice -->
-    <div class="alert alert-info">{LANG.api_role_notice_lang}.</div>
-    <!-- END: add_notice -->
     <!-- BEGIN: error -->
     <div class="alert alert-danger">{ERROR}</div>
     <!-- END: error -->
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>{CAPTION}</strong>
-        </div>
-        <div class="panel-body">
-            <form method="post" action="{FORM_ACTION}" class="form-horizontal" autocomplete="off">
-                <div class="form-group">
-                    <label class="col-sm-6 control-label" for="role_title">{LANG.api_roles_title} <span class="text-danger">(*)</span>:</label>
-                    <div class="col-sm-18 col-lg-10">
-                        <input type="text" id="role_title" name="role_title" value="{DATA.role_title}" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-6 control-label" for="role_description">{LANG.api_roles_description}:</label>
-                    <div class="col-sm-18 col-lg-10">
-                        <textarea type="text" class="form-control" id="role_description" name="role_description" rows="2">{DATA.role_description}</textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-18 col-sm-offset-6">
-                        <strong id="apiRoleAll">{LANG.api_roles_allowed}<!-- BEGIN: total_api_enabled --> <span>({TOTAL_API_ENABLED})</span><!-- END: total_api_enabled --></strong>
-                    </div>
-                </div>
-                <hr />
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="root-api-actions">
-                            <ul>
-                                <!-- BEGIN: api_tree -->
-                                <li><a data-toggle="apicat" data-cat="{API_TREE.key}" href="#api-child-{API_TREE.key}"<!-- BEGIN: active --> class="active"<!-- END: active -->>{API_TREE.name}<!-- BEGIN: total_api --> <span>({API_TREE.total_api})</span> <!-- END: total_api --></a></li>
-                                <!-- BEGIN: sub -->
-                                <li><a data-toggle="apicat" data-cat="{SUB.key}" href="#api-child-{SUB.key}"<!-- BEGIN: active --> class="active"<!-- END: active -->> &nbsp; &nbsp; {SUB.name}<!-- BEGIN: total_api --> <span>({SUB.total_api})</span> <!-- END: total_api --></a></li>
-                                <!-- END: sub -->
-                                <!-- END: api_tree -->
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-18">
-                        <div class="child-apis">
-                            <!-- BEGIN: api_content -->
-                            <div data-toggle="apichid" class="child-apis-item" id="api-child-{API_CONTENT.key}"<!-- BEGIN: active --> style="display: block;"<!-- END: active -->>
-                                <div class="child-apis-item-ctn">
-                                    <div class="row">
-                                        <!-- BEGIN: api -->
-                                        <div class="col-sm-12">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input data-toggle="apiroleit" class="custom-control-input" type="checkbox" name="api_{API_CONTENT.input_key}[]" value="{API.cmd}"<!-- BEGIN: checked --> checked="checked"<!-- END: checked -->> {API.name}
-                                                </label>
+    <form method="post" action="{FORM_ACTION}" class="form-horizontal" autocomplete="off">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>{CAPTION}</strong>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td class="left-col">{LANG.api_roles_title} <span class="text-danger">(*)</span>:</td>
+                            <td><input type="text" id="role_title" name="role_title" value="{DATA.role_title}" class="form-control w300"></td>
+                        </tr>
+                        <tr>
+                            <td class="left-col">{LANG.api_roles_description}:</td>
+                            <td><textarea type="text" class="form-control w300" id="role_description" name="role_description" rows="2">{DATA.role_description}</textarea></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" id="apiRoleAll">{LANG.api_roles_allowed}: <span class="total-api-enabled api-count">{TOTAL_API_ENABLED}</span></th>
+                        </tr>
+                        <tr class="info">
+                            <th class="left-col">{LANG.api_cat}</th>
+                            <th>{LANG.cat_api_list}</th>
+                        </tr>
+                        <tr>
+                            <td class="root-api-actions left-col">
+                                <ul>
+                                    <!-- BEGIN: api_tree -->
+                                        <li><a data-toggle="apicat" data-cat="{API_TREE.key}" href="#api-child-{API_TREE.key}"<!-- BEGIN: active --> class="active"<!-- END: active -->>{API_TREE.name}<!-- BEGIN: total_api --> <span class="api-count"><span class="total_api">{API_TREE.total_api}</span>/{API_TREE.total}</span><!-- END: total_api --></a></li>
+                                        <!-- BEGIN: sub --> <li><a data-toggle="apicat" data-cat="{SUB.key}" href="#api-child-{SUB.key}"<!-- BEGIN: active --> class="active"<!-- END: active -->> &nbsp; &nbsp; {SUB.name}<!-- BEGIN: total_api --> <span class="api-count"><span class="total_api">{SUB.total_api}</span>/{SUB.total}</span><!-- END: total_api --></a></li><!-- END: sub -->
+                                    <!-- END: api_tree -->
+                                </ul>
+                            </td>
+                            <td class="child-apis" style="background-color:white;">
+                                <!-- BEGIN: api_content -->
+                                <div data-toggle="apichid" class="child-apis-item" id="api-child-{API_CONTENT.key}" <!-- BEGIN: active --> style="display: block;"<!-- END: active -->>
+                                    <div class="child-apis-item-ctn">
+                                        <div class="row">
+                                            <!-- BEGIN: api -->
+                                            <div class="col-sm-12">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input data-toggle="apiroleit" class="form-control" type="checkbox" name="api_{API_CONTENT.input_key}[]" value="{API.cmd}"<!-- BEGIN: checked --> checked="checked"<!-- END: checked -->> {API.name}
+                                                    </label>
+                                                </div>
                                             </div>
+                                            <!-- END: api -->
                                         </div>
-                                        <!-- END: api -->
+                                    </div>
+                                    <div class="child-apis-item-tool">
+                                        <a href="#api-child-{API_CONTENT.key}" class="btn btn-default" data-toggle="apicheck"><i class="fa fa-check-square-o"></i> {LANG.api_roles_checkall}</a>
+                                        <a href="#api-child-{API_CONTENT.key}" class="btn btn-default" data-toggle="apiuncheck"><i class="fa fa-square-o"></i> {LANG.api_roles_uncheckall}</a>
                                     </div>
                                 </div>
-                                <div class="child-apis-item-tool">
-                                    <hr />
-                                    <ul class="list-inline list-unstyled">
-                                        <li class="list-inline-item"><a href="#api-child-{API_CONTENT.key}" data-toggle="apicheck"><i class="fa fa-check-circle text-muted"></i> {LANG.api_roles_checkall}</a></li>
-                                        <li class="list-inline-item"><a href="#api-child-{API_CONTENT.key}" data-toggle="apiuncheck"><i class="fa fa-circle text-muted"></i> {LANG.api_roles_uncheckall}</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- END: api_content -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-18 col-sm-offset-6">
-                        <input type="hidden" name="current_cat" value="{CURRENT_CAT}">
-                        <button type="submit" name="submit" value="submit" class="btn btn-primary">{GLANG.save}</button>
-                    </div>
-                </div>
-            </form>
+                                <!-- END: api_content -->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <!-- BEGIN: add_notice -->
+                        <tr>
+                            <td colspan="2"><i class="fa fa-flag" aria-hidden="true"></i> {LANG.api_role_notice_lang}</td>
+                        </tr>
+                        <!-- END: add_notice -->
+                        <tr>
+                            <td colspan="2">
+                                <input type="hidden" name="current_cat" value="{CURRENT_CAT}">
+                                <input type="hidden" name="save" value="1">
+                                <button type="submit" class="btn btn-primary">{GLANG.save}</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
         </div>
-    </div>
+    </form>
 </div>
 <!-- BEGIN: scrolltop -->
 <script type="text/javascript">
-$(document).ready(function() {
-    $("html,body").animate({scrollTop: $('#addeditarea').offset().top}, 100);
-});
+    $(function() {
+        $("html,body").animate({scrollTop: $('#addeditarea').offset().top}, 100);
+    });
 </script>
 <!-- END: scrolltop -->
 <!-- END: main -->

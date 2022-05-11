@@ -74,33 +74,14 @@ function nv_del_oauthone(id, userid, tokend) {
 }
 
 function apiRoleChanged() {
-    var totalApis = 0;
+    var totalApis = 0,
+        total;
     $('[data-toggle="apicat"]').each(function() {
-        var $this = $(this);
-        var ctnItem = $($this.attr('href'));
-        var total = ctnItem.find('[data-toggle="apiroleit"]:checked').length;
-        if (total > 0) {
-            totalApis = totalApis + total;
-            var textEle = $this.find('span');
-            if (textEle.length) {
-                textEle.html('(' + total + ')');
-            } else {
-                $this.append(' <span>(' + total + ')</span>');
-            }
-        } else {
-            $this.find('span').remove();
-        }
+        total = $($(this).attr('href') + ' [data-toggle="apiroleit"]:checked').length;
+        totalApis = totalApis + total;
+        $('.total_api', this).text(total)
     });
-    if (totalApis > 0) {
-        var textEle = $('#apiRoleAll').find('span');
-        if (textEle.length) {
-            textEle.html('(' + totalApis + ')');
-        } else {
-            $('#apiRoleAll').append(' <span>(' + totalApis + ')</span>');
-        }
-    } else {
-        $('#apiRoleAll').find('span').remove();
-    }
+    $('#apiRoleAll .total-api-enabled').text(totalApis)
 }
 
 $(document).ready(function() {

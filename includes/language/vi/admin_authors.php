@@ -225,6 +225,8 @@ $lang_module['api_cr_auth_method_none'] = 'Không xác thực, dùng trong việ
 
 $lang_module['api_System'] = 'Các chức năng hệ thống';
 $lang_module['api_System_SendMail'] = 'Gửi email';
+$lang_module['api_cat'] = 'Danh mục';
+$lang_module['cat_api_list'] = 'Các API trong danh mục';
 
 $lang_module['other_info'] = 'Thông tin khác';
 $lang_module['value_copied'] = 'Giá trị đã được sao chép vào bộ nhớ';
