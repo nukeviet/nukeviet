@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -1320,6 +1320,7 @@ function nv_save_file_config()
         $content .= "\$global_config['cached'] = 'files';\n";
         $content .= "\$global_config['session_handler'] = 'files';\n";
         $content .= "\$global_config['extension_setup'] = 3; // 0: No, 1: Upload, 2: NukeViet Store, 3: Upload + NukeViet Store\n";
+        $content .= "\$global_config['core_cdn_url'] = '" . $global_config['core_cdn_url'] . "';\n";
         $content .= '// Readmore: https://wiki.nukeviet.vn/nukeviet4:advanced_setting:file_config';
 
         if ($step < 7) {

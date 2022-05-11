@@ -241,7 +241,8 @@ while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
 }
 
 $array_config_global['assets_cdn_checked'] = $array_config_global['assets_cdn'] ? ' checked ' : '';
-$array_config_global['assets_cdn_note'] = sprintf($lang_module['assets_cdn_note'], NV_ASSETS_DIR . '/css, ' . NV_ASSETS_DIR . '/fonts, ' . NV_ASSETS_DIR . '/images, ' . NV_ASSETS_DIR . '/js', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js', $global_config['core_cdn_url'] . 'assets/js/jquery/jquery.min.js');
+$core_cdn_url = !empty($global_config['core_cdn_url']) ? $global_config['core_cdn_url'] : 'https://cdn.jsdelivr.net/gh/nukeviet/nukeviet/';
+$array_config_global['assets_cdn_note'] = sprintf($lang_module['assets_cdn_note'], NV_ASSETS_DIR . '/css, ' . NV_ASSETS_DIR . '/fonts, ' . NV_ASSETS_DIR . '/images, ' . NV_ASSETS_DIR . '/js', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js', $core_cdn_url . 'assets/js/jquery/jquery.min.js');
 
 $cdn_urls = get_cdn_urls($array_config_global['cdn_url'], true, false);
 

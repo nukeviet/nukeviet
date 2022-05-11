@@ -246,8 +246,6 @@ $global_config['check_version'] = '/^([0-9]{1})\.([0-9]{1})\.([0-9]{2})$/';
 
 $global_config['others_headers'] = ['X-Content-Type-Options' => 'nosniff', 'X-XSS-Protection' => '1; mode=block', 'Strict-Transport-Security' => 'max-age=31536000; preload'];
 
-$global_config['core_cdn_url'] = 'https://cdn.jsdelivr.net/gh/nukeviet/nukeviet@nukeviet4.6/';
-
 // Meta Property
 $meta_property = [
     'og:title' => '',

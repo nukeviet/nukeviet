@@ -3291,8 +3291,8 @@ function set_cdn_urls(&$global_config, $cdn_is_enabled, $cl_country)
         }
 
         // Nếu bật CDN jsDelivr thì $global_config['assets_cdn_url']
-        // được gán cho giá trị $global_config['core_cdn_url'] ghi trong constants.php
-        $global_config['assets_cdn_url'] = !empty($global_config['assets_cdn']) ? $global_config['core_cdn_url'] : '';
+        // được gán cho giá trị $global_config['core_cdn_url'] ghi trong /config.php
+        $global_config['assets_cdn_url'] = !empty($global_config['assets_cdn']) ? (!empty($global_config['core_cdn_url']) ? $global_config['core_cdn_url'] : 'https://cdn.jsdelivr.net/gh/nukeviet/nukeviet/') : '';
 
         (!empty($global_config['nv_static_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['nv_static_url'])) && $global_config['nv_static_url'] = '//' . $global_config['nv_static_url'];
         (!empty($global_config['cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['cdn_url'])) && $global_config['cdn_url'] = '//' . $global_config['cdn_url'];

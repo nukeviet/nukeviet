@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -96,7 +96,23 @@ class UrlGetContents
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
         if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions, true) and $allow_url_fopen == 1) {
-            $res = get_headers($this->url_info['uri']);
+            if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
+                $context = stream_context_create([
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                    ],
+                ]);
+                $res = get_headers($this->url_info['uri'], 0, $context);
+            } else {
+                stream_context_set_default([
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                    ],
+                ]);
+                $res = get_headers($this->url_info['uri']);
+            }
         } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions, true) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions, true)) {
             $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
@@ -125,6 +141,8 @@ class UrlGetContents
 
             curl_setopt($curl, CURLOPT_TIMEOUT, 15);
             curl_setopt($curl, CURLOPT_USERAGENT, $agent);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
             $response = curl_exec($curl);
             curl_close($curl);
