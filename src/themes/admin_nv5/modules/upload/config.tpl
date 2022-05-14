@@ -96,7 +96,7 @@ $(document).on("nv.upload.ready", function() {
         path: '{$NV_UPLOADS_DIR}',
         currentpath: '{$NV_UPLOADS_DIR}',
         type: 'image',
-        area: '#upload_logo'
+        area: '#upload_logo',
     });
 });
 </script>

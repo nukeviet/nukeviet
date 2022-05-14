@@ -1635,6 +1635,10 @@ NVCoreFileBrowser.prototype.handleMenuSelect = function(element) {
         //
     }
 
+    self.trigger('picked', {
+        folder: (nv_base_siteurl + filepath),
+        file: (fullPath)
+    });
     $('#mdNVFileManagerPopup').modal('hide');
 }
 
@@ -3028,6 +3032,30 @@ NVCoreFileBrowser.prototype.decode = function(string, quote_style) {
     return string;
 }
 
+/*
+ * Gọi các event trong config và input area
+ */
+NVCoreFileBrowser.prototype.trigger = function(name, data) {
+    var self = this;
+    var element = self.firstData.area && $(self.firstData.area);
+
+    var handler = $.camelCase(
+        $.grep(['on', name], function(v) { return v }).join('-').toLowerCase()
+    ), event = $.Event(
+        ['nv', 'upload', name].join('.').toLowerCase(),
+        $.extend({relatedTarget: element}, {file_manager: self}, data)
+    );
+
+    if (typeof self.firstData[handler] === 'function') {
+        self.firstData[handler].call(this, event);
+    }
+
+    if (!element || !element.length) {
+        return;
+    }
+    element.trigger(event);
+}
+
 var NVLDATA = {
     support: false,
     init: function() {
@@ -3648,7 +3676,8 @@ function($) {
         alt: '', // Đối tượng trả về ALT image
         templateContainer: '<div id="mdNVFileManagerPopup" tabindex="-1" role="dialog" class="modal" data-backdrop="static"><div class="modal-dialog full-width modal-filemanager"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="fas fa-times"></span></button></div><div class="modal-body"></div></div></div></div>',
         templateContainerID: '#mdNVFileManagerPopup',
-        restype: 'filepath' // filepath|folderpath
+        restype: 'filepath', // filepath|folderpath
+        onPicked: null // Hàm xử lý khi chọn ảnh xong
     };
 
     /*
@@ -3664,7 +3693,8 @@ function($) {
             restype: self.options.restype,
             area: self.options.area,
             alt: self.options.alt,
-            imgfile: '' // File đang chọn
+            imgfile: '', // File đang chọn
+            onPicked: self.options.onPicked // Event khi chọn ảnh xong
         };
 
         if (data.area != '' && $(data.area).length == 1) {
