@@ -54,7 +54,7 @@ function set_ini_file(&$sys_info)
             $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
         }
     } elseif (strpos($_server_software[0], 'Microsoft-IIS') !== false and $_server_software[1] >= 7) {
-        if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
+        if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument') and !in_array('DOMDocument', $sys_info['disable_classes'], true)) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
         }
     } elseif (strpos($_server_software[0], 'nginx') !== false) {
@@ -107,13 +107,13 @@ function set_ini_file(&$sys_info)
 
     //support_cache
     $sys_info['support_cache'] = [];
-    if (class_exists('Memcached')) {
+    if (class_exists('Memcached') and !in_array('Memcached', $sys_info['disable_classes'], true)) {
         $sys_info['support_cache'][] = 'memcached';
     }
-    if (class_exists('Memcache')) {
+    if (class_exists('Memcache') and !in_array('Memcache', $sys_info['disable_classes'], true)) {
         $sys_info['support_cache'][] = 'memcache';
     }
-    if (class_exists('Redis')) {
+    if (class_exists('Redis') and !in_array('Redis', $sys_info['disable_classes'], true)) {
         $sys_info['support_cache'][] = 'redis';
     }
     $content_config .= "\$sys_info['support_cache'] = [" . ($sys_info['support_cache'] ? "'" . implode("', '", $sys_info['support_cache']) . "'" : '') . "];\n";

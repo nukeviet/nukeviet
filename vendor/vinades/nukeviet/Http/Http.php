@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -12,6 +12,8 @@
 namespace NukeViet\Http;
 
 use NukeViet\Core\Server;
+use NukeViet\Site;
+use TrueBV\Punycode;
 use ValueError;
 
 /**
@@ -41,11 +43,83 @@ class Http extends Server
     ];
 
     /**
+     * The Mozilla CA certificate store
+     */
+    public static $default_cacert = '';
+
+    /**
      * Error message and error code
      * Error code help user to show error message with optional language
      * Error message is default by english.
      */
     public static $error = [];
+
+    public static $http_response_status_codes = [
+        100 => 'Continue',
+        101 => 'Switching Protocols',
+        102 => 'Processing',
+        103 => 'Early Hints',
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+        207 => 'Multi-Status',
+        208 => 'Already Reported',
+        226 => 'IM Used',
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        306 => 'Unused',
+        307 => 'Temporary Redirect',
+        308 => 'Permanent Redirect',
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Payload Too Large',
+        414 => 'URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Range Not Satisfiable',
+        417 => 'Expectation Failed',
+        418 => 'I\'m a teapot',
+        421 => 'Misdirected Request',
+        422 => 'Unprocessable Entity',
+        423 => 'Locked',
+        424 => 'Failed Dependency',
+        425 => 'Too Early',
+        426 => 'Upgrade Required',
+        428 => 'Precondition Required',
+        429 => 'Too Many Requests',
+        431 => 'Request Header Fields Too Large',
+        451 => 'Unavailable For Legal Reasons',
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported',
+        506 => 'Variant Also Negotiates',
+        507 => 'Insufficient Storage',
+        508 => 'Loop Detected',
+        510 => 'Not Extended',
+        511 => 'Network Authentication Required',
+        520 => 'Something is wrong'
+    ];
 
     /**
      * __construct()
@@ -73,6 +147,9 @@ class Http extends Server
         if (!empty($config['site_charset'])) {
             Http::$site_config['site_charset'] = $config['site_charset'];
         }
+        if (!empty($config['default_cacert'])) {
+            Http::$default_cacert = $config['default_cacert'];
+        }
 
         // Find my domain
         parent::__construct();
@@ -96,14 +173,16 @@ class Http extends Server
      * @return mixed
      * @throws ValueError
      */
-    private function request($url, $args)
+    private static function request($url, $args)
     {
         $defaults = [
             'method' => 'GET',
+            'origin_url' => null,
             'timeout' => 10,
             'redirection' => 5,
+            'redirect_count' => 0,
             'requested' => 0,  // Number requested if redirection
-            'httpversion' => 1.0,
+            'httpversion' => '1.0',
             'user-agent' => 'NUKEVIET CMS ' . Http::$site_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5(Http::$site_config['sitekey']),
             'referer' => null,
             'reject_unsafe_urls' => false,
@@ -111,24 +190,28 @@ class Http extends Server
             'headers' => [],
             'cookies' => [],
             'body' => null,
+            'nobody' => false,
             'compress' => false,
             'decompress' => true,
             'sslverify' => true,
-            'sslcertificates' => $this->root_dir . '/includes/certificates/ca-bundle.crt',
+            'sslcertificates' => Http::$default_cacert,
             'stream' => false,
             'filename' => null,
             'limit_response_size' => null,
         ];
 
         // Get full args
-        $args = $this->build_args($args, $defaults);
+        $args = Http::build_args($args, $defaults);
+        if (empty($args['redirect_count'])) {
+            $args['origin_url'] = $url;
+        }
 
         // Get url info
-        $infoURL = parse_url($url);
+        $infoURL = Http::parse_url($url);
 
         // Check valid url
-        if (empty($url) or empty($infoURL['scheme'])) {
-            $this->set_error(1);
+        if (empty($url) or empty($infoURL)) {
+            Http::set_error(1);
 
             return false;
         }
@@ -142,12 +225,12 @@ class Http extends Server
          */
         //if( $this->is_blocking( $url ) )
         //{
-        //	$this->set_error(2);
+        //	Http::set_error(2);
         //	return false;
         //}
 
         // Determine if this request is to OUR install of NukeViet
-        $homeURL = parse_url(Http::$site_config['my_domain']);
+        $homeURL = Http::parse_url(Http::$site_config['my_domain']);
         $args['local'] = ($homeURL['host'] == $infoURL['host'] or 'localhost' == $infoURL['host']);
         unset($homeURL);
 
@@ -160,7 +243,7 @@ class Http extends Server
         if ($args['stream']) {
             $args['blocking'] = true;
             if (!@is_writable(dirname($args['filename']))) {
-                $this->set_error(3);
+                Http::set_error(3);
 
                 return false;
             }
@@ -172,8 +255,7 @@ class Http extends Server
         }
 
         if (!is_array($args['headers'])) {
-            $processedHeaders = Http::processHeaders($args['headers'], $url);
-            $args['headers'] = $processedHeaders['headers'];
+            $args['headers'] = !empty($args['headers']) ? Http::parse_headers($args['headers']) : [];
         }
 
         // Get User Agent
@@ -212,7 +294,7 @@ class Http extends Server
 
         if ((!is_null($args['body']) and '' != $args['body']) or $args['method'] == 'POST' or $args['method'] == 'PUT') {
             if (is_array($args['body']) or is_object($args['body'])) {
-                $args['body'] = http_build_query($args['body'], null, '&');
+                $args['body'] = http_build_query($args['body'], '', '&');
 
                 if (!isset($args['headers']['Content-Type'])) {
                     $args['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=' . Http::$site_config['site_charset'];
@@ -228,11 +310,11 @@ class Http extends Server
             }
         }
 
-        $response = $this->_dispatch_request($url, $args);
+        $response = Http::_dispatch_request($url, $args);
 
         Http::reset_mbstring_encoding();
 
-        if ($this->is_error($response)) {
+        if (Http::is_error($response)) {
             return $response;
         }
 
@@ -258,42 +340,12 @@ class Http extends Server
     }
 
     /**
-     * get_Env()
-     *
-     * @param string $key
-     * @return string
-     */
-    private function get_Env($key)
-    {
-        if (!is_array($key)) {
-            $key = [$key];
-        }
-
-        foreach ($key as $k) {
-            if (isset($_SERVER[$k])) {
-                return $_SERVER[$k];
-            }
-            if (isset($_ENV[$k])) {
-                return $_ENV[$k];
-            }
-            if (@getenv($k)) {
-                return @getenv($k);
-            }
-            if (function_exists('apache_getenv') and apache_getenv($k, true)) {
-                return apache_getenv($k, true);
-            }
-        }
-
-        return '';
-    }
-
-    /**
      * parse_str()
      *
      * @param mixed $str
      * @return array
      */
-    private function parse_str($str)
+    private static function parse_str($str)
     {
         $r = [];
         parse_str($str, $r);
@@ -326,8 +378,8 @@ class Http extends Server
             default: $message = 'There are some unknow errors had been occurred.';
         }
 
-        self::$error['code'] = $code;
-        self::$error['message'] = $message;
+        Http::$error['code'] = $code;
+        Http::$error['message'] = $message;
     }
 
     /**
@@ -337,14 +389,14 @@ class Http extends Server
      * @param mixed $args
      * @return mixed
      */
-    private function _dispatch_request($url, $args)
+    private static function _dispatch_request($url, $args)
     {
         static $transports = [];
 
-        $class = $this->_get_first_available_transport($args, $url);
+        $class = Http::_get_first_available_transport($args, $url);
 
         if (!$class) {
-            $this->set_error(4);
+            Http::set_error(4);
 
             return false;
         }
@@ -354,9 +406,7 @@ class Http extends Server
             $transports[$class] = new $class();
         }
 
-        $response = $transports[$class]->request($url, $args);
-
-        return $response;
+        return $transports[$class]->request($url, $args);
     }
 
     /**
@@ -423,7 +473,7 @@ class Http extends Server
 
         // Don't redirect if we've run out of redirects
         if ($args['redirection']-- <= 0) {
-            $this->set_error(5);
+            Http::set_error(5);
 
             return false;
         }
@@ -452,6 +502,8 @@ class Http extends Server
                 }
             }
         }
+
+        ++$args['redirect_count'];
 
         $http = new Http([], null);
 
@@ -536,7 +588,7 @@ class Http extends Server
      * @param mixed $resources
      * @return bool
      */
-    public function is_error($resources)
+    public static function is_error($resources)
     {
         if (is_object($resources) and isset($resources->error) and empty($resources->error)) {
             return false;
@@ -552,7 +604,7 @@ class Http extends Server
      * @param mixed|null $url
      * @return false|string
      */
-    public function _get_first_available_transport($args, $url = null)
+    public static function _get_first_available_transport($args, $url = null)
     {
         $request_order = ['Curl', 'Streams'];
 
@@ -583,7 +635,7 @@ class Http extends Server
         if (is_object($args)) {
             $args = get_object_vars($args);
         } elseif (!is_array($args)) {
-            $args = $this->parse_str($args);
+            $args = Http::parse_str($args);
         }
 
         return array_merge($defaults, $args);
@@ -611,60 +663,23 @@ class Http extends Server
      */
     public static function processHeaders($headers, $url = '')
     {
-        // Split headers, one per array element
-        if (is_string($headers)) {
-            $headers = str_replace("\r\n", "\n", $headers);
-            $headers = preg_replace('/\n[ \t]/', ' ', $headers);
-            $headers = explode("\n", $headers);
-        }
-
+        $newheaders = Http::parse_headers($headers);
         $response = [
-            'code' => 0,
-            'message' => ''
+            'code' => isset($newheaders['code']) ? $newheaders['code'] : 0,
+            'message' => isset($newheaders['message']) ? $newheaders['message'] : ''
         ];
 
-        // If a redirection has taken place, The headers for each page request may have been passed.
-        // In this case, determine the final HTTP header and parse from there.
-        for ($i = sizeof($headers) - 1; $i >= 0; --$i) {
-            if (!empty($headers[$i]) and strpos($headers[$i], ':') === false) {
-                $headers = array_splice($headers, $i);
-                break;
-            }
-        }
-
         $cookies = [];
-        $newheaders = [];
-        foreach ((array) $headers as $tempheader) {
-            if (empty($tempheader)) {
-                continue;
+        if (!empty($newheaders['set-cookie'])) {
+            if (!is_array($newheaders['set-cookie'])) {
+                $newheaders['set-cookie'] = [$newheaders['set-cookie']];
             }
-
-            if (strpos($tempheader, ':') === false) {
-                $stack = explode(' ', $tempheader, 3);
-                $stack[] = '';
-                list(, $response['code'], $response['message']) = $stack;
-                continue;
-            }
-
-            list($key, $value) = explode(':', $tempheader, 2);
-
-            $key = strtolower($key);
-            $value = trim($value);
-
-            if (isset($newheaders[$key])) {
-                if (!is_array($newheaders[$key])) {
-                    $newheaders[$key] = [$newheaders[$key]];
-                }
-
-                $newheaders[$key][] = $value;
-            } else {
-                $newheaders[$key] = $value;
-            }
-
-            if ('set-cookie' == $key) {
+            foreach ($newheaders['set-cookie'] as $value) {
                 $cookies[] = new Cookie($value, $url);
             }
         }
+
+        unset($newheaders['code'], $newheaders['message'], $newheaders['set-cookie']);
 
         return [
             'response' => $response,
@@ -699,22 +714,176 @@ class Http extends Server
     }
 
     /**
-     * is_ip_address()
+     * filter_domain()
      *
-     * @param mixed $maybe_ip
-     * @return false|int
+     * @param mixed $domain
+     * @return mixed
      */
-    public static function is_ip_address($maybe_ip)
+    public static function filter_domain($domain)
     {
-        if (preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $maybe_ip)) {
-            return 4;
+        if (preg_match("/^([a-z0-9](-*[a-z0-9])*)(\.([a-z0-9](-*[a-z0-9])*))*$/i", $domain) and preg_match('/^.{1,253}$/', $domain) and preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $domain)) {
+            return $domain;
         }
 
-        if (strpos($maybe_ip, ':') !== false and preg_match('/^(((?=.*(::))(?!.*\3.+\3))\3?|([\dA-F]{1,4}(\3|:\b|$)|\2))(?4){5}((?4){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})$/i', trim($maybe_ip, ' []'))) {
-            return 6;
+        if ($domain == 'localhost') {
+            return $domain;
         }
 
-        return false;
+        if (filter_var($domain, FILTER_VALIDATE_IP)) {
+            return $domain;
+        }
+
+        if (!empty($domain)) {
+            if (function_exists('idn_to_ascii')) {
+                $domain = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+            } else {
+                $Punycode = new Punycode();
+                try {
+                    $domain = $Punycode->encode($domain);
+                } catch (\Exception $e) {
+                    $domain = '';
+                }
+            }
+
+            if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain)) {
+                return $domain;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * parse_headers()
+     *
+     * @param mixed $response
+     * @return array
+     */
+    public static function parse_headers($response)
+    {
+        if (is_string($response)) {
+            // Split headers, one per array element
+            $header_text = str_replace("\r\n", "\n", $response);
+            $header_text = preg_replace('/\n[ \t]/', ' ', $header_text);
+            $header_text = explode("\n", $header_text);
+        } else {
+            $header_text = $response;
+        }
+
+        // If a redirection has taken place, The headers for each page request may have been passed.
+        // In this case, determine the final HTTP header and parse from there.
+        for ($i = sizeof($header_text) - 1; $i >= 0; --$i) {
+            if (!empty($header_text[$i]) and strpos($header_text[$i], ':') === false) {
+                $header_text = array_splice($header_text, $i);
+                break;
+            }
+        }
+
+        $headers = [];
+        foreach ($header_text as $line) {
+            if (stripos($line, 'HTTP/') === 0) {
+                $stack = explode(' ', $line, 3);
+                $headers['code'] = !empty($stack[1]) ? (int) $stack[1] : 0;
+                $headers['message'] = !empty($stack[2]) ? $stack[2] : '';
+                if (empty($headers['message']) or $headers['message'] == $headers['code']) {
+                    if (!empty(Http::$http_response_status_codes[$headers['code']])) {
+                        $headers['message'] = Http::$http_response_status_codes[$headers['code']];
+                    }
+                }
+            } else {
+                unset($output);
+                if (preg_match('/^([a-z][a-z0-9\-]*)\s*\:\s*(.*)$/i', $line, $output)) {
+                    $key = strtolower(trim($output[1]));
+                    if (!empty($key)) {
+                        if (isset($headers[$key])) {
+                            if (!is_array($headers[$key])) {
+                                $headers[$key] = [$headers[$key]];
+                            }
+
+                            $headers[$key][] = trim($output[2]);
+                        } else {
+                            $headers[$key] = trim($output[2]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
+     * parse_url()
+     *
+     * @param mixed $url
+     * @param bool  $return_bool
+     * @return array|bool|int|string
+     */
+    public static function parse_url($url, $return_bool = false)
+    {
+        if (!($parts = parse_url($url))) {
+            return false;
+        }
+
+        if (empty($parts['scheme']) or !preg_match('/^(https?|ssl)$/i', $parts['scheme'])) {
+            return false;
+        }
+
+        if (empty($parts['host'])) {
+            return false;
+        }
+
+        $domain = Http::filter_domain($parts['host']);
+        if (empty($domain)) {
+            return false;
+        }
+
+        if (isset($parts['user']) and !preg_match('/^([0-9a-z\-]|[\_])*$/i', $parts['user'])) {
+            return false;
+        }
+
+        if (isset($parts['pass']) and !preg_match('/^([0-9a-z\-]|[\_])*$/i', $parts['pass'])) {
+            return false;
+        }
+
+        if (isset($parts['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!\:]*$/i', $parts['path'])) {
+            return false;
+        }
+
+        if (isset($parts['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/i', $parts['query'])) {
+            return false;
+        }
+
+        if ($return_bool) {
+            return true;
+        }
+
+        if (isset($parts['path'])) {
+            if (substr($parts['path'], 0, 1) != '/') {
+                $parts['path'] = '/' . $parts['path'];
+            }
+            $parts['path'] = explode('/', $parts['path']);
+            $parts['path'] = array_map('rawurlencode', $parts['path']);
+            $parts['path'] = implode('/', $parts['path']);
+        } else {
+            $parts['path'] = '/';
+        }
+
+        $parts['login'] = isset($parts['user']) ? ($parts['user'] . (isset($parts['pass']) ? ':' . $parts['pass'] : '') . '@') : '';
+        $parts['file'] = explode('/', $parts['path']);
+        $parts['file'] = array_pop($parts['file']);
+        $parts['dir'] = substr($parts['path'], 0, strrpos($parts['path'], '/'));
+        $parts['base'] = $parts['scheme'] . '://' . $parts['host'] . $parts['dir'];
+        $parts['uri'] = $parts['scheme'] . '://' . $parts['login'] . $parts['host'];
+        if (!empty($parts['port']) and $parts['port'] != 80 and $parts['port'] != 443) {
+            $parts['uri'] .= ':' . $parts['port'];
+        }
+        $parts['uri'] .= $parts['path'];
+        if (!empty($parts['query'])) {
+            $parts['uri'] .= '?' . $parts['query'];
+        }
+
+        return $parts;
     }
 
     /**
@@ -728,9 +897,9 @@ class Http extends Server
     public function post($url, $args = [])
     {
         $defaults = ['method' => 'POST'];
-        $args = $this->build_args($args, $defaults);
+        $args = Http::build_args($args, $defaults);
 
-        return $this->request($url, $args);
+        return Http::request($url, $args);
     }
 
     /**
@@ -744,9 +913,9 @@ class Http extends Server
     public function get($url, $args = [])
     {
         $defaults = ['method' => 'GET'];
-        $args = $this->build_args($args, $defaults);
+        $args = Http::build_args($args, $defaults);
 
-        return $this->request($url, $args);
+        return Http::request($url, $args);
     }
 
     /**
@@ -760,8 +929,8 @@ class Http extends Server
     public function head($url, $args = [])
     {
         $defaults = ['method' => 'HEAD'];
-        $args = $this->build_args($args, $defaults);
+        $args = Http::build_args($args, $defaults);
 
-        return $this->request($url, $args);
+        return Http::request($url, $args);
     }
 }

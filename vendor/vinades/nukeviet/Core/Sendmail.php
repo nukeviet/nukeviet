@@ -4,13 +4,14 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Core;
 
+use NukeViet\Site;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -78,13 +79,7 @@ class Sendmail extends PHPMailer
         } elseif ($mailer_mode == 'sendmail') {
             $this->IsSendmail();
         } elseif ($mailer_mode == 'mail') {
-            // disable_functions
-            $disable_functions = (($disable_functions = ini_get('disable_functions')) != '' and $disable_functions != false) ? array_map('trim', preg_split("/[\s,]+/", $disable_functions)) : [];
-
-            if (extension_loaded('suhosin')) {
-                $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-            }
-            if (!in_array('mail', $disable_functions, true)) {
+            if (Site::function_exists('mail')) {
                 $this->IsMail();
             } else {
                 $this->Mailer = 'no';

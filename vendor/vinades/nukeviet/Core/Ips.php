@@ -11,6 +11,8 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Site;
+
 /**
  * NukeViet\Core\Ips
  *
@@ -55,37 +57,6 @@ class Ips
     }
 
     /**
-     * nv_getenv()
-     * Hàm tĩnh riêng của class
-     *
-     * @param string $key
-     * @return string
-     */
-    private static function nv_getenv($key)
-    {
-        if (isset($_SERVER[$key])) {
-            if (strpos($_SERVER[$key], ',')) {
-                $_arr = explode(',', $_SERVER[$key]);
-
-                return trim($_arr[0]);
-            }
-
-            return $_SERVER[$key];
-        }
-        if (isset($_ENV[$key])) {
-            return $_ENV[$key];
-        }
-        if (@getenv($key)) {
-            return @getenv($key);
-        }
-        if (function_exists('apache_getenv') and apache_getenv($key, true)) {
-            return apache_getenv($key, true);
-        }
-
-        return '';
-    }
-
-    /**
      * getIp()
      * Hàm tĩnh riêng của class
      *
@@ -94,7 +65,7 @@ class Ips
      */
     private static function getIp($variable_name)
     {
-        $ip = self::nv_getenv($variable_name);
+        $ip = Site::getEnv($variable_name);
 
         return ($ip and filter_var($ip, FILTER_VALIDATE_IP)) ? $ip : false;
     }

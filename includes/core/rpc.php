@@ -48,7 +48,7 @@ function nv_getRPC($url, $data)
             $proxy = $proxy[rand(0, count($proxy) - 1)];
         }
     }
-    if (function_exists('fsockopen') and !in_array('fsockopen', $sys_info['disable_functions'], true)) {
+    if (nv_function_exists('fsockopen')) {
         if (!empty($proxy)) {
             $fp = @fsockopen($proxy[1], $proxy[2], $errno, $errstr, 10);
             if ($fp) {
@@ -127,7 +127,7 @@ function nv_getRPC($url, $data)
         return [3, $lang_module['rpc_error_unknown']];
     }
 
-    if (!function_exists('curl_init') or in_array('curl_init', $sys_info['disable_functions'], true) or !function_exists('curl_exec') or in_array('curl_exec', $sys_info['disable_functions'], true)) {
+    if (!nv_function_exists('curl_init') or !nv_function_exists('curl_exec')) {
         return [3, $lang_module['rpc_error_unknown']];
     }
 

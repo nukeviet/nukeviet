@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -95,6 +95,33 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         return $return;
     }
 
+    function change_description($description, $alt = '')
+    {
+        if (!empty($description)) {
+            $description = trim(strip_tags($description, '<img><br>'));
+            // Remove all attributes from html tags
+            $description = preg_replace("/<([a-z][a-z0-9]*)(?:[^>]*(\ssrc=['\"][^'\"]*['\"]))?[^>]*?(\/?)>/i", '<$1$2$3>', $description);
+            $description = preg_replace('#<img.+src="([^"]+)"[^>]*>#i', '<img src="' . ASSETS_STATIC_URL . '/images/pix.svg" style="background-image:url($1)" alt="' . $alt . '" width="120" height="80"/>', $description);
+            $description = preg_replace("/[\r\n]+/", ' ', $description);
+            $description = preg_replace("/(\&nbsp\;|\s)+/", ' ', $description);
+            $description = nv_clean60($description, 500, false);
+        }
+
+        return $description;
+    }
+
+    function change_link($link)
+    {
+        if (!empty($link)) {
+            $link = trim(strip_tags($link));
+            if (!nv_is_url($link)) {
+                return '';
+            }
+        }
+
+        return $link;
+    }
+
     /**
      * nv_get_rss()
      *
@@ -103,39 +130,57 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
      */
     function nv_get_rss($url)
     {
-        global $global_config, $nv_Cache;
+        global $nv_Cache;
         $array_data = [];
         $cache_file = NV_LANG_DATA . '_' . md5($url) . '_' . NV_CACHE_PREFIX . '.cache';
         if (($cache = $nv_Cache->getItem('rss', $cache_file, 3600)) != false) {
-            $array_data = unserialize($cache);
+            $array_data = json_decode($cache, true);
         } else {
-            $getContent = new NukeViet\Client\UrlGetContents($global_config);
-            $xml_source = $getContent->get($url);
-            $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
-            $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
-            if ($xml = simplexml_load_string($xml_source)) {
-                $a = 0;
-                if (isset($xml->channel)) {
-                    foreach ($xml->channel->item as $item) {
-                        $array_data[$a]['title'] = strip_tags($item->title);
-                        $array_data[$a]['description'] = strip_tags($item->description, $allowed_html_tags);
-                        $array_data[$a]['link'] = strip_tags($item->link);
-                        $array_data[$a]['pubDate'] = nv_date('l - d/m/Y H:i', strtotime($item->pubDate));
-                        ++$a;
+            $xml_source = url_get_contents($url);
+            if (!empty($xml_source)) {
+                $feed = new DOMDocument('1.0', 'utf-8');
+                libxml_use_internal_errors(true);
+                if ($feed->loadXML($xml_source)) {
+                    if ($feed->getElementsByTagName('feed')->length > 0 && $feed->getElementsByTagName('rss')->length <= 0) {
+                        foreach ($feed->getElementsByTagName('entry') as $item) {
+                            $links = $item->getElementsByTagName('link');
+                            $itemlLink = $links->item(0)->getAttribute('href');
+                            if ($item->getElementsByTagName('content')->length) {
+                                $description = $item->getElementsByTagName('content')->item(0)->nodeValue;
+                            } elseif ($item->getElementsByTagName('summary')->length) {
+                                $description = $item->getElementsByTagName('summary')->item(0)->nodeValue;
+                            }
+                            $title = trim(strip_tags($item->getElementsByTagName('title')->item(0)->nodeValue));
+                            $pubtime = strtotime($item->getElementsByTagName('updated')->item(0)->nodeValue);
+                            $key = $pubtime . '-' . $title;
+
+                            $array_data[$key] = [
+                                'title' => $title,
+                                'description' => change_description($description, $title),
+                                'pubtime' => $pubtime,
+                                'link' => change_link($itemlLink)
+                            ];
+                        }
+                    } else {
+                        foreach ($feed->getElementsByTagName('item') as $item) {
+                            $title = trim(strip_tags($item->getElementsByTagName('title')->item(0)->nodeValue));
+                            $pubtime = strtotime($item->getElementsByTagName('pubDate')->item(0)->nodeValue);
+                            $key = $pubtime . '-' . $title;
+
+                            $array_data[$key] = [
+                                'title' => $title,
+                                'description' => change_description($item->getElementsByTagName('description')->item(0)->nodeValue, $title),
+                                'pubtime' => $pubtime,
+                                'link' => change_link($item->getElementsByTagName('link')->item(0)->nodeValue)
+                            ];
+                        }
                     }
-                } elseif (isset($xml->entry)) {
-                    foreach ($xml->entry as $item) {
-                        $urlAtt = $item->link->attributes();
-                        $url = $urlAtt['href'];
-                        $array_data[$a]['title'] = strip_tags($item->title);
-                        $array_data[$a]['description'] = strip_tags($item->content, $allowed_html_tags);
-                        $array_data[$a]['link'] = strip_tags($urlAtt['href']);
-                        $array_data[$a]['pubDate'] = nv_date('l - d/m/Y H:i', strtotime($item->updated));
-                        ++$a;
-                    }
+
+                    krsort($array_data);
                 }
             }
-            $cache = serialize($array_data);
+
+            $cache = json_encode(array_values($array_data));
             $nv_Cache->setItem('rss', $cache_file, $cache);
         }
 
@@ -166,7 +211,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
         $title_length = isset($block_config['title_length']) ? (int) ($block_config['title_length']) : 0;
         foreach ($array_rrs as $item) {
             if ($a <= $block_config['number']) {
-                $item['description'] = ($block_config['ishtml']) ? $item['description'] : strip_tags($item['description']);
+                $item['description'] = ($block_config['ishtml']) ? $item['description'] : (!empty($item['description']) ? strip_tags($item['description']) : '');
                 $item['target'] = ($block_config['istarget']) ? ' data-target="_blank"' : '';
                 $item['class'] = ($a % 2 == 0) ? 'second' : '';
                 if ($title_length > 0) {
@@ -174,11 +219,12 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
                 } else {
                     $item['text'] = $item['title'];
                 }
+                $item['pubDate'] = !empty($item['pubtime']) ? nv_date('l - d/m/Y H:i', $item['pubtime']) : '';
                 $xtpl->assign('DATA', $item);
-                if ($block_config['isdescription']) {
+                if (!empty($item['description']) and $block_config['isdescription']) {
                     $xtpl->parse('main.loop.description');
                 }
-                if ($block_config['ispubdate']) {
+                if (!empty($item['pubDate']) and $block_config['ispubdate']) {
                     $xtpl->parse('main.loop.pubDate');
                 }
                 $xtpl->parse('main.loop');

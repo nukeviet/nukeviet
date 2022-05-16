@@ -11,6 +11,8 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Site;
+
 /**
  * NukeViet\Core\Server
  *
@@ -79,7 +81,7 @@ class Server
     public function __construct()
     {
         // Xác định host của máy chủ website
-        $this->server_host = $this->original_host = $this->standardizeHost((string) $this->getEnv(['HTTP_HOST', 'SERVER_NAME', 'Host']));
+        $this->server_host = $this->original_host = $this->standardizeHost(Site::getEnv(['HTTP_HOST', 'SERVER_NAME', 'Host']));
         $_SERVER['SERVER_NAME'] = $this->server_host;
 
         // Xác định giao thức máy chủ website
@@ -104,16 +106,16 @@ class Server
          * Xác định lại host, port, protocol phía client nếu có Forwarded
          * Ví dụ Server thiết lập HTTP proxy, load balancer
          */
-        $original_host = $this->getEnv(['HTTP_X_FORWARDED_HOST', 'X-Forwarded-Host']);
+        $original_host = Site::getEnv(['HTTP_X_FORWARDED_HOST', 'X-Forwarded-Host'], false);
         $original_protocol = false;
         if (isset($_SERVER['HTTP_CF_VISITOR'])) {
             $cf_visitor = json_decode($_SERVER['HTTP_CF_VISITOR'], true);
             !empty($cf_visitor['scheme']) && $original_protocol = $cf_visitor['scheme'];
         }
         if (empty($original_protocol)) {
-            $original_protocol = $this->getEnv(['HTTP_X_FORWARDED_PROTO', 'X-Forwarded-Proto']);
+            $original_protocol = Site::getEnv(['HTTP_X_FORWARDED_PROTO', 'X-Forwarded-Proto'], false);
         }
-        $original_port = $this->getEnv(['HTTP_X_FORWARDED_PORT', 'X-Forwarded-Port']);
+        $original_port = Site::getEnv(['HTTP_X_FORWARDED_PORT', 'X-Forwarded-Port'], false);
         // Nếu có FORWARDED_HOST hoặc FORWARDED_PROTO
         if ($original_host !== false or $original_protocol !== false) {
             if ($original_host !== false) {
@@ -161,35 +163,6 @@ class Server
         }
 
         $this->sitePath = $site_path;
-    }
-
-    /**
-     * getEnv()
-     *
-     * @param string $key
-     * @return string
-     */
-    protected function getEnv($key)
-    {
-        if (!is_array($key)) {
-            $key = [$key];
-        }
-        foreach ($key as $k) {
-            if (isset($_SERVER[$k])) {
-                return $_SERVER[$k];
-            }
-            if (isset($_ENV[$k])) {
-                return $_ENV[$k];
-            }
-            if (@getenv($k)) {
-                return @getenv($k);
-            }
-            if (function_exists('apache_getenv') and apache_getenv($k, true)) {
-                return apache_getenv($k, true);
-            }
-        }
-
-        return false;
     }
 
     /**

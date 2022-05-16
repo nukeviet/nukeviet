@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -22,14 +22,8 @@ use Memcached as GMemcached;
  * @version 4.5.00
  * @access public
  */
-class Memcached
+class Memcached extends Cache
 {
-    private $_Lang = 'vi';
-
-    private $_Cache_Prefix = '';
-
-    private $_Db;
-
     private $_Cache;
 
     /**
@@ -42,8 +36,8 @@ class Memcached
      */
     public function __construct($Host, $Port, $Lang, $Cache_Prefix)
     {
-        $this->_Lang = $Lang;
-        $this->_Cache_Prefix = $Cache_Prefix;
+        parent::__construct($Lang, $Cache_Prefix);
+
         $this->_Cache = new GMemcached();
         $this->_Cache->addServer($Host, $Port);
     }
@@ -51,9 +45,8 @@ class Memcached
     /**
      * delAll()
      *
-     * @param bool $sys
      */
-    public function delAll($sys = true)
+    public function delAll()
     {
         $this->_Cache->flush();
     }
@@ -62,9 +55,8 @@ class Memcached
      * delMod()
      *
      * @param string $module_name
-     * @param string $lang
      */
-    public function delMod($module_name, $lang = '')
+    public function delMod($module_name)
     {
         $AllKeys = $this->_Cache->getAllKeys();
         foreach ($AllKeys as $_key) {
@@ -79,10 +71,9 @@ class Memcached
      *
      * @param string $module_name
      * @param string $filename
-     * @param int    $ttl
      * @return mixed
      */
-    public function getItem($module_name, $filename, $ttl = 0)
+    public function getItem($module_name, $filename)
     {
         // Note: $ttl not check in Memcached cache
         return $this->_Cache->get($module_name . '_' . md5($filename));
@@ -103,16 +94,6 @@ class Memcached
     }
 
     /**
-     * setDb()
-     *
-     * @param mixed $db
-     */
-    public function setDb($db)
-    {
-        $this->_Db = $db;
-    }
-
-    /**
      * db()
      *
      * @param string $sql
@@ -124,10 +105,8 @@ class Memcached
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
-        $_rows = [];
-
         if (empty($sql)) {
-            return $_rows;
+            return [];
         }
 
         if (empty($lang)) {
@@ -136,19 +115,18 @@ class Memcached
 
         $cache_key = $modname . '_' . $lang . '_' . md5($sql . '_' . $this->_Cache_Prefix);
 
-        if (!($_rows = $this->_Cache->get($cache_key))) {
-            if (($result = $this->_Db->query($sql)) !== false) {
-                $a = 0;
-                while ($row = $result->fetch()) {
-                    $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
-                    $_rows[$key2] = $row;
-                    ++$a;
-                }
-                $result->closeCursor();
-                $this->_Cache->set($cache_key, $_rows, $ttl);
-            }
+        $list = $this->_Cache->get($cache_key);
+        if ($list) {
+            return $list;
         }
 
-        return $_rows;
+        $list = parent::getList($sql, $key);
+        if ($list === false) {
+            return [];
+        }
+
+        $this->_Cache->set($cache_key, $list, $ttl);
+
+        return $list;
     }
 }

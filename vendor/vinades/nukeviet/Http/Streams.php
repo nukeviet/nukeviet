@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -36,16 +36,22 @@ class Streams
     {
         $defaults = [
             'method' => 'GET',
+            'origin_url' => null,
             'timeout' => 5,
             'redirection' => 5,
+            'redirect_count' => 0,
             'httpversion' => '1.0',
             'blocking' => true,
             'headers' => [],
             'body' => null,
+            'nobody' => false,
             'cookies' => []
         ];
 
         $args = Http::build_args($args, $defaults);
+        if (empty($args['redirect_count'])) {
+            $args['origin_url'] = $url;
+        }
 
         // Get user agent
         if (isset($args['headers']['User-Agent'])) {
@@ -102,6 +108,9 @@ class Streams
 
         $is_local = (isset($args['local']) and $args['local']);
         $ssl_verify = (isset($args['sslverify']) and $args['sslverify']);
+        if ($ssl_verify and empty($args['sslcertificates'])) {
+            $args['sslcertificates'] = Http::$default_cacert;
+        }
 
         // NukeViet has no proxy setup
         $context = stream_context_create([
@@ -112,7 +121,7 @@ class Streams
                 'SNI_enabled' => true,
                 'cafile' => $args['sslcertificates'],
                 'allow_self_signed' => !$ssl_verify,
-            ]
+            ],
         ]);
 
         $timeout = (int) floor($args['timeout']);
@@ -306,6 +315,12 @@ class Streams
         fclose($handle);
 
         $arrHeaders = Http::processHeaders($process['headers'], $url);
+        $arrHeaders['response']['origin_url'] = $args['origin_url'];
+        $arrHeaders['response']['redirect_url'] = $url != $args['origin_url'] ? $url : '';
+        $arrHeaders['response']['redirect_count'] = $args['redirect_count'];
+
+        ksort($arrHeaders['headers']);
+        ksort($arrHeaders['response']);
 
         $response = [
             'headers' => $arrHeaders['headers'],
@@ -320,20 +335,24 @@ class Streams
             return $redirect_response;
         }
 
-        // If the body was chunk encoded, then decode it.
-        if (!empty($process['body']) and isset($arrHeaders['headers']['transfer-encoding']) and 'chunked' == $arrHeaders['headers']['transfer-encoding']) {
-            $process['body'] = Http::chunkTransferDecode($process['body']);
-        }
+        if (!$args['nobody']) {
+            // If the body was chunk encoded, then decode it.
+            if (!empty($process['body']) and isset($arrHeaders['headers']['transfer-encoding']) and 'chunked' == $arrHeaders['headers']['transfer-encoding']) {
+                $process['body'] = Http::chunkTransferDecode($process['body']);
+            }
 
-        if ($args['decompress'] === true and Encoding::should_decode($arrHeaders['headers']) === true) {
-            $process['body'] = Encoding::decompress($process['body']);
-        }
+            if ($args['decompress'] === true and Encoding::should_decode($arrHeaders['headers']) === true) {
+                $process['body'] = Encoding::decompress($process['body']);
+            }
 
-        if (isset($args['limit_response_size']) and strlen($process['body']) > $args['limit_response_size']) {
-            $process['body'] = substr($process['body'], 0, $args['limit_response_size']);
-        }
+            if (isset($args['limit_response_size']) and strlen($process['body']) > $args['limit_response_size']) {
+                $process['body'] = substr($process['body'], 0, $args['limit_response_size']);
+            }
 
-        $response['body'] = str_replace("\xEF\xBB\xBF", '', $process['body']);
+            $response['body'] = str_replace("\xEF\xBB\xBF", '', $process['body']);
+        } else {
+            $response['body'] = '';
+        }
 
         return $response;
     }
@@ -359,7 +378,7 @@ class Streams
         }
 
         // If the request is being made to an IP address, we'll validate against IP fields in the cert (if they exist)
-        $host_type = (Http::is_ip_address($host) ? 'ip' : 'dns');
+        $host_type = (filter_var($host, FILTER_VALIDATE_IP) ? 'ip' : 'dns');
 
         $certificate_hostnames = [];
 

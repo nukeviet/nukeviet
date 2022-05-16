@@ -367,6 +367,19 @@ $lang_global['custom_range'] = 'Khác';
 $lang_global['content_ssl'] = 'Trang này không được mã hóa cho việc trao đổi an toàn dữ liệu. Tên người dùng, mật khẩu và bất kỳ thông tin nào khác sẽ được gửi dưới dạng văn bản nhìn thấy được. Hãy cân nhắc trước khi đăng nhập.';
 $lang_global['warning_ssl'] = 'Cảnh báo';
 
+$lang_global['error_code_1'] = 'Địa chỉ truy vấn không hợp lệ, vui lòng kiểm tra lại';
+$lang_global['error_code_2'] = 'Giao thức HTTP bị cấm đối với truy vấn này.';
+$lang_global['error_code_3'] = 'Thư mục chứa tệp tin sẽ được lưu không thể ghi được.';
+$lang_global['error_code_4'] = 'Không có tiện ích nào hỗ trợ giao thức HTTP.';
+$lang_global['error_code_5'] = 'Có quá nhiều chuyển hướng xảy ra.';
+$lang_global['error_code_6'] = 'Chứng chỉ SSL không thể kiểm tra được.';
+$lang_global['error_code_7'] = 'Truy vấn HTTP thất bại.';
+$lang_global['error_code_8'] = 'Không thể lưu dữ liệu vào tệp tin tạm thời.';
+$lang_global['error_code_9'] = 'Hàm xử lý fopen() thất bại đối với tệp tin.';
+$lang_global['error_code_10'] = 'Truy vấn HTTP bằng Curl thất bại.';
+$lang_global['error_code_11'] = 'Có một lỗi không xác định đã xảy ra.';
+$lang_global['error_valid_response'] = 'Dữ liệu trả về không hợp chuẩn.';
+
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';
 $lang_global['country_AF'] = 'Afghanistan';

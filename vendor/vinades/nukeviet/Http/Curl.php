@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -68,16 +68,22 @@ class Curl
     {
         $defaults = [
             'method' => 'GET',
+            'origin_url' => null,
             'timeout' => 5,
             'redirection' => 5,
+            'redirect_count' => 0,
             'httpversion' => '1.0',
             'blocking' => true,
             'headers' => [],
             'body' => null,
+            'nobody' => false,
             'cookies' => []
         ];
 
         $args = Http::build_args($args, $defaults);
+        if (empty($args['redirect_count'])) {
+            $args['origin_url'] = $url;
+        }
 
         // Get User Agent
         if (isset($args['headers']['User-Agent'])) {
@@ -99,7 +105,6 @@ class Curl
 
         // Construct Cookie: header if any cookies are set.
         Http::buildCookieHeader($args);
-
         $handle = curl_init();
 
         /*
@@ -128,7 +133,7 @@ class Curl
             } else {
                 $cainfo = ini_get('curl.cainfo');
                 if (empty($cainfo)) {
-                    $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+                    $cainfo = Http::$default_cacert;
                 }
             }
             $ssl_verify = !empty($cainfo);
@@ -185,6 +190,10 @@ class Curl
                 }
 
                 break;
+        }
+
+        if ($args['method'] != 'HEAD' and $args['nobody']) {
+            curl_setopt($handle, CURLOPT_NOBODY, true);
         }
 
         if ($args['blocking'] === true) {
@@ -251,7 +260,22 @@ class Curl
 
             curl_close($handle);
 
-            return ['headers' => [], 'body' => '', 'response' => ['code' => false, 'message' => false], 'cookies' => []];
+            $response_return = [
+                'origin_url' => $args['origin_url'],
+                'redirect_url' => $url != $args['origin_url'] ? $url : '',
+                'redirect_count' => $args['redirect_count'],
+                'code' => false,
+                'message' => false
+            ];
+
+            ksort($response_return);
+
+            return [
+                'headers' => [],
+                'body' => '',
+                'response' => $response_return,
+                'cookies' => []
+            ];
         }
 
         $theResponse = curl_exec($handle);
@@ -265,6 +289,10 @@ class Curl
 
         // If an error occured, or, no response
         if ($curl_error or (strlen($theBody) == 0 and empty($theHeaders['headers']))) {
+            if ($curl_error) {
+                $this->error[$curl_error] = curl_strerror($curl_error);
+            }
+
             if (CURLE_WRITE_ERROR /* 23 */ == $curl_error and $args['stream']) {
                 fclose($this->stream_handle);
 
@@ -273,7 +301,7 @@ class Curl
                 return $this;
             }
 
-            if ($curl_error = curl_error($handle)) {
+            if ($curl_error) {
                 curl_close($handle);
 
                 Http::set_error(11);
@@ -291,14 +319,20 @@ class Curl
         }
 
         $response = [];
+        $response['origin_url'] = $args['origin_url'];
+        $response['redirect_url'] = $url != $args['origin_url'] ? $url : '';
+        $response['redirect_count'] = $args['redirect_count'];
         $response['code'] = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        $response['message'] = $response['code'];
+        $response['message'] = isset(Http::$http_response_status_codes[$response['code']]) ? Http::$http_response_status_codes[$response['code']] : $response['code'];
 
         curl_close($handle);
 
         if (!empty($args['stream'])) {
             fclose($this->stream_handle);
         }
+
+        ksort($theHeaders['headers']);
+        ksort($response);
 
         $response = [
             'headers' => $theHeaders['headers'],

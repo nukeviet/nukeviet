@@ -11,6 +11,8 @@
 
 namespace NukeViet\Core;
 
+use NukeViet\Site;
+
 /**
  * NukeViet\Core\Request
  *
@@ -305,35 +307,6 @@ class Request
     }
 
     /**
-     * get_Env()
-     *
-     * @param string $key
-     * @return string
-     */
-    private function get_Env($key)
-    {
-        if (!is_array($key)) {
-            $key = [$key];
-        }
-        foreach ($key as $k) {
-            if (isset($_SERVER[$k])) {
-                return $_SERVER[$k];
-            }
-            if (isset($_ENV[$k])) {
-                return $_ENV[$k];
-            }
-            if (@getenv($k)) {
-                return @getenv($k);
-            }
-            if (function_exists('apache_getenv') and apache_getenv($k, true)) {
-                return apache_getenv($k, true);
-            }
-        }
-
-        return '';
-    }
-
-    /**
      * Initialize()
      *
      * @param \NukeViet\Core\Server $nv_Server
@@ -394,8 +367,8 @@ class Request
             $_SERVER['DOCUMENT_ROOT'] = $doc_root;
         }
         $_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
-        $_SERVER['SERVER_PORT'] = $this->get_Env('SERVER_PORT');
-        $_SERVER['SERVER_PROTOCOL'] = $this->get_Env('SERVER_PROTOCOL');
+        $_SERVER['SERVER_PORT'] = Site::getEnv('SERVER_PORT');
+        $_SERVER['SERVER_PROTOCOL'] = Site::getEnv('SERVER_PROTOCOL');
 
         if (defined('NV_SERVER_NAME')) {
             $this->server_name = NV_SERVER_NAME;
@@ -427,12 +400,12 @@ class Request
         $this->site_url = $this->my_current_domain . $this->base_siteurl;
         $this->standardizeReferer();
         $this->standardizeOrigin();
-        $this->method = strtoupper($this->get_Env(['REQUEST_METHOD', 'Method']));
+        $this->method = strtoupper(Site::getEnv(['REQUEST_METHOD', 'Method']));
 
         // CORS handle
         if (!empty($this->origin)) {
             $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
-            $hasControlRequestHeader = $this->get_Env(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
+            $hasControlRequestHeader = Site::getEnv(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
 
             foreach ($this->corsHeaders as $header => $value) {
                 header($header . ': ' . $value);
@@ -449,7 +422,7 @@ class Request
             exit(0);
         }
 
-        $user_agent = (string) $this->get_Env('HTTP_USER_AGENT');
+        $user_agent = (string) Site::getEnv('HTTP_USER_AGENT');
         $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
         if (!empty($user_agent)) {
             $user_agent = trim($user_agent);
@@ -506,7 +479,7 @@ class Request
      */
     private function standardizeOrigin()
     {
-        $this->origin = $this->get_Env(['HTTP_ORIGIN', 'Origin']);
+        $this->origin = Site::getEnv(['HTTP_ORIGIN', 'Origin']);
         if (!empty($this->origin)) {
             $origin = parse_url($this->origin);
             if (isset($origin['scheme']) and in_array($origin['scheme'], ['http', 'https', 'ftp', 'gopher'], true) and isset($origin['host'])) {
@@ -540,7 +513,7 @@ class Request
      */
     private function standardizeReferer()
     {
-        $this->referer = $this->get_Env(['HTTP_REFERER', 'Referer']);
+        $this->referer = Site::getEnv(['HTTP_REFERER', 'Referer']);
         if (!empty($this->referer)) {
             $ref = parse_url($this->referer);
             if (isset($ref['scheme']) and in_array($ref['scheme'], ['http', 'https', 'ftp', 'gopher'], true) and isset($ref['host'])) {
@@ -651,74 +624,6 @@ class Request
     }
 
     /**
-     * chr_hexdec_callback()
-     *
-     * @param array $m
-     * @return string
-     */
-    private function chr_hexdec_callback($m)
-    {
-        return chr(hexdec($m[1]));
-    }
-
-    /**
-     * chr_callback()
-     *
-     * @param array $m
-     * @return string
-     */
-    private function chr_callback($m)
-    {
-        return chr($m[1]);
-    }
-
-    /**
-     * color_hex2rgb_callback()
-     *
-     * @param array $hex
-     * @return mixed
-     */
-    private function color_hex2rgb_callback($hex)
-    {
-        if (preg_match('/[^0-9ABCDEFabcdef]/', $hex[1])) {
-            return $hex[0];
-        }
-        $color = $hex[1];
-        $l = strlen($color);
-        if ($l != 3 and $l != 6) {
-            return $hex[0];
-        }
-        $l = $l / 3;
-
-        return 'rgb(' . (hexdec(substr($color, 0, 1 * $l))) . ', ' . (hexdec(substr($color, 1 * $l, 1 * $l))) . ', ' . (hexdec(substr($color, 2 * $l, 1 * $l))) . ');';
-    }
-
-    /**
-     * unhtmlentities()
-     *
-     * @param tring $value
-     * @return string
-     */
-    private function unhtmlentities($value)
-    {
-        $value = preg_replace('/%3A%2F%2F/', '', $value); // :// to empty
-        $value = preg_replace('/([\x00-\x08][\x0b-\x0c][\x0e-\x20])/', '', $value);
-        $value = preg_replace('/%u0([a-z0-9]{3})/i', '&#x\\1;', $value);
-        $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\\1;', $value);
-        $value = str_ireplace(['&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ''], '', $value);
-
-        $search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
-        $value = preg_replace_callback($search, [$this, 'chr_hexdec_callback'], $value);
-
-        $search = '/&#0{0,8}(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/i';
-        $value = preg_replace_callback($search, [$this, 'chr_callback'], $value);
-
-        $search = ['&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C'];
-
-        return str_ireplace($search, '<', $value);
-    }
-
-    /**
      * filterAttr()
      *
      * @param array  $attrSet
@@ -762,7 +667,7 @@ class Request
                     }
                 }
 
-                $value = $this->unhtmlentities($attrSubSet[1]);
+                $value = Site::unhtmlentities($attrSubSet[1]);
                 $search = [
                     'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
                     'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
@@ -803,7 +708,19 @@ class Request
                 }
 
                 if ('href' != $attrSubSet[0]) {
-                    $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', [$this, 'color_hex2rgb_callback'], $attrSubSet[1]);
+                    $attrSubSet[1] = preg_replace_callback('/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', function ($hex) {
+                        if (preg_match('/[^0-9ABCDEFabcdef]/', $hex[1])) {
+                            return $hex[0];
+                        }
+                        $color = $hex[1];
+                        $l = strlen($color);
+                        if ($l != 3 and $l != 6) {
+                            return $hex[0];
+                        }
+                        $l = $l / 3;
+
+                        return 'rgb(' . (hexdec(substr($color, 0, 1 * $l))) . ', ' . (hexdec(substr($color, 1 * $l, 1 * $l))) . ', ' . (hexdec(substr($color, 2 * $l, 1 * $l))) . ');';
+                    }, $attrSubSet[1]);
                 }
             } elseif ($attrSubSet[1] !== '0') {
                 $attrSubSet[1] = $attrSubSet[0];
@@ -969,7 +886,7 @@ class Request
                 }
 
                 $value = str_replace(["\t", "\r", "\n", '../'], '', $value);
-                $value = $this->unhtmlentities($value);
+                $value = Site::unhtmlentities($value);
                 unset($matches);
                 preg_match_all('/<!\[cdata\[(.*?)\]\]>/is', $value, $matches);
                 $value = str_replace($matches[0], $matches[1], $value);

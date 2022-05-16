@@ -11,6 +11,9 @@
 
 namespace NukeViet\Client;
 
+use NukeViet\Http\Http;
+use NukeViet\Site;
+
 /**
  * NukeViet\Client\UrlGetContents
  *
@@ -23,15 +26,14 @@ namespace NukeViet\Client;
 class UrlGetContents
 {
     private $allow_methods = [];
-    private $open_basedir;
+    static $user_agent = '';
+    static $open_basedir = false;
     private $url_info = false;
     private $login = '';
     private $password = '';
     private $ref = '';
-    private $user_agent = '';
     private $redirectCount = 0;
     public $time_limit = 60;
-    private $disable_functions = [];
 
     /**
      * __construct()
@@ -41,48 +43,47 @@ class UrlGetContents
      */
     public function __construct($global_config, $time_limit = 60)
     {
-        $this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5($global_config['sitekey']);
+        $userAgents = [
+            'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
+            'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+            'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
+            'Mozilla/4.8 [en] (Windows NT 6.0; U)',
+            'Opera/9.25 (Windows NT 6.0; U; en)'
+        ];
+        $rand = array_rand($userAgents);
+        self::$user_agent = $userAgents[$rand];
 
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : [];
-        if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-        }
-        $this->disable_functions = $disable_functions;
-
+        self::$open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? true : false;
         $this->time_limit = (int) $time_limit;
-
-        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
+        if (Site::function_exists('set_time_limit')) {
             set_time_limit($this->time_limit);
         }
 
-        if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions, true)) {
+        if (Site::function_exists('ini_set')) {
             ini_set('default_socket_timeout', $this->time_limit);
-            ini_set('user_agent', $this->user_agent);
         }
 
-        if (extension_loaded('curl') and (empty($this->disable_functions) or (!empty($this->disable_functions) and !preg_grep('/^curl\_/', $this->disable_functions)))) {
+        if (Site::function_exists('curl', true)) {
             $this->allow_methods[] = 'curl';
         }
 
-        if (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions, true)) {
+        if (Site::function_exists('fsockopen')) {
             $this->allow_methods[] = 'fsockopen';
         }
 
         if (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') {
-            if (function_exists('fopen') and !in_array('fopen', $this->disable_functions, true)) {
+            if (Site::function_exists('fopen')) {
                 $this->allow_methods[] = 'fopen';
             }
 
-            if (function_exists('file_get_contents') and !in_array('file_get_contents', $this->disable_functions, true)) {
+            if (Site::function_exists('file_get_contents')) {
                 $this->allow_methods[] = 'file_get_contents';
             }
         }
 
-        if (function_exists('file') and !in_array('file', $this->disable_functions, true)) {
+        if (Site::function_exists('file')) {
             $this->allow_methods[] = 'file';
         }
-
-        $this->open_basedir = @ini_get('open_basedir') ? true : false;
     }
 
     /**
@@ -95,7 +96,7 @@ class UrlGetContents
     {
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
-        if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions, true) and $allow_url_fopen == 1) {
+        if (Site::function_exists('get_headers') and $allow_url_fopen == 1) {
             if (version_compare(PHP_VERSION, '7.1.0', '>=')) {
                 $context = stream_context_create([
                     'ssl' => [
@@ -113,7 +114,7 @@ class UrlGetContents
                 ]);
                 $res = get_headers($this->url_info['uri']);
             }
-        } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions, true) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions, true)) {
+        } elseif (Site::function_exists('curl_init') and Site::function_exists('curl_exec')) {
             $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
 
@@ -124,7 +125,7 @@ class UrlGetContents
                 'Mozilla/4.8 [en] (Windows NT 6.0; U)',
                 'Opera/9.25 (Windows NT 6.0; U; en)'
             ];
-            srand((float) microtime() * 10000000);
+            mt_srand(microtime(true) * 1000000);
             $rand = array_rand($userAgents);
             $agent = $userAgents[$rand];
 
@@ -133,7 +134,7 @@ class UrlGetContents
             curl_setopt($curl, CURLOPT_NOBODY, true);
 
             curl_setopt($curl, CURLOPT_PORT, $port);
-            if (!$this->open_basedir) {
+            if (!self::$open_basedir) {
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             }
 
@@ -151,7 +152,7 @@ class UrlGetContents
                 return false;
             }
             $res = explode("\n", $response);
-        } elseif (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions, true) and function_exists('fgets') and !in_array('fgets', $this->disable_functions, true)) {
+        } elseif (Site::function_exists('fsockopen') and Site::function_exists('fgets')) {
             $res = [];
             $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
@@ -193,8 +194,8 @@ class UrlGetContents
                     if (substr($location, 0, 1) == '/') {
                         $location = $this->url_info['scheme'] . '://' . $this->url_info['host'] . $location;
                     }
-                    $this->url_info = $this->url_get_info($location);
-                    if (!$this->url_info or !isset($this->url_info['scheme'])) {
+                    $this->url_info = Http::parse_url($location);
+                    if (!$this->url_info) {
                         return false;
                     }
 
@@ -240,10 +241,10 @@ class UrlGetContents
 
         if (!empty($this->login)) {
             curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-            curl_setopt(CURLOPT_USERPWD, '[' . $this->login . ']:[' . $this->password . ']');
+            curl_setopt($curlHandle, CURLOPT_USERPWD, $this->login . ':' . $this->password);
         }
 
-        curl_setopt($curlHandle, CURLOPT_USERAGENT, $this->user_agent);
+        curl_setopt($curlHandle, CURLOPT_USERAGENT, self::$user_agent);
 
         if (!empty($this->ref)) {
             curl_setopt($curlHandle, CURLOPT_REFERER, urlencode($this->ref));
@@ -251,7 +252,7 @@ class UrlGetContents
             curl_setopt($curlHandle, CURLOPT_REFERER, $this->url_info['uri']);
         }
 
-        if (!$this->open_basedir) {
+        if (!self::$open_basedir) {
             curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curlHandle, CURLOPT_MAXREDIRS, 10);
         }
@@ -275,7 +276,7 @@ class UrlGetContents
 
         $response = curl_getinfo($curlHandle);
 
-        if ($this->open_basedir) {
+        if (self::$open_basedir) {
             if ($response['http_code'] == 301 or $response['http_code'] == 302 or $response['http_code'] == 303) {
                 if (preg_match('/^(Location:|URI:)[\s]*(.*?)$/m', $header, $matches) and $this->redirectCount <= 5) {
                     ++$this->redirectCount;
@@ -284,9 +285,9 @@ class UrlGetContents
 
                     curl_setopt($curlHandle, CURLOPT_URL, $newurl);
 
-                    $this->url_info = $this->url_get_info($newurl);
+                    $this->url_info = Http::parse_url($newurl);
 
-                    if (!$this->url_info or !isset($this->url_info['scheme'])) {
+                    if (!$this->url_info) {
                         return false;
                     }
 
@@ -310,9 +311,9 @@ class UrlGetContents
 
             curl_setopt($curlHandle, CURLOPT_URL, $newurl);
 
-            $this->url_info = $this->url_get_info($newurl);
+            $this->url_info = Http::parse_url($newurl);
 
-            if (!$this->url_info or !isset($this->url_info['scheme'])) {
+            if (!$this->url_info) {
                 return false;
             }
 
@@ -349,9 +350,9 @@ class UrlGetContents
         $request .= "\r\n";
 
         $request .= "Connection: Close\r\n";
-        $request .= 'User-Agent: ' . $this->user_agent . "\r\n\r\n";
+        $request .= 'User-Agent: ' . self::$user_agent . "\r\n\r\n";
 
-        if (function_exists('gzinflate')) {
+        if (Site::function_exists('gzinflate')) {
             $request .= "Accept-Encoding: gzip,deflate\r\n";
         }
 
@@ -393,7 +394,7 @@ class UrlGetContents
             }
         }
 
-        if (function_exists('gzinflate') and substr($response, 0, 8) == "\x1f\x8b\x08\x00\x00\x00\x00\x00") {
+        if (Site::function_exists('gzinflate') and substr($response, 0, 8) == "\x1f\x8b\x08\x00\x00\x00\x00\x00") {
             $response = substr($response, 10);
             $response = gzinflate($response);
         }
@@ -407,9 +408,9 @@ class UrlGetContents
 
             $newurl = $this->generate_newUrl($matches[2]);
 
-            $this->url_info = $this->url_get_info($newurl);
+            $this->url_info = Http::parse_url($newurl);
 
-            if (!$this->url_info or !isset($this->url_info['scheme'])) {
+            if (!$this->url_info) {
                 return false;
             }
 
@@ -429,9 +430,9 @@ class UrlGetContents
 
             $newurl = $this->generate_newUrl($matches[6]);
 
-            $this->url_info = $this->url_get_info($newurl);
+            $this->url_info = Http::parse_url($newurl);
 
-            if (!$this->url_info or !isset($this->url_info['scheme'])) {
+            if (!$this->url_info) {
                 return false;
             }
 
@@ -509,76 +510,6 @@ class UrlGetContents
     }
 
     /**
-     * url_get_info()
-     *
-     * @param string $url
-     * @return mixed
-     */
-    private function url_get_info($url)
-    {
-        //URL: http://username:password@www.example.com:80/dir/page.php?foo=bar&foo2=bar2#bookmark
-        $url_info = parse_url($url);
-
-        //[host] => www.example.com
-        if (!isset($url_info['host'])) {
-            return false;
-        }
-
-        //[port] => :80
-        $url_info['port'] = isset($url_info['port']) ? $url_info['port'] : 80;
-
-        //[login] => username:password@
-        $url_info['login'] = '';
-        if (isset($url_info['user'])) {
-            $url_info['login'] = $url_info['user'];
-            if (isset($url_info['pass'])) {
-                $url_info['login'] .= ':' . $url_info['pass'];
-            }
-            $url_info['login'] .= '@';
-        }
-
-        //[path] => /dir/page.php
-        if (isset($url_info['path'])) {
-            if (substr($url_info['path'], 0, 1) != '/') {
-                $url_info['path'] = '/' . $url_info['path'];
-            }
-            $path_array = explode('/', $url_info['path']);
-            $path_array = array_map('rawurlencode', $path_array);
-            $url_info['path'] = implode('/', $path_array);
-        } else {
-            $url_info['path'] = '/';
-        }
-
-        //[query] => ?foo=bar&foo2=bar2
-        $url_info['query'] = (isset($url_info['query']) and !empty($url_info['query'])) ? '?' . $url_info['query'] : '';
-
-        //[fragment] => bookmark
-        $url_info['fragment'] = isset($url_info['fragment']) ? $url_info['fragment'] : '';
-
-        //[file] => page.php
-        $url_info['file'] = explode('/', $url_info['path']);
-        $url_info['file'] = array_pop($url_info['file']);
-
-        //[dir] => /dir
-        $url_info['dir'] = substr($url_info['path'], 0, strrpos($url_info['path'], '/'));
-
-        //[base] => http://www.example.com/dir
-        $url_info['base'] = $url_info['scheme'] . '://' . $url_info['host'] . $url_info['dir'];
-
-        //[uri] => http://username:password@www.example.com:80/dir/page.php?#bookmark
-        $url_info['uri'] = $url_info['scheme'] . '://' . $url_info['login'] . $url_info['host'];
-        if ($url_info['port'] != 80) {
-            $url_info['uri'] .= ':' . $url_info['port'];
-        }
-        $url_info['uri'] .= $url_info['path'] . $url_info['query'];
-        /*
-         * if ( $url_info['fragment'] != '' ) { $url_info['uri'] .= '#' . $url_info['fragment']; }
-         */
-
-        return $url_info;
-    }
-
-    /**
      * get()
      *
      * @param string $url
@@ -589,9 +520,9 @@ class UrlGetContents
      */
     public function get($url, $login = '', $password = '', $ref = '')
     {
-        $this->url_info = $this->url_get_info($url);
+        $this->url_info = Http::parse_url($url);
 
-        if (!$this->url_info or !isset($this->url_info['scheme'])) {
+        if (!$this->url_info) {
             return false;
         }
 

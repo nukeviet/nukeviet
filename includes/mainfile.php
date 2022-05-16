@@ -78,6 +78,11 @@ if (empty($global_config['my_domains'])) {
     }
 }
 
+// The Mozilla CA certificate store in PEM format
+// This bundle was generated at Tue Apr 26 03:12:05 2022 GMT
+// https://curl.se/docs/caextract.html
+$global_config['default_cacert'] = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+
 require NV_ROOTDIR . '/includes/ini.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 

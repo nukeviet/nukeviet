@@ -687,31 +687,6 @@ function nv_getExtVersion($updatetime = 3600)
 }
 
 /**
- * nv_http_get_lang()
- *
- * @param array $input
- * @return string
- */
-function nv_http_get_lang($input)
-{
-    global $lang_global;
-
-    if (!isset($input['code']) or !isset($input['message'])) {
-        return '';
-    }
-
-    if (!empty($lang_global['error_code_' . $input['code']])) {
-        return $lang_global['error_code_' . $input['code']];
-    }
-
-    if (!empty($input['message'])) {
-        return $input['message'];
-    }
-
-    return 'Error' . ($input['code'] ? ': ' . $input['code'] . '.' : '.');
-}
-
-/**
  * nv_save_file_ips()
  *
  * @param int $type

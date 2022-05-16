@@ -4,12 +4,14 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 namespace NukeViet\Ftp;
+
+use NukeViet\Site;
 
 // Ngon ngu
 define('NV_FTP_ERR_CONNECT', isset($lang_global['ftp_err_connect']) ? $lang_global['ftp_err_connect'] : 'Error: Couldn\'t connect to FTP server');
@@ -104,18 +106,11 @@ class Ftp
      */
     public function __construct($host = '', $user = 'root', $pass = '', $config = [], $port = 21)
     {
-        // Kiem tra thu vien FTP hoat dong
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : [];
-        if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-        }
-
-        if (!(extension_loaded('ftp') and (empty($disable_functions) or (!empty($disable_functions) and !preg_grep('/^ftp\_/', $disable_functions))))) {
+        if (!Site::function_exists('ftp', true)) {
             $this->error = NV_FTP_ERR_DISABLED_FTP;
 
             return false;
         }
-        unset($disable_functions);
 
         if (!empty($host)) {
             $this->host = $host;

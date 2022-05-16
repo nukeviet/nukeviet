@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,15 +20,9 @@ namespace NukeViet\Cache;
  * @version 4.5.00
  * @access public
  */
-class Files
+class Files extends Cache
 {
     private $_CacheDir = '/tmp';
-
-    private $_Lang = 'vi';
-
-    private $_Cache_Prefix = '';
-
-    private $_Db;
 
     private $_Current_Time = 0;
 
@@ -41,9 +35,9 @@ class Files
      */
     public function __construct($CacheDir, $Lang, $Cache_Prefix)
     {
+        parent::__construct($Lang, $Cache_Prefix);
+
         $this->_CacheDir = $CacheDir;
-        $this->_Lang = $Lang;
-        $this->_Cache_Prefix = $Cache_Prefix;
 
         if (defined('NV_CURRENTTIME')) {
             $this->_Current_Time = NV_CURRENTTIME;
@@ -145,12 +139,10 @@ class Files
      * @param string $module_name
      * @param string $filename
      * @param mixed  $content
-     * @param int    $ttl
      * @return false|int
      */
-    public function setItem($module_name, $filename, $content, $ttl = 0)
+    public function setItem($module_name, $filename, $content)
     {
-        // Note: $ttl not use in Files cache
         if (!preg_match('/^([a-z0-9\_\-]+)\.cache/', $filename)) {
             return false;
         }
@@ -163,32 +155,18 @@ class Files
     }
 
     /**
-     * setDb()
-     *
-     * @param mixed $db
-     */
-    public function setDb($db)
-    {
-        $this->_Db = $db;
-    }
-
-    /**
      * db()
      *
      * @param mixed  $sql
      * @param string $key
      * @param string $modname
      * @param string $lang
-     * @param int    $ttl
      * @return mixed
      */
-    public function db($sql, $key, $modname, $lang = '', $ttl = 0)
+    public function db($sql, $key, $modname, $lang = '')
     {
-        // Note: $ttl not use in Files cache
-        $list = [];
-
         if (empty($sql)) {
-            return $list;
+            return [];
         }
 
         if (empty($lang)) {
@@ -197,21 +175,16 @@ class Files
 
         $cache_file = $lang . '_' . md5($sql) . '_' . $this->_Cache_Prefix . '.cache';
 
-        if (($cache = $this->getItem($modname, $cache_file)) != false) {
-            $list = unserialize($cache);
-        } else {
-            if (($result = $this->_Db->query($sql)) !== false) {
-                $a = 0;
-                while ($row = $result->fetch()) {
-                    $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
-                    $list[$key2] = $row;
-                    ++$a;
-                }
-                $result->closeCursor();
-
-                $this->setItem($modname, $cache_file, serialize($list));
-            }
+        if (($cache = $this->getItem($modname, $cache_file)) !== false) {
+            return unserialize($cache);
         }
+
+        $list = parent::getList($sql, $key);
+        if ($list === false) {
+            return [];
+        }
+
+        $this->setItem($modname, $cache_file, serialize($list));
 
         return $list;
     }

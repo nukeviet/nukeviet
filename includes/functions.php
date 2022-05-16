@@ -52,28 +52,7 @@ function nv_object2array($a)
  */
 function nv_getenv($a)
 {
-    if (!is_array($a)) {
-        $a = [
-            $a
-        ];
-    }
-
-    foreach ($a as $b) {
-        if (isset($_SERVER[$b])) {
-            return $_SERVER[$b];
-        }
-        if (isset($_ENV[$b])) {
-            return $_ENV[$b];
-        }
-        if (@getenv($b)) {
-            return @getenv($b);
-        }
-        if (function_exists('apache_getenv') and apache_getenv($b, true)) {
-            return apache_getenv($b, true);
-        }
-    }
-
-    return '';
+    return NukeViet\Site::getEnv($a);
 }
 
 /**
@@ -596,7 +575,8 @@ function nv_capcha_txt($seccode, $type = 'captcha')
 
         return false;
     }
-    mt_srand((float) microtime() * 1000000);
+
+    mt_srand(microtime(true) * 1000000);
     $maxran = 1000000;
     $random = mt_rand(0, $maxran);
 
@@ -1972,33 +1952,13 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
  */
 function nv_check_domain($domain)
 {
-    if (preg_match("/^([a-z0-9](-*[a-z0-9])*)(\.([a-z0-9](-*[a-z0-9])*))*$/i", $domain) and preg_match('/^.{1,253}$/', $domain) and preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $domain)) {
-        return $domain;
-    }
-
-    if ($domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
-        return $domain;
-    }
-
+    $domain = NukeViet\Http\Http::filter_domain($domain);
     if (!empty($domain)) {
-        if (function_exists('idn_to_ascii')) {
-            $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
-        } else {
-            $Punycode = new TrueBV\Punycode();
-            try {
-                $domain_ascii = $Punycode->encode($domain);
-            } catch (\Exception $e) {
-                $domain_ascii = '';
-            }
-        }
+        return $domain;
+    }
 
-        if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain_ascii)) {
-            return $domain_ascii;
-        }
-
-        if ($domain == NV_SERVER_NAME) {
-            return $domain;
-        }
+    if ($domain == NV_SERVER_NAME) {
+        return $domain;
     }
 
     return '';
@@ -2017,234 +1977,153 @@ function nv_is_url($url, $isInternal = false)
         $url = NV_MY_DOMAIN . $url;
     }
 
-    if (!preg_match('/^(http|https|ftp)\:\/\//', $url)) {
+    $url = nv_strtolower($url);
+
+    if (filter_var($url, FILTER_VALIDATE_URL) === false) {
         return false;
     }
-
-    $url = nv_strtolower($url);
 
     $sanitizer = new NukeViet\Core\Sanitizer();
     if (!$sanitizer->xssValid($url)) {
         return false;
     }
 
-    if (!($parts = parse_url($url))) {
-        return false;
-    }
-
-    $domain = (isset($parts['host'])) ? nv_check_domain($parts['host']) : '';
-    if (empty($domain)) {
-        return false;
-    }
-
-    if (isset($parts['user']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $parts['user'])) {
-        return false;
-    }
-
-    if (isset($parts['pass']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $parts['pass'])) {
-        return false;
-    }
-
-    if (isset($parts['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!\:]*$/', $parts['path'])) {
-        return false;
-    }
-
-    if (isset($parts['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
-        return false;
-    }
-
-    return true;
+    return NukeViet\Http\Http::parse_url($url, true);
 }
 
 /**
  * nv_check_url()
  *
  * @param string $url
- * @param bool   $isTriggerError
- * @param int    $is_200
+ * @param bool   $isArray
  * @return bool
  */
-function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
+function nv_check_url($url, $isArray = false)
 {
+    global $global_config, $lang_global;
+
+    $res = [
+        'url' => $url,
+        'isvalid' => false,
+        'code' => 0,
+        'message' => ''
+    ];
+
     if (empty($url)) {
+        if ($isArray) {
+            $res['message'] = 'Empty URL';
+
+            return $res;
+        }
+
         return false;
     }
 
     $url = str_replace(' ', '%20', $url);
     $url = nv_strtolower($url);
 
-    if (!preg_match('/^(http|https|ftp|gopher)\:\/\//', $url)) {
-        return false;
-    }
+    if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+        if ($isArray) {
+            $res['message'] = 'Invalid URL';
 
-    if (!($url_info = parse_url($url))) {
-        return false;
-    }
-
-    $domain = (isset($url_info['host'])) ? nv_check_domain($url_info['host']) : '';
-    if (empty($domain)) {
-        return false;
-    }
-
-    if (isset($paurl_inforts['user']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $url_info['user'])) {
-        return false;
-    }
-
-    if (isset($url_info['pass']) and !preg_match('/^([0-9a-z\-]|[\_])*$/', $url_info['pass'])) {
-        return false;
-    }
-
-    if (isset($url_info['path']) and !preg_match('/^[0-9a-z\+\-\_\/\&\=\#\.\,\;\%\\s\!\:]*$/', $url_info['path'])) {
-        return false;
-    }
-
-    if (isset($url_info['query']) and !preg_match('/^[0-9a-z\+\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $url_info['query'])) {
-        return false;
-    }
-
-    $allow_url_fopen = ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on';
-    $isHttps = $url_info['scheme'] == 'https';
-
-    if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
-        $port = isset($url_info['port']) ? (int) $url_info['port'] : ($isHttps ? 443 : 80);
-
-        $userAgents = [
-            'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
-            'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-            'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
-            'Mozilla/4.8 [en] (Windows NT 6.0; U)',
-            'Opera/9.25 (Windows NT 6.0; U; en)'
-        ];
-
-        $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
-
-        srand((float) microtime() * 10000000);
-        $rand = array_rand($userAgents);
-        $agent = $userAgents[$rand];
-        $curl = curl_init($url);
-
-        curl_setopt($curl, CURLOPT_HEADER, true);
-        curl_setopt($curl, CURLOPT_NOBODY, true);
-        curl_setopt($curl, CURLOPT_PORT, $port);
-
-        if ($isHttps) {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYSTATUS, false);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        }
-
-        if ($open_basedir) {
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        }
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 15);
-        curl_setopt($curl, CURLOPT_USERAGENT, $agent);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        if ($response === false) {
-            if ($isTriggerError) {
-                trigger_error(curl_error($curl), E_USER_WARNING);
-            }
-
-            return false;
-        }
-        $res = explode(PHP_EOL, $response);
-    } elseif (nv_function_exists('get_headers') and $allow_url_fopen) {
-        if ($isHttps) {
-            $context = stream_context_create([
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false
-                ]
-            ]);
-        } else {
-            $context = stream_context_create([
-                'http' => [
-                    'method' => 'GET',
-                    'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
-                ]
-            ]);
-        }
-
-        $res = get_headers($url, 0, $context);
-    } elseif (nv_function_exists('stream_socket_client') and nv_function_exists('fgets')) {
-        $res = [];
-        if ($isHttps) {
-            $scheme = 'ssl://';
-            $port = isset($url_info['port']) ? (int) $url_info['port'] : 443;
-            $context = stream_context_create([
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false
-                ]
-            ]);
-        } else {
-            $scheme = '';
-            $port = isset($url_info['port']) ? (int) $url_info['port'] : 80;
-            $context = stream_context_create([
-                'http' => [
-                    'method' => 'GET',
-                    'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate, br\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0\r\n"
-                ]
-            ]);
-        }
-
-        $fp = stream_socket_client($scheme . $url_info['host'] . ':' . $port, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
-
-        if (!$fp) {
-            if ($isTriggerError) {
-                trigger_error($errstr, E_USER_WARNING);
-            }
-
-            return false;
-        }
-
-        $path = !empty($url_info['path']) ? $url_info['path'] : '/';
-        $path .= !empty($url_info['query']) ? '?' . $url_info['query'] : '';
-
-        fwrite($fp, 'HEAD ' . $path . " HTTP/1.0\r\n");
-        fwrite($fp, 'Host: ' . $url_info['host'] . ':' . $port . "\r\n");
-        fwrite($fp, "Connection: close\r\n\r\n");
-
-        while (!feof($fp)) {
-            if ($header = trim(fgets($fp, 1024))) {
-                $res[] = $header;
-            }
-        }
-        @fclose($fp);
-    } else {
-        if ($isTriggerError) {
-            trigger_error('error server no support check url', E_USER_WARNING);
+            return $res;
         }
 
         return false;
     }
 
-    if (empty($res)) {
-        return false;
-    }
+    if (!NukeViet\Http\Http::parse_url($url, true)) {
+        if ($isArray) {
+            $res['message'] = 'Invalid URL';
 
-    if (preg_match('/(200)/', $res[0])) {
-        return true;
-    }
-    if ($is_200 > 5) {
-        return false;
-    }
-
-    if (preg_match('/(301)|(302)|(303)|(307)/', $res[0])) {
-        foreach ($res as $v) {
-            if (preg_match('/location:\s(.*?)$/is', $v, $matches)) {
-                ++$is_200;
-                $location = trim($matches[1]);
-
-                return nv_check_url($location, $isTriggerError, $is_200);
-            }
+            return $res;
         }
+
+        return false;
     }
 
-    return false;
+    $args = [
+        'headers' => [
+            'Referer' => $url
+        ],
+        'nobody' => true
+    ];
+
+    $NV_Http = new NukeViet\Http\Http($global_config);
+    $result = $NV_Http->get($url, $args);
+
+    $error = '';
+    if (!empty(NukeViet\Http\Http::$error)) {
+        $error = nv_http_get_lang(NukeViet\Http\Http::$error);
+    } elseif (is_object($result) and isset($result->error) and !empty($result->error)) {
+        $error = $result->error;
+    } elseif (empty($result['response'])) {
+        $error = $lang_global['error_valid_response'];
+    } elseif ($result['response']['code'] != 200) {
+        $error = !empty($result['response']['message']) ? $result['response']['message'] : $result['response']['code'];
+    }
+
+    if (!empty($error)) {
+        if ($isArray) {
+            $res['code'] = (!is_object($result) and isset($result['response']['code'])) ? $result['response']['code'] : 0;
+            $res['message'] = $error;
+
+            return $res;
+        }
+
+        return false;
+    }
+
+    if ($isArray) {
+        $res['isvalid'] = true;
+        $res['code'] = isset($result['response']['code']) ? $result['response']['code'] : 0;
+        $res['message'] = 'OK';
+
+        return $res;
+    }
+
+    return true;
+}
+
+/**
+ * url_get_contents()
+ * 
+ * @param mixed $url 
+ * @return mixed 
+ * @throws ValueError 
+ */
+function url_get_contents($url) {
+    global $global_config;
+
+    if (!nv_is_url($url)) {
+        return false;
+    }
+
+    $userAgents = [
+        'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
+        'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
+        'Mozilla/4.8 [en] (Windows NT 6.0; U)',
+        'Opera/9.25 (Windows NT 6.0; U; en)'
+    ];
+    mt_srand(microtime(true) * 1000000);
+    $rand = array_rand($userAgents);
+    $agent = $userAgents[$rand];
+
+    $args = [
+        'headers' => [
+            'Referer' => $url,
+            'User-Agent' => $agent
+        ]
+    ];
+
+    $Http = new NukeViet\Http\Http($global_config);
+    $result = $Http->get($url, $args);
+    if (NukeViet\Http\Http::$error) {
+        return false;
+    }
+
+    return $result['body'];
 }
 
 /**
@@ -3298,4 +3177,29 @@ function set_cdn_urls(&$global_config, $cdn_is_enabled, $cl_country)
         (!empty($global_config['cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['cdn_url'])) && $global_config['cdn_url'] = '//' . $global_config['cdn_url'];
         (!empty($global_config['assets_cdn_url']) && !preg_match('/^((https?\:)?\/\/)/', $global_config['assets_cdn_url'])) && $global_config['assets_cdn_url'] = '//' . $global_config['assets_cdn_url'];
     }
+}
+
+/**
+ * nv_http_get_lang()
+ *
+ * @param array $input
+ * @return string
+ */
+function nv_http_get_lang($input)
+{
+    global $lang_global;
+
+    if (!isset($input['code']) or !isset($input['message'])) {
+        return '';
+    }
+
+    if (!empty($lang_global['error_code_' . $input['code']])) {
+        return $lang_global['error_code_' . $input['code']];
+    }
+
+    if (!empty($input['message'])) {
+        return $input['message'];
+    }
+
+    return 'Error' . ($input['code'] ? ': ' . $input['code'] . '.' : '.');
 }

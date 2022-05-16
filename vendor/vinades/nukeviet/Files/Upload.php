@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,6 +14,7 @@ namespace NukeViet\Files;
 use COM;
 use Exception;
 use finfo;
+use NukeViet\Site;
 
 if (!defined('NV_MIME_INI_FILE')) {
     define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
@@ -73,8 +74,6 @@ class Upload
     private $is_img = false;
     private $is_svg = false;
     private $img_info = [];
-    private $disable_functions = [];
-    private $disable_classes = [];
     private $user_agent;
 
     private $chunk_filename = '';
@@ -95,13 +94,13 @@ class Upload
     /**
      * __construct()
      *
-     * @param mixed                 $allowed_filetypes
-     * @param mixed                 $forbid_extensions
-     * @param mixed                 $forbid_mimes
+     * @param mixed $allowed_filetypes
+     * @param mixed $forbid_extensions
+     * @param mixed $forbid_mimes
      * @param integer|array~integer $maxsize
-     * @param int                   $maxwidth
-     * @param int                   $maxheight
-     * @param string                $magic_path
+     * @param int    $maxwidth
+     * @param int    $maxheight
+     * @param string $magic_path
      */
     public function __construct($allowed_filetypes = ['any'], $forbid_extensions = ['php'], $forbid_mimes = [], $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '')
     {
@@ -138,14 +137,6 @@ class Upload
         $this->config['upload_checking_mode'] = defined('UPLOAD_CHECKING_MODE') ? UPLOAD_CHECKING_MODE : 'strong';
         $this->config['magic_path'] = $magic_path;
 
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split('/[\s,]+/', ini_get('disable_functions'))) : [];
-        if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-        }
-        $this->disable_functions = $disable_functions;
-
-        $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : [];
-
         $userAgents = [
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
             'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
@@ -157,11 +148,11 @@ class Upload
         $rand = array_rand($userAgents);
         $this->user_agent = $userAgents[$rand];
 
-        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
+        if (Site::function_exists('set_time_limit')) {
             set_time_limit(120);
         }
 
-        if (function_exists('ini_set') and !in_array('ini_set', $this->disable_functions, true)) {
+        if (Site::function_exists('ini_set')) {
             ini_set('default_socket_timeout', 120);
             ini_set('user_agent', $this->user_agent);
         }
@@ -237,28 +228,6 @@ class Upload
         if (isset($lang_upload['error_upload_url_notfound'])) {
             $this->lang['error_upload_url_notfound'] = $lang_upload['error_upload_url_notfound'];
         }
-    }
-
-    /**
-     * func_exists()
-     *
-     * @param string $funcName
-     * @return bool
-     */
-    private function func_exists($funcName)
-    {
-        return function_exists($funcName) and !in_array($funcName, $this->disable_functions, true);
-    }
-
-    /**
-     * cl_exists()
-     *
-     * @param string $clName
-     * @return bool
-     */
-    private function cl_exists($clName)
-    {
-        return class_exists($clName, false) and !in_array($clName, $this->disable_classes, true);
     }
 
     /**
@@ -391,7 +360,7 @@ class Upload
     private function get_mime_finfo($userfile)
     {
         $mime = '';
-        if ($this->func_exists('finfo_open')) {
+        if (Site::function_exists('finfo_open')) {
             if (empty($this->config['magic_path'])) {
                 $finfo = finfo_open(FILEINFO_MIME);
             } elseif ($this->config['magic_path'] != 'auto') {
@@ -417,7 +386,7 @@ class Upload
         }
 
         if (empty($mime) or $mime == 'application/octet-stream') {
-            if ($this->cl_exists('finfo')) {
+            if (Site::class_exists('finfo')) {
                 $finfo = new finfo(FILEINFO_MIME);
                 if ($finfo) {
                     $mime = $finfo->file(realpath($userfile['tmp_name']));
@@ -440,7 +409,7 @@ class Upload
         $mime = '';
 
         if (substr(PHP_OS, 0, 3) != 'WIN') {
-            if ($this->func_exists('system')) {
+            if (Site::function_exists('system')) {
                 ob_start();
                 system('file -i -b ' . escapeshellarg($userfile['tmp_name']));
                 $m = ob_get_clean();
@@ -448,7 +417,7 @@ class Upload
                 if (!empty($m)) {
                     $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m);
                 }
-            } elseif ($this->func_exists('exec')) {
+            } elseif (Site::function_exists('exec')) {
                 $m = @exec('file -bi ' . escapeshellarg($userfile['tmp_name']));
                 $m = trim($m);
                 if (!empty($m)) {
@@ -470,7 +439,7 @@ class Upload
     {
         $mime = '';
 
-        if ($this->func_exists('mime_content_type')) {
+        if (Site::function_exists('mime_content_type')) {
             $mime = mime_content_type($userfile['tmp_name']);
             $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
         }
@@ -1116,11 +1085,11 @@ class Upload
             $return['size'] = $this->file_size;
             $return['is_img'] = $this->is_img;
             $return['is_svg'] = $this->is_svg;
-            if ($this->is_img and function_exists('exif_read_data')) {
+            if ($this->is_img and Site::function_exists('exif_read_data')) {
                 // Check/fix image rotation
                 // https://stackoverflow.com/questions/34287437/
                 $exif = exif_read_data($savepath . $filename);
-                if (!empty($exif['Orientation']) and in_array((int) $exif['Orientation'], [3, 6, 8])) {
+                if (!empty($exif['Orientation']) and in_array((int) $exif['Orientation'], [3, 6, 8], true)) {
                     $image = new Image($savepath . $filename);
                     switch ($exif['Orientation']) {
                         case 3:
@@ -1223,9 +1192,9 @@ class Upload
     private function check_url($is_200 = 0)
     {
         $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
-        if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions, true) and $allow_url_fopen == 1) {
+        if (Site::function_exists('get_headers') and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
-        } elseif (function_exists('curl_init') and !in_array('curl_init', $this->disable_functions, true) and function_exists('curl_exec') and !in_array('curl_exec', $this->disable_functions, true)) {
+        } elseif (Site::function_exists('curl_init') and Site::function_exists('curl_exec')) {
             $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
 
@@ -1265,7 +1234,7 @@ class Upload
                 return false;
             }
             $res = explode("\n", $response);
-        } elseif (function_exists('fsockopen') and !in_array('fsockopen', $this->disable_functions, true) and function_exists('fgets') and !in_array('fgets', $this->disable_functions, true)) {
+        } elseif (Site::function_exists('fsockopen') and Site::function_exists('fgets')) {
             $res = [];
             $url_info = parse_url($this->url_info['uri']);
             $port = isset($url_info['port']) ? (int) ($url_info['port']) : 80;
@@ -1349,20 +1318,20 @@ class Upload
     private function check_allow_methods()
     {
         $allow_methods = [];
-        if (extension_loaded('curl') and !preg_grep('/^curl\_/', $this->disable_functions)) {
+        if (Site::function_exists('curl', true)) {
             $allow_methods[] = 'curl';
         }
 
         if (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') {
-            if ($this->func_exists('fopen')) {
+            if (Site::function_exists('fopen')) {
                 $allow_methods[] = 'fopen';
             }
 
-            if ($this->func_exists('file_get_contents')) {
+            if (Site::function_exists('file_get_contents')) {
                 $allow_methods[] = 'file_get_contents';
             }
 
-            if ($this->func_exists('file')) {
+            if (Site::function_exists('file')) {
                 $allow_methods[] = 'file';
             }
         }
@@ -1573,7 +1542,7 @@ class Upload
         }
 
         $allow_methods = $this->check_allow_methods();
-        if (!$this->func_exists('fopen')) {
+        if (!Site::function_exists('fopen')) {
             $allow_methods = [
                 'file_get_contents'
             ];
@@ -1795,7 +1764,7 @@ class Upload
         }
         static $exec_works;
         if (!isset($exec_works)) {
-            $exec_works = ($this->func_exists('exec') and !ini_get('safe_mode') and @exec('echo EXEC') == 'EXEC');
+            $exec_works = (Site::function_exists('exec') and !ini_get('safe_mode') and @exec('echo EXEC') == 'EXEC');
         }
         // Try a shell command
         if ($exec_works) {
@@ -1806,7 +1775,7 @@ class Upload
             }
         }
         // Try the Windows COM interface
-        if ($iswin and $this->cl_exists('COM')) {
+        if ($iswin and Site::class_exists('COM')) {
             try {
                 $fsobj = new COM('Scripting.FileSystemObject');
                 $filecal = $fsobj->GetFile(realpath($file));

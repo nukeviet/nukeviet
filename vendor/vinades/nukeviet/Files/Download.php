@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -12,6 +12,7 @@
 namespace NukeViet\Files;
 
 use finfo;
+use NukeViet\Site;
 
 if (!defined('NV_MIME_INI_FILE')) {
     define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
@@ -39,8 +40,6 @@ class Download
         'max_speed' => '',
         'directory' => ''
     ];
-    private $disable_functions = [];
-    private $disable_classes = [];
     private $magic_path;
 
     /**
@@ -57,13 +56,6 @@ class Download
         if (empty($directory) or !is_dir($directory)) {
             $directory = NV_UPLOADS_REAL_DIR;
         }
-        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : [];
-        if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
-        }
-        $this->disable_functions = $disable_functions;
-
-        $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : [];
 
         $path = $this->real_path($path, $directory);
         $extension = $this->getextension($path);
@@ -136,28 +128,6 @@ class Download
     }
 
     /**
-     * func_exists()
-     *
-     * @param string $funcName
-     * @return bool
-     */
-    private function func_exists($funcName)
-    {
-        return function_exists($funcName) and !in_array($funcName, $this->disable_functions, true);
-    }
-
-    /**
-     * cl_exists()
-     *
-     * @param string $clName
-     * @return bool
-     */
-    private function cl_exists($clName)
-    {
-        return class_exists($clName, false) and !in_array($clName, $this->disable_classes, true);
-    }
-
-    /**
      * getextension()
      *
      * @param string $filename
@@ -184,7 +154,7 @@ class Download
     {
         $mime = '';
 
-        if ($this->func_exists('finfo_open')) {
+        if (Site::function_exists('finfo_open')) {
             if (empty($this->magic_path)) {
                 $finfo = finfo_open(FILEINFO_MIME);
             } elseif ($this->magic_path != 'auto') {
@@ -210,7 +180,7 @@ class Download
         }
 
         if (empty($mime) or $mime == 'application/octet-stream') {
-            if ($this->cl_exists('finfo')) {
+            if (Site::class_exists('finfo')) {
                 $finfo = new finfo(FILEINFO_MIME);
                 if ($finfo) {
                     $mime = $finfo->file(realpath($path));
@@ -221,7 +191,7 @@ class Download
 
         if (empty($mime) or $mime == 'application/octet-stream') {
             if (substr(PHP_OS, 0, 3) != 'WIN') {
-                if ($this->func_exists('system')) {
+                if (Site::function_exists('system')) {
                     ob_start();
                     system('file -i -b ' . escapeshellarg($path));
                     $m = ob_get_clean();
@@ -229,7 +199,7 @@ class Download
                     if (!empty($m)) {
                         $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m);
                     }
-                } elseif ($this->func_exists('exec')) {
+                } elseif (Site::function_exists('exec')) {
                     $m = @exec('file -bi ' . escapeshellarg($path));
                     $m = trim($m);
                     if (!empty($m)) {
@@ -240,7 +210,7 @@ class Download
         }
 
         if (empty($mime) or $mime == 'application/octet-stream') {
-            if ($this->func_exists('mime_content_type')) {
+            if (Site::function_exists('mime_content_type')) {
                 $mime = mime_content_type($path);
                 $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
             }
@@ -315,30 +285,6 @@ class Download
     }
 
     /**
-     * nv_getenv()
-     *
-     * @param string $key
-     * @return string
-     */
-    private function nv_getenv($key)
-    {
-        if (isset($_SERVER[$key])) {
-            return $_SERVER[$key];
-        }
-        if (isset($_ENV[$key])) {
-            return $_ENV[$key];
-        }
-        if (@getenv($key)) {
-            return @getenv($key);
-        }
-        if (function_exists('apache_getenv') and apache_getenv($key, true)) {
-            return apache_getenv($key, true);
-        }
-
-        return '';
-    }
-
-    /**
      * get_property()
      *
      * @param string $property
@@ -386,7 +332,7 @@ class Download
         $seek_end = -1;
         $data_section = false;
 
-        if (($http_range = nv_getenv('HTTP_RANGE')) != '') {
+        if (($http_range = Site::getEnv('HTTP_RANGE')) != '') {
             $seek_range = substr($http_range, 6);
 
             $range = explode('-', $seek_range);
@@ -411,7 +357,7 @@ class Download
         }
         $old_status = ignore_user_abort(true);
 
-        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
+        if (Site::function_exists('set_time_limit')) {
             set_time_limit(0);
         }
 
@@ -439,7 +385,7 @@ class Download
         header('Content-Description: File Transfer');
         header('Content-Type: ' . $this->properties['type']);
         if ($attachment) {
-            if (strstr($this->nv_getenv('HTTP_USER_AGENT'), 'MSIE') != false) {
+            if (strstr(Site::getEnv('HTTP_USER_AGENT'), 'MSIE') != false) {
                 header('Content-Disposition: attachment; filename="' . urlencode($this->properties['name']) . '";');
             } else {
                 header('Content-Disposition: attachment; filename="' . $this->properties['name'] . '";');
@@ -456,7 +402,7 @@ class Download
             header('Content-Length: ' . $this->properties['size']);
         }
 
-        if (function_exists('usleep') and !in_array('usleep', $this->disable_functions, true) and ($speed = $this->properties['max_speed']) > 0) {
+        if (Site::function_exists('usleep') and ($speed = $this->properties['max_speed']) > 0) {
             $sleep_time = (8 / $speed) * 1e6;
         } else {
             $sleep_time = 0;
@@ -472,7 +418,7 @@ class Download
         fclose($res);
 
         ignore_user_abort($old_status);
-        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions, true)) {
+        if (Site::function_exists('set_time_limit')) {
             set_time_limit(ini_get('max_execution_time'));
         }
         exit(0);

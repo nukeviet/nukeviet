@@ -234,6 +234,12 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
         $xtpl->parse('main.sitelink');
     }
 
+    if ($error_code >= 400) {
+        $xtpl->parse('main.is_error');
+    } else {
+        $xtpl->parse('main.is_info');
+    }
+
     $xtpl->parse('main');
 
     include NV_ROOTDIR . '/includes/header.php';
@@ -329,7 +335,7 @@ function nv_jsonOutput($array_data)
  */
 function nv_xmlOutput($content, $lastModified)
 {
-    if (class_exists('tidy', false)) {
+    if (nv_class_exists('tidy', false)) {
         $tidy_options = [
             'input-xml' => true,
             'output-xml' => true,

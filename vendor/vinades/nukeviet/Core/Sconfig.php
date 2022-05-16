@@ -12,6 +12,7 @@
 namespace NukeViet\Core;
 
 use DOMException;
+use NukeViet\Site;
 
 /**
  * NukeViet\Core\Sconfig
@@ -41,8 +42,8 @@ class Sconfig
 
     /**
      * setMyDomains()
-     * 
-     * @param mixed $domains 
+     *
+     * @param mixed $domains
      */
     public function setMyDomains($domains)
     {
@@ -51,8 +52,8 @@ class Sconfig
 
     /**
      * setRewriteExts()
-     * 
-     * @param mixed $exts 
+     *
+     * @param mixed $exts
      */
     public function setRewriteExts($exts)
     {
@@ -61,9 +62,9 @@ class Sconfig
 
     /**
      * genMyDomains()
-     * 
-     * @param mixed $domains 
-     * @return string 
+     *
+     * @param mixed $domains
+     * @return string
      */
     private static function genMyDomains($domains)
     {
@@ -78,9 +79,9 @@ class Sconfig
 
     /**
      * genRewriteExts()
-     * 
-     * @param mixed $exts 
-     * @return string 
+     *
+     * @param mixed $exts
+     * @return string
      */
     private static function genRewriteExts($exts)
     {
@@ -93,8 +94,8 @@ class Sconfig
     /**
      * setNginxContents()
      * Tạo nội dung khuyến cáo của file cấu hình máy chủ NGINX
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function setNginxContents()
     {
@@ -333,9 +334,9 @@ class Sconfig
     /**
      * setIisContents()
      * Tạo nội dung khuyến cáo của file cấu hình máy chủ Iis7
-     * 
-     * @return string|false 
-     * @throws DOMException 
+     *
+     * @return false|string
+     * @throws DOMException
      */
     public function setIisContents()
     {
@@ -385,8 +386,8 @@ class Sconfig
     /**
      * setApacheContents()
      * Tạo nội dung khuyến cáo của file cấu hình máy chủ APACHE
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function setApacheContents()
     {
@@ -400,13 +401,13 @@ class Sconfig
     /**
      * iisRewriteRule()
      * Chuyển phần Rewrite trong file cấu hình (web.config) về mặc định
-     * 
-     * @return string|false 
-     * @throws DOMException 
+     *
+     * @return false|string
+     * @throws DOMException
      */
     public function iisRewriteRule()
     {
-        if (!class_exists('DOMDocument')) {
+        if (!Site::class_exists('DOMDocument')) {
             return false;
         }
 
@@ -485,8 +486,8 @@ class Sconfig
     /**
      * apacheRewriteRule()
      * Chuyển phần Rewrite trong file cấu hình (.htaccess) về mặc định
-     * 
-     * @return string|false 
+     *
+     * @return false|string
      */
     public function apacheRewriteRule()
     {
@@ -518,9 +519,9 @@ class Sconfig
     /**
      * setIisRewrite()
      * Tạo phần Rewrite khuyến cáo cho file cấu hình (web.config)
-     * 
-     * @param bool $full 
-     * @return string 
+     *
+     * @param bool $full
+     * @return string
      */
     public function setIisRewrite($full = false)
     {
@@ -646,8 +647,8 @@ class Sconfig
     /**
      * setApacheRewrite()
      * Tạo phần Rewrite khuyến cáo cho file cấu hình (.htaccess)
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function setApacheRewrite()
     {
@@ -697,8 +698,8 @@ class Sconfig
     /**
      * apacheConfigs()
      * Chuyển phần Cấu hình chung trong file cấu hình (.htaccess) về mặc định
-     * 
-     * @return string|false 
+     *
+     * @return false|string
      */
     public function apacheConfigs()
     {
@@ -730,8 +731,8 @@ class Sconfig
     /**
      * setIisConfigs()
      * Tạo phần Cấu hình khuyến cáo cho file cấu hình (web.config)
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function setIisConfigs()
     {
@@ -827,8 +828,8 @@ class Sconfig
     /**
      * setApacheConfigs()
      * Tạo phần Cấu hình khuyến cáo cho file cấu hình (.htaccess)
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function setApacheConfigs()
     {
@@ -1011,9 +1012,9 @@ class Sconfig
     /**
      * ApacheConfigsByTypes()
      * Hàm bổ trợ cho việc tạo phần Cấu hình khuyến cáo cho file cấu hình (.htaccess)
-     * 
-     * @param mixed $type 
-     * @param mixed $config_contents 
+     *
+     * @param mixed $type
+     * @param mixed $config_contents
      */
     private function ApacheConfigsByTypes($type, &$config_contents)
     {
@@ -1049,9 +1050,9 @@ class Sconfig
     /**
      * apacheCacheControl()
      * Hàm bổ trợ cho việc tạo phần Cấu hình khuyến cáo cho file cấu hình (.htaccess)
-     * 
-     * @param mixed $type 
-     * @param mixed $config_contents 
+     *
+     * @param mixed $type
+     * @param mixed $config_contents
      */
     private function apacheCacheControl($type, &$config_contents)
     {
@@ -1102,9 +1103,9 @@ class Sconfig
     /**
      * apacheExpires()
      * Hàm bổ trợ cho việc tạo phần Cấu hình khuyến cáo cho file cấu hình (.htaccess)
-     * 
-     * @param mixed $type 
-     * @param mixed $config_contents 
+     *
+     * @param mixed $type
+     * @param mixed $config_contents
      */
     private function apacheExpires($type, &$config_contents)
     {

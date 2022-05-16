@@ -162,7 +162,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
         _loadContents('ERR__' . $upload_info['error']);
     }
 
-    mt_srand((float) microtime() * 1000000);
+    mt_srand(microtime(true) * 1000000);
     $maxran = 1000000;
     $random_num = mt_rand(0, $maxran);
     $random_num = md5($random_num);
