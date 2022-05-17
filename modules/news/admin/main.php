@@ -486,7 +486,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     if ($search_type_date != '' && ($search_time_from != '' || $search_time_to != '')) {
         $base_url_mod .= '&amp;checkss=' . $checkss;
     }
-    
+
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
     // hien thi du lieu
@@ -940,16 +940,16 @@ if (!empty($array_removeid)) {
 }
 
 if (!empty($search_type_date) && ($search_time_from != '' || $search_time_from != '')) {
-   $base_url_mod .= '&amp;type_date=' . $search_type_date;
+    $base_url_mod .= '&amp;type_date=' . $search_type_date;
+    if ($search_time_from != '') {
+       $base_url_mod .= '&amp;search_time_from=' . $search_time_from;
+    }
+
+    if ($search_time_to != '') {
+       $base_url_mod .= '&amp;search_time_to=' . $search_time_to;
+    }
 }
 
-if ($search_time_from != '') {
-   $base_url_mod .= '&amp;search_time_from=' . $search_time_from;
-}
-
-if ($search_time_to != '') {
-   $base_url_mod .= '&amp;search_time_to=' . $search_time_to;
-}
 
 $base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_name = $base_url_mod . '&amp;ordername=title&amp;order=' . $order2 . '&amp;page=' . $page;
