@@ -224,7 +224,7 @@ if ($catid == 0) {
 }
 $where = '';
 $page = $nv_Request->get_int('page', 'get', 1);
-$checkss = $nv_Request->get_string('checkss', 'get', '');
+$checkss = $nv_Request->get_title('checkss', 'get', '');
 
 if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SESSION) {
     // Ket noi den csdl elastic
@@ -400,7 +400,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         }
     }
 
-    if ($search_type_date == 'addtime' || $search_type_date == 'publtime' || $search_type_date == 'exptime') {
+    if ($search_type_date == 'addtime' or $search_type_date == 'publtime' or $search_type_date == 'exptime') {
         if (!empty($search_time_from)) {
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
                 $match[]['range'][$search_type_date] = [
@@ -480,11 +480,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     }
 
     if (!empty($q)) {
-        $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
-    }
-
-    if ($search_type_date != '' && ($search_time_from != '' || $search_time_to != '')) {
-        $base_url_mod .= '&amp;checkss=' . $checkss;
+        $base_url_mod .= '&amp;q=' . urlencode($q);
     }
 
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
@@ -627,7 +623,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
                 OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
         }
 
-        if ($search_type_date == 'addtime' || $search_type_date == 'publtime' || $search_type_date == 'exptime') {
+        if ($search_type_date == 'addtime' or $search_type_date == 'publtime' or $search_type_date == 'exptime') {
             if (!empty($search_time_from)) {
                 if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
                     $where = ' r.' . $search_type_date . ' >= ' . mktime(00, 00, 00, $m[2], $m[1], $m[3]);
@@ -703,11 +699,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     }
     
     if (!empty($q)) {
-        $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
-    }
-
-    if ($search_type_date != '' && ($search_time_from != '' || $search_time_to != '')) {
-        $base_url_mod .= '&amp;checkss=' . $checkss;
+        $base_url_mod .= '&amp;q=' . urlencode($q);
     }
 
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
@@ -897,7 +889,7 @@ if (!empty($array_ids)) {
         ->where('id IN (' . implode(',', $array_ids) . ')');
     $result = $db_slave->query($db_slave->sql());
     while ($_row = $result->fetch()) {
-        !isset($internal_authors[$_row['id']]) && $internal_authors[$_row['id']] = [];
+        !isset($internal_authors[$_row['id']]) and $internal_authors[$_row['id']] = [];
         $internal_authors[$_row['id']][] = [
             'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
             'pseudonym' => $_row['pseudonym']
@@ -939,7 +931,9 @@ if (!empty($array_removeid)) {
     nv_redirect_location($client_info['selfurl']);
 }
 
-if (!empty($search_type_date) && ($search_time_from != '' || $search_time_from != '')) {
+$base_url_mod .= '&amp;checkss=' . $checkss;
+
+if (!empty($search_type_date) and ($search_time_from != '' or $search_time_from != '')) {
     $base_url_mod .= '&amp;type_date=' . $search_type_date;
     if ($search_time_from != '') {
        $base_url_mod .= '&amp;search_time_from=' . $search_time_from;
@@ -968,15 +962,8 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('Q', $qhtml);
-
-if (!empty($search_time_from)) {
-    $xtpl->assign('TIME_FROM', $search_time_from);
-}
-
-if (!empty($search_time_to)) {
-    $xtpl->assign('TIME_TO', $search_time_to);
-}
-
+$xtpl->assign('TIME_FROM', $search_time_from);
+$xtpl->assign('TIME_TO', $search_time_to);
 $xtpl->assign('CATID', $catid);
 $xtpl->assign('base_url_id', $base_url_id);
 $xtpl->assign('base_url_name', $base_url_name);
