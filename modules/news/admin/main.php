@@ -402,28 +402,19 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
 
     if ($search_type_date == 'addtime' || $search_type_date == 'publtime' || $search_type_date == 'exptime') {
         if (!empty($search_time_from)) {
-            $timestamp_from = '';
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
-                $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
                 $match[]['range'][$search_type_date] = [
-                    'gte' => $timestamp_from
+                    'gte' => mktime(00, 00, 00, $m[2], $m[1], $m[3])
                 ];
-            } else {
-                $search_time_from = '';
             }
         }
 
         if (!empty($search_time_to)) {
-            $timestamp_to = '';
             if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
-                $timestamp_to = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
                 $match[]['range'][$search_type_date] = [
-                    'lte' => $timestamp_to
+                    'lte' => mktime(23, 59, 59, $m[2], $m[1], $m[3])
                 ];
-            } else {
-                $search_time_to = '';
             }
-
         }
     }
 
@@ -487,9 +478,15 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     if ($catid) {
         $base_url_mod .= '&amp;catid=' . $catid;
     }
+
     if (!empty($q)) {
         $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
     }
+
+    if ($search_type_date != '' && ($search_time_from != '' || $search_time_to != '')) {
+        $base_url_mod .= '&amp;checkss=' . $checkss;
+    }
+    
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
     // hien thi du lieu
@@ -632,25 +629,14 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
 
         if ($search_type_date == 'addtime' || $search_type_date == 'publtime' || $search_type_date == 'exptime') {
             if (!empty($search_time_from)) {
-                $timestamp_from = '';
                 if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
-                    $timestamp_from = mktime(00, 00, 00, $m[2], $m[1], $m[3]);
-                    $column_date = ' r.' . $search_type_date;
-                    $where = $column_date . ' >= ' . $timestamp_from;
-                } else {
-                    $search_time_from = '';
+                    $where = ' r.' . $search_type_date . ' >= ' . mktime(00, 00, 00, $m[2], $m[1], $m[3]);
                 }
-
             }
 
             if (!empty($search_time_to)) {
-                $timestamp_to = '';
                 if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
-                    $timestamp_to = mktime(23, 59, 59, $m[2], $m[1], $m[3]);
-                    $column_date = ' r.' . $search_type_date;
-                    $where = $column_date . ' <= ' . $timestamp_to;
-                } else {
-                    $search_time_to = '';
+                    $where = ' r.' . $search_type_date . ' <= ' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
                 }
             }
         }
@@ -715,9 +701,15 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     if ($catid) {
         $base_url_mod .= '&amp;catid=' . $catid;
     }
+    
     if (!empty($q)) {
         $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
     }
+
+    if ($search_type_date != '' && ($search_time_from != '' || $search_time_to != '')) {
+        $base_url_mod .= '&amp;checkss=' . $checkss;
+    }
+
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
     $db_slave->select('r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status, r.weight, r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id, r.author')
@@ -955,7 +947,7 @@ if ($search_time_from != '') {
    $base_url_mod .= '&amp;search_time_from=' . $search_time_from;
 }
 
-if ($search_time_from != '') {
+if ($search_time_to != '') {
    $base_url_mod .= '&amp;search_time_to=' . $search_time_to;
 }
 
@@ -978,12 +970,12 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('Q', $qhtml);
 
-if (!empty($search_time_to)) {
-    $xtpl->assign('TIME_TO', $search_time_to);
-}
-
 if (!empty($search_time_from)) {
     $xtpl->assign('TIME_FROM', $search_time_from);
+}
+
+if (!empty($search_time_to)) {
+    $xtpl->assign('TIME_TO', $search_time_to);
 }
 
 $xtpl->assign('CATID', $catid);
