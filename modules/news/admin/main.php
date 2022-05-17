@@ -711,6 +711,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
     }
     $base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
+
     if ($catid) {
         $base_url_mod .= '&amp;catid=' . $catid;
     }
@@ -946,13 +947,25 @@ if (!empty($array_removeid)) {
     nv_redirect_location($client_info['selfurl']);
 }
 
+if (!empty($search_type_date) && ($search_time_from != '' || $search_time_from != '')) {
+   $base_url_mod .= '&amp;type_date=' . $search_type_date;
+}
+
+if ($search_time_from != '') {
+   $base_url_mod .= '&amp;search_time_from=' . $search_time_from;
+}
+
+if ($search_time_from != '') {
+   $base_url_mod .= '&amp;search_time_to=' . $search_time_to;
+}
+
 $base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_name = $base_url_mod . '&amp;ordername=title&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_publtime = $base_url_mod . '&amp;ordername=publtime&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_exptime = $base_url_mod . '&amp;ordername=exptime&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_hitstotal = $base_url_mod . '&amp;ordername=hitstotal&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_hitscm = $base_url_mod . '&amp;ordername=hitscm&amp;order=' . $order2 . '&amp;page=' . $page;
-$base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $ordername . '&amp;order=' . $order . '&amp;search_time_from=' . $search_time_from . '&amp;type_date=' . $search_type_date . '&amp;search_time_to=' . $search_time_to;
+$base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
