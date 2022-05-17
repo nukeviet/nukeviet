@@ -670,6 +670,24 @@ $(document).ready(function() {
         $($(this).data('target')).prop('type', 'text');
         $($(this).data('target')).val(nv_randomPassword(10));
     });
+
+    if ($.fn.datepicker) {
+        $("#from_date, #to_date").datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            showOn: 'focus'
+        });
+    }
+
+    $('#to-btn').click(function() {
+        $("#to_date").datepicker('show');
+    });
+    
+    $('#from-btn').click(function() {
+        $("#from_date").datepicker('show');
+    });
 });
 
 function nv_sort_content(id, w) {

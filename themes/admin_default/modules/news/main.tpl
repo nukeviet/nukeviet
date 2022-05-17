@@ -14,11 +14,13 @@
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <input class="form-control" type="text" value="{Q}" maxlength="64" name="q" placeholder="{LANG.search_key}" />
+                    <label><strong>{LANG.search_key}</strong></label>
+                    <input class="form-control" type="text" value="{Q}" maxlength="64" name="q"/>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
+                    <label><strong>{SEARCH_TYPE.value}</strong></label>
                     <select class="form-control" name="stype">
                         <!-- BEGIN: search_type -->
                         <option value="{SEARCH_TYPE.key}" {SEARCH_TYPE.selected} >{SEARCH_TYPE.value}</option>
@@ -28,6 +30,7 @@
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
+                    <label><strong>{LANG.content_cat}</strong></label>
                     <select class="form-control" name="catid" id="catid">
                         <!-- BEGIN: cat_content -->
                         <option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
@@ -35,8 +38,9 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
+                    <label><strong>{LANG.search_status}</strong></label>
                     <select class="form-control" name="sstatus">
                         <option value="-1"> -- {LANG.search_status} -- </option>
                         <!-- BEGIN: search_status -->
@@ -45,8 +49,9 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-2">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
+                    <label><strong>{LANG.search_per_page}</strong></label>
                     <select class="form-control" name="per_page">
                         <option value="">{LANG.search_per_page}</option>
                         <!-- BEGIN: s_per_page -->
@@ -55,8 +60,48 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
+
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
+                    <label for="creator"><strong>{LANG.kind_of_time}</strong></label>
+                    <select class="form-control" name="type_date">
+                        <!-- BEGIN: search_type_date -->
+                            <option value="{VALUE.key}" {VALUE.selected} >{VALUE.value}</option>
+                        <!-- END: search_type_date -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label for="publtime"><strong>{LANG.search_time_from}</strong></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{TIME_FROM}" name="search_time_from" id="from_date">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="from-btn">
+                                <em class="fa fa-calendar fa-fix">&nbsp;</em>
+                            </button> 
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label for="publtime"><strong>{LANG.search_time_to}</strong></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{TIME_TO}" name="search_time_to" id="to_date">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="to-btn">
+                                <em class="fa fa-calendar fa-fix">&nbsp;</em>
+                            </button> 
+                        </span>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="col-xs-12 col-md-24">
+                <div class="form-group text-center">
                     <input class="btn btn-primary" type="submit" value="{LANG.search}" />
                 </div>
             </div>
@@ -73,7 +118,7 @@
                 <tr>
                     <th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
                     <th class="text-center"><a href="{base_url_name}">{LANG.name}</a></th>
-                    <th class="text-center"><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
+                    <th class="text-center"><a href="{base_url_publtime}">{LANG.search_public_time}</a></th>
                     <th>{LANG.author}</th>
                     <th>{LANG.status}</th>
                     <th class="text-center"><a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a></th>
@@ -102,7 +147,7 @@
                         <!-- END: text -->
                         <a target="_blank" href="{ROW.link}" id="id_{ROW.id}" title="{ROW.title}">{ROW.title_clean}</a>
                     </td>
-                    <td>{ROW.publtime}</td>
+                    <td class="text-center">{ROW.publtime}</td>
                     <td>{ROW.author}</td>
                     <td title="{ROW.status}">{ROW.status}</td>
                     <td class="text-center">{ROW.hitstotal}</td>
@@ -155,29 +200,29 @@
         </div>
     </form>
 </div>
-
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- BEGIN: generate_page -->
 <div class="text-center">
     {GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
 <script type="text/javascript">
-$(function() {
-    $( "#order_articles" ).dialog({
-        autoOpen: false,
-        show: {
-            effect: "blind",
-            duration: 500
-        },
-        hide: {
-            effect: "explode",
-            duration: 500
-        }
-    });
+    $(function() {
+        $( "#order_articles" ).dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 500
+            },
+            hide: {
+                effect: "explode",
+                duration: 500
+            }
+        });
 
-    $("#catid").select2({
-        language : '{NV_LANG_DATA}'
+        $("#catid").select2({
+            language : '{NV_LANG_DATA}'
+        });
     });
-});
 </script>
 <!-- END: main -->
