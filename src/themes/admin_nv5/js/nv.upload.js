@@ -1639,7 +1639,10 @@ NVCoreFileBrowser.prototype.handleMenuSelect = function(element) {
         folder: (nv_base_siteurl + filepath),
         file: (fullPath)
     });
-    $('#mdNVFileManagerPopup').modal('hide');
+
+    if (self.firstData.templateContainerID) {
+        $(self.firstData.templateContainerID).modal('hide');
+    }
 }
 
 /*
@@ -3694,6 +3697,7 @@ function($) {
             area: self.options.area,
             alt: self.options.alt,
             imgfile: '', // File đang chọn
+            templateContainerID: NVBrowseFile.DEFAULTS.templateContainerID,
             onPicked: self.options.onPicked // Event khi chọn ảnh xong
         };
 
@@ -3769,6 +3773,11 @@ function($) {
             $(NVBrowseFile.DEFAULTS.templateContainerID).on('hidden.bs.modal', function(e) {
                 var modalEle = $(e.currentTarget);
                 $('.modal-body', modalEle).html('');
+
+                // Fix multi modal
+                if ($('.modal-backdrop.show').length) {
+                    $('body').addClass('modal-open');
+                }
             });
         }
 
