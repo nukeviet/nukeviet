@@ -157,6 +157,9 @@
                         <!-- BEGIN: copy_news --><a href="{URL_COPY}" class="btn btn-success btn-xs" title="{LANG.title_copy_news}" ><i class="fa fa-copy"></i></a><!-- END: copy_news -->
                         <!-- BEGIN: excdata --><a href="{ROW.url_send}" class="btn btn-success btn-xs"><i class="fa fa-paper-plane-o"></i>{LANG.send}</a><!-- END: excdata -->
                         {ROW.feature}
+                        <!-- BEGIN: show_history -->
+                        <button type="button" value="{ROW.id}" class="btn btn-success btn-xs history" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history" aria-hidden="true"></i> {LANG.title_action_history}</button>
+                        <!-- END: show_history -->
                     </td>
                 </tr>
                 <!-- END: loop -->
@@ -176,6 +179,42 @@
         </table>
     </div>
 </form>
+
+<div class="modal fade" id="exampleModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h2 class="modal-title">{LANG.title_history_modal}</h2>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-center">{LANG.stt}</th>
+                        <th class="text-center">{LANG.title_new}</th>
+                        <th class="text-center">{LANG.user_change}</th>
+                        <th class="text-center" width="11%">{LANG.version}</th>
+                        <th class="text-center">{LANG.time_history}</th>
+                        <th class="text-center">{LANG.info_backup}</th>
+                        <th class="text-center">{LANG.action_form}</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{LANG.title_close}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading backup-->
+<div id="loading_backup"></div>
 
 <div id="order_articles" title="{LANG.order_articles}">
     <strong id="order_articles_title">{LANG.order_articles}</strong>

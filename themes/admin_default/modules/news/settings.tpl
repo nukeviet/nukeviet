@@ -21,6 +21,12 @@
                     </select></td>
                 </tr>
                 <tr>
+                    <th>{LANG.setting_history}</th>
+                    <td>
+                        <input type="checkbox" value="1" name="setting_history" {HISTORY}>
+                    </td>
+                </tr>
+                <tr>
                     <th>{LANG.setting_mobile_indexfile}</th>
                     <td>
                     <select class="form-control" name="mobile_indexfile">

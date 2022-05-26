@@ -30,7 +30,8 @@ $array_table = [
     'logs',
     'tmp',
     'author',
-    'authorlist'
+    'authorlist',
+    'history'
 ];
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
@@ -283,6 +284,21 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
     KEY alias (alias)
     ) ENGINE=MyISAM";
 
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_history (
+  id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  new_id int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Id bài viết',
+  content mediumtext NOT NULL DEFAULT '' COMMENT 'Nội dung dữ liệu của phiên bản cũ dạng JSON',
+  is_backup tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Trạng thái khôi phục: 0: chưa khôi phục, 1: Đã khôi phục',
+  time_backup int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Thời gian khôi phục',
+  userid int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Người tạo, sửa đổi phiên bản',
+  time_history int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Thời gian thay đổi',
+  active tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1: Đang sử dụng phiên bản, 0: Phiên bản cũ',
+  KEY new_id (new_id),
+  KEY time_backup (time_backup),
+  KEY userid (userid),
+  KEY time_history (time_history)
+) ENGINE=MyISAM";
+
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'mobile_indexfile', 'viewcat_page_new')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'per_page', '20')";
@@ -351,3 +367,6 @@ $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module,
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'frontend_edit_alias', '0')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'frontend_edit_layout', '1')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha_type', 'captcha')";
+
+// Cau hinh khoi phuc lịch sử
+$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setting_history', '0')";

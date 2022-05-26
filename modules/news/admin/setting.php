@@ -32,6 +32,7 @@ if (!empty($savesetting)) {
     $array_config['st_links'] = $nv_Request->get_int('st_links', 'post', 0);
     $array_config['homewidth'] = $nv_Request->get_int('homewidth', 'post', 0);
     $array_config['homeheight'] = $nv_Request->get_int('homeheight', 'post', 0);
+    $array_config['setting_history'] = $nv_Request->get_int('setting_history', 'post', 0);
     $array_config['blockwidth'] = $nv_Request->get_int('blockwidth', 'post', 0);
     $array_config['blockheight'] = $nv_Request->get_int('blockheight', 'post', 0);
     $array_config['imagefull'] = $nv_Request->get_int('imagefull', 'post', 0);
@@ -212,6 +213,7 @@ for ($i = 0; $i <= 6; ++$i) {
     $xtpl->parse('main.allowed_rating_point');
 }
 
+$xtpl->assign('HISTORY', $module_config[$module_name]['setting_history'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '');
 $xtpl->assign('HTMLHOMETEXT', $module_config[$module_name]['htmlhometext'] ? ' checked="checked"' : '');

@@ -348,3 +348,62 @@ input {
 .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
     height: 32px;
 }
+
+.fs-12 {
+    font-size: 12px !important;
+}
+
+table tr td {
+    vertical-align: middle !important;
+}
+
+.loading_spinner {
+    background: #60606073;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backup_spinner {
+    background: #fff;
+    padding: 10px;
+    border-radius: 2px;
+    box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
+}
+
+.backup_spinner i {
+    font-size: 16px;
+    color: #d3943c;
+    font-weight: bold;
+}
+
+.backup_spinner span {
+    color: #d3943c; font-size: 16px; margin-left: 8px; font-weight: bold;
+}
+
+.backup_success {
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 2px;
+    box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
+}
+
+.backup_success i {
+    color: #5cb85c;
+    font-size: 16px;
+}
+
+.backup_success p {
+    margin: 0;
+    margin-left: 8px;
+    font-size: 16px;
+}

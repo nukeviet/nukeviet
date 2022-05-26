@@ -200,6 +200,11 @@ $groups_list = nv_groups_list();
 $array_tags_old = [];
 $FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 $internal_authors_list = [];
+$array_history = [];
+$get_config_history = $db->query("SELECT config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE config_name = 'setting_history' and module = 'news'")->fetch();
+if (empty($get_config_history)) {
+    $get_config_history['config_value'] = 0;
+}
 
 // ID của bài viết cần sửa hoặc cần copy
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
@@ -691,6 +696,10 @@ if ($is_submit_form) {
             $data_insert['weight'] = $weightopic;
             $data_insert['keywords'] = $rowcontent['topictext'];
             $rowcontent['topicid'] = $db->insert_id($_sql, 'topicid', $data_insert);
+            $get_data_news_topics = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $rowcontent['topicid'])->fetch();
+            if (!empty($get_data_news_topics)) {
+                $array_history['news_topics'] = $get_data_news_topics;
+            }
         }
 
         $rowcontent['sourceid'] = 0;
@@ -714,6 +723,10 @@ if ($is_submit_form) {
                     $data_insert['weight'] = $weight;
 
                     $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
+                    $get_data_news_source = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $rowcontent['sourceid'])->fetch();
+                    if (!empty($get_data_news_source)) {
+                        $array_history['news_sources'] = $get_data_news_source;
+                    }
                 }
 
                 $rowcontent['external_link'] = $rowcontent['external_link'] ? 1 : 0;
@@ -731,6 +744,10 @@ if ($is_submit_form) {
                     $data_insert['title'] = $rowcontent['sourcetext'];
 
                     $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
+                    $get_data_news_source = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $rowcontent['sourceid'])->fetch();
+                    if (!empty($get_data_news_source)) {
+                        $array_history['news_sources'] = $get_data_news_source;
+                    }
                 }
 
                 $rowcontent['external_link'] = 0;
@@ -831,6 +848,11 @@ if ($is_submit_form) {
 
             $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
             if ($rowcontent['id'] > 0) {
+                $get_data_new = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $rowcontent['id'])->fetch();
+                if (!empty($get_data_new)) {
+                    $array_history['news_rows'] = $get_data_new;
+                }
+
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid']);
                 $ct_query = [];
 
@@ -858,8 +880,20 @@ if ($is_submit_form) {
                 $stmt->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
                 $ct_query[] = (int) $stmt->execute();
 
+                // History
+                $get_data_new_detail = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $rowcontent['id'])->fetch();
+                if (!empty($get_data_new_detail)) {
+                    $array_history['news_detail'] = $get_data_new_detail;
+                }
+
                 foreach ($catids as $catid) {
                     $ct_query[] = (int) $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
+                        $id = $db->lastInsertId();
+                        $get_data_new_detail = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id)->fetch();
+                        // History
+                        if (!empty($get_data_new_detail)) {
+                            $array_history['news_' . $catid] = $get_data_new_detail;
+                        }
                 }
 
                 if (array_sum($ct_query) != sizeof($ct_query)) {
@@ -878,6 +912,11 @@ if ($is_submit_form) {
 
                     $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
                     $response = $nukeVietElasticSearh->insert_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $rowcontent['id'], $rowcontent);
+
+                    if (!empty($array_history) && $get_config_history['config_value']) {
+                        // Lưu lại lịch sử khi thêm nv4_vi_news_history
+                        $result_news_history = nv_add_history_news($rowcontent['id'], json_encode($array_history), $rowcontent['admin_id'], NV_CURRENTTIME);
+                    }
                 }
             } else {
                 $error[] = $lang_module['errorsave'];
@@ -909,6 +948,10 @@ if ($is_submit_form) {
             if (array_intersect($catids, $array_cat_locked) != [] and $rowcontent['status'] <= $global_code_defined['row_locked_status']) {
                 $rowcontent['status'] += ($global_code_defined['row_locked_status'] + 1);
             }
+
+            // Lấy phiên bản news_row hiện tại
+            $get_data_new_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $rowcontent['id'])->fetch();
+            unset($get_data_new_old['edittime']);
 
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
                 catid=' . (int) ($rowcontent['catid']) . ',
@@ -948,7 +991,18 @@ if ($is_submit_form) {
             $sth->bindParam(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
 
             if ($sth->execute()) {
+                $get_data_new = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $rowcontent['id'])->fetch();
+                unset($get_data_new['edittime']);
+
+                $result = array_diff_assoc($get_data_new_old, $get_data_new);
+                if (!empty($result)) {
+                    $array_history['news_rows'] = $get_data_new;
+                }
+
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
+
+                // History
+                $get_data_new_detail_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $rowcontent['id'])->fetch();
 
                 $ct_query = [];
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_detail SET
@@ -976,6 +1030,13 @@ if ($is_submit_form) {
 
                 $ct_query[] = (int) $sth->execute();
 
+                $get_data_new_detail = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $rowcontent['id'])->fetch();
+
+                $result = array_diff_assoc($get_data_new_detail_old, $get_data_new_detail);
+                if (!empty($result)) {
+                    $array_history['news_detail'] = $get_data_new_detail;
+                }
+
                 if ($rowcontent_old['listcatid'] != $rowcontent['listcatid']) {
                     $array_cat_old = explode(',', $rowcontent_old['listcatid']);
                     $array_cat_new = explode(',', $rowcontent['listcatid']);
@@ -989,8 +1050,21 @@ if ($is_submit_form) {
 
                 foreach ($catids as $catid) {
                     if (!empty($catid)) {
+                        $get_data_new_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'])->fetch();
+                            unset($get_data_new_old['edittime']);
+
                         $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
                         $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
+
+                        $id = $db->lastInsertId();
+
+                        $get_data_new = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id)->fetch();
+                        unset($get_data_new['edittime']);
+
+                        $result = array_diff_assoc($get_data_new_old, $get_data_new);
+                        if (!empty($result)) {
+                            $array_history['news_' . $catid] = $get_data_new;
+                        }
                     }
                 }
 
@@ -1012,6 +1086,11 @@ if ($is_submit_form) {
 
                 // Sau khi sửa, tiến hành xóa bản ghi lưu trạng thái sửa trong csdl
                 $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id = ' . $rowcontent['id']);
+
+                if (!empty($array_history) && $get_config_history['config_value']) {
+                    // Lưu lại lịch sử khi thêm nv4_vi_news_history
+                    $result_news_history = nv_add_history_news($rowcontent['id'], json_encode($array_history), $rowcontent['admin_id'], NV_CURRENTTIME);
+                }
             } else {
                 $error[] = $lang_module['errorsave'];
             }
