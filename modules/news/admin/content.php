@@ -318,6 +318,7 @@ if ($rowcontent['id'] == 0) {
         $rowcontent['hometext'] = strip_tags($rowcontent['hometext'], 'br');
     }
 }
+$old_rowcontent = $rowcontent;
 
 // Xác định các chuyên mục được quyền đăng bài, xuất bản bài viết, sửa bài, kiểm duyệt bài, các chuyên mục hiện đang bị khóa
 $array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = [];
@@ -910,6 +911,7 @@ if ($is_submit_form) {
                 $rowcontent['status'] += ($global_code_defined['row_locked_status'] + 1);
             }
 
+            // Cập nhật bảng rows
             $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
                 catid=' . (int) ($rowcontent['catid']) . ',
                 listcatid=:listcatid,
@@ -951,6 +953,8 @@ if ($is_submit_form) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
 
                 $ct_query = [];
+
+                // Cập nhật bảng detail
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_detail SET
                     titlesite=:titlesite,
                     description=:description,
@@ -976,6 +980,7 @@ if ($is_submit_form) {
 
                 $ct_query[] = (int) $sth->execute();
 
+                // Xóa trong bảng cat cũ
                 if ($rowcontent_old['listcatid'] != $rowcontent['listcatid']) {
                     $array_cat_old = explode(',', $rowcontent_old['listcatid']);
                     $array_cat_new = explode(',', $rowcontent['listcatid']);
@@ -987,6 +992,7 @@ if ($is_submit_form) {
                     }
                 }
 
+                // Xóa bảng cat và thêm lại
                 foreach ($catids as $catid) {
                     if (!empty($catid)) {
                         $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
@@ -997,6 +1003,8 @@ if ($is_submit_form) {
                 if (array_sum($ct_query) != sizeof($ct_query)) {
                     $error[] = $lang_module['errorsave'];
                 }
+
+                // Cập nhật bên ES
                 if ($module_config[$module_name]['elas_use'] == 1) {
                     $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
                     $rowcontent = array_merge($rowcontent, $body_contents);
@@ -1012,6 +1020,11 @@ if ($is_submit_form) {
 
                 // Sau khi sửa, tiến hành xóa bản ghi lưu trạng thái sửa trong csdl
                 $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id = ' . $rowcontent['id']);
+
+                // Lưu lịch sử sửa bài viết
+                if (!empty($module_config[$module_name]['active_history'])) {
+                    nv_save_history($old_rowcontent, $rowcontent);
+                }
             } else {
                 $error[] = $lang_module['errorsave'];
             }

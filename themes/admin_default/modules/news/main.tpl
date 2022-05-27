@@ -80,7 +80,7 @@
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" id="from-btn">
                                 <em class="fa fa-calendar fa-fix">&nbsp;</em>
-                            </button> 
+                            </button>
                         </span>
                     </div>
                 </div>
@@ -94,12 +94,12 @@
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" id="to-btn">
                                 <em class="fa fa-calendar fa-fix">&nbsp;</em>
-                            </button> 
+                            </button>
                         </span>
                     </div>
                 </div>
             </div>
-           
+
             <div class="col-xs-12 col-md-24">
                 <div class="form-group text-center">
                     <input class="btn btn-primary" type="submit" value="{LANG.search}" />
@@ -153,10 +153,11 @@
                     <td class="text-center">{ROW.hitstotal}</td>
                     <td class="text-center">{ROW.hitscm}</td>
                     <td class="text-center">{ROW.numtags}</td>
-                    <td class="text-center">
+                    <td class="text-center text-nowrap">
                         <!-- BEGIN: copy_news --><a href="{URL_COPY}" class="btn btn-success btn-xs" title="{LANG.title_copy_news}" ><i class="fa fa-copy"></i></a><!-- END: copy_news -->
                         <!-- BEGIN: excdata --><a href="{ROW.url_send}" class="btn btn-success btn-xs"><i class="fa fa-paper-plane-o"></i>{LANG.send}</a><!-- END: excdata -->
                         {ROW.feature}
+                        <a href="#" class="btn btn-xs btn-default" title="Lịch sử bài viết"><i class="fa fa-history" aria-hidden="true"></i></a>
                     </td>
                 </tr>
                 <!-- END: loop -->

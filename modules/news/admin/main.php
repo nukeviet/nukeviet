@@ -697,7 +697,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     if ($catid) {
         $base_url_mod .= '&amp;catid=' . $catid;
     }
-    
+
     if (!empty($q)) {
         $base_url_mod .= '&amp;q=' . urlencode($q);
     }
@@ -995,6 +995,17 @@ foreach ($search_per_page as $s_per_page) {
 foreach ($search_status as $status_view) {
     $xtpl->assign('SEARCH_STATUS', $status_view);
     $xtpl->parse('main.search_status');
+}
+
+// Lấy số lịch sử trong các bài đăng hiển thị
+$array_histories = [];
+if (!empty($data) and !empty($module_config[$module_name]['active_history'])) {
+    $sql = "SELECT COUNT(id) numhis, new_id FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories
+    WHERE new_id IN(" . implode(',', array_keys($data)) . ") GROUP BY new_id";
+    $result = $db->query($sql);
+    while ($row = $result->fetch()) {
+        $array_histories[$row['new_id']] = $row['numhis'];
+    }
 }
 
 $url_copy = '';
