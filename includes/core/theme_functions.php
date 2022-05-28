@@ -391,22 +391,11 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
         $channel['link'] = NV_BASE_SITEURL . $matches[1];
     }
 
-    if (empty($atomlink)) {
-        global $module_info;
-
-        if (!empty($module_info['alias']['rss'])) {
-            if (preg_match('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', $channel['link'])) {
-                $atomlink = preg_replace('/((&|&amp;)' . NV_OP_VARIABLE . '=)([^&]+)/', '\\1' . $module_info['alias']['rss'] . '/\\3', $channel['link']);
-            } else if (preg_match('/((&|&amp;)' . NV_NAME_VARIABLE . '=)([^&]+)/', $channel['link'])) {
-                $atomlink = preg_replace('/((&|&amp;)' . NV_NAME_VARIABLE . '=)([^&]+)/', '\\1\\3' . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'], $channel['link']);
-            } else {
-                $atomlink = $channel['link'] . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'];
-            }
+    if (!empty($atomlink)) {
+        $atomlink = nv_url_rewrite($atomlink, true);
+        if (!str_starts_with($atomlink, NV_MY_DOMAIN)) {
+            $atomlink = NV_MY_DOMAIN . $atomlink;
         }
-    }
-    $atomlink = nv_url_rewrite($atomlink, true);
-    if (!str_starts_with($atomlink, NV_MY_DOMAIN)) {
-        $atomlink = NV_MY_DOMAIN . $atomlink;
     }
 
     $channel['link'] = nv_url_rewrite($channel['link'], true);
@@ -528,6 +517,11 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $n
     }
 
     $xtpl->assign('CHANNEL', $channel);
+
+    if (!empty($channel['atomlink'])) {
+        $xtpl->parse('main.atom');
+        $xtpl->parse('main.atom_link');
+    }
 
     if (!empty($channel['description'])) {
         $xtpl->parse('main.description');
