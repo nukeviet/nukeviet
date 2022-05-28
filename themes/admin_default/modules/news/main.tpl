@@ -76,7 +76,7 @@
                 <div class="form-group">
                     <label for="publtime"><strong>{LANG.search_time_from}</strong></label>
                     <div class="input-group">
-                        <input type="text" class="form-control" value="{TIME_FROM}" name="search_time_from" id="from_date">
+                        <input type="text" class="form-control" value="{TIME_FROM}" name="search_time_from" id="from_date" autocomplete="off">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" id="from-btn">
                                 <em class="fa fa-calendar fa-fix">&nbsp;</em>
@@ -90,7 +90,7 @@
                 <div class="form-group">
                     <label for="publtime"><strong>{LANG.search_time_to}</strong></label>
                     <div class="input-group">
-                        <input type="text" class="form-control" value="{TIME_TO}" name="search_time_to" id="to_date">
+                        <input type="text" class="form-control" value="{TIME_TO}" name="search_time_to" id="to_date" autocomplete="off">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" id="to-btn">
                                 <em class="fa fa-calendar fa-fix">&nbsp;</em>
