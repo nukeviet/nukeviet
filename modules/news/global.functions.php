@@ -566,6 +566,7 @@ function my_author_detail($userid)
 /**
  * @param array $post_old
  * @param array $post_new
+ * @return string[]
  */
 function nv_save_history($post_old, $post_new)
 {
@@ -593,7 +594,6 @@ function nv_save_history($post_old, $post_new)
         'instant_active',
         'instant_template',
         'instant_creatauto',
-        'topictext',
         'titlesite',
         'description',
         'bodyhtml',
@@ -642,14 +642,16 @@ function nv_save_history($post_old, $post_new)
             hometext, homeimgfile, homeimgalt, inhome, allowed_comm,
             allowed_rating, external_link, instant_active, instant_template,
             instant_creatauto, titlesite, description, bodyhtml, keywords, sourcetext,
-            files, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save, changed_fields
+            files, tags, internal_authors, imgposition, layout_func, copyright,
+            allowed_send, allowed_print, allowed_save, changed_fields
         ) VALUES (
             :new_id, :historytime, :catid, :listcatid, :topicid, :admin_id,
             :author, :sourceid, :publtime, :exptime, :archive, :title, :alias,
             :hometext, :homeimgfile, :homeimgalt, :inhome, :allowed_comm,
             :allowed_rating, :external_link, :instant_active, :instant_template,
             :instant_creatauto, :titlesite, :description, :bodyhtml, :keywords, :sourcetext,
-            :files, :imgposition, :layout_func, :copyright, :allowed_send, :allowed_print, :allowed_save, :changed_fields
+            :files, :tags, :internal_authors, :imgposition, :layout_func,
+            :copyright, :allowed_send, :allowed_print, :allowed_save, :changed_fields
         )";
         $array_insert = [];
         $array_insert['new_id'] = $post_old['id'];
@@ -681,6 +683,8 @@ function nv_save_history($post_old, $post_new)
         $array_insert['keywords'] = $post_old['keywords'];
         $array_insert['sourcetext'] = $post_old['sourcetext'];
         $array_insert['files'] = $post_old['files'];
+        $array_insert['tags'] = $post_old['tags'];
+        $array_insert['internal_authors'] = implode(',', $post_old['internal_authors']);
         $array_insert['imgposition'] = $post_old['imgposition'];
         $array_insert['layout_func'] = $post_old['layout_func'];
         $array_insert['copyright'] = $post_old['copyright'];
@@ -690,4 +694,6 @@ function nv_save_history($post_old, $post_new)
         $array_insert['changed_fields'] = implode(',', $change_fields);
         $db->insert_id($sql, 'id', $array_insert);
     }
+
+    return $change_fields;
 }
