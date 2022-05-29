@@ -712,7 +712,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         if ($global_config['XSSsanitize']) {
             $return[] = [
                 'ext' => 1,
-                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/DOMPurify/purify.js'
+                'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/DOMPurify/purify.js'
             ];
         }
 
@@ -723,7 +723,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
 
         $return[] = [
             'ext' => 1,
-            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/site.js'
+            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/site.js'
         ];
     }
 
