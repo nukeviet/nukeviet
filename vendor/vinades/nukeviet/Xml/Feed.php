@@ -255,7 +255,8 @@ class Feed
         }
 
         // Required channel elements
-        $channel_node->appendChild($xml->createElement('title', $channel_data['title']));
+        $channel_title_node = $channel_node->appendChild($xml->createElement('title'));
+        $channel_title_node->appendChild($xml->createCDATASection($channel_data['title']));
         $channel_node->appendChild($xml->createElement('link', self::make_external_url($channel_data['link'], $channel_data['domain'])));
         $channel_description_node = $channel_node->appendChild($xml->createElement('description'));
         $channel_description_node->appendChild($xml->createCDATASection($channel_data['description']));
@@ -294,7 +295,10 @@ class Feed
                 if (!empty($item_data['title']) or !empty($item_data['description'])) {
                     $item_node = $channel_node->appendChild($xml->createElement('item'));
 
-                    !empty($item_data['title']) && $item_node->appendChild($xml->createElement('title', $item_data['title']));
+                    if (!empty($item_data['title'])) {
+                        $item_title_node = $item_node->appendChild($xml->createElement('title'));
+                        $item_title_node->appendChild($xml->createCDATASection($item_data['title']));
+                    }
                     !empty($item_data['link']) && $item_node->appendChild($xml->createElement('link', self::make_external_url($item_data['link'], $channel_data['domain'])));
                     if (!empty($item_data['guid'])) {
                         $guid_link = $xml->createElement('guid');
@@ -365,8 +369,9 @@ class Feed
         $feed_node->setAttribute('xmlns', 'http://www.w3.org/2005/Atom');
 
         // Required feed elements
-        $feed_title_node = $feed_node->appendChild($xml->createElement('title', $channel_data['title']));
+        $feed_title_node = $feed_node->appendChild($xml->createElement('title'));
         $feed_title_node->setAttribute('type', 'html');
+        $feed_title_node->appendChild($xml->createCDATASection($channel_data['title']));
         $feed_node->appendChild($xml->createElement('updated', $channel_data['updated']));
         $feed_node->appendChild($xml->createElement('id', $channel_data['uuid']));
 
@@ -418,8 +423,9 @@ class Feed
                     $entry_node = $feed_node->appendChild($xml->createElement('entry'));
 
                     // Required Elements of <entry>
-                    $entry_title_node = $entry_node->appendChild($xml->createElement('title', $item_data['title']));
+                    $entry_title_node = $entry_node->appendChild($xml->createElement('title'));
                     $entry_title_node->setAttribute('type', 'html');
+                    $entry_title_node->appendChild($xml->createCDATASection($item_data['title']));
                     $entry_node->appendChild($xml->createElement('updated', $item_data['pubdate']));
                     $entry_node->appendChild($xml->createElement('id', $item_data['uuid']));
 
