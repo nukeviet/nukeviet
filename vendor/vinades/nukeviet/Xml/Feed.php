@@ -38,16 +38,25 @@ class Feed
      * parse_description()
      *
      * @param mixed $description
+     * @param mixed $rootdir
+     * @param mixed $domain
      * @return (false|string)[]
      */
-    private static function parse_description($description)
+    private static function parse_description($description, $rootdir, $domain)
     {
         $description_image = '';
         empty($description) && $description = '';
 
         if (!empty($description)) {
             if (preg_match('#<img.+src="([^"]+)"[^>]*>#i', $description, $matches)) {
-                $description_image = $matches['1'];
+                if (str_starts_with($matches['1'], $domain)) {
+                    $matches['1'] = substr($matches['1'], strlen($domain));
+                }
+                if (preg_match('/^https?/', $matches['1'])) {
+                    $description_image = $matches['1'];
+                } elseif (file_exists($rootdir . '/' . $matches['1'])) {
+                    $description_image = $matches['1'];
+                }
             }
 
             $description = trim(strip_tags($description));
@@ -223,7 +232,7 @@ class Feed
             return false;
         }
 
-        list(, $channel_data['description']) = self::parse_description($channel_data['description']);
+        list(, $channel_data['description']) = self::parse_description($channel_data['description'], $channel_data['rootdir'], $channel_data['domain']);
 
         $xml = new DOMDocument('1.0', 'UTF-8');
         $xml->preserveWhiteSpace = false;
@@ -302,7 +311,7 @@ class Feed
                         $item_author_node->appendChild($xml->createCDATASection($item_data['author']));
                     }
                     if (!empty($item_data['description'])) {
-                        list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description']);
+                        list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
                         $item_description_node = $item_node->appendChild($xml->createElement('description'));
                         if (!empty($item_data['description_image'])) {
                             $item_data['description_image'] = self::make_external_url($item_data['description_image'], $channel_data['domain']);
@@ -375,7 +384,7 @@ class Feed
             $feed_link_node->setAttribute('type', 'text/html');
         }
         if (!empty($channel_data['description'])) {
-            list(, $channel_data['description']) = self::parse_description($channel_data['description']);
+            list(, $channel_data['description']) = self::parse_description($channel_data['description'], $channel_data['rootdir'], $channel_data['domain']);
 
             $feed_subtitle_node = $feed_node->appendChild($xml->createElement('subtitle'));
             $feed_subtitle_node->setAttribute('type', 'html');
@@ -426,7 +435,7 @@ class Feed
                         $entry_author_name_node->appendChild($xml->createCDATASection($item_data['author']));
                     }
                     if (!empty($item_data['description'])) {
-                        list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description']);
+                        list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
                         $entry_summary_node = $entry_node->appendChild($xml->createElement('summary'));
                         if (!empty($item_data['description_image'])) {
                             $item_data['description_image'] = self::make_external_url($item_data['description_image'], $channel_data['domain']);
