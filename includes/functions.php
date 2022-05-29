@@ -1889,27 +1889,38 @@ function getCanonicalUrl($page_url, $query_check = false, $abs_comp = false)
  * nv_check_domain()
  *
  * @param string $domain
- * @return string
+ * @return string $domain_ascii
  */
 function nv_check_domain($domain)
 {
-    if (preg_match('/^([a-z0-9]+)([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain) or $domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
+    if (preg_match("/^([a-z0-9](-*[a-z0-9])*)(\.([a-z0-9](-*[a-z0-9])*))*$/i", $domain) and preg_match('/^.{1,253}$/', $domain) and preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $domain)) {
         return $domain;
     }
+
+    if ($domain == 'localhost') {
+        return $domain;
+    }
+
+    if (filter_var($domain, FILTER_VALIDATE_IP)) {
+        return $domain;
+    }
+
     if (!empty($domain)) {
         if (function_exists('idn_to_ascii')) {
-            $domain_ascii = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+            $domain = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
         } else {
             $Punycode = new TrueBV\Punycode();
             try {
-                $domain_ascii = $Punycode->encode($domain);
+                $domain = $Punycode->encode($domain);
             } catch (\Exception $e) {
-                $domain_ascii = '';
+                $domain = '';
             }
         }
-        if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain_ascii)) {
-            return $domain_ascii;
+
+        if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain)) {
+            return $domain;
         }
+
         if ($domain == NV_SERVER_NAME) {
             return $domain;
         }
