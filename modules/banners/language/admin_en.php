@@ -136,3 +136,4 @@ $lang_module['all_plan'] = 'All plans';
 $lang_module['form_random'] = 'Random all ads';
 $lang_module['form_random_one'] = 'Random one ads';
 $lang_module['form_sequential'] = 'Sequentially';
+$lang_module['click_url_invalid'] = 'Incorrect destination URL';

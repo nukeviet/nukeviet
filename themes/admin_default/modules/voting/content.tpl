@@ -17,56 +17,48 @@
                         <tr>
                             <td>{LANG.voting_time}</td>
                             <td>
-                                <table>
-                                    <tr>
-                                        <td><input name="publ_date" id="publ_date" value="{PUBL_DATE}" class="form-control w100 pull-left" maxlength="10" readonly="readonly" type="text" />&nbsp;</td>
-                                        <td>
-                                            <select name="phour" class="form-control w100">
-                                                <!-- BEGIN: phour -->
-                                                <option value="{PHOUR.key}"{PHOUR.selected}>{PHOUR.title}</option>
-                                                <!-- END: phour -->
-                                            </select>
-                                        </td>
-                                        <td>&nbsp;:&nbsp;</td>
-                                        <td>
-                                            <select name="pmin" class="form-control w100">
-                                                <!-- BEGIN: pmin -->
-                                                <option value="{PMIN.key}"{PMIN.selected}>{PMIN.title}</option>
-                                                <!-- END: pmin -->
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <div class="input-group datetime text-nowrap" style="display:flex">
+                                    <input name="publ_date" id="publ_date" value="{PUBL_DATE}" class="form-control w100 pull-left" style="background-color: white;" maxlength="10" readonly="readonly" type="text" />
+                                    <select name="phour" class="form-control pull-left" style="width: 60px;border-left:0">
+                                        <!-- BEGIN: phour -->
+                                        <option value="{PHOUR.key}" {PHOUR.selected}>{PHOUR.title}</option>
+                                        <!-- END: phour -->
+                                    </select>
+                                    <select name="pmin" class="form-control pull-left" style="width: 60px;border-left:0">
+                                        <!-- BEGIN: pmin -->
+                                        <option value="{PMIN.key}" {PMIN.selected}>{PMIN.title}</option>
+                                        <!-- END: pmin -->
+                                    </select>
+                                    <span class="input-group-btn pull-left">
+                                        <button class="btn btn-default" type="button" data-toggle="clearDateTime"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    </span>
+                                </div>
                             </td>
                         </tr>
                         <tr>
                             <td>{LANG.voting_timeout}</td>
                             <td>
-                                <table>
-                                    <tr>
-                                        <td><input name="exp_date" id="exp_date" value="{EXP_DATE}" class="form-control w100 pull-left" maxlength="10" readonly="readonly" type="text" />&nbsp;</td>
-                                        <td>
-                                            <select name="ehour" class="form-control w100">
-                                                <!-- BEGIN: ehour -->
-                                                <option value="{EHOUR.key}"{EHOUR.selected}>{EHOUR.title}</option>
-                                                <!-- END: ehour -->
-                                            </select>
-                                        </td>
-                                        <td>&nbsp;:&nbsp;</td>
-                                        <td>
-                                            <select name="emin" class="form-control w100">
-                                                <!-- BEGIN: emin -->
-                                                <option value="{EMIN.key}"{EMIN.selected}>{EMIN.title}</option>
-                                                <!-- END: emin -->
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <div class="input-group datetime text-nowrap" style="display:flex">
+                                    <input name="exp_date" id="exp_date" value="{EXP_DATE}" class="form-control w100 pull-left" style="background-color: white;" maxlength="10" readonly="readonly" type="text" />
+                                    <select name="ehour" class="form-control pull-left" style="width: 60px;border-left:0">
+                                        <!-- BEGIN: ehour -->
+                                        <option value="{EHOUR.key}" {EHOUR.selected}>{EHOUR.title}</option>
+                                        <!-- END: ehour -->
+                                    </select>
+                                    <select name="emin" class="form-control pull-left" style="width: 60px;border-left:0">
+                                        <!-- BEGIN: emin -->
+                                        <option value="{EMIN.key}" {EMIN.selected}>{EMIN.title}</option>
+                                        <!-- END: emin -->
+                                    </select>
+                                    <span class="input-group-btn pull-left">
+                                        <button class="btn btn-default" type="button" data-toggle="clearDateTime"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    </span>
+                                </div>
                             </td>
                         </tr>
                         <tr>
                             <td>{LANG.voting_question}<sup class="required">(*)</sup></td>
-                            <td><input class="form-control" type="text" name="question" size="60" maxlength="{DATA.question_maxlength}" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
+                            <td><input class="form-control" type="text" name="question" size="60" maxlength="{DATA.question_maxlength}" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}" oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')" /></td>
                         </tr>
                         <tr>
                             <td>{LANG.voting_link}</td>
@@ -87,14 +79,14 @@
                             <!-- BEGIN: item -->
                             <tr>
                                 <td class="text-right">{LANG.voting_question_num} {ITEM.stt}</td>
-                                <td><input class="form-control" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" maxlength="245"/></td>
-                                <td><input class="form-control" type="url" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
+                                <td><input class="form-control" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" maxlength="245" /></td>
+                                <td><input class="form-control" type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]" maxlength="255" /></td>
                             </tr>
                             <!-- END: item -->
                             <tr>
                                 <td class="text-right">{LANG.voting_question_num} {NEW_ITEM}<sup class="required">(*)</sup></td>
-                                <td><input class="form-control" type="text" value="" name="answervotenews[]" maxlength="245"/></td>
-                                <td><input class="form-control" type="text" value="" name="urlvotenews[]"/></td>
+                                <td><input class="form-control" type="text" value="" name="answervotenews[]" maxlength="245" /></td>
+                                <td><input class="form-control" type="text" value="" name="urlvotenews[]" maxlength="255" /></td>
                             </tr>
                         </tbody>
                     </table>
@@ -105,7 +97,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-24 m-bottom">
                     <label><strong>{LANG.voting_maxoption}:</strong></label>
-                    <input class="form-control w100" type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt" required pattern="^([0-9])+$" oninvalid="this.setCustomValidity(nv_digits)" oninput="this.setCustomValidity('')"/>
+                    <input class="form-control w100" type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt" required pattern="^([0-9])+$" oninvalid="this.setCustomValidity(nv_digits)" oninput="this.setCustomValidity('')" />
                 </div>
                 <div class="col-sm-12 col-md-24 m-bottom">
                     <label><strong>{GLANG.groups_view}:</strong></label>
@@ -128,20 +120,26 @@
     </div>
     <div class="row text-center">
         <input type="button" value="{LANG.add_answervote}" onclick="nv_vote_add_item('{LANG.voting_question_num}');" class="btn btn-info" />
-        <input type="submit" name="submit" value="{LANG.voting_confirm}" class="btn btn-primary" />
+        <input type="hidden" name="save" value="1"/>
+        <button type="submit" class="btn btn-primary">{LANG.voting_confirm}</button>
     </div>
 </form>
 <script>
-$(document).ready(function() {
-    $("#publ_date,#exp_date").datepicker({
-        showOn : "both",
-        dateFormat : "dd/mm/yy",
-        changeMonth : true,
-        changeYear : true,
-        showOtherMonths : true,
-        buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-        buttonImageOnly : true
+    $(document).ready(function() {
+        $("#publ_date,#exp_date").datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            constrainInput: true
+        });
+
+        $('[data-toggle=clearDateTime]').on('click', function(e) {
+            e.preventDefault();
+            var obj = $(this).parents('.datetime');
+            $('input', obj).val('');
+            $('select', obj).val('0')
+        })
     });
-});
 </script>
 <!-- END: main -->
