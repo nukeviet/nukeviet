@@ -89,7 +89,7 @@
                     <tr>
                         <td>{LANG.group_avatar}:</td>
                         <td class="form-inline">
-                            <input class="form-control" type="text" name="group_avatar" id="group_avatar" value="{DATA.group_avatar}" maxlength="10"/>
+                            <input class="form-control" type="text" name="group_avatar" id="group_avatar" value="{DATA.group_avatar}" maxlength="255"/>
                             <input type="button" name="browse-image" value="{LANG.select}" class="btn btn-default" data-area="group_avatar" data-path="{AVATAR_PATH}" data-currentpath="{AVATAR_CURENT_PATH}"/>
                         </td>
                     </tr>
