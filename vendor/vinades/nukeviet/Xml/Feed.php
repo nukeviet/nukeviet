@@ -35,6 +35,34 @@ class Feed
     }
 
     /**
+     * unhtmlspecialchars()
+     *
+     * @param mixed $string
+     * @return mixed
+     */
+    private static function unhtmlspecialchars($string)
+    {
+        if (empty($string)) {
+            return $string;
+        }
+
+        if (is_array($string)) {
+            $array_keys = array_keys($string);
+
+            foreach ($array_keys as $key) {
+                $string[$key] = self::unhtmlspecialchars($string[$key]);
+            }
+        } else {
+            $search = ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
+            $replace = ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
+
+            $string = str_replace($search, $replace, $string);
+        }
+
+        return $string;
+    }
+
+    /**
      * parse_description()
      *
      * @param mixed $description
@@ -60,7 +88,7 @@ class Feed
             }
 
             $description = trim(strip_tags($description));
-            $description = nv_unhtmlspecialchars($description);
+            $description = self::unhtmlspecialchars($description);
             $description = preg_replace("/[\r\n]+/", ' ', $description);
             $description = preg_replace("/(\&nbsp\;|\s)+/", ' ', $description);
             $description = nv_clean60($description, self::$description_max_length, false);
@@ -256,7 +284,7 @@ class Feed
 
         // Required channel elements
         $channel_title_node = $channel_node->appendChild($xml->createElement('title'));
-        $channel_title_node->appendChild($xml->createCDATASection($channel_data['title']));
+        $channel_title_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($channel_data['title'])));
         $channel_node->appendChild($xml->createElement('link', self::make_external_url($channel_data['link'], $channel_data['domain'])));
         $channel_description_node = $channel_node->appendChild($xml->createElement('description'));
         $channel_description_node->appendChild($xml->createCDATASection($channel_data['description']));
@@ -265,12 +293,12 @@ class Feed
         !empty($channel_data['lang']) && $channel_node->appendChild($xml->createElement('language', $channel_data['lang']));
         if (!empty($channel_data['copyright'])) {
             $channel_copyright_node = $channel_node->appendChild($xml->createElement('copyright'));
-            $channel_copyright_node->appendChild($xml->createCDATASection($channel_data['copyright']));
+            $channel_copyright_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($channel_data['copyright'])));
         }
         !empty($channel_data['docs']) && $channel_node->appendChild($xml->createElement('docs', self::make_external_url($channel_data['docs'], $channel_data['domain'])));
         if (!empty($channel_data['generator'])) {
             $channel_generator_node = $channel_node->appendChild($xml->createElement('generator'));
-            $channel_generator_node->appendChild($xml->createCDATASection($channel_data['generator']));
+            $channel_generator_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($channel_data['generator'])));
         }
         if (!empty($channel_data['pubDate'])) {
             $channel_data['pubDate'] = self::create_time($channel_data['pubDate'], $timemode);
@@ -297,12 +325,12 @@ class Feed
 
                     if (!empty($item_data['title'])) {
                         $item_title_node = $item_node->appendChild($xml->createElement('title'));
-                        $item_title_node->appendChild($xml->createCDATASection($item_data['title']));
+                        $item_title_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($item_data['title'])));
                     }
                     !empty($item_data['link']) && $item_node->appendChild($xml->createElement('link', self::make_external_url($item_data['link'], $channel_data['domain'])));
                     if (!empty($item_data['guid'])) {
                         $guid_link = $xml->createElement('guid');
-                        $guid_link->appendChild($xml->createCDATASection($item_data['guid']));
+                        $guid_link->appendChild($xml->createCDATASection(self::unhtmlspecialchars($item_data['guid'])));
                         $guid_link->setAttribute('isPermaLink', 'false');
                         $item_node->appendChild($guid_link);
                     }
@@ -312,7 +340,7 @@ class Feed
                     }
                     if (!empty($item_data['author'])) {
                         $item_author_node = $item_node->appendChild($xml->createElement('author'));
-                        $item_author_node->appendChild($xml->createCDATASection($item_data['author']));
+                        $item_author_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($item_data['author'])));
                     }
                     if (!empty($item_data['description'])) {
                         list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
@@ -371,7 +399,7 @@ class Feed
         // Required feed elements
         $feed_title_node = $feed_node->appendChild($xml->createElement('title'));
         $feed_title_node->setAttribute('type', 'html');
-        $feed_title_node->appendChild($xml->createCDATASection($channel_data['title']));
+        $feed_title_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($channel_data['title'])));
         $feed_node->appendChild($xml->createElement('updated', $channel_data['updated']));
         $feed_node->appendChild($xml->createElement('id', $channel_data['uuid']));
 
@@ -398,7 +426,7 @@ class Feed
         if (!empty($channel_data['copyright'])) {
             $feed_author_node = $feed_node->appendChild($xml->createElement('author'));
             $feed_author_name_node = $feed_author_node->appendChild($xml->createElement('name'));
-            $feed_author_name_node->appendChild($xml->createCDATASection($channel_data['copyright']));
+            $feed_author_name_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($channel_data['copyright'])));
 
             $feed_copyright_node = $feed_node->appendChild($xml->createElement('rights', 'Copyright &#169; ' . $channel_data['copyright']));
             $feed_copyright_node->setAttribute('type', 'html');
@@ -425,7 +453,7 @@ class Feed
                     // Required Elements of <entry>
                     $entry_title_node = $entry_node->appendChild($xml->createElement('title'));
                     $entry_title_node->setAttribute('type', 'html');
-                    $entry_title_node->appendChild($xml->createCDATASection($item_data['title']));
+                    $entry_title_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($item_data['title'])));
                     $entry_node->appendChild($xml->createElement('updated', $item_data['pubdate']));
                     $entry_node->appendChild($xml->createElement('id', $item_data['uuid']));
 
@@ -438,7 +466,7 @@ class Feed
                     if (!empty($item_data['author'])) {
                         $entry_author_node = $entry_node->appendChild($xml->createElement('author'));
                         $entry_author_name_node = $entry_author_node->appendChild($xml->createElement('name'));
-                        $entry_author_name_node->appendChild($xml->createCDATASection($item_data['author']));
+                        $entry_author_name_node->appendChild($xml->createCDATASection(self::unhtmlspecialchars($item_data['author'])));
                     }
                     if (!empty($item_data['description'])) {
                         list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
