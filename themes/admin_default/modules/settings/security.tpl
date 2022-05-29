@@ -122,6 +122,13 @@
                                         <textarea name="domains_whitelist" class="form-control" rows="5">{DOMAINS_WHITELIST}</textarea>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.XSSsanitize}</strong></td>
+                                    <td>
+                                        <div><label><input type="checkbox" name="XSSsanitize" value="1"{XSSSANITIZE}>{LANG.user_XSSsanitize}</label></div>
+                                        <div><label><input type="checkbox" name="admin_XSSsanitize" value="1"{ADMIN_XSSSANITIZE}>{LANG.admin_XSSsanitize}<label></div>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
