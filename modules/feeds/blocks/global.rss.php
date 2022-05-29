@@ -98,13 +98,17 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
     function change_description($description, $alt = '')
     {
         if (!empty($description)) {
-            $description = trim(strip_tags($description, '<img><br>'));
-            // Remove all attributes from html tags
-            $description = preg_replace("/<([a-z][a-z0-9]*)(?:[^>]*(\ssrc=['\"][^'\"]*['\"]))?[^>]*?(\/?)>/i", '<$1$2$3>', $description);
-            $description = preg_replace('#<img.+src="([^"]+)"[^>]*>#i', '<img src="' . ASSETS_STATIC_URL . '/images/pix.svg" style="background-image:url($1)" alt="' . $alt . '" width="120" height="80"/>', $description);
+            $img_src = '';
+            if (preg_match('#<img.+src="([^"]+)"[^>]*>#i', $description, $matches)) {
+                $img_src = $matches['1'];
+            }
+            $description = trim(strip_tags($description));
             $description = preg_replace("/[\r\n]+/", ' ', $description);
             $description = preg_replace("/(\&nbsp\;|\s)+/", ' ', $description);
-            $description = nv_clean60($description, 500, false);
+            $description = nv_clean60($description, 500);
+            if (!empty($img_src)) {
+                $description = '<img src="' . ASSETS_STATIC_URL . '/images/pix.svg" style="background-image:url(' . $img_src . ')" alt="' . $alt . '" width="120" height="80"/>' . $description;
+            }
         }
 
         return $description;
@@ -131,60 +135,83 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
     function nv_get_rss($url)
     {
         global $nv_Cache;
-        $array_data = [];
+        $data = [
+            'updatetime' => 0,
+            'md5contents' => '',
+            'contents' => []
+        ];
         $cache_file = NV_LANG_DATA . '_' . md5($url) . '_' . NV_CACHE_PREFIX . '.cache';
-        if (($cache = $nv_Cache->getItem('rss', $cache_file, 3600)) != false) {
-            $array_data = json_decode($cache, true);
-        } else {
+        if (($cache = $nv_Cache->getItem('rss', $cache_file)) != false) {
+            $data = json_decode($cache, true);
+            empty($data['updatetime']) && $data['updatetime'] = 0;
+            empty($data['md5contents']) && $data['md5contents'] = '';
+            empty($data['contents']) && $data['contents'] = [];
+        }
+
+        if ($data['updatetime'] < NV_CURRENTTIME - 3600) {
+            $data = [
+                'updatetime' => NV_CURRENTTIME,
+                'md5contents' => $data['md5contents'],
+                'contents' => $data['contents']
+            ];
             $xml_source = url_get_contents($url);
             if (!empty($xml_source)) {
-                $feed = new DOMDocument('1.0', 'utf-8');
-                libxml_use_internal_errors(true);
-                if ($feed->loadXML($xml_source)) {
-                    if ($feed->getElementsByTagName('feed')->length > 0 && $feed->getElementsByTagName('rss')->length <= 0) {
-                        foreach ($feed->getElementsByTagName('entry') as $item) {
-                            $links = $item->getElementsByTagName('link');
-                            $itemlLink = $links->item(0)->getAttribute('href');
-                            if ($item->getElementsByTagName('content')->length) {
-                                $description = $item->getElementsByTagName('content')->item(0)->nodeValue;
-                            } elseif ($item->getElementsByTagName('summary')->length) {
-                                $description = $item->getElementsByTagName('summary')->item(0)->nodeValue;
+                $md5contents = md5($xml_source);
+                if ($md5contents != $data['md5contents']) {
+                    $feed = new DOMDocument('1.0', 'utf-8');
+                    libxml_use_internal_errors(true);
+                    if ($feed->loadXML($xml_source)) {
+                        $array_data = [];
+
+                        if ($feed->getElementsByTagName('feed')->length > 0 && $feed->getElementsByTagName('rss')->length <= 0) {
+                            foreach ($feed->getElementsByTagName('entry') as $item) {
+                                $links = $item->getElementsByTagName('link');
+                                $itemlLink = $links->item(0)->getAttribute('href');
+                                if ($item->getElementsByTagName('content')->length) {
+                                    $description = $item->getElementsByTagName('content')->item(0)->nodeValue;
+                                } elseif ($item->getElementsByTagName('summary')->length) {
+                                    $description = $item->getElementsByTagName('summary')->item(0)->nodeValue;
+                                }
+                                $title = nv_htmlspecialchars(trim(strip_tags($item->getElementsByTagName('title')->item(0)->nodeValue)));
+                                $pubtime = strtotime($item->getElementsByTagName('updated')->item(0)->nodeValue);
+                                $key = $pubtime . '-' . $title;
+
+                                $array_data[$key] = [
+                                    'title' => $title,
+                                    'description' => change_description($description, $title),
+                                    'pubtime' => $pubtime,
+                                    'link' => change_link($itemlLink)
+                                ];
                             }
-                            $title = trim(strip_tags($item->getElementsByTagName('title')->item(0)->nodeValue));
-                            $pubtime = strtotime($item->getElementsByTagName('updated')->item(0)->nodeValue);
-                            $key = $pubtime . '-' . $title;
+                        } else {
+                            foreach ($feed->getElementsByTagName('item') as $item) {
+                                $title = nv_htmlspecialchars(trim(strip_tags($item->getElementsByTagName('title')->item(0)->nodeValue)));
+                                $pubtime = strtotime($item->getElementsByTagName('pubDate')->item(0)->nodeValue);
+                                $key = $pubtime . '-' . $title;
 
-                            $array_data[$key] = [
-                                'title' => $title,
-                                'description' => change_description($description, $title),
-                                'pubtime' => $pubtime,
-                                'link' => change_link($itemlLink)
-                            ];
+                                $array_data[$key] = [
+                                    'title' => $title,
+                                    'description' => change_description($item->getElementsByTagName('description')->item(0)->nodeValue, $title),
+                                    'pubtime' => $pubtime,
+                                    'link' => change_link($item->getElementsByTagName('link')->item(0)->nodeValue)
+                                ];
+                            }
                         }
-                    } else {
-                        foreach ($feed->getElementsByTagName('item') as $item) {
-                            $title = trim(strip_tags($item->getElementsByTagName('title')->item(0)->nodeValue));
-                            $pubtime = strtotime($item->getElementsByTagName('pubDate')->item(0)->nodeValue);
-                            $key = $pubtime . '-' . $title;
 
-                            $array_data[$key] = [
-                                'title' => $title,
-                                'description' => change_description($item->getElementsByTagName('description')->item(0)->nodeValue, $title),
-                                'pubtime' => $pubtime,
-                                'link' => change_link($item->getElementsByTagName('link')->item(0)->nodeValue)
-                            ];
+                        if (!empty($array_data)) {
+                            krsort($array_data);
+                            $data['md5contents'] = $md5contents;
+                            $data['contents'] = array_values($array_data);
                         }
                     }
-
-                    krsort($array_data);
                 }
             }
 
-            $cache = json_encode(array_values($array_data));
+            $cache = json_pretty_print(json_encode($data));
             $nv_Cache->setItem('rss', $cache_file, $cache);
         }
 
-        return $array_data;
+        return $data['contents'];
     }
 
     /**

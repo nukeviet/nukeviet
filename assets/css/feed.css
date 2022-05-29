@@ -1,0 +1,157 @@
+body {
+    background: #fff;
+    border: 0;
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #333
+}
+
+a:link,
+a:active,
+a:visited {
+    text-decoration: none;
+    font-size: 100%;
+    color: #428bca
+}
+
+a:hover {
+    color: #2a6496;
+    text-decoration: none
+}
+
+.item-title a:link,
+.item-title a:visited,
+.item-title a:active,
+.item-title a:hover {
+    font-weight: bold
+}
+
+.banbox {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(250, 250, 250);
+    border-bottom: 1px solid #dadada;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .25)
+}
+
+.banbox .container {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    justify-content: space-between
+}
+
+.banbox .container a {
+    font-size: 18px;
+    font-weight: bold;
+    color: #428bca;
+    text-decoration: none;
+    padding: 0 10px;
+    line-height: 1.2
+}
+
+.banbox .container a:not(:last-child) {
+    margin-right: 10px
+}
+
+.tl {
+    display: inline-flex;
+    align-items: center
+}
+
+.logo > img {
+    width: auto;
+    height: 46px;
+    float: left
+}
+
+.banbox svg {
+    margin-right: 5px;
+    vertical-align: middle
+}
+
+.mainbox {
+    width: 100%;
+    padding-top: 70px
+}
+
+.itembox {
+    width: 100%;
+    float: left
+}
+
+.footerbox {
+    clear: both;
+    width: 100%;
+    border-top: 1px solid #000
+}
+
+.item {
+    margin-bottom: 15px
+}
+
+.item:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, .15)
+}
+
+.item:after {
+    display: block;
+    content: "";
+    clear: both;
+    margin-bottom: 15px
+}
+
+.paditembox {
+    padding: 0 10px 10px
+}
+
+.item-title {
+    font-size: 15px;
+    margin-bottom: 5px
+}
+
+.item-pubdate {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 5px;
+    line-height: 1;
+}
+
+.item-pubdate svg {
+    margin-right: 5px;
+}
+
+.pubdate {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6c757d;
+    height: 12px;
+}
+
+.item-contents img {
+    width: 100px;
+    margin-right: 10px;
+    float: left;
+    border: 1px solid rgba(0, 0, 0, .05);
+    border-radius: 2px;
+    padding: 2px;
+    background-color: #fff;
+}
+
+@media (max-width:499.98px) {
+    .banbox .container a {
+        font-size: 16px
+    }
+
+    .item-title {
+        font-size: 14px
+    }
+
+    .item-contents img {
+        width: 90px
+    }
+}

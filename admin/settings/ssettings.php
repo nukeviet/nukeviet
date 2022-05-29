@@ -245,66 +245,6 @@ function set_access_control_allow_origin($any_origin, $origins)
     return array_values($origins);
 }
 
-function prettyPrint($json)
-{
-    $result = '';
-    $level = 0;
-    $in_quotes = false;
-    $in_escape = false;
-    $ends_line_level = null;
-    $json_length = strlen($json);
-
-    for ($i = 0; $i < $json_length; ++$i) {
-        $char = $json[$i];
-        $new_line_level = null;
-        $post = '';
-        if ($ends_line_level !== null) {
-            $new_line_level = $ends_line_level;
-            $ends_line_level = null;
-        }
-        if ($in_escape) {
-            $in_escape = false;
-        } elseif ($char === '"') {
-            $in_quotes = !$in_quotes;
-        } elseif (!$in_quotes) {
-            switch ($char) {
-                case '}':
-                case ']':
-                    $level--;
-                    $ends_line_level = null;
-                    $new_line_level = $level;
-                    break;
-                case '{':
-                case '[':
-                    $level++;
-                    // no break
-                case ',':
-                    $ends_line_level = $level;
-                    break;
-                case ':':
-                    $post = ' ';
-                    break;
-                case ' ':
-                case "\t":
-                case "\n":
-                case "\r":
-                    $char = '';
-                    $ends_line_level = $new_line_level;
-                    $new_line_level = null;
-                    break;
-            }
-        } elseif ($char === '\\') {
-            $in_escape = true;
-        }
-        if ($new_line_level !== null) {
-            $result .= "\n" . str_repeat('    ', $new_line_level);
-        }
-        $result .= $char . $post;
-    }
-
-    return $result;
-}
-
 $sconfig_file = '';
 $highlight_lang = '';
 if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
@@ -488,7 +428,7 @@ if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss, $csrf))
     ];
 
     $posts = json_encode($posts);
-    $posts = prettyPrint($posts);
+    $posts = json_pretty_print($posts);
 
     $old_md5_file = md5_file($server_config_file);
     file_put_contents($server_config_file, $posts, LOCK_EX);
