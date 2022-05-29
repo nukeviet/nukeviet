@@ -687,6 +687,8 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     if ($global_config['captcha_type'] == 2) {
         $jsDef .= ',nv_recaptcha_sitekey="' . $global_config['recaptcha_sitekey'] . '",nv_recaptcha_type="' . $global_config['recaptcha_type'] . '",nv_recaptcha_elements=[]';
     }
+    !isset($global_config['XSSsanitize']) && $global_config['XSSsanitize'] = 1;
+    $jsDef .= ',XSSsanitize=' . ($global_config['XSSsanitize'] ? 1 : 0);
     $jsDef .= ';';
 
     $return = [];
@@ -707,9 +709,21 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     }
 
     if ($global_js) {
+        if ($global_config['XSSsanitize']) {
+            $return[] = [
+                'ext' => 1,
+                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/DOMPurify/purify.js'
+            ];
+        }
+
         $return[] = [
             'ext' => 1,
             'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/global.js'
+        ];
+
+        $return[] = [
+            'ext' => 1,
+            'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/site.js'
         ];
     }
 

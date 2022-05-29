@@ -72,6 +72,20 @@ function locationReplace(url) {
     }
 }
 
+function formXSSsanitize(form) {
+    $(form).find("input, textarea").not(":submit, :reset, :image, :file, :disabled").not('[data-sanitize-ignore]').each(function(e) {
+        $(this).val(DOMPurify.sanitize($(this).val(), {}))
+    })
+}
+
+function btnClickSubmit(event, form) {
+    event.preventDefault();
+    if (XSSsanitize) {
+        formXSSsanitize(form)
+    }
+    $(form).submit()
+}
+
 var NV = {
     menuBusy: false,
     menuTimer: null,
@@ -149,6 +163,11 @@ $(document).ready(function() {
     $('[data-btn="toggleLang"]').on('click', function(e) {
         e.preventDefault();
         $('.menu-lang').toggleClass('menu-lang-show');
+    });
+
+    //XSSsanitize
+    $('body').on('click', '[type=submit]:not([name])', function(e) {
+        btnClickSubmit(e, $(this).parents('form'))
     });
 
     $(document).on('click', function(e) {

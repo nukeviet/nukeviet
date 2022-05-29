@@ -2,14 +2,13 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-9-2010 14:43
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @createdate 2-9-2010 14:43
  */
-
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $proxy_blocker_array = [
@@ -77,6 +76,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     $array_config_global['admin_2step_opt'] = $nv_Request->get_typed_array('admin_2step_opt', 'post', 'title', []);
     $array_config_global['admin_2step_default'] = $nv_Request->get_title('admin_2step_default', 'post', '');
     $array_config_global['domains_restrict'] = (int) $nv_Request->get_bool('domains_restrict', 'post', false);
+    $array_config_global['XSSsanitize'] = (int) $nv_Request->get_bool('XSSsanitize', 'post', false);
+    $array_config_global['admin_XSSsanitize'] = (int) $nv_Request->get_bool('admin_XSSsanitize', 'post', false);
 
     $domains = $nv_Request->get_textarea('domains_whitelist', '', NV_ALLOWED_HTML_TAGS, true);
     $domains = explode('<br />', strip_tags($domains, '<br>'));
@@ -352,12 +353,12 @@ if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request-
                 "\r",
                 "\n"
             ], ' ', $directive);
-            $array_config_csp['nv_csp'] .= $key . ' ' . preg_replace("/[ ]+/", " ", $directive) . ';';
+            $array_config_csp['nv_csp'] .= $key . ' ' . preg_replace('/[ ]+/', ' ', $directive) . ';';
         }
     }
     $array_config_csp['nv_csp_act'] = (int) $nv_Request->get_bool('nv_csp_act', 'post', false);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_csp as $config_name => $config_value) {
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -398,7 +399,7 @@ if ($nv_Request->isset_request('submitrp', 'post') and $checkss == $nv_Request->
     $nv_rp = $nv_Request->get_title('nv_rp', 'post', '');
     if (!empty($nv_rp)) {
         $nv_rp = preg_replace("/[^a-zA-Z\-]/", ' ', $nv_rp);
-        $nv_rp = preg_replace("/[\s]+/", " ", $nv_rp);
+        $nv_rp = preg_replace("/[\s]+/", ' ', $nv_rp);
     }
     $nv_rp = !empty($nv_rp) ? array_map('trim', explode(' ', $nv_rp)) : [];
     foreach ($nv_rp as $rp) {
@@ -409,7 +410,7 @@ if ($nv_Request->isset_request('submitrp', 'post') and $checkss == $nv_Request->
     $array_config_rp['nv_rp'] = !empty($array_config_rp['nv_rp']) ? implode(', ', $array_config_rp['nv_rp']) : '';
     $array_config_rp['nv_rp_act'] = (int) $nv_Request->get_bool('nv_rp_act', 'post', false);
 
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config_rp as $config_name => $config_value) {
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -700,6 +701,8 @@ if (defined('NV_IS_GODADMIN')) {
 
     $xtpl->assign('IS_LOGIN_BLOCKER', ($array_config_global['is_login_blocker']) ? ' checked="checked"' : '');
     $xtpl->assign('DOMAINS_RESTRICT', ($array_config_global['domains_restrict']) ? ' checked="checked"' : '');
+    $xtpl->assign('XSSSANITIZE', ($array_config_global['XSSsanitize']) ? ' checked="checked"' : '');
+    $xtpl->assign('ADMIN_XSSSANITIZE', ($array_config_global['admin_XSSsanitize']) ? ' checked="checked"' : '');
     $xtpl->assign('LOGIN_NUMBER_TRACKING', $array_config_global['login_number_tracking']);
     $xtpl->assign('LOGIN_TIME_TRACKING', $array_config_global['login_time_tracking']);
     $xtpl->assign('LOGIN_TIME_BAN', $array_config_global['login_time_ban']);
@@ -741,7 +744,7 @@ if (defined('NV_IS_GODADMIN')) {
         $xtpl->parse('main.sys_contents.recaptcha_type');
     }
 
-    for ($i = 2; $i < 10; $i++) {
+    for ($i = 2; $i < 10; ++$i) {
         $array = [
             'value' => $i,
             'select' => ($i == $array_define_captcha['nv_gfx_num']) ? ' selected="selected"' : '',
@@ -797,7 +800,7 @@ if (defined('NV_IS_GODADMIN')) {
     }
 
     // Xuất mask IPv6
-    for ($i = 1; $i <= 128; $i++) {
+    for ($i = 1; $i <= 128; ++$i) {
         $xtpl->assign('IPMASK', [
             'key' => $i,
             'title' => '/' . $i,
@@ -882,7 +885,7 @@ if (defined('NV_IS_GODADMIN')) {
         'notice' => $array_flip['flnotice']
     ]);
 
-    for ($i = 0; $i <= 3; $i++) {
+    for ($i = 0; $i <= 3; ++$i) {
         $two_step_verification = [
             'key' => $i,
             'title' => $lang_module['two_step_verification' . $i],
@@ -896,7 +899,7 @@ if (defined('NV_IS_GODADMIN')) {
         $admin_2step_opt = [
             'key' => $admin_2step,
             'title' => $lang_global['admin_2step_opt_' . $admin_2step],
-            'checked' => in_array($admin_2step, $array_config_global['admin_2step_opt']) ? ' checked="checked"' : ''
+            'checked' => in_array($admin_2step, $array_config_global['admin_2step_opt'], true) ? ' checked="checked"' : ''
         ];
         $xtpl->assign('ADMIN_2STEP_OPT', $admin_2step_opt);
 
