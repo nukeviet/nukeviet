@@ -83,6 +83,34 @@ class Site
     }
 
     /**
+     * unhtmlspecialchars()
+     *
+     * @param mixed $string
+     * @return mixed
+     */
+    public static function unhtmlspecialchars($string)
+    {
+        if (empty($string)) {
+            return $string;
+        }
+
+        if (is_array($string)) {
+            $array_keys = array_keys($string);
+
+            foreach ($array_keys as $key) {
+                $string[$key] = self::unhtmlspecialchars($string[$key]);
+            }
+        } else {
+            $string = str_replace(
+                ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'],
+                ['&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'],
+                $string);
+        }
+
+        return $string;
+    }
+
+    /**
      * function_exists()
      *
      * @param mixed $funcName

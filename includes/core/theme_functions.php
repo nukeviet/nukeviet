@@ -487,7 +487,7 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
             unset($items[$key]['modifydate']);
 
             if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $items[$key]['link'], $matches)) {
-                $items[$key]['link'] = NV_BASE_SITEURL . $items[$key]['link'];
+                $items[$key]['link'] = NV_BASE_SITEURL . $matches[1];
             }
             $items[$key]['link'] = nv_url_rewrite($items[$key]['link'], true);
 
@@ -690,7 +690,7 @@ function nv_xmlSitemapIndex_generate()
  */
 function nv_rssXsl_generate()
 {
-    global $nv_Request;
+    global $nv_Request, $lang_global;
 
     $contents = '';
     $theme = '';
@@ -708,13 +708,14 @@ function nv_rssXsl_generate()
     $contents = preg_replace('/\{NV\_BASE\_SITEURL\}/', NV_BASE_SITEURL, $contents);
     $contents = preg_replace('/\{NV\_ASSETS\_DIR\}/', NV_ASSETS_DIR, $contents);
     $contents = preg_replace('/\{THEME\}/', $theme, $contents);
+    $contents = preg_replace('/\{MORE\_LANG\}/', $lang_global['detail'], $contents);
     $lastModified = NV_CURRENTTIME;
     nv_xmlOutput($contents, $lastModified);
 }
 
 function nv_atomXsl_generate()
 {
-    global $nv_Request;
+    global $nv_Request, $lang_global;
 
     $contents = '';
     $theme = '';
@@ -732,6 +733,7 @@ function nv_atomXsl_generate()
     $contents = preg_replace('/\{NV\_BASE\_SITEURL\}/', NV_BASE_SITEURL, $contents);
     $contents = preg_replace('/\{NV\_ASSETS\_DIR\}/', NV_ASSETS_DIR, $contents);
     $contents = preg_replace('/\{THEME\}/', $theme, $contents);
+    $contents = preg_replace('/\{MORE\_LANG\}/', $lang_global['detail'], $contents);
     $lastModified = NV_CURRENTTIME;
     nv_xmlOutput($contents, $lastModified);
 }
