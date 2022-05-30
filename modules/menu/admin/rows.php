@@ -190,7 +190,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     $post['parentid'] = $nv_Request->get_int('parentid', 'post', 0);
     $post['mid'] = $nv_Request->get_int('item_menu', 'post', 0);
     $post['title'] = nv_substr($nv_Request->get_title('title', 'post', '', 1), 0, 255);
-    $post['link'] = $nv_Request->get_string('link', 'post', '', 1, 255);
+    $post['link'] = $nv_Request->get_string('link', 'post', '', 0, 255);
     $post['note'] = nv_substr($nv_Request->get_title('note', 'post', '', 1), 0, 255);
     $post['module_name'] = nv_substr($nv_Request->get_title('module_name', 'post', '', 1), 0, 255);
     $post['op'] = nv_substr($nv_Request->get_title('op', 'post', '', 1), 0, 255);
@@ -212,6 +212,10 @@ if ($nv_Request->isset_request('submit1', 'post')) {
         $post['image'] = substr($post['image'], $lu);
     } else {
         $post['image'] = '';
+    }
+
+    if (!empty($post['link']) and !nv_is_url($post['link'], true)) {
+        $post['link'] = '';
     }
 
     if (empty($post['module_name']) and !empty($post['link'])) {

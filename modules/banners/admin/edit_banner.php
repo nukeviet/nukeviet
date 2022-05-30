@@ -89,9 +89,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $exp_date = '';
     }
 
-    if ($click_url == 'http://') {
-        $click_url = '';
-    }
+    $click_url_allow = !empty($click_url) ? nv_is_url($click_url, true) : true;
 
     $sql = 'SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE . '_plans where id = ' . $pid;
     $result = $db->query($sql);
@@ -164,6 +162,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $error = $error_assign_user;
     } elseif ($array_require_image[0]['require_image'] == 1 and (empty($file_name) or $file_name == 'no_image')) {
         $error = $lang_module['file_upload_empty'];
+    } elseif (!$click_url_allow) {
+        $error = $lang_module['click_url_invalid'];
     } elseif (empty($error)) {
         if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
             $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
