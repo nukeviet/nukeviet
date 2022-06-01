@@ -157,7 +157,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 $text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
 $error = '';
 $field_choices = array();
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $validatefield = array(
         'pattern' => '/[^a-zA-Z0-9\_]/',
         'replacement' => ''

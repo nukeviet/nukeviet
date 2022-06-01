@@ -468,7 +468,7 @@ if (defined('NV_IS_GODADMIN')) {
         }
     }
 
-    if ($nv_Request->isset_request('submit', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    if ($nv_Request->isset_request('save', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
         $ip_version = $nv_Request->get_int('ip_version', 'post', 4);
         $cid = $nv_Request->get_int('cid', 'post', 0);
         $ip = $nv_Request->get_title('ip', 'post', '');

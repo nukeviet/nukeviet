@@ -23,7 +23,7 @@ $captcha_array = array(
 
 $groups_list = nv_groups_list();
 
-if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_name])) {
+if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_name])) {
     $array_config = array();
     $array_config['emailcomm'] = $nv_Request->get_int('emailcomm', 'post', 0);
     $array_config['auto_postcomm'] = $nv_Request->get_int('auto_postcomm', 'post', 0);

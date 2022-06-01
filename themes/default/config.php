@@ -17,7 +17,7 @@ $propety = array();
 
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $css = "";
 
     // Css property for body

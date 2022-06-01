@@ -123,7 +123,7 @@ if ($nv_Request->isset_request('add', 'get') or !empty($credential_ident)) {
         $caption = $lang_module['api_cr_add'];
     }
 
-    if ($nv_Request->isset_request('submit', 'post')) {
+    if ($nv_Request->isset_request('save', 'post')) {
         $array_post['credential_title'] = nv_substr($nv_Request->get_title('credential_title', 'post', ''), 0, 255);
         $array_post['auth_method'] = $nv_Request->get_title('auth_method', 'post', '');
 

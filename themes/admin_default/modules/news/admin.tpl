@@ -90,7 +90,8 @@
         <tfoot>
             <tr>
                 <td colspan="2" class="text-center">
-                    <input type="submit" value="{LANG.save}" name="submit"></td>
+                    <input type="hidden" name="save" value="1">
+                    <input type="submit" value="{LANG.save}"></td>
             </tr>
         </tfoot>
     </table>

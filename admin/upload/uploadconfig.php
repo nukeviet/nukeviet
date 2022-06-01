@@ -47,7 +47,7 @@ $myini['mimes'] = array_unique($myini['mimes']);
 sort($myini['mimes']);
 unset($myini['mimes'][0]);
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $type = $nv_Request->get_typed_array('type', 'post', 'int');
     $type = array_flip($type);
     $type = array_intersect_key($myini['types'], $type);

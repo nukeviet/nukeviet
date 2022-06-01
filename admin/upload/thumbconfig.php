@@ -12,7 +12,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     die('Stop!!!');
 }
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $thumb_type = $nv_Request->get_typed_array('thumb_type', 'post', 'int', []);
     $thumb_width = $nv_Request->get_typed_array('thumb_width', 'post', 'int', []);
     $thumb_height = $nv_Request->get_typed_array('thumb_height', 'post', 'int', []);
