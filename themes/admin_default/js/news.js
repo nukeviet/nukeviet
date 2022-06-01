@@ -2,7 +2,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -464,7 +464,9 @@ $(function() {
             success: function(b) {
                 $('#addTag .modal-title').text(title);
                 $('#addTag .modal-body').html(b);
-                $('#addTag').modal({backdrop:'static'})
+                $('#addTag').modal({
+                    backdrop: 'static'
+                })
             }
         });
     });
@@ -503,7 +505,7 @@ $(function() {
         }
         if (tids == '') {
             alert($(this).data('msgnocheck'));
-            return!1
+            return !1
         }
 
         if (confirm(nv_is_del_confirm[0])) {
@@ -697,6 +699,22 @@ $(function() {
         e.preventDefault();
         $($(this).data('target')).prop('type', 'text');
         $($(this).data('target')).val(nv_randomPassword(10));
+    });
+
+    $("#from_date, #to_date").datepicker({
+        dateFormat: "dd/mm/yy",
+        changeMonth: true,
+        changeYear: true,
+        showOtherMonths: true,
+        showOn: 'focus'
+    });
+
+    $('#to-btn').click(function() {
+        $("#to_date").datepicker('show');
+    });
+
+    $('#from-btn').click(function() {
+        $("#from_date").datepicker('show');
     });
 });
 

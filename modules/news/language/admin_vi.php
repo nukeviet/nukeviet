@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -160,24 +160,30 @@ $lang_module['viewcat_grid_old'] = 'theo lưới, cũ lên trên';
 $lang_module['viewcat_none'] = 'không hiển thị';
 $lang_module['viewcat_detail'] = 'Các nhóm được xem chi tiết bài viết';
 $lang_module['search'] = 'Tìm kiếm';
-$lang_module['search_type'] = 'Tìm kiếm theo';
+$lang_module['search_type'] = 'Khu vực tìm kiếm';
+$lang_module['search_type_all'] = 'Tất cả các khu vực';
 $lang_module['search_status'] = 'Trạng thái';
+$lang_module['search_status_all'] = 'Tất cả các trạng thái';
 $lang_module['search_id'] = 'ID';
 $lang_module['search_key'] = 'Từ khóa tìm kiếm';
-$lang_module['search_cat'] = 'Chuyên mục bài viết';
+$lang_module['search_cat'] = 'Chuyên mục';
 $lang_module['search_cat_all'] = 'Tất cả các chuyên mục';
 $lang_module['search_title'] = 'Tiêu đề';
 $lang_module['search_bodytext'] = 'Nội dung';
 $lang_module['search_author'] = 'Tác giả bài viết';
 $lang_module['search_admin'] = 'Người nhập liệu';
-$lang_module['search_per_page'] = 'Số bài viết hiển thị';
-$lang_module['search_note'] = 'Từ 3 đến 64 ký tự';
+$lang_module['search_per_page'] = 'Số tin/trang';
+$lang_module['search_public_time'] = 'Thời gian xuất bản';
+$lang_module['search_note'] = 'Từ 2 đến 64 ký tự, không dùng các mã html';
+$lang_module['search_time_from'] = 'Từ ngày';
+$lang_module['search_time_to'] = 'Đến ngày';
+$lang_module['kind_of_time'] = 'Loại thời gian';
 $lang_module['content_edit'] = 'Sửa bài viết';
 $lang_module['error_title'] = 'Lỗi: Bài viết chưa có tiêu đề';
 $lang_module['error_bodytext'] = 'Lỗi: Bài viết chưa có nội dung';
 $lang_module['error_cat'] = 'Lỗi: Bài viết chưa có chuyên mục';
 $lang_module['sources_sl'] = 'Hãy chọn hoặc tự điền';
-$lang_module['content_cat'] = 'Chuyên mục của bài viết';
+$lang_module['content_cat'] = 'Chuyên mục';
 $lang_module['content_block'] = 'Bài viết thuộc các nhóm tin';
 $lang_module['content_topic'] = 'Thuộc dòng sự kiện';
 $lang_module['content_homeimg'] = 'Hình minh họa';

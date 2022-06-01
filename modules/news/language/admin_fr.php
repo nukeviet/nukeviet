@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -160,8 +160,10 @@ $lang_module['viewcat_grid_old'] = 'par grille, ancien en haut';
 $lang_module['viewcat_none'] = 'cacher';
 $lang_module['viewcat_detail'] = 'Les groupes peuvent regarder les articles en détails';
 $lang_module['search'] = 'Rechercher';
-$lang_module['search_type'] = 'Recherche par';
+$lang_module['search_type'] = 'Zone de recherche';
+$lang_module['search_type_all'] = 'Partout';
 $lang_module['search_status'] = 'État';
+$lang_module['search_status_all'] = 'Tout statut';
 $lang_module['search_id'] = 'ID';
 $lang_module['search_key'] = 'Mot clé';
 $lang_module['search_cat'] = 'Catégorie';
@@ -170,8 +172,12 @@ $lang_module['search_title'] = 'Titre';
 $lang_module['search_bodytext'] = 'Contenu';
 $lang_module['search_author'] = 'Auteur';
 $lang_module['search_admin'] = 'Déposé par';
-$lang_module['search_per_page'] = 'Nombre d\'articles affichés';
-$lang_module['search_note'] = 'De 3 à 64 caractères';
+$lang_module['search_per_page'] = 'Nombre d\'articles/page';
+$lang_module['search_public_time'] = 'Publication time';
+$lang_module['search_note'] = 'De 2 à 64 caractères, ne pas utiliser de codes html';
+$lang_module['search_time_from'] = 'Depuis';
+$lang_module['search_time_to'] = 'À ce jour';
+$lang_module['kind_of_time'] = 'Type de temps';
 $lang_module['content_edit'] = 'Éditer';
 $lang_module['error_title'] = 'Erreur: Manque de titre';
 $lang_module['error_bodytext'] = 'Erreur: Manque de contenu';

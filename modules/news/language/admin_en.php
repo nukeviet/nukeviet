@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -160,8 +160,10 @@ $lang_module['viewcat_grid_old'] = 'grid, old front';
 $lang_module['viewcat_none'] = 'Not show content';
 $lang_module['viewcat_detail'] = 'Group is view in detail content';
 $lang_module['search'] = 'Search';
-$lang_module['search_type'] = 'Search by';
+$lang_module['search_type'] = 'Search area';
+$lang_module['search_type_all'] = 'Everywhere';
 $lang_module['search_status'] = 'Status';
+$lang_module['search_status_all'] = 'Any status';
 $lang_module['search_id'] = 'ID';
 $lang_module['search_key'] = 'Key word';
 $lang_module['search_cat'] = 'Categories';
@@ -170,8 +172,12 @@ $lang_module['search_title'] = 'Title';
 $lang_module['search_bodytext'] = 'Content';
 $lang_module['search_author'] = 'Author';
 $lang_module['search_admin'] = 'Typer';
-$lang_module['search_per_page'] = 'Number of topics display';
-$lang_module['search_note'] = 'From 3 to 64 characters';
+$lang_module['search_per_page'] = 'Number of posts/page';
+$lang_module['search_public_time'] = 'Publication time';
+$lang_module['search_note'] = 'From 2 to 64 characters, do not use html codes';
+$lang_module['search_time_from'] = 'From day';
+$lang_module['search_time_to'] = 'To day';
+$lang_module['kind_of_time'] = 'Time type';
 $lang_module['content_edit'] = 'Edit article';
 $lang_module['error_title'] = 'Error: Article has no title';
 $lang_module['error_bodytext'] = 'Error: Article has no content';
