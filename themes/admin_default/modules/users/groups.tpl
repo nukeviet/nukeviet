@@ -204,13 +204,13 @@ function get_alias() {
             }
         }
         var a = $(this).serialize(), b = $(this).attr("action");
-        $("input[name=sm]").attr("disabled", "disabled");
+        $("input[type=submit]").attr("disabled", "disabled");
         $.ajax({
             type : "POST",
             url : b,
             data : a,
             success : function(a) {
-                a == "OK" ? window.location.href = "{MODULE_URL}={OP}" : (alert(a), $("input[name=sm]").removeAttr("disabled"))
+                a == "OK" ? window.location.href = "{MODULE_URL}={OP}" : (alert(a), $("input[type=submit]").removeAttr("disabled"))
             }
         });
         return false
