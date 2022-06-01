@@ -42,7 +42,7 @@
             </colgroup>
             <tfoot>
                 <tr>
-                    <td class="text-center" colspan="2"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
+                    <td class="text-center" colspan="2"><input type="hidden" name="save" value="1"><input type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
                 </tr>
             </tfoot>
             <tbody>

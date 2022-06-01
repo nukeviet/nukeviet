@@ -268,7 +268,8 @@
         <input type="hidden" value="{DATAFORM.system}" name="system">
         <input type="hidden" value="{DATAFORM.fid}" name="fid">
         <input type="hidden" value="{DATAFORM.field}" name="fieldid">
-        <input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit">
+        <input type="hidden" value="1" name="save">
+        <input class="btn btn-primary" type="submit" value="{LANG.save}">
     </div>
 </form>
 <script type="text/javascript">

@@ -147,7 +147,8 @@
             <div class="form-group row">
                 <label class="col-sm-8 control-label"></label>
                 <div class="col-sm-16">
-                    <button class="btn btn-primary" type="submit" name="submit">{LANG.submit}</button>
+                    <input type="hidden" name="save" value="1">
+                    <button class="btn btn-primary" type="submit">{LANG.submit}</button>
                 </div>
             </div>
             <!-- END: submit_allowed -->

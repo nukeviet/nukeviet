@@ -66,7 +66,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-18 col-sm-offset-6">
-                    <button type="submit" name="submit" value="submit" class="btn btn-primary">{GLANG.save}</button>
+                    <input type="hidden" name="save" value="1">
+                    <button type="submit" class="btn btn-primary">{GLANG.save}</button>
                 </div>
             </div>
         </form>

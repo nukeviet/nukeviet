@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 
 $page_title = $lang_module['setting'];
 $array_config = [];
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $array_config['difftimeout'] = $nv_Request->get_int('difftimeout', 'post', 0);
 
     empty($array_config['difftimeout']) && $array_config['difftimeout'] = 1;

@@ -163,7 +163,7 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
         $plugin_lang = NV_LANG_DATA;
         $is_submit = false;
 
-        if ($nv_Request->isset_request('submit', 'post')) {
+        if ($nv_Request->isset_request('save', 'post')) {
             $is_submit = true;
             $plugin_hook_module = $nv_Request->get_title('hook_module', 'post', '');
             $plugin_module_name = $nv_Request->get_title('receive_module', 'post', '');

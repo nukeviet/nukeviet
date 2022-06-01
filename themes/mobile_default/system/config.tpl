@@ -323,7 +323,8 @@
     </div>
     <div class="theme-config-submit-area">
         <input type="hidden" name="selectedtab" value="{SELECTEDTAB}"/>
-        <button type="submit" name="submit" value="submit" class="btn btn-primary"><i class="fa fa-fw fa-save"></i>{LANG.save}</button>
+        <input type="hidden" name="save" value="1">
+        <button type="submit" value="submit" class="btn btn-primary"><i class="fa fa-fw fa-save"></i>{LANG.save}</button>
     </div>
 </form>
 

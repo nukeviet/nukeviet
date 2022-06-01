@@ -42,7 +42,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     require NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php';
 } else {
-    if ($nv_Request->isset_request('submit', 'post')) {
+    if ($nv_Request->isset_request('save', 'post')) {
         if ($checkss != $nv_Request->get_string('checkss', 'post')) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         }
