@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 $_cas_config = [];
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $_cas_config['cas_hostname'] = $nv_Request->get_title('cas_hostname', 'post', '');
     $_cas_config['cas_baseuri'] = $nv_Request->get_title('cas_baseuri', 'post', '');
     $_cas_config['cas_port'] = $nv_Request->get_int('cas_port', 'post', '');
