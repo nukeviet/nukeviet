@@ -165,6 +165,7 @@ a:hover {
     content: "";
     width: 15px;
     height: 8px;
+    margin-right: 2px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xml:space='preserve' viewBox='0 0 10590.48 5736.91' width='15' height='8'%3E%3Cpath d='M8753.26 3058.94 6397.99 5736.91h1857.73l2334.76-2677.97L8189.08 8.68H6398.84l2354.42 3050.26zm-3157.84 0-2338.14 2670.2 1823.97 4.48 2351.22-2674.68L5013.62.88 3228.13 0l2367.29 3058.94zm-3218.58-35.33L0 5736.91h1881.98l2332.33-2713.3L1844.39.61 40.76.97l2336.08 3022.64z' style='fill:%23fd7e14'/%3E%3C/svg%3E");
 }
 
