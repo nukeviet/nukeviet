@@ -138,7 +138,7 @@ foreach ($language_check_type as $key => $value) {
     $xtpl->parse('main.language_check_type');
 }
 
-$submit = $nv_Request->get_int('submit', 'post,get', 0);
+$submit = $nv_Request->get_int('save', 'post,get', 0);
 
 if ($submit > 0 and in_array($sourcelang, $array_lang_exit) and in_array($typelang, $array_lang_exit)) {
     $array_where = array();
