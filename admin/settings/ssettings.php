@@ -427,8 +427,7 @@ if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss, $csrf))
         'expires' => set_expires($nv_Request->get_title('font_expires', 'post', ''))
     ];
 
-    $posts = json_encode($posts);
-    $posts = json_pretty_print($posts);
+    $posts = json_encode($posts,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
     $old_md5_file = md5_file($server_config_file);
     file_put_contents($server_config_file, $posts, LOCK_EX);

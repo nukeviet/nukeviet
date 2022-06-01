@@ -100,8 +100,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     !empty($new_configs['contents']) && $new_configs['contents'] = preg_replace('/[\r\n\t]+/', '', $new_configs['contents']);
     $new_configs = array_filter($new_configs);
     if (!empty($new_configs)) {
-        $new_configs = json_encode($new_configs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        file_put_contents($feed_configs_file, json_pretty_print($new_configs), LOCK_EX);
+        $new_configs = json_encode($new_configs, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        file_put_contents($feed_configs_file, $new_configs, LOCK_EX);
     } elseif (file_exists($feed_configs_file)) {
         nv_deletefile($feed_configs_file);
     }
