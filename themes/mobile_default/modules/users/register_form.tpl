@@ -77,7 +77,7 @@
 
         <!-- BEGIN: show_birthday -->
         <div class="form-group">
-            <div class="input-group">
+            <div class="input-group" style="z-index: 1;">
                 <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="birthday" readonly="readonly" style="background-color:#fff" data-toggle="validErrorHidden" data-event="change" data-focus="datepickerShow" data-mess=""/>
                 <span class="input-group-addon pointer" data-toggle="button_datepickerShow"> <em class="fa fa-calendar"></em> </span>
             </div>
@@ -132,7 +132,7 @@
         <!-- BEGIN: date -->
         <div class="form-group">
             <label for="nvcf-{FIELD.field}">{FIELD.title}:</label>
-            <div class="input-group">
+            <div class="input-group" style="z-index: 1;">
                 <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" style="background-color:#fff" data-toggle="validErrorHidden" data-event="change" data-focus="datepickerShow" data-mess="" id="nvcf-{FIELD.field}">
                 <span class="input-group-addon pointer" data-toggle="button_datepickerShow"> <em class="fa fa-calendar"></em> </span>
             </div>
