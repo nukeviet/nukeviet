@@ -4,13 +4,14 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    exit('Stop!!!');
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
@@ -21,6 +22,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['categories'] = 'Categories';
 $lang_module['topics'] = 'Topics';
+$lang_module['topics1'] = 'Topic';
 $lang_module['topics_error_title'] = 'Error: You do not enter the event title';
 $lang_module['sources'] = 'Sources';
 $lang_module['save'] = 'Save';
@@ -146,6 +148,8 @@ $lang_module['setting_instant_articles_auto'] = 'The default message is posted a
 $lang_module['setting_sys'] = 'Configure system';
 $lang_module['setting_identify_cat_change'] = 'Support to change article categories';
 $lang_module['setting_identify_cat_change_help'] = 'Enabling this feature will allow the system to auto redirect the old article to a new address when changing the category of the article, but the performance will decrease a bit. If you do not regularly change article categories, turn off this feature';
+$lang_module['setting_active_history'] = 'Turn on post history';
+$lang_module['setting_active_history_help'] = 'Enable this option, the system will save the change history every time you edit the article. You can restore to the previous version if you want';
 $lang_module['viewcat_page'] = 'Display method';
 $lang_module['viewcat_page_new'] = 'New categories, Up';
 $lang_module['viewcat_page_old'] = 'Old categories, Up';
@@ -176,6 +180,7 @@ $lang_module['search_type_date'] = '---Choose time type---';
 $lang_module['search_note'] = 'Keyword must be more than 2 characters, less than 64 characters, no html';
 $lang_module['search_time_from'] = 'From day';
 $lang_module['search_time_to'] = 'To day';
+$lang_module['kind_of_time'] = 'Time type';
 $lang_module['content_edit'] = 'Edit article';
 $lang_module['error_title'] = 'Error: Article has no title';
 $lang_module['error_bodytext'] = 'Error: Article has no content';
@@ -216,6 +221,7 @@ $lang_module['content_internal_author'] = 'Author under management';
 $lang_module['content_sourceid'] = 'Source';
 $lang_module['content_copyright'] = 'Copyright';
 $lang_module['content_external_link'] = 'Use external link';
+$lang_module['content_external_link1'] = 'Open the article with the source link';
 $lang_module['content_saveok'] = 'Successfully recorded data';
 $lang_module['content_main'] = 'Back to management';
 $lang_module['content_back'] = 'Back to edit page';
@@ -230,6 +236,7 @@ $lang_module['content_description'] = 'Site description';
 $lang_module['content_insart'] = 'Instant article';
 $lang_module['content_instant_active'] = 'This is an instant message';
 $lang_module['content_instant_template'] = 'Template';
+$lang_module['content_instant_template1'] = 'Instant Article Template';
 $lang_module['content_instant_templatenote'] = 'Leave blank ie use the default template';
 $lang_module['content_instant_creatauto'] = 'Automatically generate instant messages from regular posts';
 $lang_module['content_locked_bycat'] = 'Lock by categories';
@@ -351,6 +358,7 @@ $lang_module['order_articles_1'] = 'Custom sort, incremental numbering';
 $lang_module['order_articles_number'] = 'No current arrangements';
 $lang_module['order_articles_new'] = 'No new arrangements';
 $lang_module['pick_layout'] = 'Choose layout';
+$lang_module['pick_layout1'] = 'Post layout';
 $lang_module['default_layout'] = 'Default';
 $lang_module['setting_frontend_post'] = 'Configure the post area on the user page';
 $lang_module['frontend_edit_alias'] = 'Allow custom static binding when posting new';
@@ -384,3 +392,11 @@ $lang_module['author_numnews'] = 'Articles';
 $lang_module['author_status'] = 'Status';
 $lang_module['author_status_0'] = 'Disabled';
 $lang_module['author_status_1'] = 'Enabled';
+$lang_module['history'] = 'Post History';
+$lang_module['history_time'] = 'Time';
+$lang_module['history_changefields'] = 'Changed data';
+$lang_module['history_restore'] = 'Restore';
+$lang_module['history_author'] = 'History maker';
+$lang_module['history_restore_confirm'] = 'Are you sure to roll back this version?';
+$lang_module['history_recovering'] = 'The system is restoring automatically, please wait';
+$lang_module['history_restore_success'] = 'Successfully restored';

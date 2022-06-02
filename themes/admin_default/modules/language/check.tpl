@@ -72,7 +72,7 @@
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
     <input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
     <input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
-    <input type="hidden" name ="submit" value="1" />
+    <input type="hidden" name ="save" value="1" />
     <input type="hidden" name ="typelang" value="{DATA.typelang}" />
     <input type="hidden" name ="sourcelang" value="{DATA.sourcelang}" />
     <input type="hidden" name ="check_type" value="{DATA.check_type}" />
