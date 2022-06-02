@@ -4,7 +4,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="3"><input type="hidden" name="checkss" value="{DATA.checkss}" /><input class="btn btn-primary w100" type="submit" value="{LANG.save}" name="submit"></td>
+					<td class="text-center" colspan="3"><input type="hidden" name="checkss" value="{DATA.checkss}" /><input type="hidden" name="save" value="1"><input class="btn btn-primary w100" type="submit" value="{LANG.save}"></td>
 				</tr>
 			</tfoot>
 			<tbody>

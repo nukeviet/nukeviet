@@ -195,9 +195,9 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&gid=' . $gid . '&getuserid=1');
 
     $array = [];
-    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&amp;area=' . $area . '&amp;return=' . $return . '&amp;submit=1';
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&amp;area=' . $area . '&amp;return=' . $return . '&amp;sm=1';
 
-    if ($nv_Request->isset_request('submit', 'get')) {
+    if ($nv_Request->isset_request('sm', 'get')) {
         $array_user = [];
         $generate_page = '';
 
@@ -274,7 +274,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             }
 
             $xtpl->parse('resultdata.data');
-        } elseif ($nv_Request->isset_request('submit', 'get')) {
+        } elseif ($nv_Request->isset_request('sm', 'get')) {
             $xtpl->parse('resultdata.nodata');
         }
 

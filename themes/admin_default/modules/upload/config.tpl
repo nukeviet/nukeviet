@@ -48,7 +48,8 @@
         </div>
     </div>
     <div class="text-center">
-        <input name="submit" type="submit" value="{LANG.pubdate}" class="btn btn-primary" />
+        <input type="hidden" name="save" value="1">
+        <input type="submit" value="{LANG.pubdate}" class="btn btn-primary" />
     </div>
 </form>
 <!--  END: main  -->

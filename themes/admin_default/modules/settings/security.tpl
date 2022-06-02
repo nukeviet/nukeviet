@@ -605,7 +605,8 @@
                                 <div class="row">
                                     <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
                                         <input type="hidden" name="checkss" value="{CHECKSS}" />
-                                        <input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary">
+                                        <input type="hidden" name="save" value="1">
+                                        <input type="submit" value="{LANG.banip_confirm}" class="btn btn-primary">
                                     </div>
                                 </div>
                             </div>

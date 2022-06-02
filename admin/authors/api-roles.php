@@ -118,7 +118,7 @@ if ($role_id) {
 }
 
 $is_submit_form = false;
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $is_submit_form = true;
     $current_cat = $nv_Request->get_title('current_cat', 'post', '');
 

@@ -158,7 +158,8 @@
                 <div class="row">
                     <div class="col-sm-18 col-sm-offset-6">
                         <input type="hidden" name="current_cat" value="{CURRENT_CAT}">
-                        <button type="submit" name="submit" value="submit" class="btn btn-primary">{GLANG.save}</button>
+                        <input type="hidden" name="save" value="1">
+                        <button type="submit" value="submit" class="btn btn-primary">{GLANG.save}</button>
                     </div>
                 </div>
             </form>

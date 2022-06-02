@@ -8,7 +8,7 @@
 				</colgroup>
 				<tfoot>
 					<tr>
-						<td colspan="2"><input type="submit" name="submit" value="{LANG.config_save}" class="btn btn-primary" /></td>
+						<td colspan="2"><input type="hidden" name="save" value="1"><input type="submit" value="{LANG.config_save}" class="btn btn-primary" /></td>
 					</tr>
 				</tfoot>
 				<tbody>

@@ -16,7 +16,7 @@
                     </td>
                 </tr>
 				<tr>
-					<td colspan="2"><label><input type="checkbox" name="active" value="1" {ROW.status}/> {LANG.edit_active}</label> &nbsp; <label> <input type="checkbox" name="delete" value="1"/> {LANG.edit_delete} </label>&nbsp;&nbsp; <input type="hidden" value="{CID}" name="cid"/><input type="submit" name="submit" value="{LANG.delete_accept}" class="btn btn-primary" /></td>
+					<td colspan="2"><label><input type="checkbox" name="active" value="1" {ROW.status}/> {LANG.edit_active}</label> &nbsp; <label> <input type="checkbox" name="delete" value="1"/> {LANG.edit_delete} </label>&nbsp;&nbsp; <input type="hidden" value="{CID}" name="cid"/><input type="hidden" name="save" value="1"><input type="submit" value="{LANG.delete_accept}" class="btn btn-primary" /></td>
 				</tr>
 			</tbody>
 		</table>

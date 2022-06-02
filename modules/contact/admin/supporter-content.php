@@ -34,7 +34,7 @@ if ($row['id'] > 0) {
     $row['departmentid'] = $nv_Request->get_int('departmentid', 'post,get', 0);
 }
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $row['departmentid'] = $nv_Request->get_int('departmentid', 'post', 0);
     $row['full_name'] = $nv_Request->get_title('full_name', 'post', '');
     $row['image'] = $nv_Request->get_title('image', 'post', '');
