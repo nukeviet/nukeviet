@@ -244,7 +244,7 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_file (
   name varchar(245) NOT NULL,
   ext varchar(10) NOT NULL DEFAULT '',
   type varchar(5) NOT NULL DEFAULT '',
-  filesize int(11) NOT NULL DEFAULT '0',
+  filesize double NOT NULL DEFAULT '0',
   src varchar(255) NOT NULL DEFAULT '',
   srcwidth int(11) NOT NULL DEFAULT '0',
   srcheight int(11) NOT NULL DEFAULT '0',
