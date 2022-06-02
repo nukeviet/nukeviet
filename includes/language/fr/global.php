@@ -4,13 +4,14 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+
 if (!defined('NV_MAINFILE')) {
-    exit('Stop!!!');
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -39,13 +40,15 @@ $lang_global['admin_logout_ok'] = 'Toutes les informations de session sont suppr
 $lang_global['admin_logout_question'] = 'Êtes vous sûr de vouloir quitter l\'Administration?';
 $lang_global['admin_ipincorrect'] = 'Vous êtes connecté par IP: %s. Nous sommes désolé que cet IP n\'est pas autorisé d\'entrer à l\'administration du site!';
 $lang_global['ok'] = 'ok';
-$lang_global['confirm'] = 'Confirmer';
-$lang_global['manage'] = 'Gérer';
 $lang_global['cancel'] = 'Annuler';
 $lang_global['reset'] = 'Réinitialiser';
 $lang_global['fail'] = 'Échoué';
+$lang_global['confirm'] = 'Confirmer';
+$lang_global['manage'] = 'Gérer';
 $lang_global['firewallsystem'] = 'Section d\'Administration';
 $lang_global['firewallincorrect'] = 'Le parefeu a bloqué votre session d\'administration!';
+$lang_global['limit_user_number'] = 'Votre site Web est réservé aux utilisateurs %s. Pour ajouter un utilisateur, veuillez contacter l\'administrateur système';
+$lang_global['limit_admin_number'] = 'Votre site Web est limité par l\'administrateur %s, pour ajouter un administrateur, veuillez contacter l\'administrateur système';
 $lang_global['username_empty'] = 'Nom du compte n\'a pas été entré';
 $lang_global['usernamelong'] = 'Nom du compte trop long. Maximum %1$d caractères';
 $lang_global['usernameadjective'] = 'Nom du compte trop court. Minimum %1$d caractères';
@@ -67,6 +70,7 @@ $lang_global['upass_type_4'] = 'Votre mot de passe doit être construit par des 
 $lang_global['upass_type_simple'] = 'Mot de passe utilisé est trop facile à deviner, il faut que vous saisissiez un nouveau mot de passe plus compliqué';
 $lang_global['password_rule_limit'] = 'Mot de passe invalide: %1$s et %2$d à %3$d caractère';
 $lang_global['password_rule_nolimit'] = 'Les mots de passe doivent être compris entre %1$d et %2$d caractères';
+$lang_global['content_ssl'] = 'Les données soumises sur ce site ne sont actuellement pas cryptées. Votre nom d\'utilisateur, mot de passe ou toute autre donnée que vous envoyez est visible. Veuillez réfléchir avant de vous connecter. Pour plus d\'informations, contactez votre administrateur de site Web!';
 $lang_global['securitycodeincorrect'] = 'Code de sécurité incorrect';
 $lang_global['securitycodeincorrect1'] = 'L\'authentification est pas encore Robot, s\'il vous plaît revalider';
 $lang_global['loginincorrect'] = 'L\'identifiant et le mot de passe ne correspondent pas';
@@ -81,6 +85,7 @@ $lang_global['2teplogin_other_menthod'] = 'Essayez d\'autres façons';
 $lang_global['2teplogin_error_opt'] = 'Code de confirmation est incorrecte, s\'il vous plaît ré-entrer';
 $lang_global['2teplogin_error_backup'] = 'Codes de sauvegarde sont incorrects, s\'il vous plaît ré-entrer';
 $lang_global['2teplogin_require'] = 'Vous devez activer l\'authentification à deux facteurs peut se connecter. Cliquez ici pour activer cette fonction';
+$lang_global['2teplogin'] = 'Authentification à deux facteurs';
 $lang_global['memory_time_usage'] = 'Storage: %1$s, Temps d\'exécution:  %2$s secondes';
 $lang_global['for_admin'] = 'Pour l\'administrateur';
 $lang_global['admin_account'] = 'Compte Admin';
@@ -100,6 +105,7 @@ $lang_global['securitycode1'] = 'Vérifiez que vous n\'êtes pas un robot';
 $lang_global['loginsubmit'] = 'Connexion';
 $lang_global['register'] = 'S\'inscrire';
 $lang_global['lostpass'] = 'Mot de passe oublié';
+$lang_global['warning_ssl'] = 'Avertissement';
 $lang_global['logininfo'] = 'S\'il vous plaît vous connecter à votre compte afin que vous puissiez utiliser tous les outils du site';
 $lang_global['adminlogininfo'] = 'Veuillez utiliser un identifiant et un mot de passe valide pour accéder à l\'administration';
 $lang_global['site_rss'] = 'RSS - Derniers News';
@@ -341,9 +347,6 @@ $lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés av
 $lang_global['cookie_notice'] = 'Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site web. Lorsque vous utilisez notre site, vous êtes informé que nous utilisons des cookies et que vous pouvez modifier cette utilisation à tout moment. <a href="%s">En savoir plus</a>.';
 $lang_global['on'] = 'On';
 $lang_global['off'] = 'De';
-$lang_global['limit_user_number'] = 'Votre site Web est réservé aux utilisateurs %s. Pour ajouter un utilisateur, veuillez contacter l\'administrateur système';
-$lang_global['limit_admin_number'] = 'Votre site Web est limité par l\'administrateur %s, pour ajouter un administrateur, veuillez contacter l\'administrateur système';
-$lang_global['2teplogin'] = 'Authentification à deux facteurs';
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';
