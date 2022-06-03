@@ -1,5 +1,18 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+
+NUKEVIET 4.4.05:
+- Fix redirects in banners module
+- RSS-Feed: Show atom:link only when it is defined
+- Fix the error of displaying the statistics chart of the module banners
+- Fix search error in module news (#3452)
+- Fix login error via facebook, google (#3445)
+- Fix XSS bug. Thanks abstrabakus at WhiteHub#2968
+- Fix Error cannot create firewall account (#3403)
+- Redefine host, port, client-side protocol if forwarded
+- Fix image upload error (#3386)
+- Add API authentication method: none
+
 NUKEVIET 4.4.04:
 - Add sending mail when adding/removing oauth for admin (#3016)
 - System package addition: tecnickcom/tc-lib-barcode (v1.17.6)
