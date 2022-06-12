@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.5.02
+- Module news: add the function to record the article status history
 - Module news: add article history feature
 - Fix redirects in banners module
 - RSS-Feed: Show atom:link only when it is defined

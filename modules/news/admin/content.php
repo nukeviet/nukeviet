@@ -13,6 +13,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\news\Shared\Logs;
+
 // Xuất ajax autocomplete các dòng sự kiện
 if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
     $q = $nv_Request->get_title('q', 'post, get', '');
@@ -1174,6 +1176,9 @@ if ($is_submit_form) {
                 $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid IN (' . $internal_authors_del . ') AND id = ' . $rowcontent['id']);
                 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_author SET numnews = numnews-1 WHERE id IN (' . $internal_authors_del . ')');
             }
+
+            // Lưu lịch sử thay đổi trạng thái của bài viết
+            Logs::saveLogStatusPost($rowcontent['id'], $rowcontent['status']);
 
             if (!empty($error_data)) {
                 $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'];

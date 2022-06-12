@@ -67,6 +67,8 @@ if ($catid > 0) {
                             }
                         }
                     }
+
+                    // Khi mở khóa tương tự cũng không ghi log thay đổi status của row
                 }
 
                 foreach ($sudcatids as $_catid) {
@@ -98,6 +100,7 @@ if ($catid > 0) {
                                 trigger_error($e->getMessage());
                             }
                         }
+                        // Khi khóa, không ghi log thay đổi của row
                     } else {
                         // Lấy các bài viết thuộc chuyên mục hoặc chuyên mục con của chuyên mục đang bị khóa/mở khóa
                         $sql = 'SELECT id, catid, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE FIND_IN_SET(' . $_catid . ', listcatid)';
