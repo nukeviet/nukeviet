@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\news\Shared\Logs;
+
 $global_code_defined = [
     'cat_visible_status' => [1, 2],
     'cat_locked_status' => 10,
@@ -129,6 +131,10 @@ function nv_del_content_module($id)
 
         // Xóa lịch sử bài viết
         $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = ' . $id;
+        $db->exec($_sql);
+
+        // Xóa log thay đổi trạng thái bài viết
+        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_logs WHERE sid=' . $id . ' AND log_key=\'' . Logs::KEY_CHANGE_STATUS . '\'';
         $db->exec($_sql);
 
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id = ' . $id);
