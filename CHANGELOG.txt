@@ -1,5 +1,26 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.02
+- Module news: add the function to record the article status history
+- Module news: add article history feature
+- Fix redirects in banners module
+- RSS-Feed: Show atom:link only when it is defined
+- Fix the error of displaying the statistics chart of the module banners
+- Fix search error in module news (#3452)
+- Fix login error via facebook, google (#3445)
+- Module news: add search by time in admin
+- Module users: add search user by group in admin (#2857)
+- Added warning of unencrypted data when the site is not using SSL
+- Compatible with php 8.1
+- Module news: Fix the option to display the homepage on mobile
+- Fix XSS bug. Thanks abstrabakus at WhiteHub#2968
+- Fix Error cannot create firewall account (#3403)
+- Add coccoc bot for class BotManager
+- Redefine host, port, client-side protocol if forwarded
+- Fix image upload error (#3386)
+- Add API authentication method: none
+- Update permissions to use Zalo module
+
 NUKEVIET 4.5.01
 - Add some security emails (#3016)
 - Add "Development mode" option when installing (#2939)

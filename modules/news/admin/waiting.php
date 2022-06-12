@@ -13,6 +13,8 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\news\Shared\Logs;
+
 if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('checkss', 'get') == NV_CHECK_SESSION) {
     $listid = $nv_Request->get_string('listid', 'get');
     $id_array = array_map('intval', explode(',', $listid));
@@ -56,6 +58,9 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status = 5 WHERE id =' . $id);
                 }
                 $exp_array[] = $id;
+
+                // Lưu log thay đổi trạng thái của bài viết
+                Logs::saveLogStatusPost($id, 5);
             }
         }
     }

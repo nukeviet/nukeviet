@@ -246,11 +246,14 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   sid mediumint(8) NOT NULL DEFAULT '0',
   userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  log_key varchar(60) NOT NULL DEFAULT '' COMMENT 'Khóa loại log, tùy vào lập trình',
   status tinyint(4) NOT NULL DEFAULT '0',
-  note varchar(255) NOT NULL,
+  note varchar(255) NOT NULL DEFAULT '',
   set_time int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY sid (sid),
+  KEY log_key (log_key),
+  KEY status (status),
   KEY userid (userid)
 ) ENGINE=MyISAM";
 
