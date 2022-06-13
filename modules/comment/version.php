@@ -20,7 +20,7 @@ $module_version = [
     'is_sysmod' => 0,
     'virtual' => 0,
     'version' => '4.5.02',
-    'date' => 'Saturday, June 11, 2022 4:00:00 PM GMT+07:00',
+    'date' => 'Monday, June 20, 2022 4:00:00 PM GMT+07:00',
     'author' => 'VINADES.,JSC <contact@vinades.vn>',
     'uploads_dir' => [
         $module_upload
