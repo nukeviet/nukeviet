@@ -1536,24 +1536,6 @@ if ($nv_update_config['step'] == 1) {
     } elseif ($nv_update_config['substep'] == 4) {
         // Di chuyen cac file
 
-        // Neu khong co file can di chuyen thi chuyen sang buoc 2/5 hoac buoc 3
-        if (empty($nv_update_config['updatelog']['file_list'])) {
-            // Chuyen den buoc 3 neu khong co huong dan nang cap khac bang tay
-            if (!file_exists(NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html')) {
-                $nv_update_config['updatelog']['step'] = 2;
-                $NvUpdate->set_data_log($nv_update_config['updatelog']);
-
-                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=3');
-            } else {
-                // Chuyen den buoc 2/5
-
-                $nv_update_config['updatelog']['substep'] = 4;
-                $NvUpdate->set_data_log($nv_update_config['updatelog']);
-
-                nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
-            }
-        }
-
         // Tu dong nhan dien remove_path
         if ($nv_Request->isset_request('tetectftp', 'post')) {
             $ftp_server = nv_unhtmlspecialchars($nv_Request->get_title('ftp_server', 'post', '', 1));
@@ -1590,6 +1572,29 @@ if ($nv_update_config['step'] == 1) {
 
         // Danh sach cac file con lai
         $array['file_list'] = $NvUpdate->list_all_file();
+
+        // Nếu không có file cần di chuyển hoặc đã di chuyển hết thì chuyển sang bước 2/5 hoặc bước 3
+        if (empty($nv_update_config['updatelog']['file_list']) or empty($array['file_list'])) {
+            // Chuyen den buoc 3 neu khong co huong dan nang cap khac bang tay
+            if (!file_exists(NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html')) {
+                $nv_update_config['updatelog']['step'] = 2;
+                $NvUpdate->set_data_log($nv_update_config['updatelog']);
+
+                // Chuyển ngay nếu không có file cần chuyển
+                if (empty($nv_update_config['updatelog']['file_list'])) {
+                    nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=3');
+                }
+            } else {
+                // Chuyen den buoc 2/5
+                $nv_update_config['updatelog']['substep'] = 4;
+                $NvUpdate->set_data_log($nv_update_config['updatelog']);
+
+                // Chuyển ngay nếu không có file cần chuyển
+                if (empty($nv_update_config['updatelog']['file_list'])) {
+                    nv_redirect_location(NV_BASE_SITEURL . 'install/update.php?step=2&substep=5');
+                }
+            }
+        }
 
         // Buoc tiep theo
         if (!file_exists(NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html')) {
