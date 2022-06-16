@@ -7,7 +7,7 @@ NUKEVIET 4.4.05:
 - Fix the error of displaying the statistics chart of the module banners
 - Fix search error in module news (#3452)
 - Fix login error via facebook, google (#3445)
-- Fix XSS bug. Thanks abstrabakus at WhiteHub#2968
+- Fix XSS bug (CVE-2022-30874). Thanks abstrabakus at WhiteHub#2968
 - Fix Error cannot create firewall account (#3403)
 - Redefine host, port, client-side protocol if forwarded
 - Fix image upload error (#3386)
