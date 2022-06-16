@@ -59,6 +59,7 @@ if (!empty($savesetting)) {
     $array_config['copy_news'] = $nv_Request->get_int('copy_news', 'post', 0);
     $array_config['order_articles'] = $nv_Request->get_int('order_articles', 'post', 0);
     $array_config['identify_cat_change'] = $nv_Request->get_int('identify_cat_change', 'post', 0);
+    $array_config['active_history'] = (int) $nv_Request->get_bool('active_history', 'post', false);
 
     $array_config['elas_use'] = $nv_Request->get_int('elas_use', 'post', 0);
     $array_config['elas_host'] = $nv_Request->get_title('elas_host', 'post', '');
@@ -229,6 +230,7 @@ $xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant
 $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
 $xtpl->assign('IDENTIFY_CAT_CHANGE', $module_config[$module_name]['identify_cat_change'] ? ' checked="checked"' : '');
 $xtpl->assign('ALLOWED_RATING', $module_config[$module_name]['allowed_rating'] ? ' checked="checked"' : '');
+$xtpl->assign('ACTIVE_HISTORY', !empty($module_config[$module_name]['active_history']) ? ' checked="checked"' : '');
 
 $xtpl->assign('FRONTEND_EDIT_ALIAS', $module_config[$module_name]['frontend_edit_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('FRONTEND_EDIT_LAYOUT', $module_config[$module_name]['frontend_edit_layout'] ? ' checked="checked"' : '');

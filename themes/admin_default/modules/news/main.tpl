@@ -152,10 +152,13 @@
                     <td class="text-center">{ROW.hitstotal}</td>
                     <td class="text-center">{ROW.hitscm}</td>
                     <td class="text-center">{ROW.numtags}</td>
-                    <td class="text-center">
+                    <td class="text-left text-nowrap">
                         <!-- BEGIN: copy_news --><a href="{URL_COPY}" class="btn btn-success btn-xs" title="{LANG.title_copy_news}" ><i class="fa fa-copy"></i></a><!-- END: copy_news -->
                         <!-- BEGIN: excdata --><a href="{ROW.url_send}" class="btn btn-success btn-xs"><i class="fa fa-paper-plane-o"></i>{LANG.send}</a><!-- END: excdata -->
-                        {ROW.feature}
+                        {ROW.feature_text}
+                        <!-- BEGIN: history -->
+                        <a href="#" data-loadurl="{BASE_URL}&amp;loadhistory={ROW.id}" data-btn="showhistory" class="btn btn-xs btn-default" title="{LANG.history}"><i class="fa fa-history" aria-hidden="true"></i></a>
+                        <!-- END: history -->
                     </td>
                 </tr>
                 <!-- END: loop -->
@@ -229,4 +232,43 @@ $(function() {
     });
 });
 </script>
+<!-- START FORFOOTER -->
+<div class="modal fade" tabindex="-1" role="dialog" id="md-history">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{GLANG.cancel}"><span aria-hidden="true">&times;</span></button>
+                <h2 class="mb-0"><strong>{LANG.history}</strong></h2>
+            </div>
+            <div class="table-responsive">
+            </div>
+        </div
+    </div>
+</div>
+<!-- END FORFOOTER -->
 <!-- END: main -->
+
+<!-- BEGIN: history -->
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="width: 20%;">{LANG.history_time}</th>
+            <th style="width: 30%;">{LANG.history_author}</th>
+            <th style="width: 30%;">{LANG.history_changefields}</th>
+            <th style="width: 20%;">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- BEGIN: loop -->
+        <tr>
+            <td>{HISTORY.historytime}</td>
+            <td>{HISTORY.admin_id}</td>
+            <td>{HISTORY.changed_fields}</td>
+            <td class="text-right text-nowrap">
+                <a data-btn="restorehistory" href="{BASE_URL}&amp;loadhistory={NEW_ID}" data-id="{HISTORY.id}" data-tokend="{TOKEND}" data-msg="{LANG.history_restore_confirm}" class="btn btn-xs btn-info"><i class="fa fa-database" aria-hidden="true"></i> {LANG.history_restore}</a>
+            </td>
+        </tr>
+        <!-- END: loop -->
+    </tbody>
+</table>
+<!-- END: history -->

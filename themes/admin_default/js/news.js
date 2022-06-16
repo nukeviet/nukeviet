@@ -716,6 +716,46 @@ $(function() {
     $('#from-btn').click(function() {
         $("#from_date").datepicker('show');
     });
+
+    // Hiển thị lịch sử bài viết
+    $('[data-btn="showhistory"]').on('click', function(e) {
+        e.preventDefault();
+        $('#md-history').data('loadurl', $(this).data('loadurl')).modal('show');
+    });
+    $('#md-history').on('show.bs.modal', function() {
+        var $this = $(this);
+        $('.table-responsive', $this).html('<div class="panel-body text-center"><i class="fa fa-spin fa-spinner fa-2x"></i></div>').load($this.data('loadurl'));
+    });
+
+    // Khôi phục lại lịch sử
+    $(document).delegate('[data-btn="restorehistory"]', 'click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        if (!confirm($this.data('msg'))) {
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: $this.attr('href') + '&nocache=' + new Date().getTime(),
+            data: {
+                restorehistory: $this.data('tokend'),
+                id: $this.data('id')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(respon) {
+                if (!respon.success) {
+                    alert(respon.text);
+                    return;
+                }
+                window.location = respon.url;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Request Error!!!');
+                console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    });
 });
 
 function nv_sort_content(id, w) {

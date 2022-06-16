@@ -282,6 +282,14 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <th>{LANG.setting_active_history}</th>
+                    <td>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="active_history" value="1"{ACTIVE_HISTORY}> {LANG.setting_active_history_help}</label>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
