@@ -187,7 +187,10 @@ $(document).ready(function() {
 
     //XSSsanitize
     $('body').on('click', '[type=submit]:not([name])', function(e) {
-        btnClickSubmit(e, $(this).parents('form'))
+        var form = $(this).parents('form');
+        if (!$('[name=submit]', form).length) {
+            btnClickSubmit(e,form)
+        }
     });
 
     $(document).on('click', function(e) {

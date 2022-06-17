@@ -24,6 +24,9 @@ function btnClickSubmit(event, form) {
 
 $(function() {
     $('body').on('click', '[type=submit]:not([name])', function(e) {
-        btnClickSubmit(e, $(this).parents('form'))
+        var form = $(this).parents('form');
+        if (!$('[name=submit]', form).length) {
+            btnClickSubmit(e,form)
+        }
     });
 })
