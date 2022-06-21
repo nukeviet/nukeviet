@@ -13,6 +13,8 @@ if (!defined('NV_IS_MOD_NEWS')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\news\Shared\Logs;
+
 /**
  * getPostLevel()
  *
@@ -187,8 +189,8 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
             nv_redirect_location($base_url);
         }
 
-        $rowcontent = $db->query('SELECT r.* FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows r 
-            LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON r.id=a.id 
+        $rowcontent = $db->query('SELECT r.* FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows r
+            LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON r.id=a.id
             WHERE r.id=' . $contentid . ' AND a.aid= ' . $my_author_detail['id'] . ' AND r.status<=' . $global_code_defined['row_locked_status'])->fetch();
 
         if (empty($rowcontent['id'])) {
@@ -549,6 +551,9 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         }
 
         if (empty($error)) {
+            // Lưu log thay đổi trạng thái bài viết
+            Logs::saveLogStatusPost($rowcontent['id'], $rowcontent['status']);
+
             $data = [];
             if (defined('NV_IS_USER')) {
                 $data['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;

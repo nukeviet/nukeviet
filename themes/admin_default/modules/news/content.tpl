@@ -8,10 +8,16 @@
 </div>
 <!-- END: error -->
 
+<!-- BEGIN: restore_note -->
+<div class="alert alert-info">
+    <i class="fa fa-spin fa-spinner"></i> {LANG.history_recovering}
+</div>
+<!-- END: restore_note -->
+
 <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" />
 <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/select2/select2.min.css">
 
-<form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" onsubmit="return nv_validForm(this,'{MODULE_DATA}', '{ERROR_BODYTEXT}','{ERROR_CAT}');">
+<form id="form-news-content" class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" onsubmit="return nv_validForm(this,'{MODULE_DATA}', '{ERROR_BODYTEXT}','{ERROR_CAT}');">
     <div class="row">
         <div class="alert alert-danger" id="show_error" style="display: none">
 
@@ -374,6 +380,8 @@
         <input type="hidden" value="{ISCOPY}" name="copy" />
         <input type="hidden" value="{rowcontent.id}" name="id" />
         <input type="hidden" value="{rowcontent.referer}" name="referer">
+        <input type="hidden" value="{RESTORE_ID}" name="restore">
+        <input type="hidden" value="{RESTORE_HASH}" name="restorehash">
         <!-- BEGIN:status_save -->
         <input class="btn btn-primary submit-post" name="statussave" type="submit" value="{LANG.save}" />
         <!-- END:status_save -->
@@ -413,6 +421,20 @@
     <!-- BEGIN: holdon_edit -->
     CFG.is_edit_news = true;
     <!-- END: holdon_edit -->
+    <!-- BEGIN: restore_auto -->
+    $(window).on('load', function() {
+        setTimeout(function() {
+            var form = $('#form-news-content');
+            if ($('[name="status1"]', form).length) {
+                $('[name="status1"]', form).trigger('click');
+            } else if ($('[name="statussave"]', form).length) {
+                $('[name="statussave"]', form).trigger('click');
+            } else {
+                $('[type="submit"]:first', form).trigger('click');
+            }
+        }, 2000);
+    });
+    <!-- END: restore_auto -->
 </script>
 <script src="{ASSETS_STATIC_URL}/js/select2/select2.min.js"></script>
 <script src="{ASSETS_LANG_STATIC_URL}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
