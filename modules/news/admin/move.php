@@ -105,7 +105,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
             'catid' => $catid_i,
             'space' => $space,
             'title' => $array_value['title'],
-            'checked' => (in_array((int) $catid_i, $array_map('intval', $catids), true)) ? ' checked="checked"' : '',
+            'checked' => (in_array((int) $catid_i, array_map('intval', $catids), true)) ? ' checked="checked"' : '',
             'catidchecked' => ($catid_i == $catid) ? ' checked="checked"' : '',
             'catiddisplay' => $catiddisplay
         ];
