@@ -75,10 +75,15 @@ if (!empty($credential_data['credential_ips'])) {
 }
 
 $apisecret = $crypt->decrypt($credential_data['credential_secret']);
-if ($credential_data['auth_method'] !== 'none' and !password_verify($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])) {
+if ($credential_data['auth_method'] == 'password_verify' and !password_verify($apisecret . '_' . $api_credential['timestamp'], $api_credential['hashsecret'])) {
     $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
         ->setMessage('Api Authentication fail !!! ')
         ->returnResult();
+}
+elseif ($credential_data['auth_method'] == 'md5_verify' and md5($apisecret . '_' . $api_credential['timestamp']) != $api_credential['hashsecret']) {
+    $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
+    ->setMessage('Api Authentication fail !!! ')
+    ->returnResult();
 }
 
 // Cập nhật lại lần cuối sử dụng

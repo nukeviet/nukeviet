@@ -25,7 +25,7 @@ while ($row = $result->fetch()) {
 }
 
 // Các phương thức xác thực được phép
-$credential_auth_methods = ['password_verify', 'none'];
+$credential_auth_methods = ['password_verify', 'md5_verify', 'none'];
 
 if (empty($global_array_roles)) {
     $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=api-roles';
