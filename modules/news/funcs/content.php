@@ -1,7 +1,5 @@
 <?php
 
-use NukeViet\Module\news\Shared\Logs;
-
 /**
  * NukeViet Content Management System
  * @version 4.x
@@ -14,6 +12,8 @@ use NukeViet\Module\news\Shared\Logs;
 if (!defined('NV_IS_MOD_NEWS')) {
     exit('Stop!!!');
 }
+
+use NukeViet\Module\news\Shared\Logs;
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
