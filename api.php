@@ -79,10 +79,9 @@ if ($credential_data['auth_method'] == 'password_verify' and !password_verify($a
     $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
         ->setMessage('Api Authentication fail !!! ')
         ->returnResult();
-}
-elseif ($credential_data['auth_method'] == 'md5_verify' and md5($apisecret . '_' . $api_credential['timestamp']) != $api_credential['hashsecret']) {
+} elseif ($credential_data['auth_method'] == 'md5_verify' and md5($apisecret . '_' . $api_credential['timestamp']) != $api_credential['hashsecret']) {
     $apiresults->setCode(ApiResult::CODE_AUTH_FAIL)
-    ->setMessage('Api Authentication fail !!! ')
+        ->setMessage('Api Authentication fail !!! ')
     ->returnResult();
 }
 
