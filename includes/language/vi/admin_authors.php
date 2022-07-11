@@ -221,6 +221,7 @@ $lang_module['api_cr_ips'] = 'IP Truy cập API';
 $lang_module['credential_ips_help'] = 'Nhập mỗi IP một dòng, truy vấn từ các IP này được phép thực hiện';
 $lang_module['api_cr_auth_method'] = 'Phương thức xác thực';
 $lang_module['api_cr_auth_method_password_verify'] = 'password_verify (khuyên dùng)';
+$lang_module['api_cr_auth_method_md5_verify'] = 'md5_verify';
 $lang_module['api_cr_auth_method_none'] = 'Không xác thực, dùng trong việc phát triển';
 
 $lang_module['api_System'] = 'Các chức năng hệ thống';
