@@ -26,7 +26,7 @@
             </p>
         </div>
         <div id="upload-content" class="col-lg-20 col-md-20 col-sm-18 filebrowse">
-            <div id="imglist" class="clearfix">
+            <div id="imglist" class="accept-touch-action clearfix">
                 <p class="upload-loading">
                     <em class="fa fa-spin fa-spinner fa-2x m-bottom"></em>
                     <br />
