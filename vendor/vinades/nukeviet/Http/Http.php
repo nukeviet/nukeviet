@@ -198,6 +198,7 @@ class Http extends Server
             'stream' => false,
             'filename' => null,
             'limit_response_size' => null,
+            'cipherstring_seclevel_1' => false, // For a URL having a certificate using RSA less than 2048 bits
         ];
 
         // Get full args

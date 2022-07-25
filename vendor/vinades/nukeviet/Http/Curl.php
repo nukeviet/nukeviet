@@ -151,6 +151,9 @@ class Curl
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, ($ssl_verify === true) ? 2 : false);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify);
+        if ($args['cipherstring_seclevel_1']) {
+            curl_setopt($handle, CURLOPT_SSL_CIPHER_LIST, 'DEFAULT@SECLEVEL=1');
+        }
         if ($ssl_verify) {
             curl_setopt($handle, CURLOPT_CAINFO, $cainfo);
         }
