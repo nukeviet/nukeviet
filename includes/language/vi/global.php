@@ -343,6 +343,7 @@ $lang_global['company_phone'] = 'Điện thoại';
 $lang_global['company_fax'] = 'Fax';
 $lang_global['company_email'] = 'Email';
 $lang_global['company_website'] = 'Website';
+$lang_global['config_company_phone_1'] = 'Điện thoại liên hệ';
 $lang_global['siteterms'] = 'Điều khoản sử dụng';
 $lang_global['siteterms_url'] = 'Đường dẫn đến Điều khoản sử dụng';
 $lang_global['copyright_by'] = 'Bản quyền thuộc về';

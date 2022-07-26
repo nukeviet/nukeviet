@@ -123,7 +123,7 @@ if (!nv_function_exists('nv_company_info')) {
     function nv_company_info_submit()
     {
         global $nv_Request;
-
+        
         $return = [];
         $return['error'] = [];
         $return['config']['company_name'] = $nv_Request->get_title('config_company_name', 'post');
@@ -139,6 +139,7 @@ if (!nv_function_exists('nv_company_info')) {
         $return['config']['company_fax'] = $nv_Request->get_title('config_company_fax', 'post');
         $return['config']['company_email'] = $nv_Request->get_title('config_company_email', 'post');
         $return['config']['company_website'] = $nv_Request->get_title('config_company_website', 'post');
+        $return['config']['company_phone_1'] = $nv_Request->get_title('config_company_phone_1', 'post');
 
         return $return;
     }
@@ -151,7 +152,7 @@ if (!nv_function_exists('nv_company_info')) {
      */
     function nv_company_info($block_config)
     {
-        global $global_config, $lang_global;
+        global $global_config, $lang_global, $db;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.company_info.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -160,7 +161,7 @@ if (!nv_function_exists('nv_company_info')) {
         } else {
             $block_theme = 'default';
         }
-
+        
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', $lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -254,6 +255,33 @@ if (!nv_function_exists('nv_company_info')) {
             }
             $xtpl->parse('main.company_website');
         }
+        $sql = 'SELECT id, phone FROM ' . NV_PREFIXLANG . '_contact_department WHERE act=1 AND is_default=1';
+        $result = $db->query($sql);
+        $row = $result->fetch();
+        if (!empty($row['phone'])) {
+            $nums = array_map('trim', explode('|', nv_unhtmlspecialchars($row['phone'])));
+            foreach ($nums as $k => $num) {
+                unset($m);
+                if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
+                    $phone = ['number' => nv_htmlspecialchars($m[1]), 'href' => $m[2]];
+                    $xtpl->assign('PHONE', $phone);
+                    $xtpl->parse('main.phone.item.href');
+                    $xtpl->parse('main.phone.item.href2');
+                } else {
+                    $num = preg_replace("/\[[^\]]*\]/", '', $num);
+                    $phone = ['number' => nv_htmlspecialchars($num)];
+                    $xtpl->assign('PHONE', $phone);
+                }
+                if ($k) {
+                    $xtpl->parse('main.phone.item.comma');
+                }
+                $xtpl->parse('main.phone.item');
+            }
+
+            $xtpl->parse('main.phone');
+        }
+       
+        
         $xtpl->assign('SITE_LOGO', NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
         $xtpl->parse('main');
 
