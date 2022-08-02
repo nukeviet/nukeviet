@@ -32,6 +32,9 @@ $canonicalUrl = getCanonicalUrl($page_url);
 if ($nv_Request->isset_request('q', 'get')) {
     $is_search = true;
 
+    // Không index những trang tìm kiếm bên trong
+    $nv_BotManager->setPrivate();
+
     $search['key'] = nv_substr($nv_Request->get_title('q', 'get', ''), 0, NV_MAX_SEARCH_LENGTH);
     $search['key'] = str_replace('+', ' ', urldecode($search['key']));
     $search['mod'] = $nv_Request->get_title('m', 'get', 'all', $search['mod']);
