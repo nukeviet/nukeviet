@@ -38,4 +38,5 @@ if (defined('NV_IS_GODADMIN')) {
     $submenu['cdn_backendhost'] = $lang_module['cdn_backendhost'];
     $submenu['ssettings'] = $lang_module['ssettings'];
     $submenu['variables'] = $lang_module['variables'];
+    $submenu['custom'] = $lang_module['custom'];
 }

@@ -380,6 +380,8 @@ foreach ($list as $row) {
     }
 }
 
+$global_config['custom_configs'] = !empty($global_config['custom_configs']) ? json_decode($global_config['custom_configs'], true) : [];
+
 nv_apply_hook('', 'zalo_webhook');
 
 if (!empty($global_config['nv_csp_script_nonce'])) {

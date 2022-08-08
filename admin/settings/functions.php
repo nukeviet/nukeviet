@@ -30,6 +30,7 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'variables';
     $allow_func[] = 'ssettings';
     $allow_func[] = 'cdn_backendhost';
+    $allow_func[] = 'custom';
 }
 
 $menu_top = [
