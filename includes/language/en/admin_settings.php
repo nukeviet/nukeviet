@@ -542,9 +542,7 @@ $lang_module['unsign_vietwords_note'] = 'This feature should not be enabled if t
 $lang_module['custom'] = 'Custom configuration';
 $lang_module['custom_configs'] = 'Custom configuration for language: %s';
 $lang_module['config_key'] = 'Configuration Key';
-$lang_module['config_name'] = 'Configuration Name';
 $lang_module['config_value'] = 'Configuration Value';
 $lang_module['config_key_note'] = 'Only keys matching the pattern <code>[a-zA-Z][a-zA-Z0-9_]{0,29}</code> are accepted.';
-$lang_module['config_name_note'] = 'Up to 255 characters';
-$lang_module['custom_configs_note'] = 'The custom configuration is output as: <code>$global_config[\'custom_configs\'][\'Configuration Key\'][\'Configuration Name\', \'Configuration Value\']</code>';
+$lang_module['custom_configs_note'] = 'The custom configuration is output as: <code>$global_config[\'custom_configs\'][\'Configuration Key\'] = \'Configuration Value\'</code>';
 $lang_module['addconfig'] = 'Add line';

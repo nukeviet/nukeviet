@@ -16,14 +16,13 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $config_key = $nv_Request->get_typed_array('config_key', 'post', 'title', []);
-    $config_name = $nv_Request->get_typed_array('config_name', 'post', 'title', []);
     $config_value = $nv_Request->get_typed_array('config_value', 'post', 'title', []);
 
     $custom_configs = [];
     if (!empty($config_key)) {
         foreach ($config_key as $i => $key) {
             if (preg_match('/^[a-zA-Z][a-zA-Z0-9\_]*$/', $key) and !empty($config_value[$i])) {
-                $custom_configs[$key] = [$config_name[$i], $config_value[$i]];
+                $custom_configs[$key] = $config_value[$i];
             }
         }
     }
@@ -60,18 +59,16 @@ $xtpl->assign('CHECKSS', $checkss);
 
 $custom_configs = [];
 if (!empty($global_config['custom_configs'])) {
-    foreach ($global_config['custom_configs'] as $key => $item) {
+    foreach ($global_config['custom_configs'] as $key => $value) {
         $custom_configs[] = [
             'key' => $key,
-            'name' => $item[0],
-            'value' => $item[1]
+            'value' => $value
         ];
     }
 }
 if (empty($custom_configs)) {
     $custom_configs[] = [
         'key' => '',
-        'name' => '',
         'value' => ''
     ];
 }

@@ -542,9 +542,7 @@ $lang_module['unsign_vietwords_note'] = 'Cette fonctionnalité ne doit pas être
 $lang_module['custom'] = 'Paramétrage personnalisé';
 $lang_module['custom_configs'] = 'Configuration personnalisée pour la langue: %s';
 $lang_module['config_key'] = 'Clé de configuration';
-$lang_module['config_name'] = 'Nom de la configuration';
 $lang_module['config_value'] = 'Valeur de configuration';
 $lang_module['config_key_note'] = 'Seules les clés correspondant au modèle <code>[a-zA-Z][a-zA-Z0-9_]{0,29}</code> sont acceptées.';
-$lang_module['config_name_note'] = 'Jusqu\'à 255 caractères';
-$lang_module['custom_configs_note'] = 'La configuration personnalisée est sortie sous la forme: <code>$global_config[\'custom_configs\'][\'Clé de configuration\'][\'Nom de la configuration\', \'Valeur de configuration\']</code>';
+$lang_module['custom_configs_note'] = 'La configuration personnalisée est sortie sous la forme: <code>$global_config[\'custom_configs\'][\'Clé de configuration\'] = \'Valeur de configuration\'</code>';
 $lang_module['addconfig'] = 'Ajouter ligne';
