@@ -348,3 +348,7 @@ input {
 .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
     height: 32px;
 }
+
+.witdh-100p {
+    width: 100%;
+}
