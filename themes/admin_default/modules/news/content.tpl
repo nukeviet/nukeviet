@@ -287,6 +287,7 @@
                                 </div>
                                 <textarea id="description" name="description" class="form-control w500" rows="5">{rowcontent.description}</textarea></td>
                             </tr>
+                            <!-- BEGIN: voices -->
                             <tr>
                                 <td><strong>{LANG.content_voice}:</strong></td>
                                 <td>
@@ -303,6 +304,7 @@
                                     <!-- END: voice -->
                                 </td>
                             </tr>
+                            <!-- END: voices -->
                         </tbody>
                     </table>
                 </div>

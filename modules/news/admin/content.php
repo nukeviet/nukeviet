@@ -1550,13 +1550,16 @@ $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);
 
 // Giọng đọc
-foreach ($global_array_voices as $voice) {
-    $voice['value'] = isset($rowcontent['voicedata'][$voice['id']]) ? $rowcontent['voicedata'][$voice['id']] : '';
-    if (!empty($voice['value']) and !nv_is_url($voice['value'])) {
-        $voice['value'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $voice['value'];
+if (!empty($global_array_voices)) {
+    foreach ($global_array_voices as $voice) {
+        $voice['value'] = isset($rowcontent['voicedata'][$voice['id']]) ? $rowcontent['voicedata'][$voice['id']] : '';
+        if (!empty($voice['value']) and !nv_is_url($voice['value'])) {
+            $voice['value'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $voice['value'];
+        }
+        $xtpl->assign('VOICE', $voice);
+        $xtpl->parse('main.voices.voice');
     }
-    $xtpl->assign('VOICE', $voice);
-    $xtpl->parse('main.voice');
+    $xtpl->parse('main.voices');
 }
 
 if (!empty($error)) {
