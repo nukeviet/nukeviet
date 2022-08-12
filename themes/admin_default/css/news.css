@@ -307,3 +307,7 @@ select, input {
     text-decoration: none;
     background-color: #f5f5f5;
 }
+
+.witdh-100p {
+    width: 100%;
+}
