@@ -52,10 +52,10 @@ if ($nv_Request->isset_request('setDefaultVoice', 'post')) {
 
 // Thiết lập autoplay
 if ($nv_Request->isset_request('setAutoPlayVoice', 'post') and $nv_Request->get_title('setAutoPlayVoice', 'post', '') === NV_CHECK_SESSION) {
-    $setCookieVal = !$nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false);
+    $setCookieVal = intval(!$nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false));
     $nv_Request->set_Cookie($module_file . '_autoplayvoice', $setCookieVal, NV_LIVE_COOKIE_TIME);
     nv_jsonOutput([
-        'value' => (int) $setCookieVal
+        'value' => $setCookieVal
     ]);
 }
 
