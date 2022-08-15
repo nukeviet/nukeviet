@@ -378,3 +378,7 @@ input {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.witdh-100p {
+    width: 100%;
+}
