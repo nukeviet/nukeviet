@@ -15,3 +15,4 @@ $lang_block['qr_outer_frame'] = 'QR-code Image Border';
 $lang_block['cominfo_map_yes'] = 'Enable Google MAP';
 $lang_block['cominfo_map_no'] = 'Disable Google MAP';
 $lang_block['cominfo_mapurl'] = 'Google MAP Iframe URL';
+$lang_block['export_button'] = 'Label export';

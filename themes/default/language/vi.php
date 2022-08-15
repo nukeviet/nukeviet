@@ -16,3 +16,4 @@ $lang_block['qr_outer_frame'] = 'Đường viền của QR-code';
 $lang_block['cominfo_map_yes'] = 'Bật Google MAP';
 $lang_block['cominfo_map_no'] = 'Tắt Google MAP';
 $lang_block['cominfo_mapurl'] = 'Google MAP Iframe URL';
+$lang_block['export_button'] = 'Label nút export';
