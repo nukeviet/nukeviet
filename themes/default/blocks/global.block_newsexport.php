@@ -97,7 +97,10 @@ if (!nv_function_exists('nv_block_newsexport')) {
         $limit = 3000;
 
         try {
-            $news_list = $db->query('select SQL_CALC_FOUND_ROWS * from ' . $table . ' LIMIT 0,' . $limit);
+            $news_list = $db->query('
+                select SQL_CALC_FOUND_ROWS title, author, publtime, hitstotal, total_rating
+                from ' . $table . ' LIMIT 0,' . $limit
+            );
         
             $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
