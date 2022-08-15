@@ -96,32 +96,39 @@ if (!nv_function_exists('nv_block_newsexport')) {
         $table = NV_PREFIXLANG.'_'.'news_rows';
         $limit = 3000;
 
-        $news_list = $db->query('select SQL_CALC_FOUND_ROWS * from ' . $table . ' LIMIT 0,' . $limit);
+        try {
+            $news_list = $db->query('select SQL_CALC_FOUND_ROWS * from ' . $table . ' LIMIT 0,' . $limit);
         
-        $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'STT');
-        $sheet->setCellValue('B1', 'Tên bài đăng');
-        $sheet->setCellValue('C1', 'Tác giả');
-        $sheet->setCellValue('D1', 'Ngày xuất bản');
-        $sheet->setCellValue('E1', 'Lượt xem');
-        $sheet->setCellValue('F1', 'Điểm đánh giá TB');
+            $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setCellValue('A1', 'STT');
+            $sheet->setCellValue('B1', 'Tên bài đăng');
+            $sheet->setCellValue('C1', 'Tác giả');
+            $sheet->setCellValue('D1', 'Ngày xuất bản');
+            $sheet->setCellValue('E1', 'Lượt xem');
+            $sheet->setCellValue('F1', 'Điểm đánh giá TB');
 
-        $count = 1;
-        foreach ($news_list as $news) {
-            $count++;
-            $sheet->setCellValue('A'.$count, $count-1);
-            $sheet->setCellValue('B'.$count, $news['title']);
-            $sheet->setCellValue('C'.$count, $news['author']);
-            $sheet->setCellValue('D'.$count, date("H:i:s d/m/Y", $news['publtime']));
-            $sheet->setCellValue('E'.$count, $news['hitstotal']);
-            $sheet->setCellValue('F'.$count, $news['total_rating']);
+            $count = 1;
+            foreach ($news_list as $news) {
+                $count++;
+                $sheet->setCellValue('A'.$count, $count-1);
+                $sheet->setCellValue('B'.$count, $news['title']);
+                $sheet->setCellValue('C'.$count, $news['author']);
+                $sheet->setCellValue('D'.$count, date("H:i:s d/m/Y", $news['publtime']));
+                $sheet->setCellValue('E'.$count, $news['hitstotal']);
+                $sheet->setCellValue('F'.$count, $news['total_rating']);
+            }
+
+            $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="news_list.xlsx"');
+            
+            $writer->save('php://output');
+
+        } catch (PDOException $e) {
+            trigger_error(print_r($e, true));
         }
-
-        $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="news_list.xlsx"');
-        $writer->save('php://output');
+        
     }
 }
 

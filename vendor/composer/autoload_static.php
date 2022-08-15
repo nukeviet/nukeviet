@@ -8,6 +8,8 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     );
 
@@ -51,11 +53,19 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         array (
             'League\\Url\\' => 11,
         ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+        ),
         'C' => 
         array (
             'Complex\\' => 8,
             'Com\\Tecnick\\Color\\' => 18,
             'Com\\Tecnick\\Barcode\\' => 20,
+        ),
+        'B' => 
+        array (
+            'Buzz\\' => 5,
         ),
     );
 
@@ -121,6 +131,10 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         array (
             0 => __DIR__ . '/..' . '/league/url/src',
         ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
@@ -132,6 +146,10 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         'Com\\Tecnick\\Barcode\\' => 
         array (
             0 => __DIR__ . '/..' . '/tecnickcom/tc-lib-barcode/src',
+        ),
+        'Buzz\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib/Buzz',
         ),
     );
 
@@ -152,13 +170,6 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
             'Gregwar\\Cache' => 
             array (
                 0 => __DIR__ . '/..' . '/gregwar/cache',
-            ),
-        ),
-        'B' => 
-        array (
-            'Buzz' => 
-            array (
-                0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib',
             ),
         ),
     );
