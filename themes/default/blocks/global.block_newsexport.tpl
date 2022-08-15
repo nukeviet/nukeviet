@@ -11,7 +11,8 @@
     </form>
 </div>
 <script>
-    /*$("#export_news").on("submit", function(){
+    /*
+    $("#export_news").on("submit", function(){
         $(".btn_news_export").prop('disabled', true);
     });
     function export_news(event, form){
@@ -32,6 +33,7 @@
                 console.log(jqXHR, textStatus, errorThrown);
             }
         });
-    }*/
+    }
+    */
 </script>
 <!-- END: main -->
