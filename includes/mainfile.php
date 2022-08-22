@@ -380,6 +380,12 @@ foreach ($list as $row) {
     }
 }
 
+$global_config['site_int_phone'] = '';
+if (!empty($global_config['site_phone']) and preg_match('/^(.+)\[([0-9\*\#\+\-\.\,\;]+)\]$/', $global_config['site_phone'], $matches)) {
+    $global_config['site_phone'] = $matches[1];
+    $global_config['site_int_phone'] = $matches[2];
+}
+
 $global_config['custom_configs'] = !empty($global_config['custom_configs']) ? json_decode($global_config['custom_configs'], true) : [];
 
 nv_apply_hook('', 'zalo_webhook');

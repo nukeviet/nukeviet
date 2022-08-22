@@ -133,7 +133,7 @@ $lang_global['plural_year'] = 'year,years';
 $lang_global['today'] = 'Today';
 $lang_global['current_month'] = 'This month';
 $lang_global['nojs'] = 'Your internet browser has disabled JavaScript.<br />Website only work when it enable.<br />To see how to enable JavaScript, Please <a >click here</a>!';
-$lang_global['chromeframe'] = 'You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.';
+$lang_global['chromeframe'] = 'You are using an <strong>outdated and insecure</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to be able to use the full features of the website.';
 $lang_global['sun'] = 'SUN';
 $lang_global['mon'] = 'MON';
 $lang_global['tue'] = 'TUE';
