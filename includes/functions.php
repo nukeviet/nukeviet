@@ -1114,6 +1114,36 @@ function nv_editor_br2nl($text)
 }
 
 /**
+ * @param string $str
+ * @param string $tag
+ * @return string
+ */
+function nv_nl2tag($str, $tag = 'p')
+{
+    if (empty($str)) {
+        return '';
+    }
+
+    $arr = explode("\n", $str);
+    $arr = array_map('trim', $arr);
+    $arr = array_filter($arr);
+
+    return '<' . $tag . '>' . implode('</' . $tag . '><' . $tag . '>', $arr) . '</' . $tag . '>';
+}
+
+/**
+ * @param string $str
+ * @param string $tag
+ * @return string
+ */
+function nv_tag2nl($str, $tag = 'p')
+{
+    $str = preg_replace('/<' . $tag . '[^>]*?>/', '', $str);
+
+    return str_replace('</' . $tag . '>', chr(13) . chr(10), $str);
+}
+
+/**
  * nv_get_keywords()
  *
  * @param mixed $content
@@ -2452,9 +2482,9 @@ function nv_insert_logs($lang = '', $module_name = '', $name_key = '', $note_act
 
 /**
  * nv_sys_mods()
- * 
- * @param string $lang 
- * @return array 
+ *
+ * @param string $lang
+ * @return array
  */
 function nv_sys_mods($lang = '')
 {
@@ -2521,8 +2551,8 @@ function nv_sys_mods($lang = '')
 /**
  * nv_site_mods()
  *
- * @param string $lang 
- * @return array 
+ * @param string $lang
+ * @return array
  */
 function nv_site_mods($lang = '')
 {
