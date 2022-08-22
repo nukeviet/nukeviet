@@ -88,6 +88,7 @@ $global_config['display_errors_list'] = NV_DISPLAY_ERRORS_LIST;
 $global_config['send_errors_list'] = NV_SEND_ERRORS_LIST;
 $global_config['error_log_path'] = NV_LOGS_DIR . '/error_logs';
 $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
+$global_config['notice_log_filename'] = NV_NOTICELOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 // Ket noi voi class Error_handler
