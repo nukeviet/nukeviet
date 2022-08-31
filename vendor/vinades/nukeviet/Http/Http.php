@@ -580,7 +580,7 @@ class Http extends Server
      */
     public function reset()
     {
-        $this->error = [];
+        Http::$error = [];
     }
 
     /**
