@@ -20,10 +20,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['confirm_password'] = 'Nhập mật khẩu để tiếp tục';
-$lang_module['confirm_password_info'] = 'Để thực hiện tính năng này, bạn cần xác nhận lại mật khẩu, điền mật khẩu của bạn vào ô bên dưới và nhấp Xác nhận';
+$lang_module['confirm_password_info'] = 'Để thực hiện tính năng này, bạn cần xác nhận lại mật khẩu. Vui lòng điền mật khẩu vào ô bên dưới và nhấp Xác nhận';
 $lang_module['confirm'] = 'Xác nhận';
 $lang_module['secretkey'] = 'Mã bí mật';
-$lang_module['wrong_confirm'] = 'Mã không chính xác, vui lòng nhập lại';
+$lang_module['wrong_confirm'] = 'Mã bí mật không chính xác. Vui lòng nhập lại!';
 
 $lang_module['cfg_step1'] = 'Bước 1: Quét mã QR';
 $lang_module['cfg_step1_manual'] = 'Hãy quét QR-code bằng ứng dụng hỗ trợ xác thực hai bước trên điện thoại của bạn (ví dụ: Google Authenticator). Nếu không thể quét QR-code, hãy';
@@ -54,5 +54,5 @@ $lang_module['change_2step_notvalid'] = 'Tài khoản của bạn chưa có mậ
 $lang_module['deactive_mess'] = 'Bạn thực sự muốn tắt xác thực hai bước?';
 $lang_module['setup_2step'] = 'Thiết lập xác thực hai bước';
 $lang_module['forcedrelogin'] = 'Buộc đăng nhập lại ở mọi nơi';
-$lang_module['forcedrelogin_note'] = 'Bạn đã thoát khỏi tài khoản thành viên. Vui lòng đăng nhập lại';
+$lang_module['forcedrelogin_note'] = 'Bạn đã thoát khỏi tài khoản người dùng. Vui lòng đăng nhập lại';
 $lang_module['setup_key'] = 'Khóa thiết lập';
