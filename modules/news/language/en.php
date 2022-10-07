@@ -19,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All righ
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['autoplay'] = 'Autoplay';
 $lang_module['nocatpage'] = 'Error:No topic';
 $lang_module['other'] = 'Other';
 $lang_module['detail'] = 'Detailed information';

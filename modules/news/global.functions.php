@@ -29,6 +29,10 @@ if ($timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME) {
     nv_set_status_module();
 }
 
+// Giọng đọc
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices ORDER BY weight ASC';
+$global_array_voices = $nv_Cache->db($sql, 'id', $module_name);
+
 /**
  * nv_set_status_module()
  *
@@ -620,6 +624,9 @@ function nv_save_history($post_old, $post_new)
     $key_array = [
         'internal_authors',
     ];
+    $key_array_full = [
+        'voicedata',
+    ];
 
     foreach ($key_text as $key) {
         if ($post_old[$key] != $post_new[$key]) {
@@ -638,6 +645,20 @@ function nv_save_history($post_old, $post_new)
             $change_fields[] = $key;
         }
     }
+    foreach ($key_array_full as $key) {
+        foreach ($post_old[$key] as $i_key => $i_value) {
+            if (!isset($post_new[$key][$i_key]) or $post_new[$key][$i_key] != $i_value) {
+                $change_fields[] = $key;
+                continue 2;
+            }
+        }
+        foreach ($post_new[$key] as $i_key => $i_value) {
+            if (!isset($post_old[$key][$i_key]) or $post_old[$key][$i_key] != $i_value) {
+                $change_fields[] = $key;
+                continue 2;
+            }
+        }
+    }
 
     if (!empty($change_fields)) {
         global $admin_info, $user_info, $module_data, $db;
@@ -647,7 +668,7 @@ function nv_save_history($post_old, $post_new)
             author, sourceid, publtime, exptime, archive, title, alias,
             hometext, homeimgfile, homeimgalt, inhome, allowed_comm,
             allowed_rating, external_link, instant_active, instant_template,
-            instant_creatauto, titlesite, description, bodyhtml, keywords, sourcetext,
+            instant_creatauto, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
             files, tags, internal_authors, imgposition, layout_func, copyright,
             allowed_send, allowed_print, allowed_save, changed_fields
         ) VALUES (
@@ -655,7 +676,7 @@ function nv_save_history($post_old, $post_new)
             :author, :sourceid, :publtime, :exptime, :archive, :title, :alias,
             :hometext, :homeimgfile, :homeimgalt, :inhome, :allowed_comm,
             :allowed_rating, :external_link, :instant_active, :instant_template,
-            :instant_creatauto, :titlesite, :description, :bodyhtml, :keywords, :sourcetext,
+            :instant_creatauto, :titlesite, :description, :bodyhtml, :voicedata, :keywords, :sourcetext,
             :files, :tags, :internal_authors, :imgposition, :layout_func,
             :copyright, :allowed_send, :allowed_print, :allowed_save, :changed_fields
         )";
@@ -686,6 +707,7 @@ function nv_save_history($post_old, $post_new)
         $array_insert['titlesite'] = $post_old['titlesite'];
         $array_insert['description'] = $post_old['description'];
         $array_insert['bodyhtml'] = $post_old['bodyhtml'];
+        $array_insert['voicedata'] = json_encode($post_old['voicedata']);
         $array_insert['keywords'] = $post_old['keywords'];
         $array_insert['sourcetext'] = $post_old['sourcetext'];
         $array_insert['files'] = $post_old['files'];

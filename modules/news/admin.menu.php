@@ -97,7 +97,12 @@ if ($NV_IS_ADMIN_MODULE) {
     $submenu['sources'] = $lang_module['sources'];
     $submenu['authors'] = $lang_module['author_manage'];
     $submenu['admins'] = $lang_module['admin'];
-    $submenu['setting'] = $lang_module['setting'];
+    $submenu['setting'] = [
+        'title' => $lang_module['setting'],
+        'submenu' => [
+            'voices' => $lang_module['voice_manager']
+        ]
+    ];
 
     $allow_func[] = 'cat';
     $allow_func[] = 'change_cat';
@@ -130,5 +135,6 @@ if ($NV_IS_ADMIN_MODULE) {
 
     $allow_func[] = 'tags';
     $allow_func[] = 'setting';
+    $allow_func[] = 'voices';
     $allow_func[] = 'move';
 }

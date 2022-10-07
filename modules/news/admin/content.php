@@ -207,7 +207,8 @@ $rowcontent = [
     'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
     'instant_template' => '',
     'instant_creatauto' => 0,
-    'mode' => 'add'
+    'mode' => 'add',
+    'voicedata' => []
 ];
 
 $rowcontent['topictext'] = '';
@@ -344,6 +345,7 @@ if ($rowcontent['id'] == 0) {
         unset($internal_authors);
     }
     $rowcontent['files'] = !empty($rowcontent['files']) ? explode(',', $rowcontent['files']) : [];
+    $rowcontent['voicedata'] = !empty($rowcontent['voicedata']) ? json_decode($rowcontent['voicedata'], true) : [];
 
     // Các nhóm tin của bài viết
     $id_block_content = [];
@@ -601,6 +603,19 @@ if ($is_submit_form) {
         }
     }
     $rowcontent['files'] = !empty($rowcontent['files']) ? implode(',', $rowcontent['files']) : '';
+
+    // Xử lý giọng đọc
+    $rowcontent['voicedata'] = [];
+    foreach ($global_array_voices as $voice) {
+        $voice_file = $nv_Request->get_title('voice_' . $voice['id'], 'post', '');
+        if (!empty($voice_file)) {
+            if (nv_is_url($voice_file)) {
+                $rowcontent['voicedata'][$voice['id']] = $voice_file;
+            } elseif (nv_is_file($voice_file, NV_UPLOADS_DIR . '/' . $module_upload) === true) {
+                $rowcontent['voicedata'][$voice['id']] = substr($voice_file, strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
+            }
+        }
+    }
 
     // Xử lý liên kết tĩnh
     $alias = $nv_Request->get_title('alias', 'post', '');
@@ -871,11 +886,16 @@ if ($is_submit_form) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid']);
                 $ct_query = [];
 
-                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (id, titlesite, description, bodyhtml, keywords, sourcetext, files, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save) VALUES (
+                $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (
+                    id, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
+                    files, imgposition, layout_func, copyright,
+                    allowed_send, allowed_print, allowed_save
+                ) VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
                     :description,
                     :bodyhtml,
+                    :voicedata,
                     :keywords,
                     :sourcetext,
                     :files,
@@ -886,11 +906,15 @@ if ($is_submit_form) {
                     ' . $rowcontent['allowed_print'] . ',
                     ' . $rowcontent['allowed_save'] . '
                 )');
+
+                $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
+
                 $stmt->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $stmt->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
                 $stmt->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR);
                 $stmt->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
                 $stmt->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
+                $stmt->bindParam(':voicedata', $voicedata, PDO::PARAM_STR, strlen($voicedata));
                 $stmt->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $stmt->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
                 $ct_query[] = (int) $stmt->execute();
@@ -995,6 +1019,7 @@ if ($is_submit_form) {
                     titlesite=:titlesite,
                     description=:description,
                     bodyhtml=:bodyhtml,
+                    voicedata=:voicedata,
                     keywords=:keywords,
                     sourcetext=:sourcetext,
                     files=:files,
@@ -1006,11 +1031,14 @@ if ($is_submit_form) {
                     allowed_save=' . (int) ($rowcontent['allowed_save']) . '
                 WHERE id =' . $rowcontent['id']);
 
+                $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
+
                 $sth->bindParam(':files', $rowcontent['files'], PDO::PARAM_STR);
                 $sth->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
                 $sth->bindParam(':layout_func', $rowcontent['layout_func'], PDO::PARAM_STR, strlen($rowcontent['layout_func']));
                 $sth->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
                 $sth->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
+                $sth->bindParam(':voicedata', $voicedata, PDO::PARAM_STR, strlen($voicedata));
                 $sth->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $sth->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
 
@@ -1514,6 +1542,19 @@ $xtpl->assign('instant_creatauto_checked', empty($rowcontent['instant_creatauto'
 
 $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);
+
+// Giọng đọc
+if (!empty($global_array_voices)) {
+    foreach ($global_array_voices as $voice) {
+        $voice['value'] = isset($rowcontent['voicedata'][$voice['id']]) ? $rowcontent['voicedata'][$voice['id']] : '';
+        if (!empty($voice['value']) and !nv_is_url($voice['value'])) {
+            $voice['value'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $voice['value'];
+        }
+        $xtpl->assign('VOICE', $voice);
+        $xtpl->parse('main.voices.voice');
+    }
+    $xtpl->parse('main.voices');
+}
 
 if (!empty($error)) {
     $xtpl->assign('error', implode('<br />', $error));

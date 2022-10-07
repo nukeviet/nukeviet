@@ -415,3 +415,15 @@ $lang_module['del_selected'] = 'Xóa chọn';
 $lang_module['select_keyword'] = 'Chọn từ khóa';
 $lang_module['tags_auto_create'] = 'Tạo tự động dựa vào nội dung bài viết';
 $lang_module['keywords_auto_create'] = 'Tạo tự động dựa vào nội dung bài viết';
+
+$lang_module['content_voice'] = 'Chọn file audio cho các giọng đọc';
+$lang_module['order'] = 'Thứ tự';
+$lang_module['function'] = 'Chức năng';
+$lang_module['voice'] = 'Giọng đọc';
+$lang_module['voice_manager'] = 'Thiết lập giọng đọc';
+$lang_module['voice_title'] = 'Tên giọng đọc';
+$lang_module['voice_description'] = 'Giới thiệu';
+$lang_module['voice_add'] = 'Thêm giọng đọc';
+$lang_module['voice_edit'] = 'Sửa giọng đọc';
+$lang_module['voice_error_title'] = 'Lỗi: Tên giọng đọc không được để trống';
+$lang_module['voice_error_exists'] = 'Lỗi: Tên giọng đọc bị trùng';
