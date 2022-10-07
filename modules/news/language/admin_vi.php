@@ -399,3 +399,15 @@ $lang_module['history_author'] = 'Người tạo ra lịch sử';
 $lang_module['history_restore_confirm'] = 'Bạn có chắc chắn khôi phục lại phiên bản này không?';
 $lang_module['history_recovering'] = 'Hệ thống đang khôi phục tự động, bạn vui lòng đợi';
 $lang_module['history_restore_success'] = 'Khôi phục thành công';
+
+$lang_module['content_voice'] = 'Chọn file audio cho các giọng đọc';
+$lang_module['order'] = 'Thứ tự';
+$lang_module['function'] = 'Chức năng';
+$lang_module['voice'] = 'Giọng đọc';
+$lang_module['voice_manager'] = 'Thiết lập giọng đọc';
+$lang_module['voice_title'] = 'Tên giọng đọc';
+$lang_module['voice_description'] = 'Giới thiệu';
+$lang_module['voice_add'] = 'Thêm giọng đọc';
+$lang_module['voice_edit'] = 'Sửa giọng đọc';
+$lang_module['voice_error_title'] = 'Lỗi: Tên giọng đọc không được để trống';
+$lang_module['voice_error_exists'] = 'Lỗi: Tên giọng đọc bị trùng';

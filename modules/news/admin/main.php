@@ -1119,6 +1119,7 @@ if ($loadhistory) {
         'titlesite' => $lang_module['titlesite'],
         'description' => $lang_module['description'],
         'bodyhtml' => $lang_module['content_bodytext'],
+        'voicedata' => $lang_module['voice'],
         'sourcetext' => $lang_module['sources'],
         'imgposition' => $lang_module['imgposition'],
         'layout_func' => $lang_module['pick_layout1'],
@@ -1176,6 +1177,7 @@ if ($loadhistory) {
             nv_jsonOutput($respon);
         }
         $post_new['internal_authors'] = empty($post_new['internal_authors']) ? [] : explode(',', $post_new['internal_authors']);
+        $post_new['voicedata'] = empty($post_new['voicedata']) ? [] : json_decode($post_new['voicedata'], true);
 
         // Kiểm tra xem có lưu phiên bản hiện thời không (nếu chưa lưu)
         $history_time = $data[$loadhistory_id]['edittime'] ?: $data[$loadhistory_id]['addtime'];
@@ -1207,6 +1209,7 @@ if ($loadhistory) {
             while ($row = $_query->fetch()) {
                 $post_old['internal_authors'][] = $row['aid'];
             }
+            $post_old['voicedata'] = empty($post_old['voicedata']) ? [] : json_decode($post_old['voicedata'], true);
 
             nv_save_history($post_old, $post_new);
         }

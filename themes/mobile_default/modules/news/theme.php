@@ -614,10 +614,21 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     }
 
     $news_contents['addtime'] = nv_date('d/m/Y h:i:s', $news_contents['addtime']);
+    $news_contents['css_autoplay'] = $news_contents['autoplay'] ? ' checked' : '';
 
     $xtpl->assign('NEWSID', $news_contents['id']);
     $xtpl->assign('NEWSCHECKSS', $news_contents['newscheckss']);
     $xtpl->assign('DETAIL', $news_contents);
+
+    // Xuất giọng đọc
+    if (!empty($news_contents['current_voice'])) {
+        foreach ($news_contents['voicedata'] as $voice) {
+            $xtpl->assign('VOICE', $voice);
+            $xtpl->parse('main.show_player.loop');
+        }
+
+        $xtpl->parse('main.show_player');
+    }
 
     if ($news_contents['allowed_send'] == 1) {
         $xtpl->assign('CHECKSESSION', md5($news_contents['id'] . NV_CHECK_SESSION));

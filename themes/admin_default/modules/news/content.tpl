@@ -284,8 +284,27 @@
                                 <td>
                                 <div class="help-block">
                                     {GLANG.length_characters}:<span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max}
-                                </div>								<textarea id="description" name="description" class="form-control w500" rows="5">{rowcontent.description}</textarea></td>
+                                </div>
+                                <textarea id="description" name="description" class="form-control w500" rows="5">{rowcontent.description}</textarea></td>
                             </tr>
+                            <!-- BEGIN: voices -->
+                            <tr>
+                                <td><strong>{LANG.content_voice}:</strong></td>
+                                <td>
+                                    <!-- BEGIN: voice -->
+                                    <div class="m-bottom">
+                                        <div><label for="voice_{VOICE.id}">{VOICE.title}</label></div>
+                                        <div class="input-group witdh-100p">
+                                            <input class="form-control" type="text" id="voice_{VOICE.id}" name="voice_{VOICE.id}" value="{VOICE.value}">
+                                            <span class="input-group-btn">
+                                                <button data-toggle="pickaudio" data-id="{VOICE.id}" type="button" class="btn btn-default"><i class="fa fa-file-audio-o" aria-hidden="true"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- END: voice -->
+                                </td>
+                            </tr>
+                            <!-- END: voices -->
                         </tbody>
                     </table>
                 </div>
