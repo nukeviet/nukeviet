@@ -26,6 +26,10 @@ if ($timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME) {
     nv_set_status_module();
 }
 
+// Giọng đọc
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices ORDER BY weight ASC';
+$global_array_voices = $nv_Cache->db($sql, 'id', $module_name);
+
 /**
  * nv_set_status_module()
  *

@@ -355,3 +355,15 @@ $lang_module['status_13'] = 'Lưu bài viết, gửi quản trị tối cao';
 $lang_module['error_edit'] = 'Bài đăng là người kiểm duyệt được kiểm duyệt. Bạn không thể tiếp tục chỉnh sửa.';
 $lang_module['not_edit_by_admin'] = 'Bạn đã bị tấn công để chỉnh sửa bài đăng này. Không thể lưu thay đổi của bạn vào hệ thống, hãy sao chép lại để tránh bị mất các thay đổi của bạn.';
 $lang_module['post_is_editing'] = 'đang sửa bài viết này';
+
+$lang_module['content_voice'] = 'Chọn file audio cho các giọng đọc';
+$lang_module['order'] = 'Thứ tự';
+$lang_module['function'] = 'Chức năng';
+$lang_module['voice'] = 'Giọng đọc';
+$lang_module['voice_manager'] = 'Thiết lập giọng đọc';
+$lang_module['voice_title'] = 'Tên giọng đọc';
+$lang_module['voice_description'] = 'Giới thiệu';
+$lang_module['voice_add'] = 'Thêm giọng đọc';
+$lang_module['voice_edit'] = 'Sửa giọng đọc';
+$lang_module['voice_error_title'] = 'Lỗi: Tên giọng đọc không được để trống';
+$lang_module['voice_error_exists'] = 'Lỗi: Tên giọng đọc bị trùng';
