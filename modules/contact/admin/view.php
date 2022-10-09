@@ -122,7 +122,7 @@ if ($row['is_reply'] >= 1) {
     }
 }
 
-if ($row['is_processed']) {
+if ($processed) {
     $sql = 'SELECT username, email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['processed_by'];
     $adm_row = $db->query($sql)->fetch();
     if (!empty($adm_row)) {
