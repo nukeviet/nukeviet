@@ -28,11 +28,19 @@ class Sendmail extends PHPMailer
 {
     private $configs = [];
 
+    private $sender_name = '';
+
+    private $sender_address = '';
+
     private $myFrom = [];
 
     private $myReply = [];
 
     private $logo = false;
+
+    private $mailhtml = true;
+
+    private $is_http2 = false;
 
     /**
      * __construct()
@@ -87,8 +95,6 @@ class Sendmail extends PHPMailer
         } else {
             $this->Mailer = 'no';
         }
-
-        $this->_setFrom();
     }
 
     /**
@@ -115,6 +121,38 @@ class Sendmail extends PHPMailer
         $this->logo = true;
 
         return true;
+    }
+
+    /**
+     * setMailHtml()
+     *
+     * @param bool $mailhtml
+     */
+    public function setMailHtml($mailhtml = true)
+    {
+        $this->mailhtml = (float) $mailhtml;
+    }
+
+    /**
+     * setIsHttp2()
+     * 
+     * @param bool $is_http2 
+     */
+    public function setIsHttp2($is_http2 = false)
+    {
+        $this->is_http2 = $is_http2;
+    }
+
+    /**
+     * setSender()
+     * 
+     * @param string $address 
+     * @param string $name 
+     */
+    public function setSender($address, $name = '')
+    {
+        $this->sender_address = $address;
+        $this->sender_name = $name;
     }
 
     /**
@@ -203,14 +241,15 @@ class Sendmail extends PHPMailer
 
     /**
      * _formatBody()
-     *
-     * @param string $Body
-     * @return string
+     * 
+     * @param mixed $Body 
+     * @param mixed $is_http2 
+     * @return string 
      */
-    private static function _formatBody($Body)
+    private static function _formatBody($Body, $is_http2)
     {
         $Body = nv_url_rewrite($Body);
-        $optimizer = new Optimizer($Body, NV_BASE_SITEURL);
+        $optimizer = new Optimizer($Body, NV_BASE_SITEURL, $is_http2);
         $Body = $optimizer->process(false);
 
         return nv_unhtmlspecialchars($Body);
@@ -223,28 +262,26 @@ class Sendmail extends PHPMailer
      */
     private function _setFrom()
     {
-        $sender_email = !empty($this->configs['sender_email']) ? $this->configs['sender_email'] : '';
-        $sender_name = !empty($this->configs['sender_name']) ? $this->configs['sender_name'] : '';
-
         $force_sender = !empty($this->configs['force_sender']) && !empty($this->configs['sender_email']);
+        if ($force_sender) {
+            $sender_name = !empty($this->configs['sender_name']) ? $this->configs['sender_name'] : $this->configs['site_name'];
+            $this->setFrom($this->configs['sender_email'], nv_unhtmlspecialchars($sender_name));
+        } else {
+            $sender_email = !empty($this->sender_address) ? $this->sender_address : (!empty($this->configs['sender_email']) ? $this->configs['sender_email'] : '');
+            $sender_name = !empty($this->sender_name) ? $this->sender_name : (!empty($this->configs['sender_name']) ? $this->configs['sender_name'] : $this->configs['site_name']);
 
-        if (!$force_sender) {
-            if ($this->Mailer == 'smtp') {
-                if (empty($sender_email)) {
+            if (empty($sender_email)) {
+                if ($this->Mailer == 'smtp') {
                     if (filter_var($this->configs['smtp_username'], FILTER_VALIDATE_EMAIL)) {
                         $sender_email = $this->configs['smtp_username'];
                     }
-                }
-            } elseif ($this->Mailer == 'sendmail') {
-                if (empty($sender_email)) {
+                } elseif ($this->Mailer == 'sendmail') {
                     if (isset($_SERVER['SERVER_ADMIN']) and !empty($_SERVER['SERVER_ADMIN']) and filter_var($_SERVER['SERVER_ADMIN'], FILTER_VALIDATE_EMAIL)) {
                         $sender_email = $_SERVER['SERVER_ADMIN'];
                     } elseif (checkdnsrr($_SERVER['SERVER_NAME'], 'MX') || checkdnsrr($_SERVER['SERVER_NAME'], 'A')) {
                         $sender_email = 'webmaster@' . $_SERVER['SERVER_NAME'];
                     }
-                }
-            } elseif ($this->Mailer == 'mail') {
-                if (empty($sender_email)) {
+                } elseif ($this->Mailer == 'mail') {
                     if (($php_email = @ini_get('sendmail_from')) != '' and filter_var($php_email, FILTER_VALIDATE_EMAIL)) {
                         $sender_email = $php_email;
                     } elseif (preg_match("/([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+/", ini_get('sendmail_path'), $matches) and filter_var($matches[0], FILTER_VALIDATE_EMAIL)) {
@@ -254,12 +291,9 @@ class Sendmail extends PHPMailer
                     }
                 }
             }
+            empty($sender_email) && $sender_email = $this->configs['site_email'];
+            $this->setFrom($sender_email, nv_unhtmlspecialchars($sender_name));
         }
-
-        empty($sender_email) && $sender_email = $this->configs['site_email'];
-        empty($sender_name) && $sender_name = $this->configs['site_name'];
-
-        $this->setFrom($sender_email, nv_unhtmlspecialchars($sender_name));
     }
 
     /**
@@ -269,20 +303,19 @@ class Sendmail extends PHPMailer
      */
     private function _setReply()
     {
-        $reply = [];
-        if (!empty($this->configs['reply_email'])) {
-            $reply[$this->configs['reply_email']] = !empty($this->configs['reply_name']) ? $this->configs['reply_name'] : '';
-        }
-
         $force_reply = !empty($this->configs['force_reply']) and !empty($this->configs['reply_email']);
-
-        if (!$force_reply) {
-            $reply = $reply + $this->myFrom + $this->myReply;
-        }
-
-        if (!empty($reply)) {
-            foreach ($reply as $reply_email => $reply_name) {
-                $this->addReplyTo($reply_email, nv_unhtmlspecialchars($reply_name));
+        if ($force_reply) {
+            $this->addReplyTo($this->configs['reply_email'], nv_unhtmlspecialchars($this->configs['reply_name']));
+        } else {
+            $reply = $this->myFrom + $this->myReply;
+            if (empty($reply) and !empty($this->configs['reply_email'])) {
+                $reply[$this->configs['reply_email']] = $this->configs['reply_name'];
+            }
+            if (!empty($reply)) {
+                foreach ($reply as $reply_email => $reply_name) {
+                    empty($reply_name) && $reply_name = $this->configs['site_name'];
+                    $this->addReplyTo($reply_email, nv_unhtmlspecialchars($reply_name));
+                }
             }
         }
     }
@@ -360,6 +393,7 @@ class Sendmail extends PHPMailer
         if ($this->Mailer == 'no') {
             return false;
         }
+        $this->_setFrom();
         $this->_setReply();
 
         // https://www.php.net/manual/en/function.mail.php
@@ -370,13 +404,17 @@ class Sendmail extends PHPMailer
 
         $this->AltBody = strip_tags($this->Body);
 
-        if (function_exists('nv_mailHTML')) {
-            $this->Body = nv_mailHTML($this->Subject, $this->Body);
+        if ($this->mailhtml) {
+            if (function_exists('nv_mailHTML')) {
+                $this->Body = nv_mailHTML($this->Subject, $this->Body);
+            } else {
+                $this->Body = mailAddHtml($this->Subject, $this->Body);
+            }
             $this->logo = true;
         }
 
         $this->Subject = nv_unhtmlspecialchars($this->Subject);
-        $this->Body = self::_formatBody($this->Body);
+        $this->Body = self::_formatBody($this->Body, $this->is_http2);
 
         if ($this->logo) {
             $this->AddEmbeddedImage(NV_ROOTDIR . '/' . $this->configs['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $this->configs['site_logo']));

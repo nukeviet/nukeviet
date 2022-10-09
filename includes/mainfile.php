@@ -465,6 +465,21 @@ if ($global_config['cronjobs_launcher'] == 'system') {
     }
 }
 
+// Gửi mail từ luồng truy vấn không đồng bộ
+if ($nv_Request->isset_request('__sendmail', 'post')) {
+    $file = $nv_Request->get_title('__sendmail', 'post', '');
+    if (preg_match('/^[a-zA-Z0-9]{8}$/', $file)) {
+        $md5file = md5($global_config['sitekey'] . $file);
+        if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file)) {
+            $cts = file_get_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
+            $cts = json_decode($cts, true);
+            @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
+            @nv_sendmail($cts['from'], $cts['to'], $cts['subject'], $cts['message'], $cts['files'], $cts['AddEmbeddedImage'], $cts['testmode'], $cts['cc'], $cts['bcc'], $cts['mailhtml']);
+        }
+    }
+    exit(0);
+}
+
 // Quản lý thẻ meta, header các máy chủ tìm kiếm
 $nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
 

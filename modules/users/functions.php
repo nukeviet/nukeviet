@@ -278,7 +278,7 @@ function nv_del_user($userid)
     $subject = $lang_module['delconfirm_email_title'];
     $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
     $message = nl2br($message);
-    nv_sendmail([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
+    nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
 
     return $userid;
 }

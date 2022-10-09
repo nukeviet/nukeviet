@@ -321,7 +321,7 @@ if ((int) $row['safemode'] > 0) {
                 $name = implode(' ', $name);
                 $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
                 $message = sprintf($lang_module['safe_send_content'], $name, $sitename, $row['safekey']);
-                @nv_sendmail([
+                @nv_sendmail_async([
                     $global_config['site_name'],
                     $global_config['site_email']
                 ], $row['email'], $lang_module['safe_send_subject'], $message);
@@ -531,7 +531,7 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
     $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
     $message = defined('ACCESS_EDITUS') ? $lang_module['security_alert_openid_add'] : $lang_module['security_alert_openid_add1'];
     $message = sprintf($message, nv_ucfirst($server), $row['username'], $url);
-    nv_sendmail([
+    nv_sendmail_async([
         $global_config['site_name'],
         $global_config['site_email']
     ], $row['email'], $lang_module['security_alert'], $message);
@@ -668,7 +668,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $name = implode(' ', $name);
     $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
     $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['username'], $nv_username);
-    @nv_sendmail([
+    @nv_sendmail_async([
         $global_config['site_name'],
         $global_config['site_email']
     ], $row['email'], $lang_module['edit_mail_subject'], $message);
@@ -760,7 +760,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['email_active_info'], $name, $sitename, $verikey, $p);
-        @nv_sendmail([
+        @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
         ], $nv_email, $lang_module['email_active'], $message);
@@ -821,11 +821,11 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['email'], $nv_email);
 
         // Gửi thư cho cả email mới và email cũ
-        @nv_sendmail([
+        @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
         ], $nv_email, $lang_module['edit_mail_subject'], $message);
-        @nv_sendmail([
+        @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
         ], $row['email'], $lang_module['edit_mail_subject'], $message);
@@ -909,7 +909,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
-        @nv_sendmail([
+        @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
         ], $row['email'], $lang_module['edit_mail_subject'], $message);
@@ -990,7 +990,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
         $message = defined('ACCESS_EDITUS') ? $lang_module['security_alert_openid_delete'] : $lang_module['security_alert_openid_delete1'];
         $message = sprintf($message, implode(', ', array_unique($openid_mess)), $row['username'], $url);
-        nv_sendmail([
+        nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
         ], $row['email'], $lang_module['security_alert'], $message);
@@ -1049,7 +1049,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                             ];
                             $url_group = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, NV_MY_DOMAIN);
                             $message = sprintf($lang_module['group_join_queue_message'], $groups_list['all'][$gid]['title'], $user_info['full_name'], $groups_list['all'][$gid]['title'], $url_group);
-                            @nv_sendmail($mail_from, $email, $lang_module['group_join_queue'], $message);
+                            @nv_sendmail_async($mail_from, $email, $lang_module['group_join_queue'], $message);
                         }
                     }
                 }
@@ -1155,7 +1155,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             $name = implode(' ', $name);
             $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
             $message = sprintf($lang_module['safe_send_content'], $name, $sitename, $row['safekey']);
-            @nv_sendmail([
+            @nv_sendmail_async([
                 $global_config['site_name'],
                 $global_config['site_email']
             ], $row['email'], $lang_module['safe_send_subject'], $message);

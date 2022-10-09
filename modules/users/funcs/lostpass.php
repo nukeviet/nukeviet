@@ -324,7 +324,7 @@ if ($checkss == $data['checkss']) {
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
-        @nv_sendmail([
+        @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
         ], $row['email'], $lang_module['edit_mail_subject'], $message);

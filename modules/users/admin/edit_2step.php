@@ -81,7 +81,7 @@ if (empty($row['active2step'])) {
         if (!empty($global_users_config['admin_email'])) {
             $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, NV_MY_DOMAIN);
             $message = sprintf($lang_module['security_alert_2stepoff'], $row['username'], $url);
-            nv_sendmail([
+            nv_sendmail_async([
                 $global_config['site_name'],
                 $global_config['site_email']
             ], $row['email'], $lang_module['security_alert'], $message);
@@ -115,7 +115,7 @@ if (empty($row['active2step'])) {
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $subject = $lang_module['user_2step_newcodes'];
             $message = sprintf($lang_module['user_2step_bodymail'], $full_name, $global_config['site_name'], implode('<br />', $new_code));
-            @nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
+            @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_reset_user2step_codes', 'userid ' . $row['userid'], $admin_info['userid']);
