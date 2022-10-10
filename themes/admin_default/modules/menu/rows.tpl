@@ -10,25 +10,16 @@
 <form class="navbar-form" method="post" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&mid={DATA.mid}&parentid={DATA.parentid}">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
-            <colgroup>
-                <col class="w50">
-                <col class="w50">
-                <col class="w50">
-                <col span="2">
-                <col class="w150">
-                <col class="w100">
-                <col class="w200">
-            </colgroup>
             <thead>
                 <tr>
-                    <th class="text-center"><input name="check_all[]" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" type="checkbox"></th>
-                    <th>{LANG.number}</th>
-                    <th>{LANG.id}</th>
-                    <th>{LANG.title}</th>
-                    <th>{LANG.link}</th>
-                    <th class="text-center">{GLANG.groups_view}</th>
-                    <th class="text-center">{LANG.display}</th>
-                    <th class="text-center">{LANG.action}</th>
+                    <th class="text-center" style="width:1%"><input name="check_all[]" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" type="checkbox"></th>
+                    <th class="text-center" style="width:1%">{LANG.number}</th>
+                    <th class="text-center" style="width:1%">{LANG.id}</th>
+                    <th class="text-center">{LANG.title}</th>
+                    <th class="text-center" style="width:1%">{LANG.link}</th>
+                    <th class="text-center" style="width:1%">{LANG.groups_view}</th>
+                    <th class="text-center text-nowrap" style="width:1%">{LANG.display}</th>
+                    <th class="text-center" style="width:1%">{LANG.action}</th>
                 </tr>
             </thead>
             <tfoot>
@@ -44,15 +35,15 @@
             <tbody>
                 <!-- BEGIN: loop1 -->
                 <tr>
-                    <td class="text-center"><input type="checkbox" name="idcheck[]" value="{ROW.id}" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);"></td>
-                    <td class="text-center">
-                        <select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');" class="form-control w100">
+                    <td class="text-center" style="width:1%"><input type="checkbox" name="idcheck[]" value="{ROW.id}" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);"></td>
+                    <td class="text-center" style="width:1%">
+                        <select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');" class="form-control" style="width: auto;">
                             <!-- BEGIN: weight -->
                             <option value="{stt}" {select}>{stt}</option>
                             <!-- END: weight -->
                         </select>
                     </td>
-                    <td>{ROW.id}</td>
+                    <td class="text-right" style="width:1%">{ROW.id}</td>
                     <td>
                         <!-- BEGIN: icon -->
                         <img src="{ROW.icon}" height="20px" />
@@ -63,10 +54,20 @@
                     (<span class="requie">{ROW.sub} {LANG.sub_menu}</span>)
                     <!-- END: sub -->
                     </td>
-                    <td>{ROW.link}</td>
-                    <td class="text-center">{ROW.groups_view}</td>
-                    <td class="text-center"> <input type="checkbox" id="change_active_{ROW.id}" onclick="nv_change_active({ROW.id})" {ROW.active} /> </td>
-                    <td class="text-center">
+                    <td style="width:1%">
+                        <!-- BEGIN: link -->
+                        <button type="button" class="btn btn-default link" data-toggle="popover" data-trigger="click" data-contents="{ROW.link}">{LANG.click_to_view}</button>
+                        <!-- END: link -->
+                    </td>
+                    <td style="width:1%">
+                        <ul class="list-unstyled mb-0">
+                            <!-- BEGIN: group -->
+                            <li class="text-nowrap">- {GROUP}</li>
+                            <!-- END: group -->
+                        </u>
+                    </td>
+                    <td class="text-center" style="width:1%"> <input type="checkbox" id="change_active_{ROW.id}" onclick="nv_change_active({ROW.id})" {ROW.active} /> </td>
+                    <td class="text-right text-nowrap" style="width:1%">
                         <!-- BEGIN: reload -->
                         <em class="fa fa-refresh fa-lg">&nbsp;</em> <a href="#" onclick="nv_menu_reload( {DATA.mid}, {ROW.id}, {ROW.parentid}, '{LANG.action_menu_reload_confirm}' );" data-toggle="tooltip" data-placement="top" title="" data-original-title="{LANG.action_menu_reload_note}">{LANG.action_menu_reload}</a>&nbsp;
                         <!-- END: reload -->
@@ -178,7 +179,7 @@
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td style="vertical-align:top"><strong> {GLANG.groups_view}</strong></td>
+                    <td style="vertical-align:top"><strong> {LANG.groups_view}</strong></td>
                     <td>
                     <!-- BEGIN: groups_view -->
                     <input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}
@@ -219,7 +220,7 @@
 <script type="text/javascript">
 var CFG = [];
 CFG.upload_current = '{UPLOAD_CURRENT}';
-$(document).ready(function() {
+$(function () {
     $("#parentid, #module_name_page, select[name='module_name']").select2();
     $('form#edit').on('submit', function(e) {
         if ($(this).data('busy')) {
@@ -228,6 +229,20 @@ $(document).ready(function() {
         }
         $(this).data('busy', true);
     });
-});
+
+    $('[data-toggle="popover"].link').popover({
+        html: true,
+        content: function() {
+            return '<a href="' + $(this).data('contents') + '" target="_blank">' + $(this).data('contents') + '</a>';
+        }
+    });
+    $('body').on('click', function (e) {
+        $('[data-toggle=popover].link').each(function () {
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false;
+            }
+        });
+    });
+})
 </script>
 <!-- END: main -->

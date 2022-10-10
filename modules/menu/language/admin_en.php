@@ -93,3 +93,5 @@ $lang_module['image'] = 'Image';
 $lang_module['action_form'] = 'Submit';
 $lang_module['msgnocheck'] = 'No menu selected';
 $lang_module['id'] = 'ID';
+$lang_module['click_to_view'] = 'Click to view';
+$lang_module['groups_view'] = 'Right to view';

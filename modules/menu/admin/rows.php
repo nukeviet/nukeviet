@@ -407,7 +407,7 @@ while ($row = $result->fetch()) {
         'image' => $row['image'],
         'weight' => $row['weight'],
         'title' => $row['title'],
-        'groups_view' => implode('<br>', $groups_view),
+        'groups_view' => $groups_view,
         'module_name' => $row['module_name'],
         'op' => $row['op'],
         'active' => $row['status'] ? 'checked="checked"' : '',
@@ -496,6 +496,15 @@ if (!empty($arr_table)) {
             if (empty($rows['op']) and (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php') or $func_menu > 0)) {
                 $xtpl->parse('main.table.loop1.reload');
             }
+        }
+
+        if (!empty($rows['link'])) {
+            $xtpl->parse('main.table.loop1.link');
+        }
+
+        foreach ($rows['groups_view'] as $gr) {
+            $xtpl->assign('GROUP', $gr);
+            $xtpl->parse('main.table.loop1.group');
         }
 
         $xtpl->parse('main.table.loop1');
