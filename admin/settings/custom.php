@@ -81,7 +81,7 @@ foreach ($custom_configs as $custom_config) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = sprintf($lang_module['custom_configs'], $array_lang_admin[NV_LANG_DATA]);
+$page_title = sprintf($lang_module['custom_configs'], $language_array[NV_LANG_DATA]['name']);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
