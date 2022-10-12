@@ -14,4 +14,10 @@
     </div>
 </div>
 </div>
+<script>
+$(function() {
+    // Ẩn/hiển thị mật khẩu
+    "function" === typeof addPassBtn && addPassBtn()
+})
+</script>
 <!-- END: main -->

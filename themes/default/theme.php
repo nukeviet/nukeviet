@@ -266,6 +266,14 @@ function nv_site_theme($contents, $full = true)
         }
     }
 
+    // CSS của nút ẩn/hiện mật khẩu
+    if (($global_config['passshow_button'] === 1) or ($global_config['passshow_button'] === 2 and defined('NV_IS_USER')) or ($global_config['passshow_button'] === 3 and defined('NV_IS_ADMIN'))) {
+        $html_links[] = [
+            'rel' => 'stylesheet',
+            'href' => ASSETS_STATIC_URL . '/js/show-pass-btn/bootstrap3-show-pass.css'
+        ];
+    }
+
     foreach ($html_links as $links) {
         foreach ($links as $key => $value) {
             $xtpl->assign('LINKS', [
@@ -289,6 +297,14 @@ function nv_site_theme($contents, $full = true)
         'ext' => 1,
         'content' => NV_STATIC_URL . 'themes/' . $global_config['module_theme'] . '/js/custom.js'
     ];
+
+    // JS của nút ẩn/hiện mật khẩu
+    if (($global_config['passshow_button'] === 1) or ($global_config['passshow_button'] === 2 and defined('NV_IS_USER')) or ($global_config['passshow_button'] === 3 and defined('NV_IS_ADMIN'))) {
+        $html_js[] = [
+            'ext' => 1,
+            'content' => ASSETS_STATIC_URL . '/js/show-pass-btn/bootstrap3-show-pass.js'
+        ];
+    }
 
     foreach ($html_js as $js) {
         if ($js['ext']) {

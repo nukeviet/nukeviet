@@ -165,6 +165,10 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('LANG', $lang_global);
     $xtpl->assign('SITE_FAVICON', $site_favicon);
 
+    if (!empty($global_config['passshow_button'])) {
+        $xtpl->parse('main.passshow_button');
+    }
+
     if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css')) {
         $xtpl->assign('NV_CSS_MODULE_THEME', NV_STATIC_URL . 'themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css');
         $xtpl->parse('main.css_module');

@@ -546,3 +546,8 @@ $lang_module['config_value'] = 'Configuration Value';
 $lang_module['config_key_note'] = 'Only keys matching the pattern <code>[a-zA-Z][a-zA-Z0-9_]{0,29}</code> are accepted.';
 $lang_module['custom_configs_note'] = 'The custom configuration is output as: <code>$global_config[\'custom_configs\'][\'Configuration Key\'] = \'Configuration Value\'</code>';
 $lang_module['addconfig'] = 'Add line';
+$lang_module['passshow_button'] = '&laquo;Show/hide password&raquo; button integration';
+$lang_module['passshow_button_0'] = 'Not integrated';
+$lang_module['passshow_button_1'] = 'Always integrated';
+$lang_module['passshow_button_2'] = 'Integrated only for registered users';
+$lang_module['passshow_button_3'] = 'Integrated only for admins';

@@ -554,3 +554,8 @@ $lang_module['config_value'] = 'Giá trị cấu hình';
 $lang_module['config_key_note'] = 'Chỉ chấp nhận các khóa phù hợp với mẫu <code>[a-zA-Z][a-zA-Z0-9_]{0,29}</code>.';
 $lang_module['custom_configs_note'] = 'Cấu hình tủy chỉnh được xuất ra ở dạng: <code>$global_config[\'custom_configs\'][\'khóa cấu hình\'] = \'giá trị cấu hình\'</code>';
 $lang_module['addconfig'] = 'Thêm dòng';
+$lang_module['passshow_button'] = 'Tích hợp nút &laquo;Hiển thị/ẩn mật khẩu&raquo;';
+$lang_module['passshow_button_0'] = 'Không tích hợp';
+$lang_module['passshow_button_1'] = 'Luôn tích hợp';
+$lang_module['passshow_button_2'] = 'Chỉ tích hợp cho người dùng đã đăng ký';
+$lang_module['passshow_button_3'] = 'Chỉ tích hợp cho quản trị viên';

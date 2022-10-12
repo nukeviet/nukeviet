@@ -607,6 +607,10 @@ if (empty($admin_pre_data)) {
     $login_content = $xtpl->text('2step_form');
 }
 
+if ($global_config['passshow_button'] === 1) {
+    $xtpl->parse('main.passshow_button');
+}
+
 // Logo của site
 if (!empty($global_config['site_logo'])) {
     $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);

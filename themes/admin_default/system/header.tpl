@@ -45,6 +45,11 @@
         <script type="text/javascript" src="{NV_JS_MODULE}"></script>
         <!-- END: module_js -->
 
+        <!-- BEGIN: passshow_button -->
+        <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.css">
+        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.js"></script>
+        <!-- END: passshow_button -->
+
         <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=EmulateIE8; IE=EDGE" />
         <![endif]-->

@@ -33,7 +33,7 @@
                 <tr>
                     <td> {LANG.repassword} </td>
                     <td> <span class="text-danger">(*)</span> </td>
-                    <td><input class="form-control required password w300" type="password" autocomplete="new-password" name="password2" value="{DATA.password2}" id="password2" /> <input id="methods" type="checkbox"> {LANG.show_password}</td>
+                    <td><input class="form-control required password w300" type="password" autocomplete="new-password" name="password2" value="{DATA.password2}" id="password2" /></td>
                 </tr>
                 <tr>
                     <td> {LANG.pass_reset_request} </td>
