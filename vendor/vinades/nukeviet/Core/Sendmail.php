@@ -40,8 +40,6 @@ class Sendmail extends PHPMailer
 
     private $mailhtml = true;
 
-    private $is_http2 = false;
-
     /**
      * __construct()
      *
@@ -131,16 +129,6 @@ class Sendmail extends PHPMailer
     public function setMailHtml($mailhtml = true)
     {
         $this->mailhtml = (float) $mailhtml;
-    }
-
-    /**
-     * setIsHttp2()
-     * 
-     * @param bool $is_http2 
-     */
-    public function setIsHttp2($is_http2 = false)
-    {
-        $this->is_http2 = $is_http2;
     }
 
     /**
@@ -243,13 +231,12 @@ class Sendmail extends PHPMailer
      * _formatBody()
      * 
      * @param mixed $Body 
-     * @param mixed $is_http2 
      * @return string 
      */
-    private static function _formatBody($Body, $is_http2)
+    private static function _formatBody($Body)
     {
         $Body = nv_url_rewrite($Body);
-        $optimizer = new Optimizer($Body, NV_BASE_SITEURL, $is_http2);
+        $optimizer = new Optimizer($Body, NV_BASE_SITEURL);
         $Body = $optimizer->process(false);
 
         return nv_unhtmlspecialchars($Body);
@@ -414,7 +401,7 @@ class Sendmail extends PHPMailer
         }
 
         $this->Subject = nv_unhtmlspecialchars($this->Subject);
-        $this->Body = self::_formatBody($this->Body, $this->is_http2);
+        $this->Body = self::_formatBody($this->Body);
 
         if ($this->logo) {
             $this->AddEmbeddedImage(NV_ROOTDIR . '/' . $this->configs['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $this->configs['site_logo']));

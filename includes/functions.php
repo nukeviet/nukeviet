@@ -1310,7 +1310,7 @@ function mailAddHtml($subject, $body)
  */
 function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true)
 {
-    global $global_config, $sys_info;
+    global $global_config;
 
     $sm_parameters = [];
 
@@ -1374,9 +1374,6 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
         // Có thêm khung HTML vào nội dung mail hay không
         $mail->setMailHtml($mailhtml);
-
-        // Có phải http2 hay không
-        $mail->setIsHttp2(!empty($sys_info['is_http2']));
 
         // Add logo
         $AddEmbeddedImage && $mail->addLogo();
@@ -1457,9 +1454,9 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 
 /**
  * _otherMethodSendmail()
- * 
- * @param array $sm_parameters 
- * @return mixed 
+ *
+ * @param array $sm_parameters
+ * @return mixed
  */
 function _otherMethodSendmail($sm_parameters)
 {
@@ -2874,37 +2871,41 @@ function nv_set_authorization()
  *
  * post_async()
  *
- * @param mixed $url
- * @param mixed $params
- * @param array $headers
+ * @param string $url
+ * @param array  $params
+ * @param array  $headers
  */
-function post_async($url, $params, $headers = [])
+function post_async($url, $params = [], $headers = [])
 {
-    ksort($params);
-    $post_string = http_build_query($params);
     !str_starts_with($url, NV_MY_DOMAIN) && $url = NV_MY_DOMAIN . $url;
+    if (nv_is_url($url)) {
+        if (!empty($params)) {
+            ksort($params);
+            $post_string = http_build_query($params);
+        } else {
+            $post_string = '';
+        }
+        
+        !isset($headers['Referer']) && $headers['Referer'] = NV_MY_DOMAIN;
+        $_headers = [];
+        foreach ($headers as $name => $value) {
+            $_headers[] = "{$name}: {$value}";
+        }
 
-    if (!isset($headers['Referer'])) {
-        $headers['Referer'] = NV_MY_DOMAIN;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, 50);
+        curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $_headers);
+        curl_exec($ch);
+        curl_close($ch);
     }
-    $_headers = [];
-    foreach ($headers as $name => $value) {
-        $_headers[] = "{$name}: $value";
-    }
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt($ch, CURLOPT_HEADER, false);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
-    curl_setopt($ch, CURLOPT_TIMEOUT_MS, 50);
-    curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $_headers);
-    curl_exec($ch);
-    curl_close($ch);
 }
 
 /**
