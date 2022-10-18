@@ -164,8 +164,8 @@ while ($data = $result->fetch()) {
                     $data['send_from'] = $lang_global['level5'];
                 }
 
-                if (!empty($user_info['avata'])) {
-                    $data['photo'] = $user_info['avata'];
+                if (!empty($user_info['photo'])) {
+                    $data['photo'] = NV_STATIC_URL . $user_info['photo'];
                 } else {
                     $data['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
                 }
