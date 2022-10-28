@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -402,3 +402,6 @@ $lang_module['verify_email_sent'] = 'Mã xác minh email mới đã được g�
 $lang_module['verify_email_sent_error'] = 'Đã xảy ra lỗi kỹ thuật khi gửi mã xác minh đến email của bạn. Vui lòng liên hệ với quản trị site về vấn đề này.';
 $lang_module['forcedrelogin'] = 'Buộc đăng nhập lại ở mọi nơi';
 $lang_module['forcedrelogin_note'] = 'Bạn đã thoát khỏi tài khoản người dùng. Vui lòng đăng nhập lại';
+$lang_module['welcome_new_account'] = 'Chào mừng bạn đến với %s! Bạn đã đăng ký tài khoản người dùng thành công. Hãy bắt đầu từ việc thiết lập tài khoản của mình... Hy vọng bạn sẽ có thời gian vui vẻ và bổ ích tại website của chúng tôi.';
+$lang_module['welcome_new_member'] = 'Chào mừng bạn đến với nhóm &laquo;%1$s&raquo;! Bây giờ bạn đã trở thành thành viên chính thức của nhóm. Chúc bạn có nhiều trải nghiệm thú vị cùng &laquo;%1$s&raquo;.';
+$lang_module['info_when_leaving_group'] = 'Rất tiếc là bạn đã rời nhóm &laquo;%s&raquo;. Chúng tôi hy vọng sẽ có cơ hội để phục vụ bạn lần nữa.';

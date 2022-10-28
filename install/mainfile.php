@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -64,15 +64,15 @@ $global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_
 
 // Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
-$client_info['ip'] = $ips->remote_ip;
+$client_info['ip'] = $ips::$remote_ip;
 if ($client_info['ip'] == 'none') {
     exit('Error: Your IP address is not correct');
 }
 
 // Neu khong co IP
 // define( 'NV_SERVER_IP', $ips->server_ip );
-define('NV_FORWARD_IP', $ips->forward_ip);
-define('NV_REMOTE_ADDR', $ips->remote_addr);
+define('NV_FORWARD_IP', $ips::$forward_ip);
+define('NV_REMOTE_ADDR', $ips::$remote_addr);
 define('NV_CLIENT_IP', $client_info['ip']);
 
 // Xac dinh Quoc gia

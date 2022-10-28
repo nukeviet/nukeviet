@@ -1491,6 +1491,17 @@ a.btn {
 
 .personalArea {
     padding-left: 50px;
+    white-space: nowrap;
+}
+
+.personalArea > * {
+    display: inline-block !important;
+    vertical-align: middle;
+    white-space: initial;
+}
+
+.personalArea > * + * {
+    margin-left: 5px;
 }
 
 .personalArea a.button.user,

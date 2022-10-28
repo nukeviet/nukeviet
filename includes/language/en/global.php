@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -349,6 +349,12 @@ $lang_global['limit_user_number'] = 'Your site is limited to %s users. To add a 
 $lang_global['limit_admin_number'] = 'Your site is limited to %s admins, to add a new admin, please contact your system administrator';
 $lang_global['2teplogin'] = 'Two-factor authentication';
 $lang_global['indefinitely'] = 'Indefinitely';
+$lang_global['all'] = 'All';
+$lang_global['unviewed'] = 'Unviewed';
+$lang_global['favorite'] = 'Favorite';
+$lang_global['viewall'] = 'View all';
+$lang_global['refresh'] = 'Refresh';
+$lang_global['push_notifications'] = 'Push-notifications';
 $lang_global['content_ssl'] = 'This page is not encrypted for secure communication. User names, passwords, and any other information will be sent in clear text.';
 $lang_global['warning_ssl'] = 'Warning';
 $lang_global['error_code_1'] = 'Address is invalid';

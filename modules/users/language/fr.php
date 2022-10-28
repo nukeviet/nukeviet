@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -399,3 +399,6 @@ $lang_module['security_alert_openid_delete'] = 'OpenID <strong>%s</strong> vient
 $lang_module['security_alert_openid_delete1'] = 'OpenID <strong>%s</strong> vient d\'être supprimé de votre compte <strong>%s</strong>. Nous vous envoyons cet e-mail pour nous assurer qu\'il s\'agit bien de vous.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Gestion OpenID</a>';
 $lang_module['forcedrelogin'] = 'Reconnexion forcée partout';
 $lang_module['forcedrelogin_note'] = 'Vous êtes déconnecté de votre compte. Veuillez vous reconnecter';
+$lang_module['welcome_new_account'] = 'Bienvenue sur %s! Vous vous êtes inscrit avec succès. Commençons par la création de votre compte... Nous espérons que vous passerez un moment agréable et enrichissant sur notre site.';
+$lang_module['welcome_new_member'] = 'Bienvenue dans le groupe %1$s ! Vous êtes maintenant devenu son membre officiel. Nous vous souhaitons de nombreuses expériences agréables avec le groupe %1$s.';
+$lang_module['info_when_leaving_group'] = 'Malheureusement, vous avez quitté le groupe %s. Nous espérons que nous aurons l\'occasion de vous servir à nouveau.';

@@ -105,6 +105,15 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
     $live_cookie_time = ($remember) ? NV_LIVE_COOKIE_TIME : 0;
     $nv_Request->set_Cookie('nvloginhash', json_encode($user), $live_cookie_time);
 
+    // Tạo thông báo đẩy nếu đăng nhập lần đầu
+    if (empty($array_user['last_login'])) {
+        add_push([
+            'receiver_ids' => [$array_user['userid']],
+            'message' => sprintf($lang_module['welcome_new_account'], $global_config['site_name']),
+            'link' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true)
+        ]);
+    }
+
     if (!empty($global_users_config['active_user_logs'])) {
         $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $oauth_data['provider']) : $lang_module['st_login'];
         nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, ' Client IP:' . NV_CLIENT_IP, 0);

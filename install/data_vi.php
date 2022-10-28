@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,6 +20,8 @@ $install_lang['modules']['news'] = 'Tin Tức';
 $install_lang['modules']['news_for_acp'] = '';
 $install_lang['modules']['users'] = 'Tài khoản người dùng';
 $install_lang['modules']['users_for_acp'] = 'Tài khoản';
+$install_lang['modules']['push_notification'] = 'Thông báo đẩy';
+$install_lang['modules']['push_notification_for_acp'] = '';
 $install_lang['modules']['contact'] = 'Liên hệ';
 $install_lang['modules']['contact_for_acp'] = '';
 $install_lang['modules']['statistics'] = 'Thống kê';
@@ -78,6 +80,8 @@ $install_lang['blocks_groups']['about'] = [];
 $install_lang['blocks_groups']['about']['global.about'] = 'Giới thiệu';
 $install_lang['blocks_groups']['voting'] = [];
 $install_lang['blocks_groups']['voting']['global.voting_random'] = 'Thăm dò ý kiến';
+$install_lang['blocks_groups']['push-notification'] = [];
+$install_lang['blocks_groups']['push-notification']['global.push'] = 'Thông báo đẩy';
 $install_lang['blocks_groups']['users'] = [];
 $install_lang['blocks_groups']['users']['global.user_button'] = 'Đăng nhập người dùng';
 $install_lang['blocks_groups']['theme'] = [];
@@ -96,6 +100,7 @@ $install_lang['cron']['cron_auto_sendmail_error_log'] = 'Gửi email các thông
 $install_lang['cron']['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
 $install_lang['cron']['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
 $install_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
+$install_lang['cron']['cron_remove_expired_push'] = 'Xóa thông báo đẩy quá hạn';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Người hâm mộ';
 $install_lang['groups']['NukeViet-Admins'] = 'Người quản lý';

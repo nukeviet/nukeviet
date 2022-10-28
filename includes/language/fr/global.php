@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -349,6 +349,12 @@ $lang_global['limit_user_number'] = 'Votre site Web est réservé aux utilisateu
 $lang_global['limit_admin_number'] = 'Votre site Web est limité par l\'administrateur %s, pour ajouter un administrateur, veuillez contacter l\'administrateur système';
 $lang_global['2teplogin'] = 'Authentification à deux facteurs';
 $lang_global['indefinitely'] = 'Indéfiniment';
+$lang_global['all'] = 'Tout';
+$lang_global['unviewed'] = 'Inédit';
+$lang_global['favorite'] = 'Favori';
+$lang_global['viewall'] = 'Voir tout';
+$lang_global['refresh'] = 'Rafraîchir';
+$lang_global['push_notifications'] = 'Notifications push';
 $lang_global['content_ssl'] = 'Cette page n\'est pas cryptée pour une communication sécurisée. Les noms d\'utilisateur, mots de passe et toute autre information seront envoyés en texte clair.';
 $lang_global['warning_ssl'] = 'Avertissement';
 $lang_global['error_code_1'] = 'Adresse donnée n\'est pas bonne, veuillez la vérifier.';

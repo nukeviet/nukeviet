@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -1024,6 +1024,13 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     if (!empty($in_groups_del)) {
         foreach ($in_groups_del as $gid) {
             nv_groups_del_user($gid, $edit_userid, $module_data);
+            if (in_array($gid, $groups_list['share'], true)) {
+                add_push([
+                    'receiver_ids' => [$edit_userid],
+                    'message' => sprintf($lang_module['info_when_leaving_group'], $groups_list['all'][$gid]['title']),
+                    'exp_time' => NV_CURRENTTIME + 86400
+                ]);
+            }
         }
     }
 
@@ -1052,6 +1059,14 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                             @nv_sendmail_async($mail_from, $email, $lang_module['group_join_queue'], $message);
                         }
                     }
+                } elseif (in_array($gid, $groups_list['share'], true)) {
+                    add_push([
+                        'receiver_ids' => [$edit_userid],
+                        'sender_role' => 'group',
+                        'sender_group' => $gid,
+                        'message' => sprintf($lang_module['welcome_new_member'], $groups_list['all'][$gid]['title']),
+                        'exp_time' => NV_CURRENTTIME + 86400
+                    ]);
                 }
             }
         }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -299,4 +299,28 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_notification (
   KEY send_to (send_to),
   KEY admin_view_allowed (admin_view_allowed),
   KEY logic_mode (logic_mode)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_push (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  receiver_grs VARCHAR(1000) NOT NULL DEFAULT '',
+  receiver_ids VARCHAR(1000) NOT NULL DEFAULT '',
+  sender_role ENUM('system','group','admin') NOT NULL DEFAULT 'system',
+  sender_group MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  sender_admin MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  message TEXT NULL DEFAULT NULL,
+  link VARCHAR(500) NOT NULL DEFAULT '',
+  add_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  exp_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_push_status (
+  pid INT(11) UNSIGNED NOT NULL,
+  userid INT(11) UNSIGNED NOT NULL,
+  shown_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  viewed_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  favorite_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  hidden_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  UNIQUE KEY pid_userid (pid, userid)
 ) ENGINE=MyISAM";

@@ -19,7 +19,6 @@ if (!defined('NV_MAINFILE')) {
  * pr()
  *
  * @param mixed $a
- * @return
  */
 function pr($a)
 {
@@ -2728,6 +2727,68 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
 }
 
 /**
+ * add_push()
+ * $args có thể chứa các phần tử:
+ * receiver_grs (dạng mảng): Danh sách ID của các nhóm nhận thông báo
+ * receiver_ids (dạng mảng): Danh sách ID của người dùng nhận thông báo.
+ *                           Nếu có giá trị rỗng = tất cả người dùng
+ * sender_role (dạng chuỗi): Gửi từ (gồm: system, group, admin)
+ * sender_group (dạng số):   ID của nhóm gửi thông báo (sử dụng khi sender_role là group)
+ * sender_admin (dạng số):   ID của admin gửi thông báo (sử dụng khi sender_role là admin)
+ * message (dạng chuỗi):     Nội dung thông báo (bắt buộc)
+ * link (dạng chuỗi):        Liên kết của thông báo
+ * add_time (dạng số):       Thời gian đăng thông báo (0 = thời gian hiển thị đầu tiên)
+ * exp_time (dạng số):       Thời gian hết hạn thông báo (0 = vô thời hạn)
+ *
+ * @param array $args
+ * @return false|string
+ */
+function add_push($args)
+{
+    global $global_config, $db;
+
+    if (empty($global_config['push_active'])) {
+        return false;
+    }
+
+    $data = [
+        'receiver_grs' => [],
+        'receiver_ids' => [],
+        'sender_role' => 'system',
+        'sender_group' => 0,
+        'sender_admin' => 0,
+        'message' => '',
+        'link' => '',
+        'add_time' => NV_CURRENTTIME,
+        'exp_time' => !empty($global_config['push_default_exp']) ? (NV_CURRENTTIME + (int) $global_config['push_default_exp']) : 0
+    ];
+    $data = array_merge($data, $args);
+
+    if (!(!empty($data['message']) and ($data['sender_role'] == 'system' or ($data['sender_role'] == 'group' and !empty($data['sender_group'])) or ($data['sender_role'] == 'admin' and !empty($data['sender_admin']))))) {
+        return false;
+    }
+
+    $data['receiver_grs'] = !empty($data['receiver_grs']) ? implode(',', $data['receiver_grs']) : '';
+    $data['sender_role'] == 'group' && $data['receiver_grs'] = '';
+    $data['receiver_ids'] = !empty($data['receiver_ids']) ? implode(',', $data['receiver_ids']) : '';
+    $data['message'] = nv_nl2br(strip_tags($data['message'], '<br>'),'<br/>');
+    if (!empty($data['link']) and !preg_match('#^https?\:\/\/#', $data['link'])) {
+        str_starts_with($data['link'], NV_BASE_SITEURL) && $data['link'] = substr($data['link'], strlen(NV_BASE_SITEURL));
+    }
+
+    $sth = $db->prepare('INSERT INTO ' . NV_PUSH_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
+    (:receiver_grs, :receiver_ids, :sender_role, ' . $data['sender_group'] . ', ' . $data['sender_admin'] . ', :message, :link, ' . $data['add_time'] . ', ' . $data['exp_time'] . ')');
+    $sth->bindValue(':receiver_grs', $data['receiver_grs'], PDO::PARAM_STR);
+    $sth->bindValue(':receiver_ids', $data['receiver_ids'], PDO::PARAM_STR);
+    $sth->bindValue(':sender_role', $data['sender_role'], PDO::PARAM_STR);
+    $sth->bindValue(':message', $data['message'], PDO::PARAM_STR);
+    $sth->bindValue(':link', $data['link'], PDO::PARAM_STR);
+    $sth->execute();
+
+    return $db->lastInsertId();
+}
+
+/**
  * nv_redirect_location()
  *
  * @param string $url
@@ -2885,7 +2946,7 @@ function post_async($url, $params = [], $headers = [])
         } else {
             $post_string = '';
         }
-        
+
         !isset($headers['Referer']) && $headers['Referer'] = NV_MY_DOMAIN;
         $_headers = [];
         foreach ($headers as $name => $value) {
@@ -3094,7 +3155,6 @@ function nv_autoLinkDisable($text)
  * @param mixed  $args        => Tham số truyền vào
  * @param mixed  $default     => Dữ liệu mặc định trả về nếu hook không tồn tại
  * @param mixed  $return_type => Để trống thì dữ liệu trả về là giá trị cuối cùng. 1: Gộp array_merge. 2: Gộp array_merge_recursive
- * @return
  */
 function nv_apply_hook($module, $tag, $args = [], $default = null, $return_type = 0)
 {

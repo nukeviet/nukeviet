@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -360,6 +360,12 @@ $lang_global['off'] = 'Tắt';
 $lang_global['close'] = 'Đóng';
 $lang_global['system'] = 'Hệ thống';
 $lang_global['indefinitely'] = 'Vô thời hạn';
+$lang_global['all'] = 'Tất cả';
+$lang_global['unviewed'] = 'Chưa đọc';
+$lang_global['favorite'] = 'Yêu thích';
+$lang_global['viewall'] = 'Xem tất cả';
+$lang_global['refresh'] = 'Làm mới';
+$lang_global['push_notifications'] = 'Thông báo đẩy';
 
 $lang_global['apply'] = 'Áp dụng';
 $lang_global['custom_range'] = 'Khác';
