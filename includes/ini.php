@@ -65,7 +65,7 @@ function server_info_update($config_ini_file)
                     $server_headers[] = "'" . addslashes($key) . "' => '" . addslashes($value) . "'";
                 }
             } else {
-                if (str_contains(strtolower($line), 'http/2')) {
+                if (strpos(strtolower($line), 'http/2') !== false) {
                     $is_http2 = true;
                 }
             }
