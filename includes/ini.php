@@ -65,7 +65,7 @@ function server_info_update($config_ini_file)
                     $server_headers[] = "'" . addslashes($key) . "' => '" . addslashes($value) . "'";
                 }
             } else {
-                if (str_contains(strtolower($line), 'http/2')) {
+                if (strpos(strtolower($line), 'http/2') !== false) {
                     $is_http2 = true;
                 }
             }
@@ -328,7 +328,7 @@ function set_ini_file(&$sys_info)
     if (!$isErrorFile) {
         if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
             $url = NV_BASE_SITEURL . 'index.php';
-            !str_starts_with($url, NV_MY_DOMAIN) && $url = NV_MY_DOMAIN . $url;
+            strpos($url, NV_MY_DOMAIN) !== 0 && $url = NV_MY_DOMAIN . $url;
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
