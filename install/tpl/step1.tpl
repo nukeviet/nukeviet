@@ -27,7 +27,7 @@
         </select>
     </p>
     <ul class="control_t fr">
-        <li><span class="next_step" id="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2">{LANG.next_step}</a></span></li>
+        <li><span class="next_step" id="next_step"><a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=2&t={NV_CURRENTTIME}">{LANG.next_step}</a></span></li>
     </ul>
 </form>
 <!-- BEGIN: check_supports_rewrite -->
@@ -68,7 +68,8 @@
             <a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a>,
             <a target="_blank" href="https://github.com/tdfoss">tdfoss</a>,
             <a target="_blank" href="https://github.com/thehung">thehung</a>,
-            82592373+tmsholdings, tuyenhv.abs, khoaij123, dat.huynh,
+            <a target="_blank" href="https://github.com/tmsholdings">tmsholdings</a>,
+            tuyenhv.abs, khoaij123, dat.huynh,
             dinhpc86 at gmail.com,
             <a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet</a>,
             <a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp</a>,
@@ -94,14 +95,25 @@
             mtmost.com at gmail.com,
             <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a>,
             <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a>,
-            Hoàng Tuyên at VINADES.,JSC
+            Hoàng Tuyên at VINADES.,JSC,
+            <a target="_blank" href="https://github.com/nvu-github">nvu-github</a>,
+            <a target="_blank" href="https://github.com/NguyenDuong21">NguyenDuong21</a>,
+            nguyenuc09112000, thien123111999
         </div>
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.5.02</h5>
+                    <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (68 commits)</a>,
+                    <a target="_blank" href="https://github.com/nvu-github">nvu-github (3 commits)</a>,
+                    <a target="_blank" href="https://github.com/NguyenDuong21">NguyenDuong21 (2 commits)</a>,
+                    nguyenuc09112000 (2 commits),
+                    thien123111999 (1 commits),
+                    <a target="_blank" href="https://github.com/tmsholdings">tmsholdings (1 commits)</a>
+                    <br><br>
                 <h5>{LANG.thanks_other_version} 4.5.01</h5>
                     <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (70 commits)</a>,
-                    82592373+tmsholdings (3 commits),
+                    <a target="_blank" href="https://github.com/tmsholdings">tmsholdings (3 commits)</a>,
                     tuyenhv.abs (3 commits),
                     <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (1 commits)</a>
                     <br><br>

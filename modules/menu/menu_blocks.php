@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -27,10 +27,15 @@ function nv_menu_blocks($block_config)
     $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
     $list = $nv_Cache->db($sql, '', $block_config['module']);
 
+    $search = ['&amp;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
+    $replace = ['&', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
+
     foreach ($list as $row) {
         if (nv_user_in_groups($row['groups_view'])) {
             if ($row['link'] != '' and $row['link'] != '#') {
-                $row['link'] = nv_url_rewrite(nv_unhtmlspecialchars($row['link']), true);
+                $row['link'] = str_replace($search, $replace, $row['link']);
+                $row['link'] = nv_url_rewrite($row['link'], true);
+
                 switch ($row['target']) {
                     case 1:
                         $row['target'] = '';

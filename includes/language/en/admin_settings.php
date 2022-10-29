@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -391,3 +391,6 @@ $lang_module['rp_strict_origin_when_cross_origin'] = 'Send the origin, path, and
 $lang_module['rp_unsafe_url'] = 'Send the origin, path, and query string when performing any request, regardless of security. Warning: This policy will leak potentially-private information from HTTPS resource URLs to insecure origins. Carefully consider the impact of this setting.';
 $lang_module['rp_note'] = 'If you want to specify a fallback policy in any case the desired policy hasn\'t got wide enough browser support, use a comma-separated list with the desired policy specified last. For example, Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. In the above scenario, no-referrer-when-downgrade will only be used if strict-origin-when-cross-origin is not supported by the browser.';
 $lang_module['rp_directives'] = 'Referrer-Policy directives';
+$lang_module['XSSsanitize'] = 'Filter dangerous HTML codes before submitting the form';
+$lang_module['admin_XSSsanitize'] = 'In the admin area';
+$lang_module['user_XSSsanitize'] = 'In the user interaction area';

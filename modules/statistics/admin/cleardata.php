@@ -20,7 +20,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $clearall = $nv_Request->isset_request('all', 'post');
     $alllang = $nv_Request->get_int('alllang', 'post', 0);
     $clearmode = '';

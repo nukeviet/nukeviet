@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Module\news\Shared\Logs;
+
 $global_code_defined = [
     'cat_visible_status' => [1, 2],
     'cat_locked_status' => 10,
@@ -26,6 +28,10 @@ $timecheckstatus = $module_config[$module_name]['timecheckstatus'];
 if ($timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME) {
     nv_set_status_module();
 }
+
+// Giọng đọc
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices ORDER BY weight ASC';
+$global_array_voices = $nv_Cache->db($sql, 'id', $module_name);
 
 /**
  * nv_set_status_module()
@@ -115,15 +121,25 @@ function nv_del_content_module($id)
             }
         }
 
+        // Xóa bảng rows
         $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
         if (!$db->exec($_sql)) {
             ++$number_no_del;
         }
 
+        // Xóa bảng detail
         $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $id;
         if (!$db->exec($_sql)) {
             ++$number_no_del;
         }
+
+        // Xóa lịch sử bài viết
+        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id = ' . $id;
+        $db->exec($_sql);
+
+        // Xóa log thay đổi trạng thái bài viết
+        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_logs WHERE sid=' . $id . ' AND log_key=\'' . Logs::KEY_CHANGE_STATUS . '\'';
+        $db->exec($_sql);
 
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote($module_name) . ' AND id = ' . $id);
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $id);
@@ -555,4 +571,157 @@ function my_author_detail($userid)
     }
 
     return $detail;
+}
+
+/**
+ * @param array $post_old
+ * @param array $post_new
+ * @return string[]
+ */
+function nv_save_history($post_old, $post_new)
+{
+    if (is_array($post_old['files'])) {
+        $post_old['files'] = empty($post_old['files']) ? '' : implode(',', $post_old['files']);
+    }
+    $change_fields = [];
+    $key_text = [
+        'catid',
+        'topicid',
+        'author',
+        'sourceid',
+        'publtime',
+        'exptime',
+        'archive',
+        'title',
+        'alias',
+        'hometext',
+        'homeimgfile',
+        'homeimgalt',
+        'inhome',
+        'allowed_comm',
+        'allowed_rating',
+        'external_link',
+        'instant_active',
+        'instant_template',
+        'instant_creatauto',
+        'titlesite',
+        'description',
+        'bodyhtml',
+        'sourcetext',
+        'imgposition',
+        'layout_func',
+        'copyright',
+        'allowed_send',
+        'allowed_print',
+        'allowed_save',
+    ];
+    $key_textlist = [
+        'listcatid',
+        'keywords',
+        'tags',
+        'files',
+    ];
+    $key_array = [
+        'internal_authors',
+    ];
+    $key_array_full = [
+        'voicedata',
+    ];
+
+    foreach ($key_text as $key) {
+        if ($post_old[$key] != $post_new[$key]) {
+            $change_fields[] = $key;
+        }
+    }
+    foreach ($key_textlist as $key) {
+        $old = array_map('trim', explode(',', $post_old[$key]));
+        $new = array_map('trim', explode(',', $post_new[$key]));
+        if (array_diff($old, $new) != [] or array_diff($new, $old) != []) {
+            $change_fields[] = $key;
+        }
+    }
+    foreach ($key_array as $key) {
+        if (array_diff($post_old[$key], $post_new[$key]) != [] or array_diff($post_new[$key], $post_old[$key]) != []) {
+            $change_fields[] = $key;
+        }
+    }
+    foreach ($key_array_full as $key) {
+        foreach ($post_old[$key] as $i_key => $i_value) {
+            if (!isset($post_new[$key][$i_key]) or $post_new[$key][$i_key] != $i_value) {
+                $change_fields[] = $key;
+                continue 2;
+            }
+        }
+        foreach ($post_new[$key] as $i_key => $i_value) {
+            if (!isset($post_old[$key][$i_key]) or $post_old[$key][$i_key] != $i_value) {
+                $change_fields[] = $key;
+                continue 2;
+            }
+        }
+    }
+
+    if (!empty($change_fields)) {
+        global $admin_info, $user_info, $module_data, $db;
+
+        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_row_histories (
+            new_id, historytime, catid, listcatid, topicid, admin_id,
+            author, sourceid, publtime, exptime, archive, title, alias,
+            hometext, homeimgfile, homeimgalt, inhome, allowed_comm,
+            allowed_rating, external_link, instant_active, instant_template,
+            instant_creatauto, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
+            files, tags, internal_authors, imgposition, layout_func, copyright,
+            allowed_send, allowed_print, allowed_save, changed_fields
+        ) VALUES (
+            :new_id, :historytime, :catid, :listcatid, :topicid, :admin_id,
+            :author, :sourceid, :publtime, :exptime, :archive, :title, :alias,
+            :hometext, :homeimgfile, :homeimgalt, :inhome, :allowed_comm,
+            :allowed_rating, :external_link, :instant_active, :instant_template,
+            :instant_creatauto, :titlesite, :description, :bodyhtml, :voicedata, :keywords, :sourcetext,
+            :files, :tags, :internal_authors, :imgposition, :layout_func,
+            :copyright, :allowed_send, :allowed_print, :allowed_save, :changed_fields
+        )";
+        $array_insert = [];
+        $array_insert['new_id'] = $post_old['id'];
+        $array_insert['historytime'] = empty($post_old['edittime']) ? $post_old['addtime'] : $post_old['edittime'];
+        $array_insert['catid'] = $post_old['catid'];
+        $array_insert['listcatid'] = $post_old['listcatid'];
+        $array_insert['topicid'] = $post_old['topicid'];
+        $array_insert['admin_id'] = empty($admin_info) ? (empty($user_info) ? 0 : $user_info['userid']) : $admin_info['admin_id'];
+        $array_insert['author'] = $post_old['author'];
+        $array_insert['sourceid'] = $post_old['sourceid'];
+        $array_insert['publtime'] = $post_old['publtime'];
+        $array_insert['exptime'] = $post_old['exptime'];
+        $array_insert['archive'] = $post_old['archive'];
+        $array_insert['title'] = $post_old['title'];
+        $array_insert['alias'] = $post_old['alias'];
+        $array_insert['hometext'] = $post_old['hometext'];
+        $array_insert['homeimgfile'] = $post_old['homeimgfile'];
+        $array_insert['homeimgalt'] = $post_old['homeimgalt'];
+        $array_insert['inhome'] = $post_old['inhome'];
+        $array_insert['allowed_comm'] = $post_old['allowed_comm'];
+        $array_insert['allowed_rating'] = $post_old['allowed_rating'];
+        $array_insert['external_link'] = $post_old['external_link'];
+        $array_insert['instant_active'] = $post_old['instant_active'];
+        $array_insert['instant_template'] = $post_old['instant_template'];
+        $array_insert['instant_creatauto'] = $post_old['instant_creatauto'];
+        $array_insert['titlesite'] = $post_old['titlesite'];
+        $array_insert['description'] = $post_old['description'];
+        $array_insert['bodyhtml'] = $post_old['bodyhtml'];
+        $array_insert['voicedata'] = json_encode($post_old['voicedata']);
+        $array_insert['keywords'] = $post_old['keywords'];
+        $array_insert['sourcetext'] = $post_old['sourcetext'];
+        $array_insert['files'] = $post_old['files'];
+        $array_insert['tags'] = $post_old['tags'];
+        $array_insert['internal_authors'] = implode(',', $post_old['internal_authors']);
+        $array_insert['imgposition'] = $post_old['imgposition'];
+        $array_insert['layout_func'] = $post_old['layout_func'];
+        $array_insert['copyright'] = $post_old['copyright'];
+        $array_insert['allowed_send'] = $post_old['allowed_send'];
+        $array_insert['allowed_print'] = $post_old['allowed_print'];
+        $array_insert['allowed_save'] = $post_old['allowed_save'];
+        $array_insert['changed_fields'] = implode(',', $change_fields);
+        $db->insert_id($sql, 'id', $array_insert);
+    }
+
+    return $change_fields;
 }

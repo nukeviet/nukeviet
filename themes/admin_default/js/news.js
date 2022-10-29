@@ -532,6 +532,16 @@ $(document).ready(function() {
         nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + encodeURIComponent(path) + "&type=" + type + "&currentpath=" + encodeURIComponent(currentpath) + '&currentfile=' + encodeURIComponent(currentfile), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
     });
+    $('[data-toggle="pickaudio"]').click(function() {
+        var $this = $(this);
+        var area = "voice_" + $this.data('id');
+        var path = CFG.uploads_dir_user;
+        var currentpath = CFG.upload_current;
+        var currentfile = $("#voice_" + $this.data('id')).val();
+        var type = "file";
+        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + encodeURIComponent(path) + "&type=" + type + "&currentpath=" + encodeURIComponent(currentpath) + '&currentfile=' + encodeURIComponent(currentfile), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+        return false;
+    });
     $('.submit-post').hover(function() {
         if ($('[name="keywords[]"]').length == 0) {
             if ($('#message-tags').length == 0) {
@@ -670,6 +680,65 @@ $(document).ready(function() {
         $($(this).data('target')).prop('type', 'text');
         $($(this).data('target')).val(nv_randomPassword(10));
     });
+
+    // Từ ngày, đến ngày ở trang chủ
+    if ($.fn.datepicker) {
+        $("#from_date, #to_date").datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            showOn: 'focus'
+        });
+    }
+
+    $('#to-btn').click(function() {
+        $("#to_date").datepicker('show');
+    });
+
+    $('#from-btn').click(function() {
+        $("#from_date").datepicker('show');
+    });
+
+    // Hiển thị lịch sử bài viết
+    $('[data-btn="showhistory"]').on('click', function(e) {
+        e.preventDefault();
+        $('#md-history').data('loadurl', $(this).data('loadurl')).modal('show');
+    });
+    $('#md-history').on('show.bs.modal', function() {
+        var $this = $(this);
+        $('.table-responsive', $this).html('<div class="panel-body text-center"><i class="fa fa-spin fa-spinner fa-2x"></i></div>').load($this.data('loadurl'));
+    });
+
+    // Khôi phục lại lịch sử
+    $(document).delegate('[data-btn="restorehistory"]', 'click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        if (!confirm($this.data('msg'))) {
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: $this.attr('href') + '&nocache=' + new Date().getTime(),
+            data: {
+                restorehistory: $this.data('tokend'),
+                id: $this.data('id')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(respon) {
+                if (!respon.success) {
+                    alert(respon.text);
+                    return;
+                }
+                window.location = respon.url;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Request Error!!!');
+                console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
+    });
 });
 
 function nv_sort_content(id, w) {
@@ -707,4 +776,47 @@ function getPopoverContent(e) {
         }
     }
     return '<div class="dropdown-cattool-ctn"><ul class="dropdown-cattool" data-mod="' + $(e).data('mod') + '" data-catid="' + $(e).data('catid') + '">' + tmpcat.html() + '</ul></div>';
+}
+
+function nv_change_voice_weight(id, tokend) {
+    var new_weight = $('#change_weight_' + id).val();
+    $('#change_weight_' + id).prop('disabled', true);
+    $.post(
+        script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
+        'changeweight=' + tokend + '&id=' + id + '&new_weight=' + new_weight, function(res) {
+        $('#change_weight_' + id).prop('disabled', false);
+        var r_split = res.split("_");
+        if (r_split[0] != 'OK') {
+            alert(nv_is_change_act_confirm[2]);
+        }
+        location.reload();
+    });
+}
+
+function nv_change_voice_status(id, tokend) {
+    $('#change_status' + id).prop('disabled', true);
+    $.post(
+        script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
+        'changestatus=' + tokend + '&id=' + id, function(res) {
+        $('#change_status' + id).prop('disabled', false);
+        if (res != 'OK') {
+            alert(nv_is_change_act_confirm[2]);
+            location.reload();
+        }
+    });
+}
+
+function nv_delele_voice(id, tokend) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(
+            script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
+            'delete=' + tokend + '&id=' + id, function(res) {
+            var r_split = res.split("_");
+            if (r_split[0] == 'OK') {
+                location.reload();
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
 }

@@ -4,13 +4,14 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    exit('Stop!!!');
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -21,6 +22,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['categories'] = 'Gestion du rubrique';
 $lang_module['topics'] = 'Sujets';
+$lang_module['topics1'] = 'Ligne d\'événements';
 $lang_module['topics_error_title'] = 'Erreur: Vous ne saisissez pas le titre de l\'événement';
 $lang_module['sources'] = 'Source';
 $lang_module['save'] = 'Sauver';
@@ -146,6 +148,8 @@ $lang_module['setting_instant_articles_auto'] = 'Article par défaut est un arti
 $lang_module['setting_sys'] = 'Configurer le système';
 $lang_module['setting_identify_cat_change'] = 'Support pour changer les catégories d\'articles';
 $lang_module['setting_identify_cat_change_help'] = 'Activer cette fonctionnalité permettra au système de rediriger manuellement l\'ancien article vers une nouvelle adresse lors du changement de catégorie de l\'article, mais les performances diminueront un peu. Si vous ne modifiez pas régulièrement les catégories d\'articles, désactivez cette fonctionnalité.';
+$lang_module['setting_active_history'] = 'Activer l\'historique des articles';
+$lang_module['setting_active_history_help'] = 'Activez cette option, le système enregistrera l\'historique des modifications chaque fois que vous modifierez l\'article. Vous pouvez restaurer la version précédente si vous le souhaitez';
 $lang_module['viewcat_page'] = 'Méthode d\'affichage';
 $lang_module['viewcat_page_new'] = 'liste, nouveau en haut';
 $lang_module['viewcat_page_old'] = 'liste, ancien en haut';
@@ -170,8 +174,13 @@ $lang_module['search_title'] = 'Titre';
 $lang_module['search_bodytext'] = 'Contenu';
 $lang_module['search_author'] = 'Auteur';
 $lang_module['search_admin'] = 'Déposé par';
-$lang_module['search_per_page'] = 'Nombre d\'articles affichés';
+$lang_module['search_per_page'] = 'Délai de parution';
+$lang_module['search_public_time'] = 'Publication time';
+$lang_module['search_type_date'] = '---Choisissez le type de temps---';
 $lang_module['search_note'] = 'Mot clé doit être plus de 2 et moins de 64 caractères, code html interdit';
+$lang_module['search_time_from'] = 'Depuis';
+$lang_module['search_time_to'] = 'À ce jour';
+$lang_module['kind_of_time'] = 'Type d\'heure';
 $lang_module['content_edit'] = 'Éditer';
 $lang_module['error_title'] = 'Erreur: Manque de titre';
 $lang_module['error_bodytext'] = 'Erreur: Manque de contenu';
@@ -212,6 +221,7 @@ $lang_module['content_internal_author'] = 'Auteur sous gestion';
 $lang_module['content_sourceid'] = 'Source';
 $lang_module['content_copyright'] = 'Garder le droit d\'auteur';
 $lang_module['content_external_link'] = 'Lien open source (si disponible)';
+$lang_module['content_external_link1'] = 'Lien open source';
 $lang_module['content_saveok'] = 'Enregistrement de données avec succès';
 $lang_module['content_main'] = 'Retour à la gestion';
 $lang_module['content_back'] = 'Retour à l\'administration';
@@ -226,6 +236,7 @@ $lang_module['content_description'] = 'Description du site';
 $lang_module['content_insart'] = 'instant article';
 $lang_module['content_instant_active'] = 'Cet article est instantanée';
 $lang_module['content_instant_template'] = 'échantillon';
+$lang_module['content_instant_template1'] = 'Modèle d\'article instantané';
 $lang_module['content_instant_templatenote'] = 'Blank-à-dire à l\'aide de modèles par défaut';
 $lang_module['content_instant_creatauto'] = 'Créer automatiquement l\'article instantané de l\'article souvent';
 $lang_module['content_locked_bycat'] = 'Verrouiller par catégories';
@@ -347,6 +358,7 @@ $lang_module['order_articles_1'] = 'Personnaliser, incrémenter la numérotation
 $lang_module['order_articles_number'] = 'Non arrangements actuels';
 $lang_module['order_articles_new'] = 'Non arrangements actuels';
 $lang_module['pick_layout'] = 'Choisissez une mise en page pour l\'article';
+$lang_module['pick_layout1'] = 'Disposition des messages';
 $lang_module['default_layout'] = 'Par défaut';
 $lang_module['setting_frontend_post'] = 'Configurer la zone de publication sur la page de l\'utilisateur';
 $lang_module['frontend_edit_alias'] = 'Autoriser la liaison statique personnalisée lors de la publication de nouveaux';
@@ -380,3 +392,22 @@ $lang_module['author_numnews'] = 'Articles';
 $lang_module['author_status'] = 'Statut';
 $lang_module['author_status_0'] = 'Désactivée';
 $lang_module['author_status_1'] = 'Activée';
+$lang_module['history'] = 'Historique des publications';
+$lang_module['history_time'] = 'Temps';
+$lang_module['history_changefields'] = 'Changement de données';
+$lang_module['history_restore'] = 'Restaurer';
+$lang_module['history_author'] = 'Créateur d\'histoire';
+$lang_module['history_restore_confirm'] = 'Voulez-vous vraiment restaurer cette version ?';
+$lang_module['history_recovering'] = 'Le système récupère automatiquement, veuillez patienter';
+$lang_module['history_restore_success'] = 'Récupération réussie';
+$lang_module['content_voice'] = 'Sélectionnez les fichiers audio pour les voix';
+$lang_module['order'] = 'Ordre';
+$lang_module['function'] = 'Fonction';
+$lang_module['voice'] = 'Voix de lecture';
+$lang_module['voice_manager'] = 'Réglage de la voix';
+$lang_module['voice_title'] = 'Titre';
+$lang_module['voice_description'] = 'La description';
+$lang_module['voice_add'] = 'Ajouter une voix';
+$lang_module['voice_edit'] = 'Modifier la voix';
+$lang_module['voice_error_title'] = 'Erreur: Le titre ne peut pas être laissé vide';
+$lang_module['voice_error_exists'] = 'Erreur: Titre en double';

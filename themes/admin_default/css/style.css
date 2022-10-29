@@ -158,6 +158,10 @@ a.text-white {
     margin-bottom: 0 !important;
 }
 
+.mt-5 {
+    margin-top: 25px;
+}
+
 .pointer,
 .fa-pointer,
 .icon-pointer {

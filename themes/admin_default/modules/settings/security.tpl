@@ -122,6 +122,13 @@
                                         <textarea name="domains_whitelist" class="form-control" rows="5">{DOMAINS_WHITELIST}</textarea>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.XSSsanitize}</strong></td>
+                                    <td>
+                                        <div><label><input type="checkbox" name="XSSsanitize" value="1"{XSSSANITIZE}>{LANG.user_XSSsanitize}</label></div>
+                                        <div><label><input type="checkbox" name="admin_XSSsanitize" value="1"{ADMIN_XSSSANITIZE}>{LANG.admin_XSSsanitize}<label></div>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -598,7 +605,8 @@
                                 <div class="row">
                                     <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
                                         <input type="hidden" name="checkss" value="{CHECKSS}" />
-                                        <input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary">
+                                        <input type="hidden" name="save" value="1">
+                                        <input type="submit" value="{LANG.banip_confirm}" class="btn btn-primary">
                                     </div>
                                 </div>
                             </div>

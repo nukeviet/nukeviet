@@ -69,8 +69,8 @@ class Redis
         }
 
         $checkOptions = [];
-        $checkOptions[] = $redis->setOption(Redis::OPT_PREFIX, $Cache_Prefix);
-        $checkOptions[] = $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+        $checkOptions[] = $redis->setOption(CRedis::OPT_PREFIX, $Cache_Prefix);
+        $checkOptions[] = $redis->setOption(CRedis::OPT_SERIALIZER, CRedis::SERIALIZER_PHP);
 
         foreach ($checkOptions as $opt) {
             if ($opt !== true) {
@@ -102,7 +102,7 @@ class Redis
         $AllKeys = $this->_Cache->keys(str_replace('-', '\-', $module_name) . '*');
 
         foreach ($AllKeys as $key) {
-            $this->_Cache->delete(substr($key, strlen($this->_Cache_Prefix)));
+            $this->_Cache->del(substr($key, strlen($this->_Cache_Prefix)));
         }
     }
 
@@ -195,7 +195,7 @@ class Redis
         $this->_Cache->set($key, $value);
 
         if ($ttl > 0) {
-            $this->_Cache->setTimeout($key, $ttl);
+            $this->_Cache->expire($key, $ttl);
         }
     }
 }

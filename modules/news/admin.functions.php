@@ -109,11 +109,17 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
     if ($parentid > 0) {
         $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET numsubcat=' . $numsubcat;
         if ($numsubcat == 0) {
-            $sql .= ",subcatid='', viewcat='viewcat_page_new'";
+            // Chuyên mục cha không có chuyên mục con
+            $sql .= ",subcatid='', viewcat=CASE
+            WHEN viewcat='viewcat_main_left' THEN 'viewcat_page_new'
+            WHEN viewcat='viewcat_main_right' THEN 'viewcat_page_new'
+            WHEN viewcat='viewcat_main_bottom' THEN 'viewcat_page_new'
+            WHEN viewcat='viewcat_two_column' THEN 'viewcat_page_new'
+            ELSE viewcat END";
         } else {
             $sql .= ",subcatid='" . implode(',', $array_cat_order) . "'";
         }
-        $sql .= ' WHERE catid=' . (int) $parentid;
+        $sql .= ' WHERE catid=' . $parentid;
         $db->query($sql);
     }
 

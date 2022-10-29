@@ -1,11 +1,15 @@
 <!-- BEGIN: main -->
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="{CSSPATH}" media="screen"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    <!-- BEGIN: atom -->xmlns:atom="http://www.w3.org/2005/Atom"<!-- END: atom -->
+>
     <channel>
         <title>{CHANNEL.title}</title>
         <link>{CHANNEL.link}</link>
-        <atom:link href="{CHANNEL.atomlink}" rel="self" type="application/rss+xml" />
+        <!-- BEGIN: atom_link --><atom:link href="{CHANNEL.atomlink}" rel="self" /><!-- END: atom_link -->
         <!-- BEGIN: description -->
         <description>
             <![CDATA[{CHANNEL.description}]]>

@@ -98,7 +98,7 @@
                     <tr>
                         <td>{LANG.group_avatar}:</td>
                         <td class="form-inline">
-                            <input class="form-control" type="text" name="group_avatar" id="group_avatar" value="{DATA.group_avatar}" maxlength="10"/>
+                            <input class="form-control" type="text" name="group_avatar" id="group_avatar" value="{DATA.group_avatar}" maxlength="255"/>
                             <input type="button" name="browse-image" value="{LANG.select}" class="btn btn-default" data-area="group_avatar" data-path="{AVATAR_PATH}" data-currentpath="{AVATAR_CURENT_PATH}"/>
                         </td>
                     </tr>
@@ -148,7 +148,8 @@
         <!-- END: config -->
         <input type="hidden" name="checkss" value="{DATA.checkss}" />
         <input type="hidden" name="save" value="1" />
-        <p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
+        <input type="hidden" name="sm" value="1" />
+        <p class="text-center"><input type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
     </form>
 </div>
 <script type="text/javascript">
@@ -203,13 +204,13 @@ function get_alias() {
             }
         }
         var a = $(this).serialize(), b = $(this).attr("action");
-        $("input[name=submit]").attr("disabled", "disabled");
+        $("input[type=submit]").attr("disabled", "disabled");
         $.ajax({
             type : "POST",
             url : b,
             data : a,
             success : function(a) {
-                a == "OK" ? window.location.href = "{MODULE_URL}={OP}" : (alert(a), $("input[name=submit]").removeAttr("disabled"))
+                a == "OK" ? window.location.href = "{MODULE_URL}={OP}" : (alert(a), $("input[type=submit]").removeAttr("disabled"))
             }
         });
         return false

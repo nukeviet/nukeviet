@@ -133,10 +133,12 @@ class DoApi
             ],
             'body' => array_merge($request, $this->data),
             'timeout' => 0,
-            'decompress' => false
+            'decompress' => false,
+            'sslverify' => false
         ];
 
         $http = new Http($global_config, NV_TEMP_DIR);
+        $http->reset();
         $responsive = $http->post($this->apiurl, $args);
 
         if (!empty(Http::$error)) {

@@ -20,12 +20,28 @@ $catid = $nv_Request->get_int('catid', 'get', 0);
 $per_page_old = $nv_Request->get_int('per_page', 'cookie', 50);
 $per_page = $nv_Request->get_int('per_page', 'get', $per_page_old);
 $num_items = $nv_Request->get_int('num_items', 'get', 0);
+$search_type_date = $nv_Request->get_title('type_date', 'get', 'addtime');
+$search_time_from = $nv_Request->get_title('search_time_from', 'get', '');
+$search_time_to = $nv_Request->get_title('search_time_to', 'get', '');
 
 if ($per_page < 1 or $per_page > 500) {
     $per_page = 50;
 }
 if ($per_page_old != $per_page) {
     $nv_Request->set_Cookie('per_page', $per_page, NV_LIVE_COOKIE_TIME);
+}
+if (!in_array($search_type_date, ['addtime', 'publtime', 'exptime'], true)) {
+    $search_type_date = 'addtime';
+}
+if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
+    $search_time_from = mktime(0, 0, 0, intval($m[2]), intval($m[1]), intval($m[3]));
+} else {
+    $search_time_from = 0;
+}
+if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
+    $search_time_to = mktime(23, 59, 59, intval($m[2]), intval($m[1]), intval($m[3]));
+} else {
+    $search_time_to = 0;
 }
 
 $q = $nv_Request->get_title('q', 'get', '');
@@ -151,12 +167,6 @@ $array_search = [
     'admin_id' => $lang_module['search_admin'],
     'sourcetext' => $lang_module['sources']
 ];
-$array_in_rows = [
-    'title',
-    'bodytext',
-    'author',
-    'sourcetext'
-];
 $array_in_ordername = [
     'title',
     'publtime',
@@ -219,9 +229,9 @@ if ($catid == 0) {
 } else {
     $from = NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' r';
 }
-$where = '';
+$where = [];
 $page = $nv_Request->get_int('page', 'get', 1);
-$checkss = $nv_Request->get_string('checkss', 'get', '');
+$checkss = $nv_Request->get_title('checkss', 'get', '');
 
 if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SESSION) {
     // Ket noi den csdl elastic
@@ -230,6 +240,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     $search_elastic = [];
     // Tim kiem theo bodytext,author,title
     $key_elastic_search = nv_EncString($db_slave->dblikeescape($q));
+
     if ($stype == 'bodytext' or $stype == 'author' or $stype == 'title') {
         if ($stype == 'bodytext') {
             // match:tim kiem theo 1 truong
@@ -395,6 +406,23 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             $search_elastic = array_merge($search_elastic, $search_elastic_user);
         }
     }
+
+    if (!empty($search_time_from)) {
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_from, $m)) {
+            $match[]['range'][$search_type_date] = [
+                'gte' => mktime(00, 00, 00, $m[2], $m[1], $m[3])
+            ];
+        }
+    }
+
+    if (!empty($search_time_to)) {
+        if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $search_time_to, $m)) {
+            $match[]['range'][$search_type_date] = [
+                'lte' => mktime(23, 59, 59, $m[2], $m[1], $m[3])
+            ];
+        }
+    }
+
     if ($catid != 0) {
         $search_elastic_catid = [
             'must' => [
@@ -455,9 +483,11 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     if ($catid) {
         $base_url_mod .= '&amp;catid=' . $catid;
     }
+
     if (!empty($q)) {
-        $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
+        $base_url_mod .= '&amp;q=' . urlencode($q);
     }
+
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
     // hien thi du lieu
@@ -471,6 +501,8 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             $value['_source']['title'],
             $value['_source']['alias'],
             $value['_source']['status'],
+            $value['_source']['addtime'],
+            $value['_source']['edittime'],
             $value['_source']['publtime'],
             $value['_source']['exptime'],
             $value['_source']['hitstotal'],
@@ -478,7 +510,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             $value['_source']['admin_id'],
             $value['_source']['author']
         ];
-        list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $array_list_elastic_search;
+        list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $addtime, $edittime, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $array_list_elastic_search;
         $publtime = nv_date('H:i d/m/y', $publtime);
         $title = nv_clean60($title);
         if ($catid > 0) {
@@ -548,6 +580,8 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'id' => $id,
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
             'title' => $title,
+            'addtime' => $addtime,
+            'edittime' => $edittime,
             'publtime' => $publtime,
             'status_id' => $status,
             'status' => $status > $global_code_defined['row_locked_status'] ? $lang_module['content_locked_bycat'] : $lang_module['status_' . $status],
@@ -565,54 +599,64 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     }
 } else {
     if ($checkss == NV_CHECK_SESSION) {
-        if ($stype == 'bodytext') {
-            $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
-            $where = " c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'";
-        } elseif ($stype == 'title') {
-            $where = " r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'";
-        } elseif ($stype == 'author') {
-            $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
+        // Tìm theo từ khóa nhập vào
+        $search_user = $search_author = false;
+        if (!empty($q)) {
+            if ($stype == 'bodytext') {
+                $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
+                $where[] = "c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'";
+            } elseif ($stype == 'title') {
+                $where[] = "r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'";
+            } elseif ($stype == 'author') {
+                $where[] = "(r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.alias LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
-        } elseif ($stype == 'sourcetext') {
-            $qurl = $q;
-            $url_info = parse_url($qurl);
-            if (isset($url_info['scheme']) and isset($url_info['host'])) {
-                $qurl = $url_info['scheme'] . '://' . $url_info['host'];
-            }
-            $where = ' r.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($q) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')";
-        } elseif ($stype == 'admin_id') {
-            $where = " (u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%' OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
-        } elseif (!empty($q)) {
-            $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
-            $arr_from = [];
-            foreach ($array_in_rows as $key => $val) {
-                $arr_from[] = '(r.' . $val . " LIKE '%" . $db_slave->dblikeescape($q) . "%')";
-            }
-            $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
+                $search_author = true;
+            } elseif ($stype == 'sourcetext') {
+                $qurl = $q;
+                $url_info = parse_url($qurl);
+                if (isset($url_info['scheme']) and isset($url_info['host'])) {
+                    $qurl = $url_info['scheme'] . '://' . $url_info['host'];
+                }
+                $where[] = 'r.sourceid IN (SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape($q) . "%' OR link like '%" . $db_slave->dblikeescape($qurl) . "%')";
+            } elseif ($stype == 'admin_id') {
+                $where[] = "(u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%' OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
+                $search_user = true;
+            } else {
+                $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
+                $where[] = "(r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'
                 OR u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.alias LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
                 OR a.pseudonym LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
+                $search_user = true;
+                $search_author = true;
+            }
         }
+
+        // Thời gian từ
+        if (!empty($search_time_from)) {
+            $where[] = 'r.' . $search_type_date . ' >= ' . $search_time_from;
+        }
+
+        // Thời gian đến
+        if (!empty($search_time_to)) {
+            $where[] = 'r.' . $search_type_date . ' <= ' . $search_time_to;
+        }
+
         if ($sstatus != -1) {
             if ($sstatus > $global_code_defined['row_locked_status']) {
-                $where_status = 'r.status > ' . $global_code_defined['row_locked_status'];
+                $where[] = 'r.status > ' . $global_code_defined['row_locked_status'];
             } else {
-                $where_status = 'r.status = ' . $sstatus;
-            }
-            if ($where == '') {
-                $where = ' ' . $where_status;
-            } else {
-                $where .= ' AND ' . $where_status;
+                $where[] = 'r.status = ' . $sstatus;
             }
         }
-        if (str_contains($where, 'u.username')) {
+        if ($search_user) {
             $from .= ' LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
         }
-        if (str_contains($where, 'a.pseudonym')) {
+        if ($search_author) {
             $from .= ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON r.id=a.id';
         }
     }
@@ -620,12 +664,15 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
     if (!defined('NV_IS_ADMIN_MODULE')) {
         $from_catid = [];
         foreach ($array_cat_view as $catid_i) {
-            $from_catid[] = "r.listcatid = '" . $catid_i . "'";
-            $from_catid[] = "r.listcatid like '" . $catid_i . ",%'";
-            $from_catid[] = "r.listcatid like '%," . $catid_i . ",%'";
-            $from_catid[] = "r.listcatid like '%," . $catid_i . "'";
+            $from_catid[] = "FIND_IN_SET(" . $catid_i . ", r.listcatid)";
         }
-        $where .= (empty($where)) ? ' (' . implode(' OR ', $from_catid) . ')' : ' AND (' . implode(' OR ', $from_catid) . ')';
+        if (!empty($from_catid)) {
+            // Giới hạn xem những bài trong chuyên mục mình được quản lý
+            $where[] = '(' . implode(' OR ', $from_catid) . ')';
+        } else {
+            // Không có quyền quản lý chuyên mục nào thì xem như không xem được bài viết nào
+            $where[] = 'r.id=0';
+        }
     }
     $link_i = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=Other';
     $global_array_cat[0] = [
@@ -641,10 +688,10 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         'keywords' => ''
     ];
 
-    $db_slave->sqlreset()
-        ->select('COUNT(*)')
-        ->from($from)
-        ->where($where);
+    $db_slave->sqlreset()->select('COUNT(*)')->from($from);
+    if (!empty($where)) {
+        $db_slave->where(implode(' AND ', $where));
+    }
 
     $_sql = $db_slave->sql();
     $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
@@ -653,22 +700,25 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
         $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
     }
     $base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
+
     if ($catid) {
         $base_url_mod .= '&amp;catid=' . $catid;
     }
+
     if (!empty($q)) {
-        $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
+        $base_url_mod .= '&amp;q=' . urlencode($q);
     }
+
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
-    $db_slave->select('r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status, r.weight, r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id, r.author')
+    $db_slave->select('r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status, r.weight, r.addtime, r.edittime, r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id, r.author')
         ->order('r.' . $ordername . ' ' . $order)
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
     $result = $db_slave->query($db_slave->sql());
 
     $data = $array_ids = $array_userid = [];
-    while (list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $result->fetch(3)) {
+    while (list($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $weight, $addtime, $edittime, $publtime, $exptime, $hitstotal, $hitscm, $_userid, $author) = $result->fetch(3)) {
         $publtime = nv_date('H:i d/m/y', $publtime);
 
         if ($catid > 0) {
@@ -742,6 +792,8 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
             'title' => $title,
             'title_clean' => nv_clean60($title),
+            'addtime' => $addtime,
+            'edittime' => $edittime,
             'publtime' => $publtime,
             'status_id' => $status,
             'weight' => $weight,
@@ -795,6 +847,21 @@ foreach ($array_search as $key => $val) {
     ];
 }
 
+$arr_search_date = [
+    'addtime' => $lang_module['content_publ_date'],
+    'publtime' => $lang_module['search_public_time'],
+    'exptime' => $lang_module['content_exp_date'],
+];
+
+$array_select_type_date = [];
+foreach ($arr_search_date as $key => $val) {
+    $array_select_type_date[] = [
+        'key' => $key,
+        'value' => $val,
+        'selected' => ($key == $search_type_date) ? ' selected="selected"' : ''
+    ];
+}
+
 $order2 = ($order == 'asc') ? 'desc' : 'asc';
 $ord_sql = ' r.' . $ordername . ' ' . $order;
 
@@ -831,7 +898,7 @@ if (!empty($array_ids)) {
         ->where('id IN (' . implode(',', $array_ids) . ')');
     $result = $db_slave->query($db_slave->sql());
     while ($_row = $result->fetch()) {
-        !isset($internal_authors[$_row['id']]) && $internal_authors[$_row['id']] = [];
+        !isset($internal_authors[$_row['id']]) and $internal_authors[$_row['id']] = [];
         $internal_authors[$_row['id']][] = [
             'href' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;q=' . urlencode($_row['alias']) . '&amp;stype=author&amp;checkss=' . NV_CHECK_SESSION,
             'pseudonym' => $_row['pseudonym']
@@ -873,14 +940,25 @@ if (!empty($array_removeid)) {
     nv_redirect_location($client_info['selfurl']);
 }
 
+$base_url_mod .= '&amp;type_date=' . $search_type_date;
+$search_time_from = empty($search_time_from) ? '' : nv_date('d/m/Y', $search_time_from);
+$search_time_to = empty($search_time_to) ? '' : nv_date('d/m/Y', $search_time_to);
+if (!empty($search_time_from)) {
+    $base_url_mod .= '&amp;search_time_from=' . urlencode($search_time_from);
+}
+if (!empty($search_time_to)) {
+    $base_url_mod .= '&amp;search_time_to=' . urlencode($search_time_to);
+}
+$base_url_mod .= '&amp;checkss=' . $checkss;
+
 $base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_name = $base_url_mod . '&amp;ordername=title&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_publtime = $base_url_mod . '&amp;ordername=publtime&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_exptime = $base_url_mod . '&amp;ordername=exptime&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_hitstotal = $base_url_mod . '&amp;ordername=hitstotal&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_hitscm = $base_url_mod . '&amp;ordername=hitscm&amp;order=' . $order2 . '&amp;page=' . $page;
-
 $base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
+
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -891,14 +969,17 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('Q', $qhtml);
-
+$xtpl->assign('TIME_FROM', $search_time_from);
+$xtpl->assign('TIME_TO', $search_time_to);
 $xtpl->assign('CATID', $catid);
+$xtpl->assign('BASE_URL', $base_url);
 $xtpl->assign('base_url_id', $base_url_id);
 $xtpl->assign('base_url_name', $base_url_name);
 $xtpl->assign('base_url_publtime', $base_url_publtime);
 $xtpl->assign('base_url_exptime', $base_url_exptime);
 $xtpl->assign('base_url_hitstotal', $base_url_hitstotal);
 $xtpl->assign('base_url_hitscm', $base_url_hitscm);
+$xtpl->assign('TOKEND', NV_CHECK_SESSION);
 
 foreach ($val_cat_content as $cat_content) {
     $xtpl->assign('CAT_CONTENT', $cat_content);
@@ -908,6 +989,11 @@ foreach ($val_cat_content as $cat_content) {
 foreach ($search_type as $search_t) {
     $xtpl->assign('SEARCH_TYPE', $search_t);
     $xtpl->parse('main.search_type');
+}
+
+foreach ($array_select_type_date as $search_d) {
+    $xtpl->assign('VALUE', $search_d);
+    $xtpl->parse('main.search_type_date');
 }
 
 foreach ($search_per_page as $s_per_page) {
@@ -920,7 +1006,20 @@ foreach ($search_status as $status_view) {
     $xtpl->parse('main.search_status');
 }
 
+// Lấy số lịch sử trong các bài đăng hiển thị
+$array_histories = [];
+if (!empty($data) and !empty($module_config[$module_name]['active_history'])) {
+    $sql = "SELECT COUNT(id) numhis, new_id FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories
+    WHERE new_id IN(" . implode(',', array_keys($data)) . ") GROUP BY new_id";
+    $result = $db->query($sql);
+    while ($row = $result->fetch()) {
+        $array_histories[$row['new_id']] = $row['numhis'];
+    }
+}
+
 $url_copy = '';
+$loadhistory = $nv_Request->get_absint('loadhistory', 'get', 0);
+$loadhistory_id = 0;
 foreach ($data as $row) {
     $is_excdata = 0;
     $is_editing_row = (isset($array_editdata[$row['id']]) and $array_editdata[$row['id']]['admin_id'] != $admin_info['userid']) ? true : false;
@@ -928,7 +1027,7 @@ foreach ($data as $row) {
     if ($is_locked_row) {
         unset($row['feature']['edit'], $row['feature']['delete']);
     }
-    $row['feature'] = implode(' ', $row['feature']);
+    $row['feature_text'] = implode(' ', $row['feature']);
     if ($global_config['idsite'] > 0 and isset($site_mods['excdata']) and isset($push_content['module'][$module_name]) and $row['status_id'] == 1) {
         $count = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db_slave->quote($module_name))
             ->fetchColumn();
@@ -981,8 +1080,176 @@ foreach ($data as $row) {
     if (!$is_locked_row) {
         $xtpl->parse('main.loop.checkrow');
     }
+    if (isset($row['feature']['edit']) and isset($array_histories[$row['id']])) {
+        $xtpl->parse('main.loop.history');
+        if ($loadhistory == $row['id']) {
+            $loadhistory_id = $row['id'];
+        }
+    }
 
     $xtpl->parse('main.loop');
+}
+
+// Hiển thị lịch sử sửa bài
+if ($loadhistory) {
+    if (!$loadhistory_id) {
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    }
+
+    $maps_fields = [
+        'catid' => $lang_module['cat_parent'],
+        'topicid' => $lang_module['topics1'],
+        'author' => $lang_module['content_author'],
+        'sourceid' => $lang_module['content_sourceid'],
+        'publtime' => $lang_module['content_publ_date'],
+        'exptime' => $lang_module['content_exp_date'],
+        'archive' => $lang_module['content_archive'],
+        'title' => $lang_module['name'],
+        'alias' => $lang_module['alias'],
+        'hometext' => $lang_module['content_hometext'],
+        'homeimgfile' => $lang_module['content_homeimg'],
+        'homeimgalt' => $lang_module['content_homeimgalt'],
+        'inhome' => $lang_module['content_inhome'],
+        'allowed_comm' => $lang_module['content_allowed_comm'],
+        'allowed_rating' => $lang_module['content_allowed_rating'],
+        'external_link' => $lang_module['content_external_link1'],
+        'instant_active' => $lang_module['content_insart'],
+        'instant_template' => $lang_module['content_instant_template1'],
+        'instant_creatauto' => $lang_module['content_instant_creatauto'],
+        'titlesite' => $lang_module['titlesite'],
+        'description' => $lang_module['description'],
+        'bodyhtml' => $lang_module['content_bodytext'],
+        'voicedata' => $lang_module['voice'],
+        'sourcetext' => $lang_module['sources'],
+        'imgposition' => $lang_module['imgposition'],
+        'layout_func' => $lang_module['pick_layout1'],
+        'copyright' => $lang_module['content_copyright'],
+        'allowed_send' => $lang_module['content_allowed_send'],
+        'allowed_print' => $lang_module['content_allowed_print'],
+        'allowed_save' => $lang_module['content_allowed_save'],
+        'listcatid' => $lang_module['search_cat'],
+        'keywords' => $lang_module['keywords'],
+        'tags' => $lang_module['tag'],
+        'files' => $lang_module['fileattach'],
+        'internal_authors' => $lang_module['content_internal_author']
+    ];
+
+    $array_userids = $array_users = [];
+    $sql = "SELECT id, historytime, admin_id, changed_fields FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories
+    WHERE new_id=" . $loadhistory_id . " ORDER BY historytime DESC";
+    $result = $db->query($sql);
+
+    $array_histories = [];
+    while ($row = $result->fetch()) {
+        $row['changed_fields'] = array_map(function($val) {
+            global $maps_fields;
+            return $maps_fields[$val];
+        }, explode(',', $row['changed_fields']));
+        $row['changed_fields'] = implode(', ', $row['changed_fields']);
+
+        $array_histories[$row['id']] = $row;
+
+        if (!empty($row['admin_id'])) {
+            $array_userids[$row['admin_id']] = $row['admin_id'];
+        }
+    }
+
+    // Khôi phục 1 phiên bản
+    if ($nv_Request->get_title('restorehistory', 'post', '') === NV_CHECK_SESSION) {
+        $respon = [
+            'success' => false,
+            'text' => '',
+            'url' => ''
+        ];
+
+        $history_id = $nv_Request->get_absint('id', 'post', 0);
+        if (!isset($array_histories[$history_id])) {
+            $respon['text'] = 'History not exists!!!';
+            nv_jsonOutput($respon);
+        }
+
+        // Lấy full lịch sử
+        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories WHERE
+        new_id=" . $loadhistory_id . " AND id=" . $history_id;
+        $post_new = $db->query($sql)->fetch();
+        if (empty($post_new)) {
+            $respon['text'] = 'Error detail history!';
+            nv_jsonOutput($respon);
+        }
+        $post_new['internal_authors'] = empty($post_new['internal_authors']) ? [] : explode(',', $post_new['internal_authors']);
+        $post_new['voicedata'] = empty($post_new['voicedata']) ? [] : json_decode($post_new['voicedata'], true);
+
+        // Kiểm tra xem có lưu phiên bản hiện thời không (nếu chưa lưu)
+        $history_time = $data[$loadhistory_id]['edittime'] ?: $data[$loadhistory_id]['addtime'];
+        $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories WHERE
+        new_id=" . $loadhistory_id . " AND historytime=" . $history_time;
+        if (!$db->query($sql)->fetchColumn()) {
+            // Lấy phiên bản hiện thời
+            $post_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $loadhistory_id)->fetch();
+            if (empty($post_old)) {
+                nv_htmlOutput('Error row now!');
+            }
+
+            // Lấy chi tiết bài viết
+            $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id=' . $loadhistory_id)->fetch();
+            $post_old = array_merge($post_old, $body_contents);
+            unset($body_contents);
+
+            // Lấy các tag của bài viết
+            $array_tags_old = [];
+            $_query = $db->query('SELECT tid, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $loadhistory_id . ' ORDER BY keyword ASC');
+            while ($row = $_query->fetch()) {
+                $array_tags_old[$row['tid']] = $row['keyword'];
+            }
+            $post_old['tags'] = implode(', ', $array_tags_old);
+
+            // Lấy danh sach tac gia của bài viết
+            $post_old['internal_authors'] = [];
+            $_query = $db->query('SELECT aid, pseudonym FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE id=' . $loadhistory_id . ' ORDER BY alias ASC');
+            while ($row = $_query->fetch()) {
+                $post_old['internal_authors'][] = $row['aid'];
+            }
+            $post_old['voicedata'] = empty($post_old['voicedata']) ? [] : json_decode($post_old['voicedata'], true);
+
+            nv_save_history($post_old, $post_new);
+        }
+
+        // Đẩy qua trang content để sử dụng lại cái form đó cho chuẩn
+        $respon['success'] = true;
+        $respon['url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content&id=' . $loadhistory_id . '&restore=' . $history_id . '&restorehash=' . md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $loadhistory_id . $history_id . $post_new['historytime']);
+        nv_jsonOutput($respon);
+    }
+
+    if (!empty($array_userids)) {
+        $sql = "SELECT userid, username, first_name, last_name, email
+        FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN(" . implode(',', $array_userids) . ")";
+        $result = $db->query($sql);
+
+        while ($row = $result->fetch()) {
+            $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name']);
+            $row['show_name'] = $row['username'];
+            if (!empty($row['full_name'])) {
+                $row['show_name'] .= ' (' . $row['full_name'] . ')';
+            }
+            $array_users[$row['userid']] = $row;
+        }
+    }
+
+    $xtpl->assign('NEW_ID', $loadhistory_id);
+
+    foreach ($array_histories as $history) {
+        $history['historytime'] = nv_date('d/m/Y H:i:s', $history['historytime']);
+        $history['admin_id'] = isset($array_users[$history['admin_id']]) ? $array_users[$history['admin_id']]['show_name'] : ('#' . $array_users[$history['admin_id']]);
+        $xtpl->assign('HISTORY', $history);
+        $xtpl->parse('history.loop');
+    }
+
+    $xtpl->parse('history');
+    $contents = $xtpl->text('history');
+
+    include NV_ROOTDIR . '/includes/header.php';
+    echo $contents;
+    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 foreach ($array_list_action as $action_i => $title_i) {

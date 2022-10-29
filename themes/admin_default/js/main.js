@@ -74,10 +74,26 @@ function modalShow(a, b, callback) {
     });
 }
 
+// locationReplace
 function locationReplace(url) {
-    if (history.pushState) {
-        history.pushState(null, null, url);
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
     }
+}
+
+function formXSSsanitize(form) {
+    $(form).find("input, textarea").not(":submit, :reset, :image, :file, :disabled").not('[data-sanitize-ignore]').each(function(e) {
+        $(this).val(DOMPurify.sanitize($(this).val(), {}))
+    })
+}
+
+function btnClickSubmit(event, form) {
+    event.preventDefault();
+    if (XSSsanitize) {
+        formXSSsanitize(form)
+    }
+    $(form).submit()
 }
 
 var NV = {
@@ -167,6 +183,14 @@ $(document).ready(function() {
     //Change Localtion
     $("[data-location]").on("click", function() {
         locationReplace($(this).data("location"))
+    });
+
+    //XSSsanitize
+    $('body').on('click', '[type=submit]:not([name])', function(e) {
+        var form = $(this).parents('form');
+        if (!$('[name=submit]', form).length) {
+            btnClickSubmit(e,form)
+        }
     });
 
     $(document).on('click', function(e) {

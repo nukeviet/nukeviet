@@ -19,21 +19,21 @@ if (defined('NV_IS_BANNER_CLIENT')) {
     $ads = $nv_Request->get_int('ads', 'post,get');
     $year = (int) date('Y');
     $month_array = [
-        '1' => 31,
-        '3' => 31,
-        '4' => 30,
-        '5' > 31,
-        '6' => 30,
-        '7' => 31,
-        '8' => 31,
-        '9' => 30,
-        '10' => 31,
-        '11' => 30,
-        '12' => 31
+        1 => 31,
+        3 => 31,
+        4 => 30,
+        5 => 31,
+        6 => 30,
+        7 => 31,
+        8 => 31,
+        9 => 30,
+        10 => 31,
+        11 => 30,
+        12 => 31
     ];
-    $month_array['2'] = (($year % 100 == 0) and ($year % 400 == 0)) ? 29 : 28;
+    $month_array[2] = (($year % 100 == 0) and ($year % 400 == 0)) ? 29 : 28;
     $firstdate = mktime(0, 0, 0, $month, 1, $year);
-    $enddate = mktime(24, 60, 60, $month, $month_array[$month], $year);
+    $enddate = mktime(23, 59, 59, $month, $month_array[$month], $year);
     $onetype = '';
 
     switch ($type) {
@@ -52,8 +52,6 @@ if (defined('NV_IS_BANNER_CLIENT')) {
     }
 
     $process = $data = [];
-
-    $geturl = new NukeViet\Client\UrlGetContents($global_config);
 
     $result = $db->query('SELECT a.' . $onetype . ' FROM ' . NV_BANNERS_GLOBALTABLE . '_click a INNER JOIN ' . NV_BANNERS_GLOBALTABLE . '_rows b ON a.bid=b.id WHERE b.clid= ' . $user_info['userid'] . ' AND a.click_time <= ' . $enddate . ' AND a.click_time >= ' . $firstdate . ' AND a.bid=' . $ads . ' ORDER BY click_time ASC');
     while ($row = $result->fetch()) {
@@ -82,7 +80,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
         $imagechart .= '&chtt=Banner Stats';
         $imagechart = str_replace(' ', '%20', $imagechart);
         header('Content-type: image/png');
-        echo $geturl->get($imagechart);
+        echo file_get_contents($imagechart);
     } else {
         $my_img = imagecreate(700, 80);
         $background = imagecolorallocate($my_img, 255, 255, 255);

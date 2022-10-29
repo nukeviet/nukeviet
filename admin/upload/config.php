@@ -25,7 +25,7 @@ $array_logo_position = [
     'topCenter' => $lang_module['logopostopcenter']
 ];
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $upload_logo = $nv_Request->get_title('upload_logo', 'post', '');
 
     if (!empty($upload_logo) and !nv_is_url($upload_logo) and nv_is_file($upload_logo)) {

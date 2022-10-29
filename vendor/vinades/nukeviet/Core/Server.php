@@ -107,18 +107,19 @@ class Server
         $original_host = $this->getEnv(['HTTP_X_FORWARDED_HOST', 'X-Forwarded-Host']);
         $original_protocol = $this->getEnv(['HTTP_X_FORWARDED_PROTO', 'X-Forwarded-Proto']);
         $original_port = $this->getEnv(['HTTP_X_FORWARDED_PORT', 'X-Forwarded-Port']);
-        if ($original_host !== false and $original_protocol !== false) {
-            if ($original_port === false) {
-                $original_port = $this->server_port;
+        // Nếu có FORWARDED_HOST hoặc FORWARDED_PROTO
+        if ($original_host !== false or $original_protocol !== false) {
+            if ($original_host !== false) {
+                $this->original_host = $this->standardizeHost($original_host);
             }
-
-            $this->original_host = $this->standardizeHost($original_host);
-            $this->original_protocol = strtolower($original_protocol);
-            $this->original_port = $original_port;
-            if ($this->original_port != 80 and $this->original_port != 443) {
-                $this->original_port = ':' . $this->original_port;
-            } else {
-                $this->original_port = '';
+            if ($original_protocol !== false) {
+                $this->original_protocol = strtolower($original_protocol);
+            }
+            if ($original_port !== false) {
+                if ($original_port != 80 and $original_port != 443) {
+                    $original_port = ':' . $original_port;
+                }
+                $this->original_port = $original_port;
             }
 
             if (filter_var($this->original_host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {

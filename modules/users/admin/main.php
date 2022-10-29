@@ -98,6 +98,14 @@ if (!empty($methodvalue)) {
     $table_caption = $lang_module['search_page_title'];
 }
 
+// Default group is all
+
+$group_global = $nv_Request->get_int('group', 'post,get', 6);
+if (!empty($group_global) && $group_global != '6') {
+    $_arr_where[] = '(FIND_IN_SET(' . $group_global . ', in_groups) OR group_id = ' . $group_global . ')';
+    $base_url .= '&amp;group=' . $group_global;
+}
+
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
 
@@ -281,6 +289,19 @@ for ($i = $_bg; $i >= 0; --$i) {
 }
 $xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');
 
+// get all group
+
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups AS g LEFT JOIN ' . NV_MOD_TABLE . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE g.idsite = " . $global_config['idsite'] . ' OR (g.idsite=0 AND g.group_id>3 AND g.siteus=1) ORDER BY g.idsite, g.weight ASC';
+$result = $db->query($sql);
+while ($group = $result->fetch()) {
+
+    $group['selected'] = ($group['group_id'] == $group_global) ? ' selected="selected"' : '';
+    $group['title'] = ($group['group_id'] < 10) ? $lang_global['level' . $group['group_id']] : $group['title'];
+    $xtpl->assign('GROUP', $group);
+    $xtpl->parse('main.group');
+}
+
+$xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');
 $view_user_allowed = nv_user_in_groups($global_config['whoviewuser']);
 $has_choose = false;
 

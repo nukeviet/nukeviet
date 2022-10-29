@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -66,6 +66,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     $array_config_global['admin_2step_opt'] = $nv_Request->get_typed_array('admin_2step_opt', 'post', 'title', []);
     $array_config_global['admin_2step_default'] = $nv_Request->get_title('admin_2step_default', 'post', '');
     $array_config_global['domains_restrict'] = (int) $nv_Request->get_bool('domains_restrict', 'post', false);
+    $array_config_global['XSSsanitize'] = (int) $nv_Request->get_bool('XSSsanitize', 'post', false);
+    $array_config_global['admin_XSSsanitize'] = (int) $nv_Request->get_bool('admin_XSSsanitize', 'post', false);
 
     $domains = $nv_Request->get_textarea('domains_whitelist', '', NV_ALLOWED_HTML_TAGS, true);
     $domains = explode('<br />', strip_tags($domains, '<br>'));
@@ -474,7 +476,7 @@ if (defined('NV_IS_GODADMIN')) {
         nv_htmlOutput('OK');
     }
 
-    if ($nv_Request->isset_request('submit', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    if ($nv_Request->isset_request('save', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
         $ip_version = $nv_Request->get_int('ip_version', 'post', 4);
         $cid = $nv_Request->get_int('cid', 'post', 0);
         $ip = $nv_Request->get_title('ip', 'post', '');
@@ -716,6 +718,8 @@ if (defined('NV_IS_GODADMIN')) {
 
     $xtpl->assign('IS_LOGIN_BLOCKER', ($array_config_global['is_login_blocker']) ? ' checked="checked"' : '');
     $xtpl->assign('DOMAINS_RESTRICT', ($array_config_global['domains_restrict']) ? ' checked="checked"' : '');
+    $xtpl->assign('XSSSANITIZE', ($array_config_global['XSSsanitize']) ? ' checked="checked"' : '');
+    $xtpl->assign('ADMIN_XSSSANITIZE', ($array_config_global['admin_XSSsanitize']) ? ' checked="checked"' : '');
     $xtpl->assign('LOGIN_NUMBER_TRACKING', $array_config_global['login_number_tracking']);
     $xtpl->assign('LOGIN_TIME_TRACKING', $array_config_global['login_time_tracking']);
     $xtpl->assign('LOGIN_TIME_BAN', $array_config_global['login_time_ban']);

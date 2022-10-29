@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -402,3 +402,6 @@ $lang_module['rp_strict_origin_when_cross_origin'] = 'Gửi origin, path và que
 $lang_module['rp_unsafe_url'] = 'Gửi origin, path và querystring trong mọi trường hợp. Cảnh báo: Chính sách này sẽ làm rò rỉ thông tin có khả năng riêng tư từ các URL dạng HTTPS đến các nguồn không an toàn. Hãy xem xét cẩn thận tác động của cài đặt này.';
 $lang_module['rp_note'] = 'Để đề phòng trường hợp trình duyệt không hỗ trợ chỉ thị mong muốn, bạn có thể liệt kê nhiều chỉ thị được phân cách bằng dấu phẩy với trật tự: chỉ thị mong muốn được chỉ định sau cùng. Ví dụ: Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. Ở ví dụ trên, chính sách no-referrer-when-downgrade sẽ được áp dụng nếu trình duyệt không hỗ trợ strict-origin-when-cross-origin.';
 $lang_module['rp_directives'] = 'Các chỉ thị RP';
+$lang_module['XSSsanitize'] = 'Lọc các mã HTML nguy hiểm trước khi gửi biểu mẫu';
+$lang_module['admin_XSSsanitize'] = 'Trong khu vực quản trị';
+$lang_module['user_XSSsanitize'] = 'Trong khu vực tương tác của người dùng';

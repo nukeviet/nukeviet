@@ -9,7 +9,7 @@
             <col />
             <tfoot>
                 <tr>
-                    <td colspan="2" class="text-center"><input type="submit" value="{LANG.pubdate}" name="submit" class="btn btn-primary" /></td>
+                    <td colspan="2" class="text-center"><input type="hidden" name="save" value="1"><input type="submit" value="{LANG.pubdate}" class="btn btn-primary" /></td>
                 </tr>
             </tfoot>
             <tbody>

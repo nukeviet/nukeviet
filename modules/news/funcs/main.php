@@ -38,7 +38,7 @@ if ($page > 1) {
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 if (!defined('NV_IS_MODADMIN') and $page < 5) {
-    $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
+    $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $viewcat . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
     if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
         $contents = $cache;
     }
