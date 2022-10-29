@@ -724,8 +724,10 @@ class Request
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", '\\1', $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
+                $value = $this->unhtmlentities($attrSubSet[1]);
+
                 // Security check Data URLs
-                if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $attrSubSet[1], $m)) {
+                if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*[\r\n\s\t]*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $value, $m)) {
                     if (empty($m[2])) {
                         $dataURLs = urldecode($m[3]);
                     } else {
@@ -739,7 +741,10 @@ class Request
                     }
                 }
 
-                $value = $this->unhtmlentities($attrSubSet[1]);
+                if (preg_replace('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', '', $value)) {
+                    continue;
+                }
+
                 $search = [
                     'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
                     'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
@@ -804,7 +809,7 @@ class Request
     private function filterTags($source, &$isvalid = true)
     {
         $checkInvalid = 0;
-        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source, -1, $checkInvalid);
+        $source = preg_replace('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', '', $source, -1, $checkInvalid);
         if ($checkInvalid > 0) {
             $isvalid = false;
         }
@@ -915,7 +920,7 @@ class Request
         }
 
         $preTag .= $postTag;
-        while (preg_match('/\<script([^\>]*)\>(.*)\<\/script\>/isU', $preTag)) {
+        while (preg_match('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', $preTag)) {
             $preTag = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $preTag);
         }
         $preTag = str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $preTag);
