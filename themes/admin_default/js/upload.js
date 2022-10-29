@@ -62,4 +62,9 @@ $(document).ready(function() {
             );
         }
     });
+
+    $('#frm [name=upload_checking_mode]').on('change', function() {
+        var val = $(this).val();
+        $(this).parent().find('.help-block').text($(this).find('option[value=' + val + ']').data('description'))
+    })
 });

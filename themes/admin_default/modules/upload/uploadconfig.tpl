@@ -33,11 +33,13 @@
                 <tr>
                     <td><strong>{LANG.upload_checking_mode}:</strong></td>
                     <td>
-                    <select name="upload_checking_mode" class="form-control w100">
-                        <!-- BEGIN: upload_checking_mode -->
-                        <option value="{UPLOAD_CHECKING_MODE.key}"{UPLOAD_CHECKING_MODE.selected}>{UPLOAD_CHECKING_MODE.title}</option>
-                        <!-- END: upload_checking_mode -->
-                    </select> {UPLOAD_CHECKING_NOTE} </td>
+                        <select name="upload_checking_mode" class="form-control w100 m-bottom">
+                            <!-- BEGIN: upload_checking_mode -->
+                            <option value="{UPLOAD_CHECKING_MODE.key}" data-description="{UPLOAD_CHECKING_MODE.description}"{UPLOAD_CHECKING_MODE.selected}>{UPLOAD_CHECKING_MODE.title}</option>
+                            <!-- END: upload_checking_mode -->
+                        </select> {UPLOAD_CHECKING_NOTE}
+                        <div class="help-block m-bottom-none">{UPLOAD_CHECKING_MODE_DESC}</div>
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.upload_alt_require}</strong></td>

@@ -220,10 +220,12 @@ foreach ($_upload_checking_mode as $m => $n) {
     $xtpl->assign('UPLOAD_CHECKING_MODE', [
         'key' => $m,
         'title' => $n,
-        'selected' => ($m == $global_config['upload_checking_mode']) ? ' selected="selected"' : ''
+        'selected' => ($m == $global_config['upload_checking_mode']) ? ' selected="selected"' : '',
+        'description' => $lang_module[$m . '_mode_note']
     ]);
     $xtpl->parse('main.upload_checking_mode');
 }
+$xtpl->assign('UPLOAD_CHECKING_MODE_DESC', $lang_module[$global_config['upload_checking_mode'] . '_mode_note']);
 
 $strong = false;
 if (nv_function_exists('finfo_open') or nv_class_exists('finfo', false) or nv_function_exists('mime_content_type') or (substr($sys_info['os'], 0, 3) != 'WIN' and (nv_function_exists('system') or nv_function_exists('exec')))) {

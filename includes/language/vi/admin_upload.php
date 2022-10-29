@@ -148,6 +148,10 @@ $lang_module['strong_mode'] = 'Mạnh';
 $lang_module['mild_mode'] = 'Vừa phải';
 $lang_module['lite_mode'] = 'Yếu';
 $lang_module['none_mode'] = 'Không';
+$lang_module['strong_mode_note'] = 'File tải lên được coi là hợp lệ nếu MIME-type của nó được xác định là hợp lệ dựa trên nội dung thực và khớp với phần mở rộng của file.';
+$lang_module['mild_mode_note'] = 'File tải lên được coi là hợp lệ nếu MIME-type của nó được xác định là hợp lệ dựa trên nội dung thực hoặc do trình duyệt cung cấp và khớp với phần mở rộng của file.';
+$lang_module['lite_mode_note'] = 'File tải lên được coi là hợp lệ nếu MIME-type của nó được xác định là hợp lệ dựa trên nội dung thực hoặc do trình duyệt cung cấp và không nhất thiết phải khớp với phần mở rộng của file.';
+$lang_module['none_mode_note'] = 'File tải lên được coi là hợp lệ nếu MIME-type của nó được xác định là hợp lệ dựa trên: nội dung thực, do trình duyệt cung cấp hoặc được lấy từ tệp ini phù hợp với phần mở rộng của file.';
 $lang_module['upload_checking_note'] = 'Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn "Mạnh", bạn sẽ không thể upload file lên host';
 
 $lang_module['thumbconfig'] = 'Cấu hình ảnh thumbnail';
