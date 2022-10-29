@@ -20,6 +20,10 @@
     </script>
     <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/global{AUTO_MINIFIED}.js"></script>
     <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/js/login.js"></script>
+    <!-- BEGIN: passshow_button -->
+    <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.css">
+    <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/show-pass-btn/bootstrap3-show-pass.js"></script>
+    <!-- END: passshow_button -->
 </head>
 
 <body>

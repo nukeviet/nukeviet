@@ -105,7 +105,7 @@ $lang_module['error_mail_empty'] = 'Lỗi: Bạn chưa nhập email';
 
 $lang_module['config'] = 'Cấu hình module';
 $lang_module['config_sendcopymode'] = 'Quyền gửi bản sao tới email';
-$lang_module['config_sendcopymode0'] = 'Thành viên đã xác thực email';
+$lang_module['config_sendcopymode0'] = 'Người dùng đã xác thực email';
 $lang_module['config_sendcopymode1'] = 'Tất cả người dùng';
 
 $lang_module['processed_by'] = 'Người thực hiện: ';

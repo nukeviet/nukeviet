@@ -1,0 +1,34 @@
+/* eye btn */
+.btn-eye {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    --bs-btn-color: #000;
+    --bs-btn-bg: #ffffff;
+    --bs-btn-border-color: #ced4da;
+    --bs-btn-hover-color: #000;
+    --bs-btn-hover-bg: white;
+    --bs-btn-hover-border-color: #d3d8de;
+    --bs-btn-focus-shadow-rgb: 175, 180, 185;
+    --bs-btn-active-color: #000;
+    --bs-btn-active-bg: white;
+    --bs-btn-active-border-color: #d3d8de;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #000;
+    --bs-btn-disabled-bg: #ffffff;
+    --bs-btn-disabled-border-color: #ced4da;
+}
+
+.btn-eye::before {
+    display: inline-block;
+    content: "";
+    height: 11px;
+    width: 16px;
+    vertical-align: middle;
+    line-height: 11px;
+    background-image: url(data:image/webp;base64,UklGRnABAABXRUJQVlA4TGMBAAAvD0AFEA+iqJGkqHa5MYBM/D8INhQ1khTVLjcGkIn/B0FRI0lR7XJjAJn4fxAcR7atRNgTXHckoBFQpA7BuOv4rALCOQf23sqck2utWEoxIoLhRMQLM3I40IHwYcNGCIgIAoFBACAQiBIf3DgxoH7v7ffeqtaKmSn33sWIiCLiiAiAHxGPiACYCP7/fwTQQLCB8CPihzc2FEAo0GCDgACoyAAxkm3T1rp6xrVt+9n5h/W+fwIR/Z8AfHsXfy3fHR7FV/JHh+7Z+R/57bMDwvJy39dFUQ/3Sxkhe1Qo+tP1eh4yVI/y2CC4JEhSvC4hmiOA9uZjN8K/tvgwyYHDAUjTj/4jOXUXM+KzGauppqGr9vyNtGWRowBGEpQVQPEspcxp1iY8juFYgt+AEbDdmEtCA2FuWZNkRGxY3iU10IJDWMJEnpHrJVzTkx0AS0WWZoCnSpKHd2ot6JKsc0sCn5MMQ+JDAA==);
+    background-repeat: no-repeat;
+}
+
+[data-nv-type=password] + .btn-eye::before {
+    background-position: 0 -12px;
+}

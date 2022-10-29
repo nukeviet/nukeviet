@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -357,4 +357,30 @@ if (!function_exists('str_ends_with')) {
 
         return $length > 0 ? nv_substr($haystack, -$length, $length) === $needle : true;
     }
+}
+
+/**
+ * text_split()
+ * Hàm chia đoạn text ra làm 2 phần,
+ * phần đầu có số lượng ký tự nhỏ hơn hoặc bằng giá trị $limit.
+ * Không tách text ở vị trí giữa từ, mà  chỉ ở chỗ có dấu cách
+ *
+ * @param string $text
+ * @param int    $limit
+ * @return array
+ */
+function text_split($text, $limit = 200)
+{
+    if (nv_strlen($text) <= $limit) {
+        return [$text];
+    }
+
+    for ($i = 0; $i < $limit; ++$i) {
+        $rpos = nv_strrpos(nv_substr($text, 0, ($limit - $i)), ' ');
+        if ($rpos !== false) {
+            break;
+        }
+    }
+
+    return [nv_substr($text, 0, $rpos), nv_substr($text, $rpos, null)];
 }

@@ -67,7 +67,7 @@ if (empty($global_config['my_domains'])) {
     $global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
     // Nếu domain truy cập không đúng sẽ chuyển đến domain đúng (Báo mã 301)
     if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
-        $location = $nv_Server->getOriginalProtocol(). '://' . $global_config['my_domains'][0] . $_SERVER['REQUEST_URI'];
+        $location = $nv_Server->getOriginalProtocol() . '://' . $global_config['my_domains'][0] . $_SERVER['REQUEST_URI'];
         if (in_array(substr(php_sapi_name(), 0, 3), ['cgi', 'fpm'], true)) {
             header('Location: ' . $location);
             header('Status: 301 Moved Permanently');
@@ -172,14 +172,6 @@ $client_info['clid'] = $nv_Request->get_title('clid', 'cookie', '');
 if (!preg_match('/^[a-z0-9]{32}$/', $client_info['clid'])) {
     $client_info['clid'] = md5(microtime(true) . bin2hex(openssl_random_pseudo_bytes(32)) . $global_config['sitekey']);
     $nv_Request->set_Cookie('clid', $client_info['clid'], 315360000);
-}
-
-// Cap nhat thong tin Server
-if ($nv_Request->isset_request('__serverInfoUpdate', 'post')) {
-    require NV_ROOTDIR . '/includes/sinfoUpdate.php';
-}
-if (!$isErrorFile and !$serverInfoUpdated) {
-    post_async(NV_BASE_SITEURL . 'index.php', ['__serverInfoUpdate' => 1]);
 }
 
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
@@ -356,6 +348,8 @@ define('NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language');
 define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
 define('NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs');
 define('NV_NOTIFICATION_GLOBALTABLE', $db_config['prefix'] . '_notification');
+define('NV_PUSH_GLOBALTABLE', $db_config['prefix'] . '_push');
+define('NV_PUSH_STATUS_GLOBALTABLE', $db_config['prefix'] . '_push_status');
 
 define('NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload');
 define('NV_BANNERS_GLOBALTABLE', $db_config['prefix'] . '_banners');
@@ -379,6 +373,14 @@ foreach ($list as $row) {
         $module_config[$row['module']][$row['config_name']] = $row['config_value'];
     }
 }
+
+$global_config['site_int_phone'] = '';
+if (!empty($global_config['site_phone']) and preg_match('/^(.+)\[([0-9\*\#\+\-\.\,\;]+)\]$/', $global_config['site_phone'], $matches)) {
+    $global_config['site_phone'] = $matches[1];
+    $global_config['site_int_phone'] = $matches[2];
+}
+
+$global_config['custom_configs'] = !empty($global_config['custom_configs']) ? json_decode($global_config['custom_configs'], true) : [];
 
 nv_apply_hook('', 'zalo_webhook');
 
@@ -457,6 +459,21 @@ if ($global_config['cronjobs_launcher'] == 'system') {
     }
 }
 
+// Gửi mail từ luồng truy vấn không đồng bộ
+if ($nv_Request->isset_request('__sendmail', 'post')) {
+    $file = $nv_Request->get_title('__sendmail', 'post', '');
+    if (preg_match('/^[a-zA-Z0-9]{8}$/', $file)) {
+        $md5file = md5($global_config['sitekey'] . $file);
+        if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file)) {
+            $cts = file_get_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
+            $cts = json_decode($cts, true);
+            @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
+            @nv_sendmail($cts['from'], $cts['to'], $cts['subject'], $cts['message'], $cts['files'], $cts['AddEmbeddedImage'], $cts['testmode'], $cts['cc'], $cts['bcc'], $cts['mailhtml']);
+        }
+    }
+    exit(0);
+}
+
 // Quản lý thẻ meta, header các máy chủ tìm kiếm
 $nv_BotManager = new NukeViet\Seo\BotManager($global_config['private_site']);
 
@@ -498,58 +515,7 @@ unset($nv_check_update);
 
 nv_apply_hook('', 'modify_global_config');
 
-$cache_file = NV_LANG_DATA . '_smods_' . NV_CACHE_PREFIX . '.cache';
-if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
-    $sys_mods = unserialize($cache);
-} else {
-    $sys_mods = [];
-    try {
-        $result = $db->query('SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight');
-        while ($row = $result->fetch()) {
-            $m_title = $row['title'];
-            $f_name = $row['func_name'];
-            $f_alias = $row['alias'];
-            if (!isset($sys_mods[$m_title])) {
-                $sys_mods[$m_title] = [
-                    'module_file' => $row['module_file'],
-                    'module_data' => $row['module_data'],
-                    'module_upload' => $row['module_upload'],
-                    'module_theme' => $row['module_theme'],
-                    'custom_title' => $row['custom_title'],
-                    'site_title' => (empty($row['site_title'])) ? $row['custom_title'] : $row['site_title'],
-                    'admin_title' => (empty($row['admin_title'])) ? $row['custom_title'] : $row['admin_title'],
-                    'admin_file' => $row['admin_file'],
-                    'main_file' => $row['main_file'],
-                    'theme' => $row['theme'],
-                    'mobile' => $row['mobile'],
-                    'description' => $row['description'],
-                    'keywords' => $row['keywords'],
-                    'groups_view' => $row['groups_view'],
-                    'is_modadmin' => false,
-                    'admins' => $row['admins'],
-                    'rss' => $row['rss'],
-                    'sitemap' => $row['sitemap'],
-                    'is_search' => file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/search.php') ? 1 : 0,
-                    'funcs' => []
-                ];
-            }
-            $sys_mods[$m_title]['funcs'][$f_alias] = [
-                'func_id' => $row['func_id'],
-                'func_name' => $f_name,
-                'show_func' => $row['show_func'],
-                'func_custom_name' => $row['func_custom_name'],
-                'func_site_title' => empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'],
-                'in_submenu' => $row['in_submenu']
-            ];
-            $sys_mods[$m_title]['alias'][$f_name] = $f_alias;
-        }
-        $cache = serialize($sys_mods);
-        $nv_Cache->setItem('modules', $cache_file, $cache);
-        unset($cache, $result);
-    } catch (PDOException $e) {
-        // trigger_error( $e->getMessage() );
-    }
-}
+$sys_mods = nv_sys_mods();
 
 define('PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/');
 // Hook sector 2

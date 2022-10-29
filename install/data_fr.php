@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,6 +20,8 @@ $install_lang['modules']['news'] = 'News';
 $install_lang['modules']['news_for_acp'] = '';
 $install_lang['modules']['users'] = 'Compte d&#039;utilisateur';
 $install_lang['modules']['users_for_acp'] = '';
+$install_lang['modules']['push_notification'] = 'Notification push';
+$install_lang['modules']['push_notification_for_acp'] = '';
 $install_lang['modules']['contact'] = 'Contact';
 $install_lang['modules']['contact_for_acp'] = '';
 $install_lang['modules']['statistics'] = 'Statistiques';
@@ -78,6 +80,8 @@ $install_lang['blocks_groups']['about'] = [];
 $install_lang['blocks_groups']['about']['global.about'] = 'À propos';
 $install_lang['blocks_groups']['voting'] = [];
 $install_lang['blocks_groups']['voting']['global.voting_random'] = 'Sondage';
+$install_lang['blocks_groups']['push-notification'] = [];
+$install_lang['blocks_groups']['push-notification']['global.push'] = 'Notification push';
 $install_lang['blocks_groups']['users'] = [];
 $install_lang['blocks_groups']['users']['global.user_button'] = 'Se connecter';
 $install_lang['blocks_groups']['theme'] = [];
@@ -96,6 +100,7 @@ $install_lang['cron']['cron_auto_sendmail_error_log'] = 'Envoyer à l\'administr
 $install_lang['cron']['cron_ref_expired_del'] = 'Supprimer les referers expirés';
 $install_lang['cron']['cron_auto_check_version'] = 'Vérifier la version NukeViet';
 $install_lang['cron']['cron_notification_autodel'] = 'Supprimer vieille notification';
+$install_lang['cron']['cron_remove_expired_push'] = 'Supprimer les notifications push expirées';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Fans de NukeViet';
 $install_lang['groups']['NukeViet-Admins'] = 'Admins de NukeViet';

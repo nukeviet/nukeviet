@@ -152,6 +152,7 @@ function nv_save_file_config_global()
     $config_variable['send_errors_list'] = NV_SEND_ERRORS_LIST;
     $config_variable['error_log_path'] = NV_LOGS_DIR . '/error_logs';
     $config_variable['error_log_filename'] = NV_ERRORLOGS_FILENAME;
+    $config_variable['notice_log_filename'] = NV_NOTICELOGS_FILENAME;
     $config_variable['error_log_fileext'] = NV_LOGS_EXT;
     $config_variable['error_send_email'] = $config_variable['error_send_email'];
 

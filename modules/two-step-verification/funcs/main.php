@@ -39,7 +39,7 @@ if ($nv_Request->isset_request('turnoff2step', 'post')) {
     $m_link = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN);
     $m_link_manager = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
     $message = sprintf($lang_module['email_2step_off'], $m_time, NV_CLIENT_IP, NV_USER_AGENT, $m_link_manager, $user_info['username'], $m_link, $global_config['site_name']);
-    nv_sendmail('', $user_info['email'], $lang_module['email_subject'], $message);
+    nv_sendmail_async('', $user_info['email'], $lang_module['email_subject'], $message);
 
     nv_htmlOutput('OK');
 }
@@ -58,7 +58,7 @@ if ($nv_Request->isset_request('changecode2step', 'post')) {
     $m_link = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN);
     $m_link_manager = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
     $message = sprintf($lang_module['email_code_renew'], $m_time, NV_CLIENT_IP, NV_USER_AGENT, $m_link_manager, $user_info['username'], $m_link, $global_config['site_name']);
-    nv_sendmail('', $user_info['email'], $lang_module['email_subject'], $message);
+    nv_sendmail_async('', $user_info['email'], $lang_module['email_subject'], $message);
 
     nv_htmlOutput('OK');
 }

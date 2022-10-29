@@ -215,6 +215,7 @@ $lang_module['api_cr_ips'] = 'IP autorisée';
 $lang_module['credential_ips_help'] = 'Entrez une adresse IP par ligne, les appels API à partir de ces IP sont autorisés';
 $lang_module['api_cr_auth_method'] = 'Méthode d\'authentification';
 $lang_module['api_cr_auth_method_password_verify'] = 'password_verify (recommander)';
+$lang_module['api_cr_auth_method_md5_verify'] = 'md5_verify';
 $lang_module['api_cr_auth_method_none'] = 'Aucun, pour le développement';
 $lang_module['api_System'] = 'Fonctions du système';
 $lang_module['api_System_SendMail'] = 'Envoyer un email';

@@ -90,7 +90,7 @@ if (empty($array_oauth)) {
             if (!empty($global_users_config['admin_email'])) {
                 $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
                 $message = sprintf($lang_module['security_alert_openid_delete'], $openid['openid'], $row['username'], $url);
-                nv_sendmail([
+                nv_sendmail_async([
                     $global_config['site_name'],
                     $global_config['site_email']
                 ], $row['email'], $lang_module['security_alert'], $message);
@@ -117,7 +117,7 @@ if (empty($array_oauth)) {
             if (!empty($global_users_config['admin_email'])) {
                 $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
                 $message = sprintf($lang_module['security_alert_openid_truncate'], $row['username'], $url);
-                nv_sendmail([
+                nv_sendmail_async([
                     $global_config['site_name'],
                     $global_config['site_email']
                 ], $row['email'], $lang_module['security_alert'], $message);

@@ -47,7 +47,7 @@
                 </tr>
                 <tr>
                     <td><strong>{LANG.site_phone}</strong></td>
-                    <td><input type="text" name="site_phone" value="{DATA.site_phone}" class="form-control" style="width: 450px"/></td>
+                    <td><input type="text" name="site_phone" value="{DATA.site_phone}" class="form-control m-bottom" style="width: 450px"/><button type="button" data-toggle="phone_note">{GLANG.phone_note_title}</button></td>
                 </tr>
                 <tr>
                     <td><strong>{LANG.themeadmin}</strong></td>
@@ -239,6 +239,11 @@ $(document).ready(function() {
         buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
         buttonImageOnly : true
     });
+
+    $('[data-toggle=phone_note]').on('click', function() {
+        modalShow('{GLANG.phone_note_title}','{GLANG.phone_note_content2}');
+        return!1;
+    })
 });
 
 var LANG = [];

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,6 +20,8 @@ $install_lang['modules']['news'] = 'News';
 $install_lang['modules']['news_for_acp'] = '';
 $install_lang['modules']['users'] = 'Users';
 $install_lang['modules']['users_for_acp'] = 'Users';
+$install_lang['modules']['push_notification'] = 'Push-Notification';
+$install_lang['modules']['push_notification_for_acp'] = '';
 $install_lang['modules']['contact'] = 'Contact';
 $install_lang['modules']['contact_for_acp'] = '';
 $install_lang['modules']['statistics'] = 'Statistics';
@@ -78,6 +80,8 @@ $install_lang['blocks_groups']['about'] = [];
 $install_lang['blocks_groups']['about']['global.about'] = 'About';
 $install_lang['blocks_groups']['voting'] = [];
 $install_lang['blocks_groups']['voting']['global.voting_random'] = 'Voting';
+$install_lang['blocks_groups']['push-notification'] = [];
+$install_lang['blocks_groups']['push-notification']['global.push'] = 'Push-notification';
 $install_lang['blocks_groups']['users'] = [];
 $install_lang['blocks_groups']['users']['global.user_button'] = 'Member login';
 $install_lang['blocks_groups']['theme'] = [];
@@ -96,6 +100,7 @@ $install_lang['cron']['cron_auto_sendmail_error_log'] = 'Send error logs to admi
 $install_lang['cron']['cron_ref_expired_del'] = 'Delete expired referer';
 $install_lang['cron']['cron_auto_check_version'] = 'Check NukeViet version';
 $install_lang['cron']['cron_notification_autodel'] = 'Delete old notification';
+$install_lang['cron']['cron_remove_expired_push'] = 'Remove expired push-notifications';
 
 $install_lang['groups']['NukeViet-Fans'] = 'NukeViet-Fans';
 $install_lang['groups']['NukeViet-Admins'] = 'NukeViet-Admins';

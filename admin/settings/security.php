@@ -68,6 +68,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     $array_config_global['domains_restrict'] = (int) $nv_Request->get_bool('domains_restrict', 'post', false);
     $array_config_global['XSSsanitize'] = (int) $nv_Request->get_bool('XSSsanitize', 'post', false);
     $array_config_global['admin_XSSsanitize'] = (int) $nv_Request->get_bool('admin_XSSsanitize', 'post', false);
+    $array_config_global['passshow_button'] = $nv_Request->get_int('passshow_button', 'post', 0);
 
     $domains = $nv_Request->get_textarea('domains_whitelist', '', NV_ALLOWED_HTML_TAGS, true);
     $domains = explode('<br />', strip_tags($domains, '<br>'));
@@ -1102,6 +1103,16 @@ if (defined('NV_IS_GODADMIN')) {
             'at_checked' => (!empty($vals) and in_array('at', $vals, true)) ? ' checked="checked"' : ''
         ]);
         $xtpl->parse('main.sys_contents.end_url_variable');
+    }
+
+    $passshow_button_opts = [$lang_module['passshow_button_0'], $lang_module['passshow_button_1'], $lang_module['passshow_button_2'], $lang_module['passshow_button_3']];
+    foreach ($passshow_button_opts as $val => $name) {
+        $xtpl->assign('OPT', [
+            'val' => $val,
+            'sel' => $val == $array_config_global['passshow_button'] ? ' selected="selected"' : '',
+            'name' => $name
+        ]);
+        $xtpl->parse('main.sys_contents.passshow_button');
     }
 
     $xtpl->parse('main.sys_contents');

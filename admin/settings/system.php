@@ -56,7 +56,12 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config_site['site_email'] = '';
     }
 
-    $array_config_site['site_phone'] = nv_substr($nv_Request->get_title('site_phone', 'post', ''), 0, 20);
+    $array_config_site['site_phone'] = nv_substr($nv_Request->get_string('site_phone', 'post', '', false, false), 0, 50);
+    if (preg_match('/\[(.+)\]$/', $array_config_site['site_phone'])) {
+        $array_config_site['site_phone'] = preg_replace_callback('/\[(.+)\]/', function($matches) {
+            return preg_replace('/[^0-9\.\,\;\+\-\*\#\[\]]+/', '', $matches[0]);
+        }, $array_config_site['site_phone']);
+    }
 
     $preg_replace = [
         'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i",
@@ -239,8 +244,13 @@ if (!empty($global_config['site_reopening_time'])) {
     list($global_config['reopening_date'], $global_config['reopening_hour'], $global_config['reopening_min']) = explode('|', $tdate);
 }
 
+if (!empty($global_config['site_phone']) and !empty($global_config['site_int_phone'])) {
+    $global_config['site_phone'] .= '[' . $global_config['site_int_phone'] . ']';
+}
+
 $xtpl = new XTemplate('system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);

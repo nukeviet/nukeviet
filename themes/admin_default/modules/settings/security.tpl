@@ -190,6 +190,16 @@
                                         </table>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><strong>{LANG.passshow_button}</strong></td>
+                                    <td>
+                                        <select class="form-control w300" name="passshow_button">
+                                            <!-- BEGIN: passshow_button -->
+                                            <option value="{OPT.val}"{OPT.sel}>{OPT.name}</option>
+                                            <!-- END: passshow_button -->
+                                        </select>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>

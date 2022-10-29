@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -32,6 +32,7 @@ $global_config['admin_2step_default'] = 'code';
 $global_config['admin_2step_opt'] = 'code';
 $global_config['admin_check_pass_time'] = 1800;
 $global_config['admin_user_logout'] = 0;
+$global_config['admin_XSSsanitize'] = 1;
 $global_config['allow_null_origin'] = 0;
 $global_config['allow_sitelangs'] = ['vi'];
 $global_config['assets_cdn'] = 1;
@@ -85,6 +86,7 @@ $global_config['login_time_tracking'] = 5;
 $global_config['max_requests_300'] = 150;
 $global_config['max_requests_60'] = 40;
 $global_config['my_domains'] = 'nukeviet.vn';
+$global_config['notice_log_filename'] = 'notice_log';
 $global_config['notification_active'] = 1;
 $global_config['notification_autodel'] = 15;
 $global_config['nv_auto_resize'] = 1;
@@ -92,6 +94,7 @@ $global_config['nv_display_errors_list'] = 1;
 $global_config['nv_max_size'] = 2097152;
 $global_config['nv_overflow_size'] = 0;
 $global_config['nv_static_url'] = '';
+$global_config['passshow_button'] = 0;
 $global_config['proxy_blocker'] = 0;
 $global_config['read_type'] = 0;
 $global_config['recaptcha_secretkey'] = '';

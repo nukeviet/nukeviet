@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -110,6 +110,12 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'cronjobs_last_time', '0')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'cronjobs_interval', '5')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'cronjobs_launcher', 'system')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'push_active', '1')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'push_default_exp', '604800')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'push_exp_del', '604800')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'push_refresh_time', '30')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'push_max_characters', '200')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'push_numrows', '10')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_gfx_num', '6')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'closed_site', '0')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_reopening_time', '0')";
@@ -195,6 +201,7 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'XSSsanitize', '1')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'admin_XSSsanitize', '1')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'unsign_vietwords', '1')";
+$sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'passshow_button', '0')";
 
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_gfx_width', '150')";
 $sql_create_table[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_gfx_height', '40')";
@@ -217,6 +224,7 @@ $sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, 
 $sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (' . NV_CURRENTTIME . ", 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 0, 0)";
 $sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (' . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0)";
 $sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (' . NV_CURRENTTIME . ", 1440, 'notification_autodel.php', 'cron_notification_autodel', '', 0, 1, 1, 0, 0)";
+$sql_create_table[] = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . ' (start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (' . NV_CURRENTTIME . ", 1440, 'remove_expired_push.php', 'cron_remove_expired_push', '', 0, 1, 1, 0, 0)";
 
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'module', 'about', 0, 0, 'page', 'about', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'module', 'siteterms', 0, 0, 'page', 'siteterms', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
@@ -237,6 +245,7 @@ $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (327, 'module', 'two-step-verification', 1, 0, 'two-step-verification', 'two_step_verification', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (307, 'theme', 'default', 0, 0, 'default', 'default', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (311, 'theme', 'mobile_default', 0, 0, 'mobile_default', 'mobile_default', '4.5.00 1626512400', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
+$sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (22, 'module', 'push-notification', 1, 0, 'push-notification', 'push_notification', '4.6.00 1666092814', " . NV_CURRENTTIME . ", 'VINADES <contact@vinades.vn>', '')";
 
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_plugins (pid, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES (1, 'qrcode.php', 'get_qr_code', '', '', 1)";
 $sql_create_table[] = 'INSERT INTO ' . $db_config['prefix'] . "_plugins (pid, plugin_file, plugin_area, plugin_module_name, plugin_module_file, weight) VALUES (2, 'cdn_js_css_image.php', 'change_site_buffer', '', '', 1)";

@@ -45,6 +45,7 @@ class Error
     const SEND_ERROR_LIST_DEFAULT = E_USER_ERROR;
     const ERROR_LOG_PATH_DEFAULT = 'data/logs/error_logs';
     const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
+    const LOG_NOTICE_FILE_NAME_DEFAULT = 'notice_log'; //ten file log
     const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
 
     private $cfg;
@@ -100,6 +101,7 @@ class Error
             'error_send_mail' => !empty($config['error_send_email']) ? (string) $config['error_send_email'] : '',
             'error_set_logs' => isset($config['error_set_logs']) ? (bool) $config['error_set_logs'] : true,
             'error_log_filename' => (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) ? $config['error_log_filename'] : self::LOG_FILE_NAME_DEFAULT,
+            'notice_log_filename' => (isset($config['notice_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['notice_log_filename'])) ? $config['notice_log_filename'] : self::LOG_NOTICE_FILE_NAME_DEFAULT,
             'error_log_fileext' => (isset($config['error_log_fileext']) and preg_match('/[a-z]+/i', $config['error_log_fileext'])) ? $config['error_log_fileext'] : self::LOG_FILE_EXT_DEFAULT
         ];
         $this->cfg = array_merge($this->cfg, $this->get_error_log_path((string) (isset($config['error_log_path']) ? $config['error_log_path'] : self::ERROR_LOG_PATH_DEFAULT)));
@@ -279,7 +281,7 @@ class Error
         }
 
         $content .= "\n";
-        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . $this->cfg['error_log_filename'] . '.' . $this->cfg['error_log_fileext'];
+        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . ($this->errno == E_NOTICE ? $this->cfg['notice_log_filename'] : $this->cfg['error_log_filename']) . '.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
     }
 
@@ -341,11 +343,11 @@ class Error
     }
 
     /**
-     * log_control()
+     * @desc Hàm ghi log ra file
      */
     private function log_control()
     {
-        $track_errors = $this->cl['day'] . '_' . md5($this->errno . (string) $this->errfile . (string) $this->errline . $this->cl['ip']);
+        $track_errors = $this->cl['day'] . '_' . md5($this->errno . (string) $this->errfile . (string) $this->errline);
         $track_errors = $this->cfg['error_log_tmp'] . '/' . $track_errors . '.' . $this->cfg['error_log_fileext'];
         $log_is_displayed = file_exists($track_errors);
 

@@ -474,10 +474,15 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
                 unset($items[$key]);
                 continue;
             }
-            while (isset($pubdates[$items[$key]['pubdate']])) {
-                $items[$key]['pubdate']--;
+            // Fix lỗi vòng while bị lặp vô hạn nếu truyền giá trị $item[pubdate] = null #3496
+            if (!empty($items[$key]['pubdate']) and is_numeric($items[$key]['pubdate'])) {
+                while (isset($pubdates[$items[$key]['pubdate']])) {
+                    $items[$key]['pubdate']--;
+                }
+                $pubdates[$items[$key]['pubdate']] = 0;
+            } else {
+                $items[$key]['pubdate'] = 0;
             }
-            $pubdates[$items[$key]['pubdate']] = 0;
 
             $channel['pubDate'] = max($channel['pubDate'], $items[$key]['pubdate']);
 

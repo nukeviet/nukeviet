@@ -113,7 +113,7 @@ class Streams
         }
 
         // NukeViet has no proxy setup
-        $context = stream_context_create([
+        $context = [
             'ssl' => [
                 'verify_peer' => $ssl_verify,
                 //'CN_match' => $arrURL['host'], // This is handled by self::verify_ssl_certificate()
@@ -122,7 +122,13 @@ class Streams
                 'cafile' => $args['sslcertificates'],
                 'allow_self_signed' => !$ssl_verify,
             ],
-        ]);
+        ];
+
+        if ($args['cipherstring_seclevel_1']) {
+            $context['ssl']['ciphers'] = 'DEFAULT:!DH';
+        }
+
+        $context = stream_context_create($context);
 
         $timeout = (int) floor($args['timeout']);
         $utimeout = $timeout == $args['timeout'] ? 0 : 1000000 * $args['timeout'] % 1000000;

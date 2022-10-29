@@ -93,3 +93,5 @@ $lang_module['image'] = 'Image de menu';
 $lang_module['action_form'] = 'Exécuter';
 $lang_module['msgnocheck'] = 'Il faut sélectionner au moins un article';
 $lang_module['id'] = 'ID';
+$lang_module['click_to_view'] = 'Clique pour voir';
+$lang_module['groups_view'] = 'Permission de visionner';

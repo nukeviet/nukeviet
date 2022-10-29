@@ -31,7 +31,8 @@ $array_table = [
     'logs',
     'tmp',
     'author',
-    'authorlist'
+    'authorlist',
+    'voices'
 ];
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
@@ -207,6 +208,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   titlesite varchar(255) NOT NULL DEFAULT '',
   description text NOT NULL,
   bodyhtml longtext NOT NULL,
+  voicedata text NULL DEFAULT NULL COMMENT 'Data giọng đọc json',
   keywords varchar(255) default '',
   sourcetext varchar(255) default '',
   files TEXT NULL DEFAULT NULL,
@@ -230,6 +232,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
   titlesite varchar(255) NOT NULL DEFAULT '',
   description text NOT NULL,
   bodyhtml longtext NOT NULL,
+  voicedata text NULL DEFAULT NULL COMMENT 'Data giọng đọc json',
   keywords varchar(255) default '',
   sourcetext varchar(255) default '',
   files TEXT NULL,
@@ -331,6 +334,21 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   UNIQUE KEY id_aid (id, aid),
   KEY aid (aid),
   KEY alias (alias)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_voices (
+  id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  voice_key varchar(50) NOT NULL DEFAULT '' COMMENT 'Khóa dùng trong Api sau này',
+  title varchar(250) NOT NULL DEFAULT '',
+  description text NOT NULL,
+  add_time int(11) unsigned NOT NULL DEFAULT '0',
+  edit_time int(11) unsigned NOT NULL DEFAULT '0',
+  weight smallint(4) unsigned NOT NULL DEFAULT '0',
+  status tinyint(4) NOT NULL DEFAULT '1' COMMENT '0: Dừng, 1: Hoạt động',
+  PRIMARY KEY (id),
+  KEY weight (weight),
+  KEY status (status),
+  UNIQUE KEY title (title)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";

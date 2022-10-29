@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -120,7 +120,7 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
                 } else {
                     $oauthid = !empty($attribs['email']) ? $attribs['email'] : $attribs['identity'];
                     $message = sprintf($lang_module['2step_oauth_add_mail_content'], $row_user['first_name'], $global_config['site_name'], $oauthid, ucfirst($opt));
-                    $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row_user['email'], $lang_module['2step_oauth_add_mail_subject'], $message);
+                    nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $row_user['email'], $lang_module['2step_oauth_add_mail_subject'], $message);
 
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_OAUTH', $opt . ': ' . $oauthid, $admin_info['userid']);
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
@@ -174,7 +174,7 @@ if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
 
     $list_for_mail = implode(', ', $list_for_mail);
     $message = sprintf($lang_module['2step_oauth_dels_mail_content'], $row_user['first_name'], $global_config['site_name'], $list_for_mail);
-    $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row_user['email'], $lang_module['2step_oauth_del_mail_subject'], $message);
+    nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $row_user['email'], $lang_module['2step_oauth_del_mail_subject'], $message);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_TRUNCATE_OAUTH', 'AID ' . $row['admin_id'], $admin_info['userid']);
     nv_htmlOutput('OK');
@@ -196,7 +196,7 @@ if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
 
     $oauthid = !empty($array_oauth[$id]['oauth_email']) ? $array_oauth[$id]['oauth_email'] : $array_oauth[$id]['oauth_id'];
     $message = sprintf($lang_module['2step_oauth_del_mail_content'], $row_user['first_name'], $global_config['site_name'], $oauthid, ucfirst($array_oauth[$id]['oauth_server']));
-    $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row_user['email'], $lang_module['2step_oauth_del_mail_subject'], $message);
+    nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $row_user['email'], $lang_module['2step_oauth_del_mail_subject'], $message);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DELETE_OAUTH', 'AID ' . $row['admin_id'] . ': ' . $array_oauth[$id]['oauth_server'] . '|' . $array_oauth[$id]['oauth_email'], $admin_info['userid']);
     nv_htmlOutput('OK');

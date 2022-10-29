@@ -253,7 +253,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $femail
             ];
             $email_list = array_unique($email_list);
-            @nv_sendmail($from, $email_list, $ftitle, $fcon_mail);
+            @nv_sendmail_async($from, $email_list, $ftitle, $fcon_mail);
         }
 
         // Gửi bản sao đến hộp thư người gửi
@@ -263,7 +263,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
                 $global_config['site_email']
             ];
             $fcon_mail = contact_sendcontact($row_id, $fcat, $_ftitle, $fname, $femail, $_fphone, $_fcon, $fpart, false);
-            @nv_sendmail($from, $femail, $ftitle, $fcon_mail);
+            @nv_sendmail_async($from, $femail, $ftitle, $fcon_mail);
         }
 
         nv_insert_notification($module_name, 'contact_new', [

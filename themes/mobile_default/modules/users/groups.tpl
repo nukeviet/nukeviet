@@ -2,13 +2,12 @@
 <h2 class="margin-bottom-lg margin-top-lg">{LANG.group_manage}</h2>
 <div id="pageContent"></div>
 <ul class="nav navbar-nav">
-    <!-- BEGIN: navbar -->
-    <li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
+    <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
 </ul>
 <script>
     $(function() {
-        $("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10));
-    });
+        $("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10))
+    })
 </script>
 <!-- END: main -->
 
@@ -40,7 +39,7 @@
 
 <!-- BEGIN: listUsers -->
 <!-- BEGIN: pending -->
-<div id="id_pending">
+<div id="id_pending" class="m-bottom">
     <h3 class="m-bottom">{PTITLE}</h3>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
@@ -99,7 +98,7 @@
 <!-- END: pending -->
 
 <!-- BEGIN: leaders -->
-<div id="id_leaders">
+<div id="id_leaders" class="m-bottom">
     <h3 class="m-bottom">{PTITLE}</h3>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
@@ -127,7 +126,7 @@
 <!-- END: leaders -->
 
 <!-- BEGIN: members -->
-<div id="id_members">
+<div id="id_members" class="m-bottom">
     <h3 class="m-bottom">{PTITLE}</h3>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
@@ -199,14 +198,17 @@
 <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/select2/select2.min.css">
 <div id="ablist" class="container-fluid margin-bottom">
     <div class="row">
-        <div class="col-sm-14  margin-bottom-lg">
+        <div class="col-sm-14 col-md-14 margin-bottom-lg">
             <!-- BEGIN: addUserGroup -->
             <select name="uid" id="uid" class="form-control" style="width:150px"></select>
             <button class="btn btn-primary" name="addUser" type="button" title="{LANG.addMemberToGroup}"><i class="fa fa-plus"></i></button>
             <!-- END: addUserGroup -->
         </div>
-        <div class="col-sm-10 text-right  margin-bottom-lg">
+        <div class="col-sm-10 col-md-10 text-right margin-bottom-lg">
             <a href="{EDIT_GROUP_URL}" class="btn btn-primary" title="{GLANG.edit}"><i class="fa fa-pencil-square-o"></i></a>
+            <!-- BEGIN: push_notifications -->
+            <a href="{PUSH_NOTIFICATIONS_URL}" class="btn btn-primary" title="{GLANG.push_notifications}"><i class="fa fa-bell-o"></i></a>
+            <!-- END: push_notifications -->
             <!-- BEGIN: add_user -->
             <a href="{MODULE_URL}=register/{GID}" class="btn btn-primary" title="{LANG.addusers}"><i class="fa fa-user-plus"></i></a>
             <!-- END: add_user -->
@@ -269,18 +271,16 @@
 <!-- END: tools -->
 <table class="table table-bordered">
     <tr>
-        <td rowspan="4" style="width:80px;border-top:0"><img title="{DATA.title}" src="{ASSETS_STATIC_URL}/images/pix.svg" width="80" height="80" style="background-image:url({DATA.group_avatar});background-repeat:no-repeat;background-size:cover;" /></td>
+        <td rowspan="4" style="width:80px;border-top:0"><img title="{DATA.title}" alt="{DATA.title}" src="{ASSETS_STATIC_URL}/images/pix.svg" width="80" height="80" style="background-image:url({DATA.group_avatar});background-repeat:no-repeat;background-size:cover;" /></td>
         <td class="text-nowrap" style="width:80px;border-top:0"><strong>{LANG.group_title}</strong></td>
         <td style="border-top:0">{DATA.title}
-            <!-- BEGIN: group_desc --> ({DATA.description})
-            <!-- END: group_desc -->
+            <!-- BEGIN: group_desc --> ({DATA.description})<!-- END: group_desc -->
         </td>
     </tr>
     <tr class="active">
         <td class="text-nowrap"><strong>{LANG.group_type}</strong></td>
         <td>{DATA.group_type_mess}
-            <!-- BEGIN: group_type_note --> ({DATA.group_type_note})
-            <!-- END: group_type_note -->
+            <!-- BEGIN: group_type_note --> ({DATA.group_type_note})<!-- END: group_type_note -->
         </td>
     </tr>
     <tr>
@@ -301,34 +301,35 @@
 <script>
     $(function() {
         $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10));
-    });
-    $("[name=addUser]").click(function() {
-        var a = $("#ablist select[name=uid]").val(),
-            a = intval(a);
-        a == 0 && (a = "");
-        $("#ablist select[name=uid]").val(a);
-        if (a == "") {
-            return alert("{LANG.choiceUserID}"), $("#ablist select[name=uid]").select2('open'), false;
-        }
-        $("#pageContent input, #pageContent button, #pageContent select").attr("disabled", "disabled");
-        $.ajax({
-            type: "POST",
-            url : "{MODULE_URL}={OP}",
-            data : "gid={GID}&uid=" + a + "&rand=" + nv_randomPassword(10),
-            success: function(a) {
-                a == "OK" ? ($("#ablist select[name=uid]").val("").trigger("change"), $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10))) : alert(a);
+
+        $("[name=addUser]").click(function() {
+            var a = $("#ablist select[name=uid]").val(),
+                a = intval(a);
+            a == 0 && (a = "");
+            $("#ablist select[name=uid]").val(a);
+            if (a == "") {
+                return alert("{LANG.choiceUserID}"), $("#ablist select[name=uid]").select2('open'), false;
             }
+            $("#pageContent input, #pageContent select").attr("disabled", "disabled");
+            $.ajax({
+                type: "POST",
+                url : "{MODULE_URL}={OP}",
+                data : "gid={GID}&uid=" + a + "&rand=" + nv_randomPassword(10),
+                success: function(a) {
+                    a == "OK" ? ($("#ablist select[name=uid]").val("").trigger("change"), $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10))) : alert(a);
+                }
+            });
+            return !1;
         });
-        return !1;
-    });
-    $("button[name=user_waiting]").click(function() {
-        $.ajax({
-            type: "POST",
-            url : "{MODULE_URL}={OP}",
-            data : "gid={GID}&getuserid=1&rand=" + nv_randomPassword(10),
-            success: function(a) {
-                modalShow('{LANG.user_waiting}', a);
-            }
+        $("button[name=user_waiting]").click(function() {
+            $.ajax({
+                type: "POST",
+                url : "{MODULE_URL}={OP}",
+                data : "gid={GID}&getuserid=1&rand=" + nv_randomPassword(10),
+                success: function(a) {
+                    modalShow('{LANG.user_waiting}', a);
+                }
+            });
         });
     });
 </script>
@@ -365,3 +366,32 @@
     </div>
 </form>
 <!-- END: editgroup -->
+
+<!-- BEGIN: push_notifications -->
+<div class="container-fluid margin-top-lg margin-bottom">
+    <div class="row">
+        <div class="col-xs-14">
+            <div class="margin-bottom">{LANG.group}: {GTITLE}</div>
+            <h2>{GLANG.push_notifications}</h2>
+        </div>
+        <div class="col-xs-10 text-right">
+            <a href="{GROUP_MANAGER_URL}" class="btn btn-primary" title="{LANG.group_manage}"><i class="fa fa-reply"></i> {LANG.group_manage}</a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row"><div id="push_notifications" class="col-xs-24" data-ajax-url="{PUSH_MANAGER_URL}"></div></div>
+</div>
+<script>
+$(function() {
+    var pushObj = $('#push_notifications');
+    $.ajax({
+        type: "GET",
+        url: pushObj.data('ajax-url'),
+        success: function(a) {
+            pushObj.html(a)
+        }
+    });
+})
+</script>
+<!-- END: push_notifications -->

@@ -109,7 +109,13 @@ function nv_fix_cat_order($parentid = 0, $order = 0, $lev = 0)
     if ($parentid > 0) {
         $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET numsubcat=' . $numsubcat;
         if ($numsubcat == 0) {
-            $sql .= ",subcatid='', viewcat='viewcat_page_new'";
+            // Chuyên mục cha không có chuyên mục con
+            $sql .= ",subcatid='', viewcat=CASE
+            WHEN viewcat='viewcat_main_left' THEN 'viewcat_page_new'
+            WHEN viewcat='viewcat_main_right' THEN 'viewcat_page_new'
+            WHEN viewcat='viewcat_main_bottom' THEN 'viewcat_page_new'
+            WHEN viewcat='viewcat_two_column' THEN 'viewcat_page_new'
+            ELSE viewcat END";
         } else {
             $sql .= ",subcatid='" . implode(',', $array_cat_order) . "'";
         }
@@ -824,9 +830,9 @@ function nv_get_mod_countrows()
 /**
  * nv_get_mod_tags()
  * Tìm tags cho bài viết dựa vào thư viện tags
- * 
- * @param mixed $content 
- * @return array 
+ *
+ * @param mixed $content
+ * @return array
  */
 function nv_get_mod_tags($content)
 {
@@ -874,12 +880,12 @@ function nv_get_mod_tags($content)
 
 /**
  * setTagAlias()
- * 
- * @param mixed $keywords 
- * @param int $tid 
- * @param int $dbexist 
- * @return string|null 
- * @throws PDOException 
+ *
+ * @param mixed $keywords
+ * @param int $tid
+ * @param int $dbexist
+ * @return string|null
+ * @throws PDOException
  */
 function setTagAlias($keywords, $tid = 0, &$dbexist = 0)
 {
@@ -893,10 +899,10 @@ function setTagAlias($keywords, $tid = 0, &$dbexist = 0)
 
 /**
  * setTagKeywords()
- * 
- * @param mixed $keywords 
- * @param bool $isArr 
- * @return array|string 
+ *
+ * @param mixed $keywords
+ * @param bool $isArr
+ * @return array|string
  */
 function setTagKeywords($keywords, $isArr = false)
 {

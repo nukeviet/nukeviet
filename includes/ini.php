@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -18,9 +18,99 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
 }
 
 /**
- * set_ini_file()
+ * server_info_update()
  * 
- * @param array $sys_info 
+ * @param string $config_ini_file 
+ */
+function server_info_update($config_ini_file)
+{
+    global $nv_Server;
+
+    $proto = $nv_Server->getOriginalProtocol();
+    $proto2 = ($proto == 'https') ? 'http' : 'https';
+    $host = $nv_Server->getOriginalHost();
+    if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+        $host = '[' . $host . ']';
+    }
+
+    $unset = ['http_code', 'date', 'expires', 'last-modified', 'connection', 'set-cookie', 'x-page-speed', 'x-powered-by', 'x-is-http', 'x-is-https'];
+
+    if (!defined('CURL_HTTP_VERSION_2_0')) {
+        define('CURL_HTTP_VERSION_2_0', 3);
+    }
+
+    $server_headers = [];
+    $is_http2 = false;
+    $ch = curl_init($proto . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
+    $response = curl_exec($ch);
+    if (!empty($response) and !curl_errno($ch)) {
+        $header_text = substr($response, 0, strpos($response, "\r\n\r\n"));
+        $header_text = explode("\r\n", $header_text);
+        foreach ($header_text as $line) {
+            $t = explode(':', $line, 2);
+            if (isset($t[1])) {
+                $key = strtolower(trim($t[0]));
+                $value = trim($t[1]);
+                if (!empty($key) and !in_array($key, $unset, true)) {
+                    $server_headers[] = "'" . addslashes($key) . "' => '" . addslashes($value) . "'";
+                }
+            } else {
+                if (strpos(strtolower($line), 'http/2') !== false) {
+                    $is_http2 = true;
+                }
+            }
+        }
+    }
+    curl_close($ch);
+
+    $server_headers = !empty($server_headers) ? implode(',', $server_headers) : '';
+
+    $http_only = false;
+    $https_only = false;
+    $ch = curl_init($proto2 . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
+    $response = curl_exec($ch);
+    if ($proto == 'https') {
+        $https_only = (!empty($response) and !curl_errno($ch) and (strripos($response, 'x-is-http:') !== false)) ? false : true;
+    } else {
+        $http_only = (!empty($response) and !curl_errno($ch) and (strripos($response, 'x-is-https:') !== false)) ? false : true;
+    }
+    curl_close($ch);
+
+    $contents = file_get_contents($config_ini_file);
+    if (!empty($contents)) {
+        $contents = preg_replace('/(\$sys\_info\[\'server\_headers\'\]\s*\=\s*\[)[^\]]*(\]\;)/', '\\1' . $server_headers . '\\2', $contents);
+        $contents = preg_replace('/(\$sys\_info\[\'is\_http2\'\]\s*\=\s*)[^\;]+\;/', '\\1' . ($is_http2 ? 'true' : 'false') . ';', $contents);
+        $contents = preg_replace('/(\$sys\_info\[\'http\_only\'\]\s*\=\s*)[^\;]+\;/', '\\1' . ($http_only ? 'true' : 'false') . ';', $contents);
+        $contents = preg_replace('/(\$sys\_info\[\'https\_only\'\]\s*\=\s*)[^\;]+\;/', '\\1' . ($https_only ? 'true' : 'false') . ';', $contents);
+        $contents = preg_replace('/(\$serverInfoUpdated\s*\=\s*)[^\;]+\;/', '\\1true;', $contents);
+
+        @file_put_contents($config_ini_file, $contents, LOCK_EX);
+    }
+}
+
+/**
+ * set_ini_file()
+ *
+ * @param array $sys_info
  */
 function set_ini_file(&$sys_info)
 {
@@ -152,7 +242,7 @@ function set_ini_file(&$sys_info)
     }
     $_temp = !empty($_temp) ? implode(',', $_temp) : '';
     $content_config .= "\$sys_info['server_headers'] = [" . $_temp . "];\n";
-    $content_config .= "\$sys_info['is_http2'] = " . ($sys_info['is_http2'] ? "true" : "false") . ";\n";
+    $content_config .= "\$sys_info['is_http2'] = " . ($sys_info['is_http2'] ? 'true' : 'false') . ";\n";
     $content_config .= "\$sys_info['http_only'] = " . ($sys_info['http_only'] ? 'true' : 'false') . ";\n";
     $content_config .= "\$sys_info['https_only'] = " . ($sys_info['https_only'] ? 'true' : 'false') . ";\n";
 
@@ -234,11 +324,32 @@ function set_ini_file(&$sys_info)
     $content_config .= '$iniSaveTime = ' . NV_CURRENTTIME . ';';
 
     if (!$isErrorFile) {
-        @file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX);
+        if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
+            $url = NV_BASE_SITEURL . 'index.php';
+            strpos($url, NV_MY_DOMAIN) !== 0 && $url = NV_MY_DOMAIN . $url;
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, '__serverInfoUpdate=1');
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, 200);
+            curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Referer: ' . NV_MY_DOMAIN]);
+            curl_exec($ch);
+            curl_close($ch);
+        }
     }
 }
 
-$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', NV_SERVER_NAME) . '.php';
+$config_ini_file = NV_ROOTDIR . '/' . NV_DATADIR . '/config_ini.' . NV_SERVER_PROTOCOL . '.' . preg_replace('/[^a-zA-Z0-9\.\_]/', '', NV_SERVER_NAME) . '.php';
+if (isset($_POST['__serverInfoUpdate'])) {
+    server_info_update($config_ini_file);
+    exit(0);
+}
+
 $ini_list = ini_get_all(null, false);
 
 $sys_info['server_headers'] = [];
