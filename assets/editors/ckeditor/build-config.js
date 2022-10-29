@@ -13,10 +13,10 @@
  * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) https://ckeditor.com/cke4/builder/9e046536af089eba314571b369d58e7d
+ * (2) https://ckeditor.com/cke4/builder/d73f3124f4de8a87506000df36a75f1c
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) https://ckeditor.com/cke4/builder/download/9e046536af089eba314571b369d58e7d
+ * (3) https://ckeditor.com/cke4/builder/download/d73f3124f4de8a87506000df36a75f1c
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -55,7 +55,7 @@ var CKBUILDER_CONFIG = {
 		'tests'
 	],
 	plugins : {
-		'autosave' : 1,
+		'allowsave' : 1,
 		'balloonpanel' : 1,
 		'basicstyles' : 1,
 		'bidi' : 1,
@@ -71,11 +71,14 @@ var CKBUILDER_CONFIG = {
 		'elementspath' : 1,
 		'enterkey' : 1,
 		'entities' : 1,
+		'eqneditor' : 1,
 		'filebrowser' : 1,
 		'find' : 1,
+		'flash' : 1,
 		'floatingspace' : 1,
 		'font' : 1,
 		'format' : 1,
+		'googledocs' : 1,
 		'horizontalrule' : 1,
 		'htmlwriter' : 1,
 		'iframe' : 1,
@@ -111,6 +114,7 @@ var CKBUILDER_CONFIG = {
 		'undo' : 1,
 		'uploadfile' : 1,
 		'uploadimage' : 1,
+		'video' : 1,
 		'wysiwygarea' : 1,
 		'youtube' : 1
 	},
