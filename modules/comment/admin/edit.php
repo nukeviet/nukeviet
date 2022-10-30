@@ -33,7 +33,7 @@ if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir)) {
     }
 }
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $delete = $nv_Request->get_int('delete', 'post', 0);
     if ($delete) {
         if (!empty($row['attach'])) {

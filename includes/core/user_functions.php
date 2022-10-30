@@ -264,24 +264,15 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $lang_global, $key_words, $description, $module_name, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
+    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
 
     $return = [];
 
-    if (empty($site_description) or ($global_config['metaTagsOgp'] and empty($meta_property['og:url']))) {
-        if (empty($page_url)) {
-            if ($home) {
-                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-            } else {
-                $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-                if ($op != 'main') {
-                    $current_page_url .= '&amp;' . NV_OP_VARIABLE . '=' . $op;
-                }
-            }
-        } else {
-            $current_page_url = $page_url;
-        }
-        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($current_page_url, true);
+    $current_page_url = '';
+    if (!empty($page_url)) {
+        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite($page_url, true);
+    } elseif ($home) {
+        $current_page_url = NV_MAIN_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true);
     }
 
     // Tại trang chủ lấy mô tả của site thay vì mô tả của module chọn làm trang chủ
@@ -296,7 +287,7 @@ function nv_html_meta_tags($html = true)
             $ds[] = $module_info['funcs'][$op]['func_custom_name'];
         }
         $ds[] = $module_info['custom_title'];
-        $ds[] = $current_page_url;
+        !empty($current_page_url) && $ds[] = $current_page_url;
         $site_description = implode(' - ', $ds);
     } elseif ($site_description == 'no') {
         $site_description = '';
@@ -378,7 +369,7 @@ function nv_html_meta_tags($html = true)
                 $metatags[] = $mt['meta_item'];
             }
             foreach ($metatags as $meta) {
-                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and preg_match("/^([^\'\"]+)$/", (string)$meta['content'])) {
+                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and preg_match("/^([^\'\"]+)$/", (string) $meta['content'])) {
                     $return[] = [
                         'name' => $meta['group'],
                         'value' => $meta['value'],
@@ -392,7 +383,7 @@ function nv_html_meta_tags($html = true)
     // Robot metatags
     $return = array_merge_recursive($return, $nv_BotManager->getMetaTags());
 
-    /**
+    /*
      * Đọc kỹ giấy phép trước khi thay đổi giá trị này
      *
      * @link https://github.com/nukeviet/nukeviet/blob/nukeviet4.5/LICENSE
@@ -430,7 +421,7 @@ function nv_html_meta_tags($html = true)
         if (empty($meta_property['og:type'])) {
             $meta_property['og:type'] = 'website';
         }
-        if (empty($meta_property['og:url'])) {
+        if (empty($meta_property['og:url']) and !empty($current_page_url)) {
             $meta_property['og:url'] = $current_page_url;
         }
         $meta_property['og:site_name'] = $global_config['site_name'];
@@ -486,6 +477,7 @@ function nv_html_meta_tags($html = true)
     foreach ($return as $link) {
         $res .= '<meta ' . $link['name'] . '="' . $link['value'] . '" content="' . $link['content'] . '" />' . PHP_EOL;
     }
+
     return $res;
 }
 
@@ -580,7 +572,7 @@ function nv_html_page_title($html = true)
         }
 
         if (empty($page_title) and !preg_match('/(funcname|modulename|sitename)/i', $global_config['pageTitleMode'])) {
-            $_title = $module_info['funcs'][$op]['func_custom_name'] . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
+            $_title = $module_info['funcs'][$op]['func_site_title'] . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
         } else {
             $_title = preg_replace([
                 '/pagetitle/i',
@@ -589,7 +581,7 @@ function nv_html_page_title($html = true)
                 '/sitename/i'
             ], [
                 $page_title,
-                $module_info['funcs'][$op]['func_custom_name'],
+                $module_info['funcs'][$op]['func_site_title'],
                 $module_info['custom_title'],
                 $global_config['site_name']
             ], $global_config['pageTitleMode']);
@@ -695,6 +687,8 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     if ($global_config['captcha_type'] == 2) {
         $jsDef .= ',nv_recaptcha_sitekey="' . $global_config['recaptcha_sitekey'] . '",nv_recaptcha_type="' . $global_config['recaptcha_type'] . '",nv_recaptcha_elements=[]';
     }
+    !isset($global_config['XSSsanitize']) && $global_config['XSSsanitize'] = 1;
+    $jsDef .= ',XSSsanitize=' . ($global_config['XSSsanitize'] ? 1 : 0);
     $jsDef .= ';';
 
     $return = [];
@@ -715,9 +709,21 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     }
 
     if ($global_js) {
+        if ($global_config['XSSsanitize']) {
+            $return[] = [
+                'ext' => 1,
+                'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/DOMPurify/purify.js'
+            ];
+        }
+
         $return[] = [
             'ext' => 1,
             'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/global.js'
+        ];
+
+        $return[] = [
+            'ext' => 1,
+            'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/site.js'
         ];
     }
 
@@ -786,7 +792,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
  */
 function nv_admin_menu()
 {
-    global $lang_global, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db;
+    global $lang_global, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
 
     if ($module_info['theme'] == $module_info['template'] and file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/system/admin_toolbar.tpl')) {
         $block_theme = $module_info['template'];
@@ -802,8 +808,9 @@ function nv_admin_menu()
     $xtpl->assign('URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id']);
 
     if (defined('NV_IS_SPADMIN')) {
-        $row = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'')->fetch();
-        if (!empty($row)) {
+        $sql = 'SELECT COUNT(*) AS count FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 AND module=\'themes\'';
+        $list = $nv_Cache->db($sql, '', 'authors');
+        if (!empty($list[0]['count'])) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
             $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
 

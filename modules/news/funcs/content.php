@@ -43,7 +43,6 @@ if (defined('NV_EDITOR')) {
 $page_title = $lang_module['content'];
 $key_words = $module_info['keywords'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
 
 // check user post content
 $array_post_config = [];
@@ -135,6 +134,8 @@ if (!$array_post_user['addcontent']) {
     $xtpl->parse('mainrefresh');
     $contents = $xtpl->text('mainrefresh');
 
+    $canonicalUrl = getCanonicalUrl($page_url);
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -158,8 +159,14 @@ $selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module
 $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
 
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
-    $page_url .= '&amp;author_info=1';
-    $canonicalUrl = getCanonicalUrl($page_url);
+    if ($nv_Request->isset_request('contentid', 'get')) {
+        $page_url .= '&amp;contentid=' . $contentid;
+    }
+
+    if ($nv_Request->isset_request('checkss', 'get')) {
+        $page_url .= '&amp;checkss=' . $fcheckss;
+    }
+
     if ($contentid > 0) {
         $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $contentid . ' AND admin_id= ' . $user_info['userid'] . ' AND status<=' . $global_code_defined['row_locked_status'])->fetch();
         $contentid = (isset($rowcontent_old['id'])) ? intval($rowcontent_old['id']) : 0;
@@ -514,6 +521,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $xtpl->parse('mainrefresh');
                 $contents = $xtpl->text('mainrefresh');
 
+                $canonicalUrl = getCanonicalUrl($page_url);
+
                 include NV_ROOTDIR . '/includes/header.php';
                 echo nv_site_theme($contents);
                 include NV_ROOTDIR . '/includes/footer.php';
@@ -655,7 +664,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $page = 1;
 
     if (isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-') {
-        $page = intval(substr($array_op[1], 5));
+        $page = (int) (substr($array_op[1], 5));
+
+        if ($page > 1) {
+            $page_url .= '/page-' . $page;
+        }
     }
 
     $contents = '<div style="border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;"><a href="' . $base_url . '&amp;contentid=0&checkss=' . md5('0' . NV_CHECK_SESSION) . '">' . $lang_module['add_content'] . '</a></h1></div>';
@@ -670,6 +683,9 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $num_items = $db->query($db->sql())
         ->fetchColumn();
     if ($num_items) {
+        $urlappend = '/page-';
+        betweenURLs($page, ceil($num_items / $per_page), $base_url, $urlappend, $prevPage, $nextPage);
+
         $db->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
             ->order('id DESC')
             ->limit($per_page)
@@ -752,6 +768,8 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 } elseif ($array_post_user['addcontent']) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0&checkss=' . md5('0' . NV_CHECK_SESSION));
 }
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

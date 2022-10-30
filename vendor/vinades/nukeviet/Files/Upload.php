@@ -1073,7 +1073,26 @@ class Upload
             $return['size'] = $this->file_size;
             $return['is_img'] = $this->is_img;
             $return['is_svg'] = $this->is_svg;
-            if ($this->is_img) {
+            if ($this->is_img and function_exists('exif_read_data')) {
+                // Check/fix image rotation
+                // https://stackoverflow.com/questions/34287437/
+                $exif = exif_read_data($savepath . $filename);
+                if (!empty($exif['Orientation']) and in_array((int) $exif['Orientation'], [3, 6, 8])) {
+                    $image = new Image($savepath . $filename);
+                    switch ($exif['Orientation']) {
+                        case 3:
+                            $image->rotate(180);
+                            break;
+                        case 6:
+                            $image->rotate(90);
+                            break;
+                        case 8:
+                            $image->rotate(270);
+                            break;
+                    }
+                    $image->save($savepath, $filename);
+                    $image->close();
+                }
                 $return['img_info'] = $this->img_info;
             }
         }
@@ -1341,6 +1360,13 @@ class Upload
             CURLOPT_FOLLOWLOCATION => true
         ];
 
+        $cainfo = ini_get('curl.cainfo');
+        if (empty($cainfo)) {
+            if (file_exists(NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem')) {
+                $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+            }
+        }
+
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, $this->url_info['uri']);
         curl_setopt_array($curlHandle, $options);
@@ -1350,6 +1376,11 @@ class Upload
         }
 
         curl_setopt($curlHandle, CURLOPT_FILE, $fp);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, (!empty($cainfo)) ? 2 : false);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, !empty($cainfo) ? true : false);
+        if (!empty($cainfo)) {
+            curl_setopt($curlHandle, CURLOPT_CAINFO, $cainfo);
+        }
         curl_setopt($curlHandle, CURLOPT_BINARYTRANSFER, true);
 
         if (curl_exec($curlHandle) === false) {

@@ -64,6 +64,28 @@ function modalShow(a, b, callback) {
     });
 }
 
+// locationReplace
+function locationReplace(url) {
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
+    }
+}
+
+function formXSSsanitize(form) {
+    $(form).find("input, textarea").not(":submit, :reset, :image, :file, :disabled").not('[data-sanitize-ignore]').each(function(e) {
+        $(this).val(DOMPurify.sanitize($(this).val(), {}))
+    })
+}
+
+function btnClickSubmit(event, form) {
+    event.preventDefault();
+    if (XSSsanitize) {
+        formXSSsanitize(form)
+    }
+    $(form).submit()
+}
+
 var NV = {
     menuBusy: false,
     menuTimer: null,
@@ -141,6 +163,14 @@ $(document).ready(function() {
     $('[data-btn="toggleLang"]').on('click', function(e) {
         e.preventDefault();
         $('.menu-lang').toggleClass('menu-lang-show');
+    });
+
+    //XSSsanitize
+    $('body').on('click', '[type=submit]:not([name])', function(e) {
+        var form = $(this).parents('form');
+        if (!$('[name=submit]', form).length) {
+            btnClickSubmit(e,form)
+        }
     });
 
     $(document).on('click', function(e) {

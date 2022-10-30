@@ -69,9 +69,11 @@ function timeoutsessrun() {
     }, 1E3);
 }
 
+// locationReplace
 function locationReplace(url) {
-    if (history.pushState) {
-        history.pushState(null, null, url);
+    var uri = window.location.href.substr(window.location.protocol.length + window.location.hostname.length + 2);
+    if (url != uri && history.pushState) {
+        history.pushState(null, null, url)
     }
 }
 
@@ -240,8 +242,7 @@ function ftipShow(a, b, callback) {
 };
 
 function openID_load(a) {
-    var s = $(this).attr("src");
-    nv_open_browse(a, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+    nv_open_browse($(a).attr("href"), "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
     return !1;
 }
 
@@ -261,7 +262,7 @@ function qrcodeLoad(a) {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
-    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
+    b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url"))
 };
 
 // Switch tab
@@ -642,7 +643,9 @@ $(document).ready(function() {
 
     //Change Localtion
     $("[data-location]").on("click", function() {
-        locationReplace($(this).data("location"))
+        if (window.location.origin + $(this).data("location") != window.location.href) {
+            locationReplace($(this).data("location"))
+        }
     });
 
     //Add preload: link rel="prefetch", link rel="prerender"

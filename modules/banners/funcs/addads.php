@@ -14,7 +14,6 @@ if (!defined('NV_IS_MOD_BANNERS')) {
 
 $page_title = $module_info['site_title'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 if (!defined('NV_IS_BANNER_CLIENT')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -45,7 +44,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $array['captcha'] = $nv_Request->get_title('captcha', 'post', '');
     }
 
-    if ($array['url'] == 'http://') {
+    if (!empty($array['url']) and !nv_is_url($array['url'], true)) {
         $array['url'] = '';
     }
 
@@ -59,7 +58,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $error[] = $lang_module['plan_wrong_selected'];
     } elseif (empty($global_array_uplans[$array['blockid']]['uploadtype']) and !empty($global_array_uplans[$array['blockid']]['require_image'])) {
         $error[] = $lang_module['upload_blocked'];
-    } elseif ((!empty($array['url']) and !nv_is_url($array['url'])) or (empty($global_array_uplans[$array['blockid']]['require_image']) and empty($array['url']))) {
+    } elseif (empty($global_array_uplans[$array['blockid']]['require_image']) and empty($array['url'])) {
         $error[] = $lang_module['click_url_invalid'];
     } elseif (!isset($_FILES['image']) and !empty($global_array_uplans[$array['blockid']]['require_image'])) {
         $error[] = $lang_module['file_upload_empty'];
@@ -160,6 +159,8 @@ if ($global_config['captcha_type'] == 2) {
 
 $xtpl->parse('main');
 $contents .= $xtpl->text('main');
+
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

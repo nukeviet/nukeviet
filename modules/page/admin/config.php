@@ -16,7 +16,7 @@ $page_title = $lang_module['config'];
 
 $array_config = array();
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $array_config['viewtype'] = $nv_Request->get_int('viewtype', 'post', 0);
     $array_config['facebookapi'] = $nv_Request->get_string('facebookapi', 'post', '');
     $array_config['per_page'] = $nv_Request->get_int('per_page', 'post', '0');

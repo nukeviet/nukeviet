@@ -6,6 +6,53 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+window.newsPls = {};
+window.newsSeek = 0;
+
+// Trình điều khiển báo nói
+function newsPlayVoice(voiceid, voicepath, voicetitle, autoplay) {
+    // Destroy các player đang phát
+    $.each(window.newsPls, function(k, v) {
+        v.destroy();
+    });
+    window.newsPls = {};
+    window.newsPls[voiceid] = new Plyr('#newsVoicePlayer', {
+        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'airplay']
+    });
+    window.newsPls[voiceid].source = {
+        type: 'audio',
+        title: voicetitle,
+        sources: [{
+            src: voicepath
+        }],
+    };
+    window.newsPls[voiceid].isFirstPlay = true;
+    window.newsPls[voiceid].isPlaying = false;
+    window.newsPls[voiceid].on('playing', function() {
+        window.newsPls[voiceid].isPlaying = true;
+        if (window.newsPls[voiceid].isFirstPlay) {
+            window.newsPls[voiceid].isFirstPlay = false;
+            window.newsPls[voiceid].forward(window.newsSeek);
+        }
+    });
+    window.newsPls[voiceid].on('pause', function() {
+        window.newsPls[voiceid].isPlaying = false;
+    });
+    window.newsPls[voiceid].on('ended', function() {
+        window.newsPls[voiceid].isPlaying = false;
+    });
+    window.newsPls[voiceid].on('ready', function() {
+        if (autoplay) {
+            window.newsPls[voiceid].play();
+        }
+        window.newsPls[voiceid].on('timeupdate', function() {
+            if (window.newsPls[voiceid].isPlaying) {
+                window.newsSeek = window.newsPls[voiceid].currentTime;
+            }
+        });
+    });
+}
+
 $(document).ready(function() {
     // Xem PDF đính kèm
     $('[data-toggle="collapsepdf"]').each(function() {
@@ -18,6 +65,66 @@ $(document).ready(function() {
     $('[data-toggle="newsattachimage"]').click(function(e) {
         e.preventDefault();
         modalShow('', '<div class="text-center"><img src="' + $(this).data('src') + '" style="max-width: 100%; height: auto;"/></div>');
+    });
+
+    // Xử lý player
+    var playerCtn = $('#newsVoicePlayer');
+    if (playerCtn.length) {
+        newsPlayVoice(playerCtn.data('voice-id'), playerCtn.data('voice-path'), playerCtn.data('voice-title'), playerCtn.data('autoplay'));
+    }
+
+    // Chọn giọng đọc: Thiết lập làm giọng đọc mặc định lần sau
+    $('[data-news="voicesel"]').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        if ($this.data('busy')) {
+            return;
+        }
+        $(this).data('busy', true);
+        $.ajax({
+            type: 'POST',
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+            dataType: 'json',
+            data: {
+                setDefaultVoice: $this.data('tokend'),
+                id: $this.data('id')
+            }
+        }).done(function() {
+            $this.data('busy', false);
+            $('[data-news="voiceval"]').html($this.text());
+            newsPlayVoice($this.data('id'), $this.data('path'), $this.text(), true);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            $this.data('busy', false);
+            console.error(jqXHR, textStatus, errorThrown);
+        });
+    });
+
+    // Bật/Tắt tự phát giọng đọc
+    $('[data-news="switchapl"]').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        if ($this.data('busy')) {
+            return;
+        }
+        $(this).data('busy', true);
+        $.ajax({
+            type: 'POST',
+            url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(),
+            dataType: 'json',
+            data: {
+                'setAutoPlayVoice': $this.data('tokend')
+            }
+        }).done(function(res) {
+            $this.data('busy', false);
+            if (res.value == 1) {
+                $this.addClass('checked');
+            } else {
+                $this.removeClass('checked');
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            $this.data('busy', false);
+            console.error(jqXHR, textStatus, errorThrown);
+        });
     });
 });
 

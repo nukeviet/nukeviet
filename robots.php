@@ -83,7 +83,7 @@ $contents[] = 'Sitemap: http' . ($global_config['ssl_https'] == 1 ? 's' : '') . 
 $contents = implode("\n", $contents);
 
 header('Content-Type: text/plain; charset=utf-8');
-header('Cache-Control: public; max-age=' . $maxAge);
+header('Cache-Control: public, max-age=' . $maxAge);
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $createTime) . ' GMT');
 header('expires: ' . gmdate('D, d M Y H:i:s', $expTme) . ' GMT');
 header('X-Frame-Options: SAMEORIGIN');

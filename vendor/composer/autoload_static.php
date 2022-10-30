@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
+class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -18,7 +18,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Component\\OptionsResolver\\' => 34,
         ),
         'P' => 
         array (
@@ -30,15 +29,18 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         ),
         'N' => 
         array (
+            'NukeViet\\Module\\' => 16,
+            'NukeViet\\Api\\' => 13,
             'NukeViet\\' => 9,
         ),
         'L' => 
         array (
             'League\\Url\\' => 11,
         ),
-        'E' => 
+        'C' => 
         array (
-            'Endroid\\QrCode\\' => 15,
+            'Com\\Tecnick\\Color\\' => 18,
+            'Com\\Tecnick\\Barcode\\' => 20,
         ),
     );
 
@@ -51,10 +53,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Component\\OptionsResolver\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/options-resolver',
-        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
@@ -62,6 +60,14 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'OAuth\\' => 
         array (
             0 => __DIR__ . '/..' . '/and/oauth/src',
+        ),
+        'NukeViet\\Module\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules',
+        ),
+        'NukeViet\\Api\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/includes/api',
         ),
         'NukeViet\\' => 
         array (
@@ -71,9 +77,13 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             0 => __DIR__ . '/..' . '/league/url/src',
         ),
-        'Endroid\\QrCode\\' => 
+        'Com\\Tecnick\\Color\\' => 
         array (
-            0 => __DIR__ . '/..' . '/endroid/qrcode/src',
+            0 => __DIR__ . '/..' . '/tecnickcom/tc-lib-color/src',
+        ),
+        'Com\\Tecnick\\Barcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tecnickcom/tc-lib-barcode/src',
         ),
     );
 
@@ -99,17 +109,16 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
     );
 
     public static $classMap = array (
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PclZip' => __DIR__ . '/..' . '/vinades/pclzip/pclzip.lib.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$classMap;
 
         }, null, ClassLoader::class);
     }

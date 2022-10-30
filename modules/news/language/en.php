@@ -19,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['autoplay'] = 'Autoplay';
 $lang_module['nocatpage'] = 'Error:No topic';
 $lang_module['other'] = 'Other';
 $lang_module['detail'] = 'Detailed information';
@@ -77,6 +78,7 @@ $lang_module['search_on_nuke'] = 'Search on site';
 $lang_module['search_none'] = 'No result match';
 $lang_module['empty_data_search'] = 'empty  search data';
 $lang_module['search_in_module'] = 'Search in module';
+$lang_module['search_catid_error'] = 'Error: The category you selected does not exist.';
 $lang_module['view_all_title'] = 'View all results';
 $lang_module['pages_title'] = 'Page';
 $lang_module['time_update'] = 'Time publish';

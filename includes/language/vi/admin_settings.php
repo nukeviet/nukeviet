@@ -261,6 +261,9 @@ $lang_module['ftp_error_full'] = 'Hãy nhập đủ các thông số để tự 
 $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu';
 $lang_module['ftp_error_support'] = 'Máy chủ của bạn hiện đang chặn hoặc không hỗ trợ thư viện FTP, hãy liên hệ với nhà cung cấp để được kích hoạt.';
 $lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
+$lang_module['remote_api_access'] = 'Bật Remote API';
+$lang_module['remote_api_access_help'] = 'Nếu tắt toàn bộ quyền truy cập API từ bên ngoài sẽ bị chặn. Các API bên trong vẫn sử dụng bình thường';
+$lang_module['remote_api_log'] = 'Ghi lại nhật ký Remote API';
 
 $lang_module['plugin'] = 'Thiết lập Plugin';
 $lang_module['plugin_info'] = 'Plugin thi phải là file php được chứa trong thư mục &ldquo;<strong>includes/plugin/</strong>&rdquo;. Các Plugin này sẽ luôn luôn chạy cùng hệ thống khi được kích hoạt';
@@ -350,3 +353,6 @@ $lang_module['rp_strict_origin_when_cross_origin'] = 'Gửi origin, path và que
 $lang_module['rp_unsafe_url'] = 'Gửi origin, path và querystring trong mọi trường hợp. Cảnh báo: Chính sách này sẽ làm rò rỉ thông tin có khả năng riêng tư từ các URL dạng HTTPS đến các nguồn không an toàn. Hãy xem xét cẩn thận tác động của cài đặt này.';
 $lang_module['rp_note'] = 'Để đề phòng trường hợp trình duyệt không hỗ trợ chỉ thị mong muốn, bạn có thể liệt kê nhiều chỉ thị được phân cách bằng dấu phẩy với trật tự: chỉ thị mong muốn được chỉ định sau cùng. Ví dụ: Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. Ở ví dụ trên, chính sách no-referrer-when-downgrade sẽ được áp dụng nếu trình duyệt không hỗ trợ strict-origin-when-cross-origin.';
 $lang_module['rp_directives'] = 'Các chỉ thị RP';
+$lang_module ['XSSsanitize'] = 'Lọc các mã HTML nguy hiểm trước khi gửi biểu mẫu';
+$lang_module ['admin_XSSsanitize'] = 'Trong khu vực quản trị';
+$lang_module ['user_XSSsanitize'] = 'Trong khu vực tương tác của người dùng';

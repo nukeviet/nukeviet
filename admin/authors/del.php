@@ -2,14 +2,14 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 2-1-2010 21:23
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @createdate 2-1-2010 21:23
  */
 
 if (!defined('NV_IS_FILE_AUTHORS')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 if (!defined('NV_IS_SPADMIN')) {
@@ -28,14 +28,13 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-
 if ($row['lev'] == 1 or (!defined('NV_IS_GODADMIN') and $row['lev'] == 2)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
 /**
  * @param string $adminpass
- * @return boolean
+ * @return bool
  */
 function nv_checkAdmpass($adminpass)
 {
@@ -43,10 +42,11 @@ function nv_checkAdmpass($adminpass)
 
     $sql = 'SELECT password FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_info['userid'];
     $pass = $db->query($sql)->fetchColumn();
+
     return $crypt->validate_password($adminpass, $pass);
 }
 
-$access_admin = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
+$access_admin = $db->query('SELECT content FROM ' . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
 $access_admin = unserialize($access_admin);
 $level = $admin_info['level'];
 
@@ -83,8 +83,8 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             foreach ($array_keys as $mod) {
                 if (!empty($mod)) {
                     if (!empty($site_mods[$mod]['admins'])) {
-                        $admins = explode(',', $site_mods[$mod]['admins']);
-                        if (in_array($admin_id, $admins)) {
+                        $admins = array_map('intval', explode(',', $site_mods[$mod]['admins']));
+                        if (in_array($admin_id, $admins, true)) {
                             $admins = array_diff($admins, [$admin_id]);
                             $admins = implode(',', $admins);
 
@@ -102,7 +102,10 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
                 $nv_Cache->delMod('modules');
             }
         }
+
         $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $admin_id);
+        $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_credential WHERE admin_id = ' . $admin_id);
+
         if ($action_account == 1) {
             $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id);
         } elseif ($action_account == 2) {
@@ -133,7 +136,7 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             $row_user['in_groups'] = array_filter(array_unique(array_map('trim', $row_user['in_groups'])));
             $row_user['in_groups'] = empty($row_user['in_groups']) ? '' : implode(',', $row_user['in_groups']);
 
-            $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET group_id=" . $row_user['group_id'] . ", in_groups=" . $db->quote($row_user['in_groups']) . " WHERE userid=" . $admin_id;
+            $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $row_user['group_id'] . ', in_groups=' . $db->quote($row_user['in_groups']) . ' WHERE userid=' . $admin_id;
             $db->query($sql);
         }
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_admin_del'], 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);

@@ -111,8 +111,20 @@ class Curl
         }
         */
 
-        $is_local = isset($args['local']) and $args['local'];
-        $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
+        //$is_local = (isset($args['local']) and $args['local']);
+        if (!empty($args['sslverify'])) {
+            if (!empty($args['sslcertificates'])) {
+                $cainfo = $args['sslcertificates'];
+            } else {
+                $cainfo = ini_get('curl.cainfo');
+                if (empty($cainfo)) {
+                    $cainfo = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/cacert.pem';
+                }
+            }
+            $ssl_verify = !empty($cainfo);
+        } else {
+            $ssl_verify = false;
+        }
 
         // CURLOPT_TIMEOUT and CURLOPT_CONNECTTIMEOUT expect integers. Have to use ceil since
         // a value of 0 will allow an unlimited timeout.
@@ -124,11 +136,13 @@ class Curl
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, ($ssl_verify === true) ? 2 : false);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify);
-        curl_setopt($handle, CURLOPT_CAINFO, $args['sslcertificates']);
-        curl_setopt($handle, CURLOPT_USERAGENT, $args['user-agent']);
+        if ($ssl_verify) {
+            curl_setopt($handle, CURLOPT_CAINFO, $cainfo);
+        }
+        !empty($args['user-agent']) && curl_setopt($handle, CURLOPT_USERAGENT, $args['user-agent']);
 
         // Add Curl referer if not empty
-        if (! is_null($args['referer']) or ! empty($args['referer'])) {
+        if (!empty($args['referer'])) {
             curl_setopt($handle, CURLOPT_AUTOREFERER, true);
             curl_setopt($handle, CURLOPT_REFERER, $args['referer']);
         }
@@ -177,7 +191,7 @@ class Curl
         }
 
         // If streaming to a file open a file handle, and setup our curl streaming handler
-        if ($args['stream']) {
+        if (!empty($args['stream'])) {
             $this->stream_handle = @fopen($args['filename'], 'w+');
 
             if (! $this->stream_handle) {
@@ -265,7 +279,7 @@ class Curl
 
         curl_close($handle);
 
-        if ($args['stream']) {
+        if (!empty($args['stream'])) {
             fclose($this->stream_handle);
         }
 
@@ -274,7 +288,7 @@ class Curl
             'body' => null,
             'response' => $response,
             'cookies' => $theHeaders['cookies'],
-            'filename' => $args['filename']
+            'filename' => !empty($args['filename']) ? $args['filename'] : ''
         );
 
         // Handle redirects
@@ -282,7 +296,7 @@ class Curl
             return $redirect_response;
         }
 
-        if ($args['decompress'] === true and Encoding::should_decode($theHeaders['headers']) === true) {
+        if (!empty($args['decompress']) and Encoding::should_decode($theHeaders['headers']) === true) {
             $theBody = Encoding::decompress($theBody);
         }
 
@@ -338,7 +352,7 @@ class Curl
             return false;
         }
 
-        $is_ssl = isset($args['ssl']) and $args['ssl'];
+        $is_ssl = (isset($args['ssl']) and $args['ssl']);
 
         if ($is_ssl) {
             $curl_version = curl_version();

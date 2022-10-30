@@ -16,28 +16,34 @@ $page_title = $lang_module['voting_edit'];
 
 $error = '';
 $vid = $nv_Request->get_int('vid', 'post,get');
-$submit = $nv_Request->get_string('submit', 'post');
 $groups_list = nv_groups_list();
 
-if (! empty($submit)) {
-    $question = $nv_Request->get_title('question', 'post', '', 1);
-    $link = $nv_Request->get_title('link', 'post', '', 1);
+if (!empty($vid)) {
+    $exists = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid)->fetchColumn();
+    if (!$exists) {
+        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
+}
 
-    $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
+if ($nv_Request->isset_request('save', 'post')) {
+    $question = $nv_Request->get_title('question', 'post', '', 1);
+    $link = $nv_Request->get_title('link', 'post', '');
+    if (!empty($link) and !nv_is_url($link, true)) {
+        $link = '';
+    }
+
+    $_groups_post = $nv_Request->get_typed_array('groups_view', 'post', 'int', []);
     $groups_view = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $publ_date = $nv_Request->get_title('publ_date', 'post', '');
     $exp_date = $nv_Request->get_title('exp_date', 'post', '');
     $maxoption = $nv_Request->get_int('maxoption', 'post', 1);
 
-    $array_answervote = $nv_Request->get_array('answervote', 'post');
-    $array_urlvote = $nv_Request->get_array('urlvote', 'post');
+    $array_answervote = $nv_Request->get_typed_array('answervote', 'post', 'title', []);
+    $array_urlvote = $nv_Request->get_typed_array('urlvote', 'post', 'title', []);
 
-    $answervotenews = $nv_Request->get_array('answervotenews', 'post');
-    $urlvotenews = $nv_Request->get_array('urlvotenews', 'post');
-    if ($maxoption > ($sizeof = sizeof($answervotenews) + sizeof($array_answervote)) or $maxoption <= 0) {
-        $maxoption = $sizeof;
-    }
+    $answervotenews = $nv_Request->get_typed_array('answervotenews', 'post', 'title', []);
+    $urlvotenews = $nv_Request->get_typed_array('urlvotenews', 'post', 'title', []);
 
     if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
         $phour = $nv_Request->get_int('phour', 'post', 0);
@@ -55,18 +61,36 @@ if (! empty($submit)) {
     }
 
     $number_answer = 0;
-    foreach ($array_answervote as $title) {
-        $title = trim(strip_tags($title));
-        if ($title != '') {
-            ++$number_answer;
+    if (!empty($array_answervote)) {
+        $keys = array_keys($array_answervote);
+        foreach ($keys as $key) {
+            $array_answervote[$key] = nv_htmlspecialchars($array_answervote[$key]);
+            if (!empty($array_answervote[$key])) {
+                if (!empty($array_urlvote[$key]) and !nv_is_url($array_urlvote[$key], true)) {
+                    $array_urlvote[$key] = '';
+                }
+                ++$number_answer;
+            }
         }
     }
-    foreach ($answervotenews as $title) {
-        $title = trim(strip_tags($title));
-        if ($title != '') {
-            ++$number_answer;
+
+    if (!empty($answervotenews)) {
+        $keys = array_keys($answervotenews);
+        foreach ($keys as $key) {
+            $answervotenews[$key] = nv_htmlspecialchars($answervotenews[$key]);
+            if (!empty($answervotenews[$key])) {
+                if (!empty($urlvotenews[$key]) and !nv_is_url($urlvotenews[$key], true)) {
+                    $urlvotenews[$key] = '';
+                }
+                ++$number_answer;
+            }
         }
     }
+
+    if ($maxoption > $number_answer or $maxoption <= 0) {
+        $maxoption = $number_answer;
+    }
+
     $rowvote = array(
         'groups_view' => '6',
         'publ_time' => $begindate,
@@ -94,24 +118,18 @@ if (! empty($submit)) {
         if ($vid > 0) {
             $maxoption_data = 0;
             foreach ($array_answervote as $id => $title) {
-                $title = nv_htmlspecialchars(strip_tags($title));
-                if ($title != '') {
-                    $url = nv_unhtmlspecialchars(strip_tags($array_urlvote[$id]));
-                    if (!nv_is_url($url)) {
-                        $url = '';
-                    }
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . intval($id) . ' AND vid =' . $vid);
+                if (!empty($title)) {
+                    $url = $array_urlvote[$id];
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . (int) $id . ' AND vid =' . $vid);
                     ++$maxoption_data;
                 } else {
-                    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . intval($id) . ' AND vid =' . $vid);
+                    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . (int) $id . ' AND vid =' . $vid);
                 }
             }
 
             foreach ($answervotenews as $key => $title) {
-                $title = nv_htmlspecialchars(strip_tags($title));
-                if ($title != '') {
-                    $url = nv_unhtmlspecialchars(strip_tags($urlvotenews[$key]));
-
+                if (!empty($title)) {
+                    $url = $urlvotenews[$key];
                     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (vid, title, url, hitstotal) VALUES (' . $db->quote($vid) . ', ' . $db->quote($title) . ', ' . $db->quote($url) . ', 0)';
                     if ($db->insert_id($sql, 'id')) {
                         ++$maxoption_data;

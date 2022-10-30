@@ -36,6 +36,9 @@ define('NV_CACHEDIR', 'data/cache');
 //Thu muc chua IP
 define('NV_IP_DIR', 'data/ip');
 
+//Thu muc chua certificates SMIME
+define('NV_CERTS_DIR', 'data/certs');
+
 //Thu muc assets
 define('NV_ASSETS_DIR', 'assets');
 

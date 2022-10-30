@@ -39,6 +39,25 @@ if (!empty($list)) {
     }
 }
 
+// Thiết lập giọng đọc mặc định
+if ($nv_Request->isset_request('setDefaultVoice', 'post')) {
+    $voice_id = $nv_Request->get_absint('id', 'post', 0);
+    if (isset($voice_id, $global_array_voices) and $nv_Request->get_title('setDefaultVoice', 'post', '') === NV_CHECK_SESSION) {
+        // Dùng chung cookie cho toàn bộ module news và module ảo của nó
+        $nv_Request->set_Cookie($module_file . '_voice', $voice_id, NV_LIVE_COOKIE_TIME);
+    }
+    nv_jsonOutput([]);
+}
+
+// Thiết lập autoplay
+if ($nv_Request->isset_request('setAutoPlayVoice', 'post') and $nv_Request->get_title('setAutoPlayVoice', 'post', '') === NV_CHECK_SESSION) {
+    $setCookieVal = intval(!$nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false));
+    $nv_Request->set_Cookie($module_file . '_autoplayvoice', $setCookieVal, NV_LIVE_COOKIE_TIME);
+    nv_jsonOutput([
+        'value' => $setCookieVal
+    ]);
+}
+
 // Xac dinh RSS
 if ($module_info['rss']) {
     $rss[] = [

@@ -487,6 +487,7 @@ class Database extends PDO
      * {@inheritDoc}
      * @see PDO::query()
      */
+    #[\ReturnTypeWillChange]
     public function query($statement, $fetchMode = null, ...$fetchModeArgs)
     {
         if ($this->debug) {
@@ -503,6 +504,7 @@ class Database extends PDO
      * {@inheritDoc}
      * @see PDO::exec()
      */
+    #[\ReturnTypeWillChange]
     public function exec($statement)
     {
         if ($this->debug) {
@@ -515,6 +517,7 @@ class Database extends PDO
      * {@inheritDoc}
      * @see PDO::prepare()
      */
+    #[\ReturnTypeWillChange]
     public function prepare($statement, $driver_options = [])
     {
         //if ($this->debug) {
@@ -612,6 +615,7 @@ class NukeVietPDOStatement extends PDOStatement
      * {@inheritDoc}
      * @see PDOStatement::execute()
      */
+    #[\ReturnTypeWillChange]
     public function execute($args = null)
     {
         $result = parent::execute($args);

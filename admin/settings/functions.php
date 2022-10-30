@@ -13,12 +13,12 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 }
 
 $allow_func = ['main', 'language', 'smtp'];
-if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['idsite'] > 0)) {
+if ($site_fulladmin) {
     $allow_func[] = 'system';
+    $allow_func[] = 'security';
 }
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'ftp';
-    $allow_func[] = 'security';
     $allow_func[] = 'cronjobs';
     $allow_func[] = 'cronjobs_add';
     $allow_func[] = 'cronjobs_edit';
@@ -28,11 +28,11 @@ if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'variables';
 }
 
-$menu_top = array(
+$menu_top = [
     'title' => $module_name,
     'module_file' => '',
     'custom_title' => $lang_global['mod_settings']
-);
+];
 
 unset($page_title, $select_options);
 

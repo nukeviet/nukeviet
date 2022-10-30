@@ -28,7 +28,6 @@ if ($global_config['allowuserreg'] != 2) {
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
 
 $data = [];
 $data['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op);
@@ -117,7 +116,8 @@ if ($checkss == $data['checkss']) {
                             $checknum = md5($checknum);
 
                             $subject = $lang_module['lostactive_mailtitle'];
-                            $message = sprintf($lang_module['lostactive_active_info'], $row['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
+                            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, true);
+                            $message = sprintf($lang_module['lostactive_active_info'], $row['first_name'], $global_config['site_name'], $_url, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
                             $ok = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
 
                             if ($ok) {
@@ -171,6 +171,8 @@ if ($step == 2) {
 }
 
 $contents = user_lostactivelink($data, $question);
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

@@ -2,15 +2,15 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC <contact@vinades.vn>
- * @Copyright (C) 2018 VINADES.,JSC. All rights reserved
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2018 VINADES.,JSC. All rights reserved
  * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+ * @license CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @createdate Mar 04, 2010, 08:22:00 AM
  */
 
 if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
@@ -252,6 +252,9 @@ $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detect
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
 $lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
+$lang_module['remote_api_access'] = 'Enable Remote API';
+$lang_module['remote_api_access_help'] = 'Disabling all API access from outside will be blocked. Internal APIs are still used normally';
+$lang_module['remote_api_log'] = 'Enable Remote API Logging';
 $lang_module['plugin'] = 'Configuration Plugin';
 $lang_module['plugin_info'] = 'php file plugin implementation is contained in the &ldquo;<strong>includes/plugin/</strong>&rdquo;. The plugin will always run when the system is activated';
 $lang_module['plugin_file'] = 'Executable File';
@@ -337,3 +340,6 @@ $lang_module['rp_strict_origin_when_cross_origin'] = 'Send the origin, path, and
 $lang_module['rp_unsafe_url'] = 'Send the origin, path, and query string when performing any request, regardless of security. Warning: This policy will leak potentially-private information from HTTPS resource URLs to insecure origins. Carefully consider the impact of this setting.';
 $lang_module['rp_note'] = 'If you want to specify a fallback policy in any case the desired policy hasn\'t got wide enough browser support, use a comma-separated list with the desired policy specified last. For example, Referrer-Policy: no-referrer-when-downgrade, strict-origin-when-cross-origin. In the above scenario, no-referrer-when-downgrade will only be used if strict-origin-when-cross-origin is not supported by the browser.';
 $lang_module['rp_directives'] = 'Referrer-Policy directives';
+$lang_module['XSSsanitize'] = 'Filter dangerous HTML codes before submitting the form';
+$lang_module['admin_XSSsanitize'] = 'In the admin area';
+$lang_module['user_XSSsanitize'] = 'In the user interaction area';

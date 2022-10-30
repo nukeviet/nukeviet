@@ -14,15 +14,18 @@
 
 <div class="clearfix">
     <ul class="nav nav-tabs setting-tabnav" role="tablist" id="settingTabs">
+        <!-- BEGIN: sys_tabs -->
         <li role="presentation" class="{TAB0_ACTIVE}"><a href="#settingBasic" aria-controls="settingBasic" aria-offsets="0" role="tab" data-toggle="tab">{LANG.security}</a></li>
         <li role="presentation" class="{TAB1_ACTIVE}"><a href="#settingFlood" aria-controls="settingFlood" aria-offsets="1" role="tab" data-toggle="tab">{LANG.flood_blocker}</a></li>
         <li role="presentation" class="{TAB2_ACTIVE}"><a href="#settingCaptcha" aria-controls="settingCaptcha" aria-offsets="2" role="tab" data-toggle="tab">{LANG.captcha}</a></li>
         <li role="presentation" class="{TAB3_ACTIVE}"><a href="#settingIp" aria-controls="settingIp" aria-offsets="3" role="tab" data-toggle="tab">{LANG.banip}</a></li>
         <li role="presentation" class="{TAB4_ACTIVE}"><a href="#settingCORS" aria-controls="settingCORS" aria-offsets="4" role="tab" data-toggle="tab">{LANG.cors}</a></li>
+        <!-- END: sys_tabs -->
         <li role="presentation" class="{TAB5_ACTIVE}"><a href="#settingCSP" aria-controls="settingCSP" aria-offsets="5" role="tab" data-toggle="tab">{LANG.csp}</a></li>
         <li role="presentation" class="{TAB6_ACTIVE}"><a href="#settingRP" aria-controls="settingRP" aria-offsets="6" role="tab" data-toggle="tab">{LANG.rp}</a></li>
     </ul>
     <div class="tab-content">
+        <!-- BEGIN: sys_contents -->
         <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">
@@ -117,6 +120,13 @@
                                     <td><strong>{LANG.domains_whitelist}</strong></td>
                                     <td>
                                         <textarea name="domains_whitelist" class="form-control" rows="5">{DOMAINS_WHITELIST}</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.XSSsanitize}</strong></td>
+                                    <td>
+                                        <div><label><input type="checkbox" name="XSSsanitize" value="1"{XSSSANITIZE}>{LANG.user_XSSsanitize}</label></div>
+                                        <div><label><input type="checkbox" name="admin_XSSsanitize" value="1"{ADMIN_XSSSANITIZE}>{LANG.admin_XSSsanitize}<label></div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -496,7 +506,8 @@
                                 <div class="row">
                                     <div class="col-sm-18 col-md-14 col-lg-10 col-sm-offset-6">
                                         <input type="hidden" name="checkss" value="{CHECKSS}" />
-                                        <input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary">
+                                        <input type="hidden" name="save" value="1">
+                                        <input type="submit" value="{LANG.banip_confirm}" class="btn btn-primary">
                                     </div>
                                 </div>
                             </div>
@@ -590,6 +601,7 @@
                 </form>
             </div>
         </div>
+        <!-- END: sys_contents -->
         <div role="tabpanel" class="tab-pane{TAB5_ACTIVE}" id="settingCSP">
             <div class="setting-tabcontent clearfix">
                 <form action="{FORM_ACTION}" method="post">

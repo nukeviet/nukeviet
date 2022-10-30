@@ -12,7 +12,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $array_config['oauth_client_id'] = ( string )$nv_Request->get_title('oauth_client_id', 'post', '');
     $array_config['oauth_client_secret'] = $nv_Request->get_title('oauth_client_secret', 'post', '');
     if ($checkss == $nv_Request->get_string('checkss', 'post')) {

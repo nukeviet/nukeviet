@@ -80,13 +80,13 @@ if (!empty($catid)) {
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
 $date_array['from_date'] = preg_replace('/[^0-9]/', '.', urldecode($from_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'])) {
-    $page_url .= '&from_date=' . $date_array['from_date'];
+    $page_url .= '&from_date=' . urlencode($date_array['from_date']);
 }
 
 $to_date = $nv_Request->get_title('to_date', 'get', '', 0);
 $date_array['to_date'] = preg_replace('/[^0-9]/', '.', urldecode($to_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'])) {
-    $page_url .= '&to_date=' . $date_array['to_date'];
+    $page_url .= '&to_date=' . urlencode($date_array['to_date']);
 }
 
 $base_url = $page_url;
@@ -95,9 +95,10 @@ if ($page > 1) {
     $page_url .= '&page=' . $page;
 }
 
-$canonicalUrl = getCanonicalUrl($page_url, true);
+$canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 $array_cat_search = [];
+$array_cat_search[0]['title'] = $lang_module['search_all'];
 foreach ($global_array_cat as $arr_cat_i) {
     $array_cat_search[$arr_cat_i['catid']] = [
         'catid' => $arr_cat_i['catid'],
@@ -106,13 +107,13 @@ foreach ($global_array_cat as $arr_cat_i) {
     ];
 }
 
-$array_cat_search[0]['title'] = $lang_module['search_all'];
-
 $contents = call_user_func('search_theme', $key, $choose, $date_array, $array_cat_search);
 $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
+} elseif (!empty($catid) and !isset($array_cat_search[$catid])) {
+    $contents .= '<div class="alert alert-danger">' . $lang_module['search_catid_error'] . '</div>';
 } else {
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);

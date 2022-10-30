@@ -217,7 +217,10 @@ if (empty($vid)) {
     $contents = voting_result($voting);
 
     $page_title = $row['question'];
-    $page_url .= '&amp;vid=' . $vid;
+    $page_url .= '&amp;vid=' . $vid . '&amp;checkss=' . $checkss . '&amp;lid=' . $lid;
+    if ($row['active_captcha']) {
+        $page_url .= 'captcha=' . $captcha;
+    }
     $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';

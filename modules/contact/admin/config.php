@@ -20,7 +20,7 @@ if (defined('NV_EDITOR')) {
 
 $array = array();
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $array['bodytext'] = nv_editor_nl2br($nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS));
     $array['sendcopymode'] = $nv_Request->get_int('sendcopymode', 'post', 0);
     if ($array['sendcopymode'] != 0 and $array['sendcopymode'] != 1) {

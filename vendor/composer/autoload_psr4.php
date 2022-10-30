@@ -8,10 +8,12 @@ $baseDir = dirname($vendorDir);
 return array(
     'TrueBV\\' => array($vendorDir . '/true/punycode/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
-    'Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'OAuth\\' => array($vendorDir . '/and/oauth/src'),
+    'NukeViet\\Module\\' => array($baseDir . '/modules'),
+    'NukeViet\\Api\\' => array($baseDir . '/includes/api'),
     'NukeViet\\' => array($vendorDir . '/vinades/nukeviet'),
     'League\\Url\\' => array($vendorDir . '/league/url/src'),
-    'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
+    'Com\\Tecnick\\Color\\' => array($vendorDir . '/tecnickcom/tc-lib-color/src'),
+    'Com\\Tecnick\\Barcode\\' => array($vendorDir . '/tecnickcom/tc-lib-barcode/src'),
 );

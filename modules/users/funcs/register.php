@@ -24,7 +24,9 @@ if (defined('NV_IS_USER_FORUM')) {
 }
 
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
-$canonicalUrl = getCanonicalUrl($page_url);
+if (defined('ACCESS_ADDUS')) {
+    $page_url .= '/'. $group_id;
+}
 
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
@@ -34,6 +36,8 @@ if (!$global_config['allowuserreg']) {
 
     $contents = user_info_exit($lang_module['no_allowuserreg']);
     $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+    $canonicalUrl = getCanonicalUrl($page_url);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
@@ -52,6 +56,9 @@ if ($global_config['max_user_number'] > 0) {
         } else {
             $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
             $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
+
+            $canonicalUrl = getCanonicalUrl($page_url);
+
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_site_theme($contents);
             include NV_ROOTDIR . '/includes/footer.php';
@@ -62,6 +69,9 @@ if ($global_config['max_user_number'] > 0) {
 $nv_redirect = '';
 if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
+    if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
+        $page_url .= '&nv_redirect=' . $nv_redirect;
+    }
 }
 
 /**
@@ -87,24 +97,16 @@ function nv_check_username_reg($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    // MySQL không phân biệt chữ có dấu và không dấu của các chữ cái unicode, nhưng md5 của chúng lại khác nhau.
-    // Vì thế cần kiểm tra cả username nếu không sẽ sinh ra lỗi trùng username (UNIQUE INDEX `login` (`username`))
-    // Ví dụ: "Anh Tú/Anh Tứ" khi đối chiếu là như nhau, nhưng md5 của chúng khác nhau
-    //
-    // Khi đối chiếu, MySQL phân biệt chữ hoa-thường, nhưng khi thực thi thì không phân biệt yếu tố trên.
-    // Vì thế khi kiểm tra username cần cho về cùng định dạng LOWER hoặc UPPER,
-    // nếu không sẽ sinh ra lỗi khi thêm tài khoản có cùng username
-    // Ví dụ: "Anh Tu/anh tu" khi đối chiếu là khác nhau, nhưng khi thực thi lại giống nhau.
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE LOWER(username)=:username OR md5username= :md5username');
-    $stmt->bindValue(':username', nv_strtolower($login), PDO::PARAM_STR);
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE username LIKE :username OR md5username= :md5username');
+    $stmt->bindValue(':username', $login, PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE LOWER(username)=:username OR md5username= :md5username');
-    $stmt->bindValue(':username', nv_strtolower($login), PDO::PARAM_STR);
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE :username OR md5username= :md5username');
+    $stmt->bindValue(':username', $login, PDO::PARAM_STR);
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -413,7 +415,8 @@ if ($checkss == $array_register['checkss']) {
                 $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
                 $subject = $lang_module['account_active'];
-                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, true);
+                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], $_url, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                 $send = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
 
                 if ($send) {
@@ -504,10 +507,7 @@ if ($checkss == $array_register['checkss']) {
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
             $subject = $lang_module['account_register'];
-            $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
-            if (!str_starts_with($_url, NV_MY_DOMAIN)) {
-                $_url = NV_MY_DOMAIN . $_url;
-            }
+            $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
             $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username']);
             nv_sendmail([$global_config['site_name'], $global_config['site_email']], $array_register['email'], $subject, $message);
 
@@ -557,6 +557,8 @@ if ($nv_Request->isset_request('get_usage_terms', 'post')) {
 }
 
 $contents = user_register($gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields, $group_id);
+
+$canonicalUrl = getCanonicalUrl($page_url);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

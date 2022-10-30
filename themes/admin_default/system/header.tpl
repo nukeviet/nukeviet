@@ -29,11 +29,15 @@
                  nv_cookie_prefix = '{NV_COOKIE_PREFIX}',
                  nv_check_pass_mstime = '{NV_CHECK_PASS_MSTIME}',
                  nv_safemode = {NV_SAFEMODE},
-                 nv_area_admin = 1;
+                 nv_area_admin = 1,
+                 XSSsanitize = {NV_XSS_SANITIZE};
         </script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_INTERFACE}.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
+        <!-- BEGIN: XSSsanitize -->
+        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/DOMPurify/purify.js"></script>
+        <!-- END: XSSsanitize -->
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/admin.js"></script>
 
         <!-- BEGIN: module_js -->

@@ -13,13 +13,13 @@ namespace NukeViet\Core;
  */
 class Request
 {
-    public const IS_HEADERS_SENT = 'Warning: Headers already sent';
+    const IS_HEADERS_SENT = 'Warning: Headers already sent';
 
-    public const INCORRECT_IP = 'Incorrect IP address specified';
+    const INCORRECT_IP = 'Incorrect IP address specified';
 
-    public const INCORRECT_ORIGIN = 'Incorrect Origin specified';
+    const INCORRECT_ORIGIN = 'Incorrect Origin specified';
 
-    public const REQUEST_BLOCKED = 'Your request is blocked';
+    const REQUEST_BLOCKED = 'Your request is blocked';
 
     public $session_id;
 
@@ -265,6 +265,10 @@ class Request
             $this->restrictCrossDomain = !empty($config['crossadmin_restrict']) ? true : false;
             $this->validCrossDomains = !empty($config['crossadmin_valid_domains']) ? ((array) $config['crossadmin_valid_domains']) : [];
             $this->validCrossIPs = !empty($config['crossadmin_valid_ips']) ? ((array) $config['crossadmin_valid_ips']) : [];
+        } elseif (defined('NV_REMOTE_API')) {
+            $this->restrictCrossDomain = false;
+            $this->validCrossDomains = [];
+            $this->validCrossIPs = [];
         } else {
             $this->restrictCrossDomain = !empty($config['crosssite_restrict']) ? true : false;
             $this->validCrossDomains = !empty($config['crosssite_valid_domains']) ? ((array) $config['crosssite_valid_domains']) : [];
@@ -679,6 +683,7 @@ class Request
         $value = preg_replace('/%u0([a-z0-9]{3})/i', '&#x\\1;', $value);
         $value = preg_replace('/%([a-z0-9]{2})/i', '&#x\\1;', $value);
         $value = str_ireplace(['&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', ''], '', $value);
+        $value = str_replace(['&colon;', '&lpar;', '&rpar;', '&Tab;', '&NewLine;'], [':', '(', ')', '', ''], $value);
 
         $search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
         $value = preg_replace_callback($search, [$this, 'chr_hexdec_callback'], $value);
@@ -719,8 +724,10 @@ class Request
                 $attrSubSet[1] = preg_replace("/^\'(.*)\'$/", '\\1', $attrSubSet[1]);
                 $attrSubSet[1] = str_replace(['"', '&quot;'], "'", $attrSubSet[1]);
 
+                $value = $this->unhtmlentities($attrSubSet[1]);
+
                 // Security check Data URLs
-                if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $attrSubSet[1], $m)) {
+                if (preg_match('/^[\r\n\s\t]*d\s*a\s*t\s*a\s*\:([^\,]*?)\;*[\r\n\s\t]*(base64)*?[\r\n\s\t]*\,[\r\n\s\t]*(.*?)[\r\n\s\t]*$/isu', $value, $m)) {
                     if (empty($m[2])) {
                         $dataURLs = urldecode($m[3]);
                     } else {
@@ -734,7 +741,10 @@ class Request
                     }
                 }
 
-                $value = $this->unhtmlentities($attrSubSet[1]);
+                if (preg_replace('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', '', $value)) {
+                    continue;
+                }
+
                 $search = [
                     'javascript' => '/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t/si',
                     'vbscript' => '/v\s*b\s*s\s*c\s*r\s*i\s*p\s*t/si',
@@ -799,7 +809,7 @@ class Request
     private function filterTags($source, &$isvalid = true)
     {
         $checkInvalid = 0;
-        $source = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source, -1, $checkInvalid);
+        $source = preg_replace('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', '', $source, -1, $checkInvalid);
         if ($checkInvalid > 0) {
             $isvalid = false;
         }
@@ -910,6 +920,9 @@ class Request
         }
 
         $preTag .= $postTag;
+        while (preg_match('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', $preTag)) {
+            $preTag = preg_replace('/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $preTag);
+        }
         $preTag = str_replace(["'", '"', '<', '>'], ['&#039;', '&quot;', '&lt;', '&gt;'], $preTag);
         return trim(str_replace(['[@{', '}@]', '{@[', ']@}'], ['"', '"', '<', '>'], $preTag));
     }

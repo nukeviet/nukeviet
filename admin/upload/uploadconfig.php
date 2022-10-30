@@ -47,7 +47,7 @@ $myini['mimes'] = array_unique($myini['mimes']);
 sort($myini['mimes']);
 unset($myini['mimes'][0]);
 
-if ($nv_Request->isset_request('submit', 'post')) {
+if ($nv_Request->isset_request('save', 'post')) {
     $type = $nv_Request->get_typed_array('type', 'post', 'int');
     $type = array_flip($type);
     $type = array_intersect_key($myini['types'], $type);
@@ -68,6 +68,13 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $mime = $nv_Request->get_typed_array('mime', 'post', 'int');
     $mime = array_flip($mime);
     $mime = array_intersect_key($myini['mimes'], $mime);
+    $mime[] = 'application/x-httpd-php';
+    $mime[] = 'application/x-httpd-php-source';
+    $mime[] = 'application/php';
+    $mime[] = 'application/x-php';
+    $mime[] = 'text/php';
+    $mime[] = 'text/x-php';
+    $mime = array_unique($mime);
     $mime = implode(',', $mime);
 
     $upload_checking_mode = $nv_Request->get_string('upload_checking_mode', 'post', '');

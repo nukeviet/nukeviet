@@ -22,10 +22,10 @@ function nv_error_info()
     global $lang_global, $global_config, $error_info;
 
     if (!defined('NV_IS_ADMIN')) {
-        return;
+        return '';
     }
     if (empty($error_info)) {
-        return;
+        return '';
     }
 
     $errortype = [
@@ -213,8 +213,10 @@ function nv_htmlOutput($html, $type = 'html')
     global $global_config, $headers, $nv_BotManager;
 
     // Xuất cấu hình robot vào header
-    $sys_info = [];
-    $nv_BotManager->outputToHeaders($headers, $sys_info);
+    if (is_object($nv_BotManager)) {
+        $sys_info = [];
+        $nv_BotManager->outputToHeaders($headers, $sys_info);
+    }
 
     $html_headers = $global_config['others_headers'];
     if (defined('NV_ADMIN') or !defined('NV_ANTI_IFRAME') or NV_ANTI_IFRAME != 0) {
@@ -294,7 +296,7 @@ function nv_xmlOutput($content, $lastModified)
             'output-xml' => true,
             'indent' => true,
             'indent-cdata' => true,
-            'wrap' => false
+            'wrap' => 2000
         ];
         $tidy = new tidy();
         $tidy->parseString($content, $tidy_options, 'utf8');
@@ -307,12 +309,7 @@ function nv_xmlOutput($content, $lastModified)
     @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
     @Header('Expires: ' . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
     @Header('Content-Type: text/xml; charset=utf-8');
-
-    if (!empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
-        @Header('Cache-Control: no-cache, pre-check=0, post-check=0');
-    } else {
-        @Header('Cache-Control: private, pre-check=0, post-check=0, max-age=0');
-    }
+    @header('Cache-Control: no-store, max-age=0');
 
     if (defined('NV_ADMIN') or NV_ANTI_IFRAME != 0) {
         Header('X-Frame-Options: SAMEORIGIN');
@@ -360,9 +357,25 @@ function nv_xmlOutput($content, $lastModified)
  * @param bool $noindex
  * @return void
  */
-function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noindex = true)
+function nv_rss_generate($channel, $items, $atomlink = '', $timemode = 'GMT', $noindex = true)
 {
-    global $global_config, $client_info;
+    global $global_config;
+
+    if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
+        $channel['link'] = NV_BASE_SITEURL . $matches[1];
+    }
+
+    if (!empty($atomlink)) {
+        $atomlink = nv_url_rewrite($atomlink, true);
+        if (!str_starts_with($atomlink, NV_MY_DOMAIN)) {
+            $atomlink = NV_MY_DOMAIN . $atomlink;
+        }
+    }
+
+    $channel['link'] = nv_url_rewrite($channel['link'], true);
+    if (!str_starts_with($channel['link'], NV_MY_DOMAIN)) {
+        $channel['link'] = NV_MY_DOMAIN . $channel['link'];
+    }
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     // Chi co tac dung voi IE6 va Chrome
@@ -372,21 +385,18 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
 
     $channel['generator'] = 'NukeViet v4.4';
     $channel['title'] = nv_htmlspecialchars($channel['title']);
-    $channel['atomlink'] = NV_MY_DOMAIN . nv_url_rewrite($atomlink, true);
+    $channel['atomlink'] = $atomlink;
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
+
+    if (empty($channel['description'])) {
+        $channel['description'] = $global_config['site_description'];
+    }
+    $channel['description'] = strip_tags(nv_unhtmlspecialchars($channel['description']));
 
     $channel['docs'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true);
     if (!str_starts_with($channel['docs'], NV_MY_DOMAIN)) {
         $channel['docs'] = NV_MY_DOMAIN . $channel['docs'];
-    }
-
-    if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
-        $channel['link'] = NV_BASE_SITEURL . $matches[1];
-    }
-    $channel['link'] = nv_url_rewrite($channel['link'], true);
-    if (!str_starts_with($channel['link'], NV_MY_DOMAIN)) {
-        $channel['link'] = NV_MY_DOMAIN . $channel['link'];
     }
 
     $channel['pubDate'] = 0;
@@ -481,6 +491,11 @@ function nv_rss_generate($channel, $items, $atomlink, $timemode = 'GMT', $noinde
     }
 
     $xtpl->assign('CHANNEL', $channel);
+
+    if (!empty($channel['atomlink'])) {
+        $xtpl->parse('main.atom');
+        $xtpl->parse('main.atom_link');
+    }
 
     if (!empty($channel['description'])) {
         $xtpl->parse('main.description');

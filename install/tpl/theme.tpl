@@ -6,9 +6,9 @@
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/table.css" />
+        <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{LANG_DATA}.js"></script>
-        <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{LANG_DATA}.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}install/js/main.js"></script>
@@ -49,7 +49,7 @@
         </div>
         <div id="footer">
             <p>
-                &copy; 2010 - 2017 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
+                &copy; 2010 - 2021 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
             </p>
             <p>
                 {LANG.publish} <strong><a title="GNU General Public License, version 2" href="https://www.gnu.org/licenses/gpl-2.0.html">GNU/GPL v2.0</a></strong>

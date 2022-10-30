@@ -29,7 +29,7 @@ if (empty($news_contents)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect, 404);
 }
 
-$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
 $news_contents = array_merge($news_contents, $body_contents);
 unset($body_contents);
 
@@ -187,6 +187,9 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
         $meta_property['article:expiration_time'] = date('Y-m-dTH:i:s', $news_contents['exptime']);
     }
     $meta_property['article:section'] = $global_array_cat[$news_contents['catid']]['title'];
+} else {
+    $nv_BotManager->setPrivate();
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
 if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {
@@ -403,6 +406,36 @@ if (isset($site_mods['comment']) and isset($module_config[$module_name]['activec
 
 // Xu ly Layout tuy chinh (khong ap dung cho theme mobile_default)
 $module_info['layout_funcs'][$op_file] = (!empty($news_contents['layout_func']) and "mobile_default" != $global_config['module_theme']) ? $news_contents['layout_func'] : $module_info['layout_funcs'][$op_file];
+
+// Xử lý giọng đọc nếu có
+$voicedata = empty($news_contents['voicedata']) ? [] : json_decode($news_contents['voicedata'], true);
+$news_contents['voicedata'] = $news_contents['current_voice'] = [];
+if (!empty($voicedata)) {
+    $default_voice = $nv_Request->get_absint($module_file . '_voice', 'cookie', 0);
+    $current_voice = [];
+
+    foreach ($global_array_voices as $voice) {
+        if (!empty($voice['status']) and !empty($voicedata[$voice['id']])) {
+            $voice_path = $voicedata[$voice['id']];
+            if (!nv_is_url($voice_path)) {
+                $voice_path = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $voice_path;
+            }
+            $news_contents['voicedata'][$voice['id']] = [
+                'id' => $voice['id'],
+                'title' => $voice['title'],
+                'path' => $voice_path
+            ];
+
+            // Xác định giọng đọc mặc định
+            if (empty($current_voice) or $default_voice == $voice['id']) {
+                $current_voice = $news_contents['voicedata'][$voice['id']];
+            }
+        }
+    }
+    $news_contents['current_voice'] = $current_voice;
+    unset($voicedata, $current_voice);
+}
+$news_contents['autoplay'] = (int) $nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false);
 
 $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
 

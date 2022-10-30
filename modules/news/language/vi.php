@@ -19,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['autoplay'] = 'Tự động phát';
 $lang_module['nocatpage'] = 'Lỗi không có chủ đề';
 $lang_module['other'] = 'Các tin khác';
 $lang_module['detail'] = 'Chi tiết tin';
@@ -77,6 +78,7 @@ $lang_module['search_on_nuke'] = 'Tìm trong site';
 $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên quan đến';
 $lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 trường tìm kiếm';
 $lang_module['search_in_module'] = 'trong mục';
+$lang_module['search_catid_error'] = 'Lỗi: Chủ đề bạn đã chọn không tồn tại.';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';
 $lang_module['time_update'] = 'Thời gian đăng tin';
