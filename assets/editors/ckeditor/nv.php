@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -38,7 +38,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         if (defined('NV_IS_ADMIN')) {
             $return .= "<script type=\"text/javascript\">
             CKEDITOR.on('dialogDefinition', function(e) {
-                if (e.data.name == 'image2' || e.data.name == 'video' || e.data.name == 'flash' || e.data.name == 'googledocs' || e.data.name == 'link') {
+                if (e.data.name == 'image2' || e.data.name == 'video' || e.data.name == 'googledocs' || e.data.name == 'link') {
                     var contents;
                     if (e.data.name == 'googledocs') {
                         contents = e.data.definition.getContents('settingsTab');
@@ -99,9 +99,12 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
             </script>";
         }
     }
-    $return .= "<script type=\"text/javascript\">CKEDITOR.replace( '" . $module_data . '_' . $textareaid . "', {" . (!empty($customtoolbar) ? 'toolbar : "' . $customtoolbar . '",' : '') . " width: '" . $width . "',height: '" . $height . "',";
-    $return .= "contentsCss: '" . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/nv.css?t=' . $global_config['timestamp'] . "',";
 
+    $replaces = [];
+    !empty($customtoolbar) && $replaces[] = "toolbar : '" . $customtoolbar . "'";
+    $replaces[] = "width:'" . $width . "'";
+    $replaces[] = "height:'" . $height . "'";
+    $replaces[] = "contentsCss:'" . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/nv.css?t=' . $global_config['timestamp'] . "'";
     if (defined('NV_IS_ADMIN')) {
         if (empty($path) and empty($currentpath)) {
             $path = NV_UPLOADS_DIR;
@@ -116,26 +119,26 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         }
 
         if (!empty($admin_info['allow_files_type'])) {
-            $return .= "filebrowserUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "',";
+            $replaces[] = "filebrowserUploadUrl:'" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "'";
         }
-
         if (in_array('images', $admin_info['allow_files_type'], true)) {
-            $return .= "filebrowserImageUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "&type=image',";
+            $replaces[] = "filebrowserImageUploadUrl:'" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "&type=image'";
         }
-
-        if (in_array('flash', $admin_info['allow_files_type'], true)) {
-            $return .= "filebrowserFlashUploadUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=upload&editor=ckeditor&path=' . $currentpath . "&type=flash',";
-        }
-        $return .= "filebrowserBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&path=' . $path . '&currentpath=' . $currentpath . "',
-             filebrowserImageBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&type=image&path=' . $path . '&currentpath=' . $currentpath . "',
-             filebrowserFlashBrowseUrl: '" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&type=flash&path=' . $path . '&currentpath=' . $currentpath . "'
-            ";
+        $replaces[] = "filebrowserBrowseUrl:'" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&path=' . $path . '&currentpath=' . $currentpath . "'";
+        $replaces[] = "filebrowserImageBrowseUrl:'" . NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&type=image&path=' . $path . '&currentpath=' . $currentpath . "'";
     } else {
         // Không có quyền admin (upload file) thì gỡ các plugin upload để không bị báo lỗi
-        $return .= "removePlugins: 'uploadfile,uploadimage'";
+        $replaces[] = "removePlugins:'uploadfile,uploadimage'";
     }
-
-    $return .= '});</script>';
+    if (!empty($global_config['allowed_html_tags'])) {
+        $allowedContent = [];
+        foreach ($global_config['allowed_html_tags'] as $tag) {
+            $allowedContent[] = $tag . '[*]{*}(*)';
+        }
+        $replaces[] = "disallowedContent:'script; *[on*,action,background,codebase,dynsrc,lowsrc,allownetworking,allowscriptaccess,fscommand,seeksegmenttime]'";
+    }
+    $replaces[] = "disallowedContent:'script; *[on*]'";
+    $return .= "<script>CKEDITOR.replace( '" . $module_data . '_' . $textareaid . "', {" . implode(',', $replaces) . '});</script>';
 
     return $return;
 }
