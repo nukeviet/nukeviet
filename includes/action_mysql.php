@@ -122,6 +122,7 @@ function nv_create_table_sys($lang)
          alias varchar(55) NOT NULL DEFAULT '',
          func_custom_name varchar(255) NOT NULL,
          func_site_title varchar(255) NOT NULL DEFAULT '',
+         description VARCHAR(255) NOT NULL DEFAULT '',
          in_module varchar(50) NOT NULL,
          show_func tinyint(4) NOT NULL DEFAULT '0',
          in_submenu tinyint(1) unsigned NOT NULL DEFAULT '0',

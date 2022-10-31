@@ -2510,6 +2510,7 @@ function nv_sys_mods($lang = '')
                 'show_func' => $row['show_func'],
                 'func_custom_name' => $row['func_custom_name'],
                 'func_site_title' => empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'],
+                'description' => $row['description'],
                 'in_submenu' => $row['in_submenu']
             ];
             $sys_mods[$m_title]['alias'][$f_name] = $f_alias;

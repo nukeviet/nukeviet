@@ -106,6 +106,7 @@ function nv_show_funcs()
         $data_funcs[$func]['alias'] = $row['alias'];
         $data_funcs[$func]['func_custom_name'] = $row['func_custom_name'];
         $data_funcs[$func]['func_site_title'] = empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'];
+        $data_funcs[$func]['description'] = $row['description'];
         $data_funcs[$func]['in_submenu'] = $row['in_submenu'];
         $data_funcs[$func]['subweight'] = $row['subweight'];
 
@@ -193,6 +194,7 @@ function nv_show_funcs()
             $act_funcs[$func]['alias'] = $row['alias'];
             $act_funcs[$func]['func_custom_name'] = $row['func_custom_name'];
             $act_funcs[$func]['func_site_title'] = empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'];
+            $act_funcs[$func]['description'] = $row['description'];
             $act_funcs[$func]['in_submenu'] = $row['in_submenu'];
             $act_funcs[$func]['subweight'] = $row['subweight'];
 
@@ -218,6 +220,7 @@ function nv_show_funcs()
             $values['func_name'] = $funcs;
             $values['in_submenu_checked'] = ($values['in_submenu']) ? 'checked="checked" ' : '';
             $values['disabled'] = (in_array($funcs, $arr_in_submenu, true)) ? '' : ' disabled';
+            $values['func_description_short'] = !empty($values['description']) ? nv_clean60($values['description'], 40) : $lang_module['empty'];
             $xtpl->assign('ROW', $values);
 
             foreach ($weight_list as $new_weight) {

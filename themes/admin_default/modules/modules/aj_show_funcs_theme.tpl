@@ -12,6 +12,7 @@
                 <!-- END: change_alias_head -->
                 <th>{LANG.custom_title}</th>
                 <th>{LANG.site_title}</th>
+                <th>{LANG.description}</th>
                 <th>{LANG.funcs_layout}</th>
             </tr>
         </thead>
@@ -35,6 +36,7 @@
                 <!-- END: show_alias -->
                 <td><a href="#" onclick="nv_funChange({ROW.func_id}, 'change_custom_name', event);">{ROW.func_custom_name}</a></td>
                 <td><a href="#" onclick="nv_funChange({ROW.func_id}, 'change_site_title', event);">{ROW.func_site_title}</a></td>
+                <td><a href="#" onclick="nv_funChange({ROW.func_id}, 'change_description', event);">{ROW.func_description_short}</a></td>
                 <td>{ROW.layout}</td>
             </tr>
             <!-- END: loop -->
@@ -53,8 +55,8 @@
                 <div class="form-group">
                     <label for="funChange-name" class="control-label" id="funChange-title"></label>
                     <input type="text" class="form-control" name="newvalue" value="" maxlength="" id="funChange-name">
-					<input type="hidden" name="type" value="" id="funChange-type">
-					<input type="hidden" name="id" value="" id="funChange-id">
+                    <input type="hidden" name="type" value="" id="funChange-type">
+                    <input type="hidden" name="id" value="" id="funChange-id">
                 </div>
             </div>
             <div class="modal-footer">

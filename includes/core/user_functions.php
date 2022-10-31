@@ -275,10 +275,15 @@ function nv_html_meta_tags($html = true)
         $current_page_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MAIN_DOMAIN);
     }
 
-    // Tại trang chủ lấy mô tả của site thay vì mô tả của module chọn làm trang chủ
-    $site_description = $home ? $global_config['site_description'] : (!empty($description) ? $description : (empty($module_info['description']) ? '' : $module_info['description']));
-
-    if (empty($site_description)) {
+    if ($home) {
+        $site_description = $global_config['site_description'];
+    } elseif (!empty($description)) {
+        $site_description = $description;
+    } elseif (!empty($module_info['funcs'][$op]['description'])) {
+        $site_description = $module_info['funcs'][$op]['description'];
+    } elseif (!empty($module_info['description'])) {
+        $site_description = $module_info['description'];
+    } else {
         $ds = [];
         if (!empty($page_title)) {
             $ds[] = $page_title;
@@ -289,7 +294,8 @@ function nv_html_meta_tags($html = true)
         $ds[] = $module_info['custom_title'];
         !empty($current_page_url) && $ds[] = $current_page_url;
         $site_description = implode(' - ', $ds);
-    } elseif ($site_description == 'no') {
+    }
+    if ($site_description == 'no') {
         $site_description = '';
     }
 

@@ -33,6 +33,7 @@ $allow_func = [
     'change_alias',
     'change_custom_name',
     'change_site_title',
+    'change_description',
     'change_block_weight',
     'setup_module_check'
 ];
