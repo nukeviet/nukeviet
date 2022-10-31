@@ -135,7 +135,7 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         foreach ($global_config['allowed_html_tags'] as $tag) {
             $allowedContent[] = $tag . '[*]{*}(*)';
         }
-        $replaces[] = "allowedContent:'" . implode(';', $allowedContent) . "'";
+        $replaces[] = "disallowedContent:'script; *[on*,action,background,codebase,dynsrc,lowsrc,allownetworking,allowscriptaccess,fscommand,seeksegmenttime]'";
     }
     $replaces[] = "disallowedContent:'script; *[on*]'";
     $return .= "<script>CKEDITOR.replace( '" . $module_data . '_' . $textareaid . "', {" . implode(',', $replaces) . '});</script>';
