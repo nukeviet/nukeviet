@@ -3215,7 +3215,7 @@ function nv_apply_hook($module, $tag, $args = [], $default = null, $return_type 
  * @param string $hook_module => Module sử dụng dữ liệu
  * @param int    $pid         => ID quản lý trong CSDL
  */
-function nv_add_hook($module_name, $tag, $priority = 10, $callback, $hook_module = '', $pid = 0)
+function nv_add_hook($module_name, $tag, $priority, $callback, $hook_module = '', $pid = 0)
 {
     global $nv_hooks;
 
