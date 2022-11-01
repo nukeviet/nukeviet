@@ -148,7 +148,7 @@ function login_check(val, type, max, min) {
     if (type == '1' && !/^[0-9]+$/.test(val)) return false;
     if (type == '2' && !/^[a-z0-9]+$/i.test(val)) return false;
     if (type == '3' && !/^[a-z0-9]+[a-z0-9\-\_\s]+[a-z0-9]+$/i.test(val)) return false;
-    if (type == '4' && nv_unicode_login_pattern.test(val)) return false;
+    if (type == '4' && !nv_unicode_login_pattern.test(val)) return false;
     return true;
 }
 
