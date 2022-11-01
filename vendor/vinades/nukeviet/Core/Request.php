@@ -613,6 +613,7 @@ class Request
         }
 
         session_name($this->cookie_prefix . '_sess');
+        ini_set('session.use_strict_mode', 1);
         session_start();
         $session_id = session_id();
 
@@ -625,6 +626,13 @@ class Request
                 }
             }
         }
+
+        if (!empty($_SESSION['deleted_time']) && $_SESSION['deleted_time'] < NV_CURRENTTIME - 180) {
+            $_SESSION = [];
+            session_destroy();
+            session_start();
+        }
+
         $this->session_id = $session_id;
     }
 
@@ -1638,5 +1646,23 @@ class Request
 
         $this->isOriginValid = false;
         return $this->my_current_domain;
+    }
+
+    /**
+     * sessionRegenerateId()
+     *
+     * @param bool $saveOldSession
+     */
+    public function sessionRegenerateId($saveOldSession = false)
+    {
+        $saveOldSession && $old_session = $_SESSION;
+        $new_sessid = session_create_id();
+        $_SESSION['deleted_time'] = NV_CURRENTTIME;
+        session_commit();
+        ini_set('session.use_strict_mode', 0);
+        session_id($new_sessid);
+        session_start();
+        $saveOldSession && $_SESSION = $old_session;
+        $this->session_id = $new_sessid;
     }
 }
