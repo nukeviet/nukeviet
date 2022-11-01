@@ -186,6 +186,7 @@ $lang_module['api_roles_allowed'] = 'APIs allowed to access';
 $lang_module['api_roles_error_title'] = 'Error: The API Role name was not entered';
 $lang_module['api_roles_error_exists'] = 'Error: This API Role Name already exists, please enter a different name to avoid confusion';
 $lang_module['api_roles_error_role'] = 'Error: No APIs selected';
+$lang_module['api_roles_api_doesnt_exist'] = 'The APIs are not recognized';
 $lang_module['api_roles_checkall'] = 'Select all';
 $lang_module['api_roles_uncheckall'] = 'Deselect all';
 $lang_module['api_roles_detail'] = 'Details APIs of';
