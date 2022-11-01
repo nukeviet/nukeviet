@@ -13,10 +13,7 @@ if (!defined('NV_IS_FILE_AUTHORS')) {
 }
 
 $page_title = $lang_module['api_roles'];
-$array_api_actions = nv_get_api_actions();
-$array_api_cats = $array_api_actions[2];
-$array_api_keys = $array_api_actions[1];
-$array_api_actions = $array_api_actions[0];
+list($array_api_actions, $array_api_keys, $array_api_cats) = nv_get_api_actions();
 
 $xtpl = new XTemplate('api-roles.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -34,23 +31,28 @@ while ($row = $result->fetch()) {
     $row['apis'] = [];
     $row['apis'][''] = $row['apis'][NV_LANG_DATA] = [];
     $row['apitotal'] = 0;
+    $row['api_doesnt_exist'] = [];
     if (!empty($row['role_data']['sys'])) {
         foreach ($row['role_data']['sys'] as $api_cmd) {
-            $cat = $array_api_cats[''][$api_cmd];
-            if (!isset($row['apis'][''][$cat['key']])) {
-                $row['apis'][''][$cat['key']] = [
-                    'title' => $cat['title'],
-                    'apis' => []
-                ];
+            if (isset($array_api_cats[''][$api_cmd])) {
+                $cat = $array_api_cats[''][$api_cmd];
+                if (!isset($row['apis'][''][$cat['key']])) {
+                    $row['apis'][''][$cat['key']] = [
+                        'title' => $cat['title'],
+                        'apis' => []
+                    ];
+                }
+                $row['apis'][''][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
+                ++$row['apitotal'];
+            } else {
+                $row['api_doesnt_exist'][] = $api_cmd . ' (' . $lang_module['api_of_system'] . ')';
             }
-            $row['apis'][''][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
-            ++$row['apitotal'];
         }
     }
     if (!empty($row['role_data'][NV_LANG_DATA])) {
         foreach ($row['role_data'][NV_LANG_DATA] as $mod_title => $mod_data) {
-            if (isset($array_api_cats[$mod_title])) {
-                foreach ($mod_data as $api_cmd) {
+            foreach ($mod_data as $api_cmd) {
+                if (isset($array_api_cats[$mod_title][$api_cmd])) {
                     $cat = $array_api_cats[$mod_title][$api_cmd];
                     if (!isset($row['apis'][NV_LANG_DATA][$mod_title])) {
                         $row['apis'][NV_LANG_DATA][$mod_title] = [];
@@ -63,6 +65,8 @@ while ($row = $result->fetch()) {
                     }
                     $row['apis'][NV_LANG_DATA][$mod_title][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
                     ++$row['apitotal'];
+                } else {
+                    $row['api_doesnt_exist'][] = $api_cmd . '(' . $mod_title . ')';
                 }
             }
         }
@@ -298,6 +302,14 @@ if (empty($array)) {
         $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;role_id=' . $row['role_id'];
 
         $xtpl->assign('ROW', $row);
+
+        if (!empty($row['api_doesnt_exist'])) {
+            foreach ($row['api_doesnt_exist'] as $api_doesnt_exist) {
+                $xtpl->assign('API', $api_doesnt_exist);
+                $xtpl->parse('main.data.loop.api_doesnt_exist.api');
+            }
+            $xtpl->parse('main.data.loop.api_doesnt_exist');
+        }
 
         // List API hệ thống
         if (!empty($row['apis'][''])) {

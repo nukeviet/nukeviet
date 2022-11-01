@@ -189,6 +189,7 @@ $lang_module['api_roles_allowed'] = 'Các API được phép truy cập';
 $lang_module['api_roles_error_title'] = 'Lỗi: Chưa nhập tên gọi API Role';
 $lang_module['api_roles_error_exists'] = 'Lỗi: Tên gọi API Role này đã có, mời nhập tên gọi khác để tránh nhầm lẫn';
 $lang_module['api_roles_error_role'] = 'Lỗi: Chưa có API nào được chọn';
+$lang_module['api_roles_api_doesnt_exist'] = 'Không nhận diện được API';
 $lang_module['api_roles_checkall'] = 'Chọn tất cả';
 $lang_module['api_roles_uncheckall'] = 'Bỏ chọn tất cả';
 $lang_module['api_roles_detail'] = 'Chi tiết các API của';
