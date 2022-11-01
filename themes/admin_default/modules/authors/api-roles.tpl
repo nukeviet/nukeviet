@@ -21,6 +21,7 @@
                 <tr>
                     <td>
                         <a href="#apiroledetail{ROW.role_id}" data-toggle="modal">{ROW.role_title}</a> <span class="api-count">{ROW.apitotal}</span>
+                        <!-- BEGIN: api_doesnt_exist --><div class="small text-danger"><i class="fa fa-exclamation-triangle"></i> {LANG.api_roles_api_doesnt_exist}:<ul class="list-unstyled mb-0"><!-- BEGIN: api --><li>- {API}</li><!-- END: api --></ul></div><!-- END: api_doesnt_exist -->
                     </td>
                     <td>{ROW.role_description}</td>
                     <td>{ROW.addtime}</td>
