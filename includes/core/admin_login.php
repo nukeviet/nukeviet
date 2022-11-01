@@ -452,6 +452,7 @@ if ($admin_login_success === true) {
     $sth->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
     $sth->execute();
 
+    $nv_Request->sessionRegenerateId(true);
     $nv_Request->set_Session('admin', $admin_encode);
     $nv_Request->set_Session('online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0');
     $nv_Request->set_Cookie('isal', 1, NV_LIVE_COOKIE_TIME, false);
