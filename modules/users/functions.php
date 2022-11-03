@@ -102,8 +102,7 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
     $sth->bindValue(':openid', $opid, PDO::PARAM_STR);
     $sth->execute();
 
-    $live_cookie_time = ($remember) ? NV_LIVE_COOKIE_TIME : 0;
-    $nv_Request->set_Cookie('nvloginhash', json_encode($user), $live_cookie_time);
+    NukeViet\Core\User::set_userlogin_hash($user, $remember);
 
     // Tạo thông báo đẩy nếu đăng nhập lần đầu
     if (empty($array_user['last_login'])) {
