@@ -1430,6 +1430,8 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
+        nv_apply_hook('', 'sendmail_others_actions', [$global_config, $mail]);
+
         // Gửi mail
         if (!$mail->Send()) {
             if (!$testmode and !empty($global_config['notify_email_error'])) {
