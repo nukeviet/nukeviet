@@ -63,9 +63,8 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
     $stmt->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
     $stmt->bindValue(':opid', $opid, PDO::PARAM_STR);
     $stmt->execute();
-    $live_cookie_time = ($remember) ? NV_LIVE_COOKIE_TIME : 0;
 
-    $nv_Request->set_Cookie('nvloginhash', json_encode($user), $live_cookie_time);
+    NukeViet\Core\User::set_userlogin_hash($user, $remember);
 
     if (!empty($global_users_config['active_user_logs'])) {
         $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $oauth_data['provider']) : $lang_module['st_login'];

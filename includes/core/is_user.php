@@ -30,10 +30,9 @@ if (defined('NV_IS_ADMIN')) {
 } elseif (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
     require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/is_user.php';
 } else {
-    if ($nv_Request->get_bool('nvloginhash', 'cookie', false)) {
-        $user = $nv_Request->get_string('nvloginhash', 'cookie', '');
-        if (!empty($user) and $global_config['allowuserlogin']) {
-            $user = json_decode($user, true);
+    $user = NukeViet\Core\User::get_userlogin_hash();
+    if (!empty($user)) {
+        if ($global_config['allowuserlogin']) {
             if (isset($user['userid']) and isset($user['checknum']) and isset($user['checkhash'])) {
                 $user['userid'] = intval($user['userid']);
                 if ($user['checkhash'] === md5($user['userid'] . $user['checknum'] . $global_config['sitekey'] . $client_info['browser']['key'])) {
@@ -46,7 +45,7 @@ if (defined('NV_IS_ADMIN')) {
                     if (!empty($user_info)) {
                         if (empty($global_config['allowuserloginmulti'])) {
                             if (
-                                ($user['checknum'] === $user_info['checknum']) // checknum
+                                ($user['checknum'] === $user_info['checknum'] and $user['loginhash'] === substr($user_info['checknum'], 5, 8)) // checknum
                                 and isset($user['current_agent']) and ($user['current_agent'] === $user_info['current_agent']) // user_agent
                                 and isset($user['current_ip']) and ($user['current_ip'] === $user_info['current_ip']) // current IP
                                 and isset($user['current_login']) and ($user['current_login'] === intval($user_info['current_login'])) // current login
@@ -98,16 +97,19 @@ if (defined('NV_IS_ADMIN')) {
                     }
                 }
             }
-        }
 
-        if (!empty($user_info) and isset($user_info['userid']) and $user_info['userid'] > 0) {
-            if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], [2, 3]) or !empty($user_info['2step_require']))) {
-                define('NV_IS_1STEP_USER', true);
+            if (!empty($user_info) and isset($user_info['userid']) and $user_info['userid'] > 0) {
+                if (empty($user_info['active2step']) and (in_array($global_config['two_step_verification'], [2, 3]) or !empty($user_info['2step_require']))) {
+                    define('NV_IS_1STEP_USER', true);
+                } else {
+                    define('NV_IS_USER', true);
+                }
             } else {
-                define('NV_IS_USER', true);
+                NukeViet\Core\User::unset_userlogin_hash();
+                $user_info = [];
             }
         } else {
-            $nv_Request->unset_request('nvloginhash', 'cookie');
+            NukeViet\Core\User::unset_userlogin_hash();
             $user_info = [];
         }
     }
