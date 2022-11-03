@@ -17,14 +17,14 @@ $admin_online = $nv_Request->get_string('online', 'session');
 
 if (!empty($admin_cookie)) {
     if (empty($admin_online)) {
-        $nv_Request->unset_request('admin,online', 'session');
+        nv_admin_logout();
         $info = 'Hacking attempt';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
     }
 
     if (!nv_admin_checkip()) {
-        $nv_Request->unset_request('admin,online', 'session');
+        nv_admin_logout();
         $info = 'Note: You are not signed in as admin!<br />Your IP address is incorrect!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
@@ -32,7 +32,7 @@ if (!empty($admin_cookie)) {
 
     if (defined('NV_ADMIN')) {
         if (!nv_admin_checkfirewall()) {
-            $nv_Request->unset_request('admin,online', 'session');
+            nv_admin_logout();
             $info = 'Note: You are not signed in as admin!<br />This Firewall system does not accept your login information!';
             $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
             die($info);
@@ -42,7 +42,7 @@ if (!empty($admin_cookie)) {
     $admin_info = nv_admin_checkdata($admin_cookie);
 
     if ($admin_info == []) {
-        $nv_Request->unset_request('admin,online', 'session');
+        nv_admin_logout();
         $info = 'Note: You are not signed in as admin!<br />Session Expired!Please Re-Login!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
@@ -74,14 +74,14 @@ if (!empty($admin_cookie)) {
         define('ADMIN_LOGIN_MODE', 3);
     }
     if (ADMIN_LOGIN_MODE == 2 and !defined('NV_IS_SPADMIN')) {
-        $nv_Request->unset_request('admin,online', 'session');
+        nv_admin_logout();
         $info = 'Note: Access denied in Admin Panel!<br />Only God-Admin and Super-Admin has access in Admin Panel!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
     }
 
     if (ADMIN_LOGIN_MODE == 1 and !defined('NV_IS_GODADMIN')) {
-        $nv_Request->unset_request('admin,online', 'session');
+        nv_admin_logout();
         $info = 'Note: Access denied in Admin Panel!<br />Only God-Admin has access in Admin Panel!';
         $info .= '<meta http-equiv="Refresh" content="5;URL=' . NV_BASE_SITEURL . '" />';
         die($info);
@@ -139,7 +139,7 @@ if (!empty($admin_cookie)) {
 
     if ($admin_info['checkpass']) {
         if ((NV_CURRENTTIME - $admin_info['last_online']) > $global_config['admin_check_pass_time']) {
-            $nv_Request->unset_request('admin,online', 'session');
+            nv_admin_logout();
             if (!defined('NV_IS_AJAX')) {
                 nv_redirect_location($client_info['selfurl']);
             }

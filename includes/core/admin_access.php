@@ -258,3 +258,16 @@ function nv_admin_check_predata($adm_session_value)
 
     return $admin_info;
 }
+
+/**
+ * Xóa dữ liệu đăng nhập của admin
+ * nv_admin_logout()
+ * 
+ */
+function nv_admin_logout()
+{
+    global $nv_Request;
+
+    $nv_Request->unset_request('admin,online', 'session');
+    $nv_Request->sessionRegenerateId(true);
+}
