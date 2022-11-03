@@ -20,7 +20,6 @@ $log_userid = $is_system ? 0 : $admin_info['admin_id'];
 if ($js) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, $log_userid);
     nv_admin_logout();
-    $nv_Request->sessionRegenerateId(true);
     if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {
         require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
     }
@@ -31,7 +30,6 @@ $ok = $nv_Request->get_int('ok', 'get', 0);
 if ($ok) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, $log_userid);
     nv_admin_logout();
-    $nv_Request->sessionRegenerateId(true);
     $info = $lang_global['admin_logout_ok'];
     $info .= '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />';
     if (defined('NV_IS_USER_FORUM') OR defined('SSO_SERVER')) {

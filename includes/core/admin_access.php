@@ -270,4 +270,5 @@ function nv_admin_logout()
 
     $nv_Request->unset_request('admin,online', 'session');
     $nv_Request->unset_request('isal', 'cookie');
+    $nv_Request->sessionRegenerateId(true);
 }
