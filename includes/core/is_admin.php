@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -55,9 +55,8 @@ if (!empty($admin_cookie)) {
         if (defined('NV_IS_USER_FORUM')) {
             define('NV_IS_MOD_USER', true);
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
-        } else {
-            //$nv_Request->unset_request('nvloginhash', 'cookie');
         }
+
         require_once NV_ROOTDIR . '/includes/core/admin_logout.php';
     }
 
@@ -126,6 +125,16 @@ if (!empty($admin_cookie)) {
         }
     }
 
+    if (!empty($global_config['admin_login_duration'])) {
+        if (NV_CURRENTTIME - $admin_info['current_login'] > $global_config['admin_login_duration']) {
+            nv_admin_logout();
+            if (!defined('NV_IS_AJAX')) {
+                nv_redirect_location($client_info['selfurl']);
+            }
+            exit();
+        }
+    }
+
     $admin_online = explode('|', $admin_online);
     $admin_info['checkpass'] = (int) ($admin_online[0]);
     $admin_info['last_online'] = (int) ($admin_online[2]);
@@ -147,6 +156,7 @@ if (!empty($admin_cookie)) {
             exit();
         }
     }
+
     if ($nv_Request->get_title(NV_OP_VARIABLE, 'get') != 'notification') {
         $nv_Request->set_Session('online', $admin_info['checkpass'] . '|' . $admin_info['last_online'] . '|' . NV_CURRENTTIME . '|' . $admin_info['checkhits']);
     }

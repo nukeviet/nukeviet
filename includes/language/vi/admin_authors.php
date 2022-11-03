@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -109,7 +109,7 @@ $lang_module['adminip'] = 'Quản lý IP truy cập khu vực quản trị';
 $lang_module['adminip_ip'] = 'Ip';
 $lang_module['adminip_timeban'] = 'Thời gian bắt đầu';
 $lang_module['adminip_timeendban'] = 'Thời gian kết thúc';
-$lang_module['adminip_add'] = 'Thêm địa chỉ IP';
+$lang_module['adminip_add'] = 'Thêm địa chỉ IP được chấp nhận tại khu vực admin';
 $lang_module['adminip_address'] = 'Địa chỉ';
 $lang_module['adminip_begintime'] = 'Thời gian bắt đầu';
 $lang_module['adminip_endtime'] = 'Thời gian kết thúc';
@@ -127,8 +127,8 @@ $lang_module['adminip_error_validip'] = 'Lỗi: Bạn cần nhập IP đúng chu
 $lang_module['title_username'] = 'Quản lý tài khoản tường lửa khu vực admin';
 $lang_module['admfirewall'] = 'Kiểm tra tường lửa cho khu vực admin';
 $lang_module['block_admin_ip'] = 'Kiểm tra IP khi truy cập khu vực admin';
-$lang_module['username_add'] = 'Thêm tài khoản';
-$lang_module['username_edit'] = 'Sửa tài khoản';
+$lang_module['username_add'] = 'Thêm tài khoản tường lửa';
+$lang_module['username_edit'] = 'Sửa tài khoản tường lửa';
 $lang_module['nicknam_delete_confirm'] = 'Bạn có chắc muốn xóa tài khoản này ra khỏi danh sách?';
 $lang_module['passwordsincorrect'] = 'Mật khẩu bạn nhập hai lần không giống nhau.';
 $lang_module['nochangepass'] = 'Nếu không thay đổi mật khẩu bạn không nhập hai trường mật khẩu';
@@ -136,7 +136,8 @@ $lang_module['rule_user'] = 'Tên đăng nhập chỉ dùng các ký tự a-zA-Z
 $lang_module['rule_pass'] = 'Mật khẩu chỉ dùng các ký tự a-zA-Z0-9_-';
 $lang_module['spadmin_add_admin'] = 'Cho phép người điều hành chung tạo và thay đổi quyền hạn người điều hành modules';
 $lang_module['authors_detail_main'] = 'Hiển thị chi tiết các thông tin tài khoản của người quản trị';
-
+$lang_module['admin_login_duration'] = 'Thời lượng của một phiên đăng nhập quản trị viên';
+$lang_module['admin_login_duration_note'] = '0 = Thời lượng không được xem xét';
 $lang_module['admin_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu admin không sử dụng trình duyệt';
 $lang_module['add_user'] = 'Chỉ định người dùng';
 $lang_module['add_select'] = 'Chọn';

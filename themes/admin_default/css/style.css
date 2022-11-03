@@ -1151,3 +1151,26 @@ div.checkbox [type='checkbox'],
 div.radio [type='radio'] {
     margin-top: 0;
 }
+
+.admin-info .dropdown-menu {
+    width: 270px;
+    padding: 5px 0;
+}
+
+.admin-info .dropdown-menu > li {
+    line-height: 1.5;
+}
+
+.admin-info .dropdown-menu > li:not(:last-child) {
+    border-bottom: 1px solid #494949;
+}
+
+.admin-info .dropdown-menu > li > a,
+.admin-info .dropdown-menu > li > span {
+    display: block;
+    padding: 10px 15px !important;
+}
+
+.admin-info .dropdown-menu > li > a {
+    background-color: #202020;
+}

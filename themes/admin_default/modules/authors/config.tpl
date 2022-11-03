@@ -43,9 +43,22 @@
                     <td><input type="checkbox" value="1" name="spadmin_add_admin"{DATA.spadmin_add_admin} /></td>
                 </tr>
                 <tr>
-                    <td>{LANG.admin_check_pass_time}</td>
-                    <td><input class="form-control pull-left" style="width:50px;" type="text" value="{ADMIN_CHECK_PASS_TIME}" name="admin_check_pass_time" maxlength="3"/>({GLANG.min})</td>
+                    <td>{LANG.admin_login_duration}<p class="help-block mb-0">({LANG.admin_login_duration_note})</p></td>
+                    <td>
+                        <div class="input-group w100">
+                            <input class="form-control number" type="text" value="{DATA.admin_login_duration}" name="admin_login_duration" maxlength="4"/>
+                            <span class="input-group-addon">{GLANG.min}</span>
+                        </div>
+                    </td>
                 </tr>
+                <tr>
+                    <td>{LANG.admin_check_pass_time}</td>
+                    <td>
+                        <div class="input-group w100">
+                            <input class="form-control number" type="text" value="{ADMIN_CHECK_PASS_TIME}" name="admin_check_pass_time" maxlength="3"/>
+                            <span class="input-group-addon">{GLANG.min}</span>
+                        </div>
+                    </tr>
                 <tr>
                     <td>{LANG.admin_user_logout}</td>
                     <td><input type="checkbox" value="1" name="admin_user_logout"{DATA.admin_user_logout} /></td>

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -107,7 +107,7 @@ $lang_module['adminip'] = 'Gestion de IP connecté à l\'administration';
 $lang_module['adminip_ip'] = 'IP';
 $lang_module['adminip_timeban'] = 'Commencer';
 $lang_module['adminip_timeendban'] = 'Terminer';
-$lang_module['adminip_add'] = 'Ajouter IP';
+$lang_module['adminip_add'] = 'Ajouter une adresse IP acceptée dans la zone d\'administration';
 $lang_module['adminip_address'] = 'Adresse';
 $lang_module['adminip_begintime'] = 'Commencer';
 $lang_module['adminip_endtime'] = 'Terminer';
@@ -125,8 +125,8 @@ $lang_module['adminip_error_validip'] = 'Erreur: IP invalide';
 $lang_module['title_username'] = 'Gestion de compte Parefeu de l\'Administration';
 $lang_module['admfirewall'] = 'Contrôler le Parefeu de l\'Administration';
 $lang_module['block_admin_ip'] = 'Vérifier IP lors de la connexion de l\'Administration';
-$lang_module['username_add'] = 'Ajouter un compte';
-$lang_module['username_edit'] = 'Éditer';
+$lang_module['username_add'] = 'Ajouter un compte de pare-feu';
+$lang_module['username_edit'] = 'Modifier un compte de pare-feu';
 $lang_module['nicknam_delete_confirm'] = 'Êtes-vous sûr de vouloir supprimer ce compte de la liste?';
 $lang_module['passwordsincorrect'] = 'Vous avez entré 2 mot de passe différents';
 $lang_module['nochangepass'] = 'Laisser vide 2 champs de mot de passe si vous ne voulez pas changer le mot de passe';
@@ -134,6 +134,8 @@ $lang_module['rule_user'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pou
 $lang_module['rule_pass'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pour le mot de passe';
 $lang_module['spadmin_add_admin'] = 'Autoriser l\'administrateur général de changer les droits des administrateurs de module';
 $lang_module['authors_detail_main'] = 'Afficher les détails du compte de l\'administrateur';
+$lang_module['admin_login_duration'] = 'Durée d\'une session de connexion administrateur';
+$lang_module['admin_login_duration_note'] = '0 = Durée non prise en compte';
 $lang_module['admin_check_pass_time'] = 'Le temps pour vérifier le mot de passe si l\'admin n\'utilise pas navigateur';
 $lang_module['add_user'] = 'Désigner un utilisateur';
 $lang_module['add_select'] = 'Sélectionner';

@@ -31,6 +31,7 @@ $global_config['admfirewall'] = 0;
 $global_config['admin_2step_default'] = 'code';
 $global_config['admin_2step_opt'] = 'code';
 $global_config['admin_check_pass_time'] = 1800;
+$global_config['admin_login_duration'] = 10800;
 $global_config['admin_user_logout'] = 0;
 $global_config['admin_XSSsanitize'] = 1;
 $global_config['allow_null_origin'] = 0;

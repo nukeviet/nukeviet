@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -107,7 +107,7 @@ $lang_module['adminip'] = 'Admin IP';
 $lang_module['adminip_ip'] = 'IP';
 $lang_module['adminip_timeban'] = 'Start';
 $lang_module['adminip_timeendban'] = 'Finish';
-$lang_module['adminip_add'] = 'Add IP';
+$lang_module['adminip_add'] = 'Add accepted IP address in admin area';
 $lang_module['adminip_address'] = 'Address';
 $lang_module['adminip_begintime'] = 'Start';
 $lang_module['adminip_endtime'] = 'Finish';
@@ -125,8 +125,8 @@ $lang_module['adminip_error_validip'] = 'Invalid IP';
 $lang_module['title_username'] = 'Manage firewall account';
 $lang_module['admfirewall'] = 'Check firewall';
 $lang_module['block_admin_ip'] = 'Check IP to access to administration area';
-$lang_module['username_add'] = 'Add';
-$lang_module['username_edit'] = 'Edit';
+$lang_module['username_add'] = 'Add a firewall account';
+$lang_module['username_edit'] = 'Edit a firewall account';
 $lang_module['nicknam_delete_confirm'] = 'Are you sure you want to remove this account?';
 $lang_module['passwordsincorrect'] = 'Password does not match';
 $lang_module['nochangepass'] = 'Leave password fields blank if you don\'t want to change password';
@@ -134,6 +134,8 @@ $lang_module['rule_user'] = 'Use only characters a-zA-Z0-9_- for account';
 $lang_module['rule_pass'] = 'Use only characters a-zA-Z0-9_- for password';
 $lang_module['spadmin_add_admin'] = 'Allows General Administrator to create and modify the rights of modules administrator';
 $lang_module['authors_detail_main'] = 'Show detailed information of the administrator account';
+$lang_module['admin_login_duration'] = 'Duration of an administrator login session';
+$lang_module['admin_login_duration_note'] = '0 = Duration not considered';
 $lang_module['admin_check_pass_time'] = 'Time to check your password, if admin not using the browser';
 $lang_module['add_user'] = 'Appoint a member';
 $lang_module['add_select'] = 'Select';

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -44,9 +44,8 @@ $lang_global['admin_password'] = 'Password';
 $lang_global['admin_no_allow_func'] = 'You can\'t access this function';
 $lang_global['admin_suspend'] = 'Account Suspended';
 $lang_global['block_modules'] = 'Block in modules';
-$lang_global['hello_admin1'] = 'Wellcome %1$s ! Last login to administration at: %2$s';
-$lang_global['hello_admin2'] = 'Account: %1$s ! Your session was opened %2$s ago';
-$lang_global['hello_admin3'] = 'Wellcome %1$s. This is the first time to login administration';
+$lang_global['hello_admin1'] = 'You last logged in to your administrator account at %1$s via IP address %2$s';
+$lang_global['hello_admin2'] = 'You logged at %1$s via IP address %2$s';
 $lang_global['ftp_error_account'] = 'Error: Can\'t connect to FTP server, please check FTP configuration';
 $lang_global['ftp_error_path'] = 'Error: Wrong configuration in Remote path';
 $lang_global['login_error_account'] = 'Error: Username was not announced or declared invalid. (Only letters, numbers and underscores the Latin alphabet. Minimum %1$s characters, maximum %1$s characters)';
@@ -80,3 +79,6 @@ $lang_global['admin_oauth_error_email'] = 'Error: The return email is not valid,
 $lang_global['admin_oauth_error_savenew'] = 'Error: Unable to save the verification data';
 $lang_global['admin_oauth_error'] = 'Error: The verification is not valid, this account has not been authorized to verify';
 $lang_global['acp'] = 'Site management';
+$lang_global['login_session_expire'] = 'Your login session will expire in';
+$lang_global['account_settings'] = 'Account settings';
+$lang_global['your_admin_account'] = 'Your admin account';

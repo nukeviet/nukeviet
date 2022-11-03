@@ -143,4 +143,8 @@ $(document).ready(function() {
             });
         }
     });
+
+    $('.number').on('input', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    })
 });

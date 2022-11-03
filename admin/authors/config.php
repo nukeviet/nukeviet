@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -101,6 +101,7 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
             $array_config_global['admin_check_pass_time'] = 120;
         }
         $array_config_global['admin_user_logout'] = (int) $nv_Request->get_bool('admin_user_logout', 'post', false);
+        $array_config_global['admin_login_duration'] = 60 * $nv_Request->get_int('admin_login_duration', 'post', 0);
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
         foreach ($array_config_global as $config_name => $config_value) {
@@ -283,7 +284,8 @@ $xtpl->assign('DATA', [
     'block_admin_ip' => $global_config['block_admin_ip'] ? ' checked="checked"' : '',
     'authors_detail_main' => $global_config['authors_detail_main'] ? ' checked="checked"' : '',
     'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? ' checked="checked"' : '',
-    'admin_user_logout' => $global_config['admin_user_logout'] ? ' checked="checked"' : ''
+    'admin_user_logout' => $global_config['admin_user_logout'] ? ' checked="checked"' : '',
+    'admin_login_duration' => !empty($global_config['admin_login_duration']) ? round($global_config['admin_login_duration'] / 60) : ''
 ]);
 
 if (!empty($error)) {

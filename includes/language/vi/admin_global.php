@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -45,9 +45,8 @@ $lang_global['admin_no_allow_func'] = 'Bạn không có quyền truy cập chứ
 $lang_global['admin_suspend'] = 'Tài khoản bị đình chỉ';
 
 $lang_global['block_modules'] = 'Block của modules';
-$lang_global['hello_admin1'] = 'Xin chào %1$s ! Lần đăng nhập Quản trị trước vào %2$s';
-$lang_global['hello_admin2'] = 'Tài khoản quản trị: %1$s ! Bạn đã đăng nhập Quản trị cách đây %2$s';
-$lang_global['hello_admin3'] = 'Xin chào mừng %1$s. Đây là lần đăng nhập Quản trị đầu tiên của bạn';
+$lang_global['hello_admin1'] = 'Đăng nhập trước: %1$s<br/>Bằng IP: %2$s';
+$lang_global['hello_admin2'] = 'Đăng nhập vào: %1$s<br/>Bằng IP: %2$s';
 $lang_global['ftp_error_account'] = 'Lỗi: hệ thống không kết nối được FTP server vui lòng kiểm tra lại các thông số FTP';
 $lang_global['ftp_error_path'] = 'Lỗi: thông số Remote path không đúng';
 $lang_global['login_error_account'] = 'Lỗi: Tên đăng nhập tài khoản quản trị chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1$s ký tự, không nhiều hơn %2$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)';
@@ -84,3 +83,6 @@ $lang_global['admin_oauth_error_email'] = 'Lỗi: Email trả về không hợp 
 $lang_global['admin_oauth_error_savenew'] = 'Lỗi: Không thể lưu thông tin xác thực';
 $lang_global['admin_oauth_error'] = 'Lỗi: Xác minh không hợp lệ. Tài khoản này chưa được ủy quyền để xác minh';
 $lang_global['acp'] = 'Quản lý site';
+$lang_global['login_session_expire'] = 'Phiên đăng nhập hiện tại sẽ hết hạn sau';
+$lang_global['account_settings'] = 'Thiết lập tài khoản';
+$lang_global['your_admin_account'] = 'Tài khoản quản trị của bạn';

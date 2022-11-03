@@ -36,10 +36,38 @@
                 <a data-btn="toggleLang" href="#"><em class="fa fa-2x fa-magic fix" aria-hidden="true"></em></a>
             </li>
             <!-- END: lang1 -->
-            <li class="tip admin-info" data-toggle="tooltip" data-placement="bottom" title="<!-- BEGIN: hello_admin -->{HELLO_ADMIN1}<!-- END: hello_admin --><!-- BEGIN: hello_admin3 -->{HELLO_ADMIN3}<!-- END: hello_admin3 --><!-- BEGIN: hello_admin2 -->{HELLO_ADMIN2}<!-- END: hello_admin2 -->">
-                <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=users">
+            <li class="admin-info">
+                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
                     <img src="{ADMIN_PHOTO}" alt="{ADMIN_USERNAME}" width="32" height="32" class="bg-gainsboro"/>
                 </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <span><img alt="" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{ADMIN.level}.png"> {ADMIN.username}</span>
+                    </li>
+                    <li>
+                        <span><i class="fa fa-caret-right fa-fw"></i> {ADMIN.hello_admin2}</span>
+                    </li>
+                    <!-- BEGIN: admin_login_duration -->
+                    <li>
+                        <span><i class="fa fa-globe fa-spin fa-fw"></i> {LANG.login_session_expire} <span id="countdown" data-duration="{DURATION}"></span></span>
+                    </li>
+                    <!-- END: admin_login_duration -->
+                    <!-- BEGIN: hello_admin1 -->
+                    <li>
+                        <span><i class="fa fa-caret-right fa-fw"></i> {ADMIN.hello_admin1}</span>
+                    </li>
+                    <!-- END: hello_admin1 -->
+                    <li>
+                        <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=users">
+                        <i class="fa fa-arrow-circle-right fa-fw"></i> {LANG.account_settings}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=authors&amp;id={ADMIN.admin_id}">
+                        <i class="fa fa-arrow-circle-right fa-fw"></i> {LANG.your_admin_account}
+                        </a>
+                    </li>
+                </ul>
             </li>
             <!-- BEGIN: notification -->
             <li class="dropdown" id="notification-area">

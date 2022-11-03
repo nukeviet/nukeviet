@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -44,9 +44,8 @@ $lang_global['admin_password'] = 'Votre mot de passe';
 $lang_global['admin_no_allow_func'] = 'Vous n\'êtes pas authorisé d\'accéder à cette fonction';
 $lang_global['admin_suspend'] = 'Est suspendu';
 $lang_global['block_modules'] = 'Blocks de modules';
-$lang_global['hello_admin1'] = 'Bonjour %1$s ! Votre dernière session était à %2$s';
-$lang_global['hello_admin2'] = 'Compte: %1$s ! Votre session est ouverte depuis %2$s';
-$lang_global['hello_admin3'] = 'Bonjour %1$s. C\'est votre première session d\'administration';
+$lang_global['hello_admin1'] = 'Vous vous êtes connecté pour la dernière fois à votre compte administrateur à %1$s via l\'adresse IP %2$s';
+$lang_global['hello_admin2'] = 'Vous vous êtes connecté à votre compte administrateur à %1$s via l\'adresse IP %2$s';
 $lang_global['ftp_error_account'] = 'Erreur: Impossible de se connecter au serveur FTP, merci de vérifier la configuration de FTP';
 $lang_global['ftp_error_path'] = 'Erreur: Chemin d\'accès incorrect';
 $lang_global['login_error_account'] = 'Erreur: Compte d\'Administrateur manquant ou invalide (pas moins de %1$s caractères, ni plus de  %2$s caractères. Utilisez uniquement les lettres latines, chiffres et tiret)';
@@ -80,3 +79,6 @@ $lang_global['admin_oauth_error_email'] = 'Erreur: L\'email de retour n\'est pas
 $lang_global['admin_oauth_error_savenew'] = 'Erreur: Impossible d\'enregistrer les données de vérification';
 $lang_global['admin_oauth_error'] = 'Erreur: La vérification n\'est pas valide, ce compte n\'a pas été autorisé à vérifier';
 $lang_global['acp'] = 'Administration du site';
+$lang_global['login_session_expire'] = 'Votre session de connexion expirera dans';
+$lang_global['account_settings'] = 'Paramètres du compte';
+$lang_global['your_admin_account'] = 'Votre compte administrateur';

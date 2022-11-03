@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -147,6 +147,9 @@ function nv_admin_theme($contents, $head_site = 1)
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
     }
 
+    $admin_info['hello_admin1'] = !empty($admin_info['last_login']) ? sprintf($lang_global['hello_admin1'], date('H:i d/m/Y', $admin_info['last_login']), $admin_info['last_ip']) : '';
+    $admin_info['hello_admin2'] = sprintf($lang_global['hello_admin2'], date('H:i d/m/Y', $admin_info['current_login']), $admin_info['current_ip']);
+
     $xtpl = new XTemplate($file_name_tpl, $dir_template);
     $xtpl->assign('NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ');
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
@@ -164,6 +167,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('NV_SAFEMODE', $admin_info['safemode']);
     $xtpl->assign('LANG', $lang_global);
     $xtpl->assign('SITE_FAVICON', $site_favicon);
+    $xtpl->assign('ADMIN', $admin_info);
 
     if (!empty($global_config['passshow_button'])) {
         $xtpl->parse('main.passshow_button');
@@ -257,22 +261,6 @@ function nv_admin_theme($contents, $head_site = 1)
 
         $xtpl->parse('main.top_menu');
 
-        if ($admin_info['current_login'] >= NV_CURRENTTIME - 60) {
-            if (!empty($admin_info['last_login'])) {
-                $temp = sprintf($lang_global['hello_admin1'], $admin_info['username'], date('H:i d/m/Y', $admin_info['last_login']), $admin_info['last_ip']);
-                $xtpl->assign('HELLO_ADMIN1', $temp);
-                $xtpl->parse('main.hello_admin');
-            } else {
-                $temp = sprintf($lang_global['hello_admin3'], $admin_info['username']);
-                $xtpl->assign('HELLO_ADMIN3', $temp);
-                $xtpl->parse('main.hello_admin3');
-            }
-        } else {
-            $temp = sprintf($lang_global['hello_admin2'], $admin_info['username'], nv_convertfromSec(NV_CURRENTTIME - $admin_info['current_login']), $admin_info['current_ip']);
-            $xtpl->assign('HELLO_ADMIN2', $temp);
-            $xtpl->parse('main.hello_admin2');
-        }
-
         // Admin photo
         $xtpl->assign('ADMIN_USERNAME', $admin_info['username']);
         if (isset($admin_info['avata']) and !empty($admin_info['avata'])) {
@@ -336,6 +324,17 @@ function nv_admin_theme($contents, $head_site = 1)
         if ($global_config['notification_active']) {
             $xtpl->parse('main.notification');
             $xtpl->parse('main.notification_js');
+        }
+
+        // login_session_expire
+        if (!empty($global_config['admin_login_duration'])) {
+            $xtpl->assign('DURATION', ($admin_info['current_login'] + $global_config['admin_login_duration'] - NV_CURRENTTIME) * 1000);
+            $xtpl->parse('main.admin_login_duration');
+        }
+
+        // Last login info
+        if (!empty($admin_info['hello_admin1'])) {
+            $xtpl->parse('main.hello_admin1');
         }
     }
 
