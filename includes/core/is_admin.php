@@ -56,7 +56,7 @@ if (!empty($admin_cookie)) {
             define('NV_IS_MOD_USER', true);
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
         } else {
-            $nv_Request->unset_request('nvloginhash', 'cookie');
+            NukeViet\Core\User::unset_userlogin_hash();
         }
         require_once NV_ROOTDIR . '/includes/core/admin_logout.php';
     }

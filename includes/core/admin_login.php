@@ -154,7 +154,7 @@ if (!empty($admin_pre_data) and in_array(($opt = $nv_Request->get_title('auth', 
         $stmt->bindValue(':last_agent', NV_USER_AGENT, PDO::PARAM_STR);
         $stmt->execute();
 
-        $nv_Request->set_Cookie('nvloginhash', json_encode($user), NV_LIVE_COOKIE_TIME);
+        NukeViet\Core\User::set_userlogin_hash($user, true);
 
         $tokend_key = md5($admin_pre_data['username'] . '_' . NV_CURRENTTIME . '_users_confirm_pass_' . NV_CHECK_SESSION);
         $tokend = md5('users_confirm_pass_' . NV_CHECK_SESSION);
