@@ -19,16 +19,14 @@ $log_userid = $is_system ? 0 : $admin_info['admin_id'];
 
 if ($js) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, $log_userid);
-    $nv_Request->unset_request('admin,online', 'session');
-    $nv_Request->sessionRegenerateId(true);
+    nv_admin_logout();
     exit('1');
 }
 
 $ok = $nv_Request->get_int('ok', 'get', 0);
 if ($ok) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, $log_userid);
-    $nv_Request->unset_request('admin,online', 'session');
-    $nv_Request->sessionRegenerateId(true);
+    nv_admin_logout();
     $info = $lang_global['admin_logout_ok'];
     $info .= '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />';
 } else {
