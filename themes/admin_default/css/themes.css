@@ -43,8 +43,9 @@
     color: red;
 }
 
-#shows_all_func td {
-    background-color: #f9f9f9;
+#shows_all_func thead {
+    background-color: #838383;
+    color: #ffffff;
 }
 
 .container {
@@ -342,4 +343,51 @@ div.colpick {
     display: inline-block;
     margin-top: 2px;
     margin-bottom: 2px;
+}
+
+#blocklist tfoot {
+    border-top: 2px solid #333;
+}
+
+#blocklist .table > tbody.thead > tr {
+    background-color: #428bca;
+    color: #fff;
+}
+
+#blocklist .table > tbody:not(.thead) > tr:nth-of-type(2n+1) {
+    background-color: #f9f9f9;
+}
+
+#blocklist .block_pos {
+    background-color: #dadada;
+    border-bottom: 1px solid #888888;
+}
+
+#blocklist .btn-group {
+    display: flex;
+}
+
+#blocklist .change_pos .modal-dialog {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width:25%;
+    min-width: 300px;
+    height:160px;
+}
+
+#block-content-form .dtime_details {
+    display: flex;
+    align-items: center;
+}
+
+#block-content-form .dtime_details + .dtime_details {
+    margin-top: 5px;
+}
+
+#block-content-form .dtime_details > :not(:last-child) {
+    margin-right: 5px;
 }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -118,14 +118,15 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
             $row['weight'] = (int) ($sth->fetchColumn()) + 1;
 
-            $row['exp_time'] = 0;
+            $row['dtime_type'] = 'regular';
+            $row['dtime_details'] = '[]';
             $row['active'] = 1;
             $row['groups_view'] = '6';
 
             $all_func = ($row['all_func'] == 1 and preg_match('/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name)) ? 1 : 0;
 
-            $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-			( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";
+            $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, dtime_type, dtime_details, active, groups_view, all_func, weight, config) VALUES
+			( :selectthemes, :module, :file_name, :title, :link, :template, :position, :dtime_type, :dtime_details, '" . $row['active'] . "', :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";
             $data = [];
             $data['selectthemes'] = $selectthemes;
             $data['module'] = $row['module'];
@@ -134,6 +135,8 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $data['link'] = $row['link'];
             $data['template'] = (string) $row['template'];
             $data['position'] = $row['position'];
+            $data['dtime_type'] = $row['dtime_type'];
+            $data['dtime_details'] = $row['dtime_details'];
             $data['groups_view'] = $row['groups_view'];
             $data['config'] = (string) $row['config'];
             $row['bid'] = $db->insert_id($_sql, 'bid', $data);

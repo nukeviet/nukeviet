@@ -1026,7 +1026,7 @@ if (!empty($theme_mobile)) {
  * Nhap du lieu cho table: nv4_vi_blocks_groups
  */
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups');
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, dtime_details, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
 $_bid = 0;
 $array_weight_block = [];
@@ -1047,7 +1047,7 @@ foreach ($blockGroups as $theme => $vals) {
                     !empty($bl['link']) ? $bl['link'] : '',
                     $bl['template'],
                     '[' . $pos . ']',
-                    0,
+                    '[]',
                     $bl['active'],
                     $bl['groups_view'],
                     !empty($bl['all_func']) ? 1 : 0,

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -28,8 +28,8 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
 
     try {
         $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
-			(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-			( :theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, 0, ' . $row['weight'] . ', :config )';
+			(theme, module, file_name, title, link, template, position, dtime_type, dtime_details, active, groups_view, all_func, weight, config) VALUES
+			( :theme, :module, :file_name, :title, :link, :template, :position, :dtime_type, :dtime_details, :active, :groups_view, 0, ' . $row['weight'] . ', :config )';
 
         $data = [];
         $data['theme'] = $row['theme'];
@@ -39,6 +39,8 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
         $data['link'] = $row['link'];
         $data['template'] = $row['template'];
         $data['position'] = $row['position'];
+        $data['dtime_type'] = $row['dtime_type'];
+        $data['dtime_details'] = $row['dtime_details'];
         $data['active'] = $row['active'];
         $data['groups_view'] = $row['groups_view'];
         $data['config'] = $row['config'];

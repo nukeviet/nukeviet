@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -39,8 +39,8 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
         $sth->execute();
         while ($row = $sth->fetch()) {
             $_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
-				(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, :all_func, :weight, :config )';
+				(theme, module, file_name, title, link, template, position, dtime_type, dtime_details, active, groups_view, all_func, weight, config) VALUES
+				(:theme, :module, :file_name, :title, :link, :template, :position, :dtime_type, :dtime_details, :active, :groups_view, :all_func, :weight, :config )';
 
             $data = [];
             $data['theme'] = $theme2;
@@ -50,6 +50,8 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
             $data['link'] = $row['link'];
             $data['template'] = $row['template'];
             $data['position'] = $row['position'];
+            $data['dtime_type'] = $row['dtime_type'];
+            $data['dtime_details'] = $row['dtime_details'];
             $data['active'] = $row['active'];
             $data['groups_view'] = $row['groups_view'];
             $data['all_func'] = $row['all_func'];

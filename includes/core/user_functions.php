@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -47,11 +47,7 @@ function nv_blocks_content($sitecontent)
     $_posAllowed = [];
 
     foreach ($theme_config_positions as $_pos) {
-        $_pos = trim((string) $_pos['tag']);
-        unset($matches);
-        if (preg_match('/^\[([^\]]+)\]$/is', $_pos, $matches)) {
-            $_posAllowed[] = $matches[1];
-        }
+        $_posAllowed[] = preg_replace('/[^a-zA-Z0-9\_]+/', '', (string) $_pos['tag']);
     }
 
     if (empty($_posAllowed)) {
@@ -71,14 +67,13 @@ function nv_blocks_content($sitecontent)
     $cache_file = NV_LANG_DATA . '_' . $global_config['module_theme'] . '_' . $module_name . '_' . NV_CACHE_PREFIX . '.cache';
     $blocks = [];
 
+    $cacheValid = false;
     if (($cache = $nv_Cache->getItem('themes', $cache_file)) !== false) {
-        $cache = unserialize($cache);
-        if (isset($cache[$module_info['funcs'][$op]['func_id']])) {
-            $blocks = $cache[$module_info['funcs'][$op]['func_id']];
-        }
-        unset($cache);
-    } else {
-        $cache = [];
+        $mod_blocklist = json_decode($cache, true);
+        $cacheValid = (json_last_error() === JSON_ERROR_NONE);
+    }
+    if (!$cacheValid) {
+        $mod_blocklist = [];
         $in = [];
         $list = $sys_mods[$module_name]['funcs'];
         foreach ($list as $row) {
@@ -86,11 +81,11 @@ function nv_blocks_content($sitecontent)
                 $in[] = $row['func_id'];
             }
         }
-
+        $in = implode(',', $in);
         $_result = $db->query('SELECT t1.*, t2.func_id FROM ' . NV_BLOCKS_TABLE . '_groups t1
              INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2
              ON t1.bid = t2.bid
-             WHERE t2.func_id IN (' . implode(',', $in) . ")
+             WHERE t2.func_id IN (' . $in . ")
              AND t1.theme ='" . $global_config['module_theme'] . "'
              AND t1.active!=''
              ORDER BY t2.weight ASC");
@@ -103,20 +98,16 @@ function nv_blocks_content($sitecontent)
             $block_config['title'] = $_row['title'];
             $block_config['block_name'] = substr($_row['file_name'], 0, -4);
 
-            // Tieu de block
-            $blockTitle = (!empty($_row['title']) and !empty($_row['link'])) ? '<a href="' . $_row['link'] . '">' . $_row['title'] . '</a>' : $_row['title'];
-
-            if (!isset($cache[$_row['func_id']])) {
-                $cache[$_row['func_id']] = [];
-            }
-            $cache[$_row['func_id']][] = [
+            !isset($mod_blocklist[$_row['func_id']]) && $mod_blocklist[$_row['func_id']] = [];
+            $mod_blocklist[$_row['func_id']][] = [
                 'bid' => $_row['bid'],
                 'position' => $_row['position'],
                 'module' => $_row['module'],
-                'blockTitle' => $blockTitle,
+                'blockTitle' => (!empty($_row['title']) and !empty($_row['link'])) ? '<a href="' . $_row['link'] . '">' . $_row['title'] . '</a>' : $_row['title'],
                 'file_name' => $_row['file_name'],
                 'template' => $_row['template'],
-                'exp_time' => $_row['exp_time'],
+                'dtime_type' => $_row['dtime_type'],
+                'dtime_details' => json_decode($_row['dtime_details'], true),
                 'show_device' => !empty($_row['active']) ? array_map('intval', explode(',', $_row['active'])) : [],
                 'act' => $_row['act'],
                 'groups_view' => $_row['groups_view'],
@@ -125,29 +116,99 @@ function nv_blocks_content($sitecontent)
             ];
         }
         $_result->closeCursor();
+        $nv_Cache->setItem('themes', $cache_file, json_encode($mod_blocklist, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    }
 
-        if (isset($cache[$module_info['funcs'][$op]['func_id']])) {
-            $blocks = $cache[$module_info['funcs'][$op]['func_id']];
-        }
-
-        $cache = serialize($cache);
-        $nv_Cache->setItem('themes', $cache_file, $cache);
-
-        unset($cache, $in, $block_config, $blockTitle);
+    if (isset($mod_blocklist[$module_info['funcs'][$op]['func_id']])) {
+        $blocks = $mod_blocklist[$module_info['funcs'][$op]['func_id']];
     }
 
     if (!empty($blocks)) {
-        $unact = [];
         global $blockID;
 
+        //$unact = [];
         $array_position = array_keys($_posReal);
         foreach ($blocks as $_key => $_row) {
             if (!defined('NV_IS_DRAG_BLOCK') and !$_row['act']) {
                 continue;
             }
 
-            if ($_row['exp_time'] != 0 and $_row['exp_time'] <= NV_CURRENTTIME) {
-                $unact[] = $_row['bid'];
+            // Kiểm tra thời gian hiển thị
+            // 'regular': thường xuyên, 'specific': theo thời gian cụ thể, 
+            // 'daily': hàng ngày, 'weekly': hàng tuần,
+            // 'monthly': hàng tháng, 'yearly': hàng năm
+            $is_show = false;
+            if ($_row['dtime_type'] == 'regular') {
+                $is_show = true;
+            } elseif ($_row['dtime_type'] == 'specific' and !empty($_row['dtime_details'])) {
+                foreach ($_row['dtime_details'] as $option) {
+                    if (!empty($option['end_date'])) {
+                        if (empty($option['start_date'])) {
+                            $start_time = NV_CURRENTTIME;
+                        } else {
+                            $start_date = array_map('intval', explode('/', $option['start_date']));
+                            $start_time = mktime($option['start_h'], $option['start_i'], 0, $start_date[1], $start_date[0], $start_date[2]);
+                        }
+                        $end_date = array_map('intval', explode('/', $option['end_date']));
+                        $end_time = mktime($option['end_h'], $option['end_i'], 0, $end_date[1], $end_date[0], $end_date[2]);
+                        if (NV_CURRENTTIME >= $start_time and NV_CURRENTTIME <= $end_time) {
+                            $is_show = true;
+                            break;
+                        }
+                    }
+                }
+            } elseif ($_row['dtime_type'] == 'daily' and !empty($_row['dtime_details'])) {
+                foreach ($_row['dtime_details'] as $option) {
+                    if (isset($option['start_h'], $option['start_i'], $option['end_h'], $option['end_i'])) {
+                        $start_time = mktime($option['start_h'], $option['start_i'], 0);
+                        $end_time = mktime($option['end_h'], $option['end_i'], 0);
+                        if (NV_CURRENTTIME >= $start_time and NV_CURRENTTIME <= $end_time) {
+                            $is_show = true;
+                            break;
+                        }
+                    }
+                }
+            } elseif ($_row['dtime_type'] == 'weekly' and !empty($_row['dtime_details'])) {
+                foreach ($_row['dtime_details'] as $option) {
+                    if (isset($option['day_of_week'], $option['start_h'], $option['start_i'], $option['end_h'], $option['end_i'])) {
+                        if ((int) date('N', NV_CURRENTTIME) == (int) $option['day_of_week']) {
+                            $start_time = mktime($option['start_h'], $option['start_i'], 0);
+                            $end_time = mktime($option['end_h'], $option['end_i'], 0);
+                            if (NV_CURRENTTIME >= $start_time and NV_CURRENTTIME <= $end_time) {
+                                $is_show = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            } elseif ($_row['dtime_type'] == 'monthly' and !empty($_row['dtime_details'])) {
+                foreach ($_row['dtime_details'] as $option) {
+                    if (isset($option['day'], $option['start_h'], $option['start_i'], $option['end_h'], $option['end_i'])) {
+                        if ((int) date('j', NV_CURRENTTIME) == (int) $option['day']) {
+                            $start_time = mktime($option['start_h'], $option['start_i'], 0);
+                            $end_time = mktime($option['end_h'], $option['end_i'], 0);
+                            if (NV_CURRENTTIME >= $start_time and NV_CURRENTTIME <= $end_time) {
+                                $is_show = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            } elseif ($_row['dtime_type'] == 'yearly' and !empty($_row['dtime_details'])) {
+                foreach ($_row['dtime_details'] as $option) {
+                    if (isset($option['month'], $option['day'], $option['start_h'], $option['start_i'], $option['end_h'], $option['end_i'])) {
+                        if (date('j.n', NV_CURRENTTIME) == $option['day'] . '.' . $option['month']) {
+                            $start_time = mktime($option['start_h'], $option['start_i'], 0);
+                            $end_time = mktime($option['end_h'], $option['end_i'], 0);
+                            if (NV_CURRENTTIME >= $start_time and NV_CURRENTTIME <= $end_time) {
+                                $is_show = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!$is_show and !defined('NV_IS_DRAG_BLOCK')) {
                 continue;
             }
 
@@ -229,10 +290,10 @@ function nv_blocks_content($sitecontent)
                 }
             }
         }
-        if (!empty($unact)) {
+        /*if (!empty($unact)) {
             $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET act=0 WHERE bid IN (' . implode(',', $unact) . ')');
             $nv_Cache->delMod('themes', NV_LANG_DATA);
-        }
+        }*/
     }
 
     if (defined('NV_IS_DRAG_BLOCK')) {

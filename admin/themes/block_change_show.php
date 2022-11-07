@@ -4,13 +4,35 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
+}
+
+// Bật/tắt hàng loạt
+if ($nv_Request->isset_request('multi, list, checkss', 'post')) {
+    $new_act = (int) $nv_Request->get_bool('multi', 'post', false);
+    $list = $nv_Request->get_string('list', 'post');
+    $checkss = $nv_Request->get_string('checkss', 'post');
+
+    $selectthemes = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
+    if (!empty($list) and md5($selectthemes . NV_CHECK_SESSION) == $checkss) {
+        $list = preg_replace('/[^0-9\,]+/', '', $list);
+        $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET act=' . $new_act . ' WHERE bid IN (' . $list . ')');
+        $nv_Cache->delMod('themes');
+        nv_jsonOutput([
+            'status' => 'OK',
+            'act' => $new_act ? 'act' : 'deact'
+        ]);
+    }
+
+    nv_jsonOutput([
+        'status' => 'error'
+    ]);
 }
 
 $bid = $nv_Request->get_int('bid', 'post');

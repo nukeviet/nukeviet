@@ -95,7 +95,8 @@ function nv_create_table_sys($lang)
          link varchar(255) DEFAULT NULL,
          template varchar(55) DEFAULT NULL,
          position varchar(55) DEFAULT NULL,
-         exp_time int(11) DEFAULT '0',
+         dtime_type CHAR(50) NOT NULL DEFAULT 'regular',
+         dtime_details JSON NULL DEFAULT NULL,
          active varchar(10) DEFAULT '1',
          act tinyint(1) unsigned NOT NULL DEFAULT '1',
          groups_view varchar(255) DEFAULT '',
@@ -105,8 +106,7 @@ function nv_create_table_sys($lang)
          PRIMARY KEY (bid),
          KEY theme (theme),
          KEY module (module),
-         KEY position (position),
-         KEY exp_time (exp_time)
+         KEY position (position)
     ) ENGINE=MyISAM";
 
     $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_blocks_weight (

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -37,7 +37,7 @@ if (!empty($file_name)) {
                 $path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
             }
         }
-        //die($path_file_php .'=--->'. $path_file_ini .'=--->'. $path_file_lang);
+    //die($path_file_php .'=--->'. $path_file_ini .'=--->'. $path_file_lang);
     } elseif (isset($site_mods[$module]) and preg_match($global_config['check_block_module'], $file_name, $matches)) {
         $module_file = $site_mods[$module]['module_file'];
 
@@ -122,6 +122,4 @@ if (!empty($file_name)) {
     }
 }
 
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+nv_htmlOutput($contents);
