@@ -58,6 +58,9 @@ if (!empty($global_config['unsign_vietwords'])) {
      */
     function searchKeywordforSQL($keyword)
     {
+        global $db;
+
+        $keyword = $db->regexpescape($keyword);
         return searchPatternByLang(nv_EncString($keyword));
     }
 }

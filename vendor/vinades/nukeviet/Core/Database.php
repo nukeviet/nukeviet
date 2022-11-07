@@ -323,6 +323,24 @@ class Database extends PDO
     }
 
     /**
+     * regexpescape()
+     * 
+     * @param mixed $value 
+     * @return string|array|null 
+     */
+    public function regexpescape($value)
+    {
+        if (is_array($value)) {
+            $value = array_map([$this, __FUNCTION__], $value);
+        } else {
+            $value = preg_replace('/([.*?+\[\]{}^$|(\)])/','\\\\\1',$value);
+            $value = preg_replace('/(\\\[.*?+\[\]{}^$|(\)\\\])/','\\\\\1',$value);
+        }
+
+        return $value;
+    }
+
+    /**
      * sqlreset()
      *
      * @return $this
