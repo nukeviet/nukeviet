@@ -57,5 +57,8 @@ function searchPatternByLang($str)
  */
 function searchKeywordforSQL($keyword)
 {
+    global $db;
+
+    $keyword = $db->regexpescape($keyword);
     return searchPatternByLang(nv_EncString($keyword));
 }
