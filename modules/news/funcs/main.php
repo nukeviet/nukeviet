@@ -4,13 +4,117 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_IS_MOD_NEWS')) {
     exit('Stop!!!');
+}
+
+// Xử lý báo cáo lỗi
+if (!empty($module_config[$module_name]['report_active']) and (!empty($module_config[$module_name]['report_group']) and nv_user_in_groups($module_config[$module_name]['report_group']))) {
+    $action = $nv_Request->get_title('action', 'post', '');
+    if ($action == 'report') {
+        $newsid = $nv_Request->get_int('newsid', 'post', 0);
+        if (!$newsid) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['article_not_found']
+            ]);
+        }
+        $news_details = $db->query('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $newsid . ' AND status=1')->fetch();
+        if (empty($news_details)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['article_not_found']
+            ]);
+        }
+        $checkss = md5($newsid . NV_CHECK_SESSION);
+        $csrf = $nv_Request->get_title('_csrf', 'post', '');
+        if (!hash_equals($checkss, $csrf)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => 'Stop!!!'
+            ]);
+        }
+        unset($nv_seccode);
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+        if ($module_captcha == 'recaptcha') {
+            $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        }
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+        elseif ($module_captcha == 'captcha') {
+            $nv_seccode = $nv_Request->get_title('captcha', 'post', '');
+        }
+        // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
+        if (isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $module_captcha)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            ]);
+        }
+        $orig_content = $nv_Request->get_title('report_content', 'post', '');
+        $orig_content = nv_substr(trim(strip_tags($orig_content)), 0, 250);
+        if (nv_strlen($orig_content) < 3) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['report_content_empty']
+            ]);
+        }
+        $repl_content = $nv_Request->get_title('report_fix', 'post', '');
+        $repl_content = nv_substr(trim(strip_tags($repl_content)), 0, 250);
+        if (nv_strlen($repl_content) > 0 and strcasecmp($orig_content, $repl_content) == 0) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['report_same_values']
+            ]);
+        }
+        $post_email = $nv_Request->get_title('report_email', 'post', '');
+        if (defined('NV_IS_USER')) {
+            $post_email = $user_info['email'];
+        }
+        if (!empty($post_email)) {
+            $check_email = nv_check_valid_email($post_email, true);
+            if (!empty($check_email[0])) {
+                $post_email = '';
+            } else {
+                $post_email = $check_email[1];
+            }
+        }
+        $last_post_time = $db->query('SELECT MAX(post_time) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE post_ip = ' . $db->quote($client_info['ip']))->fetchColumn();
+        if ($last_post_time > NV_CURRENTTIME - (int) $module_config[$module_name]['report_limit'] * 60) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['sending_too_much']
+            ]);
+        }
+        $md5content = md5($orig_content);
+        $rid = $db->query('SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE newsid = ' . $newsid . ' AND md5content = ' . $db->quote($md5content) . ' AND  post_ip = ' . $db->quote($client_info['ip']))->fetchColumn();
+        if ($rid) {
+            $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_report SET post_email=:post_email, post_time=' . NV_CURRENTTIME . ', repl_content=:repl_content WHERE id=' . $rid);
+            $sth->bindParam(':post_email', $post_email, PDO::PARAM_STR);
+            $sth->bindParam(':repl_content', $repl_content, PDO::PARAM_STR);
+            $sth->execute();
+        } else {
+            $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_report
+        (newsid, md5content, post_ip, post_email, post_time, orig_content, repl_content) VALUES
+        ( ' . $newsid . ', :md5content, :post_ip, :post_email, ' . NV_CURRENTTIME . ', :orig_content, :repl_content)');
+            $sth->bindParam(':md5content', $md5content, PDO::PARAM_STR);
+            $sth->bindParam(':post_ip', $client_info['ip'], PDO::PARAM_STR);
+            $sth->bindParam(':post_email', $post_email, PDO::PARAM_STR);
+            $sth->bindParam(':orig_content', $orig_content, PDO::PARAM_STR);
+            $sth->bindParam(':repl_content', $repl_content, PDO::PARAM_STR);
+            $sth->execute();
+            $rid = $db->lastInsertId();
+        }
+        nv_insert_notification($module_name, 'report', ['newsid' => $newsid, 'title' => $news_details['title'], 'post_ip' => $client_info['ip'], 'post_email' => $post_email], $rid);
+        nv_jsonOutput([
+            'status' => 'OK',
+            'mess' => $lang_module['report_success']
+        ]);
+    }
 }
 
 $page_title = $module_info['site_title'];

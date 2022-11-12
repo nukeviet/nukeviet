@@ -97,6 +97,7 @@ if ($NV_IS_ADMIN_MODULE) {
     $submenu['sources'] = $lang_module['sources'];
     $submenu['authors'] = $lang_module['author_manage'];
     $submenu['admins'] = $lang_module['admin'];
+    $submenu['report'] = $lang_module['report'];
     $submenu['setting'] = [
         'title' => $lang_module['setting'],
         'submenu' => [
@@ -137,4 +138,5 @@ if ($NV_IS_ADMIN_MODULE) {
     $allow_func[] = 'setting';
     $allow_func[] = 'voices';
     $allow_func[] = 'move';
+    $allow_func[] = 'report';
 }

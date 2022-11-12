@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,6 +23,9 @@ $socialbuttons = [
     'twitter',
     'zalo'
 ];
+
+$groupslist = nv_groups_list();
+
 $savesetting = $nv_Request->get_int('savesetting', 'post', 0);
 if (!empty($savesetting)) {
     $array_config = [];
@@ -44,6 +47,10 @@ if (!empty($savesetting)) {
     $array_config['tooltip_length'] = $nv_Request->get_int('tooltip_length', 'post', 0);
     $array_config['showhometext'] = $nv_Request->get_int('showhometext', 'post', 0);
     $array_config['htmlhometext'] = $nv_Request->get_int('htmlhometext', 'post', 0);
+
+    $array_config['report_active'] = (int) $nv_Request->get_bool('report_active', 'post', false);
+    $array_config['report_limit'] = $nv_Request->get_int('report_limit', 'post', 0);
+    $array_config['report_limit'] <= 0 && $array_config['report_limit'] = 1;
 
     $array_config['facebookappid'] = $nv_Request->get_title('facebookappid', 'post', '');
     $array_config['socialbutton'] = $nv_Request->get_typed_array('socialbutton', 'post', 'title', []);
@@ -231,6 +238,7 @@ $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_art
 $xtpl->assign('IDENTIFY_CAT_CHANGE', $module_config[$module_name]['identify_cat_change'] ? ' checked="checked"' : '');
 $xtpl->assign('ALLOWED_RATING', $module_config[$module_name]['allowed_rating'] ? ' checked="checked"' : '');
 $xtpl->assign('ACTIVE_HISTORY', !empty($module_config[$module_name]['active_history']) ? ' checked="checked"' : '');
+$xtpl->assign('ALLOWED_REPORT', $module_config[$module_name]['report_active'] ? ' checked="checked"' : '');
 
 $xtpl->assign('FRONTEND_EDIT_ALIAS', $module_config[$module_name]['frontend_edit_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('FRONTEND_EDIT_LAYOUT', $module_config[$module_name]['frontend_edit_layout'] ? ' checked="checked"' : '');
@@ -321,7 +329,7 @@ $xtpl->assign('PATH', defined('NV_IS_SPADMIN') ? '' : NV_UPLOADS_DIR . '/' . $mo
 $xtpl->assign('CURRENTPATH', defined('NV_IS_SPADMIN') ? 'images' : NV_UPLOADS_DIR . '/' . $module_upload);
 
 if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)) {
-    $groups_list = nv_groups_list();
+    $groups_list = $groupslist;
     unset($groups_list[1], $groups_list[2], $groups_list[3], $groups_list[6]);
 
     $savepost = $nv_Request->get_int('savepost', 'post', 0);
@@ -335,6 +343,9 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
 
         $array_config['frontend_edit_alias'] = $nv_Request->get_int('frontend_edit_alias', 'post', 0);
         $array_config['frontend_edit_layout'] = $nv_Request->get_int('frontend_edit_layout', 'post', 0);
+
+        $array_config['report_group'] = $nv_Request->get_typed_array('report_group', 'post', 'int', []);
+        $array_config['report_group'] = !empty($array_config['report_group']) ? implode(',', nv_groups_post(array_intersect($array_config['report_group'], array_keys($groupslist)))) : '';
 
         $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
@@ -405,6 +416,17 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
         ]);
 
         $xtpl->parse('main.admin_config_post.loop');
+    }
+
+    $report_group = !empty($module_config[$module_name]['report_group']) ? array_map('intval', explode(',', $module_config[$module_name]['report_group'])) : [];
+    foreach ($groupslist as $key => $gr) {
+        $key = (int) $key;
+        $xtpl->assign('OPTION', [
+            'value' => $key,
+            'title' => $gr,
+            'checked' => (!empty($report_group) and in_array($key, $report_group, true)) ? ' checked="checked"' : ''
+        ]);
+        $xtpl->parse('main.admin_config_post.report_group');
     }
 
     $xtpl->parse('main.admin_config_post');

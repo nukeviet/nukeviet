@@ -19,10 +19,46 @@
 
 <form id="form-news-content" class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" onsubmit="return nv_validForm(this,'{MODULE_DATA}', '{ERROR_BODYTEXT}','{ERROR_CAT}');">
     <div class="row">
-        <div class="alert alert-danger" id="show_error" style="display: none">
-
-        </div>
+        <div class="alert alert-danger" id="show_error" style="display: none"></div>
         <div class="col-sm-24 col-md-18">
+            <!-- BEGIN: report -->
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-red">
+                    <a class="panel-heading{REPORT.collapsed}"  id="heading-reportlist" role="tab" data-toggle="collapse" data-parent="#accordion" href="#collapse-reportlist" aria-expanded="{REPORT.expanded}" aria-controls="collapse-reportlist">
+                    <i class="fa fa-exclamation-triangle"></i> {LANG.report} (<strong>{REPORT.count}</strong>)
+                    </a>
+                    <div id="collapse-reportlist" class="panel-collapse collapse{REPORT.in}" role="tabpanel" aria-labelledby="heading-reportlist">
+                        <div class="list-report" data-url="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=report" data-del-confirm="{LANG.report_del_confirm}">
+                            <!-- BEGIN: loop -->
+                            <div class="list-report-item item" data-id="{REPORT_DETAILS.id}">
+                                <a class="report-title{REPORT_DETAILS.collapsed}" data-toggle="collapse" href="#report-{REPORT_DETAILS.id}" aria-expanded="{REPORT_DETAILS.expanded}" aria-controls="report-{REPORT_DETAILS.id}">{REPORT_DETAILS.orig_content_short}</a>
+                                <div class="report-content collapse{REPORT_DETAILS.in}" id="report-{REPORT_DETAILS.id}">
+                                    <div class="post_info">
+                                        <span>{REPORT_DETAILS.post_info}</span>
+                                        </div>
+                                    <div class="orig_content_sector">
+                                        <label><strong>{LANG.error_text}</strong></label>
+                                        <div class="orig_content">{REPORT_DETAILS.orig_content}</div>
+                                    </div>
+                                    <!-- BEGIN: repl_content -->
+                                    <div class="repl_content_sector">
+                                        <label><strong>{LANG.proposal_text}</strong></label>
+                                        <div class="repl_content">{REPORT_DETAILS.repl_content}</div>
+                                    </div>
+                                    <!-- END: repl_content -->
+                                    <div class="post_action text-right">
+                                        <button type="button" class="btn btn-sm btn-danger report_del_action">{GLANG.delete}</button>
+                                        <button type="button" class="btn btn-sm btn-danger report_del_mail_action">{LANG.report_delete}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END: loop -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END: report -->
+
             <table class="table table-striped table-bordered">
                 <col class="w200" />
                 <col />

@@ -181,3 +181,16 @@ $lang_module['author_pseudonym_error'] = 'Bút danh đã được sử dụng. V
 $lang_module['author_unspecified_error'] = 'Đã xảy ra lỗi không xác định. Vui lòng thử lại sau!';
 $lang_module['author_page'] = 'Trang tác giả';
 $lang_module['edit_author_info'] = 'Sửa thông tin tác giả';
+
+$lang_module['article_not_found'] = 'Không tìm thấy bài viết';
+$lang_module['report_content_empty'] = 'Vui lòng xác định đoạn văn bản lỗi';
+$lang_module['report_same_values'] = 'Đoạn văn bản mà bạn đề xuất thay thế không có gì khác so với đoạn văn bản gốc';
+$lang_module['sending_too_much'] = 'Vì lý do bảo mật, chúng tôi chỉ nhận báo cáo lỗi không quá một lần trong 2 phút. Vui lòng gửi lại báo cáo này sau ít phút';
+$lang_module['report_success'] = 'Báo cáo nội dung lỗi của bạn đã được gửi. Xin cảm ơn!';
+$lang_module['text_truncated'] = 'Chúng tôi chỉ chấp nhận đoạn văn bản không vượt quá 250 ký tự. Do đó đoạn văn bản mà bạn chọn sẽ bị cắt ngắn lại.';
+$lang_module['report_error_content'] = 'Báo cáo nội dung lỗi';
+$lang_module['error_text'] = 'Đoạn văn bản lỗi';
+$lang_module['proposal_text'] = 'Đoạn văn bản đề xuất thay thế';
+$lang_module['post_email'] = 'Email của bạn';
+$lang_module['post_email_note'] = 'Chúng tôi sẽ kiểm tra nội dung báo cáo lỗi của bạn. Vui lòng cung cấp email của bạn để chúng tôi có thể thông báo cho bạn khi có kết quả kiểm tra.';
+$lang_module['post_email_error'] = 'Vui lòng để trống hoặc khai báo email hợp lệ';

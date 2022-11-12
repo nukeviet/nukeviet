@@ -382,3 +382,89 @@ input {
 .witdh-100p {
     width: 100%;
 }
+
+.panel-red {
+    border-color: #dc3545;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.panel-red .panel-heading {
+    display: block;
+    background-color: #dc3545;
+    color: #ffffff;
+    outline:0;
+}
+
+.panel-red a.panel-heading,
+.panel-red a.panel-heading:hover,
+.panel-red a.panel-heading:link,
+.panel-red a.panel-heading:active,
+.panel-red a.panel-heading a:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+.report-title,
+.report-title:hover,
+.report-title:link,
+.report-title:visited,
+.report-title:active {
+    display: block;
+    padding: 10px 14px;
+    background-color: #333333;
+    color: #fff;
+    text-decoration: none;
+    outline:0;
+}
+
+.report-title.collapsed {
+    background-color: #e6e6e6;
+    color: #333;
+}
+
+.panel-red .panel-heading::after,
+.report-title::after {
+    float: right;
+    font-family: "FontAwesome";
+    content: "\f077";
+}
+
+.panel-red .panel-heading.collapsed::after,
+.report-title.collapsed::after {
+    content: "\f078";
+}
+
+.list-report-item:not(:last-child) {
+    border-bottom: 1px solid #fff;
+}
+
+.report-content {
+    padding: 14px;
+}
+
+.report-content > :not(:first-child) {
+    margin-top: 15px;
+}
+
+.orig_content {
+    border: 1px solid #ebccd1;
+    border-radius: 4px;
+    background-color: #f2dede;
+    padding: 10px;
+}
+
+.repl_content {
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.post_info span {
+    display: inline-block;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #f2f2f2;
+    font-size: 12px;
+}

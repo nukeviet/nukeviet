@@ -1311,6 +1311,19 @@ $lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_m
 
 $rowcontent['style_content_bodytext_required'] = $rowcontent['external_link'] ? 'hidden' : '';
 
+// Lấy danh sách báo lỗi
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE newsid = ' . $rowcontent['id'] . ' ORDER BY post_time DESC';
+$result = $db->query($sql);
+$reportlist = [];
+while ($reportrow = $result->fetch()) {
+    $reportlist[$reportrow['id']] = $reportrow;
+}
+
+$rid = $nv_Request->get_int('rid', 'get', 0);
+if (empty($reportlist) or !isset($reportlist[$rid])) {
+    $rid = 0;
+}
+
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('rowcontent', $rowcontent);
@@ -1333,6 +1346,30 @@ if ($rowcontent['id'] > 0) {
     $lang_module['save_temp'] = $lang_module['save'];
 }
 $xtpl->assign('LANG', $lang_module);
+
+if (!empty($reportlist)) {
+    $xtpl->assign('REPORT', [
+        'count' => sizeof($reportlist),
+        'collapsed' => !empty($rid) ? '' : ' collapsed',
+        'expanded' => !empty($rid) ? 'true' : 'false',
+        'in' => !empty($rid) ? ' in' : ''
+    ]);
+    foreach ($reportlist as $report) {
+        $report['collapsed'] = $report['id'] == $rid ? '' : ' collapsed';
+        $report['expanded'] = $report['id'] == $rid ? 'true' : 'false';
+        $report['in'] = $report['id'] == $rid ? ' in' : '';
+        $report['post_info'] = date('d/m/Y H:i', $report['post_time']) . ', ' . $lang_module['post_ip'] . ': ' . $report['post_ip'] . (!empty($report['post_email']) ? ', ' . $lang_module['post_email'] . ': ' . $report['post_email'] : '');
+        $report['orig_content_short'] = text_split($report['orig_content'], 50);
+        $report['orig_content_short'] = $report['orig_content_short'][0] . (!empty($report['orig_content_short'][1]) ? '...' : '');
+        $xtpl->assign('REPORT_DETAILS', $report);
+
+        if (!empty($report['repl_content'])) {
+            $xtpl->parse('main.report.loop.repl_content');
+        }
+        $xtpl->parse('main.report.loop');
+    }
+    $xtpl->parse('main.report');
+}
 
 $xtpl->assign('module_name', $module_name);
 

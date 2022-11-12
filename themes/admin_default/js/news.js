@@ -711,13 +711,15 @@ $(function() {
         $($(this).data('target')).val(nv_randomPassword(10));
     });
 
-    $("#from_date, #to_date").datepicker({
-        dateFormat: "dd/mm/yy",
-        changeMonth: true,
-        changeYear: true,
-        showOtherMonths: true,
-        showOn: 'focus'
-    });
+    if ($("#from_date, #to_date").length) {
+        $("#from_date, #to_date").datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            showOn: 'focus'
+        });
+    }
 
     $('#to-btn').click(function() {
         $("#to_date").datepicker('show');
@@ -766,6 +768,70 @@ $(function() {
             }
         });
     });
+
+    $('.number').on('input', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    });
+
+    // Xóa báo cáo lỗi
+    $('.report_del_action, .report_del_mail_action').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).parents('.list-report').data('url'),
+            rid = $(this).parents('.item').data('id'),
+            action = $(this).is('.report_del_action') ? 'del_action' : 'del_mail_action',
+            conf = confirm($(this).parents('.list-report').data('del-confirm'));
+        if (conf) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    'action': action,
+                    'rid': rid
+                },
+                cache: false,
+                success: function(respon) {
+                    window.location.href = window.location.href;
+                }
+            })
+        }
+    });
+
+    // Xóa hàng loạt báo cáo lỗi
+    $('.report_del_check_action').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).parents('.list-report').data('url'),
+            list = [];
+        $('.checkitem:checked').each(function() {
+            list.push($(this).val());
+        });
+        if (!list.length) {
+            alert($(this).data('not-checked'));
+            return !1
+        }
+        if (confirm($(this).parents('.list-report').data('del-confirm'))) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    'action': 'multidel',
+                    'list': list
+                },
+                cache: false,
+                success: function(respon) {
+                    window.location.href = window.location.href;
+                }
+            })
+        }
+    });
+
+    // Chọn/bỏ chọn tất cả
+    $('.list-report .checkall').on('change', function(e) {
+        $('.list-report .checkall, .list-report .checkitem').prop('checked', $(this).is(':checked'))
+    });
+    $('.list-report .checkitem').on('change', function(e) {
+        $('.list-report .checkall').prop('checked', $('.list-report .checkitem:not(:checked').length == 0)
+    });
+
 });
 
 function nv_sort_content(id, w) {
@@ -810,40 +876,43 @@ function nv_change_voice_weight(id, tokend) {
     $('#change_weight_' + id).prop('disabled', true);
     $.post(
         script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
-        'changeweight=' + tokend + '&id=' + id + '&new_weight=' + new_weight, function(res) {
-        $('#change_weight_' + id).prop('disabled', false);
-        var r_split = res.split("_");
-        if (r_split[0] != 'OK') {
-            alert(nv_is_change_act_confirm[2]);
-        }
-        location.reload();
-    });
+        'changeweight=' + tokend + '&id=' + id + '&new_weight=' + new_weight,
+        function(res) {
+            $('#change_weight_' + id).prop('disabled', false);
+            var r_split = res.split("_");
+            if (r_split[0] != 'OK') {
+                alert(nv_is_change_act_confirm[2]);
+            }
+            location.reload();
+        });
 }
 
 function nv_change_voice_status(id, tokend) {
     $('#change_status' + id).prop('disabled', true);
     $.post(
         script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
-        'changestatus=' + tokend + '&id=' + id, function(res) {
-        $('#change_status' + id).prop('disabled', false);
-        if (res != 'OK') {
-            alert(nv_is_change_act_confirm[2]);
-            location.reload();
-        }
-    });
+        'changestatus=' + tokend + '&id=' + id,
+        function(res) {
+            $('#change_status' + id).prop('disabled', false);
+            if (res != 'OK') {
+                alert(nv_is_change_act_confirm[2]);
+                location.reload();
+            }
+        });
 }
 
 function nv_delele_voice(id, tokend) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(
             script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=voices&nocache=' + new Date().getTime(),
-            'delete=' + tokend + '&id=' + id, function(res) {
-            var r_split = res.split("_");
-            if (r_split[0] == 'OK') {
-                location.reload();
-            } else {
-                alert(nv_is_del_confirm[2]);
-            }
-        });
+            'delete=' + tokend + '&id=' + id,
+            function(res) {
+                var r_split = res.split("_");
+                if (r_split[0] == 'OK') {
+                    location.reload();
+                } else {
+                    alert(nv_is_del_confirm[2]);
+                }
+            });
     }
 }

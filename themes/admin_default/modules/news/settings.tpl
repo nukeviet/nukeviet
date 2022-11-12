@@ -10,6 +10,9 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_view}</caption>
+            <colgroup>
+                <col style="width: 40%;"/>
+            </colgroup>
             <tbody>
                 <tr>
                     <th>{LANG.setting_indexfile}</th>
@@ -31,20 +34,20 @@
                 </tr>
                 <tr>
                     <th>{LANG.setting_homesite}</th>
-                    <td><input class= "form-control" type="text" value="{DATA.homewidth}" name="homewidth" /><span class="text-middle"> x </span><input class= "form-control" type="text" value="{DATA.homeheight}" name="homeheight" /></td>
+                    <td><input class= "form-control w100 number" type="text" value="{DATA.homewidth}" name="homewidth" /><span class="text-middle"> x </span><input class= "form-control w100 number" type="text" value="{DATA.homeheight}" name="homeheight" /></td>
                 </tr>
                 <tr>
                     <th>{LANG.setting_thumbblock}</th>
-                    <td><input class= "form-control" type="text" value="{DATA.blockwidth}" name="blockwidth" /><span class="text-middle"> x </span><input class= "form-control" type="text" value="{DATA.blockheight}" name="blockheight" /></td>
+                    <td><input class= "form-control w100 number" type="text" value="{DATA.blockwidth}" name="blockwidth" /><span class="text-middle"> x </span><input class= "form-control w100 number" type="text" value="{DATA.blockheight}" name="blockheight" /></td>
                 </tr>
                 <tr>
                     <th>{LANG.setting_imagefull}</th>
-                    <td><input class= "form-control" type="text" value="{DATA.imagefull}" name="imagefull" /></td>
+                    <td><input class= "form-control w100 number" type="text" value="{DATA.imagefull}" name="imagefull" /></td>
                 </tr>
                 <tr>
                     <th>{LANG.setting_per_page}</th>
                     <td>
-                    <select class="form-control" name="per_page">
+                    <select class="form-control w100" name="per_page">
                         <!-- BEGIN: per_page -->
                         <option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.title}</option>
                         <!-- END: per_page -->
@@ -53,7 +56,7 @@
                 <tr>
                     <th>{LANG.setting_st_links}</th>
                     <td>
-                    <select class="form-control" name="st_links">
+                    <select class="form-control w100" name="st_links">
                         <!-- BEGIN: st_links -->
                         <option value="{ST_LINKS.key}"{ST_LINKS.selected}>{ST_LINKS.title}</option>
                         <!-- END: st_links -->
@@ -64,13 +67,13 @@
                     <td>
                         <input type="checkbox" value="1" name="showtooltip"{SHOWTOOLTIP}/>
                         &nbsp;&nbsp;&nbsp;<span class="text-middle">{LANG.showtooltip_position}</span>
-                        <select name="tooltip_position" class="form-control">
+                        <select name="tooltip_position w100" class="form-control">
                             <!-- BEGIN: tooltip_position -->
                             <option value="{TOOLTIP_P.key}"{TOOLTIP_P.selected}>{TOOLTIP_P.title}</option>
                             <!-- END: tooltip_position -->
                         </select>
                         &nbsp;&nbsp;&nbsp;<span class="text-middle">{LANG.showtooltip_length}</span>
-                        <input type="text" name="tooltip_length" class="form-control" value="{DATA.tooltip_length}" style="width: 100px" />
+                        <input type="text" name="tooltip_length" class="form-control w100 number" value="{DATA.tooltip_length}" style="width: 100px" />
                     </td>
                 </tr>
                 <tr>
@@ -96,12 +99,20 @@
                 <tr>
                     <th>{LANG.allowed_rating_point}</th>
                     <td>
-                        <select class="form-control" name="allowed_rating_point">
+                        <select class="form-control w100" name="allowed_rating_point">
                             <!-- BEGIN: allowed_rating_point -->
                             <option value="{RATING_POINT.key}"{RATING_POINT.selected}>{RATING_POINT.title}</option>
                             <!-- END: allowed_rating_point -->
                         </select>
                     </td>
+                </tr>
+                <tr>
+                    <th>{LANG.report_active}</th>
+                    <td><input type="checkbox" value="1" name="report_active"{ALLOWED_REPORT}/></td>
+                </tr>
+                <tr>
+                    <th>{LANG.report_limit}</th>
+                    <td><input type="text" class="form-control w100 number" value="{DATA.report_limit}" name="report_limit" maxlength="4">{GLANG.minute}</td>
                 </tr>
                 <tr>
                     <th>{LANG.show_no_image}</th>
@@ -126,6 +137,9 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_post}</caption>
+            <colgroup>
+                <col style="width: 40%;"/>
+            </colgroup>
             <tbody>
                 <tr>
                     <th>{LANG.facebookAppID}</th>
@@ -190,6 +204,9 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_elasticseach}</caption>
+            <colgroup>
+                <col style="width: 40%;"/>
+            </colgroup>
             <tbody>
                 <tr>
                     <td colspan="2">
@@ -207,7 +224,7 @@
                 </tr>
                 <tr>
                     <th>{LANG.setting_elas_port}</th>
-                    <td><input class="form-control" type="text" value="{DATA.elas_port}" name="elas_port"/></td>
+                    <td><input class="form-control number" type="text" value="{DATA.elas_port}" name="elas_port"/></td>
                 </tr>
                 <tr>
                     <th>{LANG.setting_elas_index}</th>
@@ -219,6 +236,9 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_insart_caption}</caption>
+            <colgroup>
+                <col style="width: 40%;"/>
+            </colgroup>
             <tbody>
                 <tr>
                     <th class="w400">{LANG.setting_active_instant_articles}</th>
@@ -254,11 +274,11 @@
                 </tr>
                 <tr>
                     <th class="w400">{LANG.setting_instant_articles_livetime}&nbsp;(<a href="javascript:void(0);" data-toggle="tooltip" title="{LANG.setting_instant_articles_livetime1}"><i class="fa fa-info-circle"></i></a>)</th>
-                    <td><input type="text" value="{DATA.instant_articles_livetime}" name="instant_articles_livetime" class="form-control"/></td>
+                    <td><input type="text" value="{DATA.instant_articles_livetime}" name="instant_articles_livetime" class="form-control w100 number"/></td>
                 </tr>
                 <tr>
                     <th class="w400">{LANG.setting_instant_articles_gettime}&nbsp;(<a href="javascript:void(0);" data-toggle="tooltip" title="{LANG.setting_instant_articles_gettime1}"><i class="fa fa-info-circle"></i></a>)</th>
-                    <td><input type="text" value="{DATA.instant_articles_gettime}" name="instant_articles_gettime" class="form-control"/></td>
+                    <td><input type="text" value="{DATA.instant_articles_gettime}" name="instant_articles_gettime" class="form-control w100 number"/></td>
                 </tr>
                 <tr>
                     <th class="w400">{LANG.setting_instant_articles_defaulturl}</th>
@@ -273,6 +293,9 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption><i class="fa fa-file-text-o"></i> {LANG.setting_sys}</caption>
+            <colgroup>
+                <col style="width: 40%;"/>
+            </colgroup>
             <tbody>
                 <tr>
                     <th class="w400">{LANG.setting_identify_cat_change}</th>
@@ -342,6 +365,9 @@ $(document).ready(function() {
     <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_frontend_post}</caption>
+            <colgroup>
+                <col style="width: 40%;"/>
+            </colgroup>
             <tbody>
                 <tr>
                     <th class="w400">{LANG.frontend_edit_alias}</th>
@@ -350,6 +376,26 @@ $(document).ready(function() {
                 <tr>
                     <th class="w400">{LANG.frontend_edit_layout}</th>
                     <td><input type="checkbox" name="frontend_edit_layout" value="1"{FRONTEND_EDIT_LAYOUT}/></td>
+                </tr>
+            </tbody>
+        </table>
+   </div>
+   <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+            <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.report}</caption>
+            <colgroup>
+                <col style="width: 40%;"/>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th class="w400">{LANG.report_group}</th>
+                    <td>
+                        <ul class="list-unstyled">
+                            <!-- BEGIN: report_group -->
+                            <li><label><input name="report_group[]" type="checkbox" value="{OPTION.value}" {OPTION.checked} />{OPTION.title}</label></li>
+                            <!-- END: report_group -->
+                        </ul>
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
