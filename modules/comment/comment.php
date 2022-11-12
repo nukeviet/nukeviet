@@ -33,9 +33,9 @@ function nv_comment_data($module, $area, $id, $page, $sortcomm, $base_url)
 
     $_where = 'a.module=' . $db_slave->quote($module);
     if ($area) {
-        $_where .= ' AND a.area= ' . $area;
+        $_where .= ' AND a.area= ' . $db_slave->quote($area);
     }
-    $_where .= ' AND a.id= ' . $id . ' AND a.status=1 AND a.pid=0';
+    $_where .= ' AND a.id= ' . $db_slave->quote($id) . ' AND a.status=1 AND a.pid=0';
 
     $db_slave->sqlreset()
         ->select('COUNT(*)')
@@ -168,7 +168,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (!empty($module) and isset($module_config[$module]['activecomm'])) {
-        if ($id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
+        if (!empty($id) and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
             if (file_exists(NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php')) {
                 require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
             } else {
@@ -229,7 +229,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (!empty($module) and isset($module_config[$module]['activecomm'])) {
-        if ($id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
+        if (!empty($id) and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
             $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
             $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
 

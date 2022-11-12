@@ -20,8 +20,8 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . "_comment (
  cid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  module varchar(55) NOT NULL,
- area int(11) NOT NULL DEFAULT '0',
- id mediumint(8) unsigned NOT NULL DEFAULT '0',
+ area CHAR(50) NOT NULL DEFAULT '',
+ id CHAR(50) NOT NULL DEFAULT '',
  pid mediumint(8) unsigned NOT NULL DEFAULT '0',
  content text NOT NULL,
  attach varchar(255) NOT NULL DEFAULT '',

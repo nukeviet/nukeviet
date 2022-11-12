@@ -19,8 +19,8 @@ $module = $nv_Request->get_string('module', 'post,get');
 if (!empty($module) and isset($module_config[$module]['activecomm'])) {
     require_once NV_ROOTDIR . '/modules/comment/comment.php';
 
-    $area = $nv_Request->get_int('area', 'post,get', 0);
-    $id = $nv_Request->get_int('id', 'post,get', 0);
+    $area = $nv_Request->get_title('area', 'post,get', '');
+    $id = $nv_Request->get_title('id', 'post,get', '');
     $allowed_comm = $nv_Request->get_title('allowed', 'post,get', 0);
     $checkss = $nv_Request->get_title('checkss', 'post,get');
     $page = $nv_Request->get_int('page', 'get', 1);

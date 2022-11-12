@@ -133,8 +133,8 @@ if ($sstatus == 0 or $sstatus == 1) {
 }
 if (!empty($from['q'])) {
     $array_like = [];
-    if ($stype == 'content_id' and preg_match('/^([0-9]+)$/', $from['q'])) {
-        $array_like[] = 'id =' . (int) ($from['q']);
+    if ($stype == 'content_id') {
+        $array_like[] = 'id LIKE :id';
     } else {
         if ($stype == '' or $stype == 'content') {
             $array_like[] = 'content LIKE :content';
@@ -162,6 +162,9 @@ if (!empty($array_where)) {
 }
 $sql = $db->sql();
 $sth = $db->prepare($sql);
+if (str_contains($sql, ':id')) {
+    $sth->bindValue(':id', '%' . $from['q'] . '%', PDO::PARAM_STR);
+}
 if (str_contains($sql, ':content')) {
     $sth->bindValue(':content', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }
@@ -179,6 +182,9 @@ $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 $db->select('cid, module, area, id, content, attach, userid, post_name, post_email, status')->order('cid DESC')->limit($per_page)->offset(($page - 1) * $per_page);
 $sql = $db->sql();
 $sth = $db->prepare($sql);
+if (str_contains($sql, ':id')) {
+    $sth->bindValue(':id', '%' . $from['q'] . '%', PDO::PARAM_STR);
+}
 if (str_contains($sql, ':content')) {
     $sth->bindValue(':content', '%' . $from['q'] . '%', PDO::PARAM_STR);
 }

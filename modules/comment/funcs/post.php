@@ -29,11 +29,11 @@ if (empty($module) or !isset($module_config[$module]['activecomm']) or !isset($s
 }
 
 // Kiểm tra module có được Sử dụng chức năng bình luận
-$area = $nv_Request->get_int('area', 'post', 0);
-$id = $nv_Request->get_int('id', 'post');
+$area = $nv_Request->get_title('area', 'post', '');
+$id = $nv_Request->get_title('id', 'post', '');
 $allowed_comm = $nv_Request->get_title('allowed', 'post');
 $checkss = $nv_Request->get_title('checkss', 'post');
-if ($id <= 0 or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX)) {
+if (empty($id) or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX)) {
     _loadContents('ERR__' . $lang_module['comment_unsuccess']);
 }
 
@@ -183,9 +183,11 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
 
 try {
     $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, attach, post_time, userid, post_name, post_email, post_ip, status) VALUES 
-            (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, :attach, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')';
+            (:module, :area, :id, ' . $pid . ', :content, :attach, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')';
     $data_insert = [];
     $data_insert['module'] = $module;
+    $data_insert['area'] = $area;
+    $data_insert['id'] = $id;
     $data_insert['content'] = $content;
     $data_insert['attach'] = $fileupload;
     $data_insert['post_name'] = $name;
