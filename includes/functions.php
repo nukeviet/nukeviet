@@ -15,6 +15,21 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+// Dành cho các phiên bản php nhỏ hơn 8.1
+if (!function_exists('array_is_list')) {
+    /**
+     * array_is_list()
+     * Kiểm tra mảng có phải có dạng danh sách hay không (key từ 0 đến n)
+     * 
+     * @param mixed $a 
+     * @return bool 
+     */
+    function array_is_list($a)
+    {
+        return is_array($a) && ($a === [] || (array_keys($a) === range(0, count($a) - 1)));
+    }
+}
+
 /**
  * pr()
  *
@@ -2774,7 +2789,7 @@ function add_push($args)
     $data['receiver_grs'] = !empty($data['receiver_grs']) ? implode(',', $data['receiver_grs']) : '';
     $data['sender_role'] == 'group' && $data['receiver_grs'] = '';
     $data['receiver_ids'] = !empty($data['receiver_ids']) ? implode(',', $data['receiver_ids']) : '';
-    $data['message'] = nv_nl2br(strip_tags($data['message'], '<br>'),'<br/>');
+    $data['message'] = nv_nl2br(strip_tags($data['message'], '<br>'), '<br/>');
     if (!empty($data['link']) and !preg_match('#^https?\:\/\/#', $data['link'])) {
         str_starts_with($data['link'], NV_BASE_SITEURL) && $data['link'] = substr($data['link'], strlen(NV_BASE_SITEURL));
     }
