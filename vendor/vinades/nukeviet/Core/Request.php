@@ -749,7 +749,7 @@ class Request
                     }
                 }
 
-                if (preg_replace('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', '', $value)) {
+                if (preg_match('/\<\s*s\s*c\s*r\s*i\s*p\s*t([^\>]*)\>(.*)\<\s*\/\s*s\s*c\s*r\s*i\s*p\s*t\s*\>/isU', $value)) {
                     continue;
                 }
 
