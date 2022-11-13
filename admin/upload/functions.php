@@ -31,7 +31,7 @@ $allow_func = [
     'main', 'imglist', 'delimg', 'createimg',
     'dlimg', 'renameimg', 'moveimg', 'folderlist',
     'delfolder', 'renamefolder', 'createfolder',
-    'upload', 'addlogo', 'cropimg', 'rotateimg', 'download'
+    'upload', 'addlogo', 'cropimg', 'rotateimg', 'download', 'webpconvert'
 ];
 
 if (defined('NV_IS_SPADMIN')) {

@@ -247,6 +247,27 @@ function download() {
     $("iframe#Fdownload").attr("src", nv_module_url + "dlimg&path=" + fullPath + "&img=" + selFile);
 }
 
+// Tạo WEBP
+function webpconvert() {
+    var selFile = $("input[name=selFile]").val();
+    var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+
+    fullPath = (selFileData[7] == "") ? $("span#foldervalue").attr("title") : selFileData[7];
+    $.ajax({
+        type: "POST",
+        url: nv_module_url + "webpconvert",
+        data: "path=" + fullPath + "&img=" + selFile,
+        dataType: 'json',
+        success: function(e) {
+            if (e.status == 'error') {
+                alert(e.mess);
+            } else if (e.status == 'OK') {
+                LFILE.reload(fullPath, e.file);
+            }
+        }
+    })
+}
+
 // Xem thong tin chi tiet
 function preview() {
     $("div.dynamic").text("");
@@ -548,6 +569,10 @@ function fileMouseup(file, e) {
                     html += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
                     html += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
                 }
+            }
+
+            if ($.inArray(fileExt, ['jpg', 'jpeg', 'png']) !== -1 && !isMultiple) {
+                html += '<li id="webpconvert"><em class="fa fa-lg ' + ICON.webpconvert + '">&nbsp;</em>' + LANG.webpconvert + '</li>';
             }
 
             if ($("span#move_file").attr("title") == "1") {
@@ -1035,6 +1060,7 @@ ICON.filecrop = 'fa-crop';
 ICON.filerotate = 'fa-repeat';
 ICON.addlogo = 'fa-file-image-o';
 ICON.spin = 'fa-spin';
+ICON.webpconvert = 'fa-file-image-o';
 
 $(".vchange").change(function() {
     var a = $("span#foldervalue").attr("title"),
@@ -2429,6 +2455,9 @@ var NVCMENU = {
         },
         deletefolder: function() {
             deletefolder()
+        },
+        webpconvert: function() {
+            webpconvert()
         }
     },
     init: function() {

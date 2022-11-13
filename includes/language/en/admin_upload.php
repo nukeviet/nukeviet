@@ -195,3 +195,4 @@ $lang_module['upload_overflow'] = 'Overflow file size';
 $lang_module['upload_overflow_help'] = 'Allows uploading files larger than the maximum file size. Note: Only works when uploading files directly from your computer in the file manager, the Chunk Upload section above is set. The value configured here must not be less than the maximum size of the uploaded file set above';
 $lang_module['nv_mobile_mode_img'] = 'Create image for mobile mode';
 $lang_module['nv_mobile_mode_img_note'] = 'Image width (0 = no creation)';
+$lang_module['webpconvert'] = 'Create file in WEBP format';
