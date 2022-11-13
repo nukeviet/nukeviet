@@ -32,7 +32,8 @@ $array_table = [
     'tmp',
     'author',
     'authorlist',
-    'voices'
+    'voices',
+    'report'
 ];
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
@@ -360,7 +361,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   post_time INT(11) NOT NULL DEFAULT '0',
   orig_content VARCHAR(255) NOT NULL DEFAULT '',
   repl_content VARCHAR(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (id) USING BTREE,
+  PRIMARY KEY (id),
   UNIQUE KEY newsid_md5content_post_ip (newsid, md5content, post_ip)
 ) ENGINE=MyISAM";
 
