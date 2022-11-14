@@ -94,12 +94,12 @@ private static $installed = array (
     ),
     'phpmailer/phpmailer' => 
     array (
-      'pretty_version' => 'v6.5.3',
-      'version' => '6.5.3.0',
+      'pretty_version' => 'v6.6.5',
+      'version' => '6.6.5.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'baeb7cde6b60b1286912690ab0693c7789a31e71',
+      'reference' => '8b6386d7417526d1ea4da9edb70b8352f7543627',
     ),
     'symfony/polyfill-mbstring' => 
     array (
@@ -112,21 +112,21 @@ private static $installed = array (
     ),
     'tecnickcom/tc-lib-barcode' => 
     array (
-      'pretty_version' => '1.17.7',
-      'version' => '1.17.7.0',
+      'pretty_version' => '1.17.14',
+      'version' => '1.17.14.0',
       'aliases' => 
       array (
       ),
-      'reference' => '5975807c1cc9d9b50377529f22a4fdb435e75b6a',
+      'reference' => '4907ef1e384dbb7d3100c897925e7dc071a419a3',
     ),
     'tecnickcom/tc-lib-color' => 
     array (
-      'pretty_version' => '1.14.6',
-      'version' => '1.14.6.0',
+      'pretty_version' => '1.14.14',
+      'version' => '1.14.14.0',
       'aliases' => 
       array (
       ),
-      'reference' => '83cdb57fd900901c6aa2af8cfd67202518fb69b2',
+      'reference' => 'f9e45c59496418227184626ad31e83470153c11f',
     ),
     'true/punycode' => 
     array (
