@@ -476,7 +476,7 @@ if ($nv_Request->isset_request('__sendmail', 'post')) {
             $cts = file_get_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
             $cts = json_decode($cts, true);
             @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
-            @nv_sendmail($cts['from'], $cts['to'], $cts['subject'], $cts['message'], $cts['files'], $cts['AddEmbeddedImage'], $cts['testmode'], $cts['cc'], $cts['bcc'], $cts['mailhtml']);
+            @nv_sendmail($cts['from'], $cts['to'], $cts['subject'], $cts['message'], $cts['files'], $cts['AddEmbeddedImage'], $cts['testmode'], $cts['cc'], $cts['bcc'], $cts['mailhtml'], $cts['custom_headers']);
         }
     }
     exit(0);

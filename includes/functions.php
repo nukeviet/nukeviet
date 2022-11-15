@@ -20,9 +20,9 @@ if (!function_exists('array_is_list')) {
     /**
      * array_is_list()
      * Kiểm tra mảng có phải có dạng danh sách hay không (key từ 0 đến n)
-     * 
-     * @param mixed $a 
-     * @return bool 
+     *
+     * @param mixed $a
+     * @return bool
      */
     function array_is_list($a)
     {
@@ -1284,16 +1284,17 @@ function mailAddHtml($subject, $body)
 /**
  * nv_sendmail()
  *
- * @param array|string $from
- * @param array|string $to
- * @param string       $subject
- * @param string       $message
- * @param string       $files
- * @param bool         $AddEmbeddedImage
- * @param bool         $testmode
- * @param array|string $cc
- * @param array        $bcc
- * @param bool         $mailhtml
+ * @param mixed  $from
+ * @param mixed  $to
+ * @param string $subject
+ * @param string $message
+ * @param string $files
+ * @param bool   $AddEmbeddedImage
+ * @param bool   $testmode
+ * @param mixed  $cc
+ * @param array  $bcc
+ * @param bool   $mailhtml
+ * @param array  $custom_headers
  * @return bool
  *
  * $from:             Nếu là string thì nó được hiểu là reply_address
@@ -1321,8 +1322,10 @@ function mailAddHtml($subject, $body)
  *                    Hoặc: contact@nukeviet.vn,contact2@nukeviet.vn
  *
  * $mailhtml:         Xác định có thêm khung HTML vào nội dung thư hay không, mặc định true
+ *
+ * $custom_headers:   Tiêu đề tùy chỉnh thêm vào phần header của mail (Dạng: Khóa => Giá trị)
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true)
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true, $custom_headers = [])
 {
     global $global_config;
 
@@ -1445,6 +1448,13 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
+        // Thêm tiêu đề tùy chỉnh
+        if (!empty($custom_headers)) {
+            foreach ($custom_headers as $key => $val) {
+                $mail->addCustomHeader($key, $val);
+            }
+        }
+
         nv_apply_hook('', 'sendmail_others_actions', [$global_config, $mail]);
 
         // Gửi mail
@@ -1540,8 +1550,9 @@ function _otherMethodSendmail($sm_parameters)
  * @param array|string $cc
  * @param array        $bcc
  * @param bool         $mailhtml
+ * @param array        $custom_headers
  */
-function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true)
+function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true, $custom_headers = [])
 {
     global $global_config;
 
@@ -1555,7 +1566,8 @@ function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbe
         'testmode' => $testmode,
         'cc' => $cc,
         'bcc' => $bcc,
-        'mailhtml' => $mailhtml
+        'mailhtml' => $mailhtml,
+        'custom_headers' => $custom_headers
     ], JSON_UNESCAPED_UNICODE);
 
     $file_name = nv_genpass(8);
