@@ -96,6 +96,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         $mail->setContent($mess_content);
         $mail->setSubject($row['title']);
+        $mail->addCustomHeader('References', md5('contact' . $id . $global_config['sitekey']));
         if ($mail->Send()) {
             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_reply (id, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
             $sth->bindParam(':reply_content', $mess_content, PDO::PARAM_STR, strlen($mess_content));
