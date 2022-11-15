@@ -551,3 +551,4 @@ $lang_module['passshow_button_0'] = 'Non intégré';
 $lang_module['passshow_button_1'] = 'Toujours intégré';
 $lang_module['passshow_button_2'] = 'Intégré uniquement pour les utilisateurs enregistrés';
 $lang_module['passshow_button_3'] = 'Intégré uniquement pour les administrateurs';
+$lang_module['config_description'] = 'Remarques sur la configuration';

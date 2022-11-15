@@ -17,12 +17,13 @@ $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $config_key = $nv_Request->get_typed_array('config_key', 'post', 'title', []);
     $config_value = $nv_Request->get_typed_array('config_value', 'post', 'title', []);
+    $config_description = $nv_Request->get_typed_array('config_description', 'post', 'title', []);
 
     $custom_configs = [];
     if (!empty($config_key)) {
         foreach ($config_key as $i => $key) {
             if (preg_match('/^[a-zA-Z][a-zA-Z0-9\_]*$/', $key) and !empty($config_value[$i])) {
-                $custom_configs[$key] = $config_value[$i];
+                $custom_configs[$key] = [$config_value[$i], $config_description[$i]];
             }
         }
     }
@@ -47,6 +48,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
 }
 
+$custom_configs = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name = 'custom_configs' AND lang='" . NV_LANG_DATA . "' AND module='global'")->fetchColumn();
+$custom_configs = !empty($custom_configs) ? json_decode($custom_configs, true) : ['' => ['', '']];
+
 $xtpl = new XTemplate('custom.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -57,24 +61,13 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('CHECKSS', $checkss);
 
-$custom_configs = [];
-if (!empty($global_config['custom_configs'])) {
-    foreach ($global_config['custom_configs'] as $key => $value) {
-        $custom_configs[] = [
-            'key' => $key,
-            'value' => $value
-        ];
-    }
-}
-if (empty($custom_configs)) {
-    $custom_configs[] = [
-        'key' => '',
-        'value' => ''
+foreach ($custom_configs as $key => $vals) {
+    $custom = [
+        'key' => $key,
+        'value' => is_array($vals) ? $vals[0] : $vals,
+        'description' => is_array($vals) ? $vals[1] : ''
     ];
-}
-
-foreach ($custom_configs as $custom_config) {
-    $xtpl->assign('CUSTOM', $custom_config);
+    $xtpl->assign('CUSTOM', $custom);
     $xtpl->parse('main.loop');
 }
 

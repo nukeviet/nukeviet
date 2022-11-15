@@ -559,3 +559,4 @@ $lang_module['passshow_button_0'] = 'Không tích hợp';
 $lang_module['passshow_button_1'] = 'Luôn tích hợp';
 $lang_module['passshow_button_2'] = 'Chỉ tích hợp cho người dùng đã đăng ký';
 $lang_module['passshow_button_3'] = 'Chỉ tích hợp cho quản trị viên';
+$lang_module['config_description'] = 'Ghi chú cấu hình';

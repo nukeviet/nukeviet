@@ -5,20 +5,22 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <colgroup>
-                <col>
-                <col>
+                <col style="width:30%;min-width:150px">
+                <col style="width:30%;min-width:150px">
+                <col style="min-width:200px">
                 <col style="width: 1%;">
             </colgroup>
             <thead>
                 <tr class="bg-primary">
                     <th>{LANG.config_key}</th>
                     <th>{LANG.config_value}</th>
+                    <th>{LANG.config_description}</th>
                     <th></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="3" class="text-center">
+                    <td colspan="4" class="text-center">
                         <input type="hidden" name="checkss" value="{CHECKSS}" />
                         <button type="button" class="btn btn-default addconfig">{LANG.addconfig}</button>
                         <input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary w100" />
@@ -34,6 +36,9 @@
                         <input type="text" class="form-control required" name="config_value[]" value="">
                     </td>
                     <td>
+                        <input type="text" class="form-control" name="config_description[]" value="">
+                    </td>
+                    <td>
                         <button type="button" class="btn btn-default del-item">{GLANG.delete}</button>
                     </td>
                 </tr>
@@ -44,6 +49,9 @@
                     </td>
                     <td>
                         <input type="text" class="form-control required" name="config_value[]" value="{CUSTOM.value}">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="config_description[]" value="{CUSTOM.description}">
                     </td>
                     <td>
                         <button type="button" class="btn btn-default del-item">{GLANG.delete}</button>

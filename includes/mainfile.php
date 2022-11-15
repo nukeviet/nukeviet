@@ -380,7 +380,15 @@ if (!empty($global_config['site_phone']) and preg_match('/^(.+)\[([0-9\*\#\+\-\.
     $global_config['site_int_phone'] = $matches[2];
 }
 
-$global_config['custom_configs'] = !empty($global_config['custom_configs']) ? json_decode($global_config['custom_configs'], true) : [];
+if (!empty($global_config['custom_configs'])) {
+    $custom_configs = json_decode($global_config['custom_configs'], true);
+    $global_config['custom_configs'] = [];
+    foreach ($custom_configs as $key => $val) {
+        $global_config['custom_configs'][$key] = is_array($val) ? $val[0] : $val;
+    }
+} else {
+    $global_config['custom_configs'] = [];
+}
 
 nv_apply_hook('', 'zalo_webhook');
 
