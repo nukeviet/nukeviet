@@ -528,7 +528,7 @@ class Image
                         }
                     }
 
-                    if ($this->fileinfo['type'] == IMAGETYPE_PNG) {
+                    if ($this->fileinfo['type'] == IMAGETYPE_PNG or (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP)) {
                         if (imagealphablending($workingImage, false)) {
                             $transparency = imagecolorallocatealpha($workingImage, 0, 0, 0, 127);
                             if (false !== $transparency and imagefill($workingImage, 0, 0, $transparency)) {
@@ -602,7 +602,7 @@ class Image
                         }
                     }
 
-                    if ($this->fileinfo['type'] == IMAGETYPE_PNG) {
+                    if ($this->fileinfo['type'] == IMAGETYPE_PNG or (defined('IMAGETYPE_WEBP') and $this->fileinfo['type'] == IMAGETYPE_WEBP)) {
                         if (imagealphablending($workingImage, false)) {
                             $transparency = imagecolorallocatealpha($workingImage, 0, 0, 0, 127);
                             if (false !== $transparency and imagefill($workingImage, 0, 0, $transparency)) {
@@ -1014,24 +1014,60 @@ class Image
 
             header('Content-type: ' . $this->create_Image_info['mime']);
             if ($this->create_Image_info['type'] == IMAGETYPE_GIF) {
-                imagegif($this->createImage);
+                imagegif($this->createImage, null);
             } elseif ($this->create_Image_info['type'] == IMAGETYPE_JPEG) {
                 imagejpeg($this->createImage, null, $quality);
             } elseif ($this->create_Image_info['type'] == IMAGETYPE_PNG) {
                 $quality = round(($quality / 100) * 10);
-                if ($quality < 1) {
-                    $quality = 1;
-                } elseif ($quality > 10) {
-                    $quality = 10;
-                }
+                $quality < 1 && $quality = 1;
+                $quality > 10 && $quality = 10;
                 $quality = 10 - $quality;
-
-                imagepng($this->createImage, $quality);
+                imagepng($this->createImage, null, $quality);
             } elseif (defined('IMAGETYPE_WEBP') and $this->create_Image_info['type'] == IMAGETYPE_WEBP) {
                 imagewebp($this->createImage, null, $quality);
             }
 
             $this->close();
+        }
+    }
+
+    /**
+     * base64data()
+     * 
+     * @param int $quality 
+     * @return (int|false|string)[]|void 
+     */
+    public function base64data($quality = 100)
+    {
+        if (empty($this->error)) {
+            if ($this->is_destroy) {
+                $this->get_createImage();
+            }
+
+            ob_start();
+            if ($this->create_Image_info['type'] == IMAGETYPE_GIF) {
+                imagegif($this->createImage, null);
+            } elseif ($this->create_Image_info['type'] == IMAGETYPE_JPEG) {
+                imagejpeg($this->createImage, null, $quality);
+            } elseif ($this->create_Image_info['type'] == IMAGETYPE_PNG) {
+                $quality = round(($quality / 100) * 10);
+                $quality < 1 && $quality = 1;
+                $quality > 10 && $quality = 10;
+                $quality = 10 - $quality;
+                imagepng($this->createImage, null, $quality);
+            } elseif (defined('IMAGETYPE_WEBP') and $this->create_Image_info['type'] == IMAGETYPE_WEBP) {
+                imagewebp($this->createImage, null, $quality);
+            }
+            $ImageData = ob_get_contents();
+            $ImageDataLength = ob_get_length();
+            $mime = $this->fileinfo['mime'];
+            $this->close();
+            ob_end_clean();
+
+            return [
+                'data:' . $mime . ';base64, ' . base64_encode($ImageData),
+                $ImageDataLength
+            ];
         }
     }
 
@@ -1107,7 +1143,11 @@ class Image
                 } elseif ($this->create_Image_info['type'] == IMAGETYPE_JPEG) {
                     imagejpeg($this->createImage, $newname, $quality);
                 } elseif ($this->create_Image_info['type'] == IMAGETYPE_PNG) {
-                    imagepng($this->createImage, $newname);
+                    $quality = round(($quality / 100) * 10);
+                    $quality < 1 && $quality = 1;
+                    $quality > 10 && $quality = 10;
+                    $quality = 10 - $quality;
+                    imagepng($this->createImage, $newname, $quality);
                 } elseif ($this->create_Image_info['type'] == IMAGETYPE_BMP) {
                     file_put_contents($newname, $this->GD2BMPstring($this->createImage));
                 } elseif (defined('IMAGETYPE_WEBP') and $this->create_Image_info['type'] == IMAGETYPE_WEBP) {
@@ -1124,11 +1164,10 @@ class Image
     /**
      * webpConvert()
      * 
-     * @param mixed $path 
-     * @param string $newname 
+     * @param mixed $newFullName 
      * @param int $quality 
      */
-    public function webpConvert($newFullName, $quality = 80)
+    public function webpConvert($newFullName)
     {
         if (empty($this->error)) {
             if ($this->is_destroy) {
@@ -1140,10 +1179,7 @@ class Image
                 imagealphablending($this->createImage, true);
                 imagesavealpha($this->createImage, true);
             }
-
-            imagewebp($this->createImage, $newFullName, $quality);
-            $this->create_Image_info['src'] = $newFullName;
-
+            imagewebp($this->createImage, $newFullName);
             $this->Destroy();
         }
     }

@@ -233,6 +233,30 @@
     text-align: center;
 }
 
+/* Quality change */
+#qualitychangeObj {
+    padding: 10px;
+    display: none;
+    text-align: center;
+}
+
+#qualitychangeObj .image-content {
+    margin: 10px 0;
+}
+
+#qualitychangeObj .image-content img {
+    border: 2px #dadada solid;
+}
+
+#qualitychangeObj .orig-image,
+#qualitychangeObj .image-detail {
+    font-size: 11px;
+}
+
+#imageView.zoomin img {
+    cursor: zoom-in;
+}
+
 /* Remote upload */
 
 #uploadremote {

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -31,7 +31,8 @@ $allow_func = [
     'main', 'imglist', 'delimg', 'createimg',
     'dlimg', 'renameimg', 'moveimg', 'folderlist',
     'delfolder', 'renamefolder', 'createfolder',
-    'upload', 'addlogo', 'cropimg', 'rotateimg', 'download', 'webpconvert'
+    'upload', 'addlogo', 'cropimg', 'rotateimg', 'download',
+    'webpconvert', 'compressimage', 'qualitychange'
 ];
 
 if (defined('NV_IS_SPADMIN')) {
@@ -48,7 +49,6 @@ if (defined('NV_IS_SPADMIN')) {
  * nv_check_allow_upload_dir()
  *
  * @param mixed $dir
- * @return
  */
 function nv_check_allow_upload_dir($dir)
 {
@@ -166,7 +166,6 @@ function nv_check_allow_upload_dir($dir)
  * nv_check_path_upload()
  *
  * @param mixed $path
- * @return
  */
 function nv_check_path_upload($path)
 {
@@ -195,7 +194,6 @@ function nv_check_path_upload($path)
  *
  * @param mixed $fileName
  * @param bool  $replace
- * @return
  */
 function nv_create_mobileModeImage($fileName, $replace = 0)
 {
@@ -252,7 +250,6 @@ function nv_create_mobileModeImage($fileName, $replace = 0)
  * nv_get_viewImage()
  *
  * @param mixed $fileName
- * @return
  */
 function nv_get_viewImage($fileName, $refresh = 0)
 {
@@ -380,7 +377,6 @@ function nv_get_viewImage($fileName, $refresh = 0)
  *
  * @param mixed $pathimg
  * @param mixed $file
- * @return
  */
 function nv_getFileInfo($pathimg, $file)
 {
@@ -507,7 +503,6 @@ function nv_getFileInfo($pathimg, $file)
  * nv_filesListRefresh()
  *
  * @param mixed $pathimg
- * @return
  */
 function nv_filesListRefresh($pathimg)
 {
@@ -580,7 +575,6 @@ function nv_filesListRefresh($pathimg)
  *
  * @param mixed $dir
  * @param mixed $real_dirlist
- * @return
  */
 function nv_listUploadDir($dir, $real_dirlist = [])
 {

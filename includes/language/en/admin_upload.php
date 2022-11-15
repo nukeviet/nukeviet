@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -196,3 +196,15 @@ $lang_module['upload_overflow_help'] = 'Allows uploading files larger than the m
 $lang_module['nv_mobile_mode_img'] = 'Create image for mobile mode';
 $lang_module['nv_mobile_mode_img_note'] = 'Image width (0 = no creation)';
 $lang_module['webpconvert'] = 'Create file in WEBP format';
+$lang_module['compressimage'] = 'Compress image';
+$lang_module['qualitychange'] = 'Image quality';
+$lang_module['quality'] = 'Quality';
+$lang_module['filesize'] = 'File size';
+$lang_module['original_filesize'] = 'Original file size';
+$lang_module['imgconfig'] = 'Image processing configuration';
+$lang_module['otherconfig'] = 'Other configuration';
+$lang_module['tinify_compress'] = 'Apply image compression with the Tinify tool';
+$lang_module['tinify_compress_note'] = 'The Tinify image compression tool is freely available through the API of the website <a href="https://tinypng.com/developers/reference/php">https://tinypng.com</a> (Limited to 500 API calls in one month).';
+$lang_module['tinify_compress_note2'] = 'To use this tool, you need to add the Tinify package to the composer repository (See instructions <a href="https://github.com/tinify/tinify-php#installation">here</a>)';
+$lang_module['tinify_api_key'] = 'Tinify API Key';
+$lang_module['tinify_api_key_note'] = 'To get Tinify\'s API key, you need to register <a href="https://tinypng.com/developers">here</a>';

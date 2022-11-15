@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -202,3 +202,15 @@ $lang_module['upload_overflow_help'] = 'Cho phép tải lên các tập tin có 
 $lang_module['nv_mobile_mode_img'] = 'Tạo hình ảnh cho chế độ di động';
 $lang_module['nv_mobile_mode_img_note'] = 'Chiều rộng hình ảnh (0 = không tạo)';
 $lang_module['webpconvert'] = 'Tạo file WEBP';
+$lang_module['compressimage'] = 'Nén ảnh';
+$lang_module['qualitychange'] = 'Chất lượng ảnh';
+$lang_module['quality'] = 'Chất lượng';
+$lang_module['filesize'] = 'Dung lượng';
+$lang_module['original_filesize'] = 'Dung lượng file gốc';
+$lang_module['imgconfig'] = 'Cấu hình xử lý ảnh';
+$lang_module['otherconfig'] = 'Cấu hình khác';
+$lang_module['tinify_compress'] = 'Áp dụng nén ảnh bằng công cụ Tinify';
+$lang_module['tinify_compress_note'] = 'Công cụ nén ảnh Tinify được cung cấp miễn phí thông qua API của website <a href="https://tinypng.com/developers/reference/php">https://tinypng.com</a> (Giới hạn 500 lượt gọi API trong một tháng).';
+$lang_module['tinify_compress_note2'] = 'Để sử dụng công cụ này, bạn cần thêm thư viện Tinify vào kho composer (Xem hướng dẫn <a href="https://github.com/tinify/tinify-php#installation">tại đây</a>)';
+$lang_module['tinify_api_key'] = 'Tinify API Key';
+$lang_module['tinify_api_key_note'] = 'Để lấy khóa API của Tinify, bạn cần đăng ký <a href="https://tinypng.com/developers">tại đây</a>';

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -196,3 +196,15 @@ $lang_module['upload_overflow_help'] = 'Permet de télécharger des fichiers plu
 $lang_module['nv_mobile_mode_img'] = 'Créer une image pour le mode mobile';
 $lang_module['nv_mobile_mode_img_note'] = 'Largeur de l\'image (0 = aucune création)';
 $lang_module['webpconvert'] = 'Fichier avec l\'extension WEBP';
+$lang_module['compressimage'] = 'Compresser l\'image';
+$lang_module['qualitychange'] = 'Qualité d\'image';
+$lang_module['quality'] = 'Qualité';
+$lang_module['filesize'] = 'Taille du fichier';
+$lang_module['original_filesize'] = 'Taille du fichier d\'origine';
+$lang_module['imgconfig'] = 'Paramétrage du traitement d\'images';
+$lang_module['otherconfig'] = 'Autre configuration';
+$lang_module['tinify_compress'] = 'Appliquer la compression d\'image avec l\'outil Tinify';
+$lang_module['tinify_compress_note'] = 'L\'outil de compression d\'image Tinify est disponible gratuitement via l\'API du site Web <a href="https://tinypng.com/developers/reference/php">https://tinypng.com</a> (Limité à 500 appels API en un mois).';
+$lang_module['tinify_compress_note2'] = 'Pour utiliser cet outil, vous devez ajouter le package Tinify au référentiel composer (voir les instructions <a href="https://github.com/tinify/tinify-php#installation">ici</a>).';
+$lang_module['tinify_api_key'] = 'Clé API Tinify';
+$lang_module['tinify_api_key_note'] = 'Pour obtenir la clé API de Tinify, vous devez vous inscrire <a href="https://tinypng.com/developers">ici</a>';
