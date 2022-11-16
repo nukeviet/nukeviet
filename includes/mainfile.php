@@ -114,7 +114,7 @@ if ($global_config['proxy_blocker'] != 0) {
     }
 }
 
-if (defined('NV_SYSTEM')) {
+if (defined('NV_SYSTEM') and $isIndexFile) {
     require NV_ROOTDIR . '/includes/request_uri.php';
 }
 
