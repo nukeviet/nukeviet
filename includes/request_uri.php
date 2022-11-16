@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -43,7 +43,7 @@ $base_siteurl_quote = nv_preg_quote($base_siteurl);
 $request_uri = preg_replace('/(' . $base_siteurl_quote . ')index\.php\//', '\\1', $_SERVER['REQUEST_URI']);
 $request_uri = parse_url($request_uri);
 if (!isset($request_uri['path'])) {
-    nv_redirect_location($base_siteurl);
+    $isIndexFile && nv_redirect_location($base_siteurl);
 }
 $request_uri_query = isset($request_uri['query']) ? urldecode($request_uri['query']) : '';
 $request_uri = urldecode($request_uri['path']);
@@ -105,7 +105,7 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
     } elseif (isset($_GET[NV_NAME_VARIABLE])) {
         if (str_contains($_GET[NV_NAME_VARIABLE], '/')) {
             if (isset($_GET[NV_OP_VARIABLE])) {
-                nv_redirect_location($base_siteurl);
+                $isIndexFile && nv_redirect_location($base_siteurl);
             }
             $name_variable = explode('/', $_GET[NV_NAME_VARIABLE]);
             $_GET[NV_NAME_VARIABLE] = $name_variable[0];
@@ -114,7 +114,7 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
             unset($name_variable);
         }
     } elseif (str_contains(substr($request_uri, strlen($base_siteurl)), '/')) {
-        nv_redirect_location($base_siteurl);
+        $isIndexFile && nv_redirect_location($base_siteurl);
     }
 }
 

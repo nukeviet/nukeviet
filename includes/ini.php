@@ -19,8 +19,8 @@ if (headers_sent() or connection_status() != 0 or connection_aborted()) {
 
 /**
  * server_info_update()
- * 
- * @param string $config_ini_file 
+ *
+ * @param string $config_ini_file
  */
 function server_info_update($config_ini_file)
 {
@@ -114,7 +114,7 @@ function server_info_update($config_ini_file)
  */
 function set_ini_file(&$sys_info)
 {
-    global $config_ini_file, $ini_list, $global_config, $isErrorFile;
+    global $config_ini_file, $ini_list, $global_config, $isIndexFile;
 
     $content_config = '<?php' . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
@@ -151,7 +151,7 @@ function set_ini_file(&$sys_info)
         $sys_info['supports_rewrite'] = 'nginx';
     } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-    } elseif (!$isErrorFile) {
+    } elseif ($isIndexFile) {
         $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'check.rewrite');
         if (in_array($_check_rewrite, ['rewrite_mode_apache', 'rewrite_mode_iis', 'nginx'], true)) {
             $sys_info['supports_rewrite'] = $_check_rewrite;
@@ -323,7 +323,7 @@ function set_ini_file(&$sys_info)
     $content_config .= "\$serverInfoUpdated = false;\n";
     $content_config .= '$iniSaveTime = ' . NV_CURRENTTIME . ';';
 
-    if (!$isErrorFile) {
+    if ($isIndexFile) {
         if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
             $url = NV_BASE_SITEURL . 'index.php';
             strpos($url, NV_MY_DOMAIN) !== 0 && $url = NV_MY_DOMAIN . $url;
@@ -357,10 +357,9 @@ $sys_info['is_http2'] = false;
 $sys_info['http_only'] = false;
 $sys_info['https_only'] = false;
 $serverInfoUpdated = false;
-$isErrorFile = (substr($_SERVER['PHP_SELF'], -9, 9) === 'error.php');
 $iniSaveTime = 0;
 
-if (!$isErrorFile) {
+if ($isIndexFile) {
     @include_once $config_ini_file;
 }
 
