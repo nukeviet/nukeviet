@@ -43,7 +43,7 @@ $base_siteurl_quote = nv_preg_quote($base_siteurl);
 $request_uri = preg_replace('/(' . $base_siteurl_quote . ')index\.php\//', '\\1', $_SERVER['REQUEST_URI']);
 $request_uri = parse_url($request_uri);
 if (!isset($request_uri['path'])) {
-    $isIndexFile && nv_redirect_location($base_siteurl);
+    nv_redirect_location($base_siteurl);
 }
 $request_uri_query = isset($request_uri['query']) ? urldecode($request_uri['query']) : '';
 $request_uri = urldecode($request_uri['path']);
@@ -105,7 +105,7 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
     } elseif (isset($_GET[NV_NAME_VARIABLE])) {
         if (str_contains($_GET[NV_NAME_VARIABLE], '/')) {
             if (isset($_GET[NV_OP_VARIABLE])) {
-                $isIndexFile && nv_redirect_location($base_siteurl);
+                nv_redirect_location($base_siteurl);
             }
             $name_variable = explode('/', $_GET[NV_NAME_VARIABLE]);
             $_GET[NV_NAME_VARIABLE] = $name_variable[0];
@@ -114,7 +114,7 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
             unset($name_variable);
         }
     } elseif (str_contains(substr($request_uri, strlen($base_siteurl)), '/')) {
-        $isIndexFile && nv_redirect_location($base_siteurl);
+        nv_redirect_location($base_siteurl);
     }
 }
 
