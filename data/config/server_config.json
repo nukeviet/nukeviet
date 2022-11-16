@@ -1,100 +1,100 @@
 {
     "site_mimetypes": {
-        "application\/manifest+json": [
+        "application/manifest+json": [
             "webmanifest"
         ],
-        "application\/json": [
+        "application/json": [
             "json"
         ],
-        "application\/xml": [
+        "application/xml": [
             "xml"
         ],
-        "application\/rss+xml": [
+        "application/rss+xml": [
             "rss"
         ],
-        "font\/eot": [
+        "font/eot": [
             "eot"
         ],
-        "font\/otf": [
+        "font/otf": [
             "otf"
         ],
-        "font\/ttf": [
+        "font/ttf": [
             "ttf"
         ],
-        "font\/woff": [
+        "font/woff": [
             "woff"
         ],
-        "font\/woff2": [
+        "font/woff2": [
             "woff2"
         ],
-        "image\/bmp": [
+        "image/bmp": [
             "bmp"
         ],
-        "image\/gif": [
+        "image/gif": [
             "gif"
         ],
-        "image\/jpeg": [
+        "image/jpeg": [
             "jpeg",
             "jpg"
         ],
-        "image\/png": [
+        "image/png": [
             "png"
         ],
-        "image\/svg+xml": [
+        "image/svg+xml": [
             "svg"
         ],
-        "image\/tiff": [
+        "image/tiff": [
             "tif",
             "tiff"
         ],
-        "image\/vnd.microsoft.icon": [
+        "image/vnd.microsoft.icon": [
             "ico"
         ],
-        "image\/webp": [
+        "image/webp": [
             "webp"
         ],
-        "text\/css": [
+        "text/css": [
             "css"
         ],
-        "text\/html": [
+        "text/html": [
             "htm",
             "html"
         ],
-        "text\/javascript": [
+        "text/javascript": [
             "js",
             "mjs"
         ],
-        "text\/plain": [
+        "text/plain": [
             "txt"
         ],
-        "text\/xsl": [
+        "text/xsl": [
             "xsl"
         ]
     },
     "compress_file_exts": [
-        "application\/json",
-        "application\/manifest+json",
-        "application\/rss+xml",
-        "application\/xml",
-        "font\/otf",
-        "font\/ttf",
-        "image\/svg+xml",
-        "text\/css",
-        "text\/html",
-        "text\/javascript",
-        "text\/plain",
-        "text\/xsl"
+        "application/json",
+        "application/manifest+json",
+        "application/rss+xml",
+        "application/xml",
+        "font/otf",
+        "font/ttf",
+        "image/svg+xml",
+        "text/css",
+        "text/html",
+        "text/javascript",
+        "text/plain",
+        "text/xsl"
     ],
     "charset_types": [
-        "application\/json",
-        "application\/manifest+json",
-        "application\/rss+xml",
-        "application\/xml",
-        "image\/svg+xml",
-        "text\/css",
-        "text\/html",
-        "text\/javascript",
-        "text\/xsl"
+        "application/json",
+        "application/manifest+json",
+        "application/rss+xml",
+        "application/xml",
+        "image/svg+xml",
+        "text/css",
+        "text/html",
+        "text/javascript",
+        "text/xsl"
     ],
     "cors_origins": [
         "*"
@@ -114,19 +114,19 @@
     "referrer_policy": "no-referrer-when-downgrade, strict-origin-when-cross-origin",
     "deny_access": {
         "file": [
-            "[(.*\/)?\\.(.*)]",
-            "[(.*\/)?composer\\.json]",
-            "[(.*\/)?web\\.config]",
-            "[install\/default\\.(htaccess\\.txt|web\\.config\\.txt|php)]",
-            "includes\/mainfile.php",
+            "[\\.(.*)]",
+            "[composer\\.json]",
+            "[default\\.(htaccess\\.txt|web\\.config\\.txt|php)]",
+            "[mainfile\\.php]",
+            "[web\\.config]",
             "{NV_CONFIG_FILENAME}"
         ],
         "dir": [
             "[{NV_IP_DIR}6?]",
             "includes",
-            "install\/tpl",
+            "install/tpl",
             "vendor",
-            "{NV_ASSETS_DIR}\/tpl",
+            "{NV_ASSETS_DIR}/tpl",
             "{NV_CACHEDIR}",
             "{NV_CERTS_DIR}",
             "{NV_LOGS_DIR}"
@@ -135,7 +135,7 @@
             "{NV_ADMINDIR}"
         ],
         "include_exec_files": [
-            "[install\/(css|images)]",
+            "[install/(css|images)]",
             "modules",
             "themes",
             "{NV_ASSETS_DIR}",
@@ -172,23 +172,23 @@
     },
     "js_css_files": {
         "mime_types": [
-            "text\/css",
-            "text\/javascript",
-            "text\/xsl"
+            "text/css",
+            "text/javascript",
+            "text/xsl"
         ],
         "cache_control": "public",
         "expires": "1M"
     },
     "image_files": {
         "mime_types": [
-            "image\/bmp",
-            "image\/gif",
-            "image\/jpeg",
-            "image\/png",
-            "image\/svg+xml",
-            "image\/tiff",
-            "image\/vnd.microsoft.icon",
-            "image\/webp"
+            "image/bmp",
+            "image/gif",
+            "image/jpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/tiff",
+            "image/vnd.microsoft.icon",
+            "image/webp"
         ],
         "cache_control": "public, no-transform",
         "expires": "1y",
@@ -196,11 +196,11 @@
     },
     "font_files": {
         "mime_types": [
-            "font\/eot",
-            "font\/otf",
-            "font\/ttf",
-            "font\/woff",
-            "font\/woff2"
+            "font/eot",
+            "font/otf",
+            "font/ttf",
+            "font/woff",
+            "font/woff2"
         ],
         "cache_control": "public",
         "expires": "6M"

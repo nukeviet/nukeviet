@@ -850,26 +850,37 @@ class Sconfig
             $deny_access_contents = '';
             foreach ($this->server_configs['deny_access'] as $key => $vals) {
                 if (!empty($vals)) {
+                    $start = '';
                     $end = '';
                     if ($key == 'dir') {
+                        $start = 'RewriteCond %{REQUEST_URI} ^/';
                         $end = '/.*';
                     } elseif ($key == 'include_dirs') {
-                        $end = '/.*/.*';
+                        $start = 'RewriteCond %{REQUEST_URI} ^/';
+                        $end = '/.*/.*$';
                     } elseif ($key == 'file') {
-                        $end = '.*';
+                        $start = 'RewriteCond %{REQUEST_FILENAME} /';
+                        $end = '$';
                     } elseif ($key == 'include_exec_files') {
+                        $start = 'RewriteCond %{REQUEST_URI} ^/';
                         $exec_files = self::contentsImplode($this->server_configs['exec_files']);
-                        $end = "/.*\.(" . $exec_files . ').*';
+                        $end = "/.*\.(" . $exec_files . ')($|\?|\/)';
                     }
-                    if (!empty($end)) {
+                    if (!empty($start)) {
                         $vals = self::contentsImplode($vals);
-                        $redirect = $this->server_configs['deny_access_code'] == '301' ? ' ' . NV_BASE_SITEURL : '';
-                        $deny_access_contents .= 'RedirectMatch ' . $this->server_configs['deny_access_code'] . ' ^/(' . $vals . ')' . $end . '$' . $redirect . "\n";
+                        $redirect = $this->server_configs['deny_access_code'] == '301' ? NV_BASE_SITEURL : '-';
+                        $deny_access_contents .= '  ' . $start . '(' . $vals . ')' . $end . " [NC]\n";
+                        $deny_access_contents .= '  RewriteRule ^.* ' . $redirect . ' [L,R=' . $this->server_configs['deny_access_code'] . "]\n";
+                        //$deny_access_contents .= 'RedirectMatch ' . $this->server_configs['deny_access_code'] . ' ^/(' . $vals . ')' . $end . '$' . $redirect . "\n";
                     }
                 }
             }
             if (!empty($deny_access_contents)) {
-                $config_contents .= $deny_access_contents . "\n";
+                $config_contents .= "<IfModule mod_rewrite.c>\n";
+                $config_contents .= "  RewriteEngine On\n";
+                $config_contents .= '  RewriteBase ' . NV_BASE_SITEURL . "\n";
+                $config_contents .= $deny_access_contents;
+                $config_contents .= "</IfModule>\n\n";
             }
         }
 
