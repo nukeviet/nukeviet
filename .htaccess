@@ -8,8 +8,18 @@
 #nukeviet_config_start //Please do not change the contents of the following lines
 ##################################################################################
 
-RedirectMatch 404 ^.*\/(config|mainfile)\.php(.*)$
-RedirectMatch 404 ^.*\/composer\.json$
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} /(\.(.*)|composer\.json|default\.(htaccess\.txt|web\.config\.txt|php)|mainfile\.php|web\.config|config\.php)$ [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(data/ip6?|includes|install/tpl|vendor|assets/tpl|data/cache|data/certs|data/logs)/.* [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(admin)/.*/.*$ [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php|pl|py|sh|sql\.gz|tpl|xml)($|\?|\/) [NC]
+  RewriteRule ^.* - [L,R=404]
+</IfModule>
 
 ErrorDocument 400 /error.php?code=400&nvDisableRewriteCheck=1
 ErrorDocument 403 /error.php?code=403&nvDisableRewriteCheck=1
@@ -41,7 +51,7 @@ ErrorDocument 504 /error.php?code=504&nvDisableRewriteCheck=1
   </FilesMatch>
 
   <FilesMatch "\.(js|css|jpe?g|png|gif|webp|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$">
-    Header set Cache-Control 'public, max-age=2592000, no-cache="set-cookie"'
+    Header set Cache-Control 'max-age=2592000, public, no-cache="set-cookie"'
   </FilesMatch>
 </IfModule>
 
