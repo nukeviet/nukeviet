@@ -1,0 +1,40 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+#my-role-api .description {
+    margin-top: 5px;
+    margin-bottom: 0;
+    color: #555;
+    font-size: 12px;
+}
+
+#my-role-api .tools {
+    display: flex;
+    align-items: flex-end;
+}
+
+#my-role-api .tools > *:last-child {
+    margin-left: auto;
+    margin-bottom: 10px;
+}
+
+#credential_auth .dropdown-menu {
+    min-width: 280px;
+    padding: 15px;
+}
+
+@media (min-width: 350px) {
+    #credential_auth .dropdown-menu {
+        min-width: 350px;
+    }
+}
+
+#credential_auth .bg-white {
+    background-color: white;
+}

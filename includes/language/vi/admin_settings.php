@@ -280,9 +280,6 @@ $lang_module['cdn_url'] = 'CDN cho các tệp tĩnh';
 $lang_module['assets_cdn'] = 'Sử dụng các file tĩnh có sẵn trên <a href="https://github.com/nukeviet/nukeviet" target="_blank">Kho mã nguồn NukeViet</a> kết hợp mạng CDN <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr</a>';
 $lang_module['assets_cdn_note'] = 'URL tương đối của các file <strong>js, css, svg, woff, woff2, ttf</strong> trong thư mục<strong> %s</strong> của site sẽ được thay thế bằng URL tuyệt đối đến các file tương ứng trên kho mã nguồn NukeViet (ví dụ, URL: <code>%s</code> sẽ được thay thế bằng: <code>%s</code>)';
 $lang_module['not_apply_to_localhost'] = 'Cấu hình này không có tác dụng trong môi trường localhost';
-$lang_module['remote_api_access'] = 'Bật Remote API';
-$lang_module['remote_api_access_help'] = 'Nếu tắt toàn bộ quyền truy cập API từ bên ngoài sẽ bị chặn. Các API bên trong vẫn sử dụng bình thường';
-$lang_module['remote_api_log'] = 'Ghi lại nhật ký Remote API';
 
 $lang_module['plugin'] = 'Thiết lập Plugin';
 $lang_module['plugin_file'] = 'File thực thi';

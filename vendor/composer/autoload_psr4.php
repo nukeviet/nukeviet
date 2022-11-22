@@ -10,6 +10,7 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'OAuth\\' => array($vendorDir . '/and/oauth/src'),
+    'NukeViet\\Uapi\\' => array($baseDir . '/includes/uapi'),
     'NukeViet\\Module\\' => array($baseDir . '/modules'),
     'NukeViet\\Api\\' => array($baseDir . '/includes/api'),
     'NukeViet\\' => array($vendorDir . '/vinades/nukeviet'),

@@ -45,6 +45,7 @@ function loginFormLoad() {
                     <li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
                     <!-- BEGIN: allowopenid --><li><a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
                     <!-- BEGIN: regroups --><li><a href="{URL_HREF}editinfo/group">{LANG.in_group}</a></li><!-- END: regroups -->
+                    <!-- BEGIN: myapis --><li><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=api">{GLANG.myapis}</a></li><!-- END: myapis -->
                 </ul>
             </div>
         </div>

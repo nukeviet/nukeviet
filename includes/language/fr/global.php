@@ -369,6 +369,7 @@ $lang_global['error_code_9'] = 'Fonction fopen() est échoué en applicant sur c
 $lang_global['error_code_10'] = 'Demande HTTP par Curl échoué';
 $lang_global['error_code_11'] = 'Un erreur non-déterminé a eu lieu';
 $lang_global['error_valid_response'] = 'Les données retournées n\'est pas en bonne forme';
+$lang_global['myapis'] = 'Mes API';
 
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';

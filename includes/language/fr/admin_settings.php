@@ -267,9 +267,6 @@ $lang_module['cdn_url'] = 'CDN pour les fichiers statiques';
 $lang_module['assets_cdn'] = 'Utilisation de fichiers statiques disponibles sur <a href="https://github.com/nukeviet/nukeviet" target="_blank">Référentiel de code source NukeViet</a> combiné avec le réseau CDN <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr</a>';
 $lang_module['assets_cdn_note'] = 'Les URL relatives des fichiers <strong>js, css, svg, woff, woff2, ttf</strong> dans les répertoires <strong>%s</strong> seront remplacées par les URL absolues des fichiers correspondants, qui sont disponibles dans le Référentiel de code source NukeViet (par exemple, l\'URL: <code>%s</code> sera remplacé par: <code>%s</code>)';
 $lang_module['not_apply_to_localhost'] = 'Cette configuration n\'est pas disponible dans l\'environnement localhost';
-$lang_module['remote_api_access'] = 'Activer l\'API à distance';
-$lang_module['remote_api_access_help'] = 'La désactivation de tous les accès API de l\'extérieur sera bloquée. Les API internes sont toujours utilisées normalement';
-$lang_module['remote_api_log'] = 'Activer la journalisation d\'API à distance';
 
 $lang_module['plugin'] = 'Configurer le plugin';
 $lang_module['plugin_file'] = 'Fichier exécutable';

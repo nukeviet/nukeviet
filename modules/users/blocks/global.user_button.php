@@ -88,6 +88,10 @@ if ($global_config['allowuserlogin']) {
             $xtpl->parse('signed.allowopenid');
         }
 
+        if (!empty($site_mods['api'])) {
+            $xtpl->parse('signed.myapis');
+        }
+
         if (defined('NV_IS_ADMIN')) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
             $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];

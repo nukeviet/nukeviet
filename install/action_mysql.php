@@ -20,6 +20,45 @@ while ($item = $result->fetch()) {
     $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
 }
 
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_role (
+  role_id SMALLINT(4) NOT NULL AUTO_INCREMENT,
+  role_md5title CHAR(32) NOT NULL,
+  role_type ENUM('private','public') NOT NULL DEFAULT 'private',
+  role_object ENUM('admin','user') NOT NULL DEFAULT 'admin',
+  role_title VARCHAR(250) NOT NULL DEFAULT '',
+  role_description VARCHAR(250) NOT NULL DEFAULT '',
+  role_data JSON NOT NULL,
+  addtime INT(11) NOT NULL DEFAULT '0',
+  edittime INT(11) NOT NULL DEFAULT '0',
+  status TINYINT(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (role_id),
+  UNIQUE KEY role_md5title (role_md5title)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_role_credential (
+  userid INT(11) UNSIGNED NOT NULL,
+  role_id SMALLINT(4) UNSIGNED NOT NULL DEFAULT '0',
+  access_count INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  last_access INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  addtime INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  status TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
+  UNIQUE KEY userid_role_id (userid, role_id)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_user (
+  userid INT(11) UNSIGNED NOT NULL,
+  ident VARCHAR(50) NOT NULL DEFAULT '',
+  secret VARCHAR(250) NOT NULL DEFAULT '',
+  ips JSON NOT NULL,
+  method ENUM('none','password_verify','md5_verify') NOT NULL DEFAULT 'password_verify',
+  addtime INT(11) NOT NULL DEFAULT '0',
+  edittime INT(11) NOT NULL DEFAULT '0',
+  last_access INT(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY userid (userid),
+  UNIQUE KEY ident (ident),
+	UNIQUE KEY secret (secret)
+) ENGINE=MyISAM";
+
 $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . " (
   admin_id int(11) unsigned NOT NULL,
   editor varchar(100) DEFAULT '',
@@ -79,32 +118,6 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_oauth (
   UNIQUE KEY admin_id (admin_id, oauth_server, oauth_uid),
   KEY oauth_email (oauth_email)
 ) ENGINE=MyISAM COMMENT 'Bảng lưu xác thực 2 bước từ oauth của admin'";
-
-$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_role (
-  role_id smallint(4) NOT NULL AUTO_INCREMENT,
-  role_title varchar(250) NOT NULL DEFAULT '',
-  role_description text NOT NULL,
-  role_data text NOT NULL,
-  addtime int(11) NOT NULL DEFAULT '0',
-  edittime int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (role_id)
-) ENGINE=MyISAM COMMENT 'Bảng lưu quyền truy cập API'";
-
-$sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . "_api_credential (
-  admin_id int(11) unsigned NOT NULL,
-  credential_title varchar(255) NOT NULL DEFAULT '',
-  credential_ident varchar(50) NOT NULL DEFAULT '',
-  credential_secret varchar(250) NOT NULL DEFAULT '',
-  credential_ips varchar(255) NOT NULL DEFAULT '',
-  auth_method ENUM('none','password_verify', 'md5_verify') NOT NULL DEFAULT 'password_verify' COMMENT 'Phương thức xác thực',
-  api_roles varchar(255) NOT NULL DEFAULT '',
-  addtime int(11) NOT NULL DEFAULT '0',
-  edittime int(11) NOT NULL DEFAULT '0',
-  last_access int(11) NOT NULL DEFAULT '0',
-  UNIQUE KEY credential_ident (credential_ident),
-  UNIQUE KEY credential_secret (credential_secret),
-  KEY admin_id (admin_id)
-) ENGINE=MyISAM COMMENT 'Bảng lưu key API của quản trị'";
 
 $sql_create_table[] = 'CREATE TABLE ' . NV_CONFIG_GLOBALTABLE . " (
   lang varchar(3) NOT NULL DEFAULT 'sys',

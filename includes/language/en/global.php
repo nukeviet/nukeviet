@@ -369,6 +369,7 @@ $lang_global['error_code_9'] = 'Processing functions fopen() failed for file.';
 $lang_global['error_code_10'] = 'HTTP request failed with Curl.';
 $lang_global['error_code_11'] = 'There was an unknown error occurred.';
 $lang_global['error_valid_response'] = 'Data returns nonstandard.';
+$lang_global['myapis'] = 'My APIs';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'United Arab Emirates';

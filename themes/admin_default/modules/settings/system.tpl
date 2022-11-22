@@ -160,14 +160,6 @@
                     <td><label><input type="checkbox" name="nv_debug" value="1"{CFG_DEFINE.nv_debug}/> {LANG.nv_debug_help}</label></td>
                 </tr>
                 <tr>
-                    <td><strong>{LANG.remote_api_access}</strong></td>
-                    <td><label><input type="checkbox" name="remote_api_access" value="1"{CHECKED_REMOTE_API_ACCESS}/> {LANG.remote_api_access_help}</label></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.remote_api_log}</strong></td>
-                    <td><input type="checkbox" name="remote_api_log" value="1"{CHECKED_REMOTE_API_LOG}/></td>
-                </tr>
-                <tr>
                     <td><strong>{LANG.cookie_notice_popup}</strong></td>
                     <td><input type="checkbox" name="cookie_notice_popup" value="1"{CHECKED_COOKIE_NOTICE_POPUP}/></td>
                 </tr>

@@ -385,6 +385,7 @@ $lang_global['error_code_9'] = 'Hàm xử lý fopen() thất bại đối với 
 $lang_global['error_code_10'] = 'Truy vấn HTTP bằng Curl thất bại.';
 $lang_global['error_code_11'] = 'Có một lỗi không xác định đã xảy ra.';
 $lang_global['error_valid_response'] = 'Dữ liệu trả về không hợp chuẩn.';
+$lang_global['myapis'] = 'API của tôi';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';

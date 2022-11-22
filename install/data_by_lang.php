@@ -198,6 +198,23 @@ $installMods['users'] = [
     ]
 ];
 
+$installMods['api'] = [
+    'module_file' => 'api',
+    'module_theme' => 'api',
+    'custom_title' => $install_lang['modules']['api'],
+    'admin_title' => $install_lang['modules']['api_for_acp'],
+    'main_file' => 1,
+    'admin_file' => 1,
+    'groups_view' => '6',
+    'funcs' => [
+        'main' => [
+            'show_func' => 1,
+            'theme_default' => 'main',
+            'theme_mobile' => 'main'
+        ]
+    ]
+];
+
 $installMods['push-notification'] = [
     'custom_title' => $install_lang['modules']['push_notification'],
     'admin_title' => $install_lang['modules']['push_notification_for_acp'],

@@ -21,7 +21,7 @@ if (!nv_function_exists('nv_module_menu')) {
      */
     function nv_module_menu()
     {
-        global $global_config, $module_info, $lang_global, $module_name, $op, $user_info, $db;
+        global $global_config, $module_info, $lang_global, $module_name, $op, $user_info, $db, $site_mods;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.module_menu.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -53,6 +53,15 @@ if (!nv_function_exists('nv_module_menu')) {
                         if (!$user_info['group_manage']) {
                             continue;
                         }
+                    }
+
+                    if (!empty($site_mods['api']) and $_li['func_name'] == 'logout') {
+                        $xtpl->assign('LOOP', [
+                            'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=api',
+                            'active' => '',
+                            'title' => $lang_global['myapis']
+                        ]);
+                        $xtpl->parse('main.loop');
                     }
                 }
 

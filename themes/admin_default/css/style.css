@@ -930,7 +930,7 @@ label {
     padding-left: 0px;
 }
 
-.nav-pills > li.active > a {
+#left-menu .nav-pills > li.active > a {
     background: none repeat scroll 0 0 #ffd9d9;
     color: #333 !important;
     border: 1px solid #c6c6c6;
@@ -944,8 +944,8 @@ label {
     padding: 0px;
 }
 
-.nav-pills > li.active > a:hover,
-.nav-pills > li.active > a:focus {
+#left-menu .nav-pills > li.active > a:hover,
+#left-menu .nav-pills > li.active > a:focus {
     color: #fff !important;
 }
 

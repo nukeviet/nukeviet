@@ -29,6 +29,7 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         ),
         'N' => 
         array (
+            'NukeViet\\Uapi\\' => 14,
             'NukeViet\\Module\\' => 16,
             'NukeViet\\Api\\' => 13,
             'NukeViet\\' => 9,
@@ -60,6 +61,10 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         'OAuth\\' => 
         array (
             0 => __DIR__ . '/..' . '/and/oauth/src',
+        ),
+        'NukeViet\\Uapi\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/includes/uapi',
         ),
         'NukeViet\\Module\\' => 
         array (

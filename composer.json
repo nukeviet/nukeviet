@@ -29,6 +29,7 @@
         "psr-4" : {
             "NukeViet\\" : "vendor/vinades/nukeviet",
             "NukeViet\\Api\\" : "includes/api",
+            "NukeViet\\Uapi\\" : "includes/uapi",
             "NukeViet\\Module\\" : "modules"
         },
         "classmap" : [

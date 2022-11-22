@@ -1,0 +1,159 @@
+/**
+ * NukeViet Content Management System
+ * @version 4.x
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @see https://github.com/nukeviet The NukeViet CMS GitHub project
+ */
+
+#role .left-col {
+    width: 250px;
+    min-width: 200px;
+}
+
+#role .role_type label {
+    cursor: pointer;
+}
+
+#role .role_type label + label {
+    margin-left: 10px;
+}
+
+#role .note {
+    color: #777;
+    font-size: 12px;
+}
+
+#role .role_note {
+    margin: 10px 0 0 0;
+    padding-left: 15px;
+}
+
+#role .api-count {
+    background-color: #dddddd;
+    color: #7e7e7e;
+    border: 1px solid #7e7e7e;
+    display: inline-block;
+    font-size: 95%;
+    font-weight: bold;
+    padding: 1px 5px;
+    border-radius: 50%;
+    margin-left: auto;
+    min-width: 25px;
+    text-align: center;
+}
+
+#role .api-count.checked {
+    background-color: #777;
+    color: #fff;
+    border: 1px solid transparent;
+}
+
+#role td.root-api-actions ul {
+    margin: -8px;
+}
+
+#role .root-api-actions ul li + li {
+    margin-top: 0;
+}
+
+#role .root-api-actions ul li:not(:last-child) a {
+    border-bottom: 1px solid #ccc !important;
+}
+
+#role .root-api-actions ul li a {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    text-decoration: none;
+    outline: 0;
+    color: #333;
+    border-radius: inherit;
+}
+
+#role .root-api-actions ul li a .fa {
+    margin-right: 5px;
+}
+
+#role .root-api-actions ul li a.main {
+    background-color: #e6e6e6;
+}
+
+#role .root-api-actions ul li a.sub {
+    background-color: #f9f9f9;
+}
+
+#role .root-api-actions ul li a.main:hover {
+    background-color: #dddddd;
+}
+
+#role .root-api-actions ul li a.sub:hover {
+    background-color: #f3f3f3;
+}
+
+#role .root-api-actions ul li.active a {
+    border: inherit;
+    border-left: 4px solid #cb0000;
+    font-size: inherit !important;
+    font-weight: 700;
+    line-height: inherit !important;
+    margin-bottom: 0;
+    height: inherit;
+}
+
+#role .root-api-actions ul li.active a:hover,
+#role .root-api-actions ul li.active a:focus {
+    color: inherit !important;
+}
+
+#role .apilist {
+    background-color: #777;
+    color: #fff;
+}
+
+#credential-add .modal-body {
+    padding: 30px;
+}
+
+#credential-add .userid {
+    width: 100%;
+}
+
+#credentiallist .select2-container--default .select2-selection--single {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-color: #ccc;
+}
+
+#my-role-api .description {
+    margin-top: 5px;
+    margin-bottom: 0;
+    color: #555;
+    font-size: 12px;
+}
+
+#my-role-api .tools {
+    display: flex;
+    align-items: flex-end;
+}
+
+#my-role-api .tools > *:last-child {
+    margin-left: auto;
+    margin-bottom: 10px;
+}
+
+#credential_auth .dropdown-menu {
+    min-width: 280px;
+    padding: 15px;
+}
+
+@media (min-width: 350px) {
+    #credential_auth .dropdown-menu {
+        min-width: 350px;
+    }
+}
+
+#credential_auth .bg-white {
+    background-color: white;
+}
