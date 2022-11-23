@@ -77,7 +77,8 @@ class Curl
             'headers' => [],
             'body' => null,
             'nobody' => false,
-            'cookies' => []
+            'cookies' => [],
+            'cipherstring_seclevel_1' => false // For a URL having a certificate using RSA less than 2048 bits
         ];
 
         $args = Http::build_args($args, $defaults);
@@ -151,7 +152,7 @@ class Curl
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, ($ssl_verify === true) ? 2 : false);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify);
-        if ($args['cipherstring_seclevel_1']) {
+        if (!empty($args['cipherstring_seclevel_1'])) {
             curl_setopt($handle, CURLOPT_SSL_CIPHER_LIST, 'DEFAULT@SECLEVEL=1');
         }
         if ($ssl_verify) {

@@ -45,7 +45,8 @@ class Streams
             'headers' => [],
             'body' => null,
             'nobody' => false,
-            'cookies' => []
+            'cookies' => [],
+            'cipherstring_seclevel_1' => false // For a URL having a certificate using RSA less than 2048 bits
         ];
 
         $args = Http::build_args($args, $defaults);
@@ -124,7 +125,7 @@ class Streams
             ],
         ];
 
-        if ($args['cipherstring_seclevel_1']) {
+        if (!empty($args['cipherstring_seclevel_1'])) {
             $context['ssl']['ciphers'] = 'DEFAULT:!DH';
         }
 
