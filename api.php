@@ -71,7 +71,7 @@ $credential_ips = json_decode($credential_data['ips'], true);
 if (!empty($credential_ips)) {
     if (!in_array(NV_CLIENT_IP, $credential_ips, true)) {
         $apiresults->setCode(ApiResult::CODE_MISSING_IP)
-            ->setMessage('Api IP fail !!! ')
+            ->setMessage('Api IP ' . NV_CLIENT_IP . ' fail !!!')
             ->returnResult();
     }
 }
