@@ -22,10 +22,11 @@ if (isset($array_op[1])) {
     $stmt = $db_slave->prepare('SELECT bid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias');
     $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
     $stmt->execute();
-    list($bid, $page_title, $alias, $image_group, $description, $key_words) = $stmt->fetch(3);
-    if (!$bid) {
+    $row = $stmt->fetch(3);
+    if (empty($row)) {
         nv_redirect_location($page_url);
     }
+    list($bid, $page_title, $alias, $image_group, $description, $key_words) = $row;
 
     $page_url .= '/' . $alias;
     $base_url = $page_url;
