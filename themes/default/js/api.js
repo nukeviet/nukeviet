@@ -70,7 +70,6 @@ $(function() {
                 } else if ('OK' == a.status) {
                     $('[name=ident]', credential_auth).val(a.ident);
                     $('[name=secret]', credential_auth).val(a.secret);
-                    $('[name=method]', credential_auth).val('');
                     $('.api_ips', credential_auth).slideDown()
                 }
             })

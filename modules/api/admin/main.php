@@ -127,8 +127,21 @@ if (empty($api_user)) {
     $xtpl->parse('main.created_access_authentication');
 }
 
+$methods = [
+    'password_verify' => $lang_module['auth_method_password_verify'],
+    'md5_verify' => $lang_module['auth_method_md5_verify']
+];
 if (defined('NV_IS_SPADMIN')) {
-    $xtpl->parse('main.auth_method_none');
+    $methods['none'] = $lang_module['auth_method_none'];
+}
+
+foreach ($methods as $key => $name) {
+    $xtpl->assign('METHOD', [
+        'key' => $key,
+        'sel' => (!empty($api_user['method']) and $key == $api_user['method']) ? ' selected="selected"' : '',
+        'name' => $name
+    ]);
+    $xtpl->parse('main.method');
 }
 
 if (empty($roleCount)) {

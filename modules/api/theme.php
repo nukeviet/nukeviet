@@ -47,6 +47,20 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         $xtpl->parse('main.created_access_authentication');
     }
 
+    $methods = [
+        'password_verify' => $lang_module['auth_method_password_verify'],
+        'md5_verify' => $lang_module['auth_method_md5_verify']
+    ];
+    
+    foreach ($methods as $key => $name) {
+        $xtpl->assign('METHOD', [
+            'key' => $key,
+            'sel' => (!empty($api_user['method']) and $key == $api_user['method']) ? ' selected="selected"' : '',
+            'name' => $name
+        ]);
+        $xtpl->parse('main.method');
+    }
+
     if (empty($roleCount)) {
         $xtpl->parse('main.role_empty');
     } else {

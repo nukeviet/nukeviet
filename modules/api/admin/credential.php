@@ -74,6 +74,20 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
     $xtpl->assign('API_USER', $api_user);
     $xtpl->assign('USERID', $userid);
 
+    $methods = [
+        'password_verify' => $lang_module['auth_method_password_verify'],
+        'md5_verify' => $lang_module['auth_method_md5_verify'],
+        'none' => $lang_module['auth_method_none']
+    ];
+    foreach ($methods as $key => $name) {
+        $xtpl->assign('METHOD', [
+            'key' => $key,
+            'sel' => (!empty($api_user['method']) and $key == $api_user['method']) ? ' selected="selected"' : '',
+            'name' => $name
+        ]);
+        $xtpl->parse('changeAuth.method');
+    }
+
     if (empty($api_user)) {
         $xtpl->parse('changeAuth.not_access_authentication');
         $xtpl->parse('changeAuth.not_access_authentication2');

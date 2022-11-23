@@ -168,9 +168,9 @@
     <div class="col-xs-12">
         <select class="form-control" name="method">
             <option value="">{LANG.auth_method}</option>
-            <option value="password_verify">{LANG.auth_method_password_verify}</option>
-            <option value="md5_verify">{LANG.auth_method_md5_verify}</option>
-            <option value="none">{LANG.auth_method_none}</option>
+            <!-- BEGIN: method -->
+            <option value="{METHOD.key}"{METHOD.sel}>{METHOD.name}</option>
+            <!-- END: method -->
         </select>
     </div>
     <div class="col-xs-12">
