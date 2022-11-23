@@ -154,7 +154,7 @@ class UapiResult
      */
     public function getResult()
     {
-        return json_encode($this->result);
+        return json_encode($this->result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     /**
@@ -165,10 +165,10 @@ class UapiResult
      */
     public function returnResult()
     {
-        if (!function_exists('nv_jsonOutput')) {
-            throw new Exception('Missing function nv_jsonOutput!!!', self::CODE_MISSING_FUNCTION);
+        if (!function_exists('nv_htmlOutput')) {
+            throw new Exception('Missing function nv_htmlOutput!!!', self::CODE_MISSING_FUNCTION);
         }
 
-        return nv_jsonOutput($this->result);
+        return nv_htmlOutput(json_encode($this->result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), 'json');
     }
 }
