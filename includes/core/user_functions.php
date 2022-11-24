@@ -448,7 +448,7 @@ function nv_html_meta_tags($html = true)
                 $metatags[] = $mt['meta_item'];
             }
             foreach ($metatags as $meta) {
-                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and preg_match("/^([^\'\"]+)$/", (string) $meta['content'])) {
+                if (($meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match('/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value']) and (!empty($meta['content']) and preg_match("/^([^\'\"]+)$/", (string) $meta['content']))) {
                     $return[] = [
                         'name' => $meta['group'],
                         'value' => $meta['value'],

@@ -34,3 +34,8 @@
     color: #ef3805;
     font: 800 12px Tahoma, Arial, Verdana, sans-serif;
 }
+
+#metatags-manage .dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
+}

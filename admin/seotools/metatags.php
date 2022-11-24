@@ -20,8 +20,13 @@ if ($global_config['idsite']) {
 }
 $sys_metatags = [];
 $sys_metatags['meta'] = [];
-$mt = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml'));
-if ($mt['meta_item']) {
+if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml')) {
+    $mt = nv_object2array(simplexml_load_file(NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml'));
+} else {
+    $mt = [];
+}
+
+if (!empty($mt['meta_item'])) {
     if (isset($mt['meta_item'][0])) {
         $sys_metatags['meta'] = $mt['meta_item'];
     } else {
@@ -72,7 +77,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             'value' => $value,
             'content' => $content
         ];
-        if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore, true) and preg_match("/^([^\'\"]+)$/", $content) and !in_array($newArray, $metatags['meta'], true)) {
+        if (preg_match("/^[a-zA-Z0-9\-\_\.\:]+$/", $value) and !in_array($value, $ignore, true) and (empty($content) or preg_match("/^([^\'\"]+)$/", $content)) and !in_array($newArray, $metatags['meta'], true)) {
             $metatags['meta'][] = $newArray;
         }
     }
@@ -138,9 +143,19 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('CHECKSS', $checkss);
 
+if (empty($metatags['meta'])) {
+    $metatags['meta'][] = [
+        'group' => '',
+        'content' => '',
+        'value' => '',
+        'h_selected' => '',
+        'n_selected' => ''
+    ];
+}
 // Các meta hiện có
 if (!empty($metatags['meta'])) {
     foreach ($metatags['meta'] as $value) {
+        $value['content'] = !empty($value['content']) ? $value['content'] : '';
         $value['h_selected'] = $value['group'] == 'http-equiv' ? ' selected="selected"' : '';
         $value['n_selected'] = $value['group'] == 'name' ? ' selected="selected"' : '';
         $value['p_selected'] = $value['group'] == 'property' ? ' selected="selected"' : '';
@@ -152,20 +167,14 @@ if (!empty($metatags['meta'])) {
         }
 
         $xtpl->assign('DATA', $value);
+
+        $defs = ['{BASE_SITEURL}', '{UPLOADS_DIR}', '{ASSETS_DIR}', '{CONTENT-LANGUAGE}', '{LANGUAGE}', '{SITE_NAME}', '{SITE_EMAIL}'];
+        foreach ($defs as $def) {
+            $xtpl->assign('ITEM', $def);
+            $xtpl->parse('main.loop.metaContents_list');
+        }
         $xtpl->parse('main.loop');
     }
-}
-
-// Tạo mới 2 meta trống
-for ($i = 0; $i < 2; ++$i) {
-    $data = [
-        'content' => '',
-        'value' => '',
-        'h_selected' => '',
-        'n_selected' => ''
-    ];
-    $xtpl->assign('DATA', $data);
-    $xtpl->parse('main.loop');
 }
 
 $xtpl->assign('METATAGSOGPCHECKED', $global_config['metaTagsOgp'] ? ' checked="checked" ' : '');
@@ -176,6 +185,27 @@ if (!empty($global_config['ogp_image']) and !nv_is_url($global_config['ogp_image
     $ogp_image = NV_BASE_SITEURL . $global_config['ogp_image'];
 }
 $xtpl->assign('OGP_IMAGE', $ogp_image);
+
+$meta_name_list = 'author, designer, publisher, revisit-after, distribution, web_author, subject, copyright, reply-to, abstract, city, country, classification, robots,googlebot, google, googlebot-news,  twitter:title, twitter:description, twitter:image, twitter:card, twitter:site, twitter:creator, google-site-verification, rating';
+$meta_name_list = array_map('trim', explode(',', $meta_name_list));
+foreach ($meta_name_list as $item) {
+    $xtpl->assign('ITEM', $item);
+    $xtpl->parse('main.meta_name_list');
+}
+
+$meta_property_list = 'og:title, og:type, og:url, og:image, og:image:secure_url, og:image:type,og:image:width, og:image:height, og:image:alt, og:audio, og:audio:secure_url, og:audio:type, og:video, og:video:secure_url, og:video:type, og:video:width, og:video:height, og:description, og:determiner, og:locale, og:locale:alternate, og:site_name';
+$meta_property_list = array_map('trim', explode(',', $meta_property_list));
+foreach ($meta_property_list as $item) {
+    $xtpl->assign('ITEM', $item);
+    $xtpl->parse('main.meta_property_list');
+}
+
+$meta_http_equiv_list = 'Content-Style-Type, Content-Script-Type, refresh';
+$meta_http_equiv_list = array_map('trim', explode(',', $meta_http_equiv_list));
+foreach ($meta_http_equiv_list as $item) {
+    $xtpl->assign('ITEM', $item);
+    $xtpl->parse('main.meta_http_equiv_list');
+}
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

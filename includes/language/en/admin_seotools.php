@@ -57,6 +57,7 @@ $lang_module['metaTagsOgp'] = 'Active meta-Tag Open Graph protocol';
 $lang_module['metaTagsOgpNote'] = 'Open Graph protocol: Is a prepared  data to share on facebook, view detail in <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
 $lang_module['description_length'] = 'Number of characters of meta description tag';
 $lang_module['description_note'] = ' = 0 unlimited number of characters';
+$lang_module['metaTagsSettings'] = 'Settings';
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Outside site name';
 $lang_module['rpc'] = 'PING service';
