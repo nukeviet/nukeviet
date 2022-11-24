@@ -446,3 +446,7 @@ $lang_module['report_not_checked'] = 'Vui lòng đánh dấu vào các báo cáo
 $lang_module['report_active'] = 'Cho phép gửi báo cáo lỗi';
 $lang_module['report_group'] = 'Ai có thể gửi báo cáo lỗi';
 $lang_module['report_limit'] = 'Thời gian tối thiểu giữa hai lượt gửi báo cáo lỗi (phút)';
+$lang_module['change_weight'] = 'Thay đổi thứ tự';
+$lang_module['new_weight'] = 'Thứ tự mới';
+$lang_module['type_new_weight'] = 'Nhập thứ tự mới trong khoảng từ 1 đến';
+$lang_module['total'] = 'Tất cả';

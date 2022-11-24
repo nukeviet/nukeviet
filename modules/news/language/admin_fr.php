@@ -446,3 +446,7 @@ $lang_module['report_not_checked'] = 'Veuillez cocher les rapports que vous souh
 $lang_module['report_active'] = 'Autoriser le rapport d\'erreur';
 $lang_module['report_group'] = 'Qui peut envoyer des rapports d\'erreur';
 $lang_module['report_limit'] = 'Délai minimum entre deux rapports d\'erreur (minutes)';
+$lang_module['change_weight'] = 'Changer de poids';
+$lang_module['new_weight'] = 'Nouveau poids';
+$lang_module['type_new_weight'] = 'Entrez un nouveau poids de 1 à';
+$lang_module['total'] = 'Totale';

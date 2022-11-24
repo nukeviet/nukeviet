@@ -446,3 +446,7 @@ $lang_module['report_not_checked'] = 'Please tick the reports you want to delete
 $lang_module['report_active'] = 'Allow error reporting';
 $lang_module['report_group'] = 'Who can submit error reports';
 $lang_module['report_limit'] = 'Minimum time between two error reports (minutes)';
+$lang_module['change_weight'] = 'Change weight';
+$lang_module['new_weight'] = 'New weight';
+$lang_module['type_new_weight'] = 'Enter new weight from 1 to';
+$lang_module['total'] = 'Total';

@@ -769,7 +769,7 @@ $(function() {
         });
     });
 
-    $('.number').on('input', function() {
+    $('body').on('input', '.number', function() {
         $(this).val($(this).val().replace(/[^0-9]/gi, ''))
     });
 
