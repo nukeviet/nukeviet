@@ -411,3 +411,7 @@ $lang_module['voice_add'] = 'Thêm giọng đọc';
 $lang_module['voice_edit'] = 'Sửa giọng đọc';
 $lang_module['voice_error_title'] = 'Lỗi: Tên giọng đọc không được để trống';
 $lang_module['voice_error_exists'] = 'Lỗi: Tên giọng đọc bị trùng';
+$lang_module['change_weight'] = 'Thay đổi thứ tự';
+$lang_module['new_weight'] = 'Thứ tự mới';
+$lang_module['type_new_weight'] = 'Nhập thứ tự mới trong khoảng từ 1 đến';
+$lang_module['total'] = 'Tất cả';

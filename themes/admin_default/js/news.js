@@ -739,6 +739,10 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('body').on('input', '.number', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    });
 });
 
 function nv_sort_content(id, w) {

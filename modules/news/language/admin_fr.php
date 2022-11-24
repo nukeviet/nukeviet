@@ -411,3 +411,7 @@ $lang_module['voice_add'] = 'Ajouter une voix';
 $lang_module['voice_edit'] = 'Modifier la voix';
 $lang_module['voice_error_title'] = 'Erreur: Le titre ne peut pas être laissé vide';
 $lang_module['voice_error_exists'] = 'Erreur: Titre en double';
+$lang_module['change_weight'] = 'Changer de poids';
+$lang_module['new_weight'] = 'Nouveau poids';
+$lang_module['type_new_weight'] = 'Entrez un nouveau poids de 1 à';
+$lang_module['total'] = 'Totale';
