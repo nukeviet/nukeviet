@@ -367,3 +367,7 @@ $lang_module['voice_add'] = 'Add voice';
 $lang_module['voice_edit'] = 'Edit voice';
 $lang_module['voice_error_title'] = 'Error: Title cannot be left blank';
 $lang_module['voice_error_exists'] = 'Error: Duplicate title';
+$lang_module['change_weight'] = 'Change weight';
+$lang_module['new_weight'] = 'New weight';
+$lang_module['type_new_weight'] = 'Enter new weight from 1 to';
+$lang_module['total'] = 'Total';

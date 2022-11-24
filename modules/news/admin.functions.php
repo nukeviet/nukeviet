@@ -431,10 +431,12 @@ function nv_show_topics_list($page = 1)
         $xtpl = new XTemplate('topics_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('TOTAL', $num_items);
         foreach ($_array_topic as $row) {
             $numnews = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where topicid=' . $row['topicid'])->fetchColumn();
 
             $xtpl->assign('ROW', array(
+                'weight' => $row['weight'],
                 'topicid' => $row['topicid'],
                 'description' => $row['description'],
                 'title' => $row['title'],
@@ -443,15 +445,6 @@ function nv_show_topics_list($page = 1)
                 'numnews' => $numnews,
                 'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics&amp;topicid=' . $row['topicid'] . '#edit'
             ));
-
-            for ($i = (($page-1)* $per_page) + 1; $i <= $max_height; ++$i) {
-                $xtpl->assign('WEIGHT', array(
-                    'key' => $i,
-                    'title' => $i,
-                    'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ));
-                $xtpl->parse('main.loop.weight');
-            }
 
             $xtpl->parse('main.loop');
         }
@@ -487,27 +480,20 @@ function nv_show_block_cat_list()
         $xtpl = new XTemplate('blockcat_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('TOTAL', $num);
 
         foreach ($_array_block_cat as $row) {
             $numnews = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $row['bid'])->fetchColumn();
 
             $xtpl->assign('ROW', array(
                 'bid' => $row['bid'],
+                'weight' => $row['weight'],
                 'title' => $row['title'],
                 'numnews' => $numnews,
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=block&amp;bid=' . $row['bid'],
                 'linksite' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $row['alias'],
                 'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups&amp;bid=' . $row['bid'] . '#edit'
             ));
-
-            for ($i = 1; $i <= $num; ++$i) {
-                $xtpl->assign('WEIGHT', array(
-                    'key' => $i,
-                    'title' => $i,
-                    'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ));
-                $xtpl->parse('main.loop.weight');
-            }
 
             foreach ($array_adddefault as $key => $val) {
                 $xtpl->assign('ADDDEFAULT', array(
@@ -557,6 +543,7 @@ function nv_show_sources_list()
     $xtpl = new XTemplate('sources_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('TOTAL', $num);
 
     if ($num > 0) {
         $db_slave->sqlreset()
@@ -570,20 +557,11 @@ function nv_show_sources_list()
         while ($row = $result->fetch()) {
             $xtpl->assign('ROW', array(
                 'sourceid' => $row['sourceid'],
+                'weight' => $row['weight'],
                 'title' => $row['title'],
                 'link' => $row['link'],
                 'url_edit' => $base_url . '&amp;sourceid=' . $row['sourceid']
             ));
-
-            for ($i = 1; $i <= $num; ++$i) {
-                $xtpl->assign('WEIGHT', array(
-                    'key' => $i,
-                    'title' => $i,
-                    'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
-                ));
-                $xtpl->parse('main.loop.weight');
-            }
-
             $xtpl->parse('main.loop');
         }
         $result->closeCursor();

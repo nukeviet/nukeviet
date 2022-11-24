@@ -664,6 +664,9 @@ $(document).ready(function(){
         $($(this).data('target')).prop('type', 'text');
         $($(this).data('target')).val(nv_randomPassword(10));
     });
+    $('body').on('input', '.number', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    });
 });
 
 function nv_sort_content(id, w) {
