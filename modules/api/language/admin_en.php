@@ -103,3 +103,8 @@ $lang_module['remote_api_log'] = 'Enable Remote API Logging';
 $lang_module['api_remote_off'] = 'Remote API <strong>is off</strong> so API calls will not be possible. To support API calls, <strong><a href="%s">enable Remote API here</a></strong>';
 $lang_module['api_remote_off2'] = 'Remote API <strong>is off</strong> so API calls will not be possible.';
 $lang_module['cat_api_list'] = 'API list under category';
+$lang_module['flood_blocker'] = 'Query restriction';
+$lang_module['flood_blocker_note'] = 'If you leave these fields blank, the number of requests is unlimited';
+$lang_module['flood_limit'] = 'Max Requests';
+$lang_module['flood_interval'] = 'Within';
+$lang_module['minutes'] = 'minutes';

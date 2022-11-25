@@ -8,6 +8,9 @@
  */
 
 $(function() {
+    $('.number').on('input', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    });
     // Thay đổi đối tượng
     $('#role [name=role_object]').on('change', function() {
         $.ajax({
@@ -55,6 +58,23 @@ $(function() {
     // Không cho xuống dòng ở textarea
     $('#role_description').on('input', function() {
         $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
+    });
+    // Thêm flood rule
+    $('#role').on('click', '.add-rule', function() {
+        var item = $(this).parents('.item'),
+            newitem = item.clone();
+        $('[name^=flood_rules_limit], [name^=flood_rules_interval]', newitem).val('');
+        item.after(newitem)
+    });
+    // Xóa flood rule
+    $('#role').on('click', '.del-rule', function() {
+        var item = $(this).parents('.item'),
+            items = $(this).parents('.items');
+        if ($('.item', items).length > 1) {
+            item.remove()
+        } else {
+            $('[name^=flood_rules_limit], [name^=flood_rules_interval]', item).val('')
+        }
     });
     // Xử lý khi form thêm/sửa API-role được submit
     $('#role').on('submit', function(e) {

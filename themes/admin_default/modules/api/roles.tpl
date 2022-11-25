@@ -179,6 +179,27 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td class="left-col">{LANG.flood_blocker}:</td>
+                    <td class="items">
+                        <!-- BEGIN: flood_rule -->
+                        <div class="flood_rule item">
+                            <div class="input-group" style="width: fit-content;">
+                                <span class="input-group-addon">{LANG.flood_limit}</span>
+                                <input type="text" class="form-control w100 number" name="flood_rules_limit[]" value="{RULE.limit}" maxlength="15">
+                                <span class="input-group-addon" style="border-left: 0;">{LANG.flood_interval}</span>
+                                <input type="text" class="form-control w100 number" style="border-left: 0;" name="flood_rules_interval[]" value="{RULE.interval}" maxlength="10">
+                                <span class="input-group-addon" style="border-left: 0;">{LANG.minutes}</span>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default del-rule" type="button"><em class="fa fa-minus"></em></button>
+                                    <button class="btn btn-default add-rule" type="button"><em class="fa fa-plus"></em></button>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- END: flood_rule -->
+                        <div class="help-block mb-0">{LANG.flood_blocker_note}</div>
+                    </td>
+                </tr>
             </tbody>
             <tbody id="apicheck">{APICHECK}</tbody>
             <tfoot>

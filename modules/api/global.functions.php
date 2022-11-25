@@ -183,6 +183,8 @@ function parseRole($row)
         }
     }
 
+    $row['flood_rules'] = !empty($row['flood_rules']) ? json_decode($row['flood_rules'], true) : [];
+
     return $row;
 }
 
