@@ -47,7 +47,6 @@ class ApiResult
     const CODE_MISSING_IP = '0019';
     const CODE_MISSING_TIME = '0020';
     const CODE_ADMIN_SUSPEND = '0021';
-    const CODE_REQUEST_LIMIT_EXCEEDED = '0022';
 
     private const CODE_PATTERN = '/^[0-9]{4}$/';
 

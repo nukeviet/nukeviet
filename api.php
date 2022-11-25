@@ -122,9 +122,8 @@ $credential_data['api_allowed'] = [
 ];
 $forAdmin = [];
 $roles = [];
-$flood_rules = [];
 
-$sql = 'SELECT tb1.flood_info, tb2.role_id, tb2.role_object, tb2.role_data, tb2.flood_rules FROM ' . $db_config['prefix'] . '_api_role_credential tb1 INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb1.role_id=tb2.role_id  AND tb2.status = 1) WHERE (tb1.userid = ' . $credential_data['userid'] . ' AND tb1.status = 1)';
+$sql = 'SELECT tb2.role_id, tb2.role_object, tb2.role_data FROM ' . $db_config['prefix'] . '_api_role_credential tb1 INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb1.role_id=tb2.role_id  AND tb2.status = 1) WHERE (tb1.userid = ' . $credential_data['userid'] . ' AND tb1.status = 1)';
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $row['role_data'] = json_decode($row['role_data'], true);
@@ -139,8 +138,6 @@ while ($row = $result->fetch()) {
                     }
                     !isset($roles[$k]) && $roles[$k] = [];
                     $roles[$k][] = $row['role_id'];
-                    !isset($flood_rules[$k]) && $flood_rules[$k] = [];
-                    $flood_rules[$k][] = [$row['flood_rules'], $row['flood_info'], $row['role_id']];
                 }
             } else {
                 if (!isset($credential_data['api_allowed'][$sysormod])) {
@@ -158,8 +155,6 @@ while ($row = $result->fetch()) {
                         }
                         !isset($roles[$k]) && $roles[$k] = [];
                         $roles[$k][] = $row['role_id'];
-                        !isset($flood_rules[$k]) && $flood_rules[$k] = [];
-                        $flood_rules[$k][] = [$row['flood_rules'], $row['flood_info'], $row['role_id']];
                     }
                 }
             }
@@ -191,7 +186,6 @@ if (empty($api_request['module'])) {
     }
 
     $role_id = $roles[$testObject];
-    $my_flood_rules = $flood_rules[$testObject];
     $classname = 'NukeViet\\' . $apidir . '\\' . $api_request['action'];
 } else {
     // Api module theo ngôn ngữ
@@ -229,7 +223,6 @@ if (empty($api_request['module'])) {
     $module_info = $sys_mods[$api_request['module']];
     $module_file = $module_info['module_file'];
     $role_id = $roles[$testObject];
-    $my_flood_rules = $flood_rules[$testObject];
     $classname = 'NukeViet\\Module\\' . $module_file . '\\' . $apidir . '\\' . $api_request['action'];
 }
 
@@ -310,39 +303,6 @@ if ($adminLev) {
         } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/en.php')) {
             require NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/en.php';
         }
-    }
-}
-
-// Kiểm tra flood blocker
-if (!empty($my_flood_rules)) {
-    foreach ($my_flood_rules as $dt) {
-        list($flood_rules, $flood_info, $flood_role_id) = $dt;
-        $flood_rules = json_decode($flood_rules, true);
-        $flood_info = json_decode($flood_info, true);
-        foreach ($flood_rules as $interval => $limit) {
-            if (!isset($flood_info[$interval])) {
-                $flood_info[$interval] = [
-                    'time' => NV_CURRENTTIME,
-                    'count' => 0
-                ];
-            }
-            ++$flood_info[$interval]['count'];
-
-            if (NV_CURRENTTIME - $flood_info[$interval]['time'] > $interval) {
-                $flood_info[$interval]['count'] = 1;
-                $flood_info[$interval]['time'] = NV_CURRENTTIME;
-            }
-
-            if ($flood_info[$interval]['count'] > $limit) {
-                $flood_block_time = 1 + (NV_CURRENTTIME - $flood_info[$interval]['time'] - $interval) * -1;
-                $apiresults->setCode(ApiResult::CODE_REQUEST_LIMIT_EXCEEDED)
-                    ->setMessage('Request limit exceeded!!! Retry after ' . $flood_block_time . 's')
-                    ->returnResult();
-                break;
-            }
-        }
-        $flood_info = json_encode($flood_info);
-        $db->query('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET flood_info = ' . $db->quote($flood_info) . ' WHERE userid = ' . $credential_data['userid'] . ' AND role_id = ' . $flood_role_id);
     }
 }
 

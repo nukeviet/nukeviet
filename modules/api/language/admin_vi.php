@@ -103,8 +103,3 @@ $lang_module['remote_api_log'] = 'Ghi lại nhật ký Remote API';
 $lang_module['api_remote_off'] = 'Remote API <strong>đang tắt</strong> nên các cuộc gọi API sẽ không thể thực hiện. Để hỗ trợ cuộc gọi API, <strong><a href="%s">hãy bật Remote API tại đây</a></strong>';
 $lang_module['api_remote_off2'] = 'Remote API <strong>đang tắt</strong> nên các cuộc gọi API sẽ không thể thực hiện.';
 $lang_module['cat_api_list'] = 'Các API trong danh mục';
-$lang_module['flood_blocker'] = 'Hạn chế truy vấn';
-$lang_module['flood_blocker_note'] = 'Nếu để trống các trường ở dòng này, số lượng truy vấn sẽ không bị giới hạn';
-$lang_module['flood_limit'] = 'Số truy vấn tối đa';
-$lang_module['flood_interval'] = 'Trong khoảng';
-$lang_module['minutes'] = 'phút';

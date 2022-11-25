@@ -112,10 +112,6 @@
     color: #fff;
 }
 
-#role .flood_rule + .flood_rule {
-    margin-top: 5px;
-}
-
 #credential-add .modal-body {
     padding: 30px;
 }

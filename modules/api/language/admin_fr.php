@@ -103,8 +103,3 @@ $lang_module['remote_api_log'] = 'Activer la journalisation d\'API à distance';
 $lang_module['api_remote_off'] = 'L\'API distante <strong>est désactivée</strong>, les appels d\'API ne seront donc pas possibles. Pour prendre en charge les appels d\'API, <strong><a href="%s">activez l\'API distante ici</a></strong>';
 $lang_module['api_remote_off2'] = 'L\'API distante <strong>est désactivée</strong>, les appels d\'API ne seront donc pas possibles.';
 $lang_module['cat_api_list'] = 'Liste des API sous catégorie';
-$lang_module['flood_blocker'] = 'Restriction de requête';
-$lang_module['flood_blocker_note'] = 'Si vous laissez ces champs vides, le nombre de requêtes est illimité';
-$lang_module['flood_limit'] = 'Requêtes maximales';
-$lang_module['flood_interval'] = 'Dans les';
-$lang_module['minutes'] = 'minutes';
