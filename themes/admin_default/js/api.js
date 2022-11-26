@@ -8,6 +8,9 @@
  */
 
 $(function() {
+    $('body').on('input', '.number', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    });
     // Thay đổi đối tượng
     $('#role [name=role_object]').on('change', function() {
         $.ajax({
@@ -55,6 +58,23 @@ $(function() {
     // Không cho xuống dòng ở textarea
     $('#role_description').on('input', function() {
         $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
+    });
+    // Thêm flood rule
+    $('#role').on('click', '.add-rule', function() {
+        var item = $(this).parents('.item'),
+            newitem = item.clone();
+        $('[name^=flood_rules_limit], [name^=flood_rules_interval]', newitem).val('');
+        item.after(newitem)
+    });
+    // Xóa flood rule
+    $('#role').on('click', '.del-rule', function() {
+        var item = $(this).parents('.item'),
+            items = $(this).parents('.items');
+        if ($('.item', items).length > 1) {
+            item.remove()
+        } else {
+            $('[name^=flood_rules_limit], [name^=flood_rules_interval]', item).val('')
+        }
     });
     // Xử lý khi form thêm/sửa API-role được submit
     $('#role').on('submit', function(e) {
@@ -135,66 +155,47 @@ $(function() {
             var role_id = parseInt($(this).val());
             window.location.href = credential_page_url + '&role_id=' + role_id
         }).select2();
-        // Tìm admin/user
-        if ($('#credential-add').length) {
-            var get_user_url = $('#credential-add form').data('get-user-url');
-            $("#credential-add [name=userid]").select2({
-                language: nv_lang_interface,
-                ajax: {
-                    type: "POST",
-                    url: get_user_url,
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data, params) {
-                        params.page = params.page || 1;
-                        return {
-                            results: data.results,
-                            pagination: {
-                                more: (params.page * 30) < data.total_count
-                            }
-                        };
-                    },
-                    cache: true
-                },
-                escapeMarkup: function(markup) {
-                    return markup
-                },
-                minimumInputLength: 3,
-                templateResult: function(repo) {
-                    if (repo.loading) return repo.text;
-                    return repo.title
-                },
-                templateSelection: function(repo) {
-                    return repo.title || repo.text
-                }
-            })
-        };
 
-        //Form thêm quyền truy cập
-        $('#credential-add form').on('submit', function(e) {
-            e.preventDefault();
-            var url = $(this).attr('action');
-            data = $(this).serialize();
+        // Thêm/sửa quyền truy cập API-role
+        $('[data-toggle=credential-add], [data-toggle=credential-edit]', credentiallist).on('click', function() {
+            var url = $('#credential-add form').attr('action'),
+                title = $(this).data('title');
+            if ($(this).is('[data-toggle=credential-edit]')) {
+                url += '&edit=1&userid=' + $(this).parents('.item').data('userid')
+            }
             $.ajax({
-                type: "POST",
-                url: $(this).attr('action'),
-                cache: !1,
-                data: $(this).serialize(),
-                dataType: "json"
+                type: "GET",
+                url: url,
+                cache: !1
             }).done(function(a) {
-                if ('error' == a.status) {
-                    alert(a.mess);
-                } else if ('OK' == a.status) {
-                    location.reload()
-                }
+                $('#credential-add .credential-title').text(title);
+                $('#credential-add form').html(a);
+                $('#credential-add').modal('show')
             })
         });
+
+        // Tìm admin/user
+        if ($('#credential-add').length) {
+            //Form thêm quyền truy cập
+            $('#credential-add form').on('submit', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('action');
+                data = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    cache: !1,
+                    data: $(this).serialize(),
+                    dataType: "json"
+                }).done(function(a) {
+                    if ('error' == a.status) {
+                        alert(a.mess);
+                    } else if ('OK' == a.status) {
+                        location.reload()
+                    }
+                })
+            })
+        };
 
         $('.change-status', credentiallist).on('change', function() {
             var userid = parseInt($(this).parents('.item').data('userid')),
@@ -258,7 +259,7 @@ $(function() {
 
         if ($('#changeAuth').length) {
             var changeAuth = $('#changeAuth');
-    
+
             var clipboard1 = new ClipboardJS('#credential_ident_btn'),
                 clipboard2 = new ClipboardJS('#credential_secret_btn');
             clipboard1.on('success', function(e) {
@@ -273,7 +274,7 @@ $(function() {
                     $(e.trigger).tooltip('destroy');
                 }, 1000);
             });
-    
+
             changeAuth.on('click', '.create_authentication', function(e) {
                 $('.has-error', changeAuth).removeClass('has-error');
                 $('.auth-info', changeAuth).text($('.auth-info', changeAuth).data('default'));
@@ -284,7 +285,7 @@ $(function() {
                     $('[name=method]', changeAuth).focus();
                     return !1
                 }
-    
+
                 $.ajax({
                     type: "POST",
                     url: credential_page_url,
@@ -359,7 +360,7 @@ $(function() {
                 $(e.trigger).tooltip('destroy');
             }, 1000);
         });
-        
+
         $('.create_authentication', credential_auth).on('click', function(e) {
             $('.has-error', credential_auth).removeClass('has-error');
             $('.auth-info', credential_auth).text($('.auth-info', credential_auth).data('default'));
@@ -408,4 +409,109 @@ $(function() {
             })
         })
     };
+
+    if ($('#logs').length) {
+        var logs = $('#logs'),
+            page_url = logs.data('page-url');
+        $('.log-del', logs).on('click', function() {
+            if (confirm($(this).parents('.list').data('delete-confirm'))) {
+                $.ajax({
+                    type: "POST",
+                    url: page_url,
+                    cache: !1,
+                    data: 'delLog=' + $(this).parents('.item').data('id')
+                }).done(function(a) {
+                    location.reload()
+                })
+            }
+        });
+
+        $('.checkall', logs).on('change', function() {
+            $('.checkall, .checkitem', logs).prop('checked', $(this).is(':checked'))
+        });
+
+        $('.checkitem', logs).on('change', function() {
+            var ls = $(this).parents('.list');
+            $('.checkall', logs).prop('checked', !$('.checkitem:not(:checked)', ls).length)
+        });
+
+        $('.log-multidel', logs).on('click', function() {
+            var list = [];
+            $('.checkitem:checked', logs).each(function() {
+                list.push($(this).parents('.item').data('id'))
+            });
+            if (list.length) {
+                if (confirm($('.list', logs).data('delete-confirm'))) {
+                    $.ajax({
+                        type: "POST",
+                        url: page_url,
+                        cache: !1,
+                        data: 'delLogs=' + list
+                    }).done(function(a) {
+                        location.reload()
+                    })
+                }
+            }
+        });
+
+        $('.log-delall', logs).on('click', function() {
+            if (confirm($('.list', logs).data('delete-confirm'))) {
+                $.ajax({
+                    type: "POST",
+                    url: page_url,
+                    cache: !1,
+                    data: 'delAllLogs=1'
+                }).done(function(a) {
+                    location.reload()
+                })
+            }
+        });
+
+        $('.role-id, .command', logs).select2();
+
+        $('.userid', logs).select2({
+            language: nv_lang_interface,
+            allowClear: true,
+            ajax: {
+                type: "POST",
+                url: page_url,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        getUser: 1,
+                        q: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.results,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function(markup) {
+                return markup
+            },
+            minimumInputLength: 3,
+            templateResult: function(repo) {
+                if (repo.loading) return repo.text;
+                return repo.title
+            },
+            templateSelection: function(repo) {
+                return repo.title || repo.text
+            }
+        });
+
+        $('.fromdate,.todate', logs).datepicker({
+            dateFormat: "dd.mm.yy",
+            showOtherMonths: true,
+            showOn: 'focus'
+        });
+    }
 });

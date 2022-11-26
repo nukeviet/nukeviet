@@ -122,10 +122,17 @@ $credential_data['api_allowed'] = [
 ];
 $forAdmin = [];
 $roles = [];
+$flood_rules = [];
+$log_period_list = [];
+$time_wrong = [];
+$quota_exhausted = [];
 
-$sql = 'SELECT tb2.role_id, tb2.role_object, tb2.role_data FROM ' . $db_config['prefix'] . '_api_role_credential tb1 INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb1.role_id=tb2.role_id  AND tb2.status = 1) WHERE (tb1.userid = ' . $credential_data['userid'] . ' AND tb1.status = 1)';
+$sql = 'SELECT tb1.addtime, tb1.endtime, tb1.access_count, tb1.quota, tb2.role_id, tb2.role_object, tb2.role_data, tb2.log_period, tb2.flood_rules FROM ' . $db_config['prefix'] . '_api_role_credential tb1 INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb1.role_id=tb2.role_id  AND tb2.status = 1) WHERE (tb1.userid = ' . $credential_data['userid'] . ' AND tb1.status = 1)';
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
+    !empty($row['log_period']) && $log_period_list[] = $row['role_id'];
+    ((int) $row['addtime'] > NV_CURRENTTIME or (!empty($row['endtime']) and (int) $row['endtime'] < NV_CURRENTTIME)) && $time_wrong[] = $row['role_id'];
+    (!empty($row['quota']) and (int) $row['access_count'] >= (int) $row['quota']) && $quota_exhausted[] = $row['role_id'];
     $row['role_data'] = json_decode($row['role_data'], true);
     if (!empty($row['role_data'])) {
         foreach ($row['role_data'] as $sysormod => $sdata) {
@@ -138,6 +145,10 @@ while ($row = $result->fetch()) {
                     }
                     !isset($roles[$k]) && $roles[$k] = [];
                     $roles[$k][] = $row['role_id'];
+                    if (!empty($row['flood_rules']) and $row['flood_rules'] !== '[]') {
+                        !isset($flood_rules[$k]) && $flood_rules[$k] = [];
+                        $flood_rules[$k][] = [$row['flood_rules'], $row['role_id']];
+                    }
                 }
             } else {
                 if (!isset($credential_data['api_allowed'][$sysormod])) {
@@ -155,6 +166,10 @@ while ($row = $result->fetch()) {
                         }
                         !isset($roles[$k]) && $roles[$k] = [];
                         $roles[$k][] = $row['role_id'];
+                        if (!empty($row['flood_rules']) and $row['flood_rules'] !== '[]') {
+                            !isset($flood_rules[$k]) && $flood_rules[$k] = [];
+                            $flood_rules[$k][] = [$row['flood_rules'], $row['role_id']];
+                        }
                     }
                 }
             }
@@ -186,6 +201,7 @@ if (empty($api_request['module'])) {
     }
 
     $role_id = $roles[$testObject];
+    $my_flood_rules = $flood_rules[$testObject];
     $classname = 'NukeViet\\' . $apidir . '\\' . $api_request['action'];
 } else {
     // Api module theo ngôn ngữ
@@ -223,6 +239,7 @@ if (empty($api_request['module'])) {
     $module_info = $sys_mods[$api_request['module']];
     $module_file = $module_info['module_file'];
     $role_id = $roles[$testObject];
+    $my_flood_rules = $flood_rules[$testObject];
     $classname = 'NukeViet\\Module\\' . $module_file . '\\' . $apidir . '\\' . $api_request['action'];
 }
 
@@ -306,16 +323,74 @@ if ($adminLev) {
     }
 }
 
-// Cập nhật lại lần cuối sử dụng
+// Kiểm tra flood blocker
+if (!empty($my_flood_rules)) {
+    foreach ($my_flood_rules as $dt) {
+        list($flood_rules, $flood_role_id) = $dt;
+        $flood_rules = json_decode($flood_rules, true);
+
+        $select = [];
+        foreach (array_keys($flood_rules) as $interval) {
+            $select[] = 'COUNT(CASE WHEN log_time >= ' . (NV_CURRENTTIME - $interval) . ' THEN 1 END) AS count' . $interval;
+        }
+        $sql = 'SELECT ' . implode(', ', $select) . ' FROM ' . $db_config['prefix'] . '_api_role_logs WHERE role_id = ' . $flood_role_id . ' AND userid = ' . $credential_data['userid'];
+        $countlist = $db->query($sql)->fetch();
+        if (!empty($countlist)) {
+            foreach ($flood_rules as $interval => $limit) {
+                if (!empty($countlist['count' . $interval])) {
+                    if ((int) $countlist['count' . $interval] >= $limit) {
+                        $apiresults->setCode(ApiResult::CODE_REQUEST_LIMIT_EXCEEDED)
+                            ->setMessage('Request limit exceeded!!!')
+                            ->returnResult();
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Cập nhật CSDL
 $role_id = array_unique($role_id);
+$values = [];
+$is_time_wrong = true;
+$is_quota_exhausted = true;
+foreach ($role_id as $rid) {
+    if (in_array($rid, $log_period_list, true)) {
+        $id = NV_CURRENTTIME . $rid . $credential_data['userid'];
+        $values[] = '(' . $db->quote($id) . ', ' . $rid . ', ' . $credential_data['userid'] . ', ' . $db->quote($api_request['action']) . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . ')';
+    }
+
+    if (!in_array($rid, $time_wrong, true)) {
+        $is_time_wrong = false;
+    }
+
+    if (!in_array($rid, $quota_exhausted, true)) {
+        $is_quota_exhausted = false;
+    }
+}
+
+// Nếu thời gian bắt đầu hoặc kết thúc không phù hợp
+if ($is_time_wrong) {
+    $apiresults->setCode(ApiResult::CODE_WRONG_TIME)
+        ->setMessage('API request at wrong time !!!')
+        ->returnResult();
+}
+
+// Nếu hết hạn ngạch
+if ($is_quota_exhausted) {
+    $apiresults->setCode(ApiResult::CODE_QUOTA_EXHAUSTED)
+        ->setMessage('Quota exhausted !!!')
+        ->returnResult();
+}
+
+if (!empty($values)) {
+    $values = implode(', ', $values);
+    $db->query('INSERT INTO ' . $db_config['prefix'] . '_api_role_logs (id, role_id, userid, command, log_time, log_ip) VALUES ' . $values);
+}
+
 $role_id = implode(',', $role_id);
 $db->query('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET access_count = access_count + 1, last_access = ' . NV_CURRENTTIME . ' WHERE userid = ' . $credential_data['userid'] . ' AND role_id IN (' . $role_id . ')');
 $db->query('UPDATE ' . $db_config['prefix'] . '_api_user SET last_access = ' . NV_CURRENTTIME . ' WHERE userid = ' . $credential_data['userid']);
-
-// Ghi nhật ký
-if (!empty($global_config['remote_api_log'])) {
-    nv_insert_logs(NV_LANG_DATA, $api_request['module'], 'LOG_REMOTE_API_REQUEST', 'Command: ' . $api_request['action'], $credential_data['userid']);
-}
 
 unset($credential_data, $api_request, $role_id, $forAdmin, $roles);
 

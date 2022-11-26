@@ -103,6 +103,7 @@ $install_lang['cron']['cron_ref_expired_del'] = 'Supprimer les referers expirés
 $install_lang['cron']['cron_auto_check_version'] = 'Vérifier la version NukeViet';
 $install_lang['cron']['cron_notification_autodel'] = 'Supprimer vieille notification';
 $install_lang['cron']['cron_remove_expired_push'] = 'Supprimer les notifications push expirées';
+$install_lang['cron']['cron_apilogs_autodel'] = 'Supprimer les journaux d\'API expirés';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Fans de NukeViet';
 $install_lang['groups']['NukeViet-Admins'] = 'Admins de NukeViet';

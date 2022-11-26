@@ -41,8 +41,20 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_role_creden
   access_count INT(11) UNSIGNED NOT NULL DEFAULT '0',
   last_access INT(11) UNSIGNED NOT NULL DEFAULT '0',
   addtime INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  endtime INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  quota INT(20) UNSIGNED NOT NULL DEFAULT '0',
   status TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
   UNIQUE KEY userid_role_id (userid, role_id)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_role_logs (
+  id CHAR(50) NOT NULL,
+  role_id SMALLINT(4) NOT NULL DEFAULT '0',
+  userid INT(11) NOT NULL DEFAULT '0',
+  command CHAR(100) NOT NULL DEFAULT '',
+  log_time INT(11) NOT NULL DEFAULT '0',
+  log_ip CHAR(50) NOT NULL DEFAULT '',
+  UNIQUE KEY id (id)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_user (

@@ -81,6 +81,8 @@
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_status}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_status}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_addtime}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.endtime}</th>
+                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.quota}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_access_count}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_last_access}</th>
                     <!-- BEGIN: is_public -->
@@ -150,7 +152,9 @@
                     </td>
                     <td class="text-nowrap text-center" style="width: 1%;">{ROLE.status}</td>
                     <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_status_format}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_addtime}</td>
+                    <td class="text-center" style="width: 1%;">{ROLE.credential_addtime}</td>
+                    <td class="text-center" style="width: 1%;">{ROLE.credential_endtime}</td>
+                    <td class="text-center" style="width: 1%;">{ROLE.credential_quota}</td>
                     <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_access_count}</td>
                     <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_last_access}</td>
                     <!-- BEGIN: is_public -->

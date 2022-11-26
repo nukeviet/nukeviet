@@ -205,45 +205,161 @@ if ($action == 'del' and $nv_Request->isset_request('userid', 'post')) {
 }
 
 //Thêm quyền truy cập API-role
-if ($action == 'add') {
-    $userid = $nv_Request->get_int('userid', 'post', 0);
-    if (empty($userid)) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $lang_module['api_role_credential_error']
-        ]);
-    }
+if ($action == 'credential') {
+    if ($nv_Request->isset_request('add', 'post') or $nv_Request->isset_request('edit', 'post')) {
+        $isAdd = $nv_Request->isset_request('add', 'post') ? true : false;
+        $userid = $nv_Request->get_int('userid', 'post', 0);
+        if (empty($userid)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['api_role_credential_error']
+            ]);
+        }
 
-    $exists = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $userid)->fetchColumn();
-    if (!$exists) {
-        nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $lang_module['api_role_credential_error']
-        ]);
-    }
-
-    if ($rolelist[$role_id]['role_object'] == 'admin') {
-        $exists = $db->query('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id =' . $userid)->fetchColumn();
+        $exists = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $userid)->fetchColumn();
         if (!$exists) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $lang_module['api_role_credential_error']
             ]);
         }
-    }
 
-    $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetchColumn();
-    if ($exists) {
+        if ($rolelist[$role_id]['role_object'] == 'admin') {
+            $exists = $db->query('SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id =' . $userid)->fetchColumn();
+            if (!$exists) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $lang_module['api_role_credential_error']
+                ]);
+            }
+        }
+
+        $exists = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetchColumn();
+        if ($isAdd and $exists) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['api_role_credential_error']
+            ]);
+        } elseif (!$isAdd and !$exists) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => '1' . $lang_module['api_role_credential_error']
+            ]);
+        }
+
+        $adddate = $nv_Request->get_title('adddate', 'post', '');
+        $addhour = $nv_Request->get_int('addhour', 'post', 0);
+        $addmin = $nv_Request->get_int('addmin', 'post', 0);
+        $enddate = $nv_Request->get_title('enddate', 'post', '');
+        $endhour = $nv_Request->get_int('endhour', 'post', 0);
+        $endmin = $nv_Request->get_int('endmin', 'post', 0);
+
+        unset($m);
+        if (!empty($adddate) and preg_match('/^([0-9]{2})\.([0-9]{2})\.([0-9]{4})$/', $adddate, $m)) {
+            $addtime = mktime($addhour, $addmin, 0, $m[2], $m[1], $m[3]);
+        } else {
+            $addtime = NV_CURRENTTIME;
+        }
+        unset($m);
+        if (!empty($enddate) and preg_match('/^([0-9]{2})\.([0-9]{2})\.([0-9]{4})$/', $enddate, $m)) {
+            $endtime = mktime($endhour, $endmin, 0, $m[2], $m[1], $m[3]);
+        } else {
+            $endtime = 0;
+        }
+
+        $quota = $nv_Request->get_int('quota', 'post', 0);
+
+        if ($isAdd) {
+            $db->query('INSERT INTO ' . $db_config['prefix'] . '_api_role_credential (userid, role_id, addtime, endtime, quota) VALUES (' . $userid . ', ' . $role_id . ', ' . $addtime . ', ' . $endtime . ', ' . $quota . ')');
+        } else {
+            $db->query('UPDATE ' . $db_config['prefix'] . '_api_role_credential SET addtime = ' . $addtime . ', endtime = ' . $endtime . ', quota = ' . $quota . ' WHERE userid = ' . $userid . ' AND role_id = ' . $role_id);
+        }
+
         nv_jsonOutput([
-            'status' => 'error',
-            'mess' => $lang_module['api_role_credential_error']
+            'status' => 'OK'
         ]);
     }
 
-    $db->query('INSERT INTO ' . $db_config['prefix'] . '_api_role_credential (userid, role_id, addtime) VALUES (' . $userid . ', ' . $role_id . ', ' . NV_CURRENTTIME . ')');
-    nv_jsonOutput([
-        'status' => 'OK'
-    ]);
+    $credential_data = [
+        'userid' => 0,
+        'adddate' => '',
+        'addhour' => 0,
+        'addmin' => 0,
+        'enddate' => '',
+        'endhour' => 23,
+        'endmin' => 59,
+        'quota' => ''
+    ];
+    if ($nv_Request->isset_request('edit, userid', 'get')) {
+        $userid = $nv_Request->get_absint('userid', 'get', 0);
+        if (!empty($userid)) {
+            $row = $db->query('SELECT addtime, endtime, quota FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid = ' . $userid . ' AND role_id = ' . $role_id)->fetch();
+            if (!empty($row)) {
+                $credential_data['userid'] = $userid;
+                $addtime = explode('|', nv_date('d.m.Y|H|i', $row['addtime']));
+                $credential_data['adddate'] = $addtime[0];
+                $credential_data['addhour'] = (int) $addtime[1];
+                $credential_data['addmin'] = (int) $addtime[2];
+                if (!empty($row['endtime'])) {
+                    $endtime = explode('|', nv_date('d.m.Y|H|i', $row['endtime']));
+                    $credential_data['enddate'] = $endtime[0];
+                    $credential_data['endhour'] = (int) $endtime[1];
+                    $credential_data['endmin'] = (int) $endtime[2];
+                }
+                $credential_data['quota'] = !empty($row['quota']) ? (int) $row['quota'] : '';
+            }
+        }
+    }
+
+    $xtpl = new XTemplate('credential.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('CREDENTIAL', $credential_data);
+
+    if (!$credential_data['userid']) {
+        $xtpl->assign('GET_USER_URL', $page_url . '&role_id=' . $role_id . '&action=getUser');
+        $xtpl->assign('CREDENTIAL_ADD_LABEL', $lang_module['api_role_object_' . $rolelist[$role_id]['role_object']]);
+        $xtpl->parse('add_credential.is_add');
+    } else {
+        $xtpl->parse('add_credential.is_edit');
+    }
+    
+    for ($i = 0; $i < 24; ++$i) {
+        $val = str_pad($i, 2, '0', STR_PAD_LEFT);
+        $xtpl->assign('ADDHOUR', [
+            'key' => $i,
+            'sel' => $i == $credential_data['addhour'] ? ' selected="selected"' : '',
+            'val' => $val
+        ]);
+        $xtpl->parse('add_credential.addhour');
+
+        $xtpl->assign('ENDHOUR', [
+            'key' => $i,
+            'sel' => $i == $credential_data['endhour'] ? ' selected="selected"' : '',
+            'val' => $val
+        ]);
+        $xtpl->parse('add_credential.endhour');
+    }
+
+    for ($i = 0; $i < 60; ++$i) {
+        $val = str_pad($i, 2, '0', STR_PAD_LEFT);
+        $xtpl->assign('ADDMIN', [
+            'key' => $i,
+            'sel' => $i == $credential_data['addmin'] ? ' selected="selected"' : '',
+            'val' => $val
+        ]);
+        $xtpl->parse('add_credential.addmin');
+
+        $xtpl->assign('ENDMIN', [
+            'key' => $i,
+            'sel' => $i == $credential_data['endmin'] ? ' selected="selected"' : '',
+            'val' => $val
+        ]);
+        $xtpl->parse('add_credential.endmin');
+    }
+
+    $xtpl->parse('add_credential');
+    nv_htmlOutput($xtpl->text('add_credential'));
 }
 
 $base_url = $page_url;
@@ -266,7 +382,7 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('PAGE_URL', $page_url);
 $xtpl->assign('NV_ADMIN_THEME', $global_config['module_theme']);
-$xtpl->assign('ADD_CREDENTIAL_URL', !empty($role_id) ? $base_url . '&action=add' : '');
+$xtpl->assign('ADD_CREDENTIAL_URL', !empty($role_id) ? $base_url . '&action=credential' : '');
 $xtpl->assign('ROLE_ID', $role_id);
 
 if (empty($rolecount)) {
@@ -294,8 +410,6 @@ foreach ($rolelist as $role) {
 }
 
 if (!empty($role_id)) {
-    $xtpl->assign('GET_USER_URL', $base_url . '&action=getUser');
-    $xtpl->assign('CREDENTIAL_ADD_LABEL', $lang_module['api_role_object_' . $rolelist[$role_id]['role_object']]);
     $xtpl->parse('main.add_credential_button');
 
     if (!$credentialcount) {
@@ -306,6 +420,8 @@ if (!empty($role_id)) {
         foreach ($credentiallist as $credential) {
             $credential['last_access'] = !empty($credential['last_access']) ? nv_date('d/m/Y H:i', $credential['last_access']) : '';
             $credential['addtime'] = nv_date('d/m/Y H:i', $credential['addtime']);
+            $credential['endtime'] = !empty($credential['endtime']) ? nv_date('d/m/Y H:i', $credential['endtime']) : $lang_module['indefinitely'];
+            $credential['quota'] = !empty($credential['quota']) ? number_format($credential['quota'], 0,'','.') : $lang_module['no_quota'];
             $xtpl->assign('CREDENTIAL', $credential);
 
             $sts = [$lang_module['suspended'], $lang_module['active']];

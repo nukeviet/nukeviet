@@ -54,3 +54,7 @@ $lang_module['api_role_credential_addtime'] = 'Démarrage';
 $lang_module['api_role_credential_access_count'] = 'Nombre d\'appels<br/>de rôle API';
 $lang_module['api_role_credential_last_access'] = 'Dernier appel<br/>au rôle API';
 $lang_module['api_roles_detail'] = 'Liste API de';
+$lang_module['endtime'] = 'Heure de fin';
+$lang_module['quota'] = 'Quota';
+$lang_module['indefinitely'] = 'Indéfiniment';
+$lang_module['no_quota'] = 'Pas de quota';

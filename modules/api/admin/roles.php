@@ -253,7 +253,9 @@ if ($action == 'role') {
             'role_type' => 'private',
             'role_object' => 'admin',
             'role_title' => '',
-            'role_description' => ''
+            'role_description' => '',
+            'log_period' => 0,
+            'flood_rules' => []
         ];
         $array_post['role_data'] = [
             'sys' => [],
@@ -273,6 +275,9 @@ if ($action == 'role') {
             'role_description' => nv_substr($nv_Request->get_textarea('role_description', '', ''), 0, 250),
             'role_type' => $nv_Request->get_title('role_type', 'post', ''),
             'role_object' => $nv_Request->get_title('role_object', 'post', ''),
+            'log_period' => $nv_Request->get_absint('log_period', 'post', 0),
+            'flood_rules_interval' => $nv_Request->get_typed_array('flood_rules_interval', 'post', 'int', 0),
+            'flood_rules_limit' => $nv_Request->get_typed_array('flood_rules_limit', 'post', 'int', 0),
             'role_data' => $array_post['role_data']
         ];
         $data['role_type'] != 'private' && $data['role_type'] = 'public';
@@ -293,6 +298,26 @@ if ($action == 'role') {
                 'mess' => $lang_module['api_roles_error_exists']
             ]);
         }
+
+        $data['flood_rules'] = [];
+        if (!empty($data['flood_rules_interval'])) {
+            foreach ($data['flood_rules_interval'] as $k => $interval) {
+                $interval = (int) $interval;
+                $limit = (int) $data['flood_rules_limit'][$k];
+                if (!empty($interval) and !empty($limit)) {
+                    if ($interval > $data['log_period'] * 60) {
+                        nv_jsonOutput([
+                            'status' => 'error',
+                            'mess' => $lang_module['flood_interval_error']
+                        ]);
+                    }
+
+                    $data['flood_rules'][$interval * 60] = $limit;
+                }
+            }
+        }
+        $data['flood_rules'] = json_encode($data['flood_rules']);
+        $data['log_period'] = $data['log_period'] * 3600;
 
         $data['role_data']['sys'] = [];
         $data['role_data'][NV_LANG_DATA] = [];
@@ -327,9 +352,9 @@ if ($action == 'role') {
 
         if ($isAdd) {
             $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_api_role (
-                role_md5title, role_type, role_object, role_title, role_description, role_data, addtime
+                role_md5title, role_type, role_object, role_title, role_description, role_data, log_period, flood_rules, addtime
             ) VALUES (
-                :role_md5title, :role_type, :role_object, :role_title, :role_description, :role_data, ' . NV_CURRENTTIME . '
+                :role_md5title, :role_type, :role_object, :role_title, :role_description, :role_data, ' . $data['log_period'] . ', :flood_rules, ' . NV_CURRENTTIME . '
             )');
             $sth->bindParam(':role_md5title', $md5title, PDO::PARAM_STR);
             $sth->bindParam(':role_type', $data['role_type'], PDO::PARAM_STR);
@@ -337,6 +362,7 @@ if ($action == 'role') {
             $sth->bindParam(':role_title', $data['role_title'], PDO::PARAM_STR);
             $sth->bindParam(':role_description', $data['role_description'], PDO::PARAM_STR);
             $sth->bindParam(':role_data', $data['role_data'], PDO::PARAM_STR);
+            $sth->bindParam(':flood_rules', $data['flood_rules'], PDO::PARAM_STR);
             $sth->execute();
             $id = $db->lastInsertId();
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Add API-role', $id . ': ' . $data['role_title'], $admin_info['userid']);
@@ -348,6 +374,8 @@ if ($action == 'role') {
                 role_title = :role_title,
                 role_description = :role_description,
                 role_data = :role_data,
+                log_period = ' . $data['log_period'] . ',
+                flood_rules = :flood_rules,
                 edittime = ' . NV_CURRENTTIME . '
                 WHERE role_id=' . $id);
             $sth->bindParam(':role_md5title', $md5title, PDO::PARAM_STR);
@@ -356,6 +384,7 @@ if ($action == 'role') {
             $sth->bindParam(':role_title', $data['role_title'], PDO::PARAM_STR);
             $sth->bindParam(':role_description', $data['role_description'], PDO::PARAM_STR);
             $sth->bindParam(':role_data', $data['role_data'], PDO::PARAM_STR);
+            $sth->bindParam(':flood_rules', $data['flood_rules'], PDO::PARAM_STR);
             $sth->execute();
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit API-role', $id . ': ' . $array_post['role_title'], $admin_info['userid']);
         }
@@ -370,6 +399,7 @@ if ($action == 'role') {
     $array_post['role_type_public_checked'] = $array_post['role_type'] == 'public' ? ' checked="checked"' : '';
     $array_post['role_object_admin_checked'] = $array_post['role_object'] == 'admin' ? ' checked="checked"' : '';
     $array_post['role_object_user_checked'] = $array_post['role_object'] == 'user' ? ' checked="checked"' : '';
+    $array_post['log_period'] = !empty($array_post['log_period']) ? round($array_post['log_period'] / 3600) : '';
 
     $page_title = $isAdd ? $lang_module['add_role'] : $lang_module['edit_role'];
     $page_url .= '&action=role';
@@ -377,6 +407,16 @@ if ($action == 'role') {
     $xtpl->assign('FORM_ACTION', $page_url);
     $xtpl->assign('DATA', $array_post);
     $xtpl->assign('APICHECK', apicheck($array_post['role_object'], $array_post));
+
+    empty($array_post['flood_rules']) && $array_post['flood_rules'] = ['' => ''];
+    foreach ($array_post['flood_rules'] as $interval => $limit) {
+        $interval = !empty($interval) ? round((int) $interval / 60) : '';
+        $xtpl->assign('RULE', [
+            'interval' => $interval,
+            'limit' => $limit
+        ]);
+        $xtpl->parse('role.flood_rule');
+    }
 
     $xtpl->parse('role');
     $contents = $xtpl->text('role');

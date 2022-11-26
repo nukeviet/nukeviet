@@ -54,3 +54,7 @@ $lang_module['api_role_credential_addtime'] = 'Bắt đầu';
 $lang_module['api_role_credential_access_count'] = 'Số lần gọi<br/>API-role';
 $lang_module['api_role_credential_last_access'] = 'Gọi API-role<br/>gần đây';
 $lang_module['api_roles_detail'] = 'Danh sách các API của';
+$lang_module['endtime'] = 'Kết thúc';
+$lang_module['quota'] = 'Hạn ngạch';
+$lang_module['indefinitely'] = 'Vô thời hạn';
+$lang_module['no_quota'] = 'Không giới hạn';

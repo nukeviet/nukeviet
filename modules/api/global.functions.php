@@ -183,6 +183,8 @@ function parseRole($row)
         }
     }
 
+    $row['flood_rules'] = !empty($row['flood_rules']) ? json_decode($row['flood_rules'], true) : [];
+
     return $row;
 }
 
@@ -193,7 +195,7 @@ function myApiRoleList($type = 'public', $page = 0, $per_page = 20)
     $type != 'private' && $type = 'public';
     $userid = defined('NV_ADMIN') ? $admin_info['admin_id'] : $user_info['userid'];
 
-    $select = 'tb1.*, IFNULL(tb2.access_count,-1) AS credential_access_count, IFNULL(tb2.last_access,-1) AS credential_last_access, IFNULL(tb2.addtime,-1) AS credential_addtime, IFNULL(tb2.status,-1) AS credential_status';
+    $select = 'tb1.*, IFNULL(tb2.access_count,-1) AS credential_access_count, IFNULL(tb2.last_access,-1) AS credential_last_access, IFNULL(tb2.addtime,-1) AS credential_addtime, IFNULL(tb2.endtime,-1) AS credential_endtime, IFNULL(tb2.quota,-1) AS credential_quota, IFNULL(tb2.status,-1) AS credential_status';
     $where = "tb1.role_type = '" . $type . "'";
     if (!defined('NV_ADMIN')) {
         $where .= " AND tb1.role_object ='user'";

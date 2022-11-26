@@ -7,7 +7,7 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-#role .left-col {
+ #role .left-col {
     width: 250px;
     min-width: 200px;
 }
@@ -112,6 +112,10 @@
     color: #fff;
 }
 
+#role .flood_rule + .flood_rule {
+    margin-top: 5px;
+}
+
 #credential-add .modal-body {
     padding: 30px;
 }
@@ -156,4 +160,13 @@
 
 #credential_auth .bg-white {
     background-color: white;
+}
+
+#logs .select2-selection--single {
+    border-color: #ccc;
+}
+
+#logs .input-group .select2-selection--single {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }

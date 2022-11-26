@@ -20,6 +20,7 @@ $allow_func = [
 if (defined('NV_IS_GODADMIN')) {
     $allow_func[] = 'roles';
     $allow_func[] = 'credential';
+    $allow_func[] = 'logs';
     $allow_func[] = 'config';
 }
 

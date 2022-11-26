@@ -103,6 +103,7 @@ $install_lang['cron']['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
 $install_lang['cron']['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
 $install_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
 $install_lang['cron']['cron_remove_expired_push'] = 'Xóa thông báo đẩy quá hạn';
+$install_lang['cron']['cron_apilogs_autodel'] = 'Xóa các API-log hết hạn';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Người hâm mộ';
 $install_lang['groups']['NukeViet-Admins'] = 'Người quản lý';
