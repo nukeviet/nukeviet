@@ -543,3 +543,7 @@ $lang_module['security_alert_2stepoff'] = 'Your <strong>%s</strong> account has 
 $lang_module['email_dot_equivalent'] = 'E-mail with a dot before the @ are the version of an email without a dot';
 $lang_module['forcedrelogin'] = 'Force re-login';
 $lang_module['forcedrelogin_note'] = 'User has logged out';
+$lang_module['login_name_type'] = 'Login name type';
+$lang_module['login_name_type_1'] = 'Username';
+$lang_module['login_name_type_2'] = 'Email';
+$lang_module['login_name_type_3'] = 'Username or Email';

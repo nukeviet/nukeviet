@@ -242,6 +242,16 @@
                     <td><input name="allowuserlogin" value="1" type="checkbox"{DATA.allowuserlogin} /></td>
                 </tr>
                 <tr>
+                    <td>{LANG.login_name_type}</td>
+                    <td>
+                        <select name="login_name_type" class="form-control" style="width:fit-content;">
+                            <!-- BEGIN: login_name_type -->
+                            <option value="{TYPE.val}"{TYPE.sel}>{TYPE.title}</option>
+                            <!-- END: login_name_type -->
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td>{LANG.min_old_user}</td>
                     <td><input class="form-control pull-left"  name="min_old_user" value="{DATA.min_old_user}" type="text" style="width: 50px" /></td>
                 </tr>

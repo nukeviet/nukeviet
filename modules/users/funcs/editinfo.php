@@ -397,7 +397,7 @@ if (!defined('ACCESS_EDITUS') or (defined('ACCESS_EDITUS') and defined('ACCESS_P
 if (!defined('ACCESS_EDITUS')) {
     $types[] = '2step';
 }
-// Thành viên có quyền đổi tên đăng nhập
+// Thành viên có quyền đổi bí danh
 if ($array_data['allowloginchange'] and !defined('ACCESS_EDITUS')) {
     $types[] = 'username';
 }

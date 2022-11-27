@@ -87,6 +87,10 @@
                 <td>{USER.st_login}</td>
             </tr>
             <tr>
+                <td>{LANG.login_name}</td>
+                <td>{USER.login_name}</td>
+            </tr>
+            <tr>
                 <td>{LANG.2step_status}</td>
                 <td>{USER.active2step} (<a href="{URL_2STEP}">{LANG.2step_link}</a>)</td>
             </tr>

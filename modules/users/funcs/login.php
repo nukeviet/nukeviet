@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -49,7 +49,6 @@ $gfx_chk = (!empty($array_gfx_chk) and in_array('l', $array_gfx_chk, true)) ? 1 
  * login_result()
  *
  * @param mixed $array
- * @return
  */
 function signin_result($array)
 {
@@ -61,9 +60,9 @@ function signin_result($array)
 
 /**
  * create_username_from_email()
- * 
- * @param mixed $email 
- * @return string 
+ *
+ * @param mixed $email
+ * @return string
  */
 function create_username_from_email($email)
 {
@@ -98,9 +97,8 @@ function create_username_from_email($email)
 /**
  * set_reg_attribs()
  *
- * @param mixed $attribs
+ * @param mixed  $attribs
  * @param string $username
- * @return
  */
 function set_reg_attribs($attribs, $username)
 {
@@ -166,13 +164,13 @@ function set_reg_attribs($attribs, $username)
 
 /**
  * new_openid_user_save()
- * 
- * @param mixed $reg_username 
- * @param mixed $reg_email 
- * @param mixed $reg_password 
- * @param mixed $attribs 
- * @throws ValueError 
- * @throws PDOException 
+ *
+ * @param mixed $reg_username
+ * @param mixed $reg_email
+ * @param mixed $reg_password
+ * @param mixed $attribs
+ * @throws ValueError
+ * @throws PDOException
  */
 function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs)
 {
@@ -182,15 +180,15 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
     $current_mode = isset($attribs['current_mode']) ? $attribs['current_mode'] : 1;
 
     /*
-    * Neu dang ky moi va cho dang ky khong can kich hoat hoac kich hoat qua email (allowuserreg = 1, 2)
-    */
+     * Neu dang ky moi va cho dang ky khong can kich hoat hoac kich hoat qua email (allowuserreg = 1, 2)
+     */
     if ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2) {
         $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
                 group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
                 question, answer, passlostkey, view_mail, remember, in_groups,
                 active, checknum, last_login, last_ip, last_agent, last_openid, idsite, email_verification_time, active_obj
             ) VALUES (
-                ' . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
+                ' . ($global_users_config['active_group_newusers'] ? 7 : 4) . ',
                 :username,
                 :md5username,
                 :password,
@@ -200,7 +198,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
                 :gender,
                 :photo,
                 0,
-                " . NV_CURRENTTIME . ",
+                ' . NV_CURRENTTIME . ",
                 '', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . (int) ($global_config['idsite']) . ',
                 -1, ' . $db->quote('OAUTH:' . $reg_attribs['server']) . '
             )';
@@ -284,8 +282,8 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
     }
 
     /*
-    * Neu dang ky moi + phai qua kiem duyet cua admin (allowuserreg = 3)
-    */
+     * Neu dang ky moi + phai qua kiem duyet cua admin (allowuserreg = 3)
+     */
     if ($global_config['allowuserreg'] == 3) {
         $query_field = [];
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
@@ -293,7 +291,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
             $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
         }
 
-        $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_reg (
+        $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_reg (
                 username, md5username, password, email, first_name, last_name, birthday, regdate, question, answer, checknum, users_info, openid_info
             ) VALUES (
                 :username,
@@ -303,7 +301,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
                 :first_name,
                 :last_name,
                 0,
-                " . NV_CURRENTTIME . ",
+                ' . NV_CURRENTTIME . ",
                 '',
                 '',
                 '',
@@ -454,9 +452,9 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             }
 
             /*
-            * Nếu tài khoản trùng email này có mật khẩu và chức năng tự động gán Oauh bị tắt
-            * thì yêu cầu nhập mật khẩu xác nhận
-            */
+             * Nếu tài khoản trùng email này có mật khẩu và chức năng tự động gán Oauh bị tắt
+             * thì yêu cầu nhập mật khẩu xác nhận
+             */
             if (!empty($nv_row['password']) and empty($global_users_config['auto_assign_oauthuser'])) {
                 if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                     $password = $nv_Request->get_string('password', 'post', '');
@@ -594,43 +592,28 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 ]);
             }
         } else {
-            $error1 = $lang_global['loginincorrect'];
-
-            $check_email = nv_check_valid_email($nv_username, true);
-            if ($check_email[0] == '') {
-                // Email login
-                $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE email =' . $db->quote($check_email[1]);
-                $row = $db->query($sql)->fetch();
-                if (empty($row)) {
-                    opidr_login([
-                        'status' => 'error',
-                        'mess' => $lang_global['loginincorrect']
-                    ]);
+            if (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 1) {
+                $row = checkLoginName('username', $nv_username);
+            } elseif (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 2) {
+                $check_email = nv_check_valid_email($nv_username, true);
+                if (!empty($check_email[0])) {
+                    $row = false;
                 }
-
-                if ($row['email'] != $nv_username) {
-                    opidr_login([
-                        'status' => 'error',
-                        'mess' => $lang_global['loginincorrect']
-                    ]);
-                }
+                $row = checkLoginName('email', $check_email[1]);
             } else {
-                // Username login
-                $sql = 'SELECT * FROM ' . NV_MOD_TABLE . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
-                $row = $db->query($sql)->fetch();
-                if (empty($row)) {
-                    opidr_login([
-                        'status' => 'error',
-                        'mess' => $lang_global['loginincorrect']
-                    ]);
+                $check_email = nv_check_valid_email($nv_username, true);
+                if (empty($check_email[0])) {
+                    $row = checkLoginName('email', $check_email[1]);
+                } else {
+                    $row = checkLoginName('username', $nv_username);
                 }
+            }
 
-                if ($row['username'] != $nv_username) {
-                    opidr_login([
-                        'status' => 'error',
-                        'mess' => $lang_global['loginincorrect']
-                    ]);
-                }
+            if (empty($row)) {
+                opidr_login([
+                    'status' => 'error',
+                    'mess' => $lang_global['loginincorrect']
+                ]);
             }
 
             if (!$crypt->validate_password($nv_password, $row['password'])) {
@@ -671,8 +654,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     }
 
     /*
-    * Gui ma xac minh email do nguoi dung khai bao
-    */
+     * Gui ma xac minh email do nguoi dung khai bao
+     */
     if ($global_config['allowuserreg'] != 0 and $nv_Request->isset_request('verify_send, reg_email', 'post')) {
         $reg_email = nv_strtolower(nv_substr($nv_Request->get_title('reg_email', 'post', '', 1), 0, 100));
         $check_reg_email = nv_check_email_reg($reg_email);
@@ -692,7 +675,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             $sess_verify = ['code' => '', 'time' => 0];
         }
 
-        if (!empty($sess_verify['code']) and ($pas = 300 - NV_CURRENTTIME + (int)$sess_verify['time']) > 0) {
+        if (!empty($sess_verify['code']) and ($pas = 300 - NV_CURRENTTIME + (int) $sess_verify['time']) > 0) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => sprintf($lang_module['verifykey_issend'], ceil($pas / 60))
@@ -724,8 +707,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     }
 
     /*
-    * Neu dang ky moi
-    */
+     * Neu dang ky moi
+     */
     if (isset($op_process['create']) and $nv_Request->isset_request('nv_reg', 'post')) {
         $reg_username = $nv_Request->get_title('reg_username', 'post', '', 1);
         if (($check_reg_username = nv_check_username_reg($reg_username)) != '') {
@@ -864,6 +847,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         ]);
     }
 
+    // Nếu đăng nhập bằng forum hoặc sso
     if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER')) {
         $error = '';
         require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
@@ -874,112 +858,121 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
                 'mess' => $error
             ]);
         }
-    } else {
-        $error1 = $lang_global['loginincorrect'];
 
+        signin_result([
+            'status' => 'ok',
+            'input' => '',
+            'mess' => $lang_module['login_ok']
+        ]);
+    }
+
+    // đăng nhập qua hệ thống nukeviet
+    if (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 1) {
+        $row = checkLoginName('username', $nv_username);
+    } elseif (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 2) {
         $check_email = nv_check_valid_email($nv_username, true);
-        if ($check_email[0] == '') {
-            // Email login
-            $nv_username = $check_email[1];
-            $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE email =' . $db->quote($nv_username);
-            $login_email = true;
+        if (!empty($check_email[0])) {
+            $row = false;
         } else {
-            // Username login
-            $sql = 'SELECT * FROM ' . NV_MOD_TABLE . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
-            $login_email = false;
+            $row = checkLoginName('email', $check_email[1]);
         }
-
-        $row = $db->query($sql)->fetch();
-
-        if (!empty($row)) {
-            if ((($row['md5username'] == nv_md5safe($nv_username) and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
-                if (!$row['active']) {
-                    $error1 = $lang_module['login_no_active'];
-                } else {
-                    if (!empty($row['active2step'])) {
-                        $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
-                        $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
-
-                        if (empty($nv_totppin) and empty($nv_backupcodepin)) {
-                            $nv_Request->set_Session('users_dismiss_captcha', md5($nv_username));
-                            signin_result([
-                                'status' => '2step',
-                                'input' => '',
-                                'mess' => ''
-                            ]);
-                        }
-
-                        $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
-
-                        if (!empty($nv_totppin) and !$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
-                            signin_result([
-                                'status' => 'error',
-                                'input' => 'nv_totppin',
-                                'mess' => $lang_global['2teplogin_error_opt']
-                            ]);
-                        }
-
-                        if (!empty($nv_backupcodepin)) {
-                            $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
-                            $sth = $db->prepare('SELECT code FROM ' . NV_MOD_TABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $row['userid']);
-                            $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
-                            $sth->execute();
-
-                            if ($sth->rowCount() != 1) {
-                                signin_result([
-                                    'status' => 'error',
-                                    'input' => 'nv_backupcodepin',
-                                    'mess' => $lang_global['2teplogin_error_backup']
-                                ]);
-                            }
-
-                            $code = $sth->fetchColumn();
-                            $db->query('UPDATE ' . NV_MOD_TABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
-                        }
-
-                        $error1 = '';
-                    } else {
-                        $error1 = '';
-                    }
-
-                    if (empty($error1)) {
-                        validUserLog($row, 1, '');
-                        $nv_Request->unset_request('users_dismiss_captcha', 'session');
-                        $blocker->reset_trackLogin($nv_username);
-                    }
-                }
-            }
-        }
-
-        if ($global_config['login_number_tracking'] and (empty($row) or ($row['active'] and !empty($error1)))) {
-            $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
-        }
-
-        if (!empty($error1)) {
-            signin_result([
-                'status' => 'error',
-                'input' => '',
-                'mess' => $error1
-            ]);
-        } elseif (empty($row['active2step'])) {
-            $_2step_require = in_array((int) $global_config['two_step_verification'], [
-                2,
-                3
-            ], true);
-            if (!$_2step_require) {
-                $_2step_require = nv_user_groups($row['in_groups'], true);
-                $_2step_require = $_2step_require[1];
-            }
-            if ($_2step_require) {
-                signin_result([
-                    'status' => '2steprequire',
-                    'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup' . ($nv_redirect ? '&nv_redirect=' . $nv_redirect : ''), true),
-                    'mess' => $lang_global['2teplogin_require']
-                ]);
-            }
+    } else {
+        $check_email = nv_check_valid_email($nv_username, true);
+        if (empty($check_email[0])) {
+            $row = checkLoginName('email', $check_email[1]);
+        } else {
+            $row = checkLoginName('username', $nv_username);
         }
     }
 
+    // Nếu không tìm thấy tài khoản hoặc mật khẩu không khớp
+    if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {
+        if ($global_config['login_number_tracking']) {
+            $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
+        }
+        signin_result([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $lang_global['loginincorrect']
+        ]);
+    }
+
+    // Nếu tài khoản bị đình chỉ
+    if (empty($row['active'])) {
+        signin_result([
+            'status' => 'error',
+            'input' => '',
+            'mess' => $lang_module['login_no_active']
+        ]);
+    }
+
+    // Nếu cần đăng nhập 2 bước
+    if (!empty($row['active2step'])) {
+        $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
+        $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
+
+        // Nếu cả mã từ app và mã dự phòng không được xác định
+        if (empty($nv_totppin) and empty($nv_backupcodepin)) {
+            $nv_Request->set_Session('users_dismiss_captcha', md5($nv_username));
+            signin_result([
+                'status' => '2step',
+                'input' => '',
+                'mess' => ''
+            ]);
+        }
+
+        // Nếu mã từ app nhập vào không chính xác
+        $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
+        if (!empty($nv_totppin) and !$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
+            signin_result([
+                'status' => 'error',
+                'input' => 'nv_totppin',
+                'mess' => $lang_global['2teplogin_error_opt']
+            ]);
+        }
+
+        if (!empty($nv_backupcodepin)) {
+            $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
+            $sth = $db->prepare('SELECT code FROM ' . NV_MOD_TABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $row['userid']);
+            $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
+            $sth->execute();
+
+            // Nếu không tìm thấy trong CSDL mã dự phòng
+            if ($sth->rowCount() != 1) {
+                signin_result([
+                    'status' => 'error',
+                    'input' => 'nv_backupcodepin',
+                    'mess' => $lang_global['2teplogin_error_backup']
+                ]);
+            }
+
+            // Nếu mã dự phòng khớp thì đánh dấu trong CSDL là mã này đã được sử dụng
+            $code = $sth->fetchColumn();
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_backupcodes SET is_used=1, time_used=' . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
+        }
+    }
+
+    // Xác nhận đăng nhập thành công
+    validUserLog($row, 1, '');
+    $nv_Request->unset_request('users_dismiss_captcha', 'session');
+    $blocker->reset_trackLogin($nv_username);
+
+    // Nếu tài khoản không xác thực 2 bước, nhưng hệ thống hoặc nhóm bắt buộc phải xác thực 2 bước
+    if (empty($row['active2step'])) {
+        $_2step_require = in_array((int) $global_config['two_step_verification'], [2,3], true);
+        if (!$_2step_require) {
+            list(, $_2step_require) = nv_user_groups($row['in_groups'], true);
+        }
+        if ($_2step_require) {
+            signin_result([
+                'status' => '2steprequire',
+                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup' . ($nv_redirect ? '&nv_redirect=' . $nv_redirect : ''), true),
+                'mess' => $lang_global['2teplogin_require']
+            ]);
+        }
+    }
+
+    // Trả kết quả OK
     signin_result([
         'status' => 'ok',
         'input' => '',

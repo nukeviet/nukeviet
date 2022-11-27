@@ -170,7 +170,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
                 $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
                 $subject = $lang_module['adduser_register'];
                 $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-                $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
+                $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username'], $row['email']);
                 @nv_sendmail_async([
                     $global_config['site_name'],
                     $global_config['site_email']

@@ -47,7 +47,7 @@ $lang_module['exp_time'] = 'Kết thúc';
 $lang_module['push_link'] = 'Liên kết của thông báo';
 $lang_module['to_group_all'] = 'Tất cả thành viên nhóm';
 $lang_module['id'] = 'ID';
-$lang_module['username'] = 'Tên đăng nhập';
+$lang_module['username'] = 'Bí danh';
 $lang_module['fullname'] = 'Họ tên';
 $lang_module['unlimited'] = 'Vô thời hạn';
 $lang_module['empty_is_unlimited'] = 'Để trống = không giới hạn';

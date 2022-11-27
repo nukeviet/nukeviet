@@ -85,6 +85,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['pass_timeout'] = 86400 * $nv_Request->get_int('pass_timeout', 'post', 0);
         $array_config['oldpass_num'] = $nv_Request->get_int('oldpass_num', 'post', 5);
         $array_config['send_pass'] = (int) $nv_Request->get_bool('send_pass', 'post', false);
+        $array_config['login_name_type'] = $nv_Request->get_int('login_name_type', 'post', 3);
+        ($array_config['login_name_type'] != 1 and $array_config['login_name_type'] != 2) && $array_config['login_name_type'] = 3;
 
         $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', []);
         $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
@@ -407,6 +409,17 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             'sel' => $i == $array_config['oldpass_num'] ? ' selected="selected"' : ''
         ]);
         $xtpl->parse('main.oldpass_num');
+    }
+
+    $login_name_types = [1, 2, 3];
+    $login_name_type = !empty($global_config['login_name_type']) ? (int) $global_config['login_name_type'] : 3;
+    foreach ($login_name_types as $login_name_type) {
+        $xtpl->assign('TYPE', [
+            'val' => $login_name_type,
+            'sel' => ($login_name_type == $login_name_type) ? ' selected="selected"' : '',
+            'title' => $lang_module['login_name_type_' . $login_name_type]
+        ]);
+        $xtpl->parse('main.login_name_type');
     }
 
     foreach ($array_openid_processing as $key => $name) {

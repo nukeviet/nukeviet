@@ -851,7 +851,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.return_group_manage');
     }
 
-    // Tab đổi tên đăng nhập
+    // Tab đổi bí danh
     if (in_array('username', $types, true)) {
         if ($pass_empty) {
             $xtpl->parse('main.tab_edit_username.username_empty_pass');
@@ -1281,6 +1281,7 @@ function user_welcome($array_field_config, $custom_fields)
     $_user_info['current_login'] = nv_date('l, d/m/Y H:i', $user_info['current_login']);
     $_user_info['st_login'] = !empty($user_info['st_login']) ? $lang_module['yes'] : $lang_module['no'];
     $_user_info['active2step'] = !empty($user_info['active2step']) ? $lang_global['on'] : $lang_global['off'];
+    $_user_info['login_name'] = $global_config['login_name_type'] == 1 ? $lang_module['username'] :($global_config['login_name_type'] == 2 ? $lang_module['email'] : $lang_module['usernamr_or_email']);
 
     if (isset($user_info['current_mode']) and $user_info['current_mode'] == 5) {
         $_user_info['current_mode'] = $lang_module['admin_login'];

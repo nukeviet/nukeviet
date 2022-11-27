@@ -308,14 +308,22 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     }
 
     // Kiểm tra đăng nhập bằng email hay username
-    $check_email = nv_check_valid_email($nv_username, true);
-    if ($check_email[0] == '') {
-        $nv_username = $check_email[1];
+    if (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 1) {
+        $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
+        $login_email = false;
+    } elseif (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 2) {
         $sql = 't2.email =' . $db->quote($nv_username);
         $login_email = true;
     } else {
-        $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
-        $login_email = false;
+        $check_email = nv_check_valid_email($nv_username, true);
+        if (empty($check_email[0])) {
+            $nv_username = $check_email[1];
+            $sql = 't2.email =' . $db->quote($nv_username);
+            $login_email = true;
+        } else {
+            $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
+            $login_email = false;
+        }
     }
 
     // Lấy thông tin đăng nhập

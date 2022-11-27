@@ -543,3 +543,7 @@ $lang_module['security_alert_2stepoff'] = 'Votre compte <strong>%s</strong> vien
 $lang_module['email_dot_equivalent'] = 'Les e-mails avec un point avant le @ sont la version d\'un e-mail sans point';
 $lang_module['forcedrelogin'] = 'Forcer la reconnexion';
 $lang_module['forcedrelogin_note'] = 'L\'utilisateur s\'est déconnecté';
+$lang_module['login_name_type'] = 'Type de nom de connexion';
+$lang_module['login_name_type_1'] = 'Nom d\'utilisateur';
+$lang_module['login_name_type_2'] = 'Email';
+$lang_module['login_name_type_3'] = 'Nom d\'utilisateur ou email';

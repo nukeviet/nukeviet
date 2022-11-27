@@ -86,6 +86,10 @@
                 <td>{USER.st_login}</td>
             </tr>
             <tr>
+                <td>{LANG.login_name}</td>
+                <td>{USER.login_name}</td>
+            </tr>
+            <tr>
                 <td>{LANG.last_login}</td>
                 <td>{USER.last_login}</td>
             </tr>

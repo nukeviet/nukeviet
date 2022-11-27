@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,9 +23,9 @@ $nv_BotManager->setPrivate();
 
 /**
  * get_checknum()
- * 
- * @param mixed $userid 
- * @return mixed 
+ *
+ * @param mixed $userid
+ * @return mixed
  */
 function get_checknum($userid)
 {
@@ -124,7 +124,6 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
  * Ham kiem tra email kha dung
  *
  * @param mixed $email
- * @return
  */
 function nv_check_email_reg(&$email)
 {
@@ -198,7 +197,6 @@ function nv_check_email_reg(&$email)
  * Ham kiem tra ten dang nhap kha dung
  *
  * @param mixed $login
- * @return
  */
 function nv_check_username_reg($login)
 {
@@ -326,6 +324,37 @@ function opidr_login($openid_info)
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents, false);
     include NV_ROOTDIR . '/includes/footer.php';
+}
+
+/**
+ * checkLoginName()
+ * 
+ * @param string $type 
+ * @param string $name 
+ * @param bool $isBool 
+ * @return mixed 
+ */
+function checkLoginName($type,$name)
+{
+    global $db;
+
+    $type != 'email' && $type = 'username';
+    if ($type == 'email') {
+        $where = 'email =' . $db->quote($name);
+    } else {
+        $where = 'md5username =' . $db->quote(nv_md5safe($name));
+    }
+
+    $row = $db->query('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE ' . $where)->fetch();
+    if (empty($row[$type])) {
+        return false;
+    }
+
+    if (strcmp($row[$type], $name) !== 0) {
+        return false;
+    }
+
+    return $row;
 }
 
 // Xác định cấu hình module

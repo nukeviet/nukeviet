@@ -65,7 +65,7 @@
     <div class="inner-message normal">{GLANG.adminlogininfo}</div>
     <div class="form-detail">
         <div class="form-group">
-            <label for="nv_login" class="col-xs-9 control-label form-label">{GLANG.username}:</label>
+            <label for="nv_login" class="col-xs-9 control-label form-label">{GLANG.login_name}:</label>
             <div class="col-xs-15"><input autocomplete="off" class="form-control" name="nv_login" type="text" id="nv_login" value="{V_LOGIN}" data-error-mess="{GLANG.username_empty}" /></div>
         </div>
         <div class="form-group">

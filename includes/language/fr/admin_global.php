@@ -82,3 +82,4 @@ $lang_global['acp'] = 'Administration du site';
 $lang_global['login_session_expire'] = 'Votre session de connexion expirera dans';
 $lang_global['account_settings'] = 'Paramètres du compte';
 $lang_global['your_admin_account'] = 'Votre compte administrateur';
+$lang_global['login_name'] = 'Identifiant';
