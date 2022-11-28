@@ -319,12 +319,14 @@ function nv_htmlOutput($html, $type = 'html')
 
 /**
  * nv_jsonOutput()
- *
- * @param array $array_data
+ * 
+ * @param array $array_data 
+ * @param int $flags 
+ * @return never 
  */
-function nv_jsonOutput($array_data)
+function nv_jsonOutput($array_data, $flags = 0)
 {
-    nv_htmlOutput(json_encode($array_data), 'json');
+    nv_htmlOutput(json_encode($array_data, $flags), 'json');
 }
 
 /**
