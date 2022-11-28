@@ -113,7 +113,7 @@ $(document).ready(function() {
                     } else if ($("[data-toggle=nv_change_captcha]", form).length) {
                         $("[data-toggle=nv_change_captcha]", form).trigger('click')
                     }
-                    $('.inner-message', form).text(e.mess).removeClass('normal success').addClass('error');
+                    $('.inner-message', form).html(e.mess).removeClass('normal success').addClass('error');
                     if (e.input != '') {
                         $('[name=' + e.input + ']', form).focus()
                     }
