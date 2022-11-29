@@ -44,7 +44,7 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
         $search = ['&amp;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
         $replace = ['&', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
         foreach ($list as $row) {
-            if (!empty($site_mods[$row['module_name']]) and nv_user_in_groups($row['groups_view'])) {
+            if ((empty($row['module_name']) or (!empty($row['module_name']) and !empty($site_mods[$row['module_name']]))) and nv_user_in_groups($row['groups_view'])) {
                 $link = str_replace($search, $replace, $row['link']);
                 $link = nv_url_rewrite($link, true);
                 switch ($row['target']) {
