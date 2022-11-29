@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,7 +20,7 @@ $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:menu'
 $array_url_instruction['menu'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:menu#lấy_menu_tự_dộng_từ_ten_cac_chuyen_mục_module';
 $array_url_instruction['rows'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:menu#xem_sửa_khối';
 
-$allow_func = ['main', 'menu', 'rows', 'link_menu', 'link_module', 'change_weight_row', 'del_row', 'change_active'];
+$allow_func = ['main', 'blocks'];
 
 // Loai lien ket
 $type_target = [];

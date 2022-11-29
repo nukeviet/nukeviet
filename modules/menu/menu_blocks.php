@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,7 +21,7 @@ if (!defined('NV_MAINFILE')) {
  */
 function nv_menu_blocks($block_config)
 {
-    global $nv_Cache, $global_config, $lang_global;
+    global $nv_Cache, $global_config, $lang_global, $site_mods;
 
     $list_cats = [];
     $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
@@ -30,7 +30,7 @@ function nv_menu_blocks($block_config)
     $search = ['&amp;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
     $replace = ['&', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
     foreach ($list as $row) {
-        if (nv_user_in_groups($row['groups_view'])) {
+        if (!empty($site_mods[$row['module_name']]) and nv_user_in_groups($row['groups_view'])) {
             if ($row['link'] != '' and $row['link'] != '#') {
                 $row['link'] = str_replace($search, $replace, $row['link']);
                 $row['link'] = nv_url_rewrite($row['link'], true);
@@ -64,7 +64,7 @@ function nv_menu_blocks($block_config)
                 'link' => $row['link'],
                 'icon' => $row['icon'],
                 'html_class' => $row['css'],
-                'current' => nv_menu_check_current($row['link'], $row['active_type'])
+                'current' => is_current_url($row['link'], $row['active_type'])
             ];
         }
     }
@@ -135,51 +135,6 @@ function nv_menu_blocks_active($cat)
     }
 
     return $class;
-}
-
-/**
- * nv_menu_check_current()
- *
- * @param string $url
- * @param int    $type
- * @return bool
- */
-function nv_menu_check_current($url, $type = 0)
-{
-    global $home, $client_info, $global_config;
-
-    if ($client_info['selfurl'] == $url) {
-        return true;
-    }
-    // Chinh xac tuyet doi
-
-    $_curr_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
-    $_url = nv_url_rewrite($url, true);
-
-    if ($home and ($_url == nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA) or $_url == NV_BASE_SITEURL . 'index.php' or $_url == NV_BASE_SITEURL)) {
-        return true;
-    }
-    if ($_url != NV_BASE_SITEURL) {
-        if ($type == 2) {
-            if (preg_match('#' . preg_quote($_url, '#') . '#', $_curr_url)) {
-                return true;
-            }
-
-            return false;
-        }
-        if ($type == 1) {
-            if (preg_match('#^' . preg_quote($_url, '#') . '#', $_curr_url)) {
-                return true;
-            }
-
-            return false;
-        }
-        if ($_curr_url == $_url) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 /**

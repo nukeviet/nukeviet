@@ -35,6 +35,45 @@ function nv_create_submenu()
 }
 
 /**
+ * is_current_url()
+ * Kiểm tra URL có phải là URL của trạng hiện tại hay không
+ *
+ * @param string $url
+ * @param int    $cmptype
+ * @return bool
+ */
+function is_current_url($url, $cmptype = 0)
+{
+    global $home, $client_info, $global_config;
+
+    if (strcasecmp($client_info['selfurl'], $url) === 0) {
+        return true;
+    }
+
+    $url = nv_url_rewrite($url, true);
+
+    if ($home and (strcasecmp($url, nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA)) === 0 or strcasecmp($url, NV_BASE_SITEURL . 'index.php') === 0 or strcasecmp($url, NV_BASE_SITEURL) === 0)) {
+        return true;
+    }
+
+    if (strcasecmp($url, NV_BASE_SITEURL) !== 0) {
+        $current_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
+        if (
+            // Nếu URL hiện tại có chứa URL so sánh
+            ($cmptype == 2 and preg_match('#' . preg_quote($url, '#') . '#', $current_url)) or
+            // Nếu URL hiện tại bắt đầu chứa URL so sánh
+            ($cmptype == 1 and preg_match('#^' . preg_quote($url, '#') . '#', $current_url)) or
+            // Nếu URL hiện tại khớp hoàn toàn URL so sánh
+            (strcasecmp($url, $current_url) === 0)
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * nv_blocks_content()
  *
  * @param string $sitecontent
@@ -134,7 +173,7 @@ function nv_blocks_content($sitecontent)
             }
 
             // Kiểm tra thời gian hiển thị
-            // 'regular': thường xuyên, 'specific': theo thời gian cụ thể, 
+            // 'regular': thường xuyên, 'specific': theo thời gian cụ thể,
             // 'daily': hàng ngày, 'weekly': hàng tuần,
             // 'monthly': hàng tháng, 'yearly': hàng năm
             $is_show = false;

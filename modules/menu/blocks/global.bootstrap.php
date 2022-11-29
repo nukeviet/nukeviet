@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,43 +19,6 @@ if (defined('NV_IS_FILE_THEMES')) {
 }
 
 if (!nv_function_exists('nv_menu_bootstrap')) {
-    /**
-     * nv_menu_bootstrap_check_current()
-     *
-     * @param string $url
-     * @param int    $type
-     * @return bool
-     */
-    function nv_menu_bootstrap_check_current($url, $type = 0)
-    {
-        global $home, $client_info, $global_config;
-
-        // Chinh xac tuyet doi
-        if ($client_info['selfurl'] == $url) {
-            return true;
-        }
-
-        if ($home and ($url == nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA) or $url == NV_BASE_SITEURL . 'index.php' or $url == NV_BASE_SITEURL)) {
-            return true;
-        }
-        if ($url != NV_BASE_SITEURL) {
-            $_curr_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
-            if ($type == 2) {
-                if (preg_match('#' . preg_quote($url, '#') . '#', $_curr_url)) {
-                    return true;
-                }
-            } elseif ($type == 1) {
-                if (preg_match('#^' . preg_quote($url, '#') . '#', $_curr_url)) {
-                    return true;
-                }
-            } elseif ($_curr_url == $url) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * nv_menu_bootstrap()
      *
@@ -81,7 +44,7 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
         $search = ['&amp;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;'];
         $replace = ['&', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '#', '%', '^', ':', '{', '}', '`', '~'];
         foreach ($list as $row) {
-            if (nv_user_in_groups($row['groups_view'])) {
+            if (!empty($site_mods[$row['module_name']]) and nv_user_in_groups($row['groups_view'])) {
                 $link = str_replace($search, $replace, $row['link']);
                 $link = nv_url_rewrite($link, true);
                 switch ($row['target']) {
@@ -130,7 +93,7 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
                     $xtpl->parse('main.top_menu.sub');
                     $xtpl->parse('main.top_menu.has_sub');
                 }
-                if (nv_menu_bootstrap_check_current($item['link'], $item['active_type'])) {
+                if (is_current_url($item['link'], $item['active_type'])) {
                     $classcurrent[] = 'active';
                     $aclass[] = 'active';
                 } elseif (!empty($submenu_active)) {
@@ -175,7 +138,7 @@ if (!nv_function_exists('nv_menu_bootstrap')) {
             foreach ($array_menu[$id] as $sid => $smenu) {
                 $liclass = []; // For bootstrap 4/5
                 $aclass = []; // For bootstrap 4/5
-                if (nv_menu_bootstrap_check_current($smenu['link'], $smenu['active_type'])) {
+                if (is_current_url($smenu['link'], $smenu['active_type'])) {
                     $aclass[] = 'active';
                     $submenu_active[] = $id;
                 }

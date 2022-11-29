@@ -7,160 +7,242 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-function nv_link_settitle(alias, module) {
-    var nv_timer = nv_settimeout_disable('module_sub_menu', 2000);
-    var new_status = $("#module_sub_menu").val();
-    if (new_status != 0) {
-        $('input#module').val(module);
-        $('input#op').val(new_status);
-        $('input#link').val(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + module + "&" + nv_fc_variable + "=" + new_status);
-        var new_text = document.getElementById('module_sub_menu').options[document.getElementById('module_sub_menu').selectedIndex].text;
-        $('input#title').val(trim(new_text));
-    }
-    return;
-}
-
-function nv_link_module(module) {
-    $('#module_name_' + module).attr('readonly', 'readonly');
-    var new_status = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].value;
-    var new_text = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].text;
-
-    $('input#title').val(trim(new_text));
-    if (new_status != 0) {
-        $('input#link').val(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + new_status);
-        $('input#module').val(new_status);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_module&nocache=' + new Date().getTime(), 'module=' + new_status, function(res) {
-            $('#thu').html(res);
-            $('#thu').show();
-            $('#module_sub_menu').select2();
-        });
-    } else {
-        $('input#link').val('');
-        $('#thu').hide();
-    }
-    setTimeout(function() {
-        $('#module_name_' + module).removeAttr('readonly');
-    }, 1000);
-}
-
-function nv_link_menu(blog_menu, parentid) {
-    var nv_timer = nv_settimeout_disable('item_menu_' + blog_menu, 2000);
-    var new_status = document.getElementById('item_menu_' + blog_menu).options[document.getElementById('item_menu_' + blog_menu).selectedIndex].value;
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_menu&nocache=' + new Date().getTime(), 'mid=' + new_status + '&parentid=' + parentid, function(res) {
-        $('#parentid').html(res);
-        $('#parentid').select2();
+$(function() {
+    // Lấy HTML cho modal thêm/sửa khối menu
+    $('#menu-block .add-menu-block, #menu-block .edit-menu-block').on('click', function() {
+        $.ajax({
+            type: "GET",
+            url: $(this).data('url'),
+            cache: !1
+        }).done(function(a) {
+            $('#menu-block-modal').html(a);
+            $('#menu-block-modal .modal').modal({
+                backdrop: 'static',
+                keyboard: false
+            }).modal('show')
+        })
     });
-}
 
-function nv_menu_delete(id) {
-    if (confirm(nv_is_del_confirm[0])) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'del=1&id=' + id, function(res) {
-            var r_split = res.split('_');
-            if (r_split[0] == 'OK') {
-                window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main';
-            } else {
-                alert(nv_is_del_confirm[2]);
+    // Thêm/sửa khối menu
+    $('#menu-block-modal').on('submit', 'form', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(e) {
+                if ('error' == e.status) {
+                    alert(e.mess)
+                } else if ('OK' == e.status) {
+                    location.reload()
+                }
             }
-        });
-    }
-    return false;
-}
+        })
+    });
 
-function nv_chang_weight_item(id, mid, parentid) {
-    var nv_timer = nv_settimeout_disable('change_weight_' + id, 3000);
-    var new_weight = document.getElementById('change_weight_' + id).options[document.getElementById('change_weight_' + id).selectedIndex].value;
-    $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight_row&nocache=' + new Date().getTime(), 'id=' + id + '&mid=' + mid + '&parentid=' + parentid + '&new_weight=' + new_weight, function(res) {
-        var r_split = res.split('_');
-        if (r_split[0] == 'OK') {
-            window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rows&mid=' + r_split[2] + '&parentid=' + r_split[3];
-        } else {
-            alert(nv_is_del_confirm[2]);
+    // Xóa khối menu
+    $('#menu-block .delete-menu-block').on('click', function() {
+        if (confirm(nv_is_del_confirm[0])) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=blocks&nocache=' + new Date().getTime(), 'del=1&id=' + $(this).data('id'), function() {
+                location.reload()
+            });
         }
     });
-    return;
-}
 
-function nv_menu_item_delete(id, mid, parentid, num) {
-    var del_confirm = 0;
-    if (num && confirm(cat + num + caton)) {
-        del_confirm = 1;
-    } else if (confirm(nv_is_del_confirm[0])) {
-        del_confirm = 1;
-    }
-    if (del_confirm == 1) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_row&nocache=' + new Date().getTime(), 'id=' + id + '&parentid=' + parentid + '&mid=' + mid, function(res) {
-            var r_split = res.split('_');
-            if (r_split[0] == 'OK') {
-                window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rows&mid=' + r_split[2] + '&parentid=' + r_split[3];
-            } else {
-                alert(nv_is_del_confirm[2]);
-            }
-        });
-    }
-    return false;
-}
-
-function nv_change_active(id) {
-    var new_status = $('#change_active_' + id).is(':checked') ? 1 : 0;
-    if (confirm(nv_is_change_act_confirm[0])) {
-        var nv_timer = nv_settimeout_disable('change_active_' + id, 3000);
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), 'change_active=1&id=' + id + '&new_status=' + new_status, function(res) {
-
-        });
-    } else {
-        $('#change_active_' + id).prop('checked', new_status ? false : true);
-    }
-}
-
-function nv_main_action(oForm, msgnocheck) {
-    var fa = oForm['idcheck[]'];
-    var listid = '';
-    if (fa.length) {
-        for (var i = 0; i < fa.length; i++) {
-            if (fa[i].checked) {
-                listid = listid + fa[i].value + ',';
-            }
-        }
-    } else {
-        if (fa.checked) {
-            listid = listid + fa.value + ',';
-        }
-    }
-
-    if (listid != '') {
-        var action = document.getElementById('action').value;
-        if (action == 'delete') {
-            if (confirm(nv_is_del_confirm[0])) {
-                return true;
-            }
-        } else {
-            window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid + '&checkss=' + checkss;
-        }
-    } else {
-        alert(msgnocheck);
-    }
-    return false;
-}
-
-function nv_menu_reload(mid, id, parentid, lang_confirm) {
-    if (confirm(lang_confirm)) {
-        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rows&nocache=' + new Date().getTime(), 'reload=1&mid=' + mid + '&id=' + id, function(res) {
-            var r_split = res.split('_');
-            alert(r_split[1]);
-            if (r_split[0] == 'OK') {
-                window.location.href = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rows&mid=' + mid + '&parentid=' + r_split[3];
-            }
-        });
-    }
-}
-
-$(document).ready(function() {
-    $(".selectimg").click(function() {
-        var area = $(this).data('area');
-        var path = CFG.upload_current;
-        var currentpath = CFG.upload_current;
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
+    // Thay đổi khối menu
+    $('#tools .change-mid').on('change', function() {
+        var mid = $(this).val();
+        window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&mid=' + mid
     });
+
+    // Thay đổi thứ tự menu
+    $('#menulist .chang_weight').on('change', function() {
+        var id = $(this).parents('.item').data('id'),
+            mid = $('#menulist').data('mid'),
+            parentid = $('#menulist').data('parentid'),
+            new_weight = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: $('#menulist').attr('action'),
+            cache: !1,
+            data: 'action=chang_weight&mid=' + mid + '&parentid=' + parentid + '&id=' + id + '&new_weight=' + new_weight
+        }).done(function(a) {
+            location.reload()
+        })
+    });
+
+    // Xóa menu
+    $('#menulist .item_delete').on('click', function() {
+        var item = $(this).parents('.item'),
+            id = item.data('id'),
+            mid = $('#menulist').data('mid'),
+            parentid = $('#menulist').data('parentid'),
+            num = parseInt(item.data('num')),
+            conf = num ? confirm(cat + num + caton) : confirm(nv_is_del_confirm[0]);
+        if (conf) {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=delete&id=' + id + '&parentid=' + parentid + '&mid=' + mid, function() {
+                location.reload()
+            });
+        }
+    });
+
+    // Xóa nhiều menu
+    $('#menulist .multi-delete').on('click', function() {
+        var mid = $('#menulist').data('mid'),
+            parentid = $('#menulist').data('parentid'),
+            list = [];
+        $('#menulist [name^=idcheck]:checked').each(function() {
+            list.push($(this).val())
+        });
+        if (!list.length) {
+            alert($(this).data('error'));
+            return !1
+        }
+
+        if (confirm(nv_is_del_confirm[0])) {
+            $.ajax({
+                type: "POST",
+                url: $('#menulist').attr('action'),
+                cache: !1,
+                data: 'action=delete&mid=' + mid + '&parentid=' + parentid + '&idcheck=' + list
+            }).done(function(a) {
+                location.reload()
+            })
+        }
+    });
+
+    // Thay đổi trạng thái của menu
+    $('#menulist .change-active').on('click', function() {
+        var id = $(this).parents('.item').data('id'),
+            that = $(this);
+        that.prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: $('#menulist').attr('action'),
+            cache: !1,
+            data: 'action=change_active&id=' + id
+        }).done(function() {
+            setTimeout(function() {
+                that.prop('disabled', false)
+            }, 1000);
+        })
+    });
+
+    // Reload lại menu
+    $('#menulist .menu_reload').on('click', function() {
+        if (confirm($('#menulist').data('reload-confirm'))) {
+            $.post($('#menulist').attr('action'), 'reload=1&mid=' + $('#menulist').data('mid') + '&id=' + $(this).parents('.item').data('id'), function(res) {
+                location.reload()
+            });
+        }
+    });
+
+    $('#tools .add-menu, #menulist .edit-menu').on('click', function() {
+        $.ajax({
+            type: "GET",
+            url: $(this).data('url'),
+            cache: !1
+        }).done(function(a) {
+            $('#edit').html(a);
+            $('#edit .modal').modal({
+                backdrop: 'static',
+                keyboard: false
+            }).modal('show')
+        })
+    });
+
+    // Button chọn hình/icon
+    $('#edit').on('click', '.selectimg', function(e) {
+        e.preventDefault();
+        var area = $(this).data('area'),
+            path = $(this).data('path');
+        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=image&currentpath=" + path, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+    });
+
+    // Event khi thay đổi module
+    $('#edit').on('change', '[name=module_name]', function() {
+        var mod_field = $(this).parents('.field'),
+            val = $(this).val(),
+            subMod = $('#edit [name=func]');
+        if (subMod.length) {
+            subMod.parents('.field').remove()
+        }
+        if (val != '') {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=link_module&module=' + val, function(res) {
+                if (res != '') {
+                    mod_field.after(res);
+                    $('#edit [name=func]').select2()
+                }
+            });
+        }
+    });
+
+    // Khi click vào button lấy title theo module/op
+    $('#edit').on('click', '.get-title', function() {
+        var obj = $('#edit'),
+            module = $('[name=module_name]', obj).val(),
+            opobj = $('[name=func]', obj),
+            op;
+        if (opobj.length) {
+            op = opobj.val();
+            if (op != '') {
+                $('[name=title]', obj).val(trim(strip_tags($('[name=func] option[value="' + op + '"]', obj).text())));
+                return !1
+            }
+        }
+        if (module != '') {
+            $('[name=title]', obj).val(trim(strip_tags($('[name=module_name] option[value=' + module + ']', obj).text())))
+            return !1
+        }
+        $('[name=title]', obj).val('')
+    });
+
+    // Khi click vào nút lấy link theo module/op
+    $('#edit').on('click', '.get-link', function() {
+        var obj = $('#edit'),
+            module = $('[name=module_name]', obj).val(),
+            opobj = $('[name=func]', obj),
+            op;
+        if (opobj.length) {
+            op = opobj.val();
+            if (op != '') {
+                $('[name=link]', obj).val(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + module + "&" + nv_fc_variable + "=" + op);
+                return !1
+            }
+        }
+        if (module != '') {
+            $('[name=link]', obj).val(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + module);
+            return !1
+        }
+        $('[name=link]', obj).val('')
+    });
+
+    // Khi thay đổi khối menu
+    $('#edit').on('change', '[name=item_menu]', function() {
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'action=link_menu&mid=' + $(this).val() + '&parentid=' + $(this).data('parentid'), function(res) {
+            $('#edit [name=parentid]').html(res).select2();
+        });
+    });
+
+    // Form thêm/sửa menu
+    $('#edit').on('submit', 'form', function(e) {
+        e.preventDefault();
+        var data = $(this).serialize();
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: $(this).attr('action'),
+            data: data,
+            dataType: 'json',
+            success: function(e) {
+                if ('error' == e.status) {
+                    alert(e.mess)
+                } else if ('OK' == e.status) {
+                    location.reload()
+                }
+            }
+        })
+    })
 });
