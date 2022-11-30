@@ -321,6 +321,7 @@ $lang_module['cron_launcher_server'] = 'Server Side Cron Service';
 $lang_module['cron_launcher_server_note'] = 'You can copy the code below and paste it into your crontab.';
 $lang_module['cron_last_time'] = 'The last check and execution of cronjobs was at %s';
 $lang_module['cron_next_time'] = 'The next check and execution of cronjobs is expected at %s';
+$lang_module['cron_list'] = 'Cronjobs';
 $lang_module['cors'] = 'Cross-Site config';
 $lang_module['cors_exceptions'] = 'Blocking does not apply to the following cases';
 $lang_module['cors_site_restrict'] = 'Protect the user area';

@@ -254,6 +254,7 @@ $lang_module['cron_launcher_server'] = 'Dịch vụ cron phía máy chủ';
 $lang_module['cron_launcher_server_note'] = 'Bạn có thể sao chép mã bên dưới và dán vào crontab của mình.';
 $lang_module['cron_last_time'] = 'Lần kiểm tra và thực thi công việc gần đây là %s';
 $lang_module['cron_next_time'] = 'Lần kiểm tra và thực thi công việc tiếp theo dự kiến vào lúc %s';
+$lang_module['cron_list'] = 'Danh sách công việc';
 $lang_module['closed_site'] = 'Chế độ đóng cửa site';
 $lang_module['closed_site_0'] = 'Site hoạt động bình thường';
 $lang_module['closed_site_1'] = 'Đóng cửa site đối với tất cả, ngoại trừ Quản trị tối cao';

@@ -53,6 +53,11 @@ while ($row = $result->fetch()) {
         ($row['act'] ? $lang_global['disable'] : $lang_global['activate']),
         NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_act&amp;id=' . $row['id'] . '&checkss=' . md5(NV_CHECK_SESSION . '_' . $module_name . '_cronjobs_act_' . $row['id'])
     ];
+    $contents[$row['id']]['act'] = $row['act'];
+    $contents[$row['id']]['last_time'] = $row['last_time'];
+    $contents[$row['id']]['last_time_title'] = !empty($row['last_time']) ? nv_date('d/m/Y H:i', $row['last_time']) : $lang_module['last_time0'];
+    $contents[$row['id']]['last_result'] = $row['last_result'];
+    $contents[$row['id']]['last_result_title'] = empty($row['last_time']) ? $lang_module['last_result_empty'] : $lang_module['last_result' . $row['last_result']];
     $contents[$row['id']]['detail'][$lang_module['run_file']] = $row['run_file'];
     $contents[$row['id']]['detail'][$lang_module['run_func']] = $row['run_func'];
     $contents[$row['id']]['detail'][$lang_module['params']] = !empty($row['params']) ? implode(', ', explode(',', $row['params'])) : '';

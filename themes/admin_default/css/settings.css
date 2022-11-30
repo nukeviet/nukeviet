@@ -61,3 +61,41 @@
 .dropdown-menu-checkbox label:hover {
     background-color: #f5f5f5;
 }
+
+.cronlist .cron-heading {
+    display: block;
+}
+
+.cronlist .cron-heading {
+    background-color: #428bca;
+    color: #fff;
+    text-decoration: none;
+}
+
+.cronlist .cron-heading.collapsed {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.cronlist .cron-heading.collapsed.text-muted {
+    color: #999;
+}
+
+.cronlist .cron-heading::before {
+    display: inline-block;
+    font-family: "FontAwesome";
+    content: "\f077";
+    margin-right: 6px;
+}
+
+.cronlist .cron-heading.collapsed::before {
+    content: "\f078";
+}
+
+.cronlist .cron-heading .title {
+    font-weight: 700;
+}
+
+.cronlist .cron-heading.collapsed .title {
+    font-weight: 400;
+}

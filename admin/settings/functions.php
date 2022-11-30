@@ -164,17 +164,33 @@ function main_theme($contents)
             'edit' => empty($values['edit']) ? [] : $values['edit'],
             'disable' => empty($values['disable']) ? [] : $values['disable'],
             'delete' => empty($values['delete']) ? [] : $values['delete'],
-            'id' => $id
+            'id' => $id,
+            'last_time_title' => $values['last_time_title'],
+            'last_result_title' => $values['last_result_title']
         ]);
 
-        if (!empty($values['edit'][0])) {
-            $xtpl->parse('main.crj.edit');
+        if (empty($values['act'])) {
+            $xtpl->parse('main.crj.inactivate');
         }
-        if (!empty($values['disable'][0])) {
-            $xtpl->parse('main.crj.disable');
+
+        if (!empty($values['last_time'])) {
+            $xtpl->parse('main.crj.last_time.result' . $values['last_result']);
+            $xtpl->parse('main.crj.last_time');
+        } else {
+            $xtpl->parse('main.crj.never');
         }
-        if (!empty($values['delete'][0])) {
-            $xtpl->parse('main.crj.delete');
+
+        if (!empty($values['edit'][0]) or !empty($values['disable'][0]) or !empty($values['delete'][0])) {
+            if (!empty($values['edit'][0])) {
+                $xtpl->parse('main.crj.action.edit');
+            }
+            if (!empty($values['disable'][0])) {
+                $xtpl->parse('main.crj.action.disable');
+            }
+            if (!empty($values['delete'][0])) {
+                $xtpl->parse('main.crj.action.delete');
+            }
+            $xtpl->parse('main.crj.action');
         }
 
         foreach ($values['detail'] as $key => $value) {

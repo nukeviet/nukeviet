@@ -321,6 +321,7 @@ $lang_module['cron_launcher_server'] = 'le service cron côté serveur';
 $lang_module['cron_launcher_server_note'] = 'Vous pouvez copier le code ci-dessous et le coller dans votre crontab.';
 $lang_module['cron_last_time'] = 'La dernière vérification et exécution des cronjobs a eu lieu à %s';
 $lang_module['cron_next_time'] = 'La prochaine vérification et exécution des cronjobs est prévue le %s';
+$lang_module['cron_list'] = 'Cronjobs';
 $lang_module['cors'] = 'Cross-Site config';
 $lang_module['cors_exceptions'] = 'Le blocage ne s\'applique pas aux cas suivants';
 $lang_module['cors_site_restrict'] = 'Protégez l\'espace utilisateur';
