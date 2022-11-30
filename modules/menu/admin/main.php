@@ -13,6 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+$sp = '&nbsp;&nbsp;&nbsp;';
 $groups_list = nv_groups_list();
 
 // Nạp lại thành phần con
@@ -558,7 +559,6 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
     ]);
     $xtpl->parse('row.cat');
 
-    $sp = '&nbsp;&nbsp;&nbsp;';
     foreach ($menulist as $row) {
         $sp_title = '';
         if ($row['lev'] > 0) {
