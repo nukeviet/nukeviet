@@ -74,19 +74,19 @@
     <!-- BEGIN: rolelist -->
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
-            <thead class="bg-primary">
+            <thead class="bg-primary small">
                 <tr>
-                    <th class="text-nowrap text-center" style="vertical-align:middle">{LANG.api_roles_list}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_roles_allowed}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_status}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_status}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_addtime}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.endtime}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.quota}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_access_count}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_last_access}</th>
+                    <td class="text-nowrap text-center" style="vertical-align:middle">{LANG.api_roles_list}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_roles_allowed}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_status}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_status}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_addtime}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.endtime}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.quota}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_access_count}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_last_access}</td>
                     <!-- BEGIN: is_public -->
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle"></th>
+                    <td class="text-nowrap text-center" style="width: 1%;vertical-align:middle"></td>
                     <!-- END: is_public -->
                 </tr>
             </thead>
