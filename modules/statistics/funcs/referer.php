@@ -29,7 +29,7 @@ if (empty($row)) {
 }
 
 $contents = '';
-$mod_title = $page_title = sprintf($lang_module['refererbysite'], $host);
+$page_title = sprintf($lang_module['refererbysite'], $host);
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host;
 $canonicalUrl = getCanonicalUrl($page_url, true, true);

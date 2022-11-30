@@ -15,7 +15,6 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 

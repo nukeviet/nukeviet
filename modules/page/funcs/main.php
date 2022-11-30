@@ -20,7 +20,6 @@ if ($page_config['viewtype'] == 2) {
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
-    $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $contents = '';
 } elseif ($id) {
     // Xem theo bài viết
@@ -81,7 +80,7 @@ if ($page_config['viewtype'] == 2) {
         }
     }
 
-    $page_title = $mod_title = $rowdetail['title'];
+    $page_title = $rowdetail['title'];
     $description = $rowdetail['description'];
 
     // Hiển thị các bài liên quan mới nhất.
@@ -136,7 +135,6 @@ if ($page_config['viewtype'] == 2) {
 
     $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
-    $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $per_page = $page_config['per_page'];
 
     $array_data = [];

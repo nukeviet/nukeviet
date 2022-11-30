@@ -1225,7 +1225,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     ]);
 }
 
-$page_title = $mod_title = $lang_module['editinfo_pagetitle'];
+$page_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
 $page_url .= '/' . $array_data['type'];
 $canonicalUrl = getCanonicalUrl($page_url, true);

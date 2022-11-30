@@ -15,7 +15,6 @@ if (!defined('NV_IS_MOD_USER')) {
 
 $page_title = $module_info['funcs'][$op]['func_site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['listusers'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 if (!nv_user_in_groups($global_config['whoviewuser'])) {

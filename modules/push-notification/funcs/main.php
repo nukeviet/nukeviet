@@ -500,7 +500,6 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 $contents = main_theme();
 

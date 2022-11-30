@@ -498,7 +498,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 } else {
                     $page_title = $lang_global['openid_login'];
                     $key_words = $module_info['keywords'];
-                    $mod_title = $lang_global['openid_login'];
 
                     unset($nv_row['password']);
 
@@ -773,7 +772,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
     $page_title = $lang_global['openid_login'];
     $key_words = $module_info['keywords'];
-    $mod_title = $lang_global['openid_login'];
 
     $contents .= user_openid_login($attribs, $op_process);
 
@@ -988,7 +986,6 @@ if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
 
 $page_title = $lang_module['login'];
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['login'];
 
 $canonicalUrl = getCanonicalUrl($page_url);
 

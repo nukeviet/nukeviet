@@ -291,7 +291,6 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 $page_title = $module_info['site_title'];
 array_unshift($kw, $module_info['keywords'], $module_info['site_title']);
 $key_words = implode(', ', array_filter($kw));
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 $description = $module_config[$module_name]['bodytext'];
 
 $array_content = [

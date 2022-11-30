@@ -27,7 +27,6 @@ if (defined('ACCESS_ADDUS')) {
 if (!$global_config['allowuserreg']) {
     $page_title = $lang_module['register'];
     $key_words = $module_info['keywords'];
-    $mod_title = $lang_module['register'];
 
     $contents = user_info_exit($lang_module['no_allowuserreg']);
     $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
@@ -155,7 +154,6 @@ if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
 // Dang ky thong thuong
 $page_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['register'];
 
 $array_field_config = [];
 $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');

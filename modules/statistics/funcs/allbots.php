@@ -15,7 +15,6 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 
 $page_title = $lang_module['bot'];
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['bot'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $contents = '';
 

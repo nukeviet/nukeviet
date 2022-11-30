@@ -15,7 +15,6 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
 
 $page_title = $lang_module['browser'];
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['browser'];
 $page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'];
 $contents = '';
 

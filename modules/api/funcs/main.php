@@ -89,8 +89,6 @@ $api_user = get_api_user();
 
 $page_title = $lang_module['main_title'];
 $key_words = $module_info['keywords'];
-$mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
-
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
