@@ -39,7 +39,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.toolbar_Basic =
     [
         { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-        { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+        { name: 'insert', items : [ 'Image','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
         { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
         '/',
         { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },

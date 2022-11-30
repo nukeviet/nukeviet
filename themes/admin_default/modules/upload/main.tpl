@@ -8,7 +8,6 @@
 
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/cropper/cropper.min.js"></script>
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.flash.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.lazyload.min.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.treeview.min.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jQueryRotate{AUTO_MINIFIED}.js"></script>
@@ -55,7 +54,6 @@
                     <select name="imgtype" title="{LANG.selectfiletype}" class="form-control input-sm vchange">
                         <option value="file"{SFILE}>{LANG.type_file}</option>
                         <option value="image"{SIMAGE}>{LANG.type_image}</option>
-                        <option value="flash"{SFLASH}>{LANG.type_flash}</option>
                     </select>
                 </div>
                 <div class="col-sm-5">

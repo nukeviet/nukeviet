@@ -46,7 +46,6 @@ $lang_module['upload_createimage'] = 'Create Image';
 $lang_module['upload_add_files'] = 'Add files';
 $lang_module['type_file'] = 'All file';
 $lang_module['type_image'] = 'File Image';
-$lang_module['type_flash'] = 'Flash';
 $lang_module['rename'] = 'Rename';
 $lang_module['renamefolder'] = 'Rename Folder';
 $lang_module['deletefolder'] = 'Delete Folder';

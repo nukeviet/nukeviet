@@ -45,10 +45,6 @@ if (!isset($check_allow_upload_dir['upload_file'])) {
         $allow_files_type = [
             'images'
         ];
-    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'], true)) {
-        $allow_files_type = [
-            'flash'
-        ];
     } elseif (empty($type)) {
         $allow_files_type = $admin_info['allow_files_type'];
     } else {

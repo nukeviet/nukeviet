@@ -191,7 +191,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
     $editor = 'ckeditor';
     $lev = 3;
     $modules = [];
-    $allow_files_type = explode(',', 'adobe,application,archives,audio,documents,flash,images,real,video');
+    $allow_files_type = explode(',', 'adobe,application,archives,audio,documents,images,real,video');
     $allow_modify_files = $allow_modify_subdirectories = 0;
     $allow_create_subdirectories = 1;
 }

@@ -302,16 +302,10 @@ function preview() {
     var selFileData = img.attr("name").split("|");
     fullPath = (selFileData[7] == "") ? $("span#foldervalue").attr("title") : selFileData[7];
 
-    if (selFileData[3] == "image" || selFileData[2] == "swf") {
+    if (selFileData[3] == "image") {
         var size = calSize(selFileData[0], selFileData[1], 188, 120);
         html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
-        selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_base_siteurl + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
-            src: nv_base_siteurl + fullPath + "/" + selFile,
-            width: size[0],
-            height: size[1]
-        }, {
-            version: 8
-        });
+        $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_base_siteurl + fullPath + "/" + selFile + '?' + selFileData[8] + '" />');
         if (selFileData[3] == "image") {
             $("div#fileView").addClass("zoomin");
             $("div#fileView img").click(function() {
@@ -2013,10 +2007,9 @@ var NVUPLOAD = {
             var folderPath = $("span#foldervalue").attr("title");
 
             NVUPLOAD.uploader = new plupload.Uploader({
-                runtimes: 'html5,flash,silverlight,html4',
+                runtimes: 'html5,silverlight,html4',
                 browse_button: 'upload-local',
                 url: nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
-                flash_swf_url: nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
                 silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
                 drop_element: 'upload-content',
                 file_data_name: 'upload',

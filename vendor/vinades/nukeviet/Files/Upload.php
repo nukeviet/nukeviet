@@ -787,7 +787,7 @@ class Upload
             }
         }
 
-        if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) or preg_match('#application\/[x\-]*(shockwave\-flash)#', $this->file_mime)) {
+        if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime)) {
             $this->is_img = true;
 
             // Kiểm tra file ảnh SVG
@@ -1591,7 +1591,7 @@ class Upload
             }
         }
 
-        if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime) or preg_match('#application\/[x\-]*(shockwave\-flash)#', $this->file_mime)) {
+        if (preg_match('#image\/[x\-]*([a-z]+)#', $this->file_mime)) {
             $this->is_img = true;
 
             // Kiểm tra file ảnh SVG

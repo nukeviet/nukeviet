@@ -380,7 +380,7 @@ function nv_get_viewImage($fileName, $refresh = 0)
  */
 function nv_getFileInfo($pathimg, $file)
 {
-    global $array_images, $array_flash, $array_archives, $array_documents;
+    global $array_images, $array_archives, $array_documents;
 
     clearstatcache();
 
@@ -429,16 +429,6 @@ function nv_getFileInfo($pathimg, $file)
         if ($info['srcheight'] > 80) {
             $info['srcwidth'] = round(80 / $info['srcheight'] * $info['srcwidth']);
             $info['srcheight'] = 80;
-        }
-    } elseif (in_array($ext, $array_flash, true)) {
-        $info['type'] = 'flash';
-        $info['src'] = NV_ASSETS_DIR . '/images/flash.gif';
-
-        if ($matches[2] == 'swf') {
-            $size = @getimagesize(NV_ROOTDIR . '/' . $pathimg . '/' . $file);
-            if (isset($size, $size[0], $size[1])) {
-                $info['size'] = $size[0] . '|' . $size[1];
-            }
         }
     } elseif (in_array($ext, $array_archives, true)) {
         $info['src'] = NV_ASSETS_DIR . '/images/zip.gif';
@@ -599,7 +589,6 @@ $allow_upload_dir = [NV_UPLOADS_DIR];
 $array_hidefolders = ['.', '..', 'index.html', '.htaccess', '.tmp'];
 
 $array_images = ['gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'bmp', 'ico', 'webp'];
-$array_flash = ['swf', 'swc', 'flv'];
 $array_archives = ['rar', 'zip', 'tar'];
 $array_documents = ['doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx'];
 $array_dirname = [];

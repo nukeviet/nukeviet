@@ -40,7 +40,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
     $db->sqlreset();
     if (empty($q)) {
         $_where = 'did = ' . $array_dirname[$path];
-        if ($type == 'image' or $type == 'flash') {
+        if ($type == 'image') {
             $_where .= " AND type='" . $type . "'";
         }
         if ($nv_Request->isset_request('author', 'get')) {
@@ -65,7 +65,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
         $_where = "(t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
         $_where .= ' AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)';
 
-        if ($type == 'image' or $type == 'flash') {
+        if ($type == 'image') {
             $_where .= " AND t1.type='" . $type . "'";
         }
         if ($nv_Request->isset_request('author', 'get')) {

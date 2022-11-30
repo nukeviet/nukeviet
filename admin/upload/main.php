@@ -37,7 +37,7 @@ if (empty($currentpath)) {
     $currentpath = NV_UPLOADS_DIR;
 }
 
-if ($type != 'image' and $type != 'flash') {
+if ($type != 'image') {
     $type = 'file';
 }
 
@@ -77,9 +77,7 @@ if ($popup) {
 
     $sfile = ($type == 'file') ? ' selected="selected"' : '';
     $simage = ($type == 'image') ? ' selected="selected"' : '';
-    $sflash = ($type == 'flash') ? ' selected="selected"' : '';
 
-    $xtpl->assign('SFLASH', $sflash);
     $xtpl->assign('SIMAGE', $simage);
     $xtpl->assign('SFILE', $sfile);
 
@@ -97,8 +95,6 @@ if ($popup) {
     // Check upload allow file types
     if ($type == 'image' and in_array('images', $admin_info['allow_files_type'], true)) {
         $allow_files_type = ['images'];
-    } elseif ($type == 'flash' and in_array('flash', $admin_info['allow_files_type'], true)) {
-        $allow_files_type = ['flash'];
     } else {
         $allow_files_type = $admin_info['allow_files_type'];
     }

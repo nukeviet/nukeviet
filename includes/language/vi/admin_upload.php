@@ -46,7 +46,6 @@ $lang_module['upload_createimage'] = 'Công cụ ảnh';
 $lang_module['upload_add_files'] = 'Thêm file';
 $lang_module['type_file'] = 'Tất cả';
 $lang_module['type_image'] = 'Hình ảnh';
-$lang_module['type_flash'] = 'Flash';
 $lang_module['rename'] = 'Đổi tên file';
 $lang_module['renamefolder'] = 'Đổi tên Thư mục';
 $lang_module['deletefolder'] = 'Xóa Thư mục';
