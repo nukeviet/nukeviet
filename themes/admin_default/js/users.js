@@ -923,4 +923,61 @@ $(document).ready(function() {
             );
         }
     });
+
+    if ($('#user_details').length) {
+        var user_details = $('#user_details');
+        $('.genpass', user_details).on('click', function() {
+            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
+                $("[name=password]", user_details).val(res);
+                $("[name=re_password]", user_details).val(res);
+            })
+        });
+        $('.question', user_details).on('click', function(e) {
+            e.preventDefault();
+            $(this).parents('.item').find('[name=question]').val($(this).text())
+        });
+        $(".mydatepicker", user_details).datepicker({
+            showOn: "focus",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            beforeShow: function() {
+                setTimeout(function() {
+                    $('.ui-datepicker').css('z-index', 999999999);
+                }, 0);
+            }
+        });
+        $('.user-delete', user_details).on('click', function() {
+            if (confirm(nv_is_del_confirm[0])) {
+                $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + $(this).data('userid') + '&checkss=' + $('[name=checkss]', user_details).val(), function(res) {
+                    if (res == 'OK') {
+                        window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting';
+                    } else {
+                        alert(nv_is_del_confirm[2]);
+                    }
+                });
+            }
+        });
+        user_details.on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                cache: !1,
+                dataType: "json",
+                success: function(response) {
+                    if (response.status == 'error') {
+                        alert(response.mess);
+                        if (response.input) {
+                            $('[name=' + response.input + ']', user_details).focus()
+                        }
+                    } else {
+                        window.location.href = response.redirect
+                    }
+                }
+            })
+        })
+    }
 });

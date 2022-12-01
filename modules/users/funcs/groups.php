@@ -131,7 +131,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
         if ($userid) {
             // Luu vao bang OpenID
             if (!empty($row['openid_info'])) {
-                $reg_attribs = unserialize(nv_base64_decode($row['openid_info']));
+                $reg_attribs = json_decode($row['openid_info'], true);
                 $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $userid . ', :server, :opid , :email)');
                 $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
                 $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
@@ -146,7 +146,7 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
             )');
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4 or group_id=' . $gid);
             $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = ' . $gid . ', in_groups=' . $gid . ' WHERE userid=' . $userid);
-            $users_info = unserialize(nv_base64_decode($row['users_info']));
+            $users_info = json_decode($row['users_info'], true);
             $query_field = [];
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');

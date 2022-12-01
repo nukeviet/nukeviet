@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -91,7 +91,7 @@ if ($checknum == $row['checknum']) {
 
         $userid = $db->insert_id($sql, 'userid', $data_insert);
         if ($userid) {
-            $users_info = unserialize(nv_base64_decode($row['users_info']));
+            $users_info = json_decode($row['users_info'], true);
             $query_field = [];
             $query_field['userid'] = $userid;
             $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');

@@ -565,7 +565,12 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'sig' => 1
     ]);
 
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    $query_field = [];
+    $valid_field = [];
+    $check = fieldsCheck($custom_fields, $array_data, $query_field, $valid_field);
+    if ($check['status'] == 'error') {
+        nv_jsonOutput($check);
+    }
 
     if (empty($array_data['first_name'])) {
         $array_data['first_name'] = !empty($row['first_name']) ? $row['first_name'] : $row['username'];
@@ -940,7 +945,10 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'answer' => 1
     ]);
 
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    $check = fieldsCheck($custom_fields, $array_data, $query_field, $valid_field);
+    if ($check['status'] == 'error') {
+        nv_jsonOutput($check);
+    }
 
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
         nv_jsonOutput([
@@ -1093,7 +1101,10 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'question' => 1,
         'answer' => 1
     ]);
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    $check = fieldsCheck($custom_fields, $array_data, $query_field, $valid_field, $userid);
+    if ($check['status'] == 'error') {
+        nv_jsonOutput($check);
+    }
 
     if ($array_data['editcensor'] and !defined('ACCESS_EDITUS') and !defined('NV_IS_MODADMIN')) {
         // Lưu thông tin và thông báo kiểm duyệt

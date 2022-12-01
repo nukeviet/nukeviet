@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -199,7 +199,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
     $query_field = [];
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    $valid_field = [];
+    if (!empty($array_field_config)) {
+        $check = fieldsCheck($custom_fields, $_user, $query_field, $valid_field, $userid);
+        if ($check['status'] == 'error') {
+            nv_jsonOutput($check);
+        }
+    }
 
     if (empty($_user['is_official'])) {
         // Khi là thành viên mới thì chỉ có nhóm = 7, không có các nhóm khác

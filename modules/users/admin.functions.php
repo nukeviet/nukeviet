@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -27,22 +27,6 @@ $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:use
 $array_url_instruction['editcensor'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:users#kiểm_duyệt_thong_tin_chỉnh_sửa_của_thanh_vien';
 
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
-
-// Xác định cấu hình module
-$global_users_config = [];
-$cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';
-$cacheTTL = 3600;
-if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
-    $global_users_config = unserialize($cache);
-} else {
-    $sql = 'SELECT config, content FROM ' . NV_MOD_TABLE . '_config';
-    $result = $db->query($sql);
-    while ($row = $result->fetch()) {
-        $global_users_config[$row['config']] = $row['content'];
-    }
-    $cache = serialize($global_users_config);
-    $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
-}
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 

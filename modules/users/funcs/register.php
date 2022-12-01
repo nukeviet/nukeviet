@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,7 +20,7 @@ if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
 
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 if (defined('ACCESS_ADDUS')) {
-    $page_url .= '/'. $group_id;
+    $page_url .= '/' . $group_id;
 }
 
 // Ngung dang ki thanh vien
@@ -84,7 +84,6 @@ if (defined('NV_IS_USER_FORUM')) {
  * reg_result()
  *
  * @param mixed $array
- * @return
  */
 function reg_result($array)
 {
@@ -276,7 +275,10 @@ if ($checkss == $array_register['checkss']) {
         'userid' => 0
     ];
     $userid = 0;
-    require NV_ROOTDIR . '/modules/users/fields.check.php';
+    $check = fieldsCheck($custom_fields, $array_register, $query_field, $valid_field, $userid);
+    if ($check['status'] == 'error') {
+        nv_jsonOutput($check);
+    }
 
     $password = $crypt->hash_password($array_register['password'], $global_config['hashprefix']);
     $checknum = nv_genpass(10);
@@ -319,7 +321,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['question'] = $array_register['question'];
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['checknum'] = $checknum;
-        $data_insert['users_info'] = nv_base64_encode(serialize($query_field));
+        $data_insert['users_info'] = json_encode($query_field, JSON_UNESCAPED_UNICODE);
         $data_insert['idsite'] = $global_config['idsite'];
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 

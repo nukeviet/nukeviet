@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -547,3 +547,5 @@ $lang_module['login_name_type'] = 'Type de nom de connexion';
 $lang_module['login_name_type_1'] = 'Nom d\'utilisateur';
 $lang_module['login_name_type_2'] = 'Email';
 $lang_module['login_name_type_3'] = 'Nom d\'utilisateur ou email';
+$lang_module['censorship'] = 'La censure';
+$lang_module['leave_blank_note'] = 'Laisser vide si vous utilisez la valeur saisie par le déclarant';

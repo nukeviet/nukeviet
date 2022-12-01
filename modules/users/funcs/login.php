@@ -288,7 +288,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         $query_field = [];
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
-            $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
+            $query_field[$row_f['field']] = $row_f['default_value'];
         }
 
         $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_reg (
@@ -316,8 +316,8 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         $data_insert['email'] = $reg_email;
         $data_insert['first_name'] = $reg_attribs['first_name'];
         $data_insert['last_name'] = $reg_attribs['last_name'];
-        $data_insert['users_info'] = nv_base64_encode(serialize($query_field));
-        $data_insert['openid_info'] = nv_base64_encode(serialize($reg_attribs));
+        $data_insert['users_info'] = json_encode($query_field, JSON_UNESCAPED_UNICODE);
+        $data_insert['openid_info'] = json_encode($reg_attribs, JSON_UNESCAPED_UNICODE);
         $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (!$userid) {
@@ -957,7 +957,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
     // Nếu tài khoản không xác thực 2 bước, nhưng hệ thống hoặc nhóm bắt buộc phải xác thực 2 bước
     if (empty($row['active2step'])) {
-        $_2step_require = in_array((int) $global_config['two_step_verification'], [2,3], true);
+        $_2step_require = in_array((int) $global_config['two_step_verification'], [2, 3], true);
         if (!$_2step_require) {
             list(, $_2step_require) = nv_user_groups($row['in_groups'], true);
         }

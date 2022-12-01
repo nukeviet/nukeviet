@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -118,8 +118,12 @@ if ($nv_Request->isset_request('approved', 'post')) {
 
         unset($array_field_config['question'], $array_field_config['answer']);
         $query_field = [];
+        $valid_field = [];
         if (!empty($array_field_config)) {
-            require NV_ROOTDIR . '/modules/users/fields.check.php';
+            $check = fieldsCheck($custom_fields, $_user, $query_field, $valid_field, $userid);
+            if ($check['status'] == 'error') {
+                nv_jsonOutput($check);
+            }
         }
 
         /*
@@ -231,9 +235,13 @@ if (!empty($reviewuid)) {
 
         // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
         $query_field = [];
+        $valid_field = [];
         $userid = $reviewuid;
         if (!empty($array_field_config)) {
-            require NV_ROOTDIR . '/modules/users/fields.check.php';
+            $check = fieldsCheck($custom_fields, $_user, $query_field, $valid_field, $userid);
+            if ($check['status'] == 'error') {
+                nv_jsonOutput($check);
+            }
         }
 
         // Cập nhật thông tin cơ bản
