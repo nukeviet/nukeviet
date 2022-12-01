@@ -305,7 +305,7 @@ if ($action == 'role') {
                 $interval = (int) $interval;
                 $limit = (int) $data['flood_rules_limit'][$k];
                 if (!empty($interval) and !empty($limit)) {
-                    if ($interval > $data['log_period'] * 60) {
+                    if (!empty($data['log_period']) and $interval > $data['log_period'] * 60) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'mess' => $lang_module['flood_interval_error']

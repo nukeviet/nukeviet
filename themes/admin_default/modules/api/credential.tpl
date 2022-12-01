@@ -252,12 +252,12 @@
     <div class="col-sm-18">
         <div class="input-group" style="width:fit-content">
             <input type="text" class="form-control w100 adddate" name="adddate" value="{CREDENTIAL.adddate}" maxlength="10" placeholder="{LANG.api_role_credential_addtime}" />
-            <select name="addhour" class="form-control w50" style="border-left:0">
+            <select name="addhour" class="form-control" style="border-left:0;width: fit-content">
                 <!-- BEGIN: addhour -->
                 <option value="{ADDHOUR.key}" {ADDHOUR.sel}>{ADDHOUR.val}</option>
                 <!-- END: addhour -->
             </select>
-            <select name="addmin" class="form-control w50" style="border-left:0">
+            <select name="addmin" class="form-control" style="border-left:0;width: fit-content">
                 <!-- BEGIN: addmin -->
                 <option value="{ADDMIN.key}" {ADDMIN.sel}>{ADDMIN.val}</option>
                 <!-- END: addmin -->
@@ -271,12 +271,12 @@
     <div class="col-sm-18">
         <div class="input-group" style="width:fit-content">
             <input type="text" class="form-control w100 enddate" name="enddate" value="{CREDENTIAL.enddate}" maxlength="10" placeholder="{LANG.endtime}" />
-            <select name="endhour" class="form-control w50" style="border-left:0">
+            <select name="endhour" class="form-control" style="border-left:0;width: fit-content">
                 <!-- BEGIN: endhour -->
                 <option value="{ENDHOUR.key}" {ENDHOUR.sel}>{ENDHOUR.val}</option>
                 <!-- END: endhour -->
             </select>
-            <select name="endmin" class="form-control w50" style="border-left:0">
+            <select name="endmin" class="form-control" style="border-left:0;width: fit-content">
                 <!-- BEGIN: endmin -->
                 <option value="{ENDMIN.key}" {ENDMIN.sel}>{ENDMIN.val}</option>
                 <!-- END: endmin -->
