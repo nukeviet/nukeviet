@@ -357,6 +357,22 @@ function fieldsCheck($custom_fields, &$array_data, &$query_field, &$valid_field,
     ];
 }
 
+/**
+ * delOldRegAccount()
+ * Xóa các tài khoản chờ kích hoạt quá hạn
+ * 
+ */
+function delOldRegAccount()
+{
+    global $global_users_config, $db;
+
+    $register_active_time = isset($global_users_config['register_active_time']) ? (int) $global_users_config['register_active_time'] : 86400;
+    if ($register_active_time) {
+        $del = NV_CURRENTTIME - $register_active_time;
+        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE regdate < ' . $del);
+    }
+}
+
 // Xác định cấu hình module
 $global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';

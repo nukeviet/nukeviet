@@ -569,3 +569,6 @@ $lang_module['login_name_type_2'] = 'Email';
 $lang_module['login_name_type_3'] = 'Bí danh hoặc Email';
 $lang_module['censorship'] = 'Kiểm duyệt';
 $lang_module['leave_blank_note'] = 'Để trống nếu sử dụng giá trị mà người đăng ký đã nhập';
+$lang_module['register_active_time'] = 'Thời gian tài khoản chờ kích hoạt';
+$lang_module['register_active_time_note'] = 'Nếu giá trị lớn hơn 0, tài khoản chờ kích hoạt sẽ bị xóa sau khoảng thời gian này. Nếu bằng 0, tài khoản chờ kích hoạt sẽ không bị xóa tự động';
+$lang_module['hours'] = 'giờ';

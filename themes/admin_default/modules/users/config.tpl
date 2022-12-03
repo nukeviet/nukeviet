@@ -106,6 +106,18 @@
                     <td>{LANG.auto_login_after_reg}</td>
                     <td><input type="checkbox" value="1" name="auto_login_after_reg"{DATA.auto_login_after_reg}/></td>
                 </tr>
+                <!-- BEGIN: register_active_time -->
+                <tr>
+                    <td>{LANG.register_active_time}</td>
+                    <td>
+                        <div class="input-group" style="width:fit-content">
+                            <input type="text" class="form-control w50 number" value="{DATA.register_active_time}" name="register_active_time" maxlength="4" />
+                            <span class="input-group-addon" id="basic-addon2">{LANG.hours}</span>
+                        </div>
+                        <div class="help-block mb-0">{LANG.register_active_time_note}</div>
+                    </td>
+                </tr>
+                <!-- END: register_active_time -->
                 <!-- BEGIN: active_group_newusers -->
                 <tr>
                     <td>{LANG.active_group_newusers}</td>
@@ -164,8 +176,8 @@
                     <td>{LANG.avatar_size}</td>
                     <td>
                         <label>
-                            <input type="text" class="form-control txt-half" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x
-                            <input type="text" class="form-control txt-half" name="avatar_height" value="{DATA.avatar_height}" style="width: 50px"/>
+                            <input type="text" class="form-control txt-half number" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x
+                            <input type="text" class="form-control txt-half number" name="avatar_height" value="{DATA.avatar_height}" style="width: 50px"/>
                         </label>
                     </td>
                 </tr>
@@ -209,7 +221,12 @@
                 </tr>
                 <tr>
                     <td>{LANG.user_check_pass_time}</td>
-                    <td><input class="form-control pull-left" style="width:50px;" type="text" value="{USER_CHECK_PASS_TIME}" name="user_check_pass_time" maxlength="3"/>({GLANG.min})</td>
+                    <td>
+                        <div class="input-group" style="width:fit-content">
+                            <input class="form-control number pull-left" style="width:50px;" type="text" value="{USER_CHECK_PASS_TIME}" name="user_check_pass_time" maxlength="3"/>
+                            <span class="input-group-addon" id="basic-addon2">{GLANG.min}</span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>{LANG.pass_timeout}</td>
@@ -253,7 +270,7 @@
                 </tr>
                 <tr>
                     <td>{LANG.min_old_user}</td>
-                    <td><input class="form-control pull-left"  name="min_old_user" value="{DATA.min_old_user}" type="text" style="width: 50px" /></td>
+                    <td><input class="form-control number pull-left"  name="min_old_user" value="{DATA.min_old_user}" type="text" style="width: 50px" /></td>
                 </tr>
                 <!-- BEGIN: active_user_logs -->
                 <tr>

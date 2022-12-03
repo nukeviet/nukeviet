@@ -518,6 +518,8 @@ if ($nv_Request->isset_request('userid', 'get')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+delOldRegAccount();
+
 $methods = [
     'userid' => [
         'key' => 'userid',
@@ -634,7 +636,7 @@ foreach ($orders as $order) {
 if (defined('NV_IS_USER_FORUM')) {
     $lang_module['warning'] = $lang_module['modforum'];
 } else {
-    $register_active_time = isset($global_users_config['register_active_time']) ? round($global_users_config['register_active_time'] / 3600) : 24;
+    $register_active_time = isset($global_users_config['register_active_time']) ? round((int) $global_users_config['register_active_time'] / 3600) : 24;
     $lang_module['warning'] = sprintf($lang_module['userwait_note'], $register_active_time);
 }
 
@@ -653,6 +655,10 @@ foreach ($methods as $m) {
 if ($num_items > 0) {
     $xtpl->assign('RESEND_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting_remail');
     $xtpl->parse('main.resend_email');
+
+    if ($register_active_time) {
+        $xtpl->parse('main.userlist.warning');
+    }
 
     foreach ($head_tds as $head_td) {
         $xtpl->assign('HEAD_TD', $head_td);

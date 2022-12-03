@@ -30,6 +30,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
     ];
 
     if ($tokend == $checkss and $per_email > 0 and $offset >= 0) {
+        delOldRegAccount();
         $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg';
         if ($global_config['idsite'] > 0) {
             $sql .= ' WHERE idsite=' . $global_config['idsite'];

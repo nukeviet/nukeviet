@@ -549,3 +549,6 @@ $lang_module['login_name_type_2'] = 'Email';
 $lang_module['login_name_type_3'] = 'Username or Email';
 $lang_module['censorship'] = 'Censorship';
 $lang_module['leave_blank_note'] = 'Leave blank if using the value entered by the registrant';
+$lang_module['register_active_time'] = 'Time for the account to wait for activation';
+$lang_module['register_active_time_note'] = 'If the value is greater than 0, the account pending activation will be deleted after this period. If it is 0, the account waiting for activation will not be deleted automatically';
+$lang_module['hours'] = 'hours';

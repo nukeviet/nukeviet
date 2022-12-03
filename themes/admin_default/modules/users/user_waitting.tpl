@@ -26,7 +26,9 @@
         <!-- END: resend_email -->
     </div>
     <!-- BEGIN: userlist -->
+    <!-- BEGIN: warning -->
     <div class="alert alert-info">{LANG.warning}</div>
+    <!-- END: warning -->
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead>
