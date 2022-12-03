@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,7 +23,6 @@ if (PHP_VERSION_ID < 50600) {
     ini_set('default_charset', $global_config['site_charset']);
 }
 
-
 /**
  * nv_internal_encoding()
  *
@@ -32,7 +31,11 @@ if (PHP_VERSION_ID < 50600) {
  */
 function nv_internal_encoding($encoding)
 {
-    return iconv_set_encoding('internal_encoding', $encoding);
+    if (PHP_VERSION_ID < 50600) {
+        return iconv_set_encoding('internal_encoding', $encoding);
+    }
+
+    return true;
 }
 
 /**
