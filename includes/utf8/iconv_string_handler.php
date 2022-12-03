@@ -12,19 +12,29 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-iconv_set_encoding('input_encoding', $global_config['site_charset']);
-iconv_set_encoding('internal_encoding', $global_config['site_charset']);
-iconv_set_encoding('output_encoding', $global_config['site_charset']);
+// https://www.php.net/manual/en/function.iconv-set-encoding.php#119888
+// https://github.com/nukeviet/nukeviet/issues/3376
+if (PHP_VERSION_ID < 50600) {
+    iconv_set_encoding('input_encoding', $global_config['site_charset']);
+    iconv_set_encoding('internal_encoding', $global_config['site_charset']);
+    iconv_set_encoding('output_encoding', $global_config['site_charset']);
+} else {
+    ini_set('default_charset', $global_config['site_charset']);
+}
 
 /**
  * nv_internal_encoding()
- * 
- * @param mixed $encoding
- * @return
+ *
+ * @param string $encoding
+ * @return bool
  */
 function nv_internal_encoding($encoding)
 {
-    return iconv_set_encoding('internal_encoding', $encoding);
+    if (PHP_VERSION_ID < 50600) {
+        return iconv_set_encoding('internal_encoding', $encoding);
+    }
+
+    return true;
 }
 
 /**
