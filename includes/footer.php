@@ -18,6 +18,7 @@ unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module
 // Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
 global $db, $nv_Request, $nv_plugin_area, $headers, $lang_global, $global_config, $sys_info, $nv_BotManager;
 
+define('NV_ENABLE_REWRITE_OBSOLUTE', true);
 $contents = ob_get_contents();
 ob_end_clean();
 $contents = nv_url_rewrite($contents);
