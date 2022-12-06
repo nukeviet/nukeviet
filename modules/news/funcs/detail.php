@@ -171,6 +171,9 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
     } elseif (!empty($show_no_image)) {
         $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
     }
+    if (!empty($meta_property['og:image'])) {
+        $meta_property['og:image:alt'] = $news_contents['homeimgalt'] ?: $news_contents['title'];
+    }
 
     // File download
     if (!empty($news_contents['files'])) {

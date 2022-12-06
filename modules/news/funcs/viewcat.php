@@ -51,6 +51,7 @@ $description = $global_array_cat[$catid]['description'];
 $global_array_cat[$catid]['description'] = $global_array_cat[$catid]['descriptionhtml'];
 if (!empty($global_array_cat[$catid]['image'])) {
     $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image'];
+    $meta_property['og:image:alt'] = $global_array_cat[$catid]['title'];
 }
 
 if (empty($contents)) {

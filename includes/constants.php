@@ -256,5 +256,6 @@ $meta_property = [
     'og:image:type' => '',
     'og:image:width' => '',
     'og:image:height' => '',
+    'og:image:alt' => '',
     'og:url' => ''
 ];
