@@ -39,7 +39,7 @@ class User
         $live_cookie_time = $remember ? NV_LIVE_COOKIE_TIME : 0;
         $data['loghash_time'] = NV_CURRENTTIME;
         $nvloginhash_name = substr($data['checknum'], 5, 8);
-        $nvloginhash_name_encrypt = 'l' . substr(md5($nvloginhash_name . $global_config['sitekey']), 8, 10);
+        $nvloginhash_name_encrypt = 'ls' . substr(md5($nvloginhash_name . $global_config['sitekey']), 8, 10) . 'le';
         $nv_Request->set_Cookie('lghm', $nvloginhash_name, $live_cookie_time);
         $nv_Request->set_Cookie($nvloginhash_name_encrypt, json_encode($data), $live_cookie_time);
     }
@@ -51,12 +51,16 @@ class User
     {
         global $nv_Request, $global_config;
 
-        $nvloginhash_name = $nv_Request->get_title('lghm', 'cookie', '');
-        if (!empty($nvloginhash_name)) {
-            $nvloginhash_name_encrypt = 'l' . substr(md5($nvloginhash_name . $global_config['sitekey']), 8, 10);
-            $nv_Request->unset_request($nvloginhash_name_encrypt, 'cookie');
-            $nv_Request->unset_request('lghm', 'cookie');
+        $keys = array_keys($_COOKIE);
+        $cookie_prefix = !empty($global_config['cookie_prefix']) ? preg_replace('/[^a-zA-Z0-9\_]+/', '', $global_config['cookie_prefix']) : 'NV4';
+
+        foreach ($keys as $key) {
+            unset($matches);
+            if (preg_match('/^' . nv_preg_quote($cookie_prefix). '\_(ls([a-z0-9]{10})le)$/', $key, $matches)) {
+                $nv_Request->unset_request($matches[1], 'cookie');
+            }
         }
+        $nv_Request->unset_request('lghm', 'cookie');
     }
 
     /**
@@ -79,10 +83,8 @@ class User
             return [];
         }
 
-        $nvloginhash_name_encrypt = 'l' . substr(md5($nvloginhash_name . $global_config['sitekey']), 8, 10);
+        $nvloginhash_name_encrypt = 'ls' . substr(md5($nvloginhash_name . $global_config['sitekey']), 8, 10) . 'le';
         if (!$nv_Request->isset_request($nvloginhash_name_encrypt, 'cookie')) {
-            print_r($nvloginhash_name_encrypt);
-            exit;
             $nv_Request->unset_request('lghm', 'cookie');
 
             return [];
