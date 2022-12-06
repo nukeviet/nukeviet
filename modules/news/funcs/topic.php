@@ -37,8 +37,9 @@ if (!empty($alias)) {
     if (!$row) {
         nv_redirect_location($page_url);
     }
-    list($topicid, $page_title, $alias, $topic_image, $description, $key_words) = $row;
+    list($topicid, $topictitle, $alias, $topic_image, $description, $key_words) = $row;
 
+    $page_title = $topictitle;
     $page_url .= '/' . $alias;
     $base_url = $page_url;
     if ($page > 1) {
@@ -121,6 +122,7 @@ if (!empty($alias)) {
     if (!empty($topic_image)) {
         $topic_image = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $topic_image;
         $meta_property['og:image'] = NV_MY_DOMAIN . $topic_image;
+        $meta_property['og:image:alt'] = $topictitle;
     }
 
     $contents = topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image);
