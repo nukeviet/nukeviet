@@ -30,6 +30,7 @@ $lang_module['categories_edit'] = 'Edit category';
 $lang_module['categories_title'] = 'Category name';
 $lang_module['categories_error_title'] = 'Category name not already entered';
 $lang_module['categories_error_exists'] = 'This category name has already been used, please choose a different name';
+$lang_module['categories_show'] = 'Show email in list';
 $lang_module['tpl_send_name'] = 'Sender &amp; Email send';
 $lang_module['tpl_send_cc'] = 'CC';
 $lang_module['tpl_send_bcc'] = 'BCC';

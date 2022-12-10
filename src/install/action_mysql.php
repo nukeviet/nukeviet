@@ -404,7 +404,9 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_emailtemplates_
   time_update int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Cập nhật lúc',
   weight smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT 'Sắp thứ tự',
   is_system tinyint(1) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (catid)
+  status tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0 ẩn, 1 hiển thị',
+  PRIMARY KEY (catid),
+  KEY status (status)
 ) ENGINE=InnoDB";
 
 $sql_create_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_emailtemplates_categories AUTO_INCREMENT=101;';

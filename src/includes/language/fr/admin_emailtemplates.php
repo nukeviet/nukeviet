@@ -30,6 +30,7 @@ $lang_module['categories_edit'] = 'Modifier la catégorie';
 $lang_module['categories_title'] = 'Nom de catégorie';
 $lang_module['categories_error_title'] = 'Nom de la catégorie non déjà entré';
 $lang_module['categories_error_exists'] = 'Ce nom de catégorie a déjà été utilisé, veuillez choisir un autre nom';
+$lang_module['categories_show'] = 'Afficher l\'e-mail dans la liste';
 $lang_module['tpl_send_name'] = 'Expéditeur &amp; Email envoyé';
 $lang_module['tpl_send_cc'] = 'CC';
 $lang_module['tpl_send_bcc'] = 'BCC';

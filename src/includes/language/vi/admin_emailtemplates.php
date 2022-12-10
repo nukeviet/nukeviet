@@ -30,6 +30,8 @@ $lang_module['categories_edit'] = 'Sửa danh mục';
 $lang_module['categories_title'] = 'Tên danh mục';
 $lang_module['categories_error_title'] = 'Chưa nhập tên danh mục';
 $lang_module['categories_error_exists'] = 'Tên danh mục này đã được sử dụng, hãy chọn một tên khác';
+$lang_module['categories_show'] = 'Hiển thị email trong danh sách';
+
 $lang_module['tpl_send_name'] = 'Tên &amp; Email gửi';
 $lang_module['tpl_send_cc'] = 'CC';
 $lang_module['tpl_send_bcc'] = 'BCC';

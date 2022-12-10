@@ -46,7 +46,14 @@ if (empty($global_array_cat)) {
 
 $page_title = $nv_Lang->getModule('tpl_list');
 
-$db->sqlreset()->select('emailid, catid, is_system, is_disabled, ' . NV_LANG_DATA . '_title title')->from(NV_EMAILTEMPLATES_GLOBALTABLE)->order(NV_LANG_DATA . '_title ASC');
+$db->sqlreset()
+    ->select('tb1.emailid, tb1.catid, tb1.is_system, tb1.is_disabled, tb1.' . NV_LANG_DATA . '_title title')
+    ->from(NV_EMAILTEMPLATES_GLOBALTABLE . ' tb1')
+    ->where('tb1.catid=0 OR EXISTS(
+        SELECT tb2.catid FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories tb2
+        WHERE tb2.catid=tb1.catid AND tb2.status=1
+    )')
+    ->order('tb1.' . NV_LANG_DATA . '_title ASC');
 $result = $db->query($db->sql());
 
 $array = [];
