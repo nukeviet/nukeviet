@@ -98,7 +98,7 @@ $error = '';
 $catid = $nv_Request->get_int('catid', 'post,get', 0);
 
 if (!empty($catid)) {
-    $sql = 'SELECT catid, ' . NV_LANG_DATA . '_title title FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = ' . $catid;
+    $sql = 'SELECT catid, status, ' . NV_LANG_DATA . '_title title FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories WHERE catid = ' . $catid;
     $result = $db->query($sql);
     $data = $result->fetch();
 
@@ -111,7 +111,8 @@ if (!empty($catid)) {
 } else {
     $data = [
         'catid' => 0,
-        'title' => ''
+        'title' => '',
+        'status' => 1
     ];
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
     $caption = $nv_Lang->getModule('categories_add');
@@ -119,6 +120,7 @@ if (!empty($catid)) {
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $data['title'] = $nv_Request->get_title('title', 'post', '', true);
+    $data['status'] = (int) $nv_Request->get_bool('status', 'post', false);
 
     if (empty($data['title'])) {
         $error = $nv_Lang->getModule('categories_error_title');
@@ -158,11 +160,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     $field_value .= ', :' . $lang . '_title';
                 }
 
-                $sql = 'INSERT INTO ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories (time_add, time_update, weight, is_system' . $field_title . ') VALUES (
-                    ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $weight . ', 0' . $field_value . '
+                $sql = 'INSERT INTO ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories (
+                    time_add, time_update, weight, is_system, status' . $field_title . '
+                ) VALUES (
+                    ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', ' . $weight . ', 0, ' . $data['status'] . $field_value . '
                 )';
             } else {
-                $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET time_update = ' . NV_CURRENTTIME . ', ' . NV_LANG_DATA . '_title=:' . NV_LANG_DATA . '_title WHERE catid = ' . $catid;
+                $sql = 'UPDATE ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories SET
+                    time_update = ' . NV_CURRENTTIME . ',
+                    status=' . $data['status'] . ',
+                    ' . NV_LANG_DATA . '_title=:' . NV_LANG_DATA . '_title
+                WHERE catid = ' . $catid;
             }
 
             try {

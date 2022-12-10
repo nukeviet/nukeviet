@@ -65,6 +65,14 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group row py-0">
+                <label class="col-12 col-sm-3 col-form-label text-sm-right d-none d-sm-block"></label>
+                <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                    <label class="custom-control custom-checkbox custom-control-inline mb-1">
+                        <input class="custom-control-input" type="checkbox" id="cat_status" name="status" value="1"{if $DATA['status']} checked="checked"{/if}><span class="custom-control-label">{$LANG->get('categories_show')}</span>
+                    </label>
+                </div>
+            </div>
             <div class="form-group row mb-0 pb-0">
                 <label class="col-12 col-sm-3 col-form-label text-sm-right"></label>
                 <div class="col-12 col-sm-8 col-lg-6">

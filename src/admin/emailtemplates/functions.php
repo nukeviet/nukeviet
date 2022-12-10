@@ -28,5 +28,6 @@ $menu_top = [
     'custom_title' => $nv_Lang->getGlobal('mod_emailtemplates')
 ];
 
-$sql = 'SELECT catid, time_add, time_update, weight, is_system, ' . NV_LANG_DATA . '_title title FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories ORDER BY weight ASC';
+$sql = 'SELECT catid, time_add, time_update, weight, is_system, ' . NV_LANG_DATA . '_title title
+FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . '_categories ORDER BY weight ASC';
 $global_array_cat = $nv_Cache->db($sql, 'catid', $module_name);
