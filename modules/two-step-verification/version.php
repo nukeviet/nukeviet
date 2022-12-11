@@ -18,8 +18,8 @@ $module_version = array(
     'submenu' => 'main,setup,confirm',
     'is_sysmod' => 1,
     'virtual' => 0,
-    'version' => '4.4.05',
-    'date' => 'Monday, June 20, 2022 4:00:00 PM GMT+07:00',
+    'version' => '4.4.06',
+    'date' => 'Saturday, December 24, 2022 4:00:00 PM GMT+07:00',
     'author' => 'VINADES <contact@vinades.vn>',
     'note' => 'Two-Step Verification'
 );
