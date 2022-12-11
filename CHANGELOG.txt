@@ -1,6 +1,20 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.4.06:
+- Fix sorting topic module news (#3521), fix error in view topic (#3520)
+- Switch from RedirectMatch to RewriteRule to support OpenLiteSpeed
+- Optimally compatible with PHP 8.1
+- Change login cookie name to dynamic
+- Fix Session Fixation
+- Displays a warning that the list of APIs does not exist in Api-role
+- Add filter tags, attributes, styles, css in the editor (#3422)
+- Bug fix WAF bypass xss
+- Fix class Http
+- Module news: Add manage reading articles (#3492)
+- Fix bug can't scroll down on mobile
+- Fix rss logo size
+
 NUKEVIET 4.4.05:
 - Fix redirects in banners module
 - RSS-Feed: Show atom:link only when it is defined
