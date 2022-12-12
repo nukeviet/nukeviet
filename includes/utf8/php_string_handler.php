@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -171,4 +171,66 @@ function nv_strtoupper($string)
     include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup['strtoupper']);
+}
+
+/**
+ * nv_utf8_encode()
+ * function thay thế cho utf8_encode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_encode($string)
+{
+    $s = $string;
+    $len = strlen($s);
+
+    for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
+        switch (true) {
+            case $s[$i] < "\x80": $s[$j] = $s[$i];
+                break;
+            case $s[$i] < "\xC0": $s[$j] = "\xC2";
+                $s[++$j] = $s[$i];
+                break;
+            default: $s[$j] = "\xC3";
+                $s[++$j] = chr(ord($s[$i]) - 64);
+                break;
+        }
+    }
+
+    return substr($s, 0, $j);
+}
+
+/**
+ * nv_utf8_decode()
+ * function thay thế cho utf8_decode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_decode($string)
+{
+    $s = (string) $string;
+    $len = strlen($s);
+
+    for ($i = 0, $j = 0; $i < $len; ++$i, ++$j) {
+        switch ($s[$i] & "\xF0") {
+            case "\xC0":
+            case "\xD0":
+                $c = (ord($s[$i] & "\x1F") << 6) | ord($s[++$i] & "\x3F");
+                $s[$j] = $c < 256 ? chr($c) : '?';
+                break;
+            case "\xF0":
+                ++$i;
+                // no break
+            case "\xE0":
+                $s[$j] = '?';
+                $i += 2;
+                break;
+            default:
+                $s[$j] = $s[$i];
+        }
+    }
+
+    return substr($s, 0, $j);
 }

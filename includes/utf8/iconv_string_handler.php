@@ -136,3 +136,27 @@ function nv_strtoupper($string)
 
     return strtr($string, $utf8_lookup['strtoupper']);
 }
+
+/**
+ * nv_utf8_encode()
+ * function thay thế cho utf8_encode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_encode($string)
+{
+    return iconv('ISO-8859-1', 'UTF-8', $string);
+}
+
+/**
+ * nv_utf8_decode()
+ * function thay thế cho utf8_decode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_decode($string)
+{
+    return iconv('UTF-8', 'ISO-8859-1', $string);
+}
