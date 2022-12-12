@@ -153,7 +153,7 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
             }
         }
 
-        if (is_resource($finfo)) {
+        if ($finfo !== false) {
             $mime = finfo_file($finfo, realpath($filename));
             finfo_close($finfo);
             $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
