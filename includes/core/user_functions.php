@@ -550,6 +550,7 @@ function nv_html_meta_tags($html = true)
                 $meta_property['og:image:type'] = $imagesize['mime'];
                 $meta_property['og:image:width'] = $imagesize[0];
                 $meta_property['og:image:height'] = $imagesize[1];
+                $meta_property['og:image:alt'] = $global_config['site_name'];
             }
         }
         $meta_property['og:site_name'] = $global_config['site_name'];

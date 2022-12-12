@@ -30,6 +30,12 @@ if ($page_config['viewtype'] == 2) {
         if (!nv_is_url($rowdetail['image'])) {
             $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image']);
             $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
+            $meta_property['og:image:url'] = $meta_property['og:image'];
+            $meta_property['og:image:type'] = $imagesize['mime'];
+            $meta_property['og:image:width'] = $imagesize[0];
+            $meta_property['og:image:height'] = $imagesize[1];
+            $meta_property['og:image:alt'] = !empty($rowdetail['imagealt']) ? $rowdetail['imagealt'] : $rowdetail['title'];
+
             $srcset = '';
             if (file_exists(NV_ROOTDIR . '/' . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $rowdetail['image'])) {
                 $srcset = NV_BASE_SITEURL . NV_MOBILE_FILES_DIR . '/' . $module_upload . '/' . $rowdetail['image'] . ' ' . NV_MOBILE_MODE_IMG . 'w, ';
