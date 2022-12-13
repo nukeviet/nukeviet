@@ -159,7 +159,7 @@ class Ftp
         }
 
         // Ket noi den FTP server
-        if (!is_resource($this->conn_id)) {
+        if ($this->conn_id === false) {
             $this->conn_id = ftp_connect($this->host, $this->port);
 
             if ($this->conn_id === false) {
@@ -185,7 +185,7 @@ class Ftp
      */
     private function check_login()
     {
-        if (is_resource($this->conn_id) and $this->logined) {
+        if ($this->conn_id !== false and $this->logined) {
             return true;
         } else {
             return false;
@@ -559,7 +559,7 @@ class Ftp
      */
     public function close()
     {
-        if (!is_resource($this->conn_id)) {
+        if ($this->conn_id === false) {
             return false;
         }
 

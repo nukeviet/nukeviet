@@ -1026,10 +1026,10 @@ class Image
      */
     public function Destroy()
     {
-        if (is_resource($this->logoimg)) {
+        if ($this->logoimg !== false) {
             @ImageDestroy($this->logoimg);
         }
-        if (is_resource($this->createImage)) {
+        if ($this->createImage !== false) {
             @ImageDestroy($this->createImage);
         }
         $this->is_destroy = true;
@@ -1042,10 +1042,10 @@ class Image
      */
     public function close()
     {
-        if (is_resource($this->logoimg)) {
+        if ($this->logoimg !== false) {
             @ImageDestroy($this->logoimg);
         }
-        if (is_resource($this->createImage)) {
+        if ($this->createImage !== false) {
             @ImageDestroy($this->createImage);
         }
         if ($this->is_url) {

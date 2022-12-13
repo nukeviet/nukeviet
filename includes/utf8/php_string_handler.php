@@ -2,21 +2,19 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 22/8/2010, 19:33
+ * @author VINADES.,JSC (contact@vinades.vn)
+ * @copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @license GNU/GPL version 2 or any later version
+ * @createdate 22/8/2010, 19:33
  */
-
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+if (!defined('NV_MAINFILE')) {
+    exit('Stop!!!');
 }
 
 /**
  * nv_internal_encoding()
- * 
+ *
  * @param mixed $encoding
- * @return
  */
 function nv_internal_encoding($encoding)
 {
@@ -25,9 +23,8 @@ function nv_internal_encoding($encoding)
 
 /**
  * nv_strlen()
- * 
+ *
  * @param mixed $string
- * @return
  */
 function nv_strlen($string)
 {
@@ -36,11 +33,10 @@ function nv_strlen($string)
 
 /**
  * nv_substr()
- * 
+ *
  * @param mixed $string
  * @param mixed $start
  * @param mixed $length
- * @return
  */
 function nv_substr($string, $start, $length)
 {
@@ -60,25 +56,24 @@ function nv_substr($string, $start, $length)
 
 /**
  * nv_substr_count()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
- * @return
  */
 function nv_substr_count($haystack, $needle)
 {
     $needle = preg_quote($needle, '/');
     preg_match_all('/' . $needle . '/u', $haystack, $dummy);
+
     return sizeof($dummy[0]);
 }
 
 /**
  * nv2_strpos()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
- * @param integer $offset
- * @return
+ * @param int   $offset
  */
 function nv_strpos($haystack, $needle, $offset = 0)
 {
@@ -110,11 +105,10 @@ function nv_strpos($haystack, $needle, $offset = 0)
 
 /**
  * nv_strrpos()
- * 
+ *
  * @param mixed $haystack
  * @param mixed $needle
  * @param mixed $offset
- * @return
  */
 function nv_strrpos($haystack, $needle, $offset = null)
 {
@@ -124,48 +118,109 @@ function nv_strrpos($haystack, $needle, $offset = null)
         if (sizeof($ar) > 1) {
             array_pop($ar);
             $haystack = join($needle, $ar);
+
             return nv_strlen($haystack);
         }
 
         return false;
-    } else {
-        if (! is_int($offset)) {
-            trigger_error('nv_strrpos expects parameter 3 to be long', E_USER_WARNING);
-            return false;
-        }
-
-        $haystack = nv_substr($haystack, $offset);
-
-        if (false !== ($pos = nv_strrpos($haystack, $needle))) {
-            return $pos + $offset;
-        }
+    }
+    if (!is_int($offset)) {
+        trigger_error('nv_strrpos expects parameter 3 to be long', E_USER_WARNING);
 
         return false;
     }
+
+    $haystack = nv_substr($haystack, $offset);
+
+    if (false !== ($pos = nv_strrpos($haystack, $needle))) {
+        return $pos + $offset;
+    }
+
+    return false;
 }
 
 /**
  * nv_strtolower()
- * 
+ *
  * @param mixed $string
- * @return
  */
 function nv_strtolower($string)
 {
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup['strtolower']);
 }
 
 /**
  * nv_strtoupper()
- * 
+ *
  * @param mixed $string
- * @return
  */
 function nv_strtoupper($string)
 {
-    include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+    include NV_ROOTDIR . '/includes/utf8/lookup.php';
 
     return strtr($string, $utf8_lookup['strtoupper']);
+}
+
+/**
+ * nv_utf8_encode()
+ * function thay thế cho utf8_encode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_encode($string)
+{
+    $s = $string;
+    $len = strlen($s);
+
+    for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
+        switch (true) {
+            case $s[$i] < "\x80": $s[$j] = $s[$i];
+                break;
+            case $s[$i] < "\xC0": $s[$j] = "\xC2";
+                $s[++$j] = $s[$i];
+                break;
+            default: $s[$j] = "\xC3";
+                $s[++$j] = chr(ord($s[$i]) - 64);
+                break;
+        }
+    }
+
+    return substr($s, 0, $j);
+}
+
+/**
+ * nv_utf8_decode()
+ * function thay thế cho utf8_decode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_decode($string)
+{
+    $s = (string) $string;
+    $len = strlen($s);
+
+    for ($i = 0, $j = 0; $i < $len; ++$i, ++$j) {
+        switch ($s[$i] & "\xF0") {
+            case "\xC0":
+            case "\xD0":
+                $c = (ord($s[$i] & "\x1F") << 6) | ord($s[++$i] & "\x3F");
+                $s[$j] = $c < 256 ? chr($c) : '?';
+                break;
+            case "\xF0":
+                ++$i;
+                // no break
+            case "\xE0":
+                $s[$j] = '?';
+                $i += 2;
+                break;
+            default:
+                $s[$j] = $s[$i];
+        }
+    }
+
+    return substr($s, 0, $j);
 }

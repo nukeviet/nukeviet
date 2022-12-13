@@ -394,7 +394,7 @@ class Upload
                 }
             }
 
-            if (is_resource($finfo)) {
+            if ($finfo !== false) {
                 $mime = finfo_file($finfo, realpath($userfile['tmp_name']));
                 finfo_close($finfo);
                 $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
@@ -1759,7 +1759,7 @@ class Upload
      */
     private function lockChunkFile($file)
     {
-        if (is_resource($this->chunk_resource)) {
+        if ($this->chunk_resource !== false) {
             fclose($this->chunk_resource);
         }
         $this->chunk_resource = fopen($file . '.lock', 'w');
