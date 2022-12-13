@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -121,4 +121,28 @@ function nv_strtoupper($string)
     global $global_config;
 
     return mb_strtoupper($string, $global_config['site_charset']);
+}
+
+/**
+ * nv_utf8_encode()
+ * function thay thế cho utf8_encode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_encode($string)
+{
+    return mb_convert_encoding($string, 'UTF-8', mb_list_encodings());
+}
+
+/**
+ * nv_utf8_decode()
+ * function thay thế cho utf8_decode đã lỗi thời
+ *
+ * @param string $string
+ * @return string
+ */
+function nv_utf8_decode($string)
+{
+    return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
 }

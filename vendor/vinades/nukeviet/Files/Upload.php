@@ -409,7 +409,7 @@ class Upload
                 }
             }
 
-            if (is_resource($finfo)) {
+            if ($finfo !== false) {
                 $mime = finfo_file($finfo, realpath($userfile['tmp_name']));
                 finfo_close($finfo);
                 $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
