@@ -1,54 +1,9 @@
 /*!
- * Chart.js v3.8.0
+ * Chart.js v3.9.1
  * https://www.chartjs.org
  * (c) 2022 Chart.js Contributors
  * Released under the MIT License
  */
-function fontString(pixelSize, fontStyle, fontFamily) {
-  return fontStyle + ' ' + pixelSize + 'px ' + fontFamily;
-}
-const requestAnimFrame = (function() {
-  if (typeof window === 'undefined') {
-    return function(callback) {
-      return callback();
-    };
-  }
-  return window.requestAnimationFrame;
-}());
-function throttled(fn, thisArg, updateFn) {
-  const updateArgs = updateFn || ((args) => Array.prototype.slice.call(args));
-  let ticking = false;
-  let args = [];
-  return function(...rest) {
-    args = updateArgs(rest);
-    if (!ticking) {
-      ticking = true;
-      requestAnimFrame.call(window, () => {
-        ticking = false;
-        fn.apply(thisArg, args);
-      });
-    }
-  };
-}
-function debounce(fn, delay) {
-  let timeout;
-  return function(...args) {
-    if (delay) {
-      clearTimeout(timeout);
-      timeout = setTimeout(fn, delay, args);
-    } else {
-      fn.apply(this, args);
-    }
-    return delay;
-  };
-}
-const _toLeftRightCenter = (align) => align === 'start' ? 'left' : align === 'end' ? 'right' : 'center';
-const _alignStartEnd = (align, start, end) => align === 'start' ? start : align === 'end' ? end : (start + end) / 2;
-const _textX = (align, left, right, rtl) => {
-  const check = rtl ? 'left' : 'right';
-  return align === check ? right : align === 'center' ? (left + right) / 2 : left;
-};
-
 function noop() {}
 const uid = (function() {
   let id = 0;
@@ -199,24 +154,41 @@ function _deprecated(scope, value, previous, current) {
 			'" is deprecated. Please use "' + current + '" instead');
   }
 }
-const emptyString = '';
-const dot = '.';
-function indexOfDotOrLength(key, start) {
-  const idx = key.indexOf(dot, start);
-  return idx === -1 ? key.length : idx;
-}
+const keyResolvers = {
+  '': v => v,
+  x: o => o.x,
+  y: o => o.y
+};
 function resolveObjectKey(obj, key) {
-  if (key === emptyString) {
+  const resolver = keyResolvers[key] || (keyResolvers[key] = _getKeyResolver(key));
+  return resolver(obj);
+}
+function _getKeyResolver(key) {
+  const keys = _splitKey(key);
+  return obj => {
+    for (const k of keys) {
+      if (k === '') {
+        break;
+      }
+      obj = obj && obj[k];
+    }
     return obj;
+  };
+}
+function _splitKey(key) {
+  const parts = key.split('.');
+  const keys = [];
+  let tmp = '';
+  for (const part of parts) {
+    tmp += part;
+    if (tmp.endsWith('\\')) {
+      tmp = tmp.slice(0, -1) + '.';
+    } else {
+      keys.push(tmp);
+      tmp = '';
+    }
   }
-  let pos = 0;
-  let idx = indexOfDotOrLength(key, pos);
-  while (obj && idx > pos) {
-    obj = obj[key.slice(pos, idx)];
-    pos = idx + 1;
-    idx = indexOfDotOrLength(key, pos);
-  }
-  return obj;
+  return keys;
 }
 function _capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -351,6 +323,190 @@ function _int16Range(value) {
 }
 function _isBetween(value, start, end, epsilon = 1e-6) {
   return value >= Math.min(start, end) - epsilon && value <= Math.max(start, end) + epsilon;
+}
+
+function _lookup(table, value, cmp) {
+  cmp = cmp || ((index) => table[index] < value);
+  let hi = table.length - 1;
+  let lo = 0;
+  let mid;
+  while (hi - lo > 1) {
+    mid = (lo + hi) >> 1;
+    if (cmp(mid)) {
+      lo = mid;
+    } else {
+      hi = mid;
+    }
+  }
+  return {lo, hi};
+}
+const _lookupByKey = (table, key, value, last) =>
+  _lookup(table, value, last
+    ? index => table[index][key] <= value
+    : index => table[index][key] < value);
+const _rlookupByKey = (table, key, value) =>
+  _lookup(table, value, index => table[index][key] >= value);
+function _filterBetween(values, min, max) {
+  let start = 0;
+  let end = values.length;
+  while (start < end && values[start] < min) {
+    start++;
+  }
+  while (end > start && values[end - 1] > max) {
+    end--;
+  }
+  return start > 0 || end < values.length
+    ? values.slice(start, end)
+    : values;
+}
+const arrayEvents = ['push', 'pop', 'shift', 'splice', 'unshift'];
+function listenArrayEvents(array, listener) {
+  if (array._chartjs) {
+    array._chartjs.listeners.push(listener);
+    return;
+  }
+  Object.defineProperty(array, '_chartjs', {
+    configurable: true,
+    enumerable: false,
+    value: {
+      listeners: [listener]
+    }
+  });
+  arrayEvents.forEach((key) => {
+    const method = '_onData' + _capitalize(key);
+    const base = array[key];
+    Object.defineProperty(array, key, {
+      configurable: true,
+      enumerable: false,
+      value(...args) {
+        const res = base.apply(this, args);
+        array._chartjs.listeners.forEach((object) => {
+          if (typeof object[method] === 'function') {
+            object[method](...args);
+          }
+        });
+        return res;
+      }
+    });
+  });
+}
+function unlistenArrayEvents(array, listener) {
+  const stub = array._chartjs;
+  if (!stub) {
+    return;
+  }
+  const listeners = stub.listeners;
+  const index = listeners.indexOf(listener);
+  if (index !== -1) {
+    listeners.splice(index, 1);
+  }
+  if (listeners.length > 0) {
+    return;
+  }
+  arrayEvents.forEach((key) => {
+    delete array[key];
+  });
+  delete array._chartjs;
+}
+function _arrayUnique(items) {
+  const set = new Set();
+  let i, ilen;
+  for (i = 0, ilen = items.length; i < ilen; ++i) {
+    set.add(items[i]);
+  }
+  if (set.size === ilen) {
+    return items;
+  }
+  return Array.from(set);
+}
+
+function fontString(pixelSize, fontStyle, fontFamily) {
+  return fontStyle + ' ' + pixelSize + 'px ' + fontFamily;
+}
+const requestAnimFrame = (function() {
+  if (typeof window === 'undefined') {
+    return function(callback) {
+      return callback();
+    };
+  }
+  return window.requestAnimationFrame;
+}());
+function throttled(fn, thisArg, updateFn) {
+  const updateArgs = updateFn || ((args) => Array.prototype.slice.call(args));
+  let ticking = false;
+  let args = [];
+  return function(...rest) {
+    args = updateArgs(rest);
+    if (!ticking) {
+      ticking = true;
+      requestAnimFrame.call(window, () => {
+        ticking = false;
+        fn.apply(thisArg, args);
+      });
+    }
+  };
+}
+function debounce(fn, delay) {
+  let timeout;
+  return function(...args) {
+    if (delay) {
+      clearTimeout(timeout);
+      timeout = setTimeout(fn, delay, args);
+    } else {
+      fn.apply(this, args);
+    }
+    return delay;
+  };
+}
+const _toLeftRightCenter = (align) => align === 'start' ? 'left' : align === 'end' ? 'right' : 'center';
+const _alignStartEnd = (align, start, end) => align === 'start' ? start : align === 'end' ? end : (start + end) / 2;
+const _textX = (align, left, right, rtl) => {
+  const check = rtl ? 'left' : 'right';
+  return align === check ? right : align === 'center' ? (left + right) / 2 : left;
+};
+function _getStartAndCountOfVisiblePoints(meta, points, animationsDisabled) {
+  const pointCount = points.length;
+  let start = 0;
+  let count = pointCount;
+  if (meta._sorted) {
+    const {iScale, _parsed} = meta;
+    const axis = iScale.axis;
+    const {min, max, minDefined, maxDefined} = iScale.getUserBounds();
+    if (minDefined) {
+      start = _limitValue(Math.min(
+        _lookupByKey(_parsed, iScale.axis, min).lo,
+        animationsDisabled ? pointCount : _lookupByKey(points, axis, iScale.getPixelForValue(min)).lo),
+      0, pointCount - 1);
+    }
+    if (maxDefined) {
+      count = _limitValue(Math.max(
+        _lookupByKey(_parsed, iScale.axis, max, true).hi + 1,
+        animationsDisabled ? 0 : _lookupByKey(points, axis, iScale.getPixelForValue(max), true).hi + 1),
+      start, pointCount) - start;
+    } else {
+      count = pointCount - start;
+    }
+  }
+  return {start, count};
+}
+function _scaleRangesChanged(meta) {
+  const {xScale, yScale, _scaleRanges} = meta;
+  const newRanges = {
+    xmin: xScale.min,
+    xmax: xScale.max,
+    ymin: yScale.min,
+    ymax: yScale.max
+  };
+  if (!_scaleRanges) {
+    meta._scaleRanges = newRanges;
+    return true;
+  }
+  const changed = _scaleRanges.xmin !== xScale.min
+		|| _scaleRanges.xmax !== xScale.max
+		|| _scaleRanges.ymin !== yScale.min
+		|| _scaleRanges.ymax !== yScale.max;
+  Object.assign(_scaleRanges, newRanges);
+  return changed;
 }
 
 const atEdge = (t) => t === 0 || t === 1;
@@ -1213,7 +1369,10 @@ function clearCanvas(canvas, ctx) {
   ctx.restore();
 }
 function drawPoint(ctx, options, x, y) {
-  let type, xOffset, yOffset, size, cornerRadius;
+  drawPointLegend(ctx, options, x, y, null);
+}
+function drawPointLegend(ctx, options, x, y, w) {
+  let type, xOffset, yOffset, size, cornerRadius, width;
   const style = options.pointStyle;
   const rotation = options.rotation;
   const radius = options.radius;
@@ -1235,7 +1394,11 @@ function drawPoint(ctx, options, x, y) {
   ctx.beginPath();
   switch (style) {
   default:
-    ctx.arc(x, y, radius, 0, TAU);
+    if (w) {
+      ctx.ellipse(x, y, w / 2, radius, 0, 0, TAU);
+    } else {
+      ctx.arc(x, y, radius, 0, TAU);
+    }
     ctx.closePath();
     break;
   case 'triangle':
@@ -1260,7 +1423,8 @@ function drawPoint(ctx, options, x, y) {
   case 'rect':
     if (!rotation) {
       size = Math.SQRT1_2 * radius;
-      ctx.rect(x - size, y - size, 2 * size, 2 * size);
+      width = w ? w / 2 : size;
+      ctx.rect(x - width, y - size, 2 * width, 2 * size);
       break;
     }
     rad += QUARTER_PI;
@@ -1299,7 +1463,7 @@ function drawPoint(ctx, options, x, y) {
     ctx.lineTo(x - yOffset, y + xOffset);
     break;
   case 'line':
-    xOffset = Math.cos(rad) * radius;
+    xOffset = w ? w / 2 : Math.cos(rad) * radius;
     yOffset = Math.sin(rad) * radius;
     ctx.moveTo(x - xOffset, y - yOffset);
     ctx.lineTo(x + xOffset, y + yOffset);
@@ -1526,99 +1690,6 @@ function _addGrace(minmax, grace, beginAtZero) {
 }
 function createContext(parentContext, context) {
   return Object.assign(Object.create(parentContext), context);
-}
-
-function _lookup(table, value, cmp) {
-  cmp = cmp || ((index) => table[index] < value);
-  let hi = table.length - 1;
-  let lo = 0;
-  let mid;
-  while (hi - lo > 1) {
-    mid = (lo + hi) >> 1;
-    if (cmp(mid)) {
-      lo = mid;
-    } else {
-      hi = mid;
-    }
-  }
-  return {lo, hi};
-}
-const _lookupByKey = (table, key, value) =>
-  _lookup(table, value, index => table[index][key] < value);
-const _rlookupByKey = (table, key, value) =>
-  _lookup(table, value, index => table[index][key] >= value);
-function _filterBetween(values, min, max) {
-  let start = 0;
-  let end = values.length;
-  while (start < end && values[start] < min) {
-    start++;
-  }
-  while (end > start && values[end - 1] > max) {
-    end--;
-  }
-  return start > 0 || end < values.length
-    ? values.slice(start, end)
-    : values;
-}
-const arrayEvents = ['push', 'pop', 'shift', 'splice', 'unshift'];
-function listenArrayEvents(array, listener) {
-  if (array._chartjs) {
-    array._chartjs.listeners.push(listener);
-    return;
-  }
-  Object.defineProperty(array, '_chartjs', {
-    configurable: true,
-    enumerable: false,
-    value: {
-      listeners: [listener]
-    }
-  });
-  arrayEvents.forEach((key) => {
-    const method = '_onData' + _capitalize(key);
-    const base = array[key];
-    Object.defineProperty(array, key, {
-      configurable: true,
-      enumerable: false,
-      value(...args) {
-        const res = base.apply(this, args);
-        array._chartjs.listeners.forEach((object) => {
-          if (typeof object[method] === 'function') {
-            object[method](...args);
-          }
-        });
-        return res;
-      }
-    });
-  });
-}
-function unlistenArrayEvents(array, listener) {
-  const stub = array._chartjs;
-  if (!stub) {
-    return;
-  }
-  const listeners = stub.listeners;
-  const index = listeners.indexOf(listener);
-  if (index !== -1) {
-    listeners.splice(index, 1);
-  }
-  if (listeners.length > 0) {
-    return;
-  }
-  arrayEvents.forEach((key) => {
-    delete array[key];
-  });
-  delete array._chartjs;
-}
-function _arrayUnique(items) {
-  const set = new Set();
-  let i, ilen;
-  for (i = 0, ilen = items.length; i < ilen; ++i) {
-    set.add(items[i]);
-  }
-  if (set.size === ilen) {
-    return items;
-  }
-  return Array.from(set);
 }
 
 function _createResolver(scopes, prefixes = [''], rootScopes = scopes, fallback, getTarget = () => scopes[0]) {
@@ -2545,4 +2616,4 @@ function styleChanged(style, prevStyle) {
   return prevStyle && JSON.stringify(style) !== JSON.stringify(prevStyle);
 }
 
-export { toFont as $, _rlookupByKey as A, _isPointInArea as B, getAngleFromPoint as C, toPadding as D, each as E, getMaximumSize as F, _getParentNode as G, HALF_PI as H, readUsedSize as I, throttled as J, supportsEventListenerOptions as K, _isDomSupported as L, log10 as M, _factorize as N, finiteOrDefault as O, PI as P, callback as Q, _addGrace as R, toDegrees as S, TAU as T, _measureText as U, _int16Range as V, _alignPixel as W, clipArea as X, renderText as Y, unclipArea as Z, _arrayUnique as _, resolve as a, QUARTER_PI as a$, _toLeftRightCenter as a0, _alignStartEnd as a1, overrides as a2, merge as a3, _capitalize as a4, descriptors as a5, isFunction as a6, _attachContext as a7, _createResolver as a8, _descriptors as a9, _textX as aA, restoreTextDirection as aB, noop as aC, distanceBetweenPoints as aD, _setMinAndMaxByKey as aE, niceNum as aF, almostWhole as aG, almostEquals as aH, _decimalPlaces as aI, _longestText as aJ, _filterBetween as aK, _lookup as aL, isPatternOrGradient as aM, getHoverColor as aN, clone$1 as aO, _merger as aP, _mergerIf as aQ, _deprecated as aR, toFontString as aS, splineCurve as aT, splineCurveMonotone as aU, getStyle as aV, fontString as aW, toLineHeight as aX, PITAU as aY, INFINITY as aZ, RAD_PER_DEG as a_, mergeIf as aa, uid as ab, debounce as ac, retinaScale as ad, clearCanvas as ae, setsEqual as af, _elementsEqual as ag, _isClickEvent as ah, _isBetween as ai, _readValueToProps as aj, _updateBezierControlPoints as ak, _computeSegments as al, _boundSegments as am, _steppedInterpolation as an, _bezierInterpolation as ao, _pointInLine as ap, _steppedLineTo as aq, _bezierCurveTo as ar, drawPoint as as, addRoundedRectPath as at, toTRBL as au, toTRBLCorners as av, _boundSegment as aw, _normalizeAngle as ax, getRtlAdapter as ay, overrideTextDirection as az, isArray as b, TWO_THIRDS_PI as b0, _angleDiff as b1, color as c, defaults as d, effects as e, resolveObjectKey as f, isNumberFinite as g, createContext as h, isObject as i, defined as j, isNullOrUndef as k, listenArrayEvents as l, toPercentage as m, toDimension as n, formatNumber as o, _angleBetween as p, isNumber as q, requestAnimFrame as r, sign as s, toRadians as t, unlistenArrayEvents as u, valueOrDefault as v, _limitValue as w, _lookupByKey as x, _parseObjectDataRadialScale as y, getRelativePosition as z };
+export { _isPointInArea as $, _factorize as A, finiteOrDefault as B, callback as C, _addGrace as D, _limitValue as E, toDegrees as F, _measureText as G, HALF_PI as H, _int16Range as I, _alignPixel as J, toPadding as K, clipArea as L, renderText as M, unclipArea as N, toFont as O, PI as P, each as Q, _toLeftRightCenter as R, _alignStartEnd as S, TAU as T, overrides as U, merge as V, _capitalize as W, getRelativePosition as X, _rlookupByKey as Y, _lookupByKey as Z, _arrayUnique as _, resolve as a, toLineHeight as a$, getAngleFromPoint as a0, getMaximumSize as a1, _getParentNode as a2, readUsedSize as a3, throttled as a4, supportsEventListenerOptions as a5, _isDomSupported as a6, descriptors as a7, isFunction as a8, _attachContext as a9, getRtlAdapter as aA, overrideTextDirection as aB, _textX as aC, restoreTextDirection as aD, drawPointLegend as aE, noop as aF, distanceBetweenPoints as aG, _setMinAndMaxByKey as aH, niceNum as aI, almostWhole as aJ, almostEquals as aK, _decimalPlaces as aL, _longestText as aM, _filterBetween as aN, _lookup as aO, isPatternOrGradient as aP, getHoverColor as aQ, clone$1 as aR, _merger as aS, _mergerIf as aT, _deprecated as aU, _splitKey as aV, toFontString as aW, splineCurve as aX, splineCurveMonotone as aY, getStyle as aZ, fontString as a_, _createResolver as aa, _descriptors as ab, mergeIf as ac, uid as ad, debounce as ae, retinaScale as af, clearCanvas as ag, setsEqual as ah, _elementsEqual as ai, _isClickEvent as aj, _isBetween as ak, _readValueToProps as al, _updateBezierControlPoints as am, _computeSegments as an, _boundSegments as ao, _steppedInterpolation as ap, _bezierInterpolation as aq, _pointInLine as ar, _steppedLineTo as as, _bezierCurveTo as at, drawPoint as au, addRoundedRectPath as av, toTRBL as aw, toTRBLCorners as ax, _boundSegment as ay, _normalizeAngle as az, isArray as b, PITAU as b0, INFINITY as b1, RAD_PER_DEG as b2, QUARTER_PI as b3, TWO_THIRDS_PI as b4, _angleDiff as b5, color as c, defaults as d, effects as e, resolveObjectKey as f, isNumberFinite as g, createContext as h, isObject as i, defined as j, isNullOrUndef as k, listenArrayEvents as l, toPercentage as m, toDimension as n, formatNumber as o, _angleBetween as p, _getStartAndCountOfVisiblePoints as q, requestAnimFrame as r, sign as s, toRadians as t, unlistenArrayEvents as u, valueOrDefault as v, _scaleRangesChanged as w, isNumber as x, _parseObjectDataRadialScale as y, log10 as z };
