@@ -692,7 +692,7 @@ function user_lostactivelink($data, $question)
  */
 function user_info($data, $array_field_config, $custom_fields, $types, $data_questions, $data_openid, $groups, $pass_empty)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders, $is_custom_field, $user_info, $global_users_config, $group_lists, $group_id;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $op, $global_array_genders, $is_custom_field, $user_info, $global_users_config, $group_lists, $group_id, $language_array;
 
     $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
@@ -826,6 +826,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $item_active['title'] = $lang_module['edit_email'];
     } elseif ($data['type'] == 'password') {
         $item_active['title'] = $lang_module['edit_password'];
+    } elseif ($data['type'] == 'langinterface') {
+        $item_active['title'] = $lang_global['langinterface'];
     } elseif ($data['type'] == 'question') {
         $item_active['title'] = $lang_module['edit_question'];
     } elseif ($data['type'] == 'openid') {
@@ -881,6 +883,21 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $xtpl->parse('main.tab_edit_password.forcedrelogin');
         }
         $xtpl->parse('main.tab_edit_password');
+    }
+
+    // Tab đổi ngôn ngữ hiển thị
+    if (in_array('langinterface', $types, true)) {
+        $xtpl->parse('main.edit_langinterface');
+
+        foreach ($global_config['allow_sitelangs'] as $lang_i) {
+            $xtpl->assign('OPTION', [
+                'val' => $lang_i,
+                'sel' => $lang_i == $data['langinterface'] ? ' selected="selected"' : '',
+                'name' => !empty($language_array[$lang_i]['name']) ? $language_array[$lang_i]['name'] : $lang_i
+            ]);
+            $xtpl->parse('main.tab_edit_langinterface.lang_option');
+        }
+        $xtpl->parse('main.tab_edit_langinterface');
     }
 
     // Tab quản lý xác thực hai bước
@@ -1243,10 +1260,11 @@ function openid_callback($openid_info)
  */
 function user_welcome($array_field_config, $custom_fields)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $user_info, $op;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $user_info, $op, $language_array;
 
     $xtpl = new XTemplate('userinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
@@ -1282,6 +1300,9 @@ function user_welcome($array_field_config, $custom_fields)
     $_user_info['st_login'] = !empty($user_info['st_login']) ? $lang_module['yes'] : $lang_module['no'];
     $_user_info['active2step'] = !empty($user_info['active2step']) ? $lang_global['on'] : $lang_global['off'];
     $_user_info['login_name'] = $global_config['login_name_type'] == 1 ? $lang_module['username'] :($global_config['login_name_type'] == 2 ? $lang_module['email'] : $lang_module['username_or_email']);
+    if ($global_config['lang_multi']) {
+        $_user_info['langinterface'] = !empty($_user_info['language']) ? (!empty($language_array[$_user_info['language']]['name']) ? $language_array[$_user_info['language']]['name'] : $_user_info['language']) : $lang_module['bydatalang'];
+    }
 
     if (isset($user_info['current_mode']) and $user_info['current_mode'] == 5) {
         $_user_info['current_mode'] = $lang_module['admin_login'];
@@ -1296,6 +1317,10 @@ function user_welcome($array_field_config, $custom_fields)
     $_user_info['question_empty_note'] = sprintf($lang_module['question_empty_note'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/question');
 
     $xtpl->assign('USER', $_user_info);
+
+    if ($global_config['lang_multi']) {
+        $xtpl->parse('main.langinterface');
+    }
 
     if (!$global_config['allowloginchange'] and !empty($user_info['current_openid']) and empty($user_info['prev_login']) and empty($user_info['prev_agent']) and empty($user_info['prev_ip']) and empty($user_info['prev_openid'])) {
         $xtpl->parse('main.change_login_note');

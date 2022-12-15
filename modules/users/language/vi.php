@@ -407,3 +407,4 @@ $lang_module['welcome_new_member'] = 'Chào mừng bạn đến với nhóm &laq
 $lang_module['info_when_leaving_group'] = 'Rất tiếc là bạn đã rời nhóm &laquo;%s&raquo;. Chúng tôi hy vọng sẽ có cơ hội để phục vụ bạn lần nữa.';
 $lang_module['login_name'] = 'Tên đăng nhập';
 $lang_module['username_or_email'] = 'Bí danh hoặc email';
+$lang_module['bydatalang'] = 'Theo ngôn ngữ dữ liệu';

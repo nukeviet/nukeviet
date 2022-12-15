@@ -405,6 +405,10 @@ if ($array_data['allowloginchange'] and !defined('ACCESS_EDITUS')) {
 if ($array_data['allowmailchange'] and !defined('ACCESS_EDITUS')) {
     $types[] = 'email';
 }
+// Thành viên đổi ngôn ngữ giao diện
+if ($global_config['lang_multi'] and !defined('ACCESS_EDITUS')) {
+    $types[] = 'langinterface';
+}
 // Thành viên quản lý OpenID
 if (defined('NV_OPENID_ALLOWED') and !defined('ACCESS_EDITUS')) {
     $types[] = 'openid';
@@ -631,6 +635,23 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     }
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'avatar') {
     // Avatar
+} elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'langinterface') {
+    $langinterface = $nv_Request->get_title('langinterface', 'post', '');
+    if (!empty($langinterface) and (!preg_match('/^[a-z]{2}$/', $langinterface) or !file_exists(NV_ROOTDIR . '/includes/language/' . $langinterface . '/global.php'))) {
+        $langinterface = '';
+    }
+    if ($langinterface != $row['language']) {
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET language= :language WHERE userid=' . $edit_userid);
+        $stmt->bindParam(':language', $langinterface, PDO::PARAM_STR);
+        $stmt->execute();
+
+        updateUserCookie(['language' => $langinterface]);
+    }
+    nv_jsonOutput([
+        'status' => 'ok',
+        'input' => nv_url_rewrite($page_url . '/langinterface', true),
+        'mess' => $lang_module['editinfo_ok']
+    ]);
 } elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username') {
     // Username
     $nv_username = nv_substr($nv_Request->get_title('username', 'post', '', 1), 0, $global_config['nv_unickmax']);
@@ -1283,6 +1304,7 @@ $array_data['gender'] = $row['gender'];
 $array_data['birthday'] = !empty($row['birthday']) ? date('d/m/Y', $row['birthday']) : '';
 $array_data['view_mail'] = $row['view_mail'] ? ' checked="checked"' : '';
 $array_data['photo'] = (!empty($row['photo']) and file_exists(NV_ROOTDIR . '/' . $row['photo'])) ? NV_BASE_SITEURL . $row['photo'] : '';
+$array_data['langinterface'] = $row['language'];
 
 if (empty($array_data['photo'])) {
     $array_data['photo'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';

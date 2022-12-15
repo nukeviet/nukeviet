@@ -463,7 +463,8 @@ if ($checkss == $array_register['checkss']) {
                     'last_agent' => '',
                     'last_ip' => '',
                     'last_login' => 0,
-                    'last_openid' => ''
+                    'last_openid' => '',
+                    'language' => ''
                 ];
                 validUserLog($array_user, 1, '');
 

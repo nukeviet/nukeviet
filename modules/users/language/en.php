@@ -405,3 +405,4 @@ $lang_module['welcome_new_member'] = 'Welcome to the %1$s group! You have now be
 $lang_module['info_when_leaving_group'] = 'Unfortunately, you left the %s group. We hope that we will have the opportunity to serve you again.';
 $lang_module['login_name'] = 'Login name';
 $lang_module['username_or_email'] = 'Username or Email';
+$lang_module['bydatalang'] = 'By data language';

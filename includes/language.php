@@ -79,7 +79,9 @@ if (empty($global_config['lang_multi'])) {
         $nv_Request->set_Cookie('u_lang', $site_lang, NV_LIVE_COOKIE_TIME);
     }
 
-    define('NV_LANG_INTERFACE', $site_lang);
+    $langinterface = (!empty($user_cookie['language']) and preg_match('/^[a-z]{2}$/', $user_cookie['language']) and file_exists(NV_ROOTDIR . '/includes/language/' . $user_cookie['language'] . '/global.php')) ? $user_cookie['language'] : $site_lang;
+
+    define('NV_LANG_INTERFACE', $langinterface);
     define('NV_LANG_DATA', $site_lang);
-    unset($cookie, $site_lang);
+    unset($cookie, $site_lang, $langinterface);
 }

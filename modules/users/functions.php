@@ -69,7 +69,8 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
         'current_login' => NV_CURRENTTIME,
         'prev_login' => (int) ($array_user['last_login']),
         'prev_openid' => $array_user['last_openid'],
-        'current_openid' => $opid
+        'current_openid' => $opid,
+        'language' => $array_user['language']
     ];
 
     $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET
@@ -116,6 +117,32 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
     if (!empty($global_users_config['active_user_logs'])) {
         $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $oauth_data['provider']) : $lang_module['st_login'];
         nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, ' Client IP:' . NV_CLIENT_IP, 0);
+    }
+}
+
+/**
+ * updateUserCookie()
+ *
+ * @param mixed $newValues
+ */
+function updateUserCookie($newValues)
+{
+    global $db, $user_info, $user_cookie;
+
+    if (!empty($user_cookie)) {
+        $isUpdate = false;
+        if (!empty($newValues)) {
+            foreach ($newValues as $key => $value) {
+                if (isset($user_cookie[$key]) and $value != $user_cookie[$key]) {
+                    $user_cookie[$key] = $value;
+                    $isUpdate = true;
+                }
+            }
+        }
+        if ($isUpdate) {
+            $remember = (int) $db->query('SELECT remember FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_info['userid'] . ' AND active=1')->fetchColumn();
+            NukeViet\Core\User::set_userlogin_hash($user_cookie, $remember);
+        }
     }
 }
 

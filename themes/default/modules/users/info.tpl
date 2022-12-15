@@ -26,6 +26,9 @@
                 <!-- BEGIN: edit_password -->
                 <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/password" href="#edit_password">{LANG.edit_password}</a></li>
                 <!-- END: edit_password -->
+                <!-- BEGIN: edit_langinterface -->
+                <li class="{LANGINTERFACE_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/langinterface" href="#edit_langinterface">{GLANG.langinterface}</a></li>
+                <!-- END: edit_langinterface -->
                 <!-- BEGIN: 2step -->
                 <li><a href="{URL_2STEP}">{LANG.2step_status}</a></li>
                 <!-- END: 2step -->
@@ -312,6 +315,34 @@
             </form>
         </div>
         <!-- END: tab_edit_password -->
+        <!-- BEGIN: tab_edit_langinterface -->
+        <div id="edit_langinterface" class="well-lg tab-pane fade {TAB_LANGINTERFACE_ACTIVE}">
+            <form action="{EDITINFO_FORM}/langinterface" method="post" role="form" class="form-horizontal" data-toggle="reg_validForm">
+                <div class="nv-info margin-bottom" data-default="" style="display: none"></div>
+                <div class="form-detail">
+                    <div class="form-group">
+                        <label for="new_langinterface" class="control-label col-md-6 text-normal">{GLANG.langinterface}</label>
+                        <div class="col-md-12">
+                            <select name="langinterface" class="form-control" style="width:fit-content;">
+                                <option value="">{LANG.bydatalang}</option>
+                                <!-- BEGIN: lang_option -->
+                                <option value="{OPTION.val}"{OPTION.sel}>{OPTION.name}</option>
+                                <!-- END: lang_option -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                        </div>
+                        <div class="col-md-10">
+                            <input type="submit" class="btn btn-primary" value="{GLANG.submit}" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- END: tab_edit_langinterface -->
         <!-- BEGIN: tab_edit_question -->
         <div id="edit_question" class="well-lg tab-pane fade {TAB_QUESTION_ACTIVE}">
             <!-- BEGIN: question_empty_pass -->

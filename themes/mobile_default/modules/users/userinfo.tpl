@@ -67,6 +67,12 @@
                 <td>{LANG.regdate}</td>
                 <td>{USER.regdate}</td>
             </tr>
+            <!-- BEGIN: langinterface -->
+            <tr>
+                <td>{GLANG.langinterface}</td>
+                <td>{USER.langinterface}</td>
+            </tr>
+            <!-- END: langinterface -->
             <!-- BEGIN: field -->
             <!-- BEGIN: loop -->
             <tr>

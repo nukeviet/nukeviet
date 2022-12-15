@@ -404,3 +404,4 @@ $lang_module['welcome_new_member'] = 'Bienvenue dans le groupe %1$s ! Vous êtes
 $lang_module['info_when_leaving_group'] = 'Malheureusement, vous avez quitté le groupe %s. Nous espérons que nous aurons l\'occasion de vous servir à nouveau.';
 $lang_module['login_name'] = 'Identifiant';
 $lang_module['username_or_email'] = 'Nom d\'utilisateur ou email';
+$lang_module['bydatalang'] = 'Par langage de données';

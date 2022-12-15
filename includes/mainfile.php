@@ -23,7 +23,7 @@ define('NV_START_TIME', microtime(true));
 define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = $nv_hooks = $nv_plugins = $custom_preloads = [];
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = $nv_hooks = $nv_plugins = $custom_preloads = $user_cookie = [];
 $page_title = $key_words = $page_url = $canonicalUrl = $prevPage = $nextPage = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 $isIndexFile = (substr($_SERVER['PHP_SELF'], -9, 9) === 'index.php');
@@ -192,6 +192,9 @@ define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung
 
 define('NV_USER_AGENT', $nv_Request->user_agent);
+
+// Lấy thông tin cookie của user
+defined('NV_SYSTEM') && $user_cookie =  NukeViet\Core\User::get_userlogin_hash();
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
