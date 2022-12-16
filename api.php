@@ -234,6 +234,7 @@ if (empty($api_request['module'])) {
 
         $adminLev = true;
         $apidir = 'Api';
+        define('NV_ADMIN', true);
     }
 
     $module_info = $sys_mods[$api_request['module']];
