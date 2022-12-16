@@ -38,14 +38,6 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         'url' => $page_url . '&amp;type=private',
         'name' => $lang_module['api_role_type_private2']
     ]);
-    $xtpl->assign('AUTH_INFO', empty($api_user) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
-
-    if (empty($api_user)) {
-        $xtpl->parse('main.not_access_authentication');
-    } else {
-        $xtpl->assign('API_USER', $api_user);
-        $xtpl->parse('main.created_access_authentication');
-    }
 
     $methods = [
         'password_verify' => $lang_module['auth_method_password_verify'],
@@ -53,12 +45,20 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
     ];
     
     foreach ($methods as $key => $name) {
-        $xtpl->assign('METHOD', [
-            'key' => $key,
-            'sel' => (!empty($api_user['method']) and $key == $api_user['method']) ? ' selected="selected"' : '',
-            'name' => $name
-        ]);
-        $xtpl->parse('main.method');
+        $method = isset($api_user[$key]) ? $api_user[$key] : [];
+        $method['key'] = $key;
+        $method['name'] = $name;
+        $xtpl->assign('METHOD', $method);
+        $xtpl->assign('AUTH_INFO', empty($api_user[$key]) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
+        $xtpl->assign('BTN', empty($api_user[$key]) ? $lang_module['create_access_authentication'] : $lang_module['recreate_access_authentication']);
+
+        if ($key == 'password_verify') {
+            $xtpl->parse('main.method_tab.is_active');
+            $xtpl->parse('main.method_panel.is_active');
+        }
+
+        $xtpl->parse('main.method_tab');
+        $xtpl->parse('main.method_panel');
     }
 
     if (empty($roleCount)) {

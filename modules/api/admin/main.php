@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 // Tạo xác thực
 if ($nv_Request->isset_request('createAuth', 'post')) {
     $method = $nv_Request->get_title('createAuth', 'post', '');
-    if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true)) {
+    if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $lang_module['auth_method_select']
@@ -33,6 +33,13 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
 
 // Lưu IP được phép truy cập
 if ($nv_Request->isset_request('ipsUpdate', 'post')) {
+    $method = $nv_Request->get_title('method', 'post', '');
+    if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['auth_method_select']
+        ]);
+    }
     $api_ips = $nv_Request->get_title('ipsUpdate', 'post', '');
     $api_ips = array_map('trim', explode(',', $api_ips));
     $api_ips = array_filter($api_ips, function($ip) {
@@ -41,8 +48,11 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
     });
 
     $iplist = json_encode($api_ips);
-    ipsUpdate($iplist);
-    nv_htmlOutput(implode(', ', $api_ips));
+    ipsUpdate($iplist, $method);
+    nv_jsonOutput([
+        'status' => 'OK',
+        'ips' => implode(', ', $api_ips)
+    ]);
 }
 
 // Kích hoạt/hủy kích hoạt quyền truy cập
@@ -113,35 +123,39 @@ $xtpl->assign('TYPE_PRIVATE', [
     'url' => $page_url . '&amp;type=private',
     'name' => $lang_module['api_role_type_private2']
 ]);
-$xtpl->assign('AUTH_INFO', empty($api_user) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
 
 if (empty($global_config['remote_api_access'])) {
     $xtpl->parse('main.remote_api_off');
 }
 
-if (empty($api_user)) {
-    $xtpl->parse('main.not_access_authentication');
-    $xtpl->parse('main.not_access_authentication2');
-} else {
-    $xtpl->assign('API_USER', $api_user);
-    $xtpl->parse('main.created_access_authentication');
-}
-
 $methods = [
     'password_verify' => $lang_module['auth_method_password_verify'],
-    'md5_verify' => $lang_module['auth_method_md5_verify']
+    'md5_verify' => $lang_module['auth_method_md5_verify'],
+    'none' => $lang_module['auth_method_none']
 ];
-if (defined('NV_IS_SPADMIN')) {
-    $methods['none'] = $lang_module['auth_method_none'];
-}
-
 foreach ($methods as $key => $name) {
-    $xtpl->assign('METHOD', [
-        'key' => $key,
-        'sel' => (!empty($api_user['method']) and $key == $api_user['method']) ? ' selected="selected"' : '',
-        'name' => $name
-    ]);
-    $xtpl->parse('main.method');
+    $method = isset($api_user[$key]) ? $api_user[$key] : [];
+    $method['key'] = $key;
+    $method['name'] = $name;
+    $xtpl->assign('METHOD', $method);
+    $xtpl->assign('AUTH_INFO', empty($api_user[$key]) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
+    $xtpl->assign('BTN', empty($api_user[$key]) ? $lang_module['create_access_authentication'] : $lang_module['recreate_access_authentication']);
+
+    if ($key == 'password_verify') {
+        $xtpl->parse('main.method_tab.is_active');
+        $xtpl->parse('main.method_panel.is_active');
+    }
+
+    if (empty($api_user[$key])) {
+        $xtpl->parse('main.method_panel.not_access_authentication');
+    }
+
+    if (defined('NV_IS_SPADMIN') or $key == 'password_verify' or $key == 'md5_verify') {
+        $xtpl->parse('main.method_panel.isEditLevel');
+        $xtpl->parse('main.method_panel.isEditLevel2');
+    }
+    $xtpl->parse('main.method_tab');
+    $xtpl->parse('main.method_panel');
 }
 
 if (empty($roleCount)) {

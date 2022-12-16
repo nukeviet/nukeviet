@@ -260,15 +260,8 @@ $(function() {
         if ($('#changeAuth').length) {
             var changeAuth = $('#changeAuth');
 
-            var clipboard1 = new ClipboardJS('#credential_ident_btn'),
-                clipboard2 = new ClipboardJS('#credential_secret_btn');
-            clipboard1.on('success', function(e) {
-                $(e.trigger).tooltip('show');
-                setTimeout(function() {
-                    $(e.trigger).tooltip('destroy');
-                }, 1000);
-            });
-            clipboard2.on('success', function(e) {
+            var clipboard = new ClipboardJS('[data-toggle=clipboard]');
+            clipboard.on('success', function(e) {
                 $(e.trigger).tooltip('show');
                 setTimeout(function() {
                     $(e.trigger).tooltip('destroy');
@@ -276,16 +269,7 @@ $(function() {
             });
 
             changeAuth.on('click', '.create_authentication', function(e) {
-                $('.has-error', changeAuth).removeClass('has-error');
-                $('.auth-info', changeAuth).text($('.auth-info', changeAuth).data('default'));
-                var method = $('[name=method]', changeAuth).val();
-                if (method == '') {
-                    $('[name=method]', changeAuth).parent().addClass('has-error');
-                    $('.auth-info', changeAuth).text($('.auth-info', changeAuth).data('error')).parent().addClass('has-error');
-                    $('[name=method]', changeAuth).focus();
-                    return !1
-                }
-
+                var method = $(this).data('method');
                 $.ajax({
                     type: "POST",
                     url: credential_page_url,
@@ -294,32 +278,37 @@ $(function() {
                     dataType: "json"
                 }).done(function(a) {
                     if ('error' == a.status) {
-                        $('[name=method]', changeAuth).parent().addClass('has-error');
-                        $('.auth-info', changeAuth).text($('.auth-info', changeAuth).data('error')).parent().addClass('has-error');
-                        $('[name=method]', changeAuth).focus();
+                        alert(a.mess)
                     } else if ('OK' == a.status) {
-                        $('[name=ident]', changeAuth).val(a.ident);
-                        $('[name=secret]', changeAuth).val(a.secret);
-                        $('.api_ips', changeAuth).slideDown()
+                        $('[name=' + method + '_ident]', changeAuth).val(a.ident);
+                        $('[name=' + method + '_secret]', changeAuth).val(a.secret);
+                        $('[name=' + method + '_ips]', changeAuth).parents('.api_ips').slideDown()
                     }
                 })
             });
-            changeAuth.on('input', '[name=ips]', function() {
+            changeAuth.on('input', '.ips', function() {
                 $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
             });
             changeAuth.on('click', '.api_ips_update', function() {
-                var ips = $('[name=ips]', changeAuth).val();
-                $('[name=ips], .api_ips_update', changeAuth).prop('disabled', true);
+                var method = $(this).data('method'),
+                    ips = $('[name=' + method + '_ips]', changeAuth).val();
+                $('.ips, .api_ips_update', changeAuth).prop('disabled', true);
                 $.ajax({
                     type: "POST",
                     url: credential_page_url,
                     cache: !1,
-                    data: 'ips=' + ips + '&changeAuth=' + $(this).data('userid'),
+                    data: 'ips=' + ips + '&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    dataType: "json"
                 }).done(function(a) {
-                    $('[name=ips]', changeAuth).val(a);
-                    setTimeout(function() {
-                        $('[name=ips], .api_ips_update', changeAuth).prop('disabled', false)
-                    }, 1000);
+                    if ('error' == a.status) {
+                        alert(a.mess);
+                        $('.ips, .api_ips_update', changeAuth).prop('disabled', false)
+                    } else if ('OK' == a.status) {
+                        $('[name=' + method + '_ips]', changeAuth).val(a.ips);
+                        setTimeout(function() {
+                            $('.ips, .api_ips_update', changeAuth).prop('disabled', false)
+                        }, 1000);
+                    }
                 })
             })
         }
@@ -346,15 +335,9 @@ $(function() {
             })
         });
 
-        var clipboard1 = new ClipboardJS('#credential_ident_btn');
-        var clipboard2 = new ClipboardJS('#credential_secret_btn');
-        clipboard1.on('success', function(e) {
-            $(e.trigger).tooltip('show');
-            setTimeout(function() {
-                $(e.trigger).tooltip('destroy');
-            }, 1000);
-        });
-        clipboard2.on('success', function(e) {
+        var credential_auth = $('#credential_auth');
+        var clipboard = new ClipboardJS('[data-toggle=clipboard]');
+        clipboard.on('success', function(e) {
             $(e.trigger).tooltip('show');
             setTimeout(function() {
                 $(e.trigger).tooltip('destroy');
@@ -362,16 +345,7 @@ $(function() {
         });
 
         $('.create_authentication', credential_auth).on('click', function(e) {
-            $('.has-error', credential_auth).removeClass('has-error');
-            $('.auth-info', credential_auth).text($('.auth-info', credential_auth).data('default'));
-            var method = $('[name=method]', credential_auth).val();
-            if (method == '') {
-                $('[name=method]', credential_auth).parent().addClass('has-error');
-                $('.auth-info', credential_auth).text($('.auth-info', credential_auth).data('error')).parent().addClass('has-error');
-                $('[name=method]', credential_auth).focus();
-                return !1
-            }
-
+            var method = $(this).data('method');
             $.ajax({
                 type: "POST",
                 url: myroleapi_url,
@@ -380,32 +354,37 @@ $(function() {
                 dataType: "json"
             }).done(function(a) {
                 if ('error' == a.status) {
-                    $('[name=method]', credential_auth).parent().addClass('has-error');
-                    $('.auth-info', credential_auth).text($('.auth-info', credential_auth).data('error')).parent().addClass('has-error');
-                    $('[name=method]', credential_auth).focus();
+                    alert(a.mess)
                 } else if ('OK' == a.status) {
-                    $('[name=ident]', credential_auth).val(a.ident);
-                    $('[name=secret]', credential_auth).val(a.secret);
-                    $('.api_ips', credential_auth).slideDown()
+                    $('[name=' + method + '_ident]', credential_auth).val(a.ident);
+                    $('[name=' + method + '_secret]', credential_auth).val(a.secret);
+                    $('[name=' + method + '_ips]', credential_auth).parents('.api_ips').slideDown()
                 }
             })
         });
-        $('[name=ips]', credential_auth).on('input', function() {
+        $('.ips', credential_auth).on('input', function() {
             $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
         });
         $('.api_ips_update', credential_auth).on('click', function() {
-            var ips = $('[name=ips]', credential_auth).val();
-            $('[name=ips], .api_ips_update', credential_auth).prop('disabled', true);
+            var method = $(this).data('method'),
+                ips = $('[name=' + method + '_ips]', credential_auth).val();
+            $('.ips, .api_ips_update', credential_auth).prop('disabled', true);
             $.ajax({
                 type: "POST",
                 url: myroleapi_url,
                 cache: !1,
-                data: 'ipsUpdate=' + ips
+                data: 'ipsUpdate=' + ips + '&method=' + method,
+                dataType: "json"
             }).done(function(a) {
-                $('[name=ips]', credential_auth).val(a);
-                setTimeout(function() {
-                    $('[name=ips], .api_ips_update', credential_auth).prop('disabled', false)
-                }, 1000);
+                if ('error' == a.status) {
+                    alert(a.mess);
+                    $('.ips, .api_ips_update', credential_auth).prop('disabled', false)
+                } else if ('OK' == a.status) {
+                    $('[name=' + method + '_ips]', credential_auth).val(a.ips);
+                    setTimeout(function() {
+                        $('.ips, .api_ips_update', credential_auth).prop('disabled', false)
+                    }, 1000);
+                }
             })
         })
     };

@@ -19,55 +19,59 @@
                             <div class="modal-title"><strong>{LANG.authentication}</strong></div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label><strong>{LANG.api_credential_ident}</strong></label>
-                                <div class="input-group">
-                                    <input type="text" name="ident" id="credential_ident" value="{API_USER.ident}" class="form-control bg-white" readonly="readonly">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-default active" type="button" data-clipboard-target="#credential_ident" id="credential_ident_btn" data-title="{LANG.value_copied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="false"><i class="fa fa-copy"></i></button>
+                            <div class="m-bottom"><strong>{LANG.auth_method}</strong></div>
+                            <ul class="nav nav-tabs m-bottom" role="tablist">
+                                <!-- BEGIN: method_tab -->
+                                <li role="presentation" class="<!-- BEGIN: is_active -->active<!-- END: is_active -->"><a href="#{METHOD.key}-panel" aria-controls="{METHOD.key}-panel" role="tab" data-toggle="tab">{METHOD.name}</a></li>
+                                <!-- END: method_tab -->
+                            </ul>
+
+                            <div class="tab-content">
+                                <!-- BEGIN: method_panel -->
+                                <div role="tabpanel" class="tab-pane<!-- BEGIN: is_active --> active<!-- END: is_active -->" id="{METHOD.key}-panel">
+                                    <div class="form-group">
+                                        <label><strong>{LANG.api_credential_ident}</strong></label>
+                                        <div class="input-group">
+                                            <input type="text" name="{METHOD.key}_ident" id="{METHOD.key}-credential_ident" value="{METHOD.ident}" class="form-control bg-white" readonly="readonly">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default active" type="button" data-clipboard-target="#{METHOD.key}-credential_ident" data-toggle="clipboard" data-title="{LANG.value_copied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="false"><i class="fa fa-copy"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>{LANG.api_credential_secret}</strong></label>
+                                        <div class="input-group">
+                                            <input type="text" name="{METHOD.key}_secret" id="{METHOD.key}-credential_secret" value="" class="form-control bg-white" readonly="readonly">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default active" type="button" data-clipboard-target="#{METHOD.key}-credential_secret" data-toggle="clipboard" data-title="{LANG.value_copied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="false"><i class="fa fa-copy"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- BEGIN: isEditLevel -->
+                                    <div class="row m-bottom">
+                                        <div class="col-xs-16">
+                                            <label class="auth-info control-label mb-0">{AUTH_INFO}</label>
+                                        </div>
+                                        <div class="col-xs-8">
+                                            <button type="button" class="btn btn-primary btn-block create_authentication" data-method="{METHOD.key}">{BTN}</button>
+                                        </div>
+                                    </div>
+                                    <!-- END: isEditLevel -->
+
+                                    <div class="api_ips" <!-- BEGIN: not_access_authentication --> style="display:none"<!-- END: not_access_authentication -->>
+                                        <div class="form-group">
+                                            <label><strong>{LANG.api_ips}</strong></label>
+                                            <textarea class="form-control ips" name="{METHOD.key}_ips">{METHOD.ips}</textarea>
+                                            <div class="help-block">{LANG.api_ips_help}</div>
+                                        </div>
+                                        <!-- BEGIN: isEditLevel2 -->
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-primary api_ips_update" data-method="{METHOD.key}">{LANG.api_ips_update}</button>
+                                        </div>
+                                        <!-- END: isEditLevel2 -->
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label><strong>{LANG.api_credential_secret}</strong></label>
-                                <div class="input-group">
-                                    <input type="text" name="secret" id="credential_secret" value="" class="form-control bg-white" readonly="readonly">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-default active" type="button" data-clipboard-target="#credential_secret" id="credential_secret_btn" data-title="{LANG.value_copied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="false"><i class="fa fa-copy"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m-bottom">
-                                <label class="auth-info control-label mb-0" data-default="{AUTH_INFO}" data-error="{LANG.auth_method_select}">{AUTH_INFO}</label>
-                            </div>
-                            <div class="row m-bottom">
-                                <div class="col-xs-12">
-                                    <select class="form-control" name="method">
-                                        <option value="">{LANG.auth_method}</option>
-                                        <!-- BEGIN: method -->
-                                        <option value="{METHOD.key}"{METHOD.sel}>{METHOD.name}</option>
-                                        <!-- END: method -->
-                                    </select>
-                                </div>
-                                <div class="col-xs-12">
-                                    <button type="button" class="btn btn-primary btn-block create_authentication">
-                                        <!-- BEGIN: not_access_authentication -->{LANG.create_access_authentication}
-                                        <!-- END: not_access_authentication -->
-                                        <!-- BEGIN: created_access_authentication -->{LANG.recreate_access_authentication}
-                                        <!-- END: created_access_authentication -->
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="api_ips" <!-- BEGIN: not_access_authentication2 --> style="display:none"
-                                <!-- END: not_access_authentication2 -->>
-                                <div class="form-group">
-                                    <label><strong>{LANG.api_ips}</strong></label>
-                                    <textarea class="form-control" name="ips">{API_USER.ips}</textarea>
-                                    <div class="help-block">{LANG.api_ips_help}</div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-primary api_ips_update">{LANG.api_ips_update}</button>
-                                </div>
+                                <!-- END: method_panel -->
                             </div>
                         </div>
                     </div>

@@ -20,5 +20,5 @@ if (!defined('NV_IS_USER')) {
 
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
-$mothods = ['password_verify', 'md5_verify'];
+$methods = ['password_verify', 'md5_verify'];
 list($user_array_api_actions, $user_array_api_keys, $user_array_api_cats) = nv_get_api_actions('user');

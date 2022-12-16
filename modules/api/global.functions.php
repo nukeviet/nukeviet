@@ -264,13 +264,12 @@ function createAuth($method, $userid = 0)
     }
     $new_secret_db = $crypt->encrypt($new_secret);
 
-    if ($db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid)->fetchColumn()) {
+    if ($db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid . ' AND method=' . $db->quote($method))->fetchColumn()) {
         $sql = 'UPDATE ' . $db_config['prefix'] . '_api_user SET
             ident = :ident,
             secret = :secret,
-            method = :method,
             edittime=' . NV_CURRENTTIME . '
-            WHERE userid =' . $userid;
+            WHERE userid =' . $userid . ' AND method=:method';
     } else {
         $sql = 'INSERT INTO ' . $db_config['prefix'] . '_api_user (
             userid, ident, secret, ips, method, addtime
@@ -287,7 +286,7 @@ function createAuth($method, $userid = 0)
     return [$new_ident, $new_secret];
 }
 
-function ipsUpdate($api_ips, $userid = 0)
+function ipsUpdate($api_ips, $method, $userid = 0)
 {
     global $db, $db_config, $admin_info, $user_info;
 
@@ -298,8 +297,9 @@ function ipsUpdate($api_ips, $userid = 0)
     $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_api_user SET
     ips = :ips,
     edittime=' . NV_CURRENTTIME . '
-    WHERE userid =' . $userid);
+    WHERE userid =' . $userid . ' AND method=:method');
     $sth->bindParam(':ips', $api_ips, PDO::PARAM_STR);
+    $sth->bindParam(':method', $method, PDO::PARAM_STR);
 
     return $sth->execute();
 }
@@ -312,14 +312,19 @@ function get_api_user($userid = 0)
         $userid = defined('NV_ADMIN') ? $admin_info['admin_id'] : $user_info['userid'];
     }
 
-    $api_user = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid)->fetch();
-    if (isset($api_user['ips'])) {
-        $api_user['ips'] = json_decode($api_user['ips'], true);
-        if (json_last_error() === JSON_ERROR_NONE) {
-            $api_user['ips'] = implode(', ', $api_user['ips']);
-        } else {
-            $api_user['ips'] = '';
+    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid;
+    $result = $db->query($sql);
+    $api_user = [];
+    while ($row = $result->fetch()) {
+        if (!empty($row['ips'])) {
+            $row['ips'] = json_decode($row['ips'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $row['ips'] = implode(', ', $row['ips']);
+            } else {
+                $row['ips'] = '';
+            }
         }
+        $api_user[$row['method']] = $row;
     }
 
     return $api_user;

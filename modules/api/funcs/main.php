@@ -16,7 +16,7 @@ if (!defined('NV_IS_API_MOD')) {
 // Tạo xác thực
 if ($nv_Request->isset_request('createAuth', 'post')) {
     $method = $nv_Request->get_title('createAuth', 'post', '');
-    if (empty($method) or !in_array($method, $mothods, true)) {
+    if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $lang_module['auth_method_select']

@@ -50,6 +50,13 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
     }
 
     if ($nv_Request->isset_request('ips', 'post')) {
+        $method = $nv_Request->get_title('method', 'post', '');
+        if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true)) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['auth_method_select']
+            ]);
+        }
         $api_ips = $nv_Request->get_title('ips', 'post', '');
         $api_ips = array_map('trim', explode(',', $api_ips));
         $api_ips = array_filter($api_ips, function ($ip) {
@@ -59,8 +66,11 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         });
 
         $iplist = json_encode($api_ips);
-        ipsUpdate($iplist, $userid);
-        nv_htmlOutput(implode(', ', $api_ips));
+        ipsUpdate($iplist, $method, $userid);
+        nv_jsonOutput([
+            'status' => 'OK',
+            'ips' => implode(', ', $api_ips)
+        ]);
     }
 
     $api_user = get_api_user($userid);
@@ -69,9 +79,6 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('PAGE_URL', $page_url);
-
-    $xtpl->assign('AUTH_INFO', empty($api_user) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
-    $xtpl->assign('API_USER', $api_user);
     $xtpl->assign('USERID', $userid);
 
     $methods = [
@@ -80,20 +87,25 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         'none' => $lang_module['auth_method_none']
     ];
     foreach ($methods as $key => $name) {
-        $xtpl->assign('METHOD', [
-            'key' => $key,
-            'sel' => (!empty($api_user['method']) and $key == $api_user['method']) ? ' selected="selected"' : '',
-            'name' => $name
-        ]);
-        $xtpl->parse('changeAuth.method');
-    }
+        $method = isset($api_user[$key]) ? $api_user[$key] : [];
+        $method['key'] = $key;
+        $method['name'] = $name;
+        $xtpl->assign('METHOD', $method);
 
-    if (empty($api_user)) {
-        $xtpl->parse('changeAuth.not_access_authentication');
-        $xtpl->parse('changeAuth.not_access_authentication2');
-    } else {
-        $xtpl->assign('API_USER', $api_user);
-        $xtpl->parse('changeAuth.created_access_authentication');
+        $xtpl->assign('AUTH_INFO', empty($api_user[$key]) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
+        $xtpl->assign('BTN', empty($api_user[$key]) ? $lang_module['create_access_authentication'] : $lang_module['recreate_access_authentication']);
+
+        if ($key == 'password_verify') {
+            $xtpl->parse('changeAuth.method_tab.is_active');
+            $xtpl->parse('changeAuth.method_panel.is_active');
+        }
+
+        if (empty($api_user[$key])) {
+            $xtpl->parse('changeAuth.method_panel.not_access_authentication');
+        }
+
+        $xtpl->parse('changeAuth.method_tab');
+        $xtpl->parse('changeAuth.method_panel');
     }
 
     $xtpl->parse('changeAuth');
@@ -323,7 +335,7 @@ if ($action == 'credential') {
     } else {
         $xtpl->parse('add_credential.is_edit');
     }
-    
+
     for ($i = 0; $i < 24; ++$i) {
         $val = str_pad($i, 2, '0', STR_PAD_LEFT);
         $xtpl->assign('ADDHOUR', [
@@ -421,7 +433,7 @@ if (!empty($role_id)) {
             $credential['last_access'] = !empty($credential['last_access']) ? nv_date('d/m/Y H:i', $credential['last_access']) : '';
             $credential['addtime'] = nv_date('d/m/Y H:i', $credential['addtime']);
             $credential['endtime'] = !empty($credential['endtime']) ? nv_date('d/m/Y H:i', $credential['endtime']) : $lang_module['indefinitely'];
-            $credential['quota'] = !empty($credential['quota']) ? number_format($credential['quota'], 0,'','.') : $lang_module['no_quota'];
+            $credential['quota'] = !empty($credential['quota']) ? number_format($credential['quota'], 0, '', '.') : $lang_module['no_quota'];
             $xtpl->assign('CREDENTIAL', $credential);
 
             $sts = [$lang_module['suspended'], $lang_module['active']];
