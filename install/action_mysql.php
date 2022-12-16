@@ -66,7 +66,7 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_user (
   addtime INT(11) NOT NULL DEFAULT '0',
   edittime INT(11) NOT NULL DEFAULT '0',
   last_access INT(11) NOT NULL DEFAULT '0',
-  UNIQUE KEY userid (userid),
+  UNIQUE KEY userid_method (userid, method),
   UNIQUE KEY ident (ident),
 	UNIQUE KEY secret (secret)
 ) ENGINE=MyISAM";
