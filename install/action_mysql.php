@@ -48,13 +48,13 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_role_creden
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_role_logs (
-  id CHAR(50) NOT NULL,
+  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   role_id SMALLINT(4) NOT NULL DEFAULT '0',
   userid INT(11) NOT NULL DEFAULT '0',
   command CHAR(100) NOT NULL DEFAULT '',
   log_time INT(11) NOT NULL DEFAULT '0',
   log_ip CHAR(50) NOT NULL DEFAULT '',
-  UNIQUE KEY id (id)
+  PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_user (

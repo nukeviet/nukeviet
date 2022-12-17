@@ -357,11 +357,7 @@ $is_time_wrong = true;
 $is_quota_exhausted = true;
 foreach ($role_id as $rid) {
     if (in_array($rid, $log_period_list, true)) {
-        mt_srand(microtime(true) * 1000000);
-        $maxran = 1000000;
-        $random = mt_rand(0, $maxran);
-        $id = $random . NV_CURRENTTIME . $rid . $credential_data['userid'];
-        $values[] = '(' . $db->quote($id) . ', ' . $rid . ', ' . $credential_data['userid'] . ', ' . $db->quote($api_request['action']) . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . ')';
+        $values[] = '(' . $rid . ', ' . $credential_data['userid'] . ', ' . $db->quote($api_request['action']) . ', ' . NV_CURRENTTIME . ', ' . $db->quote($client_info['ip']) . ')';
     }
 
     if (!in_array($rid, $time_wrong, true)) {
@@ -389,7 +385,7 @@ if ($is_quota_exhausted) {
 
 if (!empty($values)) {
     $values = implode(', ', $values);
-    $db->query('INSERT IGNORE INTO ' . $db_config['prefix'] . '_api_role_logs (id, role_id, userid, command, log_time, log_ip) VALUES ' . $values);
+    $db->query('INSERT IGNORE INTO ' . $db_config['prefix'] . '_api_role_logs (role_id, userid, command, log_time, log_ip) VALUES ' . $values);
 }
 
 $role_id = implode(',', $role_id);
