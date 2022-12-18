@@ -188,7 +188,7 @@ $(function() {
         if (opobj.length) {
             op = opobj.val();
             if (op != '') {
-                $('[name=title]', obj).val(trim(strip_tags($('[name=func] option[value="' + op + '"]', obj).text())));
+                $('[name=title]', obj).val(trim(strip_tags($('[name=func] option[value="' + op + '"]', obj).data('title'))));
                 return !1
             }
         }

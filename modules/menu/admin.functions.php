@@ -144,22 +144,74 @@ function nv_menu_del_sub($id, $parentid)
  * @param int    $id
  * @param string $alias_selected
  * @param array  $array_item
- * @param string $sp_i
+ * @param array  $sps
+ * @param array  $subs
  */
-function nv_menu_get_submenu($id, $alias_selected, $array_item, $sp_i)
+function nv_menu_get_submenu($id, $alias_selected, $array_item, &$sps, &$subs)
 {
-    global $array_submenu, $sp, $mod_name;
+    global $array_submenu, $mod_name;
 
     foreach ($array_item as $item2) {
         if (isset($item2['parentid']) and $item2['parentid'] == $id) {
-            $item2['title'] = $sp_i . $item2['title'];
+            ++$subs[$item2['parentid']];
+            $sp_title = $sps[$item2['parentid']] . $subs[$item2['parentid']] . '.';
+            $sps[$item2['key']] = $sp_title;
+            $item2['name'] = $sp_title . ' ' . $item2['title'];
             $item2['module'] = $mod_name;
             $item2['selected'] = ($item2['alias'] == $alias_selected) ? ' selected="selected"' : '';
 
             $array_submenu[] = $item2;
-            nv_menu_get_submenu($item2['key'], $alias_selected, $array_item, $sp_i . $sp);
+            nv_menu_get_submenu($item2['key'], $alias_selected, $array_item, $sps, $subs);
         }
     }
+}
+
+/**
+ * nv_menu_get_subcat()
+ *
+ * @param int   $id
+ * @param array $menulist
+ * @param array $array_subcat
+ */
+function nv_menu_get_subcat($id, $menulist, &$array_subcat)
+{
+    foreach ($menulist as $row) {
+        if ($row['parentid'] == $id) {
+            $array_subcat[] = $row;
+            nv_menu_get_subcat($row['id'], $menulist, $array_subcat);
+        }
+    }
+}
+
+function nv_get_menulist($mid)
+{
+    global $db, $module_data;
+
+    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid . ' ORDER BY parentid, sort ASC';
+    $result = $db->query($sql);
+    $sps = [];
+    $subs = [];
+    $i = 0;
+    $menulist = [];
+    while ($row = $result->fetch()) {
+        $row['parentid'] = (int) $row['parentid'];
+        $sp_title = '';
+        if ($row['parentid'] > 0) {
+            !isset($subs[$row['parentid']]) && $subs[$row['parentid']] = 0;
+            ++$subs[$row['parentid']];
+            $sp_title = $sps[$row['parentid']] . $subs[$row['parentid']] . '.';
+            $sps[$row['id']] = $sp_title;
+        } else {
+            ++$i;
+            $sp_title = $i . '.';
+            $sps[$row['id']] = $sp_title;
+            $subs[$row['id']] = 0;
+        }
+        $row['name'] = $sp_title . ' ' . $row['title'];
+        $menulist[$row['id']] = $row;
+    }
+
+    return $menulist;
 }
 
 /**

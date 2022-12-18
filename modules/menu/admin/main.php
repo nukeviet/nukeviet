@@ -13,7 +13,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$sp = '&nbsp;&nbsp;&nbsp;';
 $groups_list = nv_groups_list();
 
 // Nạp lại thành phần con
@@ -311,9 +310,7 @@ if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->iss
         ]
     ];
 
-    $sp = '&nbsp;&nbsp;&nbsp;';
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid . ' ORDER BY sort';
-    $result = $db->query($sql);
+    $menulist = nv_get_menulist($mid);
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -325,19 +322,29 @@ if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->iss
     ]);
     $xtpl->parse('row.cat');
 
-    while ($row = $result->fetch()) {
-        $sp_title = '';
-        if ($row['lev'] > 0) {
-            for ($i = 1; $i <= $row['lev']; ++$i) {
-                $sp_title .= $sp;
+    foreach ($menulist as $row) {
+        if ($row['parentid'] == 0) {
+            $xtpl->assign('CAT', [
+                'key' => $row['id'],
+                'title' => $row['name'],
+                'selected' => ($parentid == $row['id']) ? ' selected="selected"' : ''
+            ]);
+            $xtpl->parse('row.cat');
+    
+            $array_subcat = [];
+            nv_menu_get_subcat($row['id'], $menulist, $array_subcat);
+            if (!empty($array_subcat)) {
+                foreach ($array_subcat as $row) {
+                    $xtpl->assign('CAT', [
+                        'key' => $row['id'],
+                        'parentid' => $row['parentid'],
+                        'title' => $row['name'],
+                        'selected' => ($parentid == $row['id']) ? ' selected="selected"' : ''
+                    ]);
+                    $xtpl->parse('row.cat');
+                }
             }
         }
-        $xtpl->assign('CAT', [
-            'key' => $row['id'],
-            'title' => $sp_title . $row['title'],
-            'selected' => ($parentid == $row['id']) ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('row.cat');
     }
     nv_htmlOutput($xtpl->text('row.cat'));
 }
@@ -375,16 +382,24 @@ if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->i
         $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
         $xtpl->assign('LANG', $lang_module);
 
+        $sps = [];
+        $subs = [];
+        $i = 0;
         foreach ($array_item as $key => $item1) {
             $parentid = (isset($item1['parentid'])) ? $item1['parentid'] : 0;
             if (empty($parentid)) {
+                ++$i;
+                $sp_title = $i . '.';
+                $subs[$key] = 0;
+                $sps[$key] = $sp_title;
+                $item1['name'] = $sp_title . ' ' . $item1['title'];
                 $item1['module'] = $mod_name;
 
                 $xtpl->assign('ITEM', $item1);
                 $xtpl->parse('row.link.item');
 
                 $array_submenu = [];
-                nv_menu_get_submenu($key, '', $array_item, $sp);
+                nv_menu_get_submenu($key, '', $array_item, $sps, $subs);
                 foreach ($array_submenu as $item2) {
                     $xtpl->assign('ITEM', $item2);
                     $xtpl->parse('row.link.item');
@@ -505,12 +520,7 @@ if (empty($pg['mid']) or empty($menublocks[$pg['mid']])) {
 }
 
 // Danh sách các menu của khối
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $pg['mid'] . ' ORDER BY sort ASC';
-$result = $db->query($sql);
-$menulist = [];
-while ($row = $result->fetch()) {
-    $menulist[$row['id']] = $row;
-}
+$menulist = nv_get_menulist($pg['mid']);
 
 // Lấy content cho modal thêm/sửa menu
 if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
@@ -560,20 +570,29 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
     $xtpl->parse('row.cat');
 
     foreach ($menulist as $row) {
-        $sp_title = '';
-        if ($row['lev'] > 0) {
-            for ($i = 1; $i <= $row['lev']; ++$i) {
-                $sp_title .= $sp;
+        if ($row['parentid'] == 0) {
+            $xtpl->assign('CAT', [
+                'key' => $row['id'],
+                'parentid' => $row['parentid'],
+                'title' => $row['name'],
+                'selected' => ($post['parentid'] == $row['id']) ? ' selected="selected"' : ''
+            ]);
+            $xtpl->parse('row.cat');
+
+            $array_subcat = [];
+            nv_menu_get_subcat($row['id'], $menulist, $array_subcat);
+            if (!empty($array_subcat)) {
+                foreach ($array_subcat as $row) {
+                    $xtpl->assign('CAT', [
+                        'key' => $row['id'],
+                        'parentid' => $row['parentid'],
+                        'title' => $row['name'],
+                        'selected' => ($post['parentid'] == $row['id']) ? ' selected="selected"' : ''
+                    ]);
+                    $xtpl->parse('row.cat');
+                }
             }
         }
-
-        $xtpl->assign('CAT', [
-            'key' => $row['id'],
-            'parentid' => $row['parentid'],
-            'title' => $sp_title . $row['title'],
-            'selected' => ($post['parentid'] == $row['id']) ? ' selected="selected"' : ''
-        ]);
-        $xtpl->parse('row.cat');
     }
 
     $list_module = [];
@@ -609,16 +628,24 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
             }
 
             if (!empty($array_item)) {
+                $sps = [];
+                $subs = [];
+                $i = 0;
                 foreach ($array_item as $key => $item) {
                     $parentid = (isset($item['parentid'])) ? $item['parentid'] : 0;
                     if (empty($parentid)) {
+                        ++$i;
+                        $sp_title = $i . '.';
+                        $sps[$key] = $sp_title;
+                        $subs[$key] = 0;
+                        $item['name'] = $sp_title . ' ' . $item['title'];
                         $item['module'] = $mod_name;
                         $item['selected'] = ($item['alias'] == $post['op']) ? ' selected="selected"' : '';
                         $xtpl->assign('ITEM', $item);
                         $xtpl->parse('row.link.item');
                         if (isset($item['parentid'])) {
                             $array_submenu = [];
-                            nv_menu_get_submenu($key, $post['op'], $array_item, $sp);
+                            nv_menu_get_submenu($key, $post['op'], $array_item, $sps, $subs);
                             foreach ($array_submenu as $item2) {
                                 $xtpl->assign('ITEM', $item2);
                                 $xtpl->parse('row.link.item');

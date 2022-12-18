@@ -180,7 +180,7 @@
                                 <select name="func" class="form-control" style="width: 100%;">
                                     <option value="">{LANG.no}</option>
                                     <!-- BEGIN: item -->
-                                    <option value="{ITEM.alias}" {ITEM.selected}>{ITEM.title}</option>
+                                    <option value="{ITEM.alias}" data-title="{ITEM.title}" {ITEM.selected}>{ITEM.name}</option>
                                     <!-- END: item -->
                                 </select>
                             </td>
