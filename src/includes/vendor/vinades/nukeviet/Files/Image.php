@@ -21,7 +21,7 @@ class Image
     public $error = '';
     public $createImage = false;
     public $create_Image_info = [];
-    public $logoimg;
+    public $logoimg = false;
     public $is_destroy = false;
     public $is_createWorkingImage = false;
 
@@ -1008,11 +1008,13 @@ class Image
      */
     public function Destroy()
     {
-        if (is_resource($this->logoimg)) {
+        if ($this->logoimg !== false) {
             @imagedestroy($this->logoimg);
+            $this->logoimg = false;
         }
-        if (is_resource($this->createImage)) {
+        if ($this->createImage !== false) {
             @imagedestroy($this->createImage);
+            $this->createImage = false;
         }
         $this->is_destroy = true;
     }
@@ -1024,11 +1026,13 @@ class Image
      */
     public function close()
     {
-        if (is_resource($this->logoimg)) {
+        if ($this->logoimg !== false) {
             @imagedestroy($this->logoimg);
+            $this->logoimg = false;
         }
-        if (is_resource($this->createImage)) {
+        if ($this->createImage !== false) {
             @imagedestroy($this->createImage);
+            $this->createImage = false;
         }
         if ($this->is_url) {
             @unlink($this->filename);

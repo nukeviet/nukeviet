@@ -176,6 +176,7 @@ class Download
         $mime = '';
 
         if ($this->func_exists('finfo_open')) {
+            $finfo = false;
             if (empty($this->magic_path)) {
                 $finfo = finfo_open(FILEINFO_MIME);
             } elseif ($this->magic_path != 'auto') {
@@ -193,7 +194,7 @@ class Download
                 }
             }
 
-            if (is_resource($finfo)) {
+            if ($finfo !== false) {
                 $mime = finfo_file($finfo, realpath($path));
                 finfo_close($finfo);
                 $mime = preg_replace('/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim($mime));
