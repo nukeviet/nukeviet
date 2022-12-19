@@ -368,6 +368,11 @@ define('NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs');
 define('NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys');
 define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
+// Lấy tổng số thông báo đẩy chưa xem
+if ($nv_Request->isset_request('__checkPush, __userid, __groups', 'post')) {
+    require NV_ROOTDIR . '/includes/core/check_push.php';
+}
+
 $sql = 'SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND (module='site' OR module='banners')) ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
 

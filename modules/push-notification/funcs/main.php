@@ -332,7 +332,7 @@ if (!empty($u_groups)) {
 }
 
 // Lấy tổng số thông báo đẩy chưa xem
-if (defined('NV_IS_AJAX') and $nv_Request->isset_request('getNew', 'post')) {
+/*if (defined('NV_IS_AJAX') and $nv_Request->isset_request('getNew', 'post')) {
     $where .= ' AND NOT EXISTS (SELECT * FROM ' . NV_PUSH_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
     $sql = 'SELECT mtb.id FROM ' . NV_PUSH_GLOBALTABLE . ' AS mtb WHERE ' . $where . ' ORDER BY mtb.id DESC';
     $result = $db->query($sql);
@@ -346,7 +346,7 @@ if (defined('NV_IS_AJAX') and $nv_Request->isset_request('getNew', 'post')) {
     nv_jsonOutput([
         'count' => 0
     ]);
-}
+}*/
 
 // Thay đổi trạng thái đã xem/chưa xem, đã ẩn/chưa ẩn
 if ($nv_Request->isset_request('setStatus', 'post')) {

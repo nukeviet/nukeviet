@@ -42,6 +42,11 @@ if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
     $push_filter_default = $nv_Request->get_title('push_filter', 'session', 'unviewed');
     !isset($filters[$push_filter_default]) && $push_filter_default = 'all';
 
+    $u_groups = array_values(array_unique(array_filter(array_map(function ($gr) {
+        return $gr >= 10 ? (int) $gr : 0;
+    }, $user_info['in_groups']))));
+    $u_groups = !empty($u_groups) ? implode(',', $u_groups) : '';
+
     $xtpl = new XTemplate('block.push.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/push-notification');
 
     $xtpl->assign('GLANG', $lang_global);
@@ -51,6 +56,8 @@ if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
     $xtpl->assign('REFRESH_TIME', $global_config['push_refresh_time']);
     $xtpl->assign('FILTER_DEFAULT', $push_filter_default);
     $xtpl->assign('PUSH_MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push-notification');
+    $xtpl->assign('USERID', $user_info['userid']);
+    $xtpl->assign('USERGROUPS', $u_groups);
 
     foreach ($filters as $key => $name) {
         $xtpl->assign('FILTER', [

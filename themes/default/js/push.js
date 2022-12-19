@@ -1,7 +1,9 @@
 var pushCheck,
     pushObj,
     pushModuleUrl,
-    refresh_time = 30000;
+    refresh_time = 30000,
+    userid = 0,
+    usergroups = '';
 
 function pushCheck_setTimeout() {
     clearTimeout(pushCheck);
@@ -15,7 +17,7 @@ function pushNotifyGetCount() {
     $.ajax({
         type: 'POST',
         url: url,
-        data: 'getNew=1',
+        data: '__checkPush=1&__userid=' + userid + '&__groups=' + usergroups,
         dataType: "json",
         success: function(data) {
             $('.new-count', pushObj).text(data.count);
@@ -69,6 +71,8 @@ $(window).on('load', function() {
         pushObj = $('#push-notification');
         refresh_time = parseInt(pushObj.data('refresh-time')) * 1000;
         pushModuleUrl = pushObj.data('url');
+        userid = pushObj.data('userid');
+        usergroups = pushObj.data('usergroups');
 
         if (typeof PerfectScrollbar != "undefined") {
             var ps = new PerfectScrollbar('#push-notification .push-content', {
