@@ -3,7 +3,8 @@ var pushCheck,
     pushModuleUrl,
     refresh_time = 30000,
     userid = 0,
-    usergroups = '';
+    usergroups = '',
+    csrf = '';
 
 function pushCheck_setTimeout() {
     clearTimeout(pushCheck);
@@ -17,7 +18,7 @@ function pushNotifyGetCount() {
     $.ajax({
         type: 'POST',
         url: url,
-        data: '__checkPush=1&__userid=' + userid + '&__groups=' + usergroups,
+        data: '__checkPush=1&__userid=' + userid + '&__groups=' + usergroups + '&_csrf=' + csrf,
         dataType: "json",
         success: function(data) {
             $('.new-count', pushObj).text(data.count);
@@ -73,6 +74,7 @@ $(window).on('load', function() {
         pushModuleUrl = pushObj.data('url');
         userid = pushObj.data('userid');
         usergroups = pushObj.data('usergroups');
+        csrf = pushObj.data('csrf');
 
         if (typeof PerfectScrollbar != "undefined") {
             var ps = new PerfectScrollbar('#push-notification .push-content', {

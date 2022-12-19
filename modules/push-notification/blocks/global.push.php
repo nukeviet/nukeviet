@@ -58,6 +58,7 @@ if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
     $xtpl->assign('PUSH_MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push-notification');
     $xtpl->assign('USERID', $user_info['userid']);
     $xtpl->assign('USERGROUPS', $u_groups);
+    $xtpl->assign('CSRF', md5($user_info['userid'] . NV_CHECK_SESSION));
 
     foreach ($filters as $key => $name) {
         $xtpl->assign('FILTER', [

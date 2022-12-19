@@ -369,7 +369,7 @@ define('NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys');
 define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
 // Lấy tổng số thông báo đẩy chưa xem
-if ($nv_Request->isset_request('__checkPush, __userid, __groups', 'post')) {
+if (defined('NV_IS_AJAX') and $nv_Request->isset_request('__checkPush, __userid, __groups, _csrf', 'post')) {
     require NV_ROOTDIR . '/includes/core/check_push.php';
 }
 

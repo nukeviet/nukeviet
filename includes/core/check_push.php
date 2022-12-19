@@ -15,7 +15,9 @@ if (!defined('NV_MAINFILE')) {
 
 $count = 0;
 $userid = $nv_Request->get_int('__userid', 'post', 0);
-if ($userid) {
+$csrf = $nv_Request->get_title('_csrf', 'post', '');
+$checkss = md5($userid . NV_CHECK_SESSION);
+if ($userid and hash_equals($checkss, $csrf)) {
     $groups = $nv_Request->get_title('__groups', 'post', '');
     $groups = preg_replace('/[^0-9\,]+/', '', $groups);
 
