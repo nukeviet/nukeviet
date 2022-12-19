@@ -2156,7 +2156,7 @@ function nv_set_authorization()
  * @param mixed  $return_type => Để trống thì dữ liệu trả về là giá trị cuối cùng. 1: Gộp array_merge. 2: Gộp array_merge_recursive
  * @return
  */
-function nv_apply_hook($module = '', $tag, $args = [], $default = null, $return_type = 0)
+function nv_apply_hook($module, $tag, $args = [], $default = null, $return_type = 0)
 {
     global $nv_hooks, $sys_mods;
     // Kiểm tra module khởi chạy tồn tại
@@ -2210,7 +2210,7 @@ function nv_apply_hook($module = '', $tag, $args = [], $default = null, $return_
  * @param string $hook_module   => Module sử dụng dữ liệu
  * @param int    $pid           => ID quản lý trong CSDL
  */
-function nv_add_hook($module_name, $tag, $priority = 10, $function_name, $hook_module = '', $pid = 0)
+function nv_add_hook($module_name, $tag, $priority = 10, $function_name = null, $hook_module = '', $pid = 0)
 {
     global $nv_hooks;
     if (!isset($nv_hooks[$module_name])) {
