@@ -114,7 +114,7 @@ class ApiResult
         if (!is_string($key)) {
             throw new Exception('Invaild Data Key');
         }
-        if (is_null($data) or is_resource($data)) {
+        if (is_null($data) or is_resource($data) or is_object($data)) {
             throw new Exception('Invaild Data Type');
         }
         $this->result[$key] = $data;
