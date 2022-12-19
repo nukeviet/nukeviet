@@ -6,9 +6,9 @@
 		"and/oauth" : "^0.7-dev",
 		"pclzip/pclzip" : "^2.8",
 		"true/punycode" : "^2.1",
-		"smarty/smarty" : "^3.1",
 		"phpmailer/phpmailer" : "^6.1",
-		"endroid/qr-code": "^3.7"
+		"endroid/qr-code": "^3.7",
+		"smarty/smarty": "^4.3"
 	},
 	"autoload" : {
 		"psr-4" : {
