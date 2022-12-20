@@ -1656,7 +1656,7 @@ class Request
     public function sessionRegenerateId($saveOldSession = false)
     {
         $saveOldSession && $old_session = $_SESSION;
-        $new_sessid = session_create_id();
+        $new_sessid = function_exists('session_create_id') ? session_create_id() : substr(bin2hex(openssl_random_pseudo_bytes(26)), 0, 26);
         $_SESSION['deleted_time'] = NV_CURRENTTIME;
         session_commit();
         ini_set('session.use_strict_mode', 0);
