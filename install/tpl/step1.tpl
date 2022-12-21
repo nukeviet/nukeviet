@@ -98,6 +98,10 @@
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
+                <h5>{LANG.thanks_other_version} 4.4.06</h5>
+                    <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (42 commits)</a>,
+                    <a target="_blank" href="https://github.com/vuthao">vuthao (1 commits)</a>
+                <br><br>
                 <h5>{LANG.thanks_other_version} 4.4.05</h5>
                     <a target="_blank" href="https://github.com/vinades">VINADES.,JSC (48 commits)</a>
                 <br><br>
