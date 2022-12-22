@@ -1,5 +1,21 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.03
+- Ckeditor 4.20.1, PHPMailer 6.7.1, Fix ckeditor 4.20.1, Jquery UI 1.13.2, Jquery 3.6.1, Chart.js v3.9.1, Jquery validate v1.19.5, DOMPurify 2.4.1
+- Fix rewrite obsolute (#3523)
+- Fix sorting topic module news (#3521), fix error in view topic (#3520)
+- Switch from RedirectMatch to RewriteRule to support OpenLiteSpeed
+- Optimally compatible with PHP 8.2
+- Change login cookie name to dynamic
+- Fix Session Fixation
+- Displays a warning that the list of APIs does not exist in Api-role
+- Add filter tags, attributes, styles, css in the editor (#3422)
+- Bug fix WAF bypass xss
+- Fix class Http
+- Module news: Add manage reading articles (#3492)
+- Fix bug can't scroll down on mobile
+- Fix rss logo size
+
 NUKEVIET 4.5.02
 - Module news: add the function to record the article status history
 - Module news: add article history feature
