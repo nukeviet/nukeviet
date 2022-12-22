@@ -96,7 +96,7 @@ function nv_create_table_sys($lang)
          template varchar(55) DEFAULT NULL,
          position varchar(55) DEFAULT NULL,
          dtime_type CHAR(50) NOT NULL DEFAULT 'regular',
-         dtime_details JSON NULL DEFAULT NULL,
+         dtime_details TEXT NULL DEFAULT NULL,
          active varchar(10) DEFAULT '1',
          act tinyint(1) unsigned NOT NULL DEFAULT '1',
          groups_view varchar(255) DEFAULT '',
