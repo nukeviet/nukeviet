@@ -1,8 +1,8 @@
 <!-- BEGIN: main -->
 <link href="{ASSETS_STATIC_URL}/js/perfect-scrollbar/style{AUTO_MINIFIED}.css" rel="stylesheet" />
-<link href="{NV_STATIC_URL}themes/{BLOCK_JS}/css/push.css" rel="stylesheet" />
+<link href="{NV_STATIC_URL}themes/{BLOCK_JS}/css/block.push.css" rel="stylesheet" />
 <script src="{ASSETS_STATIC_URL}/js/perfect-scrollbar/min.js" charset="utf-8"></script>
-<script src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/push.js"></script>
+<script src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/block.push.js"></script>
 
 <div class="push-notification dropdown" id="push-notification" data-refresh-time="{REFRESH_TIME}" data-url="{PUSH_MODULE_URL}" data-userid="{USERID}" data-usergroups="{USERGROUPS}" data-csrf="{CSRF}">
     <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

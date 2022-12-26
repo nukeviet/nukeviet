@@ -14,7 +14,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
 }
 
 $module_version = [
-    'name' => 'push-notification',
+    'name' => 'push',
     'modfuncs' => 'main',
     'is_sysmod' => 1,
     'virtual' => 0,

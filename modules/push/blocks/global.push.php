@@ -18,17 +18,17 @@ global $global_config, $user_info, $lang_global, $blockID, $nv_Request;
 $content = '';
 
 if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/push-notification/block.push.tpl')) {
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/push/block.push.tpl')) {
         $block_theme = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/push-notification/block.push.tpl')) {
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/push/block.push.tpl')) {
         $block_theme = $global_config['site_theme'];
     } else {
         $block_theme = 'default';
     }
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/push.js')) {
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/block.push.js')) {
         $block_js = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/push.js')) {
+    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/block.push.js')) {
         $block_js = $global_config['site_theme'];
     } else {
         $block_js = 'default';
@@ -47,7 +47,7 @@ if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
     }, $user_info['in_groups']))));
     $u_groups = !empty($u_groups) ? implode(',', $u_groups) : '';
 
-    $xtpl = new XTemplate('block.push.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/push-notification');
+    $xtpl = new XTemplate('block.push.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/push');
 
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('BLOCKID', $blockID);
@@ -55,7 +55,7 @@ if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
     $xtpl->assign('BLOCK_JS', $block_js);
     $xtpl->assign('REFRESH_TIME', $global_config['push_refresh_time']);
     $xtpl->assign('FILTER_DEFAULT', $push_filter_default);
-    $xtpl->assign('PUSH_MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push-notification');
+    $xtpl->assign('PUSH_MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push');
     $xtpl->assign('USERID', $user_info['userid']);
     $xtpl->assign('USERGROUPS', $u_groups);
     $xtpl->assign('CSRF', md5($user_info['userid'] . NV_CHECK_SESSION));

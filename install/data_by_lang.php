@@ -215,9 +215,9 @@ $installMods['api'] = [
     ]
 ];
 
-$installMods['push-notification'] = [
-    'custom_title' => $install_lang['modules']['push_notification'],
-    'admin_title' => $install_lang['modules']['push_notification_for_acp'],
+$installMods['push'] = [
+    'custom_title' => $install_lang['modules']['push'],
+    'admin_title' => $install_lang['modules']['push_for_acp'],
     'main_file' => 1,
     'admin_file' => 1,
     'groups_view' => '4',
@@ -739,9 +739,9 @@ $blockGroups = [
         ],
         'PERSONALAREA' => [
             [
-                'module' => 'push-notification',
+                'module' => 'push',
                 'file_name' => 'global.push.php',
-                'title' => $install_lang['blocks_groups']['push-notification']['global.push'],
+                'title' => $install_lang['blocks_groups']['push']['global.push'],
                 'template' => 'no_title',
                 'active' => '1',
                 'groups_view' => '6',
@@ -842,9 +842,9 @@ $blockGroups = [
                 'config' => 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}'
             ],
             [
-                'module' => 'push-notification',
+                'module' => 'push',
                 'file_name' => 'global.push.php',
-                'title' => $install_lang['blocks_groups']['push-notification']['global.push'],
+                'title' => $install_lang['blocks_groups']['push']['global.push'],
                 'template' => 'no_title',
                 'active' => '1',
                 'groups_view' => '6',

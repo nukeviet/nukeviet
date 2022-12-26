@@ -1,0 +1,288 @@
+/* push-notification */
+.push-open {
+    overflow: hidden;
+    padding-right: 17px;
+}
+
+.push-notification {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.push-notification a.dropdown-toggle {
+    display: block;
+    position: relative;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    background-color: transparent;
+    color: #dcdcdc;
+}
+
+.push-notification a.dropdown-toggle:hover,
+.push-notification.open a.dropdown-toggle {
+    color: #fff;
+}
+
+.push-notification a.dropdown-toggle .fa {
+    font-size: 24px;
+    line-height: 34px;
+}
+
+.push-notification .new-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff0040;
+    min-width: 10px;
+    padding: 3px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.push-notification .push-box {
+    position: fixed;
+    top: 0;
+    margin: 0;
+    right: 0;
+    left: auto;
+    background: #fff;
+    border: 0;
+    color: #555;
+    width: 360px;
+    padding: 0;
+    z-index: 1001;
+}
+
+.push-notification .btn-close {
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    border-radius: 50%;
+    -webkit-appearance: none;
+    float: right;
+    color: #000;
+    opacity: 0.2;
+    outline-width: 0;
+    outline-style: none;
+}
+
+.push-notification .filter-box .btn {
+    color: #666;
+    background-color: #fff;
+    border-color: #ccc;
+    font-weight: 700;
+}
+
+.push-notification .btn-close:hover,
+.push-notification .btn-close:active,
+.push-notification .filter-box .btn:active,
+.push-notification .filter-box .btn.active {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #2f74b1;
+}
+
+.push-notification .push-header,
+.push-notification .push-footer {
+    padding: 10px;
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.push-notification .push-header {
+    border-bottom: 1px solid #ccc;
+}
+
+.push-notification .push-footer {
+    border-top: 1px solid #ccc;
+}
+
+.push-notification .push-footer {
+    text-align: center;
+}
+
+.push-notification .push-footer a {
+    color: #666;
+    font-weight: 700;
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.push-notification .push-footer a:hover {
+    color: #555;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.push-notification .push-footer a + a {
+    margin-left: 15px;
+}
+
+.push-notification .push-content {
+    position: relative;
+    color: #555;
+    background-color: #fff;
+    max-height: calc(100vh - 150px);
+    min-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.push-notification .push-content a,
+.push-notification .push-content a:link,
+.push-notification .push-content a:active,
+.push-notification .push-content a:visited {
+    color: #1a3f5e;
+}
+
+.push-notification .push-content a:hover,
+.push-notification .push-content a:focus {
+    text-decoration: none;
+    color: #0e2132;
+}
+
+.push-notification ul {
+    margin-bottom: 0;
+}
+
+.push-notification .item {
+    position: relative;
+    display: block;
+    padding: 15px 18px;
+    background-color: #fff;
+}
+
+.push-notification .item + .item {
+    border-top: 1px solid #eee;
+}
+
+.push-notification .more {
+    white-space: nowrap;
+}
+
+.push-notification .more u {
+    cursor: pointer;
+}
+
+.push-notification .avatar {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin-right: 5px;
+    margin-top: -4px;
+    background-color: #428bca;
+    color: #fff;
+    font-size: 26px;
+    line-height: 1;
+    padding: 12px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.push-notification .item .title {
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.push-notification .item .message {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.push-notification .item .message::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.push-notification .details {
+    margin-top: 10px;
+}
+
+.push-notification .details a {
+    display: inline-block;
+    margin-left: 5px;
+    white-space: nowrap;
+    font-size: 85%;
+    line-height: 1;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.push-notification .item .foot {
+    font-size: 12px;
+    color: #8f8f8f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.push-notification .item .foot button {
+    text-align: center;
+    background-color: transparent;
+    color: #8f8f8f;
+    border-color: #ececec;
+    height: 28px;
+    width: 28px;
+    line-height: 1;
+    padding: 0;
+    text-align: center;
+    border-radius: 50%;
+    outline-width: 0;
+    outline-style: none;
+}
+
+.push-notification .item .foot button:hover {
+    background-color: #f5f5f5;
+}
+
+.push-notification .item .foot button + button {
+    margin-left: 8px;
+}
+
+.push-notification .viewed-0:not(.hidden-1) .btn-viewed,
+.push-notification .details a,
+.push-notification .item:not(.favorite-0):not(.hidden-1) .btn-favorite {
+    background-color: #666 !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+.push-notification .notify-empty {
+    padding: 15px;
+    color: #666;
+    text-align: center;
+}
+
+@media (max-width: 374.98px) {
+    .push-notification .push-box {
+        width: calc(100vw - 15px);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .push-open {
+        padding-right: 0;
+    }
+}

@@ -616,7 +616,7 @@ if (!empty($global_config['push_active']) and sizeof($array_op) == 3 and $array_
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('GROUP_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id);
-    $xtpl->assign('PUSH_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push-notification&amp;manager=' . $group_id . '&amp;filter=active');
+    $xtpl->assign('PUSH_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push&amp;manager=' . $group_id . '&amp;filter=active');
     $xtpl->assign('GTITLE', $groupsList[$group_id]['title']);
 
     $xtpl->parse('push_notifications');
