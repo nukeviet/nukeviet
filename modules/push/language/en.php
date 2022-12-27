@@ -64,3 +64,5 @@ $lang_module['after_30_days'] = 'After 30 days';
 $lang_module['to_be_removed'] = 'To be removed on';
 $lang_module['delete_confirm'] = 'Do you really want to delete?';
 $lang_module['views'] = 'Views';
+$lang_module['notification_not_exist'] = 'Notification does not exist';
+$lang_module['unknown_new_status'] = 'Unknown new status';

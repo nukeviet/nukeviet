@@ -79,3 +79,5 @@ $lang_module['push_max_characters'] = 'Số ký tự của thông báo đẩy r�
 $lang_module['push_numrows'] = 'Số lượng thông báo đẩy tối đa cho mỗi lần hiển thị';
 $lang_module['field_required'] = 'Trường này là bắt buộc';
 $lang_module['views'] = 'Xem';
+$lang_module['unspecified_action'] = 'Hành động chưa được xác định';
+$lang_module['api_error_hash'] = 'Mã kiểm tra không hợp lệ';

@@ -68,3 +68,5 @@ $lang_module['after_30_days'] = 'Через 30 дней';
 $lang_module['to_be_removed'] = 'Будет удалено';
 $lang_module['delete_confirm'] = 'Вы действительно хотите удалить?';
 $lang_module['views'] = 'Просмотры';
+$lang_module['notification_not_exist'] = 'Уведомление не существует';
+$lang_module['unknown_new_status'] = 'Неизвестный новый статус';

@@ -80,3 +80,5 @@ $lang_module['push_max_characters'] = 'Nombre de caractères de notification pus
 $lang_module['push_numrows'] = 'Nombre maximum de notifications push par impression';
 $lang_module['field_required'] = 'Ce champ est requis';
 $lang_module['views'] = 'Vues';
+$lang_module['unspecified_action'] = 'Action non spécifiée';
+$lang_module['api_error_hash'] = 'Code de hachage invalide';

@@ -79,3 +79,5 @@ $lang_module['push_max_characters'] = 'Number of characters of shortened push-no
 $lang_module['push_numrows'] = 'Maximum number of push-notifications per impression';
 $lang_module['field_required'] = 'This field is required';
 $lang_module['views'] = 'Views';
+$lang_module['unspecified_action'] = 'Unspecified action';
+$lang_module['api_error_hash'] = 'Invalid hash code';

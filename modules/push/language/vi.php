@@ -68,3 +68,5 @@ $lang_module['after_30_days'] = 'Sau 30 ngày';
 $lang_module['to_be_removed'] = 'Sẽ xóa vào';
 $lang_module['delete_confirm'] = 'Bạn thực sự muốn xóa?';
 $lang_module['views'] = 'Xem';
+$lang_module['notification_not_exist'] = 'Thông báo không tồn tại';
+$lang_module['unknown_new_status'] = 'Trạng thái mới chưa được xác định';
