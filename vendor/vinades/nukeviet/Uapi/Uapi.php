@@ -24,6 +24,7 @@ class Uapi
 {
     private static $user_id = 0;
     private static $user_username = '';
+    private static $user_groups = [];
 
     private static $module_name = '';
     private static $module_info = [];
@@ -71,6 +72,16 @@ class Uapi
     }
 
     /**
+     * setUserGroups()
+     * 
+     * @param array $groups 
+     */
+    public static function setUserGroups($groups)
+    {
+        self::$user_groups = $groups;
+    }
+
+    /**
      * setModuleName()
      *
      * @param string $name
@@ -108,6 +119,16 @@ class Uapi
     public static function getUserName()
     {
         return self::$user_username;
+    }
+
+    /**
+     * getUserGroups()
+     * 
+     * @return array 
+     */
+    public static function getUserGroups()
+    {
+        return self::$user_groups;
     }
 
     /**

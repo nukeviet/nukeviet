@@ -47,7 +47,7 @@ if ($api_credential['timestamp'] + 5 < NV_CURRENTTIME or $api_credential['timest
 // Kiểm tra thông tin xác thực
 $db->sqlreset()->from($db_config['prefix'] . '_api_user tb1');
 $db->join('LEFT JOIN ' . NV_AUTHORS_GLOBALTABLE . ' tb2 ON tb1.userid=tb2.admin_id INNER JOIN ' . NV_USERS_GLOBALTABLE . ' tb3 ON tb1.userid=tb3.userid');
-$db->select('tb1.userid, tb1.secret, tb1.ips, tb1.method, IFNULL(tb2.lev, -1) AS lev, IFNULL(tb2.is_suspend, -1) AS is_suspend, tb3.username');
+$db->select('tb1.userid, tb1.secret, tb1.ips, tb1.method, IFNULL(tb2.lev, -1) AS lev, IFNULL(tb2.is_suspend, -1) AS is_suspend, tb3.username, tb3.in_groups');
 $db->where('tb1.ident=:ident AND tb3.active=1');
 
 try {
@@ -300,6 +300,8 @@ if ($adminLev) {
     // Thông tin User
     Uapi::setUserId($credential_data['userid']);
     Uapi::setUserName($credential_data['username']);
+    $check_in_groups = nv_user_groups($credential_data['in_groups'], true);
+    Uapi::setUserGroups($check_in_groups[0]);
 
     if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php')) {
         require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
