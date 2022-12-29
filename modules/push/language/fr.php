@@ -70,3 +70,7 @@ $lang_module['delete_confirm'] = 'Voulez-vous vraiment supprimer?';
 $lang_module['views'] = 'Vues';
 $lang_module['notification_not_exist'] = 'La notification n\'existe pas';
 $lang_module['unknown_new_status'] = 'Nouveau statut inconnu';
+$lang_module['group_not_defined'] = 'Groupe non défini';
+$lang_module['not_group_manager'] = 'Vous n\'êtes pas le responsable du groupe';
+$lang_module['unspecified_action'] = 'Action non spécifiée';
+$lang_module['api_error_hash'] = 'Code de hachage invalide';

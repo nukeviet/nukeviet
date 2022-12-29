@@ -66,3 +66,7 @@ $lang_module['delete_confirm'] = 'Do you really want to delete?';
 $lang_module['views'] = 'Views';
 $lang_module['notification_not_exist'] = 'Notification does not exist';
 $lang_module['unknown_new_status'] = 'Unknown new status';
+$lang_module['group_not_defined'] = 'Group not defined';
+$lang_module['not_group_manager'] = 'You are not the group manager';
+$lang_module['unspecified_action'] = 'Unspecified action';
+$lang_module['api_error_hash'] = 'Invalid hash code';

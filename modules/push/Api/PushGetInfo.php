@@ -83,14 +83,20 @@ class PushGetInfo implements IApi
         $postdata['id'] = $nv_Request->get_int('id', 'post', 0);
         // Nếu thông báo đẩy chưa được xác định
         if (empty($postdata['id'])) {
-            return $this->result->setCode('5003')->setMessage($lang_module['notification_not_exist'])->getResult();
+            return $this->result->setError()
+                ->setCode('5003')
+                ->setMessage($lang_module['notification_not_exist'])
+                ->getResult();
         }
 
         $where[] = '(mtb.id = ' . $postdata['id'] . ')';
         $sql = 'SELECT * FROM ' . NV_PUSH_GLOBALTABLE . ' AS mtb WHERE ' . implode(' AND ', $where);
         $data = $db->query($sql)->fetch();
         if (empty($data)) {
-            return $this->result->setCode('5004')->setMessage($lang_module['notification_not_exist'])->getResult();
+            return $this->result->setError()
+                ->setCode('5004')
+                ->setMessage($lang_module['notification_not_exist'])
+                ->getResult();
         }
 
         $this->result->set('info', $data);

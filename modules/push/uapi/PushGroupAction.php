@@ -9,38 +9,30 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-namespace NukeViet\Module\push\Api;
+namespace NukeViet\Module\push\uapi;
 
-use NukeViet\Api\Api;
-use NukeViet\Api\ApiResult;
-use NukeViet\Api\IApi;
+use NukeViet\Uapi\Uapi;
+use NukeViet\Uapi\UapiResult;
+use NukeViet\Uapi\UiApi;
 use PDO;
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
 /**
- * NukeViet\Module\push\Api\PushAction
- * API dùng để thêm/sửa/xóa thông báo đẩy
+ * NukeViet\Module\push\uapi\PushGroupAction
+ * API dùng để thêm/sửa/xóa thông báo đẩy dành cho trưởng nhóm
  *
- * @package NukeViet\Module\push\Api
+ * @package NukeViet\Module\push\uapi
  * @author VINADES.,JSC <contact@vinades.vn>
  * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
  * @version 4.6.00
  * @access public
  */
-class PushAction implements IApi
+class PushGroupAction implements UiApi
 {
     private $result;
-
-    /**
-     * @return number
-     */
-    public static function getAdminLev()
-    {
-        return Api::ADMIN_LEV_MOD;
-    }
 
     /**
      * @return string
@@ -51,30 +43,53 @@ class PushAction implements IApi
     }
 
     /**
-     * {@inheritdoc}
-     * @see \NukeViet\Api\IApi::setResultHander()
+     * setResultHander()
+     *
+     * @return mixed
      */
-    public function setResultHander(ApiResult $result)
+    public function setResultHander(UapiResult $result)
     {
         $this->result = $result;
     }
 
     /**
-     * {@inheritdoc}
-     * @see \NukeViet\Api\IApi::execute()
+     * execute()
+     *
+     * @return mixed
      */
     public function execute()
     {
         global $db, $nv_Request, $lang_module;
 
-        $module_name = Api::getModuleName();
-        $module_info = Api::getModuleInfo();
+        $module_name = Uapi::getModuleName();
+        $module_info = Uapi::getModuleInfo();
         $module_data = $module_info['module_data'];
         $module_file = $module_info['module_file'];
-        $admin_id = Api::getAdminId();
-        $admin_lev = Api::getAdminLev();
+        $user_id = Uapi::getUserId();
+        $user_groups = Uapi::getUserGroups();
+        $u_groups = array_values(array_unique(array_filter(array_map(function ($gr) {
+            return $gr >= 10 ? (int) $gr : 0;
+        }, $user_groups))));
 
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
+        include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
+
+        $group_id = $nv_Request->get_int('group_id', 'post', 0);
+        if (empty($group_id) or !in_array($group_id, $u_groups, true)) {
+            return $this->result->setError()
+                ->setCode('5014')
+                ->setMessage($lang_module['group_not_defined'])
+                ->getResult();
+        }
+
+        $count = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_groups_users WHERE group_id=' . $group_id . ' AND is_leader=1 AND userid=' . $user_id)->fetchColumn();
+        if (!$count) {
+            return $this->result->setError()
+                ->setCode('5015')
+                ->setMessage($lang_module['not_group_manager'])
+                ->getResult();
+        }
+
+        $where = "(mtb.sender_role='group' AND mtb.sender_group=" . $group_id . ')';
 
         $postdata = [];
         if ($nv_Request->isset_request('action', 'post')) {
@@ -82,21 +97,6 @@ class PushAction implements IApi
         }
         if ($nv_Request->isset_request('id', 'post')) {
             $postdata['id'] = $nv_Request->get_int('id', 'post', 0);
-        }
-        if ($nv_Request->isset_request('sender_role', 'post')) {
-            $postdata['sender_role'] = $nv_Request->get_title('sender_role', 'post', '');
-        }
-        if ($nv_Request->isset_request('sender_group', 'post')) {
-            $postdata['sender_group'] = $nv_Request->get_int('sender_group', 'post', 0);
-        }
-        if ($nv_Request->isset_request('sender_admin', 'post')) {
-            $postdata['sender_admin'] = $nv_Request->get_int('sender_admin', 'post', 0);
-        }
-        if ($nv_Request->isset_request('receiver_type', 'post')) {
-            $postdata['receiver_type'] = $nv_Request->get_title('receiver_type', 'post', '');
-        }
-        if ($nv_Request->isset_request('receiver_grs', 'post')) {
-            $postdata['receiver_grs'] = $nv_Request->get_typed_array('receiver_grs', 'post', 'int', []);
         }
         if ($nv_Request->isset_request('receiver_ids', 'post')) {
             $postdata['receiver_ids'] = $nv_Request->get_typed_array('receiver_ids', 'post', 'int', []);
@@ -126,11 +126,6 @@ class PushAction implements IApi
             $postdata['exp_min'] = $nv_Request->get_int('exp_min', 'post', -1);
         }
 
-        if ($admin_lev > Api::ADMIN_LEV_SP) {
-            $postdata['sender_role'] = 'admin';
-            $postdata['sender_admin'] = $admin_id;
-        }
-
         // Không có dữ liệu
         if (empty($postdata)) {
             return $this->result->setError()
@@ -138,18 +133,12 @@ class PushAction implements IApi
                 ->setMessage('No data')
                 ->getResult();
         }
-
         // Nếu không xác định được hành động
         if (!in_array($postdata['action'], ['add', 'edit', 'delete'], true)) {
             return $this->result->setError()
                 ->setCode('5002')
                 ->setMessage($lang_module['unspecified_action'])
                 ->getResult();
-        }
-
-        $where = [];
-        if ($admin_lev > Api::ADMIN_LEV_SP) {
-            $where[] = '(mtb.sender_admin=' . $admin_id . ')';
         }
 
         if ($postdata['action'] == 'edit' or $postdata['action'] == 'delete') {
@@ -161,8 +150,8 @@ class PushAction implements IApi
                     ->getResult();
             }
 
-            $where[] = '(mtb.id = ' . $postdata['id'] . ')';
-            $exist = $db->query('SELECT COUNT(*) FROM ' . NV_PUSH_GLOBALTABLE . ' AS mtb WHERE ' . implode(' AND ', $where) . ' LIMIT 1')->fetchColumn();
+            $where .= ' AND (mtb.id=' . $postdata['id'] . ')';
+            $exist = $db->query('SELECT COUNT(*) FROM ' . NV_PUSH_GLOBALTABLE . ' AS mtb WHERE ' . $where . ' LIMIT 1')->fetchColumn();
             // Nếu thông báo đẩy không tồn tại
             if (empty($exist)) {
                 return $this->result->setError()
@@ -193,44 +182,6 @@ class PushAction implements IApi
         }
         // Nếu là thêm/sửa thông báo
         elseif ($postdata['action'] == 'add' or $postdata['action'] == 'edit') {
-            !in_array($postdata['sender_role'], ['system', 'group', 'admin'], true) && $postdata['sender_role'] = 'system';
-            if ($postdata['sender_role'] == 'system') {
-                $postdata['sender_group'] = 0;
-                $postdata['sender_admin'] = 0;
-            } elseif ($postdata['sender_role'] == 'group') {
-                $postdata['sender_admin'] = 0;
-                $postdata['receiver_type'] = 'ids';
-            } elseif ($postdata['sender_role'] == 'admin') {
-                $postdata['sender_group'] = 0;
-            }
-            !in_array($postdata['receiver_type'], ['grs', 'ids'], true) && $postdata['receiver_type'] = 'ids';
-            if ($postdata['receiver_type'] == 'ids') {
-                $postdata['receiver_grs'] = [];
-            } elseif ($postdata['receiver_type'] == 'grs') {
-                $postdata['receiver_ids'] = [];
-            }
-
-            // Nếu gửi từ nhóm mà không xác định được nhóm
-            if ($postdata['sender_role'] == 'group' and empty($postdata['sender_group'])) {
-                return $this->result->setError()
-                    ->setCode('5006')
-                    ->setMessage($lang_module['please_select_group'])
-                    ->getResult();
-            }
-            // Nếu gửi từ admin mà không xác định được ID của admin
-            if ($postdata['sender_role'] == 'admin' and empty($postdata['sender_admin'])) {
-                return $this->result->setError()
-                    ->setCode('5007')
-                    ->setMessage($lang_module['please_select_admin'])
-                    ->getResult();
-            }
-            // Nếu đối tượng nhận tin nhắn là nhóm mà không xác định được ID của nhóm
-            if ($postdata['receiver_type'] == 'grs' and empty($postdata['receiver_grs'])) {
-                return $this->result->setError()
-                    ->setCode('5008')
-                    ->setMessage($lang_module['please_select_receiver_group'])
-                    ->getResult();
-            }
             // Nếu nội dung của thông báo đẩy chưa được xác định
             if (nv_strlen($postdata['message']) < 3) {
                 return $this->result->setError()
@@ -245,7 +196,6 @@ class PushAction implements IApi
                     ->setMessage($lang_module['please_enter_valid_link'])
                     ->getResult();
             }
-
             $add_time_array = [];
             // Nếu thời gian bắt đầu của thông báo đẩy không hợp lệ
             if (!preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['add_time'], $add_time_array)) {
@@ -263,8 +213,6 @@ class PushAction implements IApi
                     ->getResult();
             }
 
-            empty($postdata['sender_admin']) && $postdata['sender_admin'] = $admin_id;
-            $postdata['receiver_grs'] = !empty($postdata['receiver_grs']) ? implode(',', $postdata['receiver_grs']) : '';
             $postdata['receiver_ids'] = !empty($postdata['receiver_ids']) ? implode(',', $postdata['receiver_ids']) : '';
             $postdata['message'] = nv_nl2br($postdata['message'], '<br/>');
             if (!empty($postdata['link']) and !preg_match('#^https?\:\/\/#', $postdata['link'])) {
@@ -278,22 +226,17 @@ class PushAction implements IApi
             } else {
                 $postdata['exp_time'] = 0;
             }
-
-            if (!empty($postdata['id'])) {
+            if ($postdata['action'] == 'edit') {
                 $sth = $db->prepare('UPDATE ' . NV_PUSH_GLOBALTABLE . ' SET 
-                receiver_grs = :receiver_grs, receiver_ids = :receiver_ids, sender_role = :sender_role, 
-                sender_group = ' . $postdata['sender_group'] . ', sender_admin = ' . $postdata['sender_admin'] . ',
-                message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
+                receiver_ids = :receiver_ids, message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
                 WHERE id = ' . $postdata['id']);
             } else {
-                $sth = $db->prepare('INSERT INTO ' . NV_PUSH_GLOBALTABLE . ' 
-                (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
-                (:receiver_grs, :receiver_ids, :sender_role, ' . $postdata['sender_group'] . ', ' . $postdata['sender_admin'] . ', :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
+                $sth = $db->prepare('INSERT INTO ' . NV_PUSH_GLOBALTABLE . " 
+                (receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
+                (:receiver_ids, 'group', " . $group_id . ', 0, :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
             }
 
-            $sth->bindValue(':receiver_grs', $postdata['receiver_grs'], PDO::PARAM_STR);
             $sth->bindValue(':receiver_ids', $postdata['receiver_ids'], PDO::PARAM_STR);
-            $sth->bindValue(':sender_role', $postdata['sender_role'], PDO::PARAM_STR);
             $sth->bindValue(':message', $postdata['message'], PDO::PARAM_STR);
             $sth->bindValue(':link', $postdata['link'], PDO::PARAM_STR);
             $sth->execute();

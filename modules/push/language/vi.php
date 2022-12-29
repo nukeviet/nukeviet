@@ -70,3 +70,7 @@ $lang_module['delete_confirm'] = 'Bạn thực sự muốn xóa?';
 $lang_module['views'] = 'Xem';
 $lang_module['notification_not_exist'] = 'Thông báo không tồn tại';
 $lang_module['unknown_new_status'] = 'Trạng thái mới chưa được xác định';
+$lang_module['group_not_defined'] = 'Nhóm chưa được xác định';
+$lang_module['not_group_manager'] = 'Bạn không phải là người quản lý nhóm';
+$lang_module['unspecified_action'] = 'Hành động chưa được xác định';
+$lang_module['api_error_hash'] = 'Mã kiểm tra không hợp lệ';

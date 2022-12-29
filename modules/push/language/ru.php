@@ -70,3 +70,7 @@ $lang_module['delete_confirm'] = 'Вы действительно хотите �
 $lang_module['views'] = 'Просмотры';
 $lang_module['notification_not_exist'] = 'Уведомление не существует';
 $lang_module['unknown_new_status'] = 'Неизвестный новый статус';
+$lang_module['group_not_defined'] = 'Группа не определена';
+$lang_module['not_group_manager'] = 'Вы не администратор группы';
+$lang_module['unspecified_action'] = 'Неуказанное действие';
+$lang_module['api_error_hash'] = 'Неверный хэш-код';

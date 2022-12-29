@@ -76,7 +76,10 @@ class PushAction implements UiApi
         $status = $nv_Request->get_title('setStatus', 'post', '');
 
         if (empty($id)) {
-            return $this->result->setCode('5003')->setMessage($lang_module['notification_not_exist'])->getResult();
+            return $this->result->setError()
+                ->setCode('5003')
+                ->setMessage($lang_module['notification_not_exist'])
+                ->getResult();
         }
 
         $where = [];
@@ -103,11 +106,17 @@ class PushAction implements UiApi
         $result = $db->query($db->sql());
         $row = $result->fetch();
         if (empty($row['id'])) {
-            return $this->result->setCode('5003')->setMessage($lang_module['notification_not_exist'])->getResult();
+            return $this->result->setError()
+                ->setCode('5003')
+                ->setMessage($lang_module['notification_not_exist'])
+                ->getResult();
         }
 
         if (!in_array($status, ['viewed', 'unviewed', 'favorite', 'unfavorite', 'hidden', 'unhidden'], true)) {
-            return $this->result->setCode('5012')->setMessage($lang_module['unknown_new_status'])->getResult();
+            return $this->result->setError()
+                ->setCode('5013')
+                ->setMessage($lang_module['unknown_new_status'])
+                ->getResult();
         }
 
         switch ($status) {
