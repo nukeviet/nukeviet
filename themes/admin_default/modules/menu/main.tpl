@@ -31,10 +31,9 @@
                 <tr>
                     <th class="text-center text-nowrap" style="width:1%"><input class="form-control" name="check_all[]" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" type="checkbox"></th>
                     <th class="text-center text-nowrap" style="width:1%">{LANG.number}</th>
-                    <th class="text-center text-nowrap" style="width:1%">{LANG.id}</th>
+                    <th class="text-center text-nowrap" style="width:1%" colspan="2">{LANG.sub_menu}</th>
                     <th class="text-center text-nowrap">{LANG.title}</th>
                     <th class="text-center text-nowrap" style="width:1%">{LANG.groups_view}</th>
-                    <th class="text-center text-nowrap" style="width:1%" colspan="2">{LANG.sub_menu}</th>
                     <th class="text-center text-nowrap" style="width:1%">{LANG.display}</th>
                     <th class="text-center text-nowrap" style="width:1%">{LANG.action}</th>
                 </tr>
@@ -42,7 +41,7 @@
             <tfoot>
                 <tr>
                     <td class="text-center text-nowrap" style="width:1%;padding-top:14px"><input class="form-control" name="check_all[]" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" type="checkbox"></td>
-                    <td colspan="8">
+                    <td colspan="7">
                         <button type="button" data-error="{LANG.msgnocheck}" class="btn btn-default multi-delete">{LANG.multi_delete}</button>
                     </td>
                 </tr>
@@ -58,7 +57,10 @@
                             <!-- END: weight -->
                         </select>
                     </td>
-                    <td class="text-right" style="width:1%;padding-top:14px">{ROW.id}</td>
+                    <td style="width:1%;padding-top:14px">{ROW.sub}</td>
+                    <td style="width:1%">
+                        <a href="{ROW.url_title}" class="btn btn-default"><i class="fa fa-chevron-down"></i></a>
+                    </td>
                     <td style="padding-top:14px">
                         <!-- BEGIN: icon -->
                         <img src="{ROW.icon}" height="20px" />
@@ -75,10 +77,6 @@
                             <li class="text-nowrap">- {GROUP}</li>
                             <!-- END: group -->
                             </u>
-                    </td>
-                    <td style="width:1%;padding-top:14px">{ROW.sub}</td>
-                    <td style="width:1%">
-                        <a href="{ROW.url_title}" class="btn btn-default"><i class="fa fa-chevron-down"></i></a>
                     </td>
                     <td class="text-center" style="width:1%;padding-top:14px">
                         <input class="form-control change-active" type="checkbox" id="change_active_{ROW.id}" {ROW.active} />
