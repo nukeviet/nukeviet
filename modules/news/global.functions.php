@@ -614,6 +614,7 @@ function nv_save_history($post_old, $post_new)
         'allowed_send',
         'allowed_print',
         'allowed_save',
+        'auto_nav',
     ];
     $key_textlist = [
         'listcatid',
@@ -670,7 +671,7 @@ function nv_save_history($post_old, $post_new)
             allowed_rating, external_link, instant_active, instant_template,
             instant_creatauto, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
             files, tags, internal_authors, imgposition, layout_func, copyright,
-            allowed_send, allowed_print, allowed_save, changed_fields
+            allowed_send, allowed_print, allowed_save, auto_nav, changed_fields
         ) VALUES (
             :new_id, :historytime, :catid, :listcatid, :topicid, :admin_id,
             :author, :sourceid, :publtime, :exptime, :archive, :title, :alias,
@@ -678,7 +679,7 @@ function nv_save_history($post_old, $post_new)
             :allowed_rating, :external_link, :instant_active, :instant_template,
             :instant_creatauto, :titlesite, :description, :bodyhtml, :voicedata, :keywords, :sourcetext,
             :files, :tags, :internal_authors, :imgposition, :layout_func,
-            :copyright, :allowed_send, :allowed_print, :allowed_save, :changed_fields
+            :copyright, :allowed_send, :allowed_print, :allowed_save, :auto_nav, :changed_fields
         )";
         $array_insert = [];
         $array_insert['new_id'] = $post_old['id'];
@@ -719,6 +720,7 @@ function nv_save_history($post_old, $post_new)
         $array_insert['allowed_send'] = $post_old['allowed_send'];
         $array_insert['allowed_print'] = $post_old['allowed_print'];
         $array_insert['allowed_save'] = $post_old['allowed_save'];
+        $array_insert['auto_nav'] = $post_old['auto_nav'];
         $array_insert['changed_fields'] = implode(',', $change_fields);
         $db->insert_id($sql, 'id', $array_insert);
     }

@@ -196,6 +196,7 @@ $rowcontent = [
     'allowed_send' => 1,
     'allowed_print' => 1,
     'allowed_save' => 1,
+    'auto_nav' => 0,
     'hitstotal' => 0,
     'hitscm' => 0,
     'total_rating' => 0,
@@ -651,6 +652,9 @@ if ($is_submit_form) {
     // Lua chon Layout
     $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
 
+    // Tự động tạo mục lục
+    $rowcontent['auto_nav'] = (int) $nv_Request->get_bool('auto_nav', 'post', false);
+
     $rowcontent['titlesite'] = $nv_Request->get_title('titlesite', 'post', '');
     $rowcontent['description'] = $nv_Request->get_title('description', 'post', '');
     $rowcontent['bodyhtml'] = $nv_Request->get_editor('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
@@ -889,7 +893,7 @@ if ($is_submit_form) {
                 $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (
                     id, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
                     files, imgposition, layout_func, copyright,
-                    allowed_send, allowed_print, allowed_save
+                    allowed_send, allowed_print, allowed_save, auto_nav
                 ) VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
@@ -904,7 +908,8 @@ if ($is_submit_form) {
                     ' . $rowcontent['copyright'] . ',
                     ' . $rowcontent['allowed_send'] . ',
                     ' . $rowcontent['allowed_print'] . ',
-                    ' . $rowcontent['allowed_save'] . '
+                    ' . $rowcontent['allowed_save'] . ',
+                    ' . $rowcontent['auto_nav'] . '
                 )');
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
@@ -929,7 +934,7 @@ if ($is_submit_form) {
                 unset($ct_query);
                 if ($module_config[$module_name]['elas_use'] == 1) {
                     /* connect to elasticsearch */
-                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
                     $rowcontent = array_merge($rowcontent, $body_contents);
 
                     $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
@@ -1028,7 +1033,8 @@ if ($is_submit_form) {
                     copyright=' . (int) ($rowcontent['copyright']) . ',
                     allowed_send=' . (int) ($rowcontent['allowed_send']) . ',
                     allowed_print=' . (int) ($rowcontent['allowed_print']) . ',
-                    allowed_save=' . (int) ($rowcontent['allowed_save']) . '
+                    allowed_save=' . (int) ($rowcontent['allowed_save']) . ',
+                    auto_nav=' . (int) ($rowcontent['auto_nav']) . '
                 WHERE id =' . $rowcontent['id']);
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
@@ -1070,7 +1076,7 @@ if ($is_submit_form) {
 
                 // Cập nhật bên ES
                 if ($module_config[$module_name]['elas_use'] == 1) {
-                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
                     $rowcontent = array_merge($rowcontent, $body_contents);
 
                     $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
@@ -1559,7 +1565,7 @@ if (!empty($rowcontent['internal_authors'])) {
     }
 }
 
-// Hiển thị thông báo nếu tự động tạo mục lục bài viết
+// Cấu hình tạo mục lục bài viết
 if ($module_config[$module_name]['auto_nav']) {
     $xtpl->parse('main.if_auto_nav');
 }
@@ -1581,6 +1587,7 @@ $xtpl->assign('allowed_save_checked', $allowed_save_checked);
 $instant_active_checked = ($rowcontent['instant_active']) ? ' checked="checked"' : '';
 $xtpl->assign('instant_active_checked', $instant_active_checked);
 $xtpl->assign('instant_creatauto_checked', empty($rowcontent['instant_creatauto']) ? '' : ' checked="checked"');
+$xtpl->assign('AUTO_NAV', $rowcontent['auto_nav'] ? ' checked="checked"' : '');
 
 $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);

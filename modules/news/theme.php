@@ -859,6 +859,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
         $xtpl->parse('main.showhometext');
     }
 
+    // Mục lục bài viết
     if (!empty($news_contents['navigation'])) {
         foreach ($news_contents['navigation'] as $item) {
             $xtpl->assign('NAVIGATION', $item['item']);

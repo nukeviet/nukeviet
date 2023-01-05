@@ -104,12 +104,15 @@
                     </tr>
                     <tr>
                         <td colspan="2"><strong>{LANG.content_bodytext}</strong><sup class="required {rowcontent.style_content_bodytext_required}" id="content_bodytext_required">(∗)</sup><i>{LANG.content_bodytext_note}</i>
-                            <!-- BEGIN: if_auto_nav -->
-                            <p>{LANG.auto_nav_note}</p>
-                            <!-- END: if_auto_nav -->
                             <div style="padding:2px; background:#CCCCCC; margin:0; display:block; position:relative">
                                 {edit_bodytext}
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>{LANG.auto_nav}</strong></td>
+                        <td>
+                            <input type="checkbox" value="1" name="auto_nav"{AUTO_NAV}/> {LANG.auto_nav_note}
                         </td>
                     </tr>
                     <tr>

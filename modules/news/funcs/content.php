@@ -272,7 +272,8 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
             'copyright' => 0,
             'allowed_send' => 1,
             'allowed_print' => 1,
-            'allowed_save' => 1
+            'allowed_save' => 1,
+            'auto_nav' => 0
         ];
 
         if (!$post_level['addcontent']) {
@@ -464,7 +465,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
                         $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $contentid);
                     }
 
-                    $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (id, titlesite, description, bodyhtml, sourcetext, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save) VALUES (
+                    $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (id, titlesite, description, bodyhtml, sourcetext, imgposition, layout_func, copyright, allowed_send, allowed_print, allowed_save, auto_nav) VALUES (
                             ' . $contentid . ',
                             ' . $db->quote($rowcontent['titlesite']) . ',
                             ' . $db->quote($rowcontent['description']) . ',
@@ -475,7 +476,8 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
                             ' . (int) ($rowcontent['copyright']) . ',
                             ' . (int) ($rowcontent['allowed_send']) . ',
                             ' . (int) ($rowcontent['allowed_print']) . ',
-                            ' . (int) ($rowcontent['allowed_save']) . '
+                            ' . (int) ($rowcontent['allowed_save']) . ',
+                            ' . (int) ($rowcontent['auto_nav']) . '
                         )');
 
                     if (defined('NV_IS_USER')) {

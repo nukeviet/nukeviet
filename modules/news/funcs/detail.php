@@ -30,7 +30,7 @@ if (empty($news_contents)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect, 404);
 }
 
-$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
 $news_contents = array_merge($news_contents, $body_contents);
 unset($body_contents);
 
@@ -482,15 +482,14 @@ if (!empty($voicedata)) {
 $news_contents['autoplay'] = (int) $nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false);
 
 // Tạo mục lục cho bài viết dựa theo h2 và h3
-$news_contents['navigation'] = '';
-if (!empty($news_contents['bodyhtml'])) {
+$news_contents['navigation'] = [];
+if (!empty($news_contents['auto_nav']) and !empty($news_contents['bodyhtml'])) {
     $bodyhtml = '<?xml encoding="UTF-8">' . $news_contents['bodyhtml'];
     libxml_use_internal_errors(true);
     $dom = new DOMDocument();
     $dom->loadHTML($bodyhtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     $xpath = new DOMXPath($dom);
     $idname = 'art-menu-';
-    $news_contents['navigation'] = [];
     $i = 0;
     $y = 0;
     foreach ($xpath->query('//h2 | //h3') as $node) {

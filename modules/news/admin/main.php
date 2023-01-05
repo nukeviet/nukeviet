@@ -1118,6 +1118,7 @@ if ($loadhistory) {
         'allowed_send' => $lang_module['content_allowed_send'],
         'allowed_print' => $lang_module['content_allowed_print'],
         'allowed_save' => $lang_module['content_allowed_save'],
+        'auto_nav' => $lang_module['auto_nav'],
         'listcatid' => $lang_module['search_cat'],
         'keywords' => $lang_module['keywords'],
         'tags' => $lang_module['tag'],
