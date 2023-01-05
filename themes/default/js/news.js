@@ -182,6 +182,20 @@ $(window).on("resize", function() {
 });
 
 $(document).ready(function() {
+    // Mục lục bài viết
+    $('a[data-scroll-to]').on('click', function(e) {
+        e.preventDefault;
+        var id = $(this).data('scroll-to');
+        $("html, body").animate({
+            scrollTop: $('[data-id=' + id + ']').offset().top
+        }, 800);
+    });
+    $('h2[data-id], h3[data-id]').on('click', function() {
+        $("html, body").animate({
+            scrollTop: $('#navigation').offset().top
+        }, 800);
+    });
+
     // Xem file đính kèm
     $('[data-toggle="collapsefile"]').each(function() {
         $('#' + $(this).attr('id')).on('show.bs.collapse', function() {

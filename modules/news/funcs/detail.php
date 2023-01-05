@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -227,7 +227,7 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
 
 if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {
     $alert = sprintf($lang_module['status_alert'], $lang_module['status_' . $news_contents['status']]);
-    $my_footer .= "<script" . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">alert('" . $alert . "')</script>";
+    $my_footer .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">alert('" . $alert . "')</script>";
     $news_contents['allowed_send'] = 0;
     $module_config[$module_name]['socialbutton'] = 0;
 }
@@ -480,6 +480,43 @@ if (!empty($voicedata)) {
     unset($voicedata, $current_voice);
 }
 $news_contents['autoplay'] = (int) $nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false);
+
+// Tạo mục lục cho bài viết dựa theo h2 và h3
+$news_contents['navigation'] = '';
+if (!empty($news_contents['bodyhtml'])) {
+    $bodyhtml = '<?xml encoding="UTF-8">' . $news_contents['bodyhtml'];
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHTML($bodyhtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $xpath = new DOMXPath($dom);
+    $idname = 'art-menu-';
+    $news_contents['navigation'] = [];
+    $i = 0;
+    $y = 0;
+    foreach ($xpath->query('//h2 | //h3') as $node) {
+        if (!empty($node->textContent)) {
+            if ($node->tagName == 'h2') {
+                ++$y;
+                ++$i;
+                $attrid = $idname . $i;
+                $node->setAttribute('data-id', $attrid);
+                $news_contents['navigation'][$y]['item'] = [$node->textContent, $attrid];
+            } elseif ($y) {
+                ++$i;
+                $attrid = $idname . $i;
+                $node->setAttribute('data-id', $attrid);
+                !isset($news_contents['navigation'][$y]['subitems']) && $news_contents['navigation'][$y]['subitems'] = [];
+                $news_contents['navigation'][$y]['subitems'][] = [$node->textContent, $attrid];
+            }
+        }
+    }
+    if ($i) {
+        $dom->formatOutput = true;
+        $news_contents['bodyhtml'] = $dom->saveHTML();
+        $news_contents['bodyhtml'] = html_entity_decode($news_contents['bodyhtml']);
+        $news_contents['bodyhtml'] = preg_replace('/\<\?xml([^\>]*)\>/', '', $news_contents['bodyhtml']);
+    }
+}
 
 $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
 

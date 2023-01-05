@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -194,3 +194,4 @@ $lang_module['proposal_text'] = 'Đoạn văn bản đề xuất thay thế';
 $lang_module['post_email'] = 'Email của bạn';
 $lang_module['post_email_note'] = 'Chúng tôi sẽ kiểm tra nội dung báo cáo lỗi của bạn. Vui lòng cung cấp email của bạn để chúng tôi có thể thông báo cho bạn khi có kết quả kiểm tra.';
 $lang_module['post_email_error'] = 'Vui lòng để trống hoặc khai báo email hợp lệ';
+$lang_module['table_of_contents'] = 'Mục lục';

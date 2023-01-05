@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -450,3 +450,5 @@ $lang_module['change_weight'] = 'Thay đổi thứ tự';
 $lang_module['new_weight'] = 'Thứ tự mới';
 $lang_module['type_new_weight'] = 'Nhập thứ tự mới trong khoảng từ 1 đến';
 $lang_module['total'] = 'Tất cả';
+$lang_module['auto_nav'] = 'Tự động tạo mục lục bài viết';
+$lang_module['auto_nav_note'] = 'Để có thể tự động tạo mục lục bài viết, bạn cần sử dụng các html-tags <code>h2</code> và <code>h3</code>. Tag <code>h2</code> sẽ được chọn là mục chính, tag <code>h3</code> cần nằm trong tag <code>h2</code> và sẽ được chọn là mục con. Không đánh số thứ tự cho các mục này. Hệ thống sẽ tự động đánh số cho chúng.';

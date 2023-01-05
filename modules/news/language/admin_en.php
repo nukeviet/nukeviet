@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -450,3 +450,5 @@ $lang_module['change_weight'] = 'Change weight';
 $lang_module['new_weight'] = 'New weight';
 $lang_module['type_new_weight'] = 'Enter new weight from 1 to';
 $lang_module['total'] = 'Total';
+$lang_module['auto_nav'] = 'Automatically generate article table of contents';
+$lang_module['auto_nav_note'] = 'To create an article table of contents, you need to use <code>h2</code> and <code>h3</code> html-tags. The <code>h2</code> tag is the main item, the <code>h3</code> tag is in the <code>h2</code> tag and is a sub-item';

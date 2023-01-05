@@ -93,6 +93,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>{LANG.auto_nav}</th>
+                    <td><input type="checkbox" value="1" name="auto_nav"{AUTO_NAV}/></td>
+                </tr>
+                <tr>
                     <th>{LANG.content_allowed_rating}</th>
                     <td><input type="checkbox" value="1" name="allowed_rating"{ALLOWED_RATING}/></td>
                 </tr>

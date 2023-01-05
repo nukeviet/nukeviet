@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -858,6 +858,22 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
         $xtpl->parse('main.showhometext');
     }
+
+    if (!empty($news_contents['navigation'])) {
+        foreach ($news_contents['navigation'] as $item) {
+            $xtpl->assign('NAVIGATION', $item['item']);
+            if (!empty($item['subitems'])) {
+                foreach ($item['subitems'] as $subitem) {
+                    $xtpl->assign('SUBNAVIGATION', $subitem);
+                    $xtpl->parse('main.navigation.navigation_item.sub_navigation.sub_navigation_item');
+                }
+                $xtpl->parse('main.navigation.navigation_item.sub_navigation');
+            }
+            $xtpl->parse('main.navigation.navigation_item');
+        }
+        $xtpl->parse('main.navigation');
+    }
+
     if (!empty($news_contents['post_name'])) {
         $xtpl->parse('main.post_name');
     }
@@ -1038,10 +1054,10 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
 /**
  * theme_report()
- * 
- * @param mixed $newsid 
- * @param mixed $newscheckss 
- * @return string 
+ *
+ * @param mixed $newsid
+ * @param mixed $newscheckss
+ * @return string
  */
 function theme_report($newsid, $newscheckss)
 {

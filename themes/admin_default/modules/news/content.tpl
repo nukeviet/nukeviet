@@ -104,7 +104,9 @@
                     </tr>
                     <tr>
                         <td colspan="2"><strong>{LANG.content_bodytext}</strong><sup class="required {rowcontent.style_content_bodytext_required}" id="content_bodytext_required">(∗)</sup><i>{LANG.content_bodytext_note}</i>
-                            <br>
+                            <!-- BEGIN: if_auto_nav -->
+                            <p>{LANG.auto_nav_note}</p>
+                            <!-- END: if_auto_nav -->
                             <div style="padding:2px; background:#CCCCCC; margin:0; display:block; position:relative">
                                 {edit_bodytext}
                             </div>

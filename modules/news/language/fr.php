@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -191,3 +191,4 @@ $lang_module['proposal_text'] = 'Autre texte de proposition';
 $lang_module['post_email'] = 'Votre email';
 $lang_module['post_email_note'] = 'Nous vérifierons le contenu de votre rapport de bogue. Veuillez fournir votre e-mail afin que nous puissions vous informer lorsque les résultats du test seront disponibles.';
 $lang_module['post_email_error'] = 'Veuillez le laisser vide ou entrer un email valide';
+$lang_module['table_of_contents'] = 'Table des matières';

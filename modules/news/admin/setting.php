@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -67,6 +67,7 @@ if (!empty($savesetting)) {
     $array_config['order_articles'] = $nv_Request->get_int('order_articles', 'post', 0);
     $array_config['identify_cat_change'] = $nv_Request->get_int('identify_cat_change', 'post', 0);
     $array_config['active_history'] = (int) $nv_Request->get_bool('active_history', 'post', false);
+    $array_config['auto_nav'] = (int) $nv_Request->get_bool('auto_nav', 'post', false);
 
     $array_config['elas_use'] = $nv_Request->get_int('elas_use', 'post', 0);
     $array_config['elas_host'] = $nv_Request->get_title('elas_host', 'post', '');
@@ -236,6 +237,7 @@ $xtpl->assign('INSTANT_ARTICLES_ACTIVE', $module_config[$module_name]['instant_a
 $xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant_articles_httpauth'] ? ' checked="checked"' : '');
 $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
 $xtpl->assign('IDENTIFY_CAT_CHANGE', $module_config[$module_name]['identify_cat_change'] ? ' checked="checked"' : '');
+$xtpl->assign('AUTO_NAV', !empty($module_config[$module_name]['auto_nav']) ? ' checked="checked"' : '');
 $xtpl->assign('ALLOWED_RATING', $module_config[$module_name]['allowed_rating'] ? ' checked="checked"' : '');
 $xtpl->assign('ACTIVE_HISTORY', !empty($module_config[$module_name]['active_history']) ? ' checked="checked"' : '');
 $xtpl->assign('ALLOWED_REPORT', $module_config[$module_name]['report_active'] ? ' checked="checked"' : '');

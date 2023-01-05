@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -316,7 +316,7 @@ if ($rowcontent['id'] == 0) {
     // Lấy và đè lại thông tin sẽ khôi phục
     $restore_data = [];
     if ($restore_id) {
-        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories WHERE new_id=" . $rowcontent['id'] . " AND id=" . $restore_id;
+        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id=' . $rowcontent['id'] . ' AND id=' . $restore_id;
         $restore_data = $db->query($sql)->fetch();
         if (empty($restore_data) or $restore_hash !== md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
             nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
@@ -1090,7 +1090,7 @@ if ($is_submit_form) {
                     $change_field = nv_save_history($old_rowcontent, $rowcontent);
                     if (empty($change_field)) {
                         // Trường hợp ấn sửa mà không thay đổi gì thì không cập nhật edittime mới lên
-                        $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET edittime=" . $old_rowcontent['edittime'] . " WHERE id=" . $rowcontent['id'];
+                        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET edittime=' . $old_rowcontent['edittime'] . ' WHERE id=' . $rowcontent['id'];
                         $db->query($sql);
                     }
                 }
@@ -1557,6 +1557,11 @@ if (!empty($rowcontent['internal_authors'])) {
         $xtpl->assign('INTERNAL_AUTHORS', $internal_authors_list[$_aid]);
         $xtpl->parse('main.internal_authors');
     }
+}
+
+// Hiển thị thông báo nếu tự động tạo mục lục bài viết
+if ($module_config[$module_name]['auto_nav']) {
+    $xtpl->parse('main.if_auto_nav');
 }
 
 $archive_checked = ($rowcontent['archive']) ? ' checked="checked"' : '';

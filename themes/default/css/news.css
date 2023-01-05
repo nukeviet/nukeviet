@@ -510,6 +510,52 @@ label:hover ~ .rating:not(.disabled) input:checked ~ label {
     transform: translateX(22px);
 }
 
+.navigation-cont {
+    position: relative;
+    background-color: #f5f5f5;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.navigation-cont .navigation-head {
+    padding: 6px 10px;
+    background-color: #d4d4d4;
+    border-bottom: 1px solid #ccc;
+}
+
+.navigation-cont .navigation-body {
+    padding: 10px;
+}
+
+ol.navigation {
+    list-style-type: upper-roman;
+    padding-left:10px;
+    margin-left:10px;
+}
+
+ol.sub-navigation {
+    list-style-type: decimal;
+    padding-left:20px;
+    margin-top: 7px;
+}
+
+ol.navigation a {
+    font-size: 14px;
+    outline: none;
+}
+
+ol.navigation > li > a {
+    font-weight: 600;
+}
+
+ol.navigation li:not(:last-child) {
+    margin-bottom: 7px;
+}
+
+h2[data-id], h3[data-id] {
+    cursor: pointer;
+}
+
 /* Responsive news */
 
 @media (max-width: 499.98px) {

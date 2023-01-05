@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -450,3 +450,5 @@ $lang_module['change_weight'] = 'Changer de poids';
 $lang_module['new_weight'] = 'Nouveau poids';
 $lang_module['type_new_weight'] = 'Entrez un nouveau poids de 1 à';
 $lang_module['total'] = 'Totale';
+$lang_module['auto_nav'] = 'Générer automatiquement la table des matières des articles';
+$lang_module['auto_nav_note'] = 'Pour créer une table des matières d\'article, vous devez utiliser les balises html <code>h2</code> et <code>h3</code>. La balise <code>h2</code> est l\'élément principal, la balise <code>h3</code> est dans la balise <code>h2</code> et est un sous-élément';

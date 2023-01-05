@@ -118,6 +118,31 @@
             <!-- END: imgfull -->
         </div>
         <!-- END: showhometext -->
+        <!-- BEGIN: navigation -->
+        <div id="navigation" class="navigation-cont">
+            <div class="navigation-head">
+                <em class="fa fa-list-ol"></em> {LANG.table_of_contents}
+            </div>
+            <div class="navigation-body">
+                <ol class="navigation">
+                    <!-- BEGIN: navigation_item -->
+                    <li>
+                        <a href="#" data-scroll-to="{NAVIGATION.1}">{NAVIGATION.0}</a>
+                        <!-- BEGIN: sub_navigation -->
+                        <ol class="sub-navigation">
+                            <!-- BEGIN: sub_navigation_item -->
+                            <li>
+                                <a href="#" data-scroll-to="{SUBNAVIGATION.1}">{SUBNAVIGATION.0}</a>
+                            </li>
+                            <!-- END: sub_navigation_item -->
+                        </ol>
+                        <!-- END: sub_navigation -->
+                    </li>
+                    <!-- END: navigation_item -->
+                </ol>
+            </div>
+        </div>
+        <!-- END: navigation -->
         <div id="news-bodyhtml" class="bodytext margin-bottom-lg">
             {DETAIL.bodyhtml}
         </div>
