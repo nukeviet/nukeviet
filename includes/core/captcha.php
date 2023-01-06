@@ -58,5 +58,5 @@ header('Cache-Control:');
 header('Pragma:');
 header('Set-Cookie:');
 imagejpeg($image, null, 80);
-imagedestroy($image);
+version_compare(PHP_VERSION, '8.0.0', '<') && imagedestroy($image);
 die();

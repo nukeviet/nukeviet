@@ -37,5 +37,5 @@ imagettftext($image, $font_size, 0, $x_value1, $y_value1, $text_color1, $font, $
 imagettftext($image, $font_size, 0, $x_value2, $y_value2, $text_color2, $font, $hits);
 Header('Content-type: image/png');
 imagepng($image);
-ImageDestroy($image);
+version_compare(PHP_VERSION, '8.0.0', '<') && ImageDestroy($image);
 die();

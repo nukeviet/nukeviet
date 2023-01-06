@@ -100,5 +100,5 @@ while ($cron_row = $cron_result->fetch()) {
 $image = imagecreate(1, 1);
 Header('Content-type: image/jpg');
 imagejpeg($image, null, 80);
-imagedestroy($image);
+version_compare(PHP_VERSION, '8.0.0', '<') && imagedestroy($image);
 die();

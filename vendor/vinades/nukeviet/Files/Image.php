@@ -1026,11 +1026,13 @@ class Image
      */
     public function Destroy()
     {
-        if ($this->logoimg !== false) {
-            @ImageDestroy($this->logoimg);
-        }
-        if ($this->createImage !== false) {
-            @ImageDestroy($this->createImage);
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            if (is_resource($this->logoimg)) {
+                @ImageDestroy($this->logoimg);
+            }
+            if (is_resource($this->createImage)) {
+                @ImageDestroy($this->createImage);
+            }
         }
         $this->is_destroy = true;
     }
@@ -1042,11 +1044,13 @@ class Image
      */
     public function close()
     {
-        if ($this->logoimg !== false) {
-            @ImageDestroy($this->logoimg);
-        }
-        if ($this->createImage !== false) {
-            @ImageDestroy($this->createImage);
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            if (is_resource($this->logoimg)) {
+                @ImageDestroy($this->logoimg);
+            }
+            if (is_resource($this->createImage)) {
+                @ImageDestroy($this->createImage);
+            }
         }
         if ($this->is_url) {
             @unlink($this->filename);
