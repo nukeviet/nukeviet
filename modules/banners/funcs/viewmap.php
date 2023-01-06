@@ -95,6 +95,6 @@ if (defined('NV_IS_BANNER_CLIENT')) {
         imagecolordeallocate($my_img, $line_colour);
         imagecolordeallocate($my_img, $text_colour);
         imagecolordeallocate($my_img, $background);
-        imagedestroy($my_img);
+        version_compare(PHP_VERSION, '8.0.0', '<') && imagedestroy($my_img);
     }
 }
