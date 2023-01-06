@@ -1077,8 +1077,12 @@ class Image
     private function Destroy()
     {
         if (version_compare(PHP_VERSION, '8.0.0', '<')) {
-            @imagedestroy($this->logoimg);
-            @imagedestroy($this->createImage);
+            if (is_resource($this->logoimg)) {
+                @imagedestroy($this->logoimg);
+            }
+            if (is_resource($this->createImage)) {
+                @imagedestroy($this->createImage);
+            }
         }
 
         $this->is_destroy = true;
