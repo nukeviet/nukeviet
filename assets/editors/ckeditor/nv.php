@@ -106,6 +106,8 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
     $replaces[] = "height:'" . $height . "'";
     $replaces[] = "contentsCss:'" . NV_STATIC_URL . NV_EDITORSDIR . '/ckeditor/nv.css?t=' . $global_config['timestamp'] . "'";
     if (defined('NV_IS_ADMIN')) {
+        $replaces[] = 'clipboard_handleImages: false';
+
         if (empty($path) and empty($currentpath)) {
             $path = NV_UPLOADS_DIR;
             $currentpath = NV_UPLOADS_DIR;
