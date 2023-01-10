@@ -258,7 +258,7 @@
                     <!-- BEGIN: api -->
                     <tr class="item">
                         <td style="width: 1%;"><input type="checkbox" class="form-control checkitem" name="api_{API_CONTENT.input_key}[]" id="api_{API.cmd}" value="{API.cmd}" {API.checked} /></td>
-                        <td><label for="api_{API.cmd}" class="pointer mb-0">{API.name}</label></td>
+                        <td><label for="api_{API.cmd}" class="pointer mb-0">{API.cmd} - {API.name}</label></td>
                     </tr>
                     <!-- END: api -->
                 </tbody>
