@@ -94,7 +94,8 @@ class Http
             'method' => 'GET',
             'timeout' => 10,
             'redirection' => 5,
-            'requested' => 0,  // Number requested if redirection
+            'requested' => 0,
+            // Number requested if redirection
             'httpversion' => 1.0,
             'user-agent' => 'NUKEVIET CMS ' . Http::$site_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5(Http::$site_config['sitekey']),
             'referer' => null,
@@ -204,7 +205,7 @@ class Http
 
         if ((!is_null($args['body']) and '' != $args['body']) or $args['method'] == 'POST' or $args['method'] == 'PUT') {
             if (is_array($args['body']) or is_object($args['body'])) {
-                $args['body'] = http_build_query($args['body'], null, '&');
+                $args['body'] = http_build_query($args['body'], '', '&');
 
                 if (!isset($args['headers']['Content-Type'])) {
                     $args['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=' . Http::$site_config['site_charset'];
@@ -299,18 +300,41 @@ class Http
         $message = '';
 
         switch ($code) {
-            case 1: $message = 'A valid URL was not provided.'; break;
-            case 2: $message = 'User has blocked requests through HTTP.'; break;
-            case 3: $message = 'Destination directory for file streaming does not exist or is not writable.'; break;
-            case 4: $message = 'There are no HTTP transports available which can complete the requested request.'; break;
-            case 5: $message = 'Too many redirects.'; break;
-            case 6: $message = 'The SSL certificate for the host could not be verified.'; break;
-            case 7: $message = 'HTTP request failed.'; break;
-            case 8: $message = 'Could not open stream file.'; break;
-            case 9: $message = 'Failed to write request to temporary file.'; break;
-            case 10: $message = 'Could not open handle for fopen() to streamfile.'; break;
-            case 11: $message = 'HTTP Curl request failed.'; break;
-            default: $message = 'There are some unknow errors had been occurred.';
+            case 1:
+                $message = 'A valid URL was not provided.';
+                break;
+            case 2:
+                $message = 'User has blocked requests through HTTP.';
+                break;
+            case 3:
+                $message = 'Destination directory for file streaming does not exist or is not writable.';
+                break;
+            case 4:
+                $message = 'There are no HTTP transports available which can complete the requested request.';
+                break;
+            case 5:
+                $message = 'Too many redirects.';
+                break;
+            case 6:
+                $message = 'The SSL certificate for the host could not be verified.';
+                break;
+            case 7:
+                $message = 'HTTP request failed.';
+                break;
+            case 8:
+                $message = 'Could not open stream file.';
+                break;
+            case 9:
+                $message = 'Failed to write request to temporary file.';
+                break;
+            case 10:
+                $message = 'Could not open handle for fopen() to streamfile.';
+                break;
+            case 11:
+                $message = 'HTTP Curl request failed.';
+                break;
+            default:
+                $message = 'There are some unknow errors had been occurred.';
         }
 
         self::$error['code'] = $code;
@@ -591,7 +615,7 @@ class Http
 
         // If a redirection has taken place, The headers for each page request may have been passed.
         // In this case, determine the final HTTP header and parse from there.
-        for ($i = sizeof($headers) - 1; $i >= 0; --$i ) {
+        for ($i = sizeof($headers) - 1; $i >= 0; --$i) {
             if (!empty($headers[$i]) and strpos($headers[$i], ':') === false) {
                 $headers = array_splice($headers, $i);
                 break;
