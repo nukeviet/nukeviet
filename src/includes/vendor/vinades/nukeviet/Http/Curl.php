@@ -95,23 +95,21 @@ class Curl
         // No Proxy setting so proxy be omitted
         // cURL offers really easy proxy support.
         $proxy = new Http_proxy();
-
         if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
         {
-            curl_setopt( $handle, CURLOPT_PROXYTYPE, CURLPROXY_HTTP );
-            curl_setopt( $handle, CURLOPT_PROXY, $proxy->host() );
-            curl_setopt( $handle, CURLOPT_PROXYPORT, $proxy->port() );
-
-            if( $proxy->use_authentication() )
-            {
-                curl_setopt( $handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY );
-                curl_setopt( $handle, CURLOPT_PROXYUSERPWD, $proxy->authentication() );
-            }
+        curl_setopt( $handle, CURLOPT_PROXYTYPE, CURLPROXY_HTTP );
+        curl_setopt( $handle, CURLOPT_PROXY, $proxy->host() );
+        curl_setopt( $handle, CURLOPT_PROXYPORT, $proxy->port() );
+        if( $proxy->use_authentication() )
+        {
+        curl_setopt( $handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY );
+        curl_setopt( $handle, CURLOPT_PROXYUSERPWD, $proxy->authentication() );
         }
-         */
+        }
+        */
 
-        $is_local = isset($args['local']) and $args['local'];
-        $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
+        $is_local = (isset($args['local']) and $args['local']);
+        $ssl_verify = (isset($args['sslverify']) and $args['sslverify']);
 
         // CURLOPT_TIMEOUT and CURLOPT_CONNECTTIMEOUT expect integers. Have to use ceil since
         // a value of 0 will allow an unlimited timeout.
@@ -240,7 +238,7 @@ class Curl
 
         // If an error occured, or, no response
         if ($curl_error or (strlen($theBody) == 0 and empty($theHeaders['headers']))) {
-            if (CURLE_WRITE_ERROR /* 23 */ == $curl_error and $args['stream']) {
+            if (CURLE_WRITE_ERROR /* 23 */== $curl_error and $args['stream']) {
                 fclose($this->stream_handle);
 
                 Http::set_error(9);
@@ -342,11 +340,11 @@ class Curl
             return false;
         }
 
-        $is_ssl = isset($args['ssl']) and $args['ssl'];
+        $is_ssl = (isset($args['ssl']) and $args['ssl']);
 
         if ($is_ssl) {
             $curl_version = curl_version();
-            if (!(CURL_VERSION_SSL & $curl_version['features'])) {
+            if (!(CURL_VERSION_SSL && $curl_version['features'])) {
                 // Does this cURL version support SSL requests?
                 return false;
             }
