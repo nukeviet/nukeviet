@@ -928,14 +928,19 @@ $(document).ready(function() {
         }
     });
 
+    // Tạo mật khẩu
+    $('[data-toggle=genpass]').on('click', function(e) {
+        e.preventDefault();
+        var field1 = $($(this).data('field1')),
+            field2 = $($(this).data('field2'));
+        $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
+            field1.val(res);
+            field2.val(res);
+        })
+    });
+
     if ($('#user_details').length) {
         var user_details = $('#user_details');
-        $('.genpass', user_details).on('click', function() {
-            $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
-                $("[name=password]", user_details).val(res);
-                $("[name=re_password]", user_details).val(res);
-            })
-        });
         $('.question', user_details).on('click', function(e) {
             e.preventDefault();
             $(this).parents('.item').find('[name=question]').val($(this).text())

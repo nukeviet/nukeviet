@@ -95,7 +95,7 @@
                                 <div class="input-group">
                                     <input class="form-control password" style="height: 32.5px;" type="text" id="password1" name="password" value="" maxlength="{NV_UPASSMAX}" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default genpass" type="button" title="{LANG.random_password}"><i class="fa fa-retweet"></i></button>
+                                        <button class="btn btn-default" type="button" title="{LANG.random_password}" data-toggle="genpass" data-field1="#password1" data-field2="#password2"><i class="fa fa-retweet"></i></button>
                                     </span>
                                 </div>
                                 <div class="help-block mb-0">{LANG.leave_blank_note}</div>

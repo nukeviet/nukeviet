@@ -6,12 +6,12 @@
 <link type="text/css" href="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<form role="form" action="{FORM_ACTION}" method="post" class="form-inline" onsubmit="return user_validForm(this);">
+<form role="form" action="{FORM_ACTION}" method="post" onsubmit="return user_validForm(this);">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <colgroup>
-                <col class="w300"/>
-                <col class="w20"/>
+                <col class="w300" />
+                <col class="w20" />
                 <col />
             </colgroup>
             <tbody>
@@ -28,15 +28,23 @@
                 <!-- BEGIN: name_show_0 -->
                 <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
                     <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" /></td>
                 </tr>
                 <!-- END: show_last_name -->
                 <!-- BEGIN: show_first_name -->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
                     <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" /></td>
                 </tr>
                 <!-- END: show_first_name -->
@@ -44,55 +52,88 @@
                 <!-- BEGIN: name_show_1 -->
                 <!-- BEGIN: show_first_name -->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
                     <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" /></td>
                 </tr>
                 <!-- END: show_first_name -->
                 <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
                     <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" /></td>
                 </tr>
-                 <!-- END: show_last_name -->
+                <!-- END: show_last_name -->
                 <!-- END: name_show_1 -->
                 <!-- BEGIN: show_gender -->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
                     <td>
-                        <select class="form-control" name="gender">
-                            <!-- BEGIN: gender --><option value="{GENDER.key}"{GENDER.selected}>{GENDER.title}</option><!-- END: gender -->
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
+                    <td>
+                        <select class="form-control" name="gender" style="width: fit-content;">
+                            <!-- BEGIN: gender -->
+                            <option value="{GENDER.key}" {GENDER.selected}>{GENDER.title}</option><!-- END: gender -->
                         </select>
                     </td>
                 </tr>
                 <!-- END: show_gender -->
                 <!-- BEGIN: show_birthday -->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
-                    <td><input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" autocomplete="off"></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
+                    <td>
+                        <div class="form-inline">
+                            <input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" autocomplete="off">
+                        </div>
+                    </td>
                 </tr>
                 <!-- END: show_birthday -->
                 <!-- BEGIN: show_sig -->
                 <tr>
-                    <td style="vertical-align:top"> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
-                    <td><textarea name="sig" class="form-control {FIELD.required} w300" cols="70" rows="5" >{FIELD.value}</textarea></td>
+                    <td style="vertical-align:top"> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
+                    <td><textarea name="sig" class="form-control {FIELD.required} w300" cols="70" rows="5">{FIELD.value}</textarea></td>
                 </tr>
                 <!-- END: show_sig -->
                 <!-- BEGIN: show_question -->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
                     <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="question" /></td>
                 </tr>
                 <!-- END: show_question -->
                 <!-- BEGIN: show_answer -->
                 <tr>
-                    <td> {FIELD.title} <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description --> </td>
-                    <td><!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required --></td>
+                    <td> {FIELD.title}
+                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
+                    </td>
+                    <td>
+                        <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
+                    </td>
                     <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="answer" /></td>
                 </tr>
                 <!-- END: show_answer -->
@@ -102,15 +143,15 @@
                     <td>
                         <!-- BEGIN: photo -->
                         <p id="current-photo" class="pull-left text-center">
-                            <img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail fa-pointer"/>
+                            <img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail fa-pointer" />
                             <span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.delete}</span>
-                            <input type="hidden" name="delpic" id="photo_delete" value="{DATA.delpic}"/>
+                            <input type="hidden" name="delpic" id="photo_delete" value="{DATA.delpic}" />
                         </p>
                         <!-- END: photo -->
                         <div id="change-photo" class="w300">
                             <div class="input-group">
                                 <span class="input-group-addon"> <em class="fa fa-trash-o fa-fix fa-pointer" onclick="$('#avatar').val('');">&nbsp;</em> </span>
-                                <input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly"/>
+                                <input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" id="btn_upload">
                                         <em class="fa fa-folder-open-o fa-fix">&nbsp;</em>
@@ -123,7 +164,7 @@
                 <tr>
                     <td> {LANG.show_email} </td>
                     <td></td>
-                    <td><input type="checkbox" name="view_mail" value="1"{DATA.view_mail} /></td>
+                    <td><input type="checkbox" name="view_mail" value="1" {DATA.view_mail} /></td>
                 </tr>
                 <!-- BEGIN: is_official -->
                 <tr>
@@ -133,41 +174,42 @@
                 </tr>
                 <!-- END: is_official -->
                 <!-- BEGIN: group -->
-                <tr<!-- BEGIN: hide --> class="hidden"<!-- END: hide --> id="ctn-list-groups">
+                <tr<!-- BEGIN: hide --> class="hidden"
+                    <!-- END: hide --> id="ctn-list-groups">
                     <td style="vertical-align:top"> {LANG.in_group} </td>
                     <td></td>
                     <td>
                         <!-- BEGIN: list -->
                         <div class="clearfix">
-                            <label class="pull-left w200"> <input type="checkbox" value="{GROUP.id}" name="group[]" {GROUP.checked} {GROUP.disabled}/> {GROUP.title} </label>
-                            <label class="pull-left group_default"{GROUP.default_show}> <input type="radio" value="{GROUP.id}" name="group_default"{GROUP.default}/> {LANG.in_group_default} </label>
+                            <label class="pull-left w200"> <input type="checkbox" value="{GROUP.id}" name="group[]" {GROUP.checked} {GROUP.disabled} /> {GROUP.title} </label>
+                            <label class="pull-left group_default" {GROUP.default_show}> <input type="radio" value="{GROUP.id}" name="group_default" {GROUP.default} /> {LANG.in_group_default} </label>
                         </div>
                         <!-- END: list -->
-                        <div class="clearfix" id="cleargroupdefault"{SHOW_BTN_CLEAR}>
+                        <div class="clearfix" id="cleargroupdefault" {SHOW_BTN_CLEAR}>
                             <label class="pull-left w200">&nbsp;</label>
                             <label class="pull-left">
                                 <a href="#" data-toggle="cleargdefault" class="btn btn-default"><i class="fa fa-times-circle-o" aria-hidden="true"></i> {LANG.clear_group_default}</a>
                             </label>
                         </div>
                     </td>
-                </tr>
-                <!-- END: group -->
-                <tr>
-                    <td> {LANG.pass_reset_request} </td>
-                    <td></td>
-                    <td>
-                        <select class="form-control" name="pass_reset_request">
-                            <!-- BEGIN: pass_reset_request -->
-                            <option value="{PASSRESET.num}"{PASSRESET.sel}>{PASSRESET.title}</option>
-                            <!-- END: pass_reset_request -->
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td> {LANG.adduser_email1} </td>
-                    <td></td>
-                    <td><label><input type="checkbox" name="adduser_email" value="1"{DATA.adduser_email}/> <small>{LANG.adduser_email1_note1}</small></label></td>
-                </tr>
+                    </tr>
+                    <!-- END: group -->
+                    <tr>
+                        <td> {LANG.pass_reset_request} </td>
+                        <td></td>
+                        <td>
+                            <select class="form-control" name="pass_reset_request" style="width: fit-content;">
+                                <!-- BEGIN: pass_reset_request -->
+                                <option value="{PASSRESET.num}" {PASSRESET.sel}>{PASSRESET.title}</option>
+                                <!-- END: pass_reset_request -->
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> {LANG.adduser_email1} </td>
+                        <td></td>
+                        <td><label><input type="checkbox" name="adduser_email" value="1" {DATA.adduser_email} /> <small>{LANG.adduser_email1_note1}</small></label></td>
+                    </tr>
             </tbody>
         </table>
         <!-- BEGIN: field -->
@@ -176,8 +218,8 @@
                 <em class="fa fa-file-text-o">&nbsp;</em>{LANG.fields}
             </caption>
             <colgroup>
-                <col class="w300"/>
-                <col class="w20"/>
+                <col class="w300" />
+                <col class="w20" />
                 <col />
             </colgroup>
             <tbody>
@@ -237,17 +279,26 @@
                 <em class="fa fa-file-text-o">&nbsp;</em>{LANG.edit_password_note}
             </caption>
             <colgroup>
-                <col style="width:325px"/>
+                <col style="width:325px" />
                 <col />
             </colgroup>
             <tbody>
                 <tr>
                     <td> {LANG.password} </td>
-                    <td><input class="form-control" type="password" name="password1" autocomplete="new-password" value="{DATA.password1}" style="width: 300px" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
+                    <td>
+                        <div class="input-group w300">
+                            <input class="form-control password" style="height: 32.5px;" type="text" id="password1" name="password1" value="" maxlength="{NV_UPASSMAX}" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" title="{LANG.random_password}" data-toggle="genpass" data-field1="#password1" data-field2="#password2"><i class="fa fa-retweet"></i></button>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td> {LANG.repassword} </td>
-                    <td><input class="form-control" type="password" name="password2" autocomplete="new-password" value="{DATA.password2}" style="width: 300px" id="password2" /></td>
+                    <td>
+                        <input class="form-control password w300" type="text" name="password2" value="" id="password2" />
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -265,37 +316,37 @@
 </form>
 <br />
 <script type="text/javascript">
-$(function() {
-    $.toggleShowPassword({
-        field : '#password2',
-        control : '#methods'
-    });
+    $(function() {
+        $.toggleShowPassword({
+            field: '#password2',
+            control: '#methods'
+        });
 
-    $('[name="is_official"]').on('change', function() {
-        var ctngroups = $('#ctn-list-groups');
-        if (!ctngroups.length) {
-            return;
-        }
-        if ($(this).is(":checked")) {
-            ctngroups.removeClass('hidden');
-        } else {
-            ctngroups.addClass('hidden');
-            $('[name="group[]"]').prop('checked', false);
+        $('[name="is_official"]').on('change', function() {
+            var ctngroups = $('#ctn-list-groups');
+            if (!ctngroups.length) {
+                return;
+            }
+            if ($(this).is(":checked")) {
+                ctngroups.removeClass('hidden');
+            } else {
+                ctngroups.addClass('hidden');
+                $('[name="group[]"]').prop('checked', false);
+                $('[name="group_default"]').prop('checked', false);
+            }
+        });
+
+        $('[data-toggle="cleargdefault"]').on('click', function(e) {
+            e.preventDefault();
             $('[name="group_default"]').prop('checked', false);
-        }
+        });
     });
-
-    $('[data-toggle="cleargdefault"]').on('click', function(e) {
-        e.preventDefault();
-        $('[name="group_default"]').prop('checked', false);
-    });
-});
 </script>
 <!-- BEGIN: add_photo -->
 <script type="text/javascript">
-$(function() {
-    $('#change-photo').show();
-});
+    $(function() {
+        $('#change-photo').show();
+    });
 </script>
 <!-- END: add_photo -->
 <!-- END: edit_user -->
