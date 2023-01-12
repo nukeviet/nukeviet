@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -218,7 +218,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
         $query_field = [];
         $valid_field = [];
         if (!empty($array_field_config)) {
-            $check = fieldsCheck($custom_fields, $post, $query_field, $valid_field, 0);
+            $check = fieldsCheck($custom_fields, $post, $query_field, $valid_field);
             if ($check['status'] == 'error') {
                 nv_jsonOutput($check);
             }
@@ -298,7 +298,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
 
         $query_field['userid'] = $user_id;
-        if (!$db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
+        if (!userInfoTabDb($query_field)) {
             $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
             nv_jsonOutput([
                 'status' => 'error',
@@ -664,14 +664,14 @@ if ($num_items > 0) {
         $xtpl->assign('HEAD_TD', $head_td);
         $xtpl->parse('main.userlist.head_td');
     }
-    
+
     foreach ($users_list as $u) {
         $u['checkss'] = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $u['userid']);
         $xtpl->assign('CONTENT_TD', $u);
         $xtpl->assign('ACTIVATE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;userid=' . $u['userid']);
         $xtpl->parse('main.userlist.xusers');
     }
-    
+
     if (!empty($generate_page)) {
         $xtpl->assign('GENERATE_PAGE', $generate_page);
         $xtpl->parse('main.userlist.generate_page');

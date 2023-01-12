@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -1122,7 +1122,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         'question' => 1,
         'answer' => 1
     ]);
-    $check = fieldsCheck($custom_fields, $array_data, $query_field, $valid_field, $userid);
+    $check = fieldsCheck($custom_fields, $array_data, $query_field, $valid_field);
     if ($check['status'] == 'error') {
         nv_jsonOutput($check);
     }
@@ -1155,7 +1155,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
             'mess' => $lang_module['editinfo_okcensor']
         ]);
     } else {
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $edit_userid);
+        userInfoTabDb($query_field, $edit_userid);
         $db->query('UPDATE ' . NV_MOD_TABLE . ' SET last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $edit_userid);
 
         nv_jsonOutput([

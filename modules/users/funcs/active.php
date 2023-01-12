@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -96,12 +96,12 @@ if ($checknum == $row['checknum']) {
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
                     $default_value = (float) ($row_f['default_value']);
                 } else {
-                    $default_value = $db->quote($row_f['default_value']);
+                    $default_value = $row_f['default_value'];
                 }
                 $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }
 
-            if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
+            if (userInfoTabDb($query_field)) {
                 if (!empty($global_users_config['active_group_newusers'])) {
                     nv_groups_add_user(7, $row['userid'], 1, $module_data);
                 } else {

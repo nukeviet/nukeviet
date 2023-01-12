@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -275,7 +275,7 @@ if ($checkss == $array_register['checkss']) {
         'userid' => 0
     ];
     $userid = 0;
-    $check = fieldsCheck($custom_fields, $array_register, $query_field, $valid_field, $userid);
+    $check = fieldsCheck($custom_fields, $array_register, $query_field, $valid_field);
     if ($check['status'] == 'error') {
         nv_jsonOutput($check);
     }
@@ -434,7 +434,7 @@ if ($checkss == $array_register['checkss']) {
             ]);
         } else {
             $query_field['userid'] = $userid;
-            $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
+            userInfoTabDb($query_field);
 
             if (defined('ACCESS_ADDUS')) {
                 $db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users (

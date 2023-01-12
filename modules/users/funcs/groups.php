@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -157,12 +157,12 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
                     $default_value = (float) ($row_f['default_value']);
                 } else {
-                    $default_value = $db->quote($row_f['default_value']);
+                    $default_value = $row_f['default_value'];
                 }
                 $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }
 
-            if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
+            if (userInfoTabDb($query_field)) {
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $user_info['userid']);

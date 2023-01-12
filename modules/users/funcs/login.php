@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -238,9 +238,9 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
             if ($row_f['is_system'] == 1) {
                 continue;
             }
-            $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
+            $query_field[$row_f['field']] = $row_f['default_value'];
         }
-        $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
+        userInfoTabDb($query_field);
 
         // Luu vao bang OpenID
         $user_id = (int) ($row['userid']);

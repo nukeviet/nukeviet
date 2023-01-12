@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -118,7 +118,7 @@ function forcedrelogin($userid)
     $stmt->execute();
 }
 
-function fieldsCheck($custom_fields, &$array_data, &$query_field, &$valid_field, $userid = 0)
+function fieldsCheck($custom_fields, &$array_data, &$query_field, &$valid_field)
 {
     global $array_field_config, $lang_module, $global_users_config;
 
@@ -337,16 +337,9 @@ function fieldsCheck($custom_fields, &$array_data, &$query_field, &$valid_field,
         if (empty($row_f['system'])) {
             if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
                 $value = (float) $value;
-                $valid_field[$row_f['field']] = $value;
-            } else {
-                $valid_field[$row_f['field']] = $value;
-                //$value = $db->quote($value);
             }
-            if (!empty($userid)) {
-                $query_field[] = $row_f['field'] . '=' . $value;
-            } else {
-                $query_field[$row_f['field']] = $value;
-            }
+            $valid_field[$row_f['field']] = $value;
+            $query_field[$row_f['field']] = $value;
         } else {
             $array_data[$row_f['field']] = $value;
         }
@@ -358,9 +351,39 @@ function fieldsCheck($custom_fields, &$array_data, &$query_field, &$valid_field,
 }
 
 /**
+ * userInfoTabDb()
+ * Lưu/cập nhật bảng nv4_users_info
+ *
+ * @param mixed $data
+ * @param int   $userid
+ * @return false|PDOStatement
+ */
+function userInfoTabDb($data, $userid = 0)
+{
+    global $db;
+
+    if ($userid) {
+        $upd = [];
+        foreach ($data as $key => $value) {
+            $upd[] = $key . '=' . $db->quote($value);
+        }
+        $upd = implode(', ', $upd);
+
+        return $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . $upd . ' WHERE userid=' . $userid);
+    }
+    $keys = implode(', ', array_keys($data));
+    $values = implode(', ', array_map(function ($val) {
+        global $db;
+
+        return $db->quote($val);
+    }, array_values($data)));
+
+    return $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . $keys . ') VALUES (' . $values . ')');
+}
+
+/**
  * delOldRegAccount()
  * Xóa các tài khoản chờ kích hoạt quá hạn
- * 
  */
 function delOldRegAccount()
 {

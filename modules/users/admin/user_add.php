@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -201,7 +201,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $query_field = [];
     $valid_field = [];
     if (!empty($array_field_config)) {
-        $check = fieldsCheck($custom_fields, $_user, $query_field, $valid_field, $userid);
+        $check = fieldsCheck($custom_fields, $_user, $query_field, $valid_field);
         if ($check['status'] == 'error') {
             nv_jsonOutput($check);
         }
@@ -290,8 +290,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     $query_field['userid'] = $userid;
-    $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
-
+    userInfoTabDb($query_field);
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_user', 'userid ' . $userid, $admin_info['userid']);
 
     // Check photo
