@@ -128,6 +128,11 @@ $(function() {
 
     $('#block-content-form').on('submit', function(e) {
         e.preventDefault();
+        if (typeof CKEDITOR != "undefined") {
+            for (var instanceName in CKEDITOR.instances) {
+                $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+            }
+        }
         var that = $(this),
             url = that.attr('action'),
             data = that.serialize();
