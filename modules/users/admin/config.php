@@ -299,7 +299,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->assign('OPTION', $array);
         $xtpl->parse('main.nv_unickmin');
     }
-    for ($id = 20; $id < 100; ++$id) {
+    for ($id = 9; $id < 100; ++$id) {
         $array = [
             'id' => $id,
             'select' => ($global_config['nv_unickmax'] == $id) ? ' selected="selected"' : '',
