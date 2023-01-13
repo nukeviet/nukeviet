@@ -58,72 +58,74 @@
                 <!-- BEGIN: name_show_0 -->
                 <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
-                    <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" /></td>
+                    <td>
+                        <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" />
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                    </td>
                 </tr>
                 <!-- END: show_last_name -->
                 <!-- BEGIN: show_first_name -->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
-                    <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" /></td>
+                    <td>
+                        <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" />
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                    </td>
                 </tr>
                 <!-- END: show_first_name -->
                 <!-- END: name_show_0 -->
                 <!-- BEGIN: name_show_1 -->
                 <!-- BEGIN: show_first_name -->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
-                    <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" /></td>
+                    <td>
+                        <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" />
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                    </td>
                 </tr>
                 <!-- END: show_first_name -->
                 <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
-                    <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" /></td>
+                    <td>
+                        <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" />
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                    </td>
                 </tr>
                 <!-- END: show_last_name -->
                 <!-- END: name_show_1 -->
                 <!-- BEGIN: show_gender -->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <select class="form-control" name="gender" style="width: fit-content;">
                             <!-- BEGIN: gender -->
-                            <option value="{GENDER.key}" {GENDER.selected}>{GENDER.title}</option><!-- END: gender -->
+                            <option value="{GENDER.key}" {GENDER.selected}>{GENDER.title}</option>
+                            <!-- END: gender -->
                         </select>
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_gender -->
                 <!-- BEGIN: show_birthday -->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
@@ -131,40 +133,44 @@
                         <div class="form-inline">
                             <input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" autocomplete="off">
                         </div>
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_birthday -->
                 <!-- BEGIN: show_sig -->
                 <tr>
-                    <td style="vertical-align:top"> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td style="vertical-align:top"> {FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
-                    <td><textarea name="sig" class="form-control {FIELD.required} w300" cols="70" rows="5">{FIELD.value}</textarea></td>
+                    <td>
+                        <textarea name="sig" class="form-control {FIELD.required} w300" cols="70" rows="5">{FIELD.value}</textarea>
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                    </td>
                 </tr>
                 <!-- END: show_sig -->
                 <!-- BEGIN: show_question -->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
-                    <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="question" /></td>
+                    <td>
+                        <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="question" />
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                    </td>
                 </tr>
                 <!-- END: show_question -->
                 <!-- BEGIN: show_answer -->
                 <tr>
-                    <td> {FIELD.title}
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
-                    </td>
+                    <td>{FIELD.title}</td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
-                    <td><input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="answer" /></td>
+                    <td>
+                        <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="answer" />
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                    </td>
                 </tr>
                 <!-- END: show_answer -->
                 <tr>
@@ -237,7 +243,6 @@
                 <tr>
                     <td>
                         <strong>{FIELD.title}</strong>
-                        <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                     </td>
                     <td>
                         <!-- BEGIN: required -->
@@ -249,7 +254,9 @@
                         <input class="form-control {FIELD.required} w300" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
                         <!-- END: textbox -->
                         <!-- BEGIN: date -->
-                        <input class="form-control datepicker {FIELD.required} w100" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
+                        <div class="form-inline">
+                            <input class="form-control datepicker {FIELD.required} w100" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
+                        </div>
                         <!-- END: date -->
                         <!-- BEGIN: textarea -->
                         <textarea class="form-control w300" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
@@ -258,7 +265,7 @@
                         {EDITOR}
                         <!-- END: editor -->
                         <!-- BEGIN: select -->
-                        <select class="form-control" name="custom_fields[{FIELD.field}]">
+                        <select class="form-control" name="custom_fields[{FIELD.field}]" style="width: fit-content;">
                             <!-- BEGIN: loop -->
                             <option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                             <!-- END: loop -->
@@ -277,6 +284,8 @@
                             <!-- END: loop -->
                         </select>
                         <!-- END: multiselect -->
+
+                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: loop -->

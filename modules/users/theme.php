@@ -160,6 +160,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         }
                         $xtpl->parse('main.field.loop.textbox.data_callback');
                     }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.field.loop.textbox.description');
+                    }
                     $xtpl->parse('main.field.loop.textbox');
                 } elseif ($row['field_type'] == 'date') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
@@ -170,11 +173,17 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                     if ($row['max_length']) {
                         $xtpl->parse('main.field.loop.date.maxDate');
                     }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.field.loop.date.description');
+                    }
                     $xtpl->parse('main.field.loop.date');
                     $datepicker = true;
                 } elseif ($row['field_type'] == 'textarea') {
                     $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
                     $xtpl->assign('FIELD', $row);
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.field.loop.textarea.description');
+                    }
                     $xtpl->parse('main.field.loop.textarea');
                 } elseif ($row['field_type'] == 'editor') {
                     $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
@@ -182,10 +191,16 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $array_tmp = explode('@', $row['class']);
                         $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
                         $xtpl->assign('EDITOR', $edits);
+                        if (!empty($row['description'])) {
+                            $xtpl->parse('main.field.loop.editor.description');
+                        }
                         $xtpl->parse('main.field.loop.editor');
                     } else {
                         $row['class'] = '';
                         $xtpl->assign('FIELD', $row);
+                        if (!empty($row['description'])) {
+                            $xtpl->parse('main.field.loop.textarea.description');
+                        }
                         $xtpl->parse('main.field.loop.textarea');
                     }
                 } elseif ($row['field_type'] == 'select') {
@@ -196,6 +211,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             'value' => $value
                         ]);
                         $xtpl->parse('main.field.loop.select.loop');
+                    }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.field.loop.select.description');
                     }
                     $xtpl->parse('main.field.loop.select');
                 } elseif ($row['field_type'] == 'radio') {
@@ -212,6 +230,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             $xtpl->parse('main.field.loop.radio.loop.invalidtooltip');
                         }
                         $xtpl->parse('main.field.loop.radio.loop');
+                    }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.field.loop.radio.description');
                     }
                     $xtpl->parse('main.field.loop.radio');
                 } elseif ($row['field_type'] == 'checkbox') {
@@ -230,6 +251,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         }
                         $xtpl->parse('main.field.loop.checkbox.loop');
                     }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.field.loop.checkbox.description');
+                    }
                     $xtpl->parse('main.field.loop.checkbox');
                 } elseif ($row['field_type'] == 'multiselect') {
                     $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : [];
@@ -240,6 +264,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             'value' => $value
                         ]);
                         $xtpl->parse('main.field.loop.multiselect.loop');
+                    }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.field.loop.multiselect.description');
                     }
                     $xtpl->parse('main.field.loop.multiselect');
                 }
@@ -1033,6 +1060,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                         }
                         $xtpl->parse('main.tab_edit_others.loop.textbox.data_callback');
                     }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.textbox.description');
+                    }
                     $xtpl->parse('main.tab_edit_others.loop.textbox');
                 } elseif ($row['field_type'] == 'date') {
                     $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
@@ -1044,10 +1074,16 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     if (!empty($row['max_length'])) {
                         $xtpl->parse('main.tab_edit_others.loop.date.maxDate');
                     }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.date.description');
+                    }
                     $xtpl->parse('main.tab_edit_others.loop.date');
                 } elseif ($row['field_type'] == 'textarea') {
                     $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
                     $xtpl->assign('FIELD', $row);
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.textarea.description');
+                    }
                     $xtpl->parse('main.tab_edit_others.loop.textarea');
                 } elseif ($row['field_type'] == 'editor') {
                     $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
@@ -1055,10 +1091,16 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                         $array_tmp = explode('@', $row['class']);
                         $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'], 'Basic');
                         $xtpl->assign('EDITOR', $edits);
+                        if (!empty($row['description'])) {
+                            $xtpl->parse('main.tab_edit_others.loop.editor.description');
+                        }
                         $xtpl->parse('main.tab_edit_others.loop.editor');
                     } else {
                         $row['class'] = '';
                         $xtpl->assign('FIELD', $row);
+                        if (!empty($row['description'])) {
+                            $xtpl->parse('main.tab_edit_others.loop.textarea.description');
+                        }
                         $xtpl->parse('main.tab_edit_others.loop.textarea');
                     }
                 } elseif ($row['field_type'] == 'select') {
@@ -1069,6 +1111,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                             'value' => $value
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.select.loop');
+                    }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.select.description');
                     }
                     $xtpl->parse('main.tab_edit_others.loop.select');
                 } elseif ($row['field_type'] == 'radio') {
@@ -1085,6 +1130,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     }
                     if ($number == $count) {
                         $xtpl->parse('main.tab_edit_others.loop.radio.loop.invalidtooltip');
+                    }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.radio.description');
                     }
                     $xtpl->parse('main.tab_edit_others.loop.radio');
                 } elseif ($row['field_type'] == 'checkbox') {
@@ -1104,6 +1152,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     if ($number == $count) {
                         $xtpl->parse('main.tab_edit_others.loop.checkbox.loop.invalidtooltip');
                     }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.checkbox.description');
+                    }
                     $xtpl->parse('main.tab_edit_others.loop.checkbox');
                 } elseif ($row['field_type'] == 'multiselect') {
                     $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : [];
@@ -1115,6 +1166,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                             'value' => $value
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.multiselect.loop');
+                    }
+                    if (!empty($row['description'])) {
+                        $xtpl->parse('main.tab_edit_others.loop.multiselect.description');
                     }
                     $xtpl->parse('main.tab_edit_others.loop.multiselect');
                 }

@@ -123,18 +123,22 @@
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
-                            <td><input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="last_name" /></td>
+                            <td>
+                                <input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="last_name" />
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                            </td>
                         </tr>
                         <!-- END: show_last_name -->
                         <!-- BEGIN: show_first_name -->
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
-                            <td><input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="first_name" /></td>
+                            <td>
+                                <input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="first_name" />
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                            </td>
                         </tr>
                         <!-- END: show_first_name -->
                         <!-- END: name_show_0 -->
@@ -143,18 +147,22 @@
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
-                            <td><input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="first_name" /></td>
+                            <td>
+                                <input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="first_name" />
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                            </td>
                         </tr>
                         <!-- END: show_first_name -->
                         <!-- BEGIN: show_last_name-->
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
-                            <td><input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="last_name" /></td>
+                            <td>
+                                <input class="form-control {FIELD.required}" type="text" value="{FIELD.value}" name="last_name" />
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                            </td>
                         </tr>
                         <!-- END: show_last_name -->
                         <!-- END: name_show_1 -->
@@ -162,13 +170,13 @@
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
                             <td>
                                 <select class="form-control w150" name="gender">
                                     <!-- BEGIN: gender -->
                                     <option value="{GENDER.key}" {GENDER.selected}>{GENDER.title}</option><!-- END: gender -->
                                 </select>
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                             </td>
                         </tr>
                         <!-- END: show_gender -->
@@ -176,10 +184,10 @@
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
                             <td>
                                 <input name="birthday" class="form-control mydatepicker {FIELD.required} w150" value="{FIELD.value}" maxlength="10" type="text" autocomplete="off">
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                             </td>
                         </tr>
                         <!-- END: show_birthday -->
@@ -187,16 +195,17 @@
                         <tr>
                             <td style="vertical-align:top"> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
-                            <td><textarea name="sig" class="form-control {FIELD.required}" cols="70" rows="5">{FIELD.value}</textarea></td>
+                            <td>
+                                <textarea name="sig" class="form-control {FIELD.required}" cols="70" rows="5">{FIELD.value}</textarea>
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                            </td>
                         </tr>
                         <!-- END: show_sig -->
                         <!-- BEGIN: show_question -->
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
                             <td>
                                 <div class="input-group item">
@@ -210,6 +219,7 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                                 <div class="help-block mb-0">{LANG.leave_blank_note}</div>
                             </td>
                         </tr>
@@ -218,10 +228,10 @@
                         <tr>
                             <td> {FIELD.title}
                                 <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
                             <td>
                                 <input class="form-control {FIELD.required}" type="text" value="" name="answer" />
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                                 <div class="help-block mb-0">{LANG.leave_blank_note}</div>
                             </td>
                         </tr>
@@ -239,7 +249,6 @@
                         <tr>
                             <td>
                                 <strong>{FIELD.title}</strong> <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
-                                <!-- BEGIN: description --><br /><em>{FIELD.description}</em><!-- END: description -->
                             </td>
                             <td>
                                 <!-- BEGIN: textbox -->
@@ -274,6 +283,8 @@
                                     <!-- END: loop -->
                                 </select>
                                 <!-- END: multiselect -->
+
+                                <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                             </td>
                         </tr>
                         <!-- END: loop -->

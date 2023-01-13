@@ -63,6 +63,7 @@
                         <label for="last_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
                             <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_last_name -->
@@ -71,6 +72,7 @@
                         <label for="first_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
                             <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_first_name -->
@@ -81,6 +83,7 @@
                         <label for="first_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
                             <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="first_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_first_name -->
@@ -89,6 +92,7 @@
                         <label for="last_name" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
                             <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="last_name" maxlength="{FIELD.max_length}" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_last_name -->
@@ -102,6 +106,7 @@
                                 <option value="{GENDER.key}"{GENDER.sel}>{GENDER.title}</option>
                                 <!-- END: gender -->
                             </select>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_gender -->
@@ -110,6 +115,7 @@
                         <label for="birthday" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-5 col-md-4">
                             <input type="text" class="form-control calendar-icon datepicker {FIELD.required} {FIELD.class}" name="birthday" value="{FIELD.value}" readonly="readonly" style="background-color: #fff" data-focus="datepickerShow" data-mess="">
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_birthday -->
@@ -118,6 +124,7 @@
                         <label for="birthday" class="control-label col-sm-7 col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-sm-13 col-md-12">
                             <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="sig" data-toggle="validErrorHidden" data-event="keypress" data-mess="">{FIELD.value}</textarea>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_sig -->
@@ -377,6 +384,7 @@
                                     </ul>
                                 </div>
                             </div>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_question -->
@@ -385,6 +393,7 @@
                         <label for="answer" class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-12">
                             <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="" name="answer" maxlength="{FIELD.max_length}" data-pattern="/^(.){{FIELD.min_length},}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.answer_empty}">
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: show_answer -->
@@ -547,6 +556,7 @@
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-18">
                             <input type="text" class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" data-toggle="validErrorHidden" data-event="keypress" data-mess=""<!-- BEGIN: data_callback--> data-callback="{CALLFUNC}" data-error="{ERRMESS}"<!-- END: data_callback-->/>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: textbox -->
@@ -555,6 +565,7 @@
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-4">
                             <input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" data-provide="datepicker" placeholder="{FIELD.title}" value="{FIELD.value}" name="custom_fields[{FIELD.field}]" readonly="readonly" style="background-color:#fff" data-toggle="validErrorHidden" data-event="change" data-focus="datepickerShow" data-mess="" />
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: date -->
@@ -563,13 +574,17 @@
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
                         <div class="col-md-18">
                             <textarea class="form-control {FIELD.required} {FIELD.class}" placeholder="{FIELD.title}" name="custom_fields[{FIELD.field}]" data-toggle="validErrorHidden" data-event="keypress" data-mess="">{FIELD.value}</textarea>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: textarea -->
                     <!-- BEGIN: editor -->
                     <div class="form-group">
                         <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
-                        <div class="col-md-18">{EDITOR}</div>
+                        <div class="col-md-18">
+                            {EDITOR}
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
+                        </div>
                     </div>
                     <!-- END: editor -->
                     <!-- BEGIN: select -->
@@ -581,6 +596,7 @@
                                 <option value="{FIELD_CHOICES.key}"{FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                                 <!-- END: loop -->
                             </select>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: select -->
@@ -593,6 +609,7 @@
                                 <label for="lb_{FIELD_CHOICES.id}" class="radio-box" style="vertical-align:middle"> <input type="radio" name="custom_fields[{FIELD.field}]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" data-toggle="validErrorHidden" data-event="click" data-parents="4"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br />
                                 <!-- END: loop -->
                             </div>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: radio -->
@@ -605,6 +622,7 @@
                                 <label for="lb_{FIELD_CHOICES.id}" class="check-box" style="vertical-align:middle"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" id="lb_{FIELD_CHOICES.id}" value="{FIELD_CHOICES.key}" class="{FIELD.class}" style="margin-top: 0" data-toggle="validErrorHidden" data-event="click" data-parents="4"{FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label><br />
                                 <!-- END: loop -->
                             </div>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: checkbox -->
@@ -617,6 +635,7 @@
                                 <option value="{FIELD_CHOICES.key}"{FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                                 <!-- END: loop -->
                             </select>
+                            <!-- BEGIN: description --><div class="small help-block" style="margin-bottom:0">{FIELD.description}</div><!-- END: description -->
                         </div>
                     </div>
                     <!-- END: multiselect -->
