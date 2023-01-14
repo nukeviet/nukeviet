@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -234,7 +234,7 @@ class Error
 
         $contents = file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/error.tpl');
         $contents = str_replace('[PAGE_TITLE]', self::$errortype[$this->errno], $contents);
-        $contents = str_replace('[ERRSTR]', $this->errstr, $contents);
+        $contents = str_replace('[ERRSTR]', nl2br($this->errstr), $contents);
         $contents = str_replace('[CODE]', $error_code2, $contents);
         $contents = str_replace('[EMAIL]', $email, $contents);
 
@@ -378,14 +378,9 @@ class Error
     public function error_handler($errno, $errstr, $errfile, $errline)
     {
         $this->errno = $errno;
-        $this->errstr = $errstr;
-
-        if (!empty($errfile)) {
-            $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $errfile));
-        }
-        if (!empty($errline)) {
-            $this->errline = $errline;
-        }
+        $this->errstr = str_replace(NV_ROOTDIR, '...', str_replace('\\', '/', nl2br($errstr)));
+        !empty($errfile) && $this->errfile = str_replace(NV_ROOTDIR, '...', str_replace('\\', '/', $errfile));
+        !empty($errline) && $this->errline = $errline;
 
         $this->log_control();
 
