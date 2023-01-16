@@ -328,7 +328,7 @@ class Error
         }
 
         if ($display) {
-            $info = $this->errstr;
+            $info = nl2br($this->errstr);
             if ($this->errno != E_USER_ERROR and $this->errno != E_USER_WARNING and $this->errno != E_USER_NOTICE) {
                 if (!empty($this->errfile)) {
                     $info .= ' in file ' . $this->errfile;
@@ -378,7 +378,7 @@ class Error
     public function error_handler($errno, $errstr, $errfile, $errline)
     {
         $this->errno = $errno;
-        $this->errstr = str_replace(NV_ROOTDIR, '...', str_replace('\\', '/', nl2br($errstr)));
+        $this->errstr = str_replace(NV_ROOTDIR, '...', str_replace('\\', '/', $errstr));
         !empty($errfile) && $this->errfile = str_replace(NV_ROOTDIR, '...', str_replace('\\', '/', $errfile));
         !empty($errline) && $this->errline = $errline;
 
