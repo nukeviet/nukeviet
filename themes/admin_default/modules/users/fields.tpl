@@ -1,23 +1,24 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered">
         <thead>
-            <tr class="text-center">
-                <th class="100">{LANG.weight}</th>
-                <th>{LANG.field_id}</th>
-                <th>{LANG.field_title}</th>
-                <th>{LANG.field_type}</th>
-                <th>{LANG.field_show_register}</th>
-                <th>{LANG.field_required}</th>
-                <th>{LANG.field_show_profile}</th>
-                <th>&nbsp;</th>
+            <tr class="bg-primary">
+                <th class="text-center">{LANG.weight}</th>
+                <th class="text-center">{LANG.field_id}</th>
+                <th class="text-center">{LANG.field_title}</th>
+                <th class="text-center">{LANG.field_type}</th>
+                <th class="text-center">{LANG.for_admin}</th>
+                <th class="text-center">{LANG.field_required}</th>
+                <th class="text-center">{LANG.field_show_register}</th>
+                <th class="text-center">{LANG.field_show_profile}</th>
+                <th style="width: 1%;"></th>
             </tr>
         </thead>
         <tbody>
             <!-- BEGIN: loop -->
             <tr>
-                <td class="text-center">
+                <td class="text-center" style="width: 70px;">
                 <select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});" {DISABLED_WEIGHT}>
                     <!-- BEGIN: weight -->
                     <option value="{WEIGHT.key}"{WEIGHT.selected} >{WEIGHT.title}</option>
@@ -26,13 +27,14 @@
                 <td>{ROW.field}</td>
                 <td>{ROW.field_lang}</td>
                 <td>{ROW.field_type} </td>
-                <td class="text-center"><i class="fa fa-lg {ROW.show_register}" aria-hidden="true"></i></td>
-                <td class="text-center"><i class="fa fa-lg {ROW.required}" aria-hidden="true"></i></td>
-                <td class="text-center"><i class="fa fa-lg {ROW.show_profile}" aria-hidden="true"></i></td>
-                <td>
-                    <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a>
+                <td class="text-center" style="width:80px;"><i class="fa {ROW.for_admin}"></i></td>
+                <td class="text-center" style="width:80px;"><i class="fa {ROW.required}"></i></td>
+                <td class="text-center" style="width:80px;"><i class="fa {ROW.show_register}"></i></td>
+                <td class="text-center" style="width:80px;"><i class="fa {ROW.show_profile}"></i></td>
+                <td class="text-nowrap" style="width: 1%;">
+                    <button type="button" class="btn btn-default btn-sm" onclick="nv_edit_field({ROW.fid});" title="{LANG.field_edit}"><em class="fa fa-edit fa-lg"></em></button>
                     <!-- BEGIN: show_delete -->
-                    - <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+                    <button type="button" class="btn btn-default btn-sm" onclick="nv_del_field({ROW.fid})" title="{LANG.delete}"><em class="fa fa-trash-o fa-lg"></em></button>
                     <!-- END: show_delete -->
                 </td>
             </tr>
@@ -53,7 +55,7 @@
 <!-- END: error -->
 <form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields" autocomplete="off">
     <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered">
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONFORM} </caption>
             <colgroup>
                 <col class="w250" />
@@ -75,18 +77,22 @@
                     <td><textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;" class="form-control">{DATAFORM.description}</textarea></td>
                 </tr>
                 <tr>
+                    <td>{LANG.for_admin}</td>
+                    <td><input name="for_admin" value="1" type="checkbox" {DATAFORM.for_admin}></td>
+                </tr>
+                <tr class="item {IS_HIDDEN}">
                     <td>{LANG.field_required}</td>
                     <td><input name="required" value="1" type="checkbox" {DATAFORM.required}> {LANG.field_required_note}</td>
                 </tr>
-                <tr>
+                <tr class="item {IS_HIDDEN}">
                     <td>{LANG.field_show_register}</td>
                     <td><input name="show_register" value="1" type="checkbox" {DATAFORM.show_register}></td>
                 </tr>
-                <tr>
+                <tr class="item {IS_HIDDEN}">
                     <td>{LANG.field_user_editable}</td>
                     <td><input name="user_editable" value="1" type="checkbox" {DATAFORM.user_editable}/></td>
                 </tr>
-                <tr>
+                <tr class="item {IS_HIDDEN}">
                     <td>{LANG.field_show_profile}</td>
                     <td><input name="show_profile" value="1" type="checkbox" {DATAFORM.show_profile}></td>
                 </tr>

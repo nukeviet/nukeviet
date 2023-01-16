@@ -270,6 +270,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     func_callback varchar(75) NOT NULL DEFAULT '',
     min_length int(11) NOT NULL DEFAULT '0',
     max_length bigint(20) unsigned NOT NULL DEFAULT '0',
+    for_admin TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
     required tinyint(3) unsigned NOT NULL DEFAULT '0',
     show_register tinyint(3) unsigned NOT NULL DEFAULT '0',
     user_editable tinyint(3) unsigned NOT NULL DEFAULT '0',

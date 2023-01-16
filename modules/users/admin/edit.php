@@ -564,6 +564,9 @@ if (defined('NV_IS_USER_FORUM')) {
                     $xtpl->parse('main.edit_user.' . $show_key . '.gender');
                 }
             }
+            if ($row['for_admin']) {
+                $xtpl->parse('main.edit_user.' . $show_key . '.for_admin');
+            }
             if ($row['description']) {
                 $xtpl->parse('main.edit_user.' . $show_key . '.description');
             }
@@ -571,6 +574,9 @@ if (defined('NV_IS_USER_FORUM')) {
         } else {
             if ($row['required']) {
                 $xtpl->parse('main.edit_user.field.loop.required');
+            }
+            if ($row['for_admin']) {
+                $xtpl->parse('main.edit_user.field.loop.for_admin');
             }
             if ($row['description']) {
                 $xtpl->parse('main.edit_user.field.loop.description');

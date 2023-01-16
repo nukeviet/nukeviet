@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -181,10 +181,16 @@ if ($nv_Request->isset_request('save', 'post')) {
     $dataform['title'] = $nv_Request->get_title('title', 'post', '');
     $dataform['description'] = $nv_Request->get_title('description', 'post', '');
 
-    $dataform['required'] = $nv_Request->get_int('required', 'post', 0);
-    $dataform['show_register'] = ($dataform['required']) ? 1 : $nv_Request->get_int('show_register', 'post', 0);
-    $dataform['user_editable'] = $nv_Request->get_int('user_editable', 'post', 0);
-    $dataform['show_profile'] = $nv_Request->get_int('show_profile', 'post', 0);
+    $dataform['for_admin'] = (int) $nv_Request->get_bool('for_admin', 'post', false);
+    if ($dataform['for_admin']) {
+        $dataform['required'] = $dataform['show_register'] = $dataform['user_editable'] = $dataform['show_profile'] = 0;
+    } else {
+        $dataform['required'] = (int) $nv_Request->get_bool('required', 'post', false);
+        $dataform['show_register'] = ($dataform['required']) ? 1 : (int) $nv_Request->get_bool('show_register', 'post', false);
+        $dataform['user_editable'] = (int) $nv_Request->get_bool('user_editable', 'post', false);
+        $dataform['show_profile'] = (int) $nv_Request->get_bool('show_profile', 'post', false);
+    }
+
     $dataform['class'] = nv_substr($nv_Request->get_title('class', 'post', '', 0, $validatefieldCss), 0, 50);
 
     $dataform['field_type'] = nv_substr($nv_Request->get_title('field_type', 'post', '', 0, $preg_replace), 0, 50);
@@ -371,13 +377,13 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_field (
                     field, weight, field_type, field_choices, sql_choices, match_type,
                     match_regex, func_callback, min_length, max_length,
-                    required, show_register, user_editable,
+                    for_admin, required, show_register, user_editable,
                     show_profile, class, language, default_value
                 ) VALUES (
                     '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
                     :match_regex, :func_callback,
                     " . $dataform['min_length'] . ', ' . $dataform['max_length'] . ',
-                    ' . $dataform['required'] . ', ' . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
+                    ' . $dataform['for_admin'] . ', ' . $dataform['required'] . ', ' . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
                     " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value
                 )";
 
@@ -413,12 +419,13 @@ if ($nv_Request->isset_request('save', 'post')) {
                 match_regex=:match_regex, func_callback=:func_callback, ";
             }
             $query .= ' max_length=' . $dataform['max_length'] . ', min_length=' . $dataform['min_length'] . ",
-                required = '" . $dataform['required'] . "',
+                for_admin = " . $dataform['for_admin'] . ",
+                required = " . $dataform['required'] . ",
                 field_choices='" . $dataform['field_choices'] . "',
                 sql_choices = '" . $dataform['sql_choices'] . "',
-                show_register = '" . $dataform['show_register'] . "',
-                user_editable = '" . $dataform['user_editable'] . "',
-                show_profile = '" . $dataform['show_profile'] . "',
+                show_register = " . $dataform['show_register'] . ",
+                user_editable = " . $dataform['user_editable'] . ",
+                show_profile = " . $dataform['show_profile'] . ",
                 class = :class,
                 language='" . serialize($language) . "',
                 default_value= :default_value
@@ -545,9 +552,10 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 'field' => $row['field'],
                 'field_lang' => (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : '',
                 'field_type' => $array_field_type[$row['field_type']],
-                'required' => ($row['required']) ? 'fa-check-square-o' : 'fa fa-square-o',
-                'show_register' => ($row['show_register']) ? 'fa-check-square-o' : 'fa fa-square-o',
-                'show_profile' => ($row['show_profile']) ? 'fa-check-square-o' : 'fa fa-square-o'
+                'for_admin' => ($row['for_admin']) ? 'fa-check' : '',
+                'required' => ($row['required']) ? 'fa-check' : '',
+                'show_register' => ($row['show_register']) ? 'fa-check' : '',
+                'show_profile' => ($row['show_profile']) ? 'fa-check' : ''
             ]);
 
             for ($i = ($row['is_system'] == 1 ? $row['weight'] : $fieldsys_offset + 1); $i <= ($row['is_system'] == 1 ? $row['weight'] : $num); ++$i) {
@@ -601,7 +609,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $dataform['system'] = $dataform['is_system'];
         } else {
             $dataform = [];
-            $dataform['show_register'] = 1;
+            $dataform['for_admin'] = 0;
             $dataform['required'] = 0;
             $dataform['show_profile'] = 1;
             $dataform['user_editable'] = 1;
@@ -688,11 +696,19 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $dataform['editordisabled'] = ($dataform['field_type'] != 'editor') ? ' style="display: none;"' : '';
     $dataform['classdisabled'] = ($dataform['field_type'] == 'editor') ? ' style="display: none;"' : '';
 
+    $dataform['for_admin'] = $dataform['for_admin'] ? ' checked="checked"' : '';
+    if ($dataform['for_admin']) {
+        $dataform['for_admin'] = ' checked="checked"';
+        $dataform['required'] = $dataform['show_register'] = $dataform['show_profile'] = $dataform['user_editable'] = ' disabled="disabled"';
+        $xtpl->assign('IS_HIDDEN', 'hidden');
+    } else {
+        $dataform['for_admin'] = '';
+        $dataform['required'] = ($dataform['required']) ? ' checked="checked"' : '';
+        $dataform['show_register'] = ($dataform['show_register']) ? ' checked="checked"' : '';
+        $dataform['show_profile'] = ($dataform['show_profile']) ? ' checked="checked"' : '';
+        $dataform['user_editable'] = ($dataform['user_editable']) ? ' checked="checked"' : '';
+    }
     $dataform['fielddisabled'] = ($fid) ? ' disabled="disabled"' : '';
-    $dataform['required'] = ($dataform['required']) ? ' checked="checked"' : '';
-    $dataform['show_register'] = ($dataform['show_register']) ? ' checked="checked"' : '';
-    $dataform['show_profile'] = ($dataform['show_profile']) ? ' checked="checked"' : '';
-    $dataform['user_editable'] = ($dataform['user_editable']) ? ' checked="checked"' : '';
 
     $xtpl->assign('CAPTIONFORM', ($fid) ? $lang_module['captionform_edit'] . ': ' . $dataform['fieldid'] : $lang_module['captionform_add']);
     $xtpl->assign('DATAFORM', $dataform);

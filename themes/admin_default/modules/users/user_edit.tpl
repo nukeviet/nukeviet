@@ -16,37 +16,49 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td> {LANG.account} </td>
+                    <td><strong>{LANG.account}</strong></td>
                     <td> <span class="text-danger">(*)</span> </td>
                     <td><input class="required form-control" value="{DATA.username}" name="username" id="username_iavim" style="width: 300px" /></td>
                 </tr>
                 <tr>
-                    <td> {LANG.email} </td>
+                    <td><strong>{LANG.email}</strong></td>
                     <td> <span class="text-danger">(*)</span> </td>
                     <td><input type="email" class="email required form-control" value="{DATA.email}" name="email" id="email_iavim" style="width: 300px" /></td>
                 </tr>
                 <!-- BEGIN: name_show_0 -->
                 <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" />
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_last_name -->
                 <!-- BEGIN: show_first_name -->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" />
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_first_name -->
@@ -54,32 +66,49 @@
                 <!-- BEGIN: name_show_1 -->
                 <!-- BEGIN: show_first_name -->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="first_name" />
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_first_name -->
                 <!-- BEGIN: show_last_name-->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="last_name" />
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_last_name -->
                 <!-- END: name_show_1 -->
                 <!-- BEGIN: show_gender -->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
@@ -88,13 +117,19 @@
                             <!-- BEGIN: gender -->
                             <option value="{GENDER.key}" {GENDER.selected}>{GENDER.title}</option><!-- END: gender -->
                         </select>
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_gender -->
                 <!-- BEGIN: show_birthday -->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
@@ -102,48 +137,67 @@
                         <div class="form-inline">
                             <input name="birthday" id="birthday" class="form-control {FIELD.required} w100" value="{FIELD.value}" maxlength="10" type="text" autocomplete="off">
                         </div>
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_birthday -->
                 <!-- BEGIN: show_sig -->
                 <tr>
-                    <td style="vertical-align:top">{FIELD.title}</td>
+                    <td style="vertical-align:top">
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <textarea name="sig" class="form-control {FIELD.required} w300" cols="70" rows="5">{FIELD.value}</textarea>
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_sig -->
                 <!-- BEGIN: show_question -->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="question" />
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_question -->
                 <!-- BEGIN: show_answer -->
                 <tr>
-                    <td>{FIELD.title}</td>
+                    <td>
+                        <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
+                    </td>
                     <td>
                         <!-- BEGIN: required --><span class="text-danger">(*)</span><!-- END: required -->
                     </td>
                     <td>
                         <input class="form-control {FIELD.required} w300" type="text" value="{FIELD.value}" name="answer" />
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: show_answer -->
                 <tr>
-                    <td> {LANG.avatar} </td>
+                    <td><strong>{LANG.avatar}</strong></td>
                     <td></td>
                     <td>
                         <!-- BEGIN: photo -->
@@ -167,7 +221,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td> {LANG.show_email} </td>
+                    <td><strong>{LANG.show_email}</strong></td>
                     <td></td>
                     <td><input type="checkbox" name="view_mail" value="1" {DATA.view_mail} /></td>
                 </tr>
@@ -181,7 +235,7 @@
                 <!-- BEGIN: group -->
                 <tr<!-- BEGIN: hide --> class="hidden"
                     <!-- END: hide --> id="ctn-list-groups">
-                    <td style="vertical-align:top"> {LANG.in_group} </td>
+                    <td style="vertical-align:top"><strong>{LANG.in_group}</strong></td>
                     <td></td>
                     <td>
                         <!-- BEGIN: list -->
@@ -200,7 +254,7 @@
                     </tr>
                     <!-- END: group -->
                     <tr>
-                        <td> {LANG.pass_reset_request} </td>
+                        <td><strong>{LANG.pass_reset_request}</strong></td>
                         <td></td>
                         <td>
                             <select class="form-control" name="pass_reset_request" style="width: fit-content;">
@@ -211,7 +265,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td> {LANG.adduser_email1} </td>
+                        <td><strong>{LANG.adduser_email1}</strong></td>
                         <td></td>
                         <td><label><input type="checkbox" name="adduser_email" value="1" {DATA.adduser_email} /> <small>{LANG.adduser_email1_note1}</small></label></td>
                     </tr>
@@ -232,6 +286,9 @@
                 <tr>
                     <td>
                         <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
                     </td>
                     <td>
                         <!-- BEGIN: required -->
@@ -243,7 +300,9 @@
                         <input class="form-control {FIELD.required} w300" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
                         <!-- END: textbox -->
                         <!-- BEGIN: date -->
-                        <input class="form-control datepicker {FIELD.required} w100" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
+                        <div class="form-inline">
+                            <input class="form-control datepicker {FIELD.required} w100" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
+                        </div>
                         <!-- END: date -->
                         <!-- BEGIN: textarea -->
                         <textarea class="form-control w300" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
@@ -252,7 +311,7 @@
                         {EDITOR}
                         <!-- END: editor -->
                         <!-- BEGIN: select -->
-                        <select class="form-control" name="custom_fields[{FIELD.field}]">
+                        <select class="form-control" name="custom_fields[{FIELD.field}]" style="width: fit-content;">
                             <!-- BEGIN: loop -->
                             <option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
                             <!-- END: loop -->
@@ -272,7 +331,8 @@
                         </select>
                         <!-- END: multiselect -->
 
-                        <!-- BEGIN: description --><div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
+                        <!-- BEGIN: description -->
+                        <div class="help-block mb-0">{FIELD.description}</div><!-- END: description -->
                     </td>
                 </tr>
                 <!-- END: loop -->
@@ -290,7 +350,7 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td> {LANG.password} </td>
+                    <td><strong>{LANG.password}</strong></td>
                     <td>
                         <div class="input-group w300">
                             <input class="form-control password" style="height: 32.5px;" type="text" id="password1" name="password1" value="" maxlength="{NV_UPASSMAX}" />
@@ -301,7 +361,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td> {LANG.repassword} </td>
+                    <td><strong>{LANG.repassword}</strong></td>
                     <td>
                         <input class="form-control password w300" type="text" name="password2" value="" id="password2" />
                     </td>

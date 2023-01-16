@@ -21,10 +21,10 @@
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover">
         <caption><em class="fa fa-file-text-o">&nbsp;</em>{TABLE_CAPTION}</caption>
-        <thead>
+        <thead class="bg-primary">
             <tr>
                 <!-- BEGIN: head_td -->
-                <th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
+                <th><a class="text-white" href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
                 <!-- END: head_td -->
                 <th class="text-center w200">{LANG.funcs}</th>
             </tr>
@@ -44,8 +44,9 @@
                 <td> {CONTENT_TD.full_name} </td>
                 <td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
                 <td> {CONTENT_TD.lastedit} </td>
-                <td class="text-center">
+                <td class="text-nowrap">
                     <!-- BEGIN: allowed -->
+                    <a href="{VIEW_LINK}" class="btn btn-xs btn-info"><i class="fa fa-search"></i> {LANG.check}</a>
                     <a href="javascript:void(0);" class="btn btn-xs btn-success" onclick="nv_editcensor_row_accept({CONTENT_TD.userid}, '{LANG.editcensor_confirm_approval}');"><i class="fa fa-check"></i> {LANG.approved}</a>
                     <a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="nv_editcensor_row_del({CONTENT_TD.userid}, '{LANG.editcensor_confirm_denied}');"><i class="fa fa-trash"></i> {LANG.denied}</a>
                     <!-- END: allowed -->

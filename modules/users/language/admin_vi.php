@@ -572,3 +572,5 @@ $lang_module['leave_blank_note'] = 'Để trống nếu sử dụng giá trị m
 $lang_module['register_active_time'] = 'Thời gian tài khoản chờ kích hoạt';
 $lang_module['register_active_time_note'] = 'Nếu giá trị lớn hơn 0, tài khoản chờ kích hoạt sẽ bị xóa sau khoảng thời gian này. Nếu bằng 0, tài khoản chờ kích hoạt sẽ không bị xóa tự động';
 $lang_module['hours'] = 'giờ';
+$lang_module['for_admin'] = 'Chỉ dành cho quản trị';
+$lang_module['check'] = 'Kiểm tra';

@@ -7,7 +7,7 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption>{LANG.editcensor_info_basic}</caption>
-            <thead>
+            <thead class="bg-primary">
                 <tr>
                     <th class="w200">{LANG.editcensor_field}</th>
                     <th class="w250">{LANG.editcensor_current}</th>
@@ -104,7 +104,7 @@
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <caption>{LANG.editcensor_info_custom}</caption>
-            <thead>
+            <thead class="bg-primary">
                 <tr>
                     <th class="w200">{LANG.editcensor_field}</th>
                     <th class="w250">{LANG.editcensor_current}</th>

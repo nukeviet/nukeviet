@@ -552,3 +552,5 @@ $lang_module['leave_blank_note'] = 'Laisser vide si vous utilisez la valeur sais
 $lang_module['register_active_time'] = 'Temps d\'attente d\'activation du compte';
 $lang_module['register_active_time_note'] = 'Si la valeur est supérieure à 0, le compte en attente d\'activation sera supprimé après cette période. Si c\'est 0, le compte en attente d\'activation ne sera pas supprimé automatiquement';
 $lang_module['hours'] = 'heures';
+$lang_module['for_admin'] = 'Pour les admins';
+$lang_module['check'] = 'Chèque';

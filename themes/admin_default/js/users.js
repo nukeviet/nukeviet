@@ -778,6 +778,14 @@ $(document).ready(function() {
             nv_users_check_choicetypes("select[name=choicetypes]");
         }
     });
+    $('input[name=for_admin]').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('input[name=required],input[name=show_register],input[name=user_editable],input[name=show_profile]').prop('disabled', true).parents('.item').addClass('hidden')
+        } else {
+            $('input[name=required],input[name=show_register],input[name=user_editable],input[name=show_profile]').prop('disabled', false).parents('.item').removeClass('hidden')
+        }
+        
+    });
     $("input[name=required],input[name=show_register]").click(function() {
         if ($("input[name='required']:checked").val() == 1) {
             $("input[name=show_register]").prop("checked", true);
