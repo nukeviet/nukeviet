@@ -118,7 +118,7 @@ function forcedrelogin($userid)
     $stmt->execute();
 }
 
-function fieldsCheck($custom_fields, &$array_data, &$query_field, &$valid_field)
+function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field)
 {
     global $array_field_config, $lang_module, $global_users_config;
 
