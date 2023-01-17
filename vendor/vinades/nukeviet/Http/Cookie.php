@@ -20,7 +20,8 @@ namespace NukeViet\Http;
  * @version 4.5.00
  * @access public
  */
-class Cookie
+#[\AllowDynamicProperties]
+ class Cookie
 {
     /**
      * Cookie name.
