@@ -193,7 +193,7 @@ class Http extends Server
             'nobody' => false,
             'compress' => false,
             'decompress' => true,
-            'sslverify' => true,
+            'sslverify' => false,
             'sslcertificates' => Http::$default_cacert,
             'stream' => false,
             'filename' => null,
