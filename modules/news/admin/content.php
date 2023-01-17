@@ -59,6 +59,13 @@ if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('che
     nv_htmlOutput($return);
 }
 
+if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
+    $contents = nv_theme_alert('', $lang_global['error_upload_over_capacity1']);
+    include NV_ROOTDIR . '/includes/header.php';
+    echo nv_admin_theme($contents);
+    include NV_ROOTDIR . '/includes/footer.php';
+}
+
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }

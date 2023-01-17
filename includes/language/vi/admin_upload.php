@@ -73,6 +73,7 @@ $lang_module['foldername'] = 'Tên thư mục';
 $lang_module['folder_exists'] = 'Lỗi! Đã có thư mục cùng tên tồn tại';
 $lang_module['notlevel'] = 'Bạn không được cấp quyền thực hiện thao tác này';
 $lang_module['notupload'] = 'Thư mục không được phép upload';
+$lang_module['over_capacity'] = 'Hết dung lượng tải lên';
 $lang_module['errorInfo'] = 'Thông báo';
 $lang_module['selectfiletype'] = 'Hiển thị loại file';
 $lang_module['refresh'] = 'Cập nhật lại';

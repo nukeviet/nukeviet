@@ -37,7 +37,8 @@ class Upload
         'overflowsize' => 0,
         'maxwidth' => 0,
         'maxheight' => 0,
-        'magic_path' => ''
+        'magic_path' => '',
+        'over_capacity' => 0
     ];
     private $lang = [
         'error_uploadNameEmpty' => 'Upload failed: UserFile Name is empty',
@@ -60,7 +61,8 @@ class Upload
         'error_upload_forbidden' => 'Upload forbidden',
         'error_upload_writable' => 'Directory %s is not writable',
         'error_upload_urlfile' => 'The URL is not valid and cannot be loaded',
-        'error_upload_url_notfound' => 'The url was not found'
+        'error_upload_url_notfound' => 'The url was not found',
+        'error_upload_over_capacity' => 'The file cannot be uploaded because this website has exceeded the allowed capacity',
     ];
 
     private $file_extension = '';
@@ -105,6 +107,8 @@ class Upload
      */
     public function __construct($allowed_filetypes = ['any'], $forbid_extensions = ['php'], $forbid_mimes = [], $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '')
     {
+        global $global_config;
+
         if (!is_array($allowed_filetypes)) {
             $allowed_filetypes = [
                 $allowed_filetypes
@@ -137,6 +141,9 @@ class Upload
         $this->config['maxheight'] = (int) $maxheight;
         $this->config['upload_checking_mode'] = defined('UPLOAD_CHECKING_MODE') ? UPLOAD_CHECKING_MODE : 'strong';
         $this->config['magic_path'] = $magic_path;
+        if (!defined('NV_IS_GODADMIN')) {
+            $this->config['over_capacity'] = isset($global_config['over_capacity']) ? intval($global_config['over_capacity']) : 0;
+        }
 
         $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split('/[\s,]+/', ini_get('disable_functions'))) : [];
         if (extension_loaded('suhosin')) {
@@ -170,72 +177,14 @@ class Upload
     /**
      * setLanguage()
      *
-     * @param string $lang_upload
+     * @param string[] $lang_upload
      */
     public function setLanguage($lang_upload)
     {
-        if (isset($lang_upload['error_uploadNameEmpty'])) {
-            $this->lang['error_uploadNameEmpty'] = $lang_upload['error_uploadNameEmpty'];
-        }
-        if (isset($lang_upload['error_uploadSizeEmpty'])) {
-            $this->lang['error_uploadSizeEmpty'] = $lang_upload['error_uploadSizeEmpty'];
-        }
-        if (isset($lang_upload['error_upload_ini_size'])) {
-            $this->lang['error_upload_ini_size'] = $lang_upload['error_upload_ini_size'];
-        }
-        if (isset($lang_upload['error_upload_form_size'])) {
-            $this->lang['error_upload_form_size'] = $lang_upload['error_upload_form_size'];
-        }
-        if (isset($lang_upload['error_upload_partial'])) {
-            $this->lang['error_upload_partial'] = $lang_upload['error_upload_partial'];
-        }
-        if (isset($lang_upload['error_upload_no_file'])) {
-            $this->lang['error_upload_no_file'] = $lang_upload['error_upload_no_file'];
-        }
-        if (isset($lang_upload['error_upload_no_tmp_dir'])) {
-            $this->lang['error_upload_no_tmp_dir'] = $lang_upload['error_upload_no_tmp_dir'];
-        }
-        if (isset($lang_upload['error_upload_cant_write'])) {
-            $this->lang['error_upload_cant_write'] = $lang_upload['error_upload_cant_write'];
-        }
-        if (isset($lang_upload['error_upload_extension'])) {
-            $this->lang['error_upload_extension'] = $lang_upload['error_upload_extension'];
-        }
-        if (isset($lang_upload['error_upload_unknown'])) {
-            $this->lang['error_upload_unknown'] = $lang_upload['error_upload_unknown'];
-        }
-        if (isset($lang_upload['error_upload_type_not_allowed'])) {
-            $this->lang['error_upload_type_not_allowed'] = $lang_upload['error_upload_type_not_allowed'];
-        }
-        if (isset($lang_upload['error_upload_mime_not_recognize'])) {
-            $this->lang['error_upload_mime_not_recognize'] = $lang_upload['error_upload_mime_not_recognize'];
-        }
-        if (isset($lang_upload['error_upload_max_user_size'])) {
-            $this->lang['error_upload_max_user_size'] = $lang_upload['error_upload_max_user_size'];
-        }
-        if (isset($lang_upload['error_upload_not_image'])) {
-            $this->lang['error_upload_not_image'] = $lang_upload['error_upload_not_image'];
-        }
-        if (isset($lang_upload['error_upload_image_failed'])) {
-            $this->lang['error_upload_image_failed'] = $lang_upload['error_upload_image_failed'];
-        }
-        if (isset($lang_upload['error_upload_image_width'])) {
-            $this->lang['error_upload_image_width'] = $lang_upload['error_upload_image_width'];
-        }
-        if (isset($lang_upload['error_upload_image_height'])) {
-            $this->lang['error_upload_image_height'] = $lang_upload['error_upload_image_height'];
-        }
-        if (isset($lang_upload['error_upload_forbidden'])) {
-            $this->lang['error_upload_forbidden'] = $lang_upload['error_upload_forbidden'];
-        }
-        if (isset($lang_upload['error_upload_writable'])) {
-            $this->lang['error_upload_writable'] = $lang_upload['error_upload_writable'];
-        }
-        if (isset($lang_upload['error_upload_urlfile'])) {
-            $this->lang['error_upload_urlfile'] = $lang_upload['error_upload_urlfile'];
-        }
-        if (isset($lang_upload['error_upload_url_notfound'])) {
-            $this->lang['error_upload_url_notfound'] = $lang_upload['error_upload_url_notfound'];
+        foreach ($this->lang as $key => $value) {
+            if (isset($lang_upload[$key])) {
+                $this->lang[$key] = $lang_upload[$key];
+            }
         }
     }
 
@@ -374,7 +323,7 @@ class Upload
     /**
      * get_mime_from_userFile()
      *
-     * @param string $userfile
+     * @param array $userfile
      * @return string
      */
     private function get_mime_from_userFile($userfile)
@@ -385,7 +334,7 @@ class Upload
     /**
      * get_mime_finfo()
      *
-     * @param string $userfile
+     * @param array $userfile
      * @return string
      */
     private function get_mime_finfo($userfile)
@@ -432,7 +381,7 @@ class Upload
     /**
      * get_mime_exec()
      *
-     * @param string $userfile
+     * @param array $userfile
      * @return string
      */
     private function get_mime_exec($userfile)
@@ -463,7 +412,7 @@ class Upload
     /**
      * get_mime_content_type()
      *
-     * @param string $userfile
+     * @param array $userfile
      * @return string
      */
     private function get_mime_content_type($userfile)
@@ -481,7 +430,7 @@ class Upload
     /**
      * get_mime_image()
      *
-     * @param string $userfile
+     * @param array $userfile
      * @return string
      */
     private function get_mime_image($userfile)
@@ -597,7 +546,7 @@ class Upload
     /**
      * get_mime_type()
      *
-     * @param string $userfile
+     * @param array $userfile
      * @return string
      */
     private function get_mime_type($userfile)
@@ -743,10 +692,10 @@ class Upload
             return $this->lang['error_uploadNameEmpty'];
         }
         if (!isset($userfile['size']) or empty($userfile['size'])) {
-            return _ERROR_UPLOAD_SIZEEMPTY;
+            return $this->lang['error_uploadSizeEmpty'];
         }
         if (!isset($userfile['tmp_name']) or empty($userfile['tmp_name']) or !file_exists($userfile['tmp_name'])) {
-            return _ERROR_UPLOAD_SIZEEMPTY;
+            return $this->lang['error_uploadSizeEmpty'];
         }
         if (!isset($userfile['error']) or $userfile['error'] != UPLOAD_ERR_OK) {
             switch ($userfile['error']) {
@@ -938,7 +887,7 @@ class Upload
         }
 
         if (file_exists(NV_ROOTDIR . '/includes/utf8/lookup.php')) {
-            $utf8_lookup = false;
+            $utf8_lookup = [];
             include NV_ROOTDIR . '/includes/utf8/lookup.php';
             $word = strtr($word, $utf8_lookup['romanize']);
         }
@@ -975,6 +924,10 @@ class Upload
         }
 
         $return = [];
+        if (!empty($this->config['over_capacity'])) {
+            $return['error'] = $this->lang['error_upload_over_capacity'];
+            return $return;
+        }
         $return['error'] = $this->checkUploadBlob($userfile);
         if (!empty($return['error'])) {
             return $return;
@@ -1538,6 +1491,10 @@ class Upload
         $return = [];
         $return['error'] = '';
 
+        if (!empty($this->config['over_capacity'])) {
+            $return['error'] = $this->lang['error_upload_over_capacity'];
+            return $return;
+        }
         $this->url_info = $this->url_get_info($urlfile);
         if (empty($this->url_info) or !isset($this->url_info['scheme'])) {
             $return['error'] = $this->lang['error_upload_urlfile'];

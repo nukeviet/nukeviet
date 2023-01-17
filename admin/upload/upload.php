@@ -30,7 +30,9 @@ $error = '';
 $upload_info = [];
 $is_remote_upload = false;
 
-if (!isset($check_allow_upload_dir['upload_file'])) {
+if (isset($check_allow_upload_dir['over_capacity'])) {
+    $error = $lang_module['over_capacity'];
+} elseif (!isset($check_allow_upload_dir['upload_file'])) {
     $error = $lang_module['notlevel'];
 } elseif (!isset($_FILES, $_FILES['upload'], $_FILES['upload']['tmp_name']) and !$nv_Request->isset_request('fileurl', 'post')) {
     $error = $lang_module['uploadError1'];
