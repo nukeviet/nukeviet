@@ -33,6 +33,7 @@
 <span class="upload-hide" id="move_file" title="{MOVE_FILE}"></span>
 <span class="upload-hide" id="crop_file" title="{CROP_FILE}"></span>
 <span class="upload-hide" id="rotate_file" title="{ROTATE_FILE}"></span>
+<span class="upload-hide" id="over_capacity" title="{OVER_CAPACITY}"></span>
 
 <script type="text/javascript">
 //<![CDATA[

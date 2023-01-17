@@ -371,6 +371,7 @@ LANG.errorEmptyY = "{LANG.errorEmptyY}";
 LANG.crop = "{LANG.crop}";
 LANG.rotate = "{LANG.rotate}";
 LANG.notupload = "{LANG.notupload}";
+LANG.over_capacity = "{LANG.over_capacity}";
 LANG.upload_file = "{LANG.upload_file}";
 LANG.upload_mode = "{LANG.upload_mode}";
 LANG.upload_mode_remote = "{LANG.upload_mode_remote}";
