@@ -133,6 +133,7 @@ $xtpl->assign('CROP_FILE', (isset($check_allow_upload_dir['crop_file']) and $che
 $xtpl->assign('ROTATE_FILE', (isset($check_allow_upload_dir['rotate_file']) and $check_allow_upload_dir['rotate_file'] === true) ? 1 : 0);
 $xtpl->assign('DELETE_FILE', (isset($check_allow_upload_dir['delete_file']) and $check_allow_upload_dir['delete_file'] === true) ? 1 : 0);
 $xtpl->assign('MOVE_FILE', (isset($check_allow_upload_dir['move_file']) and $check_allow_upload_dir['move_file'] === true) ? 1 : 0);
+$xtpl->assign('OVER_CAPACITY', (isset($check_allow_upload_dir['over_capacity']) and $check_allow_upload_dir['over_capacity'] === true) ? 1 : 0);
 
 if (empty($content)) {
     $content = '<li class="hide">&nbsp;</li>';

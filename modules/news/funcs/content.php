@@ -287,6 +287,13 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         $page_title = $lang_module['add_content'];
     }
 
+    if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
+        $contents = nv_theme_alert('', $lang_global['error_upload_over_capacity1']);
+        include NV_ROOTDIR . '/includes/header.php';
+        echo nv_site_theme($contents);
+        include NV_ROOTDIR . '/includes/footer.php';
+    }
+
     if (empty($post_status)) {
         nv_redirect_location($base_url);
     }

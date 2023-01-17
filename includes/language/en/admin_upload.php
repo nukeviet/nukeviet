@@ -72,6 +72,7 @@ $lang_module['foldername'] = 'Folder name';
 $lang_module['folder_exists'] = 'Error! Same name already exists directory';
 $lang_module['notlevel'] = 'You are not granted the right to perform this operation';
 $lang_module['notupload'] = 'Not allowed to upload directory';
+$lang_module['over_capacity'] = 'Over upload capacity';
 $lang_module['errorInfo'] = 'Announcement';
 $lang_module['selectfiletype'] = 'Display file type';
 $lang_module['refresh'] = 'refresh';
