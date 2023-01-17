@@ -113,7 +113,7 @@ class Http extends Server
             'body' => null,
             'compress' => false,
             'decompress' => true,
-            'sslverify' => true,
+            'sslverify' => false,
             'sslcertificates' => $this->root_dir . '/includes/certificates/ca-bundle.crt',
             'stream' => false,
             'filename' => null,
