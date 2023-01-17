@@ -212,7 +212,7 @@ class Http extends Server
 
         if ((!is_null($args['body']) and '' != $args['body']) or $args['method'] == 'POST' or $args['method'] == 'PUT') {
             if (is_array($args['body']) or is_object($args['body'])) {
-                $args['body'] = http_build_query($args['body'], null, '&');
+                $args['body'] = http_build_query($args['body'], '', '&');
 
                 if (!isset($args['headers']['Content-Type'])) {
                     $args['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=' . Http::$site_config['site_charset'];
