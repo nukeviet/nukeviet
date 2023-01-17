@@ -369,7 +369,7 @@ class XTemplate
     /**
      * PHP 5 Constructor - Instantiate the object
      *
-     * @param array $options Options array (was $file)
+     * @param string|array $options Options array (was $file)
      * @param string/array $tpldir Location of template files (useful for keeping files outside web server root)
      * @param array $files Filenames lookup
      * @param string $mainblock Name of main block in the template
