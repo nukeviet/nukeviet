@@ -73,6 +73,7 @@ $lang_module['foldername'] = 'Nom du dossier';
 $lang_module['folder_exists'] = 'Erreur! Un dossier du même nom déjà existant';
 $lang_module['notlevel'] = 'Vous n\'avez pas la permission de faire cette opération';
 $lang_module['notupload'] = 'Envoi non autorisé';
+$lang_module['over_capacity'] = 'Surcapacité de téléchargement';
 $lang_module['errorInfo'] = 'Notification';
 $lang_module['selectfiletype'] = 'Afficher type de fichier';
 $lang_module['refresh'] = 'Rafraîchir';

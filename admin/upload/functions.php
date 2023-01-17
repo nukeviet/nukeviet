@@ -159,6 +159,11 @@ function nv_check_allow_upload_dir($dir)
         $level['auto_logo'] = true;
     }
 
+    if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
+        unset($level['create_file'], $level['recreatethumb'], $level['upload_file'], $level['create_dir']);
+        $level['over_capacity'] = true;
+    }
+
     return $level;
 }
 

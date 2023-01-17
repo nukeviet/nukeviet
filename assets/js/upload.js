@@ -1850,9 +1850,10 @@ var NVUPLOAD = {
 
         // Check folder if allow upload
         var isUploadAllow = $("span#upload_file").attr("title") == "1" ? true : false;
+        var isOverCapacity = $("span#over_capacity").attr("title") == "1" ? true : false;
 
         if (!isUploadAllow) {
-            $('#upload-button-area').html('<span class="text-danger"><em class="fa fa-info">&nbsp;</em>' + LANG.notupload + '</span>');
+            $('#upload-button-area').html('<span class="text-danger"><em class="fa fa-info">&nbsp;</em>' + (isOverCapacity ? LANG.over_capacity : LANG.notupload) + '</span>');
         } else {
             NVUPLOAD.buildBtns();
 
