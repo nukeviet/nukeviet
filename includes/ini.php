@@ -392,7 +392,7 @@ if (!extension_loaded('xml')) {
     trigger_error('Xml library not supported', 256);
 }
 
-//Neu he thong khong ho tro mcrypt library se bao loi
+//Neu he thong khong ho tro openssl encrypt se bao loi
 if (!function_exists('openssl_encrypt')) {
     trigger_error('Openssl library not available', 256);
 }
