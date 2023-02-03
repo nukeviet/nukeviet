@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -69,7 +69,7 @@ $lang_global['password_rule_limit'] = 'Mot de passe invalide: %1$s et %2$d à %3
 $lang_global['password_rule_nolimit'] = 'Les mots de passe doivent être compris entre %1$d et %2$d caractères';
 $lang_global['securitycodeincorrect'] = 'Code de sécurité incorrect';
 $lang_global['securitycodeincorrect1'] = 'L\'authentification est pas encore Robot, s\'il vous plaît revalider';
-$lang_global['loginincorrect'] = 'L\'identifiant et le mot de passe ne correspondent pas';
+$lang_global['loginincorrect'] = 'Aucun compte trouvé correspondant aux informations saisies';
 $lang_global['admin_loginsuccessfully'] = 'Vous avez réussi à vous identifier. Le système vous transférera à l\'Administration du site';
 $lang_global['incorrect_password'] = 'Mot de passe incorrect';
 $lang_global['userlogin_blocked'] = 'Vous devez être connecté %s fois échoué, verrouiller temporairement journal système jusqu\'à %s';
@@ -372,6 +372,10 @@ $lang_global['error_code_10'] = 'Demande HTTP par Curl échoué';
 $lang_global['error_code_11'] = 'Un erreur non-déterminé a eu lieu';
 $lang_global['error_valid_response'] = 'Les données retournées n\'est pas en bonne forme';
 $lang_global['myapis'] = 'Mes API';
+
+$lang_global['login_name_type_username'] = 'Nom d\'utilisateur';
+$lang_global['login_name_type_email'] = 'Email';
+$lang_global['login_name_type_email_username'] = 'Nom d\'utilisateur ou email';
 
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';

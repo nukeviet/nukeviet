@@ -591,31 +591,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 ]);
             }
         } else {
-            if (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 1) {
-                $row = checkLoginName('username', $nv_username);
-            } elseif (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 2) {
-                $check_email = nv_check_valid_email($nv_username, true);
-                if (!empty($check_email[0])) {
-                    $row = false;
-                }
-                $row = checkLoginName('email', $check_email[1]);
-            } else {
-                $check_email = nv_check_valid_email($nv_username, true);
-                if (empty($check_email[0])) {
-                    $row = checkLoginName('email', $check_email[1]);
-                } else {
-                    $row = checkLoginName('username', $nv_username);
-                }
-            }
+            $row = false;
+            $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+            require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
+            $row = check_user_login($nv_username);
 
-            if (empty($row)) {
-                opidr_login([
-                    'status' => 'error',
-                    'mess' => $lang_global['loginincorrect']
-                ]);
-            }
-
-            if (!$crypt->validate_password($nv_password, $row['password'])) {
+            if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {
                 opidr_login([
                     'status' => 'error',
                     'mess' => $lang_global['loginincorrect']
@@ -865,23 +846,10 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     }
 
     // đăng nhập qua hệ thống nukeviet
-    if (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 1) {
-        $row = checkLoginName('username', $nv_username);
-    } elseif (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 2) {
-        $check_email = nv_check_valid_email($nv_username, true);
-        if (!empty($check_email[0])) {
-            $row = false;
-        } else {
-            $row = checkLoginName('email', $check_email[1]);
-        }
-    } else {
-        $check_email = nv_check_valid_email($nv_username, true);
-        if (empty($check_email[0])) {
-            $row = checkLoginName('email', $check_email[1]);
-        } else {
-            $row = checkLoginName('username', $nv_username);
-        }
-    }
+    $row = false;
+    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+    require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
+    $row = check_user_login($nv_username);
 
     // Nếu không tìm thấy tài khoản hoặc mật khẩu không khớp
     if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {

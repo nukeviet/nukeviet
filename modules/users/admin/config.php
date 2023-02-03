@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -42,6 +42,14 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     require NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php';
 } else {
+    $files = nv_scandir(NV_ROOTDIR . '/modules/users/methods/', '/(.*?)/');
+    $login_name_types = [];
+    foreach ($files as $file) {
+        if (preg_match('/^([^0-9]+[a-z0-9\_]{0,})\.php$/', $file, $m)) {
+            $login_name_types[] = $m[1];
+        }
+    }
+
     if ($nv_Request->isset_request('save', 'post')) {
         if ($checkss != $nv_Request->get_string('checkss', 'post')) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
@@ -85,9 +93,11 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['pass_timeout'] = 86400 * $nv_Request->get_int('pass_timeout', 'post', 0);
         $array_config['oldpass_num'] = $nv_Request->get_int('oldpass_num', 'post', 5);
         $array_config['send_pass'] = (int) $nv_Request->get_bool('send_pass', 'post', false);
-        $array_config['login_name_type'] = $nv_Request->get_int('login_name_type', 'post', 3);
-        ($array_config['login_name_type'] != 1 and $array_config['login_name_type'] != 2) && $array_config['login_name_type'] = 3;
-
+        $array_config['login_name_type'] = $nv_Request->get_title('login_name_type', 'post', '');
+        if (!in_array($array_config['login_name_type'], $login_name_types, true)) {
+            $array_config['login_name_type'] = 'username';
+        }
+        
         $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', []);
         $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
 
@@ -418,13 +428,12 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.oldpass_num');
     }
 
-    $login_name_types = [1, 2, 3];
-    $login_name_type = !empty($global_config['login_name_type']) ? (int) $global_config['login_name_type'] : 3;
-    foreach ($login_name_types as $login_name_type) {
+    $login_name_type = (!empty($global_config['login_name_type']) and in_array($global_config['login_name_type'], $login_name_types)) ? $global_config['login_name_type'] : 'username';
+    foreach ($login_name_types as $type) {
         $xtpl->assign('TYPE', [
-            'val' => $login_name_type,
-            'sel' => ($login_name_type == $login_name_type) ? ' selected="selected"' : '',
-            'title' => $lang_module['login_name_type_' . $login_name_type]
+            'val' => $type,
+            'sel' => ($type == $login_name_type) ? ' selected="selected"' : '',
+            'title' => isset($lang_global['login_name_type_' . $type]) ? $lang_global['login_name_type_' . $type] : $type
         ]);
         $xtpl->parse('main.login_name_type');
     }

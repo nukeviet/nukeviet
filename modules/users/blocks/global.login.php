@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -115,6 +115,15 @@ if (!nv_function_exists('nv_block_login')) {
                 }
             } else {
                 global $lang_module;
+            }
+
+            $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+            if (isset($lang_global['login_name_type_' . $method])) {
+                $lang_global['username_email'] = $lang_global['login_name_type_' . $method];
+            } elseif (isset($lang_global[$method])) {
+                $lang_global['username_email'] = $lang_global[$method];
+            } elseif (isset($lang_module[$method])) {
+                $lang_global['username_email'] = $lang_module[$method];
             }
 
             $xtpl->assign('LANG', $lang_module);

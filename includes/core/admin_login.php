@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -308,33 +308,11 @@ if (empty($admin_pre_data) and $nv_Request->isset_request('nv_login,nv_password'
     }
 
     // Kiểm tra đăng nhập bằng email hay username
-    if (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 1) {
-        $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
-        $login_email = false;
-    } elseif (!empty($global_config['login_name_type']) and $global_config['login_name_type'] == 2) {
-        $sql = 't2.email =' . $db->quote($nv_username);
-        $login_email = true;
-    } else {
-        $check_email = nv_check_valid_email($nv_username, true);
-        if (empty($check_email[0])) {
-            $nv_username = $check_email[1];
-            $sql = 't2.email =' . $db->quote($nv_username);
-            $login_email = true;
-        } else {
-            $sql = "t2.md5username ='" . nv_md5safe($nv_username) . "'";
-            $login_email = false;
-        }
-    }
-
-    // Lấy thông tin đăng nhập
-    $sql = 'SELECT t1.admin_id admin_id, t1.lev admin_lev, t1.last_agent admin_last_agent, t1.last_ip admin_last_ip, t1.last_login admin_last_login,
-        t2.userid, t2.last_agent, t2.last_ip, t2.last_login, t2.last_openid, t2.username, t2.email, t2.password, t2.active2step, t2.in_groups, t2.secretkey
-        FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1, ' . NV_USERS_GLOBALTABLE . ' t2
-        WHERE t1.admin_id=t2.userid AND ' . $sql . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1';
-
-    $row = $db->query($sql)->fetch();
-
-    if (empty($row) or !((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password']))) {
+    $row = false;
+    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+    require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
+    $row = check_admin_login($nv_username);
+    if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {
         // Đăng nhập bước đầu thất bại
         nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
         $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
@@ -501,6 +479,13 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/syst
 } else {
     $dir_template = NV_ROOTDIR . '/themes/admin_default/system';
     $global_config['admin_theme'] = 'admin_default';
+}
+
+$method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+if (isset($lang_global['login_name_type_' . $method])) {
+    $lang_global['login_name'] = $lang_global['login_name_type_' . $method];
+} elseif (isset($lang_global[$method])) {
+    $lang_global['login_name'] = $lang_global[$method];
 }
 
 $xtpl = new XTemplate('login.tpl', $dir_template);

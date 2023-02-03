@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -83,3 +83,6 @@ $lang_global['login_session_expire'] = 'Your login session will expire in';
 $lang_global['account_settings'] = 'Account settings';
 $lang_global['your_admin_account'] = 'Your admin account';
 $lang_global['login_name'] = 'Login name';
+$lang_global['login_name_type_username'] = 'Username';
+$lang_global['login_name_type_email'] = 'Email';
+$lang_global['login_name_type_email_username'] = 'Username or Email';

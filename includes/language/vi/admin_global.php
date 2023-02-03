@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -87,3 +87,6 @@ $lang_global['login_session_expire'] = 'Phiên đăng nhập hiện tại sẽ h
 $lang_global['account_settings'] = 'Thiết lập tài khoản';
 $lang_global['your_admin_account'] = 'Tài khoản quản trị của bạn';
 $lang_global['login_name'] = 'Tên đăng nhập';
+$lang_global['login_name_type_username'] = 'Bí danh';
+$lang_global['login_name_type_email'] = 'Email';
+$lang_global['login_name_type_email_username'] = 'Bí danh hoặc Email';

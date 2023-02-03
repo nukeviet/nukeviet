@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -69,7 +69,7 @@ $lang_global['password_rule_limit'] = 'Invalid Password: %1$s and %2$d from to %
 $lang_global['password_rule_nolimit'] = 'Password must be between %1$d to %2$d characters';
 $lang_global['securitycodeincorrect'] = 'Security Code is invalid';
 $lang_global['securitycodeincorrect1'] = 'Unverified i\'m not a robot, please verify again!';
-$lang_global['loginincorrect'] = 'The system can not find information correctly with your declaration. Login name or password do not match';
+$lang_global['loginincorrect'] = 'No account found matching the information you entered';
 $lang_global['admin_loginsuccessfully'] = 'You have successfully logged. The system will transfer you to the site administration area';
 $lang_global['incorrect_password'] = 'Password is incorrect';
 $lang_global['userlogin_blocked'] = 'You are logged after failure%, temporarily locking system login to% s';
@@ -372,6 +372,10 @@ $lang_global['error_code_10'] = 'HTTP request failed with Curl.';
 $lang_global['error_code_11'] = 'There was an unknown error occurred.';
 $lang_global['error_valid_response'] = 'Data returns nonstandard.';
 $lang_global['myapis'] = 'My APIs';
+
+$lang_global['login_name_type_username'] = 'Username';
+$lang_global['login_name_type_email'] = 'Email';
+$lang_global['login_name_type_email_username'] = 'Username or Email';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'United Arab Emirates';

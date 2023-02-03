@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -366,6 +366,15 @@ function user_login($is_ajax = false)
         $xtpl = new XTemplate('login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
     }
 
+    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+    if (isset($lang_global['login_name_type_' . $method])) {
+        $lang_global['username_email'] = $lang_global['login_name_type_' . $method];
+    } elseif (isset($lang_global[$method])) {
+        $lang_global['username_email'] = $lang_global[$method];
+    } elseif (isset($lang_module[$method])) {
+        $lang_global['username_email'] = $lang_module[$method];
+    }
+
     $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login');
     $xtpl->assign('USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
     $xtpl->assign('LANG', $lang_module);
@@ -473,11 +482,11 @@ function user_login($is_ajax = false)
 
 /**
  * user_openid_login()
- * 
- * @param mixed $gfx_chk 
- * @param mixed $attribs 
- * @param array $op_process 
- * @return string 
+ *
+ * @param mixed $gfx_chk
+ * @param mixed $attribs
+ * @param array $op_process
+ * @return string
  */
 function user_openid_login($attribs, $op_process)
 {
@@ -503,7 +512,7 @@ function user_openid_login($attribs, $op_process)
     $op_process_count = count($op_process);
 
     if ($op_process_count > 1) {
-        foreach($op_process as $process => $val) {
+        foreach ($op_process as $process => $val) {
             $xtpl->assign('ACTION', [
                 'key' => $process,
                 'name' => $lang_module['openid_processing_' . $process]
@@ -1353,7 +1362,9 @@ function user_welcome($array_field_config, $custom_fields)
     $_user_info['current_login'] = nv_date('l, d/m/Y H:i', $user_info['current_login']);
     $_user_info['st_login'] = !empty($user_info['st_login']) ? $lang_module['yes'] : $lang_module['no'];
     $_user_info['active2step'] = !empty($user_info['active2step']) ? $lang_global['on'] : $lang_global['off'];
-    $_user_info['login_name'] = $global_config['login_name_type'] == 1 ? $lang_module['username'] :($global_config['login_name_type'] == 2 ? $lang_module['email'] : $lang_module['username_or_email']);
+
+    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+    $_user_info['login_name'] = isset($lang_global['login_name_type_' . $method]) ? $lang_global['login_name_type_' . $method] : $method;
     if ($global_config['lang_multi']) {
         $_user_info['langinterface'] = !empty($_user_info['language']) ? (!empty($language_array[$_user_info['language']]['name']) ? $language_array[$_user_info['language']]['name'] : $_user_info['language']) : $lang_module['bydatalang'];
     }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -75,7 +75,7 @@ $lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2
 
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['securitycodeincorrect1'] = 'Chưa xác thực &laquo;Tôi không phải người máy&raquo;. Vui lòng xác thực lại';
-$lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai tên đăng nhập hoặc mật khẩu truy cập';
+$lang_global['loginincorrect'] = 'Không tìm thấy tài khoản nào phù hợp với thông tin bạn đã nhập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
 $lang_global['userlogin_blocked'] = 'Bạn đã đăng nhập thất bại %s lần liên tiếp nên hệ thống tạm khóa công cụ đăng nhập cho đến %s';
@@ -388,6 +388,10 @@ $lang_global['error_code_10'] = 'Truy vấn HTTP bằng Curl thất bại.';
 $lang_global['error_code_11'] = 'Có một lỗi không xác định đã xảy ra.';
 $lang_global['error_valid_response'] = 'Dữ liệu trả về không hợp chuẩn.';
 $lang_global['myapis'] = 'API của tôi';
+
+$lang_global['login_name_type_username'] = 'Bí danh';
+$lang_global['login_name_type_email'] = 'Email';
+$lang_global['login_name_type_email_username'] = 'Bí danh hoặc Email';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';
