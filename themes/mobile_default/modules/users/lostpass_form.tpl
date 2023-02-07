@@ -5,7 +5,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                    <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="userField" maxlength="100" data-pattern="/^(.){3,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.lostpass_no_info1}">
+                    <input type="text" class="required form-control" placeholder="{LANG.username_or_email}" value="" name="userField" maxlength="100" data-pattern="/^(.){3,}$/" data-toggle="validErrorHidden" data-event="keypress" data-mess="{LANG.lostpass_no_info1}">
                 </div>
             </div>
         </div>

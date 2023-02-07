@@ -236,6 +236,52 @@
                             </td>
                         </tr>
                         <!-- END: show_answer -->
+                        <tr>
+                            <td>{LANG.avatar}</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" id="btn_upload"><em class="fa fa-folder-open-o fa-fix"></em></button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{LANG.show_email}</td>
+                            <td><input type="checkbox" name="view_mail" value="1"/></td>
+                        </tr>
+                        <tr>
+                            <td>{LANG.is_official}</td>
+                            <td><label><input type="checkbox" name="is_official" value="1" checked/> <small>{LANG.is_official_note}</small></label></td>
+                        </tr>
+                        <!-- BEGIN: group -->
+                        <tr id="ctn-list-groups">
+                            <td style="vertical-align:top">{LANG.in_group}</td>
+                            <td>
+                                <!-- BEGIN: list -->
+                                <div class="clearfix">
+                                    <label class="pull-left w200">
+                                        <input type="checkbox" value="{GROUP.id}" name="group[]"/> {GROUP.title}
+                                    </label>
+                                    <label class="pull-left group_default" style="display:none">
+                                        <input type="radio" value="{GROUP.id}" name="group_default" /> {LANG.in_group_default}
+                                    </label>
+                                </div>
+                                <!-- END: list -->
+                                <div class="clearfix" id="cleargroupdefault" style="display: none;">
+                                    <label class="pull-left w200">&nbsp;</label>
+                                    <label class="pull-left">
+                                        <a href="#" data-toggle="cleargdefault" class="btn btn-default"><i class="fa fa-times-circle-o" aria-hidden="true"></i> {LANG.clear_group_default}</a>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- END: group -->
+                        <tr>
+                            <td>{LANG.is_email_verified}</td>
+                            <td><label><input type="checkbox" name="is_email_verified" value="1" checked> <small>{LANG.is_email_verified1}</small></label></td>
+                        </tr>
                     </tbody>
                 </table>
                 <!-- BEGIN: field -->
@@ -305,4 +351,26 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    $(function() {
+        $('[name="is_official"]').on('change', function() {
+            var ctngroups = $('#ctn-list-groups');
+            if (!ctngroups.length) {
+                return;
+            }
+            if ($(this).is(":checked")) {
+                ctngroups.removeClass('hidden');
+            } else {
+                ctngroups.addClass('hidden');
+                $('[name="group[]"]').prop('checked', false);
+                $('[name="group_default"]').prop('checked', false);
+            }
+        });
+
+        $('[data-toggle="cleargdefault"]').on('click', function(e) {
+            e.preventDefault();
+            $('[name="group_default"]').prop('checked', false);
+        });
+    });
+</script>
 <!-- END: user_details -->

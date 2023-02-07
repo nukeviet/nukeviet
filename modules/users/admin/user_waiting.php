@@ -68,6 +68,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
     $userdata['users_info'] = json_decode($userdata['users_info'], true);
     $userdata['photo'] = '';
 
+    $groups_list = nv_groups_list($module_data);
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
     // Nếu chấp nhận
     if ($checkss == $nv_Request->get_string('checkss', 'post')) {
@@ -83,7 +84,13 @@ if ($nv_Request->isset_request('userid', 'get')) {
             'birthday' => $nv_Request->get_title('birthday', 'post'),
             'sig' => $nv_Request->get_title('sig', 'post', ''),
             'question' => nv_substr($nv_Request->get_title('question', 'post', '', 1), 0, 255),
-            'answer' => nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255)
+            'answer' => nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255),
+            'photo' => nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255),
+            'view_mail' => (int) $nv_Request->get_bool('view_mail', 'post', false),
+            'is_official' => (int) $nv_Request->get_bool('is_official', 'post', false),
+            'in_groups' => $nv_Request->get_typed_array('group', 'post', 'int'),
+            'group_id' => $nv_Request->get_int('group_default', 'post', 0),
+            'is_email_verified' => (int) $nv_Request->get_bool('is_email_verified', 'post', false)
         ];
         $post['question'] = !empty($post['question']) ? $post['question'] : $userdata['question'];
         $post['answer'] = !empty($post['answer']) ? $post['answer'] : $userdata['answer'];
@@ -208,11 +215,40 @@ if ($nv_Request->isset_request('userid', 'get')) {
         }
 
         if (!empty($post['password'])) {
+            $password = $post['password'];
             $post['password'] = $crypt->hash_password($post['password'], $global_config['hashprefix']);
+            $post['pass_creation_time'] = NV_CURRENTTIME;
         } else {
+            $password = '';
             $post['password'] = $userdata['password'];
+            $post['pass_creation_time'] = !empty($post['password']) ? $userdata['regdate'] : 0;
         }
-        $post['group_id'] = $post['in_groups'] = !empty($global_users_config['active_group_newusers']) ? 7 : 4;
+        if (empty($post['is_official'])) {
+            // Khi là thành viên mới thì chỉ có nhóm = 7, không có các nhóm khác
+            $post['in_groups'] = [7];
+            $post['group_id'] = 7;
+        } else {
+            // Khi là thành viên chính thức thì cho phép chọn nhóm + nhóm = 4
+            $in_groups = [];
+            foreach ($post['in_groups'] as $_group_id) {
+                if ($_group_id > 9) {
+                    $in_groups[] = $_group_id;
+                }
+            }
+            $post['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
+            $post['in_groups'] = array_map('intval', $post['in_groups']);
+
+            // Kiểm tra nhóm thành viên mặc định phải thuộc các nhóm đã chọn
+            !in_array($post['group_id'], $post['in_groups'], true) && $post['group_id'] = 4;
+
+            $post['in_groups'][] = 4;
+        }
+
+        if ($post['pass_reset_request'] > 2 or $post['pass_reset_request'] < 0) {
+            $post['pass_reset_request'] = 0;
+        }
+
+        $post['email_verification_time'] = $post['is_email_verified'] ? -1 : 0;
 
         // Kiểm tra các trường dữ liệu tùy biến + Hệ thống
         $query_field = [];
@@ -224,28 +260,57 @@ if ($nv_Request->isset_request('userid', 'get')) {
             }
         }
 
-        $post['photo'] = '';
-        $reg_attribs = !empty($userdata['openid_info']) ? unserialize(nv_base64_decode($userdata['openid_info'])) : [];
-        if (!empty($reg_attribs['photo'])) {
-            $upload = new NukeViet\Files\Upload(['images'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-            $upload->setLanguage($lang_global);
-            $upload_info = $upload->save_urlfile($reg_attribs['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false);
+        // Check photo
+        if (!empty($post['photo'])) {
+            $tmp_photo = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $post['photo'];
 
-            if (empty($upload_info['error'])) {
-                $basename = change_alias($post['username']) . '.' . nv_getextension($upload_info['basename']);
-                $newname = $basename;
-                $fullname = $upload_info['name'];
+            if (!nv_is_file($tmp_photo, NV_TEMP_DIR)) {
+                $post['photo'] = '';
+            } else {
+                $new_photo_name = $post['photo'];
+                $new_photo_path = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/';
 
+                $new_photo_name2 = $new_photo_name;
                 $i = 1;
-                while (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname)) {
-                    $newname = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $basename);
+                while (file_exists($new_photo_path . $new_photo_name2)) {
+                    $new_photo_name2 = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $new_photo_name);
                     ++$i;
                 }
+                $new_photo = $new_photo_path . $new_photo_name2;
 
-                $check = nv_renamefile($fullname, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname);
+                if (nv_copyfile(NV_DOCUMENT_ROOT . $tmp_photo, $new_photo)) {
+                    $post['photo'] = substr($new_photo, strlen(NV_ROOTDIR . '/'));
+                } else {
+                    $post['photo'] = '';
+                }
 
-                if ($check[0] == 1) {
-                    $post['photo'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $newname;
+                nv_deletefile(NV_DOCUMENT_ROOT . $tmp_photo);
+            }
+        }
+
+        if (empty($post['photo'])) {
+            $reg_attribs = !empty($userdata['openid_info']) ? unserialize(nv_base64_decode($userdata['openid_info'])) : [];
+            if (!empty($reg_attribs['photo'])) {
+                $upload = new NukeViet\Files\Upload(['images'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                $upload->setLanguage($lang_global);
+                $upload_info = $upload->save_urlfile($reg_attribs['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false);
+
+                if (empty($upload_info['error'])) {
+                    $basename = change_alias($post['username']) . '.' . nv_getextension($upload_info['basename']);
+                    $newname = $basename;
+                    $fullname = $upload_info['name'];
+
+                    $i = 1;
+                    while (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname)) {
+                        $newname = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $basename);
+                        ++$i;
+                    }
+
+                    $check = nv_renamefile($fullname, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname);
+
+                    if ($check[0] == 1) {
+                        $post['photo'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $newname;
+                    }
                 }
             }
         }
@@ -257,9 +322,9 @@ if ($nv_Request->isset_request('userid', 'get')) {
             email_verification_time, active_obj
         ) VALUES (
             :group_id, :username, :md5username, :password, :email, :first_name, :last_name, :gender, :photo, :birthday, :sig,
-            ' . $userdata['regdate'] . ', :question, :answer, 0, 0, :in_groups, 1, 
-            ' . $userdata['idsite'] . ', ' . (!empty($post['password']) ? $userdata['regdate'] : 0) . ', 0, 
-            -2, :active_obj
+            ' . $userdata['regdate'] . ', :question, :answer, ' . $post['view_mail'] . ', 1, :in_groups, 1, 
+            ' . $userdata['idsite'] . ', ' . $post['pass_creation_time'] . ', ' . $post['pass_reset_request'] . ', 
+            ' . $post['email_verification_time'] . ', :active_obj
         )';
 
         $data_insert = [];
@@ -276,7 +341,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
         $data_insert['sig'] = $post['sig'];
         $data_insert['question'] = $post['question'];
         $data_insert['answer'] = $post['answer'];
-        $data_insert['in_groups'] = $post['in_groups'];
+        $data_insert['in_groups'] = implode(',', $post['in_groups']);
         $data_insert['active_obj'] = $admin_info['userid'];
         $user_id = $db->insert_id($sql, 'userid', $data_insert);
 
@@ -299,7 +364,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
 
         $query_field['userid'] = $user_id;
         if (!userInfoTabDb($query_field)) {
-            $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id);
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => '',
@@ -307,11 +372,15 @@ if ($nv_Request->isset_request('userid', 'get')) {
             ]);
         }
 
-        if (!empty($global_users_config['active_group_newusers'])) {
-            nv_groups_add_user(7, $user_id, 1, $module_data);
-        } else {
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+        if (!empty($post['in_groups'])) {
+            foreach ($post['in_groups'] as $group_id) {
+                if ($group_id != 7 and $group_id != 4) {
+                    nv_groups_add_user($group_id, $user_id, 1, $module_data);
+                }
+            }
         }
+
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($post['is_official'] ? 4 : 7));
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid);
 
         // Callback sau khi đăng ký
@@ -327,9 +396,17 @@ if ($nv_Request->isset_request('userid', 'get')) {
 
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
         if (!empty($userdata['openid_info'])) {
-            $message = sprintf($lang_module['adduser_register_openid_info'], $full_name, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+            if (!empty($password)) {
+                $message = sprintf($lang_module['adduser_register_openid_info_with_password'], $full_name, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']), $post['username'], $password);
+            } else {
+                $message = sprintf($lang_module['adduser_register_openid_info'], $full_name, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+            }
         } else {
-            $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $post['username']);
+            if (!empty($password)) {
+                $message = sprintf($lang_module['adduser_register_info_with_password'], $full_name, $global_config['site_name'], $_url, $post['username'], $password);
+            } else {
+                $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $post['username']);
+            }
         }
 
         @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $post['email'], $subject, $message);
@@ -365,6 +442,24 @@ if ($nv_Request->isset_request('userid', 'get')) {
             'title' => $lang_module['pass_reset_request' . $i]
         ]);
         $xtpl->parse('user_details.pass_reset_request');
+    }
+
+    $group_exists = false;
+    if (!empty($groups_list)) {
+        foreach ($groups_list as $group_id => $grtl) {
+            if ($group_id > 9) {
+                $xtpl->assign('GROUP', [
+                    'id' => $group_id,
+                    'title' => $grtl,
+                    'checked' => ''
+                ]);
+                $xtpl->parse('user_details.group.list');
+                $group_exists = true;
+            }
+        }
+    }
+    if ($group_exists) {
+        $xtpl->parse('user_details.group');
     }
 
     $have_custom_fields = false;

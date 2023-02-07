@@ -42,7 +42,7 @@
 
         <div class="form-group">
             <div>
-                <input type="text" class="required form-control" placeholder="{LANG.account}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-toggle="validErrorHidden" data-event="keypress" data-mess="{USERNAME_RULE}" data-callback="login_check" data-minlength="{NICK_MINLENGTH}" data-type="{LOGINTYPE}">
+                <input type="text" class="required form-control" placeholder="{LANG.username}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-toggle="validErrorHidden" data-event="keypress" data-mess="{USERNAME_RULE}" data-callback="login_check" data-minlength="{NICK_MINLENGTH}" data-type="{LOGINTYPE}">
             </div>
         </div>
 
