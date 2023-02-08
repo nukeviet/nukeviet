@@ -2353,14 +2353,18 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
 
 /**
  * @param int|mixed $emailid
+ * @param string $lang
  * @return bool|mixed
  */
-function nv_get_email_template($emailid)
+function nv_get_email_template($emailid, $lang = '')
 {
-    global $db;
+    global $db, $global_config;
 
+    if (empty($lang) or !in_array($lang, $global_config['setup_langs'], true)) {
+        $lang = NV_LANG_DATA;
+    }
     $sql = 'SELECT sys_pids, pids, send_name, send_email, send_cc, send_bcc, attachments, is_plaintext, is_disabled, is_selftemplate, default_subject, default_content,
-    ' . NV_LANG_DATA . '_subject lang_subject, ' . NV_LANG_DATA . '_content lang_content FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid=:emailid';
+    ' . $lang . '_subject lang_subject, ' . $lang . '_content lang_content FROM ' . NV_EMAILTEMPLATES_GLOBALTABLE . ' WHERE emailid=:emailid';
     $sth = $db->prepare($sql);
     $sth->bindParam(':emailid', $emailid, PDO::PARAM_INT);
     $sth->execute();
@@ -2399,13 +2403,14 @@ function nv_get_email_template($emailid)
  * @param int|mixed $emailid
  * @param array     $data
  * @param string    $attachments
+ * @param string    $lang
  * @return bool
  */
-function nv_sendmail_from_template($emailid, $data = [], $attachments = '')
+function nv_sendmail_from_template($emailid, $data = [], $attachments = '', $lang = '')
 {
     global $global_config;
 
-    $email_data = nv_get_email_template($emailid);
+    $email_data = nv_get_email_template($emailid, $lang);
     if ($email_data === false) {
         return false;
     }
