@@ -330,12 +330,12 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_file (
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_plugin (
   pid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  plugin_lang varchar(3) NOT NULL DEFAULT 'all',
-  plugin_file varchar(50) NOT NULL,
-  plugin_area varchar(50) NOT NULL DEFAULT '',
-  plugin_module_name varchar(50) NOT NULL DEFAULT '',
-  plugin_module_file varchar(50) NOT NULL DEFAULT '',
-  hook_module varchar(50) NOT NULL DEFAULT '',
+  plugin_lang varchar(3) NOT NULL DEFAULT 'all' COMMENT 'Ngôn ngữ, all là tất cả các ngôn ngữ',
+  plugin_file varchar(50) NOT NULL COMMENT 'Tên file plugin',
+  plugin_area varchar(50) NOT NULL DEFAULT '' COMMENT 'Tên khóa để gọi',
+  plugin_module_name varchar(50) NOT NULL DEFAULT '' COMMENT 'Tên module truyền dữ liệu đến',
+  plugin_module_file varchar(50) NOT NULL DEFAULT '' COMMENT 'Module file truyền dữ liệu đến, nếu rỗng thì gọi tới includes',
+  hook_module varchar(50) NOT NULL DEFAULT '' COMMENT 'Tên module xảy ra event',
   weight tinyint(4) NOT NULL,
   PRIMARY KEY (pid),
   UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
