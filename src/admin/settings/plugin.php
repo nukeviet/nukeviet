@@ -182,7 +182,9 @@ if ($nv_Request->isset_request('plugin_file', 'get')) {
             $plugin_module_name = $nv_Request->get_title('receive_module', 'post', '');
 
             // Kiểm tra tồn tại
-            $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_file=' . $db->quote($plugin_file) . ' AND plugin_module_file=\'\' AND plugin_module_name=' . $db->quote($plugin_module_name) . ' AND hook_module=' . $db->quote($plugin_hook_module);
+            $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_lang=' . $db->quote($plugin_lang) . ' AND
+            plugin_file=' . $db->quote($plugin_file) . ' AND plugin_module_file=\'\' AND
+            plugin_module_name=' . $db->quote($plugin_module_name) . ' AND hook_module=' . $db->quote($plugin_hook_module);
             $is_exists = $db->query($sql)->fetchColumn();
 
             if (!empty($plugin_hook_module) and !isset($array_hook_mods[$plugin_hook_module])) {
