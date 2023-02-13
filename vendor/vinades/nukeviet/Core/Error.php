@@ -107,9 +107,9 @@ class Error
         $this->cfg = array_merge($this->cfg, $this->get_error_log_path((string) (isset($config['error_log_path']) ? $config['error_log_path'] : self::ERROR_LOG_PATH_DEFAULT)));
 
         $this->cl = [
-            'day' => gmdate('d-m-Y', NV_CURRENTTIME), // Prefix của file log, Lấy cố định GMT, không theo múi giờ
+            'day' => gmdate('Y-m-d', NV_CURRENTTIME), // Prefix của file log, Lấy cố định GMT, không theo múi giờ
             'error_date' => date('r', NV_CURRENTTIME), // Thời gian xảy ra lỗi, Lấy theo múi giờ của client (tùy cấu hình)
-            'month' => gmdate('m-Y', NV_CURRENTTIME), // Prefix theo tháng log 256, Lấy cố định GMT, không theo múi giờ,
+            'month' => gmdate('Y-m', NV_CURRENTTIME), // Prefix theo tháng log 256, Lấy cố định GMT, không theo múi giờ,
             'ip' => Ips::$remote_ip,
             'request' => substr(Site::getEnv(['UNENCODED_URL', 'REQUEST_URI']), 0, 500),
             'useragent' => substr(Site::getEnv('HTTP_USER_AGENT'), 0, 500),
