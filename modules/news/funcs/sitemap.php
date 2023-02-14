@@ -12,6 +12,11 @@ if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
+// Không cho truy cập trực tiếp vào /[lang]/[module-name]/sitemap/ chỉ truy cập vào /sitemap-[lang].[module-name].xml
+if (!preg_match('/' . nv_preg_quote($module_name) . '\.xml/', $nv_Request->request_uri)) {
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+}
+
 /*
  * Xem thêm https://www.sitemaps.org/protocol.html
  * always
