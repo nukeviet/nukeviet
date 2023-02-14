@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -26,8 +26,6 @@ $lang_module['api_role_select'] = 'Sélectionnez le rôle de l\'API';
 $lang_module['api_role_type_private_error'] = 'Le rôle d\'API n\'autorise pas l\'activation arbitraire de l\'utilisation';
 $lang_module['api_role_type_public2'] = 'Rôles API publics';
 $lang_module['api_role_type_private2'] = 'Rôles API rien que pour vous';
-$lang_module['not_access_authentication'] = 'Vous n\'avez pas créé d\'authentification d\'accès par rôle d\'API';
-$lang_module['recreate_access_authentication_info'] = 'Si vous avez oublié le code secret, recréez l\'authentification';
 $lang_module['status'] = 'Statut';
 $lang_module['active'] = 'Actif';
 $lang_module['inactive'] = 'Inactif';
@@ -45,8 +43,8 @@ $lang_module['value_copied'] = 'La valeur a été copiée';
 $lang_module['auth_method'] = 'Méthode';
 $lang_module['auth_method_password_verify'] = 'password_verify (recommander)';
 $lang_module['auth_method_md5_verify'] = 'md5_verify';
-$lang_module['create_access_authentication'] = 'Créer une authentification';
-$lang_module['recreate_access_authentication'] = 'Recréer l\'authentification';
+$lang_module['create_access_authentication'] = 'Créer une nouvelle authentification';
+$lang_module['delete_authentication'] = 'Supprimer l\'authentification';
 $lang_module['api_roles_empty'] = 'Les rôles d\'API demandés sont introuvables';
 $lang_module['api_roles_list'] = 'Liste des rôles de l\'API';
 $lang_module['api_roles_allowed'] = 'APIs';
@@ -58,3 +56,6 @@ $lang_module['endtime'] = 'Heure de fin';
 $lang_module['quota'] = 'Quota';
 $lang_module['indefinitely'] = 'Indéfiniment';
 $lang_module['no_quota'] = 'Pas de quota';
+$lang_module['api_ips'] = 'IP d\'accès';
+$lang_module['api_ips_help'] = 'Les IP sont séparées par des virgules. L\'accès au rôle d\'API se fait uniquement à partir de ces IP. Le laisser vide signifie ne pas vérifier l\'IP';
+$lang_module['api_ips_update'] = 'Mettre à jour l\'IP d\'accès';

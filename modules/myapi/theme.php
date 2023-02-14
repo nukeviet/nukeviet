@@ -49,12 +49,14 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         $method['key'] = $key;
         $method['name'] = $name;
         $xtpl->assign('METHOD', $method);
-        $xtpl->assign('AUTH_INFO', empty($api_user[$key]) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
-        $xtpl->assign('BTN', empty($api_user[$key]) ? $lang_module['create_access_authentication'] : $lang_module['recreate_access_authentication']);
 
         if ($key == 'password_verify') {
             $xtpl->parse('main.method_tab.is_active');
             $xtpl->parse('main.method_panel.is_active');
+        }
+
+        if (empty($api_user[$key])) {
+            $xtpl->parse('main.method_panel.not_access_authentication');
         }
 
         $xtpl->parse('main.method_tab');

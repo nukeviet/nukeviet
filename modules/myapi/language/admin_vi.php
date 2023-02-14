@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -80,10 +80,8 @@ $lang_module['api_role_type_public_note'] = 'API-role công cộng là nhóm cá
 $lang_module['api_role_type_private_error'] = 'API-role không cho phép tự ý kích hoạt sử dụng';
 $lang_module['all'] = 'Tất cả';
 $lang_module['authentication'] = 'Xác thực';
-$lang_module['not_access_authentication'] = 'Tài khoản chưa được tạo xác thực truy cập API-role';
-$lang_module['recreate_access_authentication_info'] = 'Nếu quên mã bí mật, hãy tạo lại xác thực';
-$lang_module['create_access_authentication'] = 'Tạo xác thực';
-$lang_module['recreate_access_authentication'] = 'Tạo lại xác thực';
+$lang_module['create_access_authentication'] = 'Tạo mới xác thực';
+$lang_module['delete_authentication'] = 'Xóa xác thực';
 $lang_module['api_credential_ident'] = 'Khóa truy cập';
 $lang_module['api_credential_secret'] = 'Mã bí mật';
 $lang_module['auth_method'] = 'Phương thức';

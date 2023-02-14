@@ -88,7 +88,7 @@ if ($global_config['allowuserlogin']) {
             $xtpl->parse('signed.allowopenid');
         }
 
-        if (!empty($site_mods['api'])) {
+        if (!empty($site_mods['myapi'])) {
             $xtpl->parse('signed.myapis');
         }
 

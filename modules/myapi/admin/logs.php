@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -47,28 +47,30 @@ if ($nv_Request->isset_request('getUser, q', 'post')) {
 }
 
 // Xóa log
-if ($nv_Request->isset_request('delLog', 'post')) {
-    $id = $nv_Request->get_int('delLog', 'post', 0);
-    if (!empty($id)) {
-        $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id=' . $id);
+if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
+    if ($nv_Request->isset_request('delLog', 'post')) {
+        $id = $nv_Request->get_int('delLog', 'post', 0);
+        if (!empty($id)) {
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id=' . $id);
+        }
+        nv_htmlOutput('OK');
     }
-    nv_htmlOutput('OK');
-}
 
-// Xóa nhiều log
-if ($nv_Request->isset_request('delLogs', 'post')) {
-    $ids = $nv_Request->get_title('delLogs', 'post', '');
-    if (!empty($ids)) {
-        $ids = preg_replace('/[^0-9\,]+/', '', $ids);
-        $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id IN (' . $ids . ')');
+    // Xóa nhiều log
+    if ($nv_Request->isset_request('delLogs', 'post')) {
+        $ids = $nv_Request->get_title('delLogs', 'post', '');
+        if (!empty($ids)) {
+            $ids = preg_replace('/[^0-9\,]+/', '', $ids);
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_logs WHERE id IN (' . $ids . ')');
+        }
+        nv_htmlOutput('OK');
     }
-    nv_htmlOutput('OK');
-}
 
-// Xóa tất cả log
-if ($nv_Request->isset_request('delAllLogs', 'post')) {
-    $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_api_role_logs');
-    nv_htmlOutput('OK');
+    // Xóa tất cả log
+    if ($nv_Request->isset_request('delAllLogs', 'post')) {
+        $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_api_role_logs');
+        nv_htmlOutput('OK');
+    }
 }
 
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
@@ -205,8 +207,19 @@ if (!empty($get_data['userid'])) {
 }
 
 if (!empty($data)) {
+    if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
+        $xtpl->parse('main.loglist.manuall_del_log1');
+        $xtpl->parse('main.loglist.manuall_del_log2');
+        $xtpl->parse('main.loglist.manuall_del_log5');
+    }
+
     foreach ($data as $log) {
         $xtpl->assign('LOG', $log);
+
+        if (defined('MANUALL_DEL_API_LOG') and MANUALL_DEL_API_LOG === true) {
+            $xtpl->parse('main.loglist.log.manuall_del_log3');
+            $xtpl->parse('main.loglist.log.manuall_del_log4');
+        }
         $xtpl->parse('main.loglist.log');
     }
 

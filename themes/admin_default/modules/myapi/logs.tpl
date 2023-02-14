@@ -77,27 +77,28 @@
     <div class="table-responsive m-bottom">
         <table class="table table-bordered table-striped list" data-delete-confirm="{LANG.log_del_confirm}">
             <thead class="bg-primary">
-                <th style="width: 1%;"><input type="checkbox" class="form-control checkall" /></th>
+                <!-- BEGIN: manuall_del_log1 --><th style="width: 1%;"><input type="checkbox" class="form-control checkall" /></th><!-- END: manuall_del_log1 -->
                 <th class="text-center text-nowrap" style="width: 1%;">{LANG.log_time}</th>
                 <th class="text-center text-nowrap">{LANG.api_role}</th>
                 <th class="text-center text-nowrap">API</th>
                 <th class="text-center text-nowrap" style="width: 1%;">{LANG.api_role_object}</th>
                 <th class="text-center text-nowrap" style="width: 1%;">{LANG.log_ip}</th>
-                <th style="width: 1%;"></th>
+                <!-- BEGIN: manuall_del_log2 --><th style="width: 1%;"></th><!-- END: manuall_del_log2 -->
             </thead>
             <tbody>
                 <!-- BEGIN: log -->
                 <tr class="item" data-id="{LOG.id}">
-                    <td style="width: 1%;"><input type="checkbox" class="form-control checkitem" /></td>
+                    <!-- BEGIN: manuall_del_log3 --><td style="width: 1%;"><input type="checkbox" class="form-control checkitem" /></td><!-- END: manuall_del_log3 -->
                     <td class="text-center" style="width: 1%;">{LOG.log_time}</td>
                     <td>{LOG.role_title} ({LANG.api_role_type}: {LOG.role_type}, {LANG.api_role_object}: {LOG.role_object})</td>
                     <td class="text-center text-nowrap" style="width: 1%;">{LOG.command}</td>
                     <td class="text-center text-nowrap" style="width: 1%;">{LOG.username}</td>
                     <td class="text-center" style="width: 1%;">{LOG.log_ip}</td>
-                    <td><button type="button" class="btn btn-default log-del"><i class="fa fa-trash-o"></i> {GLANG.delete}</button></td>
+                    <!-- BEGIN: manuall_del_log4 --><td><button type="button" class="btn btn-default log-del"><i class="fa fa-trash-o"></i> {GLANG.delete}</button></td><!-- END: manuall_del_log4 -->
                 </tr>
                 <!-- END: log -->
             </tbody>
+            <!-- BEGIN: manuall_del_log5 -->
             <tfoot>
                 <tr>
                     <td style="width: 1%;"><input type="checkbox" class="form-control checkall" /></td>
@@ -107,6 +108,7 @@
                     </td>
                 </tr>
             </tfoot>
+            <!-- END: manuall_del_log5 -->
         </table>
     </div>
     <!-- BEGIN: generate_page -->

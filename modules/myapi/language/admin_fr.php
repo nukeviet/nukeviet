@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -80,10 +80,8 @@ $lang_module['api_role_type_public_note'] = 'Le rôle d\'API publique est un gro
 $lang_module['api_role_type_private_error'] = 'Le rôle d\'API n\'autorise pas l\'activation arbitraire de l\'utilisation';
 $lang_module['all'] = 'Toute';
 $lang_module['authentication'] = 'Authentication';
-$lang_module['not_access_authentication'] = 'Vous n\'avez pas créé d\'authentification d\'accès par rôle d\'API';
-$lang_module['recreate_access_authentication_info'] = 'Si vous avez oublié le code secret, recréez l\'authentification';
-$lang_module['create_access_authentication'] = 'Créer une authentification';
-$lang_module['recreate_access_authentication'] = 'Recréer l\'authentification';
+$lang_module['create_access_authentication'] = 'Créer une nouvelle authentification';
+$lang_module['delete_authentication'] = 'Supprimer l\'authentification';
 $lang_module['api_credential_ident'] = 'Touches d\'accès';
 $lang_module['api_credential_secret'] = 'Code secret';
 $lang_module['auth_method'] = 'Méthode';

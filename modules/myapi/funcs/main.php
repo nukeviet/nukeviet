@@ -13,6 +13,21 @@ if (!defined('NV_IS_API_MOD')) {
     exit('Stop!!!');
 }
 
+// Xóa xác thực
+if ($nv_Request->isset_request('delAuth', 'post')) {
+    $method = $nv_Request->get_title('delAuth', 'post', '');
+    if (empty($method) or !in_array($method, $methods, true)) {
+        nv_jsonOutput([
+            'status' => 'error'
+        ]);
+    }
+
+    delAuth($method);
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
+}
+
 // Tạo xác thực
 if ($nv_Request->isset_request('createAuth', 'post')) {
     $method = $nv_Request->get_title('createAuth', 'post', '');
@@ -28,6 +43,30 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
         'status' => 'OK',
         'ident' => $ident,
         'secret' => $secret
+    ]);
+}
+
+// Lưu IP được phép truy cập
+if ($nv_Request->isset_request('ipsUpdate', 'post')) {
+    $method = $nv_Request->get_title('method', 'post', '');
+    if (empty($method) or !in_array($method, $methods, true)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['auth_method_select']
+        ]);
+    }
+    $api_ips = $nv_Request->get_title('ipsUpdate', 'post', '');
+    $api_ips = array_map('trim', explode(',', $api_ips));
+    $api_ips = array_filter($api_ips, function($ip) {
+        global $ips;
+        return ($ips->isIp4($ip) or $ips->isIp6($ip));
+    });
+
+    $iplist = json_encode($api_ips);
+    ipsUpdate($iplist, $method);
+    nv_jsonOutput([
+        'status' => 'OK',
+        'ips' => implode(', ', $api_ips)
     ]);
 }
 

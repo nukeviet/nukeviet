@@ -49,11 +49,11 @@
                                     </div>
                                     <!-- BEGIN: isEditLevel -->
                                     <div class="row m-bottom">
-                                        <div class="col-xs-16">
-                                            <label class="auth-info control-label mb-0">{AUTH_INFO}</label>
+                                        <div class="col-xs-12">
+                                            <button type="button" class="btn btn-primary btn-block create_authentication" data-method="{METHOD.key}">{LANG.create_access_authentication}</button>
                                         </div>
-                                        <div class="col-xs-8">
-                                            <button type="button" class="btn btn-primary btn-block create_authentication" data-method="{METHOD.key}">{BTN}</button>
+                                        <div class="col-xs-12">
+                                            <button type="button" class="btn btn-danger btn-block delete_authentication" data-method="{METHOD.key}">{LANG.delete_authentication}</button>
                                         </div>
                                     </div>
                                     <!-- END: isEditLevel -->

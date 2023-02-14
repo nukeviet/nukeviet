@@ -168,11 +168,11 @@
             </div>
         </div>
         <div class="row m-bottom">
-            <div class="col-xs-16">
-                <label class="auth-info control-label mb-0">{AUTH_INFO}</label>
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-primary btn-block create_authentication" data-method="{METHOD.key}" data-userid="{USERID}">{LANG.create_access_authentication}</button>
             </div>
-            <div class="col-xs-8">
-                <button type="button" class="btn btn-primary btn-block create_authentication" data-method="{METHOD.key}" data-userid="{USERID}">{BTN}</button>
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-danger btn-block delete_authentication" data-method="{METHOD.key}" data-userid="{USERID}">{LANG.delete_authentication}</button>
             </div>
         </div>
 
@@ -294,7 +294,7 @@
 </div>
 <div class="form-group">
     <div class="col-sm-offset-6 col-sm-18">
-        <button type="submit" class="btn btn-default">{GLANG.submit}</button>
+        <button type="submit" class="btn btn-primary">{GLANG.submit}</button>
     </div>
 </div>
 <script>

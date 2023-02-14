@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -188,6 +188,14 @@ function parseRole($row)
     return $row;
 }
 
+/**
+ * myApiRoleList()
+ * 
+ * @param string $type 
+ * @param int $page 
+ * @param int $per_page 
+ * @return array 
+ */
 function myApiRoleList($type = 'public', $page = 0, $per_page = 20)
 {
     global $db, $db_config, $admin_info, $user_info;
@@ -246,6 +254,34 @@ function getRoleDetails($id, $isParseRole = true)
     return !empty($row) ? parseRole($row) : [];
 }
 
+/**
+ * delAuth()
+ * 
+ * @param mixed $method 
+ * @param int $userid 
+ * @return true 
+ */
+function delAuth($method, $userid = 0)
+{
+    global $db, $db_config, $admin_info, $user_info, $crypt;
+
+    if (empty($userid)) {
+        $userid = defined('NV_ADMIN') ? $admin_info['admin_id'] : $user_info['userid'];
+    }
+
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_user WHERE userid = ' . $userid . ' AND method = ' . $db->quote($method));
+
+    return true;
+}
+
+/**
+ * createAuth()
+ * 
+ * @param mixed $method 
+ * @param int $userid 
+ * @return string[] 
+ * @throws PDOException 
+ */
 function createAuth($method, $userid = 0)
 {
     global $db, $db_config, $admin_info, $user_info, $crypt;
@@ -286,6 +322,15 @@ function createAuth($method, $userid = 0)
     return [$new_ident, $new_secret];
 }
 
+/**
+ * ipsUpdate()
+ * 
+ * @param mixed $api_ips 
+ * @param mixed $method 
+ * @param int $userid 
+ * @return bool 
+ * @throws PDOException 
+ */
 function ipsUpdate($api_ips, $method, $userid = 0)
 {
     global $db, $db_config, $admin_info, $user_info;
@@ -304,6 +349,12 @@ function ipsUpdate($api_ips, $method, $userid = 0)
     return $sth->execute();
 }
 
+/**
+ * get_api_user()
+ * 
+ * @param int $userid 
+ * @return array 
+ */
 function get_api_user($userid = 0)
 {
     global $db, $db_config, $admin_info, $user_info;

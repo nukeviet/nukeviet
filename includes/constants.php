@@ -232,6 +232,9 @@ define('NV_REDIS_PASSWORD', ''); // Warning: password default is empty, but if u
 define('NV_REDIS_DBINDEX', 0);
 define('NV_REDIS_TIMEOUT', 2.5);
 
+// API
+define('MANUALL_DEL_API_LOG', false); // Allow the super-admins to delete logs
+
 $global_config['site_charset'] = 'utf-8';
 $global_config['check_module'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op'] = '/^[a-zA-Z0-9\-]+$/';

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -80,10 +80,8 @@ $lang_module['api_role_type_public_note'] = 'Public API-role is a group of APIs 
 $lang_module['api_role_type_private_error'] = 'API-role does not allow arbitrary activation of use';
 $lang_module['all'] = 'All';
 $lang_module['authentication'] = 'Authentication';
-$lang_module['not_access_authentication'] = 'You have not created API-role access authentication';
-$lang_module['recreate_access_authentication_info'] = 'If you forgot the secret code, recreate the authentication';
-$lang_module['create_access_authentication'] = 'Create authentication';
-$lang_module['recreate_access_authentication'] = 'Recreate authentication';
+$lang_module['create_access_authentication'] = 'Create new authentication';
+$lang_module['delete_authentication'] = 'Delete authentication';
 $lang_module['api_credential_ident'] = 'Access keys';
 $lang_module['api_credential_secret'] = 'Secret code';
 $lang_module['auth_method'] = 'Method';

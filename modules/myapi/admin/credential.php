@@ -32,6 +32,20 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         ]);
     }
 
+    if ($nv_Request->isset_request('del', 'post')) {
+        $method = $nv_Request->get_title('method', 'post', '');
+        if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true)) {
+            nv_jsonOutput([
+                'status' => 'error'
+            ]);
+        }
+
+        delAuth($method, $userid);
+        nv_jsonOutput([
+            'status' => 'OK'
+        ]);
+    }
+
     if ($nv_Request->isset_request('save', 'post')) {
         $method = $nv_Request->get_title('method', 'post', '');
         if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true)) {
@@ -91,9 +105,6 @@ if ($nv_Request->isset_request('changeAuth', 'post')) {
         $method['key'] = $key;
         $method['name'] = $name;
         $xtpl->assign('METHOD', $method);
-
-        $xtpl->assign('AUTH_INFO', empty($api_user[$key]) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
-        $xtpl->assign('BTN', empty($api_user[$key]) ? $lang_module['create_access_authentication'] : $lang_module['recreate_access_authentication']);
 
         if ($key == 'password_verify') {
             $xtpl->parse('changeAuth.method_tab.is_active');

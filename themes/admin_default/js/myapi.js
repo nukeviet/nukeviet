@@ -286,6 +286,22 @@ $(function() {
                     }
                 })
             });
+            changeAuth.on('click', '.delete_authentication', function(e) {
+                var method = $(this).data('method');
+                $.ajax({
+                    type: "POST",
+                    url: credential_page_url,
+                    cache: !1,
+                    data: 'del=1&method=' + method + '&changeAuth=' + $(this).data('userid'),
+                    dataType: "json"
+                }).done(function(a) {
+                    if ('OK' == a.status) {
+                        $('[name=' + method + '_ident]', changeAuth).val('');
+                        $('[name=' + method + '_secret]', changeAuth).val('');
+                        $('[name=' + method + '_ips]', changeAuth).val('').parents('.api_ips').slideUp()
+                    }
+                })
+            });
             changeAuth.on('input', '.ips', function() {
                 $(this).val($(this).val().replace(/[\r\n\v]+/g, ''));
             });
@@ -359,6 +375,22 @@ $(function() {
                     $('[name=' + method + '_ident]', credential_auth).val(a.ident);
                     $('[name=' + method + '_secret]', credential_auth).val(a.secret);
                     $('[name=' + method + '_ips]', credential_auth).parents('.api_ips').slideDown()
+                }
+            })
+        });
+        $('.delete_authentication', credential_auth).on('click', function(e) {
+            var method = $(this).data('method');
+            $.ajax({
+                type: "POST",
+                url: myroleapi_url,
+                cache: !1,
+                data: 'delAuth=' + method,
+                dataType: "json"
+            }).done(function(a) {
+                if ('OK' == a.status) {
+                    $('[name=' + method + '_ident]', credential_auth).val('');
+                    $('[name=' + method + '_secret]', credential_auth).val('');
+                    $('[name=' + method + '_ips]', credential_auth).val('').parents('.api_ips').slideUp()
                 }
             })
         });

@@ -13,6 +13,22 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+// Xóa xác thực
+if ($nv_Request->isset_request('delAuth', 'post')) {
+    $method = $nv_Request->get_title('delAuth', 'post', '');
+    if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['auth_method_select']
+        ]);
+    }
+
+    delAuth($method);
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
+}
+
 // Tạo xác thực
 if ($nv_Request->isset_request('createAuth', 'post')) {
     $method = $nv_Request->get_title('createAuth', 'post', '');
@@ -138,8 +154,6 @@ foreach ($methods as $key => $name) {
     $method['key'] = $key;
     $method['name'] = $name;
     $xtpl->assign('METHOD', $method);
-    $xtpl->assign('AUTH_INFO', empty($api_user[$key]) ? $lang_module['not_access_authentication'] : $lang_module['recreate_access_authentication_info']);
-    $xtpl->assign('BTN', empty($api_user[$key]) ? $lang_module['create_access_authentication'] : $lang_module['recreate_access_authentication']);
 
     if ($key == 'password_verify') {
         $xtpl->parse('main.method_tab.is_active');

@@ -47,11 +47,22 @@
                                         </div>
                                     </div>
                                     <div class="row m-bottom">
-                                        <div class="col-xs-16">
-                                            <label class="auth-info control-label mb-0">{AUTH_INFO}</label>
+                                        <div class="col-xs-12">
+                                            <button type="button" class="btn btn-primary btn-block create_authentication" data-method="{METHOD.key}">{LANG.create_access_authentication}</button>
                                         </div>
-                                        <div class="col-xs-8">
-                                            <button type="button" class="btn btn-primary btn-block create_authentication" data-method="{METHOD.key}">{BTN}</button>
+                                        <div class="col-xs-12">
+                                            <button type="button" class="btn btn-danger btn-block delete_authentication" data-method="{METHOD.key}">{LANG.delete_authentication}</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row m-bottom api_ips" <!-- BEGIN: not_access_authentication --> style="display:none"<!-- END: not_access_authentication -->>
+                                        <div class="form-group">
+                                            <label><strong>{LANG.api_ips}</strong></label>
+                                            <textarea class="form-control ips" name="{METHOD.key}_ips">{METHOD.ips}</textarea>
+                                            <div class="help-block">{LANG.api_ips_help}</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-primary api_ips_update" data-method="{METHOD.key}">{LANG.api_ips_update}</button>
                                         </div>
                                     </div>
                                 </div>

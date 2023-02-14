@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -26,8 +26,6 @@ $lang_module['api_role_select'] = 'Hãy chọn API-role';
 $lang_module['api_role_type_private_error'] = 'API-role không cho phép tự ý kích hoạt sử dụng';
 $lang_module['api_role_type_public2'] = 'Các API-role công cộng';
 $lang_module['api_role_type_private2'] = 'Các API-role được chỉ định';
-$lang_module['not_access_authentication'] = 'Bạn chưa tạo xác thực truy cập API-role';
-$lang_module['recreate_access_authentication_info'] = 'Nếu quên mã bí mật, hãy tạo lại xác thực';
 $lang_module['status'] = 'Trạng thái';
 $lang_module['active'] = 'Hoạt động';
 $lang_module['inactive'] = 'Tạm dừng';
@@ -45,8 +43,8 @@ $lang_module['value_copied'] = 'Giá trị đã được sao chép vào bộ nh�
 $lang_module['auth_method'] = 'Phương thức';
 $lang_module['auth_method_password_verify'] = 'password_verify (khuyên dùng)';
 $lang_module['auth_method_md5_verify'] = 'md5_verify';
-$lang_module['create_access_authentication'] = 'Tạo xác thực';
-$lang_module['recreate_access_authentication'] = 'Tạo lại xác thực';
+$lang_module['create_access_authentication'] = 'Tạo mới xác thực';
+$lang_module['delete_authentication'] = 'Xóa xác thực';
 $lang_module['api_roles_empty'] = 'Không tìm thấy API-role theo yêu cầu';
 $lang_module['api_roles_list'] = 'Danh sách các API-role';
 $lang_module['api_roles_allowed'] = 'Các API';
@@ -58,3 +56,6 @@ $lang_module['endtime'] = 'Kết thúc';
 $lang_module['quota'] = 'Hạn ngạch';
 $lang_module['indefinitely'] = 'Vô thời hạn';
 $lang_module['no_quota'] = 'Không giới hạn';
+$lang_module['api_ips'] = 'IP Truy cập';
+$lang_module['api_ips_help'] = 'Các IP được phân cách bởi dấu phẩy. Việc truy cập API-role chỉ được thực hiện từ các IP này. Để trống được hiểu là không kiểm tra IP';
+$lang_module['api_ips_update'] = 'Cập nhật IP Truy cập';

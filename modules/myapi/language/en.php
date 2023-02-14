@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -26,8 +26,6 @@ $lang_module['api_role_select'] = 'Select API Role';
 $lang_module['api_role_type_private_error'] = 'API-role does not allow arbitrary activation of use';
 $lang_module['api_role_type_public2'] = 'Public API-roles';
 $lang_module['api_role_type_private2'] = 'API-roles just for you';
-$lang_module['not_access_authentication'] = 'You have not created API-role access authentication';
-$lang_module['recreate_access_authentication_info'] = 'If you forgot the secret code, recreate the authentication';
 $lang_module['status'] = 'Status';
 $lang_module['active'] = 'Active';
 $lang_module['inactive'] = 'Inactive';
@@ -45,8 +43,8 @@ $lang_module['value_copied'] = 'Value has been copied';
 $lang_module['auth_method'] = 'Method';
 $lang_module['auth_method_password_verify'] = 'password_verify (recommend)';
 $lang_module['auth_method_md5_verify'] = 'md5_verify';
-$lang_module['create_access_authentication'] = 'Create authentication';
-$lang_module['recreate_access_authentication'] = 'Recreate authentication';
+$lang_module['create_access_authentication'] = 'Create new authentication';
+$lang_module['delete_authentication'] = 'Delete authentication';
 $lang_module['api_roles_empty'] = 'The requested API-roles could not be found';
 $lang_module['api_roles_list'] = 'List of API Roles';
 $lang_module['api_roles_allowed'] = 'APIs';
@@ -58,3 +56,6 @@ $lang_module['endtime'] = 'End time';
 $lang_module['quota'] = 'Quota';
 $lang_module['indefinitely'] = 'Indefinitely';
 $lang_module['no_quota'] = 'No quota';
+$lang_module['api_ips'] = 'Access IP';
+$lang_module['api_ips_help'] = 'IPs are separated by commas. API-role access is made only from these IPs. Leaving it blank means not checking IP';
+$lang_module['api_ips_update'] = 'Update Access IP';

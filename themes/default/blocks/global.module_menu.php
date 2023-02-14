@@ -55,9 +55,9 @@ if (!nv_function_exists('nv_module_menu')) {
                         }
                     }
 
-                    if (!empty($site_mods['api']) and $_li['func_name'] == 'logout') {
+                    if (!empty($site_mods['myapi']) and $_li['func_name'] == 'logout') {
                         $xtpl->assign('LOOP', [
-                            'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=api',
+                            'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=myapi',
                             'active' => '',
                             'title' => $lang_global['myapis']
                         ]);
