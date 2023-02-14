@@ -13,6 +13,11 @@ if (!defined('NV_IS_MOD_PAGE')) {
     exit('Stop!!!');
 }
 
+// Không cho truy cập trực tiếp vào /[lang]/[module-name]/sitemap/ chỉ truy cập vào /sitemap-[lang].[module-name].xml
+if (!preg_match('/' . nv_preg_quote($module_name) . '\.xml/', $nv_Request->request_uri)) {
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+}
+
 $url = [];
 $cacheFile = NV_LANG_DATA . '_sitemap_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 7200;
