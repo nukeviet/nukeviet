@@ -931,6 +931,7 @@ if ($step == 1) {
                             $module_name = 'upload';
                             $lang_global['mod_upload'] = 'upload';
                             $global_config['upload_logo'] = '';
+                            $admin_info['userid'] = 1;
 
                             define('NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload');
                             define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
@@ -946,7 +947,15 @@ if ($step == 1) {
                                 } catch (PDOException $e) {
                                     trigger_error($e->getMessage());
                                 }
+
+                                // Quét các file upload có sẵn
+                                if (!empty($array_dirname[$dirname])) {
+                                    nv_filesListRefresh($dirname);
+                                }
                             }
+                            // Cập nhật lại dung lượng thư mục
+                            $global_config['show_folder_size'] = 1;
+                            nv_dirListRefreshSize();
 
                             // Data Counter
                             $db->query('INSERT INTO ' . $db_config['prefix'] . "_counter VALUES ('c_time', 'start', 0, 0, 0)");

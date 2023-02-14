@@ -16,8 +16,5 @@ if (!defined('NV_ADMIN')) {
 if (defined('NV_IS_SPADMIN')) {
     $submenu['thumbconfig'] = $lang_module['thumbconfig'];
     $submenu['config'] = $lang_module['configlogo'];
-
-    if (defined('NV_IS_GODADMIN')) {
-        $submenu['uploadconfig'] = $lang_module['uploadconfig'];
-    }
+    $submenu['uploadconfig'] = $lang_module['uploadconfig'];
 }

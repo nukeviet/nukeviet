@@ -82,6 +82,7 @@ foreach ($images as $image) {
             $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . " AND title='" . $image . "'");
         }
     }
+    nv_dirListRefreshSize();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['move'], $path . '/' . $image . ' -> ' . $newfolder . '/' . $file, $admin_info['userid']);
 }

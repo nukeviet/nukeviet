@@ -37,6 +37,7 @@ if ($d[0]) {
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
     }
+    nv_dirListRefreshSize();
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['deletefolder'], $path, $admin_info['userid']);
     echo 'OK';

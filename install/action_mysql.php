@@ -232,6 +232,7 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_dir (
   did mediumint(8) NOT NULL AUTO_INCREMENT,
   dirname varchar(250) DEFAULT NULL,
   time int(11) NOT NULL DEFAULT '0',
+  total_size double unsigned NOT NULL DEFAULT '0' COMMENT 'Dung lượng thư mục',
   thumb_type tinyint(4) NOT NULL DEFAULT '0',
   thumb_width smallint(6) NOT NULL DEFAULT '0',
   thumb_height smallint(6) NOT NULL DEFAULT '0',

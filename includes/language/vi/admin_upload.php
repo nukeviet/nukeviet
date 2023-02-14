@@ -198,3 +198,4 @@ $lang_module['upload_overflow'] = 'Upload vượt giới hạn';
 $lang_module['upload_overflow_help'] = 'Cho phép tải lên các tập tin có kích thước lớn hơn dung lượng tối đa được tải lên. Lưu ý: Chỉ có tác dụng khi tải lên trực tiếp tập tin từ máy tính tại phần quản lý file, phần Chunk Upload bên trên được thiết lập. Giá trị cấu hình tại đây không được nhỏ hơn dung lượng tối đa của file tải lên được thiết lập bên trên';
 $lang_module['nv_mobile_mode_img'] = 'Tạo hình ảnh cho chế độ di động';
 $lang_module['nv_mobile_mode_img_note'] = 'Chiều rộng hình ảnh (0 = không tạo)';
+$lang_module['show_folder_size'] = 'Hiển thị dung lượng thư mục trong cây thư mục';

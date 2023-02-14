@@ -1,6 +1,9 @@
 <!-- BEGIN: tree -->
 <li class="{DIRTREE.class1}">
-    <span {DIRTREE.style} class="{DIRTREE.class2}" title="{DIRTREE.title}"> &nbsp;{DIRTREE.titlepath}</span>
+    <span {DIRTREE.style} class="{DIRTREE.class2}" title="{DIRTREE.title}">
+        {DIRTREE.titlepath}
+        <!-- BEGIN: size --><span class="folder-stat">({DIRTREE.total_size})</span><!-- END: size -->
+    </span>
     <ul>
         <!-- BEGIN: tree_content -->
         {TREE_CONTENT}
@@ -11,7 +14,10 @@
 <!-- BEGIN: main -->
 <ul id="foldertree" class="filetree">
     <li class="open collapsable">
-        <span {DATA.style} class="{DATA.class}" title="{DATA.title}"> &nbsp; {DATA.titlepath}</span>
+        <span {DATA.style} class="{DATA.class}" title="{DATA.title}">
+            {DATA.titlepath}
+            <!-- BEGIN: size --><span class="folder-stat">({SIZE})</span><!-- END: size -->
+        </span>
         <ul>
             <!-- BEGIN: main_content -->
             {CONTENT}
