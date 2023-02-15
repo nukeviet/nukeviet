@@ -63,9 +63,10 @@ if (isset($array_dirname[$path])) {
                 (name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
                 ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $admin_info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $newimg . "')");
         } else {
-            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET 
+            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET
                 filesize=' . $info['filesize'] . ', srcwidth=' . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . " AND title = '" . $newimg . "'");
         }
+        nv_dirListRefreshSize();
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['compressimage'], $path . '/' . $newimg, $admin_info['userid']);
 
         nv_jsonOutput([

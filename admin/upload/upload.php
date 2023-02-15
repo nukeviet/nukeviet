@@ -236,6 +236,8 @@ if (!empty($error)) {
 
         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
         $sth->execute();
+
+        nv_dirListRefreshSize();
     }
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . '/' . $upload_info['basename'], $admin_info['userid']);

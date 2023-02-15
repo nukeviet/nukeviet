@@ -13,6 +13,7 @@
                 </tr>
             </tfoot>
             <tbody>
+                <!-- BEGIN: sys -->
                 <tr>
                     <td><strong>{LANG.nv_max_width_height}</strong></td>
                     <td><input class="form-control w100 pull-left" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/><span class="pull-left text-middle">&nbsp; x &nbsp;</span><input class="form-control pull-left w100" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/> <span class="pull-left text-middle"><input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize}</span> </td>
@@ -104,6 +105,11 @@
                     <label style="display:inline-block;width:48%"><input type="checkbox" name="mime[]" value="{MIMES.key}"{MIMES.checked} /> {MIMES.title}&nbsp;&nbsp;</label>
                     <!-- END: mimes -->
                     </td>
+                </tr>
+                <!-- END: sys -->
+                <tr>
+                    <td>{LANG.show_folder_size}</td>
+                    <td><input type="checkbox" name="show_folder_size" value="1"{CONFIG.show_folder_size}></td>
                 </tr>
             </tbody>
         </table>

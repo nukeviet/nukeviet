@@ -67,6 +67,18 @@
     padding: 0;
 }
 
+.filetree span.folder,
+.filetree span.file {
+    padding-left: 18px!important;
+    overflow-wrap: break-word;
+    hyphens: manual;
+}
+
+.filetree span.folder .folder-stat {
+    color: #666;
+    font-size: 11px;
+}
+
 @media (max-width: 768px) {
     .content {
         height: auto;
