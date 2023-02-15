@@ -72,22 +72,23 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
                 $sth = $db->prepare('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
                     name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt
                 ) VALUES (
-                    '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', 
-                    " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ', 
-                    ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ', 
+                    '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "',
+                    " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ',
+                    ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ',
                     ' . $info['mtime'] . ', ' . $did . ", '" . $file . "', :newalt
                 )");
 
                 $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
                 $sth->execute();
             } else {
-                $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET 
-                    filesize=' . $info['filesize'] . ", src='" . $info['src'] . "', 
-                    srcwidth=" . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ", 
-                    sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ', 
-                    mtime=' . $info['mtime'] . ' 
+                $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET
+                    filesize=' . $info['filesize'] . ", src='" . $info['src'] . "',
+                    srcwidth=" . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ",
+                    sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ',
+                    mtime=' . $info['mtime'] . '
                 WHERE did = ' . $did . " AND title = '" . $file . "'");
             }
+            nv_dirListRefreshSize();
         }
 
         exit('OK#' . basename($file));

@@ -64,6 +64,11 @@ composer.lock
 # Ignore some uploads, assets dir
 /assets/download
 /assets/*.jpg
+/assets/about/*.png
+/assets/banners/*.jpg
+/assets/freecontent/*.jpg
+/assets/news/**/*.jpg
+
 /uploads/download
 /uploads/users/*.jpg
 /uploads/contact/*.jpg

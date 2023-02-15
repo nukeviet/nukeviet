@@ -192,3 +192,4 @@ $lang_module['upload_overflow'] = 'Taille du fichier de débordement';
 $lang_module['upload_overflow_help'] = 'Permet de télécharger des fichiers plus grands que la taille de fichier maximale. Remarque: ne fonctionne que lors du téléchargement de fichiers directement à partir de votre ordinateur dans le gestionnaire de fichiers, la section Téléchargement de blocs ci-dessus est définie. La valeur configurée ici ne doit pas être inférieure à la taille maximale de l\'ensemble de fichiers téléchargé ci-dessus';
 $lang_module['nv_mobile_mode_img'] = 'Créer une image pour le mode mobile';
 $lang_module['nv_mobile_mode_img_note'] = 'Largeur de l\'image (0 = aucune création)';
+$lang_module['show_folder_size'] = 'Afficher la taille du dossier dans l\'arborescence des répertoires';

@@ -14,8 +14,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 /**
- * nv_set_dir_class()
- *
  * @param array $array
  * @return string
  */
@@ -51,13 +49,12 @@ function nv_set_dir_class($array)
 }
 
 /**
- * viewdirtree()
- *
  * @param string $dir
  * @param string $currentpath
+ * @param array $array_folders
  * @return string
  */
-function viewdirtree($dir, $currentpath)
+function viewdirtree($dir, $currentpath, $array_folders)
 {
     global $array_dirname, $global_config, $module_file;
 
@@ -78,14 +75,18 @@ function viewdirtree($dir, $currentpath)
             $tree['style'] = $style_color;
             $tree['title'] = $_dir;
             $tree['titlepath'] = basename($_dir);
+            $tree['total_size'] = empty($array_folders[$_dir]) ? 0 : nv_convertfromBytes($array_folders[$_dir]);
 
-            $content2 = viewdirtree($_dir, $currentpath);
+            $content2 = viewdirtree($_dir, $currentpath, $array_folders);
 
             $xtpl = new XTemplate('foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
             $xtpl->assign('DIRTREE', $tree);
 
             if (empty($content2)) {
                 $content2 = '<li class="hide">&nbsp;</li>';
+            }
+            if (!empty($tree['total_size'])) {
+                $xtpl->parse('tree.size');
             }
 
             if (!empty($content2)) {
@@ -112,9 +113,19 @@ $data = [];
 $data['style'] = $path == $currentpath ? ' style="color:red"' : '';
 $data['class'] = nv_set_dir_class($check_allow_upload_dir) . ' pos' . nv_string_to_filename($path);
 $data['title'] = $path;
-$data['titlepath'] = empty($path) ? NV_BASE_SITEURL : $path;
+$data['titlepath'] = $path;
 
-$content = viewdirtree($path, $currentpath);
+$array_folders = [];
+if (!empty($global_config['show_folder_size'])) {
+    $sql = "SELECT dirname, total_size FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE
+    dirname=" . $db->quote($path) . " OR dirname LIKE '" . $db->dblikeescape($path . '/') . "%'";
+    $result = $db->query($sql);
+    while ($row = $result->fetch()) {
+        $array_folders[$row['dirname']] = $row['total_size'];
+    }
+}
+
+$content = viewdirtree($path, $currentpath, $array_folders);
 
 $xtpl = new XTemplate('foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('DATA', $data);
@@ -142,6 +153,12 @@ if (empty($content)) {
 if (!empty($content)) {
     $xtpl->assign('CONTENT', $content);
     $xtpl->parse('main.main_content');
+}
+
+// Kích thước thư mục chính
+if (!empty($array_folders[$path])) {
+    $xtpl->assign('SIZE', nv_convertfromBytes($array_folders[$path]));
+    $xtpl->parse('main.size');
 }
 
 $xtpl->parse('main');
