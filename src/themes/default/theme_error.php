@@ -21,8 +21,6 @@ function nv_error_theme($page_title, $info_title, $info_content, $error_code, $a
         trigger_error('Error template!!!', 256);
     }
 
-    $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
-
     $xtpl = new XTemplate('info_die.tpl', NV_ROOTDIR . '/themes/' . $template . '/system');
     $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
     $xtpl->assign('PAGE_TITLE', $page_title);
@@ -31,7 +29,9 @@ function nv_error_theme($page_title, $info_title, $info_content, $error_code, $a
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
-    $xtpl->assign('SITE_NAME', $global_config['site_name']);
+
+    // Có trường hợp !isset site_name
+    $xtpl->assign('SITE_NAME', empty($global_config['site_name']) ? '' : $global_config['site_name']);
 
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
     if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
@@ -39,20 +39,11 @@ function nv_error_theme($page_title, $info_title, $info_content, $error_code, $a
     }
     $xtpl->assign('SITE_FAVICON', $site_favicon);
 
-    if (isset($size[1])) {
-        if ($size[0] > 490) {
-            $size[1] = ceil(490 * $size[1] / $size[0]);
-            $size[0] = 490;
-        }
+    if (!empty($global_config['site_logo'])) {
         $xtpl->assign('LOGO', NV_BASE_SITEURL . $global_config['site_logo']);
-        $xtpl->assign('WIDTH', $size[0]);
-        $xtpl->assign('HEIGHT', $size[1]);
-        if (isset($size['mime']) and $size['mime'] == 'application/x-shockwave-flash') {
-            $xtpl->parse('main.swf');
-        } else {
-            $xtpl->parse('main.image');
-        }
+        $xtpl->parse('main.logo');
     }
+
     $xtpl->assign('INFO_TITLE', $info_title);
     $xtpl->assign('INFO_CONTENT', $info_content);
 
