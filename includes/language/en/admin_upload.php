@@ -208,3 +208,4 @@ $lang_module['tinify_compress_note'] = 'The Tinify image compression tool is fre
 $lang_module['tinify_compress_note2'] = 'To use this tool, you need to add the Tinify package to the composer repository (See instructions <a href="https://github.com/tinify/tinify-php#installation">here</a>)';
 $lang_module['tinify_api_key'] = 'Tinify API Key';
 $lang_module['tinify_api_key_note'] = 'To get Tinify\'s API key, you need to register <a href="https://tinypng.com/developers">here</a>';
+$lang_module['show_folder_size'] = 'Show folder size in directory tree';

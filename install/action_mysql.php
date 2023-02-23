@@ -74,7 +74,7 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_api_user (
   PRIMARY KEY (id),
   UNIQUE KEY userid_method (userid, method),
   UNIQUE KEY ident (ident),
-	UNIQUE KEY secret (secret)
+    UNIQUE KEY secret (secret)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = 'CREATE TABLE ' . NV_AUTHORS_GLOBALTABLE . " (
@@ -263,6 +263,7 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_dir (
   did mediumint(8) NOT NULL AUTO_INCREMENT,
   dirname varchar(250) DEFAULT NULL,
   time int(11) NOT NULL DEFAULT '0',
+  total_size double unsigned NOT NULL DEFAULT '0' COMMENT 'Dung lượng thư mục',
   thumb_type tinyint(4) NOT NULL DEFAULT '0',
   thumb_width smallint(6) NOT NULL DEFAULT '0',
   thumb_height smallint(6) NOT NULL DEFAULT '0',

@@ -214,3 +214,4 @@ $lang_module['tinify_compress_note'] = 'Công cụ nén ảnh Tinify được cu
 $lang_module['tinify_compress_note2'] = 'Để sử dụng công cụ này, bạn cần thêm thư viện Tinify vào kho composer (Xem hướng dẫn <a href="https://github.com/tinify/tinify-php#installation">tại đây</a>)';
 $lang_module['tinify_api_key'] = 'Tinify API Key';
 $lang_module['tinify_api_key_note'] = 'Để lấy khóa API của Tinify, bạn cần đăng ký <a href="https://tinypng.com/developers">tại đây</a>';
+$lang_module['show_folder_size'] = 'Hiển thị dung lượng thư mục trong cây thư mục';

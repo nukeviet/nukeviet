@@ -115,3 +115,7 @@ define('NV_ANTI_AGENT', 0);
 
 // Chế độ phát triển
 define('NV_DEBUG', 0);
+
+// Kích thước ảnh tối đa mặc định
+define('NV_MAX_WIDTH', 1500);
+define('NV_MAX_HEIGHT', 1500);

@@ -73,6 +73,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
 
             $did = $array_dirname[$path];
             $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_file SET filesize=' . $info['filesize'] . ", src='" . $info['src'] . "', srcwidth=" . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . " AND title = '" . $file . "'");
+            nv_dirListRefreshSize();
         }
 
         exit('OK#' . basename($file));

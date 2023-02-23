@@ -57,9 +57,15 @@ if (isset($array_dirname[$path])) {
     $did = $array_dirname[$path];
     $info = nv_getFileInfo($path, $file);
     $info['userid'] = $admin_info['userid'];
-    $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file
-							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
-							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ', ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ', ' . $info['mtime'] . ', ' . $did . ", '" . $file . "')");
+    $db->query('INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . "_file (
+        name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title
+    ) VALUES (
+        '" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "',
+        " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ',
+        ' . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ',
+        ' . $info['mtime'] . ', ' . $did . ", '" . $file . "'
+    )");
+    nv_dirListRefreshSize();
 }
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['upload_createimage'], $path . '/' . $file, $admin_info['userid']);

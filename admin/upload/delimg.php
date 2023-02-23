@@ -44,6 +44,7 @@ foreach ($files as $file) {
 
     if (isset($array_dirname[$path])) {
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $array_dirname[$path] . " AND title='" . $file . "'");
+        nv_dirListRefreshSize();
     }
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $file, $admin_info['userid']);

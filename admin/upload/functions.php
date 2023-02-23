@@ -21,7 +21,7 @@ $menu_top = [
 
 define('NV_IS_FILE_ADMIN', true);
 
-//Document
+// Document
 $array_url_instruction['main'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload';
 $array_url_instruction['thumbconfig'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:thumbconfig';
 $array_url_instruction['config'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:upload:config';
@@ -39,10 +39,7 @@ if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'thumbconfig';
     $allow_func[] = 'recreatethumb';
     $allow_func[] = 'config';
-
-    if (defined('NV_IS_GODADMIN')) {
-        $allow_func[] = 'uploadconfig';
-    }
+    $allow_func[] = 'uploadconfig';
 }
 
 /**
@@ -506,11 +503,13 @@ function nv_filesListRefresh($pathimg)
     $results = [];
     $did = $array_dirname[$pathimg];
     if (is_dir(NV_ROOTDIR . '/' . $pathimg)) {
+        // Lấy hết các file đã lưu trong CSDL của thư mục này
         $result = $db->query('SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
         while ($row = $result->fetch()) {
             $results[$row['title']] = $row;
         }
 
+        // Quét tệp tin trên máy chủ
         if ($dh = opendir(NV_ROOTDIR . '/' . $pathimg)) {
             while (($title = readdir($dh)) !== false) {
                 if (in_array($title, $array_hidefolders, true)) {
@@ -556,12 +555,43 @@ function nv_filesListRefresh($pathimg)
                     $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did . ' AND title=' . $db->quote($_row['title']));
                 }
             }
-            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did);
+
+            // Tính toán lại dung lượng thư mục
+            $sql = "SELECT SUM(filesize) FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did IN(
+                SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE
+                dirname=" . $db->quote($pathimg) . " OR dirname LIKE '" . $db->dblikeescape($pathimg . '/') . "%'
+            )";
+            $total_size = floatval($db->query($sql)->fetchColumn());
+
+            $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time=' . NV_CURRENTTIME . ', total_size=' . $total_size . ' WHERE did = ' . $did);
         }
     } else {
         // Xóa CSDL thư mục không còn tồn tại
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
         $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
+    }
+}
+
+/**
+ * Hàm tính lại toàn bộ dung lượng thư mục
+ */
+function nv_dirListRefreshSize()
+{
+    global $global_config, $array_dirname, $db;
+
+    if (empty($global_config['show_folder_size'])) {
+        return true;
+    }
+
+    foreach ($array_dirname as $dirname => $did) {
+        // Tính toán lại dung lượng thư mục
+        $sql = "SELECT SUM(filesize) FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did IN(
+            SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE
+            dirname=" . $db->quote($dirname) . " OR dirname LIKE '" . $db->dblikeescape($dirname . '/') . "%'
+        )";
+        $total_size = floatval($db->query($sql)->fetchColumn());
+
+        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET total_size=' . $total_size . ' WHERE did=' . $did);
     }
 }
 
@@ -634,6 +664,7 @@ if ($nv_Request->isset_request('dirListRefresh', 'get')) {
             trigger_error($e->getMessage());
         }
     }
+    nv_dirListRefreshSize();
 }
 
 $global_config['upload_logo'] = nv_unhtmlspecialchars($global_config['upload_logo']);
