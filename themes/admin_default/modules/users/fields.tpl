@@ -247,14 +247,14 @@
                 <tr>
                     <th class="text-center">{LANG.field_number}</th>
                     <th class="text-center">{LANG.field_value}</th>
-                    <th class="text-center">{LANG.field_text}</th>
+                    <th class="text-center">{LANG.field_text} (*)</th>
                     <th class="text-center">{LANG.field_default_value}</th>
                 </tr>
             </thead>
             <!-- BEGIN: add_field_choice -->
             <tfoot>
                 <tr>
-                    <td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem('{LANG.field_match_type_alphanumeric}');" /></td>
+                    <td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem('{LANG.field_match_type_alphanumeric}');" /><br/><br/><div class="help-block">(*) {LANG.value_empty_note}</div></td>
                 </tr>
             </tfoot>
             <!-- END: add_field_choice -->

@@ -475,11 +475,11 @@ if ($nv_Request->isset_request('userid', 'get')) {
                     $row['value'] = isset($data[$row['field']]) ? $data[$row['field']] : $row['default_value'];
                 } else {
                     $temp = array_map('strval', array_keys($row['field_choices']));
-                    $tempkey = isset($data[$row['field']]) ? $data[$row['field']] : $row['default_value'];
+                    $tempkey = isset($data[$row['field']]) ? $data[$row['field']] : get_value_by_lang($row['default_value']);
                     $row['value'] = in_array($tempkey, $temp, true) ? $tempkey : '';
                 }
             } else {
-                $row['value'] = isset($data[$row['field']]) ? $data[$row['field']] : $row['default_value'];
+                $row['value'] = isset($data[$row['field']]) ? $data[$row['field']] : get_value_by_lang($row['default_value']);
             }
 
             $row['required'] = ($row['required']) ? 'required' : '';
@@ -553,7 +553,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
                         $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('user_details.field.loop.select.loop');
                     }
@@ -565,7 +565,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('user_details.field.loop.radio');
                     }
@@ -577,7 +577,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('user_details.field.loop.checkbox');
                     }
@@ -586,7 +586,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
                         $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('user_details.field.loop.multiselect.loop');
                     }

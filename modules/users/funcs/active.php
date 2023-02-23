@@ -96,7 +96,7 @@ if ($checknum == $row['checknum']) {
                 if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
                     $default_value = (float) ($row_f['default_value']);
                 } else {
-                    $default_value = $row_f['default_value'];
+                    $default_value = get_value_by_lang($row_f['default_value']);
                 }
                 $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $default_value;
             }

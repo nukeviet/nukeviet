@@ -238,7 +238,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
             if ($row_f['is_system'] == 1) {
                 continue;
             }
-            $query_field[$row_f['field']] = $row_f['default_value'];
+            $query_field[$row_f['field']] = get_value_by_lang($row_f['default_value']);
         }
         userInfoTabDb($query_field);
 
@@ -288,7 +288,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         $query_field = [];
         $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
-            $query_field[$row_f['field']] = $row_f['default_value'];
+            $query_field[$row_f['field']] = get_value_by_lang($row_f['default_value']);
         }
 
         $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_reg (

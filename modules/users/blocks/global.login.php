@@ -347,7 +347,7 @@ if (!nv_function_exists('nv_block_login')) {
                                             $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
                                         }
                                     } else {
-                                        $row['value'] = $row['default_value'];
+                                        $row['value'] = get_value_by_lang($row['default_value']);
                                     }
 
                                     $row['required'] = ($row['required']) ? 'required' : '';
@@ -419,7 +419,7 @@ if (!nv_function_exists('nv_block_login')) {
                                                 $xtpl->assign('FIELD_CHOICES', [
                                                     'key' => $key,
                                                     'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                                                    'value' => $value
+                                                    'value' => get_value_by_lang2($key, $value)
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.select.loop');
                                             }
@@ -431,7 +431,7 @@ if (!nv_function_exists('nv_block_login')) {
                                                     'id' => $row['fid'] . '_' . $number++,
                                                     'key' => $key,
                                                     'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                                                    'value' => $value
+                                                    'value' => get_value_by_lang2($key, $value)
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.radio.loop');
                                             }
@@ -444,7 +444,7 @@ if (!nv_function_exists('nv_block_login')) {
                                                     'id' => $row['fid'] . '_' . $number++,
                                                     'key' => $key,
                                                     'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
-                                                    'value' => $value
+                                                    'value' => get_value_by_lang2($key, $value)
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.checkbox.loop');
                                             }
@@ -455,7 +455,7 @@ if (!nv_function_exists('nv_block_login')) {
                                                 $xtpl->assign('FIELD_CHOICES', [
                                                     'key' => $key,
                                                     'selected' => (in_array((string) $key, $valueselect, true)) ? ' selected="selected"' : '',
-                                                    'value' => $value
+                                                    'value' => get_value_by_lang2($key, $value)
                                                 ]);
                                                 $xtpl->parse('main.allowuserreg.field.loop.multiselect.loop');
                                             }

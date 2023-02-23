@@ -535,7 +535,7 @@ if (defined('NV_IS_USER_FORUM')) {
     $have_custom_fields = false;
     $have_name_field = false;
     foreach ($array_field_config as $row) {
-        $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
+        $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : get_value_by_lang($row['default_value']);
         $row['required'] = ($row['required']) ? 'required' : '';
 
         $xtpl->assign('FIELD', $row);
@@ -608,7 +608,7 @@ if (defined('NV_IS_USER_FORUM')) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
                         'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                        'value' => $value
+                        'value' => get_value_by_lang2($key, $value)
                     ]);
                     $xtpl->parse('main.edit_user.field.loop.select.loop');
                 }
@@ -620,7 +620,7 @@ if (defined('NV_IS_USER_FORUM')) {
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
                         'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                        'value' => $value
+                        'value' => get_value_by_lang2($key, $value)
                     ]);
                     $xtpl->parse('main.edit_user.field.loop.radio');
                 }
@@ -632,7 +632,7 @@ if (defined('NV_IS_USER_FORUM')) {
                         'id' => $row['fid'] . '_' . $number++,
                         'key' => $key,
                         'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
-                        'value' => $value
+                        'value' => get_value_by_lang2($key, $value)
                     ]);
                     $xtpl->parse('main.edit_user.field.loop.checkbox');
                 }
@@ -642,7 +642,7 @@ if (defined('NV_IS_USER_FORUM')) {
                     $xtpl->assign('FIELD_CHOICES', [
                         'key' => $key,
                         'selected' => (in_array((string) $key, $valueselect, true)) ? ' selected="selected"' : '',
-                        'value' => $value
+                        'value' => get_value_by_lang2($key, $value)
                     ]);
                     $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
                 }

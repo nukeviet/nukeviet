@@ -573,3 +573,4 @@ $lang_module['register_active_time_note'] = 'Nếu giá trị lớn hơn 0, tài
 $lang_module['hours'] = 'giờ';
 $lang_module['for_admin'] = 'Chỉ dành cho quản trị';
 $lang_module['check'] = 'Kiểm tra';
+$lang_module['value_empty_note'] = 'Nếu Giá trị không được khai báo theo ngôn ngữ hiện tại, nó sẽ tự động lấy Khóa làm giá trị';

@@ -87,7 +87,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                     $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
                 }
             } else {
-                $row['value'] = $row['default_value'];
+                $row['value'] = get_value_by_lang($row['default_value']);
             }
 
             $row['required'] = ($row['required']) ? 'required' : '';
@@ -208,7 +208,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('main.field.loop.select.loop');
                     }
@@ -224,7 +224,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         if ($number == $count) {
                             $xtpl->parse('main.field.loop.radio.loop.invalidtooltip');
@@ -244,7 +244,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         if ($number == $count) {
                             $xtpl->parse('main.field.loop.checkbox.loop.invalidtooltip');
@@ -261,7 +261,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => (in_array((string) $key, $valueselect, true)) ? ' selected="selected"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('main.field.loop.multiselect.loop');
                     }
@@ -1049,7 +1049,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         // Parse custom fields
         foreach ($array_field_config as $row) {
             if (empty($row['system'])) {
-                $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
+                $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : get_value_by_lang($row['default_value']);
                 $row['required'] = ($row['required']) ? 'required' : '';
 
                 $xtpl->assign('FIELD', $row);
@@ -1117,7 +1117,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                         $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.select.loop');
                     }
@@ -1133,7 +1133,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.radio.loop');
                     }
@@ -1154,7 +1154,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                             'id' => $row['fid'] . '_' . $number++,
                             'key' => $key,
                             'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.checkbox.loop');
                     }
@@ -1172,7 +1172,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                         $xtpl->assign('FIELD_CHOICES', [
                             'key' => $key,
                             'selected' => (in_array((string) $key, $valueselect, true)) ? ' selected="selected"' : '',
-                            'value' => $value
+                            'value' => get_value_by_lang2($key, $value)
                         ]);
                         $xtpl->parse('main.tab_edit_others.loop.multiselect.loop');
                     }
@@ -1417,16 +1417,16 @@ function user_welcome($array_field_config, $custom_fields)
                     $result = explode(',', $custom_fields[$row['field']]);
                     $value = [];
                     foreach ($result as $item) {
-                        if (isset($row['field_choices'][$item])) {
-                            $value[] = $row['field_choices'][$item];
+                        if (isset($row['field_choices'][$item][NV_LANG_DATA])) {
+                            $value[] = $row['field_choices'][$item][NV_LANG_DATA];
                         } elseif (!empty($item)) {
                             $value[] = $item;
                         }
                     }
                     $value = empty($value) ? '' : implode('<br />', $value);
                 } elseif ($question_type == 'multiselect' or $question_type == 'select' or $question_type == 'radio') {
-                    if (isset($row['field_choices'][$custom_fields[$row['field']]])) {
-                        $value = $row['field_choices'][$custom_fields[$row['field']]];
+                    if (isset($row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA])) {
+                        $value = $row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA];
                     } else {
                         $value = $custom_fields[$row['field']];
                     }
@@ -1669,16 +1669,16 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields,
                     $result = explode(',', $custom_fields[$row['field']]);
                     $value = [];
                     foreach ($result as $item) {
-                        if (isset($row['field_choices'][$item])) {
-                            $value[] = $row['field_choices'][$item];
+                        if (isset($row['field_choices'][$item][NV_LANG_DATA])) {
+                            $value[] = $row['field_choices'][$item][NV_LANG_DATA];
                         } elseif (!empty($item)) {
                             $value[] = $item;
                         }
                     }
                     $value = empty($value) ? '' : implode('<br />', $value);
                 } elseif ($question_type == 'multiselect' or $question_type == 'select' or $question_type == 'radio') {
-                    if (isset($row['field_choices'][$custom_fields[$row['field']]])) {
-                        $value = $row['field_choices'][$custom_fields[$row['field']]];
+                    if (isset($row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA])) {
+                        $value = $row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA];
                     } else {
                         $value = $custom_fields[$row['field']];
                     }

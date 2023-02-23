@@ -263,7 +263,16 @@ if ($nv_Request->isset_request('save', 'post')) {
         } elseif ($dataform['max_length'] < 0) {
             $dataform['max_length'] = 255;
         }
-        $dataform['default_value'] = $nv_Request->get_title('default_value', 'post', '');
+
+        $default_value = [];
+        if (!empty($dataform_old['default_value'])) {
+            $default_value = json_decode($dataform_old['default_value'], true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $default_value = [];
+            }
+        }
+        $default_value[NV_LANG_DATA] = $nv_Request->get_title('default_value', 'post', '');
+        $dataform['default_value'] = json_encode($default_value, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
             $error = $lang_module['field_number_error'];
@@ -328,18 +337,30 @@ if ($nv_Request->isset_request('save', 'post')) {
 
         if ($dataform['choicetypes'] == 'field_choicetypes_text') {
             if ($dataform['fid'] and $dataform['fieldid'] == 'gender') {
-                $field_choice_value = [1 => 'N', 2 => 'M', 3 => 'F'];
-                $field_choice_text = [1 => $global_array_genders['N']['title'], 2 => $global_array_genders['M']['title'], 3 => $global_array_genders['F']['title']];
+                //$field_choice_value = [1 => 'N', 2 => 'M', 3 => 'F'];
+                //$field_choice_text = [1 => $global_array_genders['N']['title'], 2 => $global_array_genders['M']['title'], 3 => $global_array_genders['F']['title']];
+                $dataform['field_choices'] = serialize(['N' => $global_array_genders['N']['title'], 'M' => $global_array_genders['M']['title'], 'F' => $global_array_genders['F']['title']]);
             } else {
+                $old_field_choices = !empty($dataform_old['field_choices']) ? unserialize($dataform_old['field_choices']) : [];
                 $field_choice_value = $nv_Request->get_array('field_choice', 'post');
                 $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
-            }
-            $field_choices = array_combine(array_map('strip_punctuation', $field_choice_value), array_map('strip_punctuation', $field_choice_text));
-            if (sizeof($field_choices)) {
-                unset($field_choices['']);
-                $dataform['field_choices'] = serialize($field_choices);
-            } else {
-                $error = $lang_module['field_choices_empty'];
+                if (!sizeof($field_choice_value)) {
+                    $error = $lang_module['field_choices_empty'];
+                } else {
+                    $field_choices = [];
+                    foreach ($field_choice_value as $k => $val) {
+                        $val = strip_punctuation($val);
+                        if (!empty($val)) {
+                            $field_choices[$val] = (isset($old_field_choices[$val]) and is_array($old_field_choices[$val])) ? $old_field_choices[$val] : [];
+                            $field_choices[$val][NV_LANG_DATA] = strip_punctuation($field_choice_text[$k]);
+                        }
+                    }
+                    if (empty($field_choices)) {
+                        $error = $lang_module['field_choices_empty'];
+                    } else {
+                        $dataform['field_choices'] = serialize($field_choices);
+                    }
+                }
             }
         } else {
             // Module data
@@ -623,6 +644,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $dataform['editor_height'] = '100px';
             $dataform['fieldid'] = '';
             $dataform['class'] = 'input';
+            $dataform['default_value'] = '';
             $dataform['default_value_number'] = 0;
             $dataform['min_number'] = 0;
             $dataform['max_number'] = 1000;
@@ -634,6 +656,12 @@ if ($nv_Request->isset_request('qlist', 'get')) {
 
     if ($dataform['field_type'] == 'textbox' or $dataform['field_type'] == 'textarea' or $dataform['field_type'] == 'editor') {
         $text_fields = 1;
+        $default_value = json_decode($dataform['default_value'], true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $dataform['default_value'] = !empty($default_value[NV_LANG_DATA]) ? $default_value[NV_LANG_DATA] : '';
+        }
+
+        
     } elseif ($dataform['field_type'] == 'number') {
         $number_fields = 1;
         $dataform['min_number'] = $dataform['min_length'];
@@ -670,7 +698,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                     'checked' => ($number == $dataform['default_value']) ? ' checked="checked"' : '',
                     'number' => $number++,
                     'key' => $key,
-                    'value' => $disable_edit_choose ? $global_array_genders[$key]['title'] : $value
+                    'value' => $disable_edit_choose ? $global_array_genders[$key]['title'] : get_value_by_lang2($key, $value)
                 ]);
                 $xtpl->parse('main.load.loop_field_choice');
             }

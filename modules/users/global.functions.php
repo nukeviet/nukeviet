@@ -396,6 +396,32 @@ function delOldRegAccount()
     }
 }
 
+function get_value_by_lang($value)
+{
+    $value_decode = json_decode($value, true);
+    if (json_last_error() === JSON_ERROR_NONE) {
+        $value = !empty($value_decode[NV_LANG_DATA]) ? $value_decode[NV_LANG_DATA] : '';
+    }
+
+    return $value;
+}
+
+function get_value_by_lang2($key, $value)
+{
+    if (is_array($value)) {
+        if (!empty($value[NV_LANG_DATA])) {
+            $return = $value[NV_LANG_DATA];
+        } else {
+            $return = '';
+        }
+    } else {
+        $return = $value;
+    }
+    empty($return) && $return = $key;
+
+    return $return;
+}
+
 // Xác định cấu hình module
 $global_users_config = [];
 $cacheFile = NV_LANG_DATA . '_' . $module_data . '_config_' . NV_CACHE_PREFIX . '.cache';

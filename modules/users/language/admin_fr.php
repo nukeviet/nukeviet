@@ -553,3 +553,4 @@ $lang_module['register_active_time_note'] = 'Si la valeur est supérieure à 0, 
 $lang_module['hours'] = 'heures';
 $lang_module['for_admin'] = 'Pour les admins';
 $lang_module['check'] = 'Chèque';
+$lang_module['value_empty_note'] = 'Si la valeur n\'est pas déclarée dans les paramètres régionaux actuels, elle prendra la clé comme valeur';
