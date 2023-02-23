@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_PAGE')) {
     die('Stop!!!');
 }
 
-$url = array();
+$url = [];
 $cacheFile = NV_LANG_DATA . '_sitemap_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 7200;
 
