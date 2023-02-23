@@ -403,6 +403,6 @@ $lang_module['forcedrelogin_note'] = 'You are signed out of your account. Please
 $lang_module['welcome_new_account'] = 'Welcome to %s! You have successfully registered. Let\'s start with setting up your account... We hope you\'ll have a pleasant and rewarding time on our website.';
 $lang_module['welcome_new_member'] = 'Welcome to the %1$s group! You have now become its official member. We wish you many enjoyable experiences with %1$s group.';
 $lang_module['info_when_leaving_group'] = 'Unfortunately, you left the %s group. We hope that we will have the opportunity to serve you again.';
-$lang_module['login_name'] = 'Login name';
+$lang_module['login_name'] = 'Login name is valid as';
 $lang_module['username_or_email'] = 'Username or Email';
 $lang_module['bydatalang'] = 'By data language';

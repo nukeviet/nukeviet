@@ -405,6 +405,6 @@ $lang_module['forcedrelogin_note'] = 'Bạn đã thoát khỏi tài khoản ngư
 $lang_module['welcome_new_account'] = 'Chào mừng bạn đến với %s! Bạn đã đăng ký tài khoản người dùng thành công. Hãy bắt đầu từ việc thiết lập tài khoản của mình... Hy vọng bạn sẽ có thời gian vui vẻ và bổ ích tại website của chúng tôi.';
 $lang_module['welcome_new_member'] = 'Chào mừng bạn đến với nhóm &laquo;%1$s&raquo;! Bây giờ bạn đã trở thành thành viên chính thức của nhóm. Chúc bạn có nhiều trải nghiệm thú vị cùng &laquo;%1$s&raquo;.';
 $lang_module['info_when_leaving_group'] = 'Rất tiếc là bạn đã rời nhóm &laquo;%s&raquo;. Chúng tôi hy vọng sẽ có cơ hội để phục vụ bạn lần nữa.';
-$lang_module['login_name'] = 'Tên đăng nhập';
+$lang_module['login_name'] = 'Tên đăng nhập có giá trị là';
 $lang_module['username_or_email'] = 'Bí danh hoặc email';
 $lang_module['bydatalang'] = 'Theo ngôn ngữ dữ liệu';

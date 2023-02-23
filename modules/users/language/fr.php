@@ -402,6 +402,6 @@ $lang_module['forcedrelogin_note'] = 'Vous êtes déconnecté de votre compte. V
 $lang_module['welcome_new_account'] = 'Bienvenue sur %s! Vous vous êtes inscrit avec succès. Commençons par la création de votre compte... Nous espérons que vous passerez un moment agréable et enrichissant sur notre site.';
 $lang_module['welcome_new_member'] = 'Bienvenue dans le groupe %1$s ! Vous êtes maintenant devenu son membre officiel. Nous vous souhaitons de nombreuses expériences agréables avec le groupe %1$s.';
 $lang_module['info_when_leaving_group'] = 'Malheureusement, vous avez quitté le groupe %s. Nous espérons que nous aurons l\'occasion de vous servir à nouveau.';
-$lang_module['login_name'] = 'Identifiant';
+$lang_module['login_name'] = 'Le nom de connexion est valide comme';
 $lang_module['username_or_email'] = 'Nom d\'utilisateur ou email';
 $lang_module['bydatalang'] = 'Par langage de données';
