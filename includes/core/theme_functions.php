@@ -319,10 +319,10 @@ function nv_htmlOutput($html, $type = 'html')
 
 /**
  * nv_jsonOutput()
- * 
- * @param array $array_data 
- * @param int $flags 
- * @return never 
+ *
+ * @param array $array_data
+ * @param int $flags
+ * @return never
  */
 function nv_jsonOutput($array_data, $flags = 0)
 {
@@ -863,10 +863,11 @@ function nv_disable_site()
         $disable_site_content = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . NV_LANG_DATA . '.txt');
     }
 
-    if (!empty($global_config['site_reopening_time']) and $global_config['site_reopening_time'] > NV_CURRENTTIME) {
-        $disable_site_content .= '<br/><br/>' . $lang_global['closed_site_reopening_time'] . ': ' . nv_date('d/m/Y H:i', $global_config['site_reopening_time']);
+    $reopening_time = $global_config['closed_site'] > 0 ? $global_config['site_reopening_time'] : ((!empty($global_config['closed_subsite']) and $global_config['idsite'] > 0) ? $global_config['subsite_reopening_time'] : 0);
+    if (!empty($reopening_time) and $reopening_time > NV_CURRENTTIME) {
+        $disable_site_content .= '<br/><br/>' . $lang_global['closed_site_reopening_time'] . ': ' . nv_date('d/m/Y H:i', $reopening_time);
         $disable_site_headers = [
-            'Retry-After: ' . gmdate('D, d M Y H:i:s', $global_config['site_reopening_time']) . ' GMT'
+            'Retry-After: ' . gmdate('D, d M Y H:i:s', $reopening_time) . ' GMT'
         ];
         $disable_site_code = 503;
     }
