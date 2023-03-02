@@ -379,7 +379,7 @@ if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
 
 // Kiem tra ton tai goi cap nhat va tu cach admin
 $nv_check_update = file_exists(NV_ROOTDIR . '/install/update_data.php');
-define('ADMIN_LOGIN_MODE', $nv_check_update ? 1 : (empty($global_config['closed_site']) ? 3 : $global_config['closed_site']));
+define('ADMIN_LOGIN_MODE', ($nv_check_update or ($global_config['idsite'] > 0 and !empty($global_config['closed_subsite']))) ? 1 : (empty($global_config['closed_site']) ? 3 : $global_config['closed_site']));
 
 $admin_cookie = $nv_Request->get_bool('admin', 'session', false);
 if (!empty($admin_cookie)) {
@@ -391,16 +391,17 @@ if (!empty($admin_cookie)) {
 if (!defined('NV_IS_ADMIN')) {
     $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', NV_LANG_DATA);
     if (!in_array($site_lang, $global_config['allow_sitelangs'], true)) {
+        // Đình chỉ nếu ngôn ngữ chưa được kích hoạt ngoài site cho người dùng
         $global_config['closed_site'] = 1;
     }
 }
 if ($nv_check_update and !defined('NV_IS_UPDATE')) {
-    // Dinh chi neu khong la admin toi cao
+    // Trong quá trình nâng cấp, đình chỉ nếu không là admin tối cao
     if (!defined('NV_ADMIN') and !defined('NV_IS_GODADMIN')) {
         nv_disable_site();
     }
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
-    if (!empty($global_config['closed_site'])) {
+    if (!empty($global_config['closed_site']) or ($global_config['idsite'] > 0 and !empty($global_config['closed_subsite']))) {
         nv_disable_site();
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'], true)) {
         nv_redirect_location(NV_BASE_SITEURL);
