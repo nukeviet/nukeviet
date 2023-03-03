@@ -70,6 +70,13 @@ function nv_get_users_field_config()
     return $array_field_config;
 }
 
+/**
+ * oldPassSave()
+ *
+ * @param mixed $userid
+ * @param mixed $oldpass
+ * @param mixed $oldpass_creation_time
+ */
 function oldPassSave($userid, $oldpass, $oldpass_creation_time)
 {
     global $db, $global_config;
@@ -89,6 +96,14 @@ function oldPassSave($userid, $oldpass, $oldpass_creation_time)
     }
 }
 
+/**
+ * passCmp()
+ *
+ * @param mixed $newpass
+ * @param mixed $currentpass
+ * @param mixed $userid
+ * @return bool
+ */
 function passCmp($newpass, $currentpass, $userid)
 {
     global $crypt, $db;
@@ -108,6 +123,12 @@ function passCmp($newpass, $currentpass, $userid)
     return true;
 }
 
+/**
+ * forcedrelogin()
+ *
+ * @param mixed $userid
+ * @throws PDOException
+ */
 function forcedrelogin($userid)
 {
     global $db;
@@ -118,11 +139,77 @@ function forcedrelogin($userid)
     $stmt->execute();
 }
 
+/**
+ * get_file_save_info()
+ * Tạo tên file bí mật và thư mục lưu file
+ *
+ * @param mixed $value
+ * @return string[]
+ */
+function get_file_save_info($value)
+{
+    global $global_config;
+
+    $md5filename = md5($value . '_' . substr($global_config['sitekey'], 5, 8));
+
+    return [
+        'dir' => substr($md5filename, 0, 2),
+        'basename' => $md5filename . '.' . nv_getextension($value)
+    ];
+}
+
+/**
+ * get_other_fields()
+ *
+ * @param mixed $array_field_config
+ * @return mixed
+ */
+function get_other_fields($array_field_config)
+{
+    return array_diff_key($array_field_config, [
+        'first_name' => 1,
+        'last_name' => 1,
+        'gender' => 1,
+        'birthday' => 1,
+        'sig' => 1,
+        'question' => 1,
+        'answer' => 1
+    ]);
+}
+
+/**
+ * delete_userfile()
+ *
+ * @param mixed $file_save_info
+ */
+function delete_userfile($file_save_info)
+{
+    global $module_upload;
+
+    @unlink(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename']);
+    $files = scandir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/');
+    $files = array_diff($files, ['.', '..', '.htaccess', 'index.html']);
+    if (!sizeof($files)) {
+        nv_deletefile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/');
+    }
+}
+
+/**
+ * fieldsCheck()
+ *
+ * @param mixed $custom_fields
+ * @param mixed $array_data
+ * @param mixed $query_field
+ * @param mixed $valid_field
+ * @return array
+ */
 function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field)
 {
-    global $array_field_config, $lang_module, $global_users_config;
+    global $array_field_config, $lang_module, $global_users_config, $module_upload;
 
-    empty($array_field_config) && $array_field_config = nv_get_users_field_config();
+    if (empty($array_field_config)) {
+        $array_field_config = get_other_fields(nv_get_users_field_config());
+    }
 
     if (empty($query_field)) {
         $query_field = [];
@@ -321,6 +408,34 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
                     ];
                 }
+            } elseif ($row_f['field_type'] == 'file') {
+                $temp_value = [];
+                if (!empty($value)) {
+                    $value = array_values(array_unique($value));
+                    foreach ($value as $i => $value_i) {
+                        $file_save_info = get_file_save_info($value_i);
+                        if (!empty($row_f['limited_values']['maxnum']) and $i >= $row_f['limited_values']['maxnum']) {
+                            if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                delete_userfile($file_save_info);
+                            } elseif (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_save_info['basename'])) {
+                                @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_save_info['basename']);
+                            }
+                        } else {
+                            if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                $temp_value[] = $value_i;
+                            } elseif (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_save_info['basename'])) {
+                                if (!is_dir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'])) {
+                                    nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/', $file_save_info['dir']);
+                                }
+                                if (nv_copyfile(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_save_info['basename'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                    $temp_value[] = $value_i;
+                                }
+                                @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_save_info['basename']);
+                            }
+                        }
+                    }
+                }
+                $value = !empty($temp_value) ? implode(',', $temp_value) : '';
             }
 
             $custom_fields[$row_f['field']] = $value;
@@ -360,9 +475,31 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
  */
 function userInfoTabDb($data, $userid = 0)
 {
-    global $db;
+    global $db, $array_field_config, $module_upload;
 
     if ($userid) {
+        if (empty($array_field_config)) {
+            $array_field_config = get_other_fields(nv_get_users_field_config());
+        }
+        foreach ($array_field_config as $row_f) {
+            if ($row_f['field_type'] == 'file') {
+                $old_values = $db->query('SELECT ' . $row_f['field'] . ' FROM ' . NV_MOD_TABLE . '_info WHERE userid = ' . $userid)->fetchColumn();
+                $old_values = !empty($old_values) ? array_map('trim', explode(',', $old_values)) : [];
+                if (!empty($old_values)) {
+                    $temp_value = $data[$row_f['field']];
+                    !empty($temp_value) && $temp_value = array_map('trim', explode(',', $temp_value));
+                    foreach ($old_values as $old_value) {
+                        if (empty($temp_value) or !in_array($old_value, $temp_value, true)) {
+                            $file_save_info = get_file_save_info($old_value);
+                            if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                delete_userfile($file_save_info);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         $upd = [];
         foreach ($data as $key => $value) {
             $upd[] = $key . '=' . $db->quote($value);
@@ -382,6 +519,73 @@ function userInfoTabDb($data, $userid = 0)
 }
 
 /**
+ * image_size_info()
+ *
+ * @param mixed $size
+ * @param mixed $coor
+ * @return string
+ */
+function image_size_info($size, $coor)
+{
+    global $lang_module;
+
+    $limit = [];
+    if (!empty($size['equal'])) {
+        $limit[] = $lang_module['equal'] . ' ' . $size['equal'] . ' px';
+    } else {
+        if (!empty($size['greater'])) {
+            $limit[] = $lang_module['greater'] . ' ' . $size['greater'] . ' px';
+        }
+        if (!empty($size['less'])) {
+            $limit[] = $lang_module['less'] . ' ' . $size['less'] . ' px';
+        }
+    }
+    $limit = !empty($limit) ? $lang_module['file_image_' . $coor] . ' ' . implode(', ', $limit) : '';
+
+    return $limit;
+}
+
+/**
+ * shorten_name()
+ * 
+ * @param mixed $filename 
+ * @param mixed $extension 
+ * @return string 
+ */
+function shorten_name($filename, $extension)
+{
+    return (strlen($filename) > 11 ? substr($filename, 0, 4) . '...' . substr($filename, -4, 4) : $filename) . '.' . $extension;
+}
+
+/**
+ * file_type()
+ * 
+ * @param mixed $ext 
+ * @return string 
+ */
+function file_type($ext)
+{
+    return in_array($ext, ['gif', 'jpg', 'jpeg', 'png', 'webp'], true) ? 'image' : (in_array($ext, ['doc', 'docx'], true) ? 'doc' : ($ext == 'pdf' ? 'pdf' : 'file'));
+}
+
+/**
+ * file_type_name()
+ *
+ * @param mixed $file
+ * @return array
+ */
+function file_type_name($file)
+{
+    $pathinfo = pathinfo($file);
+
+    return [
+        'type' => file_type($pathinfo['extension']),
+        'key' => $file,
+        'value' => shorten_name($pathinfo['filename'], $pathinfo['extension'])
+    ];
+}
+
+/**
  * delOldRegAccount()
  * Xóa các tài khoản chờ kích hoạt quá hạn
  */
@@ -396,6 +600,12 @@ function delOldRegAccount()
     }
 }
 
+/**
+ * get_value_by_lang()
+ *
+ * @param mixed $value
+ * @return mixed
+ */
 function get_value_by_lang($value)
 {
     $value_decode = json_decode($value, true);
@@ -406,6 +616,13 @@ function get_value_by_lang($value)
     return $value;
 }
 
+/**
+ * get_value_by_lang2()
+ *
+ * @param mixed $key
+ * @param mixed $value
+ * @return mixed
+ */
 function get_value_by_lang2($key, $value)
 {
     if (is_array($value)) {

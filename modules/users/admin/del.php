@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -66,6 +66,24 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
             } catch (PDOException $e) {
                 trigger_error($e->getMessage());
             }
+
+            $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
+            $row_info = $db->query($sql)->fetch();
+            $array_field_config = nv_get_users_field_config();
+            foreach ($row_info as $key => $value) {
+                if (!empty($value)) {
+                    if ($array_field_config[$key]['field_type'] == 'file') {
+                        $value = array_map('trim', explode(',', $value));
+                        foreach ($value as $file) {
+                            $file_save_info = get_file_save_info($file);
+                            if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                delete_userfile($file_save_info);
+                            }
+                        }
+                    }
+                }
+            }
+
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $userid);
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid);

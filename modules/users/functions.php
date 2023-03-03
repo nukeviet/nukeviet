@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -423,4 +423,248 @@ if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($
             }
         }
     }
+}
+
+// Upload file vào thư mục tmp
+if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
+    $field = $nv_Request->get_title('field', 'post', '');
+    $field = preg_replace('/[^a-zA-Z0-9\-\_]+/', '', $field);
+    if (empty($field)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Stop!!!'
+        ]);
+    }
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . $field);
+    $csrf = $nv_Request->get_title('_csrf', 'post', '');
+    if (!hash_equals($checkss, $csrf)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Stop!!!'
+        ]);
+    }
+
+    $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE user_editable = 1 AND field=' . $db->quote($field));
+    $row_field = $result->fetch();
+    if (empty($row_field) or $row_field['field_type'] != 'file') {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Stop!!!'
+        ]);
+    }
+
+    if (empty($_FILES) or empty($_FILES['file']) or empty($_FILES['file']['tmp_name']) or empty($_FILES['file']['type']) or empty($_FILES['file']['size'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['file_empty']
+        ]);
+    }
+
+    $limited_values = !empty($row_field['limited_values']) ? json_decode($row_field['limited_values'], true) : [];
+    $file_allowed_ext = !empty($limited_values['filetype']) ? $limited_values['filetype'] : $global_config['file_allowed_ext'];
+    $file_max_size = !empty($limited_values['file_max_size']) ? min($limited_values['file_max_size'], NV_UPLOAD_MAX_FILESIZE) : NV_UPLOAD_MAX_FILESIZE;
+    $upload = new NukeViet\Files\Upload($file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], $file_max_size);
+    $upload->setLanguage($lang_global);
+    $upload_info = $upload->save_file($_FILES['file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
+    @unlink($_FILES['file']['tmp_name']);
+    if (!empty($upload_info['error'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $upload_info['error']
+        ]);
+    }
+
+    $extension = nv_getextension($upload_info['basename']);
+    if ($extension != $upload_info['ext']) {
+        @unlink($upload_info['name']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['file_extension_does_not_match']
+        ]);
+    }
+
+    if (!in_array($upload_info['ext'], $limited_values['mime'], true)) {
+        @unlink($upload_info['name']);
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['file_extension_not_accepted']
+        ]);
+    }
+
+    if ($upload_info['is_img']) {
+        $img_error = false;
+        $width_mess = [];
+        $height_mess = [];
+        if (!empty($limited_values['widthlimit']['equal'])) {
+            $width_mess[] = $lang_module['equal'] . ' ' . $limited_values['widthlimit']['equal'] . ' px';
+            if ($upload_info['img_info'][0] != $limited_values['widthlimit']['equal']) {
+                $img_error = true;
+            }
+        } else {
+            if (!empty($limited_values['widthlimit']['greater'])) {
+                $width_mess[] = $lang_module['greater'] . ' ' . $limited_values['widthlimit']['greater'] . ' px';
+                if ($upload_info['img_info'][0] < $limited_values['widthlimit']['greater']) {
+                    $img_error = true;
+                }
+            }
+            if (!empty($limited_values['widthlimit']['less'])) {
+                $width_mess[] = $lang_module['less'] . ' ' . $limited_values['widthlimit']['less'] . ' px';
+                if ($upload_info['img_info'][0] > $limited_values['widthlimit']['less']) {
+                    $img_error = true;
+                }
+            }
+        }
+
+        if (!empty($limited_values['heightlimit']['equal'])) {
+            $height_mess[] = $lang_module['equal'] . ' ' . $limited_values['heightlimit']['equal'] . ' px';
+            if ($upload_info['img_info'][1] != $limited_values['heightlimit']['equal']) {
+                $img_error = true;
+            }
+        } else {
+            if (!empty($limited_values['heightlimit']['greater'])) {
+                $height_mess[] = $lang_module['greater'] . ' ' . $limited_values['heightlimit']['greater'] . ' px';
+                if ($upload_info['img_info'][1] < $limited_values['heightlimit']['greater']) {
+                    $img_error = true;
+                }
+            }
+            if (!empty($limited_values['heightlimit']['less'])) {
+                $height_mess[] = $lang_module['less'] . ' ' . $limited_values['heightlimit']['less'] . ' px';
+                if ($upload_info['img_info'][1] > $limited_values['heightlimit']['less']) {
+                    $img_error = true;
+                }
+            }
+        }
+
+        if ($img_error) {
+            @unlink($upload_info['name']);
+            $width_mess = !empty($width_mess) ? implode(', ', $width_mess) : '';
+            $height_mess = !empty($height_mess) ? implode(', ', $height_mess) : '';
+            nv_jsonOutput([
+                'status' => 'error',
+                'mess' => $lang_module['file_image_size_error'] . ' (' . $upload_info['img_info'][0] . ' x ' . $upload_info['img_info'][1] . ' px)' . (!empty($width_mess) ? '. ' . $lang_module['file_image_width'] . ' ' . $width_mess : '') . (!empty($height_mess) ? '. ' . $lang_module['file_image_height'] . ' ' . $height_mess : '')
+            ]);
+        }
+    }
+
+    $strl = strlen($extension) + 1;
+    $bsname = $bsname2 = substr($upload_info['basename'], 0, -$strl);
+    $file_save_info = get_file_save_info($upload_info['basename']);
+    while (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+        $bsname = $bsname2 . '.' . substr(strtolower(nv_genpass(8)), 2, 2);
+        $file_save_info = get_file_save_info($bsname . '.' . $extension);
+    }
+    nv_renamefile($upload_info['name'], $file_save_info['basename']);
+    if ($bsname != $bsname2) {
+        $upload_info['basename'] = $bsname . '.' . $extension;
+    }
+
+    nv_jsonOutput([
+        'status' => 'OK',
+        'file_value' => shorten_name($bsname, $extension),
+        'file_key' => $upload_info['basename'],
+        'csrf' => md5(NV_CHECK_SESSION . '_' . $module_name . $file_save_info['basename'])
+    ]);
+}
+
+// Xóa thủ công file trong thư mục tmp
+if ($nv_Request->isset_request('field_filedel,file,_csrf', 'post')) {
+    $file = $nv_Request->get_title('file', 'post', '');
+    $file = preg_replace('/[^a-zA-Z0-9\-\_\.]+/', '', $file);
+    if (empty($file)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Stop!!!'
+        ]);
+    }
+
+    $file_save_info = get_file_save_info($file);
+
+    $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . $file_save_info['basename']);
+    $csrf = $nv_Request->get_title('_csrf', 'post', '');
+    if (!hash_equals($checkss, $csrf)) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => 'Stop!!!'
+        ]);
+    }
+
+    if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_save_info['basename'])) {
+        @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file_save_info['basename']);
+    }
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
+}
+
+// Download/Xem file (Nếu là image hoặc pdf thì xem)
+if ($nv_Request->isset_request('userfile', 'get')) {
+    if (!(defined('NV_IS_MODADMIN') or defined('NV_IS_USER'))) {
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+    }
+    $userfile = $nv_Request->get_title('userfile', 'get', '');
+    if (defined('NV_IS_USER') and !defined('NV_IS_MODADMIN')) {
+        $field = $nv_Request->get_title('field', 'get', '');
+        $field = preg_replace('/[^a-zA-Z0-9\-\_]+/', '', $field);
+        if (empty($field)) {
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+        }
+        $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE user_editable = 1 AND field=' . $db->quote($field));
+        $row_field = $result->fetch();
+        if (empty($row_field) or $row_field['field_type'] != 'file') {
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+        }
+
+        $uid = $user_info['userid'];
+        if ($nv_Request->isset_request('userid', 'get')) {
+            $_user_id = $nv_Request->get_int('userid', 'get', 0);
+            if (!empty($_user_id) and $_user_id != $user_info['userid']) {
+                if ($nv_Request->isset_request('groupid', 'get')) {
+                    $groupid = $nv_Request->get_int('groupid', 'get', 0);
+                    if ($db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $groupid . ' AND userid = ' . $user_info['userid'] . ' AND is_leader = 1')->fetchColumn()) {
+                        if ($db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $groupid . ' and userid = ' . $_user_id . ' and is_leader = 0')->fetchColumn()) {
+                            $uid = $_user_id;
+                        }
+                    }
+                }
+            }
+        }
+        $values = $db->query('SELECT ' . $field . ' FROM ' . NV_MOD_TABLE . '_info WHERE userid = ' . $uid)->fetchColumn();
+        $values = !empty($values) ? array_map('trim', explode(',', $values)) : [];
+        if (empty($values) or !in_array($userfile, $values, true)) {
+            $info_custom = $db->query('SELECT info_custom FROM ' . NV_MOD_TABLE . '_edit WHERE userid = ' . $uid)->fetchColumn();
+            if (empty($info_custom)) {
+                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+            }
+            $info_custom = json_decode($info_custom, true);
+            $editfiles = !empty($info_custom[$field]) ? array_map('trim', explode(',', $info_custom[$field])) : [];
+            if (empty($editfiles) or !in_array($userfile, $editfiles, true)) {
+                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+            }
+        }
+    }
+
+    $file_save_info = get_file_save_info($userfile);
+    if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+    }
+
+    $extension = nv_getextension($userfile);
+    if (in_array($extension, ['gif', 'jpg', 'jpeg', 'png', 'webp', 'pdf'], true)) {
+        if ($extension == 'pdf') {
+            $mime = 'application/pdf';
+        } else {
+            $sizes = getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename']);
+            $mime = $sizes['mime'];
+        }
+        header('Content-Type: ' . $mime);
+        header('Content-Disposition: inline; filename="' . $userfile . '"');
+        header('Cache-Control: private, max-age=0, must-revalidate');
+        header('Pragma: public');
+        readfile(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename']);
+    } else {
+        $file_info = pathinfo(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename']);
+        $download = new NukeViet\Files\Download(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'], $file_info['dirname'], $userfile, true);
+        $download->download_file();
+    }
+    exit();
 }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -262,7 +262,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     fid mediumint(8) NOT NULL AUTO_INCREMENT,
     field varchar(25) NOT NULL,
     weight int(10) unsigned NOT NULL DEFAULT '1',
-    field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
+    field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect', 'file') NOT NULL DEFAULT 'textbox',
     field_choices text NOT NULL,
     sql_choices text NOT NULL,
     match_type enum('none','alphanumeric','unicodename','email','url','regex','callback') NOT NULL DEFAULT 'none',
@@ -270,6 +270,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     func_callback varchar(75) NOT NULL DEFAULT '',
     min_length int(11) NOT NULL DEFAULT '0',
     max_length bigint(20) unsigned NOT NULL DEFAULT '0',
+    limited_values TEXT NULL DEFAULT NULL,
     for_admin TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
     required tinyint(3) unsigned NOT NULL DEFAULT '0',
     show_register tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -321,13 +322,13 @@ $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $mod
 $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_config (config, content, edit_time) VALUES ('auto_assign_oauthuser', '0', " . NV_CURRENTTIME . ')';
 $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_config (config, content, edit_time) VALUES ('admin_email', '0', " . NV_CURRENTTIME . ')';
 
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('first_name', 1, 'textbox', '', '', 'none', '', '', 0, 100, 1, 1, 1, 1, 'input', '', '', 1)";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('last_name', 2, 'textbox', '', '', 'none', '', '', 0, 100, 0, 1, 1, 1, 'input', '', '', 1)";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('gender', 3, 'select', 'a:3:{s:1:\"N\";s:0:\"\";s:1:\"M\";s:0:\"\";s:1:\"F\";s:0:\"\";}', '', 'none', '', '', 0, 1, 0, 1, 1, 1, 'input', '', '2', 1)";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('birthday', 4, 'date', 'a:1:{s:12:\"current_date\";i:0;}', '', 'none', '', '', 0, 0, 1, 1, 1, 1, 'input', '', '0', 1)";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('sig', 5, 'textarea', '', '', 'none', '', '', 0, 1000, 0, 1, 1, 1, 'input', '', '', 1)";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('question', 6, 'textbox', '', '', 'none', '', '', 3, 255, 1, 1, 1, 1, 'input', '', '', 1)";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('answer', 7, 'textbox', '', '', 'none', '', '', 3, 255, 1, 1, 1, 1, 'input', '', '', 1)";
+$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, limited_values, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('first_name', 1, 'textbox', '', '', 'none', '', '', 0, 100, '', 1, 1, 1, 1, 'input', '', '', 1)";
+$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, limited_values, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('last_name', 2, 'textbox', '', '', 'none', '', '', 0, 100, '', 0, 1, 1, 1, 'input', '', '', 1)";
+$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, limited_values, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('gender', 3, 'select', 'a:3:{s:1:\"N\";s:0:\"\";s:1:\"M\";s:0:\"\";s:1:\"F\";s:0:\"\";}', '', 'none', '', '', 0, 1, '', 0, 1, 1, 1, 'input', '', '2', 1)";
+$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, limited_values, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('birthday', 4, 'date', 'a:1:{s:12:\"current_date\";i:0;}', '', 'none', '', '', 0, 0, '', 1, 1, 1, 1, 'input', '', '0', 1)";
+$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, limited_values, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('sig', 5, 'textarea', '', '', 'none', '', '', 0, 1000, '', 0, 1, 1, 1, 'input', '', '', 1)";
+$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, limited_values, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('question', 6, 'textbox', '', '', 'none', '', '', 3, 255, '', 1, 1, 1, 1, 'input', '', '', 1)";
+$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . '_' . $module_data . "_field (field, weight, field_type, field_choices, sql_choices, match_type, match_regex, func_callback, min_length, max_length, limited_values, required, show_register, user_editable, show_profile, class, language, default_value, is_system) VALUES ('answer', 7, 'textbox', '', '', 'none', '', '', 3, 255, '', 1, 1, 1, 1, 'input', '', '', 1)";
 
 $a = 0;
 if ($module_data == 'users') {

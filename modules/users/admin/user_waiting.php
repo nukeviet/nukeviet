@@ -27,6 +27,28 @@ if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_absint('userid', 'post', 0);
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $userid);
     if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+        $sql = 'SELECT users_info FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+        if ($global_config['idsite'] > 0) {
+            $sql .= ' AND idsite=' . $global_config['idsite'];
+        }
+        $users_info = $db->query($sql)->fetchColumn();
+        if (!empty($users_info)) {
+            $users_info = json_decode($users_info, true);
+            foreach ($users_info as $key => $value) {
+                if (!empty($value)) {
+                    if ($array_field_config[$key]['field_type'] == 'file') {
+                        $value = array_map('trim', explode(',', $value));
+                        foreach ($value as $file) {
+                            $file_save_info = get_file_save_info($file);
+                            if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                delete_userfile($file_save_info);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
         if ($global_config['idsite'] > 0) {
             $sql .= ' AND idsite=' . $global_config['idsite'];
@@ -372,6 +394,26 @@ if ($nv_Request->isset_request('userid', 'get')) {
             ]);
         }
 
+        if (!empty($userdata['users_info'])) {
+            foreach ($userdata['users_info'] as $key => $value) {
+                if (!empty($value)) {
+                    if ($array_field_config[$key]['field_type'] == 'file') {
+                        $old_values = array_map('trim', explode(',', $value));
+                        $temp_value = $query_field[$array_field_config[$key]['field']];
+                        !empty($temp_value) && $temp_value = array_map('trim', explode(',', $temp_value));
+                        foreach ($old_values as $old_value) {
+                            if (empty($temp_value) or !in_array($old_value, $temp_value, true)) {
+                                $file_save_info = get_file_save_info($old_value);
+                                if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                    delete_userfile($file_save_info);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (!empty($post['in_groups'])) {
             foreach ($post['in_groups'] as $group_id) {
                 if ($group_id != 7 and $group_id != 4) {
@@ -591,6 +633,37 @@ if ($nv_Request->isset_request('userid', 'get')) {
                         $xtpl->parse('user_details.field.loop.multiselect.loop');
                     }
                     $xtpl->parse('user_details.field.loop.multiselect');
+                } elseif ($row['field_type'] == 'file') {
+                    $filelist = !empty($row['value']) ? explode(',', $row['value']) : [];
+                    if (!empty($filelist)) {
+                        foreach ($filelist as $file_item) {
+                            $assign = file_type_name($file_item);
+                            $assign['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item;
+                            $xtpl->assign('FILE_ITEM', $assign);
+                            $xtpl->parse('user_details.field.loop.file.loop');
+                        }
+                    }
+                    $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
+                    $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
+                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
+                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
+                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+                    $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
+                    $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
+                    if (!empty($widthlimit)) {
+                        $xtpl->assign('WIDTHLIMIT', $widthlimit);
+                        $xtpl->parse('user_details.field.loop.file.widthlimit');
+                    }
+                    if (!empty($heightlimit)) {
+                        $xtpl->assign('HEIGHTLIMIT', $heightlimit);
+                        $xtpl->parse('user_details.field.loop.file.heightlimit');
+                    }
+                    if (!(empty($row['limited_values']['maxnum']) or (count($filelist) < $row['limited_values']['maxnum']))) {
+                        $xtpl->parse('user_details.field.loop.file.addfile');
+                    }
+                    $xtpl->parse('user_details.field.loop.file');
                 }
                 $xtpl->parse('user_details.field.loop');
                 $have_custom_fields = true;

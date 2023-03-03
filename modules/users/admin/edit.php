@@ -472,6 +472,7 @@ if (!empty($groups_list)) {
 
 $xtpl = new XTemplate('user_edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('DATA', $_user);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -647,6 +648,37 @@ if (defined('NV_IS_USER_FORUM')) {
                     $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
                 }
                 $xtpl->parse('main.edit_user.field.loop.multiselect');
+            } elseif ($row['field_type'] == 'file') {
+                $filelist = !empty($row['value']) ? explode(',', $row['value']) : [];
+                if (!empty($filelist)) {
+                    foreach ($filelist as $file_item) {
+                        $assign = file_type_name($file_item);
+                        $assign['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item;
+                        $xtpl->assign('FILE_ITEM', $assign);
+                        $xtpl->parse('main.edit_user.field.loop.file.loop');
+                    }
+                }
+                $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
+                $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
+                $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
+                $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
+                $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+                $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
+                $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
+                if (!empty($widthlimit)) {
+                    $xtpl->assign('WIDTHLIMIT', $widthlimit);
+                    $xtpl->parse('main.edit_user.field.loop.file.widthlimit');
+                }
+                if (!empty($heightlimit)) {
+                    $xtpl->assign('HEIGHTLIMIT', $heightlimit);
+                    $xtpl->parse('main.edit_user.field.loop.file.heightlimit');
+                }
+                if (!(empty($row['limited_values']['maxnum']) or (count($filelist) < $row['limited_values']['maxnum']))) {
+                    $xtpl->parse('main.edit_user.field.loop.file.addfile');
+                }
+                $xtpl->parse('main.edit_user.field.loop.file');
             }
             $xtpl->parse('main.edit_user.field.loop');
             $have_custom_fields = true;

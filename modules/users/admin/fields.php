@@ -155,7 +155,7 @@ if ($nv_Request->isset_request('choicesql', 'post')) {
 }
 
 //Add, Edit
-$text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
+$text_fields = $number_fields = $date_fields = $choice_fields = $file_fields = $choice_type_sql = $choice_type_text = 0;
 $error = '';
 $field_choices = [];
 if ($nv_Request->isset_request('save', 'post')) {
@@ -174,6 +174,7 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     $dataform = [];
     $dataform['sql_choices'] = '';
+    $dataform['limited_values'] = '';
 
     $dataform['fid'] = $nv_Request->get_int('fid', 'post', 0);
     $dataform['system'] = $nv_Request->get_int('system', 'post', 0);
@@ -272,7 +273,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             }
         }
         $default_value[NV_LANG_DATA] = $nv_Request->get_title('default_value', 'post', '');
-        $dataform['default_value'] = json_encode($default_value, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+        $dataform['default_value'] = json_encode($default_value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         if ($dataform['min_length'] >= $dataform['max_length']) {
             $error = $lang_module['field_number_error'];
@@ -326,6 +327,68 @@ if ($nv_Request->isset_request('save', 'post')) {
             $error = $lang_module['field_date_error'];
         } else {
             $dataform['field_choices'] = serialize(['current_date' => $dataform['current_date']]);
+        }
+    } elseif ($dataform['field_type'] == 'file') {
+        $file_fields = 1;
+        $dataform['field_choices'] = $dataform['match_regex'] = $dataform['func_callback'] = $dataform['default_value'] = '';
+        $dataform['match_type'] = 'none';
+        $dataform['min_length'] = $dataform['max_length'] = 0;
+        $datafile = [
+            'filetype' => $nv_Request->get_typed_array('filetype', 'post', 'string', []),
+            'mime' => $nv_Request->get_typed_array('mime', 'post', 'string', []),
+            'file_max_size' => $nv_Request->get_int('file_max_size', 'post', 0),
+            'maxnum' => $nv_Request->get_int('maxnum', 'post', 0),
+            'widthlimit' => $nv_Request->get_typed_array('widthlimit', 'post', 'int', []),
+            'heightlimit' => $nv_Request->get_typed_array('heightlimit', 'post', 'int', [])
+        ];
+        if (empty($datafile['filetype'])) {
+            $error = $lang_module['field_file_exts_error'];
+        } else {
+            if (!empty($datafile['filetype']) and in_array('images', $datafile['filetype'], true)) {
+                if ($datafile['widthlimit']['equal'] > 0) {
+                    $datafile['widthlimit']['greater'] = 0;
+                    $datafile['widthlimit']['less'] = 0;
+                } else {
+                    $datafile['widthlimit']['equal'] = 0;
+                    if ($datafile['widthlimit']['greater'] != 0 and $datafile['widthlimit']['less'] != 0) {
+                        if ($datafile['widthlimit']['greater'] == $datafile['widthlimit']['less']) {
+                            $datafile['widthlimit']['equal'] = $datafile['widthlimit']['greater'];
+                            $datafile['widthlimit']['greater'] = 0;
+                            $datafile['widthlimit']['less'] = 0;
+                        } elseif ($datafile['widthlimit']['greater'] > $datafile['widthlimit']['less']) {
+                            $datafile['widthlimit']['greater'] = 0;
+                        }
+                    }
+                }
+                if ($datafile['heightlimit']['equal'] > 0) {
+                    $datafile['heightlimit']['greater'] = 0;
+                    $datafile['heightlimit']['less'] = 0;
+                } else {
+                    $datafile['heightlimit']['equal'] = 0;
+                    if ($datafile['heightlimit']['greater'] != 0 and $datafile['heightlimit']['less'] != 0) {
+                        if ($datafile['heightlimit']['greater'] == $datafile['heightlimit']['less']) {
+                            $datafile['heightlimit']['equal'] = $datafile['heightlimit']['greater'];
+                            $datafile['heightlimit']['greater'] = 0;
+                            $datafile['heightlimit']['less'] = 0;
+                        } elseif ($datafile['heightlimit']['greater'] > $datafile['heightlimit']['less']) {
+                            $datafile['heightlimit']['greater'] = 0;
+                        }
+                    }
+                }
+            } else {
+                $datafile['widthlimit'] = [
+                    'equal' => 0,
+                    'greater' => 0,
+                    'less' => 0
+                ];
+                $datafile['heightlimit'] = [
+                    'equal' => 0,
+                    'greater' => 0,
+                    'less' => 0
+                ];
+            }
+
+            $dataform['limited_values'] = json_encode($datafile);
         }
     } else {
         $dataform['choicetypes'] = $nv_Request->get_string('choicetypes', 'post', '');
@@ -397,18 +460,19 @@ if ($nv_Request->isset_request('save', 'post')) {
 
                 $sql = 'INSERT INTO ' . NV_MOD_TABLE . "_field (
                     field, weight, field_type, field_choices, sql_choices, match_type,
-                    match_regex, func_callback, min_length, max_length,
+                    match_regex, func_callback, min_length, max_length, limited_values,
                     for_admin, required, show_register, user_editable,
                     show_profile, class, language, default_value
                 ) VALUES (
                     '" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote($dataform['sql_choices']) . ", '" . $dataform['match_type'] . "',
                     :match_regex, :func_callback,
-                    " . $dataform['min_length'] . ', ' . $dataform['max_length'] . ',
+                    " . $dataform['min_length'] . ', ' . $dataform['max_length'] . ', :limited_values,
                     ' . $dataform['for_admin'] . ', ' . $dataform['required'] . ', ' . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
                     " . $dataform['show_profile'] . ", :class, '" . serialize($language) . "', :default_value
                 )";
 
                 $data_insert = [];
+                $data_insert['limited_values'] = $dataform['limited_values'];
                 $data_insert['match_regex'] = nv_unhtmlspecialchars($dataform['match_regex']);
                 $data_insert['func_callback'] = nv_unhtmlspecialchars($dataform['func_callback']);
                 $data_insert['class'] = $dataform['class'];
@@ -418,6 +482,8 @@ if ($nv_Request->isset_request('save', 'post')) {
                     $type_date = '';
                     if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
                         $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+                    } elseif ($dataform['field_type'] == 'file') {
+                        $type_date = 'TEXT NOT NULL';
                     } elseif ($dataform['max_length'] <= 255) {
                         $type_date = 'VARCHAR( ' . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
                     } elseif ($dataform['max_length'] <= 65536) {
@@ -439,14 +505,15 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $query .= " match_type='" . $dataform['match_type'] . "',
                 match_regex=:match_regex, func_callback=:func_callback, ";
             }
-            $query .= ' max_length=' . $dataform['max_length'] . ', min_length=' . $dataform['min_length'] . ",
-                for_admin = " . $dataform['for_admin'] . ",
-                required = " . $dataform['required'] . ",
+            $query .= ' max_length=' . $dataform['max_length'] . ', min_length=' . $dataform['min_length'] . ',
+                limited_values = :limited_values,
+                for_admin = ' . $dataform['for_admin'] . ',
+                required = ' . $dataform['required'] . ",
                 field_choices='" . $dataform['field_choices'] . "',
                 sql_choices = '" . $dataform['sql_choices'] . "',
-                show_register = " . $dataform['show_register'] . ",
-                user_editable = " . $dataform['user_editable'] . ",
-                show_profile = " . $dataform['show_profile'] . ",
+                show_register = " . $dataform['show_register'] . ',
+                user_editable = ' . $dataform['user_editable'] . ',
+                show_profile = ' . $dataform['show_profile'] . ",
                 class = :class,
                 language='" . serialize($language) . "',
                 default_value= :default_value
@@ -459,6 +526,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $stmt->bindParam(':match_regex', $dataform['match_regex'], PDO::PARAM_STR);
                 $stmt->bindParam(':func_callback', $dataform['func_callback'], PDO::PARAM_STR);
             }
+            $stmt->bindParam(':limited_values', $dataform['limited_values'], PDO::PARAM_STR);
             $stmt->bindParam(':class', $dataform['class'], PDO::PARAM_STR);
             $stmt->bindParam(':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen($dataform['default_value']));
             $save = $stmt->execute();
@@ -468,6 +536,8 @@ if ($nv_Request->isset_request('save', 'post')) {
                     $type_date = '';
                     if ($dataform['field_type'] == 'number' or $dataform['field_type'] == 'date') {
                         $type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
+                    } elseif ($dataform['field_type'] == 'file') {
+                        $type_date = 'TEXT NOT NULL';
                     } elseif ($dataform['max_length'] <= 255) {
                         $type_date = 'VARCHAR( ' . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
                     } elseif ($dataform['max_length'] <= 65536) {
@@ -530,7 +600,8 @@ $array_field_type = [
     'select' => $lang_module['field_type_select'],
     'radio' => $lang_module['field_type_radio'],
     'checkbox' => $lang_module['field_type_checkbox'],
-    'multiselect' => $lang_module['field_type_multiselect']
+    'multiselect' => $lang_module['field_type_multiselect'],
+    'file' => $lang_module['field_type_file'] = 'File'
 ];
 
 $array_choice_type = [
@@ -639,6 +710,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $dataform['match_type'] = 'none';
             $dataform['min_length'] = 0;
             $dataform['max_length'] = 255;
+            $dataform['limited_values'] = '';
             $dataform['match_regex'] = $dataform['func_callback'] = '';
             $dataform['editor_width'] = '100%';
             $dataform['editor_height'] = '100px';
@@ -654,14 +726,41 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         }
     }
 
+    if (!isset($datafile)) {
+        if (!empty($dataform['limited_values'])) {
+            $datafile = json_decode($dataform['limited_values'], true);
+        } else {
+            $datafile = [
+                'filetype' => [],
+                'mime' => [],
+                'file_max_size' => 0,
+                'maxnum' => 1,
+                'widthlimit' => [
+                    'equal' => 0,
+                    'greater' => 0,
+                    'less' => 0
+                ],
+                'heightlimit' => [
+                    'equal' => 0,
+                    'greater' => 0,
+                    'less' => 0
+                ]
+            ];
+        }
+    }
+    empty($datafile['widthlimit']['equal']) && $datafile['widthlimit']['equal'] = '';
+    empty($datafile['widthlimit']['greater']) && $datafile['widthlimit']['greater'] = '';
+    empty($datafile['widthlimit']['less']) && $datafile['widthlimit']['less'] = '';
+    empty($datafile['heightlimit']['equal']) && $datafile['heightlimit']['equal'] = '';
+    empty($datafile['heightlimit']['greater']) && $datafile['heightlimit']['greater'] = '';
+    empty($datafile['heightlimit']['less']) && $datafile['heightlimit']['less'] = '';
+
     if ($dataform['field_type'] == 'textbox' or $dataform['field_type'] == 'textarea' or $dataform['field_type'] == 'editor') {
         $text_fields = 1;
         $default_value = json_decode($dataform['default_value'], true);
         if (json_last_error() === JSON_ERROR_NONE) {
             $dataform['default_value'] = !empty($default_value[NV_LANG_DATA]) ? $default_value[NV_LANG_DATA] : '';
         }
-
-        
     } elseif ($dataform['field_type'] == 'number') {
         $number_fields = 1;
         $dataform['min_number'] = $dataform['min_length'];
@@ -675,6 +774,8 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         $dataform['default_date'] = empty($dataform['default_value']) ? '' : date('d/m/Y', $dataform['default_value']);
         $dataform['min_date'] = empty($dataform['min_length']) ? '' : date('d/m/Y', $dataform['min_length']);
         $dataform['max_date'] = empty($dataform['max_length']) ? '' : date('d/m/Y', $dataform['max_length']);
+    } elseif ($dataform['field_type'] == 'file') {
+        $file_fields = 1;
     } else {
         $choice_fields = 1;
         if (!empty($dataform['sql_choices'])) {
@@ -720,6 +821,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
     $dataform['display_choicetypes'] = ($choice_fields) ? '' : 'style="display: none;"';
     $dataform['display_choiceitems'] = ($choice_type_text) ? '' : 'style="display: none;"';
     $dataform['display_choicesql'] = ($choice_type_sql) ? '' : 'style="display: none;"';
+    $dataform['display_filefields'] = ($file_fields) ? '' : 'style="display: none;"';
 
     $dataform['editordisabled'] = ($dataform['field_type'] != 'editor') ? ' style="display: none;"' : '';
     $dataform['classdisabled'] = ($dataform['field_type'] == 'editor') ? ' style="display: none;"' : '';
@@ -795,6 +897,44 @@ if ($nv_Request->isset_request('qlist', 'get')) {
             $xtpl->parse('main.load.match_type.match_input');
         }
         $xtpl->parse('main.load.match_type');
+    }
+
+    $xtpl->assign('DATAFILE', $datafile);
+    $ini = array_intersect_key(nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true), array_flip($global_config['file_allowed_ext']));
+    foreach ($ini as $filetype => $mimes) {
+        $xtpl->assign('FILETYPE', [
+            'key' => $filetype,
+            'checked' => (!empty($datafile['filetype']) and in_array($filetype, $datafile['filetype'], true)) ? ' checked="checked"' : ''
+        ]);
+        foreach ($mimes as $key => $val) {
+            $xtpl->assign('MIME', [
+                'key' => $key,
+                'checked' => (!empty($datafile['mime']) and in_array($key, $datafile['mime'], true)) ? ' checked="checked"' : ''
+            ]);
+            $xtpl->parse('main.load.filetype.mime');
+        }
+        $xtpl->parse('main.load.filetype');
+    }
+
+    $p_size = $global_config['nv_max_size'] / 100;
+    for ($index = 100; $index > 0; --$index) {
+        $size = floor($index * $p_size);
+
+        $xtpl->assign('SIZE', [
+            'key' => $size,
+            'name' => nv_convertfromBytes($size),
+            'sel' => (!empty($datafile['file_max_size']) and $size == $datafile['file_max_size']) ? ' selected="selected"' : ''
+        ]);
+
+        $xtpl->parse('main.load.size');
+    }
+
+    for ($i = 1; $i <= 20; ++$i) {
+        $xtpl->assign('MAXNUM', [
+            'key' => $i,
+            'sel' => (!empty($datafile['maxnum']) and $i == $datafile['maxnum']) ? ' selected="selected"' : ''
+        ]);
+        $xtpl->parse('main.load.maxnum');
     }
 
     if (!empty($error)) {

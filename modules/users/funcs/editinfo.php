@@ -164,6 +164,7 @@ function get_field_config()
                 $row_field['field_choices'][$key] = $val;
             }
         }
+        $row_field['limited_values'] = !empty($row_field['limited_values']) ? json_decode($row_field['limited_values'], true) : [];
         $row_field['system'] = $row_field['is_system'];
         $array_field_config[$row_field['field']] = $row_field;
         if ($row_field['fid'] > 7) {
@@ -1113,15 +1114,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $userid = $edit_userid;
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
 
-    $array_field_config = array_diff_key($array_field_config, [
-        'first_name' => 1,
-        'last_name' => 1,
-        'gender' => 1,
-        'birthday' => 1,
-        'sig' => 1,
-        'question' => 1,
-        'answer' => 1
-    ]);
+    $array_field_config = get_other_fields($array_field_config);
     $check = fieldsCheck($custom_fields, $array_data, $query_field, $valid_field);
     if ($check['status'] == 'error') {
         nv_jsonOutput($check);
@@ -1132,6 +1125,28 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         if (empty($array_data['awaitinginfo'])) {
             $sql = 'INSERT INTO ' . NV_MOD_TABLE . '_edit (userid, lastedit, info_basic, info_custom) VALUES (' . $edit_userid . ', ' . NV_CURRENTTIME . ', :info_basic, :info_custom)';
         } else {
+            if (!empty($array_data['awaitinginfo']['info_custom'])) {
+                $row_info = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid)->fetch();
+                $array_field_config = nv_get_users_field_config();
+                foreach ($array_data['awaitinginfo']['info_custom'] as $key => $value) {
+                    if (!empty($value)) {
+                        if ($array_field_config[$key]['field_type'] == 'file') {
+                            $current = !empty($row_info[$key]) ? array_map('trim', explode(',', $row_info[$key])) : [];
+                            $old = array_map('trim', explode(',', $value));
+                            $new = !empty($valid_field[$key]) ? array_map('trim', explode(',', $valid_field[$key])) : [];
+                            foreach ($old as $file) {
+                                if ((empty($current) or !in_array($file, $current, true)) and (empty($new) or !in_array($file, $new, true))) {
+                                    $file_save_info = get_file_save_info($file);
+                                    if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                        delete_userfile($file_save_info);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             $sql = 'UPDATE ' . NV_MOD_TABLE . '_edit SET
                 lastedit=' . NV_CURRENTTIME . ',
                 info_basic=:info_basic,

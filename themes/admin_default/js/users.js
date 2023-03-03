@@ -745,13 +745,7 @@ $(document).ready(function() {
     // User field
     $("input[name=field_type]").click(function() {
         var field_type = $("input[name='field_type']:checked").val();
-        $("#textfields").hide();
-        $("#numberfields").hide();
-        $("#datefields").hide();
-        $("#choicetypes").hide();
-        $("#choiceitems").hide();
-        $("#choicesql").hide();
-        $("#editorfields").hide();
+        $("#textfields, #numberfields, #datefields, #choicetypes, #choiceitems, #choicesql, #editorfields, #filefields").hide();
         if (field_type == 'textbox' || field_type == 'textarea' || field_type == 'editor') {
             if (field_type == 'textbox') {
                 $("#li_alphanumeric").show();
@@ -770,6 +764,8 @@ $(document).ready(function() {
             $("#numberfields").show();
         } else if (field_type == 'date') {
             $("#datefields").show();
+        } else if (field_type == 'file') {
+            $("#filefields").show();
         } else {
             $("#choicetypes").show();
             $("#textfields").hide();
@@ -997,4 +993,150 @@ $(document).ready(function() {
             })
         })
     }
+
+    $('[data-toggle=mimecheck]').on('click', function() {
+        var filetypeObj = $(this).parents('.filetype');
+        $('input[name^=filetype]', filetypeObj).prop('checked', !!$('input[name^=mime]:checked', filetypeObj).length).trigger('change')
+    });
+    $('input[name^=filetype][value=images]').on('change', function() {
+        var fieldFileObj = $(this).parents('.field_file');
+        if ($(this).is(':checked')) {
+            $('.photo_max_size', fieldFileObj).show()
+        } else {
+            $('.photo_max_size', fieldFileObj).hide()
+        }
+    });
+
+    $('[data-toggle=addfilebtn]').on('click', function() {
+        var filelist = $(this).parents('.filelist'),
+            filenum = $('[name^=custom_fields]', filelist).length,
+            maxnum = parseInt(filelist.data('maxnum')),
+            that = $(this),
+            setAddFileBtn = function(num) {
+                if (maxnum && num >= maxnum) {
+                    that.hide();
+                } else {
+                    that.show();
+                }
+            };
+        
+        var modalObj = $('#' + $(this).data('modal')),
+            fileAccept = modalObj.data('accept'),
+            maxsize = parseInt(modalObj.data('maxsize')),
+            updateFileInput = function() {
+                var input = $('<input type="file"/>');
+                if (fileAccept != '') {
+                    input.attr('accept', fileAccept)
+                }
+                input.on('change', function() {
+                    var sFileName = $(this).val();
+                    if (sFileName.length > 0) {
+                        // Check extension
+                        if (fileAccept != '') {
+                            var fileAcceptArr = fileAccept.split(',');
+                            var blnValid = false;
+                            for (var j = 0; j < fileAcceptArr.length; j++) {
+                                var sCurExtension = fileAcceptArr[j];
+                                if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                                    blnValid = true;
+                                    break;
+                                }
+                            }
+                            if (!blnValid) {
+                                updateFileInput();
+                                alert(modalObj.data('ext-error') + ' ' + fileAcceptArr.join(', '));
+                                return !1;
+                            }
+                        }
+        
+                        // Check file size
+                        if (typeof ($(this)[0].files) != "undefined") {
+                            if ($(this)[0].files[0].size > maxsize) {
+                                var maxsizeKB = parseFloat(maxsize / 1024).toFixed(2),
+                                    sizeKB = parseFloat($(this)[0].files[0].size / 1024).toFixed(2);
+                                updateFileInput();
+                                alert(modalObj.data('size-error') + ' (' + sizeKB + ' KB) ' + modalObj.data('size-error2') + ' (' + maxsizeKB + ' KB)');
+                                return !1
+                            }
+
+                            data = new FormData();
+                            data.append('file', $(this)[0].files[0]);
+                            data.append('field', modalObj.data('field'));
+                            data.append('_csrf', modalObj.data('csrf'));
+                            data.append('field_fileupload', 1);
+                            $.ajax({
+                                type: 'POST',
+                                url: modalObj.data('url'),
+                                enctype: 'multipart/form-data',
+                                data: data,
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                dataType: "json"
+                            }).done(function(a) {
+                                if (a.status == 'error') {
+                                    updateFileInput();
+                                    alert(a.mess);
+                                    return !1
+                                } else if(a.status == 'OK') {
+                                    var newfile = $('<li><input type="checkbox" name="custom_fields[' + filelist.data('field') + '][]" value="' + a.file_key + '" class="' + filelist.data('oclass') + '" checked> ' + a.file_value + ' (<a href="javascript:void(0)" data-toggle="userfile_del">'+ modalObj.data('delete') + '</a>)</li>');
+                                    $('[data-toggle=userfile_del]', newfile).on('click', function(e) {
+                                        $.ajax({
+                                            type: 'POST',
+                                            cache: !1,
+                                            url: modalObj.data('url'),
+                                            data: {
+                                                'file': a.file_key,
+                                                '_csrf': a.csrf,
+                                                'field_filedel': 1
+                                            },
+                                            dataType: 'json',
+                                            success: function(e) {
+                                                if (e.status == 'error') {
+                                                    alert(a.mess)
+                                                } else if (e.status == 'OK') {
+                                                    newfile.remove();
+                                                    --filenum;
+                                                    setAddFileBtn(filenum)
+                                                }
+                                            }
+                                        });
+                                    });
+                                    $('.items', filelist).append(newfile);
+                                    modalObj.modal('hide');
+                                    ++filenum;
+                                    setAddFileBtn(filenum)
+                                }
+                            })
+                        }
+                    }
+                });
+                $('.fileinput', modalObj).html(input)
+            };
+        updateFileInput();
+        modalObj.modal('show')
+    });
+
+    $('[data-toggle=thisfile_del]').on('click', function() {
+        var filelist = $(this).parents('.filelist');
+        $(this).parents('li').remove();
+        if ($('[data-toggle=addfilebtn]', filelist).length) {
+            var maxnum = parseInt(filelist.data('maxnum'));
+            if (maxnum && $('[name^=custom_fields]', filelist).length >= maxnum) {
+                $('[data-toggle=addfilebtn]', filelist).hide();
+            } else {
+                $('[data-toggle=addfilebtn]', filelist).show();
+            }
+        }
+    });
+
+    $('.btn-file').on('click', function() {
+        var url = $(this).data('url');
+        if ($(this).is('.type-image, .type-pdf')) {
+            nv_open_browse(url, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+        } else {
+            window.location.href = url;
+        }
+        return !1;
+    });
 });

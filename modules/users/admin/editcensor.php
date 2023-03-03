@@ -40,6 +40,33 @@ if ($nv_Request->isset_request('del', 'post')) {
         nv_htmlOutput('ERROR');
     }
 
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $userid;
+    $row = $db->query($sql)->fetch();
+    if (!empty($row['info_custom'])) {
+        $info_custom = json_decode($row['info_custom'], true);
+
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
+        $row_info = $db->query($sql)->fetch();
+
+        $array_field_config = nv_get_users_field_config();
+
+        foreach ($info_custom as $key => $value) {
+            if (!empty($value)) {
+                if ($array_field_config[$key]['field_type'] == 'file') {
+                    $current = !empty($row_info[$key]) ? array_map('trim', explode(',', $row_info[$key])) : [];
+                    $new = array_map('trim', explode(',', $value));
+                    foreach ($new as $file) {
+                        if (empty($current) or !in_array($file, $current, true)) {
+                            $file_save_info = get_file_save_info($file);
+                            if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                delete_userfile($file_save_info);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $userid;
     $db->exec($sql);
 
@@ -110,7 +137,7 @@ if ($nv_Request->isset_request('approved', 'post')) {
                 $field = $array_field_config[$fkey];
                 if ($field['field_type'] == 'date') {
                     $custom_fields[$fkey] = empty($custom_fields[$fkey]) ? '' : date('d/m/Y', $custom_fields[$fkey]);
-                } elseif ($field['field_type'] == 'checkbox' or $field['field_type'] == 'multiselect') {
+                } elseif ($field['field_type'] == 'checkbox' or $field['field_type'] == 'multiselect' or $field['field_type'] == 'file') {
                     $custom_fields[$fkey] = empty($custom_fields[$fkey]) ? [] : explode(',', $custom_fields[$fkey]);
                 }
             }
@@ -261,6 +288,26 @@ if (!empty($reviewuid)) {
             userInfoTabDb($query_field, $reviewuid);
         }
 
+        if (!empty($info_custom)) {
+            foreach ($info_custom as $key => $value) {
+                if (!empty($value)) {
+                    if ($array_field_config[$key]['field_type'] == 'file') {
+                        $old_values = array_map('trim', explode(',', $value));
+                        $temp_value = $query_field[$array_field_config[$key]['field']];
+                        !empty($temp_value) && $temp_value = array_map('trim', explode(',', $temp_value));
+                        foreach ($old_values as $old_value) {
+                            if (empty($temp_value) or !in_array($old_value, $temp_value, true)) {
+                                $file_save_info = get_file_save_info($old_value);
+                                if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                    delete_userfile($file_save_info);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // Xóa thông tin chỉnh sửa
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_edit WHERE userid=' . $reviewuid);
 
@@ -362,12 +409,12 @@ if (!empty($reviewuid)) {
                         ]);
                         $xtpl->parse('main.custom.loop.select.loop');
                     }
-                    $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? $row['field_choices'][$row['valueold']] : $row['valueold'];
+                    $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? get_value_by_lang2($row['valueold'], $row['field_choices'][$row['valueold']]) : $row['valueold'];
                     $xtpl->assign('FIELD', $row);
                     $xtpl->parse('main.custom.loop.select');
                 } elseif ($row['field_type'] == 'radio') {
                     $number = 0;
-                    $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? $row['field_choices'][$row['valueold']] : $row['valueold'];
+                    $row['valueold'] = isset($row['field_choices'][$row['valueold']]) ? get_value_by_lang2($row['valueold'], $row['field_choices'][$row['valueold']]) : $row['valueold'];
                     $xtpl->assign('FIELD', $row);
                     foreach ($row['field_choices'] as $key => $value) {
                         $xtpl->assign('FIELD_CHOICES', [
@@ -415,6 +462,43 @@ if (!empty($reviewuid)) {
                     $xtpl->parse('main.custom.loop.multiselect');
                     $row['valueold'] = implode(', ', $row['valueold']);
                     $xtpl->assign('FIELD', $row);
+                } elseif ($row['field_type'] == 'file') {
+                    $filelist = !empty($row['value']) ? array_map('trim', explode(',', $row['value'])) : [];
+                    $old = !empty($row['valueold']) ? array_map('trim', explode(',', $row['valueold'])) : [];
+                    $all = array_merge($filelist, $old);
+                    if (!empty($all)) {
+                        $all = array_unique($all);
+                        foreach ($all as $file_item) {
+                            $assign = file_type_name($file_item);
+                            $assign['checked'] = (!empty($filelist) and in_array($file_item, $filelist, true)) ? ' checked="checked"' : '';
+                            $assign['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item;
+                            $xtpl->assign('FILE_ITEM', $assign);
+                            $xtpl->parse('main.custom.loop.file.loop');
+                        }
+                    }
+                    $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
+                    $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
+                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
+                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
+                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+                    $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
+                    $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
+                    if (!empty($widthlimit)) {
+                        $xtpl->assign('WIDTHLIMIT', $widthlimit);
+                        $xtpl->parse('main.custom.loop.file.widthlimit');
+                    }
+                    if (!empty($heightlimit)) {
+                        $xtpl->assign('HEIGHTLIMIT', $heightlimit);
+                        $xtpl->parse('main.custom.loop.file.heightlimit');
+                    }
+                    if (!(empty($row['limited_values']['maxnum']) or (count($filelist) < $row['limited_values']['maxnum']))) {
+                        $xtpl->parse('main.custom.loop.file.addfile');
+                    }
+                    $row['valueold'] = !empty($old) ? '<p>' . implode('</p><p>', $old) . '</p>' : '';
+                    $xtpl->assign('FIELD', $row);
+                    $xtpl->parse('main.custom.loop.file');
                 }
                 $xtpl->parse('main.custom.loop');
                 $have_custom_fields = true;

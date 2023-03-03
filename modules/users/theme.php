@@ -269,6 +269,26 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                         $xtpl->parse('main.field.loop.multiselect.description');
                     }
                     $xtpl->parse('main.field.loop.multiselect');
+                } elseif ($row['field_type'] == 'file') {
+                    $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
+                    $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
+                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
+                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
+                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+                    $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
+                    $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
+                    if (!empty($widthlimit)) {
+                        $xtpl->assign('WIDTHLIMIT', $widthlimit);
+                        $xtpl->parse('main.field.loop.file.widthlimit');
+                    }
+                    if (!empty($heightlimit)) {
+                        $xtpl->assign('HEIGHTLIMIT', $heightlimit);
+                        $xtpl->parse('main.field.loop.file.heightlimit');
+                    }
+
+                    $xtpl->parse('main.field.loop.file');
                 }
                 $xtpl->parse('main.field.loop');
                 $have_custom_fields = true;
@@ -1180,6 +1200,36 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                         $xtpl->parse('main.tab_edit_others.loop.multiselect.description');
                     }
                     $xtpl->parse('main.tab_edit_others.loop.multiselect');
+                } elseif ($row['field_type'] == 'file') {
+                    $filelist = !empty($row['value']) ? explode(',', $row['value']) : [];
+                    foreach ($filelist as $file_item) {
+                        $assign = file_type_name($file_item);
+                        $assign['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $file_item . '&amp;field=' . $row['field'];
+                        if (defined('ACCESS_EDITUS')) {
+                            $assign['url'] .= '&amp;groupid=' . $data['group_id'] . '&amp;userid=' . $data['userid'];
+                        }
+                        $xtpl->assign('FILE_ITEM', $assign);
+                        $xtpl->parse('main.tab_edit_others.loop.file.loop');
+                    }
+                    $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
+                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
+                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
+                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                    $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
+                    $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
+                    if (!empty($widthlimit)) {
+                        $xtpl->assign('WIDTHLIMIT', $widthlimit);
+                        $xtpl->parse('main.tab_edit_others.loop.file.widthlimit');
+                    }
+                    if (!empty($heightlimit)) {
+                        $xtpl->assign('HEIGHTLIMIT', $heightlimit);
+                        $xtpl->parse('main.tab_edit_others.loop.file.heightlimit');
+                    }
+                    if (!(empty($row['limited_values']['maxnum']) or (count($filelist) < $row['limited_values']['maxnum']))) {
+                        $xtpl->parse('main.tab_edit_others.loop.file.addfile');
+                    }
+                    $xtpl->parse('main.tab_edit_others.loop.file');
                 }
                 $xtpl->parse('main.tab_edit_others.loop');
             }
@@ -1429,6 +1479,17 @@ function user_welcome($array_field_config, $custom_fields)
                         $value = $row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA];
                     } else {
                         $value = $custom_fields[$row['field']];
+                    }
+                } elseif ($question_type == 'file') {
+                    $value = $custom_fields[$row['field']];
+                    if (!empty($value)) {
+                        $tempfiles = explode(',', $value);
+                        $value = '';
+                        foreach ($tempfiles as $tempfile) {
+                            $tempfile = trim($tempfile);
+                            $pathinfo = pathinfo($tempfile);
+                            $value .= '<button type="button" class="btn btn-success btn-file type-' . file_type($pathinfo['extension']) . '" data-url="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;userfile=' . $tempfile . '&amp;field=' . $row['field'] . '">' . shorten_name($pathinfo['filename'], $pathinfo['extension']) . '</button> ';
+                        }
                     }
                 } else {
                     $value = $custom_fields[$row['field']];

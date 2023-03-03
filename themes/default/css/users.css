@@ -348,3 +348,39 @@ fieldset[disabled] .openid-single-sign-on:focus {
         width: 100%;
     }
 }
+
+.filelist li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 7px;
+}
+
+.btn-file {
+    width: 140px;
+    text-align: left;
+    padding: 5px 5px 5px 30px;
+}
+
+.btn-file::before {
+    font-family: FontAwesome;
+    font-size: 24px;
+    position: absolute;
+    margin-left: -28px;
+    margin-top: -8px;
+}
+
+.type-doc::before {
+    content: "\f0f6";
+}
+
+.type-pdf::before {
+    content: "\f1c1";
+}
+
+.type-image::before {
+    content: "\f1c5";
+}
+
+.type-file::before {
+    content: "\f016";
+}
