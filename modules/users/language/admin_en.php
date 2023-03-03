@@ -31,6 +31,7 @@ $lang_module['search_id'] = 'Member\'s ID';
 $lang_module['search_account'] = 'Member\'s account';
 $lang_module['search_name'] = 'Member\'s name';
 $lang_module['search_mail'] = 'Member\'s email';
+$lang_module['search_oauth'] = 'Oauth account';
 $lang_module['search_key'] = 'Keyword search';
 $lang_module['search_note'] = 'Keyword maximum length is 64 characters, html isn\'t allowed';
 $lang_module['submit'] = 'Searcg';

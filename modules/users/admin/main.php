@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -32,15 +32,15 @@ if ($usactive_old != $usactive) {
 }
 $_arr_where = [];
 if ($global_config['idsite'] > 0) {
-    $_arr_where[] = '(idsite=' . $global_config['idsite'] . ' OR userid = ' . $admin_info['admin_id'] . ')';
+    $_arr_where[] = '(tb1.idsite=' . $global_config['idsite'] . ' OR tb1.userid = ' . $admin_info['admin_id'] . ')';
 }
 if ($usactive == -3) {
-    $_arr_where[] = 'group_id!=7';
+    $_arr_where[] = 'tb1.group_id!=7';
 } elseif ($usactive == -2) {
-    $_arr_where[] = 'group_id=7';
+    $_arr_where[] = 'tb1.group_id=7';
 } else {
     if ($usactive > -1) {
-        $_arr_where[] = 'active=' . ($usactive % 2);
+        $_arr_where[] = 'tb1.active=' . ($usactive % 2);
     }
 }
 
@@ -49,26 +49,32 @@ $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_D
 $methods = [
     'userid' => [
         'key' => 'userid',
-        'sql' => 'userid',
+        'sql' => ['tb1.userid'],
         'value' => $lang_module['search_id'],
         'selected' => ''
     ],
     'username' => [
         'key' => 'username',
-        'sql' => 'username',
+        'sql' => ['tb1.username'],
         'value' => $lang_module['search_account'],
         'selected' => ''
     ],
     'fullname' => [
         'key' => 'fullname',
-        'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
+        'sql' => [$global_config['name_show'] == 0 ? "concat(tb1.last_name,' ',tb1.first_name)" : "concat(tb1.first_name,' ',tb1.last_name)"],
         'value' => $lang_module['search_name'],
         'selected' => ''
     ],
     'email' => [
         'key' => 'email',
-        'sql' => 'email',
+        'sql' => ['tb1.email'],
         'value' => $lang_module['search_mail'],
+        'selected' => ''
+    ],
+    'oauth' => [
+        'key' => 'oauth',
+        'sql' => ['tb2.id', 'tb2.email'],
+        'value' => $lang_module['search_oauth'],
         'selected' => ''
     ]
 ];
@@ -82,16 +88,29 @@ if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
 $method = (!empty($method) and isset($methods[$method])) ? $method : '';
+$join = '';
 
 if (!empty($methodvalue)) {
     if (empty($method)) {
+        $join = 'LEFT JOIN ' . NV_MOD_TABLE . '_openid tb2 ON tb1.userid=tb2.userid';
+    } elseif ($method == 'oauth') {
+        $join = 'INNER JOIN ' . NV_MOD_TABLE . '_openid tb2 ON tb1.userid=tb2.userid';
+    }
+
+    if (empty($method)) {
         $array_like = [];
         foreach ($methods as $method_i) {
-            $array_like[] = $method_i['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
+            foreach ($method_i['sql'] as $method_sql) {
+                $array_like[] = $method_sql . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
+            }
         }
         $_arr_where[] = '(' . implode(' OR ', $array_like) . ')';
     } else {
-        $_arr_where[] = ' (' . $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%')";
+        $array_like = [];
+        foreach ($methods[$method]['sql'] as $method_sql) {
+            $array_like[] = $method_sql . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
+        }
+        $_arr_where[] = '(' . implode(' OR ', $array_like) . ')';
         $methods[$method]['selected'] = ' selected="selected"';
     }
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
@@ -101,7 +120,7 @@ if (!empty($methodvalue)) {
 // Default group is all
 $selgroup = $nv_Request->get_int('group', 'post,get', 6);
 if (!empty($selgroup) and $selgroup != 6) {
-    $_arr_where[] = '(FIND_IN_SET(' . $selgroup . ', in_groups) OR group_id = ' . $selgroup . ')';
+    $_arr_where[] = '(FIND_IN_SET(' . $selgroup . ', tb1.in_groups) OR tb1.group_id = ' . $selgroup . ')';
     $base_url .= '&amp;group=' . $selgroup;
 }
 
@@ -110,19 +129,24 @@ $per_page = 30;
 
 $db->sqlreset()
     ->select('COUNT(*)')
-    ->from(NV_MOD_TABLE);
+    ->from(NV_MOD_TABLE . ' tb1');
+
+if (!empty($join)) {
+    $db->join($join);
+}
 
 if (!empty($_arr_where)) {
     $db->where(implode(' AND ', $_arr_where));
 }
 
 $num_items = $db->query($db->sql())->fetchColumn();
+$page_url = $base_url;
 
-$db->select('*')
+$db->select('tb1.*')
     ->limit($per_page)
     ->offset(($page - 1) * $per_page);
 if (!empty($orderby) and in_array($orderby, $orders, true)) {
-    $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
+    $orderby_sql = $orderby != 'full_name' ? 'tb1.' . $orderby : ($global_config['name_show'] == 0 ? "concat(tb1.first_name,' ',tb1.last_name)" : "concat(tb1.last_name,' ',tb1.first_name)");
     $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
@@ -236,22 +260,22 @@ $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $head_tds = [];
 $head_tds['userid']['title'] = $lang_module['userid'];
-$head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=userid&amp;sorttype=ASC';
+$head_tds['userid']['href'] = $page_url . '&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $lang_module['account'];
-$head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=username&amp;sorttype=ASC';
+$head_tds['username']['href'] = $page_url . '&amp;sortby=username&amp;sorttype=ASC';
 $head_tds['full_name']['title'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
-$head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=full_name&amp;sorttype=ASC';
+$head_tds['full_name']['href'] = $page_url . '&amp;sortby=full_name&amp;sorttype=ASC';
 $head_tds['email']['title'] = $lang_module['email'];
-$head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=email&amp;sorttype=ASC';
+$head_tds['email']['href'] = $page_url . '&amp;sortby=email&amp;sorttype=ASC';
 $head_tds['regdate']['title'] = $lang_module['register_date'];
-$head_tds['regdate']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=regdate&amp;sorttype=ASC';
+$head_tds['regdate']['href'] = $page_url . '&amp;sortby=regdate&amp;sorttype=ASC';
 
 foreach ($orders as $order) {
     if ($orderby == $order and $ordertype == 'ASC') {
-        $head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=DESC';
+        $head_tds[$order]['href'] = $page_url . '&amp;sortby=' . $order . '&amp;sorttype=DESC';
         $head_tds[$order]['title'] .= ' &darr;';
     } elseif ($orderby == $order and $ordertype == 'DESC') {
-        $head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=ASC';
+        $head_tds[$order]['href'] = $page_url . '&amp;sortby=' . $order . '&amp;sorttype=ASC';
         $head_tds[$order]['title'] .= ' &uarr;';
     }
 }

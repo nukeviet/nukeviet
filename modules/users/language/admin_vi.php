@@ -31,6 +31,7 @@ $lang_module['search_id'] = 'ID tài khoản';
 $lang_module['search_account'] = 'Tài khoản';
 $lang_module['search_name'] = 'Bí danh';
 $lang_module['search_mail'] = 'Email';
+$lang_module['search_oauth'] = 'Tài khoản oauth';
 $lang_module['search_key'] = 'Từ khóa tìm kiếm';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['submit'] = 'Tìm kiếm';

@@ -31,6 +31,7 @@ $lang_module['search_id'] = 'ID de l\'utilisateur';
 $lang_module['search_account'] = 'Nom d\'utilisateur';
 $lang_module['search_name'] = 'Nom de l\'utilisateur';
 $lang_module['search_mail'] = 'E-mail de l\'utilisateur';
+$lang_module['search_oauth'] = 'Compte Oauth';
 $lang_module['search_key'] = 'Mot clé';
 $lang_module['search_note'] = 'Le mot clé ne peut pas être plus de 64 caractères, code html interdit';
 $lang_module['submit'] = 'Rechercher';
