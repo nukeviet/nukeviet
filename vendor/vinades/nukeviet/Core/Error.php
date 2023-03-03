@@ -396,13 +396,14 @@ class Error
     {
         $error = error_get_last();
 
-        if (!empty($error) and $error['type'] === E_ERROR) {
+        if (!empty($error) and $error['type'] === E_ERROR | E_PARSE) {
             $file = substr(str_replace('\\', '/', preg_replace(['/\\\\/', "/\/{2,}/"], '/', $error['file'])), strlen(NV_ROOTDIR . '/'));
             $finded_track = false;
 
-            $this->errno = E_ERROR;
-            $this->errstr = $error['message'];
-            $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $error['file']));
+            $this->errno = $error['type'];
+            $error['type'] .= ' (' . self::$errortype[$error['type']] . ')';
+            $this->errstr = $error['message'] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $error['message']));
+            $this->errfile = $error['file'] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $error['file']));
             $this->errline = $error['line'];
 
             foreach ($this->track_fatal_error as $track_fatal) {
@@ -427,11 +428,20 @@ class Error
                 $this->info_die();
             } else {
                 if (NV_DEBUG) {
-                    echo 'Error on file ' . $this->errfile . ' line ' . $this->errline . ':<br /><pre><code>';
-                    echo $error['message'];
-                    exit('</code></pre>');
+                    exit('An error occurred while loading the page:<br /><pre><code>' . print_r($error, true) . '</code></pre>');
                 }
-                exit(chr(0));
+
+                if (!empty($this->cfg['error_send_mail'])) {
+                    $strEncodedEmail = '';
+                    $strlen = strlen($this->cfg['error_send_mail']);
+                    for ($i = 0; $i < $strlen; ++$i) {
+                        $strEncodedEmail .= '&#' . ord(substr($this->cfg['error_send_mail'], $i)) . ';';
+                    }
+                    $email = '<a href="mailto:' . $strEncodedEmail . '">let us know</a>';
+                } else {
+                    $email = 'let us know';
+                }
+                exit('An error occurred while loading the page: ' . self::$errortype[$this->errno] . '(' . $this->errno . ').<br/>Please ' . $email . ' about this!');
             }
         }
     }
