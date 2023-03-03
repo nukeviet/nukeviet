@@ -826,7 +826,7 @@ function nv_get_mod_tags($content)
     $ts = array_filter($ts);
     $ts = array_unique($ts);
     $ts = array_map(function($t) {
-        return preg_replace( '/([\W])/', '\\\\\\\\$1', $t);
+        return preg_replace( '/([\W])/u', '\\\\\\\\$1', $t);
     }, $ts);
     $ts = implode('|', $ts);
 
