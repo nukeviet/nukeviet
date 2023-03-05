@@ -254,7 +254,8 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     id char(50) NOT NULL DEFAULT '',
     email varchar(100) NOT NULL DEFAULT '',
     UNIQUE KEY opid (openid, opid),
-    KEY userid (userid)
+    KEY userid (userid),
+    KEY email (email)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_field (
