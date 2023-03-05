@@ -25,6 +25,7 @@ if (defined('NV_IS_GODADMIN')) {
     if (empty($global_config['idsite'])) {
         $allow_func[] = 'rpc';
     }
+    $allow_func[] = 'others';
 } elseif (defined('NV_IS_SPADMIN') and $global_config['idsite']) {
     $allow_func[] = 'metatags';
     $allow_func[] = 'linktags';

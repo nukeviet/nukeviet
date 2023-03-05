@@ -22,6 +22,7 @@ if (defined('NV_IS_GODADMIN')) {
     if (empty($global_config['idsite'])) {
         $submenu['rpc'] = $lang_module['rpc_setting'];
     }
+    $submenu['others'] = $lang_module['other_seo_tools'];
 } elseif (defined('NV_IS_SPADMIN') and $global_config['idsite']) {
     $submenu['metatags'] = $lang_module['metaTagsConfig'];
     $submenu['linktags'] = $lang_module['linkTagsConfig'];

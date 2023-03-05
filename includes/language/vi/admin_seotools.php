@@ -102,3 +102,6 @@ $lang_module['ShortName'] = 'Tên ngắn gọn';
 $lang_module['Description'] = 'Mô tả';
 $lang_module['ShortName_note'] = 'Không hơn 16 ký tự';
 $lang_module['Description_note'] = 'Không hơn 1024 ký tự';
+$lang_module['other_seo_tools'] = 'Các công cụ SEO khác';
+$lang_module['add_sitelinks_search_box_schema'] = 'Thêm Hộp tìm kiếm liên kết trang web lên Google';
+$lang_module['more_information'] = 'Tìm hiểu thêm';

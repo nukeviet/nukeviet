@@ -98,3 +98,6 @@ $lang_module['ShortName'] = 'Nom court';
 $lang_module['Description'] = 'La description';
 $lang_module['ShortName_note'] = '16 caractères ou moins';
 $lang_module['Description_note'] = '1024 caractères ou moins';
+$lang_module['other_seo_tools'] = 'Autres outils SEO';
+$lang_module['add_sitelinks_search_box_schema'] = 'Ajouter un schéma de zone de recherche de liens annexes';
+$lang_module['more_information'] = 'Plus d\'information';

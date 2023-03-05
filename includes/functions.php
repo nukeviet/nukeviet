@@ -2338,6 +2338,28 @@ function nv_change_buffer($buffer)
         $buffer = preg_replace('/(<body[^>]*>)/', '$1' . PHP_EOL . '<' . $script . '>if(window.top!==window.self){document.write="";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=""},1);window.self.onload=function(){document.body.innerHTML=""}};</script>', $buffer, 1);
     }
 
+    // Thêm Hộp tìm kiếm liên kết trang web
+    // https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
+    if (defined('NV_SYSTEM') and !empty($global_config['sitelinks_search_box_schema'])) {
+        $sitelinks_search_box_data = '<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "' . $global_config['site_name'] . '",
+    "url": "' . NV_MY_DOMAIN . '",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "' . NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek', true) . '?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>';
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $sitelinks_search_box_data . '$1', $buffer, 1);
+    }
+
     return $buffer;
 }
 
