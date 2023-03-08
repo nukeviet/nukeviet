@@ -364,25 +364,24 @@ function nv_site_theme($contents, $full = true)
 
         // Breadcrumbs
         if (!$home) {
-            $array_mod_title_copy = $array_mod_title;
             if ($global_config['rewrite_op_mod'] != $module_name) {
-                $arr_cat_title_i = [
+                array_unshift($array_mod_title, [
                     'catid' => 0,
                     'title' => $module_info['custom_title'],
                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
-                ];
-                array_unshift($array_mod_title_copy, $arr_cat_title_i);
+                ]);
             }
-            if (!empty($array_mod_title_copy)) {
-                $border = 2;
-                foreach ($array_mod_title_copy as $arr_cat_title_i) {
-                    $arr_cat_title_i['position'] = $border++;
+            if (!empty($array_mod_title)) {
+                $border = 1;
+                foreach ($array_mod_title as $arr_cat_title_i) {
+                    ++$border;
+                    $arr_cat_title_i['position'] = $border;
                     $xtpl->assign('BREADCRUMBS', $arr_cat_title_i);
                     $xtpl->parse('main.breadcrumbs.loop');
                 }
             }
             $xtpl->parse('main.breadcrumbs');
-        } elseif (empty($array_mod_title_copy)) {
+        } elseif (empty($array_mod_title)) {
             $xtpl->parse('main.currenttime');
         }
 

@@ -10,6 +10,36 @@
 var myTimerPage = '';
 var myTimersecField = '';
 
+// Load multiliple js,css files
+function getFiles(files, callback) {
+    var progress = 0;
+    files.forEach(function(fileurl) {
+        var dtype = fileurl.substring(fileurl.lastIndexOf('.') + 1) == 'js' ? 'script' : 'text',
+            attrs = "undefined" !== typeof site_nonce ? {
+                'nonce': site_nonce
+            } : {};
+        $.ajax({
+            url: fileurl,
+            cache: true,
+            dataType: dtype,
+            scriptAttrs: attrs,
+            success: function() {
+                if (dtype == 'text') {
+                    $("<link/>", {
+                        rel: "stylesheet",
+                        href: fileurl
+                    }).appendTo("head")
+                }
+                if (++progress == files.length) {
+                    if ("function" === typeof callback) {
+                        callback()
+                    }
+                }
+            }
+        })
+    })
+}
+
 function timeoutsesscancel() {
     clearInterval(myTimersecField);
     $.ajax({

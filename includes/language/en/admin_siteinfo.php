@@ -164,6 +164,3 @@ $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong />%s  ha
 $lang_module['notification_hide'] = 'Hide this notification';
 $lang_module['notification_email_failure'] = 'Email failed. Subject <strong>%s</strong>, received email <strong>%s</strong>';
 $lang_module['server_config_file_changed'] = 'Server config file (%s) changed';
-$lang_module['other_seo_tools'] = 'Other SEO-tools';
-$lang_module['add_sitelinks_search_box_schema'] = 'Add Sitelinks Search Box Schema';
-$lang_module['more_information'] = 'More information';

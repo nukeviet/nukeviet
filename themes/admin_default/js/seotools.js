@@ -2,7 +2,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -53,7 +53,7 @@ $(document).ready(function() {
     });
 
     // Các meta dựng sẵn
-    $('#metatags-manage').on('show.bs.dropdown', '.metaGroupsValue-dropdown', function () {
+    $('#metatags-manage').on('show.bs.dropdown', '.metaGroupsValue-dropdown', function() {
         var item = $(this).parents('.item'),
             metaGroupsName = $('[name^=metaGroupsName]', item).val(),
             id = (metaGroupsName == 'name') ? 'meta-name-list' : (metaGroupsName == 'property' ? 'meta-property-list' : 'meta-http-equiv-list');
@@ -93,6 +93,44 @@ $(document).ready(function() {
         e.preventDefault();
         var item = $(this).parents('.item'),
             val = $('[name^=metaContents]', item).val() + $(this).text();
-            $('[name^=metaContents]', item).val(val)
+        $('[name^=metaContents]', item).val(val)
     });
+    // Lưu cấu hình Dữ liệu có cấu trúc
+    $('#strdata').on('submit', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('action'),
+            data = $(this).serialize();
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: url,
+            data: data,
+            dataType: "json",
+            success: function(result) {}
+        })
+    });
+    $('#strdata .submit').on('change', function() {
+        $(this).parents('form').submit()
+    });
+    // Popup tải lên biểu trưng tổ chức
+    $('#organization_logo').on('click', function() {
+        var url = $(this).parents('form').attr('action') + '&logoupload=1';
+        nv_open_browse(url, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+    });
+    // Xóa biểu trưng tổ chức
+    $('#organization_logo_del').on('click', function() {
+        var url = $(this).parents('form').attr('action'),
+            that = $(this);
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: url,
+            data: 'logodel=1',
+            dataType: "json",
+            success: function(result) {
+                $('#organization_logo').attr('src', $('#organization_logo').data('default'));
+                that.hide()
+            }
+        })
+    })
 });

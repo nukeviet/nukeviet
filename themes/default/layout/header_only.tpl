@@ -11,13 +11,5 @@
         <!-- BEGIN: js -->
         <script<!-- BEGIN: ext --> src="{JS_SRC}"<!-- END: ext -->><!-- BEGIN: int -->{JS_CONTENT}<!-- END: int --></script>
         <!-- END: js -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "url": "{NV_MY_DOMAIN}",
-            "logo": "{NV_MY_DOMAIN}{LOGO_SRC}"
-        }
-        </script>
     </head>
     <body>
