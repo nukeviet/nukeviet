@@ -110,7 +110,29 @@ $(document).ready(function() {
         })
     });
     $('#strdata .submit').on('change', function() {
-        $(this).parents('form').submit()
+        var that = $(this),
+            form = that.parents('form'),
+            url = form.attr('action'),
+            name = that.attr('name'),
+            checkss = $('[name=checkss]', form).val(),
+            val = that.is(':checked') ? 1 : 0;
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: url,
+            data: {
+                'name': name,
+                'val': val,
+                'checkss': checkss
+            },
+            dataType: "json",
+            success: function(result) {
+                if ('error' == result.status) {
+                    alert(result.mess);
+                    that.prop('checked', val == 1 ? false : true)
+                }
+            }
+        })
     });
     // Popup tải lên biểu trưng tổ chức
     $('#organization_logo').on('click', function() {
@@ -132,5 +154,52 @@ $(document).ready(function() {
                 that.hide()
             }
         })
+    });
+    $('#localbusiness_info').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function(result) {
+                if ('error' == result.status) {
+                    alert(result.mess)
+                } else if ('OK' == result.status) {
+                    window.location.href = result.redirect
+                }
+            }
+        })
+    });
+
+    $('[data-toggle=sample_data]').on('click', function() {
+        var url = $(this).data('url'),
+            form = $(this).parents('form');
+        $.ajax({
+            type: 'POST',
+            cache: !1,
+            url: url,
+            data: 'sample_data=1',
+            success: function(result) {
+                $('[name=jsondata]', form).val(result)
+            }
+        })
+    });
+
+    $('[data-toggle=lbinf_delete]').on('click', function() {
+        var url = $(this).data('url'),
+            conf = confirm($(this).data('confirm'));
+        if (conf) {
+            $.ajax({
+                type: 'POST',
+                cache: !1,
+                url: url,
+                data: 'lbinf_delete=1',
+                success: function(result) {
+                    window.location.href = result
+                }
+            })
+        }
     })
 });

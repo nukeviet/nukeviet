@@ -2392,6 +2392,17 @@ function nv_change_buffer($buffer)
                 'itemListElement' => $breadcrumbs
             ];
         }
+        // Hiển thị thông tin doanh nghiệp trên Google Search
+        // https://developers.google.com/search/docs/appearance/structured-data/local-business
+        if (!empty($global_config['localbusiness'])) {
+            if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
+                $data = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
+                $data = json_decode($data, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $strdata[] = $data;
+                }
+            }
+        }
         if (!empty($strdata)) {
             if (count($strdata) == 1) {
                 $strdata = $strdata[0];

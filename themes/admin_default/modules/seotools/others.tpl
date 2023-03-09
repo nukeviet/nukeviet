@@ -33,12 +33,22 @@
                     </tr>
                     <tr>
                         <td>
+                            {LANG.strdata_localbusiness}
+                            <a class="small" href="https://developers.google.com/search/docs/appearance/structured-data/local-business" target="_blank" title="{LANG.more_information}"><i class="fa fa-question-circle fa-lg" aria-hidden="true"></i></a>
+                            (<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;localbusiness_information=1">{LANG.localbusiness_information}</a>)
+                        </td>
+                        <td class="text-center" style="width: 1%;">
+                            <input type="checkbox" class="form-control submit" name="localbusiness" value="1" {LOCALBUSINESS_CHECKED} />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             {LANG.strdata_organization}
                             <a class="small" href="https://developers.google.com/search/docs/appearance/structured-data/logo" target="_blank" title="{LANG.more_information}"><i class="fa fa-question-circle fa-lg" aria-hidden="true"></i></a>
                             <div class="help-block">{LANG.strdata_organization_logo_guidelines}</div>
                         </td>
                         <td class="text-center" style="width: 1%;">
-                            <img src="{ORGANIZATION_LOGO}" data-default="{ORGANIZATION_LOGO_DEFAULT}" class="pointer" id="organization_logo" alt="" width="112" height="112"/>
+                            <img src="{ORGANIZATION_LOGO}" data-default="{ORGANIZATION_LOGO_DEFAULT}" class="pointer" id="organization_logo" alt="" width="112" height="112" />
                             <button type="button" class="btn btn-xs btn-primary" id="organization_logo_del" style="margin-top: 10px;<!-- BEGIN: delbtn -->display:none<!-- END: delbtn -->">{GLANG.delete}</button>
                         </td>
                     </tr>
@@ -71,7 +81,7 @@
                         <span><em class="fa fa-upload"></em></span>
                     </div>
                 </div>
-                <div class="img-area"><img id="preview" style="display: none;"/></div>
+                <div class="img-area"><img id="preview" style="display: none;" /></div>
             </div>
         </div>
         <div class="col-xs-8">
@@ -90,37 +100,55 @@
                     <input id="btn-submit" type="submit" class="btn btn-primary btn-sm" value="{LANG.crop}" />
                     <input id="btn-reset" type="button" class="btn btn-primary btn-sm" value="{LANG.chosen_other}" />
                 </div>
-             </div>
+            </div>
             <div class="exit-bt">
                 <button class="btn btn-primary btn-sm" data-toggle="win_close">{GLANG.cancel}</button>
             </div>
         </div>
-        <input type="hidden" id="crop_x" name="crop_x"/>
-        <input type="hidden" id="crop_y" name="crop_y"/>
-        <input type="hidden" id="crop_width" name="crop_width"/>
-        <input type="hidden" id="crop_height" name="crop_height"/>
-        <input type="file" name="image_file" id="image_file" class="hide" accept=".jpg,.jpeg,.png,.webp"/>
+        <input type="hidden" id="crop_x" name="crop_x" />
+        <input type="hidden" id="crop_y" name="crop_y" />
+        <input type="hidden" id="crop_width" name="crop_width" />
+        <input type="hidden" id="crop_height" name="crop_height" />
+        <input type="file" name="image_file" id="image_file" class="hide" accept=".jpg,.jpeg,.png,.webp" />
     </form>
 </div>
 <script>
     $(function() {
         getFiles(['{ASSETS_STATIC_URL}/js/cropper/cropper.min.css','{ASSETS_STATIC_URL}/js/cropper/cropper.min.js','{NV_STATIC_URL}themes/{TEMPLATE}/js/change_logo.js'], function(){
-            UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
-            UAV.config.img_width = {CONFIG.logo_width};
-            UAV.config.img_height = {CONFIG.logo_height};
-            UAV.lang.bigsize = '{LANG.bigsize}';
-            UAV.lang.smallsize = '{LANG.smallsize}';
-            UAV.lang.filetype = '{LANG.allowed_type}';
-            UAV.lang.bigfile = '{LANG.bigfile}';
-            UAV.lang.upload = '{LANG.change_logo_upload}';
-            UAV.init()
-        });
-        <!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
-        $('[data-toggle=win_close]').on('click', function(e) {
-            e.preventDefault();
-            window.close()
-        })
+        UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
+        UAV.config.img_width = {CONFIG.logo_width};
+        UAV.config.img_height = {CONFIG.logo_height};
+        UAV.lang.bigsize = '{LANG.bigsize}';
+        UAV.lang.smallsize = '{LANG.smallsize}';
+        UAV.lang.filetype = '{LANG.allowed_type}';
+        UAV.lang.bigfile = '{LANG.bigfile}';
+        UAV.lang.upload = '{LANG.change_logo_upload}';
+        UAV.init()
+    });
+    <!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
+    $('[data-toggle=win_close]').on('click', function(e) {
+    e.preventDefault();
+    window.close()
+    })
     });
 </script>
 <!-- END: init -->
 <!-- END: logoupload -->
+
+<!-- BEGIN: lbinf -->
+<div class="row">
+    <div class="col-24 col-md-20 col-lg-18">
+        <form id="localbusiness_info" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;localbusiness_information=1" method="post">
+            <div class="m-bottom">
+                <textarea class="form-control" name="jsondata" style="height: 500px">{DATA}</textarea>
+            </div>
+            <div class="text-center">
+                <input type="hidden" name="save" value="1"/>
+                <button type="submit" class="btn btn-primary">{GLANG.save}</button>
+                <button type="button" class="btn btn-default" data-toggle="sample_data" data-url="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">{LANG.localbusiness_reset}</button>
+                <button type="button" class="btn btn-default" data-toggle="lbinf_delete" data-confirm="{LANG.localbusiness_del_confirm}" data-url="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">{GLANG.delete}</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- END: lbinf -->
