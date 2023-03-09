@@ -248,7 +248,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         }
 
         $custom_headers = [
-            'References' => md5('contact' . $id . $global_config['sitekey'])
+            'References' => md5('contact' . $row_id . $global_config['sitekey'])
         ];
 
         if (!empty($email_list)) {
