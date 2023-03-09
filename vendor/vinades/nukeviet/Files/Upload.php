@@ -1038,25 +1038,27 @@ class Upload
             $return['size'] = $this->file_size;
             $return['is_img'] = $this->is_img;
             $return['is_svg'] = $this->is_svg;
-            if ($this->is_img and Site::function_exists('exif_read_data')) {
-                // Check/fix image rotation
-                // https://stackoverflow.com/questions/34287437/
-                $exif = exif_read_data($savepath . $filename);
-                if (!empty($exif['Orientation']) and in_array((int) $exif['Orientation'], [3, 6, 8], true)) {
-                    $image = new Image($savepath . $filename);
-                    switch ($exif['Orientation']) {
-                        case 3:
-                            $image->rotate(180);
-                            break;
-                        case 6:
-                            $image->rotate(90);
-                            break;
-                        case 8:
-                            $image->rotate(270);
-                            break;
+            if ($this->is_img) {
+                if (Site::function_exists('exif_read_data')) {
+                    // Check/fix image rotation
+                    // https://stackoverflow.com/questions/34287437/
+                    $exif = exif_read_data($savepath . $filename);
+                    if (!empty($exif['Orientation']) and in_array((int) $exif['Orientation'], [3, 6, 8], true)) {
+                        $image = new Image($savepath . $filename);
+                        switch ($exif['Orientation']) {
+                            case 3:
+                                $image->rotate(180);
+                                break;
+                            case 6:
+                                $image->rotate(90);
+                                break;
+                            case 8:
+                                $image->rotate(270);
+                                break;
+                        }
+                        $image->save($savepath, $filename);
+                        $image->close();
                     }
-                    $image->save($savepath, $filename);
-                    $image->close();
                 }
                 $return['img_info'] = $this->img_info;
             }
