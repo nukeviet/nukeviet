@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -194,7 +194,7 @@ define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
 // Lấy thông tin cookie của user
-defined('NV_SYSTEM') && $user_cookie =  NukeViet\Core\User::get_userlogin_hash();
+defined('NV_SYSTEM') && $user_cookie = NukeViet\Core\User::get_userlogin_hash();
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
@@ -320,7 +320,9 @@ $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
 // Ket noi voi class chong flood
 if (
-    $global_config['is_flood_blocker'] and !$nv_Request->isset_request('admin', 'session') and
+    $global_config['is_flood_blocker'] and
+    !$nv_Request->isset_request('admin', 'session') and
+    !defined('NV_REMOTE_API') and
     (!$nv_Request->isset_request('second', 'get') or ($nv_Request->isset_request('second', 'get') and $client_info['is_myreferer'] != 1))
 ) {
     require NV_ROOTDIR . '/includes/core/flood_blocker.php';
