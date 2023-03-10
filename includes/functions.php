@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -2339,77 +2339,79 @@ function nv_change_buffer($buffer)
     }
 
     if (defined('NV_SYSTEM')) {
-        $strdata = [];
-        // Thêm Hộp tìm kiếm liên kết trang web lên Google Search
-        // https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
-        if (!empty($global_config['sitelinks_search_box_schema'])) {
-            $strdata[] = [
-                '@context' => 'https://schema.org',
-                '@type' => 'WebSite',
-                'url' => NV_MAIN_DOMAIN . '/',
-                'potentialAction' => [
-                    '@type' => 'SearchAction',
-                    'target' => [
-                        '@type' => 'EntryPoint',
-                        'urlTemplate' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&amp;q=', true) . '{search_term_string}'
-                    ],
-                    'query-input' => 'required name=search_term_string'
-                ]
-            ];
-        }
-        // Thêm biểu trưng của tổ chức lên Google Search
-        // https://developers.google.com/search/docs/appearance/structured-data/logo
-        if (!empty($global_config['organization_logo'])) {
-            $strdata[] = [
-                '@context' => 'https://schema.org',
-                '@type' => 'Organization',
-                'url' => NV_MAIN_DOMAIN,
-                'logo' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['organization_logo']
-            ];
-        }
-        // Thêm đường dẫn breadcrumb của trang hiện tại lên Google Search
-        // https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
-        if (!empty($global_config['breadcrumblist']) and !empty($array_mod_title)) {
-            array_unshift($array_mod_title, [
-                'catid' => 0,
-                'title' => $lang_global['Home'],
-                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
-            ]);
-            $breadcrumbs = [];
-            $position = 0;
-            foreach ($array_mod_title as $breadcrumb) {
-                ++$position;
-                $breadcrumbs[] = [
-                    '@type' => 'ListItem',
-                    'position' => $position,
-                    'name' => $breadcrumb['title'],
-                    'item' => NV_MY_DOMAIN . nv_url_rewrite($breadcrumb['link'], true)
+        if ($client_info['is_bot'] or stripos(NV_USER_AGENT, 'google') !== false) {
+            $strdata = [];
+            // Thêm Hộp tìm kiếm liên kết trang web lên Google Search
+            // https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
+            if (!empty($global_config['sitelinks_search_box_schema'])) {
+                $strdata[] = [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'WebSite',
+                    'url' => NV_MAIN_DOMAIN . '/',
+                    'potentialAction' => [
+                        '@type' => 'SearchAction',
+                        'target' => [
+                            '@type' => 'EntryPoint',
+                            'urlTemplate' => NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&amp;q=', true) . '{search_term_string}'
+                        ],
+                        'query-input' => 'required name=search_term_string'
+                    ]
                 ];
             }
-            $strdata[] = [
-                '@context' => 'https://schema.org',
-                '@type' => 'BreadcrumbList',
-                'itemListElement' => $breadcrumbs
-            ];
-        }
-        // Hiển thị thông tin doanh nghiệp trên Google Search
-        // https://developers.google.com/search/docs/appearance/structured-data/local-business
-        if (!empty($global_config['localbusiness'])) {
-            if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
-                $data = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
-                $data = json_decode($data, true);
-                if (json_last_error() === JSON_ERROR_NONE) {
-                    $strdata[] = $data;
+            // Thêm biểu trưng của tổ chức lên Google Search
+            // https://developers.google.com/search/docs/appearance/structured-data/logo
+            if (!empty($global_config['organization_logo'])) {
+                $strdata[] = [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'Organization',
+                    'url' => NV_MAIN_DOMAIN,
+                    'logo' => NV_MY_DOMAIN . NV_BASE_SITEURL . $global_config['organization_logo']
+                ];
+            }
+            // Thêm đường dẫn breadcrumb của trang hiện tại lên Google Search
+            // https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
+            if (!empty($global_config['breadcrumblist']) and !empty($array_mod_title)) {
+                array_unshift($array_mod_title, [
+                    'catid' => 0,
+                    'title' => $lang_global['Home'],
+                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA
+                ]);
+                $breadcrumbs = [];
+                $position = 0;
+                foreach ($array_mod_title as $breadcrumb) {
+                    ++$position;
+                    $breadcrumbs[] = [
+                        '@type' => 'ListItem',
+                        'position' => $position,
+                        'name' => $breadcrumb['title'],
+                        'item' => NV_MY_DOMAIN . nv_url_rewrite($breadcrumb['link'], true)
+                    ];
+                }
+                $strdata[] = [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'BreadcrumbList',
+                    'itemListElement' => $breadcrumbs
+                ];
+            }
+            // Hiển thị thông tin doanh nghiệp trên Google Search
+            // https://developers.google.com/search/docs/appearance/structured-data/local-business
+            if (!empty($global_config['localbusiness'])) {
+                if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
+                    $data = file_get_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json');
+                    $data = json_decode($data, true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $strdata[] = $data;
+                    }
                 }
             }
-        }
-        if (!empty($strdata)) {
-            if (count($strdata) == 1) {
-                $strdata = $strdata[0];
+            if (!empty($strdata)) {
+                if (count($strdata) == 1) {
+                    $strdata = $strdata[0];
+                }
+                $strdata = json_encode($strdata, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                $strdata = '<script type="application/ld+json">' . PHP_EOL . $strdata . PHP_EOL . '</script>';
+                $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $strdata . '$1', $buffer, 1);
             }
-            $strdata = json_encode($strdata, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
-            $strdata = '<script type="application/ld+json">' . PHP_EOL . $strdata . PHP_EOL . '</script>';
-            $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $strdata . '$1', $buffer, 1);
         }
     }
 
