@@ -5,7 +5,8 @@ var pushCheck,
     userid = 0,
     usergroups = '',
     csrf = '',
-    push_cookie_name = nv_cookie_prefix + '_pushtime';
+    push_cookie_name = nv_cookie_prefix + '_pushtime',
+    lastCheckPush = 0;
 
 function pushCheck_setTimeout(tm) {
     clearTimeout(pushCheck);
@@ -15,11 +16,11 @@ function pushCheck_setTimeout(tm) {
 }
 
 function pushNotifyGetCount() {
-    var last = nv_getCookie(push_cookie_name),
-        current = new Date().getTime(),
-        pas = last ? (current - parseInt(last)) : current;
+    var current = new Date().getTime(),
+        pas = current - lastCheckPush;
     if (pas > refresh_time) {
         nv_setCookie(push_cookie_name, current, 365);
+        lastCheckPush = current;
         var url = pushModuleUrl + ((-1 < pushModuleUrl.indexOf("?")) ? '&' : '?') + 'nocache=' + current;
         $.ajax({
             type: 'POST',
@@ -159,6 +160,8 @@ $(window).on('load', function() {
             $('.morecontent', obj).show()
         });
 
+        lastCheckPush = nv_getCookie(push_cookie_name);
+        lastCheckPush = lastCheckPush ? parseInt(lastCheckPush) : 0;
         pushNotifyGetCount()
     }
 });
