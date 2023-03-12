@@ -1,6 +1,7 @@
 var pushCheck,
     pushObj,
     pushModuleUrl,
+    checkPushUrl,
     refresh_time = 30000,
     userid = 0,
     usergroups = '',
@@ -21,7 +22,7 @@ function pushNotifyGetCount() {
     if (pas > refresh_time) {
         nv_setCookie(push_cookie_name, current, 365);
         lastCheckPush = current;
-        var url = pushModuleUrl + ((-1 < pushModuleUrl.indexOf("?")) ? '&' : '?') + 'nocache=' + current;
+        var url = checkPushUrl + ((-1 < checkPushUrl.indexOf("?")) ? '&' : '?') + 'nocache=' + current;
         $.ajax({
             type: 'POST',
             url: url,
@@ -82,6 +83,7 @@ $(window).on('load', function() {
         pushObj = $('#push-notification');
         refresh_time = parseInt(pushObj.data('refresh-time')) * 1000;
         pushModuleUrl = pushObj.data('url');
+        checkPushUrl = pushObj.data('checkpush-url');
         userid = pushObj.data('userid');
         usergroups = pushObj.data('usergroups');
         csrf = pushObj.data('csrf');

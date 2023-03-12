@@ -42,7 +42,7 @@ $(document).ready(function() {
 
     $('body').on('click', '[data-toggle=nv_change_captcha]', function(e) {
         e.preventDefault();
-        $('#vimg').attr('src', base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+        $('#vimg').attr('src', base_siteurl + "sload.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
         $('#seccode').val('')
     });
 

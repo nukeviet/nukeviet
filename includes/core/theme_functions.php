@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -209,8 +209,6 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
     $xtpl->assign('HOME_LINK', $global_config['site_url']);
     $xtpl->assign('LANG', $lang_global);
     $xtpl->assign('TEMPLATE', $template);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
     $xtpl->assign('SITE_NAME', empty($global_config['site_name']) ? '' : $global_config['site_name']);
 
     $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
@@ -321,7 +319,7 @@ function nv_htmlOutput($html, $type = 'html')
  * nv_jsonOutput()
  *
  * @param array $array_data
- * @param int $flags
+ * @param int   $flags
  * @return never
  */
 function nv_jsonOutput($array_data, $flags = 0)
@@ -414,9 +412,8 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
     $timemode != 'ISO8601' && $timemode = 'GMT';
     $noindex = (bool) $noindex;
 
-    $xsl = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . ($type == 'rss' ? 'rssxsl' : 'atomxsl');
+    $xsl = NV_BASE_SITEURL . 'sload.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;xsl=' . $type;
     !empty($channel['xsltheme']) && $xsl .= '&amp;theme=' . $channel['xsltheme'];
-    $xsl = nv_url_rewrite($xsl, true);
 
     if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
         $channel['link'] = NV_BASE_SITEURL . $matches[1];
@@ -479,7 +476,7 @@ function nv_rss_generate($channel, $items, $atomlink = '', $timemode = '', $noin
             // Fix lỗi vòng while bị lặp vô hạn nếu truyền giá trị $item[pubdate] = null #3496
             if (!empty($items[$key]['pubdate']) and is_numeric($items[$key]['pubdate'])) {
                 while (isset($pubdates[$items[$key]['pubdate']])) {
-                    $items[$key]['pubdate']--;
+                    --$items[$key]['pubdate'];
                 }
                 $pubdates[$items[$key]['pubdate']] = 0;
             } else {
@@ -687,61 +684,6 @@ function nv_xmlSitemapIndex_generate()
         }
     }
 
-    nv_xmlOutput($contents, $lastModified);
-}
-
-/**
- * nv_rssXsl_generate()
- *
- * @return never
- */
-function nv_rssXsl_generate()
-{
-    global $nv_Request, $lang_global;
-
-    $contents = '';
-    $theme = '';
-    if ($nv_Request->isset_request('theme', 'get')) {
-        $theme = preg_replace('/[^a-zA-Z0-9\_\-]/', '', $nv_Request->get_string('theme', 'get'));
-        if (!empty($theme) and file_exists(NV_ROOTDIR . '/themes/' . $theme . '/css/rss.xsl')) {
-            $contents = file_get_contents(NV_ROOTDIR . '/themes/' . $theme . '/css/rss.xsl');
-        }
-    }
-
-    if (empty($contents)) {
-        $contents = file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/rss.xsl');
-    }
-
-    $contents = preg_replace('/\{NV\_BASE\_SITEURL\}/', NV_BASE_SITEURL, $contents);
-    $contents = preg_replace('/\{NV\_ASSETS\_DIR\}/', NV_ASSETS_DIR, $contents);
-    $contents = preg_replace('/\{THEME\}/', $theme, $contents);
-    $contents = preg_replace('/\{MORE\_LANG\}/', $lang_global['detail'], $contents);
-    $lastModified = NV_CURRENTTIME;
-    nv_xmlOutput($contents, $lastModified);
-}
-
-function nv_atomXsl_generate()
-{
-    global $nv_Request, $lang_global;
-
-    $contents = '';
-    $theme = '';
-    if ($nv_Request->isset_request('theme', 'get')) {
-        $theme = preg_replace('/[^a-zA-Z0-9\_\-]/', '', $nv_Request->get_string('theme', 'get'));
-        if (!empty($theme) and file_exists(NV_ROOTDIR . '/themes/' . $theme . '/css/atom.xsl')) {
-            $contents = file_get_contents(NV_ROOTDIR . '/themes/' . $theme . '/css/atom.xsl');
-        }
-    }
-
-    if (empty($contents)) {
-        $contents = file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/atom.xsl');
-    }
-
-    $contents = preg_replace('/\{NV\_BASE\_SITEURL\}/', NV_BASE_SITEURL, $contents);
-    $contents = preg_replace('/\{NV\_ASSETS\_DIR\}/', NV_ASSETS_DIR, $contents);
-    $contents = preg_replace('/\{THEME\}/', $theme, $contents);
-    $contents = preg_replace('/\{MORE\_LANG\}/', $lang_global['detail'], $contents);
-    $lastModified = NV_CURRENTTIME;
     nv_xmlOutput($contents, $lastModified);
 }
 

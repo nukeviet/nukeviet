@@ -34,7 +34,6 @@ if (!nv_function_exists('nv_block_qr_code')) {
 
         $xtpl = new XTemplate('global.QR_code.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', $lang_global);
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
         if (empty($page_url)) {
             if ($home) {

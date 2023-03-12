@@ -317,12 +317,6 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
             $xtpl->parse('main.reg_recaptcha');
         } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
-            $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-            $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
             $xtpl->parse('main.reg_captcha');
         }
     }
@@ -417,11 +411,6 @@ function user_login($is_ajax = false)
             $xtpl->parse('main.recaptcha');
         } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-            $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
             $xtpl->parse('main.captcha');
         }
     }
@@ -617,11 +606,6 @@ function user_lostpass($data)
             $xtpl->parse('main.recaptcha');
         } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-            $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
             $xtpl->parse('main.captcha');
         }
     }
@@ -694,12 +678,6 @@ function user_lostactivelink($data, $question)
                 $xtpl->parse('main.step1.recaptcha');
             } elseif ($module_captcha == 'captcha') {
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-                $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-                $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-                $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
-                $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-                $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
                 $xtpl->parse('main.step1.captcha');
             }
         }
@@ -758,8 +736,6 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
     }
 
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('AVATAR_DEFAULT', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/src', true));
     $xtpl->assign('TEMPLATE', $module_info['template']);
@@ -1586,10 +1562,6 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
             $xtpl->parse('main.recaptcha');
         } elseif ($module_captcha == 'captcha') {
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-            $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
             $xtpl->parse('main.captcha');
         }
     }
@@ -1794,7 +1766,6 @@ function user_info_exit_redirect($info, $nv_redirect)
 
     $xtpl = new XTemplate('info_exit_redirect.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('INFO', $info);
     $xtpl->assign('NV_REDIRECT', $nv_redirect);
 
@@ -1818,7 +1789,6 @@ function nv_avatar($array)
     global $module_info, $module_name, $lang_module, $lang_global, $global_config;
 
     $xtpl = new XTemplate('avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('MODULE_FILE', $module_info['module_file']);
 
@@ -1875,7 +1845,6 @@ function safe_deactivate($data)
 
     $xtpl = new XTemplate('safe.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);

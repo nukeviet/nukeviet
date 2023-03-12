@@ -760,7 +760,6 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 
     $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG_GLOBAL', $lang_global);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
@@ -1275,7 +1274,6 @@ function sendmail_themme($sendmail)
     $xtpl->assign('SENDMAIL', $sendmail);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
     if (defined('NV_IS_USER')) {
         $xtpl->parse('main.sender_is_user');
@@ -1291,12 +1289,7 @@ function sendmail_themme($sendmail)
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
     } elseif ($module_captcha == 'captcha') {
-        $xtpl->assign('GFX_NUM', NV_GFX_NUM);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->parse('main.captcha');
     }
     $xtpl->parse('main');
@@ -1596,11 +1589,6 @@ function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_s
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');
     } elseif ($module_captcha == 'captcha') {
-        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
-        $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
         $xtpl->parse('main.captcha');
     }
 

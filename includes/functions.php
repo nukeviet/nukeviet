@@ -1558,7 +1558,7 @@ function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbe
     $file_name = nv_genpass(8);
     $temp_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . md5($global_config['sitekey'] . $file_name);
     file_put_contents($temp_file, $json_contents, LOCK_EX);
-    post_async(NV_BASE_SITEURL . 'index.php', ['__sendmail' => $file_name]);
+    post_async(NV_BASE_SITEURL . 'sload.php', ['__sendmail' => $file_name]);
 }
 
 /**
@@ -3416,4 +3416,28 @@ function nv_http_get_lang($input)
     }
 
     return 'Error' . ($input['code'] ? ': ' . $input['code'] . '.' : '.');
+}
+
+/**
+ * mhash_create()
+ *
+ * @param mixed $module
+ * @param mixed $op
+ * @return string
+ */
+function mhash_create($module, $op)
+{
+    return md5(NV_CHECK_SESSION . '_' . $module . '_' . $op);
+}
+
+/**
+ * mload_url_generate()
+ *
+ * @param mixed $module
+ * @param mixed $op
+ * @return string
+ */
+function mload_url_generate($module, $op)
+{
+    return NV_BASE_SITEURL . 'mload.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;mhash=' . mhash_create($module, $op);
 }

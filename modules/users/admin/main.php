@@ -343,7 +343,6 @@ foreach ($users_list as $u) {
         $u['active_obj'] = 'N/A';
     }
     $xtpl->assign('CONTENT_TD', $u);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
 
     if ($u['is_admin']) {

@@ -81,7 +81,6 @@ function nv_menu_blocks($block_config)
     $xtpl->assign('LANG', $lang_global);
     $xtpl->assign('BLOCK_THEME', $block_theme);
     $xtpl->assign('BLOCK_CONFIG', $block_config);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 
     if (!empty($list_cats)) {

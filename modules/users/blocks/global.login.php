@@ -141,10 +141,6 @@ if (!nv_function_exists('nv_block_login')) {
                 }
 
                 $user_info['current_login_txt'] = nv_date('d/m, H:i', $user_info['current_login']);
-
-                $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-                $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-                $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
                 $xtpl->assign('URL_LOGOUT', defined('NV_IS_ADMIN') ? 'nv_admin_logout' : 'bt_logout');
                 $xtpl->assign('MODULENAME', $module_info['custom_title']);
                 $xtpl->assign('AVATA', $avata);
@@ -188,12 +184,7 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('NICK_MINLENGTH', $global_config['nv_unickmin']);
                 $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
                 $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
-                $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-                $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-                $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-                $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
                 $xtpl->assign('NV_HEADER', '');
                 $xtpl->assign('NV_REDIRECT', '');
                 $xtpl->assign('CHECKSS', md5(NV_CHECK_SESSION . '_' . $block_config['module'] . '_register'));

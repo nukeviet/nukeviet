@@ -50,9 +50,6 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         $page_title = $lang_module['rpc'] . ': ' . $news_contents['title'];
                         $xtpl = new XTemplate('rpc_ping.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/seotools');
                         $xtpl->assign('LANG', $lang_module);
-                        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-                        $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-                        $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
                         $xtpl->assign('MODULE_NAME', $module_name);
                         $xtpl->assign('OP', $op);
                         $xtpl->assign('LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&getdata=1');

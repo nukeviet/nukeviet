@@ -78,7 +78,6 @@ if (!nv_function_exists('nv_menu_theme_social')) {
         }
 
         $xtpl = new XTemplate('global.social.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('LANG', $lang_global);
         $xtpl->assign('BLOCK_THEME', $block_theme);
         $xtpl->assign('DATA', $block_config);

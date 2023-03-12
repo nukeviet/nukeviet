@@ -91,7 +91,6 @@ function nv_site_theme($contents, $full = true)
     $xtpl = new XTemplate($layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
     $xtpl->assign('LANG', $lang_global);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
     $xtpl->assign('NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ');
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
@@ -99,14 +98,9 @@ function nv_site_theme($contents, $full = true)
     $xtpl->assign('SITE_DESCRIPTION', $global_config['site_description']);
     $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['user_check_pass_time']) - 62) * 1000);
     $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-    $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-    $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-    $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('NV_CURRENTTIME', nv_date($global_config['date_pattern'] . ', ' . $global_config['time_pattern'], NV_CURRENTTIME));
     $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
     $xtpl->assign('SITE_FAVICON', $site_favicon);
-    $xtpl->assign('NV_MY_DOMAIN', NV_MY_DOMAIN);
 
     // System variables
     $xtpl->assign('THEME_PAGE_TITLE', nv_html_page_title(false));

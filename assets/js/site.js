@@ -210,7 +210,7 @@ function loadCaptcha(obj) {
 function change_captcha(a) {
     loadCaptcha();
     if ($("img.captchaImg").length) {
-        $("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+        $("img.captchaImg").attr("src", nv_base_siteurl + "sload.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
         "undefined" != typeof a && "" != a && $(a).val("");
     }
     return !1

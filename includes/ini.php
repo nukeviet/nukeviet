@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -41,7 +41,7 @@ function server_info_update($config_ini_file)
 
     $server_headers = [];
     $is_http2 = false;
-    $ch = curl_init($proto . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1');
+    $ch = curl_init($proto . '://' . $host . NV_BASE_SITEURL . 'sload.php?response_headers_detect=1');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_NOBODY, true);
@@ -77,7 +77,7 @@ function server_info_update($config_ini_file)
 
     $http_only = false;
     $https_only = false;
-    $ch = curl_init($proto2 . '://' . $host . NV_BASE_SITEURL . 'index.php?response_headers_detect=1');
+    $ch = curl_init($proto2 . '://' . $host . NV_BASE_SITEURL . 'sload.php?response_headers_detect=1');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_NOBODY, true);

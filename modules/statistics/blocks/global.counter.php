@@ -66,8 +66,6 @@ if (!nv_function_exists('nv_block_counter')) {
 
         $xtpl->assign('COUNT_ONLINE', number_format($count_online));
 
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-
         if ($users) {
             $xtpl->assign('COUNT_USERS', number_format($users));
             $xtpl->parse('main.users');

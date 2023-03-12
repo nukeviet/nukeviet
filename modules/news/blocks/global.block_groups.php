@@ -147,7 +147,6 @@ if (!nv_function_exists('nv_block_news_groups')) {
                 $block_theme = 'default';
             }
             $xtpl = new XTemplate('block_groups.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
-            $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
             $xtpl->assign('TEMPLATE', $block_theme);
 
             foreach ($list as $l) {

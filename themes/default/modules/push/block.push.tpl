@@ -4,7 +4,7 @@
 <script src="{ASSETS_STATIC_URL}/js/perfect-scrollbar/min.js" charset="utf-8"></script>
 <script src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/block.push.js"></script>
 
-<div class="push-notification dropdown" id="push-notification" data-refresh-time="{REFRESH_TIME}" data-url="{PUSH_MODULE_URL}" data-userid="{USERID}" data-usergroups="{USERGROUPS}" data-csrf="{CSRF}">
+<div class="push-notification dropdown" id="push-notification" data-refresh-time="{REFRESH_TIME}" data-url="{PUSH_MODULE_URL}" data-checkpush-url="{CHECK_PUSH_URL}" data-userid="{USERID}" data-usergroups="{USERGROUPS}" data-csrf="{CSRF}">
     <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <em class="fa fa-bell-o"></em>
         <span class="new-count" style="display:none"></span>

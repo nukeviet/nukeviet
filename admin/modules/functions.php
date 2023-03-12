@@ -392,7 +392,6 @@ function main_theme($contents)
     global $global_config, $module_file, $lang_global, $lang_module;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CONTENT', $contents);
@@ -532,7 +531,6 @@ function show_funcs_theme($contents)
     global $global_config, $module_file;
 
     $xtpl = new XTemplate('show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('CONTENT', $contents);
 
     if (!empty($contents['ajax'][0])) {

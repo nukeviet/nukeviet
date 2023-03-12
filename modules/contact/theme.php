@@ -262,11 +262,6 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
         $xtpl->parse('main.recaptcha');
     } elseif ($module_captcha == 'captcha') {
-        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
         $xtpl->parse('main.captcha');
     }
 

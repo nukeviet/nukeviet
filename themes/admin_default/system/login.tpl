@@ -75,7 +75,7 @@
         <!-- BEGIN: captcha -->
         <div class="form-group">
             <div class="col-xs-12 col-xs-offset-12 text-right">
-                <img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+                <img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
                 <em class="fa fa-refresh fa-lg" data-toggle="nv_change_captcha">&nbsp;</em>
             </div>
         </div>

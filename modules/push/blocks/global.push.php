@@ -56,9 +56,10 @@ if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
     $xtpl->assign('REFRESH_TIME', $global_config['push_refresh_time']);
     $xtpl->assign('FILTER_DEFAULT', $push_filter_default);
     $xtpl->assign('PUSH_MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push');
+    $xtpl->assign('CHECK_PUSH_URL', NV_BASE_SITEURL . 'sload.php');
     $xtpl->assign('USERID', $user_info['userid']);
     $xtpl->assign('USERGROUPS', $u_groups);
-    $xtpl->assign('CSRF', md5($user_info['userid'] . NV_CHECK_SESSION));
+    $xtpl->assign('CSRF', md5($user_info['userid'] . $u_groups . NV_CHECK_SESSION));
 
     foreach ($filters as $key => $name) {
         $xtpl->assign('FILTER', [

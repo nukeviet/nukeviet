@@ -171,7 +171,6 @@ if ($nv_Request->isset_request('qlist', 'post')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->parse('load');
 $contents = $xtpl->text('load');
 

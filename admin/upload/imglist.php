@@ -95,7 +95,6 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
 
     if ($num_items) {
         $xtpl = new XTemplate('listimg.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
         $db->limit($per_page)->offset(($page - 1) * $per_page);
         $sth = $db->prepare($db->sql());

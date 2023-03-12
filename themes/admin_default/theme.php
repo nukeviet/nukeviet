@@ -157,10 +157,6 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('SITE_DESCRIPTION', empty($global_config['site_description']) ? $page_title : $global_config['site_description']);
     $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['admin_check_pass_time']) - 62) * 1000);
     $xtpl->assign('NV_XSS_SANITIZE', ($global_config['admin_XSSsanitize'] ? 1 : 0));
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('NV_ADMINDIR', NV_ADMINDIR);
-    $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-    $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('MODULE_FILE', $module_file);
     $xtpl->assign('NV_ADMIN_THEME', $admin_info['admin_theme']);

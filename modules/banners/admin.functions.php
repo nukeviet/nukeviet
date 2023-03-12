@@ -409,7 +409,6 @@ function nv_plans_list_theme($contents)
     global $global_config, $module_file;
     $xtpl = new XTemplate('plans_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->parse('main');
 
     return $xtpl->text('main');
@@ -456,9 +455,6 @@ function nv_add_banner_theme($contents)
     $xtpl = new XTemplate('add_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
     if (!empty($contents['upload_blocked'])) {
         $xtpl->parse('upload_blocked');
@@ -529,9 +525,6 @@ function nv_edit_banner_theme($contents)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
     if (!empty($contents['upload_blocked'])) {
         $xtpl->parse('upload_blocked');
@@ -614,7 +607,6 @@ function nv_banners_list_theme($contents)
     global $global_config, $module_file;
     $xtpl = new XTemplate('banners_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->parse('main');
 
     return $xtpl->text('main');

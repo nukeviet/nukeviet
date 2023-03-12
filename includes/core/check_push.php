@@ -4,21 +4,21 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (!defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE') or !defined('NV_SYS_LOAD')) {
     exit('Stop!!!');
 }
 
 $count = 0;
 $userid = $nv_Request->get_int('__userid', 'post', 0);
+$groups = $nv_Request->get_title('__groups', 'post', '');
 $csrf = $nv_Request->get_title('_csrf', 'post', '');
-$checkss = md5($userid . NV_CHECK_SESSION);
+$checkss = md5($userid . $groups . NV_CHECK_SESSION);
 if ($userid and hash_equals($checkss, $csrf)) {
-    $groups = $nv_Request->get_title('__groups', 'post', '');
     $groups = preg_replace('/[^0-9\,]+/', '', $groups);
 
     $where = [];

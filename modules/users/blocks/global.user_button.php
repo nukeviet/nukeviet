@@ -71,9 +71,6 @@ if ($global_config['allowuserlogin']) {
 
         $user_info['current_login_txt'] = nv_date('d/m, H:i', $user_info['current_login']);
 
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-        $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
         $xtpl->assign('URL_LOGOUT', defined('NV_IS_ADMIN') ? 'nv_admin_logout' : 'bt_logout');
         $xtpl->assign('MODULENAME', $module_info['custom_title']);
         $xtpl->assign('AVATA', $avata);

@@ -33,7 +33,6 @@ if (!nv_function_exists('nv_block_language')) {
         }
 
         $xtpl = new XTemplate('global.block_language.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('BLOCK_THEME', $block_theme);
         $xtpl->assign('SELECT_LANGUAGE', $lang_global['langsite']);
 

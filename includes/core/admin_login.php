@@ -522,12 +522,7 @@ if (empty($admin_pre_data)) {
             }
             $xtpl->parse('pre_form.recaptcha');
         } elseif ($captcha_type == 'captcha') {
-            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
             $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-            $xtpl->assign('GFX_NUM', NV_GFX_NUM);
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
             $xtpl->parse('pre_form.captcha');
         }
     }

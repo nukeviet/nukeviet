@@ -201,6 +201,14 @@ require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
+// Hiển thị nội dung file rssXsl/atomXsl
+if (defined('NV_SYS_LOAD')) {
+    if ($nv_Request->isset_request('xsl', 'get') and ($nv_Request->get_string('xsl', 'get') == 'rss' or $nv_Request->get_string('xsl', 'get') == 'atom')) {
+        require NV_ROOTDIR . '/includes/core/xsl.php';
+        exit(0);
+    }
+}
+
 $cdn_is_enabled = false;
 // Load các plugin
 if (!empty($nv_plugins[NV_LANG_DATA])) {
@@ -312,6 +320,13 @@ if ($is_mobile_tablet != $nv_Request->get_string('is_mobile_tablet', 'session'))
 }
 
 // Captcha
+define('SRC_CAPTCHA', NV_BASE_SITEURL . 'sload.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
+define('GFX_WIDTH', NV_GFX_WIDTH);
+define('GFX_HEIGHT', NV_GFX_HEIGHT);
+define('GFX_NUM', NV_GFX_NUM);
+define('GFX_MAXLENGTH', NV_GFX_NUM);
+define('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
+define('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     require NV_ROOTDIR . '/includes/core/captcha.php';
 }
@@ -371,8 +386,10 @@ define('NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys');
 define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
 // Lấy tổng số thông báo đẩy chưa xem
-if (defined('NV_IS_AJAX') and $nv_Request->isset_request('__checkPush, __userid, __groups, _csrf', 'post')) {
-    require NV_ROOTDIR . '/includes/core/check_push.php';
+if (defined('NV_SYS_LOAD')) {
+    if (defined('NV_IS_AJAX') and $nv_Request->isset_request('__checkPush, __userid, __groups, _csrf', 'post')) {
+        require NV_ROOTDIR . '/includes/core/check_push.php';
+    }
 }
 
 $sql = 'SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND (module='site' OR module='banners')) ORDER BY module ASC";
@@ -471,26 +488,18 @@ if ($global_config['cronjobs_launcher'] == 'server' and $nv_Request->isset_reque
     exit();
 }
 if ($global_config['cronjobs_launcher'] == 'system') {
-    if ($nv_Request->isset_request('__cronjobs', 'post')) {
+    if (defined('NV_SYS_LOAD') and $nv_Request->isset_request('__cronjobs', 'post')) {
         require NV_ROOTDIR . '/includes/core/cronjobs.php';
+        exit(0);
     }
     if (NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
-        post_async(NV_BASE_SITEURL . 'index.php', ['__cronjobs' => 1]);
+        post_async(NV_BASE_SITEURL . 'sload.php', ['__cronjobs' => 1]);
     }
 }
 
 // Gửi mail từ luồng truy vấn không đồng bộ
-if ($nv_Request->isset_request('__sendmail', 'post')) {
-    $file = $nv_Request->get_title('__sendmail', 'post', '');
-    if (preg_match('/^[a-zA-Z0-9]{8}$/', $file)) {
-        $md5file = md5($global_config['sitekey'] . $file);
-        if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file)) {
-            $cts = file_get_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
-            $cts = json_decode($cts, true);
-            @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
-            @nv_sendmail($cts['from'], $cts['to'], $cts['subject'], $cts['message'], $cts['files'], $cts['AddEmbeddedImage'], $cts['testmode'], $cts['cc'], $cts['bcc'], $cts['mailhtml'], $cts['custom_headers']);
-        }
-    }
+if (defined('NV_SYS_LOAD') and $nv_Request->isset_request('__sendmail', 'post')) {
+    require NV_ROOTDIR . '/includes/core/async_sendmail.php';
     exit(0);
 }
 

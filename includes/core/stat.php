@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -24,29 +24,10 @@ function nv_stat_update()
 
     $last_update = $db->query('SELECT c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'c_time' AND c_val= 'last'")->fetchColumn();
 
-    if (NV_SITE_TIMEZONE_NAME == $global_config['statistics_timezone']) {
-        $last_year = date('Y', $last_update);
-        $last_month = date('M', $last_update);
-        $last_day = date('d', $last_update);
-
-        $current_year = date('Y', NV_CURRENTTIME);
-        $current_month = date('M', NV_CURRENTTIME);
-        $current_day = date('d', NV_CURRENTTIME);
-        $current_hour = date('H', NV_CURRENTTIME);
-        $current_week = date('l', NV_CURRENTTIME);
-    } else {
-        date_default_timezone_set($global_config['statistics_timezone']);
-        $last_year = date('Y', $last_update);
-        $last_month = date('M', $last_update);
-        $last_day = date('d', $last_update);
-
-        $current_year = date('Y', NV_CURRENTTIME);
-        $current_month = date('M', NV_CURRENTTIME);
-        $current_day = date('d', NV_CURRENTTIME);
-        $current_hour = date('H', NV_CURRENTTIME);
-        $current_week = date('l', NV_CURRENTTIME);
-        date_default_timezone_set(NV_SITE_TIMEZONE_NAME);
-    }
+    NV_SITE_TIMEZONE_NAME != $global_config['statistics_timezone'] && date_default_timezone_set($global_config['statistics_timezone']);
+    list($last_year, $last_month, $last_day) = explode('|', date('Y|M|d', $last_update));
+    list($current_year, $current_month, $current_day, $current_hour, $current_week) = explode('|', date('Y|M|d|H|l', NV_CURRENTTIME));
+    NV_SITE_TIMEZONE_NAME != $global_config['statistics_timezone'] && date_default_timezone_set(NV_SITE_TIMEZONE_NAME);
 
     if ($last_year != $current_year) {
         $year_exists = $db->query('SELECT COUNT(*) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' AND c_val='" . $current_year . "'")->fetchColumn();

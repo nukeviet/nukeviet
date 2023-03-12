@@ -129,11 +129,6 @@ if (!nv_function_exists('nv_block_voting')) {
                         $xtpl->parse('main.has_captcha.recaptcha');
                     } else {
                         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-                        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-                        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-                        $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-                        $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
                         $xtpl->parse('main.has_captcha.basic');
                     }
                     $xtpl->parse('main.has_captcha');

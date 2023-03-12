@@ -76,7 +76,6 @@ if (defined('NV_IS_GODADMIN') and substr($sys_info['os'], 0, 3) != 'WIN') {
 }
 
 $xtpl = new XTemplate('system_info.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('LANG', $lang_module);
 
 foreach ($info as $key => $if) {

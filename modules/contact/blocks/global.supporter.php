@@ -67,7 +67,6 @@ if (!nv_function_exists('nv_contact_supporter')) {
 
             $xtpl = new XTemplate('block.supporter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
             $xtpl->assign('LANG', $lang_global);
-            $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
             $xtpl->assign('TEMPLATE', $block_theme);
             $xtpl->assign('MODULE', $module);
 

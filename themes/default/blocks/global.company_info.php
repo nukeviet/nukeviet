@@ -163,7 +163,6 @@ if (!nv_function_exists('nv_company_info')) {
 
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', $lang_global);
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('DATA', $block_config);
 
         if (!empty($block_config['company_name'])) {

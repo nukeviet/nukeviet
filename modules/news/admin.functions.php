@@ -699,7 +699,6 @@ function redriect($msg1, $msg2, $nv_redirect, $autoSaveKey = '', $go_back = '')
     if (empty($nv_redirect)) {
         $nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
     }
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_REDIRECT', $nv_redirect);
     $xtpl->assign('MSG1', $msg1);
     $xtpl->assign('MSG2', $msg2);

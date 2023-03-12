@@ -423,7 +423,6 @@ $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['mo
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('TEMPLATE', $global_config['module_theme']);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 
@@ -854,8 +853,6 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         $xtpl->assign('CONTENT', $_cont);
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
         $xtpl->assign('AVATAR_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
         $xtpl->assign('AVATAR_CURENT_PATH', NV_UPLOADS_DIR . '/' . $module_upload . '/groups');
 

@@ -33,7 +33,6 @@ if (!nv_function_exists('nv_module_menu')) {
 
         $xtpl = new XTemplate('global.module_menu.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', $lang_global);
-        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $block_theme);
 
         $_lis = $module_info['funcs'];

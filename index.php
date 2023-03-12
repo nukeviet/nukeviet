@@ -9,27 +9,6 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-if (isset($_GET['response_headers_detect'])) {
-    if ((isset($_SERVER['HTTPS']) and (strtolower($_SERVER['HTTPS']) == 'on' or $_SERVER['HTTPS'] == '1')) or $_SERVER['SERVER_PORT'] == 443) {
-        header('x-is-https: 1');
-    } else {
-        header('x-is-http: 1');
-    }
-    exit(0);
-}
-if (isset($_GET['rewritesupport'])) {
-    if ($_GET['rewritesupport'] == 'apache') {
-        exit('rewrite_mode_apache');
-    }
-    if ($_GET['rewritesupport'] == 'iis') {
-        exit('rewrite_mode_iis');
-    }
-    if ($_GET['rewritesupport'] == 'nginx') {
-        exit('nginx');
-    }
-    exit(0);
-}
-
 define('NV_SYSTEM', true);
 
 // Xac dinh thu muc goc cua site
@@ -44,17 +23,6 @@ nv_apply_hook('', 'get_qr_code', [$nv_Request]);
 // Google Sitemap
 if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_string(NV_NAME_VARIABLE, 'get') == 'SitemapIndex') {
     nv_xmlSitemapIndex_generate();
-    exit();
-}
-
-// Kết nối với file XSL của RSS
-if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_string(NV_NAME_VARIABLE, 'get') == 'rssxsl') {
-    nv_rssXsl_generate();
-    exit();
-}
-// Kết nối với file XSL của ATOM
-if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') and $nv_Request->get_string(NV_NAME_VARIABLE, 'get') == 'atomxsl') {
-    nv_atomXsl_generate();
     exit();
 }
 
