@@ -336,9 +336,9 @@
 </div>
 
 <!-- BEGIN: rewrite_support -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/{HIGHLIGHT_LANG}.min.js"></script>
+<link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/highlightjs/default.min.css">
+<script src="{ASSETS_STATIC_URL}/js/highlightjs/highlight.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/highlightjs/lang/{HIGHLIGHT_LANG}.min.js"></script>
 <div class="modal fade" tabindex="-1" role="dialog" id="sConfigModal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
