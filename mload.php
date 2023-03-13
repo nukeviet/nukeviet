@@ -17,6 +17,9 @@ define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), P
 
 require NV_ROOTDIR . '/includes/mainfile.php';
 
+$module_name = $nv_Request->get_string(NV_NAME_VARIABLE, 'post,get');
+$op = $nv_Request->get_string(NV_OP_VARIABLE, 'post,get');
+
 if (!defined('IS_CROSS_SITE_LOAD')) {
     $mhash = $nv_Request->get_title('mhash', 'post,get'); // là kết quả của md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op)
 
@@ -24,9 +27,6 @@ if (!defined('IS_CROSS_SITE_LOAD')) {
         exit('MODHASH_NOT_CORRECT');
     }
 }
-
-$module_name = $nv_Request->get_string(NV_NAME_VARIABLE, 'post,get');
-$op = $nv_Request->get_string(NV_OP_VARIABLE, 'post,get');
 
 if (!preg_match($global_config['check_module'], $module_name) or !isset($sys_mods[$module_name])) {
     exit('MODULE_NOT_FOUND');
