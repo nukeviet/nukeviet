@@ -27,6 +27,7 @@ nv_add_hook($module_name, 'modify_global_config', $priority, function () {
         $global_config['recaptcha_ver'] = 0;
         $global_config['googleAnalyticsID'] = '';
         $global_config['googleAnalytics4ID'] = '';
+        $global_config['google_tag_manager'] = '';
         $global_config['searchEngineUniqueID'] = '';
         $global_config['google_client_id'] = '';
         $global_config['google_client_secret'] = '';

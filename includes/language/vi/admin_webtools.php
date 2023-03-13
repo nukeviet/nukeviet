@@ -90,3 +90,4 @@ $lang_module['online_upd'] = 'Kích hoạt tiện ích đếm số người onli
 $lang_module['googleAnalyticsID'] = 'Mã Google Universal Analytics<br />(Có dạng UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">xem chi tiết</a>)';
 $lang_module['googleAnalytics4ID'] = 'Mã Google Analytics 4<br />(Có dạng G-XXXXXXXX hoặc UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">xem chi tiết</a>)';
 $lang_module['referer_blocker'] = 'Kích hoạt tiện ích kiểm tra, thống kê đường dẫn đến site';
+$lang_module['google_tag_manager'] = 'Mã trình quản lý thẻ của Google<br />(Có dạng GTM-XXXXXXX, <a href="https://developers.google.com/tag-platform/tag-manager/web" target="_blank">xem chi tiết</a>)';

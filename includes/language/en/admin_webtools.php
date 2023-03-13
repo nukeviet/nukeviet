@@ -87,3 +87,4 @@ $lang_module['online_upd'] = 'Activate monitoring online users';
 $lang_module['googleAnalyticsID'] = 'Google Universal Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
 $lang_module['googleAnalytics4ID'] = 'Google Analytics 4 ID<br />(G-XXXXXXXX, UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
 $lang_module['referer_blocker'] = 'Active referer utility';
+$lang_module['google_tag_manager'] = 'Google Tag Manager container ID<br />(GTM-XXXXXXX, <a href="https://developers.google.com/tag-platform/tag-manager/web" target="_blank">Detail</a>)';

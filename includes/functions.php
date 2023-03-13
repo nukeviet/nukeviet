@@ -2324,13 +2324,18 @@ function nv_change_buffer($buffer)
         }
         $_google_analytics .= "ga('send', 'pageview');" . PHP_EOL;
         $_google_analytics .= '</script>' . PHP_EOL;
-        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . '$1', $buffer, 1);
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . PHP_EOL . '$1', $buffer, 1);
     }
 
     if (defined('NV_SYSTEM') and isset($global_config['googleAnalytics4ID']) and (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalytics4ID']) or preg_match('/^G\-[a-zA-Z0-9]{8,}$/', $global_config['googleAnalytics4ID']))) {
         $_google_analytics4 = '<' . $script . ' async src="https://www.googletagmanager.com/gtag/js?id=' . $global_config['googleAnalytics4ID'] . '"></script>' . PHP_EOL;
         $_google_analytics4 .= '<' . $script . ">window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date);gtag('config','" . $global_config['googleAnalytics4ID'] . "');</script>" . PHP_EOL;
-        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics4 . '$1', $buffer, 1);
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics4 . PHP_EOL . '$1', $buffer, 1);
+    }
+
+    if (defined('NV_SYSTEM') and !empty($global_config['google_tag_manager']) and preg_match('/^GTM-[A-Z0-9]{6,}$/', $global_config['google_tag_manager'])) {
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . '<' . $script . ' data-show="inline">!function(e,t,a,n){e[n]=e[n]||[],e[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"});var g=t.getElementsByTagName(a)[0],m=t.createElement(a);m.async=!0,m.src="https://www.googletagmanager.com/gtm.js?id=' . $global_config['google_tag_manager'] . '",g.parentNode.insertBefore(m,g)}(window,document,"script","dataLayer");</script>' . PHP_EOL . '$1', $buffer, 1);
+        $buffer = preg_replace('/(<body[^>]*>)/', '$1' . PHP_EOL . '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $global_config['google_tag_manager'] . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>' . PHP_EOL, $buffer, 1);
     }
 
     if (NV_ANTI_IFRAME and empty($client_info['is_myreferer'])) {

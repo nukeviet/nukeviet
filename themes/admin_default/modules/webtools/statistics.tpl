@@ -40,6 +40,10 @@
                     <td><strong>{LANG.googleAnalyticsID}</strong></td>
                     <td><input type="text" class="form-control w400" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" maxlength="20" /></td>
                 </tr>
+                <tr>
+                    <td><strong>{LANG.google_tag_manager}</strong></td>
+                    <td><input type="text" class="form-control w400" name="google_tag_manager" value="{DATA.google_tag_manager}" maxlength="20" /></td>
+                </tr>
             </tbody>
         </table>
     </div>
