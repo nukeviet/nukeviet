@@ -86,6 +86,9 @@ class Error
         ]
     ];
     private $error_excluded = ["/^ftp\_login\(\)/i", "/^gzinflate\(\)\: data error/i"];
+    public static $unreported_errors = [ // md5($this->errfile . $this->errline . $this->errno)
+        '8384c750f2c06509c08ae011f7cf8978', // md5('/includes/ini.php' . '363' . '2')
+    ];
 
     /**
      * __construct()
@@ -378,14 +381,17 @@ class Error
     public function error_handler($errno, $errstr, $errfile, $errline)
     {
         $this->errno = $errno;
-        $this->errstr = str_replace(NV_ROOTDIR, '...', str_replace('\\', '/', $errstr));
-        !empty($errfile) && $this->errfile = str_replace(NV_ROOTDIR, '...', str_replace('\\', '/', $errfile));
+        $this->errstr = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $errstr));
+        !empty($errfile) && $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $errfile));
         !empty($errline) && $this->errline = $errline;
+        $md5 = md5(($this->errfile ? $this->errfile : '') . ($this->errline ? $this->errline : '') . $this->errno);
 
-        $this->log_control();
+        if (!in_array($md5, self::$unreported_errors, true)) {
+            $this->log_control();
 
-        if ($this->errno == 256) {
-            $this->info_die();
+            if ($this->errno == 256) {
+                $this->info_die();
+            }
         }
     }
 
