@@ -2110,7 +2110,6 @@ function nv_check_url($url, $isArray = false)
  *
  * @param mixed $url
  * @return mixed
- * @throws ValueError
  */
 function url_get_contents($url)
 {
@@ -2868,7 +2867,7 @@ function add_push($args)
         str_starts_with($data['link'], NV_BASE_SITEURL) && $data['link'] = substr($data['link'], strlen(NV_BASE_SITEURL));
     }
 
-    $sth = $db->prepare('INSERT INTO ' . NV_PUSH_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
+    $sth = $db->prepare('INSERT INTO ' . NV_PUSH_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
     (:receiver_grs, :receiver_ids, :sender_role, ' . $data['sender_group'] . ', ' . $data['sender_admin'] . ', :message, :link, ' . $data['add_time'] . ', ' . $data['exp_time'] . ')');
     $sth->bindValue(':receiver_grs', $data['receiver_grs'], PDO::PARAM_STR);
     $sth->bindValue(':receiver_ids', $data['receiver_ids'], PDO::PARAM_STR);
@@ -3437,7 +3436,7 @@ function mhash_create($module, $op)
  * @param mixed $op
  * @return string
  */
-function mload_url_generate($module, $op)
+function mload_url_generate($module, $op, $amp = '&amp;')
 {
-    return NV_BASE_SITEURL . 'mload.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;mhash=' . mhash_create($module, $op);
+    return NV_BASE_SITEURL . 'mload.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . $amp . NV_NAME_VARIABLE . '=' . $module . $amp . NV_OP_VARIABLE . '=' . $op . $amp.'mhash=' . mhash_create($module, $op);
 }
