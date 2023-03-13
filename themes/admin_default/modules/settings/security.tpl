@@ -2,6 +2,7 @@
 <link type="text/css" href="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 
 <!-- BEGIN: error_save -->
 <div class="alert alert-danger">{ERROR_SAVE}</div>
@@ -792,6 +793,19 @@
                                     <td>
                                         <textarea rows="3" class="form-control" name="ip_allow_null_origin">{CONFIG_CROSS.ip_allow_null_origin}</textarea>
                                         <div class="form-text text-muted">{LANG.ip_allow_null_origin_help}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{LANG.load_files_seccode}</strong></td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="load_files_seccode" id="load_files_seccode" value="{CONFIG_CROSS.load_files_seccode}" class="form-control bg-white" readonly="readonly">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="button" data-clipboard-target="#load_files_seccode" data-toggle="clipboard" data-title="{LANG.value_copied}" data-placement="left" data-container="body" data-trigger="manual" data-animation="false"><i class="fa fa-copy"></i></button>
+                                                <button class="btn btn-default" type="button" data-target="#load_files_seccode" data-toggle="seccode_create"><i class="fa fa-retweet"></i></button>
+                                                <button class="btn btn-default" type="button" data-target="#load_files_seccode" data-toggle="seccode_remove"><i class="fa fa-trash-o"></i></button>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

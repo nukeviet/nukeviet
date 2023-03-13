@@ -82,6 +82,8 @@ class Request
 
     public $referer_host = '';
 
+    public $ref_origin = '';
+
     public $referer_queries = false;
 
     public $request_uri;
@@ -517,7 +519,7 @@ class Request
         if (!empty($this->referer)) {
             $ref = parse_url($this->referer);
             if (isset($ref['scheme']) and in_array($ref['scheme'], ['http', 'https', 'ftp', 'gopher'], true) and isset($ref['host'])) {
-                $ref_origin = ($ref['scheme'] . '://' . $ref['host'] . ((isset($ref['port']) and $ref['port'] != '80' and $ref['port'] != '443') ? (':' . $ref['port']) : ''));
+                $this->ref_origin = ($ref['scheme'] . '://' . $ref['host'] . ((isset($ref['port']) and $ref['port'] != '80' and $ref['port'] != '443') ? (':' . $ref['port']) : ''));
                 // Server dạng IPv6 trực tiếp
                 if (substr($ref['host'], 0, 1) == '[' and substr($ref['host'], -1) == ']') {
                     $ref['host'] = substr($ref['host'], 1, -1);
@@ -555,7 +557,7 @@ class Request
                 }
                 $this->referer = $_SERVER['HTTP_REFERER'];
 
-                if (!$this->restrictCrossDomain or $this->referer_key === 1 or in_array($ref_origin, $this->validCrossDomains, true)) {
+                if (!$this->restrictCrossDomain or $this->referer_key === 1 or in_array($this->ref_origin, $this->validCrossDomains, true)) {
                     $this->isRefererValid = true;
                 }
             } else {

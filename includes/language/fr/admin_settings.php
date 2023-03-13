@@ -550,3 +550,5 @@ $lang_module['passshow_button_1'] = 'Toujours intégré';
 $lang_module['passshow_button_2'] = 'Intégré uniquement pour les utilisateurs enregistrés';
 $lang_module['passshow_button_3'] = 'Intégré uniquement pour les administrateurs';
 $lang_module['config_description'] = 'Remarques sur la configuration';
+$lang_module['load_files_seccode'] = 'Code secret pour accéder aux load-fichiers';
+$lang_module['value_copied'] = 'La valeur a été copiée';

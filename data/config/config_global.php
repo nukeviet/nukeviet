@@ -81,6 +81,7 @@ $global_config['is_flood_blocker'] = 1;
 $global_config['is_login_blocker'] = 1;
 $global_config['lang_geo'] = 0;
 $global_config['lang_multi'] = 0;
+$global_config['load_files_seccode'] = '';
 $global_config['login_number_tracking'] = 5;
 $global_config['login_time_ban'] = 30;
 $global_config['login_time_tracking'] = 5;

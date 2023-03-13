@@ -558,3 +558,5 @@ $lang_module['passshow_button_1'] = 'Luôn tích hợp';
 $lang_module['passshow_button_2'] = 'Chỉ tích hợp cho người dùng đã đăng ký';
 $lang_module['passshow_button_3'] = 'Chỉ tích hợp cho quản trị viên';
 $lang_module['config_description'] = 'Ghi chú cấu hình';
+$lang_module['load_files_seccode'] = 'Mã bí mật truy cập load-files';
+$lang_module['value_copied'] = 'Giá trị đã được sao chép vào bộ nhớ';

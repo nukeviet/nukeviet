@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -123,7 +123,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitbasic', 'pos
     $at_sign = $nv_Request->get_typed_array('at', 'post', 'bool', []);
     $_end_url_variables = [];
     if (!empty($end_url_variables)) {
-        foreach($end_url_variables as $key => $variable) {
+        foreach ($end_url_variables as $key => $variable) {
             if (preg_match('/^[a-zA-Z0-9\_]+$/', $variable)) {
                 $vals = [];
                 !empty($lowercase_letters[$key]) && $vals[] = 'lower';
@@ -394,6 +394,8 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
     $array_config_cross['crosssite_allowed_variables'] = empty($res) ? '' : json_encode($res);
 
     $array_config_cross['allow_null_origin'] = (int) $nv_Request->get_bool('allow_null_origin', 'post', false);
+    $array_config_cross['load_files_seccode'] = $nv_Request->get_string('load_files_seccode', 'post', '');
+    !empty($array_config_cross['load_files_seccode']) && $array_config_cross['load_files_seccode'] = $crypt->encrypt($array_config_cross['load_files_seccode']);
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE lang='sys' AND module='global' AND config_name=:config_name");
     foreach ($array_config_cross as $config_name => $config_value) {
@@ -415,6 +417,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
     $array_config_cross['crossadmin_valid_ips'] = empty($global_config['crossadmin_valid_ips']) ? '' : implode("\n", $global_config['crossadmin_valid_ips']);
     $array_config_cross['allow_null_origin'] = $global_config['allow_null_origin'];
     $array_config_cross['ip_allow_null_origin'] = empty($global_config['ip_allow_null_origin']) ? '' : implode("\n", $global_config['ip_allow_null_origin']);
+    $array_config_cross['load_files_seccode'] = !empty($global_config['load_files_seccode']) ? $crypt->decrypt($global_config['load_files_seccode']) : '';
 
     if (!empty($global_config['crosssite_allowed_variables'])) {
         $res = [];
@@ -429,28 +432,28 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
 
 // Xử lý thiết lập CSP
 $csp_directives = [
-    'default-src' =>     ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => []],
-    'script-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to', '*.cloudflareinsights.com']],
-    'style-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'unsafe-inline' => 1, 'hosts' => ['*.google.com', '*.googleapis.com', '*.tawk.to']],
-    'img-src' =>         ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.twitter.com', '*.google.com', '*.googleapis.com', '*.gstatic.com', '*.facebook.com', 'tawk.link', '*.tawk.to', 'static.nukeviet.vn']],
-    'font-src' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.googleapis.com', '*.gstatic.com', '*.tawk.to']],
-    'connect-src' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.zalo.me', '*.tawk.to', 'wss://*.tawk.to']],
-    'media-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.tawk.to']],
-    'object-src' =>      ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
-    'prefetch-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
-    'frame-src' =>       ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.google.com', '*.youtube.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me']],
+    'default-src' => ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => []],
+    'script-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to', '*.cloudflareinsights.com']],
+    'style-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'unsafe-inline' => 1, 'hosts' => ['*.google.com', '*.googleapis.com', '*.tawk.to']],
+    'img-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.twitter.com', '*.google.com', '*.googleapis.com', '*.gstatic.com', '*.facebook.com', 'tawk.link', '*.tawk.to', 'static.nukeviet.vn']],
+    'font-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 1, 'hosts' => ['*.googleapis.com', '*.gstatic.com', '*.tawk.to']],
+    'connect-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.zalo.me', '*.tawk.to', 'wss://*.tawk.to']],
+    'media-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.tawk.to']],
+    'object-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
+    'prefetch-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
+    'frame-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.google.com', '*.youtube.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me']],
     'frame-ancestors' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
-    'form-action' =>     ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.google.com']],
-    'base-uri' =>        ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
-    'manifest-src' =>    ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []]
+    'form-action' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => ['*.google.com']],
+    'base-uri' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []],
+    'manifest-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []]
 ];
 
 if ($nv_Request->isset_request('submitcsp', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     $_directives = $_POST['directives'];
     $directives = [];
-    foreach($_directives as $directive => $sources) {
+    foreach ($_directives as $directive => $sources) {
         $rs = [];
-        foreach($sources as $source => $val) {
+        foreach ($sources as $source => $val) {
             if (!empty($val)) {
                 if ($source == 'hosts') {
                     $val = strip_tags($val);
@@ -1127,7 +1130,7 @@ foreach ($csp_directives as $name => $sources) {
     $xtpl->assign('DIRECTIVE', $direct);
 
     $is_none = !empty($directives[$name]['none']);
-    foreach($sources as $key => $default) {
+    foreach ($sources as $key => $default) {
         $val = '';
         if ($key == 'hosts' and !empty($directives[$name][$key])) {
             $val = is_array($directives[$name][$key]) ? implode(chr(13) . chr(10), $directives[$name][$key]) : preg_replace('/[\s]+/', chr(13) . chr(10), $directives[$name][$key]);

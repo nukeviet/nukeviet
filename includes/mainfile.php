@@ -176,30 +176,49 @@ if (!preg_match('/^[a-z0-9]{32}$/', $client_info['clid'])) {
     $nv_Request->set_Cookie('clid', $client_info['clid'], 315360000);
 }
 
-define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
-
-define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
+define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: /ten_thu_muc_chua_site/admin/
-
-define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
+define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
 // D:/AppServ/www
-
-define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
+define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 // Hau to cua file cache
-
-define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
+define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Kiem tra session cua nguoi dung
-
+define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 define('NV_USER_AGENT', $nv_Request->user_agent);
+// vd: /ten_thu_muc_chua_site/
+$global_config['cookie_path'] = $nv_Request->cookie_path;
+// vd: .mydomain1.com
+$global_config['cookie_domain'] = $nv_Request->cookie_domain;
+// vd: http://mydomain1.com/ten_thu_muc_chua_site
+$global_config['site_url'] = $nv_Request->site_url;
+// vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
+$sys_info['sessionpath'] = $nv_Request->session_save_path;
+// ten cua session
+$client_info['session_id'] = $nv_Request->session_id;
+// referer
+$client_info['referer'] = $nv_Request->referer;
+// 0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
+$client_info['is_myreferer'] = $nv_Request->referer_key;
+// trang dang xem
+$client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri;
 
-// Lấy thông tin cookie của user
+// Lấy thông tin cookie của user (Cần để dòng này trước dòng kết nối ngôn ngữ)
 defined('NV_SYSTEM') && $user_cookie = NukeViet\Core\User::get_userlogin_hash();
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
+
+// Class ma hoa du lieu
+$crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
+
+// Kiểm tra quyền truy cập vào load-files từ site khác
+if (!$client_info['is_myreferer'] and (defined('NV_SYS_LOAD') or defined('NV_MOD_LOAD'))) {
+    require NV_ROOTDIR . '/includes/core/check_access.php';
+}
 
 // Hiển thị nội dung file rssXsl/atomXsl
 if (defined('NV_SYS_LOAD')) {
@@ -257,29 +276,6 @@ if ($global_config['cached'] == 'memcached') {
 // Xac dinh duong dan thuc den thu muc upload
 define('NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR);
 
-// vd: /ten_thu_muc_chua_site/
-$global_config['cookie_path'] = $nv_Request->cookie_path;
-
-// vd: .mydomain1.com
-$global_config['cookie_domain'] = $nv_Request->cookie_domain;
-
-// vd: http://mydomain1.com/ten_thu_muc_chua_site
-$global_config['site_url'] = $nv_Request->site_url;
-
-// vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
-$sys_info['sessionpath'] = $nv_Request->session_save_path;
-
-// ten cua session
-$client_info['session_id'] = $nv_Request->session_id;
-
-// referer
-$client_info['referer'] = $nv_Request->referer;
-
-// 0 = referer tu ben ngoai site, 1 = referer noi bo, 2 = khong co referer
-$client_info['is_myreferer'] = $nv_Request->referer_key;
-// trang dang xem
-$client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri;
-
 // Xac dinh co phai AJAX hay khong
 if (preg_match('/^[0-9]{10,}$/', $nv_Request->get_string('nocache', 'get', '')) and $client_info['is_myreferer'] === 1) {
     define('NV_IS_AJAX', true);
@@ -330,8 +326,6 @@ define('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     require NV_ROOTDIR . '/includes/core/captcha.php';
 }
-// Class ma hoa du lieu
-$crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 
 // Ket noi voi class chong flood
 if (

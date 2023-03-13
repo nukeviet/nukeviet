@@ -9,7 +9,7 @@
 
 function nv_is_del_cron(cronid, checkss) {
     if (confirm(nv_is_del_confirm[0])) {
-        $.get(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cronjobs_del&id=" + cronid + "&checkss=" + checkss + "&nocache=" + new Date().getTime(), function (res) {
+        $.get(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cronjobs_del&id=" + cronid + "&checkss=" + checkss + "&nocache=" + new Date().getTime(), function(res) {
             if (res == 1) {
                 alert(nv_is_del_confirm[1]);
                 window.location.href = window.location.href;
@@ -21,12 +21,12 @@ function nv_is_del_cron(cronid, checkss) {
     return false;
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     // System
-    $('#cdn_download').click(function () {
+    $('#cdn_download').click(function() {
         window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + CFG.cdndl;
     });
-    $('[data-toggle="controlrw1"]').change(function () {
+    $('[data-toggle="controlrw1"]').change(function() {
         var rewrite_optional = $(this).is(':checked');
         if (rewrite_optional) {
             $('#tr_rewrite_op_mod').show();
@@ -35,7 +35,7 @@ $(document).ready(function () {
             $('[name="rewrite_op_mod"]').find('option').prop('selected', false);
         }
     });
-    $('[data-toggle="controlrw"]').change(function () {
+    $('[data-toggle="controlrw"]').change(function() {
         var lang_multi = $('[name="lang_multi"]').is(':checked');
         var rewrite_enable = $('[name="rewrite_enable"]').is(':checked');
         if (!lang_multi && rewrite_enable) {
@@ -48,7 +48,7 @@ $(document).ready(function () {
     });
 
     // Smtp
-    $("input[name=mailer_mode]").click(function () {
+    $("input[name=mailer_mode]").click(function() {
         var type = $(this).val();
         if (type == "smtp") {
             $("#smtp").show();
@@ -69,7 +69,7 @@ $(document).ready(function () {
             buttonImageOnly: true
         });
     }
-    $('a.deleteone-ip').click(function () {
+    $('a.deleteone-ip').click(function() {
         if (confirm(LANG.banip_delete_confirm)) {
             var url = $(this).attr('href');
             var selectedtab = $('[name="gselectedtab"]').val();
@@ -77,7 +77,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: url,
                 data: '',
-                success: function (data) {
+                success: function(data) {
                     alert(LANG.banip_del_success);
                     window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security&selectedtab=" + selectedtab;
                 }
@@ -87,7 +87,7 @@ $(document).ready(function () {
     });
 
     // Site setting
-    $(".selectimg").click(function () {
+    $(".selectimg").click(function() {
         var area = $(this).attr('data-name');
         var path = "";
         var currentpath = "images";
@@ -97,7 +97,7 @@ $(document).ready(function () {
     });
 
     // FTP setting
-    $('#autodetectftp').click(function () {
+    $('#autodetectftp').click(function() {
         var ftp_server = $('input[name="ftp_server"]').val();
         var ftp_user_name = $('input[name="ftp_user_name"]').val();
         var ftp_user_pass = $('input[name="ftp_user_pass"]').val();
@@ -120,7 +120,7 @@ $(document).ready(function () {
                 'ftp_user_pass': ftp_user_pass,
                 'tetectftp': 1
             },
-            success: function (c) {
+            success: function(c) {
                 c = c.split('|');
                 if (c[0] == 'OK') {
                     $('#ftp_path_iavim').val(c[1]);
@@ -132,7 +132,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#ssl_https').change(function () {
+    $('#ssl_https').change(function() {
         var val = $(this).data('val');
         var mode = $(this).val();
 
@@ -143,17 +143,17 @@ $(document).ready(function () {
     });
 
     // formSearchPlugin Submit
-    $('#formSearchPlugin [name=a]').on('change', function () {
+    $('#formSearchPlugin [name=a]').on('change', function() {
         $('#formSearchPlugin').submit()
     })
 
     // nv_change_plugin_weight
-    $('[data-toggle=change_plugin_weight]').on('change', function (e) {
+    $('[data-toggle=change_plugin_weight]').on('change', function(e) {
         e.preventDefault();
         var pid = $(this).data('pid');
         var new_weight = $(this).val();
         nv_settimeout_disable($(this).attr('id'), 3000);
-        $.post(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'changeweight=1&pid=' + pid + '&new_weight=' + new_weight, function (res) {
+        $.post(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'changeweight=1&pid=' + pid + '&new_weight=' + new_weight, function(res) {
             var r_split = res.split('_');
             if (r_split[0] != 'OK') {
                 alert(nv_is_change_act_confirm[2]);
@@ -163,16 +163,16 @@ $(document).ready(function () {
     });
 
     // nv_del_plugin
-    $('[data-toggle=nv_del_plugin]').on('click', function (e) {
+    $('[data-toggle=nv_del_plugin]').on('click', function(e) {
         e.preventDefault();
         if (confirm(nv_is_del_confirm[0])) {
-            $.post(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'del=1&pid=' + $(this).data('pid'), function (res) {
+            $.post(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(), 'del=1&pid=' + $(this).data('pid'), function(res) {
                 location.reload();
             })
         }
     });
 
-    $('[data-toggle=ssetings_form_submit]').on('submit', function (e) {
+    $('[data-toggle=ssetings_form_submit]').on('submit', function(e) {
         e.preventDefault();
         var url = $(this).attr('action'),
             data = $(this).serialize();
@@ -182,7 +182,7 @@ $(document).ready(function () {
             url: url,
             data: data,
             dataType: "html",
-            success: function (b) {
+            success: function(b) {
                 window.location.href = url
             }
         })
@@ -191,7 +191,23 @@ $(document).ready(function () {
     $('textarea.nonewline').on('change', function(e) {
         e.preventDefault();
         var val = $(this).val();
-        val = val.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/,'');
+        val = val.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/, '');
         $(this).val(val)
-    })
+    });
+
+    $('[data-toggle=seccode_create]').on('click', function() {
+        $($(this).data('target')).val(nv_randomPassword(32))
+    });
+
+    $('[data-toggle=seccode_remove]').on('click', function() {
+        $($(this).data('target')).val('')
+    });
+
+    var clipboard = new ClipboardJS('[data-toggle=clipboard]');
+    clipboard.on('success', function(e) {
+        $(e.trigger).tooltip('show');
+        setTimeout(function() {
+            $(e.trigger).tooltip('destroy');
+        }, 1000);
+    });
 });
