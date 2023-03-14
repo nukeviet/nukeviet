@@ -1572,11 +1572,6 @@ if (!empty($rowcontent['internal_authors'])) {
     }
 }
 
-// Cấu hình tạo mục lục bài viết
-if ($module_config[$module_name]['auto_nav']) {
-    $xtpl->parse('main.if_auto_nav');
-}
-
 $archive_checked = ($rowcontent['archive']) ? ' checked="checked"' : '';
 $xtpl->assign('archive_checked', $archive_checked);
 $inhome_checked = ($rowcontent['inhome']) ? ' checked="checked"' : '';
