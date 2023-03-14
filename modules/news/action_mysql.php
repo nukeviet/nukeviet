@@ -222,6 +222,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
   allowed_print tinyint(1) NOT NULL default '0',
   allowed_save tinyint(1) NOT NULL default '0',
   auto_nav tinyint(1) NOT NULL default '0',
+  group_view VARCHAR(255) NULL DEFAULT '',
   changed_fields text NOT NULL COMMENT 'Các field thay đổi',
   PRIMARY KEY (id),
   KEY new_id (new_id),
@@ -245,6 +246,7 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
   allowed_print tinyint(1) NOT NULL default '0',
   allowed_save tinyint(1) NOT NULL default '0',
   auto_nav TINYINT(1) NOT NULL DEFAULT '0',
+  group_view VARCHAR(255) NULL DEFAULT '',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 

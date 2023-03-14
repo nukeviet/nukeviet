@@ -231,6 +231,21 @@
                     <ul style="padding:4px; margin:0">
                         <li>
                             <p class="message_head">
+                                <cite>{LANG.group_view}:</cite>
+                            </p>
+                            <div class="message_body">
+                                <!-- BEGIN: group_view -->
+                                <div class="row">
+                                    <label><input name="group_view[]" type="checkbox" value="{GROUP_VIEW.value}" {GROUP_VIEW.checked} />{GROUP_VIEW.title}</label>
+                                </div>
+                                <!-- END: group_view -->
+                                <div class="alert alert-info" style="padding:5px;">
+                                    {LANG.group_view_note}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <p class="message_head">
                                 <cite>{LANG.content_allowed_comm}:</cite>
                             </p>
                             <div class="message_body">
@@ -240,7 +255,7 @@
                                 </div>
                                 <!-- END: allowed_comm -->
                                 <!-- BEGIN: content_note_comm -->
-                                <div class="alert alert-info">
+                                <div class="alert alert-info" style="padding:5px;">
                                     {LANG.content_note_comm}
                                 </div>
                                 <!-- END: content_note_comm -->

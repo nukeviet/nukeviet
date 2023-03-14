@@ -30,7 +30,7 @@ if (empty($news_contents)) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect, 404);
 }
 
-$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+$body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav, group_view FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
 $news_contents = array_merge($news_contents, $body_contents);
 unset($body_contents);
 
@@ -90,6 +90,17 @@ if (!nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
+}
+
+if (!empty($news_contents['group_view'])) {
+    if (!nv_user_in_groups($news_contents['group_view'])) {
+        $nv_BotManager->setPrivate();
+        $contents = no_permission($news_contents['group_view']);
+
+        include NV_ROOTDIR . '/includes/header.php';
+        echo nv_site_theme($contents);
+        include NV_ROOTDIR . '/includes/footer.php';
+    }
 }
 
 // Mở bài viết sang nguồn tin chính thức

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -615,6 +615,7 @@ function nv_save_history($post_old, $post_new)
         'allowed_print',
         'allowed_save',
         'auto_nav',
+        'group_view',
     ];
     $key_textlist = [
         'listcatid',
@@ -647,16 +648,20 @@ function nv_save_history($post_old, $post_new)
         }
     }
     foreach ($key_array_full as $key) {
-        foreach ($post_old[$key] as $i_key => $i_value) {
-            if (!isset($post_new[$key][$i_key]) or $post_new[$key][$i_key] != $i_value) {
-                $change_fields[] = $key;
-                continue 2;
+        if (!empty($post_old[$key])) {
+            foreach ($post_old[$key] as $i_key => $i_value) {
+                if (!isset($post_new[$key][$i_key]) or $post_new[$key][$i_key] != $i_value) {
+                    $change_fields[] = $key;
+                    continue 2;
+                }
             }
         }
-        foreach ($post_new[$key] as $i_key => $i_value) {
-            if (!isset($post_old[$key][$i_key]) or $post_old[$key][$i_key] != $i_value) {
-                $change_fields[] = $key;
-                continue 2;
+        if (!empty($post_new[$key])) {
+            foreach ($post_new[$key] as $i_key => $i_value) {
+                if (!isset($post_old[$key][$i_key]) or $post_old[$key][$i_key] != $i_value) {
+                    $change_fields[] = $key;
+                    continue 2;
+                }
             }
         }
     }
@@ -664,14 +669,14 @@ function nv_save_history($post_old, $post_new)
     if (!empty($change_fields)) {
         global $admin_info, $user_info, $module_data, $db;
 
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_row_histories (
+        $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories (
             new_id, historytime, catid, listcatid, topicid, admin_id,
             author, sourceid, publtime, exptime, archive, title, alias,
             hometext, homeimgfile, homeimgalt, inhome, allowed_comm,
             allowed_rating, external_link, instant_active, instant_template,
             instant_creatauto, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
             files, tags, internal_authors, imgposition, layout_func, copyright,
-            allowed_send, allowed_print, allowed_save, auto_nav, changed_fields
+            allowed_send, allowed_print, allowed_save, auto_nav, group_view, changed_fields
         ) VALUES (
             :new_id, :historytime, :catid, :listcatid, :topicid, :admin_id,
             :author, :sourceid, :publtime, :exptime, :archive, :title, :alias,
@@ -679,8 +684,8 @@ function nv_save_history($post_old, $post_new)
             :allowed_rating, :external_link, :instant_active, :instant_template,
             :instant_creatauto, :titlesite, :description, :bodyhtml, :voicedata, :keywords, :sourcetext,
             :files, :tags, :internal_authors, :imgposition, :layout_func,
-            :copyright, :allowed_send, :allowed_print, :allowed_save, :auto_nav, :changed_fields
-        )";
+            :copyright, :allowed_send, :allowed_print, :allowed_save, :auto_nav, :group_view, :changed_fields
+        )';
         $array_insert = [];
         $array_insert['new_id'] = $post_old['id'];
         $array_insert['historytime'] = empty($post_old['edittime']) ? $post_old['addtime'] : $post_old['edittime'];
@@ -721,6 +726,7 @@ function nv_save_history($post_old, $post_new)
         $array_insert['allowed_print'] = $post_old['allowed_print'];
         $array_insert['allowed_save'] = $post_old['allowed_save'];
         $array_insert['auto_nav'] = $post_old['auto_nav'];
+        $array_insert['group_view'] = $post_old['group_view'];
         $array_insert['changed_fields'] = implode(',', $change_fields);
         $db->insert_id($sql, 'id', $array_insert);
     }
@@ -731,11 +737,11 @@ function nv_save_history($post_old, $post_new)
 /**
  * get_homeimgfile()
  *
- * @param mixed $item
+ * @param mixed  $item
  * @param string $imghome_key
  * @param string $imgmobile_key
  */
-function get_homeimgfile(&$item, $imghome_key ='imghome', $imgmobile_key = 'imgmobile')
+function get_homeimgfile(&$item, $imghome_key = 'imghome', $imgmobile_key = 'imgmobile')
 {
     global $module_upload;
 

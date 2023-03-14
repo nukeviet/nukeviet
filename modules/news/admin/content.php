@@ -216,7 +216,8 @@ $rowcontent = [
     'instant_template' => '',
     'instant_creatauto' => 0,
     'mode' => 'add',
-    'voicedata' => []
+    'voicedata' => [],
+    'group_view' => ''
 ];
 
 $rowcontent['topictext'] = '';
@@ -668,8 +669,11 @@ if ($is_submit_form) {
     $rowcontent['copyright'] = (int) $nv_Request->get_bool('copyright', 'post');
     $rowcontent['inhome'] = (int) $nv_Request->get_bool('inhome', 'post');
 
-    $_groups_post = $nv_Request->get_array('allowed_comm', 'post', []);
+    $_groups_post = $nv_Request->get_typed_array('allowed_comm', 'post', 'int', []);
     $rowcontent['allowed_comm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+
+    $_groups_post = $nv_Request->get_typed_array('group_view', 'post', 'int', []);
+    $rowcontent['group_view'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     $rowcontent['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post');
     $rowcontent['external_link'] = (int) $nv_Request->get_bool('external_link', 'post');
@@ -900,7 +904,7 @@ if ($is_submit_form) {
                 $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (
                     id, titlesite, description, bodyhtml, voicedata, keywords, sourcetext,
                     files, imgposition, layout_func, copyright,
-                    allowed_send, allowed_print, allowed_save, auto_nav
+                    allowed_send, allowed_print, allowed_save, auto_nav, group_view
                 ) VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
@@ -916,7 +920,8 @@ if ($is_submit_form) {
                     ' . $rowcontent['allowed_send'] . ',
                     ' . $rowcontent['allowed_print'] . ',
                     ' . $rowcontent['allowed_save'] . ',
-                    ' . $rowcontent['auto_nav'] . '
+                    ' . $rowcontent['auto_nav'] . ',
+                    :group_view
                 )');
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
@@ -929,6 +934,7 @@ if ($is_submit_form) {
                 $stmt->bindParam(':voicedata', $voicedata, PDO::PARAM_STR, strlen($voicedata));
                 $stmt->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $stmt->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
+                $stmt->bindParam(':group_view', $rowcontent['group_view'], PDO::PARAM_STR, strlen($rowcontent['group_view']));
                 $ct_query[] = (int) $stmt->execute();
 
                 foreach ($catids as $catid) {
@@ -1041,7 +1047,8 @@ if ($is_submit_form) {
                     allowed_send=' . (int) ($rowcontent['allowed_send']) . ',
                     allowed_print=' . (int) ($rowcontent['allowed_print']) . ',
                     allowed_save=' . (int) ($rowcontent['allowed_save']) . ',
-                    auto_nav=' . (int) ($rowcontent['auto_nav']) . '
+                    auto_nav=' . (int) ($rowcontent['auto_nav']) . ',
+                    group_view=:group_view
                 WHERE id =' . $rowcontent['id']);
 
                 $voicedata = empty($rowcontent['voicedata']) ? '' : json_encode($rowcontent['voicedata']);
@@ -1054,6 +1061,7 @@ if ($is_submit_form) {
                 $sth->bindParam(':voicedata', $voicedata, PDO::PARAM_STR, strlen($voicedata));
                 $sth->bindParam(':keywords', $rowcontent['keywords'], PDO::PARAM_STR, strlen($rowcontent['keywords']));
                 $sth->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
+                $sth->bindParam(':group_view', $rowcontent['group_view'], PDO::PARAM_STR, strlen($rowcontent['group_view']));
 
                 $ct_query[] = (int) $sth->execute();
 
@@ -1488,15 +1496,23 @@ for ($i = 0; $i < 60; ++$i) {
 }
 $xtpl->assign('emin', $select);
 
-// allowed comm
-$allowed_comm = array_map('intval', explode(',', $rowcontent['allowed_comm']));
+// allowed comm and group_view
+$group_view = !empty($rowcontent['group_view']) ? array_map('intval', explode(',', $rowcontent['group_view'])) : [];
+$allowed_comm = !empty($rowcontent['allowed_comm']) ? array_map('intval', explode(',', $rowcontent['allowed_comm'])) : [];
 foreach ($groups_list as $_group_id => $_title) {
     $xtpl->assign('ALLOWED_COMM', [
         'value' => $_group_id,
-        'checked' => in_array((int) $_group_id, $allowed_comm, true) ? ' checked="checked"' : '',
+        'checked' => (!empty($allowed_comm) and in_array((int) $_group_id, $allowed_comm, true)) ? ' checked="checked"' : '',
         'title' => $_title
     ]);
     $xtpl->parse('main.allowed_comm');
+
+    $xtpl->assign('GROUP_VIEW', [
+        'value' => $_group_id,
+        'checked' => (!empty($group_view) and in_array((int) $_group_id, $group_view, true)) ? ' checked="checked"' : '',
+        'title' => $_title
+    ]);
+    $xtpl->parse('main.group_view');
 }
 if ($module_config[$module_name]['allowed_comm'] != '-1') {
     $xtpl->parse('main.content_note_comm');

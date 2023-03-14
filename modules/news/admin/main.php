@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -1000,8 +1000,8 @@ foreach ($search_status as $status_view) {
 // Lấy số lịch sử trong các bài đăng hiển thị
 $array_histories = [];
 if (!empty($data) and !empty($module_config[$module_name]['active_history'])) {
-    $sql = "SELECT COUNT(id) numhis, new_id FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories
-    WHERE new_id IN(" . implode(',', array_keys($data)) . ") GROUP BY new_id";
+    $sql = 'SELECT COUNT(id) numhis, new_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories
+    WHERE new_id IN(' . implode(',', array_keys($data)) . ') GROUP BY new_id';
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $array_histories[$row['new_id']] = $row['numhis'];
@@ -1119,6 +1119,7 @@ if ($loadhistory) {
         'allowed_print' => $lang_module['content_allowed_print'],
         'allowed_save' => $lang_module['content_allowed_save'],
         'auto_nav' => $lang_module['auto_nav'],
+        'group_view' => $lang_module['group_view'],
         'listcatid' => $lang_module['search_cat'],
         'keywords' => $lang_module['keywords'],
         'tags' => $lang_module['tag'],
@@ -1127,23 +1128,24 @@ if ($loadhistory) {
     ];
 
     $array_userids = $array_users = [];
-    $sql = "SELECT id, historytime, admin_id, changed_fields FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories
-    WHERE new_id=" . $loadhistory_id . " ORDER BY historytime DESC";
+    $sql = 'SELECT id, historytime, admin_id, changed_fields FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories
+    WHERE new_id=' . $loadhistory_id . ' ORDER BY historytime DESC';
     $result = $db->query($sql);
 
     $array_histories = [];
     while ($row = $result->fetch()) {
-        $row['changed_fields'] = array_map(function($val) {
+        $row['changed_fields'] = array_map(function ($val) {
             global $maps_fields;
+
             return $maps_fields[$val];
         }, explode(',', $row['changed_fields']));
-            $row['changed_fields'] = implode(', ', $row['changed_fields']);
+        $row['changed_fields'] = implode(', ', $row['changed_fields']);
 
-            $array_histories[$row['id']] = $row;
+        $array_histories[$row['id']] = $row;
 
-            if (!empty($row['admin_id'])) {
-                $array_userids[$row['admin_id']] = $row['admin_id'];
-            }
+        if (!empty($row['admin_id'])) {
+            $array_userids[$row['admin_id']] = $row['admin_id'];
+        }
     }
 
     // Khôi phục 1 phiên bản
@@ -1161,8 +1163,8 @@ if ($loadhistory) {
         }
 
         // Lấy full lịch sử
-        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories WHERE
-        new_id=" . $loadhistory_id . " AND id=" . $history_id;
+        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE
+        new_id=' . $loadhistory_id . ' AND id=' . $history_id;
         $post_new = $db->query($sql)->fetch();
         if (empty($post_new)) {
             $respon['text'] = 'Error detail history!';
@@ -1173,8 +1175,8 @@ if ($loadhistory) {
 
         // Kiểm tra xem có lưu phiên bản hiện thời không (nếu chưa lưu)
         $history_time = $data[$loadhistory_id]['edittime'] ?: $data[$loadhistory_id]['addtime'];
-        $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_row_histories WHERE
-        new_id=" . $loadhistory_id . " AND historytime=" . $history_time;
+        $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE
+        new_id=' . $loadhistory_id . ' AND historytime=' . $history_time;
         if (!$db->query($sql)->fetchColumn()) {
             // Lấy phiên bản hiện thời
             $post_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $loadhistory_id)->fetch();
@@ -1213,8 +1215,8 @@ if ($loadhistory) {
     }
 
     if (!empty($array_userids)) {
-        $sql = "SELECT userid, username, first_name, last_name, email
-        FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN(" . implode(',', $array_userids) . ")";
+        $sql = 'SELECT userid, username, first_name, last_name, email
+        FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN(' . implode(',', $array_userids) . ')';
         $result = $db->query($sql);
 
         while ($row = $result->fetch()) {

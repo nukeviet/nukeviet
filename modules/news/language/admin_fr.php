@@ -452,3 +452,5 @@ $lang_module['type_new_weight'] = 'Entrez un nouveau poids de 1 à';
 $lang_module['total'] = 'Totale';
 $lang_module['auto_nav'] = 'Générer automatiquement la table des matières des articles';
 $lang_module['auto_nav_note'] = 'Pour créer une table des matières d\'article, vous devez utiliser les balises html <code>h2</code> et <code>h3</code>. La balise <code>h2</code> est l\'élément principal, la balise <code>h3</code> est dans la balise <code>h2</code> et est un sous-élément';
+$lang_module['group_view'] = 'Les groupes ont le droit de voir les détails de l\'article';
+$lang_module['group_view_note'] = 'L\'absence de sélection est interprétée comme dépendant de la configuration de la catégorie d\'article';
