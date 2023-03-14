@@ -3425,8 +3425,8 @@ function nv_http_get_lang($input)
 /**
  * mhash_create()
  *
- * @param mixed $module
- * @param mixed $op
+ * @param string $module
+ * @param string $op
  * @return string
  */
 function mhash_create($module, $op)
@@ -3436,12 +3436,24 @@ function mhash_create($module, $op)
 
 /**
  * mload_url_generate()
+ * Tạo URL truy vấn vào mload.php
  *
- * @param mixed $module
- * @param mixed $op
+ * @param string $module     Tên module
+ * @param string $op         Function của module
+ * @param string $amp        Sử dụng & hay &amp; trong URL
+ * @param bool   $checkuser  Có kết nối file kiểm tra tư cách user hay không
+ * @param array  $other_data Các biến khác cần truyền vào URL
  * @return string
  */
-function mload_url_generate($module, $op, $amp = '&amp;')
+function mload_url_generate($module, $op, $amp = '&amp;', $checkuser = false, $other_data = [])
 {
-    return NV_BASE_SITEURL . 'mload.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . $amp . NV_NAME_VARIABLE . '=' . $module . $amp . NV_OP_VARIABLE . '=' . $op . $amp.'mhash=' . mhash_create($module, $op);
+    $url = NV_BASE_SITEURL . 'mload.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . $amp . NV_NAME_VARIABLE . '=' . $module . $amp . NV_OP_VARIABLE . '=' . $op . $amp . 'mhash=' . mhash_create($module, $op);
+    if ($checkuser) {
+        $url .= $amp . 'checkuser=1';
+    }
+    if (!empty($other_data)) {
+        $url .= $amp . http_build_query($other_data, '', $amp);
+    }
+
+    return $url;
 }

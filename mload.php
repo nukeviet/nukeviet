@@ -51,6 +51,14 @@ if (!isset($module_info['funcs'][$op])) {
     }
 }
 
+// Xác định có là user hay không
+if ($nv_Request->isset_request('checkuser', 'post,get')) {
+    if (defined('NV_IS_USER')) {
+        trigger_error('Hacking attempt', 256);
+    }
+    require NV_ROOTDIR . '/includes/core/is_user.php';
+}
+
 $array_op = [];
 
 // Kết nối với file ngôn ngữ của module
