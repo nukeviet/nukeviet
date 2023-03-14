@@ -277,8 +277,15 @@ class Error
                 $trace_total = sizeof($backtrace);
                 $stt = 0;
                 for ($i = $trace_total - 1; $i >= 3; --$i) {
-                    ++$stt;
-                    $content .= '^^^ [TRACE#' . str_pad($stt, 2, '0', STR_PAD_LEFT) . '] [FILE: ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file'])) . '] [LINE: ' . $backtrace[$i]['line'] . "]\n";
+                    if (!empty($backtrace[$i]['file'])) {
+                        ++$stt;
+                        $content .= '^^^ [TRACE#' . str_pad($stt, 2, '0', STR_PAD_LEFT) . ']';
+                        $content .= ' [FILE: ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file'])) . ']';
+                        if (!empty($backtrace[$i]['line'])) {
+                            $content .= ' [LINE: ' . $backtrace[$i]['line'] . ']';
+                        }
+                        $content .= "\n";
+                    }
                 }
             }
         }
