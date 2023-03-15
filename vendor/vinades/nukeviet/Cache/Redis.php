@@ -167,7 +167,9 @@ class Redis
 
         $cache_key = $modname . '_' . $lang . '_' . md5($sql . '_' . $this->_Cache_Prefix);
 
-        if (!($_rows = $this->_Cache->get($cache_key))) {
+        if (($cache = $this->_Cache->get($cache_key)) != false) {
+            $_rows = $cache;
+        } else {
             if (($result = $this->_Db->query($sql)) !== false) {
                 $a = 0;
                 while ($row = $result->fetch()) {
