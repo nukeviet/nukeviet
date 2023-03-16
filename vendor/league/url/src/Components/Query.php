@@ -133,6 +133,7 @@ class Query extends AbstractArray implements QueryInterface, ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {

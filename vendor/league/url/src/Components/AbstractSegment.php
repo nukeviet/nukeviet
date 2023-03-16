@@ -115,6 +115,7 @@ abstract class AbstractSegment extends AbstractArray implements ArrayAccess
      * @param int|string $offset
      * @param mixed      $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $data = $this->data;

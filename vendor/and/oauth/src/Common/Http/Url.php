@@ -29,7 +29,8 @@ class Url extends BaseUrl
             );
         } // Recursion here
         else {
-            call_user_func_array('parent::__construct', func_get_args());
+            $callable = parent::class . '::__construct';
+            call_user_func_array($callable, func_get_args());
         }
     }
 

@@ -60,6 +60,7 @@ abstract class AbstractArray implements IteratorAggregate, Countable
      *
      * @return ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->data);
@@ -72,6 +73,7 @@ abstract class AbstractArray implements IteratorAggregate, Countable
      *
      * @return integer
      */
+    #[\ReturnTypeWillChange]
     public function count($mode = COUNT_NORMAL)
     {
         return count($this->data, $mode);
@@ -84,6 +86,7 @@ abstract class AbstractArray implements IteratorAggregate, Countable
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->data[$offset]);
@@ -94,6 +97,7 @@ abstract class AbstractArray implements IteratorAggregate, Countable
      *
      * @param int|string $offset
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
@@ -106,6 +110,7 @@ abstract class AbstractArray implements IteratorAggregate, Countable
      *
      * @return null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (isset($this->data[$offset])) {

@@ -64,7 +64,7 @@ abstract class AbstractComponent implements ComponentInterface
      */
     public function __toString()
     {
-        return str_replace(null, '', $this->get());
+        return (string) $this->get();
     }
 
     /**
