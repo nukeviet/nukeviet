@@ -386,10 +386,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     /**
      * Oauth này đã có trong CSDL
      */
-    $stmt = $db->prepare('SELECT a.userid AS uid, b.email AS uemail, b.active AS uactive, b.safemode AS safemode
-    FROM ' . NV_MOD_TABLE . '_openid a, ' . NV_MOD_TABLE . ' b
-    WHERE a.opid= :opid
-    AND a.userid=b.userid');
+    $stmt = $db->prepare('SELECT a.userid AS uid, b.email AS uemail, b.active AS uactive, b.safemode AS safemode 
+    FROM ' . NV_MOD_TABLE . '_openid a
+    INNER JOIN ' . NV_MOD_TABLE . ' b ON a.userid=b.userid
+    WHERE a.openid=:openid AND a.opid= :opid');
+    $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->execute();
 

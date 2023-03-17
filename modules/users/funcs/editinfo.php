@@ -490,7 +490,8 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
     !empty($check_email[1]) && $email = $check_email[1];
     $opid = $crypt->hash($attribs['id']);
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_openid WHERE openid=:openid AND opid= :opid');
+    $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->fetchColumn();
