@@ -956,6 +956,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $openid_del_al = 0;
             foreach ($data_openid as $openid) {
                 $openid['email_or_id'] = !empty($openid['email']) ? $openid['email'] : $openid['id'];
+                $openid['opid'] = $openid['opid'] . '_' . $openid['openid'];
                 $xtpl->assign('OPENID_LIST', $openid);
                 if (!$openid['disabled']) {
                     $xtpl->parse('main.tab_edit_openid.openid_not_empty.openid_list.is_act');
