@@ -458,9 +458,9 @@ if (in_array('openid', $types, true)) {
             'openid' => $row3['openid'],
             'id' => $row3['id'],
             'email' => $row3['email'],
-            'disabled' => ((!empty($user_info['current_openid']) and $user_info['current_openid'] == $row3['opid']) ? true : false)
+            'disabled' => (!empty($user_info['openid_server']) and $user_info['openid_server'] == $row3['openid'] and !empty($user_info['current_openid'] and $user_info['current_openid'] == $row3['opid']) ? true : false)
         ];
-        $data_openid_key[$row3['opid']] = [
+        $data_openid_key[$row3['opid'] . '_' . $row3['openid']] = [
             'openid' => $row3['openid'],
             'email' => $row3['email']
         ];
@@ -1004,14 +1004,16 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     }
 
     $openid_mess = [];
-    foreach ($openid_del as $opid) {
-        if (!empty($opid) and (empty($user_info['current_openid']) or (!empty($user_info['current_openid']) and $user_info['current_openid'] != $opid))) {
-            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid');
+    foreach ($openid_del as $o) {
+        list($opid,$server) = explode('_', $o, 2);
+        if (!(!empty($user_info['openid_server']) and $user_info['openid_server'] == $server and !empty($user_info['current_openid'] and $user_info['current_openid'] == $opid))) {
+            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE openid=:openid AND opid=:opid');
+            $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
             $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
             $stmt->execute();
 
-            if (isset($data_openid_key[$opid])) {
-                $openid_mess[] = nv_ucfirst($data_openid_key[$opid]['openid']);
+            if (isset($data_openid_key[$o])) {
+                $openid_mess[] = nv_ucfirst($data_openid_key[$o]['openid']);
             }
         }
     }

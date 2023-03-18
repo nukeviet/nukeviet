@@ -77,13 +77,15 @@ if (empty($array_oauth)) {
             exit('Wrong URL');
         }
 
-        $opid = $nv_Request->get_title('opid', 'post', '');
-        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_openid WHERE opid=' . $db->quote($opid) . ' AND userid=' . $row['userid'];
+        $o = $nv_Request->get_title('opid', 'post', '');
+        list($opid,$server) = explode('_', $o, 2);
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_openid WHERE opid=' . $db->quote($opid) . ' AND openid=' . $db->quote($server) . ' AND userid=' . $row['userid'];
         $openid = $db->query($sql)->fetch();
 
         if (!empty($openid)) {
-            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE opid= :opid AND userid=' . $row['userid']);
+            $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE opid=:opid AND openid=:openid AND userid=' . $row['userid']);
             $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
+            $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
             $stmt->execute();
 
             // Gửi email thông báo
@@ -132,6 +134,7 @@ if (empty($array_oauth)) {
 
     foreach ($array_oauth as $oauth) {
         $oauth['email_or_id'] = !empty($oauth['email']) ? $oauth['email'] : $oauth['id'];
+        $oauth['opid'] = $oauth['opid'] . '_' . $oauth['openid'];
         $xtpl->assign('OAUTH', $oauth);
         $xtpl->parse('main.oauth');
     }
