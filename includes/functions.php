@@ -3457,3 +3457,38 @@ function mload_url_generate($module, $op, $amp = '&amp;', $checkuser = false, $o
 
     return $url;
 }
+
+/**
+ * csrf_create()
+ * Hàm tạo mã CSRF
+ *
+ * @param string $key
+ * @return string
+ */
+function csrf_create($key)
+{
+    $timestamp = NV_CURRENTTIME;
+
+    return md5(NV_CHECK_SESSION . '_' . $key . '_' . $timestamp) . $timestamp;
+}
+
+/**
+ * csrf_check()
+ * Hàm kiểm tra mã CSRF
+ *
+ * @param string $csrf
+ * @param string $key
+ * @return bool
+ */
+function csrf_check($csrf, $key)
+{
+    $timestamp = substr($csrf, -10, 10);
+    $timestamp = (int) $timestamp;
+    $lifetime = 3600; // Thời lượng sống của mã CSRF, mặc định 60 phút
+    if ($timestamp < (NV_CURRENTTIME - $lifetime) or $timestamp > NV_CURRENTTIME) {
+        return false;
+    }
+    $expected = md5(NV_CHECK_SESSION . '_' . $key . '_' . $timestamp) . $timestamp;
+
+    return hash_equals($expected, $csrf);
+}
