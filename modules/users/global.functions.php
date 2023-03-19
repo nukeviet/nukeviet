@@ -449,10 +449,11 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
             ];
         }
 
+        if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
+            $value = (float) $value;
+        }
+
         if (empty($row_f['system'])) {
-            if ($row_f['field_type'] == 'number' or $row_f['field_type'] == 'date') {
-                $value = (float) $value;
-            }
             $valid_field[$row_f['field']] = $value;
             $query_field[$row_f['field']] = $value;
         } else {
