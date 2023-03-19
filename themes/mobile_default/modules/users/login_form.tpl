@@ -1,5 +1,5 @@
 <form action="{USER_LOGIN}" method="post" data-toggle="userLogin" autocomplete="off" novalidate<!-- BEGIN: captcha --> data-captcha="nv_seccode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
-    <input type="hidden" name="_csrf" value="{CSRF}"/>
+    <input type="hidden" name="_csrf" value="{CSRF}" />
     <div class="nv-info margin-bottom" data-default="{GLANG.logininfo}">{GLANG.logininfo}</div>
     <div class="form-detail">
         <div class="form-group loginstep1">
@@ -40,8 +40,8 @@
 
         <div class="text-center margin-bottom-lg">
             <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->
-            <!-- BEGIN: redirect --><input name="nv_redirect" value="{NV_REDIRECT}" type="hidden" /><!-- END: redirect -->
-            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset"/>
+            <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
+            <input type="button" value="{GLANG.reset}" class="btn btn-default" data-toggle="validReset" />
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
         </div>
 
@@ -62,14 +62,30 @@
         <!-- END: allowuserreg_linkform -->
 
         <!-- BEGIN: openid -->
-           <div class="text-center openid-btns">
-              <!-- BEGIN: server -->
+        <!-- BEGIN: google_identity_onload -->
+        <div id="g_id_onload" data-client_id="{GOOGLE_CLIENT_ID}" data-context="signin" data-ux_mode="popup" data-callback="GIDHandleCredentialResponse" data-itp_support="true" data-url="{GOOGLE_IDENTITY_URL}" data-csrf="{CHECKSS}">
+        </div>
+
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-locale="{NV_LANG_INTERFACE}" data-logo_alignment="center" data-width="300">
+        </div>
+
+        <div id="g_id_confirm" class="hidden">
+            <div class="alert alert-info">
+                <p class="m-bottom">{LANG.g_id_confirm}</p>
+                <div class="text-center">
+                    <a href="" class="btn btn-primary">{LANG.g_id_confirm2}</a>
+                </div>
+            </div>
+        </div>
+        <!-- END: google_identity_onload -->
+        <div class="text-center openid-btns">
+            <!-- BEGIN: server -->
             <div class="btn-group m-bottom btn-group-justified">
                 <button class="btn openid-{OPENID.server} disabled" type="button" tabindex="-1"><i class="fa fa-fw fa-{OPENID.icon}"></i></button>
                 <a class="btn openid-{OPENID.server}" href="{OPENID.href}" data-toggle="openID_load">{LANG.login_with} {OPENID.title}</a>
             </div>
             <!-- END: server -->
-           </div>
-           <!-- END: openid -->
+        </div>
+        <!-- END: openid -->
     </div>
 </form>

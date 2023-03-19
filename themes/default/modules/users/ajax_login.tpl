@@ -1,5 +1,8 @@
 <!-- BEGIN: main -->
 <link type="text/css" href="{NV_STATIC_URL}themes/{TEMPLATE}/css/users.css" rel="stylesheet" />
+<!-- BEGIN: google_identity_js -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- END: google_identity_js -->
 <script src="{NV_STATIC_URL}themes/{TEMPLATE}/js/users.js"></script>
 <div class="centered">
     <div class="login-box">

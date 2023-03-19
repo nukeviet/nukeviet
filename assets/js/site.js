@@ -191,6 +191,37 @@ function loginForm(redirect) {
     return !1
 }
 
+// Google Identity
+function GIDHandleCredentialResponse(response) {
+    $.ajax({
+        type: 'POST',
+        url: $('#g_id_onload').data('url'),
+        cache: !1,
+        data: {
+            'credential': response.credential,
+            '_csrf': $('#g_id_onload').data('csrf')
+        },
+        dataType: "json"
+    }).done(function(a) {
+        if (a.status == 'error') {
+            alert(a.mess);
+            if (a.is_reload) {
+                location.reload()
+            }
+        } else if (a.status == 'success') {
+            location.reload()
+        } else if (a.status == 'OK') {
+            var content = $($('#g_id_confirm').html());
+            $('a', content).on('click', function(e) {
+                e.preventDefault();
+                $('#sitemodal').modal('hide');
+                nv_open_browse(a.redirect, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+            });
+            modalShow('', content)
+        }
+    })
+ }
+
 // Load Captcha
 function loadCaptcha(obj) {
     if ("undefined" === typeof obj) {

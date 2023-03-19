@@ -462,6 +462,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
                 $disabled = ' disabled="disabled" ';
             } elseif ($server == 'oauth-google.php' and (empty($global_config['google_client_id']) or empty($global_config['google_client_secret']))) {
                 $disabled = ' disabled="disabled" ';
+            } elseif ($server == 'oauth-google-identity.php' and empty($global_config['google_client_id'])) {
+                $disabled = ' disabled="disabled" ';
             } elseif ($server == 'oauth-zalo.php' and (empty($global_config['zaloOfficialAccountID']) or empty($global_config['zaloAppID']) or empty($global_config['zaloAppSecretKey']))) {
                 $disabled = ' disabled="disabled" ';
             }

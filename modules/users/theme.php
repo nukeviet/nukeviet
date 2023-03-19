@@ -380,6 +380,12 @@ function user_login($is_ajax = false)
         $xtpl = new XTemplate('login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
     }
 
+    if (defined('NV_OPENID_ALLOWED')) {
+        if (in_array('google-identity', $global_config['openid_servers'], true)) {
+            $xtpl->parse('main.google_identity_js');
+        }
+    }
+
     $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
     if (isset($lang_global['login_name_type_' . $method])) {
         $lang_global['username_email'] = $lang_global['login_name_type_' . $method];
@@ -434,6 +440,12 @@ function user_login($is_ajax = false)
     }
 
     if (defined('NV_OPENID_ALLOWED')) {
+        if (in_array('google-identity', $global_config['openid_servers'], true)) {
+            $xtpl->assign('GOOGLE_CLIENT_ID', $global_config['google_client_id']);
+            $xtpl->assign('GOOGLE_IDENTITY_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=google-identity');
+            $xtpl->assign('CHECKSS', csrf_create($module_name . '_oauth'));
+            $xtpl->parse('main.openid.google_identity_onload');
+        }
         $assigns = [];
         $icons = [
             'single-sign-on' => 'lock',
@@ -443,18 +455,20 @@ function user_login($is_ajax = false)
         ];
         $default_redirect = nv_redirect_encrypt(empty($page_url) ? NV_MY_DOMAIN : urlRewriteWithDomain($page_url, NV_MY_DOMAIN));
         foreach ($global_config['openid_servers'] as $server) {
-            $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
-            if (!empty($nv_redirect)) {
-                $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
-            } else {
-                $assigns['href'] .= '&nv_redirect=' . $default_redirect;
-            }
-            $assigns['server'] = $server;
-            $assigns['title'] = ucfirst($server);
-            $assigns['icon'] = $icons[$server];
+            if ($server != 'google-identity') {
+                $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
+                if (!empty($nv_redirect)) {
+                    $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
+                } else {
+                    $assigns['href'] .= '&nv_redirect=' . $default_redirect;
+                }
+                $assigns['server'] = $server;
+                $assigns['title'] = ucfirst($server);
+                $assigns['icon'] = $icons[$server];
 
-            $xtpl->assign('OPENID', $assigns);
-            $xtpl->parse('main.openid.server');
+                $xtpl->assign('OPENID', $assigns);
+                $xtpl->parse('main.openid.server');
+            }
         }
 
         $xtpl->parse('main.openid');
@@ -499,7 +513,7 @@ function user_login($is_ajax = false)
  */
 function user_openid_login($attribs, $op_process)
 {
-    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $nv_redirect;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name, $nv_redirect, $page_title;
 
     $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
 
@@ -517,6 +531,7 @@ function user_openid_login($attribs, $op_process)
     $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('PAGETITLE', $page_title);
 
     $op_process_count = count($op_process);
 
@@ -957,6 +972,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             foreach ($data_openid as $openid) {
                 $openid['email_or_id'] = !empty($openid['email']) ? $openid['email'] : $openid['id'];
                 $openid['opid'] = $openid['opid'] . '_' . $openid['openid'];
+                $openid['openid'] = ucwords($openid['openid']);
                 $xtpl->assign('OPENID_LIST', $openid);
                 if (!$openid['disabled']) {
                     $xtpl->parse('main.tab_edit_openid.openid_not_empty.openid_list.is_act');
@@ -978,11 +994,15 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         }
 
         foreach ($global_config['openid_servers'] as $server) {
+            $img = $server;
+            if ($server == 'google-identity') {
+                $img = 'google';
+            }
             $assigns = [];
             $assigns['server'] = $server;
             $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
             $assigns['title'] = ucfirst($server);
-            $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $server . '.png';
+            $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $img . '.png';
             $assigns['img_width'] = $assigns['img_height'] = 24;
 
             $xtpl->assign('OPENID', $assigns);
@@ -1541,14 +1561,15 @@ function user_info_exit($info, $error = false)
  */
 function openid_account_confirm($gfx_chk, $attribs, $user)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $module_captcha, $nv_redirect, $global_config;
+    global $lang_global, $lang_module, $module_info, $module_name, $module_captcha, $nv_redirect, $global_config, $page_title;
 
     $xtpl = new XTemplate('confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
-    $lang_module['openid_confirm_info'] = sprintf($lang_module['openid_confirm_info'], $attribs['contact/email'], $user['username']);
+    $lang_module['openid_confirm_info'] = sprintf($lang_module['openid_confirm_info'], ucwords($attribs['server']), $attribs['contact/email']);
 
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('PAGETITLE', $page_title);
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
 
     if ($gfx_chk) {

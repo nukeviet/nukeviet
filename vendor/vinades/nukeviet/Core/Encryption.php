@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -161,5 +161,44 @@ class Encryption
         $data = strtr($data, '-_,', '+/=');
 
         return openssl_decrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
+    }
+
+    /**
+     * encodeJwt()
+     * Hàm mã hóa mảng dạng [key1 => value1, key2 => value2]
+     * Dùng để truyền qua URL
+     *
+     * @param array  $payload
+     * @param string $secret
+     * @return string
+     */
+    public function encodeJwt($payload, $secret = '')
+    {
+        $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
+        $payload = json_encode($payload);
+        $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
+        $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
+        $signature = hash_hmac('sha256', $base64UrlHeader . '.' . $base64UrlPayload, $secret, true);
+        $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+
+        return $base64UrlHeader . '.' . $base64UrlPayload . '.' . $base64UrlSignature;
+    }
+
+    /**
+     * decodeJwt()
+     *
+     * @param mixed $token
+     * @return array
+     */
+    public function decodeJwt($token)
+    {
+        $token = strtr($token, '-_', '+/');
+        $tokenParts = explode('.', $token);
+        $tokenHeader = base64_decode($tokenParts[0], true);
+        $tokenPayload = base64_decode($tokenParts[1], true);
+        $jwtHeader = json_decode($tokenHeader, true);
+        $jwtPayload = json_decode($tokenPayload, true);
+
+        return [$jwtHeader, $jwtPayload];
     }
 }

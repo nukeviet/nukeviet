@@ -383,6 +383,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     $opid = $crypt->hash($attribs['id']);
     $current_mode = isset($attribs['current_mode']) ? $attribs['current_mode'] : 1;
 
+    $page_title = $lang_global['openid_login'] . ' ' . ucwords(str_replace('-', ' ', $server));
+
     /**
      * Oauth này đã có trong CSDL
      */
@@ -497,7 +499,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                         ]);
                     }
                 } else {
-                    $page_title = $lang_global['openid_login'];
                     $key_words = $module_info['keywords'];
 
                     unset($nv_row['password']);
@@ -752,7 +753,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs);
     }
 
-    $page_title = $lang_global['openid_login'];
     $key_words = $module_info['keywords'];
 
     $contents .= user_openid_login($attribs, $op_process);

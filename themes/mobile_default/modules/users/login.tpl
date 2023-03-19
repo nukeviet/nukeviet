@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: google_identity_js -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- END: google_identity_js -->
 <div class="login-box">
     <div class="row centered margin-top-lg">
         <div class="col-md-12">

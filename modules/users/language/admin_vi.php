@@ -146,8 +146,8 @@ $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo
 $lang_module['adduser_register1'] = 'Tài khoản của bạn đã được cập nhật';
 $lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Bí danh: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['adduser_register_info_with_password'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Bí danh: %4$s<br />Mật khẩu: %5$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['adduser_register_openid_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt.<br/>Để đăng nhập vui lòng truy cập vào trang: <a href="%3$s">%3$s</a> và click vào nút: Đăng nhập với %4$s.<br/><br/>Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['adduser_register_openid_info_with_password'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt.<br/>Để đăng nhập vui lòng truy cập vào trang: <a href="%3$s">%3$s</a> và click vào nút: Đăng nhập với %4$s.<br/><br/>Bạn cũng có thể đăng nhập theo cách thông thường với thông tin:<br/>Bí danh: %5$s<br />Mật khẩu: %6$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
+$lang_module['adduser_register_openid_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt.<br/>Để đăng nhập vui lòng truy cập vào trang: <a href="%3$s">%3$s</a> và click vào nút: Đăng nhập bằng %4$s.<br/><br/>Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
+$lang_module['adduser_register_openid_info_with_password'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt.<br/>Để đăng nhập vui lòng truy cập vào trang: <a href="%3$s">%3$s</a> và click vào nút: Đăng nhập bằng %4$s.<br/><br/>Bạn cũng có thể đăng nhập theo cách thông thường với thông tin:<br/>Bí danh: %5$s<br />Mật khẩu: %6$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['adduser_register_info1'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được khởi tạo. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Bí danh: %4$s<br />Mật khẩu: %5$s<br />%6$s<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['adduser_register_info2'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được cập nhật. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Bí danh: %4$s';
 $lang_module['adduser_register_info3'] = '<br />Mật khẩu: %1$s';
@@ -169,9 +169,9 @@ $lang_module['pass_reset_request2_send'] = 'Gửi khuyến cáo thay đổi mậ
 $lang_module['pass_reset_request_sent'] = 'Yêu cầu đã được gửi đi!';
 $lang_module['openid_servers'] = 'Các nhà cung cấp Oauth được chấp nhận';
 $lang_module['openid_processing'] = 'Các phương án hành động sau khi tiếp nhận Oauth mới';
-$lang_module['openid_processing_connect'] = 'Khách kết nối Oauth với tài khoản hiện có';
-$lang_module['openid_processing_create'] = 'Khách tạo tài khoản mới và kết nối Oauth với tài khoản đó';
-$lang_module['openid_processing_auto'] = 'Hệ thống tự động tạo tài khoản mới và kết nối Oauth với tài khoản đó';
+$lang_module['openid_processing_connect'] = 'Khách kết nối tài khoản bên thứ ba vào tài khoản hiện có';
+$lang_module['openid_processing_create'] = 'Khách tạo tài khoản mới để kết nối nó với tài khoản bên thứ ba';
+$lang_module['openid_processing_auto'] = 'Hệ thống tự động tạo tài khoản mới để kết nối nó với tài khoản bên thứ ba';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi bí danh';
 $lang_module['is_user_forum'] = 'Sử dụng tài khoản của Diễn đàn';
 $lang_module['search_page_title'] = 'Kết quả tìm kiếm';
@@ -393,7 +393,7 @@ $lang_module['file_not_allowed'] = 'Bạn không được phép xem/tải tập 
 $lang_module['addfile'] = 'Thêm file';
 
 $lang_module['oauth_config'] = 'Cấu hình đăng nhập, đăng kí bằng %s';
-$lang_module['oauth_client_id'] = 'App ID/API Key';
+$lang_module['oauth_client_id'] = 'App ID/API Key/Client ID';
 $lang_module['oauth_client_secret'] = 'Mã Bí Mật';
 
 $lang_module['import'] = 'Nhập dữ liệu từ file Excel';
@@ -504,7 +504,7 @@ $lang_module['active_editinfo_censor'] = 'Bật kiểm duyệt chỉnh sửa tà
 $lang_module['active_editinfo_censor_note'] = 'Nếu chức năng này kích hoạt, tất cả các tài khoản tự chỉnh sửa thông tin sẽ được kiểm duyệt trước khi hiển thị, không áp dụng đối với việc chỉnh sửa bí danh, email, ảnh đại diện, trưởng nhóm, quản trị sửa thông tin người dùng. Khi tắt tính năng này menu kiểm duyệt trong quản trị sẽ bị ẩn để tiết kiệm không gian, tuy nhiên bạn vẫn có thể kiểm duyệt';
 $lang_module['active_editinfo_censor_note1'] = '<a href="%s">tại đây</a>';
 $lang_module['active_user_logs'] = 'Ghi nhật ký đăng nhập, đăng xuất của người dùng';
-$lang_module['user_openid_mamager'] = 'Quản lý OpenID &amp; Oauth';
+$lang_module['user_openid_mamager'] = 'Quản lý tài khoản bên thứ ba';
 $lang_module['user_2step_mamager'] = 'Quản lý xác thực hai bước';
 $lang_module['user_2step_of'] = 'Quản lý xác thực hai bước người dùng:';
 $lang_module['user_2step_off'] = 'Xác thực hai bước đang tắt';
@@ -519,9 +519,9 @@ $lang_module['user_2step_codes_s1'] = 'Đã sử dụng';
 $lang_module['user_2step_reset'] = 'Tạo lại mã dự phòng';
 $lang_module['user_2step_sendmail'] = 'Gửi email mã dự phòng mới cho người dùng';
 $lang_module['user_2step_bodymail'] = 'Xin chào %1$s,<br /><br />Mã dự phòng cho tài khoản của bạn tại website %2$s đã được thay đổi. Dưới đây là mã dự phòng mới:<br /><br />%3$s<br /><br />Bạn chú ý giữ mã dự phòng an toàn. Nếu mất điện thoại và mất cả mã dự phòng bạn sẽ không thể truy cập vào tài khoản của mình được nữa.<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['user_oauthmanager'] = 'Quản lý Oauth, OpenID người dùng';
-$lang_module['user_oauthmanager_list'] = 'Danh sách Oauth, OpenID đang sử dụng của người dùng';
-$lang_module['user_oauthmanager_empty'] = 'Người dùng này chưa có OpenID hay Oauth nào';
+$lang_module['user_oauthmanager'] = 'Quản lý tài khoản bên thứ ba của người dùng';
+$lang_module['user_oauthmanager_list'] = 'Danh sách tài khoản bên thứ ba đang kết nối với tài khoản người dùng';
+$lang_module['user_oauthmanager_empty'] = 'Chưa có tài khoản bên thứ ba nào được kết nối với tài khoản người dùng này';
 $lang_module['user_oauthmanager_gate'] = 'Tên cổng';
 $lang_module['user_oauthmanager_email'] = 'Email hoặc ID';
 $lang_module['user_oauthmanager_deleteall'] = 'Xóa tất cả';
@@ -558,8 +558,8 @@ $lang_module['auto_assign_oauthuser'] = 'Tự động xử lý trùng email Oaut
 $lang_module['auto_assign_oauthuser_note'] = 'Khi bật tùy chọn này, nếu đăng nhập qua Oauth mà email đã được sử dụng thì hệ thống sẽ tự động gán Oauth vào tài khoản đó mà không cần nhập mật khẩu để xác nhận';
 
 $lang_module['security_alert'] = 'Thông báo bảo mật';
-$lang_module['security_alert_openid_delete'] = 'OpenID <strong>%s</strong> vừa được gỡ khỏi tài khoản <strong>%s</strong> của bạn bởi quản trị viên. Chúng tôi gửi cho bạn email này để thông tin đến bạn.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý OpenID</a>';
-$lang_module['security_alert_openid_truncate'] = 'Tất cả các OpenID vừa được gỡ khỏi tài khoản <strong>%s</strong> của bạn bởi quản trị viên. Chúng tôi gửi cho bạn email này để thông tin đến bạn.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý OpenID</a>';
+$lang_module['security_alert_openid_delete'] = 'Chúng tôi thông tin đến bạn là tài khoản bên thứ ba <strong>%s</strong> vừa được ngắt kết nối khỏi tài khoản <strong>%s</strong> của bạn bởi quản trị viên.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý tài khoản bên thứ ba</a>';
+$lang_module['security_alert_openid_truncate'] = 'Chúng tôi thông tin đến bạn là tất cả các tài khoản bên thứ ba vừa được ngắt kết nối khỏi tài khoản <strong>%s</strong> của bạn bởi quản trị viên.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý tài khoản bên thứ ba</a>';
 $lang_module['security_alert_2stepoff'] = 'Tài khoản <strong>%s</strong> của bạn vừa được tắt xác thực hai bước bởi quản trị viên. Chúng tôi gửi cho bạn email này để thông tin đến bạn.<br /><br /><a href="%s" style="font-family:Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:16px;color:#ffffff;font-weight:400;text-decoration:none;font-size:14px;display:inline-block;padding:10px 24px;background-color:#4184f3;border-radius:5px;min-width:90px">Quản lý xác thực hai bước</a>';
 
 $lang_module['account_active'] = 'Thông tin kích hoạt tài khoản';

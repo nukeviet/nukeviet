@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: google_identity_js -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- END: google_identity_js -->
 <div class="centered">
     <div class="login-box">
         <div class="page panel panel-default margin-top-lg box-shadow<!-- BEGIN: not_redirect --> bg-lavender<!-- END: not_redirect -->">
