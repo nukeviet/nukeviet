@@ -69,15 +69,18 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
 
             $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
             $row_info = $db->query($sql)->fetch();
-            $array_field_config = nv_get_users_field_config();
-            foreach ($row_info as $key => $value) {
-                if (!empty($value)) {
-                    if ($array_field_config[$key]['field_type'] == 'file') {
-                        $value = array_map('trim', explode(',', $value));
-                        foreach ($value as $file) {
-                            $file_save_info = get_file_save_info($file);
-                            if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
-                                delete_userfile($file_save_info);
+            unset($row_info['userid']);
+            if (!empty($row_info)) {
+                $array_field_config = nv_get_users_field_config();
+                foreach ($row_info as $key => $value) {
+                    if ($key != 'userid' and !empty($value)) {
+                        if ($array_field_config[$key]['field_type'] == 'file') {
+                            $value = array_map('trim', explode(',', $value));
+                            foreach ($value as $file) {
+                                $file_save_info = get_file_save_info($file);
+                                if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
+                                    delete_userfile($file_save_info);
+                                }
                             }
                         }
                     }
