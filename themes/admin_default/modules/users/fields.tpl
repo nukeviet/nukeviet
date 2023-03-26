@@ -2,23 +2,32 @@
 <!-- BEGIN: data -->
 <div class="table-responsive">
     <table class="table table-striped table-bordered">
+        <colgroup>
+            <col span="1" style="width: 80px;">
+            <col span="3">
+            <col span="1" style="width: 80px;">
+            <col span="1" style="width: 80px;">
+            <col span="1" style="width: 80px;">
+            <col span="1" style="width: 80px;">
+            <col span="1" style="width: 1%;">
+         </colgroup>
         <thead>
             <tr class="bg-primary">
-                <th class="text-center">{LANG.weight}</th>
-                <th class="text-center">{LANG.field_id}</th>
-                <th class="text-center">{LANG.field_title}</th>
-                <th class="text-center">{LANG.field_type}</th>
+                <th class="text-center align-middle">{LANG.weight}</th>
+                <th class="text-center align-middle">{LANG.field_id}</th>
+                <th class="text-center align-middle">{LANG.field_title}</th>
+                <th class="text-center align-middle">{LANG.field_type}</th>
                 <th class="text-center">{LANG.for_admin}</th>
                 <th class="text-center">{LANG.field_required}</th>
                 <th class="text-center">{LANG.field_show_register}</th>
                 <th class="text-center">{LANG.field_show_profile}</th>
-                <th style="width: 1%;"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <!-- BEGIN: loop -->
             <tr>
-                <td class="text-center" style="width: 70px;">
+                <td class="text-center">
                     <select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});" {DISABLED_WEIGHT}>
                         <!-- BEGIN: weight -->
                         <option value="{WEIGHT.key}" {WEIGHT.selected}>{WEIGHT.title}</option>
@@ -28,11 +37,11 @@
                 <td>{ROW.field}</td>
                 <td>{ROW.field_lang}</td>
                 <td>{ROW.field_type} </td>
-                <td class="text-center" style="width:80px;"><i class="fa {ROW.for_admin}"></i></td>
-                <td class="text-center" style="width:80px;"><i class="fa {ROW.required}"></i></td>
-                <td class="text-center" style="width:80px;"><i class="fa {ROW.show_register}"></i></td>
-                <td class="text-center" style="width:80px;"><i class="fa {ROW.show_profile}"></i></td>
-                <td class="text-nowrap" style="width: 1%;">
+                <td class="text-center"><i class="fa {ROW.for_admin}"></i></td>
+                <td class="text-center"><i class="fa {ROW.required}"></i></td>
+                <td class="text-center"><i class="fa {ROW.show_register}"></i></td>
+                <td class="text-center"><i class="fa {ROW.show_profile}"></i></td>
+                <td class="text-nowrap">
                     <button type="button" class="btn btn-default btn-sm" onclick="nv_edit_field({ROW.fid});" title="{LANG.field_edit}"><em class="fa fa-edit fa-lg"></em></button>
                     <!-- BEGIN: show_delete -->
                     <button type="button" class="btn btn-default btn-sm" onclick="nv_del_field({ROW.fid})" title="{LANG.delete}"><em class="fa fa-trash-o fa-lg"></em></button>
