@@ -1,85 +1,43 @@
 <!-- BEGIN: main -->
-<link rel="StyleSheet" href="{NV_STATIC_URL}themes/{BLOCK_CSS}/css/users.css">
-<!-- BEGIN: display_button -->
 <div id="nv-block-login" class="text-center">
-    <button type="button" class="login btn btn-success btn-sm" data-toggle="modalShowByObj" data-obj="#guestLogin_{BLOCKID}" data-callback="recaptchareset">
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="loginForm">
         {GLANG.signin}
     </button>
-    <!-- BEGIN: allowuserreg2 -->
-    <button type="button" class="register btn btn-primary btn-sm" data-toggle="modalShowByObj" data-obj="#guestReg_{BLOCKID}" data-callback="recaptchareset">
-        {GLANG.register}
-    </button>
-    <!-- END: allowuserreg2 -->
-    <!-- BEGIN: allowuserreg_link -->
-    <a href="{USER_REGISTER}" class="register btn btn-primary btn-sm">{GLANG.register}</a>
-    <!-- END: allowuserreg_link -->
+    <!-- BEGIN: allowuserreg -->
+    <a href="{USER_REGISTER}" class="btn btn-primary btn-sm">{GLANG.register}</a>
+    <!-- END: allowuserreg -->
 </div>
-<!-- START FORFOOTER -->
-<div id="guestLogin_{BLOCKID}" class="hidden">
-    <div class="page panel panel-default bg-lavender box-shadow">
-        <div class="panel-body">
-            <div class="h2 text-center margin-bottom"><strong>{LANG.login}</strong></div>
-            {FILE "login_form.tpl"}
-        </div>
-    </div>
-</div>
-<!-- END FORFOOTER -->
-<!-- END: display_button -->
-
-<!-- BEGIN: display_form -->
-{FILE "login_form.tpl"}
-<!-- END: display_form -->
-
-<!-- BEGIN: allowuserreg -->
-<div id="guestReg_{BLOCKID}" class="hidden">
-    <div class="page panel panel-default bg-lavender box-shadow">
-        <div class="panel-body">
-            <div class="h2 text-center margin-bottom"><strong>{LANG.register}</strong></div>
-            {FILE "register_form.tpl"}
-        </div>
-    </div>
-</div>
-<!-- END: allowuserreg -->
-
-<!-- BEGIN: datepicker -->
-<link type="text/css" href="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<!-- END: datepicker -->
-
-<script type="text/javascript" src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: main -->
 
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
     <div class="nv-info" style="display:none"></div>
     <div class="userBlock">
-        <div class="h3 text-center margin-bottom-lg"><span class="lev-{LEVEL} text-normal margin-right">{WELCOME}:</span>{USER.full_name}</div>
-        <div class="row margin-bottom-lg">
-            <div class="col-xs-8 text-center">
-                <a title="{LANG.edituser}" href="#" data-toggle="changeAvatar" data-url="{URL_AVATAR}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
-            </div>
-            <div class="col-xs-16">
-                <ul class="nv-list-item sm">
-                    <li class="active">
-                        <a href="{URL_MODULE}">{LANG.user_info}</a>
-                    </li>
-                    <li>
-                        <a href="{URL_HREF}editinfo">{LANG.editinfo}</a>
-                    </li>
-                    <!-- BEGIN: allowopenid -->
-                    <li>
-                        <a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a>
-                    </li>
-                    <!-- END: allowopenid -->
-                    <!-- BEGIN: regroups -->
-                    <li>
-                        <a href="{URL_HREF}editinfo/group">{LANG.in_group}</a>
-                    </li>
-                    <!-- END: regroups -->
-                </ul>
-            </div>
+        <div class="margin-bottom" style="display: flex;">
+            <a class="margin-right-sm" title="{LANG.edituser}" href="{URL_MODULE}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" width="40" height="40" /></a>
+            <span style="flex-grow: 1">
+                <small class="lev-{LEVEL}">{WELCOME}</small><br />
+                <strong>{USER.full_name}</strong>
+            </span>
         </div>
+        <ul class="nv-list-item sm margin-bottom-lg">
+            <li>
+                <i class="fa fa-caret-right margin-right-sm" aria-hidden="true"></i><a href="{URL_MODULE}">{LANG.user_info}</a>
+            </li>
+            <li>
+                <i class="fa fa-caret-right margin-right-sm" aria-hidden="true"></i><a href="{URL_HREF}editinfo">{LANG.editinfo}</a>
+            </li>
+            <!-- BEGIN: allowopenid -->
+            <li>
+                <i class="fa fa-caret-right margin-right-sm" aria-hidden="true"></i><a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a>
+            </li>
+            <!-- END: allowopenid -->
+            <!-- BEGIN: myapis -->
+            <li>
+                <i class="fa fa-caret-right margin-right-sm" aria-hidden="true"></i><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=myapi">{GLANG.myapis}</a>
+            </li>
+            <!-- END: myapis -->
+        </ul>
         <!-- BEGIN: admintoolbar -->
         <div class="margin-top boder-top padding-top margin-bottom-lg">
             <p class="margin-bottom-sm"><strong>{GLANG.for_admin}</strong></p>
@@ -103,17 +61,16 @@
             </ul>
         </div>
         <!-- END: admintoolbar -->
-        <div class="row">
-            <div class="col-xs-16 small">
-                <em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
+        <div style="display:flex;align-items:center">
+            <div class="small" title="{GLANG.current_login}">
+                <em class="icon-enter margin-right-sm"></em>{USER.current_login_txt}
             </div>
-            <div class="col-xs-8 text-right">
+            <div class="text-right" style="flex-grow: 1">
                 <button type="button" class="btn btn-default btn-sm active" data-toggle="{URL_LOGOUT}">
-                    <em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;
+                    <em class="icon-exit"></em>&nbsp;{GLANG.logout}&nbsp;
                 </button>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" src="{NV_STATIC_URL}themes/{BLOCK_JS}/js/users.js"></script>
 <!-- END: signed -->
