@@ -203,11 +203,13 @@ $(document).ready(function() {
         $($(this).data('target')).val('')
     });
 
-    var clipboard = new ClipboardJS('[data-toggle=clipboard]');
-    clipboard.on('success', function(e) {
-        $(e.trigger).tooltip('show');
-        setTimeout(function() {
-            $(e.trigger).tooltip('destroy');
-        }, 1000);
-    });
+    if ($('[data-toggle=clipboard]').length && ClipboardJS) {
+        var clipboard = new ClipboardJS('[data-toggle=clipboard]');
+        clipboard.on('success', function(e) {
+            $(e.trigger).tooltip('show');
+            setTimeout(function() {
+                $(e.trigger).tooltip('destroy');
+            }, 1000);
+        });
+    }
 });
