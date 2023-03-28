@@ -1324,7 +1324,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     $sm_parameters['from_name'] = $sm_parameters['from_address'] = $sm_parameters['reply_name'] = $sm_parameters['reply_address'] = '';
     // Xác định thông tin người gửi, người nhận từ giá trị truyền vào
     if (empty($from)) {
-        $sm_parameters['reply_address'] = $global_config['site_email'];
+        // $sm_parameters['reply_address'] = $global_config['site_email'];
     } elseif (is_array($from)) {
         $sm_parameters['from_address'] = !empty($from[3]) ? $from[3] : (!empty($from['from_address']) ? $from['from_address'] : $sm_parameters['from_address']);
         $sm_parameters['from_name'] = !empty($from[2]) ? $from[2] : (!empty($from['from_name']) ? $from['from_name'] : $sm_parameters['from_name']);
@@ -2766,22 +2766,22 @@ function nv_insert_notification($module, $type, $content = [], $obid = 0, $send_
 /**
  * nv_delete_notification()
  *
- * @param string $language
- * @param string $module
- * @param string $type
- * @param int    $obid
+ * @param string           $language
+ * @param string           $module
+ * @param string           $type
+ * @param array|int|string $obid
  * @return true
  */
 function nv_delete_notification($language, $module, $type, $obid)
 {
-    global $db_config, $db, $global_config;
+    global $db, $global_config;
 
+    $in = is_array($obid) ? implode(',', $obid) : $obid;
     if ($global_config['notification_active']) {
         try {
-            $sth = $db->prepare('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid = :obid AND type = :type');
+            $sth = $db->prepare('DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid IN (' . $in . ') AND type = :type');
             $sth->bindParam(':language', $language, PDO::PARAM_STR);
             $sth->bindParam(':module', $module, PDO::PARAM_STR);
-            $sth->bindParam(':obid', $obid, PDO::PARAM_INT);
             $sth->bindParam(':type', $type, PDO::PARAM_STR);
             $sth->execute();
         } catch (PDOException $e) {

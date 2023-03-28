@@ -375,6 +375,8 @@ $lang_global['login_name_type_username'] = 'Nom d\'utilisateur';
 $lang_global['login_name_type_email'] = 'Email';
 $lang_global['login_name_type_email_username'] = 'Nom d\'utilisateur ou email';
 
+$lang_global['general_support'] = 'Support général';
+
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';

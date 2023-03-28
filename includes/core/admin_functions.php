@@ -850,3 +850,47 @@ function nv_get_hook_revmod($file_path)
 
     return $nv_receive_module;
 }
+
+/**
+ * mod_admin_list()
+ * 
+ * @param string $module_name 
+ * @param bool $suspend_inc 
+ * @return array 
+ */
+function mod_admin_list($module_name, $suspend_inc = false)
+{
+    global $db, $site_mods;
+
+    $sql = 'SELECT t1.admin_id, t1.lev as level, t1.is_suspend, t2.username, t2.email, t2.first_name, t2.last_name, t2.active
+    FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
+    INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
+    ON t1.admin_id = t2.userid
+    WHERE t1.lev!=0';
+    $result = $db->query($sql);
+
+    $adms = [];
+    while ($row = $result->fetch()) {
+        $allowed = false;
+        if ($row['level'] == '1') {
+            $allowed = true;
+        } else {
+            $row['is_suspend'] = ($row['is_suspend'] or empty($row['active'])) ? true : false;
+            if (!$suspend_inc and $row['is_suspend']) {
+                continue;
+            }
+            if ($row['level'] == '2') {
+                $allowed = true;
+            } else {
+                if (!empty($site_mods[$module_name]['admins']) and in_array((int) $row['admin_id'], array_map('intval', explode(',', $site_mods[$module_name]['admins'])), true)) {
+                    $allowed = true;
+                }
+            }
+        }
+        if ($allowed) {
+            $adms[$row['admin_id']] = $row;
+        }
+    }
+
+    return $adms;
+}

@@ -18,7 +18,7 @@ if (!defined('NV_ADMIN')) {
  * 	- Module var is: $lang, $module_file, $module_data, $module_upload, $module_theme, $module_name
  * 	- Accept global var: $db, $db_config, $global_config
  */
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)");
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '', 1, :weight, :is_default)");
 
 $full_name = 'Consumer Care Division';
 $alias = 'Consumer-Care';
@@ -30,7 +30,7 @@ $others = json_encode([
     'viber' => 'myViber',
     'skype' => 'mySkype'
 ]);
-$cats = 'Consulting|Complaints|Cooperation';
+$cats = json_encode(['Consulting', 'Complaints', 'Cooperation'], JSON_UNESCAPED_UNICODE);
 $weight = 1;
 $is_default = 1;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));
@@ -55,7 +55,7 @@ $others = json_encode([
     'viber' => 'myViber2',
     'skype' => 'mySkype2'
 ]);
-$cats = 'Bug Reports|Recommendations to improve';
+$cats = json_encode(['Bug Reports', 'Recommendations to improve'], JSON_UNESCAPED_UNICODE);
 $weight = 2;
 $is_default = 0;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));

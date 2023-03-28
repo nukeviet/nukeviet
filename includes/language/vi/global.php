@@ -391,6 +391,8 @@ $lang_global['login_name_type_username'] = 'Bí danh';
 $lang_global['login_name_type_email'] = 'Email';
 $lang_global['login_name_type_email_username'] = 'Bí danh hoặc Email';
 
+$lang_global['general_support'] = 'Hỗ trợ chung';
+
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';
 $lang_global['country_AF'] = 'Afghanistan';

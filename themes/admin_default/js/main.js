@@ -125,6 +125,26 @@ function btnClickSubmit(event, form) {
     $(form).submit()
 }
 
+// checkAll
+function checkAll(a, th) {
+    th.is(":checked") ? ($("[data-toggle=checkAll], [data-toggle=checkSingle]", a).not(":disabled").each(function() {
+        $(this).prop("checked", !0)
+    }), $(".checkBtn", a).length && $(".checkBtn", a).prop("disabled", !1)) : ($("[data-toggle=checkAll], [data-toggle=checkSingle]", a).not(":disabled").each(function() {
+        $(this).prop("checked", !1)
+    }), $(".checkBtn", a).length && $(".checkBtn", a).prop("disabled", !0))
+}
+
+// checkSingle
+function checkSingle(a) {
+    var checked = 0,
+        unchecked = 0;
+    $("[data-toggle=checkSingle]", a).not(":disabled").each(function() {
+        $(this).is(":checked") ? checked++ : unchecked++
+    });
+    0 != checked && 0 == unchecked ? $("[data-toggle=checkAll]", a).prop("checked", !0) : $("[data-toggle=checkAll]", a).prop("checked", !1);
+    $(".checkBtn", a).length && (checked ? $(".checkBtn", a).prop("disabled", !1) : $(".checkBtn", a).prop("disabled", !0))
+}
+
 var NV = {
     menuBusy: false,
     menuTimer: null,
@@ -263,5 +283,15 @@ $(document).ready(function() {
                 window.location.reload()
             }
         }, 1000);
-    }
+    };
+
+    // checkAll
+    $('body').on('click', '[data-toggle=checkAll]', function() {
+        checkAll($(this).parents('form'), $(this))
+    });
+
+    // checkSingle
+    $('body').on('click', '[data-toggle=checkSingle]', function() {
+        checkSingle($(this).parents('form'))
+    });
 });

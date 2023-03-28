@@ -56,8 +56,10 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
  sender_email varchar(100) NOT NULL,
  sender_phone varchar(20) DEFAULT '',
  sender_ip varchar(39) NOT NULL DEFAULT '',
+ auto_forward VARCHAR(250) NOT NULL DEFAULT '',
  is_read tinyint(1) unsigned NOT NULL DEFAULT '0',
  is_reply tinyint(1) unsigned NOT NULL DEFAULT '0',
+ read_admins TEXT NULL DEFAULT NULL,
  is_processed tinyint(1) unsigned NOT NULL DEFAULT '0',
  processed_by int(11) unsigned NOT NULL DEFAULT '0',
  processed_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -68,6 +70,8 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
 $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_reply (
  rid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  id mediumint(8) unsigned NOT NULL DEFAULT '0',
+ reply_recipient VARCHAR(255) NOT NULL DEFAULT '',
+ reply_cc VARCHAR(255) NOT NULL DEFAULT '',
  reply_content text,
  reply_time int(11) unsigned NOT NULL DEFAULT '0',
  reply_aid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -91,4 +95,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_
 // Cấu hình mặc định của module
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'bodytext', '')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sendcopymode', '0')";
+$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'silent_mode', '1')";
+$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'feedback_phone', '0')";
+$sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'feedback_address', '0')";
 $sql_create_module[] = 'INSERT INTO ' . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha_type', 'captcha')";

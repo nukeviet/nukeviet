@@ -7,6 +7,39 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+.bg-department {
+    background-color: #949494;
+    color: #fff;
+}
+.bg-department a {
+    color: #fff !important;
+}
+.align-middle {
+    vertical-align: middle !important;
+}
+
+.is-default {
+    font-weight: bold;
+}
+
+.help-block ul {
+    margin-left: 0;
+    padding-left: 14px;
+}
+
+.strs .str:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.admin-level label {
+    margin-bottom: 0;
+}
+
+.admin-level label:not(:last-child) {
+    margin-right: 15px;
+}
+
+
 .listdata1 {
     background: #f2f2f2;
     border-top: #f0f0f0 solid 1px;

@@ -1,30 +1,36 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
-<form method="post" action="{FORM_ACTION}" class="confirm-reload">
-    <input name="save" type="hidden" value="1" />
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <tfoot>
-                <tr>
-                    <td colspan="2" class="text-center"><input name="submit1" type="submit" value="{LANG.send_title}" class="btn btn-primary" /></td>
-                </tr>
-            </tfoot>
-            <tbody>
-                <tr>
-                    <td>{LANG.title_send_title}</td>
-                    <td class="text-center"><input name="title" type="text" value="{POST.title}" class="w300 form-control pull-left" /></td>
-                </tr>
-                <tr>
-                    <td>{LANG.admin_send2mail_title}</td>
-                    <td class="text-center"><input name="email" type="email" value="{POST.email}" class="w300 form-control pull-left" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2">{MESS_CONTENT}</td>
-                </tr>
-            </tbody>
-        </table>
+<div class="row">
+    <div class="col-lg-16">
+        <form method="post" action="{FORM_ACTION}" class="send-form">
+            <input name="save" type="hidden" value="1" />
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-center"><button type="submit" class="btn btn-primary">{LANG.bt_send_row_title}</button></td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{LANG.title_send_title}</td>
+                            <td>
+                                <input name="title" type="text" value="" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{GLANG.email}</td>
+                            <td>
+                                <input name="email" type="email" value="" class="form-control" />
+                                <div class="help-block">{LANG.to_note}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">{MESS_CONTENT}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 <!-- END: main -->

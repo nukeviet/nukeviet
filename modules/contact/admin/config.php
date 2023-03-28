@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,20 +13,17 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['config'];
-
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$array = [];
-
 if ($nv_Request->isset_request('save', 'post')) {
+    $array = [];
     $array['bodytext'] = nv_editor_nl2br($nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS));
-    $array['sendcopymode'] = $nv_Request->get_int('sendcopymode', 'post', 0);
-    if ($array['sendcopymode'] != 0 and $array['sendcopymode'] != 1) {
-        $array['sendcopymode'] = 0;
-    }
+    $array['sendcopymode'] = (int) $nv_Request->get_bool('sendcopymode', 'post', 0);
+    $array['silent_mode'] = (int) $nv_Request->get_bool('silent_mode', 'post', 0);
+    $array['feedback_phone'] = $nv_Request->get_int('feedback_phone', 'post', 0);
+    $array['feedback_address'] = $nv_Request->get_int('feedback_address', 'post', 0);
 
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value=:config_value WHERE config_name=:config_name AND lang = '" . NV_LANG_DATA . "' AND module='" . $module_name . "'");
     foreach ($array as $config_name => $config_value) {
@@ -40,6 +37,8 @@ if ($nv_Request->isset_request('save', 'post')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
+$page_title = $lang_module['config'];
+
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -49,10 +48,13 @@ $array = $module_config[$module_name];
 
 $array['bodytext'] = nv_htmlspecialchars(nv_editor_br2nl($array['bodytext']));
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $array['bodytext'] = nv_aleditor('bodytext', '100%', '300px', $array['bodytext']);
+    $array['bodytext'] = nv_aleditor('bodytext', '100%', '150px', $array['bodytext'], 'Basic');
 } else {
     $array['bodytext'] = '<textarea style="width: 100%" name="bodytext" id="bodytext" cols="20" rows="8" class="form-control">' . $array['bodytext'] . '</textarea>';
 }
+$array['silent_mode'] = !empty($module_config[$module_name]['silent_mode']) ? ' checked="checked"' : '';
+$array['feedback_phone'] = !empty($module_config[$module_name]['feedback_phone']) ? (int) $module_config[$module_name]['feedback_phone'] : 0;
+$array['feedback_address'] = !empty($module_config[$module_name]['feedback_address']) ? (int) $module_config[$module_name]['feedback_address'] : 0;
 
 $xtpl->assign('DATA', $array);
 
@@ -64,6 +66,22 @@ for ($i = 0; $i <= 1; ++$i) {
     ];
     $xtpl->assign('SENDCOPYMODE', $sendcopymode);
     $xtpl->parse('main.sendcopymode');
+}
+
+for ($i = 0; $i <= 2; ++$i) {
+    $xtpl->assign('PHONE', [
+        'val' => $i,
+        'sel' => $i == $array['feedback_phone'] ? ' selected="selected"' : '',
+        'title' => $lang_module['option_' . $i]
+    ]);
+    $xtpl->parse('main.feedback_phone');
+
+    $xtpl->assign('ADDRESS', [
+        'val' => $i,
+        'sel' => $i == $array['feedback_address'] ? ' selected="selected"' : '',
+        'title' => $lang_module['option_' . $i]
+    ]);
+    $xtpl->parse('main.feedback_address');
 }
 
 $xtpl->parse('main');

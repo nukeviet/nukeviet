@@ -4,13 +4,36 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
 if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
+}
+
+if (!nv_function_exists('block_contact_default_parse_phone')) {
+    /**
+     * block_contact_default_parse_phone()
+     *
+     * @param mixed $phone
+     * @return array
+     */
+    function block_contact_default_parse_phone($phone)
+    {
+        $_phones = explode('|', nv_unhtmlspecialchars($phone));
+        $phones = [];
+        foreach ($_phones as $phone) {
+            if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $phone, $m)) {
+                $phones[] = [nv_htmlspecialchars($m[1]), $m[2]];
+            } else {
+                $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $phone))];
+            }
+        }
+
+        return $phones;
+    }
 }
 
 if (!nv_function_exists('nv_contact_default_info')) {
@@ -23,6 +46,7 @@ if (!nv_function_exists('nv_contact_default_info')) {
     function nv_contact_default_info($module)
     {
         global $nv_Cache, $site_mods, $global_config, $lang_global;
+
         if (isset($site_mods[$module])) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.contact_default.tpl')) {
                 $block_theme = $global_config['module_theme'];
@@ -32,14 +56,24 @@ if (!nv_function_exists('nv_contact_default_info')) {
                 $block_theme = 'default';
             }
 
-            $sql = 'SELECT id, alias, phone, email, others FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 AND is_default=1';
-            $array_department = $nv_Cache->db($sql, 'id', $module);
-            if (empty($array_department)) {
-                $sql = 'SELECT id, alias, phone, email, others FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight LIMIT 1';
-                $array_department = $nv_Cache->db($sql, 'id', $module);
+            $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department ORDER BY weight', 'id', $module);
+            if (empty($departments)) {
+                return '';
+            }
+            $default_department = [];
+            foreach ($departments as $department) {
+                if ($department['act']) {
+                    if (empty($default_department)) {
+                        $default_department = $department;
+                    }
+                    if ($department['is_default']) {
+                        $default_department = $department;
+                        break;
+                    }
+                }
             }
 
-            if (empty($array_department)) {
+            if (empty($default_department)) {
                 return '';
             }
 
@@ -48,107 +82,90 @@ if (!nv_function_exists('nv_contact_default_info')) {
             $xtpl->assign('TEMPLATE', $block_theme);
             $xtpl->assign('MODULE', $module);
 
-            $row = array_shift($array_department);
-            if (empty($row)) {
-                return '';
-            }
-            $row['emailhref'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
+            $default_department['emailhref'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $default_department['alias'];
 
-            $xtpl->assign('DEPARTMENT', $row);
+            $xtpl->assign('DEPARTMENT', $default_department);
 
-            if (!empty($row['phone'])) {
-                $nums = array_map('trim', explode('|', nv_unhtmlspecialchars($row['phone'])));
-                foreach ($nums as $k => $num) {
-                    unset($m);
-                    if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
-                        $phone = ['number' => nv_htmlspecialchars($m[1]), 'href' => $m[2]];
-                        $xtpl->assign('PHONE', $phone);
-                        $xtpl->parse('main.phone.item.href');
-                        $xtpl->parse('main.phone.item.href2');
+            if (!empty($default_department['phone'])) {
+                $default_department['phone'] = block_contact_default_parse_phone($default_department['phone']);
+                $items = [];
+                foreach ($default_department['phone'] as $num) {
+                    if (count($num) == 2) {
+                        $items[] = '<a href="tel:' . $num[1] . '">' . $num[0] . '</a>';
                     } else {
-                        $num = preg_replace("/\[[^\]]*\]/", '', $num);
-                        $phone = ['number' => nv_htmlspecialchars($num)];
-                        $xtpl->assign('PHONE', $phone);
+                        $items[] = $num[0];
                     }
-                    if ($k) {
-                        $xtpl->parse('main.phone.item.comma');
-                    }
-                    $xtpl->parse('main.phone.item');
                 }
-
-                $xtpl->parse('main.phone');
+                $xtpl->assign('CD', [
+                    'icon' => 'fa-phone',
+                    'value' => implode(', ', $items)
+                ]);
+                $xtpl->parse('main.cd');
             }
 
-            if (!empty($row['email'])) {
-                $emails = array_map('trim', explode(',', $row['email']));
-
-                foreach ($emails as $k => $email) {
-                    $xtpl->assign('EMAIL', $email);
-                    if ($k) {
-                        $xtpl->parse('main.email.item.comma');
-                    }
-                    $xtpl->parse('main.email.item');
+            if (!empty($default_department['email'])) {
+                $emails = array_map('trim', explode(',', $default_department['email']));
+                $items = [];
+                foreach ($emails as $email) {
+                    $items[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $default_department['alias'] . '">' . $email . '</a>';
                 }
-
-                $xtpl->parse('main.email');
+                $xtpl->assign('CD', [
+                    'icon' => 'fa-envelope',
+                    'value' => implode(', ', $items)
+                ]);
+                $xtpl->parse('main.cd');
             }
 
-            if (!empty($row['others'])) {
-                $others = json_decode($row['others'], true);
+            if (!empty($default_department['others'])) {
+                $others = json_decode($default_department['others'], true);
 
                 if (!empty($others)) {
                     foreach ($others as $key => $value) {
                         if (!empty($value)) {
                             if (strtolower($key) == 'skype') {
                                 $ss = array_map('trim', explode(',', $value));
-                                foreach ($ss as $k => $s) {
-                                    $xtpl->assign('SKYPE', ['name' => $key, 'value' => $s]);
-                                    if ($k) {
-                                        $xtpl->parse('main.skype.item.comma');
-                                    }
-                                    $xtpl->parse('main.skype.item');
+                                $items = [];
+                                foreach ($ss as $s) {
+                                    $items[] = '<a href="skype:' . $s . '?call">' . $s . '</a>';
                                 }
-                                $xtpl->parse('main.skype');
+                                $xtpl->assign('CD', [
+                                    'icon' => 'fa-skype',
+                                    'value' => implode(', ', $items)
+                                ]);
+                                $xtpl->parse('main.cd');
                             } elseif (strtolower($key) == 'viber') {
                                 $ss = array_map('trim', explode(',', $value));
-                                foreach ($ss as $k => $s) {
-                                    $xtpl->assign('VIBER', ['name' => $key, 'value' => $s]);
-                                    if ($k) {
-                                        $xtpl->parse('main.viber.item.comma');
-                                    }
-                                    $xtpl->parse('main.viber.item');
+                                $items = [];
+                                foreach ($ss as $s) {
+                                    $items[] = '<a href="viber://pa?chatURI=' . $s . '">' . $s . '</a>';
                                 }
-                                $xtpl->parse('main.viber');
-                            } elseif (strtolower($key) == 'icq') {
-                                $ss = array_map('trim', explode(',', $value));
-                                foreach ($ss as $k => $s) {
-                                    $xtpl->assign('ICQ', ['name' => $key, 'value' => $s]);
-                                    if ($k) {
-                                        $xtpl->parse('main.icq.item.comma');
-                                    }
-                                    $xtpl->parse('main.icq.item');
-                                }
-                                $xtpl->parse('main.icq');
+                                $xtpl->assign('CD', [
+                                    'icon' => 'icon-viber',
+                                    'value' => implode(', ', $items)
+                                ]);
+                                $xtpl->parse('main.cd');
                             } elseif (strtolower($key) == 'whatsapp') {
                                 $ss = array_map('trim', explode(',', $value));
-                                foreach ($ss as $k => $s) {
-                                    $xtpl->assign('WHATSAPP', ['name' => $key, 'value' => $s]);
-                                    if ($k) {
-                                        $xtpl->parse('main.whatsapp.item.comma');
-                                    }
-                                    $xtpl->parse('main.whatsapp.item');
+                                $items = [];
+                                foreach ($ss as $s) {
+                                    $items[] = '<a href="https://wa.me/' . $s . '">' . $s . '</a>';
                                 }
-                                $xtpl->parse('main.whatsapp');
+                                $xtpl->assign('CD', [
+                                    'icon' => 'fa-whatsapp',
+                                    'value' => implode(', ', $items)
+                                ]);
+                                $xtpl->parse('main.cd');
                             } elseif (strtolower($key) == 'zalo') {
                                 $ss = array_map('trim', explode(',', $value));
-                                foreach ($ss as $k => $s) {
-                                    $xtpl->assign('ZALO', ['name' => $key, 'value' => $s]);
-                                    if ($k) {
-                                        $xtpl->parse('main.zalo.item.comma');
-                                    }
-                                    $xtpl->parse('main.zalo.item');
+                                $items = [];
+                                foreach ($ss as $s) {
+                                    $items[] = '<a href="https://zalo.me/' . $s . '">' . $s . '</a>';
                                 }
-                                $xtpl->parse('main.zalo');
+                                $xtpl->assign('CD', [
+                                    'icon' => 'icon-zalo',
+                                    'value' => implode(', ', $items)
+                                ]);
+                                $xtpl->parse('main.cd');
                             } else {
                                 $xtpl->assign('OTHER', ['name' => $key, 'value' => $value]);
                                 $xtpl->parse('main.other');

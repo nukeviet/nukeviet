@@ -68,11 +68,14 @@ function nv_validForm(a) {
                         $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"))
                     }, 5E3);
                 }
-            } else {
+            } else if ('success' == b.status) {
                 $(".nv-info", a).html(b.mess).removeClass("error").addClass("success");
                 setTimeout(function() {
                     $(a).find("[type='submit']").prop("disabled", !1);
-                    nv_validReset(a)
+                    nv_validReset(a);
+                    if ($('#feedback-form').length) {
+                        $('#feedback-form').modal('hide')
+                    }
                 }, 5E3)
 
             }
@@ -100,4 +103,8 @@ $(function() {
         $(".has-error", a).removeClass("has-error");
         $(".nv-info", a).removeClass("error success").html($(".nv-info", a).attr("data-mess"))
     });
+
+    $('.show-feedback-form').on('click', function() {
+        $('#feedback-form').modal('show')
+    })
 })

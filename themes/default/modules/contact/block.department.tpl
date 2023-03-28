@@ -1,77 +1,21 @@
 <!-- BEGIN: main -->
-    <div class="panel panel-default">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td colspan="2" class="active"><strong>{LANG.department}: {DEPARTMENT.full_name}</strong></td>
-                </tr>
-                <!-- BEGIN: phone -->
-                <tr>
-                    <td>{LANG.phone}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><!-- BEGIN: href --><a href="tel:{PHONE.href}"><!-- END: href -->{PHONE.number}<!-- BEGIN: href2 --></a><!-- END: href2 --><!-- END: item --></td>
-                </tr>
-                <!-- END: phone -->
-                <!-- BEGIN: address -->
-                <tr>
-                    <td>{LANG.address}</td>
-                    <td>{DEPARTMENT.address}</td>
-                </tr>
-                <!-- END: address -->
-                <!-- BEGIN: fax -->
-                <tr>
-                    <td>{LANG.fax}</td>
-                    <td>{DEPARTMENT.fax}</td>
-                </tr>
-                <!-- END: fax -->
-                <!-- BEGIN: email -->
-                <tr>
-                    <td>{LANG.email}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="{DEPARTMENT.emailhref}">{EMAIL}</a><!-- END: item --></td>
-                </tr>
-                <!-- END: email -->
-                <!-- BEGIN: skype -->
-                <tr>
-                    <td>{SKYPE.name}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="skype:{SKYPE.value}?call" title="{SKYPE.name}">{SKYPE.value}</a><!-- END: item --></td>
-                </tr>
-                <!-- END: skype -->
-                <!-- BEGIN: viber -->
-                <tr>
-                    <td>{VIBER.name}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="viber://pa?chatURI={VIBER.value}" title="{VIBER.name}">{VIBER.value}</a><!-- END: item --></td>
-                </tr>
-                <!-- END: viber -->
-                <!-- BEGIN: icq -->
-                <tr>
-                    <td>{ICQ.name}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="icq:message?uin={ICQ.value}" title="{ICQ.name}">{ICQ.value}</a><!-- END: item --></td>
-                </tr>
-                <!-- END: icq -->
-                <!-- BEGIN: whatsapp -->
-                <tr>
-                    <td>{WHATSAPP.name}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="https://wa.me/{WHATSAPP.value}" title="{WHATSAPP.name}">{WHATSAPP.value}</a><!-- END: item --></td>
-                </tr>
-                <!-- END: whatsapp -->
-                <!-- BEGIN: zalo -->
-                <tr>
-                    <td>{ZALO.name}</td>
-                    <td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="https://zalo.me/{ZALO.value}" title="{ZALO.name}">{ZALO.value}</a><!-- END: item --></td>
-                </tr>
-                <!-- END: zalo -->
-                <!-- BEGIN: other -->
-                <tr>
-                    <td>{OTHER.name}</td>
-                    <td>{OTHER.value}</td>
-                </tr>
-                <!-- END: other -->
-                <!-- BEGIN: note -->
-                <tr>
-                    <td>{LANG.note_s}</td>
-                    <td>{DEPARTMENT.note}</td>
-                </tr>
-                <!-- END: note -->
-            </tbody>
-          </table>
-    </div>
+<div class="panel panel-default">
+    <a href="{DEPARTMENT.url}" class="panel-heading" style="display:block"><strong>{DEPARTMENT.full_name}</strong></a>
+    <ul class="list-group">
+        <!-- BEGIN: note -->
+        <li class="list-group-item">{DEPARTMENT.note}</li>
+        <!-- END: note -->
+        <!-- BEGIN: address -->
+        <li class="list-group-item">{LANG.address}: {DEPARTMENT.address}</li>
+        <!-- END: address -->
+        <!-- BEGIN: cd -->
+        <li class="list-group-item">
+            <div style="display: flex;">
+                <span class="margin-right-sm">{CD.name}:</span>
+                <span style="flex-grow: 1">{CD.value}</span>
+            </div>
+        </li>
+    <!-- END: cd -->
+    </ul>
+</div>
 <!-- END: main -->

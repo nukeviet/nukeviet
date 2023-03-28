@@ -74,15 +74,17 @@ function nv_validForm(a) {
                         $(a).next().hide()
                     }, 5E3);
                 }
-            } else {
+            } else if ('success' == b.status) {
                 $(a).next().html(b.mess).removeClass("alert-danger").addClass("alert-info").show();
                 $("[data-mess]").tooltip("destroy");
                 setTimeout(function() {
                     $(a).next().hide();
                     $(a).find("[type='submit']").prop("disabled", !1)
-                    nv_validReset(a)
+                    nv_validReset(a);
+                    if ($('#feedback-form').length) {
+                        $('#feedback-form').modal('hide')
+                    }
                 }, 5E3)
-
             }
         }
     }));
@@ -146,4 +148,8 @@ $(function() {
     $('body').on('keypress', '[data-toggle=fb_validErrorHidden]', function() {
         $(this).parent().parent().removeClass("has-error")
     });
+
+    $('.show-feedback-form').on('click', function() {
+        $('#feedback-form').modal('show')
+    })
 });

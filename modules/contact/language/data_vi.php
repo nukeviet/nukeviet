@@ -18,7 +18,7 @@ if (!defined('NV_ADMIN')) {
  * 	- Module var is: $lang, $module_file, $module_data, $module_upload, $module_theme, $module_name
  * 	- Accept global var: $db, $db_config, $global_config
  */
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)");
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '', 1, :weight, :is_default)");
 
 $full_name = 'Phòng Chăm sóc khách hàng';
 $alias = 'Cham-soc-khach-hang';
@@ -31,7 +31,7 @@ $others = json_encode([
     'skype' => 'mySkype',
     'zalo' => '0933456789'
 ]);
-$cats = 'Tư vấn|Khiếu nại, phản ánh|Đề nghị hợp tác';
+$cats = json_encode(['Tư vấn', 'Khiếu nại, phản ánh', 'Đề nghị hợp tác'], JSON_UNESCAPED_UNICODE);
 $weight = 1;
 $is_default = 1;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));
@@ -57,7 +57,7 @@ $others = json_encode([
     'skype' => 'mySkype2',
     'zalo' => '0923456789'
 ]);
-$cats = 'Thông báo lỗi|Góp ý cải tiến';
+$cats = json_encode(['Thông báo lỗi', 'Góp ý cải tiến'], JSON_UNESCAPED_UNICODE);
 $weight = 2;
 $is_default = 0;
 $sth->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));
