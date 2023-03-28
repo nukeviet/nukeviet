@@ -641,7 +641,7 @@
                     <!-- END: multiselect -->
                     <!-- BEGIN: file -->
                     <div class="form-group">
-                        <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
+                        <label class="control-label col-md-6 text-normal {FIELD.required}">{FIELD.title}</label>
                         <div class="col-md-18 filelist" data-field="{FIELD.field}" data-oclass="{FIELD.class}" data-maxnum="{FILEMAXNUM}">
                             <ul class="list-unstyled items">
                                 <!-- BEGIN: loop -->

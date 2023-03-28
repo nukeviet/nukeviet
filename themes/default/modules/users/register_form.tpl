@@ -231,36 +231,35 @@
         <!-- BEGIN: file -->
         <div class="form-group">
             <div class="filelist" data-field="{FIELD.field}" data-oclass="{FIELD.class}" data-maxnum="{FILEMAXNUM}">
-                <div class="clearfix">
-                    <div class="pull-right"><button type="button" class="btn btn-info btn-xs" data-toggle="addfilebtn" data-modal="uploadfile_{FIELD.field}"><i class="fa fa-upload"></i> {LANG.addfile}</button></div>
-                    <!-- START FORFOOTER -->
-                    <div class="modal fade uploadfile" tabindex="-1" role="dialog" id="uploadfile_{FIELD.field}" data-url="{URL_MODULE}" data-field="{FIELD.field}" data-csrf="{CSRF}" data-accept="{FILEACCEPT}" data-maxsize="{FILEMAXSIZE}" data-ext-error="{LANG.addfile_ext_error}" data-size-error="{LANG.addfile_size_error}" data-size-error2="{LANG.addfile_size_error2}" data-delete="{LANG.delete}">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">{LANG.addfile}</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="fileinput" style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px"></p>
-                                    <ul class="list-unstyled help-block small">
-                                        <li>- {LANG.accepted_extensions}: {FILEACCEPT}</li>
-                                        <li>- {LANG.field_file_max_size}: {FILEMAXSIZE_FORMAT}</li>
-                                        <!-- BEGIN: widthlimit --><li>- {WIDTHLIMIT}</li><!-- END: widthlimit -->
-                                        <!-- BEGIN: heightlimit --><li>- {HEIGHTLIMIT}</li><!-- END: heightlimit -->
-                                    </ul>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.close}</button>
-                                </div>
+                <div style="display:flex">
+                    <label class="text-normal {FIELD.required}">{FIELD.title}</label>
+                    <div class="text-right" style="flex-grow: 1"><button type="button" class="btn btn-info btn-xs" data-toggle="addfilebtn" data-modal="uploadfile_{FIELD.field}"><i class="fa fa-upload"></i> {LANG.addfile}</button></div>
+                </div>
+                <ul class="list-unstyled items"></ul>
+                <!-- START FORFOOTER -->
+                <div class="modal fade uploadfile" tabindex="-1" role="dialog" id="uploadfile_{FIELD.field}" data-url="{URL_MODULE}" data-field="{FIELD.field}" data-csrf="{CSRF}" data-accept="{FILEACCEPT}" data-maxsize="{FILEMAXSIZE}" data-ext-error="{LANG.addfile_ext_error}" data-size-error="{LANG.addfile_size_error}" data-size-error2="{LANG.addfile_size_error2}" data-delete="{LANG.delete}">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">{LANG.addfile}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p class="fileinput" style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px"></p>
+                                <ul class="list-unstyled help-block small">
+                                    <li>- {LANG.accepted_extensions}: {FILEACCEPT}</li>
+                                    <li>- {LANG.field_file_max_size}: {FILEMAXSIZE_FORMAT}</li>
+                                    <!-- BEGIN: widthlimit --><li>- {WIDTHLIMIT}</li><!-- END: widthlimit -->
+                                    <!-- BEGIN: heightlimit --><li>- {HEIGHTLIMIT}</li><!-- END: heightlimit -->
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.close}</button>
                             </div>
                         </div>
                     </div>
-                    <!-- END FORFOOTER -->
-                    <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
-                    <br class="clearfix"/>
                 </div>
-                <ul class="list-unstyled items"></ul>
+                <!-- END FORFOOTER -->
             </div>
         </div>
         <!-- END: file -->

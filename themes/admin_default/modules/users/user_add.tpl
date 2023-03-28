@@ -243,6 +243,9 @@
                 <tr>
                     <td>
                         <strong>{FIELD.title}</strong>
+                        <!-- BEGIN: for_admin-->
+                        <div class="small text-muted">({LANG.for_admin})</div>
+                        <!-- END: for_admin-->
                     </td>
                     <td>
                         <!-- BEGIN: required -->

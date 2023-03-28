@@ -436,149 +436,153 @@ if (defined('NV_IS_USER_FORUM')) {
     $have_custom_fields = false;
     $have_name_field = false;
     foreach ($array_field_config as $row) {
-        if (($row['show_register'] and $userid == 0) or $userid > 0) {
-            // Value luôn là giá trị mặc định
-            if (!empty($row['field_choices'])) {
-                if ($row['field_type'] == 'date') {
-                    $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : (($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value']);
-                } elseif ($row['field_type'] == 'number') {
-                    $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : $row['default_value'];
-                } else {
-                    $temp = array_keys($row['field_choices']);
-                    $tempkey = isset($initdata[$row['field']]) ? $initdata[$row['field']] : (int) ($row['default_value']) - 1;
-                    $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
-                }
+        // Value luôn là giá trị mặc định
+        if (!empty($row['field_choices'])) {
+            if ($row['field_type'] == 'date') {
+                $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : (($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value']);
+            } elseif ($row['field_type'] == 'number') {
+                $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : $row['default_value'];
             } else {
-                $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : get_value_by_lang($row['default_value']);
+                $temp = array_keys($row['field_choices']);
+                $tempkey = isset($initdata[$row['field']]) ? $initdata[$row['field']] : (int) ($row['default_value']) - 1;
+                $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
             }
+        } else {
+            $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : get_value_by_lang($row['default_value']);
+        }
 
-            $row['required'] = ($row['required']) ? 'required' : '';
+        $row['required'] = ($row['required']) ? 'required' : '';
+        $xtpl->assign('FIELD', $row);
+
+        // Các trường hệ thống xuất độc lập
+        if (!empty($row['system'])) {
+            if ($row['field'] == 'birthday') {
+                $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+            } elseif ($row['field'] == 'sig') {
+                $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+            }
             $xtpl->assign('FIELD', $row);
-
-            // Các trường hệ thống xuất độc lập
-            if (!empty($row['system'])) {
-                if ($row['field'] == 'birthday') {
-                    $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
-                } elseif ($row['field'] == 'sig') {
-                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
-                }
-                $xtpl->assign('FIELD', $row);
-                if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
-                    $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
-                    $have_name_field = true;
-                } else {
-                    $show_key = 'show_' . $row['field'];
-                }
-                if ($row['required']) {
-                    $xtpl->parse('main.edit_user.' . $show_key . '.required');
-                }
-                if ($row['field'] == 'gender') {
-                    foreach ($global_array_genders as $gender) {
-                        $gender['selected'] = $row['value'] == $gender['key'] ? ' selected="selected"' : '';
-                        $xtpl->assign('GENDER', $gender);
-                        $xtpl->parse('main.edit_user.' . $show_key . '.gender');
-                    }
-                }
-                if ($row['description']) {
-                    $xtpl->parse('main.edit_user.' . $show_key . '.description');
-                }
-                $xtpl->parse('main.edit_user.' . $show_key);
+            if ($row['field'] == 'first_name' or $row['field'] == 'last_name') {
+                $show_key = 'name_show_' . $global_config['name_show'] . '.show_' . $row['field'];
+                $have_name_field = true;
             } else {
-                if ($row['required']) {
-                    $xtpl->parse('main.edit_user.field.loop.required');
+                $show_key = 'show_' . $row['field'];
+            }
+            if ($row['required']) {
+                $xtpl->parse('main.edit_user.' . $show_key . '.required');
+            }
+            if ($row['field'] == 'gender') {
+                foreach ($global_array_genders as $gender) {
+                    $gender['selected'] = $row['value'] == $gender['key'] ? ' selected="selected"' : '';
+                    $xtpl->assign('GENDER', $gender);
+                    $xtpl->parse('main.edit_user.' . $show_key . '.gender');
                 }
-                if ($row['description']) {
-                    $xtpl->parse('main.edit_user.field.loop.description');
-                }
-                if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
-                    $xtpl->parse('main.edit_user.field.loop.textbox');
-                } elseif ($row['field_type'] == 'date') {
-                    $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
-                    $xtpl->assign('FIELD', $row);
-                    $xtpl->parse('main.edit_user.field.loop.date');
-                } elseif ($row['field_type'] == 'textarea') {
-                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+            }
+            if ($row['for_admin']) {
+                $xtpl->parse('main.edit_user.' . $show_key . '.for_admin');
+            }
+            if ($row['description']) {
+                $xtpl->parse('main.edit_user.' . $show_key . '.description');
+            }
+            $xtpl->parse('main.edit_user.' . $show_key);
+        } else {
+            if ($row['required']) {
+                $xtpl->parse('main.edit_user.field.loop.required');
+            }
+            if ($row['for_admin']) {
+                $xtpl->parse('main.edit_user.field.loop.for_admin');
+            }
+            if ($row['description']) {
+                $xtpl->parse('main.edit_user.field.loop.description');
+            }
+            if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
+                $xtpl->parse('main.edit_user.field.loop.textbox');
+            } elseif ($row['field_type'] == 'date') {
+                $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                $xtpl->assign('FIELD', $row);
+                $xtpl->parse('main.edit_user.field.loop.date');
+            } elseif ($row['field_type'] == 'textarea') {
+                $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+                $xtpl->assign('FIELD', $row);
+                $xtpl->parse('main.edit_user.field.loop.textarea');
+            } elseif ($row['field_type'] == 'editor') {
+                $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
+                if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+                    $array_tmp = explode('@', $row['class']);
+                    $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
+                    $xtpl->assign('EDITOR', $edits);
+                    $xtpl->parse('main.edit_user.field.loop.editor');
+                } else {
+                    $row['class'] = '';
                     $xtpl->assign('FIELD', $row);
                     $xtpl->parse('main.edit_user.field.loop.textarea');
-                } elseif ($row['field_type'] == 'editor') {
-                    $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
-                    if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-                        $array_tmp = explode('@', $row['class']);
-                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
-                        $xtpl->assign('EDITOR', $edits);
-                        $xtpl->parse('main.edit_user.field.loop.editor');
-                    } else {
-                        $row['class'] = '';
-                        $xtpl->assign('FIELD', $row);
-                        $xtpl->parse('main.edit_user.field.loop.textarea');
-                    }
-                } elseif ($row['field_type'] == 'select') {
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'key' => $key,
-                            'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.edit_user.field.loop.select.loop');
-                    }
-                    $xtpl->parse('main.edit_user.field.loop.select');
-                } elseif ($row['field_type'] == 'radio') {
-                    $number = 0;
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'id' => $row['fid'] . '_' . $number++,
-                            'key' => $key,
-                            'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.edit_user.field.loop.radio');
-                    }
-                } elseif ($row['field_type'] == 'checkbox') {
-                    $number = 0;
-                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'id' => $row['fid'] . '_' . $number++,
-                            'key' => $key,
-                            'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.edit_user.field.loop.checkbox');
-                    }
-                } elseif ($row['field_type'] == 'multiselect') {
-                    foreach ($row['field_choices'] as $key => $value) {
-                        $xtpl->assign('FIELD_CHOICES', [
-                            'key' => $key,
-                            'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
-                            'value' => get_value_by_lang2($key, $value)
-                        ]);
-                        $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
-                    }
-                    $xtpl->parse('main.edit_user.field.loop.multiselect');
-                } elseif ($row['field_type'] == 'file') {
-                    $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
-                    $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
-                    $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
-                    $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
-                    $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
-                    $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
-                    $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
-                    $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
-                    $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
-                    if (!empty($widthlimit)) {
-                        $xtpl->assign('WIDTHLIMIT', $widthlimit);
-                        $xtpl->parse('main.edit_user.field.loop.file.widthlimit');
-                    }
-                    if (!empty($heightlimit)) {
-                        $xtpl->assign('HEIGHTLIMIT', $heightlimit);
-                        $xtpl->parse('main.edit_user.field.loop.file.heightlimit');
-                    }
-
-                    $xtpl->parse('main.edit_user.field.loop.file');
                 }
-                $xtpl->parse('main.edit_user.field.loop');
-                $have_custom_fields = true;
+            } elseif ($row['field_type'] == 'select') {
+                foreach ($row['field_choices'] as $key => $value) {
+                    $xtpl->assign('FIELD_CHOICES', [
+                        'key' => $key,
+                        'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
+                        'value' => get_value_by_lang2($key, $value)
+                    ]);
+                    $xtpl->parse('main.edit_user.field.loop.select.loop');
+                }
+                $xtpl->parse('main.edit_user.field.loop.select');
+            } elseif ($row['field_type'] == 'radio') {
+                $number = 0;
+                foreach ($row['field_choices'] as $key => $value) {
+                    $xtpl->assign('FIELD_CHOICES', [
+                        'id' => $row['fid'] . '_' . $number++,
+                        'key' => $key,
+                        'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
+                        'value' => get_value_by_lang2($key, $value)
+                    ]);
+                    $xtpl->parse('main.edit_user.field.loop.radio');
+                }
+            } elseif ($row['field_type'] == 'checkbox') {
+                $number = 0;
+                $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : [];
+                foreach ($row['field_choices'] as $key => $value) {
+                    $xtpl->assign('FIELD_CHOICES', [
+                        'id' => $row['fid'] . '_' . $number++,
+                        'key' => $key,
+                        'checked' => (in_array((string) $key, $valuecheckbox, true)) ? ' checked="checked"' : '',
+                        'value' => get_value_by_lang2($key, $value)
+                    ]);
+                    $xtpl->parse('main.edit_user.field.loop.checkbox');
+                }
+            } elseif ($row['field_type'] == 'multiselect') {
+                foreach ($row['field_choices'] as $key => $value) {
+                    $xtpl->assign('FIELD_CHOICES', [
+                        'key' => $key,
+                        'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
+                        'value' => get_value_by_lang2($key, $value)
+                    ]);
+                    $xtpl->parse('main.edit_user.field.loop.multiselect.loop');
+                }
+                $xtpl->parse('main.edit_user.field.loop.multiselect');
+            } elseif ($row['field_type'] == 'file') {
+                $row['limited_values'] = !empty($row['limited_values']) ? json_decode($row['limited_values'], true) : [];
+                $xtpl->assign('FILEACCEPT', !empty($row['limited_values']['mime']) ? '.' . implode(',.', $row['limited_values']['mime']) : '');
+                $xtpl->assign('FILEMAXSIZE', $row['limited_values']['file_max_size']);
+                $xtpl->assign('FILEMAXSIZE_FORMAT', nv_convertfromBytes($row['limited_values']['file_max_size']));
+                $xtpl->assign('FILEMAXNUM', $row['limited_values']['maxnum']);
+                $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . $row['field']));
+                $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+                $widthlimit = image_size_info($row['limited_values']['widthlimit'], 'width');
+                $heightlimit = image_size_info($row['limited_values']['heightlimit'], 'height');
+                if (!empty($widthlimit)) {
+                    $xtpl->assign('WIDTHLIMIT', $widthlimit);
+                    $xtpl->parse('main.edit_user.field.loop.file.widthlimit');
+                }
+                if (!empty($heightlimit)) {
+                    $xtpl->assign('HEIGHTLIMIT', $heightlimit);
+                    $xtpl->parse('main.edit_user.field.loop.file.heightlimit');
+                }
+
+                $xtpl->parse('main.edit_user.field.loop.file');
             }
+            $xtpl->parse('main.edit_user.field.loop');
+            $have_custom_fields = true;
         }
     }
     if ($have_name_field) {
