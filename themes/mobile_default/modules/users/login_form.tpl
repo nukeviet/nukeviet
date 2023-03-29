@@ -63,17 +63,19 @@
 
         <!-- BEGIN: openid -->
         <!-- BEGIN: google_identity_onload -->
-        <div id="g_id_onload" data-client_id="{GOOGLE_CLIENT_ID}" data-context="signin" data-ux_mode="popup" data-callback="GIDHandleCredentialResponse" data-itp_support="true" data-url="{GOOGLE_IDENTITY_URL}" data-csrf="{CHECKSS}">
-        </div>
+        <div class="margin-bottom-lg" style="display:flex;justify-content:center;">
+            <div id="g_id_onload" data-client_id="{GOOGLE_CLIENT_ID}" data-context="signin" data-ux_mode="popup" data-callback="GIDHandleCredentialResponse" data-itp_support="true" data-url="{GOOGLE_IDENTITY_URL}" data-csrf="{CHECKSS}">
+            </div>
 
-        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-locale="{NV_LANG_INTERFACE}" data-logo_alignment="center" data-width="300">
-        </div>
+            <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-locale="{NV_LANG_INTERFACE}" data-logo_alignment="center" data-width="300">
+            </div>
 
-        <div id="g_id_confirm" class="hidden">
-            <div class="alert alert-info">
-                <p class="m-bottom">{LANG.g_id_confirm}</p>
-                <div class="text-center">
-                    <a href="" class="btn btn-primary">{LANG.g_id_confirm2}</a>
+            <div id="g_id_confirm" class="hidden">
+                <div class="alert alert-info">
+                    <p class="m-bottom">{LANG.g_id_confirm}</p>
+                    <div class="text-center">
+                        <a href="" class="btn btn-primary">{LANG.g_id_confirm2}</a>
+                    </div>
                 </div>
             </div>
         </div>
