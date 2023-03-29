@@ -496,7 +496,7 @@ $lang_module['cache_control'] = 'En-tête HTTP Cache-Control';
 $lang_module['expires'] = 'En-tête HTTP Expires';
 $lang_module['expires_note'] = 'Valeur listée par le modèle: <code>[number][unit]</code>; Les unités comprennent: <code>y</code>(année), <code>M</code>(mois), <code>w</code>(semaine), <code>d</code>(jour) , <code>h</code>(heure), <code>m</code>(minute), <code>s</code>(seconde)';
 $lang_module['access_control_allow_origin'] = 'Liste des origines autorisées à utiliser des ressources en vertu des politiques CORS';
-$lang_module['access_control_allow_origin_note'] = 'Si vous ne sélectionnez pas &raquo;Tous&raquo; entrer une liste de domaines séparés par des espaces';
+$lang_module['access_control_allow_origin_note'] = 'Vous pouvez le laisser vide, sélectionner &raquo;Tous&raquo;, ou entrer une liste de noms de domaine séparés par des espaces. Si vous déclarez cette ligne et appliquez les suggestions, assurez-vous de désactiver l\'option &raquo;Ajouter un en-tête Access-Control-Allow-Origin&raquo; dans la zone Paramètres de sécurité =&gt; Paramètres intersites';
 $lang_module['prevent_image_hot_linking'] = 'Empêcher les liens vers les images';
 $lang_module['general_info_tab'] = 'Information';
 $lang_module['settings_tab'] = 'Réglages';
@@ -552,3 +552,5 @@ $lang_module['passshow_button_3'] = 'Intégré uniquement pour les administrateu
 $lang_module['config_description'] = 'Remarques sur la configuration';
 $lang_module['load_files_seccode'] = 'Code secret pour accéder aux load-fichiers';
 $lang_module['value_copied'] = 'La valeur a été copiée';
+$lang_module['auto_acao'] = 'Ajouter l\'en-tête Access-Control-Allow-Origin';
+$lang_module['auto_acao_note'] = 'Lorsque la requête inclut un en-tête Origin avec une valeur valide, le système répondra automatiquement avec un en-tête de réponse Access-Control-Allow-Origin avec une valeur égale à la valeur de l\'origine qui lui est envoyée.';

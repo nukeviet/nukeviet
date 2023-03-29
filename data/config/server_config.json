@@ -96,9 +96,7 @@
         "text/javascript",
         "text/xsl"
     ],
-    "cors_origins": [
-        "*"
-    ],
+    "cors_origins": [],
     "compress_types": {
         "gzip": "%Windir%\\system32\\inetsrv\\gzip.dll",
         "br": "%Windir%\\system32\\inetsrv\\br.dll"

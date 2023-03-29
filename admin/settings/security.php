@@ -394,6 +394,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
     $array_config_cross['crosssite_allowed_variables'] = empty($res) ? '' : json_encode($res);
 
     $array_config_cross['allow_null_origin'] = (int) $nv_Request->get_bool('allow_null_origin', 'post', false);
+    $array_config_cross['auto_acao'] = (int) $nv_Request->get_bool('auto_acao', 'post', false);
     $array_config_cross['load_files_seccode'] = $nv_Request->get_string('load_files_seccode', 'post', '');
     !empty($array_config_cross['load_files_seccode']) && $array_config_cross['load_files_seccode'] = $crypt->encrypt($array_config_cross['load_files_seccode']);
 
@@ -418,6 +419,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('submitcors', 'post
     $array_config_cross['allow_null_origin'] = $global_config['allow_null_origin'];
     $array_config_cross['ip_allow_null_origin'] = empty($global_config['ip_allow_null_origin']) ? '' : implode("\n", $global_config['ip_allow_null_origin']);
     $array_config_cross['load_files_seccode'] = !empty($global_config['load_files_seccode']) ? $crypt->decrypt($global_config['load_files_seccode']) : '';
+    $array_config_cross['auto_acao'] = !empty($global_config['auto_acao']) ? $global_config['auto_acao'] : 0;
 
     if (!empty($global_config['crosssite_allowed_variables'])) {
         $res = [];
@@ -790,6 +792,7 @@ if (defined('NV_IS_GODADMIN')) {
     $array_config_cross['crosssite_restrict'] = empty($array_config_cross['crosssite_restrict']) ? '' : ' checked="checked"';
     $array_config_cross['crossadmin_restrict'] = empty($array_config_cross['crossadmin_restrict']) ? '' : ' checked="checked"';
     $array_config_cross['allow_null_origin'] = empty($array_config_cross['allow_null_origin']) ? '' : ' checked="checked"';
+    $array_config_cross['auto_acao'] = empty($array_config_cross['auto_acao']) ? '' : ' checked="checked"';
 
     $xtpl->assign('CONFIG_CROSS', $array_config_cross);
 

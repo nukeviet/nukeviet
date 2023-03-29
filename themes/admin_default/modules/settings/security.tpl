@@ -796,6 +796,12 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td><strong>{LANG.auto_acao}</strong></td>
+                                    <td>
+                                        <input type="checkbox" value="1" name="auto_acao" {CONFIG_CROSS.auto_acao}> {LANG.auto_acao_note}
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td><strong>{LANG.load_files_seccode}</strong></td>
                                     <td>
                                         <div class="input-group">

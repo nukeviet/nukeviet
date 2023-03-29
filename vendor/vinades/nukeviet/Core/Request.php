@@ -221,6 +221,11 @@ class Request
     private $allowNullOriginIps = [];
 
     /**
+     * @since 4.6.00
+     */
+    private $autoACAO = false;
+
+    /**
      * __construct()
      *
      * @param array                 $config
@@ -290,6 +295,7 @@ class Request
         $this->validDomains = !empty($config['domains_whitelist']) ? ((array) $config['domains_whitelist']) : [];
         $this->allowNullOrigin = !empty($config['allow_null_origin']) ? true : false;
         $this->allowNullOriginIps = !empty($config['ip_allow_null_origin']) ? ((array) $config['ip_allow_null_origin']) : [];
+        $this->autoACAO = !empty($config['auto_acao']) ? true : false;
 
         $this->remote_ip = !empty($ip) ? $ip : Ips::$remote_ip;
         if (Ips::ip2long($this->remote_ip) === false) {
@@ -406,11 +412,13 @@ class Request
 
         // CORS handle
         if (!empty($this->origin)) {
-            $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
             $hasControlRequestHeader = Site::getEnv(['HTTP_ACCESS_CONTROL_REQUEST_HEADERS', 'Access-Control-Request-Headers']);
 
-            foreach ($this->corsHeaders as $header => $value) {
-                header($header . ': ' . $value);
+            if ($this->autoACAO) {
+                $this->corsHeaders['Access-Control-Allow-Origin'] = $this->getAllowOriginHeaderValue();
+                foreach ($this->corsHeaders as $header => $value) {
+                    header($header . ': ' . $value);
+                }
             }
 
             // Kiểm tra preflight request

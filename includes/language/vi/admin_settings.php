@@ -504,7 +504,7 @@ $lang_module['cache_control'] = 'Tiêu đề HTTP kiểm soát bộ đệm ẩn 
 $lang_module['expires'] = 'Tiêu đề HTTP chỉ thời lượng hiệu lực Expires';
 $lang_module['expires_note'] = 'Giá trị được liệt kê theo mô hình: <code>[số][đơn vị tính]</code>; Đơn vị tính bao gồm: <code>y</code>(năm), <code>M</code>(tháng), <code>w</code>(tuần), <code>d</code>(ngày), <code>h</code>(giờ), <code>m</code>(phút), <code>s</code>(giây)';
 $lang_module['access_control_allow_origin'] = 'Danh sách nguồn được phép sử dụng tài nguyên theo chính sách CORS';
-$lang_module['access_control_allow_origin_note'] = 'Nếu không chọn &laquo;Bất kỳ&raquo;, hãy nhập danh sách tên miền được phân cách bởi khoảng trắng';
+$lang_module['access_control_allow_origin_note'] = 'Có thể để trống, chọn &laquo;Bất kỳ&raquo;, hoặc nhập danh sách tên miền được phân cách bởi khoảng trắng. Nếu khai báo dòng này và áp dụng nội dung đề xuất, hãy đảm bảo tắt tùy chọn &laquo;Thêm tiêu đề Access-Control-Allow-Origin&raquo; ở khu vực Thiết lập an ninh =&gt; Thiết lập Cross-Site';
 $lang_module['prevent_image_hot_linking'] = 'Chặn liên kết đến hình ảnh từ trang web khác (hotlinking)';
 $lang_module['general_info_tab'] = 'Thông tin';
 $lang_module['settings_tab'] = 'Thiết lập';
@@ -560,3 +560,5 @@ $lang_module['passshow_button_3'] = 'Chỉ tích hợp cho quản trị viên';
 $lang_module['config_description'] = 'Ghi chú cấu hình';
 $lang_module['load_files_seccode'] = 'Mã bí mật truy cập load-files';
 $lang_module['value_copied'] = 'Giá trị đã được sao chép vào bộ nhớ';
+$lang_module['auto_acao'] = 'Thêm tiêu đề Access-Control-Allow-Origin';
+$lang_module['auto_acao_note'] = 'Khi truy vấn có kèm tiêu đề Origin với giá trị hợp lệ, hệ thống sẽ tự động trả lời bằng tiêu đề phản hồi Access-Control-Allow-Origin với giá trị bằng chính giá trị miền của Origin gửi đến';

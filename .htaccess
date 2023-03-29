@@ -72,12 +72,6 @@ ErrorDocument 504 /error.php?code=504
   Header set X-Frame-Options "SAMEORIGIN"
   Header set X-XSS-Protection "1; mode=block"
   Header set Referrer-Policy "no-referrer-when-downgrade, strict-origin-when-cross-origin"
-
-  <IfModule mod_setenvif.c>
-    SetEnvIf Origin "https?://(www\.)?(.*)$" cors_origins=$0
-    Header add Access-Control-Allow-Origin %{cors_origins}e env=cors_origins
-    Header merge Vary Origin
-  </IfModule>
 </IfModule>
 
 <IfModule mod_expires.c>
