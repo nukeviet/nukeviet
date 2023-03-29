@@ -160,9 +160,12 @@ $lang_module['thumb_type_2'] = 'resize according height';
 $lang_module['thumb_type_3'] = 'resize according two dimensions';
 $lang_module['thumb_type_4'] = 'resize and crop image according size';
 $lang_module['thumb_type_5'] = 'Resize and crop top photos by size';
-$lang_module['thumb_quality'] = 'Resize image quality';
+$lang_module['thumb_quality'] = 'Quality';
 $lang_module['thumb_dir'] = 'Folder';
 $lang_module['thumb_dir_default'] = 'Default configuration';
+$lang_module['thumb_default_size_note'] = 'The maximum default size is %d x %d pixels';
+$lang_module['thumb_dir_size_note'] = 'Maximum size is 1000 x 1000 pixels';
+
 $lang_module['search'] = 'Search';
 $lang_module['order0'] = 'Sort by date new';
 $lang_module['order1'] = 'Sort by date old';

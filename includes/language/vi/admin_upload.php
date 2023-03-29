@@ -155,17 +155,19 @@ $lang_module['none_mode_note'] = 'File tải lên được coi là hợp lệ n�
 $lang_module['upload_checking_note'] = 'Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn "Mạnh", bạn sẽ không thể upload file lên host';
 
 $lang_module['thumbconfig'] = 'Cấu hình ảnh thumbnail';
-$lang_module['thumb_width_height'] = 'Kích thước thumbnail của hình ảnh';
+$lang_module['thumb_width_height'] = 'Kích thước thumbnail';
 $lang_module['thumb_note'] = 'Hình ảnh thumbnail sẽ được dùng tại các vị trí đòi hỏi ảnh nhỏ';
-$lang_module['thumb_type'] = 'resize theo phương án';
-$lang_module['thumb_type_1'] = 'resize ảnh theo chiều rộng';
-$lang_module['thumb_type_2'] = 'resize ảnh theo chiều cao';
-$lang_module['thumb_type_3'] = 'resize ảnh theo hai chiều';
-$lang_module['thumb_type_4'] = 'resize và crop ảnh theo kích thước';
-$lang_module['thumb_type_5'] = 'resize và crop top ảnh theo kích thước';
-$lang_module['thumb_quality'] = 'Chất lượng hình ảnh resize';
+$lang_module['thumb_type'] = 'Resize theo phương án';
+$lang_module['thumb_type_1'] = 'Resize ảnh theo chiều rộng';
+$lang_module['thumb_type_2'] = 'Resize ảnh theo chiều cao';
+$lang_module['thumb_type_3'] = 'Resize ảnh theo hai chiều';
+$lang_module['thumb_type_4'] = 'Resize và crop ảnh theo kích thước';
+$lang_module['thumb_type_5'] = 'Resize và crop top ảnh theo kích thước';
+$lang_module['thumb_quality'] = 'Chất lượng';
 $lang_module['thumb_dir'] = 'Thư mục';
 $lang_module['thumb_dir_default'] = 'Cấu hình mặc định';
+$lang_module['thumb_default_size_note'] = 'Thumbnail mặc định có kích thước tối đa là %d x %d pixels';
+$lang_module['thumb_dir_size_note'] = 'Thumbnail cho thư mục cụ thể có kích thước tối đa là 1000 x 1000 pixels';
 
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['order0'] = 'Sắp xếp theo ngày mới';

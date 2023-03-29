@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,44 +13,99 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
+$lang_module['thumb_default_size_note'] = sprintf($lang_module['thumb_default_size_note'], $global_config['thumb_max_width'], $global_config['thumb_max_height']);
+
 if ($nv_Request->isset_request('save', 'post')) {
     $thumb_type = $nv_Request->get_typed_array('thumb_type', 'post', 'int', []);
     $thumb_width = $nv_Request->get_typed_array('thumb_width', 'post', 'int', []);
     $thumb_height = $nv_Request->get_typed_array('thumb_height', 'post', 'int', []);
     $thumb_quality = $nv_Request->get_typed_array('thumb_quality', 'post', 'int', []);
 
-    $did = $nv_Request->get_int('other_dir', 'post', 0);
-    $other_type = $nv_Request->get_int('other_type', 'post', 0);
-    if ($did and $other_type) {
-        $thumb_type[$did] = $other_type;
-        $thumb_width[$did] = $nv_Request->get_int('other_thumb_width', 'post', 0);
-        $thumb_height[$did] = $nv_Request->get_int('other_thumb_height', 'post', 0);
-        $thumb_quality[$did] = $nv_Request->get_int('other_thumb_quality', 'post', 0);
+    !empty($global_config['thumb_max_width']) && $global_config['thumb_max_width'] = 350;
+    !empty($global_config['thumb_max_height']) && $global_config['thumb_max_height'] = 350;
+
+    $opts = [];
+    $keys = array_keys($thumb_type);
+    foreach ($keys as $did) {
+        if (!empty($thumb_type[$did])) {
+            $max_width = $did == 0 ? $global_config['thumb_max_width'] : 1000;
+            $max_height = $did == 0 ? $global_config['thumb_max_height'] : 1000;
+            $error = $did == 0 ? $lang_module['thumb_default_size_note'] : $lang_module['thumb_dir_size_note'];
+
+            if ($thumb_type[$did] == 2) {
+                $thumb_width[$did] = 0;
+            } else {
+                if ($thumb_width[$did] > $max_width or $thumb_width[$did] <= 0) {
+                    nv_jsonOutput([
+                        'status' => 'error',
+                        'did' => 'd' . $did,
+                        'input' => 'thumb_width',
+                        'mess' => $error
+                    ]);
+                }
+            }
+
+            if ($thumb_type[$did] == 1) {
+                $thumb_height[$did] = 0;
+            } elseif ($thumb_height[$did] > $max_height or $thumb_height[$did] <= 0) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'did' => 'd' . $did,
+                    'input' => 'thumb_height',
+                    'mess' => $error
+                ]);
+            }
+            $opts[$did] = [$thumb_type[$did], $thumb_width[$did], $thumb_height[$did], $thumb_quality[$did]];
+        }
     }
-    foreach ($thumb_type as $did => $type) {
-        $did = (int) $did;
-        $type = (int) $type;
-        $width = (int) ($thumb_width[$did]);
+
+    $did = $nv_Request->get_int('other_dir', 'post', 0);
+    $type = $nv_Request->get_int('other_type', 'post', 0);
+    if ($did and $type) {
+        $width = $nv_Request->get_int('other_thumb_width', 'post', 0);
+        $height = $nv_Request->get_int('other_thumb_height', 'post', 0);
+        $quality = $nv_Request->get_int('other_thumb_quality', 'post', 0);
+
         if ($type == 2) {
             $width = 0;
-        } elseif ($width > 1000 or $width < 1) {
-            $width = 100;
+        } else {
+            if ($width > 1000 or $width <= 0) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'input' => 'other_thumb_width',
+                    'mess' => $lang_module['thumb_dir_size_note']
+                ]);
+            }
         }
-        $height = (int) ($thumb_height[$did]);
+
         if ($type == 1) {
             $height = 0;
-        } elseif ($height > 1000 or $height < 1) {
-            $height = 100;
+        } elseif ($height > 1000 or $height <= 0) {
+            nv_jsonOutput([
+                'status' => 'error',
+                'input' => 'other_thumb_height',
+                'mess' => $lang_module['thumb_dir_size_note']
+            ]);
         }
-        $quality = $thumb_quality[$did];
-        if ($quality > 100 or $quality < 20) {
-            $quality = 90;
-        }
+        $opts[$did] = [$type, $width, $height, $quality];
+    }
+
+    foreach ($opts as $did => $opt) {
         $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
-			thumb_type = ' . $type . ', thumb_width = ' . $width . ',
-			thumb_height = ' . $height . ', thumb_quality = ' . $quality . '
+			thumb_type = ' . $opt[0] . ', thumb_width = ' . $opt[1] . ',
+			thumb_height = ' . $opt[2] . ', thumb_quality = ' . $opt[3] . '
 			WHERE did = ' . $did);
     }
+
+    $in = implode(',', array_keys($opts));
+    $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
+			thumb_type = 0, thumb_width = 0,
+			thumb_height = 0, thumb_quality = 0
+			WHERE did NOT IN (' . $in . ')');
+
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
 }
 
 if ($nv_Request->isset_request('getexample', 'post')) {
@@ -70,7 +125,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
 
     $return = ['status' => 'error'];
 
-    // T?m ra c�i ?nh demo
+    // Tìm ra các ảnh demo
     $image_demo = [];
 
     if ($thumb_dir) {
@@ -159,12 +214,9 @@ $result = $db->query($sql);
 while ($data = $result->fetch()) {
     if ($data['did'] == 0) {
         $data['dirname'] = $lang_module['thumb_dir_default'];
-        $forid = 1;
-    } else {
-        $forid = 0;
     }
     if ($data['thumb_type']) {
-        for ($id = $forid; $id < 6; ++$id) {
+        for ($id = 1; $id < 6; ++$id) {
             $type = [
                 'id' => $id,
                 'selected' => ($id == $data['thumb_type']) ? ' selected="selected"' : '',
@@ -173,6 +225,20 @@ while ($data = $result->fetch()) {
             $xtpl->assign('TYPE', $type);
             $xtpl->parse('main.loop.thumb_type');
         }
+
+        for ($i = 4; $i <= 20; ++$i) {
+            $y = $i * 5;
+            $xtpl->assign('QUALITY', [
+                'val' => $y,
+                'sel' => $y == $data['thumb_quality'] ? ' selected="selected"' : ''
+            ]);
+            $xtpl->parse('main.loop.thumb_quality');
+        }
+
+        if (!empty($data['did'])) {
+            $xtpl->parse('main.loop.delbtn');
+        }
+
         $xtpl->assign('DATA', $data);
         $xtpl->parse('main.loop');
     } else {
@@ -181,10 +247,19 @@ while ($data = $result->fetch()) {
     }
 }
 
-for ($id = 0; $id < 5; ++$id) {
+for ($id = 1; $id < 6; ++$id) {
     $type = ['id' => $id, 'name' => $lang_module['thumb_type_' . $id]];
     $xtpl->assign('TYPE', $type);
     $xtpl->parse('main.other_type');
+}
+
+for ($i = 4; $i <= 20; ++$i) {
+    $y = $i * 5;
+    $xtpl->assign('QUALITY', [
+        'val' => $y,
+        'sel' => $y == 90 ? ' selected="selected"' : ''
+    ]);
+    $xtpl->parse('main.other_thumb_quality');
 }
 
 $xtpl->parse('main');

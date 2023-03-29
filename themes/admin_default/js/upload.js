@@ -8,6 +8,42 @@
  */
 
 $(document).ready(function() {
+    // Chỉ cho phép nhập số ở các input chấp nhận số
+    $('.number').on('input', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    });
+
+    // Form cấu hình thumbnails
+    $('#thumb-config-form').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: "POST",
+            url: form.attr('action'),
+            data: form.serialize(),
+            cache: !1,
+            dataType: "json",
+            success: function(response) {
+                if (response.status == 'error') {
+                    alert(response.mess);
+                    if (response.did) {
+                        $('[data-did=' + response.did + '] [name^=' + response.input + ']', form).focus()
+                    } else {
+                        $('[name=' + response.input + ']', form).focus()
+                    }
+                } else if (response.status == 'OK') {
+                    window.location.reload()
+                }
+            }
+        })
+    });
+
+    // Xóa dòng cấu hình thumbnail
+    $('[data-toggle=remove_config]').on('click', function() {
+        $(this).parents('.item').remove();
+        $('#thumb-config-form').submit()
+    })
+
     // Config logo
     $("input[name=selectimg]").click(function() {
         var area = "upload_logo";

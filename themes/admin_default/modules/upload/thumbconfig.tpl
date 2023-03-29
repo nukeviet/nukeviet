@@ -1,17 +1,19 @@
 <!-- BEGIN: main -->
-<div class="alert alert-info">{LANG.thumb_note}</div>
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
+<div class="alert alert-info">
+    <p>{LANG.thumb_note}</p>
+    <p>- {LANG.thumb_default_size_note}</p>
+    <p>- {LANG.thumb_dir_size_note}</p>
+</div>
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="thumb-config-form">
     <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
+        <table class="table table-striped table-bordered">
+            <thead class="bg-primary">
                 <tr class="text-center">
                     <th>{LANG.thumb_dir}</th>
-                    <th>{LANG.thumb_type}</th>
-                    <th>{LANG.thumb_width_height}</th>
-                    <th>{LANG.thumb_quality}</th>
-                    <th>&nbsp;</th>
+                    <th class="text-nowrap text-center" style="width:1%">{LANG.thumb_type}</th>
+                    <th class="text-nowrap text-center" style="width:1%">{LANG.thumb_width_height}</th>
+                    <th class="text-nowrap text-center" style="width:1%">{LANG.thumb_quality}</th>
+                    <th style="width:1%">&nbsp;</th>
                 </tr>
             </thead>
             <tfoot>
@@ -21,18 +23,33 @@
             </tfoot>
             <tbody>
                 <!-- BEGIN: loop -->
-                <tr class="text-center">
+                <tr class="text-center item" data-did="d{DATA.did}">
                     <td class="text-left"><strong>{DATA.dirname}</strong></td>
-                    <td>
-                        <select name="thumb_type[{DATA.did}]" class="form-control">
+                    <td class="text-nowrap text-center" style="width:1%">
+                        <select name="thumb_type[{DATA.did}]" class="form-control" style="width: fit-content;">
                             <!-- BEGIN: thumb_type -->
                             <option value="{TYPE.id}" {TYPE.selected}>{TYPE.name}</option>
                             <!-- END: thumb_type -->
                         </select>
                     </td>
-                    <td><input class="form-control w50 pull-left" type="text" value="{DATA.thumb_width}" name="thumb_width[{DATA.did}]" maxlength="3"/><span class="pull-left text-middle">&nbsp;x&nbsp;</span><input class="form-control pull-left w50" type="text" value="{DATA.thumb_height}" name="thumb_height[{DATA.did}]" maxlength="3"/></td>
-                    <td><input class="form-control w50" type="text" value="{DATA.thumb_quality}" name="thumb_quality[{DATA.did}]" maxlength="2"/></td>
-                    <td><a data-toggle="thumbCfgViewEx" data-did="{DATA.did}" data-errmsg="{LANG.prViewExampleError}" href="#" class="btn btn-default"><span class="text-black"><i class="fa fa-search" aria-hidden="true"></i> {LANG.prViewExample}</span></a></td>
+                    <td class="text-nowrap text-center" style="width:1%">
+                        <div style="display: flex;justify-content: center">
+                            <input class="form-control text-center number" style="width: 60px;" type="text" value="{DATA.thumb_width}" name="thumb_width[{DATA.did}]" maxlength="3"/>
+                            <span class="text-middle">&nbsp;x&nbsp;</span>
+                            <input class="form-control text-center number" style="width: 60px;" type="text" value="{DATA.thumb_height}" name="thumb_height[{DATA.did}]" maxlength="3"/>
+                        </div>
+                    </td>
+                    <td class="text-nowrap text-center w100">
+                        <select name="thumb_quality[{DATA.did}]" class="form-control">
+                            <!-- BEGIN: thumb_quality -->
+                            <option value="{QUALITY.val}" {QUALITY.sel}>{QUALITY.val}</option>
+                            <!-- END: thumb_quality -->
+                        </select>
+                    </td>
+                    <td class="text-nowrap text-left" style="width:1%">
+                        <a data-toggle="thumbCfgViewEx" data-did="{DATA.did}" data-errmsg="{LANG.prViewExampleError}" href="#" class="btn btn-default"><span class="text-black"><i class="fa fa-search" aria-hidden="true"></i> {LANG.prViewExample}</span></a>
+                        <!-- BEGIN: delbtn --><button type="button" class="btn btn-default" data-toggle="remove_config" title="{GLANG.delete}"><em class="fa fa-times" aria-hidden="true"></em></button><!-- END: delbtn -->
+                    </td>
                 </tr>
                 <!-- END: loop -->
                 <tr class="text-center">
@@ -51,9 +68,22 @@
                             <!-- END: other_type -->
                         </select>
                     </td>
-                    <td><input class="form-control w50 pull-left" type="text" value="100" name="other_thumb_width" maxlength="3"/><span class="pull-left text-middle">&nbsp;x&nbsp;</span><input class="form-control w50 pull-left" type="text" value="120" name="other_thumb_height" maxlength="3"/></td>
-                    <td><input class="form-control w50" type="text" value="90" name="other_thumb_quality" maxlength="2"/></td>
-                    <td><a data-toggle="thumbCfgViewEx" data-did="-1" data-errmsg="{LANG.prViewExampleError}" href="#" class="btn btn-default"><span class="text-black"><i class="fa fa-search" aria-hidden="true"></i> {LANG.prViewExample}</span></a></td>
+                    <td class="text-nowrap text-center" style="width:1%">
+                        <div style="display: flex;justify-content: center">
+                            <input class="form-control text-center number" style="width: 60px;" type="text" value="100" name="other_thumb_width" maxlength="3"/>
+                            <span class="text-middle">&nbsp;x&nbsp;</span>
+                            <input class="form-control text-center number" style="width: 60px;" type="text" value="120" name="other_thumb_height" maxlength="3"/>
+                    </td>
+                    <td class="text-nowrap text-center" style="width:1%">
+                        <select name="other_thumb_quality" class="form-control">
+                            <!-- BEGIN: other_thumb_quality -->
+                            <option value="{QUALITY.val}" {QUALITY.sel}>{QUALITY.val}</option>
+                            <!-- END: other_thumb_quality -->
+                        </select>
+                    </td>
+                    <td class="text-left" style="width:1%">
+                        <a data-toggle="thumbCfgViewEx" data-did="-1" data-errmsg="{LANG.prViewExampleError}" href="#" class="btn btn-default"><span class="text-black"><i class="fa fa-search" aria-hidden="true"></i> {LANG.prViewExample}</span></a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -77,8 +107,6 @@
     </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-    $('#frm').validate();
-});
+
 </script>
 <!-- END: main -->
