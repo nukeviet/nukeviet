@@ -4,7 +4,7 @@
     <p>- {LANG.thumb_default_size_note}</p>
     <p>- {LANG.thumb_dir_size_note}</p>
 </div>
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="thumb-config-form">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="thumb-config-form">
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
             <thead class="bg-primary">
