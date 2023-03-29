@@ -16,8 +16,24 @@ var msg = {
     status: '{OPIDRESULT.status}',
     mess: '{OPIDRESULT.mess}'
 };
-window.opener.postMessage(msg, '{OPIDRESULT.client}');
-window.close();
+var redirect = '';
+var post = false;
+try {
+    if (window.opener && window.opener.location.origin == window.location.origin) {
+        redirect = '{OPIDRESULT.client}';
+    } else {
+        post = true;
+    }
+} catch(err) {
+    post = true;
+}
+if (redirect) {
+    window.location = redirect;
+}
+if (post) {
+    window.opener.postMessage(msg, '{OPIDRESULT.client}');
+    window.close();
+}
 </script>
 <!-- END: client -->
 <!-- END: main -->

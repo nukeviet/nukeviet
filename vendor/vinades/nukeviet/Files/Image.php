@@ -32,7 +32,7 @@ class Image
     public $error = '';
     public $createImage = false;
     public $create_Image_info = [];
-    public $logoimg;
+    public $logoimg = false;
     public $is_destroy = false;
     public $is_createWorkingImage = false;
 
