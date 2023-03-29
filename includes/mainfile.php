@@ -291,7 +291,7 @@ if (NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed 
     define('NV_IS_MY_USER_AGENT', true);
 }
 
-// Xac dinh borwser cua client
+// Xac dinh browser cua client
 $browser = new NukeViet\Client\Browser(NV_USER_AGENT);
 $client_info['browser'] = [];
 $client_info['browser']['key'] = $browser->getBrowserKey();
@@ -486,8 +486,10 @@ if ($global_config['cronjobs_launcher'] == 'system') {
         require NV_ROOTDIR . '/includes/core/cronjobs.php';
         exit(0);
     }
-    if (NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
-        post_async(NV_BASE_SITEURL . 'sload.php', ['__cronjobs' => 1]);
+    if (!defined('NV_SYS_LOAD') and !defined('NV_MOD_LOAD') and !defined('NV_IS_AJAX') and $client_info['is_myreferer'] === 1) {
+        if (NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
+            post_async(NV_BASE_SITEURL . 'sload.php', ['__cronjobs' => 1]);
+        }
     }
 }
 
