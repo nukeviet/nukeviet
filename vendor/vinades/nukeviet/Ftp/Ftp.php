@@ -55,7 +55,7 @@ class Ftp
     private $pass = '';
 
     // Du lieu FTP connect
-    private $conn_id;
+    private $conn_id = false;
 
     // Cau hinh chung
     private $config = [
