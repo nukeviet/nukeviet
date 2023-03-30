@@ -78,8 +78,8 @@ function nv_show_tables()
         $tables[$item['name']]['table_charset'] = (!empty($item['collation']) and preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
         $tables[$item['name']]['table_type'] = (isset($item['engine'])) ? $item['engine'] : $item['type'];
         $tables[$item['name']]['table_auto_increment'] = (isset($item['auto_increment'])) ? (int) ($item['auto_increment']) : 'n/a';
-        $tables[$item['name']]['table_create_time'] = !empty($item['create_time']) ? strftime('%H:%M %d/%m/%Y', strtotime($item['create_time'])) : 'n/a';
-        $tables[$item['name']]['table_update_time'] = !empty($item['update_time']) ? strftime('%H:%M %d/%m/%Y', strtotime($item['update_time'])) : 'n/a';
+        $tables[$item['name']]['table_create_time'] = !empty($item['create_time']) ? date('H:i d/m/Y', strtotime($item['create_time'])) : 'n/a';
+        $tables[$item['name']]['table_update_time'] = !empty($item['update_time']) ? date('H:i d/m/Y', strtotime($item['update_time'])) : 'n/a';
         $db_size += $tables_size;
         $db_totalfree += (float) ($item['data_free']);
         ++$db_tables_count;
@@ -232,15 +232,15 @@ function nv_show_tab()
     ];
     $contents['table']['info']['create_time'] = [
         $lang_module['table_create_time'],
-        (!empty($item['create_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['create_time'])) : 'n/a')
+        (!empty($item['create_time']) ? date('H:i:s d/m/Y', strtotime($item['create_time'])) : 'n/a')
     ];
     $contents['table']['info']['update_time'] = [
         $lang_module['table_update_time'],
-        (!empty($item['update_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['update_time'])) : 'n/a')
+        (!empty($item['update_time']) ? date('H:i:s d/m/Y', strtotime($item['update_time'])) : 'n/a')
     ];
     $contents['table']['info']['check_time'] = [
         $lang_module['table_check_time'],
-        (!empty($item['check_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['check_time'])) : 'n/a')
+        (!empty($item['check_time']) ? date('H:i:s d/m/Y', strtotime($item['check_time'])) : 'n/a')
     ];
     $contents['table']['info']['collation'] = [
         $lang_module['table_charset'],
