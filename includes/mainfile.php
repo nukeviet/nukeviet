@@ -477,6 +477,8 @@ if (defined('NV_ADMIN')) {
 $global_config['cronjobs_next_time'] = (int) $global_config['cronjobs_last_time'] + (int) $global_config['cronjobs_interval'] * 60;
 if ($global_config['cronjobs_launcher'] == 'server' and $nv_Request->isset_request('loadcron', 'get')) {
     if ($nv_Request->get_title('loadcron', 'get') == md5('cronjobs' . $global_config['sitekey']) and NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
+        $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'cronjobs_last_time'");
+        $nv_Cache->delMod('settings');
         require NV_ROOTDIR . '/includes/core/cronjobs.php';
     }
     exit();
@@ -486,8 +488,10 @@ if ($global_config['cronjobs_launcher'] == 'system') {
         require NV_ROOTDIR . '/includes/core/cronjobs.php';
         exit(0);
     }
-    if (!defined('NV_SYS_LOAD') and !defined('NV_MOD_LOAD') and !defined('NV_IS_AJAX') and $client_info['is_myreferer'] === 1) {
+    if (!defined('NV_SYS_LOAD') and !defined('NV_MOD_LOAD') and !defined('NV_IS_AJAX') and !empty($client_info['is_myreferer'])) {
         if (NV_CURRENTTIME >= $global_config['cronjobs_next_time']) {
+            $db->query('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'cronjobs_last_time'");
+            $nv_Cache->delMod('settings');
             post_async(NV_BASE_SITEURL . 'sload.php', ['__cronjobs' => 1]);
         }
     }

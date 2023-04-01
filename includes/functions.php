@@ -3034,35 +3034,66 @@ function nv_set_authorization()
  */
 function post_async($url, $params = [], $headers = [])
 {
-    !str_starts_with($url, NV_MY_DOMAIN) && $url = NV_MY_DOMAIN . $url;
-    if (nv_is_url($url)) {
-        if (!empty($params)) {
-            ksort($params);
-            $post_string = http_build_query($params);
-        } else {
-            $post_string = '';
-        }
+    if (!str_starts_with($url, NV_BASE_SITEURL)) {
+        trigger_error('Invalid URL for post_async', E_USER_NOTICE);
 
-        !isset($headers['Referer']) && $headers['Referer'] = NV_MY_DOMAIN;
-        $_headers = [];
-        foreach ($headers as $name => $value) {
-            $_headers[] = "{$name}: {$value}";
-        }
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
-        curl_setopt($ch, CURLOPT_TIMEOUT_MS, 50);
-        curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $_headers);
-        curl_exec($ch);
-        curl_close($ch);
+        return false;
     }
+
+    $headers['Referer'] = NV_MY_DOMAIN;
+
+    $server_ip = nv_getenv('SERVER_ADDR');
+    if (!empty($server_ip)) {
+        if (filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === true) {
+            $server_ip = '[' . $server_ip . ']';
+        }
+        $server_domain = NV_SERVER_PROTOCOL . '://' . $server_ip . NV_SERVER_PORT;
+        $headers['Host'] = NV_SERVER_NAME;
+    } elseif ($_SERVER['SERVER_NAME'] == 'localhost') {
+        $server_domain = NV_SERVER_PROTOCOL . '://127.0.0.1' . NV_SERVER_PORT;
+        $headers['Host'] = NV_SERVER_NAME;
+    } else {
+        $server_domain = NV_MY_DOMAIN;
+    }
+
+    if (!empty($params)) {
+        ksort($params);
+        $post_string = http_build_query($params);
+    } else {
+        $post_string = '';
+    }
+
+    $_headers = [];
+    foreach ($headers as $name => $value) {
+        $_headers[] = "{$name}: {$value}";
+    }
+
+    $options = [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYHOST => 0,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_FOLLOWLOCATION => 1,
+        CURLOPT_ENCODING => '',
+        CURLOPT_HEADER => false,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $post_string,
+        CURLOPT_NOSIGNAL => 1,
+        CURLOPT_HTTPHEADER => $_headers,
+        CURLOPT_FRESH_CONNECT => true
+    ];
+    if (version_compare(PHP_VERSION, '7.16.2', '<')) {
+        $options[CURLOPT_TIMEOUT] = NV_POST_ASYNC_TIMEOUT;
+    } else {
+        $options[CURLOPT_TIMEOUT_MS] = NV_POST_ASYNC_TIMEOUT_MS;
+    }
+    // Bỏ comment 2 dòng dưới nếu muốn kiểm tra tiến trình chạy curl
+    // $options[CURLOPT_VERBOSE] = true;
+    // $options[CURLOPT_STDERR] = fopen(NV_ROOTDIR . '/curl.txt', 'a+');
+
+    $ch = curl_init($server_domain . $url);
+    curl_setopt_array($ch,$options);
+    curl_exec($ch);
+    curl_close($ch);
 }
 
 /**

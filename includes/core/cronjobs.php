@@ -13,9 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-if ($db->exec('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . NV_CURRENTTIME . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'cronjobs_last_time'")) {
-    $nv_Cache->delMod('settings');
-}
+ignore_user_abort(true);
 
 // Duyệt tất cả các cron đến giờ chạy
 $cron_result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE act=1 AND start_time <= ' . NV_CURRENTTIME . ' ORDER BY is_sys DESC');
