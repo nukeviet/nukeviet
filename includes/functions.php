@@ -3108,6 +3108,8 @@ function post_async($url, $params = [], $headers = [])
  */
 function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
 {
+    global $global_config, $sys_mods;
+
     // Default api trả về error
     $apiresults = new NukeViet\Api\ApiResult();
 
@@ -3117,8 +3119,8 @@ function nv_local_api($cmd, $params, $adminidentity = '', $module = '')
      * Do đó chỉ cần truyền module_name vào và căn cứ $sys_mods để lấy các thông tin còn lại
      * Khác với HOOK phải tuyền module_file vào để xác định
      */
-    if (NukeViet\Api\Api::test($module)) {
-        global $sys_mods;
+
+    if (preg_match($global_config['check_module'], $module)) {
         if (!isset($sys_mods[$module])) {
             $apiresults->setCode(NukeViet\Api\ApiResult::CODE_MODULE_NOT_EXISTS)->setMessage('Module not exists!!!');
 

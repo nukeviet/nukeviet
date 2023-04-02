@@ -34,17 +34,6 @@ class Api
     private static $module_info = [];
 
     /**
-     * test()
-     *
-     * @param string $module
-     * @return false|int
-     */
-    public static function test($module = '')
-    {
-        return preg_match('/^[a-z]+[a-z0-9]*$/i', $module);
-    }
-
-    /**
      * testParamKey()
      *
      * @param string $key
