@@ -982,9 +982,7 @@ class Request
         if (empty($mode)) {
             return [$this->request_default_mode];
         }
-        $mode = explode(',', $mode);
-        $mode = array_map('trim', $mode);
-        $mode = array_map('strtolower', $mode);
+        $mode = array_map('trim', explode(',', strtolower($mode)));
         $mode = array_intersect($this->allow_request_mods, $mode);
         if (empty($mode)) {
             return [$this->request_default_mode];

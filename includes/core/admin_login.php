@@ -447,7 +447,7 @@ if ($admin_login_success === true) {
         $sql = 'SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=' . $db->quote(NV_LANG_INTERFACE);
         $setup = $db->query($sql)->fetchColumn();
         if ($setup) {
-            $nv_Request->set_Cookie('data_lang', NV_LANG_INTERFACE, NV_LIVE_COOKIE_TIME);
+            $nv_Request->set_Cookie(DATA_LANG_COOKIE_NAME, NV_LANG_INTERFACE, NV_LIVE_COOKIE_TIME);
         }
     }
 

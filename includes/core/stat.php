@@ -77,4 +77,4 @@ function nv_stat_update()
 nv_stat_update();
 
 // Đếm lại sau 30 phút khách truy cập không hoạt động
-$nv_Request->set_Cookie('statistic_' . NV_LANG_DATA, NV_CURRENTTIME, 1800);
+$nv_Request->set_Cookie(STATISTIC_COOKIE_NAME . NV_LANG_DATA, NV_CURRENTTIME, 1800);

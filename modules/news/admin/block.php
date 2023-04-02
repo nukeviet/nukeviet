@@ -27,7 +27,7 @@ if (empty($array_block)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blockcat');
 }
 
-$cookie_bid = $nv_Request->get_int('int_bid', 'cookie', 0);
+$cookie_bid = $nv_Request->get_int('ibid', 'cookie', 0);
 if (empty($cookie_bid) or !isset($array_block[$cookie_bid])) {
     $cookie_bid = 0;
 }
@@ -39,7 +39,7 @@ if (!in_array($bid, array_keys($array_block), true)) {
 }
 
 if ($cookie_bid != $bid) {
-    $nv_Request->set_Cookie('int_bid', $bid, NV_LIVE_COOKIE_TIME);
+    $nv_Request->set_Cookie('ibid', $bid, NV_LIVE_COOKIE_TIME);
 }
 $page_title = $array_block[$bid];
 

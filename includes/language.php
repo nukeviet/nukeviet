@@ -22,44 +22,44 @@ if (empty($global_config['lang_multi'])) {
         nv_redirect_location(NV_BASE_SITEURL);
     }
 } elseif (defined('NV_ADMIN')) {
-    $cookie = $nv_Request->get_string('data_lang', 'cookie');
+    $cookie = $nv_Request->get_string(DATA_LANG_COOKIE_NAME, 'cookie');
     if (preg_match('/^[a-z]{2}$/', $site_lang) and file_exists(NV_ROOTDIR . '/includes/language/' . $site_lang . '/global.php')) {
         if ($site_lang != $cookie) {
-            $nv_Request->set_Cookie('data_lang', $site_lang, NV_LIVE_COOKIE_TIME);
+            $nv_Request->set_Cookie(DATA_LANG_COOKIE_NAME, $site_lang, NV_LIVE_COOKIE_TIME);
         }
 
         define('NV_LANG_DATA', $site_lang);
     } elseif (preg_match('/^[a-z]{2}$/', $cookie) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie . '/global.php')) {
         define('NV_LANG_DATA', $cookie);
     } else {
-        $nv_Request->set_Cookie('data_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
+        $nv_Request->set_Cookie(DATA_LANG_COOKIE_NAME, $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
 
         define('NV_LANG_DATA', $global_config['site_lang']);
     }
 
-    $cookie = $nv_Request->get_string('int_lang', 'cookie');
+    $cookie = $nv_Request->get_string(INT_LANG_COOKIE_NAME, 'cookie');
     $langinterface = $nv_Request->get_string('langinterface', 'get,post', '');
 
     if (preg_match('/^[a-z]{2}$/', $langinterface) and file_exists(NV_ROOTDIR . '/includes/language/' . $langinterface . '/global.php')) {
         if ($langinterface != $cookie) {
-            $nv_Request->set_Cookie('int_lang', $langinterface, NV_LIVE_COOKIE_TIME);
+            $nv_Request->set_Cookie(INT_LANG_COOKIE_NAME, $langinterface, NV_LIVE_COOKIE_TIME);
         }
 
         define('NV_LANG_INTERFACE', $langinterface);
     } elseif (preg_match('/^[a-z]{2}$/', $cookie) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie . '/global.php')) {
         define('NV_LANG_INTERFACE', $cookie);
     } else {
-        $nv_Request->set_Cookie('int_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
+        $nv_Request->set_Cookie(INT_LANG_COOKIE_NAME, $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
 
         define('NV_LANG_INTERFACE', $global_config['site_lang']);
     }
 
     unset($cookie, $site_lang, $langinterface);
 } else {
-    $cookie = $nv_Request->get_string('u_lang', 'cookie');
+    $cookie = $nv_Request->get_string(U_LANG_COOKIE_NAME, 'cookie');
     if (preg_match('/^[a-z]{2}$/', $site_lang) and file_exists(NV_ROOTDIR . '/includes/language/' . $site_lang . '/global.php')) {
         if ($site_lang != $cookie) {
-            $nv_Request->set_Cookie('u_lang', $site_lang, NV_LIVE_COOKIE_TIME);
+            $nv_Request->set_Cookie(U_LANG_COOKIE_NAME, $site_lang, NV_LIVE_COOKIE_TIME);
         }
     } elseif (preg_match('/^[a-z]{2}$/', $cookie) and file_exists(NV_ROOTDIR . '/includes/language/' . $cookie . '/global.php')) {
         $site_lang = $cookie;
@@ -76,7 +76,7 @@ if (empty($global_config['lang_multi'])) {
                 }
             }
         }
-        $nv_Request->set_Cookie('u_lang', $site_lang, NV_LIVE_COOKIE_TIME);
+        $nv_Request->set_Cookie(U_LANG_COOKIE_NAME, $site_lang, NV_LIVE_COOKIE_TIME);
     }
 
     $langinterface = (!empty($user_cookie['language']) and preg_match('/^[a-z]{2}$/', $user_cookie['language']) and file_exists(NV_ROOTDIR . '/includes/language/' . $user_cookie['language'] . '/global.php')) ? $user_cookie['language'] : $site_lang;

@@ -312,7 +312,7 @@ $client_info['client_os'] = [
 $is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
 if ($is_mobile_tablet != $nv_Request->get_string('is_mobile_tablet', 'session')) {
     $nv_Request->set_Session('is_mobile_tablet', $is_mobile_tablet);
-    $nv_Request->unset_request('nv' . NV_LANG_DATA . 'themever', 'cookie');
+    $nv_Request->unset_request(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, 'cookie');
 }
 
 // Captcha
@@ -461,13 +461,13 @@ define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
 if (defined('NV_ADMIN')) {
     if (!file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php')) {
         if ($global_config['lang_multi']) {
-            $nv_Request->set_Cookie('data_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
+            $nv_Request->set_Cookie(DATA_LANG_COOKIE_NAME, $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
         }
         nv_redirect_location(NV_BASE_ADMINURL);
     }
     if (!file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php')) {
         if ($global_config['lang_multi']) {
-            $nv_Request->set_Cookie('int_lang', $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
+            $nv_Request->set_Cookie(INT_LANG_COOKIE_NAME, $global_config['site_lang'], NV_LIVE_COOKIE_TIME);
         }
         nv_redirect_location(NV_BASE_ADMINURL);
     }

@@ -256,7 +256,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_
         $array_filename[] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang));
     }
 
-    $nv_Request->set_Cookie('dirlang', $dirlang, NV_LIVE_COOKIE_TIME);
+    $nv_Request->set_Cookie('drlg', $dirlang, NV_LIVE_COOKIE_TIME);
 
     $xtpl = new XTemplate('read.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);

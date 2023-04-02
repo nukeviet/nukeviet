@@ -42,7 +42,7 @@ if ($global_config['online_upd'] and !defined('NV_IS_AJAX') and !defined('NV_IS_
 
 // Thong ke
 if ($global_config['statistic'] and !defined('NV_IS_AJAX') and !defined('NV_IS_MY_USER_AGENT')) {
-    if (!$nv_Request->isset_request('statistic_' . NV_LANG_DATA, 'cookie')) {
+    if (!$nv_Request->isset_request(STATISTIC_COOKIE_NAME . NV_LANG_DATA, 'cookie')) {
         require NV_ROOTDIR . '/includes/core/stat.php';
     }
 }
@@ -52,7 +52,7 @@ if ($global_config['referer_blocker'] and $client_info['is_myreferer'] === 0 and
     require NV_ROOTDIR . '/includes/core/referer.php';
 }
 
-if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') or $nv_Request->isset_request(NV_NAME_VARIABLE, 'post')) {
+if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'post,get')) {
     $home = 0;
     $module_name = $nv_Request->get_string(NV_NAME_VARIABLE, 'post,get');
 
@@ -132,7 +132,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 $nv_BotManager->setNoIndex()->printToHeaders();
                 $theme_type = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '', 1);
                 if (in_array($theme_type, $global_config['array_theme_type'], true)) {
-                    $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME);
+                    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
                 }
 
                 $nv_redirect = nv_get_redirect('get', true);
@@ -197,9 +197,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 }
                 if ($drag_block) {
                     define('NV_IS_DRAG_BLOCK', true);
-                    $adm_int_lang = $nv_Request->get_string('int_lang', 'cookie');
+                    $adm_int_lang = $nv_Request->get_string(INT_LANG_COOKIE_NAME, 'cookie');
                     if ($adm_int_lang != NV_LANG_DATA) {
-                        $nv_Request->set_Cookie('int_lang', NV_LANG_DATA, NV_LIVE_COOKIE_TIME);
+                        $nv_Request->set_Cookie(INT_LANG_COOKIE_NAME, NV_LANG_DATA, NV_LIVE_COOKIE_TIME);
                     }
                 }
             }
@@ -218,7 +218,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                     $global_config['current_theme_type'] = 'm';
                 } else {
                     $is_mobile = false;
-                    $global_config['current_theme_type'] = $nv_Request->get_string('nv' . NV_LANG_DATA . 'themever', 'cookie', '');
+                    $global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
                     $array_theme_type = array_flip($global_config['array_theme_type']);
                     unset($array_theme_type['m']);
                     if (!isset($array_theme_type[$global_config['current_theme_type']])) {
@@ -236,10 +236,10 @@ if (preg_match($global_config['check_module'], $module_name)) {
                  * - desktop: d
                  * - mobile: m
                  */
-                $global_config['current_theme_type'] = $nv_Request->get_string('nv' . NV_LANG_DATA . 'themever', 'cookie', '');
+                $global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
                 if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'], true)) {
                     $global_config['current_theme_type'] = '';
-                    $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', '', NV_LIVE_COOKIE_TIME);
+                    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, '', NV_LIVE_COOKIE_TIME);
                 }
 
                 // Xac dinh giao dien chung
@@ -285,7 +285,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 // Xac lap lai giao kieu giao dien hien tai
                 if ($theme_type != $global_config['current_theme_type']) {
                     $global_config['current_theme_type'] = $theme_type;
-                    $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME);
+                    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
                 }
                 unset($theme_type);
             }

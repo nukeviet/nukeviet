@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_LANG')) {
     exit('Stop!!!');
 }
 
-$dirlang_old = $nv_Request->get_string('dirlang', 'cookie', NV_LANG_DATA);
+$dirlang_old = $nv_Request->get_string('drlg', 'cookie', NV_LANG_DATA);
 $dirlang = $nv_Request->get_string('dirlang', 'get', $dirlang_old);
 
 $page_title = $lang_module['nv_lang_interface'] . ': ' . $language_array[$dirlang]['name'];
@@ -52,7 +52,7 @@ if (!in_array($dirlang, $array_lang_exit, true)) {
 }
 
 if ($dirlang_old != $dirlang) {
-    $nv_Request->set_Cookie('dirlang', $dirlang, NV_LIVE_COOKIE_TIME);
+    $nv_Request->set_Cookie('drlg', $dirlang, NV_LIVE_COOKIE_TIME);
 }
 
 $a = 0;
