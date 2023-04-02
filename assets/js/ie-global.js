@@ -76,13 +76,11 @@ function nv_iChars_Remove(str) {
 }
 
 function nv_setCookie(name, value, expiredays, secure, SameSite) {
-    var a, domainName = document.domain;
+    var a;
     expiredays = expiredays ? ((a = new Date).setDate(a.getDate() + expiredays), "; expires=" + a.toGMTString()) : "";
-    domainName = domainName.replace(/www\./g, "");
-    domainName = /^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,}$/i.test(domainName) ? "; domain=." + domainName : "";
     secure = void 0 !== secure && secure ? "; secure" : "";
     SameSite = void 0 !== SameSite && ("Lax" == SameSite || "Strict" == SameSite || "None" == SameSite && "" != secure) ? "; SameSite=" + SameSite : "";
-    document.cookie = name + "=" + escape(value) + expiredays + domainName + "; path=" + nv_base_siteurl + SameSite + secure
+    document.cookie = name + "=" + escape(value) + expiredays + "; path=" + nv_base_siteurl + SameSite + secure
 }
 
 function nv_getCookie(name) {

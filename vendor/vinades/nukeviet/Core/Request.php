@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -115,6 +115,8 @@ class Request
     private $httponly = true;
 
     private $SameSite = '';
+
+    private $cookie_share = false;
 
     private $set_cookie_by_options = false;
 
@@ -251,6 +253,9 @@ class Request
         }
         if (!empty($config['cookie_httponly'])) {
             $this->httponly = true;
+        }
+        if (!empty($config['cookie_share'])) {
+            $this->cookie_share = true;
         }
         if (!empty($config['cookie_SameSite']) and in_array($config['cookie_SameSite'], [
             'Lax',
@@ -585,8 +590,12 @@ class Request
     private function get_cookie_save_path()
     {
         $this->cookie_path = $this->base_siteurl . '/';
-        $cookie_domain = preg_replace('/^([w]{3})\./', '', $this->server_name);
-        $this->cookie_domain = (preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain)) ? '.' . $cookie_domain : '';
+        if ($this->cookie_share) {
+            $cookie_domain = preg_replace('/^([w]{3})\./', '', $this->server_name);
+            $this->cookie_domain = (preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain)) ? '.' . $cookie_domain : '';
+        } else {
+            $this->cookie_domain = '';
+        }
     }
 
     /**

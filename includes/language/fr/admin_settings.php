@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -554,3 +554,4 @@ $lang_module['load_files_seccode'] = 'Code secret pour accéder aux load-fichier
 $lang_module['value_copied'] = 'La valeur a été copiée';
 $lang_module['auto_acao'] = 'Ajouter l\'en-tête Access-Control-Allow-Origin';
 $lang_module['auto_acao_note'] = 'Lorsque la requête inclut un en-tête Origin avec une valeur valide, le système répondra automatiquement avec un en-tête de réponse Access-Control-Allow-Origin avec une valeur égale à la valeur de l\'origine qui lui est envoyée.';
+$lang_module['cookie_share'] = 'Partager les cookies pour les sous-domaines';

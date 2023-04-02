@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -260,7 +260,6 @@ function inet_to_bits($inet)
  * nv_getCountry_from_file()
  *
  * @param string $ip
- * @return
  */
 function nv_getCountry_from_file($ip)
 {
@@ -306,7 +305,6 @@ function nv_getCountry_from_file($ip)
  * nv_getCountry_from_cookie()
  *
  * @param mixed $ip
- * @return
  */
 function nv_getCountry_from_cookie($ip)
 {
@@ -325,14 +323,19 @@ function nv_getCountry_from_cookie($ip)
     $codecountry = base64_encode($code . '.' . $country);
     $livecookietime = time() + 31536000;
 
-    if (isset($_SERVER['SERVER_NAME']) and !empty($_SERVER['SERVER_NAME'])) {
-        $cookie_domain = $_SERVER['SERVER_NAME'];
+    if (!empty($global_config['cookie_share'])) {
+        if (isset($_SERVER['SERVER_NAME']) and !empty($_SERVER['SERVER_NAME'])) {
+            $cookie_domain = $_SERVER['SERVER_NAME'];
+        } else {
+            $cookie_domain = $_SERVER['HTTP_HOST'];
+        }
+
+        $cookie_domain = preg_replace(['/^[a-zA-Z]+\:\/\//', '/^([w]{3})\./'], ['', ''], $cookie_domain);
+        $cookie_domain = preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain) ? '.' . $cookie_domain : '';
     } else {
-        $cookie_domain = $_SERVER['HTTP_HOST'];
+        $cookie_domain = '';
     }
 
-    $cookie_domain = preg_replace(['/^[a-zA-Z]+\:\/\//', '/^([w]{3})\./'], ['', ''], $cookie_domain);
-    $cookie_domain = preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain) ? '.' . $cookie_domain : '';
     $cookie_path = '/';
     if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
         $options = [

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -554,3 +554,4 @@ $lang_module['load_files_seccode'] = 'Secret code to access load-files';
 $lang_module['value_copied'] = 'Value has been copied';
 $lang_module['auto_acao'] = 'Add Access-Control-Allow-Origin header';
 $lang_module['auto_acao_note'] = 'When the query includes an Origin header with a valid value, the system will automatically respond with an Access-Control-Allow-Origin response header with a value equal to the value of the origin sent to the query';
+$lang_module['cookie_share'] = 'Share cookies for subdomains';

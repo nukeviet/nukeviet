@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -18,7 +18,6 @@ if (!defined('NV_MAINFILE')) {
  * Xác định tên múi giờ
  *
  * @param mixed $cookie
- * @return
  */
 function nv_getTimezoneName_from_cookie($cookie)
 {
@@ -66,11 +65,12 @@ if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cooki
     $client_timezone_name = base64_encode(NV_CLIENT_TIMEZONE_NAME . '.' . NV_CLIENT_TIMEZONE_OFFSET . '.' . NV_CLIENT_TIMEZONE_DST);
 
     $secure = NV_SERVER_PROTOCOL == 'https' ? true : false;
+    $cookie_domain = !empty($global_config['cookie_share']) ? $matches2[5] : '';
     if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
         $options = [
             'expires' => 0,
             'path' => $matches2[4],
-            'domain' => $matches2[5],
+            'domain' => $cookie_domain,
             'secure' => $secure,
             'httponly' => true
         ];
@@ -79,7 +79,7 @@ if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cooki
         }
         setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, $options);
     } else {
-        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $matches2[5], $secure, true);
+        setcookie($global_config['cookie_prefix'] . '_cltn', $client_timezone_name, 0, $matches2[4], $cookie_domain, $secure, true);
     }
 
     unset($client_timezone_name, $sd);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -562,3 +562,4 @@ $lang_module['load_files_seccode'] = 'Mã bí mật truy cập load-files';
 $lang_module['value_copied'] = 'Giá trị đã được sao chép vào bộ nhớ';
 $lang_module['auto_acao'] = 'Thêm tiêu đề Access-Control-Allow-Origin';
 $lang_module['auto_acao_note'] = 'Khi truy vấn có kèm tiêu đề Origin với giá trị hợp lệ, hệ thống sẽ tự động trả lời bằng tiêu đề phản hồi Access-Control-Allow-Origin với giá trị bằng chính giá trị miền của Origin gửi đến';
+$lang_module['cookie_share'] = 'Chia sẻ cookie cho tên miền phụ';

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -29,6 +29,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global['session_prefix'] = nv_substr($nv_Request->get_title('session_prefix', 'post', '', 0, $preg_replace), 0, 255);
     $array_config_global['cookie_secure'] = (int) $nv_Request->get_bool('cookie_secure', 'post', 0);
     $array_config_global['cookie_httponly'] = (int) $nv_Request->get_bool('cookie_httponly', 'post', 0);
+    $array_config_global['cookie_share'] = (int) $nv_Request->get_bool('cookie_share', 'post', 0);
     $array_config_global['cookie_SameSite'] = $nv_Request->get_title('cookie_SameSite', 'post', '');
     if (!empty($array_config_global['cookie_SameSite']) and !isset($sameSite_array[$array_config_global['cookie_SameSite']])) {
         $array_config_global['cookie_SameSite'] = '';
@@ -73,8 +74,9 @@ $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('NV_LIVE_COOKIE_TIME', round(NV_LIVE_COOKIE_TIME / 86400));
 $xtpl->assign('NV_LIVE_SESSION_TIME', round(NV_LIVE_SESSION_TIME / 60));
-$xtpl->assign('CHECKBOX_COOKIE_SECURE', ($global_config['cookie_secure'] == 1) ? ' checked="checked"' : '');
-$xtpl->assign('CHECKBOX_COOKIE_HTTPONLY', ($global_config['cookie_httponly'] == 1) ? ' checked="checked"' : '');
+$xtpl->assign('CHECKBOX_COOKIE_SECURE', !empty($global_config['cookie_secure']) ? ' checked="checked"' : '');
+$xtpl->assign('CHECKBOX_COOKIE_HTTPONLY', !empty($global_config['cookie_httponly']) ? ' checked="checked"' : '');
+$xtpl->assign('CHECKBOX_COOKIE_SHARE', !empty($global_config['cookie_share']) ? ' checked="checked"' : '');
 
 if ($errormess != '') {
     $xtpl->assign('ERROR', $errormess);
