@@ -3044,7 +3044,7 @@ function post_async($url, $params = [], $headers = [])
 
     $server_ip = nv_getenv('SERVER_ADDR');
     if (!empty($server_ip)) {
-        if (filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === true) {
+        if (filter_var($server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             $server_ip = '[' . $server_ip . ']';
         }
         $server_domain = NV_SERVER_PROTOCOL . '://' . $server_ip . NV_SERVER_PORT;
