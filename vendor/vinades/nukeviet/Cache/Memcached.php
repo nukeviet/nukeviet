@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -124,10 +124,8 @@ class Memcached
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
-        $_rows = [];
-
         if (empty($sql)) {
-            return $_rows;
+            return [];
         }
 
         if (empty($lang)) {
@@ -135,20 +133,24 @@ class Memcached
         }
 
         $cache_key = $modname . '_' . $lang . '_' . md5($sql . '_' . $this->_Cache_Prefix);
-
-        if (!($_rows = $this->_Cache->get($cache_key))) {
-            if (($result = $this->_Db->query($sql)) !== false) {
-                $a = 0;
-                while ($row = $result->fetch()) {
-                    $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
-                    $_rows[$key2] = $row;
-                    ++$a;
-                }
-                $result->closeCursor();
-                $this->_Cache->set($cache_key, $_rows, $ttl);
-            }
+        if (($cache = $this->_Cache->get($cache_key)) !== false) {
+            return $cache;
         }
 
-        return $_rows;
+        if (($result = $this->_Db->query($sql)) === false) {
+            return [];
+        }
+
+        $a = 0;
+        $cache = [];
+        while ($row = $result->fetch()) {
+            $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
+            $cache[$key2] = $row;
+            ++$a;
+        }
+        $result->closeCursor();
+        $this->_Cache->set($cache_key, $cache, $ttl);
+
+        return $cache;
     }
 }

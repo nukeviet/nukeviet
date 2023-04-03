@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -184,11 +184,8 @@ class Files
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
-        // Note: $ttl not use in Files cache
-        $list = [];
-
         if (empty($sql)) {
-            return $list;
+            return [];
         }
 
         if (empty($lang)) {
@@ -196,23 +193,24 @@ class Files
         }
 
         $cache_file = $lang . '_' . md5($sql) . '_' . $this->_Cache_Prefix . '.cache';
-
-        if (($cache = $this->getItem($modname, $cache_file)) != false) {
-            $list = unserialize($cache);
-        } else {
-            if (($result = $this->_Db->query($sql)) !== false) {
-                $a = 0;
-                while ($row = $result->fetch()) {
-                    $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
-                    $list[$key2] = $row;
-                    ++$a;
-                }
-                $result->closeCursor();
-
-                $this->setItem($modname, $cache_file, serialize($list));
-            }
+        if (($cache = $this->getItem($modname, $cache_file)) !== false) {
+            return unserialize($cache);
         }
 
-        return $list;
+        if (($result = $this->_Db->query($sql)) === false) {
+            return [];
+        }
+
+        $a = 0;
+        $cache = [];
+        while ($row = $result->fetch()) {
+            $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
+            $cache[$key2] = $row;
+            ++$a;
+        }
+        $result->closeCursor();
+        $this->setItem($modname, $cache_file, serialize($cache));
+
+        return $cache;
     }
 }
