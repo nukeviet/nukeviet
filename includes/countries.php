@@ -325,14 +325,19 @@ function nv_getCountry_from_cookie($ip)
     $codecountry = base64_encode($code . '.' . $country);
     $livecookietime = time() + 31536000;
 
-    if (isset($_SERVER['SERVER_NAME']) and !empty($_SERVER['SERVER_NAME'])) {
-        $cookie_domain = $_SERVER['SERVER_NAME'];
+    if (!empty($global_config['cookie_share'])) {
+        if (isset($_SERVER['SERVER_NAME']) and !empty($_SERVER['SERVER_NAME'])) {
+            $cookie_domain = $_SERVER['SERVER_NAME'];
+        } else {
+            $cookie_domain = $_SERVER['HTTP_HOST'];
+        }
+
+        $cookie_domain = preg_replace(['/^[a-zA-Z]+\:\/\//', '/^([w]{3})\./'], ['', ''], $cookie_domain);
+        $cookie_domain = preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain) ? '.' . $cookie_domain : '';
     } else {
-        $cookie_domain = $_SERVER['HTTP_HOST'];
+        $cookie_domain = '';
     }
 
-    $cookie_domain = preg_replace(['/^[a-zA-Z]+\:\/\//', '/^([w]{3})\./'], ['', ''], $cookie_domain);
-    $cookie_domain = preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain) ? '.' . $cookie_domain : '';
     $cookie_path = '/';
     if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
         $options = [

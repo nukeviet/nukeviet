@@ -405,3 +405,4 @@ $lang_module['rp_directives'] = 'Các chỉ thị RP';
 $lang_module['XSSsanitize'] = 'Lọc các mã HTML nguy hiểm trước khi gửi biểu mẫu';
 $lang_module['admin_XSSsanitize'] = 'Trong khu vực quản trị';
 $lang_module['user_XSSsanitize'] = 'Trong khu vực tương tác của người dùng';
+$lang_module['cookie_share'] = 'Chia sẻ cookie cho tên miền phụ';

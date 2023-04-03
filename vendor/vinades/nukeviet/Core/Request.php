@@ -114,6 +114,8 @@ class Request
 
     private $SameSite = '';
 
+    private $cookie_share = false;
+
     private $set_cookie_by_options = false;
 
     private $ip_addr;
@@ -245,6 +247,9 @@ class Request
         }
         if (!empty($config['cookie_httponly'])) {
             $this->httponly = true;
+        }
+        if (!empty($config['cookie_share'])) {
+            $this->cookie_share = true;
         }
         if (!empty($config['cookie_SameSite']) and in_array($config['cookie_SameSite'], [
             'Lax',
@@ -597,8 +602,12 @@ class Request
     private function get_cookie_save_path()
     {
         $this->cookie_path = $this->base_siteurl . '/';
-        $cookie_domain = preg_replace('/^([w]{3})\./', '', $this->server_name);
-        $this->cookie_domain = (preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain)) ? '.' . $cookie_domain : '';
+        if ($this->cookie_share) {
+            $cookie_domain = preg_replace('/^([w]{3})\./', '', $this->server_name);
+            $this->cookie_domain = (preg_match('/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain)) ? '.' . $cookie_domain : '';
+        } else {
+            $this->cookie_domain = '';
+        }
     }
 
     /**

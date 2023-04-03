@@ -394,3 +394,4 @@ $lang_module['rp_directives'] = 'Referrer-Policy directives';
 $lang_module['XSSsanitize'] = 'Filtrer les codes HTML dangereux avant de soumettre le formulaire';
 $lang_module['admin_XSSsanitize'] = 'Dans la zone d\'administration';
 $lang_module['user_XSSsanitize'] = 'Dans la zone d\'interaction utilisateur';
+$lang_module['cookie_share'] = 'Partager les cookies pour les sous-domaines';
