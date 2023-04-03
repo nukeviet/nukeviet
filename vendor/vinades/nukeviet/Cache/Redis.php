@@ -159,10 +159,8 @@ class Redis
      */
     public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
-        $_rows = array();
-
         if (empty($sql)) {
-            return $_rows;
+            return array();
         }
 
         if (empty($lang)) {
@@ -170,21 +168,25 @@ class Redis
         }
 
         $cache_key = $modname . '_' . $lang . '_' . md5($sql . '_' . $this->_Cache_Prefix);
-
-        if (!($_rows = $this->_Cache->get($cache_key))) {
-            if (($result = $this->_Db->query($sql)) !== false) {
-                $a = 0;
-                while ($row = $result->fetch()) {
-                    $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
-                    $_rows[$key2] = $row;
-                    ++$a;
-                }
-                $result->closeCursor();
-                $this->set($cache_key, $_rows, $ttl);
-            }
+        if (($cache = $this->_Cache->get($cache_key)) !== false) {
+            return $cache;
         }
 
-        return $_rows;
+        if (($result = $this->_Db->query($sql)) === false) {
+            return array();
+        }
+
+        $a = 0;
+        $cache = array();
+        while ($row = $result->fetch()) {
+            $key2 = (!empty($key) and isset($row[$key])) ? $row[$key] : $a;
+            $cache[$key2] = $row;
+            ++$a;
+        }
+        $result->closeCursor();
+        $this->set($cache_key, $cache, $ttl);
+
+        return $cache;
     }
 
     /**
