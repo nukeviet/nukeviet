@@ -37,4 +37,35 @@ $(document).ready(function() {
     $("body").delegate(".wttooltip", "click", function() {
         $(this).hide().prev(".ninfo").show();
     });
+
+    $('#clearsystem-form').on('submit', function(e) {
+        e.preventDefault();
+        var that = $(this),
+            url = that.attr('action'),
+            data = that.serialize(),
+            checked_num = $('[name^=deltype]:checked', that).length;
+        if (checked_num) {
+            $('#pload').show();
+            $('#presult, #pnoresult').hide();
+            $('input', that).prop('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                cache: !1,
+                success: function(response) {
+                    $('input', that).prop('disabled', false);
+                    $('[type=checkbox]:checked', that).prop('checked', false);
+                    if (response) {
+                        $('#presult .contents').html(response);
+                        $('#pload, #pnoresult').hide();
+                        $('#presult').slideDown();
+                    } else {
+                        $('#pload, #presult').hide();
+                        $('#pnoresult').show();
+                    }
+                }
+            })
+        }
+    });
 });

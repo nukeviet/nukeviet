@@ -88,3 +88,4 @@ $lang_module['googleAnalyticsID'] = 'ID du compte Google Universal Analytics  (S
 $lang_module['googleAnalytics4ID'] = 'ID du compte Google Analytics 4(Sous format G-XXXXXXXX, UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Regardez les details</a>)';
 $lang_module['referer_blocker'] = 'Activé referer utilité';
 $lang_module['google_tag_manager'] = 'ID de conteneur de Google Tag Manager<br />(GTM-XXXXXXX, <a href="https://developers.google.com/tag-platform/tag-manager/web" target="_blank">Regardez les details</a>)';
+$lang_module['no_files_to_delete'] = 'Aucun fichier à supprimer';
