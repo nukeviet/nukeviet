@@ -151,3 +151,4 @@ $lang_module['feedback_address'] = 'Déclarer l\'adresse lors de l\'envoi de com
 $lang_module['option_0'] = 'Non';
 $lang_module['option_1'] = 'Requis';
 $lang_module['option_2'] = 'Facultatif';
+$lang_module['department_parent'] = 'Appartenant au département';

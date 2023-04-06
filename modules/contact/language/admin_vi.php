@@ -153,3 +153,4 @@ $lang_module['feedback_address'] = 'Khai báo địa chỉ khi gửi phản hồ
 $lang_module['option_0'] = 'Không';
 $lang_module['option_1'] = 'Bắt buộc';
 $lang_module['option_2'] = 'Không bắt buộc';
+$lang_module['department_parent'] = 'Thuộc bộ phận';

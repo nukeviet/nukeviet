@@ -151,3 +151,4 @@ $lang_module['feedback_address'] = 'Declare the address when sending feedback';
 $lang_module['option_0'] = 'No';
 $lang_module['option_1'] = 'Required';
 $lang_module['option_2'] = 'Optional';
+$lang_module['department_parent'] = 'Belonging to the department';
