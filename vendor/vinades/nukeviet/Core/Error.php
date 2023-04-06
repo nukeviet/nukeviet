@@ -44,16 +44,18 @@ class Error
     const LOG_ERROR_LIST_DEFAULT = E_ALL | E_STRICT;
     const SEND_ERROR_LIST_DEFAULT = E_USER_ERROR;
     const ERROR_LOG_PATH_DEFAULT = 'data/logs/error_logs';
-    const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
-    const LOG_NOTICE_FILE_NAME_DEFAULT = 'notice_log'; //ten file log
-    const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
+    const LOG_FILE_NAME_DEFAULT = 'error_log'; //Tên file log lỗi
+    const LOG_NOTICE_FILE_NAME_DEFAULT = 'notice_log'; //tên file log cảnh báo
+    const LOG_FILE_EXT_DEFAULT = 'log'; //đuôi file log
+    const LOG_DELIMITER = '-------------------'; //dấu phân cách
 
-    private $cfg;
+    public $cfg;
     private $cl;
     private $errno = false;
     private $errstr = false;
     private $errfile = false;
     private $errline = false;
+    private $errid = false;
     private static $errortype = [
         E_ERROR => 'Error',
         E_WARNING => 'Warning',
@@ -66,10 +68,10 @@ class Error
         E_USER_ERROR => 'User Error',
         E_USER_WARNING => 'User Warning',
         E_USER_NOTICE => 'User Notice',
-        E_STRICT => 'Runtime Notice',
-        E_RECOVERABLE_ERROR => 'Catchable fatal error',
-        E_DEPRECATED => 'Run-time notices',
-        E_USER_DEPRECATED => 'User-generated warning message'
+        E_STRICT => 'Strict Notice',
+        E_RECOVERABLE_ERROR => 'Recoverable Error',
+        E_DEPRECATED => 'Deprecated Notice',
+        E_USER_DEPRECATED => 'User-deprecated Notice'
     ];
     private $track_fatal_error = [
         [
@@ -116,8 +118,9 @@ class Error
             'month' => gmdate('Y-m', NV_CURRENTTIME), // Prefix theo tháng log 256, Lấy cố định GMT, không theo múi giờ,
             'ip' => Ips::$remote_ip,
             'request' => substr(Site::getEnv(['UNENCODED_URL', 'REQUEST_URI']), 0, 500),
-            'useragent' => substr(Site::getEnv('HTTP_USER_AGENT'), 0, 500),
-            'server_name' => preg_replace('/(\:[0-9]+)$/', '', preg_replace('/^[a-z]+\:\/\//i', '', trim(Site::getEnv(['HTTP_HOST', 'SERVER_NAME', 'Host']))))
+            'useragent' => trim(substr(Site::getEnv('HTTP_USER_AGENT'), 0, 500)),
+            'server_name' => preg_replace('/(\:[0-9]+)$/', '', preg_replace('/^[a-z]+\:\/\//i', '', trim(Site::getEnv(['HTTP_HOST', 'SERVER_NAME', 'Host'])))),
+            'method' => strtoupper(Site::getEnv(['REQUEST_METHOD', 'Method']))
         ];
 
         set_error_handler([&$this, 'error_handler']);
@@ -193,35 +196,73 @@ class Error
     }
 
     /**
+     * format_str()
+     * 
+     * @param mixed $str 
+     * @return string|string[]|null 
+     */
+    private static function format_str($str)
+    {
+        $str = str_replace('\\', '/', $str);
+        $str = preg_replace('/\/{2,}/', '/', $str);
+        $str = str_replace(NV_ROOTDIR, '', $str);
+
+        return str_replace(['[', ']'], ['&lbrack;', '&rbrack;'], $str);
+    }
+
+    /**
+     * _log_content()
+     * 
+     * @param string $seperator 
+     * @return string 
+     */
+    private function _log_content($seperator = '')
+    {
+        $errstr = strtr($this->errstr, [
+            "\r\n" => '<br/>',
+            "\r" => '<br/>',
+            "\n" => '<br/>'
+        ]);
+
+        $content = [];
+        $content[] = '[ID: ' . $this->errid . ']';
+        $content[] = '[TIME: ' . $this->cl['error_date'] . ']';
+        $content[] = '[SERVER: ' . $this->cl['server_name'] . ']';
+        $content[] = '[IP: ' . $this->cl['ip'] . ']';
+        $content[] = '[ERRNO: ' . $this->errno . ' (' . self::$errortype[$this->errno] . ')]';
+        $content[] = '[ERRSTR: ' . $errstr . ']';
+        if (!empty($this->errfile)) {
+            $content[] = '[FILE: ' . $this->errfile . ']';
+        }
+        if (!empty($this->errline)) {
+            $content[] = '[LINE: ' . $this->errline . ']';
+        }
+        if (!empty($this->cl['request'])) {
+            $content[] = '[REQUEST: ' . $this->cl['request'] . ']';
+        }
+        if (!empty($this->cl['method'])) {
+            $content[] = '[METHOD: ' . $this->cl['method'] . ']';
+        }
+        if (!empty($this->cl['useragent'])) {
+            $agent = str_replace(['[', ']'], '', $this->cl['useragent']);
+            $content[] = '[AGENT: ' . $agent . ']';
+        }
+
+        return implode($seperator, $content);
+    }
+
+    /**
      * info_die()
      *
      * @return never
      */
     private function info_die()
     {
-        $error_code = md5($this->errno . (string) $this->errfile . (string) $this->errline . $this->cl['ip']);
-        $error_code2 = md5($error_code);
-        $error_file = $this->cfg['error_log_256'] . '/' . $this->cl['month'] . '__' . $error_code2 . '__' . $error_code . '.' . $this->cfg['error_log_fileext'];
+        $error_code = md5($this->errid . '-' . $this->cl['month'] . '-' . $this->cl['ip']);
+        $error_file = $this->cfg['error_log_256'] . '/' . $error_code . '.' . $this->cfg['error_log_fileext'];
 
         if ($this->cfg['error_set_logs'] and !file_exists($error_file)) {
-            $content = 'TIME: ' . $this->cl['error_date'] . "\n";
-            if (!empty($this->cl['ip'])) {
-                $content .= 'IP: ' . $this->cl['ip'] . "\n";
-            }
-            $content .= 'INFO: ' . self::$errortype[$this->errno] . '(' . $this->errno . '): ' . $this->errstr . "\n";
-            if (!empty($this->errfile)) {
-                $content .= 'FILE: ' . $this->errfile . "\n";
-            }
-            if (!empty($this->errline)) {
-                $content .= 'LINE: ' . $this->errline . "\n";
-            }
-            if (!empty($this->cl['request'])) {
-                $content .= 'REQUEST: ' . $this->cl['request'] . "\n";
-            }
-            if (!empty($this->cl['useragent'])) {
-                $content .= 'USER-AGENT: ' . $this->cl['useragent'] . "\n";
-            }
-
+            $content = $this->_log_content("\n");
             file_put_contents($error_file, $content, FILE_APPEND);
         }
 
@@ -239,7 +280,7 @@ class Error
         $contents = file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/error.tpl');
         $contents = str_replace('[PAGE_TITLE]', self::$errortype[$this->errno], $contents);
         $contents = str_replace('[ERRSTR]', nl2br($this->errstr), $contents);
-        $contents = str_replace('[CODE]', $error_code2, $contents);
+        $contents = str_replace('[CODE]', $error_code, $contents);
         $contents = str_replace('[EMAIL]', $email, $contents);
 
         header('Content-Type: text/html; charset=utf-8');
@@ -256,34 +297,21 @@ class Error
      */
     private function _log()
     {
-        $content = '[' . $this->cl['error_date'] . '] [' . $this->cl['server_name'] . ']';
-        if (!empty($this->cl['ip'])) {
-            $content .= ' [' . $this->cl['ip'] . ']';
-        }
-        $content .= ' [' . self::$errortype[$this->errno] . '(' . $this->errno . '): ' . $this->errstr . ']';
-        if (!empty($this->errfile)) {
-            $content .= ' [FILE: ' . $this->errfile . ']';
-        }
-        if (!empty($this->errline)) {
-            $content .= ' [LINE: ' . $this->errline . ']';
-        }
-        if (!empty($this->cl['request'])) {
-            $content .= ' [REQUEST: ' . $this->cl['request'] . ']';
-        }
+        $content = $this->_log_content();
+        $content .= "\n";
 
         if (NV_DEBUG) {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             if (isset($backtrace[3])) {
-                $content .= "\n";
                 $trace_total = sizeof($backtrace);
                 $stt = 0;
                 for ($i = $trace_total - 1; $i >= 3; --$i) {
                     if (!empty($backtrace[$i]['file'])) {
                         ++$stt;
                         $content .= '^^^ [TRACE#' . str_pad($stt, 2, '0', STR_PAD_LEFT) . ']';
-                        $content .= ' [FILE: ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file'])) . ']';
+                        $content .= '[FILE: ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file'])) . ']';
                         if (!empty($backtrace[$i]['line'])) {
-                            $content .= ' [LINE: ' . $backtrace[$i]['line'] . ']';
+                            $content .= '[LINE: ' . $backtrace[$i]['line'] . ']';
                         }
                         $content .= "\n";
                     }
@@ -291,7 +319,7 @@ class Error
             }
         }
 
-        $content .= "\n";
+        $content .= self::LOG_DELIMITER . "\n";
         $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . ($this->errno == E_NOTICE ? $this->cfg['notice_log_filename'] : $this->cfg['error_log_filename']) . '.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
     }
@@ -301,23 +329,7 @@ class Error
      */
     private function _send()
     {
-        $content = '[' . $this->cl['error_date'] . ']';
-        if (!empty($this->cl['ip'])) {
-            $content .= ' [' . $this->cl['ip'] . ']';
-        }
-        $content .= ' [' . self::$errortype[$this->errno] . '(' . $this->errno . '): ' . $this->errstr . ']';
-        if (!empty($this->errfile)) {
-            $content .= ' [FILE: ' . $this->errfile . ']';
-        }
-        if (!empty($this->errline)) {
-            $content .= ' [LINE: ' . $this->errline . ']';
-        }
-        if (!empty($this->cl['request'])) {
-            $content .= ' [REQUEST: ' . $this->cl['request'] . ']';
-        }
-        if (!empty($this->cl['useragent'])) {
-            $content .= ' [AGENT: ' . $this->cl['useragent'] . ']';
-        }
+        $content = $this->_log_content();
         $content .= "\n";
         $error_log_file = $this->cfg['error_log_path'] . '/sendmail.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
@@ -358,12 +370,9 @@ class Error
      */
     private function log_control()
     {
-        $track_errors = $this->cl['day'] . '_' . md5($this->errno . (string) $this->errfile . (string) $this->errline);
-        $track_errors = $this->cfg['error_log_tmp'] . '/' . $track_errors . '.' . $this->cfg['error_log_fileext'];
-        $log_is_displayed = file_exists($track_errors);
-
-        if ($this->cfg['error_set_logs'] and !$log_is_displayed) {
-            file_put_contents($track_errors, '', FILE_APPEND);
+        $log_file = $this->cfg['error_log_tmp'] . '/' . $this->cl['day'] . '_' . $this->errid . '.' . $this->cfg['error_log_fileext'];
+        if ($this->cfg['error_set_logs'] and !file_exists($log_file)) {
+            file_put_contents($log_file, '', LOCK_EX);
 
             if (!empty($this->cfg['log_errors_list']) and isset($this->cfg['log_errors_list'][$this->errno])) {
                 $this->_log();
@@ -389,12 +398,12 @@ class Error
     public function error_handler($errno, $errstr, $errfile, $errline)
     {
         $this->errno = $errno;
-        $this->errstr = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $errstr));
-        !empty($errfile) && $this->errfile = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $errfile));
+        $this->errstr = self::format_str($errstr);
+        !empty($errfile) && $this->errfile = self::format_str($errfile);
         !empty($errline) && $this->errline = $errline;
-        $md5 = md5(($this->errfile ? $this->errfile : '') . ($this->errline ? $this->errline : '') . $this->errno);
+        $this->errid = md5(($this->errfile ? $this->errfile : '') . ($this->errline ? $this->errline : '') . $this->errno);
 
-        if (!in_array($md5, self::$unreported_errors, true)) {
+        if (!in_array($this->errid, self::$unreported_errors, true)) {
             $this->log_control();
 
             if ($this->errno == 256) {
@@ -416,9 +425,12 @@ class Error
 
             $this->errno = $error['type'];
             $error['type'] .= ' (' . self::$errortype[$error['type']] . ')';
-            $this->errstr = $error['message'] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $error['message']));
-            $this->errfile = $error['file'] = str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $error['file']));
+            $error['message'] = self::format_str($error['message']);
+            $error['file'] = self::format_str($error['file']);
+            $this->errstr = $error['message'];
+            $this->errfile = $error['file'];
             $this->errline = $error['line'];
+            $this->errid = md5(($this->errfile ? $this->errfile : '') . ($this->errline ? $this->errline : '') . $this->errno);
 
             foreach ($this->track_fatal_error as $track_fatal) {
                 if ($track_fatal['file'] == $file) {

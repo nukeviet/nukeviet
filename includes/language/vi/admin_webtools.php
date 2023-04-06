@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -92,3 +92,37 @@ $lang_module['googleAnalytics4ID'] = 'Mã Google Analytics 4<br />(Có dạng G-
 $lang_module['referer_blocker'] = 'Kích hoạt tiện ích kiểm tra, thống kê đường dẫn đến site';
 $lang_module['google_tag_manager'] = 'Mã trình quản lý thẻ của Google<br />(Có dạng GTM-XXXXXXX, <a href="https://developers.google.com/tag-platform/tag-manager/web" target="_blank">xem chi tiết</a>)';
 $lang_module['no_files_to_delete'] = 'Không có tệp nào để xóa';
+$lang_module['errorlog'] = 'Nhật ký lỗi';
+$lang_module['error_filelist_empty'] = 'Không tìm thấy nhật ký lỗi';
+$lang_module['errorlog_id'] = 'ID';
+$lang_module['errorlog_time'] = 'Thời gian xảy ra lỗi';
+$lang_module['errorlog_server'] = 'Máy chủ';
+$lang_module['errorlog_ip'] = 'IP khách';
+$lang_module['errorlog_errno'] = 'Mã lỗi';
+$lang_module['errorlog_errstr'] = 'Nội dung lỗi';
+$lang_module['errorlog_file'] = 'File xảy ra lỗi';
+$lang_module['errorlog_line'] = 'Dòng xảy ra lỗi';
+$lang_module['errorlog_request'] = 'Truy vấn xảy ra lỗi';
+$lang_module['errorlog_agent'] = 'User-Agent';
+$lang_module['errorlog_method'] = 'Phương thức truy vấn';
+$lang_module['errorlog_backtrace'] = 'Truy vết';
+$lang_module['backtrace_file'] = 'File';
+$lang_module['backtrace_line'] = 'Dòng';
+$lang_module['errorlog_log'] = 'File lỗi lưu nhật ký';
+$lang_module['errorlog_sendmail'] = 'File lỗi gửi mail';
+$lang_module['errorlog_256'] = 'File lỗi 256';
+$lang_module['errorcode_1'] = 'E_ERROR: Lỗi nghiêm trọng xảy ra trong thời gian thực thi. Lỗi này không thể khôi phục được. Việc thực thi tập lệnh bị tạm dừng.';
+$lang_module['errorcode_2'] = 'E_WARNING: Lỗi cảnh báo xảy ra trong thời gian thực thi (lỗi không nghiêm trọng). Việc thực thi tập lệnh không bị tạm dừng.';
+$lang_module['errorcode_4'] = 'E_PARSE: Lỗi phân tích xảy ra trong thời gian biên dịch. Lỗi phân tích cú pháp được tạo bởi trình phân tích cú pháp.';
+$lang_module['errorcode_8'] = 'E_NOTICE: Lỗi nhắc nhở xảy ra trong thời gian thực thi, cho biết tập lệnh đã gặp phải điều gì đó có thể gây ra lỗi, hoặc có thể xảy ra trong quá trình chạy tập lệnh bình thường.';
+$lang_module['errorcode_16'] = 'E_CORE_ERROR: Lỗi nghiêm trọng xảy ra trong quá trình khởi động ban đầu của PHP. Điều này giống như lỗi E_ERROR, ngoại trừ nó được tạo bởi lõi của PHP.';
+$lang_module['errorcode_32'] = 'E_CORE_WARNING: Lỗi cảnh báo xảy ra trong quá trình khởi động ban đầu của PHP (lỗi không nghiêm trọng). Điều này giống như lỗi E_WARNING, ngoại trừ nó được tạo bởi lõi của PHP.';
+$lang_module['errorcode_64'] = 'E_COMPILE_ERROR: Lỗi nghiêm trọng xảy ra trong thời gian biên dịch. Điều này giống như lỗi E_ERROR, ngoại trừ nó được tạo ra bởi Zend Scripting Engine.';
+$lang_module['errorcode_128'] = 'E_COMPILE_WARNING: Lỗi cảnh báo xảy ra trong thời gian biên dịch (lỗi không nghiêm trọng). Điều này giống như lỗi E_WARNING, ngoại trừ nó được tạo ra bởi Zend Scripting Engine.';
+$lang_module['errorcode_256'] = 'E_USER_ERROR: Lỗi nghiêm trọng xảy ra trong thời gian thực thi do người dùng tạo. Điều này giống như lỗi E_ERROR, ngoại trừ nó được tạo trong mã PHP bằng cách sử dụng hàm trigger_error() của PHP.';
+$lang_module['errorcode_512'] = 'E_USER_WARNING: Lỗi cảnh báo do người dùng tạo. Điều này giống như lỗi E_WARNING, ngoại trừ nó được tạo ra trong mã PHP bằng cách sử dụng hàm trigger_error() của PHP.';
+$lang_module['errorcode_1024'] = 'E_USER_NOTICE: Lỗi nhắc nhở do người dùng tạo. Điều này giống như lỗi E_NOTICE, ngoại trừ nó được tạo ra trong mã PHP bằng cách sử dụng hàm trigger_error() của PHP.';
+$lang_module['errorcode_2048'] = 'E_STRICT: PHP đề xuất các thay đổi đối với mã của bạn, điều này sẽ đảm bảo khả năng tương tác tốt nhất và khả năng tương thích trong tương lai cho mã của bạn.';
+$lang_module['errorcode_4096'] = 'E_RECOVERABLE_ERROR: Lỗi nghiêm trọng có thể bắt được. Nó chỉ ra rằng một lỗi nguy hiểm có thể xảy ra, nhưng không khiến Động cơ ở trạng thái không ổn định. Nếu lỗi không được xử lý do người dùng xác định (xem thêm set_error_handler()), thì ứng dụng sẽ hủy bỏ vì đây là một E_ERROR.';
+$lang_module['errorcode_8192'] = 'E_DEPRECATED: Lỗi nhắc nhở xảy ra trong thời gian thực thi, cảnh báo về mã sẽ không hoạt động trong các phiên bản sau.';
+$lang_module['errorcode_16384'] = 'E_USER_DEPRECATED: Lỗi nhắc nhở do người dùng tạo. Điều này giống như lỗi E_DEPRECATED, ngoại trừ nó được tạo trong mã PHP bằng cách sử dụng hàm trigger_error() của PHP.';

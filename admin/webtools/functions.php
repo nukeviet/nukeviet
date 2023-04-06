@@ -18,6 +18,9 @@ $allow_func = [
     'statistics',
     'clearsystem'
 ];
+if (defined('NV_IS_SPADMIN')) {
+    $allow_func[] = 'errorlog';
+}
 if (empty($global_config['idsite'])) {
     $allow_func[] = 'checkupdate';
     $allow_func[] = 'config';

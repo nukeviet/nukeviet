@@ -68,4 +68,17 @@ $(document).ready(function() {
             })
         }
     });
+    $('#errorfile').on('change', function() {
+        var url = $(this).data('url'),
+        efile = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: 'errorfile=' + efile,
+            cache: !1,
+            success: function(response) {
+                $('#errorlist').html(response)
+            }
+        })
+    })
 });

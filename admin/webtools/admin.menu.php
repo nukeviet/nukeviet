@@ -15,6 +15,9 @@ if (!defined('NV_ADMIN')) {
 
 $submenu['statistics'] = $lang_module['global_statistics'];
 $submenu['clearsystem'] = $lang_module['clearsystem'];
+if (defined('NV_IS_SPADMIN')) {
+    $submenu['errorlog'] = $lang_module['errorlog'];
+}
 if (empty($global_config['idsite'])) {
     $submenu['checkupdate'] = $lang_module['checkupdate'];
     $submenu['config'] = $lang_module['config'];
