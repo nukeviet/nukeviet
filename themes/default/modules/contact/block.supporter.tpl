@@ -16,7 +16,7 @@
         })
     </script>
 </div>
-<!-- END: deps -->
+<!-- END: deps_tab -->
 
 <div class="tab-content">
     <!-- BEGIN: deps_content -->
