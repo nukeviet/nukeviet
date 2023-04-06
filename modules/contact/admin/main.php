@@ -205,7 +205,7 @@ if (!empty($contact_allowed['exec'])) {
             $sends = $nv_Request->get_typed_array('sends', 'post', 'int', []);
             if (!empty($sends)) {
                 $sends = implode(',', $sends);
-                $ids = $db->query("SELECT GROUP_CONCAT(DISTINCT id SEPARATOR ',') AS ids FROM " . NV_MOD_TABLE . '_send WHERE id IN (' . $sends . ') AND ' . $db_deps);
+                $ids = $db->query("SELECT GROUP_CONCAT(DISTINCT id SEPARATOR ',') AS ids FROM " . NV_MOD_TABLE . '_send WHERE id IN (' . $sends . ') AND ' . $db_deps)->fetchColumn();
                 nv_delete_notification(NV_LANG_DATA, $module_name, 'contact_new', $ids);
                 if (!empty($ids)) {
                     $db->query('DELETE FROM ' . NV_MOD_TABLE . '_send WHERE id IN (' . $ids . ')');
