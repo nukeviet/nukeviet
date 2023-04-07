@@ -106,7 +106,7 @@ foreach ($errors as $error) {
         foreach ($matches as $match) {
             $v = trim($match[2]);
             if ($match[1] == 'TIME') {
-                $v = date('d/m/Y H:i:s', strtotime($v));
+                $v = date('d/m/Y H:i:s P', strtotime($v));
             }
             $it[strtolower($match[1])] = $v;
         }
