@@ -189,7 +189,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
                     $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
                     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
                         $array_tmp = explode('@', $row['class']);
-                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
+                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'], 'User');
                         $xtpl->assign('EDITOR', $edits);
                         if (!empty($row['description'])) {
                             $xtpl->parse('main.field.loop.editor.description');
@@ -1115,7 +1115,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                     $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
                     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
                         $array_tmp = explode('@', $row['class']);
-                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'], 'Basic');
+                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'], 'User');
                         $xtpl->assign('EDITOR', $edits);
                         if (!empty($row['description'])) {
                             $xtpl->parse('main.tab_edit_others.loop.editor.description');
@@ -1230,9 +1230,6 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
                 }
                 $xtpl->parse('main.tab_edit_others.loop');
             }
-        }
-        if (defined('CKEDITOR')) {
-            $xtpl->parse('main.tab_edit_others.ckeditor');
         }
         $xtpl->parse('main.edit_others');
 

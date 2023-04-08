@@ -679,9 +679,6 @@
                     </div>
                 </div>
             </form>
-            <!-- BEGIN: ckeditor -->
-            <script>for(var i in CKEDITOR.instances){CKEDITOR.instances[i].on('change',function(){CKEDITOR.instances[i].updateElement()});}</script>
-            <!-- END: ckeditor -->
         </div>
         <!-- END: tab_edit_others -->
         <!-- BEGIN: tab_edit_safemode -->
