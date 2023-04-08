@@ -132,13 +132,22 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         // Không có quyền admin (upload file) thì gỡ các plugin upload để không bị báo lỗi
         $replaces[] = "removePlugins:'uploadfile,uploadimage'";
     }
-    if (!empty($global_config['allowed_html_tags'])) {
+
+    if ($customtoolbar == 'User') {
+        $replaces[] = "format_tags:'p;div;h2;h3;h4;h5;h6'";
+        $replaces[] = "forcePasteAsPlainText:true";
+        $allowed_html_tags = ['b','blockquote','br','div','em','h2','h3','h4','h5','h6','i','li','p','span','strong','s','u','ul','ol'];
+    } else {
+        $allowed_html_tags = $global_config['allowed_html_tags'];
+    }
+    if (!empty($allowed_html_tags)) {
         $allowedContent = [];
-        foreach ($global_config['allowed_html_tags'] as $tag) {
+        foreach ($allowed_html_tags as $tag) {
             $allowedContent[] = $tag . '[*]{*}(*)';
         }
         $replaces[] = "allowedContent:'" . implode(';', $allowedContent) . "'";
     }
+
     $replaces[] = "disallowedContent:'script; *[on*,action,background,codebase,dynsrc,lowsrc,allownetworking,allowscriptaccess,fscommand,seeksegmenttime]'";
     $return .= "<script>CKEDITOR.replace( '" . $module_data . '_' . $textareaid . "', {" . implode(',', $replaces) . '});</script>';
 

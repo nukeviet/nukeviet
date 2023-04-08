@@ -47,4 +47,11 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'styles', items : [ 'Font', 'FontSize', 'TextColor', 'BGColor' ] },
         { name: 'tools', items : ['SwitchBar',  'Maximize'] }
     ];
+
+    config.toolbar_User =
+    [
+        { name: 'basicstyles', items : [ 'Bold','Italic', '-', 'TextColor', 'BGColor', '-','RemoveFormat' ] },
+        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+        { name: 'styles', items : [ 'Format' ] }
+    ];
 };
