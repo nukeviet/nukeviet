@@ -18,6 +18,10 @@ CKEDITOR.editorConfig = function( config ) {
     config.youtube_privacy = false;
     config.youtube_autoplay = true;
     config.codeSnippet_theme = 'github';
+    config.toolbarCanCollapse = true;
+    config.toolbarStartupExpanded = false;
+    config.resize_minHeight = 100;
+    config.resize_maxHeight = 600;
     // Default setting.
 
     config.toolbarGroups = [
