@@ -225,7 +225,7 @@ class Error
         ]);
 
         $content = [];
-        $content[] = '[ID: ' . $this->errid . ']';
+        // $content[] = '[ID: ' . $this->errid . ']';
         $content[] = '[TIME: ' . $this->cl['error_date'] . ']';
         $content[] = '[SERVER: ' . $this->cl['server_name'] . ']';
         $content[] = '[IP: ' . $this->cl['ip'] . ']';
