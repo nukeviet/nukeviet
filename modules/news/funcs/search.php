@@ -127,38 +127,48 @@ $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
 
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+$is_search = false;
 if (!empty($key)) {
     $page_url .= '&q=' . urlencode($key);
+    $is_search = true;
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
 if (!empty($choose)) {
     $page_url .= '&choose=' . $choose;
+    $is_search = true;
 }
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 if (!empty($catid)) {
     $page_url .= '&catid=' . $catid;
+    $is_search = true;
 }
 $from_date = $nv_Request->get_title('from_date', 'get', '', 0);
 $date_array['from_date'] = preg_replace('/[^0-9]/', '.', urldecode($from_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'])) {
     $page_url .= '&from_date=' . urlencode($date_array['from_date']);
+    $is_search = true;
 }
 
 $to_date = $nv_Request->get_title('to_date', 'get', '', 0);
 $date_array['to_date'] = preg_replace('/[^0-9]/', '.', urldecode($to_date));
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'])) {
     $page_url .= '&to_date=' . urlencode($date_array['to_date']);
+    $is_search = true;
 }
 
 $base_url = $page_url;
 $page = $nv_Request->get_int('page', 'get', 1);
 if ($page > 1) {
     $page_url .= '&page=' . $page;
+    $is_search = true;
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
+if ($is_search) {
+    $nv_BotManager->setPrivate();
+}
 
 $array_cat_search = [];
 $array_cat_search[0]['title'] = $lang_module['search_all'];
@@ -441,22 +451,22 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 if ($db->dbtype == 'mysql' and function_exists('searchKeywordforSQL')) {
                     $_dbkey = searchKeywordforSQL($dbkey);
                     $_dbkeyhtml = searchKeywordforSQL($dbkeyhtml);
-                    $where .= " AND (( tb1.title REGEXP '" . $_dbkeyhtml . "' 
-                        OR tb1.hometext REGEXP '" . $_dbkey . "' 
-                        OR tb1.author REGEXP '" . $_dbkeyhtml . "' 
+                    $where .= " AND (( tb1.title REGEXP '" . $_dbkeyhtml . "'
+                        OR tb1.hometext REGEXP '" . $_dbkey . "'
+                        OR tb1.author REGEXP '" . $_dbkeyhtml . "'
                         OR tb2.bodyhtml REGEXP '" . $_dbkey . "'
                         OR a.alias REGEXP '" . $_dbkeyhtml . "'
-                        OR a.pseudonym REGEXP '" . $_dbkeyhtml . "') 
+                        OR a.pseudonym REGEXP '" . $_dbkeyhtml . "')
                         OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
                 } else {
                     $_dbkey = '%' . $dbkey . '%';
                     $_dbkeyhtml = '%' . $dbkeyhtml . '%';
-                    $where .= " AND (( tb1.title LIKE '" . $_dbkeyhtml . "' 
-                        OR tb1.hometext LIKE '" . $_dbkey . "' 
-                        OR tb1.author LIKE '" . $_dbkeyhtml . "' 
+                    $where .= " AND (( tb1.title LIKE '" . $_dbkeyhtml . "'
+                        OR tb1.hometext LIKE '" . $_dbkey . "'
+                        OR tb1.author LIKE '" . $_dbkeyhtml . "'
                         OR tb2.bodyhtml LIKE '" . $_dbkey . "'
                         OR a.alias LIKE '" . $_dbkeyhtml . "'
-                        OR a.pseudonym LIKE '" . $_dbkeyhtml . "') 
+                        OR a.pseudonym LIKE '" . $_dbkeyhtml . "')
                         OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . '_' . $module_data . "_sources WHERE title LIKE '%" . $db_slave->dblikeescape($dbkey) . "%' OR link LIKE '%" . $db_slave->dblikeescape($qurl) . "%')))";
                 }
                 $tbl_src .= ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist a ON (tb1.id = a.id)';
