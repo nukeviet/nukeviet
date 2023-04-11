@@ -116,9 +116,7 @@
             <div class="input-group">
                 <input class="form-control" type="text" name="image" value="{DEPARTMENT.image}" id="selectfile" />
                 <span class="input-group-btn">
-                    <button class="btn btn-default selectfile" data-area="selectfile" data-path="{MODULE_UPLOAD}" type="button">
-                        <em class="fa fa-folder-open-o fa-fw"></em>
-                    </button>
+                    <button type="button" data-toggle="selectfile" data-target="selectfile" data-path="{MODULE_UPLOAD}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
                 </span>
             </div>
         </div>

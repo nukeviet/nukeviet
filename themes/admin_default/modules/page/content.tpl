@@ -26,30 +26,39 @@
                         </tr>
                         <tr>
                             <td class="text-right">{LANG.image}</td>
-                            <td><input class="w300 form-control pull-left" type="text" name="image" id="image" value="{DATA.image}" style="margin-right: 5px"/><input type="button" value="Browse server" name="selectimg" class="btn btn-info"/></td>
+                            <td>
+                                <div class="w300 input-group mb-0">
+                                    <input class="form-control" type="text" name="image" id="image" value="{DATA.image}" maxlength="250" />
+                                    <span class="input-group-btn">
+                                        <button type="button" data-toggle="selectfile" data-target="image" data-alt="imagealt" data-path="{UPLOADS_DIR_USER}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                                    </span>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-right">{LANG.imagealt}</td>
-                            <td><input class="w300 form-control" type="text" name="imagealt" id="imagealt" value="{DATA.imagealt}"/></td>
+                            <td><input class="w300 form-control" type="text" name="imagealt" id="imagealt" value="{DATA.imagealt}" /></td>
                         </tr>
                         <tr>
                             <td class="text-right">{LANG.imgposition}</td>
                             <td>
-                            <select class="form-control w300" name="imageposition">
-                                <!-- BEGIN: looppos -->
-                                <option value="{id_imgposition}" {posl}>{title_imgposition}</option>
-                                <!-- END: looppos -->
-                            </select></td>
+                                <select class="form-control w300" name="imageposition">
+                                    <!-- BEGIN: looppos -->
+                                    <option value="{id_imgposition}" {posl}>{title_imgposition}</option>
+                                    <!-- END: looppos -->
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td class="text-right">{LANG.description} </td>
-                            <td >							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{DATA.description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+                            <td> <textarea class="form-control" id="description" name="description" cols="100" rows="5">{DATA.description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
                         </tr>
                         <tr>
-                            <td colspan="2" class="strong" > {LANG.bodytext} <sup class="required">(*)</sup>
-                            <div>
-                                {BODYTEXT}
-                            </div></td>
+                            <td colspan="2" class="strong"> {LANG.bodytext} <sup class="required">(*)</sup>
+                                <div>
+                                    {BODYTEXT}
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -62,7 +71,7 @@
                         <td>{LANG.group_post}</td>
                     </tr>
                     <tr>
-                        <td><label><input type="checkbox" value="1" name="hot_post"{HOST_POST}/> {LANG.hot_post}</label></td>
+                        <td><label><input type="checkbox" value="1" name="hot_post" {HOST_POST} /> {LANG.hot_post}</label></td>
                     </tr>
                     <tr>
                         <td>{LANG.keywords}</td>
@@ -74,38 +83,40 @@
                         <td>{LANG.socialbutton}</td>
                     </tr>
                     <tr>
-                        <td><label><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/> {LANG.socialbuttonnote}</label></td>
+                        <td><label><input type="checkbox" value="1" name="socialbutton" {SOCIALBUTTON} /> {LANG.socialbuttonnote}</label></td>
                     </tr>
                     <tr>
                         <td>{LANG.layout_func}</td>
                     </tr>
                     <tr>
                         <td>
-                        <select name="layout_func" class="form-control">
-                            <option value="">{LANG.layout_default}</option>
-                            <!-- BEGIN: layout_func -->
-                            <option value="{LAYOUT_FUNC.key}"{LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
-                            <!-- END: layout_func -->
-                        </select></td>
+                            <select name="layout_func" class="form-control">
+                                <option value="">{LANG.layout_default}</option>
+                                <!-- BEGIN: layout_func -->
+                                <option value="{LAYOUT_FUNC.key}" {LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
+                                <!-- END: layout_func -->
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <td>{LANG.activecomm}</td>
                     </tr>
                     <tr>
-                        <td><!-- BEGIN: activecomm -->
-                        <div class="row">
-                            <label><input name="activecomm[]" type="checkbox" value="{ACTIVECOMM.value}" {ACTIVECOMM.checked} />{ACTIVECOMM.title}</label>
-                        </div><!-- END: activecomm --></td>
+                        <td>
+                            <!-- BEGIN: activecomm -->
+                            <div class="row">
+                                <label><input name="activecomm[]" type="checkbox" value="{ACTIVECOMM.value}" {ACTIVECOMM.checked} />{ACTIVECOMM.title}</label>
+                            </div><!-- END: activecomm -->
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="row text-center"><input type="submit" value="{LANG.save}" class="btn btn-primary"/>
+    <div class="row text-center"><input type="submit" value="{LANG.save}" class="btn btn-primary" />
     </div>
 </form>
 <script type="text/javascript">
-    var uploads_dir_user = '{UPLOADS_DIR_USER}';
     $("#titlelength").html($("#idtitle").val().length);
     $("#idtitle").bind('keyup paste', function() {
         $("#titlelength").html($(this).val().length);

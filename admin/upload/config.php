@@ -85,6 +85,7 @@ $array_autologosize = [
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('ADMIN_THEME', $global_config['module_theme']);
 $xtpl->assign('MODULE_NAME', $module_name);
+$xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('OP', $op);
 $xtpl->assign('AUTOLOGOSIZE', $array_autologosize);

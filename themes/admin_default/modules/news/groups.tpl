@@ -45,16 +45,20 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input id="select-img-group" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+					<td>
+						<div class="w500 input-group mb-0">
+							<input class="form-control" type="text" name="image" id="image" value="{image}" />
+							<span class="input-group-btn">
+								<button type="button" data-toggle="selectfile" data-target="image" data-path="{UPLOAD_PATH}" data-currentpath="{UPLOAD_CURRENT}" data-type="image" data-alt="homeimgalt" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+							</span>
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </form>
 <script type="text/javascript">
-var CFG = [];
-CFG.upload_current = '{UPLOAD_CURRENT}';
-CFG.upload_path = '{UPLOAD_PATH}';
 $(document).ready(function(){
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {

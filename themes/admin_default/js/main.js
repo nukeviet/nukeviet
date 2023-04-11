@@ -294,4 +294,27 @@ $(document).ready(function() {
     $('body').on('click', '[data-toggle=checkSingle]', function() {
         checkSingle($(this).parents('form'))
     });
+
+    // Select File
+    $('body').on('click', '[data-toggle=selectfile]', function(e) {
+        e.preventDefault();
+        var area = $(this).data('target'),
+            alt = $(this).data('alt'),
+            path = $(this).data('path') ? $(this).data('path') : '',
+            currentpath = $(this).data('currentpath') ? $(this).data('currentpath') : path,
+            type = $(this).data('type') ? $(this).data('type') : 'image',
+            currentfile = $('#' + area).val(),
+            winname = $(this).data('winname') ? $(this).data('winname') : 'NVImg',
+            url = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=upload&popup=1";
+        if (area) {
+            url += "&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath;
+            if (currentfile) {
+                url += "&currentfile=" + rawurlencode(currentfile)
+            }
+            if (alt) {
+                url += "&alt=" + alt
+            }
+            nv_open_browse(url, winname, 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+        }
+    })
 });

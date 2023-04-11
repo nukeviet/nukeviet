@@ -32,8 +32,12 @@
                 <tr>
                     <td class="text-right"><strong>{LANG.source_logo}: </strong></td>
                     <td>
-                        <input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="logo" id="logo" value="{logo}"/>
-                        <input id="select-img-source" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" />
+                        <div class="w500 input-group mb-0">
+                            <input class="form-control" type="text" name="logo" id="logo" value="{logo}" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="logo" data-path="{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/source" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                            </span>
+                        </div>
                         <!-- BEGIN: logo -->
                         <br />
                         <img src="{logo}"/>

@@ -212,7 +212,7 @@
                                 <div class="input-group">
                                     <input class="form-control" type="text" name="icon" id="icon" value="{DATA.icon}" maxlength="250" />
                                     <span class="input-group-btn">
-                                        <input type="button" value="Browse" class="btn btn-default active selectimg" data-path="{UPLOAD_CURRENT}" data-area="icon" />
+                                        <button type="button" data-toggle="selectfile" data-target="icon" data-path="{UPLOAD_CURRENT}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
                                     </span>
                                 </div>
                             </td>
@@ -223,7 +223,7 @@
                                 <div class="input-group">
                                     <input class="form-control" type="text" name="image" id="image" value="{DATA.image}" maxlength="250" />
                                     <span class="input-group-btn">
-                                        <input type="button" value="Browse" class="btn btn-default active selectimg" data-path="{UPLOAD_CURRENT}" data-area="image" />
+                                        <button type="button" data-toggle="selectfile" data-target="image" data-path="{UPLOAD_CURRENT}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
                                     </span>
                                 </div>
                             </td>

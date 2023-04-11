@@ -6,7 +6,14 @@
             <tbody>
                 <tr>
                     <td>{LANG.upload_logo}</td>
-                    <td><input type="text" class="w350 form-control pull-left" style="margin-right: 5px" value="{AUTOLOGOSIZE.upload_logo}" id="upload_logo" name="upload_logo"><input type="button" name="selectimg" value="{LANG.selectimg}" class="btn btn-info"></td>
+                    <td>
+                        <div class="w350 input-group mb-0">
+                            <input class="form-control" type="text" name="upload_logo" id="upload_logo" value="{AUTOLOGOSIZE.upload_logo}" maxlength="250" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="upload_logo" data-path="" data-currentpath="images" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>{LANG.imagewith} &lt; = 150px</td>
@@ -53,11 +60,14 @@
             <tbody>
                 <tr>
                     <td>{LANG.tinify_compress}</td>
-                    <td><input type="checkbox" name="tinify_active" value="1" {TINIFY_CHECKED} /> {LANG.tinify_compress_note}<!-- BEGIN: tinify_class --><p>{LANG.tinify_compress_note2}</p><!-- END: tinify_class --></td>
+                    <td><input type="checkbox" name="tinify_active" value="1" {TINIFY_CHECKED} /> {LANG.tinify_compress_note}
+                        <!-- BEGIN: tinify_class -->
+                        <p>{LANG.tinify_compress_note2}</p><!-- END: tinify_class -->
+                    </td>
                 </tr>
                 <tr>
                     <td>{LANG.tinify_api_key}</td>
-                    <td><input type="text" class="form-control d-inline-block w300" name="tinify_api" value="{TINIFY_KEY}" maxlength="50"/> {LANG.tinify_api_key_note}</td>
+                    <td><input type="text" class="form-control d-inline-block w300" name="tinify_api" value="{TINIFY_KEY}" maxlength="50" /> {LANG.tinify_api_key_note}</td>
                 </tr>
             </tbody>
         </table>

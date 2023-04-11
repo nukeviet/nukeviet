@@ -82,8 +82,12 @@
                 <tr>
                     <td class="text-right"><strong>{LANG.author_image}: </strong></td>
                     <td>
-                        <input class="form-control frm-item w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{DATA.image}"/>
-                        <input type="button" value="{GLANG.browse_image}" name="selectimg" id="selectimg" class="btn btn-info frm-item" />
+                        <div class="w500 input-group mb-0">
+                            <input class="form-control frm-item" type="text" name="image" id="image" value="{DATA.image}" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="image" data-path="{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/authors" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                            </span>
+                        </div>
                         <!-- BEGIN: image -->
                         <div><img src="{DATA.image}" width="100" class="thumbnail mb-0"/></div>
                         <!-- END: image -->
@@ -205,12 +209,6 @@ $(document).ready(function() {
         templateSelection: function (repo) {
             return repo.title || repo.text
         }
-    });
-    
-    // Topics
-    $("#selectimg").click(function() {
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=image&path={NV_UPLOADS_DIR}/{MODULE_UPLOAD}/authors&type=image&currentpath={NV_UPLOADS_DIR}/{MODULE_UPLOAD}/authors", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
     });
 });
 <!-- BEGIN: scroll -->

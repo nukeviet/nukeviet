@@ -116,7 +116,14 @@
                 </tr>
                 <tr>
                     <th>{LANG.show_no_image}</th>
-                    <td><input class="form-control" name="show_no_image" id="show_no_image" value="{SHOW_NO_IMAGE}" style="width:340px;" type="text"/> <input id="select-img-setting" value="{GLANG.browse_image}" name="selectimg" type="button" class="btn btn-info"/></td>
+                    <td>
+                        <div class="input-group mb-0" style="width:340px;">
+                            <input class="form-control" type="text" name="show_no_image" id="show_no_image" value="{SHOW_NO_IMAGE}" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="show_no_image" data-path="{PATH}" data-currentpath="{CURRENTPATH}" data-type="image" data-alt="homeimgalt" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <th>{LANG.config_source}</th>
@@ -327,9 +334,6 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-var CFG = [];
-CFG.path = '{PATH}';
-CFG.currentpath = '{CURRENTPATH}';
 $(document).ready(function() {
     $("#structure_upload").select2()
 });

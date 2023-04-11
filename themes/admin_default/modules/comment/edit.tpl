@@ -9,10 +9,14 @@
                 <tr>
                     <td class="w250">{LANG.attach}</td>
                     <td class="form-inline">
-                        <input type="text" id="post-file" name="attach" value="{ROW.attach}" class="form-control w300" readonly="readonly">
-                        <button data-path="{UPLOADS_DIR}" data-currentpath="{CURRENT_DIR}" id="select-file" class="btn btn-default" type="button">{LANG.attach_choose}</button>
-                        <button id="post-file-download" class="btn btn-default" type="button">{LANG.attach_view}</button>
-                        <button id="post-file-remove" class="btn btn-default" type="button">{GLANG.delete}</button>
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="attach" id="post-file" value="{ROW.attach}" readonly="readonly" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="post-file" data-path="{UPLOADS_DIR}" data-currentpath="{CURRENT_DIR}" data-type="file" class="btn btn-info" title="{GLANG.browse_file}"><em class="fa fa-folder-open-o"></em></button>
+                                <button id="post-file-download" class="btn btn-default" type="button">{LANG.attach_view}</button>
+                                <button id="post-file-remove" class="btn btn-default" type="button">{GLANG.delete}</button>
+                            </span>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -24,9 +28,6 @@
 </form>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#select-file").click(function() {
-            nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=post-file&alt=&path=" + $(this).data('path') + "&type=file&currentpath=" + $(this).data('currentpath'), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        });
         $('#post-file-remove').click(function() {
             $('#post-file').val('');
         });

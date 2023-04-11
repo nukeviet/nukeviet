@@ -81,13 +81,11 @@
                     <div class="form-group">
                         <label for="content-image" class="col-sm-5 control-label">{LANG.content_image}</label>
                         <div class="col-sm-19">
-                            <div class="row">
-                                <div class="col-xs-16">
-                                    <input type="text" class="form-control txt ip" id="content-image" name="image">
-                                </div>
-                                <div class="col-xs-8">
-                                    <input type="button" name="select-image" data-path="{UPLOADS_DIR_USER}" data-area="content-image" data-currentpath="{UPLOADS_DIR_USER}" id="content-select-image" value="{GLANG.browse_image}" class="btn btn-default ip">
-                                </div>
+                            <div class="input-group">
+                                <input class="form-control txt ip" type="text" name="image" id="content-image" />
+                                <span class="input-group-btn">
+                                    <button type="button" data-toggle="selectfile" data-target="content-image" data-path="{UPLOADS_DIR_USER}" data-currentpath="{UPLOADS_DIR_USER}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                                </span>
                             </div>
                         </div>
                     </div>

@@ -428,17 +428,6 @@ $(function() {
         })
     })
 
-    $("body").on("click", ".selectfile", function() {
-        var a = $(this).data("area"),
-            o = $(this).data("path"),
-            currentfile = trim($('#' + a).val()),
-            url = script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + a + "&path=" + o + "&type=image&currentpath=" + o;
-        if (currentfile.length) {
-            url += '&currentfile=' + rawurldecode(currentfile)
-        }
-        nv_open_browse(url, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no")
-    });
-
     $('body').on('click', '.help-show', function() {
         var field = $(this).parents('.field'),
             help_bl = $('.help-block', field);

@@ -75,7 +75,14 @@
                 </tr>
                 <tr>
                     <td class="text-right">{LANG.ogp_image}</td>
-                    <td><input type="text" class="w300 form-control pull-left" name="ogp_image" id="ogp_image" value="{OGP_IMAGE}" style="margin-right: 10px" /><button type="button" data-name="ogp_image" name="ogp_image_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{GLANG.browse_image}</button></td>
+                    <td>
+                        <div class="w300 input-group mb-0">
+                            <input class="form-control" type="text" name="ogp_image" id="ogp_image" value="{OGP_IMAGE}" maxlength="250" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="ogp_image" data-path="" data-currentpath="images" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="text-right">{LANG.private_site}</td>

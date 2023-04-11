@@ -34,7 +34,14 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}:</strong></td>
-					<td><input class="form-control pull-left w500" style="margin-right: 5px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input id="select-img-topic" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+					<td>
+						<div class="w500 input-group mb-0">
+							<input type="text" class="form-control" id="homeimg" name="homeimg" value="{DATA.image}">
+							<span class="input-group-btn">
+								<button type="button" data-toggle="selectfile" data-target="homeimg" data-path="{UPLOADS_DIR}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+							</span>
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
@@ -52,8 +59,6 @@
 	<br />
 </form>
 <script type="text/javascript">
-var CFG = [];
-CFG.upload_dir = '{UPLOADS_DIR}';
 <!-- BEGIN: getalias -->
 $("#idtitle").change(function() {
 	get_alias('topics', '{DATA.topicid}');

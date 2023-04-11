@@ -83,7 +83,14 @@
                     </tr>
                     <tr>
                         <td><strong>{LANG.content_homeimg}</strong></td>
-                        <td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}" /><input id="select-img-post" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" /></td>
+                        <td>
+                            <div class="input-group mb-0" style="width:380px">
+                                <input class="form-control" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}" />
+                                <span class="input-group-btn">
+                                    <button type="button" data-toggle="selectfile" data-target="homeimg" data-path="{UPLOADS_DIR_USER}" data-currentpath="{UPLOAD_CURRENT}" data-type="image" data-alt="homeimgalt" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                                </span>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td>{LANG.content_homeimgalt}</td>
@@ -116,14 +123,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:top"> {LANG.fileattach} <strong>[<a onclick="nv_add_files('{NV_BASE_ADMINURL}', '{UPLOAD_CURRENT}', '{GLANG.delete}', '{GLANG.browse_file}');" href="javascript:void(0);" title="{LANG.add}">{LANG.add}]</a></strong></td>
+                        <td style="vertical-align:top"><strong>{LANG.fileattach}</strong></td>
                         <td>
                             <div id="filearea">
                                 <!-- BEGIN: files -->
-                                <div id="fileitem_{FILEUPL.id}" style="margin-bottom: 5px">
-                                    <input title="{LANG.fileupload}" class="form-control w400 pull-left" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="margin-right: 5px" />
-                                    <input onclick="nv_open_browse('{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload_{FILEUPL.id}&path={UPLOAD_CURRENT}&type=file', 'NVImg', '850', '500', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');return false;" type="button" value="{GLANG.browse_file}" class="selectfile btn btn-primary" />
-                                    <input onclick="nv_delete_datacontent('fileitem_{FILEUPL.id}');return false;" type="button" value="{GLANG.delete}" class="selectfile btn btn-danger" />
+                                <div class="input-group m-bottom item" style="width:380px">
+                                    <input class="form-control" type="text" name="files[]" id="file_{FILEUPL.id}" value="{FILEUPL.value}" title="{LANG.fileupload}" />
+                                    <span class="input-group-btn">
+                                        <button type="button" data-toggle="selectfile" data-target="file_{FILEUPL.id}" data-path="{UPLOAD_CURRENT}" data-currentpath="{UPLOAD_CURRENT}" data-type="file" class="btn btn-info" title="{GLANG.browse_file}"><em class="fa fa-folder-open-o"></em></button>
+                                        <button type="button" class="btn btn-default" data-toggle="add_file">&plus;</button>
+                                        <button type="button" class="btn btn-default" data-toggle="del_file">&times;</button>
+                                    </span>
                                 </div>
                                 <!-- END: files -->
                             </div>
@@ -364,7 +374,7 @@
                                         <div class="input-group witdh-100p">
                                             <input class="form-control" type="text" id="voice_{VOICE.id}" name="voice_{VOICE.id}" value="{VOICE.value}">
                                             <span class="input-group-btn">
-                                                <button data-toggle="pickaudio" data-id="{VOICE.id}" type="button" class="btn btn-default"><i class="fa fa-file-audio-o" aria-hidden="true"></i></button>
+                                                <button type="button" data-toggle="selectfile" data-target="voice_{VOICE.id}" data-path="{UPLOADS_DIR_USER}" data-type="file" class="btn btn-info" title="{GLANG.browse_file}"><em class="fa fa-folder-open-o"></em></button>
                                             </span>
                                         </div>
                                     </div>
@@ -482,8 +492,6 @@
     var nv_num_files = '{NUMFILE}';
     var LANG = [];
     var CFG = [];
-    CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
-    CFG.upload_current = "{UPLOAD_CURRENT}";
     CFG.id = {rowcontent.id};
     LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
     LANG.alias_empty_notice = "{LANG.alias_empty_notice}";

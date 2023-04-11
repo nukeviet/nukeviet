@@ -32,16 +32,6 @@ $(document).ready(function() {
         return !1
     });
 
-    // ogp_image setting
-    $("#metatags-manage .selectimg").click(function() {
-        var area = $(this).attr('data-name');
-        var path = "";
-        var currentpath = "images";
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
-
     // Lọc tên của metatag
     $('[name^=metaGroupsValue]').on('input', function() {
         $(this).val($(this).val().replace(/[^a-zA-Z0-9-_.:]+/g, ''));

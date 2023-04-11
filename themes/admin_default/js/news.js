@@ -7,18 +7,6 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
-function nv_add_files(nv_admin_baseurl, nv_files_dir, nv_lang_delete, nv_lang_select) {
-    nv_num_files++;
-    $('#filearea').append('<div id="fileitem_' + nv_num_files + '" style="margin-bottom: 5px">' + '<input class="form-control pull-left w400" style="margin: 4px 4px 0 0;" type="text" name="files[]" id="fileupload_' + nv_num_files + '" value="" />' + '<input onclick="nv_open_browse( \'' + nv_admin_baseurl + 'index.php?' + nv_name_variable + '=upload&popup=1&area=fileupload_' + nv_num_files + '&path=' + nv_files_dir + '&type=file\', \'NVImg\', \'850\', \'500\', \'resizable=no,scrollbars=no,toolbar=no,location=no,status=no\' );return false;" type="button" value="' + nv_lang_select + '" class="selectfile btn btn-primary" style="margin-right: 3px" />' + '<input onclick="nv_delete_datacontent(\'fileitem_' + nv_num_files + '\');return false;" type="button" value="' + nv_lang_delete + '" class="selectfile btn btn-danger" />' + '</div>');
-
-    return false;
-}
-
-function nv_delete_datacontent(content) {
-    $('#' + content).remove();
-    return false;
-}
-
 function nv_show_list_cat(parentid) {
     if (document.getElementById('module_show_list')) {
         $('#module_show_list').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_cat&parentid=' + parentid + '&nocache=' + new Date().getTime());
@@ -397,6 +385,28 @@ $(function() {
         });
     });
 
+    // Content: Add file
+    $('body').on('click', '[data-toggle=add_file]', function() {
+        var item = $(this).parents('.item'),
+            new_item = item.clone();
+        nv_num_files++;
+        new_id = 'file_' + nv_num_files;
+        $('[name^=files]', new_item).val('').attr('id', new_id);
+        $('[data-toggle=selectimg]', new_item).attr('data-target', new_id);
+        item.after(new_item)
+    });
+
+    // Content: Delete file
+    $('body').on('click', '[data-toggle=del_file]', function() {
+        var item = $(this).parents('.item'),
+            num = $('#filearea .item').length;
+        if (num > 1) {
+            item.remove()
+        } else {
+            $('[name^=files]', item).val('')
+        }
+    });
+
     // Topic
     $('#delete-topic').click(function() {
         var list = [];
@@ -418,16 +428,6 @@ $(function() {
                 }
             });
         }
-        return false;
-    });
-
-    // Topics
-    $("#select-img-topic").click(function() {
-        var area = "homeimg";
-        var path = CFG.upload_dir;
-        var currentpath = CFG.upload_dir;
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
     });
 
@@ -522,56 +522,7 @@ $(function() {
         }
     });
 
-    // Sources
-    $("#select-img-source").click(function() {
-        var area = "logo";
-        var path = CFG.upload_path;
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
-
-    // Setting
-    $("#select-img-setting").click(function() {
-        var area = "show_no_image";
-        var type = "image";
-        var path = CFG.path;
-        var currentpath = CFG.currentpath;
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
-
-    // Groups
-    $("#select-img-group").click(function() {
-        var area = "image";
-        var path = CFG.upload_path;
-        var currentpath = CFG.upload_current;
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
-
     // News content
-    $("#select-img-post").click(function() {
-        var area = "homeimg";
-        var alt = "homeimgalt";
-        var path = CFG.uploads_dir_user;
-        var currentpath = CFG.upload_current;
-        var currentfile = $('#homeimg').val();
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + encodeURIComponent(path) + "&type=" + type + "&currentpath=" + encodeURIComponent(currentpath) + '&currentfile=' + encodeURIComponent(currentfile), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
-    $('[data-toggle="pickaudio"]').click(function() {
-        var $this = $(this);
-        var area = "voice_" + $this.data('id');
-        var path = CFG.uploads_dir_user;
-        var currentpath = CFG.upload_current;
-        var currentfile = $("#voice_" + $this.data('id')).val();
-        var type = "file";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + encodeURIComponent(path) + "&type=" + type + "&currentpath=" + encodeURIComponent(currentpath) + '&currentfile=' + encodeURIComponent(currentfile), "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
     $('.submit-post').hover(function() {
         if ($('[name="keywords[]"]').length == 0) {
             if ($('#message-tags').length == 0) {
@@ -613,14 +564,6 @@ $(function() {
     });
 
     // Cat
-    $("#select-img-cat").click(function() {
-        var area = "image";
-        var path = CFG.upload_path;
-        var currentpath = CFG.upload_current;
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        return false;
-    });
     $('a.viewinstantrss').click(function(e) {
         e.preventDefault();
         modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control w500" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');

@@ -153,14 +153,6 @@ $(function() {
         })
     });
 
-    // Button chọn hình/icon
-    $('#edit').on('click', '.selectimg', function(e) {
-        e.preventDefault();
-        var area = $(this).data('area'),
-            path = $(this).data('path');
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=image&currentpath=" + path, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-    });
-
     // Event khi thay đổi module
     $('#edit').on('change', '[name=module_name]', function() {
         var mod_field = $(this).parents('.field'),

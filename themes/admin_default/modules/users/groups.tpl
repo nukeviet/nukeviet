@@ -98,8 +98,12 @@
                     <tr>
                         <td>{LANG.group_avatar}:</td>
                         <td class="form-inline">
-                            <input class="form-control" type="text" name="group_avatar" id="group_avatar" value="{DATA.group_avatar}" maxlength="255"/>
-                            <input type="button" name="browse-image" value="{LANG.select}" class="btn btn-default" data-area="group_avatar" data-path="{AVATAR_PATH}" data-currentpath="{AVATAR_CURENT_PATH}"/>
+                            <div class="input-group mb-0">
+                                <input type="text" class="form-control" id="group_avatar" name="group_avatar" value="{DATA.group_avatar}" maxlength="255">
+                                <span class="input-group-btn">
+                                    <button type="button" data-toggle="selectfile" data-target="group_avatar" data-path="{AVATAR_PATH}" data-currentpath="{AVATAR_CURENT_PATH}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                                </span>
+                            </div>
                         </td>
                     </tr>
                     <tr>

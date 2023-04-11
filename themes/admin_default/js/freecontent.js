@@ -24,7 +24,6 @@ var cfg = {
     ctAddBtn: '.content-add-trigger',
     ctModal: '#content-data',
     ctModalDelete: '#content-delete',
-    ctSelectImg: '#content-select-image',
     ctEditor: 'content-description',
     ctSubmitBtn: '.content-submit-trigger',
     ctDelBtn: '.content-delete-trigger',
@@ -33,8 +32,8 @@ var cfg = {
     ctRow: '#content-row-',
     ctList: '#content-list-container',
     ctStatusBtn: '.content-status',
-    ctStatusPrefix: 'ct-status',
     ctCouter: '#content-couter'
+    ctStatusPrefix: 'ct-status',
 };
 
 function nv_pare_data(id, isEditor) {
@@ -217,11 +216,6 @@ $(document).ready(function() {
                 }
             }
         });
-    });
-
-    // Select image
-    $(cfg.ctSelectImg).click(function() {
-        nv_open_browse(script_name + '?' + nv_name_variable + '=upload&popup=1&area=' + $(this).data('area') + '&path=' + $(this).data('path') + '&type=image&currentpath=' + $(this).data('currentpath'), 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');
     });
 
     // Add content click

@@ -62,7 +62,14 @@
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.content_homeimg}</th>
-						<td><input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/> &nbsp;<input id="select-img-cat" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+						<td>
+							<div class="w500 input-group mb-0">
+								<input class="form-control frm-item" type="text" name="image" id="image" value="{image}" />
+								<span class="input-group-btn">
+									<button type="button" data-toggle="selectfile" data-target="image" data-path="{UPLOAD_PATH}" data-currentpath="{UPLOAD_CURRENT}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+								</span>
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<th class="text-right">
@@ -121,9 +128,6 @@
 </div>
 
 <script type="text/javascript">
-var CFG = [];
-CFG.upload_current = '{UPLOAD_CURRENT}';
-CFG.upload_path = '{UPLOAD_PATH}';
 $(document).ready(function() {
 	$("#parentid").select2();
 	$("#titlelength").html($("#idtitle").val().length);

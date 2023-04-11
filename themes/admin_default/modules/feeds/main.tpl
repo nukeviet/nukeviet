@@ -5,11 +5,25 @@
             <tbody>
                 <tr>
                     <td class="text-right"><strong>{LANG.rss_logo}</strong></td>
-                    <td><input class="w300 form-control pull-left" type="text" name="rss_logo" id="rss_logo" value="{DATA.rss_logo}" style="margin-right: 5px" /><input type="button" value="Browse server" name="selectimg" class="btn btn-info" data-path="{UPLOADS_DIR_USER}" /></td>
+                    <td>
+                        <div class="w300 input-group mb-0">
+                            <input class="form-control" type="text" name="rss_logo" id="rss_logo" value="{DATA.rss_logo}" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="rss_logo" data-path="{UPLOADS_DIR_USER}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="text-right"><strong>{LANG.atom_logo}</strong></td>
-                    <td><input class="w300 form-control pull-left" type="text" name="atom_logo" id="atom_logo" value="{DATA.atom_logo}" style="margin-right: 5px" /><input type="button" value="Browse server" name="selectimg" class="btn btn-info" data-path="{UPLOADS_DIR_USER}" /></td>
+                    <td>
+                        <div class="w300 input-group mb-0">
+                            <input class="form-control" type="text" name="atom_logo" id="atom_logo" value="{DATA.atom_logo}" />
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="selectfile" data-target="atom_logo" data-path="{UPLOADS_DIR_USER}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2"><strong>{LANG.content}</strong>

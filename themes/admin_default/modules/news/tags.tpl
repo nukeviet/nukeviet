@@ -147,7 +147,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="image" name="image" value="{IMAGE}" placeholder="{LANG.content_homeimg}">
                     <span class="input-group-btn">
-                        <button name="selectimg" class="btn btn-info" type="button" data-toggle="select_img_tag" data-path="{UPLOAD_PATH}" data-currentpath="{UPLOAD_CURRENT}">Browse server</button>
+                        <button type="button" data-toggle="selectfile" data-target="image" data-path="{UPLOAD_PATH}" data-currentpath="{UPLOAD_CURRENT}" data-type="image" class="btn btn-info" title="{GLANG.browse_image}"><em class="fa fa-folder-open-o"></em></button>
                     </span>
                 </div>
             </div>
@@ -170,13 +170,6 @@
         $("#descriptionlength").html($("#description").val().length);
         $("#description").bind("keyup paste", function() {
             $("#descriptionlength").html($(this).val().length);
-        });
-
-        $("[data-toggle=select_img_tag]").on('click', function(e) {
-            e.preventDefault();
-            var path = $(this).data('path'),
-                currentpath = $(this).data('currentpath');
-            nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=image&path=" + path + "&type=image&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no")
         });
 
         $('[data-toggle=addTagSubmit] [type=submit]').on('click', function(e) {
