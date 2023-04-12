@@ -291,6 +291,9 @@ $lang_module['plugin_error_no_receive'] = 'Ce plugin prend des données du modul
 $lang_module['plugin_error_exists'] = 'Les plugins pour ces modules existent déjà. Veuillez sélectionner un autre module';
 $lang_module['plugin_choose_hook_module'] = 'Sélectionnez le module source';
 $lang_module['plugin_choose_receive_module'] = 'Sélectionnez le module cible';
+$lang_module['plugin_log_weight'] = 'Changer l\'ordre des plugins';
+$lang_module['plugin_log_del'] = 'Supprimer le plug-in';
+$lang_module['plugin_log_integrate'] = 'Intégration du nouveau plugin';
 
 $lang_module['notification_config'] = 'Configuration du fonctionnement d\'annoncer';
 $lang_module['notification_active'] = 'Lever les annonces en cas de nouvelles activations';

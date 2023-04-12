@@ -291,6 +291,9 @@ $lang_module['plugin_error_no_receive'] = 'This plugin handles data for module %
 $lang_module['plugin_error_exists'] = 'Plugins for these modules already exist. Please select another module';
 $lang_module['plugin_choose_hook_module'] = 'Select event module';
 $lang_module['plugin_choose_receive_module'] = 'Select hook module';
+$lang_module['plugin_log_weight'] = 'Change plugin order';
+$lang_module['plugin_log_del'] = 'Remove plugin';
+$lang_module['plugin_log_integrate'] = 'Integrating new plugin';
 
 $lang_module['notification_config'] = 'Notification config';
 $lang_module['notification_active'] = 'Show notification when a new activity';

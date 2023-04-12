@@ -158,6 +158,10 @@ a.text-white {
     margin-bottom: 0 !important;
 }
 
+.pb-0 {
+    padding-bottom: 0!important;
+}
+
 .pointer,
 .fa-pointer,
 .icon-pointer {
@@ -590,6 +594,16 @@ table caption {
     font-weight: bold;
     line-height: 22px;
     padding: 0px 0 5px;
+}
+
+.panel .table-panel tr>th:first-child,
+.panel .table-panel tr>td:first-child {
+    padding-left: 15px;
+}
+
+.panel .table-panel tr>th:last-child,
+.panel .table-panel tr>td:last-child {
+    padding-right: 15px;
 }
 
 sup.required {

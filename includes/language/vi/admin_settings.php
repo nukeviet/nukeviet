@@ -305,6 +305,9 @@ $lang_module['plugin_error_no_receive'] = 'Plugin này xử lý dữ liệu cho 
 $lang_module['plugin_error_exists'] = 'Plugin cho các module này đã tồn tại. Mời bạn chọn module khác';
 $lang_module['plugin_choose_hook_module'] = 'Chọn module nguồn';
 $lang_module['plugin_choose_receive_module'] = 'Chọn module đích';
+$lang_module['plugin_log_weight'] = 'Thay đổi thứ tự plugin';
+$lang_module['plugin_log_del'] = 'Xóa plugin';
+$lang_module['plugin_log_integrate'] = 'Tích hợp mới plugin';
 
 $lang_module['notification_config'] = 'Cấu hình chức năng thông báo';
 $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt động mới';
