@@ -293,13 +293,13 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_upload_file (
 
 $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_plugins (
   pid MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-    plugin_lang VARCHAR(3) NOT NULL DEFAULT 'all',
-    plugin_file VARCHAR(50) NOT NULL,
-    plugin_area VARCHAR(50) NOT NULL DEFAULT '',
-    plugin_module_name VARCHAR(50) NOT NULL DEFAULT '',
-    plugin_module_file VARCHAR(50) NOT NULL DEFAULT '',
-    hook_module VARCHAR(50) NOT NULL DEFAULT '',
-    weight TINYINT(4) NOT NULL,
+    plugin_lang VARCHAR(3) NOT NULL DEFAULT 'all' COMMENT 'Ngôn ngữ sử dụng, all là tất cả ngôn ngữ',
+    plugin_file VARCHAR(50) NOT NULL COMMENT 'File PHP của plugin',
+    plugin_area VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'Tên hook, tự đặt, không nên có tên nào trùng nhau',
+    plugin_module_name VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'Tên module nhận và xử lý data',
+    plugin_module_file VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'Tên module chứa file plugin, rỗng thì nằm ở includes/plugin',
+    hook_module VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'Module xảy ra event, rỗng thì là của hệ thống',
+    weight TINYINT(4) NOT NULL COMMENT 'Thứ tự trong cùng một hook, càng to càng ưu tiên',
     PRIMARY KEY (pid),
     UNIQUE KEY plugin (plugin_lang, plugin_file, plugin_area, plugin_module_name, hook_module)
 ) ENGINE=MyISAM AUTO_INCREMENT=1001";

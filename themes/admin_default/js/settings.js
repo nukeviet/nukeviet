@@ -172,6 +172,175 @@ $(document).ready(function() {
         }
     });
 
+    // Tích hợp plugin mới
+    var mdPCfg = $('#mdPluginConfig');
+    $('[data-click="plintegrate"]').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var icon = $('.fa', $this);
+        if ($('[data-click="plintegrate"] .fa-spin').length > 0) {
+            return;
+        }
+        icon.addClass('fa-spin');
+        // Trường hợp là plugin thuần hệ thống
+        if ($this.data('hm') == '' && $this.data('rm') == '') {
+            $.ajax({
+                type: 'POST',
+                url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(),
+                data: {
+                    integrate: 1,
+                    hook_key: $this.data('hkey'),
+                    file_key: $this.data('fkey')
+                },
+                dataType: 'json',
+                cache: false,
+                success: function(respon) {
+                    icon.removeClass('fa-spin');
+                    if (respon.message == '') {
+                        location.reload();
+                        return;
+                    }
+                    alert(respon.message);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    icon.removeClass('fa-spin');
+                    console.log(jqXHR, textStatus, errorThrown);
+                    alert('Request Error!!!');
+                }
+            });
+            return;
+        }
+        // Trường hợp là plugin trao đổi dữ liệu module => Gọi form tích hợp
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(),
+            data: {
+                loadform: 1,
+                hook_key: $this.data('hkey'),
+                file_key: $this.data('fkey')
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(respon) {
+                icon.removeClass('fa-spin');
+                if (respon.message != '') {
+                    alert(respon.message);
+                    return;
+                }
+                window.nv_plugin_data = respon;
+
+                var opts, show;
+
+                mdPCfg.data('hook_key', $this.data('hkey'));
+                mdPCfg.data('file_key', $this.data('fkey'));
+                $('[data-area="title"]', mdPCfg).html(respon.tag);
+
+                // Xác định module nguồn còn khả dụng
+                opts = '';
+                show = 0;
+                if (respon.hook_mod != '' && respon.hook_mods.length > 0) {
+                    for (var i = 0; i < respon.hook_mods.length; i++) {
+                        var avail = 1;
+                        for (var j = 0; j < respon.exists.length; j++) {
+                            if (respon.exists[j].hook_mod == respon.hook_mods[i].key && respon.exists[j].receive_mods.length >= respon.receive_mods.length) {
+                                avail = 0;
+                            }
+                        }
+                        if (avail) {
+                            opts += '<option value="' + respon.hook_mods[i].key + '">' + respon.hook_mods[i].title + '</option>';
+                            show = 1;
+                        }
+                    }
+                }
+                $('[name="hook_module"]', mdPCfg).html(opts);
+                if (show) {
+                    $('[data-area="hook_module"]', mdPCfg).removeClass('hidden');
+                } else {
+                    $('[data-area="hook_module"]', mdPCfg).addClass('hidden');
+                }
+
+                // Gọi event change module nguồn để load ra module đích
+                $('[name="hook_module"]', mdPCfg).trigger('change');
+
+                mdPCfg.modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                icon.removeClass('fa-spin');
+                console.log(jqXHR, textStatus, errorThrown);
+                alert('Request Error!!!');
+            }
+        });
+    });
+
+    // Xử lý load module đích sau khi chọn module nguồn
+    $('[name="hook_module"]', mdPCfg).on('change', function(e) {
+        e.preventDefault();
+
+        // Xác định module đích còn khả dụng
+        var opts = ''
+        var show = 0;
+        var hook_mod = '';
+        if (!$('[data-area="hook_module"]', mdPCfg).is('.hidden')) {
+            hook_mod = $('[name="hook_module"]', mdPCfg).val();
+        }
+
+        if (nv_plugin_data.receive_mod != '' && nv_plugin_data.receive_mods.length > 0) {
+            for (var i = 0; i < nv_plugin_data.receive_mods.length; i++) {
+                var avail = 1;
+                for (var j = 0; j < nv_plugin_data.exists.length; j++) {
+                    if (nv_plugin_data.exists[j].hook_mod == hook_mod && $.inArray(nv_plugin_data.receive_mods[i].key, nv_plugin_data.exists[j].receive_mods) > -1) {
+                        avail = 0;
+                    }
+                }
+                if (avail) {
+                    opts += '<option value="' + nv_plugin_data.receive_mods[i].key + '">' + nv_plugin_data.receive_mods[i].title + '</option>';
+                    show = 1;
+                }
+            }
+        }
+        $('[name="receive_module"]', mdPCfg).html(opts);
+        if (show) {
+            $('[data-area="receive_module"]', mdPCfg).removeClass('hidden');
+        } else {
+            $('[data-area="receive_module"]', mdPCfg).addClass('hidden');
+        }
+    });
+
+    // Tích hợp plugin trao đổi dữ liệu module
+    $('[data-toggle="submitIntegratePlugin"]').on('click', function(e) {
+        e.preventDefault();
+        var btn = $(this);
+
+        btn.prop('disable', true);
+
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&nocache=' + new Date().getTime(),
+            data: {
+                integrate: 1,
+                hook_key: mdPCfg.data('hook_key'),
+                file_key: mdPCfg.data('file_key'),
+                hook_module: $('[name="hook_module"]', mdPCfg).val(),
+                receive_module: $('[name="receive_module"]', mdPCfg).val()
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(respon) {
+                btn.prop('disable', false);
+                if (respon.message == '') {
+                    location.reload();
+                    return;
+                }
+                alert(respon.message);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                btn.prop('disable', false);
+                console.log(jqXHR, textStatus, errorThrown);
+                alert('Request Error!!!');
+            }
+        });
+    });
+
     $('[data-toggle=ssetings_form_submit]').on('submit', function(e) {
         e.preventDefault();
         var url = $(this).attr('action'),

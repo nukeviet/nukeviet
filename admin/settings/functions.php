@@ -141,7 +141,7 @@ function main_theme($contents)
         $xtpl->assign('NEXT_CRON', sprintf($lang_module['cron_next_time'], nv_date('d/m/Y H:i:s', ($global_config['cronjobs_last_time'] + $global_config['cronjobs_interval'] * 60))));
         $xtpl->parse('main.next_cron');
     }
-    
+
     if (isset($global_config['cronjobs_launcher']) and $global_config['cronjobs_launcher'] == 'server') {
         $xtpl->parse('main.launcher_server');
         $xtpl->parse('main.cron_code');
@@ -246,4 +246,35 @@ function update_cronjob_next_time()
     }
 
     $nv_Cache->delMod('settings');
+}
+
+/**
+ * Lấy số module ảo+chính của 1 module
+ *
+ * @param string $module_file
+ * @return number
+ */
+function get_num_mod($module_file)
+{
+    global $site_mods;
+
+    $num = 0;
+    foreach ($site_mods as $mod) {
+        if ($mod['module_file'] == $module_file) {
+            $num++;
+        }
+    }
+    return $num;
+}
+
+/**
+ * Hàm tính số plugin tối đa của 1 file
+ *
+ * @param string $hook
+ * @param string $receive
+ * @return number
+ */
+function get_max_pulgin($hook, $receive)
+{
+    return ((empty($hook) ? 1 : get_num_mod($hook)) * (empty($receive) ? 1 : get_num_mod($receive)));
 }
