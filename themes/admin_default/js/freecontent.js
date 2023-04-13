@@ -32,8 +32,8 @@ var cfg = {
     ctRow: '#content-row-',
     ctList: '#content-list-container',
     ctStatusBtn: '.content-status',
-    ctCouter: '#content-couter'
-    ctStatusPrefix: 'ct-status',
+    ctCouter: '#content-couter',
+    ctStatusPrefix: 'ct-status'
 };
 
 function nv_pare_data(id, isEditor) {
