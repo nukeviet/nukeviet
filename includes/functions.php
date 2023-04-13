@@ -1314,6 +1314,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 {
     global $global_config;
 
+    if ($global_config['mailer_mode'] == 'no') {
+        return $testmode ? 'Mailing service has been turned off' : false;
+    }
+
     $sm_parameters = [];
 
     if (empty($to)) {
