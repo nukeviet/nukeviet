@@ -421,8 +421,8 @@ function user_login($is_ajax = false)
         }
     }
 
+    $xtpl->assign('REDIRECT', $nv_redirect);
     if (!empty($nv_redirect)) {
-        $xtpl->assign('REDIRECT', $nv_redirect);
         $xtpl->parse('main.redirect');
     } else {
         $xtpl->parse('main.not_redirect');

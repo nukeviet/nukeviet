@@ -63,7 +63,7 @@
 
         <!-- BEGIN: openid -->
         <!-- BEGIN: google_identity_onload -->
-        <div id="g_id_onload" data-client_id="{GOOGLE_CLIENT_ID}" data-context="signin" data-ux_mode="popup" data-callback="GIDHandleCredentialResponse" data-itp_support="true" data-url="{GOOGLE_IDENTITY_URL}" data-csrf="{CHECKSS}">
+        <div id="g_id_onload" data-client_id="{GOOGLE_CLIENT_ID}" data-context="signin" data-ux_mode="popup" data-callback="GIDHandleCredentialResponse" data-itp_support="true" data-url="{GOOGLE_IDENTITY_URL}" data-csrf="{CHECKSS}" data-redirect="{REDIRECT}">
         </div>
 
         <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-locale="{NV_LANG_INTERFACE}" data-logo_alignment="center" data-width="300">

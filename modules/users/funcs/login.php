@@ -39,6 +39,31 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 
     if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
         $page_url .= '&nv_redirect=' . $nv_redirect;
+        $nv_Request->set_Session('nv_redirect_' . $module_data, $nv_redirect);
+    }
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
+    if (!empty($sso_redirect)) {
+        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+
+if (defined('SSO_CLIENT_DOMAIN')) {
+    $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
+    $sso_client = $nv_Request->get_title('client', 'get', '');
+    if (!empty($sso_client)) {
+        if (!in_array($sso_client, $allowed_client_origin, true)) {
+            // 406 Not Acceptable
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+        }
+        $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
+        // Xử lý nếu client đã đăng nhập rồi mà submit vào đây nữa
+        if (defined('NV_IS_USER')) {
+            opidr_login([
+                'status' => 'success',
+                'mess' => $lang_module['login_ok']
+            ]);
+        }
     }
 }
 
@@ -347,6 +372,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
     $attribs = $nv_Request->get_string('openid_attribs', 'session', '');
     $attribs = !empty($attribs) ? unserialize($attribs) : [];
+    $attribs = nv_apply_hook($module_name, 'custom_login_openid_attribs', [$server, $attribs], $attribs);
 
     if (empty($attribs) or $attribs['server'] != $server) {
         opidr_login([
@@ -388,7 +414,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     /**
      * Oauth này đã có trong CSDL
      */
-    $stmt = $db->prepare('SELECT a.userid AS uid, b.email AS uemail, b.active AS uactive, b.safemode AS safemode 
+    $stmt = $db->prepare('SELECT a.userid AS uid, b.email AS uemail, b.active AS uactive, b.safemode AS safemode
     FROM ' . NV_MOD_TABLE . '_openid a
     INNER JOIN ' . NV_MOD_TABLE . ' b ON a.userid=b.userid
     WHERE a.openid=:openid AND a.opid= :opid');
