@@ -199,6 +199,7 @@ function GIDHandleCredentialResponse(response) {
         cache: !1,
         data: {
             'credential': response.credential,
+            'nv_redirect': $('#g_id_onload').data('redirect'),
             '_csrf': $('#g_id_onload').data('csrf')
         },
         dataType: "json"

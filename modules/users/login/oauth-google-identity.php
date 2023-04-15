@@ -75,15 +75,22 @@ if ($nv_Request->isset_request('credential', 'post')) {
 
     if (!$is_edit) {
         $server = 'google-identity';
-        $opid = $crypt->hash($credential[1]['sub']);
-        $stmt = $db->prepare('SELECT a.userid AS uid, b.email AS uemail, b.active AS uactive, b.safemode AS safemode 
-        FROM ' . NV_MOD_TABLE . '_openid a
-        INNER JOIN ' . NV_MOD_TABLE . ' b ON a.userid=b.userid
-        WHERE a.openid=:openid AND a.opid= :opid');
-        $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
-        $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
-        $stmt->execute();
-        list($user_id, $op_email, $user_active, $safemode) = $stmt->fetch(3);
+        $custom_method = nv_apply_hook($module_name, 'find_oauth_google_identity', [$credential]);
+
+        if (is_null($custom_method)) {
+            $opid = $crypt->hash($credential[1]['sub']);
+            $stmt = $db->prepare('SELECT a.userid AS uid, b.email AS uemail, b.active AS uactive, b.safemode AS safemode
+            FROM ' . NV_MOD_TABLE . '_openid a
+            INNER JOIN ' . NV_MOD_TABLE . ' b ON a.userid=b.userid
+            WHERE a.openid=:openid AND a.opid= :opid');
+            $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
+            $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
+            $stmt->execute();
+            list($user_id, $op_email, $user_active, $safemode) = $stmt->fetch(3);
+        } else {
+            list($user_id, $op_email, $user_active, $safemode) = $custom_method;
+        }
+
         if ($user_id) {
             if ($safemode == 1) {
                 nv_jsonOutput([
@@ -132,6 +139,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
         'current_mode' => 3
     ];
 
+    nv_apply_hook($module_name, 'prehandling_oauth_google_identity', [$is_edit, $attribs]);
     $nv_Request->set_Session('openid_attribs', serialize($attribs));
     if ($is_edit) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/openid&server=google-identity&result=1&t=' . NV_CURRENTTIME);
