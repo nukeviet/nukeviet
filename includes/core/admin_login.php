@@ -537,7 +537,6 @@ if (empty($admin_pre_data)) {
 } else {
     // Form xác thực hai bước
     $xtpl->assign('ADMIN_PRE_LOGOUT', NV_BASE_ADMINURL . 'index.php?pre_logout=1&amp;checkss=' . NV_CHECK_SESSION);
-    $xtpl->assign('ADMIN_2STEP_HELLO', sprintf($lang_global['admin_hello_2step'], $admin_pre_data['full_name']));
 
     if (empty($cfg_2step['opts'])) {
         // Lỗi khi không có phương thức xác thực 2 bước nào
@@ -592,6 +591,14 @@ if (empty($admin_pre_data)) {
         $xtpl->parse('2step_form.choose_method');
     }
 
+    if (!empty($error)) {
+        $xtpl->assign('ERROR', $error);
+        $xtpl->parse('2step_form.error');
+    } else {
+        $xtpl->assign('ADMIN_2STEP_HELLO', sprintf($lang_global['admin_hello_2step'], $admin_pre_data['full_name']));
+        $xtpl->parse('2step_form.hello');
+    }
+
     $xtpl->parse('2step_form');
     $login_content = $xtpl->text('2step_form');
 }
@@ -619,13 +626,6 @@ if ($global_config['lang_multi'] == 1) {
         }
     }
     $xtpl->parse('main.lang_multi');
-}
-
-if (!empty($error)) {
-    $xtpl->assign('ERROR', $error);
-    $xtpl->parse('main.error');
-} elseif (empty($admin_pre_data)) {
-    $xtpl->parse('main.info');
 }
 
 $xtpl->parse('main');
