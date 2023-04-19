@@ -31,6 +31,7 @@ if (!empty($alias)) {
 
     $sth = $db_slave->prepare('SELECT topicid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE alias= :alias');
     $sth->bindParam(':alias', $alias, PDO::PARAM_STR);
+    $sth->execute();
     $row = $sth->fetch(3);
     if (!$row) {
         nv_redirect_location($page_url);
