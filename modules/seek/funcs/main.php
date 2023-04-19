@@ -29,6 +29,7 @@ $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 
 if ($nv_Request->isset_request('q', 'get')) {
     $is_search = true;
+    $nv_BotManager->setPrivate();
 
     $search['key'] = nv_substr($nv_Request->get_title('q', 'get', ''), 0, NV_MAX_SEARCH_LENGTH);
     $search['key'] = str_replace('+', ' ', urldecode($search['key']));

@@ -66,6 +66,7 @@ $keyhtml = nv_htmlspecialchars($key);
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 if (!empty($key)) {
     $page_url .= '&q=' . urlencode($key);
+    $nv_BotManager->setPrivate();
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
