@@ -138,7 +138,12 @@
 
 <!-- BEGIN: 2step_form -->
 <form class="loginform form-horizontal" method="post" action="{NV_BASE_ADMINURL}index.php" data-toggle="step2Form">
+    <!-- BEGIN: hello -->
     <div class="inner-message normal">{ADMIN_2STEP_HELLO}.</div>
+    <!-- END: hello -->
+    <!-- BEGIN: error -->
+    <div class="inner-message error">{ERROR}.</div>
+    <!-- END: error -->
     <div class="form-detail">
         <!-- BEGIN: must_activate -->
         <p class="text-danger">{GLANG.admin_mactive_2step}. {LANG_CHOOSE}:</p>
