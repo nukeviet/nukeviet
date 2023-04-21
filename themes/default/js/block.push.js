@@ -109,17 +109,8 @@ $(window).on('load', function() {
                 $(this).data('closable', true);
                 return hide;
             },
-            "hidden.bs.dropdown": function() {
-                $('body').removeClass('push-open')
-            },
             "show.bs.dropdown": function() {
                 pushNotifyGetList()
-            },
-            "shown.bs.dropdown": function() {
-                $('html, body').animate({
-                    scrollTop: $(".dropdown-menu", pushObj).offset().top
-                }, 400);
-                $('body').addClass('push-open')
             }
         });
 

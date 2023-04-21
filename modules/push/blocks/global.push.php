@@ -17,7 +17,10 @@ global $global_config, $user_info, $lang_global, $blockID, $nv_Request;
 
 $content = '';
 
-if (!empty($global_config['push_active']) and defined('NV_IS_USER')) {
+if (!empty($global_config['push_active']) and defined('NV_IS_USER') and !defined('NV_IS_BLOCK_PUSH')) {
+    // Giới hạn block này chỉ thêm 1 lần duy nhất
+    define('NV_IS_BLOCK_PUSH', true);
+
     if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/push/block.push.tpl')) {
         $block_theme = $global_config['module_theme'];
     } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/push/block.push.tpl')) {
