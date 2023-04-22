@@ -1,6 +1,19 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.4.07:
+- Fix class image on PHP 8+ and no exif extension
+- Fix installation error on subfolder (#3537)
+- Block direct access to sitemap link
+- Removed strftime function as it was deprecated since PHP 8.1
+- Add Cookies sharing management feature for subdomains
+- Fix view topic module news
+- Block index search result page
+- PHPMailer v6.8
+- Ckeditor v4.21.0
+- Jquery v3.6.4
+- DOMPurify 3.0.2
+
 NUKEVIET 4.4.06:
 - Fix sorting topic module news (#3521), fix error in view topic (#3520)
 - Switch from RedirectMatch to RewriteRule to support OpenLiteSpeed
