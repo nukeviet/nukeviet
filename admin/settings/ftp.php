@@ -54,7 +54,7 @@ if ($sys_info['ftp_support']) {
             $ftp->close();
             exit('ERROR|' . (string) $ftp->error);
         }
-        $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
+        $list_valid = [NV_ASSETS_DIR, 'includes', 'modules', 'themes', 'vendor'];
         $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
         if ($ftp_root === false) {
