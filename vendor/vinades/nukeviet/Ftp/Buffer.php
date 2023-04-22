@@ -20,7 +20,7 @@ namespace NukeViet\Ftp;
  * @version 4.5.00
  * @access public
  */
-class Buffer
+class Buffer extends \stdClass
 {
     public $position = 0;
 
