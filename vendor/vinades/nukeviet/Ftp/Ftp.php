@@ -248,7 +248,7 @@ class Ftp
 
         if ($read_buffer === true) {
             $return_path = false;
-            $check_value = file_get_contents($path_root . '/' . $read_file);
+            $check_value = md5_file($path_root . '/' . $read_file);
 
             foreach ($paths as $tmp) {
                 $filePath = rtrim($tmp, '/') . '/' . $read_file;
@@ -256,7 +256,7 @@ class Ftp
 
                 $this->read($filePath, $buffer);
 
-                if ($buffer == $check_value) {
+                if (md5($buffer) == $check_value) {
                     $return_path = $tmp;
                     break;
                 }
@@ -290,6 +290,7 @@ class Ftp
         }
 
         // Danh sach chi tiet thu muc
+        $path === null && $path = '';
         $cmd_path = $show_hidden ? '-al ' . $path : $path;
         $list_detail = ftp_rawlist($this->conn_id, $cmd_path);
 
@@ -324,6 +325,7 @@ class Ftp
 
         // Xac dinh he dieu hanh thich hop
         $osType = null;
+        $regexp = '';
 
         foreach ($regexps as $k => $v) {
             if (preg_match($v, $list_detail[0])) {
