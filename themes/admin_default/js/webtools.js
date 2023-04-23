@@ -76,9 +76,37 @@ $(document).ready(function() {
             url: url,
             data: 'errorfile=' + efile,
             cache: !1,
+            dataType: "json",
             success: function(response) {
-                $('#errorlist').html(response)
+                $('#errorlist').html(response.errorlist);
+                $('#error-content .error_file_name').text(response.errorfilename);
+                $('#error-content code').html(response.errorfilecontent);
+                hljs.debugMode();
+                hljs.highlightAll();
             }
         })
-    })
+    });
+    $('#display-mode').on('change', function() {
+        var url = $(this).data('url'),
+            val = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: 'changemode=1&mode=' + val,
+            cache: !1,
+            success: function(response) {
+                if (val == 'tabular') {
+                    $('#errorlist').show();
+                    $('#error-content').hide()
+                } else {
+                    $('#error-content').show();
+                    $('#errorlist').hide()
+                }
+            }
+        })
+    });
+    if ($('#error-content').length) {
+        hljs.debugMode();
+        hljs.highlightAll();
+    }
 });

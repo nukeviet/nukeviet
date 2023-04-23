@@ -13,6 +13,14 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
     exit('Stop!!!');
 }
 
+if ($nv_Request->isset_request('changemode, mode', 'post')) {
+    $mode = $nv_Request->get_string('mode', 'post', '');
+    if ($mode == 'tabular' or $mode == 'plaintext') {
+        $nv_Request->set_Session('errorfile_view_mode', $mode);
+    }
+    exit('OK');
+}
+
 $page_title = $lang_module['errorlog'];
 $filelist = [];
 $logext = $ErrorHandler->cfg['error_log_fileext'];
@@ -98,7 +106,7 @@ foreach ($errors as $error) {
     } else {
         $strs = array_map('trim', explode("\n", $error, 2));
     }
-    
+
     unset($matches);
     preg_match_all('/\[([A-Z\-]+)\:\s*([^\]]*)\]/', $strs[0], $matches, PREG_SET_ORDER);
     if (!empty($matches)) {
@@ -132,20 +140,20 @@ foreach ($errors as $error) {
     }
 }
 
+$file_content = str_replace(['][', '-------------------'], [']<br/>[', '#############################'], $file_content);
+$file_content = nv_htmlspecialchars(nv_br2nl($file_content));
 $xtpl = new XTemplate('errorlog.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$xtpl->assign('ERROR_FILE_NAME', $errorfile);
+$xtpl->assign('ERROR_FILE_CONTENT', $file_content);
 
-$is_exp = false;
 foreach ($items as $id => $item) {
     $xtpl->assign('ERROR', [
         'id' => $id,
-        'time' => $item['time'],
-        'collapsed' => $is_exp ? 'collapsed' : '',
-        'expanded' => $is_exp ? 'true' : 'false',
-        'in' => $is_exp ? '' : 'in'
+        'time' => $item['time']
     ]);
 
     foreach ($item as $key => $value) {
@@ -176,13 +184,17 @@ foreach ($items as $id => $item) {
         }
     }
     $xtpl->parse('errorlist.error');
-    $is_exp = true;
 }
 
 $xtpl->parse('errorlist');
 $errorlist = $xtpl->text('errorlist');
 
 if (!$is_default) {
+    nv_jsonOutput([
+        'errorlist' => $errorlist,
+        'errorfilename' => $errorfile,
+        'errorfilecontent' => $file_content
+    ]);
     nv_htmlOutput($errorlist);
 }
 
@@ -195,6 +207,27 @@ foreach ($filelist as $key => $ef) {
         'name' => $ef
     ]);
     $xtpl->parse('main.error_file');
+}
+
+$mode = $nv_Request->get_string('errorfile_view_mode', 'session', '');
+$modes = [
+    'tabular' => $lang_module['display_mode_tabular'],
+    'plaintext' => $lang_module['display_mode_plaintext']
+];
+empty($mode) && $mode = array_key_first($modes);
+foreach ($modes as $key => $name) {
+    $xtpl->assign('MODE', [
+        'val' => $key,
+        'sel' => $key == $mode ? ' selected="selected"' : '',
+        'name' => $name
+    ]);
+    $xtpl->parse('main.display_mode');
+}
+
+if ($mode == 'tabular') {
+    $xtpl->parse('main.plaintext_mode_hide');
+} else {
+    $xtpl->parse('main.tabular_mode_hide');
 }
 
 $xtpl->parse('main');

@@ -126,3 +126,5 @@ $lang_module['errorcode_2048'] = 'E_STRICT: PHP đề xuất các thay đổi đ
 $lang_module['errorcode_4096'] = 'E_RECOVERABLE_ERROR: Lỗi nghiêm trọng có thể bắt được. Nó chỉ ra rằng một lỗi nguy hiểm có thể xảy ra, nhưng không khiến Động cơ ở trạng thái không ổn định. Nếu lỗi không được xử lý do người dùng xác định (xem thêm set_error_handler()), thì ứng dụng sẽ hủy bỏ vì đây là một E_ERROR.';
 $lang_module['errorcode_8192'] = 'E_DEPRECATED: Lỗi nhắc nhở xảy ra trong thời gian thực thi, cảnh báo về mã sẽ không hoạt động trong các phiên bản sau.';
 $lang_module['errorcode_16384'] = 'E_USER_DEPRECATED: Lỗi nhắc nhở do người dùng tạo. Điều này giống như lỗi E_DEPRECATED, ngoại trừ nó được tạo trong mã PHP bằng cách sử dụng hàm trigger_error() của PHP.';
+$lang_module['display_mode_tabular'] = 'Dạng bảng';
+$lang_module['display_mode_plaintext'] = 'Dạng văn bản thuần';
