@@ -26,34 +26,40 @@
         <!-- END: note_order-->
     </div>
     <div class="table-responsive">
-        <table class="table table-striped table-panel table-hover mb-0">
+        <table class="table table-striped table-panel mb-0">
             <thead>
                 <tr>
                     <!-- BEGIN: col_weight -->
-                    <th style="width:5%;">{LANG.plugin_number}</th>
+                    <th class="text-center text-nowrap" style="width:1%;">{LANG.plugin_number}</th>
                     <!-- END: col_weight -->
-                    <th style="width:30%;">{LANG.plugin_area}</th>
-                    <th style="width:35%;">{LANG.plugin_file}</th>
-                    <th style="width:15%;">{LANG.plugin_type}</th>
-                    <th class="text-right text-nowrap" style="width:10%;">{LANG.plugin_func}</th>
+                    <th>{LANG.plugin_area}</th>
+                    <th class="hidden-xs">{LANG.plugin_file}</th>
+                    <th class="hidden-xs" style="width:15%;">{LANG.plugin_type}</th>
+                    <th class="text-center text-nowrap" style="width:1%;">{LANG.plugin_func}</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- BEGIN: loop -->
                 <tr>
                     <!-- BEGIN: weight -->
-                    <td>
-                        <select id="weight_{ROW.pid}" class="form-control" style="width:auto" data-toggle="change_plugin_weight" data-pid="{ROW.pid}">
+                    <td class="text-center" style="vertical-align: middle;">
+                        <select id="weight_{ROW.pid}" class="form-control" data-toggle="change_plugin_weight" data-pid="{ROW.pid}">
                             <!-- BEGIN: loop -->
                             <option value="{WEIGHT.key}" {WEIGHT.selected}>{WEIGHT.key}</option>
                             <!-- END: loop -->
                         </select>
                     </td>
                     <!-- END: weight -->
-                    <td>{ROW.hook_module}{ROW.plugin_area}</td>
-                    <td>{ROW.plugin_file}</td>
-                    <td>{ROW.type}</td>
-                    <td class="text-right text-nowrap">
+                    <td style="vertical-align: middle;">
+                        <strong>{ROW.hook_module}{ROW.plugin_area}</strong>
+                        <div class="visible-xs-block">
+                            {LANG.plugin_file}: {ROW.plugin_file}<br/>
+                            {LANG.plugin_type}: {ROW.type}
+                        </div>
+                    </td>
+                    <td class="hidden-xs" style="vertical-align: middle;">{ROW.plugin_file}</td>
+                    <td class="hidden-xs" style="vertical-align: middle;">{ROW.type}</td>
+                    <td class="text-center text-nowrap" style="vertical-align: middle;">
                         <!-- BEGIN: delete -->
                         <a href="#" class="btn btn-xs btn-danger" data-toggle="nv_del_plugin" data-pid="{ROW.pid}"><i class="fa fa-trash-o"></i> {LANG.isdel}</a>
                         <!-- END: delete -->
@@ -71,27 +77,31 @@
         <i class="fa fa-list" aria-hidden="true"></i> <strong>{LANG.plugin_available}</strong>
     </div>
     <div class="table-responsive">
-        <table class="table table-striped table-panel table-hover mb-0">
+        <table class="table table-striped table-panel mb-0">
             <thead>
                 <tr>
-                    <th style="width:25%;">{LANG.plugin_area}</th>
-                    <th style="width:25%;">{LANG.plugin_file}</th>
-                    <th style="width:25%;">{LANG.plugin_type}</th>
-                    <th style="width:15%;">{LANG.act}</th>
-                    <th class="text-right text-nowrap" style="width:10%;">{LANG.plugin_func}</th>
+                    <th>{LANG.plugin_area}</th>
+                    <th class="hidden-xs">{LANG.plugin_file}</th>
+                    <th class="text-center text-nowrap hidden-xs" style="width:15%;">{LANG.plugin_type}</th>
+                    <th class="text-center text-nowrap hidden-xs" style="width:15%;">{LANG.act}</th>
+                    <th class="text-center text-nowrap" style="width:1%;">{LANG.plugin_func}</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- BEGIN: row -->
                 <tr>
-                    <td>{ROW.area}</td>
-                    <td>{ROW.file}</td>
-                    <td>{ROW.type}</td>
-                    <td>
-                        <!-- BEGIN: status_ok --><span class="text-success">{LANG.plugin_status_ok}</span><!-- END: status_ok -->
-                        <!-- BEGIN: status_error --><span class="text-danger">{LANG.plugin_status_error}</span><!-- END: status_error -->
+                    <td style="vertical-align: middle;">
+                        <strong>{ROW.area}</strong>
+                        <div class="visible-xs-block">
+                            {LANG.plugin_file}: {ROW.file}<br/>
+                            {LANG.plugin_type}: {ROW.type}<br/>
+                            {LANG.act}: {ROW.status}
+                        </div>
                     </td>
-                    <td class="text-right text-nowrap">
+                    <td class="hidden-xs" style="vertical-align: middle;">{ROW.file}</td>
+                    <td class="text-center text-nowrap hidden-xs" style="vertical-align: middle;">{ROW.type}</td>
+                    <td class="text-center text-nowrap hidden-xs" style="vertical-align: middle;">{ROW.status}</td>
+                    <td class="text-center text-nowrap" style="vertical-align: middle;">
                         <!-- BEGIN: plugin_integrate -->
                         <a href="#" data-click="plintegrate" data-hkey="{HOOK_KEY}" data-fkey="{FILE_KEY}" data-hm="{ROW.hook_module}" data-rm="{ROW.receive_module}" class="btn btn-xs btn-primary"><i class="fa fa-cog"></i> {LANG.plugin_integrate}</a>
                         <!-- END: plugin_integrate -->

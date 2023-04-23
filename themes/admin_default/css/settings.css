@@ -99,3 +99,9 @@
 .cronlist .cron-heading.collapsed .title {
     font-weight: 400;
 }
+
+.c-selected{
+    background-color: #6c757d !important;
+    color: #fff !important;
+    font-weight: 700;
+}

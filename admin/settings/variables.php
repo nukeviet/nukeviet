@@ -13,7 +13,6 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
     exit('Stop!!!');
 }
 
-$errormess = '';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $sameSite_array = [
     'Empty' => $lang_module['cookie_SameSite_Empty'],
@@ -27,9 +26,10 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $array_config_global = [];
     $array_config_global['cookie_prefix'] = nv_substr($nv_Request->get_title('cookie_prefix', 'post', '', 0, $preg_replace), 0, 255);
     $array_config_global['session_prefix'] = nv_substr($nv_Request->get_title('session_prefix', 'post', '', 0, $preg_replace), 0, 255);
-    $array_config_global['cookie_secure'] = (int) $nv_Request->get_bool('cookie_secure', 'post', 0);
-    $array_config_global['cookie_httponly'] = (int) $nv_Request->get_bool('cookie_httponly', 'post', 0);
-    $array_config_global['cookie_share'] = (int) $nv_Request->get_bool('cookie_share', 'post', 0);
+    $array_config_global['cookie_secure'] = (int) $nv_Request->get_bool('cookie_secure', 'post', false);
+    $array_config_global['cookie_httponly'] = (int) $nv_Request->get_bool('cookie_httponly', 'post', false);
+    $array_config_global['cookie_share'] = (int) $nv_Request->get_bool('cookie_share', 'post', false);
+    $array_config_global['cookie_notice_popup'] = (int) $nv_Request->get_bool('cookie_notice_popup', 'post', false);
     $array_config_global['cookie_SameSite'] = $nv_Request->get_title('cookie_SameSite', 'post', '');
     if (!empty($array_config_global['cookie_SameSite']) and !isset($sameSite_array[$array_config_global['cookie_SameSite']])) {
         $array_config_global['cookie_SameSite'] = '';
@@ -56,32 +56,26 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     nv_save_file_config_global();
 
-    if (empty($errormess)) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-    }
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
 }
 
 $global_config['checkss'] = $checkss;
 
 $xtpl = new XTemplate('variables.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('DATA', $global_config);
+$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('NV_LIVE_COOKIE_TIME', round(NV_LIVE_COOKIE_TIME / 86400));
 $xtpl->assign('NV_LIVE_SESSION_TIME', round(NV_LIVE_SESSION_TIME / 60));
 $xtpl->assign('CHECKBOX_COOKIE_SECURE', !empty($global_config['cookie_secure']) ? ' checked="checked"' : '');
 $xtpl->assign('CHECKBOX_COOKIE_HTTPONLY', !empty($global_config['cookie_httponly']) ? ' checked="checked"' : '');
 $xtpl->assign('CHECKBOX_COOKIE_SHARE', !empty($global_config['cookie_share']) ? ' checked="checked"' : '');
-
-if ($errormess != '') {
-    $xtpl->assign('ERROR', $errormess);
-    $xtpl->parse('main.error');
-}
+$xtpl->assign('CHECKED_COOKIE_NOTICE_POPUP', !empty($global_config['cookie_notice_popup']) ? ' checked="checked"' : '');
 
 foreach ($sameSite_array as $val => $note) {
     if (empty($global_config['cookie_SameSite'])) {

@@ -134,7 +134,7 @@
     </div>
     <section id="middle" class="row">
         <aside id="left-menu">
-            <div id="bg-left-menu" style="padding-right: 20px;padding-left: 4px;width: 200px;">
+            <div id="bg-left-menu">
                 <ul class="nav nav-pills nav-stacked text-color">
                     <!-- BEGIN: menu_loop -->
                         <li {MENU_CLASS}>

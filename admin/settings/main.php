@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,17 +14,48 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 }
 
 $array_theme_type = ['r', 'd', 'm'];
-$errormess = '';
+$theme_array = [];
+$theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme']);
 
+$mobile_theme_array = [];
+$mobile_theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_mobile']);
+
+$sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
+$result = $db->query($sql);
+while (list($theme) = $result->fetch(3)) {
+    if (in_array($theme, $theme_array_file, true)) {
+        $theme_array[] = $theme;
+    } elseif (in_array($theme, $mobile_theme_array_file, true)) {
+        $mobile_theme_array[] = $theme;
+    }
+}
+
+// Lưu cấu hình
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
-if ($checkss == $nv_Request->get_string('checkss', 'post')) {
+if ($nv_Request->get_string('checkss', 'post') == $checkss) {
     $array_config = [];
+    $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);
+    if (empty($array_config['site_name'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['sitename_error']
+        ]);
+    }
+
+    $array_config['site_description'] = nv_substr($nv_Request->get_title('site_description', 'post', '', 1), 0, 255);
+    if (empty($array_config['site_description'])) {
+        nv_jsonOutput([
+            'status' => 'error',
+            'mess' => $lang_module['description_error']
+        ]);
+    }
 
     $site_domain = $nv_Request->get_title('site_domain', 'post', '');
-    $array_config['site_domain'] = (sizeof($global_config['my_domains']) > 1 and in_array($site_domain, $global_config['my_domains'], true)) ? $site_domain : '';
+    $array_config['site_domain'] = (!empty($global_config['my_domains']) and in_array($site_domain, $global_config['my_domains'], true)) ? $site_domain : '';
     $array_config['site_theme'] = nv_substr($nv_Request->get_title('site_theme', 'post', '', 1), 0, 255);
+    !in_array($array_config['site_theme'], $theme_array, true) && $array_config['site_theme'] = $global_config['site_theme'];
     $array_config['mobile_theme'] = nv_substr($nv_Request->get_title('mobile_theme', 'post', '', 1), 0, 255);
-    $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);
+    !in_array($array_config['mobile_theme'], $mobile_theme_array, true) && $array_config['mobile_theme'] = $global_config['mobile_theme'];
     $array_config['switch_mobi_des'] = $nv_Request->get_int('switch_mobi_des', 'post', 0);
     $_array_theme_type = $nv_Request->get_typed_array('theme_type', 'post', 'title');
     $_array_theme_type = array_intersect($_array_theme_type, $array_theme_type);
@@ -41,17 +72,12 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     $array_config['site_keywords'] = nv_substr($nv_Request->get_title('site_keywords', 'post', '', 1), 0, 255);
     if (!empty($array_config['site_keywords'])) {
-        $site_keywords = array_map('trim', explode(',', $array_config['site_keywords']));
-        $array_config['site_keywords'] = [];
-
-        if (!empty($site_keywords)) {
-            foreach ($site_keywords as $keywords) {
-                if (!empty($keywords) and !is_numeric($keywords)) {
-                    $array_config['site_keywords'][] = $keywords;
-                }
-            }
-        }
-        $array_config['site_keywords'] = (!empty($array_config['site_keywords'])) ? implode(', ', $array_config['site_keywords']) : '';
+        $array_config['site_keywords'] = array_map('trim', explode(',', nv_strtolower($array_config['site_keywords'])));
+        $array_config['site_keywords'] = array_unique($array_config['site_keywords']);
+        $array_config['site_keywords'] = array_filter($array_config['site_keywords'], function($key) {
+            return (!empty($key) and !is_numeric($key));
+        });
+        $array_config['site_keywords'] = implode(', ', $array_config['site_keywords']);
     }
 
     $site_logo = $nv_Request->get_title('site_logo', 'post', '');
@@ -94,7 +120,6 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         $array_config['site_home_module'] = $global_config['site_home_module'];
     }
 
-    $array_config['site_description'] = nv_substr($nv_Request->get_title('site_description', 'post', '', 1), 0, 255);
     $array_config['disable_site_content'] = $nv_Request->get_editor('disable_site_content', '', NV_ALLOWED_HTML_TAGS);
 
     if (empty($array_config['disable_site_content'])) {
@@ -112,36 +137,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     $nv_Cache->delAll();
 
-    if (empty($errormess)) {
-        nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass());
-    } else {
-        $sql = 'SELECT module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
-        $result = $db->query($sql);
-
-        while (list($c_module, $c_config_name, $c_config_value) = $result->fetch(3)) {
-            if ($c_module == 'global') {
-                $global_config[$c_config_name] = $c_config_value;
-            } else {
-                $module_config[$c_module][$c_config_name] = $c_config_value;
-            }
-        }
-    }
-}
-
-$theme_array = [];
-$theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme']);
-
-$mobile_theme_array = [];
-$mobile_theme_array_file = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_mobile']);
-
-$sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
-$result = $db->query($sql);
-while (list($theme) = $result->fetch(3)) {
-    if (in_array($theme, $theme_array_file, true)) {
-        $theme_array[] = $theme;
-    } elseif (in_array($theme, $mobile_theme_array_file, true)) {
-        $mobile_theme_array[] = $theme;
-    }
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
 }
 
 $global_config['switch_mobi_des'] = !empty($global_config['switch_mobi_des']) ? ' checked="checked"' : '';
@@ -175,16 +173,14 @@ $value_setting = [
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
-$lang_module['browse_image'] = $lang_global['browse_image'];
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
-$xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
+$xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('VALUE', $value_setting);
+$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 foreach ($array_theme_type as $theme_type) {
     $xtpl->assign('THEME_TYPE', $theme_type);
@@ -207,13 +203,18 @@ foreach ($theme_array as $folder) {
     $xtpl->assign('SITE_THEME', $folder);
     $xtpl->parse('main.site_theme');
 }
-if (!empty($mobile_theme_array) and in_array('m', $global_config['array_theme_type'], true)) {
+
+if (!empty($mobile_theme_array)) {
     foreach ($mobile_theme_array as $folder) {
         $xtpl->assign('SELECTED', ($global_config['mobile_theme'] == $folder) ? ' selected="selected"' : '');
         $xtpl->assign('SITE_THEME', $folder);
-        $xtpl->parse('main.mobile_theme.loop');
+        $xtpl->parse('main.mobile_theme');
     }
-    $xtpl->parse('main.mobile_theme');
+}
+
+if (!(!empty($mobile_theme_array) and in_array('m', $global_config['array_theme_type'], true))) {
+    $xtpl->parse('main.if_not_mobile_type');
+    $xtpl->parse('main.if_not_mobile_type2');
 }
 
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . " WHERE act=1 AND title NOT IN ('menu', 'comment') ORDER BY weight ASC";
@@ -227,7 +228,7 @@ foreach ($mods as $mod) {
 $global_config['disable_site_content'] = htmlspecialchars(nv_editor_br2nl($global_config['disable_site_content']));
 
 if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
-    $disable_site_content = nv_aleditor('disable_site_content', '100%', '100px', $global_config['disable_site_content']);
+    $disable_site_content = nv_aleditor('disable_site_content', '100%', '100px', $global_config['disable_site_content'], 'Basic');
 } else {
     $disable_site_content = '<textarea style="width:100%;height:100px" name="disable_site_content" id="disable_site_content">' . $global_config['disable_site_content'] . '</textarea>';
 }
@@ -235,11 +236,6 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 $xtpl->assign('DISABLE_SITE_CONTENT', $disable_site_content);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-
-if ($errormess != '') {
-    $xtpl->assign('ERROR', $errormess);
-    $xtpl->parse('main.error');
-}
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

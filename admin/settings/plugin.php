@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -118,10 +118,10 @@ if (!empty($array_search['area'])) {
     }
 
     $sql .= ' ORDER BY weight ASC';
-    $max_weight = $db->query("SELECT MAX(weight) FROM " . $db_config['prefix'] . "_plugins
+    $max_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . "_plugins
     WHERE (plugin_lang='all' OR plugin_lang='" . NV_LANG_DATA . "')
-    AND plugin_area=" . $db->quote($array_search['s_plugin_area']) . "
-    AND hook_module=" . $db->quote($array_search['s_hook_module']))->fetchColumn();
+    AND plugin_area=" . $db->quote($array_search['s_plugin_area']) . '
+    AND hook_module=' . $db->quote($array_search['s_hook_module']))->fetchColumn();
 } else {
     $sql .= ' ORDER BY hook_module ASC, plugin_area ASC';
 }
@@ -151,7 +151,7 @@ while ($row = $result->fetch()) {
                 if (!isset($mod_counts[$key]) or !isset($mod_counts[$key][$file_key])) {
                     $mod_counts[$key][$file_key] = 0;
                 }
-                $mod_counts[$key][$file_key]++;
+                ++$mod_counts[$key][$file_key];
 
                 $key1 = empty($row['hook_module']) ? '' : $row['hook_module'];
                 $mod_exists[$key][$file_key][$key1][] = $row['plugin_module_name'];
@@ -307,9 +307,9 @@ if ($nv_Request->isset_request('integrate', 'post')) {
     }
 
     // Kiểm tra trùng
-    $sql = "SELECT pid FROM " . $db_config['prefix'] . "_plugins WHERE plugin_lang=" . $db->quote($post['lang']) . "
-    AND plugin_file=" . $db->quote($row['file']) . " AND plugin_area=" . $db->quote($row['area'][0]) . "
-    AND plugin_module_name=" . $db->quote($post['receive_module']) . " AND hook_module=" . $db->quote($post['hook_module']);
+    $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugins WHERE plugin_lang=' . $db->quote($post['lang']) . '
+    AND plugin_file=' . $db->quote($row['file']) . ' AND plugin_area=' . $db->quote($row['area'][0]) . '
+    AND plugin_module_name=' . $db->quote($post['receive_module']) . ' AND hook_module=' . $db->quote($post['hook_module']);
     if ($db->query($sql)->fetchColumn()) {
         $respon['message'] = 'Error exists!!!';
         nv_jsonOutput($respon);
@@ -354,7 +354,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
 // List danh sách các hook đã tích hợp để lọc
-foreach($array_areas as $area) {
+foreach ($array_areas as $area) {
     $p_area = [
         'key' => $area,
         'selected' => $area == $array_search['area'] ? ' selected="selected"' : ''
@@ -407,16 +407,13 @@ if (!empty($available_plugins)) {
             $row['area'] = implode(', ', $row['area']);
             !empty($row['hook_module']) && $row['area'] = $row['hook_module'] . ':' . $row['area'];
             $row['type'] = empty($row['receive_module']) ? $lang_module['plugin_type_sys'] : $lang_module['plugin_type_module'] . ':' . $row['receive_module'];
-
+            $row['status'] = $sizeof ? $lang_module['plugin_status_ok'] : $lang_module['plugin_status_error'];
             $xtpl->assign('FILE_KEY', $file_key);
             $xtpl->assign('ROW', $row);
 
             if ($sizeof) {
                 $xtpl->assign('RAND', nv_genpass());
-                $xtpl->parse('main.plugin_available.row.status_ok');
                 $xtpl->parse('main.plugin_available.row.plugin_integrate');
-            } else {
-                $xtpl->parse('main.plugin_available.row.status_error');
             }
             $xtpl->parse('main.plugin_available.row');
         }

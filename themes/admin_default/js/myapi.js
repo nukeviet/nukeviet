@@ -8,9 +8,6 @@
  */
 
 $(function() {
-    $('body').on('input', '.number', function() {
-        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
-    });
     // Thay đổi đối tượng
     $('#role [name=role_object]').on('change', function() {
         $.ajax({

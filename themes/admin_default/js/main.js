@@ -316,5 +316,15 @@ $(document).ready(function() {
             }
             nv_open_browse(url, winname, 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         }
-    })
+    });
+
+    // Chỉ cho gõ ký tự dạng số ở input có class number
+    $('body').on('input', '.number', function() {
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
+    });
+
+    // Chỉ cho gõ các ký tự [a-zA-Z0-9_] ở input có class alphanumeric
+    $('body').on('input', '.alphanumeric', function() {
+        $(this).val($(this).val().replace(/[^a-zA-Z0-9\_]/gi, ''))
+    });
 });

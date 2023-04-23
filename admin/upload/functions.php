@@ -591,7 +591,7 @@ function nv_dirListRefreshSize()
         )";
         $total_size = floatval($db->query($sql)->fetchColumn());
 
-        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET total_size=' . $total_size . ' WHERE did=' . $did);
+        $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET total_size=' . $total_size . ' WHERE did=' . (int) $did);
     }
 }
 

@@ -4,243 +4,416 @@
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-
-<!-- BEGIN: error -->
-<div class="alert alert-danger">
-    {ERROR}
-</div>
-<!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <col class="w400" />
-            <tbody>
-                <!-- BEGIN: closed_site -->
-                <tr>
-                    <td><strong>{LANG.closed_site}</strong></td>
-                    <td><select name="closed_site" class="form-control w300" onchange="reopeningTimeShow(this);">
+<!-- BEGIN: closed_site -->
+<div class="panel panel-{SITE_STATUS.panel} mb-lg">
+    <div class="panel-heading">
+        <div class="d-flex" style="align-items: center">
+            <div><em class="fa {SITE_STATUS.icon} fa-3x fa-fw"></em></div>
+            <div style="flex-grow: 1">
+                <strong>{SITE_STATUS.title}</strong>
+                <!-- BEGIN: reopening -->
+                <div class="small" style="margin-top:6px;">{SITE_STATUS.reopening}</div>
+                <!-- END: reopening -->
+            </div>
+            <div style="margin-left: 5px"><button type="button" class="btn btn-{SITE_STATUS.panel} btn-sm" data-toggle="collapse" data-target="#closed_site_collapse" aria-expanded="false" aria-controls="closed_site_collapse"><em class="fa fa-cogs"></em><span class="hidden-xs"> {LANG.closed_site}</span></button></div>
+        </div>
+    </div>
+    <div class="collapse" id="closed_site_collapse">
+        <form class="panel-body" id="change-site-mode" action="{FORM_ACTION}" method="post">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-7">
+                    <div class="form-group">
+                        <select name="closed_site" class="form-control">
                             <!-- BEGIN: closed_site_mode -->
-                            <option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
+                            <option value="{MODE_VALUE}" {MODE_SELECTED}>{MODE_NAME}</option>
                             <!-- END: closed_site_mode -->
                         </select>
-                        <div id="reopening_time" style="margin-top:10px;<!-- BEGIN: reopening_time -->display:none<!-- END: reopening_time -->">
-                            <label class="control-label">{LANG.closed_site_reopening_time}</label>
-                            <div class="form-inline">
-                                <input class="form-control" name="reopening_date" id="reopening_date" value="{DATA.reopening_date}" style="width: 90px;" maxlength="10" type="text" />
-                                <select class="form-control" name="reopening_hour">
-                                    <!-- BEGIN: reopening_hour -->
-                                    <option value="{RHOUR.num}"{RHOUR.sel}>{RHOUR.title}</option>
-                                    <!-- END: reopening_hour -->
-                                </select> : <select class="form-control" name="reopening_min">
-                                    <!-- BEGIN: reopening_min -->
-                                    <option value="{RMIN.num}"{RMIN.sel}>{RMIN.title}</option>
-                                    <!-- END: reopening_min -->
+                    </div>
+                    <div id="reopening_time" class="form-group" style="<!-- BEGIN: reopening_time -->display:none<!-- END: reopening_time -->">
+                        <div class="text-center m-bottom">{LANG.closed_site_reopening_time}</div>
+                        <div class="d-flex">
+                            <input class="form-control" style="flex-grow: 1" name="reopening_date" id="reopening_date" value="{DATA.reopening_date}" maxlength="10" type="text" />
+                            <select class="form-control" name="reopening_hour" style="width: fit-content;margin-left:3px">
+                                <!-- BEGIN: reopening_hour -->
+                                <option value="{RHOUR.num}" {RHOUR.sel}>{RHOUR.title}</option>
+                                <!-- END: reopening_hour -->
+                            </select>
+                            <select class="form-control" name="reopening_min" style="width: fit-content;margin-left:3px">
+                                <!-- BEGIN: reopening_min -->
+                                <option value="{RMIN.num}" {RMIN.sel}>{RMIN.title}</option>
+                                <!-- END: reopening_min -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <input type="hidden" name="site_mode" value="1" />
+                        <input type="submit" name="submit" value="{LANG.submit}" class="btn btn-{SITE_STATUS.panel}" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- END: closed_site -->
+
+<form id="system-settings" class="form-horizontal mb-lg" action="{FORM_ACTION}" method="post">
+    <div class="panel-group" id="accordion-settings" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-primary">
+            <a role="tab" id="headingOne" class="panel-heading" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                {LANG.general_settings}
+            </a>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <ul class="list-group type2n1">
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.site_email}</strong></label>
+                            <div class="col-sm-14">
+                                <input type="email" name="site_email" value="{DATA.site_email}" class="form-control" />
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.site_phone}</strong></label>
+                            <div class="col-sm-14">
+                                <div class="input-group">
+                                    <input type="text" name="site_phone" value="{DATA.site_phone}" class="form-control" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-info" data-toggle="phone_note" title="{GLANG.phone_note_title}"><i class="fa fa-question" aria-hidden="true"></i></button>
+                                    </span>
+                                </div>
+                                <div class="phone_note_content hide">
+                                    {GLANG.phone_note_content2}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- BEGIN: my_domains -->
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.my_domains}</strong></label>
+                            <div class="col-sm-14">
+                                <input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" />
+                                <div class="help-block mb-0">{LANG.params_info}</div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END: my_domains -->
+
+                    <!-- BEGIN: timesettings -->
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.site_timezone}</strong></label>
+                            <div class="col-sm-14">
+                                <select name="site_timezone" id="site_timezone" class="form-control" style="width:100%">
+                                    <option value="">{LANG.timezoneAuto}</option>
+                                    <!-- BEGIN: opsite_timezone -->
+                                    <option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
+                                    <!-- END: opsite_timezone -->
+                                </select>
+                                <div class="help-block">{CURRENT_TIME}</div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END: timesettings -->
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.date_time_pattern}</strong></label>
+                            <div class="col-sm-14">
+                                <div class="row">
+                                    <div class="col-xs-14 col-sm-8 col-md-6">
+                                        <input type="text" name="date_pattern" value="{DATA.date_pattern}" class="form-control" />
+                                    </div>
+                                    <div class="col-xs-10 col-sm-6 col-md-4">
+                                        <input type="text" name="time_pattern" value="{DATA.time_pattern}" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.ssl_https}</strong></label>
+                            <div class="col-sm-14">
+                                <select id="ssl_https" name="ssl_https" class="form-control" data-val="{DATA.ssl_https}" data-confirm="{LANG.note_ssl}" style="width:fit-content">
+                                    <!-- BEGIN: ssl_https -->
+                                    <option value="{SSL_HTTPS.key}" {SSL_HTTPS.selected}>{SSL_HTTPS.title}</option>
+                                    <!-- END: ssl_https -->
                                 </select>
                             </div>
                         </div>
-                    </td>
-                </tr>
-                <!-- END: closed_site -->
-                <tr>
-                    <td><strong>{LANG.site_email}</strong></td>
-                    <td><input type="email" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.site_phone}</strong></td>
-                    <td><input type="text" name="site_phone" value="{DATA.site_phone}" class="form-control m-bottom" style="width: 450px"/><button type="button" data-toggle="phone_note">{GLANG.phone_note_title}</button></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.themeadmin}</strong></td>
-                    <td>
-                    <select name="admin_theme" class="form-control w300" >
-                        <!-- BEGIN: admin_theme -->
-                        <option value="{THEME_NAME}"{THEME_SELECTED}>{THEME_NAME}</option>
-                        <!-- END: admin_theme -->
-                    </select></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.date_pattern}</strong></td>
-                    <td><input type="text" name="date_pattern" value="{DATA.date_pattern}" class="w150 form-control"/></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.time_pattern}</strong></td>
-                    <td><input type="text" name="time_pattern" value="{DATA.time_pattern}" class="w150 form-control"/></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.ssl_https}</strong></td>
-                    <td>
-                        <select id="ssl_https" name="ssl_https" class="form-control w300" data-val="{DATA.ssl_https}">
-                            <!-- BEGIN: ssl_https -->
-                            <option value="{SSL_HTTPS.key}"{SSL_HTTPS.selected}>{SSL_HTTPS.title}</option>
-                            <!-- END: ssl_https -->
-                        </select>
-                    </td>
-                </tr>
-                <!-- BEGIN: system -->
-                <tr>
-                    <td><strong>{LANG.lang_multi}</strong></td>
-                    <td><input type="checkbox" value="1" name="lang_multi" {CHECKED_LANG_MULTI} data-toggle="controlrw"/></td>
-                </tr>
-                <!-- BEGIN: lang_multi -->
-                <tr>
-                    <td><strong>{LANG.site_lang}</strong></td>
-                    <td>
-                    <select name="site_lang" class="form-control w300">
-                        <!-- BEGIN: site_lang_option -->
-                        <option value="{LANGOP}" {SELECTED}>{LANGVALUE} </option>
-                        <!-- END: site_lang_option -->
-                    </select></td>
-                </tr>
-                <!-- BEGIN: lang_geo -->
-                <tr>
-                    <td><strong>{LANG.lang_geo}</strong></td>
-                    <td><input type="checkbox" value="1" name="lang_geo" {CHECKED_LANG_GEO} /> ( <a href="{CONFIG_LANG_GEO}">{LANG.lang_geo_config}</a> ) </td>
-                </tr>
-                <!-- END: lang_geo -->
-                <!-- END: lang_multi -->
-                <tr>
-                    <td><strong>{LANG.rewrite}</strong></td>
-                    <td><input type="checkbox" value="1" name="rewrite_enable" {CHECKED_REWRITE_ENABLE} data-toggle="controlrw"/></td>
-                </tr>
-                <tr id="tr_rewrite_optional"{SHOW_REWRITE_OPTIONAL}>
-                    <td><strong>{LANG.rewrite_optional}</strong></td>
-                    <td><input type="checkbox" value="1" name="rewrite_optional" {CHECKED_REWRITE_OPTIONAL} data-toggle="controlrw1"/></td>
-                </tr>
-                <tr id="tr_rewrite_op_mod"{SHOW_REWRITE_OP_MOD}>
-                    <td><strong>{LANG.rewrite_op_mod}</strong></td>
-                    <td>
-                    <select name="rewrite_op_mod" class="form-control w300">
-                        <option value="">&nbsp;</option>
-                        <!-- BEGIN: rewrite_op_mod -->
-                        <option value="{MODE_VALUE}"{MODE_SELECTED}>{MODE_NAME}</option>
-                        <!-- END: rewrite_op_mod -->
-                    </select></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.site_timezone}</strong></td>
-                    <td>
-                    <select name="site_timezone" id="site_timezone" class="form-control w300">
-                        <option value="">{LANG.timezoneAuto}</option>
-                        <!-- BEGIN: opsite_timezone -->
-                        <option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
-                        <!-- END: opsite_timezone -->
-                    </select>
-                    {CURRENT_TIME}
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.gzip_method}</strong></td>
-                    <td><input type="checkbox" value="1" name="gzip_method" {CHECKED_GZIP_METHOD} /></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.resource_preload}</strong></td>
-                    <td>
-                    <select name="resource_preload" class="form-control w300">
-                        <!-- BEGIN: resource_preload -->
-                        <option value="{PRELOAD.val}" {PRELOAD.sel}>{PRELOAD.name}</option>
-                        <!-- END: resource_preload -->
-                    </select></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.my_domains}</strong></td>
-                    <td><input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" style="width: 450px"/></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.static_noquerystring}</strong></td>
-                    <td>
-                        <input type="checkbox" name="static_noquerystring" value="1"{STATIC_NOQUERYSTRING_CHECKED}/>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.error_set_logs}</strong></td>
-                    <td><input type="checkbox" value="1" name="error_set_logs" {CHECKED_ERROR_SET_LOGS} /></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.nv_debug}</strong></td>
-                    <td><label><input type="checkbox" name="nv_debug" value="1"{CFG_DEFINE.nv_debug}/> {LANG.nv_debug_help}</label></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.cookie_notice_popup}</strong></td>
-                    <td><input type="checkbox" name="cookie_notice_popup" value="1"{CHECKED_COOKIE_NOTICE_POPUP}/></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.error_send_email}</strong></td>
-                    <td><input type="email" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.unsign_vietwords}</strong></td>
-                    <td>
-                        <input type="checkbox" value="1" name="unsign_vietwords" {CHECKED_UNSIGN_VIETWORDS}/>
-                        {LANG.unsign_vietwords_note}
-                    </td>
-                </tr>
-                <!-- END: system -->
-                <tr>
-                    <td><strong>{LANG.searchEngineUniqueID}</strong></td>
-                    <td>
-                        <div class="m-bottom">
-                            <input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" class="form-control" style="width: 450px" maxlength="50" />
+                    </li>
+
+                    <!-- BEGIN: optimization_settings -->
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.gzip_method}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="gzip_method" {CHECKED_GZIP_METHOD} />
+                                    <strong class="visible-xs-inline-block">{LANG.gzip_method}</strong>
+                                </label>
+                            </div>
                         </div>
-                        {LANG.searchEngineUniqueID_note}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.resource_preload}</strong></label>
+                            <div class="col-sm-14">
+                                <select name="resource_preload" class="form-control" style="width:fit-content">
+                                    <!-- BEGIN: resource_preload -->
+                                    <option value="{PRELOAD.val}" {PRELOAD.sel}>{PRELOAD.name}</option>
+                                    <!-- END: resource_preload -->
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END: optimization_settings -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- BEGIN: lang_rewrite -->
+        <div class="panel panel-primary">
+            <a role="tab" id="headingTwo" class="panel-heading collapsed" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                {LANG.lang_rewrite_settings}
+            </a>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <ul class="list-group type2n1">
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.lang_multi}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="lang_multi" {CHECKED_LANG_MULTI} data-toggle="controlrw" />
+                                    <strong class="visible-xs-inline-block">{LANG.lang_multi}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- BEGIN: lang_multi -->
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.site_lang}</strong></label>
+                            <div class="col-sm-14">
+                                <select name="site_lang" class="form-control" style="width:fit-content">
+                                    <!-- BEGIN: site_lang_option -->
+                                    <option value="{LANGOP}" {SELECTED}>{LANGVALUE} </option>
+                                    <!-- END: site_lang_option -->
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- BEGIN: lang_geo -->
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.lang_geo}</strong></label>
+                            <div class="col-sm-14">
+                                <div class="checkbox-inline" style="cursor:auto;">
+                                    <input type="checkbox" class="form-control" value="1" name="lang_geo" {CHECKED_LANG_GEO} />
+                                    <span style="margin-left:20px">
+                                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                        <a href="{CONFIG_LANG_GEO}">{LANG.lang_geo_config}</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END: lang_geo -->
+                    <!-- END: lang_multi -->
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.rewrite}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="rewrite_enable" {CHECKED_REWRITE_ENABLE} data-toggle="controlrw" />
+                                    <strong class="visible-xs-inline-block">{LANG.rewrite}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item" id="tr_rewrite_optional" {SHOW_REWRITE_OPTIONAL}>
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.rewrite_optional}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="rewrite_optional" {CHECKED_REWRITE_OPTIONAL} data-toggle="controlrw1" />
+                                    <strong class="visible-xs-inline-block">{LANG.rewrite_optional}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item" id="tr_rewrite_op_mod" {SHOW_REWRITE_OP_MOD}>
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.rewrite_op_mod}</strong></label>
+                            <div class="col-sm-14">
+                                <select name="rewrite_op_mod" class="form-control" style="width: fit-content;">
+                                    <option value="">&nbsp;---&nbsp;</option>
+                                    <!-- BEGIN: rewrite_op_mod -->
+                                    <option value="{MODE_VALUE}" {MODE_SELECTED}>{MODE_NAME}</option>
+                                    <!-- END: rewrite_op_mod -->
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.static_noquerystring}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" name="static_noquerystring" value="1" {STATIC_NOQUERYSTRING_CHECKED} />
+                                    <strong class="visible-xs-inline-block">{LANG.static_noquerystring}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END: lang_rewrite -->
+
+        <!-- BEGIN: error_handling -->
+        <div class="panel panel-primary">
+            <a role="tab" id="headingThree" class="panel-heading collapsed" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                {LANG.error_handler_settings}
+            </a>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <ul class="list-group type2n1">
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.error_set_logs}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="error_set_logs" {CHECKED_ERROR_SET_LOGS} />
+                                    <strong class="visible-xs-inline-block">{LANG.error_set_logs}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.nv_debug}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" name="nv_debug" value="1" {CFG_DEFINE.nv_debug} />
+                                    <strong class="visible-xs-inline-block">{LANG.nv_debug}</strong>
+                                </label>
+                                <div class="help-block mb-0">{LANG.nv_debug_help}</div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.error_send_email}</strong></label>
+                            <div class="col-sm-14">
+                                <input type="email" name="error_send_email" value="{DATA.error_send_email}" class="form-control" />
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END: error_handling -->
+
+        <div class="panel panel-primary">
+            <a role="tab" id="headingFour" class="panel-heading collapsed" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                {LANG.search_settings}
+            </a>
+            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <ul class="list-group type2n1">
+                    <!-- BEGIN: unsign_vietwords -->
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.unsign_vietwords}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="unsign_vietwords" {CHECKED_UNSIGN_VIETWORDS} />
+                                    <strong class="visible-xs-inline-block">{LANG.unsign_vietwords}</strong>
+                                </label>
+                                <div class="help-block mb-0">{LANG.unsign_vietwords_note}</div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END: unsign_vietwords -->
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.searchEngineUniqueID}</strong></label>
+                            <div class="col-sm-14">
+                                <input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" class="form-control" maxlength="50" />
+                                <div class="help-block mb-0">{LANG.searchEngineUniqueID_note}</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <a role="tab" id="headingFive" class="panel-heading collapsed" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                {LANG.acp_settings}
+            </a>
+            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                <ul class="list-group type2n1">
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.themeadmin}</strong></label>
+                            <div class="col-sm-14">
+                                <select name="admin_theme" class="form-control" style="width:fit-content">
+                                    <!-- BEGIN: admin_theme -->
+                                    <option value="{THEME_NAME}" {THEME_SELECTED}>{THEME_NAME}</option>
+                                    <!-- END: admin_theme -->
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.notification_active}</strong></label>
+                            <div class="col-sm-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" name="notification_active" value="1" {CHECKED_NOTIFI_ACTIVE} />
+                                    <strong class="visible-xs-inline-block">{LANG.notification_active}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-10 control-label"><strong>{LANG.notification_autodel}</strong></label>
+                            <div class="col-sm-14">
+                                <div class="input-group w150">
+                                    <input type="text" name="notification_autodel" value="{DATA.notification_autodel}" class="form-control number" />
+                                    <span class="input-group-addon">{LANG.notification_day}</span>
+                                </div>
+                                <div class="help-block">{LANG.notification_autodel_note}</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <caption>
-                {LANG.notification_config}
-            </caption>
-            <col class="w500" />
-            <tbody>
-                <tr>
-                    <td><strong>{LANG.notification_active}</strong></td>
-                    <td><input type="checkbox" name="notification_active" value="1" {CHECKED_NOTIFI_ACTIVE} /></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.notification_autodel}</strong><span class="help-block">{LANG.notification_autodel_note}</span></td>
-                    <td><input type="text" name="notification_autodel" value="{DATA.notification_autodel}" class="form-control w100 pull-left" />&nbsp;<span class="text-middle">{LANG.notification_day}</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
     <div class="text-center">
         <input type="hidden" name="checkss" value="{DATA.checkss}" />
-        <input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary"/>
+        <input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary" />
     </div>
 </form>
-<script type="text/javascript">
-function reopeningTimeShow(t) {
-    var v = $(t).val();
-    if (v == '0') {
-        $("#reopening_time").hide()
-    } else {
-        $("#reopening_time").show()
-    }
-}
-$(document).ready(function() {
-    $("#site_timezone").select2();
-    
-    $("#reopening_date").datepicker({
-        showOn : "both",
-        dateFormat : "dd/mm/yy",
-        changeMonth : true,
-        changeYear : true,
-        showOtherMonths : true,
-        buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-        buttonImageOnly : true
-    });
-
-    $('[data-toggle=phone_note]').on('click', function() {
-        modalShow('{GLANG.phone_note_title}','{GLANG.phone_note_content2}');
-        return!1;
-    })
-});
-
-var LANG = [];
-LANG.note_ssl = "{LANG.note_ssl}";
-var CFG = [];
-CFG.cdndl = "{NV_CHECK_SESSION}";
-</script>
 <!-- END: main -->

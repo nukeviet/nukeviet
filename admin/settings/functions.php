@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -57,7 +57,6 @@ $array_url_instruction['variables'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:
  * nv_admin_add_theme()
  *
  * @param mixed $contents
- * @return
  */
 function nv_admin_add_theme($contents)
 {
@@ -105,107 +104,6 @@ function nv_admin_add_theme($contents)
 
     $xtpl->parse('main');
 
-    return $xtpl->text('main');
-}
-
-/**
- * main_theme()
- *
- * @param mixed $contents
- * @return
- */
-function main_theme($contents)
-{
-    if (empty($contents)) {
-        return '';
-    }
-
-    global $global_config, $module_name, $module_file, $lang_global, $lang_module;
-
-    $xtpl = new XTemplate('cronjobs_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs');
-
-    $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&loadcron=' . md5('cronjobs' . $global_config['sitekey']), NV_MY_DOMAIN);
-    if ($global_config['cronjobs_interval'] <= 1 or $global_config['cronjobs_interval'] > 59) {
-        $interval = '*';
-    } else {
-        $interval = '*/' . $global_config['cronjobs_interval'];
-    }
-    $code = $interval . ' * * * *  /usr/bin/wget --spider &quot;' . $url . '&quot;  &gt;/dev/null 2&gt;&amp;1';
-    $xtpl->assign('CRON_CODE', $code);
-
-    if ($global_config['cronjobs_last_time'] > 0) {
-        $xtpl->assign('LAST_CRON', sprintf($lang_module['cron_last_time'], nv_date('d/m/Y H:i:s', $global_config['cronjobs_last_time'])));
-        $xtpl->assign('NEXT_CRON', sprintf($lang_module['cron_next_time'], nv_date('d/m/Y H:i:s', ($global_config['cronjobs_last_time'] + $global_config['cronjobs_interval'] * 60))));
-        $xtpl->parse('main.next_cron');
-    }
-
-    if (isset($global_config['cronjobs_launcher']) and $global_config['cronjobs_launcher'] == 'server') {
-        $xtpl->parse('main.launcher_server');
-        $xtpl->parse('main.cron_code');
-    } else {
-        $xtpl->parse('main.launcher_system');
-    }
-
-    for ($i = 1; $i < 60; ++$i) {
-        $xtpl->assign('CRON_INTERVAL', [
-            'val' => $i,
-            'sel' => $i == $global_config['cronjobs_interval'] ? ' selected="selected"' : '',
-            'name' => plural($i, $lang_global['plural_min'])
-        ]);
-        $xtpl->parse('main.cronjobs_interval');
-    }
-
-    foreach ($contents as $id => $values) {
-        $xtpl->assign('DATA', [
-            'caption' => $values['caption'],
-            'edit' => empty($values['edit']) ? [] : $values['edit'],
-            'disable' => empty($values['disable']) ? [] : $values['disable'],
-            'delete' => empty($values['delete']) ? [] : $values['delete'],
-            'id' => $id,
-            'last_time_title' => $values['last_time_title'],
-            'last_result_title' => $values['last_result_title']
-        ]);
-
-        if (empty($values['act'])) {
-            $xtpl->parse('main.crj.inactivate');
-        }
-
-        if (!empty($values['last_time'])) {
-            $xtpl->parse('main.crj.last_time.result' . $values['last_result']);
-            $xtpl->parse('main.crj.last_time');
-        } else {
-            $xtpl->parse('main.crj.never');
-        }
-
-        if (!empty($values['edit'][0]) or !empty($values['disable'][0]) or !empty($values['delete'][0])) {
-            if (!empty($values['edit'][0])) {
-                $xtpl->parse('main.crj.action.edit');
-            }
-            if (!empty($values['disable'][0])) {
-                $xtpl->parse('main.crj.action.disable');
-            }
-            if (!empty($values['delete'][0])) {
-                $xtpl->parse('main.crj.action.delete');
-            }
-            $xtpl->parse('main.crj.action');
-        }
-
-        foreach ($values['detail'] as $key => $value) {
-            $xtpl->assign('ROW', [
-                'key' => $key,
-                'value' => $value
-            ]);
-
-            $xtpl->parse('main.crj.loop');
-        }
-
-        $xtpl->parse('main.crj');
-    }
-
-    $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
@@ -261,13 +159,15 @@ function get_num_mod($module_file)
     $num = 0;
     foreach ($site_mods as $mod) {
         if ($mod['module_file'] == $module_file) {
-            $num++;
+            ++$num;
         }
     }
+
     return $num;
 }
 
 /**
+ * get_max_pulgin()
  * Hàm tính số plugin tối đa của 1 file
  *
  * @param string $hook
@@ -276,5 +176,46 @@ function get_num_mod($module_file)
  */
 function get_max_pulgin($hook, $receive)
 {
-    return ((empty($hook) ? 1 : get_num_mod($hook)) * (empty($receive) ? 1 : get_num_mod($receive)));
+    return (empty($hook) ? 1 : get_num_mod($hook)) * (empty($receive) ? 1 : get_num_mod($receive));
+}
+
+/**
+ * get_list_ips()
+ * Lấy danh sách IPs bị cấm hoặc bỏ flood
+ *
+ * @param int $type
+ * @return array|void
+ */
+function get_list_ips($type)
+{
+    global $db, $db_config, $lang_module, $ips;
+
+    $masklist = [
+        0 => '255.255.255.255',
+        3 => '255.255.255.xxx',
+        2 => '255.255.xxx.xxx',
+        1 => '255.xxx.xxx.xxx'
+    ];
+    $arealist = [$lang_module['area_select'], $lang_module['area_front'], $lang_module['area_admin'], $lang_module['area_both']];
+
+    $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' ORDER BY id DESC';
+    $result = $db->query($sql);
+
+    $list = [];
+    while ($row = $result->fetch()) {
+        $status = $row['begintime'] > NV_CURRENTTIME ? 2 : ((!empty($row['endtime']) and $row['endtime'] < NV_CURRENTTIME) ? 0 : 1);
+        $note = [];
+        $note[] = $lang_module['ip_mask'] . ': ' . ($ips->isIp4($row['ip']) ? $masklist[$row['mask']] : '/' . $row['mask']);
+        !$type && $note[] = $lang_module['banip_area'] . ': ' . $arealist[$row['area']];
+        !empty($row['begintime']) && $note[] = $lang_module['start_time'] . ': ' . date('d/m/Y H:i', $row['begintime']);
+        $note[] = $lang_module['end_time'] . ': ' . (!empty($row['endtime']) ? date('d/m/Y H:i', $row['endtime']) : $lang_module['unlimited']);
+
+        $row['note'] = implode(', ', $note);
+        $row['status'] = $status === 2 ? $lang_module['waiting'] : ($status === 0 ? $lang_module['ended'] : $lang_module['running']);
+        $row['status_icon'] = $status === 2 ? 'fa-pause' : ($status === 0 ? 'fa-stop' : 'fa-play');
+        $row['class'] = $status === 0 ? ' text-muted' : '';
+        $list[$row['id']] = $row;
+    }
+
+    return $list;
 }

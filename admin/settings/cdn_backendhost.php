@@ -79,7 +79,7 @@ if ($nv_Request->isset_request('by_country', 'get')) {
                 }
             }
         }
-        $cdns = $nv_Request->get_typed_array('cdn', 'post', 'title', []);
+        $cdns = $nv_Request->get_typed_array('ccdn', 'post', 'title', []);
         $cdns = array_filter($cdns);
         if (!empty($cdns)) {
             $keys = [];
@@ -146,9 +146,7 @@ if ($nv_Request->isset_request('by_country', 'get')) {
     $xtpl->parse('by_country');
     $content = $xtpl->text('by_country');
 
-    include NV_ROOTDIR . '/includes/header.php';
-    echo nv_admin_theme($content);
-    include NV_ROOTDIR . '/includes/footer.php';
+    nv_htmlOutput($content);
 }
 
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
@@ -231,7 +229,9 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     nv_save_file_config_global();
 
-    nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+    nv_jsonOutput([
+        'status' => 'OK'
+    ]);
 }
 
 $array_config_global = [];
@@ -256,8 +256,8 @@ if (empty($cdn_urls)) {
 
 $xtpl = new XTemplate('cdn_backendhost.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
-$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('CDN_BY_COUNTRY_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&by_country=1');
+$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+$xtpl->assign('CDN_BY_COUNTRY_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;by_country=1');
 $xtpl->assign('CHECKSS', $checkss);
 $xtpl->assign('DATA', $array_config_global);
 

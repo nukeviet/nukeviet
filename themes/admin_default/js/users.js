@@ -633,10 +633,6 @@ function viewUser(link) {
 }
 
 $(document).ready(function() {
-    $('body').on('input', '.number', function() {
-        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
-    });
-
     // List user main
     $('#mainusersaction').click(function() {
         $(this).prop('disabled', true);

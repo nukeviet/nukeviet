@@ -14,6 +14,8 @@ namespace NukeViet\Ftp;
 use NukeViet\Site;
 
 // Ngon ngu
+global $lang_global;
+
 define('NV_FTP_ERR_CONNECT', isset($lang_global['ftp_err_connect']) ? $lang_global['ftp_err_connect'] : 'Error: Couldn\'t connect to FTP server');
 define('NV_FTP_ERR_LOGIN', isset($lang_global['ftp_err_login']) ? $lang_global['ftp_err_login'] : 'Error: Couldn\'t login with this account');
 define('NV_FTP_ERR_DISABLED_FTP', isset($lang_global['ftp_err_enable']) ? $lang_global['ftp_err_enable'] : 'Error: Your system unsuport FTP extension');

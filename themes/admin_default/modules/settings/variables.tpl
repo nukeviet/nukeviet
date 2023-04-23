@@ -1,70 +1,147 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
-<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <colgroup>
-                <col style="width: 40%" />
-                <col style="width: 60%" />
-            </colgroup>
-            <tfoot>
-                <tr>
-                    <td class="text-center" colspan="2"><input type="hidden" name="checkss" value="{DATA.checkss}" /><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary w100" /></td>
-                </tr>
-            </tfoot>
-            <tbody>
-                <tr>
-                    <td><strong>{LANG.cookie_prefix}</strong></td>
-                    <td><input class="w200 required validalphanumeric form-control" type="text" name="cookie_prefix" value="{DATA.cookie_prefix}" /></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.session_prefix}</strong></td>
-                    <td><input class="w200 required validalphanumeric form-control" type="text" name="session_prefix" value="{DATA.session_prefix}" /></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.live_cookie_time}</strong></td>
-                    <td><input class="required form-control pull-left w50" type="text" name="nv_live_cookie_time" value="{NV_LIVE_COOKIE_TIME}" /> <span class="text-middle">&nbsp;({GLANG.day})</span> </td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.live_session_time}</strong></td>
-                    <td><input class="required form-control pull-left w50" type="text" name="nv_live_session_time" value="{NV_LIVE_SESSION_TIME}" /> <span class="text-middle">&nbsp;({GLANG.min}) <em>{LANG.live_session_time0}</em></span></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.cookie_secure}</strong><br />({LANG.cookie_secure_note})</td>
-                    <td><input type="checkbox" value="1" name="cookie_secure" {CHECKBOX_COOKIE_SECURE} /></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.cookie_httponly}</strong><br />({LANG.cookie_httponly_note})</td>
-                    <td><input type="checkbox" value="1" name="cookie_httponly" {CHECKBOX_COOKIE_HTTPONLY} /></td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.cookie_SameSite}</strong><br />({LANG.cookie_SameSite_note})<br />{LANG.cookie_SameSite_note2}</td>
-                    <td>
-                        <!-- BEGIN: SameSite -->
-                        <div>
-                            <label class="pointer"><input type="radio" name="cookie_SameSite" value="{SAMESITE.val}" {SAMESITE.checked} /> <code>{SAMESITE.val}</code>: {SAMESITE.note}</label>
+<form id="variables-settings" class="form-horizontal" action="{FORM_ACTION}" method="post">
+    <div class="panel-group" id="accordion-settings" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-primary">
+            <a role="tab" id="headingOne" class="panel-heading" style="display: block;text-decoration:none" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <strong>Cookie</strong>
+            </a>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <ul class="list-group type2n1">
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label"><strong>{LANG.cookie_prefix}</strong></label>
+                            <div class="col-sm-16 col-md-14">
+                                <input class="w200 required alphanumeric form-control" type="text" name="cookie_prefix" value="{DATA.cookie_prefix}" />
+                            </div>
                         </div>
-                        <!-- END: SameSite -->
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>{LANG.cookie_share}</strong></td>
-                    <td><input type="checkbox" value="1" name="cookie_share" {CHECKBOX_COOKIE_SHARE} /></td>
-                </tr>
-            </tbody>
-        </table>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label"><strong>{LANG.live_cookie_time}</strong></label>
+                            <div class="col-sm-16 col-md-14">
+                                <div class="input-group w150">
+                                    <input class="required form-control number" type="text" name="nv_live_cookie_time" value="{NV_LIVE_COOKIE_TIME}" />
+                                    <span class="input-group-addon">{GLANG.day}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label hidden-xs">
+                                <strong>{LANG.cookie_secure}</strong><br />
+                                <span class="help-block">{LANG.cookie_secure_note}</span>
+                            </label>
+                            <div class="col-sm-16 col-md-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="cookie_secure" {CHECKBOX_COOKIE_SECURE} />
+                                    <strong class="visible-xs-inline-block">{LANG.cookie_secure}</strong>
+                                </label>
+                                <div class="help-block visible-xs-inline-block">{LANG.cookie_secure_note}</div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label hidden-xs">
+                                <strong>{LANG.cookie_httponly}</strong><br />
+                                <span class="help-block">{LANG.cookie_httponly_note}</span>
+                            </label>
+                            <div class="col-sm-16 col-md-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="cookie_httponly" {CHECKBOX_COOKIE_HTTPONLY} />
+                                    <strong class="visible-xs-inline-block">{LANG.cookie_httponly}</strong>
+                                </label>
+                                <div class="help-block visible-xs-inline-block">{LANG.cookie_httponly_note}</div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label">
+                                <strong>{LANG.cookie_SameSite}</strong><br />
+                                <span class="help-block">{LANG.cookie_SameSite_note}. {LANG.cookie_SameSite_note2}</span>
+                            </label>
+                            <div class="col-sm-16 col-md-14">
+                                <!-- BEGIN: SameSite -->
+                                <div>
+                                    <label class="pointer"><input type="radio" name="cookie_SameSite" value="{SAMESITE.val}" {SAMESITE.checked} /> <code>{SAMESITE.val}</code>: {SAMESITE.note}</label>
+                                </div>
+                                <!-- END: SameSite -->
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label hidden-xs">
+                                <strong>{LANG.cookie_share}</strong>
+                            </label>
+                            <div class="col-sm-16 col-md-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="cookie_share" {CHECKBOX_COOKIE_SHARE} />
+                                    <strong class="visible-xs-inline-block">{LANG.cookie_share}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label hidden-xs">
+                                <strong>{LANG.cookie_notice_popup}</strong>
+                            </label>
+                            <div class="col-sm-16 col-md-14">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="cookie_notice_popup" {CHECKED_COOKIE_NOTICE_POPUP} />
+                                    <strong class="visible-xs-inline-block">{LANG.cookie_notice_popup}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <a role="tab" id="headingTwo" class="panel-heading" style="display: block;text-decoration:none" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                <strong>Session</strong>
+            </a>
+            <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                <ul class="list-group type2n1">
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label"><strong>{LANG.session_prefix}</strong></label>
+                            <div class="col-sm-16 col-md-14">
+                                <input class="w200 required alphanumeric form-control" type="text" name="session_prefix" value="{DATA.session_prefix}" />
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-8 col-md-10 control-label"><strong>{LANG.live_session_time}</strong></label>
+                            <div class="col-sm-16 col-md-14">
+                                <div class="input-group w150">
+                                    <input class="required form-control number" type="text" name="nv_live_session_time" value="{NV_LIVE_SESSION_TIME}" />
+                                    <span class="input-group-addon">{GLANG.min}</span>
+                                </div>
+                                <div class="help-block">{LANG.live_session_time0}</div>
+                            </div>
+                        </div>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <input type="hidden" name="checkss" value="{DATA.checkss}" />
+        <button type="submit" class="btn btn-primary">{LANG.submit}</button>
     </div>
 </form>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $.validator.addMethod('validalphanumeric', function(str) {
-            return (/^([a-zA-Z0-9_])+$/.test(str)) ? true : false;
-        }, ' required a-z, 0-9, and _ only');
-        $('#frm').validate();
-    });
-</script>
 <!-- END: main -->

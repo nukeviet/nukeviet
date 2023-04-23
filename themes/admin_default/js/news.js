@@ -712,10 +712,6 @@ $(function() {
         });
     });
 
-    $('body').on('input', '.number', function() {
-        $(this).val($(this).val().replace(/[^0-9]/gi, ''))
-    });
-
     // Xóa báo cáo lỗi
     $('.report_del_action, .report_del_mail_action').on('click', function(e) {
         e.preventDefault();

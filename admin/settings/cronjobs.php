@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -60,7 +60,9 @@ while ($row = $result->fetch()) {
     $contents[$row['id']]['last_result_title'] = empty($row['last_time']) ? $lang_module['last_result_empty'] : $lang_module['last_result' . $row['last_result']];
     $contents[$row['id']]['detail'][$lang_module['run_file']] = $row['run_file'];
     $contents[$row['id']]['detail'][$lang_module['run_func']] = $row['run_func'];
-    $contents[$row['id']]['detail'][$lang_module['params']] = !empty($row['params']) ? implode(', ', explode(',', $row['params'])) : '';
+    if (!empty($row['params'])) {
+        $contents[$row['id']]['detail'][$lang_module['params']] = preg_replace('/\,\s*/', ', ', $row['params']);
+    }
     $contents[$row['id']]['detail'][$lang_module['start_time']] = nv_date('l, d/m/Y H:i', $row['start_time']);
     $contents[$row['id']]['detail'][$lang_module['interval']] = nv_convertfromSec($row['inter_val'] * 60);
     $contents[$row['id']]['detail'][$lang_module['is_del']] = !empty($row['del']) ? $lang_module['isdel'] : $lang_module['notdel'];
@@ -86,7 +88,93 @@ if (empty($contents)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs_add');
 }
 
-$contents = main_theme($contents);
+$xtpl = new XTemplate('cronjobs_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs');
+
+$url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&loadcron=' . md5('cronjobs' . $global_config['sitekey']), NV_MY_DOMAIN);
+if ($global_config['cronjobs_interval'] <= 1 or $global_config['cronjobs_interval'] > 59) {
+    $interval = '*';
+} else {
+    $interval = '*/' . $global_config['cronjobs_interval'];
+}
+$code = $interval . ' * * * *  /usr/bin/wget --spider &quot;' . $url . '&quot;  &gt;/dev/null 2&gt;&amp;1';
+$xtpl->assign('LAUCHER_SERVER_URL', $url);
+$xtpl->assign('CRON_CODE', $code);
+
+if ($global_config['cronjobs_last_time'] > 0) {
+    $xtpl->assign('LAST_CRON', sprintf($lang_module['cron_last_time'], nv_date('d/m/Y H:i:s', $global_config['cronjobs_last_time'])));
+    $xtpl->assign('NEXT_CRON', sprintf($lang_module['cron_next_time'], nv_date('d/m/Y H:i:s', ($global_config['cronjobs_last_time'] + $global_config['cronjobs_interval'] * 60))));
+    $xtpl->parse('main.next_cron');
+}
+
+if (isset($global_config['cronjobs_launcher']) and $global_config['cronjobs_launcher'] == 'server') {
+    $xtpl->parse('main.launcher_server');
+    $xtpl->parse('main.cron_code');
+} else {
+    $xtpl->parse('main.launcher_system');
+}
+
+for ($i = 1; $i < 60; ++$i) {
+    $xtpl->assign('CRON_INTERVAL', [
+        'val' => $i,
+        'sel' => $i == $global_config['cronjobs_interval'] ? ' selected="selected"' : '',
+        'name' => plural($i, $lang_global['plural_min'])
+    ]);
+    $xtpl->parse('main.cronjobs_interval');
+}
+
+foreach ($contents as $id => $values) {
+    $xtpl->assign('DATA', [
+        'caption' => $values['caption'],
+        'edit' => empty($values['edit']) ? [] : $values['edit'],
+        'disable' => empty($values['disable']) ? [] : $values['disable'],
+        'delete' => empty($values['delete']) ? [] : $values['delete'],
+        'id' => $id,
+        'last_time_title' => $values['last_time_title'],
+        'last_result_title' => $values['last_result_title']
+    ]);
+
+    if (empty($values['act'])) {
+        $xtpl->parse('main.crj.inactivate');
+    }
+
+    if (!empty($values['last_time'])) {
+        $xtpl->parse('main.crj.last_time.result' . $values['last_result']);
+        $xtpl->parse('main.crj.last_time');
+    } else {
+        $xtpl->parse('main.crj.never');
+    }
+
+    if (!empty($values['edit'][0]) or !empty($values['disable'][0]) or !empty($values['delete'][0])) {
+        if (!empty($values['edit'][0])) {
+            $xtpl->parse('main.crj.action.edit');
+        }
+        if (!empty($values['disable'][0])) {
+            $xtpl->parse('main.crj.action.disable');
+        }
+        if (!empty($values['delete'][0])) {
+            $xtpl->parse('main.crj.action.delete');
+        }
+        $xtpl->parse('main.crj.action');
+    }
+
+    foreach ($values['detail'] as $key => $value) {
+        $xtpl->assign('ROW', [
+            'key' => $key,
+            'value' => $value
+        ]);
+
+        $xtpl->parse('main.crj.loop');
+    }
+
+    $xtpl->parse('main.crj');
+}
+
+$xtpl->parse('main');
+
+$contents = $xtpl->text('main');
 $page_title = $lang_global['mod_cronjobs'];
 
 include NV_ROOTDIR . '/includes/header.php';
