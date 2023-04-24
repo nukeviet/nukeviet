@@ -575,3 +575,5 @@ $lang_module['hours'] = 'heures';
 $lang_module['for_admin'] = 'Pour les admins';
 $lang_module['check'] = 'Chèque';
 $lang_module['value_empty_note'] = 'Si la valeur n\'est pas déclarée dans les paramètres régionaux actuels, elle prendra la clé comme valeur';
+$lang_module['reg_time_from'] = 'Inscrit depuis le';
+$lang_module['reg_time_to'] = 'Inscrit au';

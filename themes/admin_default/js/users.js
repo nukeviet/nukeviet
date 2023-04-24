@@ -1126,4 +1126,22 @@ $(document).ready(function() {
         }
         return !1;
     });
+
+    if ($("#reg_time_from, #reg_time_to").length) {
+        $("#reg_time_from, #reg_time_to").datepicker({
+            dateFormat: "dd.mm.yy",
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            showOn: 'focus'
+        });
+    }
+
+    $('#to-btn').click(function() {
+        $("#reg_time_to").datepicker('show');
+    });
+
+    $('#from-btn').click(function() {
+        $("#reg_time_from").datepicker('show');
+    });
 });

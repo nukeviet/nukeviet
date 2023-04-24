@@ -110,10 +110,6 @@ a.text-white {
     color: #fff;
 }
 
-.text-nowrap {
-    white-space: nowrap !important;
-}
-
 .text-truncate {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -193,10 +189,6 @@ a.text-white {
     line-height: 32px;
 }
 
-.text-nowrap {
-    white-space: nowrap !important;
-}
-
 .nvwrap {
     position: relative;
     min-height: 100%;
@@ -227,6 +219,10 @@ a.text-white {
     display: flex;
 }
 
+.d-inline-flex {
+    display: inline-flex !important;
+}
+
 .justify-content-between {
     justify-content: space-between !important;
 }
@@ -237,6 +233,10 @@ a.text-white {
 
 .align-items-center {
     align-items: center !important;
+}
+
+.flex-nowrap {
+    flex-wrap: nowrap !important;
 }
 
 /* Heading

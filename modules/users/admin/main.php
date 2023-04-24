@@ -124,6 +124,20 @@ if (!empty($selgroup) and $selgroup != 6) {
     $base_url .= '&amp;group=' . $selgroup;
 }
 
+$reg_from = $nv_Request->get_title('reg_from', 'post,get', '');
+unset($m);
+if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $reg_from, $m)) {
+    $_arr_where[] = 'regdate >= ' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+    $base_url .= '&amp;reg_from=' . $reg_from;
+}
+
+$reg_to = $nv_Request->get_title('reg_to', 'post,get', '');
+unset($m);
+if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $reg_to, $m)) {
+    $_arr_where[] = 'regdate <= ' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+    $base_url .= '&amp;reg_to=' . $reg_to;
+}
+
 $page = $nv_Request->get_int('page', 'get', 1);
 $per_page = 30;
 
@@ -284,13 +298,14 @@ $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));
 $xtpl->assign('TABLE_CAPTION', $table_caption);
 $xtpl->assign('HEAD', $head_tds);
 $xtpl->assign('CHECKSESS', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
+$xtpl->assign('REG_TIME_FROM', $reg_from);
+$xtpl->assign('REG_TIME_TO', $reg_to);
 
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
@@ -361,6 +376,7 @@ foreach ($users_list as $u) {
             $xtpl->assign('EDIT_2STEP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $u['userid']);
             $xtpl->assign('EDIT_OAUTH_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $u['userid']);
             $xtpl->parse('main.xusers.edit');
+            $xtpl->parse('main.xusers.edit2');
         }
         if ($u['is_delete']) {
             $xtpl->parse('main.xusers.del');

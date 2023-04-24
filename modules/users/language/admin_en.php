@@ -575,3 +575,5 @@ $lang_module['hours'] = 'hours';
 $lang_module['for_admin'] = 'For Admins';
 $lang_module['check'] = 'Check';
 $lang_module['value_empty_note'] = 'If Value is not declared in current locale, it will take Key as value';
+$lang_module['reg_time_from'] = 'Registered from';
+$lang_module['reg_time_to'] = 'Registered to';

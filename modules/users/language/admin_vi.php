@@ -594,3 +594,5 @@ $lang_module['hours'] = 'giờ';
 $lang_module['for_admin'] = 'Chỉ dành cho quản trị';
 $lang_module['check'] = 'Kiểm tra';
 $lang_module['value_empty_note'] = 'Nếu Giá trị không được khai báo theo ngôn ngữ hiện tại, nó sẽ tự động lấy Khóa làm giá trị';
+$lang_module['reg_time_from'] = 'Đăng ký từ ngày';
+$lang_module['reg_time_to'] = 'Đăng ký đến ngày';
