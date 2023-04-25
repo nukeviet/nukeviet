@@ -110,6 +110,9 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
             }
 
             $nv_Cache->delMod('modules');
+            if (!defined('NV_MODULE_ADD')) {
+                define('NV_MODULE_ADD', true);
+            }
             $return = nv_setup_data_module(NV_LANG_DATA, $setmodule, $sample);
             if ($return == 'OK_' . $setmodule) {
                 nv_setup_block_module($setmodule);

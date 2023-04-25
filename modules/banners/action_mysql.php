@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -15,20 +15,35 @@ if (!defined('NV_IS_FILE_MODULES')) {
 
 $sql_drop_module = [];
 
-// Xoa cac block lien quan
-$_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
-$_result = $db->query($_sql);
-while ($_row = $_result->fetch()) {
-    $bids = $db->query('SELECT GROUP_CONCAT(bid) FROM ' . $db_config['prefix'] . '_' . $_row['lang'] . "_blocks_groups WHERE module = 'banners'")->fetchColumn();
-    if (!empty($bids)) {
-        $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $_row['lang'] . '_blocks_weight WHERE bid IN (' . $bids . ')';
-        $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $_row['lang'] . '_blocks_groups WHERE bid IN (' . $bids . ')';
+if (defined('NV_IS_INSTALL') or defined('NV_MODULE_RECREATE') or defined('NV_MODULE_ADD') or defined('NV_MODULE_DELETE')) {
+    // Xoa cac block lien quan
+    $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
+    $_result = $db->query($_sql);
+    while ($_row = $_result->fetch()) {
+        $bids = $db->query('SELECT GROUP_CONCAT(bid) FROM ' . $db_config['prefix'] . '_' . $_row['lang'] . "_blocks_groups WHERE module = 'banners'")->fetchColumn();
+        if (!empty($bids)) {
+            $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $_row['lang'] . '_blocks_weight WHERE bid IN (' . $bids . ')';
+            $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $_row['lang'] . '_blocks_groups WHERE bid IN (' . $bids . ')';
+        }
     }
-}
 
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_click;';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_plans;';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_rows;';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_click;';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_plans;';
+    $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_banners_rows;';
+} elseif (defined('NV_LANGUAGE_ADD') or defined('NV_LANGUAGE_DELETE')) {
+    $bids = $db->query('SELECT GROUP_CONCAT(bid) FROM ' . $db_config['prefix'] . '_' . $lang . "_blocks_groups WHERE module = 'banners'")->fetchColumn();
+    if (!empty($bids)) {
+        $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang . '_blocks_weight WHERE bid IN (' . $bids . ')';
+        $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups WHERE bid IN (' . $bids . ')';
+    }
+
+    $rids = $db->query('SELECT GROUP_CONCAT(id) FROM ' . $db_config['prefix'] . '_banners_rows WHERE pid IN (SELECT id FROM ' . $db_config['prefix'] . '_banners_plans WHERE blang=' . $db->quote($lang) . ')')->fetchColumn();
+    if (!empty($rids)) {
+        $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_banners_click WHERE bid IN (' . $rids . ')';
+        $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_banners_rows WHERE id IN (' . $rids . ')';
+    }
+    $sql_drop_module[] = 'DELETE FROM ' . $db_config['prefix'] . '_banners_plans WHERE blang=' . $db->quote($lang);
+}
 
 $sql_create_module = $sql_drop_module;
 
@@ -96,11 +111,13 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . "_
   KEY clid (clid)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES (1, '', 'Mid-page ad block', '', 'sequential', 575, 72, 1, 1, 'images')";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES (2, '', 'Left-column ad block', '', 'sequential', 212, 800, 1, 1, 'images')";
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES (3, '', 'Right-column ad block', '', 'random', 250, 500, 1, 1, 'images')";
+if (defined('NV_IS_INSTALL') or defined('NV_MODULE_RECREATE') or defined('NV_MODULE_ADD')) {
+    $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES (1, '', 'Mid-page ad block', '', 'sequential', 575, 72, 1, 1, 'images')";
+    $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES (2, '', 'Left-column ad block', '', 'sequential', 212, 800, 1, 1, 'images')";
+    $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_plans (id, blang, title, description, form, width, height, act, require_image, uploadtype) VALUES (3, '', 'Right-column ad block', '', 'random', 250, 500, 1, 1, 'images')";
 
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_rows (id, title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES (1, 'Mid-page advertisement', 1, 1, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', '', " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 0, 0, 1, 1)';
-$sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_rows (id, title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES (2, 'Left-column advertisement', 2, 1, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', '', " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 0, 0, 1, 2)';
+    $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_rows (id, title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES (1, 'Mid-page advertisement', 1, 1, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', '', " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 0, 0, 1, 1)';
+    $sql_create_module[] = 'INSERT IGNORE INTO ' . $db_config['prefix'] . "_banners_rows (id, title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES (2, 'Left-column advertisement', 2, 1, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', '', " . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 0, 0, 1, 2)';
 
-$sql_create_module[] = 'INSERT IGNORE INTO ' . NV_CONFIG_GLOBALTABLE . " (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'banners', 'captcha_type', 'captcha')";
+    $sql_create_module[] = 'INSERT IGNORE INTO ' . NV_CONFIG_GLOBALTABLE . " (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'banners', 'captcha_type', 'captcha')";
+}

@@ -207,6 +207,9 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $row['module_file'] = $row['module_file'];
 
                     if (in_array($row['module_file'], $modules_exit, true) and in_array($setmodule, $array_module_setup, true)) {
+                        if (!defined('NV_LANGUAGE_ADD')) {
+                            define('NV_LANGUAGE_ADD', true);
+                        }
                         nv_setup_data_module($keylang, $setmodule);
                     } else {
                         $sth = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $keylang . '_modules WHERE title= :module');
@@ -322,6 +325,9 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
             if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
                 $sql_drop_module = [];
 
+                if (!defined('NV_LANGUAGE_DELETE')) {
+                    define('NV_LANGUAGE_DELETE', true);
+                }
                 include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php';
                 if (!empty($sql_drop_module)) {
                     foreach ($sql_drop_module as $sql) {
