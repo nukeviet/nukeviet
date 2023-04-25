@@ -454,3 +454,5 @@ $lang_module['auto_nav'] = 'Tự động tạo mục lục bài viết';
 $lang_module['auto_nav_note'] = 'Để có thể tự động tạo mục lục bài viết, bạn cần sử dụng các html-tags <code>h2</code> và <code>h3</code> trong phần Nội dung chi tiết. Tag <code>h2</code> sẽ được chọn là mục chính. Tag <code>h3</code> phải đặt trong tag <code>h2</code> và sẽ được chọn là mục con. Không đánh số thứ tự cho các mục này. Hệ thống sẽ tự động đánh số cho chúng.';
 $lang_module['group_view'] = 'Nhóm được quyền xem chi tiết bài viết';
 $lang_module['group_view_note'] = 'Không chọn được hiểu là chỉ tùy thuộc vào quyền xem của chuyên mục bài viết';
+$lang_module['hide_author'] = 'Không hiển thị công khai tên tác giả bên ngoài';
+$lang_module['hide_inauthor'] = 'Không hiển thị công khai tên tác giả thuộc quyền quản lý';

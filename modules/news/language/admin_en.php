@@ -454,3 +454,5 @@ $lang_module['auto_nav'] = 'Automatically generate article table of contents';
 $lang_module['auto_nav_note'] = 'To create an article table of contents, you need to use <code>h2</code> and <code>h3</code> html-tags. The <code>h2</code> tag is the main item, the <code>h3</code> tag is in the <code>h2</code> tag and is a sub-item';
 $lang_module['group_view'] = 'Groups have the right to view article details';
 $lang_module['group_view_note'] = 'Failure to select is interpreted as depending on the article category configuration';
+$lang_module['hide_author'] = 'Don\'t publicly display external author\'s name';
+$lang_module['hide_inauthor'] = 'Don\'t publicly display external internal name';

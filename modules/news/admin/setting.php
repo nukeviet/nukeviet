@@ -57,6 +57,8 @@ if (!empty($savesetting)) {
     $array_config['show_no_image'] = $nv_Request->get_title('show_no_image', 'post', '', 0);
     $array_config['structure_upload'] = $nv_Request->get_title('structure_upload', 'post', '', 0);
     $array_config['config_source'] = $nv_Request->get_int('config_source', 'post', 0);
+    $array_config['hide_author'] = (int) $nv_Request->get_bool('hide_author', 'post', false);
+    $array_config['hide_inauthor'] = (int) $nv_Request->get_bool('hide_inauthor', 'post', false);
     $array_config['imgposition'] = $nv_Request->get_int('imgposition', 'post', 0);
     $array_config['alias_lower'] = $nv_Request->get_int('alias_lower', 'post', 0);
     $array_config['tags_alias'] = $nv_Request->get_int('tags_alias', 'post', 0);
@@ -230,6 +232,8 @@ $xtpl->assign('TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' che
 $xtpl->assign('KEYWORDS_TAG', $module_config[$module_name]['keywords_tag'] ? ' checked="checked"' : '');
 $xtpl->assign('COPY_NEWS', $module_config[$module_name]['copy_news'] ? ' checked="checked"' : '');
 $xtpl->assign('ELAS_USE', $module_config[$module_name]['elas_use'] ? ' checked="checked"' : '');
+$xtpl->assign('HIDE_AUTHOR', $module_config[$module_name]['hide_author'] ? ' checked="checked"' : '');
+$xtpl->assign('HIDE_INAUTHOR', $module_config[$module_name]['hide_inauthor'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOW_NO_IMAGE', (!empty($module_config[$module_name]['show_no_image'])) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '');
 $xtpl->assign('INSTANT_ARTICLES_URL_DEFAULT', urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=instant-rss', NV_MY_DOMAIN));
 $xtpl->assign('INSTANT_ARTICLES_ACTIVE', $module_config[$module_name]['instant_articles_active'] ? ' checked="checked"' : '');
