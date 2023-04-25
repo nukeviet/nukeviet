@@ -117,6 +117,14 @@
                     </select></td>
                 </tr>
                 <tr>
+                    <th>{LANG.hide_author}</th>
+                    <td><input type="checkbox" value="1" name="hide_author"{HIDE_AUTHOR}/></td>
+                </tr>
+                <tr>
+                    <th>{LANG.hide_inauthor}</th>
+                    <td><input type="checkbox" value="1" name="hide_inauthor"{HIDE_INAUTHOR}/></td>
+                </tr>
+                <tr>
                     <th>{LANG.setting_copyright}</th>
                     <td>{COPYRIGHTHTML}</td>
                 </tr>

@@ -415,3 +415,5 @@ $lang_module['change_weight'] = 'Thay đổi thứ tự';
 $lang_module['new_weight'] = 'Thứ tự mới';
 $lang_module['type_new_weight'] = 'Nhập thứ tự mới trong khoảng từ 1 đến';
 $lang_module['total'] = 'Tất cả';
+$lang_module['hide_author'] = 'Không hiển thị công khai tên tác giả bên ngoài';
+$lang_module['hide_inauthor'] = 'Không hiển thị công khai tên tác giả thuộc quyền quản lý';

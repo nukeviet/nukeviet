@@ -415,3 +415,5 @@ $lang_module['change_weight'] = 'Changer de poids';
 $lang_module['new_weight'] = 'Nouveau poids';
 $lang_module['type_new_weight'] = 'Entrez un nouveau poids de 1 à';
 $lang_module['total'] = 'Totale';
+$lang_module['hide_author'] = 'Ne pas afficher publiquement le nom de l\'auteur externe';
+$lang_module['hide_inauthor'] = 'Ne pas afficher publiquement le nom interne externe';

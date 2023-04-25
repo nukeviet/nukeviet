@@ -751,7 +751,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     // Khai báo dữ liệu có cấu trúc
     $news_contents['number_edittime'] = (empty($news_contents['edittime']) or $news_contents['edittime'] < $news_contents['number_publtime']) ? $news_contents['number_publtime'] : $news_contents['edittime'];
 
-    $xtpl->assign('SCHEMA_AUTHOR', empty($news_contents['author']) ? $news_contents['post_name'] : $news_contents['author']);
+    $xtpl->assign('SCHEMA_AUTHOR', $news_contents['schema_author']);
     $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $news_contents['number_publtime']));
     $xtpl->assign('SCHEMA_DATEPUBLISHED', date('c', $news_contents['number_edittime']));
     $xtpl->assign('SCHEMA_ORGLOGO', NV_MAIN_DOMAIN . NV_BASE_SITEURL . $global_config['site_logo']);
