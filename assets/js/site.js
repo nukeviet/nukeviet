@@ -626,6 +626,12 @@ $(function() {
     $('body').on('input', '.alphanumeric', function() {
         $(this).val($(this).val().replace(/[^a-zA-Z0-9\_]/gi, ''))
     });
+
+    // Không cho xuống dòng
+    $('body').on('input', '.nonewline', function () {
+        var val = $(this).val().replace(/\n$/gi, '');
+        $(this).val(val.replace(/\s*\n\s*/gi, ' '))
+    });
 });
 
 // Fix bootstrap multiple modal
