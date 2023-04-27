@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form id="site-settings" class="form-horizontal" action="{FORM_ACTION}" method="post">
+<form id="site-settings" class="form-horizontal ajax-submit" action="{FORM_ACTION}" method="post">
     <div class="panel-group" id="accordion-settings" role="tablist" aria-multiselectable="true">
         <div class="panel panel-primary">
             <a role="tab" id="headingOne" class="panel-heading" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">

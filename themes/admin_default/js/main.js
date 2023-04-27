@@ -318,6 +318,64 @@ $(document).ready(function() {
         }
     });
 
+    // Ajax submit
+    // Condition: The returned result must be in JSON format with the following elements:
+    // status ('OK/error', required), mess (Error content), input (input name),
+    // redirect (redirect URL if status is OK), refresh (Reload page if status is OK)
+    $('body').on('submit', '.ajax-submit', function(e) {
+        e.preventDefault();
+        $('.has-error', this).removeClass('has-error');
+        if (typeof(CKEDITOR) !== 'undefined') {
+            for (instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+                CKEDITOR.instances[instance].setReadOnly(true)
+            }
+        }
+
+        var that = $(this),
+            data = that.serialize(),
+            callback = that.data('callback');
+        $('input, textarea, select, button', that).prop('disabled', true);
+        $.ajax({
+            url: that.attr('action'),
+            type: 'POST',
+            data: data,
+            cache: false,
+            dataType: "json"
+        }).done(function(a) {
+            if (a.status == 'error') {
+                $('input, textarea, select, button', that).prop('disabled', false);
+                alert(a.mess);
+                if (a.input) {
+                    if ($('[name^=' + a.input + ']', that).length) {
+                        $('[name^=' + a.input + ']', that).parent().addClass('has-error');
+                        $('[name^=' + a.input + ']', that).focus()
+                    }
+                }
+            } else if (a.status == 'OK') {
+                if ('function' === typeof callback) {
+                    callback()
+                } else if ('string' == typeof callback && "function" === typeof window[callback]) {
+                    window[callback]()
+                }
+                if (a.redirect) {
+                    window.location.href = a.redirect
+                } else if (a.refresh) {
+                    window.location.reload()
+                } else {
+                    setTimeout(() => {
+                        $('input, textarea, select, button', that).prop('disabled', false);
+                        if (typeof(CKEDITOR) !== 'undefined') {
+                            for (instance in CKEDITOR.instances) {
+                                CKEDITOR.instances[instance].setReadOnly(false)
+                            }
+                        }
+                    }, 1000)
+                }
+            }
+        })
+    });
+
     // Chỉ cho gõ ký tự dạng số ở input có class number
     $('body').on('input', '.number', function() {
         $(this).val($(this).val().replace(/[^0-9]/gi, ''))

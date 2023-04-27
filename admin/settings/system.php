@@ -53,7 +53,8 @@ if (defined('NV_IS_GODADMIN')) {
         nv_save_file_config_global();
 
         nv_jsonOutput([
-            'status' => 'OK'
+            'status' => 'OK',
+            'refresh' => true
         ]);
     }
 }
@@ -247,8 +248,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         ]);
     } else {
         nv_jsonOutput([
-            'status' => 'OK',
-            'norefresh' => true
+            'status' => 'OK'
         ]);
     }
 }

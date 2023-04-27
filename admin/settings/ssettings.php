@@ -435,7 +435,10 @@ if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss, $csrf))
     if (strcmp($new_md5_file, $old_md5_file) !== 0) {
         nv_server_config_change();
     }
-    exit('OK');
+    nv_jsonOutput([
+        'status' => 'OK',
+        'refresh' => true
+    ]);
 }
 
 $server_configs['file_deny_access_format'] = array_to_string_format($server_configs['deny_access']['file']);

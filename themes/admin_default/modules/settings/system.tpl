@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="collapse" id="closed_site_collapse">
-        <form class="panel-body" id="change-site-mode" action="{FORM_ACTION}" method="post">
+        <form class="panel-body ajax-submit" id="change-site-mode" action="{FORM_ACTION}" method="post">
             <div class="row">
                 <div class="col-md-10 col-md-offset-7">
                     <div class="form-group">
@@ -57,7 +57,7 @@
 </div>
 <!-- END: closed_site -->
 
-<form id="system-settings" class="form-horizontal mb-lg" action="{FORM_ACTION}" method="post">
+<form id="system-settings" class="form-horizontal ajax-submit mb-lg" action="{FORM_ACTION}" method="post">
     <div class="panel-group" id="accordion-settings" role="tablist" aria-multiselectable="true">
         <div class="panel panel-primary">
             <a role="tab" id="headingOne" class="panel-heading" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">

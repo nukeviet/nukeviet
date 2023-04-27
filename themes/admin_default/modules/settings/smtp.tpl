@@ -6,7 +6,7 @@
             {LANG.general_settings}
         </a>
         <div id="settings-sector" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="settings-sector-heading">
-            <form id="sendmail-settings" action="{FORM_ACTION}" method="post" class="form-horizontal" data-mailer-mode-default="{MAILER_MODE_DEFAULT}">
+            <form id="sendmail-settings" action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" data-mailer-mode-default="{MAILER_MODE_DEFAULT}">
                 <ul class="list-group type2n1 mb-0">
                     <li class="list-group-item">
                         <div class="form-group mb-0">

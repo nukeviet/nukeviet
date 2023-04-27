@@ -47,7 +47,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $nv_Cache->delAll();
 
     nv_jsonOutput([
-        'status' => 'OK'
+        'status' => 'OK',
+        'refresh' => true
     ]);
 }
 

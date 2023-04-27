@@ -610,8 +610,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $nv_Cache->delMod('settings');
 
     nv_jsonOutput([
-        'status' => 'OK',
-        'norefresh' => true
+        'status' => 'OK'
     ]);
 }
 

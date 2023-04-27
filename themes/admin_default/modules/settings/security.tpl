@@ -36,7 +36,7 @@
             <!-- BEGIN: sys_contents -->
             <!-- Các thiết lập chính -->
             <div role="tabpanel" class="tab-pane{TAB0_ACTIVE}" id="settingBasic">
-                <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="secForm">
+                <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="secForm">
                     <ul class="list-group type2n1">
                         <li class="list-group-item active">
                             <strong>{LANG.general_settings}</strong>
@@ -318,7 +318,7 @@
 
             <!-- Chống tấn công ngập lụt -->
             <div role="tabpanel" class="tab-pane{TAB1_ACTIVE}" id="settingFlood">
-                <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="floodForm" style="margin-bottom:20px">
+                <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="floodForm" style="margin-bottom:20px">
                     <ul class="list-group type2n1">
                         <li class="list-group-item active">
                             <strong>{LANG.flood_blocker}</strong>
@@ -378,7 +378,7 @@
                             <strong>{LANG.captcha}</strong>
                         </a>
                         <div id="settingCaptcha-collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="settingCaptcha-headingOne">
-                            <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="captcha-general-settings">
+                            <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="captcha-general-settings">
                                 <ul class="list-group type2n1 mb-0">
                                     <li class="list-group-item">
                                         <div class="form-group mb-0">
@@ -472,7 +472,7 @@
                             <strong>{LANG.captcha_for_module}</strong>
                         </a>
                         <div id="settingCaptcha-collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="settingCaptcha-headingTwo">
-                            <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="modcapt-settings">
+                            <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="modcapt-settings">
                                 <ul class="list-group type2n1 mb-0">
                                     <!-- BEGIN: mod -->
                                     <li class="list-group-item">
@@ -512,7 +512,7 @@
                             <strong>{LANG.captcha_area}</strong>
                         </a>
                         <div id="settingCaptcha-collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="settingCaptcha-headingThree">
-                            <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="captarea-settings">
+                            <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="captarea-settings">
                                 <ul class="list-group mb-0">
                                     <li class="list-group-item">
                                         <div class="d-flex justify-content-center">
@@ -543,7 +543,7 @@
                             <strong>{LANG.captcha_comm}</strong>
                         </a>
                         <div id="settingCaptcha-collapseFourth" class="panel-collapse collapse" role="tabpanel" aria-labelledby="settingCaptcha-headingFourth">
-                            <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="captcommarea-settings">
+                            <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="captcommarea-settings">
                                 <ul class="list-group type2n1 mb-0">
                                     <!-- BEGIN: modcomm -->
                                     <li class="list-group-item">
@@ -595,7 +595,7 @@
 
             <!-- Thiết lập Cross-Site -->
             <div role="tabpanel" class="tab-pane{TAB4_ACTIVE}" id="settingCORS">
-                <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="cors-settings">
+                <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="cors-settings">
                     <ul class="list-group type2n1 mb-0">
                         <li class="list-group-item active">
                             <strong>{LANG.cors}</strong>
@@ -723,7 +723,7 @@
 
             <!-- Thiết lập CSP -->
             <div role="tabpanel" class="tab-pane{TAB5_ACTIVE}" id="settingCSP">
-                <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="csp-settings" data-confirm="{LANG.csp_source_none_confirm}">
+                <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="csp-settings" data-confirm="{LANG.csp_source_none_confirm}">
                     <ul class="list-group">
                         <li class="list-group-item active">
                             <strong>{LANG.csp}</strong>
@@ -787,7 +787,7 @@
 
             <!-- Thiết lập RP -->
             <div role="tabpanel" class="tab-pane{TAB6_ACTIVE}" id="settingRP">
-                <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="rp-settings">
+                <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="rp-settings">
                     <ul class="list-group">
                         <li class="list-group-item active">
                             <strong>{LANG.rp}</strong>

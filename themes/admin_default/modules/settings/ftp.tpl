@@ -4,7 +4,7 @@
 </div>
 <!-- END: no_support-->
 <!-- BEGIN: main-->
-<form action="{FORM_ACTION}" method="post" id="form_edit_ftp" class="form-horizontal" data-error="{LANG.ftp_error_full}">
+<form action="{FORM_ACTION}" method="post" id="form_edit_ftp" class="form-horizontal ajax-submit" data-error="{LANG.ftp_error_full}">
     <ul class="list-group type2n1">
         <li class="list-group-item">
             <div class="form-group mb-0">

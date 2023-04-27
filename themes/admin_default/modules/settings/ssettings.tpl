@@ -44,7 +44,7 @@
         </a>
         <div id="settings_tab" class="panel-collapse collapse" role="tabpanel" aria-labelledby="settings_tab-heading">
             <div class="alert alert-warning" style="margin-bottom:0;border-radius:0">{LANG.ssettings_note}</div>
-            <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="ssetings-form">
+            <form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="ssetings-form">
                 <ul class="list-group type2n1 mb-0">
                     <li class="list-group-item text-center title"><strong>{LANG.general_settings}</strong></li>
 

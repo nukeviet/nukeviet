@@ -106,7 +106,9 @@ if ($nv_Request->isset_request('by_country', 'get')) {
 
         nv_save_file_config_global();
 
-        exit('OK');
+        nv_jsonOutput([
+            'status' => 'OK'
+        ]);
     }
 
     $xtpl = new XTemplate('cdn_backendhost.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

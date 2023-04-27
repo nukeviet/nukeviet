@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form action="{FORM_ACTION}" method="post" class="list" id="custom-values-settings">
+<form action="{FORM_ACTION}" method="post" class="list ajax-submit" id="custom-values-settings">
     <!-- BEGIN: loop -->
     <div class="panel panel-primary item">
         <div class="panel-heading">

@@ -234,8 +234,6 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 }
 
 $xtpl->assign('DISABLE_SITE_CONTENT', $disable_site_content);
-$xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

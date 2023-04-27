@@ -6,7 +6,7 @@
                 {LANG.general_settings}
             </a>
             <div id="settings-sector" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="settings-sector-heading">
-                <form action="{FORM_ACTION}" method="post" id="cdn-settings" class="form-horizontal">
+                <form action="{FORM_ACTION}" method="post" id="cdn-settings" class="form-horizontal ajax-submit" data-callback="country_cdn_list_load">
                     <div class="alert alert-info mb-0" style="border-radius:0">
                         {LANG.not_apply_to_localhost}
                     </div>
@@ -81,7 +81,7 @@
 <!-- END: main -->
 
 <!-- BEGIN: by_country -->
-<form action="{FORM_ACTION}" method="post" class="form-horizontal" id="cdn-country">
+<form action="{FORM_ACTION}" method="post" class="form-horizontal ajax-submit" id="cdn-country">
     <input type="hidden" name="checkss" value="{CHECKSS}" />
     <table class="table table-striped table-bordered mb-0">
         <tbody>
