@@ -114,7 +114,7 @@ function server_info_update($config_ini_file)
  */
 function set_ini_file(&$sys_info)
 {
-    global $config_ini_file, $ini_list, $global_config, $isIndexFile;
+    global $config_ini_file, $ini_list, $global_config;
 
     $content_config = '<?php' . "\n\n";
     $content_config .= NV_FILEHEAD . "\n\n";
@@ -151,12 +151,10 @@ function set_ini_file(&$sys_info)
         $sys_info['supports_rewrite'] = 'nginx';
     } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-    } elseif ($isIndexFile) {
-        $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'install/check.rewrite');
-        if ($_check_rewrite == 'mod_rewrite works') {
-            $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-        } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
-            $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+    } else {
+        $_check_rewrite = file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'check.rewrite');
+        if (in_array($_check_rewrite, ['rewrite_mode_apache', 'rewrite_mode_iis', 'nginx'], true)) {
+            $sys_info['supports_rewrite'] = $_check_rewrite;
         }
     }
     $content_config .= "\$sys_info['supports_rewrite'] = " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : 'false') . ";\n";
@@ -325,24 +323,22 @@ function set_ini_file(&$sys_info)
     $content_config .= "\$serverInfoUpdated = false;\n";
     $content_config .= '$iniSaveTime = ' . NV_CURRENTTIME . ';';
 
-    if ($isIndexFile) {
-        if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
-            $url = NV_BASE_SITEURL . 'index.php';
-            strpos($url, NV_MY_DOMAIN) !== 0 && $url = NV_MY_DOMAIN . $url;
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, '__serverInfoUpdate=1');
-            curl_setopt($ch, CURLOPT_TIMEOUT_MS, 200);
-            curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Referer: ' . NV_MY_DOMAIN]);
-            curl_exec($ch);
-            curl_close($ch);
-        }
+    if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
+        $url = NV_BASE_SITEURL . 'index.php';
+        strpos($url, NV_MY_DOMAIN) !== 0 && $url = NV_MY_DOMAIN . $url;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, '__serverInfoUpdate=1');
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, 200);
+        curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Referer: ' . NV_MY_DOMAIN]);
+        curl_exec($ch);
+        curl_close($ch);
     }
 }
 
@@ -361,9 +357,7 @@ $sys_info['https_only'] = false;
 $serverInfoUpdated = false;
 $iniSaveTime = 0;
 
-if ($isIndexFile) {
-    @include_once $config_ini_file;
-}
+@include_once $config_ini_file;
 
 if ($iniSaveTime + 86400 < NV_CURRENTTIME) {
     set_ini_file($sys_info);
