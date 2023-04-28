@@ -92,8 +92,8 @@ class PushGroupAction implements UiApi
         $where = "(mtb.sender_role='group' AND mtb.sender_group=" . $group_id . ')';
 
         $postdata = [];
-        if ($nv_Request->isset_request('action', 'post')) {
-            $postdata['action'] = $nv_Request->get_title('action', 'post', '');
+        if ($nv_Request->isset_request('operation', 'post')) {
+            $postdata['operation'] = $nv_Request->get_title('operation', 'post', '');
         }
         if ($nv_Request->isset_request('id', 'post')) {
             $postdata['id'] = $nv_Request->get_int('id', 'post', 0);
@@ -134,14 +134,14 @@ class PushGroupAction implements UiApi
                 ->getResult();
         }
         // Nếu không xác định được hành động
-        if (!in_array($postdata['action'], ['add', 'edit', 'delete'], true)) {
+        if (empty($postdata['operation']) or !in_array($postdata['operation'], ['add', 'edit', 'delete'], true)) {
             return $this->result->setError()
                 ->setCode('5002')
                 ->setMessage($lang_module['unspecified_action'])
                 ->getResult();
         }
 
-        if ($postdata['action'] == 'edit' or $postdata['action'] == 'delete') {
+        if ($postdata['operation'] == 'edit' or $postdata['operation'] == 'delete') {
             // Nếu thông báo đẩy chưa được xác định
             if (empty($postdata['id'])) {
                 return $this->result->setError()
@@ -161,7 +161,7 @@ class PushGroupAction implements UiApi
             }
         }
 
-        ksort($postdata);
+        /*ksort($postdata);
         $checkhash = http_build_query($postdata);
         $checkhash = sha1($checkhash);
         $hashreceive = $nv_Request->get_title('checkhash', 'post', '');
@@ -171,17 +171,17 @@ class PushGroupAction implements UiApi
                 ->setCode('5005')
                 ->setMessage($lang_module['api_error_hash'])
                 ->getResult();
-        }
+        }*/
 
         // Nếu là xóa thông báo đẩy
-        if ($postdata['action'] == 'delete') {
+        if ($postdata['operation'] == 'delete') {
             $db->query('DELETE FROM ' . NV_PUSH_STATUS_GLOBALTABLE . ' WHERE pid = ' . $postdata['id']);
             $db->query('DELETE FROM ' . NV_PUSH_GLOBALTABLE . ' WHERE id = ' . $postdata['id']);
             $db->query('OPTIMIZE TABLE ' . NV_PUSH_STATUS_GLOBALTABLE);
             $db->query('OPTIMIZE TABLE ' . NV_PUSH_GLOBALTABLE);
         }
         // Nếu là thêm/sửa thông báo
-        elseif ($postdata['action'] == 'add' or $postdata['action'] == 'edit') {
+        elseif ($postdata['operation'] == 'add' or $postdata['operation'] == 'edit') {
             // Nếu nội dung của thông báo đẩy chưa được xác định
             if (nv_strlen($postdata['message']) < 3) {
                 return $this->result->setError()
@@ -226,7 +226,7 @@ class PushGroupAction implements UiApi
             } else {
                 $postdata['exp_time'] = 0;
             }
-            if ($postdata['action'] == 'edit') {
+            if ($postdata['operation'] == 'edit') {
                 $sth = $db->prepare('UPDATE ' . NV_PUSH_GLOBALTABLE . ' SET 
                 receiver_ids = :receiver_ids, message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
                 WHERE id = ' . $postdata['id']);
