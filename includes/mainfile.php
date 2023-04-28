@@ -54,8 +54,18 @@ require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 if (empty($global_config['my_domains'])) {
     $global_config['my_domains'] = [NV_SERVER_NAME];
 } else {
-    $global_config['my_domains'] = array_map('trim', explode(',', $global_config['my_domains']));
-    $global_config['my_domains'] = array_map('strtolower', $global_config['my_domains']);
+    $global_config['my_domains'] = array_map('trim', explode(',', strtolower($global_config['my_domains'])));
+    // Nếu domain truy cập không đúng sẽ chuyển đến domain đúng (Báo mã 301)
+    if (!in_array(NV_SERVER_NAME, $global_config['my_domains'], true)) {
+        $location = $nv_Server->getOriginalProtocol() . '://' . $global_config['my_domains'][0] . $_SERVER['REQUEST_URI'];
+        if (in_array(substr(php_sapi_name(), 0, 3), ['cgi', 'fpm'], true)) {
+            header('Location: ' . $location);
+            header('Status: 301 Moved Permanently');
+        } else {
+            header('Location: ' . $location, true, 301);
+        }
+        exit(0);
+    }
 }
 
 require NV_ROOTDIR . '/includes/ini.php';
