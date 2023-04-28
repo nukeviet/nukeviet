@@ -89,7 +89,7 @@ class Error
     ];
     private $error_excluded = ["/^ftp\_login\(\)/i", "/^gzinflate\(\)\: data error/i"];
     public static $unreported_errors = [ // md5($this->errfile . $this->errline . $this->errno)
-        '8384c750f2c06509c08ae011f7cf8978', // md5('/includes/ini.php' . '363' . '2')
+        '28fbebcb00a83556d3ada1cc54e6f06e', // md5('/includes/ini.php' . '360' . '2')
         'a6fbadb31af3e7035cf25831dd9865ab', // md5('/vendor/vinades/nukeviet/Files/Upload.php' . '1045' . '2')
     ];
 
