@@ -674,6 +674,10 @@ figure figcaption {
     position: relative;
 }
 
+.has-error .cke {
+    border-color: #a94442 !important;
+}
+
 /* Global */
 
 html {

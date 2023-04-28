@@ -218,6 +218,10 @@ function nv_create_table_sys($lang)
          ('" . $lang . "', 'global', 'name_show', '" . ($lang != 'vi' ? 1 : 0) . "'),
          ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!'),
          ('" . $lang . "', 'global', 'opensearch_link', ''),
+         ('" . $lang . "', 'global', 'data_warning', '0'),
+         ('" . $lang . "', 'global', 'antispam_warning', '0'),
+         ('" . $lang . "', 'global', 'data_warning_content', ''),
+         ('" . $lang . "', 'global', 'antispam_warning_content', ''),
          ('" . $lang . "', 'seotools', 'prcservice', '')";
 
     $lang_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_setup_language')->fetchColumn() + 1;

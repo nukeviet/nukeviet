@@ -140,114 +140,136 @@ $(function() {
 </div>
 <!-- END: if_user -->
 <h2 class="text-center">{ADD_OR_UPDATE}</h2>
-<form action="{CONTENT_URL}" method="post" class="form-horizontal"<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.name} <span class="txtrequired">(*)</span>:</label>
-        <div class="col-sm-16">
-            <input type="text" class="form-control" name="title" id="idtitle" value="{DATA.title}" />
+<form action="{CONTENT_URL}" method="post"<!-- BEGIN: captcha --> data-captcha="fcode"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.name} <span class="txtrequired">(*)</span>:</label>
+            <div class="col-sm-16">
+                <input type="text" class="form-control" name="title" id="idtitle" value="{DATA.title}" />
+            </div>
         </div>
-    </div>
 
-    <!-- BEGIN: alias -->
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.alias}:</label>
-        <div class="col-sm-16">
-            <input type="text" class="form-control pull-left" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" style="width: 94%;" />
-            <em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" data-toggle="get_alias" data-op="{OP}"></em>
+        <!-- BEGIN: alias -->
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.alias}:</label>
+            <div class="col-sm-16">
+                <input type="text" class="form-control pull-left" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" style="width: 94%;" />
+                <em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" data-toggle="get_alias" data-op="{OP}"></em>
+            </div>
         </div>
-    </div>
-    <!-- END: alias -->
+        <!-- END: alias -->
 
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.content_cat} <span class="txtrequired">(*)</span>:</label>
-        <div class="col-sm-16">
-            <div style="height: 130px; width: 100%; overflow: auto; text-align: left; border: solid 1px #ddd; padding: 11px;">
-                <table>
-                    <tbody>
-                        <!-- BEGIN: catid -->
-                        <tr>
-                            <td><input class="news_checkbox" name="catids[]" value="{DATACATID.value}" type="checkbox" {DATACATID.checked}>{DATACATID.title}</td>
-                        </tr>
-                        <!-- END: catid -->
-                    </tbody>
-                </table>
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.content_cat} <span class="txtrequired">(*)</span>:</label>
+            <div class="col-sm-16">
+                <div style="height: 130px; width: 100%; overflow: auto; text-align: left; border: solid 1px #ddd; padding: 11px;">
+                    <table>
+                        <tbody>
+                            <!-- BEGIN: catid -->
+                            <tr>
+                                <td><input class="news_checkbox" name="catids[]" value="{DATACATID.value}" type="checkbox" {DATACATID.checked}>{DATACATID.title}</td>
+                            </tr>
+                            <!-- END: catid -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.content_topic}:</label>
+            <div class="col-sm-16">
+                <select name="topicid" class="form-control">
+                    <!-- BEGIN: topic -->
+                    <option value="{DATATOPIC.value}" {DATATOPIC.selected}>{DATATOPIC.title}</option>
+                    <!-- END: topic -->
+                </select>
+            </div>
+        </div>
+
+        <!-- BEGIN: layout_func -->
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.pick_layout}:</label>
+            <div class="col-sm-16">
+                <select name="layout_func" class="form-control">
+                    <option value="">{LANG.default_layout}</option>
+                    <!-- BEGIN: loop -->
+                    <option value="{LAYOUT_FUNC.key}" {LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
+                    <!-- END: loop -->
+                </select>
+            </div>
+        </div>
+        <!-- END: layout_func -->
+
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.content_homeimg}:</label>
+            <div class="col-sm-16">
+                <input class="form-control" name="homeimgfile" id="homeimg" value="{DATA.homeimgfile}" type="text" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.content_homeimgalt}:</label>
+            <div class="col-sm-16">
+                <input maxlength="255" value="{DATA.homeimgalt}" name="homeimgalt" type="text" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-24 text-normal">{LANG.content_hometext}:</label>
+            <div class="col-sm-24"><textarea class="form-control" rows="6" cols="60" name="hometext">{DATA.hometext}</textarea></div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-24 text-normal">{LANG.content_bodytext} <span class="txtrequired">(*)</span>:</label>
+            <div class="col-sm-24">{HTMLBODYTEXT}</div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG.source}:</label>
+            <div class="col-sm-16">
+                <input maxlength="255" value="{DATA.sourcetext}" name="sourcetext" type="text" class="form-control" />
+            </div>
+        </div>
+
+        <!-- BEGIN: internal_author -->
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal" style="padding-top:0">{LANG.internal_author}:</label>
+            <div class="col-sm-16">
+                <!-- BEGIN: item -->
+                <a class="btn btn-default btn-xs active" href="{ITEM.href}">{ITEM.pseudonym}</a>
+                <!-- END: item -->
+            </div>
+        </div>
+        <!-- END: internal_author -->
+
+        <div class="form-group">
+            <label class="col-sm-8 control-label text-normal">{LANG_EXTERNAL_AUTHOR}:</label>
+            <div class="col-sm-16">
+                <input maxlength="255" value="{DATA.author}" name="author" type="text" class="form-control" />
             </div>
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.content_topic}:</label>
-        <div class="col-sm-16">
-            <select name="topicid" class="form-control">
-                <!-- BEGIN: topic -->
-                <option value="{DATATOPIC.value}" {DATATOPIC.selected}>{DATATOPIC.title}</option>
-                <!-- END: topic -->
-            </select>
+    <!-- BEGIN: confirm -->
+    <div class="alert alert-info confirm" style="padding:0 10px">
+        <!-- BEGIN: data_sending -->
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="form-control" style="margin-top:2px" name="data_permission_confirm" value="1" data-error="{GLANG.data_warning_error}"> <small>{DATA_USAGE_CONFIRM}</small>
+            </label>
         </div>
-    </div>
+        <!-- END: data_sending -->
 
-    <!-- BEGIN: layout_func -->
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.pick_layout}:</label>
-        <div class="col-sm-16">
-            <select name="layout_func" class="form-control">
-                <option value="">{LANG.default_layout}</option>
-                <!-- BEGIN: loop -->
-                <option value="{LAYOUT_FUNC.key}" {LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
-                <!-- END: loop -->
-            </select>
+        <!-- BEGIN: antispam -->
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="form-control" style="margin-top:2px" name="antispam_confirm" value="1" data-error="{GLANG.antispam_warning_error}"> <small>{ANTISPAM_CONFIRM}</small>
+            </label>
         </div>
+        <!-- END: antispam -->
     </div>
-    <!-- END: layout_func -->
-
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.content_homeimg}:</label>
-        <div class="col-sm-16">
-            <input class="form-control" name="homeimgfile" id="homeimg" value="{DATA.homeimgfile}" type="text" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.content_homeimgalt}:</label>
-        <div class="col-sm-16">
-            <input maxlength="255" value="{DATA.homeimgalt}" name="homeimgalt" type="text" class="form-control" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-24 text-normal">{LANG.content_hometext}:</label>
-        <div class="col-sm-24"><textarea class="form-control" rows="6" cols="60" name="hometext">{DATA.hometext}</textarea></div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-24 text-normal">{LANG.content_bodytext} <span class="txtrequired">(*)</span>:</label>
-        <div class="col-sm-24">{HTMLBODYTEXT}</div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG.source}:</label>
-        <div class="col-sm-16">
-            <input maxlength="255" value="{DATA.sourcetext}" name="sourcetext" type="text" class="form-control" />
-        </div>
-    </div>
-
-    <!-- BEGIN: internal_author -->
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal" style="padding-top:0">{LANG.internal_author}:</label>
-        <div class="col-sm-16">
-            <!-- BEGIN: item -->
-            <a class="btn btn-default btn-xs active" href="{ITEM.href}">{ITEM.pseudonym}</a>
-            <!-- END: item -->
-        </div>
-    </div>
-    <!-- END: internal_author -->
-
-    <div class="form-group">
-        <label class="col-sm-8 control-label text-normal">{LANG_EXTERNAL_AUTHOR}:</label>
-        <div class="col-sm-16">
-            <input maxlength="255" value="{DATA.author}" name="author" type="text" class="form-control" />
-        </div>
-    </div>
+    <!-- END: confirm -->
 
     <div class="form-inline text-center">
         <div class="form-group">

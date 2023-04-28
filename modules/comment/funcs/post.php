@@ -136,6 +136,15 @@ if (!($timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout)) {
     _loadContents('ERR__' . $timeoutmsg);
 }
 
+$data_permission_confirm = !empty($global_config['data_warning']) ? (int) $nv_Request->get_bool('data_permission_confirm', 'post', false) : -1;
+$antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
+if ($data_permission_confirm === 0) {
+    _loadContents('ERR__' . $lang_global['data_warning_error']);
+}
+if ($antispam_confirm === 0) {
+    _loadContents('ERR__' . $lang_global['antispam_warning_error']);
+}
+
 $pid = $nv_Request->get_int('pid', 'post', 0);
 
 // Xử lý nếu có đính kèm file vào bình luận

@@ -239,6 +239,10 @@ a.text-white {
     flex-wrap: nowrap !important;
 }
 
+.has-error .cke {
+    border-color: #a94442 !important;
+}
+
 /* Heading
  -----------------------------------------------------------------------------*/
 

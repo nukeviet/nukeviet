@@ -376,6 +376,10 @@ $lang_global['login_name_type_email'] = 'Email';
 $lang_global['login_name_type_email_username'] = 'Username or Email';
 
 $lang_global['general_support'] = 'General support';
+$lang_global['data_warning_content'] = 'When submitting data, I implicitly agree to grant the website permission to exploit the personal information that I have declared.';
+$lang_global['antispam_warning_content'] = 'When submitting data, I confirm that I have been warned about Anti-Spam Law.';
+$lang_global['data_warning_error'] = 'You need to confirm permission for the website to exploit personal information';
+$lang_global['antispam_warning_error'] = 'You need to confirm that you have been warned about the Anti-Spam Law';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'United Arab Emirates';

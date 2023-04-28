@@ -392,6 +392,10 @@ $lang_global['login_name_type_email'] = 'Email';
 $lang_global['login_name_type_email_username'] = 'Bí danh hoặc Email';
 
 $lang_global['general_support'] = 'Hỗ trợ chung';
+$lang_global['data_warning_content'] = 'Khi gửi dữ liệu, tôi xác nhận cấp quyền cho website khai thác các thông tin cá nhân mà tôi đã khai báo.';
+$lang_global['antispam_warning_content'] = 'Khi gửi dữ liệu, tôi xác nhận đã được cảnh báo về Luật chống tin rác.';
+$lang_global['data_warning_error'] = 'Bạn cần xác nhận cấp quyền cho website khai thác các thông tin cá nhân';
+$lang_global['antispam_warning_error'] = 'Bạn cần xác nhận đã được cảnh báo về Luật chống tin rác';
 
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';

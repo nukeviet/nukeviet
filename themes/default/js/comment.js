@@ -9,12 +9,20 @@
 
 function commReset(form) {
     formChangeCaptcha(form);
+    $('.has-error', form).removeClass('has-error');
     $("[name=pid]", form).val(0);
     $(form)[0].reset();
     if ($(form).data('editor')) {
         CKEDITOR.instances['commentcontent'].setData('', function() {
-            this.updateElement()
+            this.updateElement();
+            if ($('.confirm', form).length) {
+                $('.confirm', form).slideUp()
+            }
         })
+    } else {
+        if ($('.confirm', form).length) {
+            $('.confirm', form).slideUp()
+        }
     }
 }
 
@@ -67,7 +75,7 @@ function nv_commment_reload(res) {
             scrollTop: $("#idcomment").offset().top
         }, 800);
     } else {
-        formChangeCaptcha( $("#formcomment form"));
+        formChangeCaptcha($("#formcomment form"));
         if (rs[0] == 'ERR') {
             alert(rs[2]);
             "" != rs[1] && $("#formcomment form [name=" + rs[1] + "]:visible").length && $("#formcomment form [name=" + rs[1] + "]").focus()
@@ -78,8 +86,10 @@ function nv_commment_reload(res) {
 }
 
 function commFormSubmit(form) {
+    $('.has-error', form).removeClass('has-error');
     var name = strip_tags(trim($("[name=name]", form).val()));
     if ("" == name) {
+        $("[name=name]", form).parent().addClass('has-error');
         alert(nv_fullname);
         $("[name=name]", form).focus();
         return !1
@@ -87,6 +97,7 @@ function commFormSubmit(form) {
 
     var email = trim($("[name=email]", form).val());
     if (!(email.length >= 7 && nv_mailfilter.test(email))) {
+        $("[name=email]", form).parent().addClass('has-error');
         alert(nv_error_email);
         $("[name=email]", form).focus();
         return !1
@@ -95,20 +106,36 @@ function commFormSubmit(form) {
     if ($(form).data('editor')) {
         CKEDITOR.instances['commentcontent'].updateElement()
     }
-    var content = strip_tags(trim($("[name=content]", form).val()));
+    var content = strip_tags($("[name=content]", form).val());
+    content = content.replace(/\s*\&nbsp\;\s*/gi, ' ');
+    content = trim(content);
     if ("" == content) {
         alert(nv_content);
-        $("[name=content]", form).focus();
+        if ($(form).data('editor')) {
+            $('#cke_commentcontent').parent().addClass('has-error');
+            CKEDITOR.instances['commentcontent'].setData('', function() {
+                this.updateElement();
+                this.focus()
+            })
+        } else {
+            $("[name=content]", form).parent().addClass('has-error');
+            $("[name=content]", form).val('').focus();
+        }
         return !1
     }
 
-    if ($("[name=code]:visible", form).length) {
-        var gfx_count = parseInt($("[name=code]", form).attr('maxlength')),
-            code = trim($("[name=code]", form).val());
-        if (gfx_count != code.length) {
-            error = nv_error_seccode.replace(/\[num\]/g, gfx_count);
-            alert(error);
-            $("[name=code]", form).focus();
+    if ($('[type=checkbox]', form).length) {
+        var checkvalid = true;
+        $('[type=checkbox]', form).each(function() {
+            if (!$(this).is(':checked')) {
+                checkvalid = false;
+                $(this).parent().addClass('has-error');
+                alert($(this).data('error'));
+                $(this).focus();
+                return !1
+            }
+        });
+        if (!checkvalid) {
             return !1
         }
     }
@@ -150,6 +177,16 @@ $(function() {
         $('[data-toggle=commReset]', commentform).on('click', function(e) {
             e.preventDefault();
             commReset($(this).parents('form'))
+        });
+    }
+
+    $('input[type=text], input[type=email], input[type=file], textarea', commentform).on('change', function() {
+        $('.confirm', commentform).slideDown()
+    });
+
+    if (typeof(CKEDITOR) !== 'undefined') {
+        CKEDITOR.instances['commentcontent'].on('change', function() {
+            $('.confirm', commentform).slideDown()
         });
     }
 

@@ -355,6 +355,19 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
         $xtpl->parse('main.feedback_address');
     }
 
+    if (!empty($global_config['data_warning']) or !empty($global_config['antispam_warning'])) {
+        if (!empty($global_config['data_warning'])) {
+            $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $lang_global['data_warning_content']);
+            $xtpl->parse('main.confirm.data_sending');
+        }
+
+        if (!empty($global_config['antispam_warning'])) {
+            $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $lang_global['antispam_warning_content']);
+            $xtpl->parse('main.confirm.antispam');
+        }
+        $xtpl->parse('main.confirm');
+    }
+
     $xtpl->parse('main');
 
     return $xtpl->text('main');

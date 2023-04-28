@@ -405,6 +405,9 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         $bodyhtml = $nv_Request->get_string('bodyhtml', 'post', '');
         $rowcontent['bodyhtml'] = defined('NV_EDITOR') ? nv_nl2br($bodyhtml, '') : nv_nl2br(nv_htmlspecialchars(strip_tags($bodyhtml)), '<br />');
 
+        $data_permission_confirm = !empty($global_config['data_warning']) ? (int) $nv_Request->get_bool('data_permission_confirm', 'post', false) : -1;
+        $antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
+
         if (empty($rowcontent['title'])) {
             $error = $lang_module['error_title'];
         } elseif (empty($rowcontent['listcatid'])) {
@@ -413,6 +416,10 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
             $error = $lang_module['error_bodytext'];
         } elseif (isset($fcode) and !nv_capcha_txt($fcode, $module_captcha)) {
             $error = ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+        } elseif ($data_permission_confirm === 0) {
+            $error = $lang_global['data_warning_error'];
+        } elseif ($antispam_confirm === 0) {
+            $error = $lang_global['antispam_warning_error'];
         } else {
             $rowcontent['catid'] = in_array((int) $rowcontent['catid'], $catids, true) ? $rowcontent['catid'] : $catids[0];
             $rowcontent['sourceid'] = 0;

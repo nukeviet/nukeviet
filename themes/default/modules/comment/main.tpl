@@ -16,7 +16,7 @@
         <div class="col-xs-12 text-right">
             <select class="form-control" data-toggle="nv_comment_sort_change">
                 <!-- BEGIN: sortcomm -->
-                <option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
+                <option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
                 <!-- END: sortcomm -->
             </select>
         </div>
@@ -24,7 +24,7 @@
     <div id="showcomment" class="margin-bottom-lg">{COMMENTCONTENT}</div>
     <div id="formcomment" class="comment-form">
         <!-- BEGIN: allowed_comm -->
-        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}"{ENCTYPE}<!-- BEGIN: captcha --> data-captcha="code"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
+        <form method="post" role="form" target="submitcommentarea" action="{FORM_ACTION}" autocomplete="off" novalidate data-gfxnum="{GFX_NUM}" data-editor="{EDITOR_COMM}" {ENCTYPE}<!-- BEGIN: captcha --> data-captcha="code"<!-- END: captcha --><!-- BEGIN: recaptcha --> data-recaptcha2="1"<!-- END: recaptcha --><!-- BEGIN: recaptcha3 --> data-recaptcha3="1"<!-- END: recaptcha3 -->>
             <input type="hidden" name="module" value="{MODULE_COMM}" />
             <input type="hidden" name="area" value="{AREA_COMM}" />
             <input type="hidden" name="id" value="{ID_COMM}" />
@@ -44,8 +44,10 @@
             <div class="form-group clearfix">
                 <textarea class="form-control" style="width: 100%" name="content" id="commentcontent" cols="20" rows="5"></textarea>
                 <!-- BEGIN: editor -->
-                <script type="text/javascript" src="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor/ckeditor.js?t={TIMESTAMP}"></script>
-                <script type="text/javascript">CKEDITOR.replace('commentcontent', { width: '100%', height: '200px', removePlugins: 'uploadfile,uploadimage,autosave' });</script>
+                <script src="{NV_STATIC_URL}{NV_EDITORSDIR}/ckeditor/ckeditor.js?t={TIMESTAMP}"></script>
+                <script>
+                    CKEDITOR.replace('commentcontent', {{REPLACES}});
+                </script>
                 <!-- END: editor -->
             </div>
             <!-- BEGIN: attach -->
@@ -58,9 +60,30 @@
                 </div>
             </div>
             <!-- END: attach -->
+
+            <!-- BEGIN: confirm -->
+            <div class="alert alert-info confirm" style="padding:0 10px;display:none">
+                <!-- BEGIN: data_sending -->
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="form-control" style="margin-top:2px" name="data_permission_confirm" value="1" data-error="{GLANG.data_warning_error}"> <small>{DATA_USAGE_CONFIRM}</small>
+                    </label>
+                </div>
+                <!-- END: data_sending -->
+
+                <!-- BEGIN: antispam -->
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="form-control" style="margin-top:2px" name="antispam_confirm" value="1" data-error="{GLANG.antispam_warning_error}"> <small>{ANTISPAM_CONFIRM}</small>
+                    </label>
+                </div>
+                <!-- END: antispam -->
+            </div>
+            <!-- END: confirm -->
+
             <div class="form-group text-center">
                 <input type="button" value="{GLANG.reset}" class="reset btn btn-default" data-toggle="commReset" />
-                <input type="submit" value="{LANG.comment_submit}" class="btn btn-primary"/>
+                <input type="submit" value="{LANG.comment_submit}" class="btn btn-primary" />
             </div>
         </form>
         <iframe class="hidden" id="submitcommentarea" name="submitcommentarea"></iframe>

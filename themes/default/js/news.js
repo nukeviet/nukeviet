@@ -147,15 +147,49 @@ function newsSendMailModal(fm, url, sess) {
 }
 
 function newsSendMail(form) {
+    $('.has-error', form).removeClass('has-error');
     var a = $("[name=friend_email]", form).val();
     a = trim(strip_tags(a));
     $("[name=friend_email]", form).val(a);
-    if (!nv_mailfilter.test(a)) return alert($("[name=friend_email]", form).data("error")), $("[name=friend_email]", form).focus(), !1;
+    if (!nv_mailfilter.test(a)) {
+        alert($("[name=friend_email]", form).data("error"));
+        $("[name=friend_email]", form).parent().addClass('has-error');
+        $("[name=friend_email]", form).focus();
+        return !1
+    }
     a = $("[name=your_name]", form).val();
     a = trim(strip_tags(a));
     $("[name=your_name]", form).val(a);
-    if ("" == a || !nv_uname_filter.test(a)) return alert($("[name=your_name]", form).data("error")), $("[name=your_name]", form).focus(), !1;
-    if ($("[name=nv_seccode]:visible", form).length && (a = $("[name=nv_seccode]", form).val(), a.length != parseInt($("[name=nv_seccode]", form).attr("maxlength")) || !/^[a-z0-9]+$/i.test(a))) return alert($("[name=nv_seccode]", form).data("error")), $("[name=nv_seccode]", form).focus(), !1;
+    if ("" == a || !nv_uname_filter.test(a)) {
+        alert($("[name=your_name]", form).data("error"));
+        $("[name=your_name]", form).parent().addClass('has-error');
+        $("[name=your_name]", form).focus();
+        return !1
+    }
+    if ($("[name=nv_seccode]:visible", form).length) {
+        a = $("[name=nv_seccode]", form).val();
+        if (a.length != parseInt($("[name=nv_seccode]", form).attr("maxlength")) || !/^[a-z0-9]+$/i.test(a)) {
+            alert($("[name=nv_seccode]", form).data("error"));
+            $("[name=nv_seccode]", form).parent().addClass('has-error');
+            $("[name=nv_seccode]", form).focus();
+            return !1
+        }
+    }
+    if ($('[type=checkbox]', form).length) {
+        var checkvalid = true;
+        $('[type=checkbox]', form).each(function() {
+            if (!$(this).is(':checked')) {
+                checkvalid = false;
+                alert($(this).data('error'));
+                $(this).parent().addClass('has-error');
+                $(this).focus();
+                return !1
+            }
+        });
+        if (!checkvalid) {
+            return !1
+        }
+    }
     $("[name=your_message]", form).length && $("[name=your_message]", form).val(trim(strip_tags($("[name=your_message]", form).val())));
     a = $(form).serialize();
     $("input,button,textarea", form).prop("disabled", !0);

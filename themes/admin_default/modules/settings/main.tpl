@@ -176,6 +176,59 @@
                 </div>
             </div>
         </div>
+        <div class="panel panel-primary">
+            <a role="tab" id="headingFour" class="panel-heading collapsed" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#accordion-settings" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                {LANG.submitting_data_warning}
+            </a>
+            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <div class="alert alert-info mb-0" style="border-radius:0;">
+                    {LANG.submitting_data_warning_note}
+                </div>
+                <ul class="list-group type2n1">
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-12 control-label hidden-xs"><strong>{LANG.data_usage_permission_warning}</strong></label>
+                            <div class="col-sm-12">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="data_warning" {DATA_USAGE_WARNING} />
+                                    <strong class="visible-xs-inline-block">{LANG.data_usage_permission_warning}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-12 control-label"><strong>{LANG.data_usage_permission_content}</strong></label>
+                            <div class="col-sm-12">
+                                <textarea class="form-control nonewline" name="data_warning_content" placeholder="{LANG.data_usage_permission_placeholder}">{VALUE.data_warning_content}</textarea>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-12 control-label hidden-xs"><strong>{LANG.antispam_law_warning}</strong></label>
+                            <div class="col-sm-12">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="form-control" value="1" name="antispam_warning" {ANTISPAM_WARNING} />
+                                    <strong class="visible-xs-inline-block">{LANG.antispam_law_warning}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
+                            <label class="col-sm-12 control-label"><strong>{LANG.antispam_law_content}</strong></label>
+                            <div class="col-sm-12">
+                                <textarea class="form-control nonewline" name="antispam_warning_content" placeholder="{LANG.antispam_law_placeholder}">{VALUE.antispam_warning_content}</textarea>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="text-center">
         <input type="hidden" name="checkss" value="{VALUE.checkss}" />

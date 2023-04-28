@@ -83,9 +83,28 @@
         </div>
         <!-- BEGIN: sendcopy -->
         <div class="checkbox">
-            <label style="display:flex;align-content:center"><input type="checkbox" style="margin-top:2px" name="sendcopy" value="1" checked="checked" /><span>{LANG.sendcopy}</span></label>
+            <label><input type="checkbox" class="form-control" style="margin-top:2px" name="sendcopy" value="1" checked="checked" /><span>{LANG.sendcopy}</span></label>
         </div>
         <!-- END: sendcopy -->
+        <!-- BEGIN: confirm -->
+        <div class="alert alert-info confirm" style="padding:0 10px">
+            <!-- BEGIN: data_sending -->
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="form-control required" style="margin-top:2px" name="data_permission_confirm" value="1" data-mess="{GLANG.data_warning_error}" data-toggle="fb_errorHidden"> <small>{DATA_USAGE_CONFIRM}</small>
+                </label>
+            </div>
+            <!-- END: data_sending -->
+
+            <!-- BEGIN: antispam -->
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="form-control required" style="margin-top:2px" name="antispam_confirm" value="1" data-mess="{GLANG.antispam_warning_error}" data-toggle="fb_errorHidden"> <small>{ANTISPAM_CONFIRM}</small>
+                </label>
+            </div>
+            <!-- END: antispam -->
+        </div>
+        <!-- END: confirm -->
         <div class="text-center form-group">
             <input type="hidden" name="checkss" value="{CHECKSS}" />
             <input type="button" value="{LANG.reset}" class="btn btn-default" data-toggle="fb_validReset" />

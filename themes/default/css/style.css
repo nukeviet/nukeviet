@@ -714,6 +714,10 @@ figure.avatar figcaption {
     font-size: 11px;
 }
 
+.has-error .cke {
+    border-color: #a94442 !important;
+}
+
 /* Global */
 
 html,

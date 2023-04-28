@@ -80,6 +80,23 @@ if ($id > 0 and $catid > 0) {
                         ]);
                     }
 
+                    $data_permission_confirm = !empty($global_config['data_warning']) ? (int) $nv_Request->get_bool('data_permission_confirm', 'post', false) : -1;
+                    $antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
+                    if ($data_permission_confirm === 0) {
+                        nv_jsonOutput([
+                            'status' => 'error',
+                            'input' => 'data_permission_confirm',
+                            'mess' => $lang_global['data_warning_error']
+                        ]);
+                    }
+                    if ($antispam_confirm === 0) {
+                        nv_jsonOutput([
+                            'status' => 'error',
+                            'input' => 'antispam_confirm',
+                            'mess' => $lang_global['antispam_warning_error']
+                        ]);
+                    }
+
                     $difftimeout = 3600;
                     $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/news_logs';
                     $log_fileext = preg_match('/^[a-z]+$/i', NV_LOGS_EXT) ? NV_LOGS_EXT : 'log';

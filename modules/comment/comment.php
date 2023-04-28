@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -387,8 +387,20 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
         if (!empty($module_config[$module]['alloweditorcomm'])) {
             $xtpl->assign('EDITOR_COMM', 1);
             if ($header) {
+                $replaces = [];
+                $replaces[] = "width:'100%', height:'200px', removePlugins: 'uploadfile,uploadimage,autosave', toolbar: 'User', format_tags: 'p;div;h2;h3;h4;h5;h6', forcePasteAsPlainText: true, tabSpaces: 0, fillEmptyBlocks: false";
+
+                $allowed_html_tags = ['b', 'blockquote', 'br', 'div', 'em', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'li', 'p', 'span', 'strong', 's', 'u', 'ul', 'ol'];
+                $allowedContent = [];
+                foreach ($allowed_html_tags as $tag) {
+                    $allowedContent[] = $tag . '[*]{*}(*)';
+                }
+                $replaces[] = "allowedContent:'" . implode(';', $allowedContent) . "'";
+                $replaces[] = "disallowedContent:'script; *[on*,action,background,codebase,dynsrc,lowsrc,allownetworking,allowscriptaccess,fscommand,seeksegmenttime]'";
+                $replaces = implode(', ', $replaces);
                 $xtpl->assign('NV_EDITORSDIR', NV_EDITORSDIR);
                 $xtpl->assign('TIMESTAMP', $global_config['timestamp']);
+                $xtpl->assign('REPLACES', $replaces);
                 $xtpl->parse('main.allowed_comm.editor');
             }
         } else {
@@ -432,6 +444,19 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
             }
         } else {
             $xtpl->assign('GFX_NUM', 0);
+        }
+
+        if (!empty($global_config['data_warning']) or !empty($global_config['antispam_warning'])) {
+            if (!empty($global_config['data_warning'])) {
+                $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $lang_global['data_warning_content']);
+                $xtpl->parse('main.allowed_comm.confirm.data_sending');
+            }
+    
+            if (!empty($global_config['antispam_warning'])) {
+                $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $lang_global['antispam_warning_content']);
+                $xtpl->parse('main.allowed_comm.confirm.antispam');
+            }
+            $xtpl->parse('main.allowed_comm.confirm');
         }
 
         $xtpl->parse('main.allowed_comm');

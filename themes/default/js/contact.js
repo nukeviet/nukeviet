@@ -34,6 +34,7 @@ function nv_validCheck(a) {
         b = $(a).val(),
         f = $(a).attr("data-callback");
     if ("email" == $(a).prop("type") && !nv_mailfilter.test(b)) return !1;
+    else if ("checkbox" == $(a).prop("type") && !$(a).is(":checked")) return !1;
     else if ("undefined" != typeof f && "nv_uname_check" == f) {
         if (!nv_uname_check(b)) return !1
     } else if ("undefined" == typeof c || "" == c) {
@@ -147,6 +148,13 @@ $(function() {
     // validErrorHidden
     $('body').on('keypress', '[data-toggle=fb_validErrorHidden]', function() {
         $(this).parent().parent().removeClass("has-error")
+    });
+
+    // validErrorHidden for checkbox
+    $('body').on('change', '[data-toggle=fb_errorHidden]', function() {
+        if ($(this).is(":checked")) {
+            $(this).parent().parent().removeClass("has-error")
+        }
     });
 
     $('.show-feedback-form').on('click', function() {
