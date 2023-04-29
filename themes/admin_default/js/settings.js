@@ -301,6 +301,13 @@ $(document).ready(function() {
     $('[data-toggle="controlrw"]').change(function() {
         var lang_multi = $('[name="lang_multi"]').is(':checked');
         var rewrite_enable = $('[name="rewrite_enable"]').is(':checked');
+        if ($('#lang-geo').length) {
+            if (lang_multi) {
+                $('#lang-geo').slideDown();
+            } else {
+                $('#lang-geo').slideUp();
+            }
+        }
         if (!lang_multi && rewrite_enable) {
             $('#tr_rewrite_optional').slideDown();
         } else {

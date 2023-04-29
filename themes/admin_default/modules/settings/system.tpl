@@ -185,7 +185,7 @@
                 {LANG.lang_rewrite_settings}
             </a>
             <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                <ul class="list-group type2n1">
+                <ul class="list-group">
                     <li class="list-group-item">
                         <div class="form-group mb-0">
                             <label class="col-sm-10 control-label hidden-xs"><strong>{LANG.lang_multi}</strong></label>
@@ -212,8 +212,7 @@
                         </div>
                     </li>
 
-                    <!-- BEGIN: lang_geo -->
-                    <li class="list-group-item">
+                    <li class="list-group-item" id="lang-geo" style="<!-- BEGIN: hide_geo -->display:none;<!-- END: hide_geo -->">
                         <div class="form-group mb-0">
                             <label class="col-sm-10 control-label"><strong>{LANG.lang_geo}</strong></label>
                             <div class="col-sm-14">
@@ -227,7 +226,6 @@
                             </div>
                         </div>
                     </li>
-                    <!-- END: lang_geo -->
                     <!-- END: lang_multi -->
 
                     <li class="list-group-item">
