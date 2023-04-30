@@ -208,7 +208,7 @@ function notifications_manager_theme($contents, $page_url, $filter, $checkss)
 
 function notification_action_theme($data, $page_url, $checkss)
 {
-    global $lang_global, $lang_module, $module_info;
+    global $global_config, $language_array, $lang_global, $lang_module, $module_info;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -225,6 +225,16 @@ function notification_action_theme($data, $page_url, $checkss)
             ]);
             $xtpl->parse('notification_action.receiver_ids');
         }
+    }
+
+    foreach ($global_config['setup_langs'] as $lang) {
+        $xtpl->assign('MESS', [
+            'lang' => $lang,
+            'langname' => $language_array[$lang]['name'],
+            'content' => !empty($data['message'][$lang]) ? nv_br2nl($data['message'][$lang]) : '',
+            'checked' => $lang == $data['isdef'] ? ' checked="checked"' : ''
+        ]);
+        $xtpl->parse('notification_action.message');
     }
 
     for ($i = 0; $i < 24; ++$i) {

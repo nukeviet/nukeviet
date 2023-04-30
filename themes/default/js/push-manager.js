@@ -28,7 +28,7 @@ $(function() {
                     alert(result.mess);
                     return !1
                 } else if ('OK' == result.status) {
-                    $('#notification-action .panel-heading', notificationObj).text(title);
+                    $('#notification-action .panel-heading .action-title', notificationObj).text(title);
                     $('#notification-action .panel-body', notificationObj).html(result.content);
                     $('#generate_page', notificationObj).fadeOut(200, function() {
                         $('#notification-action', notificationObj).show()

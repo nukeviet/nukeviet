@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -130,7 +130,8 @@ if ($nv_Request->isset_request('manager', 'get')) {
         if (hash_equals($checkss, $csrf)) {
             $postdata = [
                 'receiver_ids' => $nv_Request->get_typed_array('receiver_ids', 'post', 'int', []),
-                'message' => $nv_Request->get_title('message', 'post', ''),
+                'message' => $nv_Request->get_typed_array('message', 'post', 'title', []),
+                'isdef' => $nv_Request->get_title('isdef', 'post', ''),
                 'link' => $nv_Request->get_title('link', 'post', ''),
                 'add_time' => $nv_Request->get_title('add_time', 'post', ''),
                 'add_hour' => $nv_Request->get_int('add_hour', 'post', 0),
@@ -140,10 +141,14 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 'exp_min' => $nv_Request->get_int('exp_min', 'post', -1)
             ];
 
-            if (nv_strlen($postdata['message']) < 3) {
+            if (empty($postdata['isdef']) or !in_array($postdata['isdef'], $global_config['setup_langs'], true)) {
+                $postdata['isdef'] = in_array('en', $global_config['setup_langs'], true) ? 'en' : $global_config['setup_langs'][0];
+            }
+
+            if (nv_strlen($postdata['message'][$postdata['isdef']]) < 3) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_content']
+                    'mess' => sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name'])
                 ]);
             }
 
@@ -177,7 +182,16 @@ if ($nv_Request->isset_request('manager', 'get')) {
             } else {
                 $postdata['receiver_ids'] = '';
             }
-            $postdata['message'] = nv_nl2br($postdata['message'], '<br/>');
+            $contents = [];
+            foreach ($postdata['message'] as $lang => $message) {
+                if (nv_strlen($message) >= 3 and in_array($lang, $global_config['setup_langs'], true)) {
+                    $contents[$lang] = nv_nl2br($message, '<br />');
+                }
+            }
+            $postdata['message'] = json_encode([
+                'isdef' => $postdata['isdef'],
+                'contents' => $contents
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             if (!empty($postdata['link']) and !preg_match('#^https?\:\/\/#', $postdata['link'])) {
                 str_starts_with($postdata['link'], NV_BASE_SITEURL) && $postdata['link'] = substr($postdata['link'], strlen(NV_BASE_SITEURL));
             }
@@ -211,7 +225,23 @@ if ($nv_Request->isset_request('manager', 'get')) {
         }
 
         $data['receiver_ids'] = !empty($data['receiver_ids']) ? userlist_by_ids($data['receiver_ids'], $group_id) : [];
-        $data['message'] = !empty($data['message']) ? nv_br2nl($data['message']) : '';
+        $data['isdef'] = '';
+        if (!empty($data['message'])) {
+            $messages = json_decode($data['message'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $data['isdef'] = $messages['isdef'];
+                $data['message'] = $messages['contents'];
+            } else {
+                $data['isdef'] = NV_LANG_DATA;
+                $data['message'] = [
+                    NV_LANG_DATA => $data['message']
+                ];
+            }
+        } else {
+            $data['message'] = [];
+        }
+        empty($data['isdef']) && $data['isdef'] = in_array('en', $global_config['setup_langs'], true) ? 'en' : $global_config['setup_langs'][0];
+
         if (!empty($data['link']) and !preg_match('#^https?\:\/\/#', $data['link'])) {
             $data['link'] = NV_BASE_SITEURL . $data['link'];
         }
@@ -267,8 +297,21 @@ if ($nv_Request->isset_request('manager', 'get')) {
     $members = [];
     while ($row = $result->fetch()) {
         if (!empty($row['message'])) {
-            $row['message'] = preg_replace('/\<\/?br\s*\/?\>/', '<br/>', $row['message']);
-            $row['message'] = text_split($row['message'], 120);
+            $messages = json_decode($row['message'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if (!empty($messages['contents'][NV_LANG_DATA])) {
+                    $row['message'] = $messages['contents'][NV_LANG_DATA];
+                } else {
+                    $row['message'] = $messages['contents'][$messages['isdef']];
+                }
+            }
+    
+            if (!empty($row['message'])) {
+                $row['message'] = preg_replace('/(\<\/?br\s*\/?\>)+/', '<br/>', $row['message']);
+                $row['message'] = text_split($row['message'], 120);
+            } else {
+                $row['message'] = [];
+            }
         } else {
             $row['message'] = [];
         }
@@ -461,8 +504,21 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
     $grouplist = groups_list();
     while ($row = $result->fetch()) {
         if (!empty($row['message'])) {
-            $row['message'] = preg_replace('/\<\/?br\s*\/?\>/', '<br/>', $row['message']);
-            $row['message'] = text_split($row['message'], $global_config['push_max_characters']);
+            $messages = json_decode($row['message'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if (!empty($messages['contents'][NV_LANG_DATA])) {
+                    $row['message'] = $messages['contents'][NV_LANG_DATA];
+                } else {
+                    $row['message'] = $messages['contents'][$messages['isdef']];
+                }
+            }
+    
+            if (!empty($row['message'])) {
+                $row['message'] = preg_replace('/\<\/?br\s*\/?\>/', '<br/>', $row['message']);
+                $row['message'] = text_split($row['message'], 120);
+            } else {
+                $row['message'] = [];
+            }
         } else {
             $row['message'] = [];
         }

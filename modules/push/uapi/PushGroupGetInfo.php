@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -114,6 +114,10 @@ class PushGroupGetInfo implements UiApi
                 ->getResult();
         }
 
+        $messages = json_decode($data['message'], true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $data['message'] = $messages;
+        }
         $this->result->set('info', $data);
         $this->result->setSuccess();
 

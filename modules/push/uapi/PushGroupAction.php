@@ -59,7 +59,7 @@ class PushGroupAction implements UiApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request, $lang_module, $global_config, $language_array;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -101,8 +101,11 @@ class PushGroupAction implements UiApi
         if ($nv_Request->isset_request('receiver_ids', 'post')) {
             $postdata['receiver_ids'] = $nv_Request->get_typed_array('receiver_ids', 'post', 'int', []);
         }
+        if ($nv_Request->isset_request('isdef', 'post')) {
+            $postdata['isdef'] = $nv_Request->get_title('isdef', 'post', '');
+        }
         if ($nv_Request->isset_request('message', 'post')) {
-            $postdata['message'] = $nv_Request->get_title('message', 'post', '');
+            $postdata['message'] = $nv_Request->get_typed_array('message', 'post', 'title', []);
         }
         if ($nv_Request->isset_request('link', 'post')) {
             $postdata['link'] = $nv_Request->get_title('link', 'post', '');
@@ -182,11 +185,15 @@ class PushGroupAction implements UiApi
         }
         // Nếu là thêm/sửa thông báo
         elseif ($postdata['operation'] == 'add' or $postdata['operation'] == 'edit') {
-            // Nếu nội dung của thông báo đẩy chưa được xác định
-            if (nv_strlen($postdata['message']) < 3) {
+            // Nếu không xác định được ngôn ngữ mặc định
+            if (empty($postdata['isdef']) or !in_array($postdata['isdef'], $global_config['setup_langs'], true)) {
+                $postdata['isdef'] = in_array('en', $global_config['setup_langs'], true) ? 'en' : $global_config['setup_langs'][0];
+            }
+            // Nếu nội dung mặc định của thông báo đẩy chưa được xác định
+            if (nv_strlen($postdata['message'][$postdata['isdef']]) < 3) {
                 return $this->result->setError()
                     ->setCode('5009')
-                    ->setMessage($lang_module['please_enter_content'])
+                    ->setMessage(sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name']))
                     ->getResult();
             }
             // Nếu có link, nhưng link không hợp lệ
@@ -214,7 +221,16 @@ class PushGroupAction implements UiApi
             }
 
             $postdata['receiver_ids'] = !empty($postdata['receiver_ids']) ? implode(',', $postdata['receiver_ids']) : '';
-            $postdata['message'] = nv_nl2br($postdata['message'], '<br/>');
+            $contents = [];
+            foreach ($postdata['message'] as $lang => $message) {
+                if (nv_strlen($message) >= 3 and in_array($lang, $global_config['setup_langs'], true)) {
+                    $contents[$lang] = nv_nl2br($message, '<br />');
+                }
+            }
+            $postdata['message'] = json_encode([
+                'isdef' => $postdata['isdef'],
+                'contents' => $contents
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             if (!empty($postdata['link']) and !preg_match('#^https?\:\/\/#', $postdata['link'])) {
                 str_starts_with($postdata['link'], NV_BASE_SITEURL) && $postdata['link'] = substr($postdata['link'], strlen(NV_BASE_SITEURL));
             }

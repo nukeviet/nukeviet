@@ -78,13 +78,14 @@
     </div>
     <div id="generate_page">{PAGE_CONTENT}</div>
     <div id="notification-action" class="notification-action" style="display:none">
-        <div class="row">
-            <div class="col-md-18">
-                <div class="panel panel-primary">
-                    <div class="panel-heading"></div>
-                    <div class="panel-body"></div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary active btn-xs" data-toggle="notification_action_cancel">{GLANG.cancel}</button>
                 </div>
+                <div class="action-title"></div>
             </div>
+            <div class="panel-body"></div>
         </div>
     </div>
 </div>
@@ -107,34 +108,34 @@
         <tbody>
             <!-- BEGIN: loop -->
             <tr class="notification-item status-{ITEM.status}" data-id="{ITEM.id}">
-                <td class="text-center" style="width: 1%;">
+                <td class="text-center" style="width: 1%;vertical-align:middle">
                     <!-- BEGIN: waiting --><i class="fa fa-hourglass-half" title="{LANG.waiting}"></i><!-- END: waiting -->
                     <!-- BEGIN: active --><i class="fa fa-cog fa-spin" title="{LANG.active}"></i><!-- END: active -->
                     <!-- BEGIN: expired --><i class="fa fa-ban" title="{LANG.expired}"></i><!-- END: expired -->
                 </td>
-                <td style="width: 25%;">
+                <td style="width: 25%;vertical-align:middle">
                     <!-- BEGIN: to_all -->{LANG.to_group_all}
                     <!-- END: to_all -->
                     <!-- BEGIN: to_member --><button type="button" class="btn btn-xs btn-default member-info" tabindex="0" data-toggle="viewUser" data-id="{LANG.id}: {MEMBER.0}" data-username="{LANG.username}: {MEMBER.1}" data-fullname="{LANG.fullname}: {MEMBER.2}">{MEMBER.2}</button><!-- END: to_member -->
                 </td>
-                <td>
+                <td style="vertical-align:middle">
                     {ITEM.message.0}
                     <!-- BEGIN: message_1 --><span class="more">... <u data-toggle="more">{LANG.view_more}</u></span><span class="morecontent" style="display: none">{ITEM.message.1}</span><!-- END: message_1 -->
                     <!-- BEGIN: link -->
                     <div class="push-link"><a href="{ITEM.link}" target="_blank">{LANG.push_link}</a></div>
                     <!-- END: link -->
                 </td>
-                <td class="text-center" style="width: 1%;">
+                <td class="text-center" style="width: 1%;vertical-align:middle">
                     {ITEM.add_time_format}
                 </td>
-                <td class="text-center" style="width: 1%;">
+                <td class="text-center" style="width: 1%;vertical-align:middle">
                     {ITEM.exp_time_format}
                 </td>
-                <td class="text-center" style="width: 1%;">
+                <td class="text-center" style="width: 1%;vertical-align:middle">
                     {ITEM.views}
                 </td>
-                <td class="text-center" style="width: 1%;">
-                    <button class="btn btn-default btn-sm margin-bottom-sm" data-toggle="push_action" data-type="edit" data-title="{LANG.push_edit}" title="{LANG.push_edit}"><i class="fa fa-pencil-square-o fa-fw"></i></button>
+                <td class="text-center text-nowrap" style="width: 1%;vertical-align:middle">
+                    <button class="btn btn-default btn-sm" data-toggle="push_action" data-type="edit" data-title="{LANG.push_edit}" title="{LANG.push_edit}"><i class="fa fa-pencil-square-o fa-fw"></i></button>
                     <button class="btn btn-default btn-sm" data-toggle="push_del" title="{GLANG.delete}"><i class="fa fa-trash-o fa-fw"></i></button>
                 </td>
             </tr>
@@ -178,8 +179,21 @@
     </div>
     <div class="form-group">
         <label class="col-md-8 control-label">{LANG.content}</label>
-        <div class="col-md-16">
-            <textarea class="form-control message" name="message" maxlength="2000">{DATA.message}</textarea>
+        <div class="col-md-16 panel-group mb-0">
+            <!-- BEGIN: message -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="margin-bottom-sm" style="display:flex">
+                        <div>{MESS.langname}</div>
+                        <label class="text-normal" style="margin-left: auto;display:inline-flex;align-items:center">
+                            <input type="radio" class="form-control" style="margin-top:0" name="isdef" value="{MESS.lang}" {MESS.checked}> {LANG.default}
+                        </label>
+                    </div>
+                    <textarea name="message[{MESS.lang}]" class="form-control message" maxlength="2000" style="resize:none;">{MESS.content}</textarea>
+                </div>
+            </div>
+            <!-- END: message -->
+            <div class="help-block">{LANG.default_help}</div>
         </div>
     </div>
     <div class="form-group">

@@ -73,8 +73,21 @@
 
     <div class="form-group field">
         <label class="col-md-5 control-label">{LANG.content}</label>
-        <div class="col-md-19">
-            <textarea name="message" class="form-control message" maxlength="2000">{DATA.message}</textarea>
+        <div class="col-md-19 panel-group mb-0">
+            <!-- BEGIN: message -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="d-flex mb-sm">
+                        <div>{MESS.langname}</div>
+                        <label style="margin-left: auto;">
+                                <input type="radio" class="form-control" name="isdef" value="{MESS.lang}"{MESS.checked}> {LANG.default}
+                        </label>
+                    </div>
+                    <textarea name="message[{MESS.lang}]" class="form-control message" maxlength="2000" style="resize:none;">{MESS.content}</textarea>
+                </div>
+            </div>
+            <!-- END: message -->
+            <div class="help-block">{LANG.default_help}</div>
         </div>
     </div>
 

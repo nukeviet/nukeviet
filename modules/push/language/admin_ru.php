@@ -62,7 +62,7 @@ $lang_module['please_select_group'] = 'Выберите группу в каче
 $lang_module['please_select_admin'] = 'Выберите администратора в качестве отправителя уведомления';
 $lang_module['please_select_receiver_group'] = 'Выберите группу в качестве получателя уведомления';
 $lang_module['empty_is_unlimited'] = 'Пусто = не ограничено';
-$lang_module['please_enter_content'] = 'Пожалуйста, введите содержание уведомления';
+$lang_module['please_enter_content'] = 'Поскольку вы выбрали сообщение на «%1$s» по умолчанию, его нельзя оставлять пустым. Пожалуйста, введите сообщение на «%1$s»';
 $lang_module['please_enter_valid_link'] = 'Пожалуйста, введите действительную ссылку';
 $lang_module['please_enter_valid_add_time'] = 'Пожалуйста, введите действительное время начала';
 $lang_module['please_enter_valid_exp_time'] = 'Пожалуйста, оставьте это поле пустым или введите действительное время окончания';
@@ -81,3 +81,5 @@ $lang_module['field_required'] = 'Это поле обязательно к за
 $lang_module['views'] = 'Просмотры';
 $lang_module['unspecified_action'] = 'Неуказанное действие';
 $lang_module['api_error_hash'] = 'Неверный хэш-код';
+$lang_module['default'] = 'По умолчанию';
+$lang_module['default_help'] = 'Сообщение по умолчанию заменит пустое сообщение на других языках';

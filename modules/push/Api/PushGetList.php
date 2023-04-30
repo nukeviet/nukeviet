@@ -118,6 +118,10 @@ class PushGetList implements IApi
         $result = $db->query($db->sql());
         $items = [];
         while ($row = $result->fetch()) {
+            $messages = json_decode($row['message'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $row['message'] = $messages;
+            }
             $items[$row['id']] = $row;
         }
         $this->result->set('items', $items);

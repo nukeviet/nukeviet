@@ -62,7 +62,7 @@ $lang_module['please_select_group'] = 'Please select a group as the notification
 $lang_module['please_select_admin'] = 'Please select an administrator as the notification sender';
 $lang_module['please_select_receiver_group'] = 'Please select a group as a notification recipient';
 $lang_module['empty_is_unlimited'] = 'Empty = unlimited';
-$lang_module['please_enter_content'] = 'Please enter the notification content';
+$lang_module['please_enter_content'] = 'Since you have selected the message in %1$s as the default, it cannot be left blank. Please enter the message in %1$s';
 $lang_module['please_enter_valid_link'] = 'Please enter a valid link';
 $lang_module['please_enter_valid_add_time'] = 'Please enter a valid start time';
 $lang_module['please_enter_valid_exp_time'] = 'Please leave it blank or enter a valid end time';
@@ -81,3 +81,5 @@ $lang_module['field_required'] = 'This field is required';
 $lang_module['views'] = 'Views';
 $lang_module['unspecified_action'] = 'Unspecified action';
 $lang_module['api_error_hash'] = 'Invalid hash code';
+$lang_module['default'] = 'Default';
+$lang_module['default_help'] = 'Default content will replace blank content of other languages';
