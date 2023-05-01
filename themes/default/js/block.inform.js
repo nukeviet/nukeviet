@@ -6,8 +6,8 @@ var informCheck,
     userid = 0,
     usergroups = '',
     csrf = '',
-    inform_cookie_name = nv_cookie_prefix + '_informtime',
-    count_cookie_name = nv_cookie_prefix + '_informcount',
+    inform_cookie_name = nv_cookie_prefix + '_inft',
+    count_cookie_name = nv_cookie_prefix + '_infc',
     lastCount = 0,
     lastCheckInform = 0;
 
