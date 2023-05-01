@@ -7,6 +7,8 @@ var informCheck,
     usergroups = '',
     csrf = '',
     inform_cookie_name = nv_cookie_prefix + '_informtime',
+    count_cookie_name = nv_cookie_prefix + '_informcount',
+    lastCount = 0,
     lastCheckInform = 0;
 
 function informCheck_setTimeout(tm) {
@@ -20,8 +22,8 @@ function informNotifyGetCount() {
     var current = new Date().getTime(),
         pas = current - lastCheckInform;
     if (pas > refresh_time) {
-        nv_setCookie(inform_cookie_name, current, 365);
         lastCheckInform = current;
+        nv_setCookie(inform_cookie_name, lastCheckInform, 365);
         var url = checkInformUrl + ((-1 < checkInformUrl.indexOf("?")) ? '&' : '?') + 'nocache=' + current;
         $.ajax({
             type: 'POST',
@@ -29,16 +31,24 @@ function informNotifyGetCount() {
             data: '__checkInform=1&__userid=' + userid + '&__groups=' + usergroups + '&_csrf=' + csrf,
             dataType: "json",
             success: function(data) {
-                $('.new-count', informObj).text(data.count);
-                if (data.count > 0) {
+                lastCount = parseInt(data.count);
+                nv_setCookie(count_cookie_name, lastCount, 365);
+                $('.new-count', informObj).text(lastCount);
+                if (lastCount > 0) {
                     $('.new-count', informObj).show()
                 } else {
-                    $('.new-count', informObj).text(data.count).hide();
+                    $('.new-count', informObj).hide();
                 }
             }
         });
         informCheck_setTimeout(refresh_time)
     } else {
+        $('.new-count', informObj).text(lastCount);
+        if (lastCount > 0) {
+            $('.new-count', informObj).show()
+        } else {
+            $('.new-count', informObj).hide();
+        }
         informCheck_setTimeout(refresh_time - pas)
     }
 }
@@ -54,6 +64,8 @@ function informNotifyGetList() {
         success: function(result) {
             $('.inform-content', informObj).html(result.content);
             if (result.count) {
+                lastCount = 0;
+                nv_setCookie(count_cookie_name, lastCount, 365);
                 informNotifyGetCount()
             }
         }
@@ -153,8 +165,15 @@ $(window).on('load', function() {
             $('.morecontent', obj).show()
         });
 
-        lastCheckInform = nv_getCookie(inform_cookie_name);
-        lastCheckInform = lastCheckInform ? parseInt(lastCheckInform) : 0;
+        var informCookie = nv_getCookie(inform_cookie_name),
+            countCookie = nv_getCookie(count_cookie_name);
+        if (informCookie) {
+            lastCheckInform = parseInt(informCookie)
+        }
+        if (countCookie) {
+            lastCount = parseInt(countCookie)
+        }
+
         informNotifyGetCount()
     }
 });
