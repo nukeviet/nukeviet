@@ -105,7 +105,7 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 
     NukeViet\Core\User::set_userlogin_hash($user, $remember);
 
-    // Tạo thông báo đẩy nếu đăng nhập lần đầu
+    // Tạo thông báo nếu đăng nhập lần đầu
     if (empty($array_user['last_login'])) {
         $messages = [];
         foreach ($global_config['setup_langs'] as $lang) {

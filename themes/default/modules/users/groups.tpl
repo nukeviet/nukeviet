@@ -206,9 +206,9 @@
         </div>
         <div class="col-sm-10 col-md-10 text-right margin-bottom-lg">
             <a href="{EDIT_GROUP_URL}" class="btn btn-primary" title="{GLANG.edit}"><i class="fa fa-pencil-square-o"></i></a>
-            <!-- BEGIN: push_notifications -->
-            <a href="{PUSH_NOTIFICATIONS_URL}" class="btn btn-primary" title="{GLANG.push_notifications}"><i class="fa fa-bell-o"></i></a>
-            <!-- END: push_notifications -->
+            <!-- BEGIN: inform_notifications -->
+            <a href="{INFORM_NOTIFICATIONS_URL}" class="btn btn-primary" title="{GLANG.inform_notifications}"><i class="fa fa-bell-o"></i></a>
+            <!-- END: inform_notifications -->
             <!-- BEGIN: add_user -->
             <a href="{MODULE_URL}=register/{GID}" class="btn btn-primary" title="{LANG.addusers}"><i class="fa fa-user-plus"></i></a>
             <!-- END: add_user -->
@@ -367,12 +367,12 @@
 </form>
 <!-- END: editgroup -->
 
-<!-- BEGIN: push_notifications -->
+<!-- BEGIN: inform_notifications -->
 <div class="container-fluid margin-top-lg margin-bottom">
     <div class="row">
         <div class="col-xs-14">
             <div class="margin-bottom">{LANG.group}: {GTITLE}</div>
-            <h2>{GLANG.push_notifications}</h2>
+            <h2>{GLANG.inform_notifications}</h2>
         </div>
         <div class="col-xs-10 text-right">
             <a href="{GROUP_MANAGER_URL}" class="btn btn-primary" title="{LANG.group_manage}"><i class="fa fa-reply"></i> {LANG.group_manage}</a>
@@ -380,18 +380,18 @@
     </div>
 </div>
 <div class="container-fluid">
-    <div class="row"><div id="push_notifications" class="col-xs-24" data-ajax-url="{PUSH_MANAGER_URL}"></div></div>
+    <div class="row"><div id="inform_notifications" class="col-xs-24" data-ajax-url="{INFORM_MANAGER_URL}"></div></div>
 </div>
 <script>
 $(function() {
-    var pushObj = $('#push_notifications');
+    var informObj = $('#inform_notifications');
     $.ajax({
         type: "GET",
-        url: pushObj.data('ajax-url'),
+        url: informObj.data('ajax-url'),
         success: function(a) {
-            pushObj.html(a)
+            informObj.html(a)
         }
     });
 })
 </script>
-<!-- END: push_notifications -->
+<!-- END: inform_notifications -->

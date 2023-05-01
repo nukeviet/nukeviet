@@ -2848,7 +2848,7 @@ function add_notification($args)
 {
     global $global_config, $db;
 
-    if (empty($global_config['push_active'])) {
+    if (empty($global_config['inform_active'])) {
         return false;
     }
 
@@ -2862,7 +2862,7 @@ function add_notification($args)
         'message' => [],
         'link' => '',
         'add_time' => NV_CURRENTTIME,
-        'exp_time' => !empty($global_config['push_default_exp']) ? (NV_CURRENTTIME + (int) $global_config['push_default_exp']) : 0
+        'exp_time' => !empty($global_config['inform_default_exp']) ? (NV_CURRENTTIME + (int) $global_config['inform_default_exp']) : 0
     ];
     $data = array_merge($data, $args);
 
@@ -2893,7 +2893,7 @@ function add_notification($args)
         str_starts_with($data['link'], NV_BASE_SITEURL) && $data['link'] = substr($data['link'], strlen(NV_BASE_SITEURL));
     }
 
-    $sth = $db->prepare('INSERT INTO ' . NV_PUSH_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
+    $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . ' (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
     (:receiver_grs, :receiver_ids, :sender_role, ' . $data['sender_group'] . ', ' . $data['sender_admin'] . ', :message, :link, ' . $data['add_time'] . ', ' . $data['exp_time'] . ')');
     $sth->bindValue(':receiver_grs', $data['receiver_grs'], PDO::PARAM_STR);
     $sth->bindValue(':receiver_ids', $data['receiver_ids'], PDO::PARAM_STR);

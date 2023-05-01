@@ -365,7 +365,7 @@ $lang_global['unviewed'] = 'Chưa đọc';
 $lang_global['favorite'] = 'Yêu thích';
 $lang_global['viewall'] = 'Xem tất cả';
 $lang_global['refresh'] = 'Làm mới';
-$lang_global['push_notifications'] = 'Thông báo đẩy';
+$lang_global['inform_notifications'] = 'Thông báo';
 
 $lang_global['apply'] = 'Áp dụng';
 $lang_global['custom_range'] = 'Khác';

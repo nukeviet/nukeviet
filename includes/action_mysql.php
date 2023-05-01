@@ -13,7 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-define('NV_MODULE_SETUP_DEFAULT', 'users,push,statistics,banners,zalo,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification,myapi');
+define('NV_MODULE_SETUP_DEFAULT', 'users,inform,statistics,banners,zalo,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification,myapi');
 
 /**
  * @param string $table_des
@@ -178,7 +178,7 @@ function nv_create_table_sys($lang)
          ('zalo', 'zalo', 'zalo', 'zalo', 'zalo', 'Zalo', 'Zalo', 1626512400, 0, 1, '', '', '', '', '0', 2, 1, '', 1, 1),
          ('news', 'news', 'news', 'news', 'news', 'News', '', 1626512400, 1, 1, '', '', '', '', '0', 3, 1, '', 1, 1),
          ('users', 'users', 'users', 'users', 'users', 'Users', 'Users', 1626512400, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 1),
-         ('push', 'push', 'push', 'push', 'push', 'Push', 'Push', 1626512400, 1, 1, '', '', '', '', '0', 5, 1, '', 0, 1),
+         ('inform', 'inform', 'inform', 'inform', 'inform', 'Inform', 'Inform', 1626512400, 1, 1, '', '', '', '', '0', 5, 1, '', 0, 1),
          ('contact', 'contact', 'contact', 'contact', 'contact', 'Contact', '', 1626512400, 1, 1, '', '', '', '', '0', 6, 1, '', 0, 1),
          ('statistics', 'statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1626512400, 1, 0, '', '', '', '', '0', 7, 1, '', 0, 1),
          ('voting', 'voting', 'voting', 'voting', 'voting', 'Voting', '', 1626512400, 1, 1, '', '', '', '', '0', 8, 1, '', 1, 1),

@@ -595,8 +595,8 @@ if (sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $ar
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-// Quản lý thông báo đẩy
-if (!empty($global_config['push_active']) and sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $array_op[2] == 'push') {
+// Quản lý thông báo
+if (!empty($global_config['inform_active']) and sizeof($array_op) == 3 and $array_op[0] == 'groups' and $array_op[1] and $array_op[2] == 'inform') {
     $group_id = (int) $array_op[1];
     if (!isset($groupsList[$group_id]) or !($group_id < 4 or $group_id > 9)) {
         nv_redirect_location($page_url);
@@ -607,17 +607,17 @@ if (!empty($global_config['push_active']) and sizeof($array_op) == 3 and $array_
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
     }
 
-    $page_url .= '/' . $group_id . '/push';
+    $page_url .= '/' . $group_id . '/inform';
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('GROUP_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id);
-    $xtpl->assign('PUSH_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=push&amp;manager=' . $group_id . '&amp;filter=active');
+    $xtpl->assign('INFORM_MANAGER_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=inform&amp;manager=' . $group_id . '&amp;filter=active');
     $xtpl->assign('GTITLE', $groupsList[$group_id]['title']);
 
-    $xtpl->parse('push_notifications');
-    $contents = $xtpl->text('push_notifications');
+    $xtpl->parse('inform_notifications');
+    $contents = $xtpl->text('inform_notifications');
 
     $canonicalUrl = getCanonicalUrl($page_url);
 
@@ -667,9 +667,9 @@ if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
     $xtpl->assign('EDIT_GROUP_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id . '/edit');
 
     if ($group_id > 9) {
-        if (!empty($global_config['push_active'])) {
-            $xtpl->assign('PUSH_NOTIFICATIONS_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id . '/push');
-            $xtpl->parse('userlist.tools.push_notifications');
+        if (!empty($global_config['inform_active'])) {
+            $xtpl->assign('INFORM_NOTIFICATIONS_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . $group_id . '/inform');
+            $xtpl->parse('userlist.tools.inform_notifications');
         }
         if ($groupsList[$group_id]['config']['access_groups_add'] != 0) {
             $xtpl->parse('userlist.tools.addUserGroup');

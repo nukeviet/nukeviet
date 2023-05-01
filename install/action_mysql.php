@@ -333,7 +333,7 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_notification (
   KEY logic_mode (logic_mode)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_push (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_inform (
   id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   receiver_grs VARCHAR(1000) NOT NULL DEFAULT '',
   receiver_ids VARCHAR(1000) NOT NULL DEFAULT '',
@@ -347,7 +347,7 @@ $sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_push (
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_push_status (
+$sql_create_table[] = 'CREATE TABLE ' . $db_config['prefix'] . "_inform_status (
   pid INT(11) UNSIGNED NOT NULL,
   userid INT(11) UNSIGNED NOT NULL,
   shown_time INT(11) UNSIGNED NOT NULL DEFAULT '0',
