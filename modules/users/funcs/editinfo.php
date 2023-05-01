@@ -1005,7 +1005,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
     $openid_mess = [];
     foreach ($openid_del as $o) {
-        list($opid,$server) = explode('_', $o, 2);
+        list($opid, $server) = explode('_', $o, 2);
         if (!(!empty($user_info['openid_server']) and $user_info['openid_server'] == $server and !empty($user_info['current_openid'] and $user_info['current_openid'] == $opid))) {
             $stmt = $db->prepare('DELETE FROM ' . NV_MOD_TABLE . '_openid WHERE openid=:openid AND opid=:opid');
             $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
@@ -1058,9 +1058,27 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         foreach ($in_groups_del as $gid) {
             nv_groups_del_user($gid, $edit_userid, $module_data);
             if (in_array($gid, $groups_list['share'], true)) {
-                add_push([
+                $messages = [];
+                foreach ($global_config['setup_langs'] as $lang) {
+                    if ($lang == NV_LANG_DATA) {
+                        $messages[NV_LANG_DATA] = sprintf($lang_module['info_when_leaving_group'], $groups_list['all'][$gid]['title']);
+                    } else {
+                        $group_title = $db->query('SELECT title FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id=' . $gid . " AND lang='" . $lang . "'")->fetchColumn();
+                        $lang_module_temp = $lang_module;
+                        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
+                            include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
+                        } else {
+                            include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
+                        }
+                        $messages[$lang] = sprintf($lang_module['info_when_leaving_group'], $group_title);
+                        $lang_module = $lang_module_temp;
+                    }
+                }
+
+                add_notification([
                     'receiver_ids' => [$edit_userid],
-                    'message' => sprintf($lang_module['info_when_leaving_group'], $groups_list['all'][$gid]['title']),
+                    'isdef' => 'en',
+                    'message' => $messages,
                     'exp_time' => NV_CURRENTTIME + 86400
                 ]);
             }
@@ -1093,11 +1111,29 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                         }
                     }
                 } elseif (in_array($gid, $groups_list['share'], true)) {
-                    add_push([
+                    $messages = [];
+                    foreach ($global_config['setup_langs'] as $lang) {
+                        if ($lang == NV_LANG_DATA) {
+                            $messages[NV_LANG_DATA] = sprintf($lang_module['welcome_new_member'], $groups_list['all'][$gid]['title']);
+                        } else {
+                            $group_title = $db->query('SELECT title FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id=' . $gid . " AND lang='" . $lang . "'")->fetchColumn();
+                            $lang_module_temp = $lang_module;
+                            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
+                                include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
+                            } else {
+                                include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
+                            }
+                            $messages[$lang] = sprintf($lang_module['welcome_new_member'], $group_title);
+                            $lang_module = $lang_module_temp;
+                        }
+                    }
+
+                    add_notification([
                         'receiver_ids' => [$edit_userid],
                         'sender_role' => 'group',
                         'sender_group' => $gid,
-                        'message' => sprintf($lang_module['welcome_new_member'], $groups_list['all'][$gid]['title']),
+                        'isdef' => 'en',
+                        'message' => $messages,
                         'exp_time' => NV_CURRENTTIME + 86400
                     ]);
                 }

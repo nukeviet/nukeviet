@@ -52,7 +52,7 @@ function get_checknum($userid)
  */
 function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 {
-    global $db, $global_config, $nv_Request, $lang_module, $global_users_config, $module_name, $client_info;
+    global $db, $global_config, $nv_Request, $lang_module, $global_users_config, $module_name, $module_file, $client_info;
 
     $remember = (int) $remember;
     $checknum = get_checknum($array_user['userid']);
@@ -107,10 +107,27 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 
     // Tạo thông báo đẩy nếu đăng nhập lần đầu
     if (empty($array_user['last_login'])) {
-        add_push([
+        $messages = [];
+        foreach ($global_config['setup_langs'] as $lang) {
+            if ($lang == NV_LANG_DATA) {
+                $messages[NV_LANG_DATA] = sprintf($lang_module['welcome_new_account'], $global_config['site_name']);
+            } else {
+                $site_name = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name='site_name' AND lang='" . $lang . "' AND module='global'")->fetchColumn();
+                $lang_module_temp = $lang_module;
+                if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
+                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
+                } else {
+                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
+                }
+                $messages[$lang] = sprintf($lang_module['welcome_new_account'], $site_name);
+                $lang_module = $lang_module_temp;
+            }
+        }
+        add_notification([
             'receiver_ids' => [$array_user['userid']],
-            'message' => sprintf($lang_module['welcome_new_account'], $global_config['site_name']),
-            'link' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true)
+            'isdef' => 'en',
+            'message' => $messages,
+            'link' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name, true)
         ]);
     }
 

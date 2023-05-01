@@ -2827,7 +2827,7 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
 }
 
 /**
- * add_push()
+ * add_notification()
  * $args có thể chứa các phần tử:
  * receiver_grs (dạng mảng): Danh sách ID của các nhóm nhận thông báo
  * receiver_ids (dạng mảng): Danh sách ID của người dùng nhận thông báo.
@@ -2835,7 +2835,8 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
  * sender_role (dạng chuỗi): Gửi từ (gồm: system, group, admin)
  * sender_group (dạng số):   ID của nhóm gửi thông báo (sử dụng khi sender_role là group)
  * sender_admin (dạng số):   ID của admin gửi thông báo (sử dụng khi sender_role là admin)
- * message (dạng chuỗi):     Nội dung thông báo (bắt buộc)
+ * isdef (dạng chuỗi):       Mã ngôn ngữ của tin nhắn mặc định (bắt buộc)
+ * message (dạng mảng):      Nội dung thông báo (bắt buộc, có dạng ['mã ngôn ngữ 1' => 'Nội dung 1', 'mã ngôn ngữ 2' => 'Nội dung 2'])
  * link (dạng chuỗi):        Liên kết của thông báo
  * add_time (dạng số):       Thời gian đăng thông báo (0 = thời gian hiển thị đầu tiên)
  * exp_time (dạng số):       Thời gian hết hạn thông báo (0 = vô thời hạn)
@@ -2843,7 +2844,7 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
  * @param array $args
  * @return false|string
  */
-function add_push($args)
+function add_notification($args)
 {
     global $global_config, $db;
 
@@ -2857,12 +2858,17 @@ function add_push($args)
         'sender_role' => 'system',
         'sender_group' => 0,
         'sender_admin' => 0,
-        'message' => '',
+        'isdef' => '',
+        'message' => [],
         'link' => '',
         'add_time' => NV_CURRENTTIME,
         'exp_time' => !empty($global_config['push_default_exp']) ? (NV_CURRENTTIME + (int) $global_config['push_default_exp']) : 0
     ];
     $data = array_merge($data, $args);
+
+    if (empty($data['isdef']) or !in_array($data['isdef'], $global_config['setup_langs'], true) or empty($data['message']) or empty($data['message'][$data['isdef']]) or nv_strlen($data['message'][$data['isdef']]) < 3) {
+        return false;
+    }
 
     if (!(!empty($data['message']) and ($data['sender_role'] == 'system' or ($data['sender_role'] == 'group' and !empty($data['sender_group'])) or ($data['sender_role'] == 'admin' and !empty($data['sender_admin']))))) {
         return false;
@@ -2871,7 +2877,18 @@ function add_push($args)
     $data['receiver_grs'] = !empty($data['receiver_grs']) ? implode(',', $data['receiver_grs']) : '';
     $data['sender_role'] == 'group' && $data['receiver_grs'] = '';
     $data['receiver_ids'] = !empty($data['receiver_ids']) ? implode(',', $data['receiver_ids']) : '';
-    $data['message'] = nv_nl2br(strip_tags($data['message'], '<br>'), '<br/>');
+
+    $contents = [];
+    foreach ($data['message'] as $lang => $message) {
+        if (nv_strlen($message) >= 3 and in_array($lang, $global_config['setup_langs'], true)) {
+            $contents[$lang] = nv_nl2br(strip_tags($message, '<br>'), '<br/>');
+        }
+    }
+    $data['message'] = json_encode([
+        'isdef' => $data['isdef'],
+        'contents' => $contents
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
     if (!empty($data['link']) and !preg_match('#^https?\:\/\/#', $data['link'])) {
         str_starts_with($data['link'], NV_BASE_SITEURL) && $data['link'] = substr($data['link'], strlen(NV_BASE_SITEURL));
     }
