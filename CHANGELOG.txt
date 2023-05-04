@@ -13,6 +13,8 @@ NUKEVIET 4.4.07:
 - Ckeditor v4.21.0
 - Jquery v3.6.4
 - DOMPurify 3.0.2
+- Fix rewrite
+- Don't allow config_ini to be written to unauthorized domains
 
 NUKEVIET 4.4.06:
 - Fix sorting topic module news (#3521), fix error in view topic (#3520)
