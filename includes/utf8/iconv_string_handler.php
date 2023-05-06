@@ -108,7 +108,7 @@ function nv_strrpos($haystack, $needle, $offset = 0)
 {
     global $global_config;
 
-    return iconv_strrpos($haystack, $needle, $offset, $global_config['site_charset']);
+    return iconv_strrpos($haystack, $needle, $global_config['site_charset']);
 }
 
 /**
