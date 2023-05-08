@@ -121,7 +121,7 @@ function BoldKeywordInStr($str, $keyword)
 }
 
 $key = $nv_Request->get_title('q', 'get', '');
-$key = str_replace(["'", '"', '<', '>', '&#039;', '&quot;', '&lt;', '&gt;'], '', $key);
+$key = str_replace(["'", '"', '<', '>', '&#039;', '&quot;', '&lt;', '&gt;', '\\'], '', $key);
 $key = str_replace('+', ' ', urldecode($key));
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
 $keyhtml = nv_htmlspecialchars($key);
