@@ -335,9 +335,13 @@ $(document).ready(function() {
         var input = $("#fsea input[name=q]"),
             maxlength = input.attr("maxlength"),
             minlength = input.attr("data-minlength"),
-            q = strip_tags(trim(input.val()));
-        input.parent().removeClass("has-error");
+            q = trim(strip_tags(input.val()).replace(/[\'\"\<\>\\]/gi, ''));
+        input.val(q).parent().removeClass("has-error");
         "" == q || q.length < minlength || q.length > maxlength ? (input.parent().addClass("has-error"), input.val(q).focus()) : window.location.href = $(this).data("href") + rawurlencode(q)
+    });
+
+    $("#fsea input[name=q]").on('input', function() {
+        return $(this).val($(this).val().replace(/[\'\"\<\>\\]/gi, ''))
     });
 
     // Xóa tin

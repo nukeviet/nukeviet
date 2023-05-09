@@ -63,15 +63,13 @@
 
             var form = $(this).parents('form'),
                 url = form.attr('action'),
-                query = $('[name=q]', form).val(),
+                query = trim(strip_tags($('[name=q]', form).val()).replace(/[\'\"\<\>\\\\]/g,'')),
                 mod = $('[name=m]', form).val(),
                 lg = parseInt($('[name=l]:checked', form).val()),
                 min = parseInt($('[name=q]', form).data('minlength')),
                 max = parseInt($('[name=q]', form).attr('maxlength'));
 
             form.bind('submit',function(e){e.preventDefault();});
-
-            query = strip_tags(trim(query));
             $('[name=q]', form).val(query);
             leng = query.length;
             if (!leng || min > query.length || max < query.length) {
@@ -91,12 +89,16 @@
             window.location.href = url;
         });
 
+        $("#form_search [name=q]").on('input', function() {
+            return $(this).val($(this).val().replace(/[\'\"\<\>\\\\]/gi, ''))
+        });
+
         $("a.advSearch").on('click', function(e) {
             e.preventDefault();
 
             var form = $(this).parents('form'),
                 b = $('[name=m]', form).val(),
-                query = $('[name=q]', form).val(),
+                query = trim(strip_tags($('[name=q]', form).val()).replace(/[\'\"\<\>\\\\]/gi, '')),
                 min = parseInt($('[name=q]', form).data('minlength')),
                 max = parseInt($('[name=q]', form).attr('maxlength')),
                 url;
@@ -106,7 +108,6 @@
                 return !1
             }
 
-            query = strip_tags(trim(query));
             $('[name=q]', form).val(query);
             leng = query.length;
             if (!leng || min > query.length || max < query.length) {

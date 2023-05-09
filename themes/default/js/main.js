@@ -216,13 +216,15 @@ $(function() {
         $(this).attr("data-click", "n");
         var a = $(".headerSearch input"),
             c = a.attr("maxlength"),
-            b = strip_tags(a.val()),
+            b = trim(strip_tags(a.val()).replace(/[\'\"\<\>\\]/gi, '')),
             d = $(this).attr("data-minlength");
-        a.parent().removeClass("has-error");
+        a.val(b).parent().removeClass("has-error");
         "" == b || b.length < d || b.length > c ? (a.parent().addClass("has-error"), a.val(b).focus(), $(this).attr("data-click", "y")) : window.location.href = $(this).attr("data-url") + rawurlencode(b);
         return !1
     });
-    $(".headerSearch input").on("keypress", function(a) {
+    $(".headerSearch input").on('input', function(e) {
+        return $(this).val($(this).val().replace(/[\'\"\<\>\\]/gi, ''))
+    }).on("keypress", function(a) {
         13 != a.which || a.shiftKey || (a.preventDefault(), $(".headerSearch button").trigger("click"))
     });
 
