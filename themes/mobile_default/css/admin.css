@@ -76,9 +76,38 @@
     opacity: 1;
 }
 
-.column .add em {
+.column .ic::before {
     display: inline-block;
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    line-height: 1;
     vertical-align: middle;
+}
+
+.column .add > .ic::before {
+    content: "\f067";
+}
+
+.column .block_content:not(.add) > .ic::before {
+    content: "\f0ad";
+}
+
+.column .delblock > .ic::before {
+    content: "\f1f8";
+}
+
+.column .actblock > .ic::before {
+    content: "\f046";
+}
+
+.column .actblock > .ic.act0::before {
+    content: "\f096";
+}
+
+.column .outgroupblock > .ic::before {
+    content: "\f045";
 }
 
 .portlet {
