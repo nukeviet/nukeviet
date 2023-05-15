@@ -20,7 +20,9 @@ if (!defined('NV_IS_AJAX')) {
 $userids = $nv_Request->get_title('userid', 'post', '');
 $userids = array_filter(array_unique(array_map('intval', array_map('trim', explode(',', $userids)))));
 $setactive = $nv_Request->get_int('setactive', 'post', -1);
-if (!defined('NV_IS_USER_FORUM') and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_string('checkss', 'post')) {
+$is_setactive = (in_array('setactive', $allow_func, true) and !defined('NV_IS_USER_FORUM')) ? true : false;
+
+if ($is_setactive and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_string('checkss', 'post')) {
     foreach ($userids as $userid) {
         if (!$userid or $admin_info['admin_id'] == $userid) {
             continue;
@@ -37,6 +39,7 @@ if (!defined('NV_IS_USER_FORUM') and md5(NV_CHECK_SESSION . '_' . $module_name .
             $level = (int) $level;
         }
 
+        // Chỉ cho thao tác với thành viên thường hoặc quản trị dưới cấp
         if (empty($level) or $admin_info['level'] < $level) {
             if ($global_config['idsite'] > 0 and $idsite != $global_config['idsite']) {
                 continue;
@@ -59,4 +62,5 @@ if (!defined('NV_IS_USER_FORUM') and md5(NV_CHECK_SESSION . '_' . $module_name .
 
     $nv_Cache->delMod($module_name);
 }
+
 nv_htmlOutput('OK');
