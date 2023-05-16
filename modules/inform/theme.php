@@ -133,7 +133,7 @@ function getlist_theme($items, $generate_page, $group_id, $members)
     if (!empty($items)) {
         foreach ($items as $item) {
             $xtpl->assign('ITEM', $item);
-    
+
             if ($item['status'] == 'waiting') {
                 $xtpl->parse('notifications_list.loop.waiting');
             } elseif ($item['status'] == 'expired') {
@@ -141,7 +141,7 @@ function getlist_theme($items, $generate_page, $group_id, $members)
             } else {
                 $xtpl->parse('notifications_list.loop.active');
             }
-    
+
             if (empty($item['receiver_ids'])) {
                 $xtpl->parse('notifications_list.loop.to_all');
             } else {
@@ -150,18 +150,18 @@ function getlist_theme($items, $generate_page, $group_id, $members)
                     $xtpl->parse('notifications_list.loop.to_member');
                 }
             }
-    
+
             if (!empty($item['message'][1])) {
                 $xtpl->parse('notifications_list.loop.message_1');
             }
-    
+
             if (!empty($item['link'])) {
                 $xtpl->parse('notifications_list.loop.link');
             }
-    
+
             $xtpl->parse('notifications_list.loop');
         }
-    
+
         if (!empty($generate_page)) {
             $xtpl->assign('GENERATE_PAGE', $generate_page);
             $xtpl->parse('notifications_list.generate_page');
@@ -235,6 +235,13 @@ function notification_action_theme($data, $page_url, $checkss)
             'checked' => $lang == $data['isdef'] ? ' checked="checked"' : ''
         ]);
         $xtpl->parse('notification_action.message');
+
+        $xtpl->assign('LINK', [
+            'lang' => $lang,
+            'langname' => $language_array[$lang]['name'],
+            'content' => !empty($data['link'][$lang]) ? $data['link'][$lang] : '',
+        ]);
+        $xtpl->parse('notification_action.link');
     }
 
     for ($i = 0; $i < 24; ++$i) {

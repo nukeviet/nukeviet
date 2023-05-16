@@ -64,6 +64,7 @@ $lang_module['please_select_receiver_group'] = 'Выберите группу в
 $lang_module['empty_is_unlimited'] = 'Пусто = не ограничено';
 $lang_module['please_enter_content'] = 'Поскольку вы выбрали сообщение на «%1$s» по умолчанию, его нельзя оставлять пустым. Пожалуйста, введите сообщение на «%1$s»';
 $lang_module['please_enter_valid_link'] = 'Пожалуйста, введите действительную ссылку';
+$lang_module['please_enter_default_link'] = 'Пожалуйста, не оставляйте ссылку пустой на языке по умолчанию';
 $lang_module['please_enter_valid_add_time'] = 'Пожалуйста, введите действительное время начала';
 $lang_module['please_enter_valid_exp_time'] = 'Пожалуйста, оставьте это поле пустым или введите действительное время окончания';
 $lang_module['status'] = 'Статус';

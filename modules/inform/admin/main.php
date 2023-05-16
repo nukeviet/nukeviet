@@ -131,7 +131,7 @@ if ($action == 'inform_action') {
             'receiver_ids' => $nv_Request->get_typed_array('receiver_ids', 'post', 'int', []),
             'message' => $nv_Request->get_typed_array('message', 'post', 'title', []),
             'isdef' => $nv_Request->get_title('isdef', 'post', ''),
-            'link' => $nv_Request->get_title('link', 'post', ''),
+            'link' => $nv_Request->get_typed_array('link', 'post', 'title', []),
             'add_time' => $nv_Request->get_title('add_time', 'post', ''),
             'add_hour' => $nv_Request->get_int('add_hour', 'post', 0),
             'add_min' => $nv_Request->get_int('add_min', 'post', 0),
@@ -191,10 +191,25 @@ if ($action == 'inform_action') {
             ]);
         }
 
-        if (!empty($postdata['link']) and !nv_is_url($postdata['link'], true)) {
+        $other_link = false;
+        foreach ($postdata['link'] as $lang => $link) {
+            if (!empty($link) and !nv_is_url($link, true)) {
+                nv_jsonOutput([
+                    'status' => 'error',
+                    'mess' => $lang_module['please_enter_valid_link']
+                ]);
+            }
+            if (!empty($link) and $lang != $postdata['isdef']) {
+                $other_link = true;
+            }
+            if (!empty($link) and !preg_match('#^https?\:\/\/#', $link)) {
+                str_starts_with($link, NV_BASE_SITEURL) && $postdata['link'][$lang] = substr($link, strlen(NV_BASE_SITEURL));
+            }
+        }
+        if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['please_enter_valid_link']
+                'mess' => $lang_module['please_enter_default_link']
             ]);
         }
 
@@ -228,9 +243,12 @@ if ($action == 'inform_action') {
             'isdef' => $postdata['isdef'],
             'contents' => $contents
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        if (!empty($postdata['link']) and !preg_match('#^https?\:\/\/#', $postdata['link'])) {
-            str_starts_with($postdata['link'], NV_BASE_SITEURL) && $postdata['link'] = substr($postdata['link'], strlen(NV_BASE_SITEURL));
-        }
+
+        $postdata['link'] = json_encode([
+            'isdef' => $postdata['isdef'],
+            'contents' => $postdata['link']
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
         $postdata['add_time'] = mktime($postdata['add_hour'], $postdata['add_min'], 0, $add_time_array[2], $add_time_array[1], $add_time_array[3]);
         if (!empty($exp_time_array)) {
             $postdata['exp_hour'] == -1 && $postdata['exp_hour'] = 23;
@@ -241,14 +259,14 @@ if ($action == 'inform_action') {
         }
 
         if (!empty($id)) {
-            $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET 
-            receiver_grs = :receiver_grs, receiver_ids = :receiver_ids, sender_role = :sender_role, 
+            $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
+            receiver_grs = :receiver_grs, receiver_ids = :receiver_ids, sender_role = :sender_role,
             sender_group = ' . $postdata['sender_group'] . ', sender_admin = ' . $postdata['sender_admin'] . ',
             message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
             WHERE id = ' . $id);
         } else {
-            $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . ' 
-            (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
+            $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . '
+            (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
             (:receiver_grs, :receiver_ids, :sender_role, ' . $postdata['sender_group'] . ', ' . $postdata['sender_admin'] . ', :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
         }
 
@@ -317,8 +335,23 @@ if ($action == 'inform_action') {
     }
     empty($data['isdef']) && $data['isdef'] = in_array('en', $global_config['setup_langs'], true) ? 'en' : $global_config['setup_langs'][0];
 
-    if (!empty($data['link']) and !preg_match('#^https?\:\/\/#', $data['link'])) {
-        $data['link'] = NV_BASE_SITEURL . $data['link'];
+    // Xử lý lại phần link
+    if (!empty($data['link'])) {
+        $links = json_decode($data['link'], true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $data['link'] = $links['contents'];
+        } else {
+            $data['link'] = [
+                NV_LANG_DATA => $data['link']
+            ];
+        }
+    } else {
+        $data['link'] = [];
+    }
+    foreach ($data['link'] as $lang => $link) {
+        if (!empty($link) and !preg_match('#^https?\:\/\/#', $link)) {
+            $data['link'][$lang] = NV_BASE_SITEURL . $link;
+        }
     }
 
     list($data['add_time_format'], $data['add_hour'], $data['add_min']) = explode('|', date('d/m/Y|H|i', $data['add_time']));
@@ -410,6 +443,13 @@ if ($action == 'inform_action') {
             'checked' => $lang == $data['isdef'] ? ' checked="checked"' : ''
         ]);
         $xtpl->parse('main.message');
+
+        $xtpl->assign('LINK', [
+            'lang' => $lang,
+            'langname' => $language_array[$lang]['name'],
+            'content' => !empty($data['link'][$lang]) ? $data['link'][$lang] : '',
+        ]);
+        $xtpl->parse('main.link');
     }
 
     for ($i = 0; $i < 24; ++$i) {
@@ -514,9 +554,22 @@ while ($row = $result->fetch()) {
     } else {
         $row['message'] = [];
     }
+
+    if (!empty($row['link'])) {
+        $links = json_decode($row['link'], true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            if (!empty($links['contents'][NV_LANG_DATA])) {
+                $row['link'] = $links['contents'][NV_LANG_DATA];
+            } else {
+                $row['link'] = $links['contents'][$links['isdef']];
+            }
+        }
+    }
+
     if (!empty($row['link']) and !preg_match('#^https?\:\/\/#', $row['link'])) {
         $row['link'] = NV_BASE_SITEURL . $row['link'];
     }
+
     if (!($row['sender_role'] == 'admin' and !empty($row['sender_admin'])) and !($row['sender_role'] == 'group' and !empty($row['sender_group']) and !empty($grouplist[$row['sender_group']]))) {
         $row['sender_role'] = 'system';
     }

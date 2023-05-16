@@ -108,26 +108,18 @@ class InformGroupAction implements UiApi
             $postdata['message'] = $nv_Request->get_typed_array('message', 'post', 'title', []);
         }
         if ($nv_Request->isset_request('link', 'post')) {
-            $postdata['link'] = $nv_Request->get_title('link', 'post', '');
+            $postdata['link'] = $nv_Request->get_typed_array('link', 'post', 'title', []);
         }
         if ($nv_Request->isset_request('add_time', 'post')) {
             $postdata['add_time'] = $nv_Request->get_title('add_time', 'post', '');
         }
-        if ($nv_Request->isset_request('add_hour', 'post')) {
-            $postdata['add_hour'] = $nv_Request->get_int('add_hour', 'post', 0);
-        }
-        if ($nv_Request->isset_request('add_min', 'post')) {
-            $postdata['add_min'] = $nv_Request->get_int('add_min', 'post', 0);
-        }
+        $postdata['add_hour'] = $nv_Request->get_int('add_hour', 'post', 0);
+        $postdata['add_min'] = $nv_Request->get_int('add_min', 'post', 0);
         if ($nv_Request->isset_request('exp_time', 'post')) {
             $postdata['exp_time'] = $nv_Request->get_title('exp_time', 'post', '');
         }
-        if ($nv_Request->isset_request('exp_hour', 'post')) {
-            $postdata['exp_hour'] = $nv_Request->get_int('exp_hour', 'post', -1);
-        }
-        if ($nv_Request->isset_request('exp_min', 'post')) {
-            $postdata['exp_min'] = $nv_Request->get_int('exp_min', 'post', -1);
-        }
+        $postdata['exp_hour'] = $nv_Request->get_int('exp_hour', 'post', -1);
+        $postdata['exp_min'] = $nv_Request->get_int('exp_min', 'post', -1);
 
         // Không có dữ liệu
         if (empty($postdata)) {
@@ -196,11 +188,26 @@ class InformGroupAction implements UiApi
                     ->setMessage(sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name']))
                     ->getResult();
             }
-            // Nếu có link, nhưng link không hợp lệ
-            if (!empty($postdata['link']) and !nv_is_url($postdata['link'], true)) {
+            // Nếu có link, nhưng link không hợp lệ hoặc nhập link ở ngôn ngữ khác mà bỏ trống ở ngôn ngữ mặc định
+            $other_link = false;
+            foreach ($postdata['link'] as $lang => $link) {
+                if (!empty($link) and !nv_is_url($link, true)) {
+                    return $this->result->setError()
+                        ->setCode('5010')
+                        ->setMessage($lang_module['please_enter_valid_link'])
+                        ->getResult();
+                }
+                if (!empty($link) and $lang != $postdata['isdef']) {
+                    $other_link = true;
+                }
+                if (!empty($link) and !preg_match('#^https?\:\/\/#', $link)) {
+                    str_starts_with($link, NV_BASE_SITEURL) && $postdata['link'][$lang] = substr($link, strlen(NV_BASE_SITEURL));
+                }
+            }
+            if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
                 return $this->result->setError()
                     ->setCode('5010')
-                    ->setMessage($lang_module['please_enter_valid_link'])
+                    ->setMessage($lang_module['please_enter_default_link'])
                     ->getResult();
             }
             $add_time_array = [];
@@ -231,9 +238,12 @@ class InformGroupAction implements UiApi
                 'isdef' => $postdata['isdef'],
                 'contents' => $contents
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            if (!empty($postdata['link']) and !preg_match('#^https?\:\/\/#', $postdata['link'])) {
-                str_starts_with($postdata['link'], NV_BASE_SITEURL) && $postdata['link'] = substr($postdata['link'], strlen(NV_BASE_SITEURL));
-            }
+
+            $postdata['link'] = json_encode([
+                'isdef' => $postdata['isdef'],
+                'contents' => $postdata['link']
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
             $postdata['add_time'] = mktime($postdata['add_hour'], $postdata['add_min'], 0, $add_time_array[2], $add_time_array[1], $add_time_array[3]);
             if (!empty($exp_time_array)) {
                 $postdata['exp_hour'] == -1 && $postdata['exp_hour'] = 23;
@@ -243,12 +253,12 @@ class InformGroupAction implements UiApi
                 $postdata['exp_time'] = 0;
             }
             if ($postdata['operation'] == 'edit') {
-                $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET 
+                $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
                 receiver_ids = :receiver_ids, message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
                 WHERE id = ' . $postdata['id']);
             } else {
-                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . " 
-                (receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
+                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . "
+                (receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
                 (:receiver_ids, 'group', " . $group_id . ', 0, :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
             }
 

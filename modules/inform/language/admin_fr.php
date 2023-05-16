@@ -64,6 +64,7 @@ $lang_module['please_select_receiver_group'] = 'Veuillez sélectionner un groupe
 $lang_module['empty_is_unlimited'] = 'Le vide est illimité';
 $lang_module['please_enter_content'] = 'Puisque vous avez sélectionné le message en %1$s par défaut, il ne peut pas être laissé vide. Veuillez saisir le message en 1$s';
 $lang_module['please_enter_valid_link'] = 'Veuillez entrer un lien valide';
+$lang_module['please_enter_default_link'] = 'Veuillez ne pas laisser le lien vide dans la langue par défaut';
 $lang_module['please_enter_valid_add_time'] = 'Veuillez entrer une heure de début valide';
 $lang_module['please_enter_valid_exp_time'] = 'Veuillez le laisser vide ou entrer une heure de fin valide';
 $lang_module['status'] = 'Statut';

@@ -94,7 +94,16 @@
     <div class="form-group field">
         <label class="col-md-5 control-label">{LANG.inform_link}</label>
         <div class="col-md-19">
-            <input type="text" name="link" value="{DATA.link}" class="form-control" maxlength="500">
+            <!-- BEGIN: link -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="d-flex mb-sm">
+                        <div>{LINK.langname}</div>
+                    </div>
+                    <input name="link[{LINK.lang}]" class="form-control" maxlength="500" value="{LINK.content}">
+                </div>
+            </div>
+            <!-- END: link -->
         </div>
     </div>
 

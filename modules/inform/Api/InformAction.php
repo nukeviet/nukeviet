@@ -83,9 +83,7 @@ class InformAction implements IApi
         if ($nv_Request->isset_request('id', 'post')) {
             $postdata['id'] = $nv_Request->get_int('id', 'post', 0);
         }
-        if ($nv_Request->isset_request('sender_role', 'post')) {
-            $postdata['sender_role'] = $nv_Request->get_title('sender_role', 'post', '');
-        }
+        $postdata['sender_role'] = $nv_Request->get_title('sender_role', 'post', '');
         if ($nv_Request->isset_request('sender_group', 'post')) {
             $postdata['sender_group'] = $nv_Request->get_int('sender_group', 'post', 0);
         }
@@ -108,26 +106,18 @@ class InformAction implements IApi
             $postdata['message'] = $nv_Request->get_typed_array('message', 'post', 'title', []);
         }
         if ($nv_Request->isset_request('link', 'post')) {
-            $postdata['link'] = $nv_Request->get_title('link', 'post', '');
+            $postdata['link'] = $nv_Request->get_typed_array('link', 'post', 'title', []);
         }
         if ($nv_Request->isset_request('add_time', 'post')) {
             $postdata['add_time'] = $nv_Request->get_title('add_time', 'post', '');
         }
-        if ($nv_Request->isset_request('add_hour', 'post')) {
-            $postdata['add_hour'] = $nv_Request->get_int('add_hour', 'post', 0);
-        }
-        if ($nv_Request->isset_request('add_min', 'post')) {
-            $postdata['add_min'] = $nv_Request->get_int('add_min', 'post', 0);
-        }
+        $postdata['add_hour'] = $nv_Request->get_int('add_hour', 'post', 0);
+        $postdata['add_min'] = $nv_Request->get_int('add_min', 'post', 0);
         if ($nv_Request->isset_request('exp_time', 'post')) {
             $postdata['exp_time'] = $nv_Request->get_title('exp_time', 'post', '');
         }
-        if ($nv_Request->isset_request('exp_hour', 'post')) {
-            $postdata['exp_hour'] = $nv_Request->get_int('exp_hour', 'post', -1);
-        }
-        if ($nv_Request->isset_request('exp_min', 'post')) {
-            $postdata['exp_min'] = $nv_Request->get_int('exp_min', 'post', -1);
-        }
+        $postdata['exp_hour'] = $nv_Request->get_int('exp_hour', 'post', -1);
+        $postdata['exp_min'] = $nv_Request->get_int('exp_min', 'post', -1);
 
         if ($admin_lev > Api::ADMIN_LEV_SP) {
             $postdata['sender_role'] = 'admin';
@@ -187,15 +177,14 @@ class InformAction implements IApi
                 ->getResult();
         }*/
 
-        // Nếu là xóa thông báo
         if ($postdata['operation'] == 'delete') {
+            // Nếu là xóa thông báo
             $db->query('DELETE FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' WHERE pid = ' . $postdata['id']);
             $db->query('DELETE FROM ' . NV_INFORM_GLOBALTABLE . ' WHERE id = ' . $postdata['id']);
             $db->query('OPTIMIZE TABLE ' . NV_INFORM_STATUS_GLOBALTABLE);
             $db->query('OPTIMIZE TABLE ' . NV_INFORM_GLOBALTABLE);
-        }
-        // Nếu là thêm/sửa thông báo
-        elseif ($postdata['operation'] == 'add' or $postdata['operation'] == 'edit') {
+        } elseif ($postdata['operation'] == 'add' or $postdata['operation'] == 'edit') {
+            // Nếu là thêm/sửa thông báo
             !in_array($postdata['sender_role'], ['system', 'group', 'admin'], true) && $postdata['sender_role'] = 'system';
             if ($postdata['sender_role'] == 'system') {
                 $postdata['sender_group'] = 0;
@@ -245,11 +234,26 @@ class InformAction implements IApi
                     ->setMessage(sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name']))
                     ->getResult();
             }
-            // Nếu có link, nhưng link không hợp lệ
-            if (!empty($postdata['link']) and !nv_is_url($postdata['link'], true)) {
+            // Nếu có link, nhưng link không hợp lệ hoặc nhập link ở ngôn ngữ khác mà bỏ trống ở ngôn ngữ mặc định
+            $other_link = false;
+            foreach ($postdata['link'] as $lang => $link) {
+                if (!empty($link) and !nv_is_url($link, true)) {
+                    return $this->result->setError()
+                        ->setCode('5010')
+                        ->setMessage($lang_module['please_enter_valid_link'])
+                        ->getResult();
+                }
+                if (!empty($link) and $lang != $postdata['isdef']) {
+                    $other_link = true;
+                }
+                if (!empty($link) and !preg_match('#^https?\:\/\/#', $link)) {
+                    str_starts_with($link, NV_BASE_SITEURL) && $postdata['link'][$lang] = substr($link, strlen(NV_BASE_SITEURL));
+                }
+            }
+            if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
                 return $this->result->setError()
                     ->setCode('5010')
-                    ->setMessage($lang_module['please_enter_valid_link'])
+                    ->setMessage($lang_module['please_enter_default_link'])
                     ->getResult();
             }
 
@@ -283,9 +287,12 @@ class InformAction implements IApi
                 'isdef' => $postdata['isdef'],
                 'contents' => $contents
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            if (!empty($postdata['link']) and !preg_match('#^https?\:\/\/#', $postdata['link'])) {
-                str_starts_with($postdata['link'], NV_BASE_SITEURL) && $postdata['link'] = substr($postdata['link'], strlen(NV_BASE_SITEURL));
-            }
+
+            $postdata['link'] = json_encode([
+                'isdef' => $postdata['isdef'],
+                'contents' => $postdata['link']
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
             $postdata['add_time'] = mktime($postdata['add_hour'], $postdata['add_min'], 0, $add_time_array[2], $add_time_array[1], $add_time_array[3]);
             if (!empty($exp_time_array)) {
                 $postdata['exp_hour'] == -1 && $postdata['exp_hour'] = 23;
@@ -296,14 +303,14 @@ class InformAction implements IApi
             }
 
             if (!empty($postdata['id'])) {
-                $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET 
-                receiver_grs = :receiver_grs, receiver_ids = :receiver_ids, sender_role = :sender_role, 
+                $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
+                receiver_grs = :receiver_grs, receiver_ids = :receiver_ids, sender_role = :sender_role,
                 sender_group = ' . $postdata['sender_group'] . ', sender_admin = ' . $postdata['sender_admin'] . ',
                 message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
                 WHERE id = ' . $postdata['id']);
             } else {
-                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . ' 
-                (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
+                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . '
+                (receiver_grs, receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
                 (:receiver_grs, :receiver_ids, :sender_role, ' . $postdata['sender_group'] . ', ' . $postdata['sender_admin'] . ', :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
             }
 
