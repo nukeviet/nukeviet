@@ -14,13 +14,6 @@ if (!defined('NV_IS_INFORM')) {
 }
 
 /**
- * main_theme()
- *
- * @param array  $items
- * @param string $generate_page
- * @param string $filter
- * @param array  $grouplist
- * @param array  $adminlist
  * @return string
  */
 function main_theme()
@@ -46,7 +39,14 @@ function main_theme()
     return $xtpl->text('main');
 }
 
-function user_getlist_theme($items, $generate_page, $filter, $grouplist, $adminlist, $page_url)
+/**
+ * @param array $items mảng các thông báo
+ * @param string $generate_page phân trang
+ * @param string $filter kiểu list: tất cả, chưa đọc, yêu thích
+ * @param string $page_url link trang
+ * @return string
+ */
+function user_getlist_theme($items, $generate_page, $filter, $page_url)
 {
     global $global_config, $lang_global, $lang_module, $module_info;
 
@@ -58,17 +58,16 @@ function user_getlist_theme($items, $generate_page, $filter, $grouplist, $adminl
     if (!empty($items)) {
         foreach ($items as $item) {
             if (!empty($item['message'])) {
-                if ($item['sender_role'] == 'group') {
-                    $title = sprintf($lang_module['from_group'], $grouplist[$item['sender_group']]);
+
+                if ($item['sender_avatar'] == 'group') {
                     $xtpl->parse('user_get_list.main_cont.loop.sender_group');
-                } elseif ($item['sender_role'] == 'admin' and !empty($adminlist[$item['sender_admin']])) {
-                    $title = sprintf($lang_module['from_admin'], $adminlist[$item['sender_admin']]);
+                } elseif ($item['sender_avatar'] == 'admin') {
                     $xtpl->parse('user_get_list.main_cont.loop.sender_admin');
                 } else {
-                    $title = sprintf($lang_module['from_system'], $global_config['site_name']);
                     $xtpl->parse('user_get_list.main_cont.loop.sender_system');
                 }
-                $item['title'] = sprintf($lang_module['notification_title'], $title);
+
+                $item['title'] = sprintf($lang_module['notification_title'], $item['title']);
                 $item['is_hidden'] = $filter == 'hidden' ? 1 : 0;
                 $item['is_viewed'] = !empty($item['viewed_time']) ? 1 : 0;
                 $item['is_favorite'] = !empty($item['favorite_time']) ? 1 : 0;
