@@ -58,8 +58,12 @@ if (!empty($global_config['inform_active']) and defined('NV_IS_USER') and !defin
     $xtpl->assign('BLOCK_JS', $block_js);
     $xtpl->assign('REFRESH_TIME', $global_config['inform_refresh_time']);
     $xtpl->assign('FILTER_DEFAULT', $inform_filter_default);
-    $xtpl->assign('INFORM_MODULE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=inform');
+
+    $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=inform';
+    $xtpl->assign('INFORM_MODULE_URL', $url);
+    $xtpl->assign('INFORM_VIEWALL_URL', nv_apply_hook('inform', 'get_all_inform_link', [], $url));
     $xtpl->assign('CHECK_INFORM_URL', NV_BASE_SITEURL . 'sload.php');
+
     $xtpl->assign('USERID', $user_info['userid']);
     $xtpl->assign('USERGROUPS', $u_groups);
     $xtpl->assign('CSRF', md5($user_info['userid'] . $u_groups . NV_CHECK_SESSION));

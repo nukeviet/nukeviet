@@ -22,7 +22,7 @@
         <div class="inform-content"></div>
         <div class="inform-footer">
             <a href="#" data-toggle="informNotifyRefresh">{GLANG.refresh}</a>
-            <a href="{INFORM_MODULE_URL}">{GLANG.viewall}</a>
+            <a href="{INFORM_VIEWALL_URL}">{GLANG.viewall}</a>
         </div>
     </div>
 </div>
