@@ -201,7 +201,7 @@ if (empty($api_request['module'])) {
     }
 
     $role_id = $roles[$testObject];
-    $my_flood_rules = $flood_rules[$testObject];
+    $my_flood_rules = !empty($flood_rules[$testObject]) ? $flood_rules[$testObject] : [];
     $classname = 'NukeViet\\' . $apidir . '\\' . $api_request['action'];
 } else {
     // Api module theo ngôn ngữ
@@ -240,7 +240,7 @@ if (empty($api_request['module'])) {
     $module_info = $sys_mods[$api_request['module']];
     $module_file = $module_info['module_file'];
     $role_id = $roles[$testObject];
-    $my_flood_rules = $flood_rules[$testObject];
+    $my_flood_rules = !empty($flood_rules[$testObject]) ? $flood_rules[$testObject] : [];
     $classname = 'NukeViet\\Module\\' . $module_file . '\\' . $apidir . '\\' . $api_request['action'];
 }
 
