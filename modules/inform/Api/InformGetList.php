@@ -73,8 +73,6 @@ class InformGetList implements IApi
         $admin_id = Api::getAdminId();
         $admin_lev = Api::getAdminLev();
 
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-
         $postdata = [];
         $postdata['page'] = $nv_Request->get_int('page', 'post', 1);
         $postdata['per_page'] = $nv_Request->get_int('per_page', 'post', 20);
@@ -121,6 +119,10 @@ class InformGetList implements IApi
             $messages = json_decode($row['message'], true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $row['message'] = $messages;
+            }
+            $links = json_decode($row['link'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $row['link'] = $links;
             }
             $items[$row['id']] = $row;
         }

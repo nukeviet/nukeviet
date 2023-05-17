@@ -132,7 +132,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 'receiver_ids' => $nv_Request->get_typed_array('receiver_ids', 'post', 'int', []),
                 'message' => $nv_Request->get_typed_array('message', 'post', 'title', []),
                 'isdef' => $nv_Request->get_title('isdef', 'post', ''),
-                'link' => $nv_Request->get_title('link', 'post', ''),
+                'link' => $nv_Request->get_typed_array('link', 'post', 'title', []),
                 'add_time' => $nv_Request->get_title('add_time', 'post', ''),
                 'add_hour' => $nv_Request->get_int('add_hour', 'post', 0),
                 'add_min' => $nv_Request->get_int('add_min', 'post', 0),
@@ -152,10 +152,25 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 ]);
             }
 
-            if (!empty($postdata['link']) and !nv_is_url($postdata['link'], true)) {
+            $other_link = false;
+            foreach ($postdata['link'] as $lang => $link) {
+                if (!empty($link) and !nv_is_url($link, true)) {
+                    nv_jsonOutput([
+                        'status' => 'error',
+                        'mess' => $lang_module['please_enter_valid_link']
+                    ]);
+                }
+                if (!empty($link) and $lang != $postdata['isdef']) {
+                    $other_link = true;
+                }
+                if (!empty($link) and !preg_match('#^https?\:\/\/#', $link)) {
+                    str_starts_with($link, NV_BASE_SITEURL) && $postdata['link'][$lang] = substr($link, strlen(NV_BASE_SITEURL));
+                }
+            }
+            if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_valid_link']
+                    'mess' => $lang_module['please_enter_default_link']
                 ]);
             }
 
@@ -192,9 +207,12 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 'isdef' => $postdata['isdef'],
                 'contents' => $contents
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            if (!empty($postdata['link']) and !preg_match('#^https?\:\/\/#', $postdata['link'])) {
-                str_starts_with($postdata['link'], NV_BASE_SITEURL) && $postdata['link'] = substr($postdata['link'], strlen(NV_BASE_SITEURL));
-            }
+
+            $postdata['link'] = json_encode([
+                'isdef' => $postdata['isdef'],
+                'contents' => $postdata['link']
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
             $postdata['add_time'] = mktime($postdata['add_hour'], $postdata['add_min'], 0, $add_time_array[2], $add_time_array[1], $add_time_array[3]);
             if (!empty($exp_time_array)) {
                 $postdata['exp_hour'] == -1 && $postdata['exp_hour'] = 23;
@@ -205,12 +223,12 @@ if ($nv_Request->isset_request('manager', 'get')) {
             }
 
             if (!empty($id)) {
-                $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET 
+                $sth = $db->prepare('UPDATE ' . NV_INFORM_GLOBALTABLE . ' SET
                 receiver_ids = :receiver_ids, message = :message, link = :link, add_time = ' . $postdata['add_time'] . ', exp_time = ' . $postdata['exp_time'] . '
                 WHERE id = ' . $id);
             } else {
-                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . " 
-                (receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES 
+                $sth = $db->prepare('INSERT INTO ' . NV_INFORM_GLOBALTABLE . "
+                (receiver_ids, sender_role, sender_group, sender_admin, message, link, add_time, exp_time) VALUES
                 (:receiver_ids, 'group', " . $group_id . ', 0, :message, :link, ' . $postdata['add_time'] . ', ' . $postdata['exp_time'] . ')');
             }
 
@@ -242,9 +260,25 @@ if ($nv_Request->isset_request('manager', 'get')) {
         }
         empty($data['isdef']) && $data['isdef'] = in_array('en', $global_config['setup_langs'], true) ? 'en' : $global_config['setup_langs'][0];
 
-        if (!empty($data['link']) and !preg_match('#^https?\:\/\/#', $data['link'])) {
-            $data['link'] = NV_BASE_SITEURL . $data['link'];
+        // Xử lý lại phần link
+        if (!empty($data['link'])) {
+            $links = json_decode($data['link'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $data['link'] = $links['contents'];
+            } else {
+                $data['link'] = [
+                    NV_LANG_DATA => $data['link']
+                ];
+            }
+        } else {
+            $data['link'] = [];
         }
+        foreach ($data['link'] as $lang => $link) {
+            if (!empty($link) and !preg_match('#^https?\:\/\/#', $link)) {
+                $data['link'][$lang] = NV_BASE_SITEURL . $link;
+            }
+        }
+
         list($data['add_time'], $data['add_hour'], $data['add_min']) = explode('|', date('d/m/Y|H|i', $data['add_time']));
         if (!empty($data['exp_time'])) {
             list($data['exp_time'], $data['exp_hour'], $data['exp_min']) = explode('|', date('d/m/Y|H|i', $data['exp_time']));
@@ -305,7 +339,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
                     $row['message'] = $messages['contents'][$messages['isdef']];
                 }
             }
-    
+
             if (!empty($row['message'])) {
                 $row['message'] = preg_replace('/(\<\/?br\s*\/?\>)+/', '<br/>', $row['message']);
                 $row['message'] = text_split($row['message'], 120);
@@ -315,6 +349,18 @@ if ($nv_Request->isset_request('manager', 'get')) {
         } else {
             $row['message'] = [];
         }
+
+        if (!empty($row['link'])) {
+            $links = json_decode($row['link'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if (!empty($links['contents'][NV_LANG_DATA])) {
+                    $row['link'] = $links['contents'][NV_LANG_DATA];
+                } else {
+                    $row['link'] = $links['contents'][$links['isdef']];
+                }
+            }
+        }
+
         if (!empty($row['link']) and !preg_match('#^https?\:\/\/#', $row['link'])) {
             $row['link'] = NV_BASE_SITEURL . $row['link'];
         }
@@ -399,6 +445,8 @@ if ($nv_Request->isset_request('setStatus', 'post')) {
     }
     $id = $nv_Request->get_int('id', 'post', 0);
     if (!empty($status) and $id) {
+        nv_apply_hook($module_name, 'set_status_inform', [$id, $status, $user_info]);
+
         switch ($status) {
             case 'viewed':
                 $field_name = 'viewed_time';
@@ -468,86 +516,121 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
     }
     $per_page = defined('NV_IS_AJAX') ? $global_config['inform_numrows'] : 20;
 
-    if ($filter == 'unviewed') {
-        $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND (exc.viewed_time != 0 OR exc.hidden_time != 0))';
-    } elseif ($filter == 'favorite') {
-        $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND (exc.favorite_time != 0 AND exc.hidden_time = 0))';
-    } elseif ($filter == 'hidden') {
-        $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND exc.hidden_time != 0)';
-    } else {
-        $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND exc.hidden_time != 0)';
-    }
+    list ($num_items, $items, $count) = nv_apply_hook($module_name, 'get_list_inform', [
+        $user_info,
+        $filter,
+        $page,
+        $per_page
+    ], [null, null, null]);
 
-    $db->sqlreset()
+    if (is_null($num_items)) {
+        if ($filter == 'unviewed') {
+            $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND (exc.viewed_time != 0 OR exc.hidden_time != 0))';
+        } elseif ($filter == 'favorite') {
+            $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND (exc.favorite_time != 0 AND exc.hidden_time = 0))';
+        } elseif ($filter == 'hidden') {
+            $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND exc.hidden_time != 0)';
+        } else {
+            $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_info['userid'] . ' AND exc.hidden_time != 0)';
+        }
+
+        $db->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
         ->where($where);
 
-    $num_items = $db->query($db->sql())
-        ->fetchColumn();
-    if ($num_items) {
-        // Không cho tùy ý đánh số page + xác định trang trước, trang sau
-        betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
-    }
+        $num_items = $db->query($db->sql())->fetchColumn();
+        if ($num_items) {
+            // Không cho tùy ý đánh số page + xác định trang trước, trang sau
+            betweenURLs($page, ceil($num_items / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
+        }
 
-    $generate_page = !defined('NV_IS_AJAX') ? nv_generate_page($base_url, $num_items, $per_page, $page, true, true) : '';
-
-    $db->select('mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time')
+        $db->select('mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time')
         ->join('LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = ' . $user_info['userid'] . ')')
         ->order('mtb.add_time DESC')
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
-    $result = $db->query($db->sql());
-    $items = [];
-    $notshown = [];
-    $adminlist = admins_list();
-    $grouplist = groups_list();
-    while ($row = $result->fetch()) {
-        if (!empty($row['message'])) {
-            $messages = json_decode($row['message'], true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                if (!empty($messages['contents'][NV_LANG_DATA])) {
-                    $row['message'] = $messages['contents'][NV_LANG_DATA];
-                } else {
-                    $row['message'] = $messages['contents'][$messages['isdef']];
-                }
-            }
-    
+        $result = $db->query($db->sql());
+
+        $items = [];
+        $notshown = [];
+        $adminlist = admins_list();
+        $grouplist = groups_list();
+
+        while ($row = $result->fetch()) {
             if (!empty($row['message'])) {
-                $row['message'] = preg_replace('/\<\/?br\s*\/?\>/', '<br/>', $row['message']);
-                $row['message'] = text_split($row['message'], 120);
+                $messages = json_decode($row['message'], true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    if (!empty($messages['contents'][NV_LANG_DATA])) {
+                        $row['message'] = $messages['contents'][NV_LANG_DATA];
+                    } else {
+                        $row['message'] = $messages['contents'][$messages['isdef']];
+                    }
+                }
+
+                if (!empty($row['message'])) {
+                    $row['message'] = preg_replace('/\<\/?br\s*\/?\>/', '<br/>', $row['message']);
+                    $row['message'] = text_split($row['message'], 120);
+                } else {
+                    $row['message'] = [];
+                }
             } else {
                 $row['message'] = [];
             }
-        } else {
-            $row['message'] = [];
-        }
-        if (!($row['sender_role'] == 'admin' and !empty($row['sender_admin'])) and !($row['sender_role'] == 'group' and !empty($row['sender_group']) and !empty($grouplist[$row['sender_group']]))) {
-            $row['sender_role'] = 'system';
-        }
-        if (empty($row['shown_time'])) {
-            $notshown[] = $row['id'];
-        }
 
-        $items[$row['id']] = $row;
-    }
+            if (!empty($row['link'])) {
+                $links = json_decode($row['link'], true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    if (!empty($links['contents'][NV_LANG_DATA])) {
+                        $row['link'] = $links['contents'][NV_LANG_DATA];
+                    } else {
+                        $row['link'] = $links['contents'][$links['isdef']];
+                    }
+                }
+            }
 
-    if (!empty($notshown)) {
-        foreach ($notshown as $id) {
-            if (empty($item[$id]['viewed_time']) and empty($item[$id]['favorite_time']) and empty($item[$id]['hidden_time'])) {
-                $db->query('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, shown_time) VALUES (' . $id . ', ' . $user_info['userid'] . ', ' . NV_CURRENTTIME . ')');
+            if (!($row['sender_role'] == 'admin' and !empty($row['sender_admin'])) and !($row['sender_role'] == 'group' and !empty($row['sender_group']) and !empty($grouplist[$row['sender_group']]))) {
+                $row['sender_role'] = 'system';
+            }
+            if (empty($row['shown_time'])) {
+                $notshown[] = $row['id'];
+            }
+
+            if ($row['sender_role'] == 'group') {
+                $title = sprintf($lang_module['from_group'], $grouplist[$row['sender_group']]);
+                $row['sender_avatar'] = 'group';
+            } elseif ($row['sender_role'] == 'admin' and !empty($adminlist[$row['sender_admin']])) {
+                $title = sprintf($lang_module['from_admin'], $adminlist[$row['sender_admin']]);
+                $row['sender_avatar'] = 'admin';
             } else {
-                $db->query('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET shown_time = ' . NV_CURRENTTIME . ' WHERE pid=' . $id . ' AND userid=' . $user_info['userid']);
+                $title = sprintf($lang_module['from_system'], $global_config['site_name']);
+                $row['sender_avatar'] = 'system';
+            }
+            $row['title'] = $title;
+
+            $items[$row['id']] = $row;
+        }
+
+        if (!empty($notshown)) {
+            foreach ($notshown as $id) {
+                if (empty($items[$id]['viewed_time']) and empty($items[$id]['favorite_time']) and empty($items[$id]['hidden_time'])) {
+                    $db->query('INSERT IGNORE INTO ' . NV_INFORM_STATUS_GLOBALTABLE . ' (pid, userid, shown_time) VALUES (' . $id . ', ' . $user_info['userid'] . ', ' . NV_CURRENTTIME . ')');
+                } else {
+                    $db->query('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET shown_time = ' . NV_CURRENTTIME . ' WHERE pid=' . $id . ' AND userid=' . $user_info['userid']);
+                }
             }
         }
+
+        $count = count($notshown);
     }
 
-    $contents = user_getlist_theme($items, $generate_page, $filter, $grouplist, $adminlist, $page_url);
+    $generate_page = !defined('NV_IS_AJAX') ? nv_generate_page($base_url, $num_items, $per_page, $page, true, true) : '';
+    $contents = user_getlist_theme($items, $generate_page, $filter, $page_url);
 
     if (defined('NV_IS_AJAX')) {
         nv_jsonOutput([
             'content' => $contents,
-            'count' => count($notshown)
+            'count' => $count
         ]);
     }
 

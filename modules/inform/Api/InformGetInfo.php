@@ -73,7 +73,6 @@ class InformGetInfo implements IApi
         $admin_id = Api::getAdminId();
         $admin_lev = Api::getAdminLev();
 
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
         $where = [];
         if ($admin_lev > Api::ADMIN_LEV_SP) {
             $where[] = '(mtb.sender_admin=' . $admin_id . ')';

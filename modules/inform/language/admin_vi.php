@@ -64,8 +64,11 @@ $lang_module['please_select_receiver_group'] = 'Vui lòng chọn nhóm nhận th
 $lang_module['empty_is_unlimited'] = 'Để trống = không giới hạn';
 $lang_module['please_enter_content'] = 'Vì bạn đã chọn thông báo bằng ngôn ngữ %1$s làm mặc định nên nó không thể để trống. Vui lòng nhập nội dung thông báo bằng ngôn ngữ %1$s';
 $lang_module['please_enter_valid_link'] = 'Vui lòng nhập liên kết hợp lệ';
+$lang_module['please_enter_default_link'] = 'Vui lòng không bỏ trống liên kết ở ngôn ngữ mặc định';
 $lang_module['please_enter_valid_add_time'] = 'Vui lòng nhập thời gian bắt đầu hợp lệ';
 $lang_module['please_enter_valid_exp_time'] = 'Vui lòng để trống hoặc nhập thời gian kết thúc hợp lệ';
+$lang_module['please_enter_user'] = 'Vui lòng chỉ định ID thành viên';
+$lang_module['user_not_exist'] = 'Thành viên không tồn tại';
 $lang_module['status'] = 'Trạng thái';
 $lang_module['waiting'] = 'Đang chờ';
 $lang_module['active'] = 'Đang hoạt động';

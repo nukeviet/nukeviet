@@ -19,6 +19,7 @@ $groups = $nv_Request->get_title('__groups', 'post', '');
 $csrf = $nv_Request->get_title('_csrf', 'post', '');
 $checkss = md5($userid . $groups . NV_CHECK_SESSION);
 if ($userid and hash_equals($checkss, $csrf)) {
+    nv_apply_hook('', 'check_inform', [$userid, $groups]);
     $groups = preg_replace('/[^0-9\,]+/', '', $groups);
 
     $where = [];
@@ -45,11 +46,8 @@ if ($userid and hash_equals($checkss, $csrf)) {
     }
 
     $where .= ' AND NOT EXISTS (SELECT * FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $userid . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
-    $sql = 'SELECT mtb.id FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
-    $result = $db->query($sql);
-    if ($result) {
-        $count = $result->rowCount();
-    }
+    $sql = 'SELECT COUNT(mtb.id) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
+    $count = (int) $db->query($sql)->fetchColumn();
 }
 
 nv_jsonOutput([

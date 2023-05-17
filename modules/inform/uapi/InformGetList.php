@@ -123,6 +123,10 @@ class InformGetList implements UiApi
             if (json_last_error() === JSON_ERROR_NONE) {
                 $row['message'] = $messages;
             }
+            $links = json_decode($row['link'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $row['link'] = $links;
+            }
             $items[$row['id']] = $row;
         }
         $this->result->set('items', $items);
