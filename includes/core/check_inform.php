@@ -19,6 +19,7 @@ $groups = $nv_Request->get_title('__groups', 'post', '');
 $csrf = $nv_Request->get_title('_csrf', 'post', '');
 $checkss = md5($userid . $groups . NV_CHECK_SESSION);
 if ($userid and hash_equals($checkss, $csrf)) {
+    nv_apply_hook('', 'check_inform', [$userid, $groups]);
     $groups = preg_replace('/[^0-9\,]+/', '', $groups);
 
     $where = [];
