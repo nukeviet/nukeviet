@@ -71,8 +71,6 @@ class InformGroupAction implements UiApi
             return $gr >= 10 ? (int) $gr : 0;
         }, $user_groups))));
 
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-
         $group_id = $nv_Request->get_int('group_id', 'post', 0);
         if (empty($group_id) or !in_array($group_id, $u_groups, true)) {
             return $this->result->setError()

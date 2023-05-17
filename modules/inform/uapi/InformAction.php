@@ -70,8 +70,6 @@ class InformAction implements UiApi
             return $gr >= 10 ? (int) $gr : 0;
         }, $user_groups))));
 
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-
         $id = $nv_Request->get_int('id', 'post', 0);
         $status = $nv_Request->get_title('setStatus', 'post', '');
 

@@ -73,8 +73,6 @@ class InformGetList implements IApi
         $admin_id = Api::getAdminId();
         $admin_lev = Api::getAdminLev();
 
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-
         $postdata = [];
         $postdata['page'] = $nv_Request->get_int('page', 'post', 1);
         $postdata['per_page'] = $nv_Request->get_int('per_page', 'post', 20);

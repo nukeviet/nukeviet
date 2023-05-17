@@ -74,8 +74,6 @@ class InformAction implements IApi
         $admin_id = Api::getAdminId();
         $admin_lev = Api::getAdminLev();
 
-        include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-
         $postdata = [];
         if ($nv_Request->isset_request('operation', 'post')) {
             $postdata['operation'] = $nv_Request->get_title('operation', 'post', '');
