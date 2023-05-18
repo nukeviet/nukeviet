@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 // Sắp xếp dạng cây các API
-function apiTrees($role_object, $array_post)
+function apiTrees($role_object, $array_post, $lang)
 {
     global $site_mods, $lang_module, $array_api_actions, $user_array_api_actions;
 
@@ -35,7 +35,7 @@ function apiTrees($role_object, $array_post)
         ];
 
         // Lev 2: Các cat của hệ thống hoặc các module, trong HTML đối xử ngang nhau
-        $role_data = $role_object == $array_post['role_object'] ? $array_post['role_data'] : ['sys' => [], NV_LANG_DATA => []];
+        $role_data = $role_object == $array_post['role_object'] ? $array_post['role_data'] : ['sys' => [], $lang => []];
         foreach ($sysmodule_data as $catkey => $catapis) {
             if (!empty($catkey)) {
                 $cat2_key = $keysysmodule . '_' . $catkey;
@@ -59,7 +59,7 @@ function apiTrees($role_object, $array_post)
                 ];
 
                 foreach ($catapis['apis'] as $api) {
-                    $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $role_data['sys'], true)) or (!empty($keysysmodule) and isset($role_data[NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $role_data[NV_LANG_DATA][$keysysmodule], true)));
+                    $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $role_data['sys'], true)) or (!empty($keysysmodule) and isset($role_data[$lang][$keysysmodule]) and in_array($api['cmd'], $role_data[$lang][$keysysmodule], true)));
                     $api_checked && ++$total_api_enabled;
                     $api_checked && ++$cat2_total_api;
                     !$api_checked && $array_api_contents[$cat2_key]['checkall'] = false;
@@ -82,7 +82,7 @@ function apiTrees($role_object, $array_post)
                 ];
 
                 foreach ($catapis['apis'] as $api) {
-                    $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $role_data['sys'], true)) or (!empty($keysysmodule) and isset($role_data[NV_LANG_DATA][$keysysmodule]) and in_array($api['cmd'], $role_data[NV_LANG_DATA][$keysysmodule], true)));
+                    $api_checked = ((empty($keysysmodule) and in_array($api['cmd'], $role_data['sys'], true)) or (!empty($keysysmodule) and isset($role_data[$lang][$keysysmodule]) and in_array($api['cmd'], $role_data[$lang][$keysysmodule], true)));
                     $api_checked && ++$total_api_enabled;
                     $api_checked && ++$array_api_trees[$keysysmodule]['total_api'];
                     !$api_checked && $array_api_contents[$keysysmodule]['checkall'] = false;
@@ -103,11 +103,11 @@ function apiTrees($role_object, $array_post)
 }
 
 // Lấy nội dung HTML của cây APIs
-function apicheck($role_object, $array_post)
+function apicheck($role_object, $array_post, $lang)
 {
     global $global_config, $lang_module, $lang_global, $module_file;
 
-    list($array_api_trees, $array_api_contents, $total_api_enabled) = apiTrees($role_object, $array_post);
+    list($array_api_trees, $array_api_contents, $total_api_enabled) = apiTrees($role_object, $array_post, $lang);
 
     $xtpl = new XTemplate('roles.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -235,7 +235,10 @@ $action = $nv_Request->get_title('action', 'get', '');
 // Form tạo/sửa API-role
 if ($action == 'role') {
     $id = $nv_Request->get_int('id', 'get', 0);
-
+    $lg = $nv_Request->get_title('lg', 'get', NV_LANG_DATA);
+    if (!in_array($lg, $global_config['setup_langs'], true)) {
+        $lg = NV_LANG_DATA;
+    }
     // Lấy dữ liệu role để sửa
     if (!empty($id)) {
         $array_post = getRoleDetails($id, true);
@@ -245,9 +248,9 @@ if ($action == 'role') {
         }
 
         !isset($array_post['role_data']['sys']) && $array_post['role_data']['sys'] = [];
-        !isset($array_post['role_data'][NV_LANG_DATA]) && $array_post['role_data'][NV_LANG_DATA] = [];
+        !isset($array_post['role_data'][$lg]) && $array_post['role_data'][$lg] = [];
         $isAdd = false;
-        $page_url .= '&id=' . $id;
+        $page_url .= '&amp;id=' . $id;
     } else {
         $array_post = [
             'role_type' => 'private',
@@ -259,17 +262,18 @@ if ($action == 'role') {
         ];
         $array_post['role_data'] = [
             'sys' => [],
-            NV_LANG_DATA => []
+            $lg => []
         ];
         $isAdd = true;
     }
 
     if ($nv_Request->isset_request('getapitree', 'post')) {
         $role_object = $nv_Request->get_title('getapitree', 'post', 'admin');
-        nv_htmlOutput(apicheck($role_object, $array_post));
+        nv_htmlOutput(apicheck($role_object, $array_post, $lg));
     }
 
     if ($nv_Request->isset_request('save', 'post')) {
+        $save = $nv_Request->get_title('save', 'post', '');
         $data = [
             'role_title' => nv_substr($nv_Request->get_title('role_title', 'post', ''), 0, 250),
             'role_description' => nv_substr($nv_Request->get_textarea('role_description', '', ''), 0, 250),
@@ -320,7 +324,7 @@ if ($action == 'role') {
         $data['log_period'] = $data['log_period'] * 3600;
 
         $data['role_data']['sys'] = [];
-        $data['role_data'][NV_LANG_DATA] = [];
+        $data['role_data'][$lg] = [];
         // Lấy các API được phép
         $actions = $data['role_object'] == 'admin' ? $array_api_actions : $user_array_api_actions;
         $keys = $data['role_object'] == 'admin' ? $array_api_keys : $user_array_api_keys;
@@ -338,16 +342,25 @@ if ($action == 'role') {
             if (empty($keysysmodule)) {
                 $data['role_data']['sys'] = $api_submits;
             } elseif (!empty($api_submits)) {
-                $data['role_data'][NV_LANG_DATA][$keysysmodule] = $api_submits;
+                $data['role_data'][$lg][$keysysmodule] = $api_submits;
             }
         }
 
-        if (empty($data['role_data']['sys']) and empty($data['role_data'][NV_LANG_DATA])) {
+        if (empty($data['role_data']['sys']) and empty($data['role_data'][$lg])) {
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $lang_module['api_roles_error_role']
             ]);
         }
+
+        if ($save == '2' and sizeof($global_config['setup_langs']) > 1) {
+            foreach ($global_config['setup_langs'] as $_lg) {
+                if ($_lg != $lg) {
+                    $data['role_data'][$_lg] = $data['role_data'][$lg];
+                }
+            }
+        }
+
         $data['role_data'] = json_encode($data['role_data']);
 
         if ($isAdd) {
@@ -389,9 +402,14 @@ if ($action == 'role') {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit API-role', $id . ': ' . $array_post['role_title'], $admin_info['userid']);
         }
 
+        if (in_array($save, $global_config['setup_langs'], true)) {
+            $redirect = str_replace('&amp;', '&', $page_url) . '&action=role&lg=' . $save;
+        } else {
+            $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
+        }
         nv_jsonOutput([
             'status' => 'OK',
-            'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op
+            'redirect' => $redirect
         ]);
     }
 
@@ -402,11 +420,11 @@ if ($action == 'role') {
     $array_post['log_period'] = !empty($array_post['log_period']) ? round($array_post['log_period'] / 3600) : '';
 
     $page_title = $isAdd ? $lang_module['add_role'] : $lang_module['edit_role'];
-    $page_url .= '&action=role';
+    $page_url .= '&action=role&lg=' . $lg;
 
     $xtpl->assign('FORM_ACTION', $page_url);
     $xtpl->assign('DATA', $array_post);
-    $xtpl->assign('APICHECK', apicheck($array_post['role_object'], $array_post));
+    $xtpl->assign('APICHECK', apicheck($array_post['role_object'], $array_post, $lg));
 
     empty($array_post['flood_rules']) && $array_post['flood_rules'] = ['' => ''];
     foreach ($array_post['flood_rules'] as $interval => $limit) {
@@ -416,6 +434,25 @@ if ($action == 'role') {
             'limit' => $limit
         ]);
         $xtpl->parse('role.flood_rule');
+    }
+
+    $saveopts = [
+        '1' => sprintf($lang_module['saveopt1'], $language_array[$lg]['name']),
+        '2' => $lang_module['saveopt2']
+    ];
+    if (sizeof($global_config['setup_langs']) > 1) {
+        foreach ($global_config['setup_langs'] as $_lg) {
+            if ($_lg != $lg) {
+                $saveopts[$_lg] = sprintf($lang_module['saveopt3'], $language_array[$lg]['name'], $language_array[$_lg]['name']);
+            }
+        }
+    }
+    foreach ($saveopts as $key => $name) {
+        $xtpl->assign('SAVEOPT', [
+            'val' => $key,
+            'name' => $name
+        ]);
+        $xtpl->parse('role.saveopt');
     }
 
     $xtpl->parse('role');
@@ -473,7 +510,6 @@ if (empty($rolelist)) {
     foreach ($rolelist as $role) {
         $xtpl->assign('ROLE', [
             'title' => $role['role_title'],
-            'apitotal' => $role['apitotal'],
             'type' => $lang_module['api_role_type_' . $role['role_type']],
             'object' => $lang_module['api_role_object_' . $role['role_object']],
             'addtime' => nv_date('d/m/Y H:i', $role['addtime']),
@@ -495,28 +531,40 @@ if (empty($rolelist)) {
             }
         }
 
-        // List API theo ngôn ngữ
-        if (!empty($role['apis'][NV_LANG_DATA])) {
-            foreach ($role['apis'][NV_LANG_DATA] as $mod_title => $mod_data) {
-                $xtpl->assign('MOD_TITLE', $site_mods[$mod_title]['custom_title']);
+        foreach ($global_config['setup_langs'] as $_lg) {
+            $xtpl->assign('FORLANG', [
+                'active' => $_lg == NV_LANG_DATA ? 'active' : '',
+                'in' => $_lg == NV_LANG_DATA ? ' in active' : '',
+                'expanded' => $_lg == NV_LANG_DATA ? 'true' : 'false',
+                'langkey' => $_lg,
+                'langname' => $language_array[$_lg]['name']
+            ]);
+            $xtpl->parse('main.role_list.loop.forlang');
 
-                foreach ($mod_data as $cat_data) {
-                    $xtpl->assign('CAT_DATA', $cat_data);
+            // List API theo ngôn ngữ
+            if (!empty($role['apis'][$_lg])) {
+                foreach ($role['apis'][$_lg] as $mod_title => $mod_data) {
+                    $xtpl->assign('MOD_TITLE', $site_mods[$mod_title]['custom_title']);
 
-                    foreach ($cat_data['apis'] as $api_data) {
-                        $xtpl->assign('API_DATA', $api_data);
-                        $xtpl->parse('main.role_list.loop.apimod.mod.loop');
+                    foreach ($mod_data as $cat_data) {
+                        $xtpl->assign('CAT_DATA', $cat_data);
+
+                        foreach ($cat_data['apis'] as $api_data) {
+                            $xtpl->assign('API_DATA', $api_data);
+                            $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod.mod.loop');
+                        }
+
+                        if (!empty($cat_data['title'])) {
+                            $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod.mod.title');
+                        }
+
+                        $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod.mod');
                     }
 
-                    if (!empty($cat_data['title'])) {
-                        $xtpl->parse('main.role_list.loop.apimod.mod.title');
-                    }
-
-                    $xtpl->parse('main.role_list.loop.apimod.mod');
+                    $xtpl->parse('main.role_list.loop.tabcontent_forlang.apimod');
                 }
-
-                $xtpl->parse('main.role_list.loop.apimod');
             }
+            $xtpl->parse('main.role_list.loop.tabcontent_forlang');
         }
 
         $sts = [$lang_module['inactive'], $lang_module['active']];

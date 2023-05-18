@@ -134,13 +134,16 @@ function nv_get_api_actions($object)
  */
 function parseRole($row)
 {
-    global $lang_module, $array_api_cats, $user_array_api_cats;
+    global $lang_module, $array_api_cats, $user_array_api_cats, $global_config;
 
     $row['role_data'] = !empty($row['role_data']) ? json_decode($row['role_data'], true) : [];
     $cats = $row['role_object'] == 'admin' ? $array_api_cats : $user_array_api_cats;
     // Xử lý các API theo cat
     $row['apis'] = [];
-    $row['apis'][''] = $row['apis'][NV_LANG_DATA] = [];
+    $row['apis'][''] = [];
+    foreach ($global_config['setup_langs'] as $_lg) {
+        $row['apis'][$_lg] = [];
+    }
     $row['apitotal'] = 0;
     $row['api_doesnt_exist'] = [];
     if (!empty($row['role_data']['sys'])) {
@@ -160,24 +163,28 @@ function parseRole($row)
             }
         }
     }
-    if (!empty($row['role_data'][NV_LANG_DATA])) {
-        foreach ($row['role_data'][NV_LANG_DATA] as $mod_title => $mod_data) {
-            foreach ($mod_data as $api_cmd) {
-                if (isset($cats[$mod_title][$api_cmd])) {
-                    $cat = $cats[$mod_title][$api_cmd];
-                    if (!isset($row['apis'][NV_LANG_DATA][$mod_title])) {
-                        $row['apis'][NV_LANG_DATA][$mod_title] = [];
+    foreach ($global_config['setup_langs'] as $_lg) {
+        if (!empty($row['role_data'][$_lg])) {
+            foreach ($row['role_data'][$_lg] as $mod_title => $mod_data) {
+                foreach ($mod_data as $api_cmd) {
+                    if (isset($cats[$mod_title][$api_cmd])) {
+                        $cat = $cats[$mod_title][$api_cmd];
+                        if (!isset($row['apis'][$_lg][$mod_title])) {
+                            $row['apis'][$_lg][$mod_title] = [];
+                        }
+                        if (!isset($row['apis'][$_lg][$mod_title][$cat['key']])) {
+                            $row['apis'][$_lg][$mod_title][$cat['key']] = [
+                                'title' => $cat['title'],
+                                'apis' => []
+                            ];
+                        }
+                        $row['apis'][$_lg][$mod_title][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
+                        if ($_lg == NV_LANG_DATA) {
+                            ++$row['apitotal'];
+                        }
+                    } else {
+                        $row['api_doesnt_exist'][] = $api_cmd . '(' . $mod_title . ')';
                     }
-                    if (!isset($row['apis'][NV_LANG_DATA][$mod_title][$cat['key']])) {
-                        $row['apis'][NV_LANG_DATA][$mod_title][$cat['key']] = [
-                            'title' => $cat['title'],
-                            'apis' => []
-                        ];
-                    }
-                    $row['apis'][NV_LANG_DATA][$mod_title][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
-                    ++$row['apitotal'];
-                } else {
-                    $row['api_doesnt_exist'][] = $api_cmd . '(' . $mod_title . ')';
                 }
             }
         }
@@ -190,11 +197,11 @@ function parseRole($row)
 
 /**
  * myApiRoleList()
- * 
- * @param string $type 
- * @param int $page 
- * @param int $per_page 
- * @return array 
+ *
+ * @param string $type
+ * @param int    $page
+ * @param int    $per_page
+ * @return array
  */
 function myApiRoleList($type = 'public', $page = 0, $per_page = 20)
 {
@@ -256,10 +263,10 @@ function getRoleDetails($id, $isParseRole = true)
 
 /**
  * delAuth()
- * 
- * @param mixed $method 
- * @param int $userid 
- * @return true 
+ *
+ * @param mixed $method
+ * @param int   $userid
+ * @return true
  */
 function delAuth($method, $userid = 0)
 {
@@ -276,11 +283,11 @@ function delAuth($method, $userid = 0)
 
 /**
  * createAuth()
- * 
- * @param mixed $method 
- * @param int $userid 
- * @return string[] 
- * @throws PDOException 
+ *
+ * @param mixed $method
+ * @param int   $userid
+ * @return string[]
+ * @throws PDOException
  */
 function createAuth($method, $userid = 0)
 {
@@ -324,12 +331,12 @@ function createAuth($method, $userid = 0)
 
 /**
  * ipsUpdate()
- * 
- * @param mixed $api_ips 
- * @param mixed $method 
- * @param int $userid 
- * @return bool 
- * @throws PDOException 
+ *
+ * @param mixed $api_ips
+ * @param mixed $method
+ * @param int   $userid
+ * @return bool
+ * @throws PDOException
  */
 function ipsUpdate($api_ips, $method, $userid = 0)
 {
@@ -351,9 +358,9 @@ function ipsUpdate($api_ips, $method, $userid = 0)
 
 /**
  * get_api_user()
- * 
- * @param int $userid 
- * @return array 
+ *
+ * @param int $userid
+ * @return array
  */
 function get_api_user($userid = 0)
 {

@@ -58,7 +58,7 @@
                                     </div>
                                     <!-- END: isEditLevel -->
 
-                                    <div class="api_ips" <!-- BEGIN: not_access_authentication --> style="display:none"<!-- END: not_access_authentication -->>
+                                    <div class="api_ips" style="<!-- BEGIN: not_access_authentication -->display:none<!-- END: not_access_authentication -->">
                                         <div class="form-group">
                                             <label><strong>{LANG.api_ips}</strong></label>
                                             <textarea class="form-control ips" name="{METHOD.key}_ips">{METHOD.ips}</textarea>
@@ -98,7 +98,6 @@
             <thead class="bg-primary">
                 <tr>
                     <th class="text-nowrap text-center" style="vertical-align:middle">{LANG.api_roles_list}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_roles_allowed}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_object}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_status}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_status}</th>
@@ -107,9 +106,7 @@
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.quota}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_access_count}</th>
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle">{LANG.api_role_credential_last_access}</th>
-                    <!-- BEGIN: is_public -->
                     <th class="text-nowrap text-center" style="width: 1%;vertical-align:middle"></th>
-                    <!-- END: is_public -->
                 </tr>
             </thead>
             <tbody>
@@ -121,8 +118,16 @@
                         <p class="description">{ROLE.role_description}</p>
                         <!-- END: description -->
                     </td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.object}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.status}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_status_format}</td>
+                    <td class="text-center" style="width: 1%;">{ROLE.credential_addtime}</td>
+                    <td class="text-center" style="width: 1%;">{ROLE.credential_endtime}</td>
+                    <td class="text-center" style="width: 1%;">{ROLE.credential_quota}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_access_count}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_last_access}</td>
                     <td class="text-nowrap text-center" style="width: 1%;">
-                        <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#apiroledetail{ROLE.role_id}">{ROLE.apitotal}</button>
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#apiroledetail{ROLE.role_id}">{LANG.api_roles_allowed}</button>
                         <!-- START FORFOOTER -->
                         <div id="apiroledetail{ROLE.role_id}" tabindex="-1" role="dialog" class="modal fade">
                             <div class="modal-dialog" role="document">
@@ -147,49 +152,52 @@
                                         </div>
                                         <!-- END: catsys -->
 
-                                        <!-- BEGIN: apimod -->
-                                        <!-- BEGIN: mod -->
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading"><strong><i class="fa fa-folder-open-o"></i> {MOD_TITLE}
-                                                    <!-- BEGIN: title --> <i class="fa fa-angle-right"></i> {CAT_DATA.title}
-                                                    <!-- END: title -->
-                                                </strong></div>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <!-- BEGIN: loop -->
-                                                    <div class="col-sm-12">
-                                                        <div class="text-truncate m-bottom" title="{API_DATA}"><i class="fa fa-caret-right"></i> {API_DATA}</div>
+                                        <div>
+                                            <ul class="nav nav-tabs m-bottom" role="tablist">
+                                                <!-- BEGIN: forlang -->
+                                                <li role="presentation" class="{FORLANG.active}"><a id="forlang-{FORLANG.langkey}-{ROLE.id}-tab" href="#forlang-{FORLANG.langkey}-{ROLE.id}" aria-controls="forlang-{FORLANG.langkey}-{ROLE.id}" role="tab" data-toggle="tab" aria-expanded="{FORLANG.expanded}">{FORLANG.langname}</a></li>
+                                                <!-- END: forlang -->
+                                            </ul>
+                                            <div class="tab-content">
+                                                <!-- BEGIN: tabcontent_forlang -->
+                                                <div role="tabpanel" class="tab-pane fade{FORLANG.in}" id="forlang-{FORLANG.langkey}-{ROLE.id}" aria-labelledby="forlang-{FORLANG.langkey}-{ROLE.id}-tab">
+                                                    <!-- BEGIN: apimod -->
+                                                    <!-- BEGIN: mod -->
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading"><strong><i class="fa fa-folder-open-o"></i> {MOD_TITLE}
+                                                                <!-- BEGIN: title --> <i class="fa fa-angle-right"></i> {CAT_DATA.title}
+                                                                <!-- END: title -->
+                                                            </strong></div>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <!-- BEGIN: loop -->
+                                                                <div class="col-sm-12">
+                                                                    <div class="text-truncate m-bottom" title="{API_DATA}"><i class="fa fa-caret-right"></i> {API_DATA}</div>
+                                                                </div>
+                                                                <!-- END: loop -->
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <!-- END: loop -->
+                                                    <!-- END: mod -->
+                                                    <!-- END: apimod -->
                                                 </div>
+                                                <!-- END: tabcontent_forlang -->
                                             </div>
                                         </div>
-                                        <!-- END: mod -->
-                                        <!-- END: apimod -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- END FORFOOTER -->
-                    </td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.object}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.status}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_status_format}</td>
-                    <td class="text-center" style="width: 1%;">{ROLE.credential_addtime}</td>
-                    <td class="text-center" style="width: 1%;">{ROLE.credential_endtime}</td>
-                    <td class="text-center" style="width: 1%;">{ROLE.credential_quota}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_access_count}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.credential_last_access}</td>
-                    <!-- BEGIN: is_public -->
-                    <td class="text-nowrap text-center" style="width: 1%;">
+                        <!-- BEGIN: is_public -->
                         <!-- BEGIN: activate -->
-                        <button type="button" class="btn btn-default btn-block credential-activate">{LANG.activate}</button>
+                        <button type="button" class="btn btn-default credential-activate">{LANG.activate}</button>
                         <!-- END: activate -->
                         <!-- BEGIN: deactivate -->
-                        <button type="button" class="btn btn-default btn-block credential-deactivate">{LANG.deactivate}</button>
+                        <button type="button" class="btn btn-default credential-deactivate">{LANG.deactivate}</button>
                         <!-- END: deactivate -->
+                        <!-- END: is_public -->
                     </td>
-                    <!-- END: is_public -->
                 </tr>
                 <!-- END: role -->
             </tbody>

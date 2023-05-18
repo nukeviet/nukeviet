@@ -41,7 +41,6 @@
             <thead class="bg-primary">
                 <tr>
                     <th class="text-nowrap text-center">{LANG.api_roles_title}</th>
-                    <th class="text-nowrap text-center" style="width: 1%;">{LANG.api_roles_allowed}</th>
                     <th class="text-nowrap text-center" style="width: 1%;">{LANG.api_role_type}</th>
                     <th class="text-nowrap text-center" style="width: 1%;">{LANG.api_role_object}</th>
                     <th class="text-nowrap text-center" style="width: 1%;">{LANG.api_addtime}</th>
@@ -54,8 +53,19 @@
                 <!-- BEGIN: loop -->
                 <tr class="item" data-id="{ROLE.id}">
                     <td>{ROLE.title}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.type}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.object}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.addtime}</td>
+                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.edittime}</td>
                     <td class="text-nowrap text-center" style="width: 1%;">
-                        <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#apiroledetail{ROLE.id}">{ROLE.apitotal}</button>
+                        <select class="form-control w100 change-status">
+                            <!-- BEGIN: status -->
+                            <option value="{STATUS.val}" {STATUS.sel}>{STATUS.title}</option>
+                            <!-- END: status -->
+                        </select>
+                    </td>
+                    <td class="text-nowrap text-center" style="width: 1%">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#apiroledetail{ROLE.id}">{LANG.api_roles_allowed}</button>
                         <!-- START FORFOOTER -->
                         <div id="apiroledetail{ROLE.id}" tabindex="-1" role="dialog" class="modal fade">
                             <div class="modal-dialog" role="document">
@@ -80,43 +90,43 @@
                                         </div>
                                         <!-- END: catsys -->
 
-                                        <!-- BEGIN: apimod -->
-                                        <!-- BEGIN: mod -->
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading"><strong><i class="fa fa-folder-open-o"></i> {MOD_TITLE}
-                                                    <!-- BEGIN: title --> <i class="fa fa-angle-right"></i> {CAT_DATA.title}
-                                                    <!-- END: title -->
-                                                </strong></div>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <!-- BEGIN: loop -->
-                                                    <div class="col-sm-12">
-                                                        <div class="text-truncate m-bottom" title="{API_DATA}"><i class="fa fa-caret-right"></i> {API_DATA}</div>
+                                        <div>
+                                            <ul class="nav nav-tabs m-bottom" role="tablist">
+                                                <!-- BEGIN: forlang -->
+                                                <li role="presentation" class="{FORLANG.active}"><a id="forlang-{FORLANG.langkey}-{ROLE.id}-tab" href="#forlang-{FORLANG.langkey}-{ROLE.id}" aria-controls="forlang-{FORLANG.langkey}-{ROLE.id}" role="tab" data-toggle="tab" aria-expanded="{FORLANG.expanded}">{FORLANG.langname}</a></li>
+                                                <!-- END: forlang -->
+                                            </ul>
+                                            <div class="tab-content">
+                                                <!-- BEGIN: tabcontent_forlang -->
+                                                <div role="tabpanel" class="tab-pane fade{FORLANG.in}" id="forlang-{FORLANG.langkey}-{ROLE.id}" aria-labelledby="forlang-{FORLANG.langkey}-{ROLE.id}-tab">
+                                                    <!-- BEGIN: apimod -->
+                                                    <!-- BEGIN: mod -->
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading"><strong><i class="fa fa-folder-open-o"></i> {MOD_TITLE}
+                                                                <!-- BEGIN: title --> <i class="fa fa-angle-right"></i> {CAT_DATA.title}
+                                                                <!-- END: title -->
+                                                            </strong></div>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <!-- BEGIN: loop -->
+                                                                <div class="col-sm-12">
+                                                                    <div class="text-truncate m-bottom" title="{API_DATA}"><i class="fa fa-caret-right"></i> {API_DATA}</div>
+                                                                </div>
+                                                                <!-- END: loop -->
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <!-- END: loop -->
+                                                    <!-- END: mod -->
+                                                    <!-- END: apimod -->
                                                 </div>
+                                                <!-- END: tabcontent_forlang -->
                                             </div>
                                         </div>
-                                        <!-- END: mod -->
-                                        <!-- END: apimod -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- END FORFOOTER -->
-                    </td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.type}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.object}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.addtime}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">{ROLE.edittime}</td>
-                    <td class="text-nowrap text-center" style="width: 1%;">
-                        <select class="form-control w100 change-status">
-                            <!-- BEGIN: status -->
-                            <option value="{STATUS.val}" {STATUS.sel}>{STATUS.title}</option>
-                            <!-- END: status -->
-                        </select>
-                    </td>
-                    <td class="text-nowrap text-center" style="width: 1%">
                         <a href="{ADD_API_ROLE_URL}&amp;id={ROLE.id}" class="btn btn-default"><i class="fa fa-pencil"></i> {GLANG.edit}</a>
                         <button type="button" class="btn btn-default" data-toggle="apiroledel"><i class="fa fa-trash-o"></i> {GLANG.delete}</button>
                     </td>
@@ -214,9 +224,13 @@
             <tbody id="apicheck">{APICHECK}</tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2" class="text-center">
-                        <input type="hidden" name="save" value="1">
-                        <button type="submit" class="btn btn-primary">{GLANG.save}</button>
+                    <td colspan="2">
+                        <select name="save" class="form-control" style="display:inline-block;width:fit-content">
+                            <!-- BEGIN: saveopt -->
+                            <option value="{SAVEOPT.val}">{SAVEOPT.name}</option>
+                            <!-- END: saveopt -->
+                        </select>
+                        <button type="submit" class="btn btn-primary">{GLANG.submit}</button>
                     </td>
                 </tr>
             </tfoot>
@@ -227,7 +241,7 @@
 
 <!-- BEGIN: apicheck -->
 <tr>
-    <td colspan="2" id="apiRoleAll">
+    <td colspan="2">
         {LANG.api_roles_allowed}: <span class="total-api-enabled api-count{TOTAL_API_CHECKED}">{TOTAL_API_ENABLED}</span>
     </td>
 </tr>
@@ -267,8 +281,5 @@
         <!-- END: api_content -->
         <div role="tabpanel" class="tab-pane" id="empty-content"></div>
     </td>
-</tr>
-<tr>
-    <td colspan="2" class="note"><i class="fa fa-flag" aria-hidden="true"></i> {LANG.api_role_notice_lang}</td>
 </tr>
 <!-- END: apicheck -->
