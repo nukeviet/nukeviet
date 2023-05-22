@@ -340,12 +340,12 @@ if ($nv_Request->isset_request('userid', 'get')) {
         $sql = 'INSERT INTO ' . NV_MOD_TABLE . ' (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,
             regdate, question, answer, view_mail, remember, in_groups, active,
-            idsite, pass_creation_time, pass_reset_request, 
+            idsite, pass_creation_time, pass_reset_request,
             email_verification_time, active_obj
         ) VALUES (
             :group_id, :username, :md5username, :password, :email, :first_name, :last_name, :gender, :photo, :birthday, :sig,
-            ' . $userdata['regdate'] . ', :question, :answer, ' . $post['view_mail'] . ', 1, :in_groups, 1, 
-            ' . $userdata['idsite'] . ', ' . $post['pass_creation_time'] . ', ' . $post['pass_reset_request'] . ', 
+            ' . $userdata['regdate'] . ', :question, :answer, ' . $post['view_mail'] . ', 1, :in_groups, 1,
+            ' . $userdata['idsite'] . ', ' . $post['pass_creation_time'] . ', ' . $post['pass_reset_request'] . ',
             ' . $post['email_verification_time'] . ', :active_obj
         )';
 
@@ -451,7 +451,9 @@ if ($nv_Request->isset_request('userid', 'get')) {
             }
         }
 
-        @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $post['email'], $subject, $message);
+        if (!nv_apply_hook($module_name, 'admin_active_account', [$post, $subject, $message], false)) {
+            @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $post['email'], $subject, $message);
+        }
         nv_jsonOutput([
             'status' => 'OK',
             'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name

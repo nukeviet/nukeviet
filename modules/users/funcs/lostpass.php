@@ -311,6 +311,7 @@ if ($checkss == $data['checkss']) {
     $stmt->execute();
 
     oldPassSave($row['userid'], $row['password'], $row['pass_creation_time']);
+    nv_apply_hook($module_name, 'user_lostpass_success', [$row, $new_password]);
 
     if ($global_config['send_pass']) {
         $name = $global_config['name_show'] ? [
