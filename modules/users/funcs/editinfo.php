@@ -924,6 +924,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
     $stmt->execute();
 
     oldPassSave($edit_userid, $row['password'], $row['pass_creation_time']);
+    nv_apply_hook($module_name, 'user_change_password', [$row, $new_password]);
 
     if ($global_config['send_pass']) {
         $name = $global_config['name_show'] ? [
