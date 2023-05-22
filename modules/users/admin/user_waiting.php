@@ -451,7 +451,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
             }
         }
 
-        if (!nv_apply_hook($module_name, 'admin_active_account', [$post, $subject, $message], false)) {
+        if (!nv_apply_hook($module_name, 'admin_active_account', [$user_id, $post, $userdata, $subject, $message], false)) {
             @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $post['email'], $subject, $message);
         }
         nv_jsonOutput([
