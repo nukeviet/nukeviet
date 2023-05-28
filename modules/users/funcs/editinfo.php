@@ -608,7 +608,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($page_url . '/basic', true),
+            'input' => 'ok',
             'mess' => $lang_module['editinfo_okcensor']
         ]);
     } else {
@@ -631,7 +631,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
 
         nv_jsonOutput([
             'status' => 'ok',
-            'input' => nv_url_rewrite($page_url . '/basic', true),
+            'input' => 'ok',
             'mess' => $lang_module['editinfo_ok']
         ]);
     }
@@ -1316,6 +1316,11 @@ $page_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
 $page_url .= '/' . $array_data['type'];
 $canonicalUrl = getCanonicalUrl($page_url, true);
+$array_mod_title[] = [
+    'catid' => 0,
+    'title' => $lang_module['editinfo_pagetitle'],
+    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op
+];
 
 $pass_reset_request = (int) $user_info['pass_reset_request'];
 $pass_timeout = !empty($global_config['pass_timeout']) && (((int) $user_info['pass_creation_time'] + (int) $global_config['pass_timeout']) < NV_CURRENTTIME);
