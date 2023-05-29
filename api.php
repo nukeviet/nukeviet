@@ -303,14 +303,6 @@ if ($adminLev) {
     $check_in_groups = nv_user_groups($credential_data['in_groups'], true);
     Uapi::setUserGroups($check_in_groups[0]);
 
-    if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php')) {
-        require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
-    } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php')) {
-        require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php';
-    } elseif (file_exists(NV_ROOTDIR . '/includes/language/en/global.php')) {
-        require NV_ROOTDIR . '/includes/language/en/global.php';
-    }
-
     if (!empty($api_request['module'])) {
         Uapi::setModuleName($api_request['module']);
         Uapi::setModuleInfo($module_info);
