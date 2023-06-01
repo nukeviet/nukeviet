@@ -27,20 +27,51 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     if ($nv_Request->isset_request('nv_redirect', 'get') and !empty($nv_redirect)) {
         $page_url .= '&amp;nv_redirect=' . $nv_redirect;
     }
+} elseif ($nv_Request->isset_request('sso_redirect', 'get')) {
+    $sso_redirect = $nv_Request->get_title('sso_redirect', 'get', '');
+    if (!empty($sso_redirect)) {
+        $nv_Request->set_Session('sso_redirect_' . $module_data, $sso_redirect);
+    }
+}
+
+if (defined('SSO_CLIENT_DOMAIN')) {
+    $sso_client = $nv_Request->get_title('client', 'get', '');
+    if (!empty($sso_client)) {
+        $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
+        if (!in_array($sso_client, $allowed_client_origin, true)) {
+            // 406 Not Acceptable
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+        }
+        $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
+    }
 }
 
 /**
- * nv_json_result()
- *
  * @param mixed $array
  * @return
  */
 function nv_json_result($array)
 {
-    global $nv_redirect;
+    global $nv_redirect, $nv_Request, $module_data;
 
     if (!empty($nv_redirect)) {
         $array['redirect'] = nv_redirect_decrypt($nv_redirect);
+    }
+
+    if (defined('SSO_REGISTER_SECRET')) {
+        $sso_client = $nv_Request->get_title('sso_client_' . $module_data, 'session', '');
+        $sso_redirect = $nv_Request->get_title('sso_redirect_' . $module_data, 'session', '');
+        $iv = substr(SSO_REGISTER_SECRET, 0, 16);
+        $sso_redirect = strtr($sso_redirect, '-_,', '+/=');
+        $sso_redirect = openssl_decrypt($sso_redirect, 'aes-256-cbc', SSO_REGISTER_SECRET, 0, $iv);
+
+        if (!empty($sso_redirect) and !empty($sso_client) and str_starts_with($sso_redirect, $sso_client)) {
+            $array['redirect'] = $sso_redirect;
+            $array['client'] = $sso_client;
+        }
+
+        $nv_Request->unset_request('sso_client_' . $module_data, 'session');
+        $nv_Request->unset_request('sso_redirect_' . $module_data, 'session');
     }
 
     nv_jsonOutput($array);
