@@ -957,9 +957,12 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             list(, $_2step_require) = nv_user_groups($row['in_groups'], true);
         }
         if ($_2step_require) {
+            if (empty($nv_redirect)) {
+                $nv_redirect = nv_redirect_encrypt($page_url);
+            }
             signin_result([
                 'status' => '2steprequire',
-                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup' . ($nv_redirect ? '&nv_redirect=' . $nv_redirect : ''), true),
+                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup&nv_redirect=' . $nv_redirect, true),
                 'mess' => $lang_global['2teplogin_require']
             ]);
         }

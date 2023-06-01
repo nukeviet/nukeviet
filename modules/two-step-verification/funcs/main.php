@@ -32,7 +32,11 @@ if ($nv_Request->isset_request('turnoff2step', 'post')) {
     if (!defined('NV_IS_AJAX') or $tokend != NV_CHECK_SESSION or !defined('NV_IS_USER')) {
         nv_htmlOutput('Wrong URL');
     }
-    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step=0, secretkey=\'\' WHERE userid=' . $user_info['userid']);
+
+    $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET
+        active2step=0, secretkey=\'\', last_update=' . NV_CURRENTTIME . '
+    WHERE userid=' . $user_info['userid'];
+    $db->query($sql);
 
     // Gửi email thông báo bảo mật
     $m_time = nv_date('H:i:s d/m/Y', NV_CURRENTTIME);
