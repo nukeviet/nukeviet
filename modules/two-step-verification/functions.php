@@ -15,6 +15,12 @@ if (!defined('NV_SYSTEM')) {
 
 define('NV_MOD_2STEP_VERIFICATION', true);
 
+// Chuyển đến domain quản lý sso
+if (defined('NV_IS_USER_FORUM') and defined('SSO_SERVER')) {
+    require NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/twostep.php';
+    exit();
+}
+
 // Sau này ảo hóa thì thay đổi giá trị này thành giá trị cấu hình trong CSDL
 define('NV_BRIDGE_USER_MODULE', 'users');
 
@@ -42,7 +48,7 @@ function nv_get_user_secretkey()
         while (1) {
             $_secretkey = $GoogleAuthenticator->creatSecretkey();
             if ($db->query('SELECT COUNT(*) FROM ' . $module_data . ' WHERE secretkey=' . $db->quote($_secretkey))->fetchColumn() == 0) {
-                if ($db->exec('UPDATE ' . $module_data . ' SET secretkey=' . $db->quote($_secretkey) . ' WHERE userid=' . $user_info['userid'])) {
+                if ($db->exec('UPDATE ' . $module_data . ' SET secretkey=' . $db->quote($_secretkey) . ', last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $user_info['userid'])) {
                     $secretkey = $_secretkey;
                     break;
                 }
