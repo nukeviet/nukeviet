@@ -210,7 +210,11 @@ function GIDHandleCredentialResponse(response) {
                 location.reload()
             }
         } else if (a.status == 'success') {
-            location.reload()
+            if (typeof a.redirect != 'undefined' && a.redirect != '') {
+                window.location.href = a.redirect;
+                return 1;
+            }
+            location.reload();
         } else if (a.status == 'OK') {
             var content = $($('#g_id_confirm').html());
             $('a', content).on('click', function(e) {
