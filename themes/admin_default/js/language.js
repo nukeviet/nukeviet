@@ -322,5 +322,22 @@ $(function() {
                 location.reload()
             }
         })
+    });
+
+    $('.delete-lang-files').on('click', function() {
+        if (confirm(nv_is_del_confirm[0])) {
+            var that = $(this);
+            that.prop('disabled', true);
+            $.ajax({
+                type: 'GET',
+                cache: !1,
+                url: that.data('url') + '&nocache=' + (new Date).getTime(),
+                dataType: "json",
+                success: function(result) {
+                    alert(result.mess);
+                    location.reload()
+                }
+            })
+        }
     })
 })

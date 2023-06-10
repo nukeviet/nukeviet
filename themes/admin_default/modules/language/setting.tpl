@@ -28,6 +28,9 @@
                     <!-- BEGIN: delete -->
                     <button type="button" class="btn btn-default delete-lang" data-url="{LANG_FUNC.delete}">{LANG.nv_admin_delete}</button>
                     <!-- END: delete -->
+                    <!-- BEGIN: delete_files -->
+                    <button type="button" class="btn btn-default delete-lang-files" data-url="{LANG_FUNC.delete_files}">{LANG.nv_admin_delete_files}</button>
+                    <!-- END: delete_files -->
                 </td>
             </tr>
             <!-- END: loop -->

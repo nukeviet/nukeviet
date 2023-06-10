@@ -52,7 +52,10 @@ foreach ($language_array as $key => $value) {
         }
         $arr_lang_func['download'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=download&amp;dirlang=' . $key . '&amp;checksess=' . md5('downloadallfile' . NV_CHECK_SESSION);
         if (in_array($key, $lang_array_data_exit, true) and in_array('delete', $allow_func, true)) {
-            $arr_lang_func['delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=delete&amp;dirlang=' . $key . '&amp;checksess=' . md5('deleteallfile' . NV_CHECK_SESSION);
+            $arr_lang_func['delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=delete&amp;type=db&amp;dirlang=' . $key . '&amp;checksess=' . md5('deleteallfile' . NV_CHECK_SESSION);
+        }
+        if (!in_array($key, $global_config['setup_langs'], true) and in_array('delete', $allow_func, true)) {
+            $arr_lang_func['delete_files'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=delete&amp;type=files&amp;dirlang=' . $key . '&amp;checksess=' . md5('deleteallfile' . NV_CHECK_SESSION);
         }
 
         $xtpl->assign('LANG_FUNC', $arr_lang_func);
@@ -73,6 +76,9 @@ foreach ($language_array as $key => $value) {
         }
         if (in_array($key, $lang_array_data_exit, true) and in_array('delete', $allow_func, true)) {
             $xtpl->parse('main.loop.delete');
+        }
+        if (!in_array($key, $global_config['setup_langs'], true) and in_array('delete', $allow_func, true)) {
+            $xtpl->parse('main.loop.delete_files');
         }
         $xtpl->parse('main.loop');
     }
