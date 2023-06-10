@@ -35,7 +35,7 @@ if ($new > 0) {
     $contents['list'][] = [
         'key' => 'new_list',
         'act' => 4,
-        'title' => $lang_module['banners_list4'],
+        'title' => $nv_Lang->getModule('banners_list4'),
         'num' => $new
     ];
 }
@@ -47,7 +47,7 @@ if ($deact > 0) {
     $contents['list'][] = [
         'key' => 'unpub_list',
         'act' => 0,
-        'title' => $lang_module['banners_list0'],
+        'title' => $nv_Lang->getModule('banners_list0'),
         'num' => $deact
     ];
 }
@@ -59,7 +59,7 @@ if ($deact > 0) {
     $contents['list'][] = [
         'key' => 'deact_list',
         'act' => 3,
-        'title' => $lang_module['banners_list3'],
+        'title' => $nv_Lang->getModule('banners_list3'),
         'num' => $deact
     ];
 }
@@ -71,7 +71,7 @@ if ($exp > 0) {
     $contents['list'][] = [
         'key' => 'exp_list',
         'act' => 2,
-        'title' => $lang_module['banners_list2'],
+        'title' => $nv_Lang->getModule('banners_list2'),
         'num' => $exp
     ];
 }
@@ -81,8 +81,8 @@ if (empty($contents['list']) and empty($contents['keyword']) and empty($contents
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('CONTENTS', $contents);
@@ -104,7 +104,7 @@ foreach ($contents['list'] as $list) {
 $xtpl->parse('main');
 
 $contents = $xtpl->text('main');
-$page_title = $lang_module['main_caption'];
+$page_title = $nv_Lang->getModule('main_caption');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

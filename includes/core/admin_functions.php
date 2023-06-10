@@ -26,14 +26,14 @@ function nv_groups_list($mod_data = 'users')
     if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
         return unserialize($cache);
     }
-    global $db, $db_config, $global_config, $lang_global;
+    global $db, $db_config, $global_config, $nv_Lang;
 
     $groups = [];
     $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
     $result = $db->query('SELECT g.group_id, d.title, g.idsite FROM ' . $_mod_table . '_groups AS g LEFT JOIN ' . $_mod_table . "_groups_detail d ON ( g.group_id = d.group_id AND d.lang='" . NV_LANG_DATA . "' ) WHERE (g.idsite = " . $global_config['idsite'] . ' OR (g.idsite =0 AND g.siteus = 1)) ORDER BY g.idsite, g.weight');
     while ($row = $result->fetch()) {
         if ($row['group_id'] < 9) {
-            $row['title'] = $lang_global['level' . $row['group_id']];
+            $row['title'] = $nv_Lang->getGlobal('level' . $row['group_id']);
         }
         $groups[$row['group_id']] = ($global_config['idsite'] > 0 and empty($row['idsite'])) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
     }
@@ -290,7 +290,7 @@ function nv_save_file_config_global()
  */
 function nv_geVersion($updatetime = 3600)
 {
-    global $global_config, $lang_global;
+    global $global_config, $nv_Lang;
 
     $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml';
 
@@ -321,7 +321,7 @@ function nv_geVersion($updatetime = 3600)
         if (!empty(NukeViet\Http\Http::$error)) {
             $error = nv_http_get_lang(NukeViet\Http\Http::$error);
         } elseif (!isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
-            $error = $lang_global['error_valid_response'];
+            $error = $nv_Lang->getGlobal('error_valid_response');
         } elseif (!empty($array['error']['message'])) {
             $error = $array['error']['message'];
         }
@@ -545,7 +545,7 @@ function nv_server_config_change($my_domains = [])
  */
 function nv_getExtVersion($updatetime = 3600)
 {
-    global $global_config, $lang_global, $db, $db_config;
+    global $global_config, $nv_Lang, $db, $db_config;
 
     $my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/extensions.version.' . NV_LANG_INTERFACE . '.xml';
 
@@ -608,7 +608,7 @@ function nv_getExtVersion($updatetime = 3600)
             if (!empty(NukeViet\Http\Http::$error)) {
                 $error = nv_http_get_lang(NukeViet\Http\Http::$error);
             } elseif (!isset($apidata['error']) or !isset($apidata['data']) or !isset($apidata['pagination']) or !is_array($apidata['error']) or !is_array($apidata['data']) or !is_array($apidata['pagination']) or (!empty($apidata['error']) and (!isset($apidata['error']['level']) or empty($apidata['error']['message'])))) {
-                $error = $lang_global['error_valid_response'];
+                $error = $nv_Lang->getGlobal('error_valid_response');
             } elseif (!empty($apidata['error']['message'])) {
                 $error = $apidata['error']['message'];
             }

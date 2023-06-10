@@ -20,12 +20,12 @@ $array_mod = LoadModulesSearch();
 if (!empty($array_op[1]) and isset($opensearch_link[$array_op[1]])) {
     $mod = $opensearch_link[$array_op[1]];
     $ShortName = $mod[0];
-    $Description = !empty($mod[1]) ? $mod[1] : sprintf($lang_module['opensearch_desc_mod'], $array_mod[$array_op[1]]['custom_title'], $global_config['site_name']);
+    $Description = !empty($mod[1]) ? $mod[1] : $nv_Lang->getModule('opensearch_desc_mod', $array_mod[$array_op[1]]['custom_title'], $global_config['site_name']);
     $Url .= '&m=' . $array_op[1];
 } elseif(isset($opensearch_link['site'])) {
     $mod = $opensearch_link['site'];
     $ShortName = $mod[0];
-    $Description = !empty($mod[1]) ? $mod[1] : sprintf($lang_module['opensearch_desc_all'], $global_config['site_name']);
+    $Description = !empty($mod[1]) ? $mod[1] : $nv_Lang->getModule('opensearch_desc_all', $global_config['site_name']);
 }
 if (empty($ShortName) or empty($Description)) {
     exit(0);

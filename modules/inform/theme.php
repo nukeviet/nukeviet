@@ -18,14 +18,14 @@ if (!defined('NV_IS_INFORM')) {
  */
 function main_theme()
 {
-    global $lang_global, $lang_module, $module_info, $module_name;
+    global $nv_Lang, $module_info, $module_name;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 
-    $filters = ['unviewed' => $lang_module['filter_unviewed'], 'favorite' => $lang_module['filter_favorite'], 'hidden' => $lang_module['filter_hidden']];
+    $filters = ['unviewed' => $nv_Lang->getModule('filter_unviewed'), 'favorite' => $nv_Lang->getModule('filter_favorite'), 'hidden' => $nv_Lang->getModule('filter_hidden')];
     foreach ($filters as $key => $title) {
         $xtpl->assign('FILTER', [
             'key' => $key,
@@ -48,11 +48,11 @@ function main_theme()
  */
 function user_getlist_theme($items, $generate_page, $filter, $page_url)
 {
-    global $global_config, $lang_global, $lang_module, $module_info;
+    global $global_config, $nv_Lang, $module_info;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PAGE_URL', nv_url_rewrite($page_url, true));
 
     if (!empty($items)) {
@@ -67,7 +67,7 @@ function user_getlist_theme($items, $generate_page, $filter, $page_url)
                     $xtpl->parse('user_get_list.main_cont.loop.sender_system');
                 }
 
-                $item['title'] = sprintf($lang_module['notification_title'], $item['title']);
+                $item['title'] = $nv_Lang->getModule('notification_title', $item['title']);
                 $item['is_hidden'] = $filter == 'hidden' ? 1 : 0;
                 $item['is_viewed'] = !empty($item['viewed_time']) ? 1 : 0;
                 $item['is_favorite'] = !empty($item['favorite_time']) ? 1 : 0;
@@ -123,11 +123,11 @@ function user_getlist_theme($items, $generate_page, $filter, $page_url)
 
 function getlist_theme($items, $generate_page, $group_id, $members)
 {
-    global $lang_global, $lang_module, $module_info;
+    global $module_info;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($items)) {
         foreach ($items as $item) {
@@ -174,21 +174,21 @@ function getlist_theme($items, $generate_page, $group_id, $members)
 
 function notifications_manager_theme($contents, $page_url, $filter, $checkss)
 {
-    global $lang_global, $lang_module, $module_info;
+    global $nv_Lang, $module_info;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $module_info['template']);
     $xtpl->assign('PAGE_CONTENT', $contents);
     $xtpl->assign('MANAGER_PAGE_URL', $page_url);
     $xtpl->assign('CHECKSS', $checkss);
 
     $filters = [
-        'active' => $lang_module['active'],
-        'waiting' => $lang_module['waiting'],
-        'expired' => $lang_module['expired'],
-        '' => $lang_module['filter_all']
+        'active' => $nv_Lang->getModule('active'),
+        'waiting' => $nv_Lang->getModule('waiting'),
+        'expired' => $nv_Lang->getModule('expired'),
+        '' => $nv_Lang->getModule('filter_all')
     ];
 
     foreach ($filters as $key => $name) {
@@ -207,11 +207,11 @@ function notifications_manager_theme($contents, $page_url, $filter, $checkss)
 
 function notification_action_theme($data, $page_url, $checkss)
 {
-    global $global_config, $language_array, $lang_global, $lang_module, $module_info;
+    global $global_config, $language_array, $module_info;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MANAGER_PAGE_URL', $page_url);
     $xtpl->assign('DATA', $data);
     $xtpl->assign('CHECKSS', $checkss);

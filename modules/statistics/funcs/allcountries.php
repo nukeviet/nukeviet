@@ -13,7 +13,7 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['country'];
+$page_title = $nv_Lang->getModule('country');
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'];
 $contents = '';
@@ -47,7 +47,7 @@ if ($num_items) {
     while (list($country, $count, $last_visit) = $result->fetch(3)) {
         $countries_list[] = [
             'key' => $country,
-            'name' => ($country != 'ZZ' and isset($countries[$country])) ? (isset($lang_global['country_' . $country]) ? $lang_global['country_' . $country] : $countries[$country][1]) : $lang_global['unknown'],
+            'name' => ($country != 'ZZ' and isset($countries[$country])) ? ($nv_Lang->existsGlobal('country_' . $country) ? $nv_Lang->getGlobal('country_' . $country) : $countries[$country][1]) : $nv_Lang->getGlobal('unknown'),
             'count' => $count,
             'count_format' => !empty($count) ? number_format($count) : 0,
             'last_visit' => !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '',
@@ -58,7 +58,7 @@ if ($num_items) {
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allcountries($countries_list, $generate_page);

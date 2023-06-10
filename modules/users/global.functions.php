@@ -18,17 +18,17 @@ define('NV_2STEP_VERIFICATION_MODULE', 'two-step-verification');
 $global_array_genders = [
     'M' => [
         'key' => 'M',
-        'title' => $lang_module['male'],
+        'title' => $nv_Lang->getModule('male'),
         'selected' => ''
     ],
     'F' => [
         'key' => 'F',
-        'title' => $lang_module['female'],
+        'title' => $nv_Lang->getModule('female'),
         'selected' => ''
     ],
     'N' => [
         'key' => 'N',
-        'title' => $lang_module['na'],
+        'title' => $nv_Lang->getModule('na'),
         'selected' => ''
     ]
 ];
@@ -205,7 +205,7 @@ function delete_userfile($file_save_info)
  */
 function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field)
 {
-    global $array_field_config, $lang_module, $global_users_config, $module_upload;
+    global $array_field_config, $nv_Lang, $global_users_config, $module_upload;
 
     if (empty($array_field_config)) {
         $array_field_config = get_other_fields(nv_get_users_field_config());
@@ -229,7 +229,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                     ];
                 }
 
@@ -239,7 +239,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                        'mess' => $nv_Lang->getModule('field_min_max_value', $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                     ];
                 }
             } elseif ($row_f['field_type'] == 'date') {
@@ -247,7 +247,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                     ];
                 }
 
@@ -260,7 +260,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
+                        'mess' => $nv_Lang->getModule('field_min_max_value', $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
                     ];
                 }
 
@@ -268,7 +268,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['old_min_user_error'], $global_users_config['min_old_user'])
+                        'mess' => $nv_Lang->getModule('old_min_user_error', $global_users_config['min_old_user'])
                     ];
                 }
             } elseif ($row_f['field_type'] == 'textbox') {
@@ -277,7 +277,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         return [
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                         ];
                     }
                 } elseif ($row_f['match_type'] == 'unicodename') {
@@ -285,7 +285,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         return [
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                         ];
                     }
                 } elseif ($row_f['match_type'] == 'email') {
@@ -302,7 +302,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         return [
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                         ];
                     }
                 } elseif ($row_f['match_type'] == 'regex') {
@@ -312,7 +312,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                             return [
                                 'status' => 'error',
                                 'input' => $field_input_name,
-                                'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                                'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                             ];
                         }
                     } else {
@@ -320,7 +320,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                             return [
                                 'status' => 'error',
                                 'input' => $field_input_name,
-                                'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                                'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                             ];
                         }
                     }
@@ -336,7 +336,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         return [
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                         ];
                     }
                 } else {
@@ -349,7 +349,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                        'mess' => $nv_Lang->getModule('field_min_max_error', $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                     ];
                 }
             } elseif ($row_f['field_type'] == 'textarea' or $row_f['field_type'] == 'editor') {
@@ -361,7 +361,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         return [
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                         ];
                     }
                 } elseif ($row_f['match_type'] == 'callback') {
@@ -376,7 +376,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                         return [
                             'status' => 'error',
                             'input' => $field_input_name,
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                            'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                         ];
                     }
                 }
@@ -388,7 +388,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                        'mess' => $nv_Lang->getModule('field_min_max_error', $row_f['title'], $row_f['min_length'], $row_f['max_length'])
                     ];
                 }
             } elseif ($row_f['field_type'] == 'checkbox' or $row_f['field_type'] == 'multiselect') {
@@ -405,7 +405,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
                     return [
                         'status' => 'error',
                         'input' => $field_input_name,
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        'mess' => $nv_Lang->getModule('field_match_type_error', $row_f['title'])
                     ];
                 }
             } elseif ($row_f['field_type'] == 'file') {
@@ -445,7 +445,7 @@ function fieldsCheck(&$custom_fields, &$array_data, &$query_field, &$valid_field
             return [
                 'status' => 'error',
                 'input' => $field_input_name,
-                'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title'])
+                'mess' => $nv_Lang->getModule('field_match_type_required', $row_f['title'])
             ];
         }
 
@@ -528,20 +528,20 @@ function userInfoTabDb($data, $userid = 0)
  */
 function image_size_info($size, $coor)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     $limit = [];
     if (!empty($size['equal'])) {
-        $limit[] = $lang_module['equal'] . ' ' . $size['equal'] . ' px';
+        $limit[] = $nv_Lang->getModule('equal') . ' ' . $size['equal'] . ' px';
     } else {
         if (!empty($size['greater'])) {
-            $limit[] = $lang_module['greater'] . ' ' . $size['greater'] . ' px';
+            $limit[] = $nv_Lang->getModule('greater') . ' ' . $size['greater'] . ' px';
         }
         if (!empty($size['less'])) {
-            $limit[] = $lang_module['less'] . ' ' . $size['less'] . ' px';
+            $limit[] = $nv_Lang->getModule('less') . ' ' . $size['less'] . ' px';
         }
     }
-    $limit = !empty($limit) ? $lang_module['file_image_' . $coor] . ' ' . implode(', ', $limit) : '';
+    $limit = !empty($limit) ? $nv_Lang->getModule('file_image_' . $coor) . ' ' . implode(', ', $limit) : '';
 
     return $limit;
 }

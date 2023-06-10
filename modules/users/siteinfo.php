@@ -13,7 +13,6 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
     exit('Stop!!!');
 }
 
-$lang_siteinfo = nv_get_lang_module($mod);
 $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
 $level = $admin_info['level'];
 
@@ -44,7 +43,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
 // Số thành viên
 if ($_arr_siteinfo['number_user'] > 0) {
     $siteinfo[] = [
-        'key' => $lang_siteinfo['siteinfo_user'],
+        'key' => $nv_Lang->getModule('siteinfo_user'),
         'value' => number_format($_arr_siteinfo['number_user'])
     ];
 }
@@ -52,7 +51,7 @@ if ($_arr_siteinfo['number_user'] > 0) {
 // Số thành viên đợi kích hoạt
 if ($_arr_siteinfo['number_user_reg'] > 0) {
     $pendinginfo[] = [
-        'key' => $lang_siteinfo['siteinfo_waiting'],
+        'key' => $nv_Lang->getModule('siteinfo_waiting'),
         'value' => number_format($_arr_siteinfo['number_user_reg']),
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=user_waiting'
     ];
@@ -61,7 +60,7 @@ if ($_arr_siteinfo['number_user_reg'] > 0) {
 // Số thành viên chờ kiểm duyệt thông tin cá nhân
 if (!empty($_arr_siteinfo['number_user_edit']) and isset($access_admin['access_editcensor'][$level]) and $access_admin['access_editcensor'][$level] == 1) {
     $pendinginfo[] = [
-        'key' => $lang_siteinfo['siteinfo_editcensor'],
+        'key' => $nv_Lang->getModule('siteinfo_editcensor'),
         'value' => number_format($_arr_siteinfo['number_user_edit']),
         'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=editcensor'
     ];
@@ -92,7 +91,7 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     if (!empty($pending_lists)) {
         foreach ($pending_lists as $row) {
             $pendinginfo[] = [
-                'key' => sprintf($lang_siteinfo['group_user_peding'], $row['title']),
+                'key' => $nv_Lang->getModule('group_user_peding', $row['title']),
                 'value' => number_format($row['num_users'], 0, ',', '.'),
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=groups&userlist=' . $row['group_id']
             ];

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -56,7 +56,7 @@ $lang_module['metaTagsContent'] = 'Contenu';
 $lang_module['metaTagsOgp'] = 'Activer le protocole meta-Tag Open Graph';
 $lang_module['metaTagsOgpNote'] = 'Protocole Open Graph: est un critère de données pour partager les données au Facebook, regarde les détails à <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
 $lang_module['description_length'] = 'Nombre de caractères dans la balise meta tag description';
-$lang_module['description_note'] = '= 0 ne limite pas le nombre de caractères';
+$lang_module['description_note'] = '1024 caractères ou moins';
 $lang_module['metaTagsSettings'] = 'Réglages';
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Titre';
@@ -82,8 +82,7 @@ $lang_module['rpc_ping'] = 'PING en misant à jour des données';
 $lang_module['rpc_ping_page'] = 'PING article';
 $lang_module['rpc_finish'] = 'Processus de PING réussit, voulez-vous revenir à la page de gestion des articles?';
 $lang_module['private_site'] = 'Décourager les moteurs de recherche d\'indexer ce site';
-$lang_module['ogp_image'] = 'Image par défaut pour les balises Open Graph<br/>(meilleure taille: 1080px x 1080px)';
-
+$lang_module['ogp_image'] = 'Image par défaut pour les balises Open Graph<br />(meilleure taille: 1080px x 1080px)';
 $lang_module['linkTags_attribute'] = 'Attribut';
 $lang_module['linkTags_value'] = 'Valeur';
 $lang_module['linkTags_add_attribute'] = 'Ajouter un attribut';
@@ -91,13 +90,11 @@ $lang_module['linkTags_rel_val_required'] = 'Vous devez déclarer la valeur de l
 $lang_module['linkTags_add'] = 'Ajouter une nouvelle balise de lien';
 $lang_module['linkTags_acceptVars'] = 'Variables acceptées dans la valeur d\'attribut';
 $lang_module['linkTags_del_confirm'] = 'Voulez-vous vraiment supprimer?';
-
 $lang_module['add_opensearch_link'] = 'Activez la balise de lien OpenSearch pour le plug-in de recherche dans les zones suivantes';
 $lang_module['add_opensearch_link_all'] = 'Recherche sur tout le site';
 $lang_module['ShortName'] = 'Nom court';
 $lang_module['Description'] = 'La description';
 $lang_module['ShortName_note'] = '16 caractères ou moins';
-$lang_module['Description_note'] = '1024 caractères ou moins';
 $lang_module['other_seo_tools'] = 'Autres outils SEO';
 $lang_module['add_sitelinks_search_box_schema'] = 'Ajouter un schéma de zone de recherche de liens annexes';
 $lang_module['more_information'] = 'Plus d\'information';

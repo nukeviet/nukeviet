@@ -15,7 +15,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
 
 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 
-$page_title = $lang_module['main'];
+$page_title = $nv_Lang->getModule('main');
 $contents = 'On development stage';
 
 include NV_ROOTDIR . '/includes/header.php';

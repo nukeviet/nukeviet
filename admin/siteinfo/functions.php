@@ -20,7 +20,7 @@ if ($admin_info['level'] == 1) {
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_siteinfo']
+    'custom_title' => $nv_Lang->getGlobal('mod_siteinfo')
 ];
 
 //Document
@@ -98,29 +98,4 @@ function nv_siteinfo_getmodules()
     }
 
     return $array_modules;
-}
-
-/**
- * nv_get_lang_module()
- *
- * @param mixed $mod
- * @return
- */
-function nv_get_lang_module($mod)
-{
-    global $site_mods;
-
-    $lang_module = [];
-
-    if (isset($site_mods[$mod])) {
-        if (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php')) {
-            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_en.php')) {
-            include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_en.php';
-        }
-    }
-
-    return $lang_module;
 }

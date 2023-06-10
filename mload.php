@@ -62,11 +62,7 @@ if ($nv_Request->isset_request('checkuser', 'post,get')) {
 $array_op = [];
 
 // Kết nối với file ngôn ngữ của module
-if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-} elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
-}
+$nv_Lang->loadModule($module_file);
 
 // Kết nối với file functions.php của module
 if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/functions.php')) {

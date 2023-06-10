@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
-$submenu['content'] = $lang_module['voting_add'];
+$submenu['content'] = $nv_Lang->getModule('voting_add');
 
 $allow_func = [
     'main',

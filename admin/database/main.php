@@ -40,16 +40,16 @@ if ($db->dbtype == 'mysql') {
 }
 
 $contents = [];
-$contents['captions']['database_info'] = sprintf($lang_module['database_info'], $database['db_dbname']);
+$contents['captions']['database_info'] = $nv_Lang->getModule('database_info', $database['db_dbname']);
 
 foreach ($database as $key => $values) {
-    $contents['database'][$lang_module[$key]] = $values;
+    $contents['database'][$nv_Lang->getModule($key)] = $values;
 }
 unset($database);
 
 $contents = main_theme($contents);
 
-$page_title = $lang_module['main'];
+$page_title = $nv_Lang->getModule('main');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

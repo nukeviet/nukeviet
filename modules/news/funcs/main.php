@@ -21,14 +21,14 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
         if (!$newsid) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['article_not_found']
+                'mess' => $nv_Lang->getModule('article_not_found')
             ]);
         }
         $news_details = $db->query('SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $newsid . ' AND status=1')->fetch();
         if (empty($news_details)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['article_not_found']
+                'mess' => $nv_Lang->getModule('article_not_found')
             ]);
         }
         $checkss = md5($newsid . NV_CHECK_SESSION);
@@ -52,7 +52,7 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
         if (isset($nv_seccode) and !nv_capcha_txt($nv_seccode, $module_captcha)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+                'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
             ]);
         }
         $orig_content = $nv_Request->get_title('report_content', 'post', '');
@@ -60,7 +60,7 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
         if (nv_strlen($orig_content) < 3) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['report_content_empty']
+                'mess' => $nv_Lang->getModule('report_content_empty')
             ]);
         }
         $repl_content = $nv_Request->get_title('report_fix', 'post', '');
@@ -68,7 +68,7 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
         if (nv_strlen($repl_content) > 0 and strcasecmp($orig_content, $repl_content) == 0) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['report_same_values']
+                'mess' => $nv_Lang->getModule('report_same_values')
             ]);
         }
         $post_email = $nv_Request->get_title('report_email', 'post', '');
@@ -87,7 +87,7 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
         if ($last_post_time > NV_CURRENTTIME - (int) $module_config[$module_name]['report_limit'] * 60) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['sending_too_much']
+                'mess' => $nv_Lang->getModule('sending_too_much')
             ]);
         }
         $md5content = md5($orig_content);
@@ -112,7 +112,7 @@ if (!empty($module_config[$module_name]['report_active']) and (!empty($module_co
         nv_insert_notification($module_name, 'report', ['newsid' => $newsid, 'title' => $news_details['title'], 'post_ip' => $client_info['ip'], 'post_email' => $post_email], $rid);
         nv_jsonOutput([
             'status' => 'OK',
-            'mess' => $lang_module['report_success']
+            'mess' => $nv_Lang->getModule('report_success')
         ]);
     }
 }
@@ -422,7 +422,7 @@ if (empty($contents)) {
 }
 
 if ($page > 1) {
-    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+    $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
 }
 
 if (empty($module_info['description']) and !empty($desc)) {

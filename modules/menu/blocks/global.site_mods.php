@@ -19,25 +19,24 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_menu_site_mods_config($module, $data_block, $lang_block)
+    function nv_menu_site_mods_config($module, $data_block)
     {
-        global $site_mods;
+        global $site_mods, $nv_Lang;
 
         $html = '<div class="form-group">';
-        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $lang_block['menu_note_auto'] . '</div></div>';
+        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $nv_Lang->getModule('menu_note_auto') . '</div></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
         $html .= '<label class="control-label col-sm-6">';
-        $html .= $lang_block['title_length'];
+        $html .= $nv_Lang->getModule('title_length');
         $html .= ':</label>';
         $html .= '<div class="col-sm-9">';
         $html .= '<input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/>';
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['module_display'] . ':</label><div class="col-sm-9"><ul id="sortable" class="list-group" style="margin-bottom:0">';
+        $html .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('module_display') . ':</label><div class="col-sm-9"><ul id="sortable" class="list-group" style="margin-bottom:0">';
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
             $data_block['module_in_menu'] = [];
@@ -63,10 +62,9 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      * nv_menu_site_mods_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_menu_site_mods_submit($module, $lang_block)
+    function nv_menu_site_mods_submit($module)
     {
         global $nv_Request;
         $return = [];
@@ -85,7 +83,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
      */
     function nv_menu_site_mods($block_config)
     {
-        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $lang_global, $catid, $home, $op, $array_op;
+        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $nv_Lang, $catid, $home, $op, $array_op;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -96,7 +94,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
         }
 
         $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('BLOCK_THEME', $block_theme);
         $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 
@@ -171,8 +169,8 @@ if (!nv_function_exists('nv_menu_site_mods')) {
                             }
 
                             $sub_nav_item[] = [
-                                'note' => $lang_global['your_account'],
-                                'title_trim' => nv_clean60($lang_global['your_account'], $block_config['title_length']),
+                                'note' => $nv_Lang->getGlobal('your_account'),
+                                'title_trim' => nv_clean60($nv_Lang->getGlobal('your_account'), $block_config['title_length']),
                                 'active' => $is_active,
                                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=config'
                             ];

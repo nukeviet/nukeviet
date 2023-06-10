@@ -70,4 +70,4 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
     }
 }
 
-echo $lang_module['block_delete_success'];
+echo $nv_Lang->getModule('block_delete_success');

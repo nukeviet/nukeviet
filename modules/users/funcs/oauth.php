@@ -32,14 +32,14 @@ if (defined('SSO_CLIENT_DOMAIN')) {
     if (!empty($sso_client)) {
         if (!in_array($sso_client, $allowed_client_origin, true)) {
             // 406 Not Acceptable
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 406);
         }
         $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
         // Xử lý nếu client đã đăng nhập rồi mà submit vào đây nữa
         if (defined('NV_IS_USER')) {
             opidr_login([
                 'status' => 'success',
-                'mess' => $lang_module['login_ok']
+                'mess' => $nv_Lang->getModule('login_ok')
             ]);
         }
     }

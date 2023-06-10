@@ -37,7 +37,7 @@ $page_title = $author_info['pseudonym'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $author_info['alias'];
 if ($page > 1) {
     $page_url .= '/page-' . $page;
-    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+    $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true);

@@ -13,7 +13,7 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['browser'];
+$page_title = $nv_Lang->getModule('browser');
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'];
 $contents = '';
@@ -46,7 +46,7 @@ if ($num_items) {
     $browsers_list = [];
     while (list($browser, $count, $last_visit) = $result->fetch(3)) {
         $const = 'BROWSER_' . strtoupper($browser);
-        $name = $browser != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($browser)) : $lang_global['unknown'];
+        $name = $browser != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($browser)) : $nv_Lang->getGlobal('unknown');
         $browsers_list[] = [
             'name' => $name,
             'count' => $count,
@@ -59,7 +59,7 @@ if ($num_items) {
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allbrowsers($browsers_list, $generate_page);

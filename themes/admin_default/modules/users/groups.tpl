@@ -314,7 +314,7 @@ $(document).ready(function() {
             <thead>
                 <tr>
                     <th class="text-center"> {LANG.userid} </th>
-                    <th> {LANG.account} </th>
+                    <th> {GLANG.username} </th>
                     <th> {LANG.nametitle} </th>
                     <th> {LANG.email} </th>
                     <th class="text-center"> {GLANG.actions} </th>
@@ -381,7 +381,7 @@ $("a.denied").click(function() {
             <thead>
                 <tr>
                     <th class="text-center"> {LANG.userid} </th>
-                    <th> {LANG.account} </th>
+                    <th> {GLANG.username} </th>
                     <th> {LANG.nametitle} </th>
                     <th> {LANG.email} </th>
                     <th class="text-center"> {GLANG.actions} </th>
@@ -448,7 +448,7 @@ $("a.demote").click(function() {
             <thead>
                 <tr>
                     <th class="text-center"> {LANG.userid} </th>
-                    <th> {LANG.account} </th>
+                    <th> {GLANG.username} </th>
                     <th> {LANG.nametitle} </th>
                     <th> {LANG.email} </th>
                     <th class="text-center"> {GLANG.actions} </th>
@@ -528,7 +528,7 @@ $("a.promote").click(function() {
         a == 0 && ( a = "");
         $("#ablist input[name=uid]").val(a);
         if (a == "") {
-            return alert("{LANG.choiceUserID}"), $("#ablist input[name=uid]").select(), false;
+            return alert("{LANG.admin_choiceUserID}"), $("#ablist input[name=uid]").select(), false;
         }
         $("#pageContent input, #pageContent select").attr("disabled", "disabled");
         $.ajax({

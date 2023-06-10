@@ -13,4 +13,4 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-$submenu['blocks'] = $lang_module['name_block'];
+$submenu['blocks'] = $nv_Lang->getModule('name_block');

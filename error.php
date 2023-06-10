@@ -86,11 +86,7 @@ if (($cache = $nv_Cache->getItem('themes', $cache_file)) != false) {
 require NV_ROOTDIR . '/themes/' . $site_theme . '/theme.php';
 
 // Ket noi ngon ngu theo theme
-if (file_exists(NV_ROOTDIR . '/themes/' . $site_theme . '/language/' . NV_LANG_INTERFACE . '.php')) {
-    require NV_ROOTDIR . '/themes/' . $site_theme . '/language/' . NV_LANG_INTERFACE . '.php';
-} elseif (file_exists(NV_ROOTDIR . '/themes/' . $site_theme . '/language/en.php')) {
-    require NV_ROOTDIR . '/themes/' . $site_theme . '/language/en.php';
-}
+$nv_Lang->loadTheme($site_theme);
 
 $error_code = $nv_Request->get_int('code', 'get', 520);
 
@@ -138,10 +134,10 @@ $error_contents = [
     520 => 'Something is wrong'
 ];
 
-$title = isset($lang_global['error_' . $error_code . '_title']) ? $lang_global['error_' . $error_code . '_title'] : (isset($error_contents[$error_code]) ? 'Error Code: ' . $error_code : 'Unknown Error');
+$title = $nv_Lang->existsGlobal('error_' . $error_code . '_title') ? $nv_Lang->getGlobal('error_' . $error_code . '_title') : (isset($error_contents[$error_code]) ? 'Error Code: ' . $error_code : 'Unknown Error');
 
-if (isset($lang_global['error_' . $error_code . '_content'])) {
-    $content = $lang_global['error_' . $error_code . '_content'];
+if ($nv_Lang->existsGlobal('error_' . $error_code . '_content')) {
+    $content = $nv_Lang->getGlobal('error_' . $error_code . '_content');
 } else {
     $content = isset($error_contents[$error_code]) ? $error_contents[$error_code] : $error_contents[520];
 }

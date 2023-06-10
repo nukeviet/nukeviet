@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['settings'];
+$page_title = $nv_Lang->getModule('settings');
 
 // Lấy tất cả các giao diện (không phải mobile) đã được thiết lập
 $array_site_cat_theme = $array_site_theme = [];
@@ -60,12 +60,12 @@ if ($nv_Request->get_title('tokend', 'post', '') === NV_CHECK_SESSION) {
 }
 
 $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('LINK_SET_CONFIG', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('TOKEND', NV_CHECK_SESSION);
-$xtpl->assign('LANG_MESSAGE', sprintf($lang_module['settings_utheme_lnote'], $language_array[NV_LANG_DATA]['name']));
+$xtpl->assign('LANG_MESSAGE', $nv_Lang->getModule('settings_utheme_lnote', $language_array[NV_LANG_DATA]['name']));
 
 foreach ($array_site_cat_theme as $theme) {
     $xtpl->assign('USER_ALLOWED_THEME', [

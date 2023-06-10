@@ -86,22 +86,22 @@ $allow_func = [
 ];
 
 if (!isset($site_mods['cms'])) {
-    $submenu['content'] = $lang_module['content_add'];
+    $submenu['content'] = $nv_Lang->getModule('content_add');
 }
 
 if ($NV_IS_ADMIN_MODULE) {
-    $submenu['cat'] = $lang_module['categories'];
-    $submenu['tags'] = $lang_module['tags'];
-    $submenu['groups'] = $lang_module['block'];
-    $submenu['topics'] = $lang_module['topics'];
-    $submenu['sources'] = $lang_module['sources'];
-    $submenu['authors'] = $lang_module['author_manage'];
-    $submenu['admins'] = $lang_module['admin'];
-    $submenu['report'] = $lang_module['report'];
+    $submenu['cat'] = $nv_Lang->getModule('categories');
+    $submenu['tags'] = $nv_Lang->getModule('tags_manage');
+    $submenu['groups'] = $nv_Lang->getModule('block');
+    $submenu['topics'] = $nv_Lang->getModule('topics');
+    $submenu['sources'] = $nv_Lang->getModule('sources');
+    $submenu['authors'] = $nv_Lang->getModule('author_manage');
+    $submenu['admins'] = $nv_Lang->getModule('admin');
+    $submenu['report'] = $nv_Lang->getModule('report');
     $submenu['setting'] = [
-        'title' => $lang_module['setting'],
+        'title' => $nv_Lang->getModule('setting'),
         'submenu' => [
-            'voices' => $lang_module['voice_manager']
+            'voices' => $nv_Lang->getModule('voice_manager')
         ]
     ];
 

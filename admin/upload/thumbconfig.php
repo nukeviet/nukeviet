@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
     exit('Stop!!!');
 }
 
-$lang_module['thumb_default_size_note'] = sprintf($lang_module['thumb_default_size_note'], $global_config['thumb_max_width'], $global_config['thumb_max_height']);
+$nv_Lang->setModule('thumb_default_size_note', $nv_Lang->getModule('thumb_default_size_note', $global_config['thumb_max_width'], $global_config['thumb_max_height']));
 
 if ($nv_Request->isset_request('save', 'post')) {
     $thumb_type = $nv_Request->get_typed_array('thumb_type', 'post', 'int', []);
@@ -30,7 +30,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         if (!empty($thumb_type[$did])) {
             $max_width = $did == 0 ? $global_config['thumb_max_width'] : 1000;
             $max_height = $did == 0 ? $global_config['thumb_max_height'] : 1000;
-            $error = $did == 0 ? $lang_module['thumb_default_size_note'] : $lang_module['thumb_dir_size_note'];
+            $error = $did == 0 ? $nv_Lang->getModule('thumb_default_size_note') : $nv_Lang->getModule('thumb_dir_size_note');
 
             if ($thumb_type[$did] == 2) {
                 $thumb_width[$did] = 0;
@@ -73,7 +73,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                 nv_jsonOutput([
                     'status' => 'error',
                     'input' => 'other_thumb_width',
-                    'mess' => $lang_module['thumb_dir_size_note']
+                    'mess' => $nv_Lang->getModule('thumb_dir_size_note')
                 ]);
             }
         }
@@ -84,7 +84,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'other_thumb_height',
-                'mess' => $lang_module['thumb_dir_size_note']
+                'mess' => $nv_Lang->getModule('thumb_dir_size_note')
             ]);
         }
         $opts[$did] = [$type, $width, $height, $quality];
@@ -120,7 +120,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     $thumb_quality = $nv_Request->get_int('q', 'post', 0);
 
     if ((!empty($thumb_dir) and !in_array($thumb_dir, $array_dirname, true)) or $thumb_type <= 0 or $thumb_width <= 0 or $thumb_height <= 0 or $thumb_quality <= 0 or $thumb_quality > 100) {
-        nv_jsonOutput(['status' => 'error', 'message' => nv_theme_alert($lang_module['prViewExampleError1'], $lang_module['prViewExampleError'])]);
+        nv_jsonOutput(['status' => 'error', 'message' => nv_theme_alert($nv_Lang->getModule('prViewExampleError1'), $nv_Lang->getModule('prViewExampleError'))]);
     }
 
     $return = ['status' => 'error'];
@@ -147,7 +147,7 @@ if ($nv_Request->isset_request('getexample', 'post')) {
     }
 
     if (empty($image_demo)) {
-        nv_jsonOutput(['status' => 'error', 'message' => nv_theme_alert($lang_module['file_no_exists'], $lang_module['prViewExampleError2'])]);
+        nv_jsonOutput(['status' => 'error', 'message' => nv_theme_alert($nv_Lang->getModule('file_no_exists'), $nv_Lang->getModule('prViewExampleError2'))]);
     }
 
     $image_demo['sizes'] = explode('|', $image_demo['sizes']);
@@ -203,24 +203,24 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 $thumb_type = [];
 $i = 0;
-$lang_module['thumb_type_0'] = '';
+$nv_Lang->setModule('thumb_type_0', '');
 
 $sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
 $result = $db->query($sql);
 while ($data = $result->fetch()) {
     if ($data['did'] == 0) {
-        $data['dirname'] = $lang_module['thumb_dir_default'];
+        $data['dirname'] = $nv_Lang->getModule('thumb_dir_default');
     }
     if ($data['thumb_type']) {
         for ($id = 1; $id < 6; ++$id) {
             $type = [
                 'id' => $id,
                 'selected' => ($id == $data['thumb_type']) ? ' selected="selected"' : '',
-                'name' => $lang_module['thumb_type_' . $id]
+                'name' => $nv_Lang->getModule('thumb_type_' . $id)
             ];
             $xtpl->assign('TYPE', $type);
             $xtpl->parse('main.loop.thumb_type');
@@ -248,7 +248,7 @@ while ($data = $result->fetch()) {
 }
 
 for ($id = 1; $id < 6; ++$id) {
-    $type = ['id' => $id, 'name' => $lang_module['thumb_type_' . $id]];
+    $type = ['id' => $id, 'name' => $nv_Lang->getModule('thumb_type_' . $id]);
     $xtpl->assign('TYPE', $type);
     $xtpl->parse('main.other_type');
 }
@@ -265,7 +265,7 @@ for ($i = 4; $i <= 20; ++$i) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['thumbconfig'];
+$page_title = $nv_Lang->getModule('thumbconfig');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

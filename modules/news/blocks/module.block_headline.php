@@ -19,20 +19,21 @@ if (!nv_function_exists('nv_block_headline')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_config_news_headline($module, $data_block, $lang_block)
+    function nv_block_config_news_headline($module, $data_block)
     {
+        global $nv_Lang;
+
         $tooltip_position = [
-            'top' => $lang_block['tooltip_position_top'],
-            'bottom' => $lang_block['tooltip_position_bottom'],
-            'left' => $lang_block['tooltip_position_left'],
-            'right' => $lang_block['tooltip_position_right']
+            'top' => $nv_Lang->getModule('tooltip_position_top'),
+            'bottom' => $nv_Lang->getModule('tooltip_position_bottom'),
+            'left' => $nv_Lang->getModule('tooltip_position_left'),
+            'right' => $nv_Lang->getModule('tooltip_position_right')
         ];
 
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('showtooltip') . ':</label>';
         $html .= '<div class="col-sm-18">';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-4">';
@@ -41,7 +42,7 @@ if (!nv_function_exists('nv_block_headline')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group margin-bottom-sm">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getModule('tooltip_position') . '</div>';
         $html .= '<select name="config_tooltip_position" class="form-control">';
 
         foreach ($tooltip_position as $key => $value) {
@@ -53,7 +54,7 @@ if (!nv_function_exists('nv_block_headline')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getModule('tooltip_length') . '</div>';
         $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
         $html .= '</div>';
         $html .= '</div>';
@@ -69,10 +70,9 @@ if (!nv_function_exists('nv_block_headline')) {
      * nv_block_config_news_headline_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_news_headline_submit($module, $lang_block)
+    function nv_block_config_news_headline_submit($module)
     {
         global $nv_Request;
         $return = [];

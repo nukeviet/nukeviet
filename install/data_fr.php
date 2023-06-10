@@ -38,7 +38,7 @@ $install_lang['modules']['menu'] = 'Barre de navigation';
 $install_lang['modules']['menu_for_acp'] = '';
 $install_lang['modules']['comment'] = 'Comment';
 $install_lang['modules']['comment_for_acp'] = '';
-$install_lang['modules']['siteterms'] = 'Conditions d\'utilisation';
+$install_lang['modules']['siteterms'] = 'Conditions d’utilisation';
 $install_lang['modules']['siteterms_for_acp'] = '';
 $install_lang['modules']['feeds'] = 'Rss Feeds';
 $install_lang['modules']['Page'] = 'Page';
@@ -98,23 +98,23 @@ $install_lang['cron']['cron_dump_autobackup'] = 'Sauvegarder automatique la base
 $install_lang['cron']['cron_auto_del_temp_download'] = 'Supprimer les fichiers temporaires du répertoire tmp';
 $install_lang['cron']['cron_del_ip_logs'] = 'Supprimer les fichiers ip_logs expirés';
 $install_lang['cron']['cron_auto_del_error_log'] = 'Supprimer les fichiers error_log expirés';
-$install_lang['cron']['cron_auto_sendmail_error_log'] = 'Envoyer à l\'administrateur l\'e-mail des notifications d\'erreurs';
+$install_lang['cron']['cron_auto_sendmail_error_log'] = 'Envoyer à l’administrateur l’e-mail des notifications d’erreurs';
 $install_lang['cron']['cron_ref_expired_del'] = 'Supprimer les referers expirés';
 $install_lang['cron']['cron_auto_check_version'] = 'Vérifier la version NukeViet';
 $install_lang['cron']['cron_notification_autodel'] = 'Supprimer vieille notification';
 $install_lang['cron']['cron_remove_expired_inform'] = 'Supprimer les notifications expirées';
-$install_lang['cron']['cron_apilogs_autodel'] = 'Supprimer les journaux d\'API expirés';
+$install_lang['cron']['cron_apilogs_autodel'] = 'Supprimer les journaux d’API expirés';
 
 $install_lang['groups']['NukeViet-Fans'] = 'Fans de NukeViet';
 $install_lang['groups']['NukeViet-Admins'] = 'Admins de NukeViet';
 $install_lang['groups']['NukeViet-Programmers'] = 'Programmeurs de NukeViet';
 
 $install_lang['groups']['NukeViet-Fans-desc'] = 'Groupe de ventilateurs du système NukeViet';
-$install_lang['groups']['NukeViet-Admins-desc'] = 'Groupe d\'administrateurs pour les sites créés par le système NukeViet';
+$install_lang['groups']['NukeViet-Admins-desc'] = 'Groupe d’administrateurs pour les sites créés par le système NukeViet';
 $install_lang['groups']['NukeViet-Programmers-desc'] = 'Groupe de programmeurs de systèmes NukeViet';
 
 $install_lang['vinades_fullname'] = 'Vietnam Open Source Development Joint Stock Company';
-$install_lang['vinades_address'] = 'Номер 1706/CT2, здание Nang Huong, д. 583, ул. Nguyen Trai, г. Ханой, Вьетнам';
+$install_lang['vinades_address'] = 'Salle 1706/CT2, Bâtiment Nang Huong, 583, rue. Nguyen Trai, Hanoï, Vietnam';
 $install_lang['nukeviet_description'] = 'Partager le succès, connectez passions';
 $install_lang['disable_site_content'] = 'Notre site est fermé temporairement pour la maintenance. Veuillez revenir plus tard. Merci!';
 

@@ -33,7 +33,7 @@ if (isset($array_op[1])) {
     $base_url = $page_url;
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
         $page_url .= '/page-' . $page;
     }
 

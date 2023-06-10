@@ -29,7 +29,7 @@ if (empty($global_config['idsite'])) {
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_webtools']
+    'custom_title' => $nv_Lang->getGlobal('mod_webtools')
 ];
 
 if (defined('NV_IS_GODADMIN')) {

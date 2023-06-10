@@ -18,11 +18,11 @@ $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['delete_dir']) or $check_allow_upload_dir['delete_dir'] !== true) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 if (empty($path) or $path == NV_UPLOADS_DIR) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 $d = nv_deletefile(NV_ROOTDIR . '/' . $path, true);
@@ -39,7 +39,7 @@ if ($d[0]) {
     }
 
     nv_dirListRefreshSize();
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['deletefolder'], $path, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('deletefolder'), $path, $admin_info['userid']);
     echo 'OK';
 } else {
     exit('ERROR_' . $d[1]);

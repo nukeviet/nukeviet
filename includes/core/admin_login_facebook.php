@@ -32,7 +32,7 @@ if (!empty($_GET['code'])) {
             $result['email'] = nv_check_valid_email($result['email'], true);
             if (!empty($result['email'][0])) {
                 // Kiểm tra email hợp lệ
-                $error = $lang_global['admin_oauth_error_email'];
+                $error = $nv_Lang->getGlobal('admin_oauth_error_email');
             } else {
                 // Thành công
                 $attribs = [

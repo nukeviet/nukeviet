@@ -19,14 +19,15 @@ if (!function_exists('nv_block_vertica_menu_note')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_vertica_menu_note($module, $data_block, $lang_block)
+    function nv_block_vertica_menu_note($module, $data_block)
     {
+        global $nv_Lang;
+
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $lang_block['menu_note_auto'] . '</div></div>';
+        $html .= '	<div class="col-sm-18 col-sm-offset-6"><div class="alert alert-info panel-block-content-last">' . $nv_Lang->getModule('menu_note_auto') . '</div></div>';
         $html .= '</div>';
 
         return $html;

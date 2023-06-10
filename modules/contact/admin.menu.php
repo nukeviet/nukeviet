@@ -13,11 +13,11 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-$submenu['department'] = $lang_module['departments'];
+$submenu['department'] = $nv_Lang->getModule('departments');
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['supporter'] = $lang_module['supporter'];
+    $submenu['supporter'] = $nv_Lang->getModule('supporter');
 }
-$submenu['send'] = $lang_module['compose_mail'];
+$submenu['send'] = $nv_Lang->getModule('compose_mail');
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['config'] = $lang_module['config'];
+    $submenu['config'] = $nv_Lang->getModule('config');
 }

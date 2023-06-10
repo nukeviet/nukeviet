@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['extensions_php'];
+$page_title = $nv_Lang->getModule('extensions_php');
 
 require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 
@@ -23,7 +23,7 @@ unset($array['Apache Environment']['HTTP_COOKIE'], $array['HTTP Headers Informat
 if (!empty($array)) {
     $xtpl = new XTemplate('extensions_php.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-    $thead = [$lang_module['directive'], $lang_module['local_value'], $lang_module['master_value']];
+    $thead = [$nv_Lang->getModule('directive'), $nv_Lang->getModule('local_value'), $nv_Lang->getModule('master_value')];
 
     foreach ($array as $module => $mod_vals) {
         $xtpl->assign('MODULE', $module);

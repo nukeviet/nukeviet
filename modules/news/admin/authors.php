@@ -119,7 +119,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'pseudonym',
-            'mess' => $lang_module['author_pseudonym_empty']
+            'mess' => $nv_Lang->getModule('author_pseudonym_empty')
         ]);
     }
 
@@ -128,7 +128,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'pseudonym',
-            'mess' => $lang_module['author_pseudonym_error']
+            'mess' => $nv_Lang->getModule('author_pseudonym_error')
         ]);
     }
 
@@ -136,7 +136,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'uid',
-            'mess' => $lang_module['author_uid_empty']
+            'mess' => $nv_Lang->getModule('author_uid_empty')
         ]);
     }
 
@@ -145,7 +145,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'uid',
-            'mess' => $lang_module['author_uid_error']
+            'mess' => $nv_Lang->getModule('author_uid_error')
         ]);
     }
 
@@ -196,7 +196,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => '',
-                'mess' => $lang_module['author_unspecified_error']
+                'mess' => $nv_Lang->getModule('author_unspecified_error')
             ]);
         }
     } else {
@@ -221,7 +221,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => '',
-                'mess' => $lang_module['author_unspecified_error']
+                'mess' => $nv_Lang->getModule('author_unspecified_error')
             ]);
         }
     }
@@ -266,7 +266,7 @@ if (!empty($uids)) {
 }
 
 $data = [
-    'title' => $lang_module['add_author'],
+    'title' => $nv_Lang->getModule('add_author'),
     'aid' => 0,
     'pseudonym' => '',
     'uid' => 0,
@@ -283,7 +283,7 @@ if ($nv_Request->isset_request('aid', 'get')) {
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         }
 
-        $data['title'] = $lang_module['edit_author'];
+        $data['title'] = $nv_Lang->getModule('edit_author');
         $data['u_account'] = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $data['uid'])->fetchColumn();
         if (!empty($data['image'])) {
             $data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $data['image'];
@@ -295,8 +295,8 @@ if ($nv_Request->isset_request('aid', 'get')) {
 }
 
 $xtpl = new XTemplate('authors.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -356,7 +356,7 @@ if (!empty($data['aid'])) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['author_manage'];
+$page_title = $nv_Lang->getModule('author_manage');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

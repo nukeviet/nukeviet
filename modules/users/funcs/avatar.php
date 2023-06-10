@@ -90,7 +90,7 @@ function deleteAvatar()
     }
 }
 
-$page_title = $lang_module['avatar_pagetitle'];
+$page_title = $nv_Lang->getModule('avatar_pagetitle');
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 $array = [];
@@ -109,7 +109,7 @@ if (defined('SSO_CLIENT_DOMAIN')) {
     $array['client'] = $nv_Request->get_title('client', 'get,post', '');
     if (!empty($array['client']) and !in_array($array['client'], $allowed_client_origin, true)) {
         // 406 Not Acceptable
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 406);
     }
 }
 
@@ -119,7 +119,7 @@ if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post'))
     nv_jsonOutput([
         'status' => 'ok',
         'input' => 'ok',
-        'mess' => $lang_module['editinfo_ok']
+        'mess' => $nv_Lang->getModule('editinfo_ok')
     ]);
 }
 
@@ -134,12 +134,12 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
     $array['crop_height'] = $array['avatar_height'] = $nv_Request->get_int('crop_height', 'post', 0);
 
     if ($array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
-        $array['error'] = $lang_module['avatar_error_data'];
+        $array['error'] = $nv_Lang->getModule('avatar_error_data');
     } else {
         $upload = new NukeViet\Files\Upload([
             'images'
         ], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE);
-        $upload->setLanguage($lang_global);
+        $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
 
         // Storage in temp dir
         $upload_info = $upload->save_file($_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
@@ -176,7 +176,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
                     $array['success'] = 1;
                 }
             } else {
-                $array['error'] = $lang_module['avatar_error_save'];
+                $array['error'] = $nv_Lang->getModule('avatar_error_save');
             }
             @nv_deletefile($upload_info['name']);
         } else {

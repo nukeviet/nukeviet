@@ -55,7 +55,7 @@ if ($bid > 0 and (md5($theme . NV_CHECK_SESSION) == $checkss or md5(NV_CHECK_SES
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
-    echo $lang_module['block_delete_success'];
+    echo $nv_Lang->getModule('block_delete_success');
 } else {
-    echo $lang_module['block_front_delete_error'];
+    echo $nv_Lang->getModule('block_front_delete_error');
 }

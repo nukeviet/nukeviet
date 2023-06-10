@@ -52,8 +52,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 }
 
 nv_jsonOutput([
-    'label' => sprintf($lang_module['change_fun_alias'], $row['func_title'], $row['mod_custom_title']),
-    'title' => $lang_module['funcs_alias'],
+    'label' => $nv_Lang->getModule('change_fun_alias', $row['func_title'], $row['mod_custom_title']),
+    'title' => $nv_Lang->getModule('funcs_alias'),
     'value' => $row['fun_alias'],
     'maxlength' => 255,
     'type' => 'change_alias',

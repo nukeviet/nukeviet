@@ -14,7 +14,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $allowed_mods = array_unique(array_merge_recursive(array_keys($admin_mods), array_keys($site_mods)));
-$page_title = $lang_module['notification'];
+$page_title = $nv_Lang->getModule('notification');
 
 if ($admin_info['level'] == 1) {
     /*
@@ -134,7 +134,7 @@ while ($data = $result->fetch()) {
         // Hien thi thong bao tu cac module he thong
         if ($data['module'] == 'modules') {
             if ($data['type'] == 'auto_deactive_module') {
-                $data['title'] = sprintf($lang_module['notification_module_auto_deactive'], $data['content']['custom_title']);
+                $data['title'] = $nv_Lang->getModule('notification_module_auto_deactive', $data['content']['custom_title']);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'];
             }
         }
@@ -142,13 +142,13 @@ while ($data = $result->fetch()) {
         if ($data['module'] == 'settings') {
             if ($data['type'] == 'auto_deactive_cronjobs') {
                 $cron_title = $db->query('SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $data['content']['cron_id'])->fetchColumn();
-                $data['title'] = sprintf($lang_module['notification_cronjobs_auto_deactive'], $cron_title);
+                $data['title'] = $nv_Lang->getModule('notification_cronjobs_auto_deactive', $cron_title);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=cronjobs';
             } elseif ($data['type'] == 'sendmail_failure') {
-                $data['title'] = sprintf($lang_module['notification_email_failure'], $data['content'][0], $data['content'][1]);
+                $data['title'] = $nv_Lang->getModule('notification_email_failure', $data['content'][0], $data['content'][1]);
                 $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=smtp';
             } elseif ($data['type'] == 'server_config_file_changed') {
-                $data['title'] = sprintf($lang_module['server_config_file_changed'], $data['content']['file']);
+                $data['title'] = $nv_Lang->getModule('server_config_file_changed', $data['content']['file']);
                 $data['link'] = 'javascript:void(0)';
             }
         }
@@ -161,7 +161,7 @@ while ($data = $result->fetch()) {
                 if ($user_info) {
                     $data['send_from'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
                 } else {
-                    $data['send_from'] = $lang_global['level5'];
+                    $data['send_from'] = $nv_Lang->getGlobal('level5');
                 }
 
                 if (!empty($user_info['photo'])) {
@@ -171,13 +171,16 @@ while ($data = $result->fetch()) {
                 }
             } else {
                 $data['photo'] = NV_STATIC_URL . 'themes/default/images/users/no_avatar.png';
-                $data['send_from'] = $lang_global['level5'];
+                $data['send_from'] = $nv_Lang->getGlobal('level5');
             }
+
+            // Đọc tạm ngôn ngữ của module
+            $nv_Lang->loadModule($site_mods[$data['module']]['module_file'], false, true);
 
             include NV_ROOTDIR . '/modules/' . $site_mods[$data['module']]['module_file'] . '/notification.php';
         }
 
-        $data['add_time_iso'] = nv_date(DATE_ISO8601, $data['add_time']);
+        $data['add_time_iso'] = nv_date("Y-m-d\TH:i:sO", $data['add_time']);
         $data['add_time'] = nv_date('H:i d/m/Y', $data['add_time']);
 
         if (!empty($data['title'])) {
@@ -187,7 +190,7 @@ while ($data = $result->fetch()) {
 }
 
 $xtpl = new XTemplate('notification.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/siteinfo');
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 if (!empty($array_data)) {
     foreach ($array_data as $data) {
@@ -208,7 +211,7 @@ if (!empty($array_data)) {
         $contents = $xtpl->text('main');
     }
 } elseif ($is_ajax) {
-    $contents = $page == 1 ? $lang_module['notification_empty'] : '';
+    $contents = $page == 1 ? $nv_Lang->getModule('notification_empty') : '';
 } else {
     if ($page != 1) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);

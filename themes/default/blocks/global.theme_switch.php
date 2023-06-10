@@ -22,7 +22,7 @@ if (!nv_function_exists('nv_block_theme_switch')) {
      */
     function nv_block_theme_switch($block_config)
     {
-        global $global_config, $lang_global;
+        global $global_config;
 
         if (empty($global_config['array_user_allowed_theme'])) {
             return '';
@@ -37,7 +37,7 @@ if (!nv_function_exists('nv_block_theme_switch')) {
         }
 
         $xtpl = new XTemplate('global.theme_switch.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('BLOCK_THEME', $block_theme);
         $xtpl->assign('CONFIG', $block_config);
         $xtpl->assign('TOKEND', NV_CHECK_SESSION);

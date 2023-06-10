@@ -40,7 +40,7 @@ if (defined('SSO_CLIENT_DOMAIN')) {
         $allowed_client_origin = explode(',', SSO_CLIENT_DOMAIN);
         if (!in_array($sso_client, $allowed_client_origin, true)) {
             // 406 Not Acceptable
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 406);
         }
         $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
     }
@@ -119,7 +119,7 @@ if ($checkss == NV_CHECK_SESSION) {
         nv_json_result([
             'status' => 'error',
             'input' => 'opt',
-            'mess' => $lang_module['wrong_confirm']
+            'mess' => $nv_Lang->getModule('wrong_confirm')
         ]);
     }
 
@@ -132,8 +132,8 @@ if ($checkss == NV_CHECK_SESSION) {
         // Gửi email thông báo bảo mật
         $m_time = nv_date('H:i:s d/m/Y', NV_CURRENTTIME);
         $m_link = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN);
-        $message = sprintf($lang_module['email_2step_on'], $m_time, NV_CLIENT_IP, NV_USER_AGENT, $user_info['username'], $m_link, $global_config['site_name']);
-        nv_sendmail_async('', $user_info['email'], $lang_module['email_subject'], $message);
+        $message = $nv_Lang->getModule('email_2step_on', $m_time, NV_CLIENT_IP, NV_USER_AGENT, $user_info['username'], $m_link, $global_config['site_name']);
+        nv_sendmail_async('', $user_info['email'], $nv_Lang->getModule('email_subject'), $message);
     } catch (Exception $e) {
         trigger_error('Error active 2-step Auth!!!', 256);
     }
@@ -151,7 +151,7 @@ if ($checkss == NV_CHECK_SESSION) {
 
         nv_json_result([
             'status' => 'ok',
-            'mess' => $lang_module['forcedrelogin_note'],
+            'mess' => $nv_Lang->getModule('forcedrelogin_note'),
             'redirect' => $redirect
         ]);
     }

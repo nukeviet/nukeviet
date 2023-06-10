@@ -316,6 +316,6 @@
     </div>
 </form>
 <div class="alert alert-info">
-    {LANG.info}
+    {LANG.ldap_info}
 </div>
 <!-- END: main -->

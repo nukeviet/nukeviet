@@ -22,13 +22,13 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
  */
 function nv_sitemapPing($module, $link)
 {
-    global $sys_info, $lang_module, $global_config;
+    global $sys_info, $nv_Lang, $global_config;
 
     $md5 = md5($link . $module . NV_LANG_DATA);
     $cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/sitemapPing_' . $md5 . '.cache';
 
     if (file_exists($cacheFile) and filemtime($cacheFile) > (NV_CURRENTTIME - 3600)) {
-        return $lang_module['pleasePingAgain'];
+        return $nv_Lang->getModule('pleasePingAgain');
     }
 
     if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
@@ -64,10 +64,10 @@ function nv_sitemapPing($module, $link)
     if (!$result and nv_function_exists('fsockopen')) {
         $url_parts = parse_url($link);
         if (!$url_parts) {
-            return $lang_module['searchEngineFailed'];
+            return $nv_Lang->getModule('searchEngineFailed');
         }
         if (!isset($url_parts['host'])) {
-            return $lang_module['searchEngineFailed'];
+            return $nv_Lang->getModule('searchEngineFailed');
         }
         if (!isset($url_parts['path'])) {
             $url_parts['path'] = '/';
@@ -75,7 +75,7 @@ function nv_sitemapPing($module, $link)
 
         $sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? (int) $url_parts['port'] : 80), $errno, $errstr, 3);
         if (!$sock) {
-            return $lang_module['PingNotSupported'];
+            return $nv_Lang->getModule('PingNotSupported');
         }
 
         $request = 'GET ' . $url_parts['path'] . (isset($url_parts['query']) ? '?' . $url_parts['query'] : '') . " HTTP/1.1\r\n";
@@ -91,10 +91,10 @@ function nv_sitemapPing($module, $link)
         unset($matches);
         preg_match("/^HTTP\/[0-9\.]+\s+(\d+)\s+/", $header, $matches);
         if ($matches == []) {
-            return $lang_module['searchEngineFailed'];
+            return $nv_Lang->getModule('searchEngineFailed');
         }
         if ($matches[1] != 200) {
-            return $lang_module['searchEngineFailed'];
+            return $nv_Lang->getModule('searchEngineFailed');
         }
         $result = true;
     }
@@ -103,7 +103,7 @@ function nv_sitemapPing($module, $link)
         file_put_contents($cacheFile, $link);
     }
 
-    return $result ? $lang_module['pingOK'] : $lang_module['PingNotSupported'];
+    return $result ? $nv_Lang->getModule('pingOK') : $nv_Lang->getModule('PingNotSupported');
 }
 
 $file_searchEngines = NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine_ping.xml';
@@ -127,8 +127,8 @@ if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $xtpl = new XTemplate('sitemap.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('URL_SITEMAP', $url_sitemap);
 $xtpl->assign('ACTION_FORM', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('CHECKSS', $checkss);
@@ -192,9 +192,9 @@ if ($checkss == $nv_Request->get_string('checkss2', 'post') and empty($global_co
         }
 
         if (!$a) {
-            $info = $lang_module['searchEngineSelect'];
+            $info = $nv_Lang->getModule('searchEngineSelect');
         } elseif (!$b) {
-            $info = $lang_module['sitemapModule'];
+            $info = $nv_Lang->getModule('sitemapModule');
         }
     }
 }
@@ -246,7 +246,7 @@ if (empty($global_config['idsite'])) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['sitemapPing'];
+$page_title = $nv_Lang->getModule('sitemapPing');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

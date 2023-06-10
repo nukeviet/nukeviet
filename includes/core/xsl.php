@@ -31,6 +31,6 @@ if (empty($contents)) {
 $contents = preg_replace('/\{NV\_BASE\_SITEURL\}/', NV_BASE_SITEURL, $contents);
 $contents = preg_replace('/\{NV\_ASSETS\_DIR\}/', NV_ASSETS_DIR, $contents);
 $contents = preg_replace('/\{THEME\}/', $theme, $contents);
-$contents = preg_replace('/\{MORE\_LANG\}/', $lang_global['detail'], $contents);
+$contents = preg_replace('/\{MORE\_LANG\}/', $nv_Lang->getGlobal('detail'), $contents);
 $lastModified = NV_CURRENTTIME;
 nv_xmlOutput($contents, $lastModified);

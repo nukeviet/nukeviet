@@ -24,9 +24,9 @@ $allow_func = ['main', 'blocks'];
 
 // Loai lien ket
 $type_target = [];
-$type_target[1] = $lang_module['type_target1'];
-$type_target[2] = $lang_module['type_target2'];
-$type_target[3] = $lang_module['type_target3'];
+$type_target[1] = $nv_Lang->getModule('type_target1');
+$type_target[2] = $nv_Lang->getModule('type_target2');
+$type_target[3] = $nv_Lang->getModule('type_target3');
 
 /**
  * nv_list_menu()

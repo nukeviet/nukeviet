@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['voting_edit'];
+$page_title = $nv_Lang->getModule('voting_edit');
 
 $error = '';
 $vid = $nv_Request->get_int('vid', 'post,get');
@@ -111,7 +111,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     $active_captcha = $nv_Request->get_int('active_captcha', 'post', 0) ? 1 : 0;
 
     if (!empty($question) and $number_answer > 1) {
-        $error = $lang_module['voting_error'];
+        $error = $nv_Lang->getModule('voting_error');
 
         if (empty($vid)) {
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
@@ -120,7 +120,7 @@ if ($nv_Request->isset_request('save', 'post')) {
                 ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1, ' . $vote_one . '
             )';
             $vid = $db->insert_id($sql, 'vid');
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_add'), $question, $admin_info['userid']);
         }
 
         if ($vid > 0) {
@@ -162,13 +162,13 @@ if ($nv_Request->isset_request('save', 'post')) {
             WHERE vid =' . $vid;
 
             if ($db->query($sql)) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('voting_edit'), $question, $admin_info['userid']);
                 $nv_Cache->delMod($module_name);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
             }
         }
     } else {
-        $error = $lang_module['voting_error_content'];
+        $error = $nv_Lang->getModule('voting_error_content');
     }
 
     foreach ($answervotenews as $key => $title) {
@@ -215,8 +215,8 @@ if ($nv_Request->isset_request('save', 'post')) {
 }
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;vid=' . $vid);
 
 $rowvote['link'] = nv_htmlspecialchars($rowvote['link']);

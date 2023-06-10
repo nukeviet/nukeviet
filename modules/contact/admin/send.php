@@ -27,7 +27,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (nv_strlen($post['title']) < 3) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['error_title']
+            'mess' => $nv_Lang->getModule('admin_error_title')
         ]);
     }
 
@@ -50,7 +50,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (empty($post['email'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['error_mail_empty']
+            'mess' => $nv_Lang->getModule('error_mail_empty')
         ]);
     }
 
@@ -58,7 +58,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     if (empty($test_content)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['no_content_send_title']
+            'mess' => $nv_Lang->getModule('no_content_send_title')
         ]);
     }
 
@@ -81,7 +81,7 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     nv_jsonOutput([
         'status' => 'OK',
-        'mess' => $lang_module['send_suc_send_title'] . ' ' . $lang_module['send_new_mail']
+        'mess' => $nv_Lang->getModule('send_suc_send_title') . ' ' . $nv_Lang->getModule('send_new_mail')
     ]);
 }
 
@@ -96,8 +96,8 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('MESS_CONTENT', $mess_content);

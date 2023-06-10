@@ -592,7 +592,7 @@ $(function() {
     });
 
     //Change Localtion
-    $("a[data-location]").on("click", function() {
+    $("[data-location]").on("click", function() {
         if (window.location.origin + $(this).data("location") != window.location.href) {
             locationReplace($(this).data("location"))
         }

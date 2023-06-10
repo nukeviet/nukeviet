@@ -23,10 +23,10 @@ if (!defined('NV_IS_MOD_SEARCH')) {
  */
 function search_main_theme($is_search, $search, $array_modul)
 {
-    global $module_info, $global_config, $lang_module, $module_name;
+    global $module_info, $global_config, $nv_Lang, $module_name;
 
     $xtpl = new XTemplate('form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH);
     $xtpl->assign('NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH);
     $xtpl->assign('PAGE', $search['page']);
@@ -34,7 +34,7 @@ function search_main_theme($is_search, $search, $array_modul)
     $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
     $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('INVALID_KEY_MESS', sprintf($lang_module['searchQueryError'], NV_MIN_SEARCH_LENGTH));
+    $xtpl->assign('INVALID_KEY_MESS', $nv_Lang->getModule('searchQueryError', NV_MIN_SEARCH_LENGTH));
 
     $search['action'] = NV_BASE_SITEURL . 'index.php';
     $search['full_action'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -103,9 +103,9 @@ function urlencode_rfc_3986($string)
  */
 function search_result_theme($result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $num_items)
 {
-    global $module_info, $lang_module, $db, $module_name;
+    global $module_info, $db, $module_name;
     $xtpl = new XTemplate('result.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SEARCH_RESULT_NUM', $num_items);
     $xtpl->assign('MODULE_CUSTOM_TITLE', $mod_custom_title);
     $xtpl->assign('HIDDEN_KEY', $search['key']);

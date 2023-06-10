@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -135,12 +135,10 @@ $lang_module['show_device_1'] = 'Show all device';
 $lang_module['show_device_2'] = 'Show in mobile';
 $lang_module['show_device_3'] = 'Show in tablet';
 $lang_module['show_device_4'] = 'Show other device';
-
 $lang_module['preview_theme_on'] = 'Enable preview';
 $lang_module['preview_theme_off'] = 'Disable preview';
 $lang_module['preview_theme_link'] = 'Preview link';
 $lang_module['preview_theme_link_copied'] = 'The link has been copied to the clipboard';
-
 $lang_module['settings'] = 'Config';
 $lang_module['settings_utheme'] = 'Config user theme';
 $lang_module['settings_utheme_help'] = 'Users can switch between themes below';

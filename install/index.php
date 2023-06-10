@@ -30,9 +30,9 @@ if (!in_array(NV_LANG_DATA, $languageslist, true)) {
     nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . $languageslist[0] . '&step=1');
 }
 
-require_once NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
-require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php';
-require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php';
+$nv_Lang->loadModule('users');
+$nv_Lang->loadInstall(NV_LANG_DATA);
+
 require_once NV_ROOTDIR . '/install/template.php';
 require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
@@ -73,7 +73,7 @@ if ($step == 1) {
         $nv_Request->set_Session('maxstep', 2);
     }
 
-    $title = $lang_module['select_language'];
+    $title = $nv_Lang->getModule('select_language');
 
     $contents = nv_step_1();
 } elseif ($step == 2) {
@@ -85,7 +85,7 @@ if ($step == 1) {
         $ftp_user_pass = nv_unhtmlspecialchars($nv_Request->get_title('ftp_user_pass', 'post', '', 1));
 
         if (!$ftp_server or !$ftp_user_name or !$ftp_user_pass) {
-            exit('ERROR|' . $lang_module['ftp_error_empty']);
+            exit('ERROR|' . $nv_Lang->getModule('ftp_error_empty'));
         }
 
         $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, [
@@ -109,7 +109,7 @@ if ($step == 1) {
 
         if ($ftp_root === false) {
             $ftp->close();
-            exit('ERROR|' . (empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : (string) $ftp->error));
+            exit('ERROR|' . (empty($ftp->error) ? $nv_Lang->getModule('ftp_error_detect_root') : (string) $ftp->error));
         }
 
         $ftp->close();
@@ -185,7 +185,7 @@ if ($step == 1) {
             $login_result = ftp_login($conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass']);
             if ((!$conn_id) or (!$login_result)) {
                 $ftp_check_login = 3;
-                $array_ftp_data['error'] = $lang_module['ftp_error_account'];
+                $array_ftp_data['error'] = $nv_Lang->getModule('ftp_error_account');
             } elseif (ftp_chdir($conn_id, $global_config['ftp_path'])) {
                 $check_files = [
                     NV_CACHEDIR,
@@ -220,11 +220,11 @@ if ($step == 1) {
                     nv_chmod_dir($conn_id, NV_TEMP_DIR, true);
                 } else {
                     $ftp_check_login = 2;
-                    $array_ftp_data['error'] = $lang_module['ftp_error_path'];
+                    $array_ftp_data['error'] = $nv_Lang->getModule('ftp_error_path');
                 }
             } else {
                 $ftp_check_login = 2;
-                $array_ftp_data['error'] = $lang_module['ftp_error_path'];
+                $array_ftp_data['error'] = $nv_Lang->getModule('ftp_error_path');
             }
             $global_config['ftp_check_login'] = $ftp_check_login;
         }
@@ -252,20 +252,20 @@ if ($step == 1) {
 
         if (is_file(NV_ROOTDIR . '/' . $dir)) {
             if (is_writable(NV_ROOTDIR . '/' . $dir)) {
-                $array_dir_check[$dir] = $lang_module['dir_writable'];
+                $array_dir_check[$dir] = $nv_Lang->getModule('dir_writable');
             } else {
-                $array_dir_check[$dir] = $lang_module['dir_not_writable'];
+                $array_dir_check[$dir] = $nv_Lang->getModule('dir_not_writable');
                 $nextstep = 0;
             }
         } elseif (is_dir(NV_ROOTDIR . '/' . $dir)) {
             if (is_writable(NV_ROOTDIR . '/' . $dir)) {
-                $array_dir_check[$dir] = $lang_module['dir_writable'];
+                $array_dir_check[$dir] = $nv_Lang->getModule('dir_writable');
             } else {
-                $array_dir_check[$dir] = $lang_module['dir_not_writable'];
+                $array_dir_check[$dir] = $nv_Lang->getModule('dir_not_writable');
                 $nextstep = 0;
             }
         } else {
-            $array_dir_check[$dir] = $lang_module['dir_noexit'];
+            $array_dir_check[$dir] = $nv_Lang->getModule('dir_noexit');
             $nextstep = 0;
         }
     }
@@ -282,13 +282,13 @@ if ($step == 1) {
         $nv_Request->set_Session('maxstep', 3);
     }
 
-    $title = $lang_module['check_chmod'];
+    $title = $nv_Lang->getModule('check_chmod');
     $contents = nv_step_2($array_dir_check, $array_ftp_data, $nextstep);
 } elseif ($step == 3) {
     if ($step < 4) {
         $nv_Request->set_Session('maxstep', 4);
     }
-    $title = $lang_module['license'];
+    $title = $nv_Lang->getModule('license');
 
     if (file_exists(NV_ROOTDIR . '/install/licenses_' . NV_LANG_DATA . '.html')) {
         $license = file_get_contents(NV_ROOTDIR . '/install/licenses_' . NV_LANG_DATA . '.html');
@@ -299,16 +299,16 @@ if ($step == 1) {
     $contents = nv_step_3($license);
 } elseif ($step == 4) {
     $nextstep = 0;
-    $title = $lang_module['check_server'];
+    $title = $nv_Lang->getModule('check_server');
 
     $array_resquest = [];
-    $array_resquest['pdo_support'] = $lang_module['not_compatible'];
+    $array_resquest['pdo_support'] = $nv_Lang->getModule('not_compatible');
     $array_resquest['class_pdo_support'] = 'highlight_red';
     if (class_exists('PDO', false)) {
         $PDODrivers = PDO::getAvailableDrivers();
         foreach ($PDODrivers as $_driver) {
             if (file_exists(NV_ROOTDIR . '/install/action_' . $_driver . '.php')) {
-                $array_resquest['pdo_support'] = $lang_module['compatible'];
+                $array_resquest['pdo_support'] = $nv_Lang->getModule('compatible');
                 $array_resquest['class_pdo_support'] = 'highlight_green';
                 $nextstep = 1;
                 break;
@@ -322,7 +322,7 @@ if ($step == 1) {
 
     foreach ($nv_resquest_serverext_key as $key) {
         $array_resquest['class_' . $key] = ($sys_info[$key]) ? 'highlight_green' : 'highlight_red';
-        $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+        $array_resquest[$key] = ($sys_info[$key]) ? $nv_Lang->getModule('compatible') : $nv_Lang->getModule('not_compatible');
 
         if (!$sys_info[$key]) {
             $nextstep = 0;
@@ -345,7 +345,7 @@ if ($step == 1) {
     $array_support['curl_support'] = (extension_loaded('curl')) ? 1 : 0;
     foreach ($array_support as $_key => $_support) {
         $array_support['class_' . $_key] = ($_support) ? 'highlight_green' : 'highlight_red';
-        $array_support[$_key] = ($_support) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+        $array_support[$_key] = ($_support) ? $nv_Lang->getModule('compatible') : $nv_Lang->getModule('not_compatible');
     }
 
     $contents = nv_step_4($array_resquest, $array_support, $nextstep);
@@ -382,7 +382,7 @@ if ($step == 1) {
             $respon['status'] = 'success';
         } else {
             if (!in_array($dbtype, $PDODrivers, true)) {
-                $respon['message'] = $lang_module['dbcheck_error_driver'];
+                $respon['message'] = $nv_Lang->getModule('dbcheck_error_driver');
             } else {
                 $array_check_files = [
                     'install' => 'install/action_' . $dbtype . '.php',
@@ -411,7 +411,7 @@ if ($step == 1) {
                     asort($array_check_files);
                     $respon['files'] = $array_check_files;
                     $respon['link'] = 'https://github.com/nukeviet/nukeviet/wiki/NukeViet-database-types';
-                    $respon['message'] = $lang_module['dbcheck_error_files'];
+                    $respon['message'] = $nv_Lang->getModule('dbcheck_error_files');
                 }
             }
         }
@@ -582,7 +582,7 @@ if ($step == 1) {
                     }
                     $num_table = 0;
                 } else {
-                    $db_config['error'] = $lang_module['db_err_prefix'];
+                    $db_config['error'] = $nv_Lang->getModule('db_err_prefix');
                 }
             }
 
@@ -608,10 +608,10 @@ if ($step == 1) {
                     define('NV_IS_MODADMIN', true);
 
                     $module_name = 'modules';
-                    $lang_module['modules'] = '';
-                    $lang_module['vmodule_add'] = '';
-                    $lang_module['autoinstall'] = '';
-                    $lang_global['mod_modules'] = '';
+                    $nv_Lang->setModule('modules', '');
+                    $nv_Lang->setModule('vmodule_add', '');
+                    $nv_Lang->setModule('autoinstall', '');
+                    $nv_Lang->setGlobal('mod_modules', '');
 
                     define('NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload');
                     require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
@@ -732,7 +732,7 @@ if ($step == 1) {
         }
     }
 
-    $title = $lang_module['config_database'];
+    $title = $nv_Lang->getModule('config_database');
     $db_config['dbpass'] = nv_htmlspecialchars($db_config['dbpass']);
     $contents = nv_step_5($db_config, $nextstep);
 } elseif ($step == 6) {
@@ -777,21 +777,21 @@ if ($step == 1) {
                 $check_pass = nv_check_valid_pass($array_data['nv_password'], $global_config['nv_upassmax'], $global_config['nv_upassmin']);
 
                 if (empty($array_data['site_name'])) {
-                    $error = $lang_module['err_sitename'];
+                    $error = $nv_Lang->getModule('err_sitename');
                 } elseif (!empty($check_login)) {
                     $error = $check_login;
                 } elseif ("'" . $array_data['nv_login'] . "'" != $db->quote($array_data['nv_login'])) {
-                    $error = sprintf($lang_module['account_deny_name'], '<strong>' . $array_data['nv_login'] . '</strong>');
+                    $error = $nv_Lang->getModule('account_deny_name', '<strong>' . $array_data['nv_login'] . '</strong>');
                 } elseif (!empty($check_email[0])) {
                     $error = $check_email[0];
                 } elseif (!empty($check_pass)) {
                     $error = $check_pass;
                 } elseif ($array_data['nv_password'] != $array_data['re_password']) {
-                    $error = $lang_global['passwordsincorrect'];
+                    $error = $nv_Lang->getGlobal('passwordsincorrect');
                 } elseif (empty($array_data['question'])) {
-                    $error = $lang_module['your_question_empty'];
+                    $error = $nv_Lang->getModule('your_question_empty');
                 } elseif (empty($array_data['answer_question'])) {
-                    $error = $lang_module['answer_empty'];
+                    $error = $nv_Lang->getModule('answer_empty');
                 } elseif (empty($error)) {
                     $password = $crypt->hash_password($array_data['nv_password'], $global_config['hashprefix']);
                     define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
@@ -894,9 +894,9 @@ if ($step == 1) {
                         $rewrite = nv_rewrite_change($array_config_rewrite);
                         $server_config = nv_server_config_change();
                         if (empty($rewrite[0])) {
-                            $error .= sprintf($lang_module['file_not_writable'], $rewrite[1]);
+                            $error .= $nv_Lang->getModule('file_not_writable', $rewrite[1]);
                         } elseif (empty($server_config[0])) {
-                            $error .= sprintf($lang_module['file_not_writable'], $server_config[1]);
+                            $error .= $nv_Lang->getModule('file_not_writable', $server_config[1]);
                         } elseif (nv_save_file_config_global()) {
                             // Nếu không có dữ liệu mẫu chuyển sang bước 8
                             $step += (empty($array_samples_data) ? 2 : 1);
@@ -923,7 +923,7 @@ if ($step == 1) {
                             define('NV_IS_MODADMIN', true);
 
                             $module_name = 'upload';
-                            $lang_global['mod_upload'] = 'upload';
+                            $nv_Lang->setGlobal('mod_upload', 'upload');
                             $global_config['upload_logo'] = '';
                             $admin_info['userid'] = 1;
 
@@ -1080,7 +1080,7 @@ if ($step == 1) {
 
                             nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step);
                         } else {
-                            $error = sprintf($lang_module['file_not_writable'], NV_DATADIR . '/config_global.php');
+                            $error = $nv_Lang->getModule('file_not_writable', NV_DATADIR . '/config_global.php');
                         }
                     } else {
                         $error = 'Error add Administrator';
@@ -1095,8 +1095,8 @@ if ($step == 1) {
         exit();
     }
     $array_data['error'] = $error;
-    $title = $lang_module['website_info'];
-    $lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
+    $title = $nv_Lang->getModule('website_info');
+    $nv_Lang->setModule('admin_pass_note', $nv_Lang->getGlobal('upass_type_' . $global_config['nv_upass_type']));
     $contents = nv_step_6($array_data, $nextstep);
 } elseif ($step == 7) {
     // Nếu không có dữ liệu mẫu chuyển sang bước tiếp theo
@@ -1157,7 +1157,7 @@ if ($step == 1) {
         nv_redirect_location(NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $maxstep);
     }
 
-    $title = $lang_module['sample_data'];
+    $title = $nv_Lang->getModule('sample_data');
     $array_data = [];
     $nextstep = 0;
     $contents = nv_step_7($array_data, $nextstep);
@@ -1280,7 +1280,7 @@ if ($step == 1) {
         $finish = 2;
     }
 
-    $title = $lang_module['done'];
+    $title = $nv_Lang->getModule('done');
     $contents = nv_step_8($finish);
 }
 

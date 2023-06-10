@@ -14,16 +14,16 @@ namespace NukeViet\Ftp;
 use NukeViet\Site;
 
 // Ngon ngu
-global $lang_global;
+global $nv_Lang;
 
-define('NV_FTP_ERR_CONNECT', isset($lang_global['ftp_err_connect']) ? $lang_global['ftp_err_connect'] : 'Error: Couldn\'t connect to FTP server');
-define('NV_FTP_ERR_LOGIN', isset($lang_global['ftp_err_login']) ? $lang_global['ftp_err_login'] : 'Error: Couldn\'t login with this account');
-define('NV_FTP_ERR_DISABLED_FTP', isset($lang_global['ftp_err_enable']) ? $lang_global['ftp_err_enable'] : 'Error: Your system unsuport FTP extension');
-define('NV_FTP_ERR_PASSIVE_ON', isset($lang_global['ftp_err_passive_on']) ? $lang_global['ftp_err_passive_on'] : 'Error: Could\'n turn passive mode on');
-define('NV_FTP_ERR_RAWLIST', isset($lang_global['ftp_err_rawlist']) ? $lang_global['ftp_err_rawlist'] : 'Error: Rawlist bad');
-define('NV_FTP_ERR_LISTDETAIL_NOTRECONIZE', isset($lang_global['ftp_err_list_detail']) ? $lang_global['ftp_err_list_detail'] : 'Error: Notreconize type of OS');
-define('NV_FTP_ERR_FGET', isset($lang_global['ftp_err_fget']) ? $lang_global['ftp_err_fget'] : 'Error get file');
-define('NV_FTP_ERR_BUFFER_CLASS', isset($lang_global['ftp_err_NVbuffet']) ? $lang_global['ftp_err_NVbuffet'] : 'Error not exist NVbuffer class');
+define('NV_FTP_ERR_CONNECT', $nv_Lang->existsGlobal('ftp_err_connect') ? $nv_Lang->getGlobal('ftp_err_connect') : 'Error: Couldn\'t connect to FTP server');
+define('NV_FTP_ERR_LOGIN', $nv_Lang->existsGlobal('ftp_err_login') ? $nv_Lang->getGlobal('ftp_err_login') : 'Error: Couldn\'t login with this account');
+define('NV_FTP_ERR_DISABLED_FTP', $nv_Lang->existsGlobal('ftp_err_enable') ? $nv_Lang->getGlobal('ftp_err_enable') : 'Error: Your system unsuport FTP extension');
+define('NV_FTP_ERR_PASSIVE_ON', $nv_Lang->existsGlobal('ftp_err_passive_on') ? $nv_Lang->getGlobal('ftp_err_passive_on') : 'Error: Could\'n turn passive mode on');
+define('NV_FTP_ERR_RAWLIST', $nv_Lang->existsGlobal('ftp_err_rawlist') ? $nv_Lang->getGlobal('ftp_err_rawlist') : 'Error: Rawlist bad');
+define('NV_FTP_ERR_LISTDETAIL_NOTRECONIZE', $nv_Lang->existsGlobal('ftp_err_list_detail') ? $nv_Lang->getGlobal('ftp_err_list_detail') : 'Error: Notreconize type of OS');
+define('NV_FTP_ERR_FGET', $nv_Lang->existsGlobal('ftp_err_fget') ? $nv_Lang->getGlobal('ftp_err_fget') : 'Error get file');
+define('NV_FTP_ERR_BUFFER_CLASS', $nv_Lang->existsGlobal('ftp_err_NVbuffet') ? $nv_Lang->getGlobal('ftp_err_NVbuffet') : 'Error not exist NVbuffer class');
 
 // FTP mode
 if (!defined('FTP_AUTOASCII')) {

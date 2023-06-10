@@ -36,7 +36,7 @@ if (defined('NV_IS_GODADMIN')) {
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_settings']
+    'custom_title' => $nv_Lang->getGlobal('mod_settings')
 ];
 
 unset($page_title, $select_options);
@@ -60,10 +60,10 @@ $array_url_instruction['variables'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:
  */
 function nv_admin_add_theme($contents)
 {
-    global $global_config, $module_file, $my_head, $my_footer, $lang_module;
+    global $global_config, $module_file, $my_head, $my_footer, $nv_Lang;
 
     $xtpl = new XTemplate('cronjobs_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $my_head .= '<link type="text/css" href="' . ASSETS_STATIC_URL . "/js/jquery-ui/jquery-ui.min.css\" rel=\"stylesheet\" />\n";
 
@@ -94,7 +94,7 @@ function nv_admin_add_theme($contents)
     for ($i = 0; $i < 2; ++$i) {
         $xtpl->assign('INTER_VAL_TYPE', [
             'key' => $i,
-            'title' => $lang_module['cron_interval_type' . $i],
+            'title' => $nv_Lang->getModule('cron_interval_type' . $i),
             'selected' => $i == $contents['inter_val_type'] ? ' selected="selected"' : ''
         ]);
         $xtpl->parse('main.inter_val_type');
@@ -188,7 +188,7 @@ function get_max_pulgin($hook, $receive)
  */
 function get_list_ips($type)
 {
-    global $db, $db_config, $lang_module, $ips;
+    global $db, $db_config, $nv_Lang, $ips;
 
     $masklist = [
         0 => '255.255.255.255',
@@ -196,7 +196,7 @@ function get_list_ips($type)
         2 => '255.255.xxx.xxx',
         1 => '255.xxx.xxx.xxx'
     ];
-    $arealist = [$lang_module['area_select'], $lang_module['area_front'], $lang_module['area_admin'], $lang_module['area_both']];
+    $arealist = [$nv_Lang->getModule('area_select'), $nv_Lang->getModule('area_front'), $nv_Lang->getModule('area_admin'), $nv_Lang->getModule('area_both')];
 
     $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_ips WHERE type = ' . $type . ' ORDER BY id DESC';
     $result = $db->query($sql);
@@ -205,13 +205,13 @@ function get_list_ips($type)
     while ($row = $result->fetch()) {
         $status = $row['begintime'] > NV_CURRENTTIME ? 2 : ((!empty($row['endtime']) and $row['endtime'] < NV_CURRENTTIME) ? 0 : 1);
         $note = [];
-        $note[] = $lang_module['ip_mask'] . ': ' . ($ips->isIp4($row['ip']) ? $masklist[$row['mask']] : '/' . $row['mask']);
-        !$type && $note[] = $lang_module['banip_area'] . ': ' . $arealist[$row['area']];
-        !empty($row['begintime']) && $note[] = $lang_module['start_time'] . ': ' . date('d/m/Y H:i', $row['begintime']);
-        $note[] = $lang_module['end_time'] . ': ' . (!empty($row['endtime']) ? date('d/m/Y H:i', $row['endtime']) : $lang_module['unlimited']);
+        $note[] = $nv_Lang->getModule('ip_mask') . ': ' . ($ips->isIp4($row['ip']) ? $masklist[$row['mask']] : '/' . $row['mask']);
+        !$type && $note[] = $nv_Lang->getModule('banip_area') . ': ' . $arealist[$row['area']];
+        !empty($row['begintime']) && $note[] = $nv_Lang->getModule('start_time') . ': ' . date('d/m/Y H:i', $row['begintime']);
+        $note[] = $nv_Lang->getModule('end_time') . ': ' . (!empty($row['endtime']) ? date('d/m/Y H:i', $row['endtime']) : $nv_Lang->getModule('unlimited'));
 
         $row['note'] = implode(', ', $note);
-        $row['status'] = $status === 2 ? $lang_module['waiting'] : ($status === 0 ? $lang_module['ended'] : $lang_module['running']);
+        $row['status'] = $status === 2 ? $nv_Lang->getModule('waiting') : ($status === 0 ? $nv_Lang->getModule('ended') : $nv_Lang->getModule('running'));
         $row['status_icon'] = $status === 2 ? 'fa-pause' : ($status === 0 ? 'fa-stop' : 'fa-play');
         $row['class'] = $status === 0 ? ' text-muted' : '';
         $list[$row['id']] = $row;

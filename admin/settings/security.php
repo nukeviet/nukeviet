@@ -16,22 +16,22 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 $proxy_blocker_list = [
-    0 => $lang_module['proxy_blocker_0'],
-    1 => $lang_module['proxy_blocker_1'],
-    2 => $lang_module['proxy_blocker_2'],
-    3 => $lang_module['proxy_blocker_3']
+    0 => $nv_Lang->getModule('proxy_blocker_0'),
+    1 => $nv_Lang->getModule('proxy_blocker_1'),
+    2 => $nv_Lang->getModule('proxy_blocker_2'),
+    3 => $nv_Lang->getModule('proxy_blocker_3')
 ];
 $captcha_opts = ['', 'captcha', 'recaptcha'];
 $captcha_area_list = ['a', 'l', 'r', 'm', 'p'];
 $recaptcha_vers = [2, 3];
 $captcha_comm_list = [
-    0 => $lang_module['captcha_comm_0'],
-    1 => $lang_module['captcha_comm_1'],
-    2 => $lang_module['captcha_comm_2'],
-    3 => $lang_module['captcha_comm_3']
+    0 => $nv_Lang->getModule('captcha_comm_0'),
+    1 => $nv_Lang->getModule('captcha_comm_1'),
+    2 => $nv_Lang->getModule('captcha_comm_2'),
+    3 => $nv_Lang->getModule('captcha_comm_3')
 ];
 
-$recaptcha_type_list = ['image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']];
+$recaptcha_type_list = ['image' => $nv_Lang->getModule('recaptcha_type_image'), 'audio' => $nv_Lang->getModule('recaptcha_type_audio')];
 $admin_2step_providers = ['code', 'facebook', 'google', 'zalo'];
 $iptypes = [
     4 => 'IPv4',
@@ -43,7 +43,7 @@ $ipv4_mask_list = [
     2 => '255.255.xxx.xxx',
     1 => '255.xxx.xxx.xxx'
 ];
-$banip_area_list = [$lang_module['area_select'], $lang_module['area_front'], $lang_module['area_admin'], $lang_module['area_both']];
+$banip_area_list = [$nv_Lang->getModule('area_select'), $nv_Lang->getModule('area_front'), $nv_Lang->getModule('area_admin'), $nv_Lang->getModule('area_both')];
 $csp_directives = [
     'default-src' => ['none' => 0, 'all' => 0, 'self' => 0, 'data' => 0, 'unsafe-inline' => 0, 'unsafe-eval' => 0, 'hosts' => []],
     'script-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'data' => 0, 'unsafe-inline' => 1, 'unsafe-eval' => 1, 'hosts' => ['*.google.com', '*.google-analytics.com', '*.googletagmanager.com', '*.gstatic.com', '*.facebook.com', '*.facebook.net', '*.twitter.com', '*.zalo.me', '*.zaloapp.com', '*.tawk.to', '*.cloudflareinsights.com']],
@@ -61,14 +61,14 @@ $csp_directives = [
     'manifest-src' => ['none' => 0, 'all' => 0, 'self' => 1, 'hosts' => []]
 ];
 $rp_directives = [
-    'no-referrer' => $lang_module['rp_no_referrer'],
-    'no-referrer-when-downgrade' => $lang_module['rp_no_referrer_when_downgrade'],
-    'origin' => $lang_module['rp_origin'],
-    'origin-when-cross-origin' => $lang_module['rp_origin_when_cross_origin'],
-    'same-origin' => $lang_module['rp_same_origin'],
-    'strict-origin' => $lang_module['rp_strict_origin'],
-    'strict-origin-when-cross-origin' => $lang_module['rp_strict_origin_when_cross_origin'],
-    'unsafe-url' => $lang_module['rp_unsafe_url']
+    'no-referrer' => $nv_Lang->getModule('rp_no_referrer'),
+    'no-referrer-when-downgrade' => $nv_Lang->getModule('rp_no_referrer_when_downgrade'),
+    'origin' => $nv_Lang->getModule('rp_origin'),
+    'origin-when-cross-origin' => $nv_Lang->getModule('rp_origin_when_cross_origin'),
+    'same-origin' => $nv_Lang->getModule('rp_same_origin'),
+    'strict-origin' => $nv_Lang->getModule('rp_strict_origin'),
+    'strict-origin-when-cross-origin' => $nv_Lang->getModule('rp_strict_origin_when_cross_origin'),
+    'unsafe-url' => $nv_Lang->getModule('rp_unsafe_url')
 ];
 
 $selectedtab = $nv_Request->get_int('selectedtab', 'get,post', 0);
@@ -214,7 +214,7 @@ if (defined('NV_IS_GODADMIN') and $nv_Request->isset_request('floodsave', 'post'
     if ($post['max_requests_60'] <= 0 or $post['max_requests_300'] <= 0) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['max_requests_error']
+            'mess' => $nv_Lang->getModule('max_requests_error')
         ]);
     }
 
@@ -272,21 +272,21 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         if (empty($post['ip'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['ip_not_entered']
+                'mess' => $nv_Lang->getModule('ip_not_entered')
             ]);
         }
 
         if (($post['version'] == 4 and !$ips->isIp4($post['ip'])) or ($post['version'] == 6 and !$ips->isIp6($post['ip']))) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['ip_incorrect']
+                'mess' => $nv_Lang->getModule('ip_incorrect')
             ]);
         }
 
         if (!$type and empty($post['area'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['area_not_selected']
+                'mess' => $nv_Lang->getModule('area_not_selected')
             ]);
         }
 
@@ -305,7 +305,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         if (!empty($post['endtime']) and $post['endtime'] < $post['begintime']) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['end_time_error']
+                'mess' => $nv_Lang->getModule('end_time_error')
             ]);
         }
 
@@ -336,7 +336,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
         $save = nv_save_file_ips($type);
 
         if ($save !== true) {
-            $mess = $type ? sprintf($lang_module['ip_write_error'], NV_DATADIR, 'efloodip.php') : sprintf($lang_module['ip_write_error'], NV_DATADIR, 'banip.php');
+            $mess = $type ? $nv_Lang->getModule('ip_write_error', NV_DATADIR, 'efloodip.php') : $nv_Lang->getModule('ip_write_error', NV_DATADIR, 'banip.php');
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $mess . "\n\n" . $save
@@ -365,8 +365,8 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fip' or $action == 'bip')) {
     }
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', $page_url);
     $xtpl->assign('DATA', $ipdetails);
     $xtpl->assign('CHECKSS', $checkss);
@@ -463,7 +463,7 @@ if (defined('NV_IS_GODADMIN') and ($action == 'delfip' or $action == 'delbip') a
     $save = nv_save_file_ips($type);
 
     if ($save !== true) {
-        $mess = $type ? sprintf($lang_module['ip_write_error'], NV_DATADIR, 'efloodip.php') : sprintf($lang_module['ip_write_error'], NV_DATADIR, 'banip.php');
+        $mess = $type ? $nv_Lang->getModule('ip_write_error', NV_DATADIR, 'efloodip.php') : $nv_Lang->getModule('ip_write_error', NV_DATADIR, 'banip.php');
         nv_jsonOutput([
             'status' => 'error',
             'mess' => $mess . "\n\n" . $save
@@ -483,8 +483,8 @@ if (defined('NV_IS_GODADMIN') and ($action == 'fiplist' or $action == 'biplist')
     $iplist = get_list_ips($type);
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     if (!empty($iplist)) {
         foreach ($iplist as $ip_details) {
             $xtpl->assign('ROW', $ip_details);
@@ -817,7 +817,7 @@ if (!empty($global_config['crosssite_allowed_variables'])) {
     $cross_config_list['crosssite_allowed_variables'] = '';
 }
 
-$lang_module['two_step_verification_note'] = sprintf($lang_module['two_step_verification_note'], $lang_module['two_step_verification0'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups');
+$nv_Lang->setModule('two_step_verification_note', $nv_Lang->getModule('two_step_verification_note', $nv_Lang->getModule('two_step_verification0'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=groups'));
 
 if (!empty($global_config['nv_csp'])) {
     $directives = json_decode($global_config['nv_csp'], true);
@@ -829,8 +829,8 @@ if (!empty($global_config['nv_csp'])) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
@@ -921,7 +921,7 @@ if (defined('NV_IS_GODADMIN')) {
     for ($i = 0; $i <= 3; ++$i) {
         $two_step_verification = [
             'key' => $i,
-            'title' => $lang_module['two_step_verification' . $i],
+            'title' => $nv_Lang->getModule('two_step_verification' . $i),
             'selected' => $i == $global_config_list['two_step_verification'] ? ' selected="selected"' : ''
         ];
         $xtpl->assign('TWO_STEP_VERIFICATION', $two_step_verification);
@@ -931,7 +931,7 @@ if (defined('NV_IS_GODADMIN')) {
     foreach ($admin_2step_providers as $admin_2step) {
         $admin_2step_opt = [
             'key' => $admin_2step,
-            'title' => $lang_global['admin_2step_opt_' . $admin_2step],
+            'title' => $nv_Lang->getGlobal('admin_2step_opt_' . $admin_2step),
             'checked' => in_array($admin_2step, $global_config_list['admin_2step_opt'], true) ? ' checked="checked"' : ''
         ];
         $xtpl->assign('ADMIN_2STEP_OPT', $admin_2step_opt);
@@ -948,7 +948,7 @@ if (defined('NV_IS_GODADMIN')) {
 
         $admin_2step_default = [
             'key' => $admin_2step,
-            'title' => $lang_global['admin_2step_opt_' . $admin_2step],
+            'title' => $nv_Lang->getGlobal('admin_2step_opt_' . $admin_2step),
             'selected' => $global_config_list['admin_2step_default'] == $admin_2step ? ' selected="selected"' : ''
         ];
         $xtpl->assign('ADMIN_2STEP_DEFAULT', $admin_2step_default);
@@ -966,7 +966,7 @@ if (defined('NV_IS_GODADMIN')) {
                 $xtpl->assign('OPT', [
                     'val' => $val,
                     'sel' => (!empty($captcha_type) and $captcha_type == $val) ? ' selected="selected"' : '',
-                    'title' => $lang_module['captcha_' . $val]
+                    'title' => $nv_Lang->getModule('captcha_' . $val)
                 ]);
                 $xtpl->parse('main.sys_contents.mod.opt');
             }
@@ -983,7 +983,7 @@ if (defined('NV_IS_GODADMIN')) {
         $captcha_area = [
             'key' => $area,
             'checked' => str_contains($global_config['captcha_area'], $area) ? ' checked="checked"' : '',
-            'title' => $lang_module['captcha_area_' . $area]
+            'title' => $nv_Lang->getModule('captcha_area_' . $area)
         ];
         $xtpl->assign('CAPTCHAAREA', $captcha_area);
         $xtpl->parse('main.sys_contents.captcha_area');
@@ -1016,11 +1016,11 @@ if (defined('NV_IS_GODADMIN')) {
     }
 
     $uri_check_values = [
-        'page' => $lang_module['request_uri_check_page'],
-        'not' => $lang_module['request_uri_check_not'],
-        'path' => $lang_module['request_uri_check_path'],
-        'query' => $lang_module['request_uri_check_query'],
-        'abs' => $lang_module['request_uri_check_abs']
+        'page' => $nv_Lang->getModule('request_uri_check_page'),
+        'not' => $nv_Lang->getModule('request_uri_check_not'),
+        'path' => $nv_Lang->getModule('request_uri_check_path'),
+        'query' => $nv_Lang->getModule('request_uri_check_query'),
+        'abs' => $nv_Lang->getModule('request_uri_check_abs')
     ];
     foreach ($uri_check_values as $key => $val) {
         $xtpl->assign('URI_CHECK', [
@@ -1047,7 +1047,7 @@ if (defined('NV_IS_GODADMIN')) {
         $xtpl->parse('main.sys_contents.end_url_variable');
     }
 
-    $passshow_button_opts = [$lang_module['passshow_button_0'], $lang_module['passshow_button_1'], $lang_module['passshow_button_2'], $lang_module['passshow_button_3']];
+    $passshow_button_opts = [$nv_Lang->getModule('passshow_button_0'), $nv_Lang->getModule('passshow_button_1'), $nv_Lang->getModule('passshow_button_2'), $nv_Lang->getModule('passshow_button_3')];
     foreach ($passshow_button_opts as $val => $name) {
         $xtpl->assign('OPT', [
             'val' => $val,
@@ -1064,7 +1064,7 @@ if (defined('NV_IS_GODADMIN')) {
 foreach ($csp_directives as $name => $sources) {
     $direct = [
         'name' => $name,
-        'desc' => $lang_module['csp_' . $name]
+        'desc' => $nv_Lang->getModule('csp_' . $name)
     ];
     $xtpl->assign('DIRECTIVE', $direct);
 
@@ -1079,7 +1079,7 @@ foreach ($csp_directives as $name => $sources) {
             'val' => $val,
             'checked' => !empty($directives[$name][$key]) ? ' checked="checked"' : '',
             'disabled' => ($key != 'none' and $is_none) ? ' disabled' : '',
-            'name' => isset($lang_module['csp_source_' . $name . '_' . $key]) ? $lang_module['csp_source_' . $name . '_' . $key] : $lang_module['csp_source_' . $key]
+            'name' => $nv_Lang->existsModule('csp_source_' . $name . '_' . $key) ? $nv_Lang->getModule('csp_source_' . $name . '_' . $key) : $nv_Lang->getModule('csp_source_' . $key)
         ];
         $xtpl->assign('SOURCE', $source);
         if ($key != 'hosts') {
@@ -1115,7 +1115,7 @@ foreach ($rp_directives as $name => $desc) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['security'];
+$page_title = $nv_Lang->getModule('security');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

@@ -21,11 +21,11 @@ function _loadContents($contents)
     exit(0);
 }
 
-$contents = 'ERR__' . $lang_module['comment_unsuccess'];
+$contents = 'ERR__' . $nv_Lang->getModule('comment_unsuccess');
 $module = $nv_Request->get_string('module', 'post');
 
 if (empty($module) or !isset($module_config[$module]['activecomm']) or !isset($site_mods[$module])) {
-    _loadContents('ERR__' . $lang_module['comment_unsuccess']);
+    _loadContents('ERR__' . $nv_Lang->getModule('comment_unsuccess'));
 }
 
 // Kiểm tra module có được Sử dụng chức năng bình luận
@@ -34,7 +34,7 @@ $id = $nv_Request->get_title('id', 'post', '');
 $allowed_comm = $nv_Request->get_title('allowed', 'post');
 $checkss = $nv_Request->get_title('checkss', 'post');
 if (empty($id) or $module_config[$module]['activecomm'] != 1 or $checkss != md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX)) {
-    _loadContents('ERR__' . $lang_module['comment_unsuccess']);
+    _loadContents('ERR__' . $nv_Lang->getModule('comment_unsuccess'));
 }
 
 // Kiểm tra quyền đăng bình luận
@@ -44,7 +44,7 @@ if ($allowed == '-1') {
     $allowed = $allowed_comm;
 }
 if (!nv_user_in_groups($allowed)) {
-    _loadContents('ERR__' . $lang_module['comment_unsuccess']);
+    _loadContents('ERR__' . $nv_Lang->getModule('comment_unsuccess'));
 }
 
 // kiểm tra captcha
@@ -82,7 +82,7 @@ elseif ($show_captcha and $captcha_type == 'captcha') {
 
 // Kiểm tra tính hợp lệ của captcha nhập vào, nếu không hợp lệ => thông báo lỗi
 if (isset($code) and !nv_capcha_txt($code, $captcha_type)) {
-    _loadContents('ERR_code_' . $lang_global['securitycodeincorrect']);
+    _loadContents('ERR_code_' . $nv_Lang->getGlobal('securitycodeincorrect'));
 }
 
 // Xác định và kiểm tra userid, name, email
@@ -96,7 +96,7 @@ if (defined('NV_IS_USER')) {
     $email = $nv_Request->get_title('email', 'post', '');
 
     if (empty($name)) {
-        _loadContents('ERR_name_' . $lang_module['comment_name_error']);
+        _loadContents('ERR_name_' . $nv_Lang->getModule('comment_name_error'));
     }
 
     $check_valid_email = nv_check_valid_email($email, true);
@@ -115,7 +115,7 @@ if (!empty($module_config[$module]['alloweditorcomm'])) {
     $content = nv_nl2br($content);
 }
 if (empty($content)) {
-    _loadContents('ERR_content_' . $lang_module['comment_content_error']);
+    _loadContents('ERR_content_' . $nv_Lang->getModule('comment_content_error'));
 }
 
 $status = $module_config[$module]['auto_postcomm'];
@@ -132,17 +132,17 @@ if (defined('NV_IS_ADMIN')) {
 }
 if (!($timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout)) {
     $timeout = nv_convertfromSec($difftimeout - NV_CURRENTTIME + $timeout);
-    $timeoutmsg = sprintf($lang_module['comment_timeout'], $timeout);
+    $timeoutmsg = $nv_Lang->getModule('comment_timeout', $timeout);
     _loadContents('ERR__' . $timeoutmsg);
 }
 
 $data_permission_confirm = !empty($global_config['data_warning']) ? (int) $nv_Request->get_bool('data_permission_confirm', 'post', false) : -1;
 $antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
 if ($data_permission_confirm === 0) {
-    _loadContents('ERR__' . $lang_global['data_warning_error']);
+    _loadContents('ERR__' . $nv_Lang->getGlobal('data_warning_error'));
 }
 if ($antispam_confirm === 0) {
-    _loadContents('ERR__' . $lang_global['antispam_warning_error']);
+    _loadContents('ERR__' . $nv_Lang->getGlobal('antispam_warning_error'));
 }
 
 $pid = $nv_Request->get_int('pid', 'post', 0);
@@ -163,7 +163,7 @@ if (!empty($module_config[$module]['allowattachcomm']) and isset($_FILES['fileat
     }
 
     $upload = new NukeViet\Files\Upload($global_config['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-    $upload->setLanguage($lang_global);
+    $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
     $upload_info = $upload->save_file($_FILES['fileattach'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $dir, false);
     @unlink($_FILES['fileattach']['tmp_name']);
 
@@ -220,14 +220,14 @@ try {
         }
 
         if (!$status) {
-            $comment_success = $lang_module['comment_success_queue'];
+            $comment_success = $nv_Lang->getModule('comment_success_queue');
 
             // Gui thong bao kiem duyet
             nv_insert_notification($module_name, 'comment_queue', [
                 'content' => strip_tags($content)
             ], $new_id);
         } else {
-            $comment_success = $lang_module['comment_success'];
+            $comment_success = $nv_Lang->getModule('comment_success');
         }
         _loadContents('OK_' . nv_base64_encode($comment_success));
     }

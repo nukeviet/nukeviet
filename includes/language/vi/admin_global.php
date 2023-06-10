@@ -43,10 +43,9 @@ $lang_global['adminpassincorrect'] = 'Mật khẩu quản trị &ldquo;<strong>%
 $lang_global['admin_password'] = 'Mật khẩu của bạn';
 $lang_global['admin_no_allow_func'] = 'Bạn không có quyền truy cập chức năng này';
 $lang_global['admin_suspend'] = 'Tài khoản bị đình chỉ';
-
 $lang_global['block_modules'] = 'Block của modules';
-$lang_global['hello_admin1'] = 'Đăng nhập trước: %1$s<br/>Bằng IP: %2$s';
-$lang_global['hello_admin2'] = 'Đăng nhập vào: %1$s<br/>Bằng IP: %2$s';
+$lang_global['hello_admin1'] = 'Đăng nhập trước: %1$s<br />Bằng IP: %2$s';
+$lang_global['hello_admin2'] = 'Đăng nhập vào: %1$s<br />Bằng IP: %2$s';
 $lang_global['ftp_error_account'] = 'Lỗi: hệ thống không kết nối được FTP server vui lòng kiểm tra lại các thông số FTP';
 $lang_global['ftp_error_path'] = 'Lỗi: thông số Remote path không đúng';
 $lang_global['login_error_account'] = 'Lỗi: Bí danh tài khoản quản trị chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1$s ký tự, không nhiều hơn %2$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)';
@@ -54,16 +53,13 @@ $lang_global['login_error_password'] = 'Lỗi: Password của Admin chưa đư�
 $lang_global['login_error_security'] = 'Lỗi: Mã kiểm tra chưa được khai báo hoặc khai báo không hợp lệ! (Phải có %1$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin và số)';
 $lang_global['error_zlib_support'] = 'Lỗi: Máy chủ của bạn không hỗ trợ thư viện zlib, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật thư viện zlib để có thể sử dụng tính năng này.';
 $lang_global['error_zip_extension'] = 'Lỗi: Máy chủ của bạn không hỗ trợ extension ZIP, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật extension ZIP để có thể sử dụng tính năng này.';
-
 $lang_global['length_characters'] = 'Số ký tự';
 $lang_global['length_suggest_max'] = 'Nên nhập tối đa %s ký tự';
-
 $lang_global['phone_note_title'] = 'Quy định khai báo số điện thoại';
 $lang_global['phone_note_content'] = '<ul><li>Số điện thoại được chia ra hai phần, phần đầu là bắt buộc và dành cho việc hiển thị trên site, phần hai không bắt buộc và dành cho việc quay số khi click chuột vào nó.</li><li>Phần đầu được viết tự do nhưng không có dấu ngoặc vuông. Phần hai để trong dấu ngoặc vuông ngay sau phần đầu và chỉ được chứa các ký tự sau: chữ số, dấu sao, dấu thăng, dấu phẩy, dấu chấm, dấu chấm phẩy và dấu cộng ([0-9\*\#\.\,\;\+]).</li><li>Ví dụ, nếu bạn khai báo <strong>0438211725 (ext 601)</strong>, thì số <strong>0438211725 (ext 601)</strong> sẽ được hiển thị đơn thuần trên site. Còn nếu bạn khai báo <strong>0438211725 (ext 601)[+84438211725,601]</strong>, hệ thống sẽ cho hiển thị <strong>0438211725 (ext 601)</strong> trên site và url khi click chuột vào số điện thoại trên sẽ là <strong>tel:+84438211725,601</strong></li><li>Bạn có thể khai báo nhiều số điện thoại theo quy tắc trên. Chúng được phân cách bởi dấu |.</li></ul>';
 $lang_global['phone_note_content2'] = '<ul><li>Số điện thoại được chia ra hai phần, phần đầu là bắt buộc và dành cho việc hiển thị trên site, phần hai không bắt buộc và dành cho việc quay số khi click chuột vào nó.</li><li>Phần đầu được viết tự do nhưng không có dấu ngoặc vuông. Phần hai để trong dấu ngoặc vuông ngay sau phần đầu và chỉ được chứa các ký tự sau: chữ số, dấu sao, dấu thăng, dấu phẩy, dấu chấm, dấu chấm phẩy và dấu cộng ([0-9\*\#\.\,\;\+]).</li><li>Ví dụ, nếu bạn khai báo <strong>0438211725 (ext 601)</strong>, thì số <strong>0438211725 (ext 601)</strong> sẽ được hiển thị đơn thuần trên site. Còn nếu bạn khai báo <strong>0438211725 (ext 601)[+84438211725,601]</strong>, hệ thống sẽ cho hiển thị <strong>0438211725 (ext 601)</strong> trên site và url khi click chuột vào số điện thoại trên sẽ là <strong>tel:+84438211725,601</strong></li></ul>';
 $lang_global['multi_note'] = 'Có thể khai báo hơn 1 giá trị, được phân cách bởi dấu phẩy.';
 $lang_global['multi_email_note'] = 'Có thể khai báo hơn 1 giá trị, được phân cách bởi dấu phẩy. Email đầu tiên được coi là email chính, được sử dụng để gửi, nhận thư.';
-
 $lang_global['view_all'] = 'Xem tất cả';
 $lang_global['email'] = 'Email';
 $lang_global['phonenumber'] = 'Điện thoại';

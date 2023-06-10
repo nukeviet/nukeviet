@@ -22,7 +22,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
      */
     function nv_block_qr_code($block_config)
     {
-        global $page_title, $global_config, $page_url, $module_name, $home, $op, $lang_global;
+        global $page_title, $global_config, $page_url, $module_name, $home, $op;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.QR_code.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -33,7 +33,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
         }
 
         $xtpl = new XTemplate('global.QR_code.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
 
         if (empty($page_url)) {
             if ($home) {

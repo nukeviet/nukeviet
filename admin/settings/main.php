@@ -38,7 +38,7 @@ if ($nv_Request->get_string('checkss', 'post') == $checkss) {
     if (empty($array_config['site_name'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['sitename_error']
+            'mess' => $nv_Lang->getModule('sitename_error')
         ]);
     }
 
@@ -46,7 +46,7 @@ if ($nv_Request->get_string('checkss', 'post') == $checkss) {
     if (empty($array_config['site_description'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['description_error']
+            'mess' => $nv_Lang->getModule('description_error')
         ]);
     }
 
@@ -123,7 +123,7 @@ if ($nv_Request->get_string('checkss', 'post') == $checkss) {
     $array_config['disable_site_content'] = $nv_Request->get_editor('disable_site_content', '', NV_ALLOWED_HTML_TAGS);
 
     if (empty($array_config['disable_site_content'])) {
-        $array_config['disable_site_content'] = $lang_global['disable_site_content'];
+        $array_config['disable_site_content'] = $nv_Lang->getGlobal('disable_site_content');
     }
 
     $array_config['data_warning'] = (int) $nv_Request->get_bool('data_warning', 'post', false);
@@ -194,14 +194,14 @@ if (defined('NV_EDITOR')) {
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('VALUE', $value_setting);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 foreach ($array_theme_type as $theme_type) {
     $xtpl->assign('THEME_TYPE', $theme_type);
-    $xtpl->assign('THEME_TYPE_TXT', $lang_global['theme_type_' . $theme_type]);
+    $xtpl->assign('THEME_TYPE_TXT', $nv_Lang->getGlobal('theme_type_' . $theme_type));
     $xtpl->assign('THEME_TYPE_CHECKED', in_array($theme_type, $global_config['array_theme_type'], true) ? ' checked="checked"' : '');
     $xtpl->parse('main.theme_type');
 }
@@ -257,7 +257,7 @@ $xtpl->assign('ANTISPAM_WARNING', !empty($global_config['antispam_warning']) ? '
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = sprintf($lang_module['lang_site_config'], $language_array[NV_LANG_DATA]['name']);
+$page_title = $nv_Lang->getModule('lang_site_config', $language_array[NV_LANG_DATA]['name']);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

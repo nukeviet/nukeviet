@@ -169,7 +169,7 @@ if ($is_search) {
 }
 
 $array_cat_search = [];
-$array_cat_search[0]['title'] = $lang_module['search_all'];
+$array_cat_search[0]['title'] = $nv_Lang->getModule('search_all');
 foreach ($global_array_cat as $arr_cat_i) {
     $array_cat_search[$arr_cat_i['catid']] = [
         'catid' => $arr_cat_i['catid'],
@@ -182,11 +182,11 @@ $contents = call_user_func('search_theme', $key, $choose, $date_array, $array_ca
 $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
-    // $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $lang_module['empty_data_search'] . '\')})</script>';
+    // $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $nv_Lang->getModule('empty_data_search') . '\')})</script>';
 } elseif (!empty($key) and nv_strlen($key) < NV_MIN_SEARCH_LENGTH) {
-    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . sprintf($lang_module['search_word_short'], NV_MIN_SEARCH_LENGTH) . '\')})</script>';
+    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $nv_Lang->getModule('search_word_short', NV_MIN_SEARCH_LENGTH) . '\')})</script>';
 } elseif (!empty($catid) and !isset($array_cat_search[$catid])) {
-    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $lang_module['search_catid_error'] . '\')})</script>';
+    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $nv_Lang->getModule('search_catid_error') . '\')})</script>';
 } else {
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
@@ -557,11 +557,11 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
 }
 
 if (empty($key)) {
-    $page_title = $lang_module['search_title'] . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
+    $page_title = $nv_Lang->getModule('search_title') . NV_TITLEBAR_DEFIS . $module_info['custom_title'];
 } else {
-    $page_title = $key . NV_TITLEBAR_DEFIS . $lang_module['search_title'];
+    $page_title = $key . NV_TITLEBAR_DEFIS . $nv_Lang->getModule('search_title');
     if ($page > 2) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
     $page_title .= NV_TITLEBAR_DEFIS . $module_info['custom_title'];
 }

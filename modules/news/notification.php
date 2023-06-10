@@ -13,12 +13,10 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
     exit('Stop!!!');
 }
 
-$lang_siteinfo = nv_get_lang_module($mod);
-
 if ($data['type'] == 'post_queue') {
-    $data['title'] = sprintf($lang_siteinfo['notification_post_queue'], $data['content']['title'], $data['send_from'], nv_clean60($data['content']['hometext'], 120));
+    $data['title'] = $nv_Lang->getModule('notification_post_queue', $data['content']['title'], $data['send_from'], nv_clean60($data['content']['hometext'], 120));
     $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $data['obid'];
 } elseif ($data['type'] == 'report') {
-    $data['title'] = sprintf($lang_siteinfo['notification_report'], $data['content']['title'], $data['content']['post_ip'], $data['content']['post_email']);
+    $data['title'] = $nv_Lang->getModule('notification_report', $data['content']['title'], $data['content']['post_ip'], $data['content']['post_email']);
     $data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $data['content']['newsid'] . '&amp;rid=' . $data['obid'];
 }

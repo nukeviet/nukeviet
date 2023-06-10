@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $table_caption = $lang_module['editcensor'];
+$page_title = $table_caption = $nv_Lang->getModule('editcensor');
 
 // Hủy bỏ thông tin chỉnh sửa
 if ($nv_Request->isset_request('del', 'post')) {
@@ -323,8 +323,8 @@ if (!empty($reviewuid)) {
     }
 
     $xtpl = new XTemplate('editcensor_review.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('REVIEWUID', $reviewuid);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;reviewuid=' . $reviewuid);
 
@@ -510,7 +510,7 @@ if (!empty($reviewuid)) {
     }
     if (!empty($info_basic)) {
         // Hiển thị email xuất riêng không theo trường dữ liệu quản lý
-        $xtpl->assign('VIEW_MAIL_OLD', empty($custom_fields_old['view_mail']) ? $lang_global['no'] : $lang_global['yes']);
+        $xtpl->assign('VIEW_MAIL_OLD', empty($custom_fields_old['view_mail']) ? $nv_Lang->getGlobal('no') : $nv_Lang->getGlobal('yes'));
         $xtpl->assign('VIEW_MAIL_NEW', empty($custom_fields['view_mail']) ? '' : ' checked="checked"');
         $xtpl->parse('main.basic');
     }
@@ -531,25 +531,25 @@ $methods = [
     'userid' => [
         'key' => 'userid',
         'sql' => 'tb2.userid',
-        'value' => $lang_module['search_id'],
+        'value' => $nv_Lang->getModule('search_id'),
         'selected' => ''
     ],
     'username' => [
         'key' => 'username',
         'sql' => 'tb2.username',
-        'value' => $lang_module['search_account'],
+        'value' => $nv_Lang->getModule('search_account'),
         'selected' => ''
     ],
     'full_name' => [
         'key' => 'full_name',
         'sql' => $global_config['name_show'] == 0 ? "concat(tb2.last_name,' ',tb2.first_name)" : "concat(tb2.first_name,' ',tb2.last_name)",
-        'value' => $lang_module['search_name'],
+        'value' => $nv_Lang->getModule('search_name'),
         'selected' => ''
     ],
     'email' => [
         'key' => 'email',
         'sql' => 'tb2.email',
-        'value' => $lang_module['search_mail'],
+        'value' => $nv_Lang->getModule('search_mail'),
         'selected' => ''
     ]
 ];
@@ -581,7 +581,7 @@ if (!empty($global_config['idsite'])) {
 if (!empty($method) and isset($methods[$method]) and !empty($methodvalue)) {
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);
     $methods[$method]['selected'] = ' selected="selected"';
-    $table_caption = $lang_module['search_page_title'];
+    $table_caption = $nv_Lang->getModule('search_page_title');
     $where[] = $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape($methodvalue) . "%'";
 }
 
@@ -618,15 +618,15 @@ while ($row = $result->fetch()) {
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $head_tds = [];
-$head_tds['userid']['title'] = $lang_module['userid'];
+$head_tds['userid']['title'] = $nv_Lang->getModule('userid');
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=userid&amp;sorttype=ASC';
-$head_tds['username']['title'] = $lang_module['account'];
+$head_tds['username']['title'] = $nv_Lang->getGlobal('username');
 $head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=username&amp;sorttype=ASC';
-$head_tds['full_name']['title'] = $lang_module['name'];
+$head_tds['full_name']['title'] = $nv_Lang->getModule('name');
 $head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=full_name&amp;sorttype=ASC';
-$head_tds['email']['title'] = $lang_module['email'];
+$head_tds['email']['title'] = $nv_Lang->getModule('email');
 $head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=email&amp;sorttype=ASC';
-$head_tds['lastedit']['title'] = $lang_module['editcensor_lastedit'];
+$head_tds['lastedit']['title'] = $nv_Lang->getModule('editcensor_lastedit');
 $head_tds['lastedit']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;sortby=lastedit&amp;sorttype=ASC';
 
 foreach ($orders as $order) {
@@ -648,7 +648,7 @@ while ($row = $result->fetch()) {
 }
 
 $xtpl = new XTemplate('editcensor.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 $xtpl->assign('SEARCH_VALUE', nv_htmlspecialchars($methodvalue));

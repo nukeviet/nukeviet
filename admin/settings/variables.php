@@ -15,10 +15,10 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $sameSite_array = [
-    'Empty' => $lang_module['cookie_SameSite_Empty'],
-    'Lax' => $lang_module['cookie_SameSite_Lax'],
-    'Strict' => $lang_module['cookie_SameSite_Strict'],
-    'None' => $lang_module['cookie_SameSite_None']
+    'Empty' => $nv_Lang->getModule('cookie_SameSite_Empty'),
+    'Lax' => $nv_Lang->getModule('cookie_SameSite_Lax'),
+    'Strict' => $nv_Lang->getModule('cookie_SameSite_Strict'),
+    'None' => $nv_Lang->getModule('cookie_SameSite_None')
 ];
 if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $preg_replace = ['pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => ''];
@@ -66,8 +66,8 @@ $global_config['checkss'] = $checkss;
 $xtpl = new XTemplate('variables.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('NV_LIVE_COOKIE_TIME', round(NV_LIVE_COOKIE_TIME / 86400));
@@ -93,7 +93,7 @@ foreach ($sameSite_array as $val => $note) {
 $xtpl->parse('main');
 $content = $xtpl->text('main');
 
-$page_title = $lang_module['variables'];
+$page_title = $nv_Lang->getModule('variables');
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($content);
 include NV_ROOTDIR . '/includes/footer.php';

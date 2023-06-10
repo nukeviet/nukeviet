@@ -58,8 +58,8 @@ if (defined('NV_IS_AJAX')) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('CHECKSS', $checkss);
@@ -75,7 +75,7 @@ foreach ($rows as $row) {
         $xtpl->assign('WEIGHT', ['key' => $i, 'selected' => ($i == $row['weight']) ? ' selected="selected"' : '']);
         $xtpl->parse('main.loop.weight');
     }
-    $row['custom_title'] = isset($lang_global[$row['lang_key']]) ? $lang_global[$row['lang_key']] : '';
+    $row['custom_title'] = $nv_Lang->existsGlobal($row['lang_key']) ? $nv_Lang->getGlobal($row['lang_key']) : '';
     $chang_act = [];
     for ($i = 1; $i <= 3; ++$i) {
         $chang_act[$i] = ($row['act_' . $i]) ? ' checked="checked"' : '';
@@ -95,7 +95,7 @@ $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
 if (!defined('NV_IS_AJAX')) {
-    $page_title = $lang_module['module_admin'];
+    $page_title = $nv_Lang->getModule('module_admin');
     $contents = nv_admin_theme($contents);
 }
 

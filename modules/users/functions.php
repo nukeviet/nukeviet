@@ -16,7 +16,7 @@ if (!defined('NV_SYSTEM')) {
 define('NV_IS_MOD_USER', true);
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
 
-$lang_module['in_groups'] = $lang_global['in_groups'];
+$nv_Lang->setModule('in_groups', $nv_Lang->getGlobal('in_groups'));
 require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 $nv_BotManager->setPrivate();
@@ -52,7 +52,7 @@ function get_checknum($userid)
  */
 function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
 {
-    global $db, $global_config, $nv_Request, $lang_module, $global_users_config, $module_name, $module_file, $client_info;
+    global $db, $global_config, $nv_Request, $nv_Lang, $global_users_config, $module_name, $module_file, $client_info;
 
     $remember = (int) $remember;
     $checknum = get_checknum($array_user['userid']);
@@ -110,17 +110,13 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
         $messages = [];
         foreach ($global_config['setup_langs'] as $lang) {
             if ($lang == NV_LANG_DATA) {
-                $messages[NV_LANG_DATA] = sprintf($lang_module['welcome_new_account'], $global_config['site_name']);
+                $messages[NV_LANG_DATA] = $nv_Lang->getModule('welcome_new_account', $global_config['site_name']);
             } else {
                 $site_name = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name='site_name' AND lang='" . $lang . "' AND module='global'")->fetchColumn();
-                $lang_module_temp = $lang_module;
-                if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
-                } else {
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
-                }
-                $messages[$lang] = sprintf($lang_module['welcome_new_account'], $site_name);
-                $lang_module = $lang_module_temp;
+                $nv_Lang->changeLang($lang);
+                $nv_Lang->loadModule($module_file, false, true);
+                $messages[$lang] = $nv_Lang->getModule('welcome_new_account', $site_name);
+                $nv_Lang->changeLang();
             }
         }
         add_notification([
@@ -132,7 +128,7 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
     }
 
     if (!empty($global_users_config['active_user_logs'])) {
-        $log_message = $opid ? ($lang_module['userloginviaopt'] . ' ' . $oauth_data['provider']) : $lang_module['st_login'];
+        $log_message = $opid ? ($nv_Lang->getModule('userloginviaopt') . ' ' . $oauth_data['provider']) : $nv_Lang->getModule('st_login');
         nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $array_user['username'] . '] ' . $log_message, ' Client IP:' . NV_CLIENT_IP, 0);
     }
 }
@@ -171,7 +167,7 @@ function updateUserCookie($newValues)
  */
 function nv_check_email_reg(&$email)
 {
-    global $db, $lang_module, $global_users_config, $global_config;
+    global $db, $nv_Lang, $global_users_config, $global_config;
 
     $error = nv_check_valid_email($email, true);
     $email = $error[1];
@@ -180,7 +176,7 @@ function nv_check_email_reg(&$email)
     }
 
     if (!empty($global_users_config['deny_email']) and preg_match('/' . $global_users_config['deny_email'] . '/i', $email)) {
-        return sprintf($lang_module['email_deny_name'], $email);
+        return $nv_Lang->getModule('email_deny_name', $email);
     }
 
     if (!empty($global_config['email_dot_equivalent'])) {
@@ -194,42 +190,42 @@ function nv_check_email_reg(&$email)
         $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            return sprintf($lang_module['email_registered_name'], $email);
+            return $nv_Lang->getModule('email_registered_name', $email);
         }
 
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email RLIKE :pattern');
         $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            return sprintf($lang_module['email_registered_name'], $email);
+            return $nv_Lang->getModule('email_registered_name', $email);
         }
 
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email RLIKE :pattern');
         $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            return sprintf($lang_module['email_registered_name'], $email);
+            return $nv_Lang->getModule('email_registered_name', $email);
         }
     } else {
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email = :email');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            return sprintf($lang_module['email_registered_name'], $email);
+            return $nv_Lang->getModule('email_registered_name', $email);
         }
 
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email = :email');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            return sprintf($lang_module['email_registered_name'], $email);
+            return $nv_Lang->getModule('email_registered_name', $email);
         }
 
         $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email = :email');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         if ($stmt->fetchColumn()) {
-            return sprintf($lang_module['email_registered_name'], $email);
+            return $nv_Lang->getModule('email_registered_name', $email);
         }
     }
 
@@ -244,18 +240,18 @@ function nv_check_email_reg(&$email)
  */
 function nv_check_username_reg($login)
 {
-    global $db, $lang_module, $global_users_config, $global_config;
+    global $db, $nv_Lang, $global_users_config, $global_config;
 
     $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
     if ("'" . $login . "'" != $db->quote($login)) {
-        return sprintf($lang_module['account_deny_name'], $login);
+        return $nv_Lang->getModule('account_deny_name', $login);
     }
 
     if (!empty($global_users_config['deny_name']) and preg_match('/' . $global_users_config['deny_name'] . '/i', $login)) {
-        return sprintf($lang_module['account_deny_name'], $login);
+        return $nv_Lang->getModule('account_deny_name', $login);
     }
 
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE username LIKE :username OR md5username= :md5username');
@@ -263,7 +259,7 @@ function nv_check_username_reg($login)
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['account_registered_name'], $login);
+        return $nv_Lang->getModule('account_registered_name', $login);
     }
 
     $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE username LIKE :username OR md5username= :md5username');
@@ -271,7 +267,7 @@ function nv_check_username_reg($login)
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
-        return sprintf($lang_module['account_registered_name'], $login);
+        return $nv_Lang->getModule('account_registered_name', $login);
     }
 
     return '';
@@ -286,7 +282,7 @@ function nv_check_username_reg($login)
  */
 function nv_del_user($userid)
 {
-    global $db, $global_config, $module_name, $user_info, $lang_module;
+    global $db, $global_config, $module_name, $user_info, $nv_Lang;
 
     $sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
     $row = $db->query($sql)->fetch(3);
@@ -325,8 +321,8 @@ function nv_del_user($userid)
         @nv_deletefile(NV_ROOTDIR . '/' . $photo);
     }
 
-    $subject = $lang_module['delconfirm_email_title'];
-    $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
+    $subject = $nv_Lang->getModule('delconfirm_email_title');
+    $message = $nv_Lang->getModule('delconfirm_email_content', $userdelete, $global_config['site_name']);
     $message = nl2br($message);
     nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
 
@@ -473,7 +469,7 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
     if (empty($_FILES) or empty($_FILES['file']) or empty($_FILES['file']['tmp_name']) or empty($_FILES['file']['type']) or empty($_FILES['file']['size'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_empty']
+            'mess' => $nv_Lang->getModule('file_empty')
         ]);
     }
 
@@ -481,7 +477,7 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
     $file_allowed_ext = !empty($limited_values['filetype']) ? $limited_values['filetype'] : $global_config['file_allowed_ext'];
     $file_max_size = !empty($limited_values['file_max_size']) ? min($limited_values['file_max_size'], NV_UPLOAD_MAX_FILESIZE) : NV_UPLOAD_MAX_FILESIZE;
     $upload = new NukeViet\Files\Upload($file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], $file_max_size);
-    $upload->setLanguage($lang_global);
+    $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
     $upload_info = $upload->save_file($_FILES['file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
     @unlink($_FILES['file']['tmp_name']);
     if (!empty($upload_info['error'])) {
@@ -496,7 +492,7 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
         @unlink($upload_info['name']);
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_extension_does_not_match']
+            'mess' => $nv_Lang->getModule('file_extension_does_not_match')
         ]);
     }
 
@@ -504,7 +500,7 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
         @unlink($upload_info['name']);
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_extension_not_accepted']
+            'mess' => $nv_Lang->getModule('file_extension_not_accepted')
         ]);
     }
 
@@ -513,19 +509,19 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
         $width_mess = [];
         $height_mess = [];
         if (!empty($limited_values['widthlimit']['equal'])) {
-            $width_mess[] = $lang_module['equal'] . ' ' . $limited_values['widthlimit']['equal'] . ' px';
+            $width_mess[] = $nv_Lang->getModule('equal') . ' ' . $limited_values['widthlimit']['equal'] . ' px';
             if ($upload_info['img_info'][0] != $limited_values['widthlimit']['equal']) {
                 $img_error = true;
             }
         } else {
             if (!empty($limited_values['widthlimit']['greater'])) {
-                $width_mess[] = $lang_module['greater'] . ' ' . $limited_values['widthlimit']['greater'] . ' px';
+                $width_mess[] = $nv_Lang->getModule('greater') . ' ' . $limited_values['widthlimit']['greater'] . ' px';
                 if ($upload_info['img_info'][0] < $limited_values['widthlimit']['greater']) {
                     $img_error = true;
                 }
             }
             if (!empty($limited_values['widthlimit']['less'])) {
-                $width_mess[] = $lang_module['less'] . ' ' . $limited_values['widthlimit']['less'] . ' px';
+                $width_mess[] = $nv_Lang->getModule('less') . ' ' . $limited_values['widthlimit']['less'] . ' px';
                 if ($upload_info['img_info'][0] > $limited_values['widthlimit']['less']) {
                     $img_error = true;
                 }
@@ -533,19 +529,19 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
         }
 
         if (!empty($limited_values['heightlimit']['equal'])) {
-            $height_mess[] = $lang_module['equal'] . ' ' . $limited_values['heightlimit']['equal'] . ' px';
+            $height_mess[] = $nv_Lang->getModule('equal') . ' ' . $limited_values['heightlimit']['equal'] . ' px';
             if ($upload_info['img_info'][1] != $limited_values['heightlimit']['equal']) {
                 $img_error = true;
             }
         } else {
             if (!empty($limited_values['heightlimit']['greater'])) {
-                $height_mess[] = $lang_module['greater'] . ' ' . $limited_values['heightlimit']['greater'] . ' px';
+                $height_mess[] = $nv_Lang->getModule('greater') . ' ' . $limited_values['heightlimit']['greater'] . ' px';
                 if ($upload_info['img_info'][1] < $limited_values['heightlimit']['greater']) {
                     $img_error = true;
                 }
             }
             if (!empty($limited_values['heightlimit']['less'])) {
-                $height_mess[] = $lang_module['less'] . ' ' . $limited_values['heightlimit']['less'] . ' px';
+                $height_mess[] = $nv_Lang->getModule('less') . ' ' . $limited_values['heightlimit']['less'] . ' px';
                 if ($upload_info['img_info'][1] > $limited_values['heightlimit']['less']) {
                     $img_error = true;
                 }
@@ -558,7 +554,7 @@ if ($nv_Request->isset_request('field_fileupload,field,_csrf', 'post')) {
             $height_mess = !empty($height_mess) ? implode(', ', $height_mess) : '';
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['file_image_size_error'] . ' (' . $upload_info['img_info'][0] . ' x ' . $upload_info['img_info'][1] . ' px)' . (!empty($width_mess) ? '. ' . $lang_module['file_image_width'] . ' ' . $width_mess : '') . (!empty($height_mess) ? '. ' . $lang_module['file_image_height'] . ' ' . $height_mess : '')
+                'mess' => $nv_Lang->getModule('file_image_size_error') . ' (' . $upload_info['img_info'][0] . ' x ' . $upload_info['img_info'][1] . ' px)' . (!empty($width_mess) ? '. ' . $nv_Lang->getModule('file_image_width') . ' ' . $width_mess : '') . (!empty($height_mess) ? '. ' . $nv_Lang->getModule('file_image_height') . ' ' . $height_mess : '')
             ]);
         }
     }
@@ -616,19 +612,19 @@ if ($nv_Request->isset_request('field_filedel,file,_csrf', 'post')) {
 // Download/Xem file (Nếu là image hoặc pdf thì xem)
 if ($nv_Request->isset_request('userfile', 'get')) {
     if (!(defined('NV_IS_MODADMIN') or defined('NV_IS_USER'))) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('file_not_allowed'), 404);
     }
     $userfile = $nv_Request->get_title('userfile', 'get', '');
     if (defined('NV_IS_USER') and !defined('NV_IS_MODADMIN')) {
         $field = $nv_Request->get_title('field', 'get', '');
         $field = preg_replace('/[^a-zA-Z0-9\-\_]+/', '', $field);
         if (empty($field)) {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('file_not_allowed'), 404);
         }
         $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE user_editable = 1 AND field=' . $db->quote($field));
         $row_field = $result->fetch();
         if (empty($row_field) or $row_field['field_type'] != 'file') {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('file_not_allowed'), 404);
         }
 
         $uid = $user_info['userid'];
@@ -650,19 +646,19 @@ if ($nv_Request->isset_request('userfile', 'get')) {
         if (empty($values) or !in_array($userfile, $values, true)) {
             $info_custom = $db->query('SELECT info_custom FROM ' . NV_MOD_TABLE . '_edit WHERE userid = ' . $uid)->fetchColumn();
             if (empty($info_custom)) {
-                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+                nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('file_not_allowed'), 404);
             }
             $info_custom = json_decode($info_custom, true);
             $editfiles = !empty($info_custom[$field]) ? array_map('trim', explode(',', $info_custom[$field])) : [];
             if (empty($editfiles) or !in_array($userfile, $editfiles, true)) {
-                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+                nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('file_not_allowed'), 404);
             }
         }
     }
 
     $file_save_info = get_file_save_info($userfile);
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/userfiles/' . $file_save_info['dir'] . '/' . $file_save_info['basename'])) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_module['file_not_allowed'], 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('file_not_allowed'), 404);
     }
 
     $extension = nv_getextension($userfile);

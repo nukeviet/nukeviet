@@ -111,8 +111,8 @@ $idfield = $nv_Request->get_title('idfield', 'get', '');
 
 $xtpl = new XTemplate('chatbot.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('TAB_ACTIVE', $tab);
@@ -126,7 +126,7 @@ if (!$popup) {
     foreach ($events as $event => $action_types) {
         $xtpl->assign('EVENT', [
             'key' => $event,
-            'name' => $lang_module[$event],
+            'name' => $nv_Lang->getModule($event),
             'action' => !empty($event_actions[$event][0]) ? $event_actions[$event][0] : '',
             'parameter' => !empty($event_actions[$event][1]) ? $event_actions[$event][1] : ''
         ]);
@@ -158,7 +158,7 @@ if (!$popup) {
 
                 $xtpl->assign('ACTION', [
                     'key' => $action,
-                    'name' => $lang_module['action_' . $action],
+                    'name' => $nv_Lang->getModule('action_' . $action),
                     'sel' => (!empty($event_actions[$event][0]) and $action == $event_actions[$event][0]) ? ' selected="selected"' : '',
                     'url' => $url,
                     'view_url' => $view_url
@@ -217,7 +217,7 @@ foreach ($keyword_actions as $i => $action) {
 
         $xtpl->assign('ACTION', [
             'key' => $act,
-            'name' => $lang_module['action_' . $act],
+            'name' => $nv_Lang->getModule('action_' . $act),
             'sel' => (!empty($action[0]) and $act == $action[0]) ? ' selected="selected"' : '',
             'url' => $url,
             'view_url' => $view_url
@@ -241,7 +241,7 @@ foreach ($keyword_actions as $i => $action) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['chatbot'];
+$page_title = $nv_Lang->getModule('chatbot');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents, !$popup);

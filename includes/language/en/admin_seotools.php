@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -56,7 +56,7 @@ $lang_module['metaTagsContent'] = 'Content';
 $lang_module['metaTagsOgp'] = 'Active meta-Tag Open Graph protocol';
 $lang_module['metaTagsOgpNote'] = 'Open Graph protocol: Is a prepared  data to share on facebook, view detail in <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
 $lang_module['description_length'] = 'Number of characters of meta description tag';
-$lang_module['description_note'] = ' = 0 unlimited number of characters';
+$lang_module['description_note'] = '1024 or fewer characters';
 $lang_module['metaTagsSettings'] = 'Settings';
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Outside site name';
@@ -82,8 +82,7 @@ $lang_module['rpc_ping'] = 'PING when updating data';
 $lang_module['rpc_ping_page'] = 'PING article';
 $lang_module['rpc_finish'] = 'Complete PING process, you may want to transfer the management page article?';
 $lang_module['private_site'] = 'Discourage search engines from indexing this site';
-$lang_module['ogp_image'] = 'Default image for Open Graph tags<br/>(best size: 1080px x 1080px)';
-
+$lang_module['ogp_image'] = 'Default image for Open Graph tags<br />(best size: 1080px x 1080px)';
 $lang_module['linkTags_attribute'] = 'Attribute';
 $lang_module['linkTags_value'] = 'Value';
 $lang_module['linkTags_add_attribute'] = 'Add attribute';
@@ -91,13 +90,11 @@ $lang_module['linkTags_rel_val_required'] = 'You need to declare the value of th
 $lang_module['linkTags_add'] = 'Add new link-tag';
 $lang_module['linkTags_acceptVars'] = 'Variables accepted in attribute value';
 $lang_module['linkTags_del_confirm'] = 'Do you really want to delete?';
-
 $lang_module['add_opensearch_link'] = 'Enable the OpenSearch link tag for the search plugin in the following areas';
 $lang_module['add_opensearch_link_all'] = 'Sitewide search';
 $lang_module['ShortName'] = 'Short name';
 $lang_module['Description'] = 'Description';
 $lang_module['ShortName_note'] = '16 or fewer characters';
-$lang_module['Description_note'] = '1024 or fewer characters';
 $lang_module['other_seo_tools'] = 'Other SEO-tools';
 $lang_module['add_sitelinks_search_box_schema'] = 'Add Sitelinks Search Box Schema';
 $lang_module['more_information'] = 'More information';

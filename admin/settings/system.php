@@ -18,12 +18,12 @@ $adminThemes = array_merge($adminThemes, nv_scandir(NV_ROOTDIR . '/themes', $glo
 unset($adminThemes[0]);
 
 $closed_site_Modes = [];
-$closed_site_Modes[0] = $lang_module['closed_site_0'];
+$closed_site_Modes[0] = $nv_Lang->getModule('closed_site_0');
 if (defined('NV_IS_GODADMIN')) {
-    $closed_site_Modes[1] = $lang_module['closed_site_1'];
+    $closed_site_Modes[1] = $nv_Lang->getModule('closed_site_1');
 }
-$closed_site_Modes[2] = $lang_module['closed_site_2'];
-$closed_site_Modes[3] = $lang_module['closed_site_3'];
+$closed_site_Modes[2] = $nv_Lang->getModule('closed_site_2');
+$closed_site_Modes[3] = $nv_Lang->getModule('closed_site_3');
 
 // Thay đổi chế độ site
 if (defined('NV_IS_GODADMIN')) {
@@ -226,7 +226,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         ];
         $rewrite = nv_rewrite_change($array_config_rewrite);
         if (empty($rewrite[0])) {
-            $errormess .= sprintf($lang_module['err_writable'], $rewrite[1]);
+            $errormess .= $nv_Lang->getModule('err_writable', $rewrite[1]);
         }
 
         $diff1 = array_diff($my_domains, $global_config['my_domains']);
@@ -234,7 +234,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         if (!empty($diff1) or !empty($diff2)) {
             $save_config = nv_server_config_change($my_domains);
             if ($save_config[0] !== true) {
-                $errormess .= (!empty($errormess) ? '<br/>' : '') . sprintf($lang_module['err_save_sysconfig'], $save_config[1]);
+                $errormess .= (!empty($errormess) ? '<br/>' : '') . $nv_Lang->getModule('err_save_sysconfig', $save_config[1]);
             }
         }
     } else {
@@ -253,7 +253,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     }
 }
 
-$page_title = $lang_module['global_config'];
+$page_title = $nv_Lang->getModule('global_config');
 
 $array_config_define['nv_debug'] = NV_DEBUG;
 $global_config['checkss'] = $checkss;
@@ -270,8 +270,8 @@ if (!empty($global_config['site_phone']) and !empty($global_config['site_int_pho
 }
 
 $xtpl = new XTemplate('system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
@@ -280,7 +280,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 for ($i = 0; $i <= 2; ++$i) {
     $ssl_https = [
         'key' => $i,
-        'title' => $lang_module['ssl_https_' . $i],
+        'title' => $nv_Lang->getModule('ssl_https_' . $i),
         'selected' => $i == $global_config['ssl_https'] ? ' selected="selected"' : ''
     ];
 
@@ -310,7 +310,7 @@ if (defined('NV_IS_GODADMIN')) {
         'panel' => empty($global_config['closed_site']) ? 'success' : 'danger',
         'icon' => empty($global_config['closed_site']) ? 'fa-check' : 'fa-ban',
         'title' => $closed_site_Modes[$global_config['closed_site']],
-        'reopening' => !empty($global_config['site_reopening_time']) ? $lang_module['closed_site_reopening_time'] . ': ' . nv_date('d/m/Y H:i', $global_config['site_reopening_time']) : ''
+        'reopening' => !empty($global_config['site_reopening_time']) ? $nv_Lang->getModule('closed_site_reopening_time') . ': ' . nv_date('d/m/Y H:i', $global_config['site_reopening_time']) : ''
     ]);
 
     $xtpl->assign('MY_DOMAINS', $array_config_global['my_domains']);
@@ -351,10 +351,10 @@ if (defined('NV_IS_GODADMIN')) {
 
     $xtpl->parse('main.closed_site');
 
-    $xtpl->assign('CURRENT_TIME', sprintf($lang_module['current_time'], nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
+    $xtpl->assign('CURRENT_TIME', $nv_Lang->getModule('current_time', nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
     $xtpl->assign('TIMEZONEOP', 'byCountry');
     $xtpl->assign('TIMEZONESELECTED', ($array_config_global['site_timezone'] == 'byCountry') ? "selected='selected'" : '');
-    $xtpl->assign('TIMEZONELANGVALUE', $lang_module['timezoneByCountry']);
+    $xtpl->assign('TIMEZONELANGVALUE', $nv_Lang->getModule('timezoneByCountry'));
     $xtpl->parse('main.timesettings.opsite_timezone');
 
     sort($timezone_array);
@@ -395,7 +395,7 @@ if (defined('NV_IS_GODADMIN')) {
 
     $xtpl->parse('main.error_handling');
 
-    $preload_opts = [$lang_module['resource_preload_not'], $lang_module['resource_preload_headers'], $lang_module['resource_preload_html']];
+    $preload_opts = [$nv_Lang->getModule('resource_preload_not'), $nv_Lang->getModule('resource_preload_headers'), $nv_Lang->getModule('resource_preload_html')];
     foreach ($preload_opts as $k => $name) {
         $xtpl->assign('PRELOAD', [
             'val' => $k,

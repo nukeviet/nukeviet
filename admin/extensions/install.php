@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_EXTENSIONS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_global['mod_extensions'];
+$page_title = $nv_Lang->getGlobal('mod_extensions');
 
 $request = [];
 $request['id'] = $nv_Request->get_int('id', 'get', 0);
@@ -24,7 +24,7 @@ $request['lang'] = NV_LANG_INTERFACE;
 $request['basever'] = $global_config['version'];
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('REQUEST', $request);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
@@ -77,7 +77,7 @@ if (empty($error) and empty($message)) {
     if (!empty(NukeViet\Http\Http::$error)) {
         $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['status']) or !isset($array['error']) or !isset($array['data']) or !isset($array['pagination']) or !is_array($array['error']) or !is_array($array['data']) or !is_array($array['pagination']) or (!empty($array['error']) and (!isset($array['error']['level']) or empty($array['error']['message'])))) {
-        $error = $lang_global['error_valid_response'];
+        $error = $nv_Lang->getGlobal('error_valid_response');
     } elseif (!empty($array['error']['message'])) {
         $error = $array['error']['message'];
     }
@@ -103,7 +103,7 @@ if (!empty($error)) {
         unset($array_string['title'], $array_string['documentation'], $array_string['require']);
         $xtpl->assign('STRING_DATA', nv_base64_encode(@serialize($array_string)));
 
-        $page_title = sprintf($lang_module['install_title'], $array['title']);
+        $page_title = $nv_Lang->getModule('install_title', $array['title']);
 
         // Show getfile info
         if ($request['getfile']) {
@@ -122,9 +122,9 @@ if (!empty($error)) {
 
                 if ($require_installed === 0) {
                     $allow_continue = false;
-                    $xtpl->assign('REQUIRE_MESSAGE', sprintf($lang_module['install_check_require_fail'], $array['require']['title']));
+                    $xtpl->assign('REQUIRE_MESSAGE', $nv_Lang->getModule('install_check_require_fail', $array['require']['title']));
                     $xtpl->assign('REQUIRE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail&amp;id=' . $array['require']['id']);
-                    $xtpl->assign('REQUIRE_TITLE', sprintf($lang_module['detail_title'], $array['require']['title']));
+                    $xtpl->assign('REQUIRE_TITLE', $nv_Lang->getModule('detail_title', $array['require']['title']));
 
                     $xtpl->parse('main.install.require_noexists');
                 } else {
@@ -135,7 +135,7 @@ if (!empty($error)) {
             if ($allow_continue === true) {
                 // Check auto install
                 if ($array['compatible']['type'] != 1 or !in_array((int) $array['tid'], [1, 2, 3, 4], true)) {
-                    $xtpl->assign('MANUAL_MESSAGE', $array['documentation'] ? $lang_module['install_manual_install'] : $lang_module['install_manual_install_danger']);
+                    $xtpl->assign('MANUAL_MESSAGE', $array['documentation'] ? $nv_Lang->getModule('install_manual_install') : $nv_Lang->getModule('install_manual_install_danger'));
                     $xtpl->parse('main.install.manual');
                 } else {
                     $xtpl->parse('main.install.auto');
@@ -146,7 +146,7 @@ if (!empty($error)) {
                     $installed = nv_extensions_is_installed($array['tid'], $array['name'], $array['compatible']['ver']);
 
                     if ($installed == 1) {
-                        $xtpl->assign('INSTALLED_MESSAGE', sprintf($lang_module['install_check_installed_error'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name));
+                        $xtpl->assign('INSTALLED_MESSAGE', $nv_Lang->getModule('install_check_installed_error', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name));
                         $xtpl->parse('main.install.installed');
                     } else {
                         // Da thanh toan

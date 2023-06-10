@@ -167,6 +167,7 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_LANGUAGE_GLOBALTABLE . " (
   idfile mediumint(8) unsigned NOT NULL DEFAULT '0',
   langtype varchar(50) NOT NULL DEFAULT 'lang_module',
   lang_key varchar(50) NOT NULL,
+  weight SMALLINT(4) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   UNIQUE KEY filelang (idfile,lang_key,langtype)
 ) ENGINE=MyISAM";

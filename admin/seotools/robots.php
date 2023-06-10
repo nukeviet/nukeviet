@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['robots'];
+$page_title = $nv_Lang->getModule('robots');
 
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
@@ -58,7 +58,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $redirect = true;
         } else {
             $xtpl = new XTemplate('robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-            $xtpl->assign('TITLE', $lang_module['robots_error_writable']);
+            $xtpl->assign('TITLE', $nv_Lang->getModule('robots_error_writable'));
             $xtpl->assign('CONTENT', str_replace([
                 "\n",
                 "\t"
@@ -79,8 +79,8 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 }
 
 $xtpl = new XTemplate('robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -137,7 +137,7 @@ foreach ($files as $file) {
         for ($i = 0; $i <= 2; ++$i) {
             $option = [
                 'value' => $i,
-                'title' => $lang_module['robots_type_' . $i],
+                'title' => $nv_Lang->getModule('robots_type_' . $i),
                 'selected' => ($type == $i) ? ' selected="selected"' : ''
             ];
 
@@ -159,7 +159,7 @@ foreach ($robots_other as $file => $value) {
     for ($i = 0; $i <= 2; ++$i) {
         $option = [
             'value' => $i,
-            'title' => $lang_module['robots_type_' . $i],
+            'title' => $nv_Lang->getModule('robots_type_' . $i),
             'selected' => ($value == $i) ? ' selected="selected"' : ''
         ];
 

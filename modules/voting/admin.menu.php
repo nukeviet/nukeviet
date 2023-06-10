@@ -13,5 +13,5 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-$submenu['content'] = $lang_module['voting_add'];
-$submenu['setting'] = $lang_module['setting'];
+$submenu['content'] = $nv_Lang->getModule('voting_add');
+$submenu['setting'] = $nv_Lang->getModule('setting');

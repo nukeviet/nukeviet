@@ -19,7 +19,7 @@ if (!$zalo->isValid()) {
 
 $oa_info = get_oa_info();
 
-$page_title = $lang_module['followers'];
+$page_title = $nv_Lang->getModule('followers');
 
 // Gui tin nhan
 if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')) {
@@ -29,7 +29,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         if (empty($oa_info['is_verified'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['feature_for_verified_OA']
+                'mess' => $nv_Lang->getModule('feature_for_verified_OA')
             ]);
         }
     }
@@ -41,28 +41,28 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         if (empty($user_id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['user_id_not_found']
+                'mess' => $nv_Lang->getModule('user_id_not_found')
             ]);
         }
 
         if (!userExists($user_id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['user_id_not_found']
+                'mess' => $nv_Lang->getModule('user_id_not_found')
             ]);
         }
     } else {
         if (!messExists($message_id, 1)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['message_id_not_found']
+                'mess' => $nv_Lang->getModule('message_id_not_found')
             ]);
         }
 
         if ($attachment_type == 'request') {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['feature_not_to_reply_message']
+                'mess' => $nv_Lang->getModule('feature_not_to_reply_message')
             ]);
         }
     }
@@ -72,7 +72,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
 
     if (in_array($attachment_type, ['plaintext', 'site', 'internet', 'zalo'], true)) {
         if (empty($chat_text)) {
-            $mess = in_array($attachment_type, ['site', 'internet', 'zalo'], true) ? $lang_module['description_for_photo_empty'] : $lang_module['description_for_photo_empty'];
+            $mess = in_array($attachment_type, ['site', 'internet', 'zalo'], true) ? $nv_Lang->getModule('description_for_photo_empty') : $nv_Lang->getModule('description_for_photo_empty');
             nv_jsonOutput([
                 'status' => 'error',
                 'mess' => $mess
@@ -85,17 +85,17 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     if ($attachment_type == 'site' and $is_localhost) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['image_from_localhost']
+            'mess' => $nv_Lang->getModule('image_from_localhost')
         ]);
     }
 
     if (in_array($attachment_type, ['site', 'internet', 'zalo', 'file', 'request', 'textlist', 'btnlist'], true)) {
         if (empty($attachment)) {
-            $mess = $lang_module['attachment_empty'];
+            $mess = $nv_Lang->getModule('attachment_empty');
             if ($attachment_type == 'request') {
-                $mess = $lang_module['request_not_selected'];
+                $mess = $nv_Lang->getModule('request_not_selected');
             } elseif ($attachment_type == 'textlist' or $attachment_type == 'btnlist') {
-                $mess = $lang_module['template_not_selected'];
+                $mess = $nv_Lang->getModule('template_not_selected');
             }
             nv_jsonOutput([
                 'status' => 'error',
@@ -107,14 +107,14 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     if ($attachment_type == 'internet' and !nv_is_url($attachment)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['image_is_invalid']
+            'mess' => $nv_Lang->getModule('image_is_invalid')
         ]);
     }
 
     if ($attachment_type == 'site' and nv_is_file($attachment, NV_UPLOADS_DIR) !== true) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['attachment_empty']
+            'mess' => $nv_Lang->getModule('attachment_empty')
         ]);
     }
 
@@ -143,7 +143,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         if (empty($zalo_id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['attachment_empty']
+                'mess' => $nv_Lang->getModule('attachment_empty')
             ]);
         }
     }
@@ -154,7 +154,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         if (empty($request_info)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['request_not_selected']
+                'mess' => $nv_Lang->getModule('request_not_selected')
             ]);
         }
 
@@ -162,7 +162,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
             if ($is_localhost) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['image_from_localhost']
+                    'mess' => $nv_Lang->getModule('image_from_localhost')
                 ]);
             }
 
@@ -180,7 +180,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         if (empty($textlist)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['template_not_selected']
+                'mess' => $nv_Lang->getModule('template_not_selected')
             ]);
         }
 
@@ -190,7 +190,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
             if ($is_localhost) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['image_from_localhost']
+                    'mess' => $nv_Lang->getModule('image_from_localhost')
                 ]);
             }
 
@@ -274,7 +274,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
                     if ($is_localhost) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['image_from_localhost']
+                            'mess' => $nv_Lang->getModule('image_from_localhost')
                         ]);
                     }
 
@@ -292,7 +292,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         if (empty($btnlist)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['template_not_selected']
+                'mess' => $nv_Lang->getModule('template_not_selected')
             ]);
         }
 
@@ -453,7 +453,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     if (empty($contents)) {
         nv_jsonOutput([
             'status' => 'success',
-            'mess' => $lang_module['empty']
+            'mess' => $nv_Lang->getModule('empty')
         ]);
     }
 
@@ -474,14 +474,14 @@ if ($nv_Request->isset_request('remove_ftag,user_id,tag_alias', 'post')) {
     if (empty($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
     if (!userExists($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
@@ -525,14 +525,14 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
     if (empty($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
     if (!userExists($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
@@ -551,7 +551,7 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
             if (in_array($alias, $ftags, true)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['tag_exists']
+                    'mess' => $nv_Lang->getModule('tag_exists')
                 ]);
             }
 
@@ -566,7 +566,7 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
     if (empty($post_tag)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['tag_empty']
+            'mess' => $nv_Lang->getModule('tag_empty')
         ]);
     }
 
@@ -595,7 +595,7 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
 
     nv_jsonOutput([
         'status' => 'success',
-        'mess' => $lang_module['update_completed']
+        'mess' => $nv_Lang->getModule('update_completed')
     ]);
 }
 
@@ -603,11 +603,11 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
 if ($nv_Request->isset_request('change_profile,user_id', 'post')) {
     $user_id = $nv_Request->get_string('user_id', 'post', '');
     if (empty($user_id)) {
-        info_redirect($lang_module['user_id_not_found'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
+        info_redirect($nv_Lang->getModule('user_id_not_found'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
     }
 
     if (!userExists($user_id)) {
-        info_redirect($lang_module['user_id_not_found'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
+        info_redirect($nv_Lang->getModule('user_id_not_found'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
     }
 
     $data = [
@@ -640,7 +640,7 @@ if ($nv_Request->isset_request('change_profile,user_id', 'post')) {
 
     foreach ($data as $key => $val) {
         if (empty($val)) {
-            info_redirect(sprintf($lang_module['error_not_declared'], $lang_module[$key]), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&user_id=' . $data['user_id'] . '&action=edit_fi');
+            info_redirect($nv_Lang->getModule('error_not_declared', $nv_Lang->getModule($key)), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&user_id=' . $data['user_id'] . '&action=edit_fi');
         }
     }
     $data['phone'] = substr($data['phone_code'], 2) . $data['phone_number'];
@@ -657,7 +657,7 @@ if ($nv_Request->isset_request('change_profile,user_id', 'post')) {
 
     follower_profile_save($user_id, $follower_profile['data']);
 
-    info_redirect($lang_module['update_completed'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&user_id=' . $data['user_id'] . '&action=edit_fi');
+    info_redirect($nv_Lang->getModule('update_completed'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&user_id=' . $data['user_id'] . '&action=edit_fi');
 }
 
 // Lay thong tin nguoi quan tam tu Zalo
@@ -666,7 +666,7 @@ if ($nv_Request->isset_request('get_follower_profile,user_id', 'post')) {
     if (empty($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
@@ -675,7 +675,7 @@ if ($nv_Request->isset_request('get_follower_profile,user_id', 'post')) {
     if (!$row) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
@@ -716,7 +716,7 @@ if ($nv_Request->isset_request('getfollowersProfile', 'get')) {
         follower_profile_save($user_id, $follower_profile['data']);
     }
 
-    info_redirect($lang_module['wait_update_info'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowersProfile=1');
+    info_redirect($nv_Lang->getModule('wait_update_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowersProfile=1');
 }
 
 // Lay danh sach followers tu zalo
@@ -756,7 +756,7 @@ if ($nv_Request->isset_request('getfollowers', 'get')) {
     }
 
     if ($offset < $total) {
-        info_redirect($lang_module['wait_update_info'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowers=1&offset=' . $offset);
+        info_redirect($nv_Lang->getModule('wait_update_info'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&getfollowers=1&offset=' . $offset);
     }
 
     $not_sync = get_followers_not_sync(1);
@@ -771,19 +771,19 @@ if ($nv_Request->isset_request('getfollowers', 'get')) {
 if ($nv_Request->isset_request('user_id', 'get')) {
     $user_id = $nv_Request->get_string('user_id', 'get', '');
     if (empty($user_id)) {
-        info_redirect($lang_module['user_id_not_found'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
+        info_redirect($nv_Lang->getModule('user_id_not_found'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
     }
 
     $user_id = preg_replace('/[^0-9]/', '', $user_id);
 
     $row = get_follower_info($user_id);
     if (!$row) {
-        info_redirect($lang_module['user_id_not_found'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
+        info_redirect($nv_Lang->getModule('user_id_not_found'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
     }
 
     $xtpl = new XTemplate('followers.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
     $xtpl->assign('TAG_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=followers');
     $xtpl->assign('CONVERSATION_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=conversation');
@@ -804,9 +804,9 @@ if ($nv_Request->isset_request('user_id', 'get')) {
             if (empty($val)) {
                 continue;
             }
-            $key == 'user_gender' && $val = $lang_module['user_gender_' . $val];
+            $key == 'user_gender' && $val = $nv_Lang->getModule('user_gender_' . $val);
             $key == 'updatetime' && $val = nv_date('d/m/Y H:i', $val);
-            $key == 'user_id_by_app' && $key = $lang_module[$key] . '<br/>' . $row['app_id'];
+            $key == 'user_id_by_app' && $key = $nv_Lang->getModule($key] . '<br/>' . $row['app_id');
             $key == 'phone_code' && $val = $callingcodes[$val][1] . ' +' . $callingcodes[$val][0];
             $key == 'city_id' && $val = $provinces[$val][0];
             $key == 'district_id' && !empty($row['city_id']) && $val = $districts[$row['city_id']][$val][0];
@@ -817,7 +817,7 @@ if ($nv_Request->isset_request('user_id', 'get')) {
             }, explode(',', $val)));
 
             $xtpl->assign('FOLLOWER', [
-                'key' => !empty($lang_module[$key]) ? $lang_module[$key] : $key,
+                'key' => !empty($nv_Lang->getModule($key)) ? $nv_Lang->getModule($key) : $key,
                 'val' => $val
             ]);
 
@@ -984,8 +984,8 @@ while ($row = $result->fetch()) {
 $generate_page = nv_generate_page($base_url, $followers_count, $per_page, $page);
 
 $xtpl = new XTemplate('followers.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('GETFOLLOWERS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=followers&amp;getfollowers=1');
 $xtpl->assign('UNFOLLOWERS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=unfollowers');
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers');
@@ -1004,7 +1004,7 @@ if (!empty($tags)) {
 
 if ($followers_count) {
     foreach ($followers as $follower) {
-        $follower['user_gender'] = $follower['user_gender'] != '' ? $lang_module['user_gender_' . $follower['user_gender']] : '';
+        $follower['user_gender'] = $follower['user_gender'] != '' ? $nv_Lang->getModule('user_gender_' . $follower['user_gender']) : '';
         $follower['updatetime_format'] = nv_date('d/m/Y H:i', $follower['updatetime']);
         $xtpl->assign('FOLLOWER', $follower);
         $xtpl->parse('main.isFollowers.follower');

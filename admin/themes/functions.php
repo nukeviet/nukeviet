@@ -16,7 +16,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_themes']
+    'custom_title' => $nv_Lang->getGlobal('mod_themes')
 ];
 
 define('NV_IS_FILE_THEMES', true);
@@ -31,12 +31,12 @@ $array_url_instruction['package_theme_module'] = 'https://wiki.nukeviet.vn/theme
 
 function get_dtime_details($dtime_type, $dtime_details)
 {
-    global $global_config, $module_file, $lang_module, $lang_global;
+    global $global_config, $module_file, $nv_Lang;
 
     if ($dtime_type != 'regular') {
         $xtpl = new XTemplate('block_content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
         if ($dtime_type == 'specific') {
             if (isset($dtime_details[0]['start_date'])) {
@@ -141,7 +141,7 @@ function get_dtime_details($dtime_type, $dtime_details)
                     $xtpl->assign('DAY_OF_WEEK', [
                         'val' => $i,
                         'sel' => (isset($dtime_details[$key]['day_of_week']) and $i == $dtime_details[$key]['day_of_week']) ? ' selected="selected"' : '',
-                        'name' => $lang_module['day_of_week_' . $i]
+                        'name' => $nv_Lang->getModule('day_of_week_' . $i)
                     ]);
                     $xtpl->parse('dtime_details.dtime_type_weekly.loop.day_of_week');
                 }
@@ -302,14 +302,14 @@ function get_dtime_details($dtime_type, $dtime_details)
 
 function loadblock($module, $bid, $selectthemes = '')
 {
-    global $db, $lang_module, $global_config, $site_mods;
+    global $db, $nv_Lang, $global_config, $site_mods;
 
     $row = ['theme' => '', 'file_name' => ''];
     if ($bid > 0) {
         $row = $db->query('SELECT theme, file_name FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid)->fetch();
     }
 
-    $return = '<option value="">' . $lang_module['block_select'] . '</option>';
+    $return = '<option value="">' . $nv_Lang->getModule('block_select') . '</option>';
 
     if ($module == 'theme') {
         if (empty($row['theme'])) {

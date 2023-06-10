@@ -107,21 +107,21 @@ if ($nv_Request->isset_request('fc', 'post')) {
             if (!empty($post['departmentid']) and !isset($departments[$post['departmentid']])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['error_required_departmentid']
+                    'mess' => $nv_Lang->getModule('error_required_departmentid')
                 ]);
             }
 
             if (nv_strlen($post['full_name']) < 3) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['error_required_full_name']
+                    'mess' => $nv_Lang->getModule('error_required_full_name')
                 ]);
             }
 
             if (nv_strlen($post['phone']) < 6) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['error_required_phone']
+                    'mess' => $nv_Lang->getModule('error_required_phone')
                 ]);
             }
 
@@ -139,7 +139,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
                 if (empty($size[0]) or $size[0] < 100 or $size[0] > 300 or $size[0] != $size[1]) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['supporter_avatar_note']
+                        'mess' => $nv_Lang->getModule('supporter_avatar_note')
                     ]);
                 }
                 $post['image'] = substr($post['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
@@ -215,8 +215,8 @@ if ($nv_Request->isset_request('fc', 'post')) {
             }
 
             $xtpl = new XTemplate('supporter.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-            $xtpl->assign('LANG', $lang_module);
-            $xtpl->assign('GLANG', $lang_global);
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+            $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
             $xtpl->assign('FORM_ACTION', $page_url);
             $xtpl->assign('SUPPORTER', $supporter);
             $xtpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
@@ -241,7 +241,7 @@ if ($nv_Request->isset_request('fc', 'post')) {
             $contents = $xtpl->text('content');
             nv_jsonOutput([
                 'status' => 'OK',
-                'title' => $id ? $lang_module['supporter_edit'] : $lang_module['supporter_add'],
+                'title' => $id ? $nv_Lang->getModule('supporter_edit') : $nv_Lang->getModule('supporter_add'),
                 'content' => $contents
             ]);
         }
@@ -295,7 +295,7 @@ $supporters = get_supporter_list();
 $departments = get_department_list();
 $departments[0] = [
     'id' => 0,
-    'full_name' => $lang_module['department_empty']
+    'full_name' => $nv_Lang->getModule('department_empty')
 ];
 
 $list = [];
@@ -309,8 +309,8 @@ if (!empty($supporters)) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('OP_URL', $page_url);
 
 if (!empty($list)) {
@@ -346,7 +346,7 @@ if (!empty($list)) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['supporter'];
+$page_title = $nv_Lang->getModule('supporter');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_DATABASE')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_global['mod_settings'];
+$page_title = $nv_Lang->getGlobal('mod_settings');
 $array_sql_ext = ['sql', 'gz'];
 
 $array_config_global = [];
@@ -54,8 +54,8 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $array_config_global);
 $xtpl->assign('CHECKSS', $checkss);
 

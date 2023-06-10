@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['comment'];
+$page_title = $nv_Lang->getModule('admin_comment');
 
 $page = $nv_Request->get_int('page', 'get', 1);
 $module = $nv_Request->get_title('module', 'get');
@@ -25,15 +25,15 @@ $from['from_date'] = $nv_Request->get_title('from_date', 'get', '');
 $from['to_date'] = $nv_Request->get_title('to_date', 'get', '');
 
 $array_search = [
-    'content' => $lang_module['search_content'],
-    'post_name' => $lang_module['search_post_name'],
-    'post_email' => $lang_module['search_post_email'],
-    'content_id' => $lang_module['search_content_id']
+    'content' => $nv_Lang->getModule('search_content'),
+    'post_name' => $nv_Lang->getModule('search_post_name'),
+    'post_email' => $nv_Lang->getModule('search_post_email'),
+    'content_id' => $nv_Lang->getModule('search_content_id')
 ];
 $array_status_view = [
-    '2' => $lang_module['search_status'],
-    '1' => $lang_module['enable'],
-    '0' => $lang_module['disable']
+    '2' => $nv_Lang->getModule('search_status'),
+    '1' => $nv_Lang->getModule('enable'),
+    '0' => $nv_Lang->getModule('disable')
 ];
 if (!in_array($stype, array_keys($array_search), true)) {
     $stype = '';
@@ -44,7 +44,7 @@ if (!in_array($sstatus, array_keys($array_status_view), true)) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -72,7 +72,7 @@ foreach ($array_status_view as $key => $val) {
 
 $xtpl->assign('OPTION', [
     'key' => '',
-    'title' => $lang_module['search_module_all'],
+    'title' => $nv_Lang->getModule('search_module_all'),
     'selected' => ($module == '') ? ' selected="selected"' : ''
 ]);
 $xtpl->parse('main.module');
@@ -106,7 +106,7 @@ if (!empty($module) and isset($site_mod_comm[$module])) {
     // Gới hạn module tìm kiếm nếu không phải là quản trị site
     if (empty($site_mod_comm)) {
         include NV_ROOTDIR . '/includes/header.php';
-        echo nv_admin_theme($lang_global['admin_no_allow_func']);
+        echo nv_admin_theme($nv_Lang->getGlobal('admin_no_allow_func'));
         include NV_ROOTDIR . '/includes/footer.php';
     } else {
         $mod_where = [];

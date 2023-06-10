@@ -42,16 +42,15 @@ if (!nv_function_exists('nv_department_info')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_config_contact_department($module, $data_block, $lang_block)
+    function nv_block_config_contact_department($module, $data_block)
     {
-        global $site_mods, $nv_Cache;
+        global $site_mods, $nv_Cache, $nv_Lang;
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['departmentid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('departmentid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="config_departmentid" class="form-control">';
         $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department ORDER BY weight', 'id', $module);
         foreach ($departments as $l) {
@@ -69,10 +68,9 @@ if (!nv_function_exists('nv_department_info')) {
      * nv_block_config_contact_department_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_contact_department_submit($module, $lang_block)
+    function nv_block_config_contact_department_submit($module)
     {
         global $nv_Request;
         $return = [];
@@ -91,7 +89,7 @@ if (!nv_function_exists('nv_department_info')) {
      */
     function nv_department_info($block_config)
     {
-        global $global_config, $site_mods, $nv_Cache, $module_name, $lang_global;
+        global $global_config, $site_mods, $nv_Cache, $module_name, $nv_Lang;
 
         $module = $block_config['module'];
         $module_data = $site_mods[$module]['module_data'];
@@ -116,7 +114,7 @@ if (!nv_function_exists('nv_department_info')) {
         }
 
         $xtpl = new XTemplate('block.department.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
 
         $row['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
 
@@ -141,7 +139,7 @@ if (!nv_function_exists('nv_department_info')) {
                 }
             }
             $xtpl->assign('CD', [
-                'name' => $lang_global['phonenumber'],
+                'name' => $nv_Lang->getGlobal('phonenumber'),
                 'value' => implode(', ', $items)
             ]);
             $xtpl->parse('main.cd');
@@ -162,7 +160,7 @@ if (!nv_function_exists('nv_department_info')) {
                 $items[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '">' . $email . '</a>';
             }
             $xtpl->assign('CD', [
-                'name' => $lang_global['email'],
+                'name' => $nv_Lang->getGlobal('email'),
                 'value' => implode(', ', $items)
             ]);
 

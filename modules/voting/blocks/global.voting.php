@@ -19,16 +19,15 @@ if (!nv_function_exists('nv_block_voting_select')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_voting_select_config($module, $data_block, $lang_block)
+    function nv_block_voting_select_config($module, $data_block)
     {
-        global $nv_Cache, $site_mods;
+        global $nv_Cache, $site_mods, $nv_Lang;
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['vid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('vid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="vid" class="form-control">';
         $sql = 'SELECT vid, question,acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
         $list = $nv_Cache->db($sql, 'vid', $module);
@@ -46,10 +45,9 @@ if (!nv_function_exists('nv_block_voting_select')) {
      * nv_block_voting_select_config_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_voting_select_config_submit($module, $lang_block)
+    function nv_block_voting_select_config_submit($module)
     {
         global $nv_Request;
 
@@ -70,7 +68,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
      */
     function nv_block_voting_select($block_config, $global_array_cat)
     {
-        global $nv_Cache, $global_config, $site_mods, $my_footer, $lang_global, $module_config;
+        global $nv_Cache, $global_config, $site_mods, $my_footer, $nv_Lang, $module_config;
 
         $module = $block_config['module'];
 
@@ -86,7 +84,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                     return '';
                 }
 
-                include NV_ROOTDIR . '/modules/' . $site_mods['voting']['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php';
+                $nv_Lang->loadModule($site_mods['voting']['module_file'], false, true);
 
                 if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods['voting']['module_file'] . '/global.voting.tpl')) {
                     $block_theme = $global_config['module_theme'];
@@ -102,17 +100,17 @@ if (!nv_function_exists('nv_block_voting_select')) {
                     'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                     'accept' => $current_voting['acceptcm'],
                     'active_captcha' => (int) $current_voting['active_captcha'],
-                    'errsm' => $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
+                    'errsm' => $current_voting['acceptcm'] > 1 ? $nv_Lang->getModule('voting_warning_all', $current_voting['acceptcm']) : $nv_Lang->getModule('voting_warning_accept1'),
                     'vid' => $current_voting['vid'],
                     'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
                     'action' => $action,
-                    'langresult' => $lang_module['voting_result'],
-                    'langsubmit' => $lang_module['voting_hits']
+                    'langresult' => $nv_Lang->getModule('voting_result'),
+                    'langsubmit' => $nv_Lang->getModule('voting_hits')
                 ];
 
                 $xtpl = new XTemplate('global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file']);
                 $xtpl->assign('VOTING', $voting_array);
-                $xtpl->assign('LANG', $lang_module);
+                $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
                 $xtpl->assign('TEMPLATE', $block_theme);
 
                 foreach ($list as $row) {
@@ -138,10 +136,10 @@ if (!nv_function_exists('nv_block_voting_select')) {
                     } elseif (($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 2) or $captcha_type == 'captcha') {
                         if ($captcha_type == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
                             $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-                            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
                             $xtpl->parse('main.has_captcha.recaptcha');
                         } else {
-                            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+                            $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
                             $xtpl->parse('main.has_captcha.basic');
                         }
                         $xtpl->parse('main.has_captcha');
@@ -149,8 +147,11 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 }
 
                 $xtpl->parse('main');
+                $content = $xtpl->text('main');
 
-                return $xtpl->text('main');
+                $nv_Lang->changeLang();
+
+                return $content;
             }
         }
     }

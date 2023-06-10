@@ -13,12 +13,12 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-$submenu['statistics'] = $lang_module['global_statistics'];
-$submenu['clearsystem'] = $lang_module['clearsystem'];
+$submenu['statistics'] = $nv_Lang->getModule('global_statistics');
+$submenu['clearsystem'] = $nv_Lang->getModule('clearsystem');
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['errorlog'] = $lang_module['errorlog'];
+    $submenu['errorlog'] = $nv_Lang->getModule('errorlog');
 }
 if (empty($global_config['idsite'])) {
-    $submenu['checkupdate'] = $lang_module['checkupdate'];
-    $submenu['config'] = $lang_module['config'];
+    $submenu['checkupdate'] = $nv_Lang->getModule('checkupdate');
+    $submenu['config'] = $nv_Lang->getModule('config');
 }

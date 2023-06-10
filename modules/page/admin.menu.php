@@ -13,8 +13,8 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-$submenu['content'] = $lang_module['add'];
+$submenu['content'] = $nv_Lang->getModule('add');
 
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['config'] = $lang_module['config'];
+    $submenu['config'] = $nv_Lang->getModule('config');
 }

@@ -74,12 +74,12 @@ function getPostLevel()
     return $post_level;
 }
 
-$page_title = $lang_module['content'];
+$page_title = $nv_Lang->getModule('content');
 $key_words = $module_info['keywords'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $array_mod_title[] = [
     'catid' => 0,
-    'title' => $lang_module['content'],
+    'title' => $nv_Lang->getModule('content'),
     'link' => $base_url
 ];
 $post_level = getPostLevel();
@@ -92,7 +92,7 @@ if (!$post_level['postcontent'] and !$post_level['addcontent'] and !$post_level[
     } else {
         $data['urlrefresh'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']), true);
     }
-    $data['content'] = $lang_module['error_content_management'];
+    $data['content'] = $nv_Lang->getModule('error_content_management');
     $contents = content_refresh($data);
     $canonicalUrl = getCanonicalUrl($page_url);
 
@@ -106,7 +106,7 @@ $my_author_detail = defined('NV_IS_USER') ? my_author_detail($user_info['userid'
 
 if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) {
     $page_url .= '&amp;author_info=1';
-    $page_title = $lang_module['author_info'];
+    $page_title = $nv_Lang->getModule('author_info');
 
     if ($nv_Request->isset_request('save', 'post')) {
         $pseudonym = $nv_Request->get_title('pseudonym', 'post', '', 1);
@@ -114,7 +114,7 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'pseudonym',
-                'mess' => $lang_module['author_pseudonym_empty']
+                'mess' => $nv_Lang->getModule('author_pseudonym_empty')
             ]);
         }
         $alias = get_pseudonym_alias($pseudonym, $my_author_detail['id']);
@@ -122,7 +122,7 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'pseudonym',
-                'mess' => $lang_module['author_pseudonym_error']
+                'mess' => $nv_Lang->getModule('author_pseudonym_error')
             ]);
         }
         $description = $nv_Request->get_string('description', 'post', '');
@@ -138,7 +138,7 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
             $stmt->bindParam(':pseudonym', $pseudonym, PDO::PARAM_STR);
             $stmt->execute();
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['edit_author_info'], 'id ' . $my_author_detail['id'], $my_author_detail['uid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_author_info'), 'id ' . $my_author_detail['id'], $my_author_detail['uid']);
             nv_jsonOutput([
                 'status' => 'OK',
                 'input' => '',
@@ -148,7 +148,7 @@ if (defined('NV_IS_USER') and $nv_Request->isset_request('author_info', 'get')) 
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => '',
-                'mess' => $lang_module['author_unspecified_error']
+                'mess' => $nv_Lang->getModule('author_unspecified_error')
             ]);
         }
     }
@@ -202,7 +202,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
             if (empty($rowcontent['status']) or $post_level['delcontent']) {
                 nv_del_content_module($contentid);
                 nv_fix_weight_content($rowcontent['weight']);
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['del_content'], $contentid . ' | ' . $client_info['ip'] . ' | ' . $user_info['username'], 0);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('del_content'), $contentid . ' | ' . $client_info['ip'] . ' | ' . $user_info['username'], 0);
 
                 if ($rowcontent['status'] == 1) {
                     $nv_Cache->delMod($module_name);
@@ -232,7 +232,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
             $post_status[] = 1;
         }
 
-        $page_title = $lang_module['update_content'];
+        $page_title = $nv_Lang->getModule('update_content');
     } else {
         $rowcontent = [
             'id' => 0,
@@ -284,11 +284,11 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         $post_status[] = 5;
         !empty($post_level['postcontent']) && $post_status[] = 1;
 
-        $page_title = $lang_module['add_content'];
+        $page_title = $nv_Lang->getModule('add_content');
     }
 
     if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
-        $contents = nv_theme_alert('', $lang_global['error_upload_over_capacity1']);
+        $contents = nv_theme_alert('', $nv_Lang->getGlobal('error_upload_over_capacity1'));
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_site_theme($contents);
         include NV_ROOTDIR . '/includes/footer.php';
@@ -341,7 +341,7 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
     $topicList = [];
     $sql = 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
     $result = $db->query($sql);
-    $topicList[0] = $lang_module['topic_sl'];
+    $topicList[0] = $nv_Lang->getModule('topic_sl');
 
     while (list($topicid_i, $title_i) = $result->fetch(3)) {
         $topicList[$topicid_i] = $title_i;
@@ -409,17 +409,17 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
         $antispam_confirm = !empty($global_config['antispam_warning']) ? (int) $nv_Request->get_bool('antispam_confirm', 'post', false) : -1;
 
         if (empty($rowcontent['title'])) {
-            $error = $lang_module['error_title'];
+            $error = $nv_Lang->getModule('error_title');
         } elseif (empty($rowcontent['listcatid'])) {
-            $error = $lang_module['error_cat'];
+            $error = $nv_Lang->getModule('error_cat');
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
-            $error = $lang_module['error_bodytext'];
+            $error = $nv_Lang->getModule('error_bodytext');
         } elseif (isset($fcode) and !nv_capcha_txt($fcode, $module_captcha)) {
-            $error = ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'];
+            $error = ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect');
         } elseif ($data_permission_confirm === 0) {
-            $error = $lang_global['data_warning_error'];
+            $error = $nv_Lang->getGlobal('data_warning_error');
         } elseif ($antispam_confirm === 0) {
-            $error = $lang_global['antispam_warning_error'];
+            $error = $nv_Lang->getGlobal('antispam_warning_error');
         } else {
             $rowcontent['catid'] = in_array((int) $rowcontent['catid'], $catids, true) ? $rowcontent['catid'] : $catids[0];
             $rowcontent['sourceid'] = 0;
@@ -512,9 +512,9 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
                     }
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['add_content'], $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0);
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('add_content'), $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0);
                 } else {
-                    $error = $lang_module['errorsave'];
+                    $error = $nv_Lang->getModule('errorsave');
                 }
             } else {
                 $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
@@ -559,9 +559,9 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
                         ];
                         nv_insert_notification($module_name, 'post_queue', $content, $contentid);
                     }
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['update_content'], $rowcontent['title'] . ' | ' . $client_info['ip'] . ' | ' . $user_info['username'], 0);
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('update_content'), $rowcontent['title'] . ' | ' . $client_info['ip'] . ' | ' . $user_info['username'], 0);
                 } else {
-                    $error = $lang_module['errorsave'];
+                    $error = $nv_Lang->getModule('errorsave');
                 }
             }
         }
@@ -575,21 +575,21 @@ if ($nv_Request->isset_request('contentid,checkss', 'get')) {
                 $data['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
                 if ($rowcontent['status'] == 1) {
-                    $data['content'] = $lang_module['save_content_ok'];
+                    $data['content'] = $nv_Lang->getModule('save_content_ok');
                     $nv_Cache->delMod($module_name);
                 } elseif ($rowcontent['status'] == 4) {
-                    $data['content'] = $lang_module['save_draft_ok'];
+                    $data['content'] = $nv_Lang->getModule('save_draft_ok');
                 } else {
-                    $data['content'] = $lang_module['save_content_waite'];
+                    $data['content'] = $nv_Lang->getModule('save_content_waite');
                 }
             } elseif ($rowcontent['status'] == 1) {
                 $catid = $catids[0];
                 $data['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $rowcontent['alias'] . '-' . $contentid;
-                $data['content'] = $lang_module['save_content_view_page'];
+                $data['content'] = $nv_Lang->getModule('save_content_view_page');
                 $nv_Cache->delMod($module_name);
             } else {
                 $data['urlrefresh'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-                $data['content'] = $lang_module['save_content_waite_home'];
+                $data['content'] = $nv_Lang->getModule('save_content_waite_home');
             }
 
             $data['urlrefresh'] = nv_url_rewrite($data['urlrefresh'], true);
@@ -692,7 +692,7 @@ if ($num_items) {
     $result = $db->query($db->sql());
     while ($item = $result->fetch()) {
         $item['publtime'] = nv_date('d/m/Y h:i:s A', $item['publtime']);
-        $item['status_note'] = $item['status'] != 1 ? sprintf($lang_module['status_alert'], $lang_module['status_' . $item['status']]) : '';
+        $item['status_note'] = $item['status'] != 1 ? $nv_Lang->getModule('status_alert', $nv_Lang->getModule('status_' . $item['status'])) : '';
         $item['imghome'] = $item['imgmobile'] = '';
         get_homeimgfile($item);
 
@@ -706,7 +706,7 @@ if ($num_items) {
 
     $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 }
 

@@ -35,7 +35,7 @@ if ($action == 'block') {
         if (empty($arr['title'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['error_menu_block']
+                'mess' => $nv_Lang->getModule('error_menu_block')
             ]);
         }
 
@@ -47,7 +47,7 @@ if ($action == 'block') {
             if (empty($arr['id'])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['errorsave']
+                    'mess' => $nv_Lang->getModule('errorsave')
                 ]);
             }
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Add menu-block', 'Menu-block id: ' . $arr['id'], $admin_info['userid']);
@@ -57,7 +57,7 @@ if ($action == 'block') {
             if (!$stmt->execute()) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['errorsave']
+                    'mess' => $nv_Lang->getModule('errorsave')
                 ]);
             }
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit menu-block', 'Menu-block id: ' . $arr['id'], $admin_info['userid']);
@@ -153,11 +153,11 @@ if ($action == 'block') {
 
     // Xuất HTML cho modal
     $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block' . (!empty($arr['id']) ? '&amp;id=' . $arr['id'] : ''));
-    $xtpl->assign('FORM_CAPTION', $arr['id'] ? $lang_module['edit_menu'] : $lang_module['add_menu']);
+    $xtpl->assign('FORM_CAPTION', $arr['id'] ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_menu'));
     $xtpl->assign('OP', $op);
 
     $xtpl->assign('DATAFORM', $arr);
@@ -193,7 +193,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     exit('OK');
 }
 
-$page_title = $lang_module['name_block'];
+$page_title = $nv_Lang->getModule('name_block');
 
 // List menu
 $db->sqlreset()
@@ -223,11 +223,11 @@ while ($row = $query2->fetch()) {
 }
 
 $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;action=block');
 
 if (empty($array)) {
-    $xtpl->assign('ERROR', $lang_module['data_no']);
+    $xtpl->assign('ERROR', $nv_Lang->getModule('data_no'));
     $xtpl->parse('main.error');
 } else {
     foreach ($array as $row) {

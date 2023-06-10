@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['content_list'];
+$page_title = $nv_Lang->getModule('content_list');
 $stype = $nv_Request->get_string('stype', 'get', '-');
 $sstatus = $nv_Request->get_int('sstatus', 'get', -1);
 $catid = $nv_Request->get_int('catid', 'get', 0);
@@ -98,7 +98,7 @@ $val_cat_content = [];
 $val_cat_content[] = [
     'value' => 0,
     'selected' => ($catid == 0) ? ' selected="selected"' : '',
-    'title' => $lang_module['search_cat_all']
+    'title' => $nv_Lang->getModule('search_cat_all')
 ];
 
 $array_cat_view = [];
@@ -151,12 +151,12 @@ if (!defined('NV_IS_ADMIN_MODULE') and $catid > 0 and !in_array($catid, array_ma
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main');
 }
 $array_search = [
-    '-' => $lang_module['search_type_all'],
-    'title' => $lang_module['search_title'],
-    'bodytext' => $lang_module['search_bodytext'],
-    'author' => $lang_module['search_author'],
-    'admin_id' => $lang_module['search_admin'],
-    'sourcetext' => $lang_module['sources']
+    '-' => $nv_Lang->getModule('search_type_all'),
+    'title' => $nv_Lang->getModule('admin_search_title'),
+    'bodytext' => $nv_Lang->getModule('search_bodytext'),
+    'author' => $nv_Lang->getModule('search_author'),
+    'admin_id' => $nv_Lang->getModule('search_admin'),
+    'sourcetext' => $nv_Lang->getModule('sources')
 ];
 $array_in_ordername = [
     'title',
@@ -166,14 +166,14 @@ $array_in_ordername = [
     'hitscm'
 ];
 $array_status_view = [
-    '-' => '---' . $lang_module['search_status'] . '---',
-    '5' => $lang_module['status_5'],
-    '1' => $lang_module['status_1'],
-    '0' => $lang_module['status_0'],
-    '6' => $lang_module['status_6'],
-    '4' => $lang_module['status_4'],
-    '2' => $lang_module['status_2'],
-    '3' => $lang_module['status_3']
+    '-' => '---' . $nv_Lang->getModule('search_status') . '---',
+    '5' => $nv_Lang->getModule('status_5'),
+    '1' => $nv_Lang->getModule('status_1'),
+    '0' => $nv_Lang->getModule('status_0'),
+    '6' => $nv_Lang->getModule('status_6'),
+    '4' => $nv_Lang->getModule('status_4'),
+    '2' => $nv_Lang->getModule('status_2'),
+    '3' => $nv_Lang->getModule('status_3')
 ];
 $array_status_class = [
     '5' => 'danger',
@@ -187,21 +187,21 @@ $array_status_class = [
 
 $_permission_action = [];
 $array_list_action = [
-    'delete' => $lang_global['delete'],
-    're-published' => $lang_module['re_published'],
-    'publtime' => $lang_module['publtime_action'],
-    'stop' => $lang_module['status_0'],
-    'waiting' => $lang_module['status_action_0']
+    'delete' => $nv_Lang->getGlobal('delete'),
+    're-published' => $nv_Lang->getModule('re_published'),
+    'publtime' => $nv_Lang->getModule('publtime_action'),
+    'stop' => $nv_Lang->getModule('status_0'),
+    'waiting' => $nv_Lang->getModule('status_action_0')
 ];
 
 // Chuyen sang cho duyet
 if (defined('NV_IS_ADMIN_MODULE')) {
-    $array_list_action['declined'] = $lang_module['declined'];
-    $array_list_action['block'] = $lang_module['addtoblock'];
-    $array_list_action['addtotopics'] = $lang_module['addtotopics'];
-    $array_list_action['move'] = $lang_module['move'];
+    $array_list_action['declined'] = $nv_Lang->getModule('declined');
+    $array_list_action['block'] = $nv_Lang->getModule('addtoblock');
+    $array_list_action['addtotopics'] = $nv_Lang->getModule('addtotopics');
+    $array_list_action['move'] = $nv_Lang->getModule('move');
 } elseif ($check_declined) { // Neu co quyen duyet bai thi
-    $array_list_action['declined'] = $lang_module['declined'];
+    $array_list_action['declined'] = $nv_Lang->getModule('declined');
 }
 
 if (!in_array($stype, array_keys($array_search), true)) {
@@ -575,7 +575,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'edittime' => $edittime,
             'publtime' => $publtime,
             'status_id' => $status,
-            'status' => $status > $global_code_defined['row_locked_status'] ? $lang_module['content_locked_bycat'] : $lang_module['status_' . $status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $nv_Lang->getModule('status_' . $status),
             'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
@@ -788,7 +788,7 @@ if (($module_config[$module_name]['elas_use'] == 1) and $checkss == NV_CHECK_SES
             'publtime' => $publtime,
             'status_id' => $status,
             'weight' => $weight,
-            'status' => $status > $global_code_defined['row_locked_status'] ? $lang_module['content_locked_bycat'] : $lang_module['status_' . $status],
+            'status' => $status > $global_code_defined['row_locked_status'] ? $nv_Lang->getModule('content_locked_bycat') : $nv_Lang->getModule('status_' . $status),
             'class' => $status > $global_code_defined['row_locked_status'] ? $array_status_class['4'] : $array_status_class[$status],
             'userid' => $_userid,
             'hitstotal' => number_format($hitstotal, 0, ',', '.'),
@@ -807,7 +807,7 @@ for ($i = 0; $i <= 10; ++$i) {
     $sl = ($i == $sstatus) ? ' selected="selected"' : '';
     $search_status[] = [
         'key' => $i,
-        'value' => $lang_module['status_' . $i],
+        'value' => $nv_Lang->getModule('status_' . $i),
         'selected' => $sl
     ];
 }
@@ -815,7 +815,7 @@ $fixedkey = $global_code_defined['row_locked_status'] + 1;
 $sl = ($fixedkey == $sstatus) ? ' selected="selected"' : '';
 $search_status[] = [
     'key' => $fixedkey,
-    'value' => $lang_module['status_lockbycat'],
+    'value' => $nv_Lang->getModule('status_lockbycat'),
     'selected' => $sl
 ];
 
@@ -839,9 +839,9 @@ foreach ($array_search as $key => $val) {
 }
 
 $arr_search_date = [
-    'addtime' => $lang_module['content_publ_date'],
-    'publtime' => $lang_module['search_public_time'],
-    'exptime' => $lang_module['content_exp_date'],
+    'addtime' => $nv_Lang->getModule('content_publ_date'),
+    'publtime' => $nv_Lang->getModule('search_public_time'),
+    'exptime' => $nv_Lang->getModule('content_exp_date'),
 ];
 
 $array_select_type_date = [];
@@ -953,8 +953,8 @@ $base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $or
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -1029,7 +1029,7 @@ foreach ($data as $row) {
     }
 
     if ($row['status_id'] == 4 and empty($row['title'])) {
-        $row['title'] = $lang_module['no_name'];
+        $row['title'] = $nv_Lang->getModule('no_name');
     }
     $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']]['username'] : '';
 
@@ -1084,47 +1084,47 @@ foreach ($data as $row) {
 // Hiển thị lịch sử sửa bài
 if ($loadhistory) {
     if (!$loadhistory_id) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
     }
 
     $maps_fields = [
-        'catid' => $lang_module['cat_parent'],
-        'topicid' => $lang_module['topics1'],
-        'author' => $lang_module['content_author'],
-        'sourceid' => $lang_module['content_sourceid'],
-        'publtime' => $lang_module['content_publ_date'],
-        'exptime' => $lang_module['content_exp_date'],
-        'archive' => $lang_module['content_archive'],
-        'title' => $lang_module['name'],
-        'alias' => $lang_module['alias'],
-        'hometext' => $lang_module['content_hometext'],
-        'homeimgfile' => $lang_module['content_homeimg'],
-        'homeimgalt' => $lang_module['content_homeimgalt'],
-        'inhome' => $lang_module['content_inhome'],
-        'allowed_comm' => $lang_module['content_allowed_comm'],
-        'allowed_rating' => $lang_module['content_allowed_rating'],
-        'external_link' => $lang_module['content_external_link1'],
-        'instant_active' => $lang_module['content_insart'],
-        'instant_template' => $lang_module['content_instant_template1'],
-        'instant_creatauto' => $lang_module['content_instant_creatauto'],
-        'titlesite' => $lang_module['titlesite'],
-        'description' => $lang_module['description'],
-        'bodyhtml' => $lang_module['content_bodytext'],
-        'voicedata' => $lang_module['voice'],
-        'sourcetext' => $lang_module['sources'],
-        'imgposition' => $lang_module['imgposition'],
-        'layout_func' => $lang_module['pick_layout1'],
-        'copyright' => $lang_module['content_copyright'],
-        'allowed_send' => $lang_module['content_allowed_send'],
-        'allowed_print' => $lang_module['content_allowed_print'],
-        'allowed_save' => $lang_module['content_allowed_save'],
-        'auto_nav' => $lang_module['auto_nav'],
-        'group_view' => $lang_module['group_view'],
-        'listcatid' => $lang_module['search_cat'],
-        'keywords' => $lang_module['keywords'],
-        'tags' => $lang_module['tag'],
-        'files' => $lang_module['fileattach'],
-        'internal_authors' => $lang_module['content_internal_author']
+        'catid' => $nv_Lang->getModule('cat_parent'),
+        'topicid' => $nv_Lang->getModule('topics1'),
+        'author' => $nv_Lang->getModule('content_author'),
+        'sourceid' => $nv_Lang->getModule('content_sourceid'),
+        'publtime' => $nv_Lang->getModule('content_publ_date'),
+        'exptime' => $nv_Lang->getModule('content_exp_date'),
+        'archive' => $nv_Lang->getModule('content_archive'),
+        'title' => $nv_Lang->getModule('name'),
+        'alias' => $nv_Lang->getModule('alias'),
+        'hometext' => $nv_Lang->getModule('content_hometext'),
+        'homeimgfile' => $nv_Lang->getModule('content_homeimg'),
+        'homeimgalt' => $nv_Lang->getModule('content_homeimgalt'),
+        'inhome' => $nv_Lang->getModule('content_inhome'),
+        'allowed_comm' => $nv_Lang->getModule('content_allowed_comm'),
+        'allowed_rating' => $nv_Lang->getModule('content_allowed_rating'),
+        'external_link' => $nv_Lang->getModule('content_external_link1'),
+        'instant_active' => $nv_Lang->getModule('content_insart'),
+        'instant_template' => $nv_Lang->getModule('content_instant_template1'),
+        'instant_creatauto' => $nv_Lang->getModule('content_instant_creatauto'),
+        'titlesite' => $nv_Lang->getModule('titlesite'),
+        'description' => $nv_Lang->getModule('description'),
+        'bodyhtml' => $nv_Lang->getModule('content_bodytext'),
+        'voicedata' => $nv_Lang->getModule('voice'),
+        'sourcetext' => $nv_Lang->getModule('sources'),
+        'imgposition' => $nv_Lang->getModule('imgposition'),
+        'layout_func' => $nv_Lang->getModule('pick_layout1'),
+        'copyright' => $nv_Lang->getModule('content_copyright'),
+        'allowed_send' => $nv_Lang->getModule('content_allowed_send'),
+        'allowed_print' => $nv_Lang->getModule('content_allowed_print'),
+        'allowed_save' => $nv_Lang->getModule('content_allowed_save'),
+        'auto_nav' => $nv_Lang->getModule('auto_nav'),
+        'group_view' => $nv_Lang->getModule('group_view'),
+        'listcatid' => $nv_Lang->getModule('search_cat'),
+        'keywords' => $nv_Lang->getModule('keywords'),
+        'tags' => $nv_Lang->getModule('tag'),
+        'files' => $nv_Lang->getModule('fileattach'),
+        'internal_authors' => $nv_Lang->getModule('content_internal_author')
     ];
 
     $array_userids = $array_users = [];

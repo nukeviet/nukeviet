@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_SETTINGS')) {
 }
 
 $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
-$page_title = $lang_module['plugin'];
+$page_title = $nv_Lang->getModule('plugin');
 
 // Thay đổi thứ tự ưu tiên
 if ($nv_Request->isset_request('changeweight', 'post')) {
@@ -30,7 +30,7 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         nv_htmlOutput('ERROR');
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['plugin_log_weight'], $pid . '-' . $new_weight, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('plugin_log_weight'), $pid . '-' . $new_weight, $admin_info['userid']);
 
     $sql = 'SELECT pid FROM ' . $db_config['prefix'] . '_plugins
     WHERE pid!=' . $pid . ' AND (plugin_lang=' . $db->quote(NV_LANG_DATA) . ' OR plugin_lang=\'all\')
@@ -64,7 +64,7 @@ if ($nv_Request->isset_request('del', 'post')) {
         nv_htmlOutput('ERROR');
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['plugin_log_del'], $pid . '-' . $row['plugin_file'], $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('plugin_log_del'), $pid . '-' . $row['plugin_file'], $admin_info['userid']);
 
     $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugins WHERE pid = ' . $pid);
 
@@ -315,7 +315,7 @@ if ($nv_Request->isset_request('integrate', 'post')) {
         nv_jsonOutput($respon);
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['plugin_log_integrate'], $post['hook_module'] . ' - ' . $row['file'] . ' - ' . $post['receive_module'], $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('plugin_log_integrate'), $post['hook_module'] . ' - ' . $row['file'] . ' - ' . $post['receive_module'], $admin_info['userid']);
 
     // Lấy vị trí mới
     $_sql = 'SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_plugins
@@ -348,8 +348,8 @@ if ($nv_Request->isset_request('integrate', 'post')) {
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
@@ -371,7 +371,7 @@ if (!empty($array_search['area'])) {
 
 // Xuất plugin đã tích hợp
 foreach ($array as $row) {
-    $row['type'] = empty($row['plugin_module_name']) ? $lang_module['plugin_type_sys'] : $lang_module['plugin_type_module'] . ':' . $row['plugin_module_name'];
+    $row['type'] = empty($row['plugin_module_name']) ? $nv_Lang->getModule('plugin_type_sys') : $nv_Lang->getModule('plugin_type_module') . ':' . $row['plugin_module_name'];
     $xtpl->assign('ROW', $row);
 
     if (!empty($array_search['area'])) {
@@ -406,8 +406,8 @@ if (!empty($available_plugins)) {
             $sizeof = !empty($row['area']);
             $row['area'] = implode(', ', $row['area']);
             !empty($row['hook_module']) && $row['area'] = $row['hook_module'] . ':' . $row['area'];
-            $row['type'] = empty($row['receive_module']) ? $lang_module['plugin_type_sys'] : $lang_module['plugin_type_module'] . ':' . $row['receive_module'];
-            $row['status'] = $sizeof ? $lang_module['plugin_status_ok'] : $lang_module['plugin_status_error'];
+            $row['type'] = empty($row['receive_module']) ? $nv_Lang->getModule('plugin_type_sys') : $nv_Lang->getModule('plugin_type_module') . ':' . $row['receive_module'];
+            $row['status'] = $sizeof ? $nv_Lang->getModule('plugin_status_ok') : $nv_Lang->getModule('plugin_status_error');
             $xtpl->assign('FILE_KEY', $file_key);
             $xtpl->assign('ROW', $row);
 

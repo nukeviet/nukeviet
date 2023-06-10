@@ -34,15 +34,15 @@ $theme_array = scandir(NV_ROOTDIR . '/themes');
 $theme_mobile_default = [];
 $theme_mobile_default[''] = [
     'key' => '',
-    'title' => $lang_module['theme_mobiledefault']
+    'title' => $nv_Lang->getModule('theme_mobiledefault')
 ];
 $theme_mobile_default[':pcsite'] = [
     'key' => ':pcsite',
-    'title' => $lang_module['theme_mobile_bysite']
+    'title' => $nv_Lang->getModule('theme_mobile_bysite')
 ];
 $theme_mobile_default[':pcmod'] = [
     'key' => ':pcmod',
-    'title' => $lang_module['theme_mobile_bymod']
+    'title' => $nv_Lang->getModule('theme_mobile_bymod')
 ];
 
 foreach ($theme_array as $dir) {
@@ -227,11 +227,11 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 }
             }
             $nv_Cache->delAll();
-            nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($lang_module['edit'], $mod), '', $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit', $mod), '', $admin_info['userid']);
 
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         } else {
-            $data['error'] = sprintf($lang_module['edit_error_update_theme'], implode(', ', $data['error']));
+            $data['error'] = $nv_Lang->getModule('edit_error_update_theme', implode(', ', $data['error']));
         }
     } elseif ($groups_view != '') {
         $row['groups_view'] = $groups_view;
@@ -256,37 +256,37 @@ if (empty($custom_title)) {
     $custom_title = $mod;
 }
 
-$page_title = sprintf($lang_module['edit'], $mod);
+$page_title = $nv_Lang->getModule('edit', $mod);
 
 if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/rss.php')) {
-    $data['rss'] = [$lang_module['activate_rss'], $rss];
+    $data['rss'] = [$nv_Lang->getModule('activate_rss'), $rss];
 }
 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs', '/^sitemap(.*?)\.php$/');
 if (sizeof($sitemaps)) {
-    $data['sitemap'] = [$lang_module['activate_sitemap'], $sitemap];
+    $data['sitemap'] = [$nv_Lang->getModule('activate_sitemap'), $sitemap];
 }
 
 $data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $mod;
 $data['custom_title'] = $custom_title;
 $data['site_title'] = $site_title;
 $data['admin_title'] = $admin_title;
-$data['theme'] = [$lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme];
-$data['mobile'] = [$lang_module['mobile'], $theme_mobile_default, $theme_mobile_list, $mobile];
+$data['theme'] = [$nv_Lang->getModule('theme'), $nv_Lang->getModule('theme_default'), $theme_list, $theme];
+$data['mobile'] = [$nv_Lang->getModule('mobile'), $theme_mobile_default, $theme_mobile_list, $mobile];
 $data['description'] = $description;
 $data['keywords'] = $keywords;
 $data['mod_name'] = $mod;
 $data['module_theme'] = $module_theme;
 $data['checkss'] = $checkss;
 if ($mod != $global_config['site_home_module']) {
-    $data['groups_view'] = [$lang_global['groups_view'], $groups_list, $groups_view];
+    $data['groups_view'] = [$nv_Lang->getGlobal('groups_view'), $groups_list, $groups_view];
 } else {
     $data['groups_view'] = [];
 }
-$data['submit'] = $lang_global['submit'];
+$data['submit'] = $nv_Lang->getGlobal('submit');
 
 $xtpl = new XTemplate('edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $data);
 
 if (!empty($data['error'])) {

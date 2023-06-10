@@ -34,7 +34,7 @@ if (defined('NV_IS_GODADMIN')) {
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_seotools']
+    'custom_title' => $nv_Lang->getGlobal('mod_seotools')
 ];
 
 define('NV_IS_FILE_SEOTOOLS', true);

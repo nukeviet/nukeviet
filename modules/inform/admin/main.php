@@ -116,7 +116,7 @@ if ($action == 'inform_action') {
         if (empty($data)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['notification_not_exist']
+                'mess' => $nv_Lang->getModule('notification_not_exist')
             ]);
         }
     }
@@ -165,19 +165,19 @@ if ($action == 'inform_action') {
         if ($postdata['sender_role'] == 'group' and empty($postdata['sender_group'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['please_select_group']
+                'mess' => $nv_Lang->getModule('please_select_group')
             ]);
         }
         if ($postdata['sender_role'] == 'admin' and empty($postdata['sender_admin'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['please_select_admin']
+                'mess' => $nv_Lang->getModule('please_select_admin')
             ]);
         }
         if ($postdata['receiver_type'] == 'grs' and empty($postdata['receiver_grs'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['please_select_receiver_group']
+                'mess' => $nv_Lang->getModule('please_select_receiver_group')
             ]);
         }
         if (empty($postdata['isdef']) or !in_array($postdata['isdef'], $global_config['setup_langs'], true)) {
@@ -187,7 +187,7 @@ if ($action == 'inform_action') {
         if (nv_strlen($postdata['message'][$postdata['isdef']]) < 3) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name'])
+                'mess' => $nv_Lang->getModule('please_enter_content', $language_array[$postdata['isdef']]['name'])
             ]);
         }
 
@@ -196,7 +196,7 @@ if ($action == 'inform_action') {
             if (!empty($link) and !nv_is_url($link, true)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_valid_link']
+                    'mess' => $nv_Lang->getModule('please_enter_valid_link')
                 ]);
             }
             if (!empty($link) and $lang != $postdata['isdef']) {
@@ -209,7 +209,7 @@ if ($action == 'inform_action') {
         if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['please_enter_default_link']
+                'mess' => $nv_Lang->getModule('please_enter_default_link')
             ]);
         }
 
@@ -217,7 +217,7 @@ if ($action == 'inform_action') {
         if (!preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['add_time'], $add_time_array)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['please_enter_valid_add_time']
+                'mess' => $nv_Lang->getModule('please_enter_valid_add_time')
             ]);
         }
 
@@ -225,7 +225,7 @@ if ($action == 'inform_action') {
         if (!empty($postdata['exp_time']) and !preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['exp_time'], $exp_time_array)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['please_enter_valid_exp_time']
+                'mess' => $nv_Lang->getModule('please_enter_valid_exp_time')
             ]);
         }
 
@@ -363,15 +363,15 @@ if ($action == 'inform_action') {
     }
 
     $xtpl = new XTemplate('action.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PAGE_URL', $page_url);
     $xtpl->assign('DATA', $data);
 
     if (!defined('NV_IS_SPADMIN')) {
         $xtpl->parse('main.is_sender_not_select');
     } else {
-        $roles = ['system' => $lang_module['from_system'], 'group' => $lang_module['from_group'], 'admin' => $lang_module['from_admin']];
+        $roles = ['system' => $nv_Lang->getModule('admin_from_system'), 'group' => $nv_Lang->getModule('admin_from_group'), 'admin' => $nv_Lang->getModule('admin_from_admin')];
         foreach ($roles as $key => $name) {
             $xtpl->assign('ROLE', [
                 'key' => $key,
@@ -403,8 +403,8 @@ if ($action == 'inform_action') {
     }
 
     $receiver_types = [
-        'ids' => $data['sender_role'] == 'group' ? $lang_module['to_members'] : $lang_module['to_users'],
-        'grs' => $lang_module['to_group']
+        'ids' => $data['sender_role'] == 'group' ? $nv_Lang->getModule('to_members') : $nv_Lang->getModule('to_users'),
+        'grs' => $nv_Lang->getModule('to_group')
     ];
     foreach ($receiver_types as $key => $name) {
         $xtpl->assign('TYPE', [
@@ -584,16 +584,16 @@ while ($row = $result->fetch()) {
     $row['receiver_grs'] = !empty($row['receiver_grs']) ? array_map('intval', explode(',', $row['receiver_grs'])) : [];
     $row['receiver_ids'] = !empty($row['receiver_ids']) ? array_map('intval', explode(',', $row['receiver_ids'])) : [];
     if (!empty($row['receiver_grs'])) {
-        $row['receiver_title'] = count($row['receiver_grs']) === 1 ? $lang_module['to_group'] : $lang_module['to_groups'];
+        $row['receiver_title'] = count($row['receiver_grs']) === 1 ? $nv_Lang->getModule('to_group') : $nv_Lang->getModule('to_groups');
     } elseif (!empty($row['receiver_ids'])) {
-        $row['receiver_title'] = $row['sender_role'] == 'group' ? $lang_module['to_members'] : $lang_module['to_users'];
+        $row['receiver_title'] = $row['sender_role'] == 'group' ? $nv_Lang->getModule('to_members') : $nv_Lang->getModule('to_users');
         $users = array_merge($users, $row['receiver_ids']);
     } else {
-        $row['receiver_title'] = $lang_module['to_all'];
+        $row['receiver_title'] = $nv_Lang->getModule('to_all');
     }
 
     $row['add_time_format'] = nv_date('d.m.Y H:i', $row['add_time']);
-    $row['exp_time_format'] = !empty($row['exp_time']) ? nv_date('d.m.Y H:i', $row['exp_time']) : $lang_module['unlimited'];
+    $row['exp_time_format'] = !empty($row['exp_time']) ? nv_date('d.m.Y H:i', $row['exp_time']) : $nv_Lang->getModule('unlimited');
 
     if ($row['add_time'] > NV_CURRENTTIME) {
         $row['status'] = 'waiting';
@@ -611,19 +611,19 @@ $users = !empty($users) ? userlist_by_ids($users, 0, true) : [];
 $page_title = $module_info['site_title'];
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('PAGE_URL', $page_url);
 
 if (defined('NV_IS_SPADMIN')) {
     $filters = [
-        'system' => $lang_module['filter_system'],
-        'group' => $lang_module['filter_group'],
-        'admins' => $lang_module['filter_admins'],
-        'admin' => $lang_module['filter_admin'],
-        'active' => $lang_module['active'],
-        'waiting' => $lang_module['waiting'],
-        'expired' => $lang_module['expired']
+        'system' => $nv_Lang->getModule('filter_system'),
+        'group' => $nv_Lang->getModule('filter_group'),
+        'admins' => $nv_Lang->getModule('filter_admins'),
+        'admin' => $nv_Lang->getModule('filter_admin'),
+        'active' => $nv_Lang->getModule('active'),
+        'waiting' => $nv_Lang->getModule('waiting'),
+        'expired' => $nv_Lang->getModule('expired')
     ];
     foreach ($filters as $key => $title) {
         $xtpl->assign('FILTER', [

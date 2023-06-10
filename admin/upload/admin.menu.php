@@ -14,7 +14,7 @@ if (!defined('NV_ADMIN')) {
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['thumbconfig'] = $lang_module['thumbconfig'];
-    $submenu['config'] = $lang_module['imgconfig'];
-    $submenu['uploadconfig'] = $lang_module['uploadconfig'];
+    $submenu['thumbconfig'] = $nv_Lang->getModule('thumbconfig');
+    $submenu['config'] = $nv_Lang->getModule('imgconfig');
+    $submenu['uploadconfig'] = $nv_Lang->getModule('uploadconfig');
 }

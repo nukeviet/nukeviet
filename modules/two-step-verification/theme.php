@@ -22,11 +22,11 @@ if (!defined('NV_MOD_2STEP_VERIFICATION')) {
  */
 function nv_theme_info_2step($backupcodes, $autoshowcode)
 {
-    global $module_info, $lang_global, $lang_module, $user_info, $module_name;
+    global $module_info, $nv_Lang, $user_info, $module_name;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
 
     if (empty($user_info['active2step'])) {
@@ -54,7 +54,7 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
         }
         $xtpl->parse('main.backupcodeModal');
 
-        $xtpl->assign('NUM_CODE', sprintf($lang_module['backupcode_2step'], $code_unused));
+        $xtpl->assign('NUM_CODE', $nv_Lang->getModule('backupcode_2step', $code_unused));
 
         if ($autoshowcode) {
             $xtpl->parse('main.backupcode.autoshowcode');
@@ -78,11 +78,11 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
  */
 function nv_theme_config_2step($secretkey, $nv_redirect)
 {
-    global $module_info, $lang_global, $lang_module, $module_name, $op, $global_config;
+    global $module_info, $module_name, $op, $global_config;
 
     $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
     $xtpl->assign('NV_REDIRECT', $nv_redirect);
 
@@ -107,11 +107,11 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
  */
 function nv_theme_confirm_password($is_pass_valid)
 {
-    global $module_info, $lang_global, $lang_module, $op, $module_name;
+    global $module_info, $nv_Lang, $op, $module_name;
 
     $xtpl = new XTemplate('confirm_password.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if ($is_pass_valid) {
         $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
@@ -122,7 +122,7 @@ function nv_theme_confirm_password($is_pass_valid)
 
         return $xtpl->text('main');
     }
-    $xtpl->assign('CHANGE_2STEP_NOTVALID', sprintf($lang_module['change_2step_notvalid'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
+    $xtpl->assign('CHANGE_2STEP_NOTVALID', $nv_Lang->getModule('change_2step_notvalid', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/password'));
     $xtpl->parse('pass_empty');
 
     return $xtpl->text('pass_empty');

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -103,8 +103,6 @@ $lang_module['config'] = 'Cấu hình';
 $lang_module['funcs'] = 'Chức năng';
 $lang_module['checkall'] = 'Chọn tất cả';
 $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
-$lang_module['ip_version'] = 'Loại IP';
-
 $lang_module['adminip'] = 'Quản lý IP truy cập khu vực quản trị';
 $lang_module['adminip_ip'] = 'Ip';
 $lang_module['adminip_timeban'] = 'Thời gian bắt đầu';
@@ -145,7 +143,6 @@ $lang_module['add_error_choose'] = 'Lỗi: Bạn chưa chọn người dùng đ�
 $lang_module['add_error_exist'] = 'Lỗi: Người dùng này đã là quản trị';
 $lang_module['add_error_notexist'] = 'Lỗi: Người dùng này không tồn tại';
 $lang_module['add_error_diff'] = 'Xảy ra lỗi không xác định';
-
 $lang_module['action_account'] = 'Tài khoản người dùng';
 $lang_module['action_account_nochange'] = 'Giữ nguyên tài khoản người dùng';
 $lang_module['action_account_suspend'] = 'Khóa tài khoản người dùng';
@@ -158,7 +155,6 @@ $lang_module['custom_title'] = 'Tiêu đề';
 $lang_module['main_module'] = 'Module trang chính';
 $lang_module['themeadmin'] = 'Giao diện người quản trị';
 $lang_module['theme_default'] = 'Mặc định theo cấu hình site';
-
 $lang_module['2step_manager'] = 'Quản lý xác thực hai bước';
 $lang_module['2step_code_off'] = 'Xác thực hai bước bằng ứng dụng đang tắt';
 $lang_module['2step_code_on'] = 'Xác thực hai bước bằng ứng dụng đang bật';
@@ -177,5 +173,6 @@ $lang_module['2step_oauth_add_mail_content'] = 'Xin chào, %1$s!<br /><br />Ban 
 $lang_module['2step_oauth_del_mail_subject'] = 'Định cấu hình Xác thực hai bước bằng Oauth đã bị hủy';
 $lang_module['2step_oauth_del_mail_content'] = 'Xin chào, %1$s!<br /><br />Ban quản trị website %2$s xin thông báo:<br />Theo yêu cầu của bạn, việc xác thực hai bước bằng Oauth đã hủy thành công. Bạn đã không thể sử dụng tài khoản %3$s của nhà cung cấp %4$s để xác thực đăng nhập vào quản trị hệ thống.<br /><br />Ban quản trị website';
 $lang_module['2step_oauth_dels_mail_content'] = 'Xin chào, %1$s!<br /><br />Ban quản trị website %2$s xin thông báo:<br />Theo yêu cầu của bạn, việc xác thực hai bước bằng Oauth đã hủy thành công. Bạn đã không thể sử dụng các tài khoản %3$s để xác thực đăng nhập vào quản trị hệ thống.<br /><br />Ban quản trị website';
+$lang_module['ip_version'] = 'Loại IP';
 $lang_module['other_info'] = 'Thông tin khác';
 $lang_module['admin_user_logout'] = 'Buộc đăng xuất khỏi tài khoản người dùng khi đăng nhập với tư cách quản trị viên';

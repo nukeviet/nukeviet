@@ -37,11 +37,11 @@ if ($nv_Request->isset_request('save', 'post')) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
-$page_title = $lang_module['config'];
+$page_title = $nv_Lang->getModule('config');
 
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 $array = $module_config[$module_name];
@@ -61,7 +61,7 @@ $xtpl->assign('DATA', $array);
 for ($i = 0; $i <= 1; ++$i) {
     $sendcopymode = [
         'key' => $i,
-        'title' => $lang_module['config_sendcopymode' . $i],
+        'title' => $nv_Lang->getModule('config_sendcopymode' . $i),
         'selected' => $i == $array['sendcopymode'] ? ' selected="selected"' : ''
     ];
     $xtpl->assign('SENDCOPYMODE', $sendcopymode);
@@ -72,14 +72,14 @@ for ($i = 0; $i <= 2; ++$i) {
     $xtpl->assign('PHONE', [
         'val' => $i,
         'sel' => $i == $array['feedback_phone'] ? ' selected="selected"' : '',
-        'title' => $lang_module['option_' . $i]
+        'title' => $nv_Lang->getModule('option_' . $i)
     ]);
     $xtpl->parse('main.feedback_phone');
 
     $xtpl->assign('ADDRESS', [
         'val' => $i,
         'sel' => $i == $array['feedback_address'] ? ' selected="selected"' : '',
-        'title' => $lang_module['option_' . $i]
+        'title' => $nv_Lang->getModule('option_' . $i)
     ]);
     $xtpl->parse('main.feedback_address');
 }

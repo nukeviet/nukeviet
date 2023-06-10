@@ -44,14 +44,14 @@ if ($nv_Request->isset_request('conversation_refresh,user_id', 'post')) {
     if (empty($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
     if (!userExists($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
@@ -111,14 +111,14 @@ if ($nv_Request->isset_request('get_conversation,user_id,refresh', 'post')) {
     if (empty($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 
     if (!userExists($user_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['user_id_not_found']
+            'mess' => $nv_Lang->getModule('user_id_not_found')
         ]);
     }
 

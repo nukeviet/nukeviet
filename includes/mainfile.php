@@ -208,7 +208,8 @@ defined('NV_SYSTEM') && $user_cookie = NukeViet\Core\User::get_userlogin_hash();
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
+$nv_Lang = new \NukeViet\Core\Language();
+$nv_Lang->loadGlobal();
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 // Class ma hoa du lieu
@@ -321,7 +322,7 @@ define('GFX_HEIGHT', NV_GFX_HEIGHT);
 define('GFX_NUM', NV_GFX_NUM);
 define('GFX_MAXLENGTH', NV_GFX_NUM);
 define('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
-define('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+define('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     require NV_ROOTDIR . '/includes/core/captcha.php';
 }

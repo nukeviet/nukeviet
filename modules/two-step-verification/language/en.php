@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,8 +14,8 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
-$lang_translator['createdate'] = '04/03/2010, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All rights reserved';
+$lang_translator['createdate'] = '02/06/2023, 14:44';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -46,8 +46,7 @@ $lang_module['email_subject'] = 'Privacy notice';
 $lang_module['email_2step_on'] = 'Your <strong>%4$s</strong> account at <a href="%5$s"><strong>%6$s</strong></a> has just enabled Two-Factor Authentication. Information:<br /><br />- Time: <strong>%1$s</strong><br />- IP: <strong>%2$s</strong><br />- Browser: <strong>%3$s</strong><br /><br />If this is you, ignore this email. If this is not you, your account is most likely stolen. Please contact the site administrator for assistance';
 $lang_module['email_2step_off'] = 'Your <strong>%5$s</strong> account at <a href="%6$s"><strong>%7$s</strong></a> has just disabled Two-Factor Authentication. Information:<br /><br />- Time: <strong>%1$s</strong><br />- IP: <strong>%2$s</strong><br />- Browser: <strong>%3$s</strong><br /><br />If this is you, ignore this email. If this is not you, please check your personal information at <a href="%4$s">%4$s</a>';
 $lang_module['email_code_renew'] = 'Your <strong>%5$s</strong> account at <a href="%6$s"><strong>%7$s</strong></a> has just recreated the backup code. Information:<br /><br />- Time: <strong>%1$s</strong><br />- IP: <strong>%2$s</strong><br />- Browser: <strong>%3$s</strong><br /><br />If this is you, ignore this email. If this is not you, please check your personal information at <a href="%4$s">%4$s</a>';
-
-$lang_module['change_2step_notvalid'] = 'Your account doesn\'t have a password, so Two-Step Authentication can\'t be changed. Please create a password and then return to this page.<br/>Please <a href="%s">click here</a> to create a password';
+$lang_module['change_2step_notvalid'] = 'Your account doesn\'t have a password, so Two-Step Authentication can\'t be changed. Please create a password and then return to this page.<br />Please <a href="%s">click here</a> to create a password';
 $lang_module['deactive_mess'] = 'Do you really want to turn off two-step authentication?';
 $lang_module['setup_2step'] = 'Set up two-step authentication';
 $lang_module['forcedrelogin'] = 'Forced re-login everywhere';

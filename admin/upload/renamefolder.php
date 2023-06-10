@@ -19,26 +19,26 @@ $newname = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['rename_dir']) or $check_allow_upload_dir['rename_dir'] !== true) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 if (empty($path) or $path == NV_UPLOADS_DIR) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 if (empty($newname)) {
-    exit('ERROR_' . $lang_module['rename_nonamefolder']);
+    exit('ERROR_' . $nv_Lang->getModule('rename_nonamefolder'));
 }
 
 unset($matches);
 preg_match('/(.*)\/([a-z0-9\-\_]+)$/i', $path, $matches);
 if (!isset($matches) or empty($matches)) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 $newpath = $matches[1] . '/' . $newname;
 if (is_dir(NV_ROOTDIR . '/' . $newpath)) {
-    exit('ERROR_' . $lang_module['folder_exists']);
+    exit('ERROR_' . $nv_Lang->getModule('folder_exists'));
 }
 
 if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
@@ -66,8 +66,8 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
         $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did);
     }
     nv_dirListRefreshSize();
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path . ' -> ' . $newpath, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('renamefolder'), $path . ' -> ' . $newpath, $admin_info['userid']);
     echo $newpath;
 } else {
-    exit('ERROR_' . $lang_module['rename_error_folder']);
+    exit('ERROR_' . $nv_Lang->getModule('rename_error_folder'));
 }

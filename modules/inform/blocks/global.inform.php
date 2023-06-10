@@ -13,7 +13,7 @@ if (!defined('NV_SYSTEM')) {
     exit('Stop!!!');
 }
 
-global $global_config, $user_info, $lang_global, $blockID, $nv_Request;
+global $global_config, $user_info, $nv_Lang, $blockID, $nv_Request;
 
 $content = '';
 
@@ -38,9 +38,9 @@ if (!empty($global_config['inform_active']) and defined('NV_IS_USER') and !defin
     }
 
     $filters = [
-        'all' => $lang_global['all'],
-        'unviewed' => $lang_global['unviewed'],
-        'favorite' => $lang_global['favorite']
+        'all' => $nv_Lang->getGlobal('all'),
+        'unviewed' => $nv_Lang->getGlobal('unviewed'),
+        'favorite' => $nv_Lang->getGlobal('favorite')
     ];
     $inform_filter_default = $nv_Request->get_title('inform_filter', 'session', 'unviewed');
     !isset($filters[$inform_filter_default]) && $inform_filter_default = 'all';
@@ -52,7 +52,7 @@ if (!empty($global_config['inform_active']) and defined('NV_IS_USER') and !defin
 
     $xtpl = new XTemplate('block.inform.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/inform');
 
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('BLOCKID', $blockID);
     $xtpl->assign('BLOCK_THEME', $block_theme);
     $xtpl->assign('BLOCK_JS', $block_js);

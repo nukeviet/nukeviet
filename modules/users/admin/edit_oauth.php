@@ -21,7 +21,7 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = $lang_module['user_oauthmanager'] . ' ' . $row['username'];
+$page_title = $nv_Lang->getModule('user_oauthmanager') . ' ' . $row['username'];
 
 $allow = false;
 
@@ -45,7 +45,7 @@ if (!$allow) {
 
 if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     $xtpl = new XTemplate('user_safemode.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SAFEMODE_DEACT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/safeshow');
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
@@ -57,11 +57,11 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
 }
 
 // Thêm vào menu top
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['userid']] = $lang_module['edit_title'];
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $row['userid']] = $lang_module['user_2step_mamager'];
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['userid']] = $nv_Lang->getModule('edit_title');
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $row['userid']] = $nv_Lang->getModule('user_2step_mamager');
 
 $xtpl = new XTemplate('user_oauth.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('USERID', $row['userid']);
 
 $sql = 'SELECT openid, opid, id, email FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $row['userid'];
@@ -91,11 +91,11 @@ if (empty($array_oauth)) {
             // Gửi email thông báo
             if (!empty($global_users_config['admin_email'])) {
                 $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
-                $message = sprintf($lang_module['security_alert_openid_delete'], $openid['openid'], $row['username'], $url);
+                $message = $nv_Lang->getModule('admin_security_alert_openid_delete', $openid['openid'], $row['username'], $url);
                 nv_sendmail_async([
                     $global_config['site_name'],
                     $global_config['site_email']
-                ], $row['email'], $lang_module['security_alert'], $message);
+                ], $row['email'], $nv_Lang->getModule('security_alert'), $message);
             }
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_delete_one_openid', 'userid ' . $row['userid'], $admin_info['userid']);
@@ -118,11 +118,11 @@ if (empty($array_oauth)) {
             // Gửi email thông báo
             if (!empty($global_users_config['admin_email'])) {
                 $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/openid', NV_MY_DOMAIN);
-                $message = sprintf($lang_module['security_alert_openid_truncate'], $row['username'], $url);
+                $message = $nv_Lang->getModule('security_alert_openid_truncate', $row['username'], $url);
                 nv_sendmail_async([
                     $global_config['site_name'],
                     $global_config['site_email']
-                ], $row['email'], $lang_module['security_alert'], $message);
+                ], $row['email'], $nv_Lang->getModule('security_alert'), $message);
             }
 
             $nv_Cache->delMod($module_name);

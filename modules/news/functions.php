@@ -118,7 +118,7 @@ if (!empty($array_op) and $op == 'main') {
     if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
         if ($catid == 0) {
             // Trang chủ
-            $contents = $lang_module['nocatpage'] . $array_op[0];
+            $contents = $nv_Lang->getModule('nocatpage') . $array_op[0];
             if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
                 $page = (int) (substr($array_op[0], 5));
             }

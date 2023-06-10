@@ -19,18 +19,19 @@ if (!nv_function_exists('nv_page_list')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_config_page_list($module, $data_block, $lang_block)
+    function nv_block_config_page_list($module, $data_block)
     {
+        global $nv_Lang;
+
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('title_length') . ':</label>';
         $html .= '	<div class="col-sm-9"><input type="text" class="form-control" name="config_title_length" value="' . $data_block['title_length'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('numrow') . ':</label>';
         $html .= '	<div class="col-sm-9"><input type="text" name="config_numrow" class="form-control" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
 
@@ -41,10 +42,9 @@ if (!nv_function_exists('nv_page_list')) {
      * nv_block_config_page_list_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_page_list_submit($module, $lang_block)
+    function nv_block_config_page_list_submit($module)
     {
         global $nv_Request;
         $return = [];

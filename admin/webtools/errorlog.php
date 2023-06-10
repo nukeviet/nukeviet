@@ -21,7 +21,7 @@ if ($nv_Request->isset_request('changemode, mode', 'post')) {
     exit('OK');
 }
 
-$page_title = $lang_module['errorlog'];
+$page_title = $nv_Lang->getModule('errorlog');
 $filelist = [];
 $logext = $ErrorHandler->cfg['error_log_fileext'];
 $error_log_filename = $ErrorHandler->cfg['error_log_filename'];
@@ -30,7 +30,7 @@ $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs';
 if ($dh = opendir($dir)) {
     while (($file = readdir($dh)) !== false) {
         if (preg_match('/^(\d{4}\-\d{2}\-\d{2})\_(' . nv_preg_quote($error_log_filename) . '|' . nv_preg_quote($notice_log_filename) . ')\.' . nv_preg_quote($logext) . '$/', $file)) {
-            $filelist[$file] = $lang_module['errorlog_log'] . ': ' . $file;
+            $filelist[$file] = $nv_Lang->getModule('errorlog_log') . ': ' . $file;
         }
     }
     closedir($dh);
@@ -40,14 +40,14 @@ if (!empty($filelist)) {
     krsort($filelist);
 }
 if (file_exists(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/sendmail.' . $logext)) {
-    $filelist['sendmail.' . $logext] = $lang_module['errorlog_sendmail'];
+    $filelist['sendmail.' . $logext] = $nv_Lang->getModule('errorlog_sendmail');
 }
 
 $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/errors256';
 if ($dh = opendir($dir)) {
     while (($file = readdir($dh)) !== false) {
         if (preg_match('/^([a-z0-9]{32})\.' . nv_preg_quote($logext) . '$/', $file)) {
-            $filelist[$file] = $lang_module['errorlog_256'] . ': ' . $file;
+            $filelist[$file] = $nv_Lang->getModule('errorlog_256') . ': ' . $file;
         }
     }
     closedir($dh);
@@ -55,7 +55,7 @@ if ($dh = opendir($dir)) {
 
 if (empty($filelist)) {
     $xtpl = new XTemplate('errorlog.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $xtpl->parse('filelist_empty');
     $contents = $xtpl->text('filelist_empty');
@@ -145,7 +145,7 @@ $file_content = nv_htmlspecialchars(nv_br2nl($file_content));
 $xtpl = new XTemplate('errorlog.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('ERROR_FILE_NAME', $errorfile);
 $xtpl->assign('ERROR_FILE_CONTENT', $file_content);
@@ -163,20 +163,20 @@ foreach ($items as $id => $item) {
                 foreach ($value as $vl) {
                     $r = [];
                     foreach ($vl as $k => $v) {
-                        $r[] = $lang_module['backtrace_' . $k] . ': ' . $v;
+                        $r[] = $nv_Lang->getModule('backtrace_' . $k) . ': ' . $v;
                     }
                     $b .= '<li>' . implode('; ', $r) . '</li>';
                 }
                 $value = '<ul>' . $b . '</ul>';
             }
             $xtpl->assign('OPTION', [
-                'title' => $lang_module['errorlog_' . $key],
+                'title' => $nv_Lang->getModule('errorlog_' . $key),
                 'value' => $value
             ]);
             unset($matches);
             if ($key == 'errno' and preg_match('/^(\d+)\s*\(.+\)/', $value, $matches)) {
-                if (!empty($lang_module['errorcode_' . $matches[1]])) {
-                    $xtpl->assign('NOTE', $lang_module['errorcode_' . $matches[1]]);
+                if (!empty($nv_Lang->getModule('errorcode_' . $matches[1]))) {
+                    $xtpl->assign('NOTE', $nv_Lang->getModule('errorcode_' . $matches[1]));
                     $xtpl->parse('errorlist.error.option.note');
                 }
             }
@@ -211,8 +211,8 @@ foreach ($filelist as $key => $ef) {
 
 $mode = $nv_Request->get_string('errorfile_view_mode', 'session', '');
 $modes = [
-    'tabular' => $lang_module['display_mode_tabular'],
-    'plaintext' => $lang_module['display_mode_plaintext']
+    'tabular' => $nv_Lang->getModule('display_mode_tabular'),
+    'plaintext' => $nv_Lang->getModule('display_mode_plaintext')
 ];
 empty($mode) && $mode = array_key_first($modes);
 foreach ($modes as $key => $name) {

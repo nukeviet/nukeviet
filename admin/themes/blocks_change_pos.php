@@ -87,7 +87,7 @@ if ($bid > 0 and md5($theme . NV_CHECK_SESSION) == $nv_Request->get_string('chec
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
-    echo $lang_module['block_update_success'];
+    echo $nv_Lang->getModule('block_update_success');
 } else {
     echo 'ERROR';
 }

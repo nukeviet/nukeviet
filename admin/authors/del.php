@@ -52,12 +52,12 @@ $access_admin = unserialize($access_admin);
 $level = $admin_info['level'];
 
 $array_action_account = [];
-$array_action_account[0] = $lang_module['action_account_nochange'];
+$array_action_account[0] = $nv_Lang->getModule('action_account_nochange');
 if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_waiting'][$level] == 1) {
-    $array_action_account[1] = $lang_module['action_account_suspend'];
+    $array_action_account[1] = $nv_Lang->getModule('action_account_suspend');
 }
 if (isset($access_admin['access_delus'][$level]) and $access_admin['access_delus'][$level] == 1) {
-    $array_action_account[2] = $lang_module['action_account_del'];
+    $array_action_account[2] = $nv_Lang->getModule('action_account_del');
 }
 
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
@@ -73,9 +73,9 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
     $adminpass = $nv_Request->get_title('adminpass_iavim', 'post');
 
     if (empty($adminpass)) {
-        $error = $lang_global['admin_password_empty'];
+        $error = $nv_Lang->getGlobal('admin_password_empty');
     } elseif (!nv_checkAdmpass($adminpass)) {
-        $error = sprintf($lang_global['adminpassincorrect'], $adminpass);
+        $error = $nv_Lang->getGlobal('adminpassincorrect', $adminpass);
         $adminpass = '';
     } else {
         if ($row['lev'] == 3) {
@@ -140,18 +140,18 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id=' . $row_user['group_id'] . ', in_groups=' . $db->quote($row_user['in_groups']) . ' WHERE userid=' . $admin_id;
             $db->query($sql);
         }
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_admin_del'], 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('nv_admin_del'), 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid']);
 
         $db->query('OPTIMIZE TABLE ' . NV_AUTHORS_GLOBALTABLE);
 
         if ($sendmail) {
-            $title = sprintf($lang_module['delete_sendmail_title'], $global_config['site_name']);
+            $title = $nv_Lang->getModule('delete_sendmail_title', $global_config['site_name']);
             $my_sig = (!empty($admin_info['sig'])) ? $admin_info['sig'] : 'All the best';
             $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
             if (empty($reason)) {
-                $message = sprintf($lang_module['delete_sendmail_mess0'], $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $my_mail);
+                $message = $nv_Lang->getModule('delete_sendmail_mess0', $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $my_mail);
             } else {
-                $message = sprintf($lang_module['delete_sendmail_mess1'], $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $reason, $my_mail);
+                $message = $nv_Lang->getModule('delete_sendmail_mess1', $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $reason, $my_mail);
             }
 
             $message = trim($message);
@@ -180,8 +180,8 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             $to = $row_user['email'];
             $send = nv_sendmail($from, $to, $title, $content);
             if (!$send) {
-                $page_title = $lang_global['error_info_caption'];
-                $contents = $lang_global['error_sendmail_admin'] . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
+                $page_title = $nv_Lang->getGlobal('error_info_caption');
+                $contents = $nv_Lang->getGlobal('error_sendmail_admin') . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
 
                 include NV_ROOTDIR . '/includes/header.php';
                 echo nv_admin_theme($contents);
@@ -197,19 +197,19 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
 
 $contents = [];
 $contents['is_error'] = (!empty($error)) ? 1 : 0;
-$contents['title'] = (!empty($error)) ? $error : sprintf($lang_module['delete_sendmail_info'], $row_user['username']);
+$contents['title'] = (!empty($error)) ? $error : $nv_Lang->getModule('delete_sendmail_info', $row_user['username']);
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
 $contents['sendmail'] = $sendmail;
-$contents['admin_password'] = [$lang_global['admin_password'], $adminpass];
+$contents['admin_password'] = [$nv_Lang->getGlobal('admin_password'), $adminpass];
 
-$page_title = $lang_module['nv_admin_del'];
+$page_title = $nv_Lang->getModule('nv_admin_del');
 
 // Parse content
 $xtpl = new XTemplate('del.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 $class = $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"';
 
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('CHECKSS', $checkss);
 
 $xtpl->assign('CLASS', $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"');

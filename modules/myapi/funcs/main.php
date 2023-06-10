@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
     if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['auth_method_select']
+            'mess' => $nv_Lang->getModule('auth_method_select')
         ]);
     }
 
@@ -52,7 +52,7 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
     if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['auth_method_select']
+            'mess' => $nv_Lang->getModule('auth_method_select')
         ]);
     }
     $api_ips = $nv_Request->get_title('ipsUpdate', 'post', '');
@@ -76,7 +76,7 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     if (empty($role_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
@@ -84,14 +84,14 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     if (empty($array_post)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
     if ($array_post['role_object'] != 'user' or  $array_post['role_type'] != 'public') {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_type_private_error']
+            'mess' => $nv_Lang->getModule('api_role_type_private_error')
         ]);
     }
 
@@ -126,7 +126,7 @@ $generate_page = nv_generate_page($base_url, $roleCount, $per_page, $page);
 
 $api_user = get_api_user();
 
-$page_title = $lang_module['main_title'];
+$page_title = $nv_Lang->getModule('main_title');
 $key_words = $module_info['keywords'];
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);

@@ -24,7 +24,7 @@ $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
-    $contents = user_info_exit($lang_module['notallowuserlogin']);
+    $contents = user_info_exit($nv_Lang->getModule('notallowuserlogin'));
 } else {
     if (!defined('NV_IS_USER')) {
         $page_title = $module_info['site_title'];
@@ -35,7 +35,7 @@ if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
         }
         nv_redirect_location($page_url);
     } else {
-        $page_title = $lang_module['user_info'];
+        $page_title = $nv_Lang->getModule('user_info');
 
         // So nhom dang quan ly
         $user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();

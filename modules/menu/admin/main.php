@@ -28,7 +28,7 @@ if ($nv_Request->isset_request('reload', 'post')) {
     $mod_file = $site_mods[$rows['module_name']]['module_file'];
 
     if (empty($rows)) {
-        exit('NO_' . $lang_module['action_menu_reload_none_success']);
+        exit('NO_' . $nv_Lang->getModule('action_menu_reload_none_success'));
     }
 
     // Xoa menu cu
@@ -77,7 +77,7 @@ if ($nv_Request->isset_request('reload', 'post')) {
         menu_fix_order($mid, $id);
         $nv_Cache->delMod($module_name);
     }
-    exit('OK_' . $lang_module['action_menu_reload_success']);
+    exit('OK_' . $nv_Lang->getModule('action_menu_reload_success'));
 }
 
 // Tạo/sửa menu
@@ -87,7 +87,7 @@ if ($nv_Request->get_title('action', 'post') == 'row') {
     if (empty($post['title'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['error_menu_name']
+            'mess' => $nv_Lang->getModule('error_menu_name')
         ]);
     }
 
@@ -305,7 +305,7 @@ if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->iss
     $arr_item = [
         [
             'key' => 0,
-            'title' => $lang_module['cat0'],
+            'title' => $nv_Lang->getModule('cat0'),
             'selected' => ($parentid == 0) ? ' selected="selected"' : ''
         ]
     ];
@@ -313,11 +313,11 @@ if ($nv_Request->get_title('action', 'post') == 'link_menu' and $nv_Request->iss
     $menulist = nv_get_menulist($mid);
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $xtpl->assign('CAT', [
         'key' => 0,
-        'title' => $lang_module['cat0'],
+        'title' => $nv_Lang->getModule('cat0'),
         'selected' => ($parentid == 0) ? ' selected="selected"' : ''
     ]);
     $xtpl->parse('row.cat');
@@ -358,7 +358,7 @@ if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->i
     $stmt->execute();
     list($mod_name, $mod_file, $mod_data) = $stmt->fetch(3);
     if (empty($mod_name)) {
-        exit($lang_module['add_error_module']);
+        exit($nv_Lang->getModule('add_error_module'));
     }
 
     $array_item = [];
@@ -380,7 +380,7 @@ if ($nv_Request->get_title('action', 'post') == 'link_module' and $nv_Request->i
     $contents = '';
     if (!empty($array_item)) {
         $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
         $sps = [];
         $subs = [];
@@ -536,10 +536,10 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
     }
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;mid=' . $post['mid']) . '&amp;parentid=' . $post['parentid'];
-    $xtpl->assign('FORM_CAPTION', ($post['id']) ? $lang_module['edit_menu'] : $lang_module['add_item']);
+    $xtpl->assign('FORM_CAPTION', ($post['id']) ? $nv_Lang->getModule('edit_menu') : $nv_Lang->getModule('add_item'));
     $xtpl->assign('UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload);
 
     if (!empty($post['icon']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['icon'])) {
@@ -564,7 +564,7 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
     $xtpl->assign('CAT', [
         'key' => 0,
         'parentid' => 0,
-        'title' => $lang_module['cat0'],
+        'title' => $nv_Lang->getModule('cat0'),
         'selected' => ($post['parentid'] == 0) ? ' selected="selected"' : ''
     ]);
     $xtpl->parse('row.cat');
@@ -679,7 +679,7 @@ if ($nv_Request->get_title('action', 'get') == 'add' or !empty($post['id'])) {
     for ($i = 0; $i <= 2; ++$i) {
         $xtpl->assign('ACTIVE_TYPE', [
             'key' => $i,
-            'title' => $lang_module['add_type_active_' . $i],
+            'title' => $nv_Lang->getModule('add_type_active_' . $i),
             'selected' => $post['active_type'] == $i ? ' selected="selected"' : ''
         ]);
         $xtpl->parse('row.active_type');
@@ -705,7 +705,7 @@ $array_mod_title[] = [
     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&mid=' . $post['mid']
 ];
 $array_mod_title[] = [
-    'title' => $lang_module['menu_manager'],
+    'title' => $nv_Lang->getModule('menu_manager'),
     'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
 ];
 krsort($array_mod_title, SORT_NUMERIC);
@@ -715,8 +715,8 @@ $s = sizeof($array_mod_title) - 1;
 $array_mod_title[$s]['active'] = true;
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;mid=' . $post['mid'] . '&amp;parentid=' . $post['parentid']);
 $xtpl->assign('DATA', $post);
@@ -824,7 +824,7 @@ if (!empty($parentid_menulist)) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['menu_manager'];
+$page_title = $nv_Lang->getModule('menu_manager');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

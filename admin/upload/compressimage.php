@@ -26,7 +26,7 @@ $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 if (!isset($check_allow_upload_dir['move_file'])) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'ERROR#' . $lang_module['notlevel']
+        'mess' => 'ERROR#' . $nv_Lang->getModule('notlevel')
     ]);
 }
 
@@ -36,7 +36,7 @@ $img = basename($img);
 if (empty($img) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $img, $path)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $img
+        'mess' => 'ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $img
     ]);
 }
 
@@ -67,7 +67,7 @@ if (isset($array_dirname[$path])) {
                 filesize=' . $info['filesize'] . ', srcwidth=' . $info['srcwidth'] . ', srcheight=' . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ', mtime=' . $info['mtime'] . ' WHERE did = ' . $did . " AND title = '" . $newimg . "'");
         }
         nv_dirListRefreshSize();
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['compressimage'], $path . '/' . $newimg, $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('compressimage'), $path . '/' . $newimg, $admin_info['userid']);
 
         nv_jsonOutput([
             'status' => 'OK',

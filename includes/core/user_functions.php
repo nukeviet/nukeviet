@@ -81,7 +81,7 @@ function is_current_url($url, $cmptype = 0)
  */
 function nv_blocks_content($sitecontent)
 {
-    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $client_info, $theme_config_positions;
+    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $nv_Lang, $sys_mods, $client_info, $theme_config_positions;
 
     $_posAllowed = [];
 
@@ -310,15 +310,15 @@ function nv_blocks_content($sitecontent)
 
                     if (defined('NV_IS_DRAG_BLOCK')) {
                         $act_class = $_row['act'] ? '' : ' act0';
-                        $act_title = $_row['act'] ? $lang_global['act_block'] : $lang_global['deact_block'];
+                        $act_title = $_row['act'] ? $nv_Lang->getGlobal('act_block') : $nv_Lang->getGlobal('deact_block');
                         $act_icon = $_row['act'] ? 'ic' : 'ic act0';
                         $checkss = md5(NV_CHECK_SESSION . '_' . $_row['bid']);
                         $content = '<div class="portlet" id="bl_' . ($_row['bid']) . '">
                              <div class="tool">
-                                 <a href="#" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="ic"></em></a>
-                                 <a href="#" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="ic"></em></a>
-                                 <a href="#" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $lang_global['act_block'] . '" data-deact="' . $lang_global['deact_block'] . '"><em class="' . $act_icon . '" data-act="ic" data-deact="ic act0"></em></a>
-                                 <a href="#" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="ic"></em></a>
+                                 <a href="#" class="block_content" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('edit_block') . '" title="' . $nv_Lang->getGlobal('edit_block') . '"><em class="ic"></em></a>
+                                 <a href="#" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('delete_block') . '" title="' . $nv_Lang->getGlobal('delete_block') . '"><em class="ic"></em></a>
+                                 <a href="#" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $nv_Lang->getGlobal('act_block') . '" data-deact="' . $nv_Lang->getGlobal('deact_block') . '"><em class="' . $act_icon . '" data-act="ic" data-deact="ic act0"></em></a>
+                                 <a href="#" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('outgroup_block') . '" title="' . $nv_Lang->getGlobal('outgroup_block') . '"><em class="ic"></em></a>
                              </div>
                              <div class="blockct' . $act_class . '">' . $content . '</div>
                              </div>';
@@ -345,7 +345,7 @@ function nv_blocks_content($sitecontent)
                 ''
             ], $__pos);
             $_posReal[$__pos] = '<div class="column" data-id="' . $__pos_name . '" data-checkss="' . md5(NV_CHECK_SESSION . '_' . $__pos_name) . '">' . $_posReal[$__pos];
-            $_posReal[$__pos] .= '<a href="#" class="add block_content" id="' . $__pos . '" title="' . $lang_global['add_block'] . ' ' . $__pos_name . '" alt="' . $lang_global['add_block'] . '"><em class="ic"></em></a>';
+            $_posReal[$__pos] .= '<a href="#" class="add block_content" id="' . $__pos . '" title="' . $nv_Lang->getGlobal('add_block') . ' ' . $__pos_name . '" alt="' . $nv_Lang->getGlobal('add_block') . '"><em class="ic"></em></a>';
             $_posReal[$__pos] .= '</div>';
         }
     }
@@ -363,7 +363,7 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
+    global $global_config, $nv_Lang, $key_words, $description, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
 
     $return = [];
 
@@ -470,8 +470,8 @@ function nv_html_meta_tags($html = true)
         $patters['/\{BASE\_SITEURL\}/'] = NV_BASE_SITEURL;
         $patters['/\{UPLOADS\_DIR\}/'] = NV_UPLOADS_DIR;
         $patters['/\{ASSETS\_DIR\}/'] = NV_ASSETS_DIR;
-        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
-        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
+        $patters['/\{CONTENT\-LANGUAGE\}/'] = $nv_Lang->getGlobal('Content_Language');
+        $patters['/\{LANGUAGE\}/'] = $nv_Lang->getGlobal('LanguageName');
         $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
         $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
         $mt = preg_replace(array_keys($patters), array_values($patters), $mt);
@@ -617,7 +617,7 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $canonicalUrl, $prevPage, $nextPage, $global_config, $lang_global;
+    global $canonicalUrl, $prevPage, $nextPage, $global_config, $nv_Lang;
 
     $return = [];
     if (!empty($canonicalUrl)) {
@@ -679,8 +679,8 @@ function nv_html_links($html = true)
         $patters['/\{BASE\_SITEURL\}/'] = NV_BASE_SITEURL;
         $patters['/\{UPLOADS\_DIR\}/'] = NV_UPLOADS_DIR;
         $patters['/\{ASSETS\_DIR\}/'] = NV_ASSETS_DIR;
-        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
-        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
+        $patters['/\{CONTENT\-LANGUAGE\}/'] = $nv_Lang->getGlobal('Content_Language');
+        $patters['/\{LANGUAGE\}/'] = $nv_Lang->getGlobal('LanguageName');
         $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
         $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
         $lt = preg_replace(array_keys($patters), array_values($patters), $lt);
@@ -841,7 +841,7 @@ function nv_html_site_rss($html = true)
  */
 function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
 {
-    global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info, $user_info;
+    global $global_config, $module_info, $module_name, $module_file, $nv_Lang, $op, $client_info, $user_info;
 
     $safemode = defined('NV_IS_USER') ? $user_info['safemode'] : 0;
     $jsDef = 'var nv_base_siteurl="' . NV_BASE_SITEURL . '",nv_assets_dir="' . NV_ASSETS_DIR . '",nv_lang_data="' . NV_LANG_INTERFACE . '",nv_lang_interface="' . NV_LANG_INTERFACE . '",nv_name_variable="' . NV_NAME_VARIABLE . '",nv_fc_variable="' . NV_OP_VARIABLE . '",nv_lang_variable="' . NV_LANG_VARIABLE . '",nv_module_name="' . $module_name . '",nv_func_name="' . $op . '",nv_is_user=' . ((int) defined('NV_IS_USER')) . ', nv_my_ofs=' . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ',nv_my_abbr="' . nv_date('T', NV_CURRENTTIME) . '",nv_cookie_prefix="' . $global_config['cookie_prefix'] . '",nv_check_pass_mstime=' . (((int) ($global_config['user_check_pass_time']) - 62) * 1000) . ',nv_area_admin=0,nv_safemode=' . $safemode . ',theme_responsive=' . ((int) ($global_config['current_theme_type'] == 'r'));
@@ -850,7 +850,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     }
 
     if (defined('NV_IS_DRAG_BLOCK')) {
-        $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
+        $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $nv_Lang->getGlobal('block_delete_confirm') . '",block_outgroup_confirm="' . $nv_Lang->getGlobal('block_outgroup_confirm') . '",blocks_saved="' . $nv_Lang->getGlobal('blocks_saved') . '",blocks_saved_error="' . $nv_Lang->getGlobal('blocks_saved_error') . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
     }
     $jsDef .= ',nv_recaptcha_ver=' . $global_config['recaptcha_ver'];
     $jsDef .= ',nv_recaptcha_sitekey="' . $global_config['recaptcha_sitekey'] . '"';
@@ -975,7 +975,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
  */
 function nv_admin_menu()
 {
-    global $lang_global, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
+    global $nv_Lang, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
 
     if ($module_info['theme'] == $module_info['template'] and file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/system/admin_toolbar.tpl')) {
         $block_theme = $module_info['template'];
@@ -986,7 +986,7 @@ function nv_admin_menu()
     }
 
     $xtpl = new XTemplate('admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system');
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_ADMINDIR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
     $xtpl->assign('URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id']);
     $xtpl->assign('TEMPLATE', $block_theme);
@@ -996,7 +996,7 @@ function nv_admin_menu()
         $list = $nv_Cache->db($sql, '', 'authors');
         if (!empty($list[0]['count'])) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
-            $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+            $lang_drag_block = ($new_drag_block) ? $nv_Lang->getGlobal('drag_block') : $nv_Lang->getGlobal('no_drag_block');
 
             $xtpl->assign('URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
             $xtpl->assign('LANG_DBLOCK', $lang_drag_block);

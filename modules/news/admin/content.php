@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('che
             $return = 'OK_' . $id;
         } else {
             $_username = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $row_tmp['admin_id'])->fetchColumn();
-            $return = 'ERROR_' . sprintf($lang_module['dulicate_edit_takeover'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+            $return = 'ERROR_' . $nv_Lang->getModule('dulicate_edit_takeover', $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
         }
     }
     nv_htmlOutput($return);
@@ -73,7 +73,7 @@ if ($nv_Request->isset_request('getKeywordsFromContent', 'post')) {
 }
 
 if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
-    $contents = nv_theme_alert('', $lang_global['error_upload_over_capacity1']);
+    $contents = nv_theme_alert('', $nv_Lang->getGlobal('error_upload_over_capacity1'));
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -158,9 +158,9 @@ while (list($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
 $catid = $nv_Request->get_int('catid', 'get', 0);
 $parentid = $nv_Request->get_int('parentid', 'get', 0);
 $array_imgposition = [
-    0 => $lang_module['imgposition_0'],
-    1 => $lang_module['imgposition_1'],
-    2 => $lang_module['imgposition_2']
+    0 => $nv_Lang->getModule('imgposition_0'),
+    1 => $nv_Lang->getModule('admin_imgposition_1'),
+    2 => $nv_Lang->getModule('imgposition_2')
 ];
 $total_news_current = nv_get_mod_countrows();
 $is_submit_form = (($nv_Request->get_int('save', 'post') == 1) ? true : false);
@@ -221,11 +221,11 @@ $rowcontent = [
 ];
 
 $rowcontent['topictext'] = '';
-$page_title = $lang_module['content_add'];
+$page_title = $nv_Lang->getModule('content_add');
 $error = [];
 $groups_list = nv_groups_list();
 $array_tags_old = [];
-$FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
+$FBIA = new \NukeViet\Facebook\InstantArticles(\NukeViet\Core\Language::$lang_module);
 $internal_authors_list = [];
 
 // ID của bài viết cần sửa hoặc cần copy
@@ -290,7 +290,7 @@ if ($rowcontent['id'] == 0) {
         nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
     }
 
-    $page_title = $lang_module['content_edit'];
+    $page_title = $nv_Lang->getModule('content_edit');
     $rowcontent['topictext'] = '';
     $rowcontent['files'] = '';
 
@@ -328,7 +328,7 @@ if ($rowcontent['id'] == 0) {
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id=' . $rowcontent['id'] . ' AND id=' . $restore_id;
         $restore_data = $db->query($sql)->fetch();
         if (empty($restore_data) or $restore_hash !== md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
         }
         unset($restore_data['id'], $restore_data['new_id'], $restore_data['admin_id'], $restore_data['changed_fields']);
 
@@ -466,8 +466,8 @@ if ($rowcontent['mode'] == 'edit') {
             WHERE id=' . $rowcontent['id']);
         } else {
             $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-            $xtpl->assign('GLANG', $lang_global);
-            $xtpl->assign('LANG', $lang_module);
+            $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
             // Thông báo không có quyền sửa.
             $_authors_lev = $db->query('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id =' . $row_tmp['admin_id'])->fetchColumn();
@@ -482,11 +482,11 @@ if ($rowcontent['mode'] == 'edit') {
                     WHERE id=' . $rowcontent['id']);
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 }
-                $message = sprintf($lang_module['dulicate_edit_admin'], $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+                $message = $nv_Lang->getModule('dulicate_edit_admin', $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
                 $xtpl->assign('TAKEOVER_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&takeover=' . $takeover);
                 $xtpl->parse('editing.takeover');
             } else {
-                $message = sprintf($lang_module['dulicate_edit'], $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+                $message = $nv_Lang->getModule('dulicate_edit', $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
             }
 
             $xtpl->assign('MESSAGE', $message);
@@ -534,14 +534,14 @@ if ($is_submit_form) {
         $rowcontent['status'] = 6;
     }
 
-    $message_error_show = $lang_module['permissions_pub_error'];
+    $message_error_show = $nv_Lang->getModule('permissions_pub_error');
     if ($rowcontent['status'] == 1) {
         $array_cat_check_content = array_map('intval', $array_cat_pub_content);
     } elseif ($rowcontent['status'] == 1 and $rowcontent['publtime'] <= NV_CURRENTTIME) {
         $array_cat_check_content = array_map('intval', $array_cat_edit_content);
     } elseif ($rowcontent['status'] == 0) {
         $array_cat_check_content = array_map('intval', $array_censor_content);
-        $message_error_show = $lang_module['permissions_sendspadmin_error'];
+        $message_error_show = $nv_Lang->getModule('permissions_sendspadmin_error');
     } else {
         $array_cat_check_content = array_map('intval', $array_cat_add_content);
     }
@@ -692,11 +692,11 @@ if ($is_submit_form) {
     $rowcontent['tags'] = !empty($tags) ? implode(',', $tags) : '';
 
     if (empty($rowcontent['title'])) {
-        $error[] = $lang_module['error_title'];
+        $error[] = $nv_Lang->getModule('error_title');
     } elseif (empty($rowcontent['listcatid'])) {
-        $error[] = $lang_module['error_cat'];
+        $error[] = $nv_Lang->getModule('error_cat');
     } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml']) and !preg_match("/<iframe.*src=\"(.*)\".*><\/iframe>/isU", $rowcontent['bodyhtml'])) {
-        $error[] = $lang_module['error_bodytext'];
+        $error[] = $nv_Lang->getModule('error_bodytext');
     }
 
     if (!empty($error)) {
@@ -898,7 +898,7 @@ if ($is_submit_form) {
 
             $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
             if ($rowcontent['id'] > 0) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('content_add'), $rowcontent['title'], $admin_info['userid']);
                 $ct_query = [];
 
                 $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail (
@@ -942,7 +942,7 @@ if ($is_submit_form) {
                 }
 
                 if (array_sum($ct_query) != sizeof($ct_query)) {
-                    $error[] = $lang_module['errorsave'];
+                    $error[] = $nv_Lang->getModule('errorsave');
                 }
                 unset($ct_query);
                 if ($module_config[$module_name]['elas_use'] == 1) {
@@ -959,7 +959,7 @@ if ($is_submit_form) {
                     $response = $nukeVietElasticSearh->insert_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $rowcontent['id'], $rowcontent);
                 }
             } else {
-                $error[] = $lang_module['errorsave'];
+                $error[] = $nv_Lang->getModule('errorsave');
             }
         } else {
             $rowcontent_old = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'])->fetch();
@@ -1028,7 +1028,7 @@ if ($is_submit_form) {
             $sth->bindParam(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
 
             if ($sth->execute()) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('content_edit'), $rowcontent['title'], $admin_info['userid']);
 
                 $ct_query = [];
 
@@ -1086,7 +1086,7 @@ if ($is_submit_form) {
                 }
 
                 if (array_sum($ct_query) != sizeof($ct_query)) {
-                    $error[] = $lang_module['errorsave'];
+                    $error[] = $nv_Lang->getModule('errorsave');
                 }
 
                 // Cập nhật bên ES
@@ -1116,7 +1116,7 @@ if ($is_submit_form) {
                     }
                 }
             } else {
-                $error[] = $lang_module['errorsave'];
+                $error[] = $nv_Lang->getModule('errorsave');
             }
         }
 
@@ -1226,14 +1226,14 @@ if ($is_submit_form) {
             if (!empty($error_data)) {
                 $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'];
                 $msg1 = implode('<br />', $error_data);
-                $msg2 = $lang_module['content_back'];
+                $msg2 = $nv_Lang->getModule('content_back');
                 redriect($msg1, $msg2, $url, $module_data . '_detail');
             } else {
                 $referer = $crypt->decrypt($rowcontent['referer']);
                 if ($restore_id) {
                     $url = $referer ?: (NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
-                    $msg1 = $lang_module['history_restore_success'];
-                    $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
+                    $msg1 = $nv_Lang->getModule('history_restore_success');
+                    $msg2 = $nv_Lang->getModule('content_main') . ' ' . $module_info['custom_title'];
                     redriect($msg1, $msg2, $url, $module_data . '_detail');
                 }
 
@@ -1244,8 +1244,8 @@ if ($is_submit_form) {
                         nv_redirect_location($referer);
                     } else {
                         $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-                        $msg1 = $lang_module['content_saveok'];
-                        $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
+                        $msg1 = $nv_Lang->getModule('content_saveok');
+                        $msg2 = $nv_Lang->getModule('content_main') . ' ' . $module_info['custom_title'];
                         redriect($msg1, $msg2, $url, $module_data . '_detail');
                     }
                 }
@@ -1254,7 +1254,7 @@ if ($is_submit_form) {
     } else {
         $url = 'javascript: history.go(-1)';
         $msg1 = implode('<br />', $error);
-        $msg2 = $lang_module['content_back'];
+        $msg2 = $nv_Lang->getModule('content_back');
         redriect($msg1, $msg2, $url, $module_data . '_detail', 'back');
     }
     $id_block_content = $id_block_content_post;
@@ -1277,7 +1277,7 @@ if (!empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/'
 $array_catid_in_row = explode(',', $rowcontent['listcatid']);
 
 $array_topic_module = [];
-$array_topic_module[0] = $lang_module['topic_sl'];
+$array_topic_module[0] = $nv_Lang->getModule('admin_topic_sl');
 if (!empty($rowcontent['topicid'])) {
     $db->sqlreset()
         ->select('topicid, title')
@@ -1293,7 +1293,7 @@ if (!empty($rowcontent['topicid'])) {
 $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC';
 $result = $db->query($sql);
 $array_source_module = [];
-$array_source_module[0] = $lang_module['sources_sl'];
+$array_source_module[0] = $nv_Lang->getModule('sources_sl');
 while (list($sourceid_i, $title_i) = $result->fetch(3)) {
     $array_source_module[$sourceid_i] = $title_i;
 }
@@ -1320,15 +1320,15 @@ if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
 
 if (empty($array_cat_check_content)) {
     $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat';
-    $contents = nv_theme_alert($lang_module['note_cat_title'], $lang_module['note_cat_content'], 'warning', $redirect, $lang_module['categories']);
+    $contents = nv_theme_alert($nv_Lang->getModule('note_cat_title'), $nv_Lang->getModule('note_cat_content'), 'warning', $redirect, $nv_Lang->getModule('categories'));
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
-$lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 $rowcontent['style_content_bodytext_required'] = $rowcontent['external_link'] ? 'hidden' : '';
 
@@ -1346,7 +1346,7 @@ if (empty($reportlist) or !isset($reportlist[$rid])) {
 }
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('rowcontent', $rowcontent);
 $xtpl->assign('ISCOPY', $copy);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -1356,17 +1356,17 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('MODULE_DATA', $module_data);
 $xtpl->assign('OP', $op);
 
-$xtpl->assign('ERROR_BODYTEXT', str_replace('\'', '\\\'', $lang_module['error_bodytext']));
-$xtpl->assign('ERROR_CAT', str_replace('\'', '\\\'', $lang_module['error_cat']));
+$xtpl->assign('ERROR_BODYTEXT', str_replace('\'', '\\\'', $nv_Lang->getModule('error_bodytext')));
+$xtpl->assign('ERROR_CAT', str_replace('\'', '\\\'', $nv_Lang->getModule('error_cat')));
 
 $xtpl->assign('RESTORE_ID', $restore_id);
 $xtpl->assign('RESTORE_HASH', $restore_hash);
 
 if ($rowcontent['id'] > 0) {
     $op = '';
-    $lang_module['save_temp'] = $lang_module['save'];
+    $nv_Lang->setModule('save_temp', $nv_Lang->getModule('save'));
 }
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 if (!empty($reportlist)) {
     $xtpl->assign('REPORT', [
@@ -1379,7 +1379,7 @@ if (!empty($reportlist)) {
         $report['collapsed'] = $report['id'] == $rid ? '' : ' collapsed';
         $report['expanded'] = $report['id'] == $rid ? 'true' : 'false';
         $report['in'] = $report['id'] == $rid ? ' in' : '';
-        $report['post_info'] = date('d/m/Y H:i', $report['post_time']) . ', ' . $lang_module['post_ip'] . ': ' . $report['post_ip'] . (!empty($report['post_email']) ? ', ' . $lang_module['post_email'] . ': ' . $report['post_email'] : '');
+        $report['post_info'] = date('d/m/Y H:i', $report['post_time']) . ', ' . $nv_Lang->getModule('post_ip') . ': ' . $report['post_ip'] . (!empty($report['post_email']) ? ', ' . $nv_Lang->getModule('post_email') . ': ' . $report['post_email'] : '');
         $report['orig_content_short'] = text_split($report['orig_content'], 50);
         $report['orig_content_short'] = $report['orig_content_short'][0] . (!empty($report['orig_content_short'][1]) ? '...' : '');
         $xtpl->assign('REPORT_DETAILS', $report);
@@ -1630,7 +1630,7 @@ if (!empty($error)) {
 
 // Thông báo vượt quá hệ thống lớn
 if (!$is_submit_form and $total_news_current == NV_MIN_MEDIUM_SYSTEM_ROWS and $rowcontent['mode'] == 'add') {
-    $xtpl->assign('LARGE_SYS_MESSAGE', sprintf($lang_module['large_sys_message'], number_format($total_news_current, 0, ',', '.')));
+    $xtpl->assign('LARGE_SYS_MESSAGE', $nv_Lang->getModule('large_sys_message', number_format($total_news_current, 0, ',', '.')));
     $xtpl->parse('main.large_sys_note');
 }
 

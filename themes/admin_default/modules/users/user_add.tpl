@@ -16,7 +16,7 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td> {LANG.account} </td>
+                    <td> {GLANG.username} </td>
                     <td> <span class="text-danger">(*)</span> </td>
                     <td><input type="text" class="form-control required w300" value="{DATA.username}" name="username" id="username_iavim" maxlength="{NV_UNICKMAX}" /></td>
                 </tr>

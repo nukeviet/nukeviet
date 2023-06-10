@@ -163,18 +163,18 @@ if ($all_pages) {
     $result = $db->query($db->sql());
     while ($row = $result->fetch()) {
         $row['log_time'] = nv_date('d.m.Y H:i', $row['log_time']);
-        $row['role_type'] = $lang_module['api_role_type_' . $row['role_type']];
-        $row['role_object'] = $lang_module['api_role_object_' . $row['role_object']];
+        $row['role_type'] = $nv_Lang->getModule('api_role_type_' . $row['role_type']);
+        $row['role_object'] = $nv_Lang->getModule('api_role_object_' . $row['role_object']);
         $data[$row['id']] = $row;
     }
     $generate_page = nv_generate_page($page_url, $all_pages, $per_page, $page);
 }
 
-$page_title = $lang_module['logs'];
+$page_title = $nv_Lang->getModule('logs');
 
 $xtpl = new XTemplate('logs.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('GET_DATA', $get_data);
 $xtpl->assign('INDEX_PAGE', NV_BASE_ADMINURL . 'index.php');

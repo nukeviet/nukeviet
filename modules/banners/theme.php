@@ -22,11 +22,11 @@ if (!defined('NV_SYSTEM')) {
  */
 function nv_banner_theme_main($contents)
 {
-    global $module_info, $lang_module, $lang_global, $manament;
+    global $module_info, $manament;
 
     $xtpl = new XTemplate('home.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($contents['rows'])) {
         $xtpl->assign('MAIN_PAGE_INFO', $contents['info']);
@@ -82,18 +82,18 @@ function nv_banner_theme_main($contents)
  */
 function nv_banner_theme_addads($global_array_uplans, $page_url)
 {
-    global $global_config, $module_info, $module_captcha, $lang_global, $lang_module, $lang_array, $manament;
+    global $global_config, $module_info, $module_captcha, $nv_Lang, $lang_array, $manament;
 
     $xtpl = new XTemplate('addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', $page_url);
 
     $xtpl->assign('MANAGEMENT', $manament);
     $xtpl->parse('main.management');
 
     foreach ($global_array_uplans as $row) {
-        $row['title'] .= ' (' . (empty($row['blang']) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']]) . ')';
+        $row['title'] .= ' (' . (empty($row['blang']) ? $nv_Lang->getModule('addads_block_lang_all') : $lang_array[$row['blang']]) . ')';
         $row['typeimage'] = $row['require_image'] ? 'true' : 'false';
         $row['uploadtype'] = str_replace(',', ', ', $row['uploadtype']);
         $xtpl->assign('blockitem', $row);
@@ -106,11 +106,11 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
     }
     // Nếu dùng reCaptcha v2
     elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
         $xtpl->parse('main.recaptcha');
     } elseif ($module_captcha == 'captcha') {
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
         $xtpl->parse('main.captcha');
     }
 
@@ -127,11 +127,11 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
  */
 function nv_banner_theme_stats($ads)
 {
-    global $module_info, $lang_module, $lang_global, $manament;
+    global $module_info, $manament;
 
     $xtpl = new XTemplate('stats.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MANAGEMENT', $manament);
     $xtpl->parse('main.management');
 

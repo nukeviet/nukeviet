@@ -19,7 +19,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_zalo']
+    'custom_title' => $nv_Lang->getGlobal('mod_zalo')
 ];
 
 $allow_func = [
@@ -227,7 +227,7 @@ function oa_truncate()
  */
 function get_accesstoken(&$accesstoken, $isAjax = false)
 {
-    global $zalo, $lang_module, $module_name;
+    global $zalo, $nv_Lang, $module_name;
 
     $get_accesstoken_info = $zalo->oa_accesstoken_info();
     if ($get_accesstoken_info['result'] == 'ok') {
@@ -239,10 +239,10 @@ function get_accesstoken(&$accesstoken, $isAjax = false)
         if ($isAjax) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['refresh_token_expired_note']
+                'mess' => $nv_Lang->getModule('refresh_token_expired_note')
             ]);
         } else {
-            info_redirect($lang_module['refresh_token_expired_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
+            info_redirect($nv_Lang->getModule('refresh_token_expired_note'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
         }
     }
 }
@@ -629,7 +629,7 @@ function video_delete($id)
  */
 function get_upload($type)
 {
-    global $db, $lang_module;
+    global $db, $nv_Lang;
 
     if (!empty($type)) {
         $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE type=' . $db->quote($type) . ' ORDER BY addtime ASC');
@@ -642,7 +642,7 @@ function get_upload($type)
         $exptime = $row['addtime'] + (604800 - 60);
         $row['addtime'] = nv_date('H:i d/m/Y', $row['addtime']);
         $row['exptime'] = nv_date('H:i d/m/Y', $exptime);
-        $row['type_name'] = $lang_module['type_' . $row['type']];
+        $row['type_name'] = $nv_Lang->getModule('type_' . $row['type']);
         $row['isexpired'] = ((NV_CURRENTTIME - (int) $row['addtime']) < 604800);
         $row['fullname'] = !empty($row['localfile']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $row['localfile'] : '';
         $files[] = $row;
@@ -926,16 +926,16 @@ function get_user_count_by_tag($tag)
  */
 function conversation_to_html($contents, $user_id)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $lang_global;
+    global $global_config, $module_name, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('conversation.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     $count = count($contents);
 
     if (empty($count)) {
-        return $lang_module['empty'];
+        return $nv_Lang->getModule('empty');
     }
 
     $oa_info = get_oa_info();
@@ -982,7 +982,7 @@ function conversation_to_html($contents, $user_id)
                 }
                 $message['title'] = $note['request_info']['title'];
                 $message['subtitle'] = $note['request_info']['subtitle'];
-                $message['message'] = $lang_module['info_request'];
+                $message['message'] = $nv_Lang->getModule('info_request');
             } elseif ($note['send_type'] == 'textlist') {
                 $message['links'] = $note['textlist'];
             } elseif ($note['send_type'] == 'btnlist') {
@@ -1087,19 +1087,19 @@ function conversation_to_html($contents, $user_id)
                     if (!empty($element['default_action'])) {
                         $content = '';
                         if ($element['default_action']['type'] == 'oa.open.url') {
-                            $content = $lang_module['url'] . ': ' . $element['default_action']['url'];
+                            $content = $nv_Lang->getModule('url') . ': ' . $element['default_action']['url'];
                         }
                         if ($element['default_action']['type'] == 'oa.query.show' or $element['default_action']['type'] == 'oa.query.hide') {
-                            $content = $lang_module['content'] . ': ' . $element['default_action']['payload'];
+                            $content = $nv_Lang->getModule('content') . ': ' . $element['default_action']['payload'];
                         }
                         if ($element['default_action']['type'] == 'oa.open.sms') {
-                            $content = $lang_module['content'] . ': ' . $element['default_action']['payload']['content'] . '; ' . $lang_module['phone'] . ': ' . $element['default_action']['payload']['phone_code'];
+                            $content = $nv_Lang->getModule('content') . ': ' . $element['default_action']['payload']['content'] . '; ' . $nv_Lang->getModule('phone') . ': ' . $element['default_action']['payload']['phone_code'];
                         }
                         if ($element['default_action']['type'] == 'oa.open.phone') {
-                            $content = $lang_module['phone'] . ': ' . $element['default_action']['payload']['phone_code'];
+                            $content = $nv_Lang->getModule('phone') . ': ' . $element['default_action']['payload']['phone_code'];
                         }
                         $xtpl->assign('ACTION', [
-                            'action_title' => $lang_module[str_replace('.', '_', $element['default_action']['type'])],
+                            'action_title' => $nv_Lang->getModule(str_replace('.', '_', $element['default_action']['type'])),
                             'action_content' => $content
                         ]);
                         $xtpl->parse('messages.message.links.element.action');
@@ -1122,18 +1122,18 @@ function conversation_to_html($contents, $user_id)
                 foreach ($buttons as $button) {
                     $content = '';
                     if ($button['type'] == 'oa.open.url') {
-                        $content = $lang_module['url'] . ': ' . $button['payload']['url'];
+                        $content = $nv_Lang->getModule('url') . ': ' . $button['payload']['url'];
                     }
                     if ($button['type'] == 'oa.query.show' or $button['type'] == 'oa.query.hide') {
-                        $content = $lang_module['content'] . ': ' . $button['payload'];
+                        $content = $nv_Lang->getModule('content') . ': ' . $button['payload'];
                     }
                     if ($button['type'] == 'oa.open.sms') {
-                        $content = $lang_module['content'] . ': ' . $button['payload']['content'] . '; ' . $lang_module['phone'] . ': ' . $button['payload']['phone_code'];
+                        $content = $nv_Lang->getModule('content') . ': ' . $button['payload']['content'] . '; ' . $nv_Lang->getModule('phone') . ': ' . $button['payload']['phone_code'];
                     }
                     if ($button['type'] == 'oa.open.phone') {
-                        $content = $lang_module['phone'] . ': ' . $button['payload']['phone_code'];
+                        $content = $nv_Lang->getModule('phone') . ': ' . $button['payload']['phone_code'];
                     }
-                    $button['action_title'] = $lang_module[str_replace('.', '_', $button['type'])];
+                    $button['action_title'] = $nv_Lang->getModule(str_replace('.', '_', $button['type']));
                     $button['action_content'] = $content;
                     $xtpl->assign('BTN', $button);
                     $xtpl->parse('messages.message.buttons.btn');
@@ -1857,18 +1857,18 @@ function messExists($message_id, $src)
  */
 function get_error_zalo_image($mime, $size)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     if (empty($mime)) {
-        return $lang_module['image_is_invalid'];
+        return $nv_Lang->getModule('image_is_invalid');
     }
 
     if (!preg_match('/^image\/(x\-)*(png|jpe?g)$/', $mime)) {
-        return $lang_module['extension_not_supported'];
+        return $nv_Lang->getModule('extension_not_supported');
     }
 
     if ($size > 1048576) {
-        return $lang_module['max_capacity_exceeded'];
+        return $nv_Lang->getModule('max_capacity_exceeded');
     }
 
     return '';
@@ -1882,13 +1882,13 @@ function get_error_zalo_image($mime, $size)
  */
 function get_error_image($image_url)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     $isURL = nv_is_url($image_url);
     $fromSite = nv_is_file($image_url, NV_UPLOADS_DIR . '/zalo');
 
     if (!$isURL and !$fromSite) {
-        return $lang_module['image_url_invalid'];
+        return $nv_Lang->getModule('image_url_invalid');
     }
 
     if ($isURL) {
@@ -1910,18 +1910,18 @@ function get_error_image($image_url)
  */
 function zaloGetError()
 {
-    global $zalo, $lang_module;
+    global $zalo, $nv_Lang;
 
     $error = $zalo->getError();
     $error_code = $zalo->getErrorCode();
-    if (!empty($lang_module[$error])) {
-        $error = $lang_module[$error];
+    if (!empty($nv_Lang->getModule($error))) {
+        $error = $nv_Lang->getModule($error);
     }
     if (!empty($error_code)) {
-        if (!empty($lang_module['error' . $error_code])) {
-            $error = $lang_module['error' . $error_code] . ' (' . $error . ')';
+        if (!empty($nv_Lang->getModule('error' . $error_code))) {
+            $error = $nv_Lang->getModule('error' . $error_code) . ' (' . $error . ')';
         } else {
-            $error = $lang_module['error_code'] . ' ' . $error_code . ' (' . $error . ')';
+            $error = $nv_Lang->getModule('error_code') . ' ' . $error_code . ' (' . $error . ')';
         }
     }
 
@@ -1940,12 +1940,12 @@ function zaloGetError()
  */
 function vnsubdivisions_to_html($provinces, $data, $subdivParent)
 {
-    global $global_config, $op, $module_name, $module_file, $lang_global, $lang_module;
+    global $global_config, $op, $module_name, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('OP', $op);
     $xtpl->assign('PARENT', $subdivParent);
@@ -1954,7 +1954,7 @@ function vnsubdivisions_to_html($provinces, $data, $subdivParent)
         $xtpl->assign('PROVINCE', [
             'code' => $code,
             'sel' => $code == $subdivParent ? ' selected="selected"' : '',
-            'name' => sprintf($lang_module['vnsubdivisions_parent'], $names[0])
+            'name' => $nv_Lang->getModule('vnsubdivisions_parent', $names[0])
         ]);
         $xtpl->parse('vnsubdivisions_page.province');
     }
@@ -1996,11 +1996,11 @@ function vnsubdivisions_to_html($provinces, $data, $subdivParent)
  */
 function callingcodes_to_html($callingcodes)
 {
-    global $global_config, $op, $module_name, $module_file, $lang_global, $lang_module;
+    global $global_config, $op, $module_name, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('OP', $op);
 
@@ -2013,7 +2013,7 @@ function callingcodes_to_html($callingcodes)
     foreach ($countries as $code => $callcodes) {
         $xtpl->assign('COUNTRY', [
             'code' => $code,
-            'name' => isset($lang_global['country_' . $code]) ? $lang_global['country_' . $code] : $code
+            'name' => $nv_Lang->existsGlobal('country_' . $code) ? $nv_Lang->getGlobal('country_' . $code) : $code
         ]);
 
         foreach ($callcodes as $callcode) {

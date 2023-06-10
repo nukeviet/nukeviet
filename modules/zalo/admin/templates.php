@@ -18,10 +18,10 @@ if (!$zalo->isValid()) {
 }
 
 $templates = [
-    'plaintext' => $lang_module['plaintext'],
-    'textlist' => $lang_module['textlist'],
-    'btnlist' => $lang_module['btnlist'],
-    'request' => $lang_module['info_request']
+    'plaintext' => $nv_Lang->getModule('plaintext'),
+    'textlist' => $nv_Lang->getModule('textlist'),
+    'btnlist' => $nv_Lang->getModule('btnlist'),
+    'request' => $nv_Lang->getModule('info_request')
 ];
 
 // Xem mẫu
@@ -30,7 +30,7 @@ if ($nv_Request->isset_request('preview, id', 'get')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['template_not_selected']
+            'mess' => $nv_Lang->getModule('template_not_selected')
         ]);
     }
 
@@ -39,7 +39,7 @@ if ($nv_Request->isset_request('preview, id', 'get')) {
     if (empty($info)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['template_not_selected']
+            'mess' => $nv_Lang->getModule('template_not_selected')
         ]);
     }
 
@@ -48,7 +48,7 @@ if ($nv_Request->isset_request('preview, id', 'get')) {
 
     $xtpl = new XTemplate('templates.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('DATA', $global_config);
 
     if ($template_type == 'plaintext') {
@@ -62,17 +62,17 @@ if ($nv_Request->isset_request('preview, id', 'get')) {
         $element0['default_action_title'] = '';
         $element0['default_action_content'] = '';
         if (!empty($element0['default_action'])) {
-            $element0['default_action_title'] = $lang_module['oa_' . $element0['default_action']];
+            $element0['default_action_title'] = $nv_Lang->getModule('oa_' . $element0['default_action']);
             if ($element0['default_action'] == 'open_url') {
-                $element0['default_action_content'] = $lang_module['url'] . ': ' . $element0['url'];
+                $element0['default_action_content'] = $nv_Lang->getModule('url') . ': ' . $element0['url'];
             } elseif ($element0['default_action'] == 'query_show' or $element0['default_action'] == 'query_hide') {
-                $element0['default_action_content'] = $lang_module['content'] . ': ' . $element0['content'];
+                $element0['default_action_content'] = $nv_Lang->getModule('content') . ': ' . $element0['content'];
             } elseif ($element0['default_action'] == 'query_keyword') {
-                $element0['default_action_content'] = $lang_module['command_keyword'] . ': ' . $element0['keyword'];
+                $element0['default_action_content'] = $nv_Lang->getModule('command_keyword') . ': ' . $element0['keyword'];
             } elseif ($element0['default_action'] == 'open_sms') {
-                $element0['default_action_content'] = $lang_module['phone'] . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'] . '; ' . $lang_module['content'] . ': ' . $element0['content'];
+                $element0['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'] . '; ' . $nv_Lang->getModule('content') . ': ' . $element0['content'];
             } elseif ($element0['default_action'] == 'open_phone') {
-                $element0['default_action_content'] = $lang_module['phone'] . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'];
+                $element0['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'];
             }
         }
         $xtpl->assign('ELEMENT0', $element0);
@@ -87,18 +87,18 @@ if ($nv_Request->isset_request('preview, id', 'get')) {
                 if (!nv_is_url($other['image_url'])) {
                     $other['image_url'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $other['image_url'];
                 }
-                $other['default_action_title'] = $lang_module['oa_' . $other['default_action']];
+                $other['default_action_title'] = $nv_Lang->getModule('oa_' . $other['default_action']);
                 $other['default_action_content'] = '';
                 if ($other['default_action'] == 'open_url' and !empty($other['url'])) {
-                    $other['default_action_content'] = $lang_module['url'] . ': ' . $other['url'];
+                    $other['default_action_content'] = $nv_Lang->getModule('url') . ': ' . $other['url'];
                 } elseif (($other['default_action'] == 'query_show' or $other['default_action'] == 'query_hide') and !empty($other['content'])) {
-                    $other['default_action_content'] = $lang_module['content'] . ': ' . $other['content'];
+                    $other['default_action_content'] = $nv_Lang->getModule('content') . ': ' . $other['content'];
                 } elseif (($other['default_action'] == 'query_keyword') and !empty($other['keyword'])) {
-                    $other['default_action_content'] = $lang_module['command_keyword'] . ': ' . $other['keyword'];
+                    $other['default_action_content'] = $nv_Lang->getModule('command_keyword') . ': ' . $other['keyword'];
                 } elseif ($other['default_action'] == 'open_sms' and !empty($other['phone_number']) and !empty($other['content'])) {
-                    $other['default_action_content'] = $lang_module['phone'] . ': +' . substr($other['phone_code'], 2) . $other['phone_number'] . '; ' . $lang_module['content'] . ': ' . $other['content'];
+                    $other['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($other['phone_code'], 2) . $other['phone_number'] . '; ' . $nv_Lang->getModule('content') . ': ' . $other['content'];
                 } elseif ($other['default_action'] == 'open_phone' and !empty($other['phone_number'])) {
-                    $other['default_action_content'] = $lang_module['phone'] . ': +' . substr($other['phone_code'], 2) . $other['phone_number'];
+                    $other['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($other['phone_code'], 2) . $other['phone_number'];
                 }
 
                 if (!empty($other['default_action_content'])) {
@@ -118,18 +118,18 @@ if ($nv_Request->isset_request('preview, id', 'get')) {
 
         foreach ($info['buttons'] as $btn) {
             if (!empty($btn['title']) and !empty($btn['type'])) {
-                $btn['action_title'] = $lang_module['oa_' . $btn['type']];
+                $btn['action_title'] = $nv_Lang->getModule('oa_' . $btn['type']);
                 $btn['action_content'] = '';
                 if ($btn['type'] == 'open_url' and !empty($btn['url'])) {
-                    $btn['action_content'] = $lang_module['url'] . ': ' . $btn['url'];
+                    $btn['action_content'] = $nv_Lang->getModule('url') . ': ' . $btn['url'];
                 } elseif (($btn['type'] == 'query_show' or $btn['type'] == 'query_hide') and !empty($btn['content'])) {
-                    $btn['action_content'] = $lang_module['content'] . ': ' . $btn['content'];
+                    $btn['action_content'] = $nv_Lang->getModule('content') . ': ' . $btn['content'];
                 } elseif (($btn['type'] == 'query_keyword') and !empty($btn['keyword'])) {
-                    $btn['action_content'] = $lang_module['command_keyword'] . ': ' . $btn['keyword'];
+                    $btn['action_content'] = $nv_Lang->getModule('command_keyword') . ': ' . $btn['keyword'];
                 } elseif ($btn['type'] == 'open_sms' and !empty($btn['phone_number']) and !empty($btn['content'])) {
-                    $btn['action_content'] = $lang_module['phone'] . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'] . '; ' . $lang_module['content'] . ': ' . $btn['content'];
+                    $btn['action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'] . '; ' . $nv_Lang->getModule('content') . ': ' . $btn['content'];
                 } elseif ($btn['type'] == 'open_phone' and !empty($btn['phone_number'])) {
-                    $btn['action_content'] = $lang_module['phone'] . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'];
+                    $btn['action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'];
                 }
 
                 if (!empty($btn['action_content'])) {
@@ -187,7 +187,7 @@ if ($type == 'plaintext') {
         if (empty($id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['template_not_selected']
+                'mess' => $nv_Lang->getModule('template_not_selected')
             ]);
         }
 
@@ -210,14 +210,14 @@ if ($type == 'plaintext') {
         if ($nv_Request->isset_request('add', 'get')) {
             $action = 'add';
             $form_action = $base_url . '&amp;add=1';
-            $page_title = $lang_module['template_plaintext_add'];
+            $page_title = $nv_Lang->getModule('template_plaintext_add');
         } else {
             $id = $nv_Request->get_int('id', 'get', 0);
             if (empty($id)) {
                 if ($is_save) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['template_not_selected']
+                        'mess' => $nv_Lang->getModule('template_not_selected')
                     ]);
                 } else {
                     nv_redirect_location($base_url);
@@ -231,7 +231,7 @@ if ($type == 'plaintext') {
                 if ($is_save) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['template_not_selected']
+                        'mess' => $nv_Lang->getModule('template_not_selected')
                     ]);
                 } else {
                     nv_redirect_location($base_url);
@@ -242,7 +242,7 @@ if ($type == 'plaintext') {
 
             $action = 'edit';
             $form_action = $base_url . '&amp;edit=1&amp;id=' . $id;
-            $page_title = $lang_module['template_plaintext_edit'];
+            $page_title = $nv_Lang->getModule('template_plaintext_edit');
         }
 
         if ($is_save) {
@@ -254,14 +254,14 @@ if ($type == 'plaintext') {
             if (empty($title)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['title_error']
+                    'mess' => $nv_Lang->getModule('title_error')
                 ]);
             }
 
             if (empty($content)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['chat_text_empty']
+                    'mess' => $nv_Lang->getModule('chat_text_empty')
                 ]);
             }
 
@@ -282,8 +282,8 @@ if ($type == 'plaintext') {
         }
 
         $xtpl = new XTemplate('plaintext.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('LIST_LINK', $base_url);
         $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
         $xtpl->assign('FORM_ACTION', $form_action);
@@ -308,7 +308,7 @@ if ($type == 'plaintext') {
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
-    $page_title = $lang_module['plaintext'];
+    $page_title = $nv_Lang->getModule('plaintext');
 
     $template_list = template_getlist('plaintext');
     if (empty($template_list)) {
@@ -316,8 +316,8 @@ if ($type == 'plaintext') {
     }
 
     $xtpl = new XTemplate('plaintext.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
     $xtpl->assign('EDIT_LINK', $base_url . '&amp;edit=1&amp;id=');
     $xtpl->assign('MAIN_PAGE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
@@ -372,7 +372,7 @@ elseif ($type == 'textlist') {
         if (empty($id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['template_not_selected']
+                'mess' => $nv_Lang->getModule('template_not_selected')
             ]);
         }
 
@@ -444,12 +444,12 @@ elseif ($type == 'textlist') {
         ];
 
         $actions = [
-            'open_url' => $lang_module['oa_open_url'],
-            'query_show' => $lang_module['oa_query_show'],
-            'query_hide' => $lang_module['oa_query_hide'],
-            'query_keyword' => $lang_module['oa_query_keyword'],
-            'open_sms' => $lang_module['oa_open_sms'],
-            'open_phone' => $lang_module['oa_open_phone']
+            'open_url' => $nv_Lang->getModule('oa_open_url'),
+            'query_show' => $nv_Lang->getModule('oa_query_show'),
+            'query_hide' => $nv_Lang->getModule('oa_query_hide'),
+            'query_keyword' => $nv_Lang->getModule('oa_query_keyword'),
+            'open_sms' => $nv_Lang->getModule('oa_open_sms'),
+            'open_phone' => $nv_Lang->getModule('oa_open_phone')
         ];
 
         $is_save = $nv_Request->isset_request('save', 'post');
@@ -457,14 +457,14 @@ elseif ($type == 'textlist') {
         if ($nv_Request->isset_request('add', 'get')) {
             $action = 'add';
             $form_action = $base_url . '&amp;add=1';
-            $page_title = $lang_module['template_textlist_add'];
+            $page_title = $nv_Lang->getModule('template_textlist_add');
         } else {
             $id = $nv_Request->get_int('id', 'get', 0);
             if (empty($id)) {
                 if ($is_save) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['template_not_selected']
+                        'mess' => $nv_Lang->getModule('template_not_selected')
                     ]);
                 } else {
                     nv_redirect_location($base_url);
@@ -478,7 +478,7 @@ elseif ($type == 'textlist') {
                 if ($is_save) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['template_not_selected']
+                        'mess' => $nv_Lang->getModule('template_not_selected')
                     ]);
                 } else {
                     nv_redirect_location($base_url);
@@ -489,7 +489,7 @@ elseif ($type == 'textlist') {
 
             $action = 'edit';
             $form_action = $base_url . '&amp;edit=1&amp;id=' . $id;
-            $page_title = $lang_module['template_textlist_edit'];
+            $page_title = $nv_Lang->getModule('template_textlist_edit');
         }
 
         require_once NV_ROOTDIR . '/' . NV_DATADIR . '/callingcodes.php';
@@ -512,7 +512,7 @@ elseif ($type == 'textlist') {
                     if ($i == 0) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['element0_title_error']
+                            'mess' => $nv_Lang->getModule('element0_title_error')
                         ]);
                     }
 
@@ -522,7 +522,7 @@ elseif ($type == 'textlist') {
                 if (empty($subtitles[$i]) and $i == 0) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['element0_subtitle_error']
+                        'mess' => $nv_Lang->getModule('element0_subtitle_error')
                     ]);
                 }
 
@@ -530,7 +530,7 @@ elseif ($type == 'textlist') {
                     if ($i == 0) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['element0_image_url_error']
+                            'mess' => $nv_Lang->getModule('element0_image_url_error')
                         ]);
                     }
 
@@ -545,7 +545,7 @@ elseif ($type == 'textlist') {
                             if ($i == 0) {
                                 nv_jsonOutput([
                                     'status' => 'error',
-                                    'mess' => $lang_module['element0_image_url_error']
+                                    'mess' => $nv_Lang->getModule('element0_image_url_error')
                                 ]);
                             }
 
@@ -562,7 +562,7 @@ elseif ($type == 'textlist') {
                     if ($i == 0) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['element0_url_error']
+                            'mess' => $nv_Lang->getModule('element0_url_error')
                         ]);
                     }
 
@@ -574,7 +574,7 @@ elseif ($type == 'textlist') {
                     if ($i == 0) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['element0_content_error']
+                            'mess' => $nv_Lang->getModule('element0_content_error')
                         ]);
                     }
 
@@ -585,7 +585,7 @@ elseif ($type == 'textlist') {
                     if ($i == 0) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['element0_keyword_error']
+                            'mess' => $nv_Lang->getModule('element0_keyword_error')
                         ]);
                     }
 
@@ -599,7 +599,7 @@ elseif ($type == 'textlist') {
                     if ($i == 0) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['element0_phone_error']
+                            'mess' => $nv_Lang->getModule('element0_phone_error')
                         ]);
                     }
 
@@ -624,7 +624,7 @@ elseif ($type == 'textlist') {
             if (count($valid) < 2) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['elements_error']
+                    'mess' => $nv_Lang->getModule('elements_error')
                 ]);
             }
 
@@ -642,8 +642,8 @@ elseif ($type == 'textlist') {
         }
 
         $xtpl = new XTemplate('textlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('LIST_LINK', $base_url);
         $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
         $xtpl->assign('FORM_ACTION', $form_action);
@@ -689,7 +689,7 @@ elseif ($type == 'textlist') {
 
             $el_actions = $actions;
             if ($key == 0) {
-                $el_actions = ['' => $lang_module['no_action']] + $el_actions;
+                $el_actions = ['' => $nv_Lang->getModule('no_action')] + $el_actions;
             }
             foreach ($el_actions as $action_key => $action_name) {
                 $xtpl->assign('ACTION', [
@@ -760,7 +760,7 @@ elseif ($type == 'textlist') {
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
-    $page_title = $lang_module['textlist'];
+    $page_title = $nv_Lang->getModule('textlist');
 
     $template_list = template_getlist('text');
     if (empty($template_list)) {
@@ -768,8 +768,8 @@ elseif ($type == 'textlist') {
     }
 
     $xtpl = new XTemplate('textlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
     $xtpl->assign('EDIT_LINK', $base_url . '&amp;edit=1&amp;id=');
     $xtpl->assign('MAIN_PAGE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
@@ -809,17 +809,17 @@ elseif ($type == 'textlist') {
         $element0['default_action_title'] = '';
         $element0['default_action_content'] = '';
         if (!empty($element0['default_action'])) {
-            $element0['default_action_title'] = $lang_module['oa_' . $element0['default_action']];
+            $element0['default_action_title'] = $nv_Lang->getModule('oa_' . $element0['default_action']);
             if ($element0['default_action'] == 'open_url') {
-                $element0['default_action_content'] = $lang_module['url'] . ': ' . $element0['url'];
+                $element0['default_action_content'] = $nv_Lang->getModule('url') . ': ' . $element0['url'];
             } elseif ($element0['default_action'] == 'query_show' or $element0['default_action'] == 'query_hide') {
-                $element0['default_action_content'] = $lang_module['content'] . ': ' . $element0['content'];
+                $element0['default_action_content'] = $nv_Lang->getModule('content') . ': ' . $element0['content'];
             } elseif ($element0['default_action'] == 'query_keyword') {
-                $element0['default_action_content'] = $lang_module['command_keyword'] . ': ' . $element0['keyword'];
+                $element0['default_action_content'] = $nv_Lang->getModule('command_keyword') . ': ' . $element0['keyword'];
             } elseif ($element0['default_action'] == 'open_sms') {
-                $element0['default_action_content'] = $lang_module['phone'] . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'] . '; ' . $lang_module['content'] . ': ' . $element0['content'];
+                $element0['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'] . '; ' . $nv_Lang->getModule('content') . ': ' . $element0['content'];
             } elseif ($element0['default_action'] == 'open_phone') {
-                $element0['default_action_content'] = $lang_module['phone'] . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'];
+                $element0['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($element0['phone_code'], 2) . $element0['phone_number'];
             }
         }
         $xtpl->assign('ELEMENT0', $element0);
@@ -836,18 +836,18 @@ elseif ($type == 'textlist') {
                         $other['image_url'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $other['image_url'];
                     }
                 }
-                $other['default_action_title'] = $lang_module['oa_' . $other['default_action']];
+                $other['default_action_title'] = $nv_Lang->getModule('oa_' . $other['default_action']);
                 $other['default_action_content'] = '';
                 if ($other['default_action'] == 'open_url' and !empty($other['url'])) {
-                    $other['default_action_content'] = $lang_module['url'] . ': ' . $other['url'];
+                    $other['default_action_content'] = $nv_Lang->getModule('url') . ': ' . $other['url'];
                 } elseif (($other['default_action'] == 'query_show' or $other['default_action'] == 'query_hide') and !empty($other['content'])) {
-                    $other['default_action_content'] = $lang_module['content'] . ': ' . $other['content'];
+                    $other['default_action_content'] = $nv_Lang->getModule('content') . ': ' . $other['content'];
                 } elseif ($other['default_action'] == 'query_keyword') {
-                    $other['default_action_content'] = $lang_module['command_keyword'] . ': ' . $other['keyword'];
+                    $other['default_action_content'] = $nv_Lang->getModule('command_keyword') . ': ' . $other['keyword'];
                 } elseif ($other['default_action'] == 'open_sms' and !empty($other['phone_number']) and !empty($other['content'])) {
-                    $other['default_action_content'] = $lang_module['phone'] . ': +' . substr($other['phone_code'], 2) . $other['phone_number'] . '; ' . $lang_module['content'] . ': ' . $other['content'];
+                    $other['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($other['phone_code'], 2) . $other['phone_number'] . '; ' . $nv_Lang->getModule('content') . ': ' . $other['content'];
                 } elseif ($other['default_action'] == 'open_phone' and !empty($other['phone_number'])) {
-                    $other['default_action_content'] = $lang_module['phone'] . ': +' . substr($other['phone_code'], 2) . $other['phone_number'];
+                    $other['default_action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($other['phone_code'], 2) . $other['phone_number'];
                 }
 
                 if (!empty($other['default_action_content'])) {
@@ -884,7 +884,7 @@ elseif ($type == 'btnlist') {
         if (empty($id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['template_not_selected']
+                'mess' => $nv_Lang->getModule('template_not_selected')
             ]);
         }
 
@@ -949,12 +949,12 @@ elseif ($type == 'btnlist') {
         ];
 
         $actions = [
-            'open_url' => $lang_module['oa_open_url'],
-            'query_show' => $lang_module['oa_query_show'],
-            'query_hide' => $lang_module['oa_query_hide'],
-            'query_keyword' => $lang_module['oa_query_keyword'],
-            'open_sms' => $lang_module['oa_open_sms'],
-            'open_phone' => $lang_module['oa_open_phone']
+            'open_url' => $nv_Lang->getModule('oa_open_url'),
+            'query_show' => $nv_Lang->getModule('oa_query_show'),
+            'query_hide' => $nv_Lang->getModule('oa_query_hide'),
+            'query_keyword' => $nv_Lang->getModule('oa_query_keyword'),
+            'open_sms' => $nv_Lang->getModule('oa_open_sms'),
+            'open_phone' => $nv_Lang->getModule('oa_open_phone')
         ];
 
         $is_save = $nv_Request->isset_request('save', 'post');
@@ -962,14 +962,14 @@ elseif ($type == 'btnlist') {
         if ($nv_Request->isset_request('add', 'get')) {
             $action = 'add';
             $form_action = $base_url . '&amp;add=1';
-            $page_title = $lang_module['template_btnlist_add'];
+            $page_title = $nv_Lang->getModule('template_btnlist_add');
         } else {
             $id = $nv_Request->get_int('id', 'get', 0);
             if (empty($id)) {
                 if ($is_save) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['template_not_selected']
+                        'mess' => $nv_Lang->getModule('template_not_selected')
                     ]);
                 } else {
                     nv_redirect_location($base_url);
@@ -983,7 +983,7 @@ elseif ($type == 'btnlist') {
                 if ($is_save) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['template_not_selected']
+                        'mess' => $nv_Lang->getModule('template_not_selected')
                     ]);
                 } else {
                     nv_redirect_location($base_url);
@@ -994,7 +994,7 @@ elseif ($type == 'btnlist') {
 
             $action = 'edit';
             $form_action = $base_url . '&amp;edit=1&amp;id=' . $id;
-            $page_title = $lang_module['template_btnlist_edit'];
+            $page_title = $nv_Lang->getModule('template_btnlist_edit');
         }
 
         require_once NV_ROOTDIR . '/' . NV_DATADIR . '/callingcodes.php';
@@ -1004,7 +1004,7 @@ elseif ($type == 'btnlist') {
             if (empty($text)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['text_list_error']
+                    'mess' => $nv_Lang->getModule('text_list_error')
                 ]);
             }
             $btns['text'] = $text;
@@ -1063,7 +1063,7 @@ elseif ($type == 'btnlist') {
             if (!count($valid)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['btns_error']
+                    'mess' => $nv_Lang->getModule('btns_error')
                 ]);
             }
 
@@ -1081,8 +1081,8 @@ elseif ($type == 'btnlist') {
         }
 
         $xtpl = new XTemplate('btnlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('LIST_LINK', $base_url);
         $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
         $xtpl->assign('FORM_ACTION', $form_action);
@@ -1176,7 +1176,7 @@ elseif ($type == 'btnlist') {
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
-    $page_title = $lang_module['btnlist'];
+    $page_title = $nv_Lang->getModule('btnlist');
 
     $template_list = template_getlist('btn');
     if (empty($template_list)) {
@@ -1184,8 +1184,8 @@ elseif ($type == 'btnlist') {
     }
 
     $xtpl = new XTemplate('btnlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('ADD_LINK', $base_url . '&amp;add=1');
     $xtpl->assign('EDIT_LINK', $base_url . '&amp;edit=1&amp;id=');
     $xtpl->assign('MAIN_PAGE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
@@ -1219,18 +1219,18 @@ elseif ($type == 'btnlist') {
 
         foreach ($template['buttons'] as $btn) {
             if (!empty($btn['title']) and !empty($btn['type'])) {
-                $btn['action_title'] = $lang_module['oa_' . $btn['type']];
+                $btn['action_title'] = $nv_Lang->getModule('oa_' . $btn['type']);
                 $btn['action_content'] = '';
                 if ($btn['type'] == 'open_url' and !empty($btn['url'])) {
-                    $btn['action_content'] = $lang_module['url'] . ': ' . $btn['url'];
+                    $btn['action_content'] = $nv_Lang->getModule('url') . ': ' . $btn['url'];
                 } elseif (($btn['type'] == 'query_show' or $btn['type'] == 'query_hide') and !empty($btn['content'])) {
-                    $btn['action_content'] = $lang_module['content'] . ': ' . $btn['content'];
+                    $btn['action_content'] = $nv_Lang->getModule('content') . ': ' . $btn['content'];
                 } elseif ($btn['type'] == 'query_keyword' and !empty($btn['keyword'])) {
-                    $btn['action_content'] = $lang_module['command_keyword'] . ': ' . $btn['keyword'];
+                    $btn['action_content'] = $nv_Lang->getModule('command_keyword') . ': ' . $btn['keyword'];
                 } elseif ($btn['type'] == 'open_sms' and !empty($btn['phone_number']) and !empty($btn['content'])) {
-                    $btn['action_content'] = $lang_module['phone'] . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'] . '; ' . $lang_module['content'] . ': ' . $btn['content'];
+                    $btn['action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'] . '; ' . $nv_Lang->getModule('content') . ': ' . $btn['content'];
                 } elseif ($btn['type'] == 'open_phone' and !empty($btn['phone_number'])) {
-                    $btn['action_content'] = $lang_module['phone'] . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'];
+                    $btn['action_content'] = $nv_Lang->getModule('phone') . ': +' . substr($btn['phone_code'], 2) . $btn['phone_number'];
                 }
 
                 if (!empty($btn['action_content'])) {
@@ -1267,7 +1267,7 @@ elseif ($type == 'request') {
         if (empty($id)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['request_not_selected']
+                'mess' => $nv_Lang->getModule('request_not_selected')
             ]);
         }
 
@@ -1277,7 +1277,7 @@ elseif ($type == 'request') {
         if (empty($request_info)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['request_not_selected']
+                'mess' => $nv_Lang->getModule('request_not_selected')
             ]);
         }
     }
@@ -1296,7 +1296,7 @@ elseif ($type == 'request') {
         if (empty($image_url)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['image_url_invalid']
+                'mess' => $nv_Lang->getModule('image_url_invalid')
             ]);
         }
 
@@ -1312,7 +1312,7 @@ elseif ($type == 'request') {
         if (empty($title)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['title_error']
+                'mess' => $nv_Lang->getModule('title_error')
             ]);
         }
 
@@ -1322,7 +1322,7 @@ elseif ($type == 'request') {
         if (empty($subtitle)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['subtitle_error']
+                'mess' => $nv_Lang->getModule('subtitle_error')
             ]);
         }
 
@@ -1353,11 +1353,11 @@ elseif ($type == 'request') {
         ]);
     }
 
-    $page_title = $lang_module['info_request'];
+    $page_title = $nv_Lang->getModule('info_request');
 
     $xtpl = new XTemplate('request.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', $page_url);
     $xtpl->assign('MAIN_PAGE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
     $xtpl->assign('IDFIELD', $idfield);
@@ -1407,14 +1407,14 @@ elseif ($type == 'request') {
 
 $xtpl = new XTemplate('templates.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['templates'];
+$page_title = $nv_Lang->getModule('templates');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

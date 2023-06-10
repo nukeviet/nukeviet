@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['edit_title'];
+$page_title = $nv_Lang->getModule('edit_title');
 
 $userid = $nv_Request->get_int('userid', 'get', 0);
 
@@ -49,12 +49,12 @@ if (!$allow) {
 }
 
 // Thêm vào menutop
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $row['userid']] = $lang_module['user_2step_mamager'];
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $row['userid']] = $lang_module['user_openid_mamager'];
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_2step&amp;userid=' . $row['userid']] = $nv_Lang->getModule('user_2step_mamager');
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $row['userid']] = $nv_Lang->getModule('user_openid_mamager');
 
 if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     $xtpl = new XTemplate('user_safemode.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SAFEMODE_DEACT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/safeshow');
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
@@ -69,7 +69,7 @@ if ($nv_Request->isset_request('forcedrelogin', 'post')) {
     forcedrelogin($userid);
     nv_jsonOutput([
         'status' => 'OK',
-        'mess' => $lang_module['forcedrelogin_note']
+        'mess' => $nv_Lang->getModule('admin_forcedrelogin_note')
     ]);
 }
 
@@ -87,19 +87,19 @@ if ($nv_Request->isset_request('psr', 'post')) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Change password request', 'userid ' . $userid, $admin_info['userid']);
 
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
-            $pass_reset_request = $type == 2 ? $lang_module['pass_reset_request2_info'] : $lang_module['pass_reset_request1_info'];
-            $subject = $type == 1 ? $lang_module['pass_reset_request_subject1'] : $lang_module['pass_reset_request_subject2'];
+            $pass_reset_request = $type == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : $nv_Lang->getModule('pass_reset_request1_info');
+            $subject = $type == 1 ? $nv_Lang->getModule('pass_reset_request_subject1') : $nv_Lang->getModule('pass_reset_request_subject2');
             $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-            $message = $type == 1 ? sprintf($lang_module['pass_reset_request_info1'], $full_name, $global_config['site_name'], $_url) : sprintf($lang_module['pass_reset_request_info2'], $full_name, $global_config['site_name'], $_url);
+            $message = $type == 1 ? $nv_Lang->getModule('pass_reset_request_info1', $full_name, $global_config['site_name'], $_url) : $nv_Lang->getModule('pass_reset_request_info2', $full_name, $global_config['site_name'], $_url);
             @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
         }
-        exit($lang_module['pass_reset_request_sent']);
+        exit($nv_Lang->getModule('pass_reset_request_sent'));
     }
     nv_jsonOutput([
         'userid' => $userid,
         'username' => $row['username'],
         'pass_creation_time' => !empty($row['pass_creation_time']) ? date('d/m/Y H:i', $row['pass_creation_time']) : '',
-        'pass_reset_request' => $lang_module['pass_reset_request' . $row['pass_reset_request']]
+        'pass_reset_request' => $nv_Lang->getModule('pass_reset_request' . $row['pass_reset_request'])
     ]);
 }
 
@@ -178,7 +178,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
-            'mess' => sprintf($lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>')
+            'mess' => $nv_Lang->getModule('account_deny_name', '<strong>' . $_user['username'] . '</strong>')
         ]);
     }
 
@@ -186,7 +186,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
-            'mess' => $lang_module['edit_error_username_exist']
+            'mess' => $nv_Lang->getModule('edit_error_username_exist')
         ]);
     }
 
@@ -194,7 +194,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
-            'mess' => $lang_module['edit_error_username_exist']
+            'mess' => $nv_Lang->getModule('edit_error_username_exist')
         ]);
     }
 
@@ -212,7 +212,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ]);
     }
 
@@ -220,7 +220,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ]);
     }
 
@@ -228,7 +228,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ]);
     }
 
@@ -244,7 +244,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'password2',
-            'mess' => $lang_module['edit_error_password']
+            'mess' => $nv_Lang->getModule('edit_error_password')
         ]);
     }
 
@@ -415,14 +415,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     // Gửi mail thông báo
     if (!empty($_user['adduser_email'])) {
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
-        $pass_reset_request = $_user['pass_reset_request'] == 2 ? $lang_module['pass_reset_request2_info'] : ($_user['pass_reset_request'] == 1 ? $lang_module['pass_reset_request1_info'] : '');
-        $subject = $lang_module['adduser_register1'];
+        $pass_reset_request = $_user['pass_reset_request'] == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : ($_user['pass_reset_request'] == 1 ? $nv_Lang->getModule('pass_reset_request1_info') : '');
+        $subject = $nv_Lang->getModule('adduser_register1');
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-        $message = sprintf($lang_module['adduser_register_info2'], $full_name, $global_config['site_name'], $_url, $_user['username']);
+        $message = $nv_Lang->getModule('adduser_register_info2', $full_name, $global_config['site_name'], $_url, $_user['username']);
         if (!empty($_user['password1'])) {
-            $message .= sprintf($lang_module['adduser_register_info3'], $_user['password1']);
+            $message .= $nv_Lang->getModule('adduser_register_info3', $_user['password1']);
         }
-        $message .= sprintf($lang_module['adduser_register_info4'], $pass_reset_request, $global_config['site_name']);
+        $message .= $nv_Lang->getModule('adduser_register_info4', $pass_reset_request, $global_config['site_name']);
         @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $_user['email'], $subject, $message);
     }
 
@@ -471,10 +471,11 @@ if (!empty($groups_list)) {
 }
 
 $xtpl = new XTemplate('user_edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $_user);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid);
+$xtpl->assign('AVATAR_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/opener');
 $xtpl->assign('NV_REDIRECT', $nv_redirect);
 
 if (defined('NV_IS_USER_FORUM')) {
@@ -518,7 +519,7 @@ if (defined('NV_IS_USER_FORUM')) {
         $xtpl->assign('PASSRESET', [
             'num' => $i,
             'sel' => $i == $_user['pass_reset_request'] ? ' selected="selected"' : '',
-            'title' => $lang_module['pass_reset_request' . $i]
+            'title' => $nv_Lang->getModule('pass_reset_request' . $i)
         ]);
         $xtpl->parse('main.edit_user.pass_reset_request');
     }

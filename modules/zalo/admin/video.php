@@ -47,14 +47,14 @@ if ($nv_Request->isset_request('edit,id,view,thumb,description', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
     if (empty($description)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['description_empty']
+            'mess' => $nv_Lang->getModule('description_empty')
         ]);
     }
 
@@ -81,7 +81,7 @@ if ($nv_Request->isset_request('file_delete,id', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
@@ -99,7 +99,7 @@ if ($nv_Request->isset_request('check,id', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
@@ -107,7 +107,7 @@ if ($nv_Request->isset_request('check,id', 'post')) {
     if (empty($token)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
@@ -153,21 +153,21 @@ if ($nv_Request->isset_request('add', 'post')) {
     if (empty($video_name)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_empty']
+            'mess' => $nv_Lang->getModule('file_empty')
         ]);
     }
 
     if (empty($description)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['description_empty']
+            'mess' => $nv_Lang->getModule('description_empty')
         ]);
     }
 
     if (empty($token)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['token_empty']
+            'mess' => $nv_Lang->getModule('token_empty')
         ]);
     }
 
@@ -217,11 +217,11 @@ if ($nv_Request->isset_request('add', 'post')) {
     ]);
 }
 
-$page_title = $lang_module['video'];
+$page_title = $nv_Lang->getModule('video');
 
 $xtpl = new XTemplate('video.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', $base_url);
 $xtpl->assign('ZALO_URL', $zalo::VIDEOUPLOAD_URL);
 $xtpl->assign('DEL_LINK', $base_url);
@@ -239,7 +239,7 @@ if (!empty($video_list)) {
     $status_check = [];
     foreach ($video_list as $file) {
         $file['size_format'] = !empty($file['video_size']) ? nv_convertfromBytes($file['video_size']) : '';
-        $file['view_format'] = $lang_module['video_view_' . $file['view']];
+        $file['view_format'] = $nv_Lang->getModule('video_view_' . $file['view']);
         $file['addtime_format'] = nv_date('d/m/Y H:i', $file['addtime']);
         if (!empty($file['thumb'])) {
             if (!nv_is_url($file['thumb'])) {
@@ -249,7 +249,7 @@ if (!empty($video_list)) {
             }
         }
         $file['disabled'] = $file['status'] == '1' ? '' : ' disabled="disabled"';
-        !empty($lang_module['video_status_' . $file['status']]) && $file['status_message'] = $lang_module['video_status_' . $file['status']];
+        !empty($nv_Lang->getModule('video_status_' . $file['status'])) && $file['status_message'] = $nv_Lang->getModule('video_status_' . $file['status']);
         $xtpl->assign('FILE', $file);
 
         $remainder = 3600 - NV_CURRENTTIME + $file['addtime'];
@@ -258,7 +258,7 @@ if (!empty($video_list)) {
             $xtpl->parse('main.isFiles.file.status_check');
 
             empty($status_check) && $status_check = [
-                'note' => sprintf($lang_module['status_check_note'], $file['video_name'], nv_convertfromSec($remainder)),
+                'note' => $nv_Lang->getModule('status_check_note', $file['video_name'], nv_convertfromSec($remainder)),
                 'id' => $file['id']
             ];
         }

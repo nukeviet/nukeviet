@@ -14,9 +14,9 @@ if (!defined('NV_ADMIN')) {
 }
 
 if (defined('NV_IS_GODADMIN')) {
-    $submenu['roles'] = $lang_module['role_management'];
-    $submenu['credential'] = $lang_module['api_role_credential'];
-    $submenu['logs'] = $lang_module['logs'];
-    $submenu['config'] = $lang_module['config'];
+    $submenu['roles'] = $nv_Lang->getModule('role_management');
+    $submenu['credential'] = $nv_Lang->getModule('api_role_credential');
+    $submenu['logs'] = $nv_Lang->getModule('logs');
+    $submenu['config'] = $nv_Lang->getModule('config');
 }
 

@@ -13,7 +13,7 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['bot'];
+$page_title = $nv_Lang->getModule('bot');
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $contents = '';
@@ -57,7 +57,7 @@ if ($num_items) {
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allbots($bot_list, $generate_page);

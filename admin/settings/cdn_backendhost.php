@@ -63,7 +63,7 @@ function get_cdn_urls($urls = '', $countries_string = false, $except_inc = true)
     return $cdn_urls;
 }
 
-$page_title = $lang_module['cdn_backendhost'];
+$page_title = $nv_Lang->getModule('cdn_backendhost');
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 if ($nv_Request->isset_request('by_country', 'get')) {
@@ -112,14 +112,14 @@ if ($nv_Request->isset_request('by_country', 'get')) {
     }
 
     $xtpl = new XTemplate('cdn_backendhost.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&by_country=1');
     $xtpl->assign('CHECKSS', $checkss);
 
     foreach ($countries as $code => $vals) {
         $xtpl->assign('COUNTRY', [
             'code' => $code,
-            'name' => isset($lang_global['country_' . $code]) ? $lang_global['country_' . $code] : $vals[1]
+            'name' => $nv_Lang->existsGlobal('country_' . $code) ? $nv_Lang->getGlobal('country_' . $code) : $vals[1]
         ]);
 
         $is_sel = false;
@@ -133,7 +133,7 @@ if ($nv_Request->isset_request('by_country', 'get')) {
                 $xtpl->assign('CDN', [
                     'key' => $cdn['val'],
                     'sel' => $isel ? ' selected="selected"' : '',
-                    'url' => ($cdn['val'] == 'except') ? $lang_module['dont_use'] : $cdn['val']
+                    'url' => ($cdn['val'] == 'except') ? $nv_Lang->getModule('dont_use') : $cdn['val']
                 ]);
                 $xtpl->parse('by_country.country.cdn');
             }
@@ -244,7 +244,7 @@ while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
 
 $array_config_global['assets_cdn_checked'] = $array_config_global['assets_cdn'] ? ' checked ' : '';
 $core_cdn_url = !empty($global_config['core_cdn_url']) ? $global_config['core_cdn_url'] : 'https://cdn.jsdelivr.net/gh/nukeviet/nukeviet/';
-$array_config_global['assets_cdn_note'] = sprintf($lang_module['assets_cdn_note'], NV_ASSETS_DIR . '/css, ' . NV_ASSETS_DIR . '/fonts, ' . NV_ASSETS_DIR . '/images, ' . NV_ASSETS_DIR . '/js', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js', $core_cdn_url . 'assets/js/jquery/jquery.min.js');
+$array_config_global['assets_cdn_note'] = $nv_Lang->getModule('assets_cdn_note', NV_ASSETS_DIR . '/css, ' . NV_ASSETS_DIR . '/fonts, ' . NV_ASSETS_DIR . '/images, ' . NV_ASSETS_DIR . '/js', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery/jquery.min.js', $core_cdn_url . 'assets/js/jquery/jquery.min.js');
 
 $cdn_urls = get_cdn_urls($array_config_global['cdn_url'], true, false);
 
@@ -257,7 +257,7 @@ if (empty($cdn_urls)) {
 }
 
 $xtpl = new XTemplate('cdn_backendhost.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('CDN_BY_COUNTRY_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;by_country=1');
 $xtpl->assign('CHECKSS', $checkss);

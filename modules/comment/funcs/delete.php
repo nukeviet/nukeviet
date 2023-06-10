@@ -13,7 +13,7 @@ if (!defined('NV_IS_MOD_COMMENT')) {
     exit('Stop!!!');
 }
 
-$contents = 'ERR_' . $lang_module['comment_unsuccess'];
+$contents = 'ERR_' . $nv_Lang->getModule('comment_unsuccess');
 
 $cid = $nv_Request->get_int('cid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');

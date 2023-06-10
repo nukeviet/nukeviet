@@ -148,7 +148,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if (nv_strlen($postdata['message'][$postdata['isdef']]) < 3) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name'])
+                    'mess' => $nv_Lang->getModule('please_enter_content', $language_array[$postdata['isdef']]['name'])
                 ]);
             }
 
@@ -157,7 +157,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 if (!empty($link) and !nv_is_url($link, true)) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['please_enter_valid_link']
+                        'mess' => $nv_Lang->getModule('please_enter_valid_link')
                     ]);
                 }
                 if (!empty($link) and $lang != $postdata['isdef']) {
@@ -170,7 +170,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_default_link']
+                    'mess' => $nv_Lang->getModule('please_enter_default_link')
                 ]);
             }
 
@@ -178,7 +178,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if (!preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['add_time'], $add_time_array)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_valid_add_time']
+                    'mess' => $nv_Lang->getModule('please_enter_valid_add_time')
                 ]);
             }
 
@@ -186,7 +186,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if (!empty($postdata['exp_time']) and !preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['exp_time'], $exp_time_array)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_valid_exp_time']
+                    'mess' => $nv_Lang->getModule('please_enter_valid_exp_time')
                 ]);
             }
 
@@ -372,10 +372,10 @@ if ($nv_Request->isset_request('manager', 'get')) {
         if (!empty($row['exp_time'])) {
             $row['exp_time_format'] = nv_date('d.m.y H:i', $row['exp_time']);
             if ($row['exp_time'] < NV_CURRENTTIME) {
-                $row['exp_time_format'] .= '<br/>' . $lang_module['to_be_removed'] . '<br/>' . (nv_date('d.m.y H:i', ($row['exp_time'] + $global_config['inform_exp_del'])));
+                $row['exp_time_format'] .= '<br/>' . $nv_Lang->getModule('to_be_removed') . '<br/>' . (nv_date('d.m.y H:i', ($row['exp_time'] + $global_config['inform_exp_del'])));
             }
         } else {
-            $row['exp_time_format'] = $lang_module['unlimited'];
+            $row['exp_time_format'] = $nv_Lang->getModule('unlimited');
         }
 
         if ($row['add_time'] > NV_CURRENTTIME) {
@@ -597,13 +597,13 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
             }
 
             if ($row['sender_role'] == 'group') {
-                $title = sprintf($lang_module['from_group'], $grouplist[$row['sender_group']]);
+                $title = $nv_Lang->getModule('from_group', $grouplist[$row['sender_group']]);
                 $row['sender_avatar'] = 'group';
             } elseif ($row['sender_role'] == 'admin' and !empty($adminlist[$row['sender_admin']])) {
-                $title = sprintf($lang_module['from_admin'], $adminlist[$row['sender_admin']]);
+                $title = $nv_Lang->getModule('from_admin', $adminlist[$row['sender_admin']]);
                 $row['sender_avatar'] = 'admin';
             } else {
-                $title = sprintf($lang_module['from_system'], $global_config['site_name']);
+                $title = $nv_Lang->getModule('from_system', $global_config['site_name']);
                 $row['sender_avatar'] = 'system';
             }
             $row['title'] = $title;

@@ -47,8 +47,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 }
 
 nv_jsonOutput([
-    'label' => sprintf($lang_module['change_func_description'], $row['func_title'], $row['mod_custom_title']),
-    'title' => $lang_module['description'],
+    'label' => $nv_Lang->getModule('change_func_description', $row['func_title'], $row['mod_custom_title']),
+    'title' => $nv_Lang->getModule('description'),
     'value' => $row['description'],
     'maxlength' => !empty($global_config['description_length']) ? $global_config['description_length'] : 255,
     'type' => 'change_description',

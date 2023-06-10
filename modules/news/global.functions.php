@@ -104,7 +104,7 @@ function nv_set_status_module()
  */
 function nv_del_content_module($id)
 {
-    global $db, $module_name, $module_data, $title, $lang_module, $module_config;
+    global $db, $module_name, $module_data, $title, $nv_Lang, $module_config;
     $content_del = 'NO_' . $id;
     $title = '';
     list($id, $listcatid, $title) = $db->query('SELECT id, listcatid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . (int) $id)->fetch(3);
@@ -161,7 +161,7 @@ function nv_del_content_module($id)
         if ($number_no_del == 0) {
             $content_del = 'OK_' . $id . '_' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
         } else {
-            $content_del = 'ERR_' . $lang_module['error_del_content'];
+            $content_del = 'ERR_' . $nv_Lang->getModule('error_del_content');
         }
     }
 
@@ -222,8 +222,8 @@ function nv_archive_content_module($id, $listcatid)
  */
 function nv_link_edit_page($id)
 {
-    global $lang_global, $module_name;
-    $link = '<a class="btn btn-primary btn-xs btn_edit" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $id . '"><em class="fa fa-edit margin-right"></em> ' . $lang_global['edit'] . '</a>';
+    global $nv_Lang, $module_name;
+    $link = '<a class="btn btn-primary btn-xs btn_edit" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $id . '"><em class="fa fa-edit margin-right"></em> ' . $nv_Lang->getGlobal('edit') . '</a>';
 
     return $link;
 }
@@ -237,8 +237,8 @@ function nv_link_edit_page($id)
  */
 function nv_link_delete_page($id, $detail = 0)
 {
-    global $lang_global;
-    $link = '<a class="btn btn-danger btn-xs" href="#" data-toggle="nv_del_content" data-id="' . $id . '" data-checkss="' . md5($id . NV_CHECK_SESSION) . '" data-adminurl="' . NV_BASE_ADMINURL . '" data-detail="' . $detail . '"><em class="fa fa-trash-o margin-right"></em> ' . $lang_global['delete'] . '</a>';
+    global $nv_Lang;
+    $link = '<a class="btn btn-danger btn-xs" href="#" data-toggle="nv_del_content" data-id="' . $id . '" data-checkss="' . md5($id . NV_CHECK_SESSION) . '" data-adminurl="' . NV_BASE_ADMINURL . '" data-detail="' . $detail . '"><em class="fa fa-trash-o margin-right"></em> ' . $nv_Lang->getGlobal('delete') . '</a>';
 
     return $link;
 }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -105,7 +105,6 @@ $lang_module['nopreview'] = 'Không hỗ trợ xem trước loại tệp tin nà
 $lang_module['errorNewSize'] = 'Bạn chỉ có thể tạo ảnh mới với chiều rộng: 10 - %d px, chiều cao: 10 - %d px';
 $lang_module['maxSizeSize'] = 'Kích cỡ tối đa: %dx%dpx';
 $lang_module['enter_url'] = 'Nhập URL file';
-
 $lang_module['configlogo'] = 'Cấu hình chèn logo';
 $lang_module['addlogo'] = 'Thêm Logo';
 $lang_module['addlogosave'] = 'Lưu thay đổi';
@@ -134,7 +133,6 @@ $lang_module['filerelativepath'] = 'Đường dẫn tương đối';
 $lang_module['fileabsolutepath'] = 'Đường dẫn tuyệt đối';
 $lang_module['altimage'] = 'Chú thích cho hình';
 $lang_module['filepathcopied'] = 'Đường dẫn đã được sao chép';
-
 $lang_module['uploadconfig'] = 'Cấu hình upload';
 $lang_module['uploadconfig_ban_ext'] = 'Phần mở rộng bị cấm';
 $lang_module['uploadconfig_ban_mime'] = 'Loại mime bị cấm';
@@ -153,7 +151,6 @@ $lang_module['mild_mode_note'] = 'File tải lên được coi là hợp lệ n�
 $lang_module['lite_mode_note'] = 'File tải lên được coi là hợp lệ nếu MIME-type của nó được xác định là hợp lệ dựa trên nội dung thực hoặc do trình duyệt cung cấp và không nhất thiết phải khớp với phần mở rộng của file.';
 $lang_module['none_mode_note'] = 'File tải lên được coi là hợp lệ nếu MIME-type của nó được xác định là hợp lệ dựa trên: nội dung thực, do trình duyệt cung cấp hoặc được lấy từ tệp ini phù hợp với phần mở rộng của file.';
 $lang_module['upload_checking_note'] = 'Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn "Mạnh", bạn sẽ không thể upload file lên host';
-
 $lang_module['thumbconfig'] = 'Cấu hình ảnh thumbnail';
 $lang_module['thumb_width_height'] = 'Kích thước thumbnail';
 $lang_module['thumb_note'] = 'Hình ảnh thumbnail sẽ được dùng tại các vị trí đòi hỏi ảnh nhỏ';
@@ -168,17 +165,14 @@ $lang_module['thumb_dir'] = 'Thư mục';
 $lang_module['thumb_dir_default'] = 'Cấu hình mặc định';
 $lang_module['thumb_default_size_note'] = 'Thumbnail mặc định có kích thước tối đa là %d x %d pixels';
 $lang_module['thumb_dir_size_note'] = 'Thumbnail cho thư mục cụ thể có kích thước tối đa là 1000 x 1000 pixels';
-
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['order0'] = 'Sắp xếp theo ngày mới';
 $lang_module['order1'] = 'Sắp xếp theo ngày cũ';
 $lang_module['order2'] = 'Sắp xếp theo tên file';
-
 $lang_module['searchdir'] = 'Tìm kiếm trong thư mục';
 $lang_module['searchkey'] = 'Từ khóa tìm kiếm';
 $lang_module['original_image'] = 'Ảnh gốc';
 $lang_module['thumb_image'] = 'Ảnh thumb';
-
 $lang_module['crop'] = 'Cắt ảnh';
 $lang_module['crop_error_small'] = 'Ảnh này kích thước quá nhỏ, không nên cắt';
 $lang_module['crop_keep_original'] = 'Giữ lại ảnh gốc';

@@ -16,18 +16,19 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $area = $nv_Request->get_title('area', 'get', '');
 $return = $nv_Request->get_title('return', 'get,post', '');
 if (empty($area)) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
 }
 
 $access_viewlist = empty($access_admin['access_viewlist'][$admin_info['level']]) ? false : true;
 
-$page_title = $lang_module['pagetitle'];
+$page_title = $nv_Lang->getModule('pagetitle');
 $filtersql = $nv_Request->get_string('filtersql', 'get', '');
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$lang_module['fullname'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
-$xtpl->assign('LANG', $lang_module);
+$nv_Lang->setModule('fullname', $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname'));
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('GLOBAL_CONFIG', $global_config);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('MODULE_FILE', $module_file);
@@ -279,17 +280,17 @@ if ($nv_Request->isset_request('save', 'get')) {
     $array['gender'] = [];
     $array['gender'][] = [
         'key' => '',
-        'title' => $lang_module['select_gender'],
+        'title' => $nv_Lang->getModule('select_gender'),
         'selected' => ('' == $gender) ? ' selected="selected"' : ''
     ];
     $array['gender'][] = [
         'key' => 'M',
-        'title' => $lang_module['select_gender_male'],
+        'title' => $nv_Lang->getModule('select_gender_male'),
         'selected' => ('M' == $gender) ? ' selected="selected"' : ''
     ];
     $array['gender'][] = [
         'key' => 'F',
-        'title' => $lang_module['select_gender_female'],
+        'title' => $nv_Lang->getModule('select_gender_female'),
         'selected' => ('F' == $gender) ? ' selected="selected"' : ''
     ];
 

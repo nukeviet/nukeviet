@@ -100,14 +100,14 @@ if ($nv_Request->isset_request('credential', 'post')) {
             if ($safemode == 1) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['safe_deactivate_openidlogin']
+                    'mess' => $nv_Lang->getModule('safe_deactivate_openidlogin')
                 ]);
             }
 
             if (!$user_active) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['login_no_active']
+                    'mess' => $nv_Lang->getModule('login_no_active')
                 ]);
             }
 
@@ -125,7 +125,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
             nv_jsonOutput([
                 'redirect' => nv_redirect_decrypt($nv_redirect),
                 'status' => 'success',
-                'mess' => $lang_module['login_ok']
+                'mess' => $nv_Lang->getModule('login_ok')
             ]);
         }
     }

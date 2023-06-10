@@ -19,7 +19,7 @@ if ($nv_Request->isset_request('delAuth', 'post')) {
     if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['auth_method_select']
+            'mess' => $nv_Lang->getModule('auth_method_select')
         ]);
     }
 
@@ -35,7 +35,7 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
     if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['auth_method_select']
+            'mess' => $nv_Lang->getModule('auth_method_select')
         ]);
     }
 
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
     if (empty($method) or !in_array($method, ['none', 'password_verify', 'md5_verify'], true) or ($method == 'none' and !defined('NV_IS_SPADMIN'))) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['auth_method_select']
+            'mess' => $nv_Lang->getModule('auth_method_select')
         ]);
     }
     $api_ips = $nv_Request->get_title('ipsUpdate', 'post', '');
@@ -78,7 +78,7 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     if (empty($role_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
@@ -86,14 +86,14 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     if (empty($array_post)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
     if ($array_post['role_type'] != 'public') {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_type_private_error']
+            'mess' => $nv_Lang->getModule('api_role_type_private_error')
         ]);
     }
 
@@ -124,21 +124,21 @@ $generate_page = nv_generate_page($base_url, $roleCount, $per_page, $page);
 
 $api_user = get_api_user();
 
-$page_title = $lang_module['main_title'];
+$page_title = $nv_Lang->getModule('main_title');
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('PAGE_URL', $page_url);
 $xtpl->assign('TYPE_PUBLIC', [
     'active' => $type == 'public' ? 'active' : '',
     'url' => $page_url,
-    'name' => $lang_module['api_role_type_public2']
+    'name' => $nv_Lang->getModule('api_role_type_public2')
 ]);
 $xtpl->assign('TYPE_PRIVATE', [
     'active' => $type == 'private' ? 'active' : '',
     'url' => $page_url . '&amp;type=private',
-    'name' => $lang_module['api_role_type_private2']
+    'name' => $nv_Lang->getModule('api_role_type_private2')
 ]);
 
 if (empty($global_config['remote_api_access'])) {
@@ -146,9 +146,9 @@ if (empty($global_config['remote_api_access'])) {
 }
 
 $methods = [
-    'password_verify' => $lang_module['auth_method_password_verify'],
-    'md5_verify' => $lang_module['auth_method_md5_verify'],
-    'none' => $lang_module['auth_method_none']
+    'password_verify' => $nv_Lang->getModule('admin_auth_method_password_verify'),
+    'md5_verify' => $nv_Lang->getModule('auth_method_md5_verify'),
+    'none' => $nv_Lang->getModule('auth_method_none')
 ];
 foreach ($methods as $key => $name) {
     $method = isset($api_user[$key]) ? $api_user[$key] : [];
@@ -177,13 +177,13 @@ if (empty($roleCount)) {
     $xtpl->parse('main.role_empty');
 } else {
     foreach ($roleList as $role) {
-        $role['object'] = $lang_module['api_role_object_' . $role['role_object']];
-        $role['status'] = !empty($role['status']) ? $lang_module['active'] : $lang_module['inactive'];
+        $role['object'] = $nv_Lang->getModule('api_role_object_' . $role['role_object']);
+        $role['status'] = !empty($role['status']) ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
         $role['credential_status'] = (int) $role['credential_status'];
-        $role['credential_status_format'] = $role['credential_status'] === 1 ? $lang_module['activated'] : ($role['credential_status'] === 0 ? $lang_module['suspended'] : $lang_module['not_activated']);
+        $role['credential_status_format'] = $role['credential_status'] === 1 ? $nv_Lang->getModule('activated') : ($role['credential_status'] === 0 ? $nv_Lang->getModule('suspended') : $nv_Lang->getModule('not_activated'));
         $role['credential_addtime'] = $role['credential_addtime'] > 0 ? nv_date('d/m/Y H:i', $role['credential_addtime']) : '';
-        $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_date('d/m/Y H:i', $role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $lang_module['indefinitely'] : '');
-        $role['credential_quota'] = $role['credential_quota'] > 0 ? number_format($role['credential_quota'], 0, '', '.') : ($role['credential_quota'] == 0 ? $lang_module['no_quota'] : '');
+        $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_date('d/m/Y H:i', $role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $nv_Lang->getModule('indefinitely') : '');
+        $role['credential_quota'] = $role['credential_quota'] > 0 ? number_format($role['credential_quota'], 0, '', '.') : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
         $role['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
         $role['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_date('d/m/Y H:i', $role['credential_last_access']) : '';
         $xtpl->assign('ROLE', $role);

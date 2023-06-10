@@ -45,7 +45,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => '',
-            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
         ]);
     }
 
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => '',
-            'mess' => $lang_module['upload_blocked']
+            'mess' => $nv_Lang->getModule('admin_upload_blocked')
         ]);
     }
 
@@ -61,7 +61,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'block',
-            'mess' => $lang_module['plan_not_selected']
+            'mess' => $nv_Lang->getModule('plan_not_selected')
         ]);
     }
 
@@ -69,7 +69,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'block',
-            'mess' => $lang_module['plan_wrong_selected']
+            'mess' => $nv_Lang->getModule('plan_wrong_selected')
         ]);
     }
 
@@ -77,7 +77,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'title',
-            'mess' => $lang_module['title_empty']
+            'mess' => $nv_Lang->getModule('title_empty')
         ]);
     }
 
@@ -85,7 +85,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'url',
-            'mess' => $lang_module['click_url_invalid']
+            'mess' => $nv_Lang->getModule('click_url_invalid')
         ]);
     }
 
@@ -93,13 +93,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'image',
-            'mess' => $lang_module['file_upload_empty']
+            'mess' => $nv_Lang->getModule('file_upload_empty')
         ]);
     }
 
     if (!empty($global_array_uplans[$post['blockid']]['require_image'])) {
         $upload = new NukeViet\Files\Upload(explode(',', $global_array_uplans[$post['blockid']]['uploadtype']), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-        $upload->setLanguage($lang_global);
+        $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
         $upload_info = $upload->save_file($_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
 
         if (is_file($_FILES['image']['tmp_name'])) {
@@ -154,13 +154,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $id = $db->insert_id($sql, 'id', $data_insert);
     nv_jsonOutput([
         'status' => 'OK',
-        'mess' => $lang_module['addads_success'],
+        'mess' => $nv_Lang->getModule('addads_success'),
         'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true)
     ]);
 }
 
 $contents = nv_banner_theme_addads($global_array_uplans, $page_url);
-$page_title = $lang_module['client_addads'];
+$page_title = $nv_Lang->getModule('client_addads');
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
 
 include NV_ROOTDIR . '/includes/header.php';

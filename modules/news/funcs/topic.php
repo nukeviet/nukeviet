@@ -43,7 +43,7 @@ if (!empty($alias)) {
     $page_url .= '/' . $alias;
     $base_url = $page_url;
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
         $page_url .= '/page-' . $page;
     }
 

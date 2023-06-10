@@ -39,17 +39,13 @@ $lang_global['admin_logout_ok'] = 'Bạn đã thoát khỏi tài khoản quản 
 $lang_global['admin_logout_question'] = 'Bạn thực sự muốn thoát khỏi tài khoản quản trị';
 $lang_global['admin_ipincorrect'] = 'Bạn đang truy cập bằng IP: %s. Rất tiếc IP này không được cấp phép truy cập vào khu vực quản lý site!';
 $lang_global['ok'] = 'OK';
+$lang_global['confirm'] = 'Xác nhận';
+$lang_global['manage'] = 'Quản lý';
 $lang_global['cancel'] = 'Hủy bỏ';
 $lang_global['reset'] = 'Thiết lập lại';
 $lang_global['fail'] = 'Thất bại';
-$lang_global['confirm'] = 'Xác nhận';
-$lang_global['manage'] = 'Quản lý';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn quyền truy cập của bạn với tư cách là quản trị viên!';
-
-$lang_global['limit_user_number'] = 'Website của bạn bị giới hạn %s tài khoản người dùng. Để thêm tài khoản người dùng mới, vui lòng liên hệ quản trị hệ thống';
-$lang_global['limit_admin_number'] = 'Website của bạn bị giới hạn %s quản trị viên. Để thêm quản trị viên mới, vui lòng liên hệ quản trị hệ thống';
-
 $lang_global['username_empty'] = 'Bí danh chưa được khai báo';
 $lang_global['usernamelong'] = 'Bí danh quá dài. Chỉ chấp nhận tên không nhiều hơn %1$d ký tự';
 $lang_global['usernameadjective'] = 'Bí danh quá ngắn. Nó phải có ít nhất %1$d ký tự';
@@ -59,7 +55,6 @@ $lang_global['unick_type_3'] = 'Bí danh chỉ được sử dụng chữ số, 
 $lang_global['unick_type_4'] = 'Bí danh chỉ được sử dụng Unicode không có các ký tự đặc biệt';
 $lang_global['username_rule_limit'] = 'Bí danh không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
 $lang_global['username_rule_nolimit'] = 'Bí danh phải từ %1$d đến %2$d ký tự';
-
 $lang_global['password_empty'] = 'Mật khẩu chưa được khai báo';
 $lang_global['passwordlong'] = 'Mật khẩu quá dài. Chỉ chấp nhận mật khẩu có tối đa %1$d ký tự';
 $lang_global['passwordadjective'] = 'Mật khẩu quá ngắn. Ít nhất phải có %1$d ký tự';
@@ -72,14 +67,12 @@ $lang_global['upass_type_4'] = 'Mật khẩu phải là tổ hợp số và ch�
 $lang_global['upass_type_simple'] = 'Mật khẩu của bạn là mật khẩu dễ đoán. Vui lòng nhập mật khẩu phức tạp hơn';
 $lang_global['password_rule_limit'] = 'Mật khẩu không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
 $lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2$d ký tự';
-
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['securitycodeincorrect1'] = 'Chưa xác thực &laquo;Tôi không phải người máy&raquo;. Vui lòng xác thực lại';
 $lang_global['loginincorrect'] = 'Không tìm thấy tài khoản nào phù hợp với thông tin bạn đã nhập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
 $lang_global['userlogin_blocked'] = 'Bạn đã đăng nhập thất bại %s lần liên tiếp nên hệ thống tạm khóa công cụ đăng nhập cho đến %s';
-
 $lang_global['2teplogin_totppin_label'] = 'Nhập mã xác minh từ ứng dụng Google Authenticator';
 $lang_global['2teplogin_totppin_placeholder'] = 'Nhập mã 6 chữ số';
 $lang_global['2teplogin_code_label'] = 'Nhập một trong các mã dự phòng.';
@@ -88,8 +81,6 @@ $lang_global['2teplogin_other_menthod'] = 'Thử cách khác';
 $lang_global['2teplogin_error_opt'] = 'Mã xác nhận không chính xác. Vui lòng nhập lại';
 $lang_global['2teplogin_error_backup'] = 'Mã dự phòng không chính xác. Vui lòng nhập lại';
 $lang_global['2teplogin_require'] = 'Để có thể đăng nhập vào tài khoản người dùng, vui lòng kích hoạt xác thực hai bước. Nhấp vào đây để kích hoạt chức năng này';
-$lang_global['2teplogin'] = 'Xác thực hai bước';
-
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['for_admin'] = 'Dành cho quản trị';
 $lang_global['admin_account'] = 'Tài khoản quản trị';
@@ -312,7 +303,6 @@ $lang_global['ftp_err_rawlist'] = 'Lỗi: Không thể xác định danh sách t
 $lang_global['ftp_err_list_detail'] = 'Lỗi: Không nhận dạng được tham số của các tệp, thư mục';
 $lang_global['ftp_err_fget'] = 'Lỗi: Không thể đọc được nội dung tệp';
 $lang_global['ftp_err_NVbuffet'] = 'Lỗi: Thiếu lớp NVbuffer';
-
 $lang_global['groups_view'] = 'Các nhóm được xem';
 $lang_global['level1'] = 'Quản trị tối cao';
 $lang_global['level2'] = 'Điều hành chung';
@@ -321,16 +311,13 @@ $lang_global['level4'] = 'Người dùng chính thức';
 $lang_global['level5'] = 'Khách';
 $lang_global['level6'] = 'Tất cả';
 $lang_global['level7'] = 'Người dùng mới';
-
 $lang_global['msgbeforeunload'] = 'Bạn có chắc chắn muốn chuyển trang? Nếu thực hiện thao tác này, dữ liệu mà bạn nhập vào sẽ không được lưu';
 $lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng site';
 $lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng thái đăng nhập';
 $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
-
 $lang_global['unknown'] = 'Không xác định';
 $lang_global['joinnow'] = 'Kết nối';
 $lang_global['contactUs'] = 'Thông tin liên hệ';
-
 $lang_global['company_name'] = 'Tên chính thức';
 $lang_global['company_sortname'] = 'Tên viết tắt';
 $lang_global['company_regcode'] = 'Mã số doanh nghiệp';
@@ -354,11 +341,13 @@ $lang_global['signin'] = 'Đăng nhập';
 $lang_global['feedback'] = 'Gửi phản hồi';
 $lang_global['required'] = 'Chú ý: Bạn cần khai báo tất cả các ô có đánh dấu hoa thị (*).';
 $lang_global['cookie_notice'] = 'Chúng tôi đang sử dụng cookie để cung cấp cho bạn những trải nghiệm tốt nhất trên website này. Bằng cách tiếp tục truy cập, bạn đồng ý với <a href="%s">Chính sách thu thập và sử dụng cookie</a> của chúng tôi.';
-
 $lang_global['on'] = 'Bật';
 $lang_global['off'] = 'Tắt';
 $lang_global['close'] = 'Đóng';
 $lang_global['system'] = 'Hệ thống';
+$lang_global['limit_user_number'] = 'Website của bạn bị giới hạn %s tài khoản người dùng. Để thêm tài khoản người dùng mới, vui lòng liên hệ quản trị hệ thống';
+$lang_global['limit_admin_number'] = 'Website của bạn bị giới hạn %s quản trị viên. Để thêm quản trị viên mới, vui lòng liên hệ quản trị hệ thống';
+$lang_global['2teplogin'] = 'Xác thực hai bước';
 $lang_global['indefinitely'] = 'Vô thời hạn';
 $lang_global['all'] = 'Tất cả';
 $lang_global['unviewed'] = 'Chưa đọc';
@@ -366,13 +355,8 @@ $lang_global['favorite'] = 'Yêu thích';
 $lang_global['viewall'] = 'Xem tất cả';
 $lang_global['refresh'] = 'Làm mới';
 $lang_global['inform_notifications'] = 'Thông báo';
-
-$lang_global['apply'] = 'Áp dụng';
-$lang_global['custom_range'] = 'Khác';
-
 $lang_global['content_ssl'] = 'Trang này không được mã hóa cho việc trao đổi an toàn dữ liệu. Tên người dùng, mật khẩu và bất kỳ thông tin nào khác sẽ được gửi dưới dạng văn bản nhìn thấy được. Hãy cân nhắc trước khi đăng nhập.';
 $lang_global['warning_ssl'] = 'Cảnh báo';
-
 $lang_global['error_code_1'] = 'Địa chỉ truy vấn không hợp lệ. Vui lòng kiểm tra lại';
 $lang_global['error_code_2'] = 'Giao thức HTTP bị cấm đối với truy vấn này.';
 $lang_global['error_code_3'] = 'Thư mục chứa tệp tin không thể ghi được.';
@@ -386,17 +370,14 @@ $lang_global['error_code_10'] = 'Truy vấn HTTP bằng Curl thất bại.';
 $lang_global['error_code_11'] = 'Có một lỗi không xác định đã xảy ra.';
 $lang_global['error_valid_response'] = 'Dữ liệu trả về không hợp chuẩn.';
 $lang_global['myapis'] = 'API của tôi';
-
 $lang_global['login_name_type_username'] = 'Bí danh';
 $lang_global['login_name_type_email'] = 'Email';
 $lang_global['login_name_type_email_username'] = 'Bí danh hoặc Email';
-
 $lang_global['general_support'] = 'Hỗ trợ chung';
 $lang_global['data_warning_content'] = 'Khi gửi dữ liệu, tôi xác nhận cấp quyền cho website khai thác các thông tin cá nhân mà tôi đã khai báo.';
 $lang_global['antispam_warning_content'] = 'Khi gửi dữ liệu, tôi xác nhận đã được cảnh báo về Luật chống tin rác.';
 $lang_global['data_warning_error'] = 'Bạn cần xác nhận cấp quyền cho website khai thác các thông tin cá nhân';
 $lang_global['antispam_warning_error'] = 'Bạn cần xác nhận đã được cảnh báo về Luật chống tin rác';
-
 $lang_global['country_AD'] = 'Andorra';
 $lang_global['country_AE'] = 'Ả Rập Thống nhất';
 $lang_global['country_AF'] = 'Afghanistan';
@@ -646,3 +627,5 @@ $lang_global['country_YU'] = 'Serbia và Montenegro';
 $lang_global['country_ZA'] = 'Nam Phi';
 $lang_global['country_ZM'] = 'Zambia';
 $lang_global['country_ZW'] = 'Zimbabwe';
+$lang_global['apply'] = 'Áp dụng';
+$lang_global['custom_range'] = 'Khác';

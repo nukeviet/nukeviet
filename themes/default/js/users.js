@@ -584,8 +584,8 @@ $(function() {
 
     $('body').on('click', '[data-toggle=safe_deactivate_show][data-hide-obj][data-show-obj]', function(e) {
         e.preventDefault();
-        $($(this).data('hide-obj')).hide(0);
-        $($(this).data('show-obj')).fadeIn()
+        $($(this).data('show-obj')).hide(0);
+        $($(this).data('hide-obj')).fadeIn()
     });
 
     $('[data-toggle=addfilebtn]').on('click', function() {

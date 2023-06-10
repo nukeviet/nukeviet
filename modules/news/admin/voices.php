@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-$page_title = $lang_module['voice_manager'];
+$page_title = $nv_Lang->getModule('voice_manager');
 
 // Thay đổi thứ tự
 if ($nv_Request->get_title('changeweight', 'post', '') === NV_CHECK_SESSION) {
@@ -116,10 +116,10 @@ if (!empty($id)) {
     $array = $result->fetch();
 
     if (empty($array)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'));
     }
 
-    $caption = $lang_module['voice_edit'];
+    $caption = $nv_Lang->getModule('voice_edit');
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 } else {
     $array = [
@@ -129,7 +129,7 @@ if (!empty($id)) {
         'description' => '',
     ];
 
-    $caption = $lang_module['voice_add'];
+    $caption = $nv_Lang->getModule('voice_add');
     $form_action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
@@ -152,9 +152,9 @@ if ($nv_Request->isset_request('save', 'post')) {
     }
 
     if (empty($array['title'])) {
-        $error = $lang_module['voice_error_title'];
+        $error = $nv_Lang->getModule('voice_error_title');
     } elseif ($is_exists) {
-        $error = $lang_module['voice_error_exists'];
+        $error = $nv_Lang->getModule('voice_error_exists');
     } else {
         if (!$id) {
             $sql = 'SELECT MAX(weight) weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_voices';
@@ -188,10 +188,10 @@ if ($nv_Request->isset_request('save', 'post')) {
                 $nv_Cache->delMod($module_name);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
             } else {
-                $error = $lang_module['errorsave'];
+                $error = $nv_Lang->getModule('errorsave');
             }
         } catch (PDOException $e) {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     }
 }
@@ -199,8 +199,8 @@ if ($nv_Request->isset_request('save', 'post')) {
 $array['description'] = nv_br2nl($array['description']);
 
 $xtpl = new XTemplate('voices.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('CAPTION', $caption);
 $xtpl->assign('FORM_ACTION', $form_action);
 $xtpl->assign('DATA', $array);

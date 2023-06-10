@@ -58,7 +58,7 @@ class InformAction implements UiApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request, $nv_Lang;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -76,7 +76,7 @@ class InformAction implements UiApi
         if (empty($id)) {
             return $this->result->setError()
                 ->setCode('5003')
-                ->setMessage($lang_module['notification_not_exist'])
+                ->setMessage($nv_Lang->getModule('notification_not_exist'))
                 ->getResult();
         }
 
@@ -106,14 +106,14 @@ class InformAction implements UiApi
         if (empty($row['id'])) {
             return $this->result->setError()
                 ->setCode('5003')
-                ->setMessage($lang_module['notification_not_exist'])
+                ->setMessage($nv_Lang->getModule('notification_not_exist'))
                 ->getResult();
         }
 
         if (!in_array($status, ['viewed', 'unviewed', 'favorite', 'unfavorite', 'hidden', 'unhidden'], true)) {
             return $this->result->setError()
                 ->setCode('5013')
-                ->setMessage($lang_module['unknown_new_status'])
+                ->setMessage($nv_Lang->getModule('unknown_new_status'))
                 ->getResult();
         }
 

@@ -58,7 +58,7 @@ class InformGroupGetList implements UiApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request, $nv_Lang;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -74,7 +74,7 @@ class InformGroupGetList implements UiApi
         if (empty($group_id) or !in_array($group_id, $u_groups, true)) {
             return $this->result->setError()
                 ->setCode('5014')
-                ->setMessage($lang_module['group_not_defined'])
+                ->setMessage($nv_Lang->getModule('group_not_defined'))
                 ->getResult();
         }
 
@@ -82,7 +82,7 @@ class InformGroupGetList implements UiApi
         if (!$count) {
             return $this->result->setError()
                 ->setCode('5015')
-                ->setMessage($lang_module['not_group_manager'])
+                ->setMessage($nv_Lang->getModule('not_group_manager'))
                 ->getResult();
         }
 

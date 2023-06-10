@@ -186,7 +186,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" class="userid" value="0" />
-                <p>{LANG.username}: <span class="username"></span></p>
+                <p>{GLANG.username}: <span class="username"></span></p>
                 <p>{LANG.currentpass_created_time}: <span class="currentpass-created-time"></span></p>
                 <p>{LANG.currentpass_request_status}: <span class="currentpass-request-status"></span></p>
                 <p><a class="btn btn-primary btn-xs" href="javascript:void(0);" onclick="passResetRequestSubmit(event, this, 1);">{LANG.pass_reset_request1_send}</a><span class="fa fa-spinner fa-spin m-left" style="display:none"></span></p>

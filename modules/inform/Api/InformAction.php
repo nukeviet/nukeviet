@@ -65,7 +65,7 @@ class InformAction implements IApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module, $global_config, $language_array;
+        global $db, $nv_Request, $nv_Lang, $global_config, $language_array;
 
         $module_name = Api::getModuleName();
         $module_info = Api::getModuleInfo();
@@ -134,7 +134,7 @@ class InformAction implements IApi
         if (empty($postdata['operation']) or !in_array($postdata['operation'], ['add', 'edit', 'delete'], true)) {
             return $this->result->setError()
                 ->setCode('5002')
-                ->setMessage($lang_module['unspecified_action'])
+                ->setMessage($nv_Lang->getModule('unspecified_action'))
                 ->getResult();
         }
 
@@ -148,7 +148,7 @@ class InformAction implements IApi
             if (empty($postdata['id'])) {
                 return $this->result->setError()
                     ->setCode('5003')
-                    ->setMessage($lang_module['notification_not_exist'])
+                    ->setMessage($nv_Lang->getModule('notification_not_exist'))
                     ->getResult();
             }
 
@@ -158,7 +158,7 @@ class InformAction implements IApi
             if (empty($exist)) {
                 return $this->result->setError()
                     ->setCode('5004')
-                    ->setMessage($lang_module['notification_not_exist'])
+                    ->setMessage($nv_Lang->getModule('notification_not_exist'))
                     ->getResult();
             }
         }
@@ -171,7 +171,7 @@ class InformAction implements IApi
         if (strcasecmp($checkhash, $hashreceive) !== 0) {
             return $this->result->setError()
                 ->setCode('5005')
-                ->setMessage($lang_module['api_error_hash'])
+                ->setMessage($nv_Lang->getModule('api_error_hash'))
                 ->getResult();
         }*/
 
@@ -204,21 +204,21 @@ class InformAction implements IApi
             if ($postdata['sender_role'] == 'group' and empty($postdata['sender_group'])) {
                 return $this->result->setError()
                     ->setCode('5006')
-                    ->setMessage($lang_module['please_select_group'])
+                    ->setMessage($nv_Lang->getModule('please_select_group'))
                     ->getResult();
             }
             // Nếu gửi từ admin mà không xác định được ID của admin
             if ($postdata['sender_role'] == 'admin' and empty($postdata['sender_admin'])) {
                 return $this->result->setError()
                     ->setCode('5007')
-                    ->setMessage($lang_module['please_select_admin'])
+                    ->setMessage($nv_Lang->getModule('please_select_admin'))
                     ->getResult();
             }
             // Nếu đối tượng nhận tin nhắn là nhóm mà không xác định được ID của nhóm
             if ($postdata['receiver_type'] == 'grs' and empty($postdata['receiver_grs'])) {
                 return $this->result->setError()
                     ->setCode('5008')
-                    ->setMessage($lang_module['please_select_receiver_group'])
+                    ->setMessage($nv_Lang->getModule('please_select_receiver_group'))
                     ->getResult();
             }
             // Nếu không xác định được ngôn ngữ mặc định
@@ -229,7 +229,7 @@ class InformAction implements IApi
             if (nv_strlen($postdata['message'][$postdata['isdef']]) < 3) {
                 return $this->result->setError()
                     ->setCode('5009')
-                    ->setMessage(sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name']))
+                    ->setMessage($nv_Lang->getModule('please_enter_content', $language_array[$postdata['isdef']]['name']))
                     ->getResult();
             }
             // Nếu có link, nhưng link không hợp lệ hoặc nhập link ở ngôn ngữ khác mà bỏ trống ở ngôn ngữ mặc định
@@ -238,7 +238,7 @@ class InformAction implements IApi
                 if (!empty($link) and !nv_is_url($link, true)) {
                     return $this->result->setError()
                         ->setCode('5010')
-                        ->setMessage($lang_module['please_enter_valid_link'])
+                        ->setMessage($nv_Lang->getModule('please_enter_valid_link'))
                         ->getResult();
                 }
                 if (!empty($link) and $lang != $postdata['isdef']) {
@@ -251,7 +251,7 @@ class InformAction implements IApi
             if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
                 return $this->result->setError()
                     ->setCode('5010')
-                    ->setMessage($lang_module['please_enter_default_link'])
+                    ->setMessage($nv_Lang->getModule('please_enter_default_link'))
                     ->getResult();
             }
 
@@ -260,7 +260,7 @@ class InformAction implements IApi
             if (!preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['add_time'], $add_time_array)) {
                 return $this->result->setError()
                     ->setCode('5011')
-                    ->setMessage($lang_module['please_enter_valid_add_time'])
+                    ->setMessage($nv_Lang->getModule('please_enter_valid_add_time'))
                     ->getResult();
             }
             $exp_time_array = [];
@@ -268,7 +268,7 @@ class InformAction implements IApi
             if (!empty($postdata['exp_time']) and !preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['exp_time'], $exp_time_array)) {
                 return $this->result->setError()
                     ->setCode('5012')
-                    ->setMessage($lang_module['please_enter_valid_exp_time'])
+                    ->setMessage($nv_Lang->getModule('please_enter_valid_exp_time'))
                     ->getResult();
             }
 

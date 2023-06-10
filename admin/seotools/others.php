@@ -17,7 +17,7 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
 $sample_data = [
     '@context' => 'https://schema.org',
     '@type' => 'LocalBusiness',
-    'name' => $lang_module['localbusiness_name'],
+    'name' => $nv_Lang->getModule('localbusiness_name'),
     'image' => ['https://www.mywebsite.com/images/image1.jpg', 'https://www.mywebsite.com/images/image2.jpg'],
     'address' => [
         '@type' => 'PostalAddress',
@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
         if (empty($jsondata)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['localbusiness_data_empty']
+                'mess' => $nv_Lang->getModule('localbusiness_data_empty')
             ]);
         }
 
@@ -75,7 +75,7 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
         if (json_last_error() !== JSON_ERROR_NONE) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['localbusiness_data_empty']
+                'mess' => $nv_Lang->getModule('localbusiness_data_empty')
             ]);
         }
 
@@ -83,21 +83,21 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
         if (empty($jsondata['@context']) or $jsondata['@context'] != 'https://schema.org' or empty($jsondata['@type'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['localbusiness_data_empty']
+                'mess' => $nv_Lang->getModule('localbusiness_data_empty')
             ]);
         }
 
         if (empty($jsondata['name'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['localbusiness_name_error']
+                'mess' => $nv_Lang->getModule('localbusiness_name_error')
             ]);
         }
 
         if (empty($jsondata['address']['streetAddress']) or empty($jsondata['address']['addressLocality']) or empty($jsondata['address']['addressCountry'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['localbusiness_address_error']
+                'mess' => $nv_Lang->getModule('localbusiness_address_error')
             ]);
         }
 
@@ -108,10 +108,10 @@ if ($nv_Request->isset_request('localbusiness_information', 'get')) {
             'redirect' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op
         ]);
     }
-    $page_title = $lang_module['localbusiness_information'];
+    $page_title = $nv_Lang->getModule('localbusiness_information');
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('OP', $op);
@@ -173,10 +173,10 @@ if ($nv_Request->isset_request('logoupload', 'get')) {
         $array['logo_height'] = $nv_Request->get_int('crop_height', 'post', 0);
 
         if ($array['logo_width'] < $logo_config['logo_width'] or $array['logo_height'] < $logo_config['logo_height']) {
-            $array['error'] = $lang_module['logo_error_data'];
+            $array['error'] = $nv_Lang->getModule('logo_error_data');
         } else {
             $upload = new NukeViet\Files\Upload(['images'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE);
-            $upload->setLanguage($lang_global);
+            $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
 
             // Storage in temp dir
             $upload_info = $upload->save_file($_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
@@ -205,7 +205,7 @@ if ($nv_Request->isset_request('logoupload', 'get')) {
                     $array['filename'] = NV_BASE_SITEURL . $photo;
                     $array['success'] = 1;
                 } else {
-                    $array['error'] = $lang_module['avatar_error_save'];
+                    $array['error'] = $nv_Lang->getModule('avatar_error_save');
                 }
                 @nv_deletefile($upload_info['name']);
             } else {
@@ -214,17 +214,17 @@ if ($nv_Request->isset_request('logoupload', 'get')) {
         }
     }
 
-    $lang_module['bigfile'] = sprintf($lang_module['bigfile'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-    $lang_module['bigsize'] = sprintf($lang_module['bigsize'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
-    $lang_module['smallsize'] = sprintf($lang_module['smallsize'], $logo_config['logo_width'], $logo_config['logo_height']);
+    $nv_Lang->setModule('bigfile', $nv_Lang->getModule('bigfile', nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE)));
+    $nv_Lang->setModule('bigsize', $nv_Lang->getModule('bigsize', NV_MAX_WIDTH, NV_MAX_HEIGHT));
+    $nv_Lang->setModule('smallsize', $nv_Lang->getModule('smallsize', $logo_config['logo_width'], $logo_config['logo_height']));
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if ($array['success']) {
         $xtpl->assign('FILENAME', $array['filename']);
         $xtpl->parse('logoupload.complete');
     } else {
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('CONFIG', $logo_config);
         $xtpl->assign('TEMPLATE', $global_config['module_theme']);
         $xtpl->assign('MODULE_NAME', $module_name);
@@ -267,7 +267,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         if (!file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/localbusiness.json')) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['localbusiness_file_error']
+                'mess' => $nv_Lang->getModule('localbusiness_file_error')
             ]);
         }
     }
@@ -283,11 +283,11 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     ]);
 }
 
-$page_title = $lang_module['other_seo_tools'];
+$page_title = $nv_Lang->getModule('other_seo_tools');
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);

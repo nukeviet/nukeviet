@@ -64,13 +64,13 @@ class InformCheck implements IApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request, $nv_Lang;
 
         $userid = $nv_Request->get_absint('userid', 'post', 0);
         if (empty($userid)) {
             return $this->result->setError()
                 ->setCode('5016')
-                ->setMessage($lang_module['please_enter_user'])
+                ->setMessage($nv_Lang->getModule('please_enter_user'))
                 ->getResult();
         }
 
@@ -79,7 +79,7 @@ class InformCheck implements IApi
         if (empty($user)) {
             return $this->result->setError()
                 ->setCode('5017')
-                ->setMessage($lang_module['user_not_exist'])
+                ->setMessage($nv_Lang->getModule('user_not_exist'))
                 ->getResult();
         }
 

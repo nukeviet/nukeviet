@@ -51,8 +51,8 @@ $vas = [
     '<code>{BASE_SITEURL}</code> (' . NV_BASE_SITEURL . ')',
     '<code>{UPLOADS_DIR}</code> (' . NV_UPLOADS_DIR . ')',
     '<code>{ASSETS_DIR}</code> (' . NV_ASSETS_DIR . ')',
-    '<code>{CONTENT-LANGUAGE}</code> (' . $lang_global['Content_Language'] . ')',
-    '<code>{LANGUAGE}</code> (' . $lang_global['LanguageName'] . ')',
+    '<code>{CONTENT-LANGUAGE}</code> (' . $nv_Lang->getGlobal('Content_Language') . ')',
+    '<code>{LANGUAGE}</code> (' . $nv_Lang->getGlobal('LanguageName') . ')',
     '<code>{SITE_NAME}</code> (' . $global_config['site_name'] . ')',
     '<code>{SITE_EMAIL}</code> (' . $global_config['site_email'] . ')'
 ];
@@ -129,13 +129,13 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     }
 }
 
-$page_title = $lang_module['metaTagsConfig'];
+$page_title = $nv_Lang->getModule('metaTagsConfig');
 
 $xtpl = new XTemplate('metatags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('NOTE', sprintf($lang_module['metaTagsNote'], implode(', ', $ignore)));
-$xtpl->assign('VARS', $lang_module['metaTagsVar'] . ': ' . implode(', ', $vas));
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('NOTE', $nv_Lang->getModule('metaTagsNote', implode(', ', $ignore)));
+$xtpl->assign('VARS', $nv_Lang->getModule('metaTagsVar') . ': ' . implode(', ', $vas));
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);

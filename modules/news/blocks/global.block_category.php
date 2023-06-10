@@ -19,16 +19,15 @@ if (!nv_function_exists('nv_news_category')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_config_news_category($module, $data_block, $lang_block)
+    function nv_block_config_news_category($module, $data_block)
     {
-        global $nv_Cache, $site_mods;
+        global $nv_Cache, $site_mods, $nv_Lang;
 
         $html_input = '';
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['catid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('catid') . ':</label>';
         $html .= '<div class="col-sm-9"><select name="config_catid" class="form-control">';
         $html .= '<option value="0"> -- </option>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
@@ -56,10 +55,10 @@ if (!nv_function_exists('nv_news_category')) {
         $html .= '</script>';
         $html .= '</div></div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['title_length'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('title_length') . ':</label>';
         $html .= '<div class="col-sm-9">';
         $html .= "<select name=\"config_title_length\" class=\"form-control\">\n";
-        $html .= '<option value="">' . $lang_block['title_length'] . "</option>\n";
+        $html .= '<option value="">' . $nv_Lang->getModule('title_length') . "</option>\n";
         for ($i = 0; $i < 100; ++$i) {
             $html .= '<option value="' . $i . '" ' . (($data_block['title_length'] == $i) ? ' selected="selected"' : '') . '>' . $i . "</option>\n";
         }
@@ -74,10 +73,9 @@ if (!nv_function_exists('nv_news_category')) {
      * nv_block_config_news_category_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_news_category_submit($module, $lang_block)
+    function nv_block_config_news_category_submit($module)
     {
         global $nv_Request;
         $return = [];
@@ -97,7 +95,7 @@ if (!nv_function_exists('nv_news_category')) {
      */
     function nv_news_category($block_config)
     {
-        global $module_array_cat, $lang_module, $global_config, $module_name, $catid;
+        global $module_array_cat, $global_config, $module_name, $catid;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_category.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -109,7 +107,7 @@ if (!nv_function_exists('nv_news_category')) {
 
         if (!empty($module_array_cat)) {
             $title_length = $block_config['title_length'];
-            $xtpl->assign('LANG', $lang_module);
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
             $xtpl->assign('BLOCK_ID', $block_config['bid']);
             $xtpl->assign('TEMPLATE', $block_theme);
             $xtpl->assign('MENUID', $block_config['bid']);

@@ -64,7 +64,7 @@ class InformGetList implements IApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request;
 
         $module_name = Api::getModuleName();
         $module_info = Api::getModuleInfo();

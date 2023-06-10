@@ -32,15 +32,15 @@ if ($id) {
         $row['alias'] .= '-copy' . nv_date('Hidmy');
     }
 
-    $page_title = $lang_module['edit'];
+    $page_title = $nv_Lang->getModule('edit');
     $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 } else {
-    $page_title = $lang_module['add'];
+    $page_title = $nv_Lang->getModule('add');
     $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
 if (!empty($global_config['over_capacity']) and !defined('NV_IS_GODADMIN')) {
-    $contents = nv_theme_alert('', $lang_global['error_upload_over_capacity1']);
+    $contents = nv_theme_alert('', $nv_Lang->getGlobal('error_upload_over_capacity1'));
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -93,11 +93,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $is_exists = $db->query($sql)->fetchColumn();
 
     if (empty($row['title'])) {
-        $error = $lang_module['empty_title'];
+        $error = $nv_Lang->getModule('empty_title');
     } elseif ($is_exists) {
-        $error = $lang_module['erroralias'];
+        $error = $nv_Lang->getModule('erroralias');
     } elseif (trim($row['bodytext']) == '') {
-        $error = $lang_module['empty_bodytext'];
+        $error = $nv_Lang->getModule('empty_bodytext');
     } else {
         if (empty($row['keywords'])) {
             $row['keywords'] = nv_get_keywords($row['title']);
@@ -167,11 +167,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $nv_Cache->delMod($module_name);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
             } else {
-                $error = $lang_module['errorsave'];
+                $error = $nv_Lang->getModule('errorsave');
             }
         } catch (PDOException $e) {
             trigger_error(print_r($e, true));
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     }
 } elseif (empty($id)) {
@@ -201,12 +201,12 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
 }
-$lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
-$lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', $action);
 $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('DATA', $row);
@@ -240,9 +240,9 @@ if (empty($row['alias'])) {
 
 // position images
 $array_imgposition = [
-    0 => $lang_module['imgposition_0'],
-    1 => $lang_module['imgposition_1'],
-    2 => $lang_module['imgposition_2']
+    0 => $nv_Lang->getModule('imgposition_0'),
+    1 => $nv_Lang->getModule('imgposition_1'),
+    2 => $nv_Lang->getModule('imgposition_2')
 ];
 foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';

@@ -19,16 +19,15 @@ if (!nv_function_exists('nv_block_freecontent')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_config_freecontent($module, $data_block, $lang_block)
+    function nv_block_config_freecontent($module, $data_block)
     {
-        global $site_mods, $nv_Cache;
+        global $site_mods, $nv_Cache, $nv_Lang;
 
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['blockid'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('blockid') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select name="config_blockid" class="form-control">';
 
@@ -44,7 +43,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrows'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('numrows') . ':</label>';
         $html .= '	<div class="col-sm-9">';
         $html .= '		<select name="config_numrows" class="form-control">';
 
@@ -63,10 +62,9 @@ if (!nv_function_exists('nv_block_freecontent')) {
      * nv_block_config_freecontent_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_freecontent_submit($module, $lang_block)
+    function nv_block_config_freecontent_submit($module)
     {
         global $nv_Request;
         $return = [];
