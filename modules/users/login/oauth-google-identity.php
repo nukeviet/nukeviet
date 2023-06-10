@@ -73,6 +73,11 @@ if ($nv_Request->isset_request('credential', 'post')) {
         ]);
     }
 
+    $nv_redirect_session = $nv_Request->get_title('nv_redirect_' . $module_data, 'session', '');
+    if (!empty($nv_redirect_session) and nv_redirect_decrypt($nv_redirect_session) != '') {
+        $nv_redirect = $nv_redirect_session;
+    }
+
     if (!$is_edit) {
         $server = 'google-identity';
         $custom_method = nv_apply_hook($module_name, 'find_oauth_google_identity', [$credential]);
@@ -118,6 +123,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
             }
 
             nv_jsonOutput([
+                'redirect' => nv_redirect_decrypt($nv_redirect),
                 'status' => 'success',
                 'mess' => $lang_module['login_ok']
             ]);
@@ -144,9 +150,14 @@ if ($nv_Request->isset_request('credential', 'post')) {
     if ($is_edit) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/openid&server=google-identity&result=1&t=' . NV_CURRENTTIME);
     } else {
+        if (!empty($nv_redirect)) {
+            $nv_redirect = '&nv_redirect=' . $nv_redirect;
+        }
+        $nv_redirect .= '&t=' . NV_CURRENTTIME;
+
         nv_jsonOutput([
             'status' => 'OK',
-            'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=google-identity&result=1', true)
+            'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=google-identity&result=1' . $nv_redirect, true)
         ]);
     }
 }
