@@ -89,9 +89,7 @@ if (preg_match('/^([a-z0-9]{32})\.' . nv_preg_quote($logext) . '$/', $errorfile)
 }
 
 $file_content = file_get_contents(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/' . $erf);
-if ($file_type == 'sendmail') {
-    $errors = array_map('trim', explode("\n", $file_content));
-} elseif ($file_type == 'error256') {
+if ($file_type == 'error256') {
     $errors = [trim($file_content)];
 } else {
     $errors = explode($ErrorHandler::LOG_DELIMITER, $file_content);
@@ -101,47 +99,12 @@ $errors = array_filter($errors);
 krsort($errors);
 $items = [];
 foreach ($errors as $error) {
-    if ($file_type != 'all') {
-        $strs = [$error];
-    } else {
-        $strs = array_map('trim', explode("\n", $error, 2));
-    }
-
-    unset($matches);
-    preg_match_all('/\[([A-Z\-]+)\:\s*([^\]]*)\]/', $strs[0], $matches, PREG_SET_ORDER);
-    if (!empty($matches)) {
-        $it = [];
-        foreach ($matches as $match) {
-            $v = trim($match[2]);
-            if ($match[1] == 'TIME') {
-                $v = date('d/m/Y H:i:s P', strtotime($v));
-            }
-            $it[strtolower($match[1])] = $v;
-        }
-
-        if (!empty($strs[1])) {
-            $_backtraces = array_map('trim', explode("\n", $strs[1]));
-            $backtraces = [];
-            foreach ($_backtraces as $backtrace) {
-                unset($matches2);
-                preg_match_all('/\[([A-Z\-]+)\:\s*([^\]]*)\]/', $backtrace, $matches2, PREG_SET_ORDER);
-                if (!empty($matches2)) {
-                    $bt = [];
-                    foreach ($matches2 as $match2) {
-                        $bt[strtolower($match2[1])] = trim($match2[2]);
-                    }
-                    $backtraces[] = $bt;
-                }
-            }
-
-            $it['backtrace'] = $backtraces;
-        }
-        $items[] = $it;
-    }
+    $error = json_decode($error, true);
+    $error['time'] = date('d/m/Y H:i:s P', strtotime($error['time']));
+    $items[] = $error;
 }
 
-$file_content = str_replace(['][', '-------------------'], [']<br/>[', '#############################'], $file_content);
-$file_content = nv_htmlspecialchars(nv_br2nl($file_content));
+$file_content = nv_htmlspecialchars($file_content);
 $xtpl = new XTemplate('errorlog.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
@@ -161,11 +124,7 @@ foreach ($items as $id => $item) {
             if ($key == 'backtrace') {
                 $b = '';
                 foreach ($value as $vl) {
-                    $r = [];
-                    foreach ($vl as $k => $v) {
-                        $r[] = $lang_module['backtrace_' . $k] . ': ' . $v;
-                    }
-                    $b .= '<li>' . implode('; ', $r) . '</li>';
+                    $b .= '<li>' . $vl . '</li>';
                 }
                 $value = '<ul>' . $b . '</ul>';
             }
