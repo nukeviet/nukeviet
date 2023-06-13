@@ -21,7 +21,7 @@
 
 <div class="panel panel-primary" id="error-content" style="<!-- BEGIN: plaintext_mode_hide -->display:none;<!-- END: plaintext_mode_hide -->">
     <div class="panel-heading"><i class="fa fa-bug" aria-hidden="true"></i> <strong class="error_file_name">{ERROR_FILE_NAME}</strong></div>
-    <pre class="mb-0" style="border-top-left-radius:0;border-top-right-radius:0"><code class="language-accesslog" style="padding: 0;background-color: transparent;white-space: pre">{ERROR_FILE_CONTENT}</code></pre>
+    <pre class="mb-0" style="border-top-left-radius:0;border-top-right-radius:0"><code class="language-json" style="padding: 0;background-color: transparent;white-space: pre">{ERROR_FILE_CONTENT}</code></pre>
 </div>
 <div class="panel-group" id="errorlist" role="tablist" aria-multiselectable="true" style="<!-- BEGIN: tabular_mode_hide -->display:none;<!-- END: tabular_mode_hide -->">
     {ERRORLIST}

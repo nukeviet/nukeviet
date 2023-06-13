@@ -213,42 +213,43 @@ class Error
     /**
      * _log_content()
      * 
-     * @param string $seperator 
      * @return string 
      */
-    private function _log_content($seperator = '')
+    private function _log_content()
     {
-        $errstr = strtr($this->errstr, [
-            "\r\n" => '<br/>',
-            "\r" => '<br/>',
-            "\n" => '<br/>'
-        ]);
+        $errstr = [];
+        if (stripos($this->errstr, 'stack trace') !== false) {
+            $errstr = explode("\n", $this->errstr);
+            $this->errstr = trim(array_shift($errstr));
+            array_shift($errstr);
+        }
 
         $content = [];
-        // $content[] = '[ID: ' . $this->errid . ']';
-        $content[] = '[TIME: ' . $this->cl['error_date'] . ']';
-        $content[] = '[SERVER: ' . $this->cl['server_name'] . ']';
-        $content[] = '[IP: ' . $this->cl['ip'] . ']';
-        $content[] = '[ERRNO: ' . $this->errno . ' (' . self::$errortype[$this->errno] . ')]';
-        $content[] = '[ERRSTR: ' . $errstr . ']';
+        $content['time'] = $this->cl['error_date'];
+        $content['server'] = $this->cl['server_name'];
+        $content['ip'] = $this->cl['ip'];
+        $content['errno'] = $this->errno . ' (' . self::$errortype[$this->errno] . ')';
+        $content['errstr'] = $this->errstr;
         if (!empty($this->errfile)) {
-            $content[] = '[FILE: ' . $this->errfile . ']';
+            $content['file'] = $this->errfile;
         }
         if (!empty($this->errline)) {
-            $content[] = '[LINE: ' . $this->errline . ']';
+            $content['line'] = $this->errline;
         }
         if (!empty($this->cl['request'])) {
-            $content[] = '[REQUEST: ' . $this->cl['request'] . ']';
+            $content['request'] = $this->cl['request'];
         }
         if (!empty($this->cl['method'])) {
-            $content[] = '[METHOD: ' . $this->cl['method'] . ']';
+            $content['method'] = $this->cl['method'];
         }
         if (!empty($this->cl['useragent'])) {
-            $agent = str_replace(['[', ']'], '', $this->cl['useragent']);
-            $content[] = '[AGENT: ' . $agent . ']';
+            $content['agent'] = $this->cl['useragent'];
+        }
+        if (!empty($errstr)) {
+            $content['backtrace'] = array_map('trim', $errstr);
         }
 
-        return implode($seperator, $content);
+        return $content;
     }
 
     /**
@@ -262,7 +263,7 @@ class Error
         $error_file = $this->cfg['error_log_256'] . '/' . $error_code . '.' . $this->cfg['error_log_fileext'];
 
         if ($this->cfg['error_set_logs'] and !file_exists($error_file)) {
-            $content = $this->_log_content("\n");
+            $content = json_encode($this->_log_content(),JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             file_put_contents($error_file, $content, FILE_APPEND);
         }
 
@@ -297,9 +298,7 @@ class Error
      */
     private function _log()
     {
-        $content = $this->_log_content();
-        $content .= "\n";
-
+        $trace = [];
         if (NV_DEBUG) {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             if (isset($backtrace[3])) {
@@ -308,16 +307,23 @@ class Error
                 for ($i = $trace_total - 1; $i >= 3; --$i) {
                     if (!empty($backtrace[$i]['file'])) {
                         ++$stt;
-                        $content .= '^^^ [TRACE#' . str_pad($stt, 2, '0', STR_PAD_LEFT) . ']';
-                        $content .= '[FILE: ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file'])) . ']';
+                        $_trace = '#' . $stt . ' ' . str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $backtrace[$i]['file']));
                         if (!empty($backtrace[$i]['line'])) {
-                            $content .= '[LINE: ' . $backtrace[$i]['line'] . ']';
+                            $_trace .= '(' . $backtrace[$i]['line'] . ')';
                         }
-                        $content .= "\n";
+                        $trace[] = $_trace;
                     }
                 }
             }
         }
+
+        $content = $this->_log_content();
+        if (!empty($trace)) {
+            $content['backtrace'] = $trace;
+        }
+
+        $content = json_encode($content,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $content .= "\n";
 
         $content .= self::LOG_DELIMITER . "\n";
         $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . ($this->errno == E_NOTICE ? $this->cfg['notice_log_filename'] : $this->cfg['error_log_filename']) . '.' . $this->cfg['error_log_fileext'];
@@ -329,8 +335,8 @@ class Error
      */
     private function _send()
     {
-        $content = $this->_log_content();
-        $content .= "\n";
+        $content = json_encode($this->_log_content(),JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $content .= self::LOG_DELIMITER . "\n";
         $error_log_file = $this->cfg['error_log_path'] . '/sendmail.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
     }
