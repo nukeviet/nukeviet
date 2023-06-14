@@ -392,11 +392,7 @@ class Sendmail extends PHPMailer
         $this->AltBody = strip_tags($this->Body);
 
         if ($this->mailhtml) {
-            if (function_exists('nv_mailHTML')) {
-                $this->Body = nv_mailHTML($this->Subject, $this->Body);
-            } else {
-                $this->Body = mailAddHtml($this->Subject, $this->Body);
-            }
+            $this->Body = mailAddHtml($this->Subject, $this->Body);
             $this->logo = true;
         }
 

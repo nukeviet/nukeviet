@@ -1238,8 +1238,7 @@ function nv_get_keywords($content, $keyword_limit = 20, $isArr = false)
 /**
  * mailAddHtml()
  * Thêm khung HTML vào nội dung mail
- * Function được áp dụng khi không có nv_mailHTML
- *
+ * 
  * @param string $subject
  * @param string $body
  * @return string
@@ -1250,7 +1249,7 @@ function mailAddHtml($subject, $body)
 
     $subject = nv_autoLinkDisable($subject);
 
-    $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
+    $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
     $xtpl->assign('GCONFIG', $global_config);
     $xtpl->assign('LANG', $lang_global);
