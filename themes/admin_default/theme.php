@@ -14,37 +14,6 @@ if (!defined('NV_MAINFILE')) {
 }
 
 /**
- * nv_mailHTML()
- *
- * @param string $title
- * @param string $content
- * @param string $footer
- * @return string
- */
-function nv_mailHTML($title, $content, $footer = '')
-{
-    global $global_config;
-
-    $title = nv_autoLinkDisable($title);
-
-    $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/themes/default/system');
-    $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
-    $xtpl->assign('GCONFIG', $global_config);
-    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('MESSAGE_TITLE', $title);
-    $xtpl->assign('MESSAGE_CONTENT', $content);
-    $xtpl->assign('MESSAGE_FOOTER', $footer);
-
-    if (!empty($global_config['phonenumber'])) {
-        $xtpl->parse('main.phonenumber');
-    }
-
-    $xtpl->parse('main');
-
-    return $xtpl->text('main');
-}
-
-/**
  * nv_get_submenu()
  *
  * @param string $mod
