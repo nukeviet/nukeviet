@@ -13,9 +13,6 @@ namespace NukeViet\Core;
 
 class Language
 {
-    private $loaded_files = [];
-    private $loaded_tmpfiles = [];
-
     static $lang_global = [];
     static $lang_module = [];
 
@@ -163,9 +160,8 @@ class Language
      */
     private function load($file, $loadtmp = false)
     {
-        if (!$loadtmp and !in_array($file, $this->loaded_files, true)) {
+        if (!$loadtmp) {
             if (file_exists($file)) {
-                $this->loaded_files[] = $file;
                 $lang_global = $lang_module = [];
                 require $file;
 
@@ -176,9 +172,8 @@ class Language
                     self::$lang_module = array_merge(self::$lang_module, $lang_module);
                 }
             }
-        } elseif ($loadtmp and !in_array($file, $this->loaded_tmpfiles, true)) {
+        } elseif ($loadtmp) {
             if (file_exists($file)) {
-                $this->loaded_tmpfiles[] = $file;
                 $lang_global = $lang_module = [];
                 require $file;
 
