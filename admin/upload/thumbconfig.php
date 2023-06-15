@@ -248,7 +248,7 @@ while ($data = $result->fetch()) {
 }
 
 for ($id = 1; $id < 6; ++$id) {
-    $type = ['id' => $id, 'name' => $nv_Lang->getModule('thumb_type_' . $id]);
+    $type = ['id' => $id, 'name' => $nv_Lang->getModule('thumb_type_' . $id)];
     $xtpl->assign('TYPE', $type);
     $xtpl->parse('main.other_type');
 }
