@@ -99,6 +99,7 @@ $lang_module['mail_force_reply'] = 'Forced reply';
 $lang_module['mail_force_reply_note'] = 'Use to force all reply information to be valid according to the configuration here instead of the information in each email sent';
 $lang_module['ftp_config'] = 'FTP Configuration';
 $lang_module['smtp_config'] = 'Send mail configuration';
+$lang_module['smtp_config_by_lang'] = 'Send mail configuration for language: %s';
 $lang_module['server'] = 'Server or Url';
 $lang_module['server_empty'] = 'Please declare Server or Url';
 $lang_module['port'] = 'Port';

@@ -43,7 +43,7 @@ function get_dkim_verified_list()
     return $dkim_verified_list;
 }
 
-$page_title = $lang_module['smtp_config'];
+$page_title = sprint_r($lang_module['smtp_config_by_lang'], $language_array[NV_LANG_DATA]['name']);
 $smtp_encrypted_array = ['None', 'SSL', 'TLS'];
 $errormess = '';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
@@ -601,7 +601,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $array_config['dkim_included'] = !empty($array_config['dkim_included']) ? implode(',', $array_config['dkim_included']) : '';
     $array_config['smime_included'] = !empty($array_config['smime_included']) ? implode(',', $array_config['smime_included']) : '';
 
-    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
+    $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);

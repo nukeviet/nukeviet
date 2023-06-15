@@ -222,6 +222,23 @@ function nv_create_table_sys($lang)
          ('" . $lang . "', 'global', 'antispam_warning', '0'),
          ('" . $lang . "', 'global', 'data_warning_content', ''),
          ('" . $lang . "', 'global', 'antispam_warning_content', ''),
+         ('" . $lang . "', 'global', 'mailer_mode', 'mail'),
+         ('" . $lang . "', 'global', 'smtp_host', 'smtp.gmail.com'),
+         ('" . $lang . "', 'global', 'smtp_port', '465'),
+         ('" . $lang . "', 'global', 'smtp_username', 'user@gmail.com'),
+         ('" . $lang . "', 'global', 'smtp_password', 'user@gmail.com'),
+         ('" . $lang . "', 'global', 'smtp_ssl', '1'),
+         ('" . $lang . "', 'global', 'verify_peer_ssl', '1'),
+         ('" . $lang . "', 'global', 'verify_peer_name_ssl', '1'),
+         ('" . $lang . "', 'global', 'sender_name', ''),
+         ('" . $lang . "', 'global', 'sender_email', ''),
+         ('" . $lang . "', 'global', 'reply_name', ''),
+         ('" . $lang . "', 'global', 'reply_email', ''),
+         ('" . $lang . "', 'global', 'force_sender', '0'),
+         ('" . $lang . "', 'global', 'force_reply', '0'),
+         ('" . $lang . "', 'global', 'notify_email_error', '0'),
+         ('" . $lang . "', 'global', 'dkim_included', 'sendmail,mail'),
+         ('" . $lang . "', 'global', 'smime_included', 'sendmail,mail'),
          ('" . $lang . "', 'seotools', 'prcservice', '')";
 
     $lang_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_setup_language')->fetchColumn() + 1;
