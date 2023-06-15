@@ -98,6 +98,7 @@ $lang_module['mail_force_reply'] = 'Cố định người nhận phản hồi';
 $lang_module['mail_force_reply_note'] = 'Dùng để ép tất cả thông tin người nhận phản hồi có giá trị theo cấu hình tại đây thay vì thông tin trong mỗi lần gửi';
 $lang_module['ftp_config'] = 'Cấu hình FTP';
 $lang_module['smtp_config'] = 'Cấu hình gửi mail';
+$lang_module['smtp_config_by_lang'] = 'Cấu hình gửi mail theo ngôn ngữ: %s';
 $lang_module['server'] = 'Máy chủ hoặc Url';
 $lang_module['server_empty'] = 'Vui lòng khai báo máy chủ hoặc Url';
 $lang_module['port'] = 'Port';
