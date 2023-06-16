@@ -400,22 +400,19 @@ if ($nv_Request->isset_request('save', 'post')) {
 
         if ($dataform['choicetypes'] == 'field_choicetypes_text') {
             if ($dataform['fid'] and $dataform['fieldid'] == 'gender') {
-                //$field_choice_value = [1 => 'N', 2 => 'M', 3 => 'F'];
-                //$field_choice_text = [1 => $global_array_genders['N']['title'], 2 => $global_array_genders['M']['title'], 3 => $global_array_genders['F']['title']];
                 $dataform['field_choices'] = serialize(['N' => $global_array_genders['N']['title'], 'M' => $global_array_genders['M']['title'], 'F' => $global_array_genders['F']['title']]);
             } else {
                 $old_field_choices = !empty($dataform_old['field_choices']) ? unserialize($dataform_old['field_choices']) : [];
-                $field_choice_value = $nv_Request->get_array('field_choice', 'post');
-                $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
+                $field_choice_value = $nv_Request->get_typed_array('field_choice', 'post', 'title', []);
+                $field_choice_text = $nv_Request->get_typed_array('field_choice_text', 'post', 'title', []);
                 if (!sizeof($field_choice_value)) {
                     $error = $nv_Lang->getModule('field_choices_empty');
                 } else {
                     $field_choices = [];
                     foreach ($field_choice_value as $k => $val) {
-                        $val = strip_punctuation($val);
-                        if (!empty($val)) {
+                        if (preg_match('/^[a-zA-Z0-9\_]+$/', $val)) {
                             $field_choices[$val] = (isset($old_field_choices[$val]) and is_array($old_field_choices[$val])) ? $old_field_choices[$val] : [];
-                            $field_choices[$val][NV_LANG_DATA] = strip_punctuation($field_choice_text[$k]);
+                            $field_choices[$val][NV_LANG_DATA] = trim(strip_tags($field_choice_text[$k]));
                         }
                     }
                     if (empty($field_choices)) {
