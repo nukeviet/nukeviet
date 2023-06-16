@@ -203,7 +203,6 @@ function nv_admin_write_lang($dirlang, $idfile)
     $result = $db->query('SELECT langtype, lang_key, lang_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE idfile=' . $idfile . ' ORDER BY langtype ASC, weight ASC');
     while (list($langtype_row, $lang_key, $lang_value) = $result->fetch(3)) {
         ++$numrows;
-        $lang_value = nv_unhtmlspecialchars($lang_value);
         $lang_value = str_replace("\'", "'", $lang_value);
         $lang_value = str_replace("'", "\'", $lang_value);
         if ($current_langtype != '' and $current_langtype != $langtype_row) {

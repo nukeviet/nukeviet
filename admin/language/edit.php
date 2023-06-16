@@ -164,7 +164,7 @@ $result = $db->query($sql);
 while (list($id, $lang_key, $lang_value) = $result->fetch(3)) {
     $xtpl->assign('ARRAY_DATA', [
         'lang_key' => $lang_key,
-        'value' => !empty($lang_value) ? str_replace(['&lt;', '&gt;', '<', '>', '"', "'"], ['&amp;lt;', '&amp;gt;', '&lt;', '&gt;', '&quot;', '&#039;'], $lang_value) : '',
+        'value' => !empty($lang_value) ? str_replace(['&lt;', '&gt;', '&quot;', '<', '>', '"', "'"], ['&amp;lt;', '&amp;gt;', '&amp;quot;', '&lt;', '&gt;', '&quot;', '&#039;'], $lang_value) : '',
         'id' => $id
     ]);
 

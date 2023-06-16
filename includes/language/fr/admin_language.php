@@ -58,7 +58,7 @@ $lang_module['nv_lang_sl'] = 'Sélection possible';
 $lang_module['nv_lang_error_exit'] = 'Pour vérifier la langue, au moins 2 langues doivent être stockées dans la base de données, dont au moins une langue de base est le vietnamien ou l\'anglais. <a href="%s">Cliquez ici</a> pour écrire les données de langue dans la base de données.';
 $lang_module['nv_lang_empty'] = 'No interface languages have been read into the database yet. <a href="%s">Click here</a> to read the language into the database.';
 $lang_module['nv_data_note'] = 'Pour télécharger la nouvelle langue, visitez le site Web <a title="Site NukeViet Language Translation 4">NukeViet 4 Language</ a>';
-$lang_module['nv_data_note2'] = 'Pour ajouter un nouveau langage de données, vous devez <a title="Activer la fonctionnalité multi-langues: Configuration -> Configuration générale" href="%s">activation multilingue</a>.';
+$lang_module['nv_data_note2'] = 'Pour ajouter un nouveau langage de données, vous devez <a title="Activer la fonctionnalité multi-langues: Configuration -&gt; Configuration générale" href="%s">activation multilingue</a>.';
 $lang_module['nv_setup'] = 'Déjà installé';
 $lang_module['nv_setup_new'] = 'Installer';
 $lang_module['nv_setup_delete'] = 'Supprimer les données';

@@ -59,7 +59,7 @@ $lang_module['nv_lang_sl'] = ' Có thể chọn';
 $lang_module['nv_lang_error_exit'] = 'Để kiểm tra ngôn ngữ, cần có ít nhất 2 ngôn ngữ được lưu vào CSDL, trong đó phải có ít nhất một ngôn ngữ cơ sở là tiếng Việt hoặc tiếng Anh. <a href="%s">Nhấp vào đây</a> để thực hiện đọc ngôn ngữ vào CSDL.';
 $lang_module['nv_lang_empty'] = 'Chưa có ngôn ngữ giao diện nào được đọc vào CSDL. <a href="%s">Nhấp vào đây</a> để thực hiện đọc ngôn ngữ vào CSDL.';
 $lang_module['nv_data_note'] = 'Để download ngôn ngữ mới truy cập website <a title="Site dịch Ngôn ngữ cho NukeViet 4" href="http://translate.nukeviet.vn" target="_blank">Ngôn ngữ cho NukeViet 4</a>';
-$lang_module['nv_data_note2'] = 'Để thêm mới ngôn ngữ dữ liệu, bạn cần <a title="Kích hoạt chức năng đa ngôn ngữ: Cấu hình -> Cấu hình chung " href="%s">kích hoạt chức năng đa ngôn ngữ</a>.';
+$lang_module['nv_data_note2'] = 'Để thêm mới ngôn ngữ dữ liệu, bạn cần <a title="Kích hoạt chức năng đa ngôn ngữ: Cấu hình -&gt; Cấu hình chung " href="%s">kích hoạt chức năng đa ngôn ngữ</a>.';
 $lang_module['nv_setup'] = 'Đã được cài đặt';
 $lang_module['nv_setup_new'] = 'Cài đặt mới';
 $lang_module['nv_setup_delete'] = 'Xóa ngôn ngữ data';
