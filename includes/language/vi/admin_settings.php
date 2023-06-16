@@ -386,6 +386,7 @@ $lang_module['DKIM_add_button'] = 'Thực hiện';
 $lang_module['DKIM_domain'] = 'Miền gửi thư';
 $lang_module['DKIM_domain_error'] = 'Lỗi: Miền gửi thư không đúng định dạng';
 $lang_module['DKIM_domain_exists'] = 'Miền gửi thư này đã có trên máy chủ';
+$lang_module['DKIM_created'] = 'Chữ ký số DKIM cho miền gửi thư %s đã được tạo. Bạn phải xác minh chữ ký DKIM này theo hướng dẫn trên trang tiếp theo.';
 $lang_module['DKIM_authentication'] = 'Chứng thực chữ ký số DKIM';
 $lang_module['dkim_included'] = 'Gửi kèm chữ ký số DKIM (nếu có) khi dùng phương thức';
 $lang_module['smime_included'] = 'Gửi kèm chứng chỉ S/MIME (nếu có) khi dùng phương thức';
