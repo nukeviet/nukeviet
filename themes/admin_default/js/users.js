@@ -408,7 +408,7 @@ function nv_choice_fields_additem(placeholder) {
     items++;
     var newitem = '<tr class="text-center">';
     newitem += '    <td>' + items + '</td>';
-    newitem += '    <td><input class="form-control w200 validalphanumeric" type="text" value="" name="field_choice[' + items + ']" placeholder="' + placeholder + '"></td>';
+    newitem += '    <td><input class="form-control w200 validalphanumeric alphanumeric" type="text" value="" name="field_choice[' + items + ']" placeholder="' + placeholder + '"></td>';
     newitem += '    <td><input class="form-control w300" type="text" value="" name="field_choice_text[' + items + ']"></td>';
     newitem += '    <td><input type="radio" value="' + items + '" name="default_value_choice"></td>';
     newitem += '    </tr>';
