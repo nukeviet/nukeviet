@@ -108,7 +108,7 @@ if ($global_config['allowuserlogin']) {
         $content = $xtpl->text('signed');
     } else {
         $xtpl->assign('LOAD_FORM_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login');
-        $xtpl->assign('NV_REDIRECT', nv_redirect_encrypt(empty($page_url) ? NV_MY_DOMAIN : urlRewriteWithDomain($page_url, NV_MY_DOMAIN)));
+        $xtpl->assign('NV_REDIRECT', nv_redirect_encrypt(empty($page_url) ? urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, NV_MY_DOMAIN) : urlRewriteWithDomain($page_url, NV_MY_DOMAIN)));
         $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $block_config['module'] . '_login'));
         $xtpl->parse('main');
         $content = $xtpl->text('main');
