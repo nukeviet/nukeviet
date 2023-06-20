@@ -20,6 +20,6 @@ if (preg_match('/^[a-zA-Z0-9]{8}$/', $file)) {
         $cts = file_get_contents(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
         $cts = json_decode($cts, true);
         @unlink(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $md5file);
-        @nv_sendmail($cts['from'], $cts['to'], $cts['subject'], $cts['message'], $cts['files'], $cts['AddEmbeddedImage'], $cts['testmode'], $cts['cc'], $cts['bcc'], $cts['mailhtml'], $cts['custom_headers']);
+        @nv_sendmail($cts['from'], $cts['to'], $cts['subject'], $cts['message'], $cts['files'], $cts['AddEmbeddedImage'], $cts['testmode'], $cts['cc'], $cts['bcc'], $cts['mailhtml'], $cts['custom_headers'], $cts['lang']);
     }
 }

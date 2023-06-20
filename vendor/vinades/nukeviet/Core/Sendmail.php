@@ -40,17 +40,20 @@ class Sendmail extends PHPMailer
 
     private $mailhtml = true;
 
+    private $maillang = 'en';
+
     /**
      * __construct()
      *
      * @param array  $config
-     * @param string $lang_interface
+     * @param string $mail_lang
      * @throws Exception
      */
-    public function __construct($config, $lang_interface)
+    public function __construct($config, $mail_lang)
     {
         parent::__construct();
-        $this->SetLanguage($lang_interface);
+        $this->maillang = $mail_lang;
+        $this->SetLanguage($mail_lang);
         $this->CharSet = $config['site_charset'];
         $this->configs = $config;
 
@@ -392,7 +395,7 @@ class Sendmail extends PHPMailer
         $this->AltBody = strip_tags($this->Body);
 
         if ($this->mailhtml) {
-            $this->Body = mailAddHtml($this->Subject, $this->Body);
+            $this->Body = mailAddHtml($this->Subject, $this->Body, $this->configs, $this->maillang);
             $this->logo = true;
         }
 

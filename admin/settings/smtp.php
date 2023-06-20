@@ -43,7 +43,7 @@ function get_dkim_verified_list()
     return $dkim_verified_list;
 }
 
-$page_title = sprint_r($lang_module['smtp_config_by_lang'], $language_array[NV_LANG_DATA]['name']);
+$page_title = sprintf($lang_module['smtp_config_by_lang'], $language_array[NV_LANG_DATA]['name']);
 $smtp_encrypted_array = ['None', 'SSL', 'TLS'];
 $errormess = '';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
@@ -490,10 +490,21 @@ if ($nv_Request->isset_request('smimedownload, email, passphrase', 'post')) {
 
 // Gửi thử email để kiểm tra
 if ($nv_Request->isset_request('submittest', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
+    if (NV_LANG_DATA != NV_LANG_INTERFACE) {
+        $lang_tmp = $lang_module;
+        $lang_module = [];
+        include(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php');
+        $mail_subject = $lang_module['smtp_test_subject'];
+        $mail_message = $lang_module['smtp_test_message'];
+        $lang_module = $lang_tmp;
+    } else {
+        $mail_subject = $lang_module['smtp_test_subject'];
+        $mail_message = $lang_module['smtp_test_message'];
+    }
     $check = nv_sendmail([
         $global_config['site_name'],
         $global_config['site_email']
-    ], $admin_info['email'], $lang_module['smtp_test_subject'], $lang_module['smtp_test_message'], '', false, true);
+    ], $admin_info['email'], $mail_subject, $mail_message, '', false, true);
     if (!empty($check)) {
         nv_htmlOutput($check);
     } else {
@@ -501,6 +512,16 @@ if ($nv_Request->isset_request('submittest', 'post') and $checkss == $nv_Request
     }
 }
 
+$mail_tpl_opt = ['' => NV_ASSETS_DIR . '/tpl/mail.tpl'];
+$themelist = nv_scandir(NV_ROOTDIR . '/themes', '/^[a-zA-Z0-9\_]+$/');
+foreach ($themelist as $theme) {
+    if (file_exists(NV_ROOTDIR . '/themes/' . $theme .'/system/mail.tpl')) {
+        $mail_tpl_opt['themes/' . $theme .'/system/mail.tpl'] = 'themes/' . $theme .'/system/mail.tpl';
+    }
+    if (file_exists(NV_ROOTDIR . '/themes/' . $theme .'/system/mail_' . NV_LANG_DATA . '.tpl')) {
+        $mail_tpl_opt['themes/' . $theme .'/system/mail_' . NV_LANG_DATA . '.tpl'] = 'themes/' . $theme .'/system/mail_' . NV_LANG_DATA . '.tpl';
+    }
+}
 $array_config = [];
 // Lưu cấu hình gửi mail
 if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
@@ -516,6 +537,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $array_config['force_sender'] = (int) ($nv_Request->get_bool('force_sender', 'post', false));
     $array_config['force_reply'] = (int) ($nv_Request->get_bool('force_reply', 'post', false));
     $array_config['notify_email_error'] = (int) ($nv_Request->get_bool('notify_email_error', 'post', false));
+    $array_config['mail_tpl'] = $nv_Request->get_title('mail_tpl', 'post', '');
     $array_config['dkim_included'] = $nv_Request->get_typed_array('dkim_included', 'post', 'title');
     $array_config['smime_included'] = $nv_Request->get_typed_array('smime_included', 'post', 'title');
 
@@ -601,6 +623,8 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
     $array_config['dkim_included'] = !empty($array_config['dkim_included']) ? implode(',', $array_config['dkim_included']) : '';
     $array_config['smime_included'] = !empty($array_config['smime_included']) ? implode(',', $array_config['smime_included']) : '';
 
+    !isset($mail_tpl_opt[$array_config['mail_tpl']]) && $array_config['mail_tpl'] = '';
+
     $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -629,6 +653,7 @@ $array_config['smtp_ssl'] = $global_config['smtp_ssl'];
 $array_config['verify_peer_ssl'] = $global_config['verify_peer_ssl'];
 $array_config['verify_peer_name_ssl'] = $global_config['verify_peer_name_ssl'];
 $array_config['notify_email_error'] = $global_config['notify_email_error'];
+$array_config['mail_tpl'] = !empty($global_config['mail_tpl']) ? $global_config['mail_tpl'] : '';
 $array_config['dkim_included'] = !empty($global_config['dkim_included']) ? explode(',', $global_config['dkim_included']) : [];
 $array_config['smime_included'] = !empty($global_config['smime_included']) ? explode(',', $global_config['smime_included']) : [];
 $array_config['smtp_ssl_checked'] = ($array_config['smtp_ssl'] == 1) ? ' checked="checked"' : '';
@@ -667,6 +692,15 @@ if (empty($global_config['idsite'])) {
     $xtpl->parse('smtp.mailhost');
     $xtpl->parse('smtp.mailhost2');
     $xtpl->parse('smtp.mailhost3');
+}
+
+foreach ($mail_tpl_opt as $key => $opt) {
+    $xtpl->assign('MAIL_TPL', [
+        'val' => $key,
+        'sel' => (!empty($key) and $key == $array_config['mail_tpl']) ? ' selected="selected"' : '',
+        'name' => $opt
+    ]);
+    $xtpl->parse('smtp.mail_tpl');
 }
 
 foreach ($smtp_encrypted_array as $id => $value) {

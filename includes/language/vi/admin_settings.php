@@ -594,3 +594,4 @@ $lang_module['antispam_law_warning'] = 'Hiển thị cảnh báo về luật ch�
 $lang_module['antispam_law_content'] = 'Nội dung cảnh báo về luật chống tin rác';
 $lang_module['antispam_law_placeholder'] = 'Ví dụ: Khi gửi dữ liệu, tôi xác nhận đã được cảnh báo về Luật chống tin rác';
 $lang_module['antispam_law_default'] = 'Khi gửi dữ liệu, tôi xác nhận đã được cảnh báo về Luật chống tin rác';
+$lang_module['mail_tpl'] = 'Tệp mẫu thư';

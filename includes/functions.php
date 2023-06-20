@@ -1241,22 +1241,35 @@ function nv_get_keywords($content, $keyword_limit = 20, $isArr = false)
  * 
  * @param string $subject
  * @param string $body
+ * @param array  $gconfigs
+ * @param string $lang
  * @return string
  */
-function mailAddHtml($subject, $body)
+function mailAddHtml($subject, $body, $gconfigs, $lang)
 {
-    global $global_config, $lang_global;
-
     $subject = nv_autoLinkDisable($subject);
 
-    $xtpl = new XTemplate('mail.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
+    if ($lang != NV_LANG_DATA) {
+        $lang_global = [];
+        include(NV_ROOTDIR . '/includes/language/' . $lang . '/global.php');
+        $maillang =  $lang_global;
+    } else {
+        $maillang =  \NukeViet\Core\Language::$lang_global;
+    }
+
+    $mail_tpl = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/mail.tpl';
+    if (!empty($gconfigs['mail_tpl']) and file_exists(NV_ROOTDIR . '/' . $gconfigs['mail_tpl'])) {
+        $mail_tpl = NV_ROOTDIR . '/' . $gconfigs['mail_tpl'];
+    }
+
+    $xtpl = new XTemplate($mail_tpl);
     $xtpl->assign('SITE_URL', NV_MY_DOMAIN);
-    $xtpl->assign('GCONFIG', $global_config);
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('GCONFIG', $gconfigs);
+    $xtpl->assign('LANG', $maillang);
     $xtpl->assign('MESSAGE_TITLE', $subject);
     $xtpl->assign('MESSAGE_CONTENT', $body);
 
-    if (!empty($global_config['phonenumber'])) {
+    if (!empty($gconfigs['phonenumber'])) {
         $xtpl->parse('main.phonenumber');
     }
 
@@ -1308,16 +1321,35 @@ function mailAddHtml($subject, $body)
  * $mailhtml:         Xác định có thêm khung HTML vào nội dung thư hay không, mặc định true
  *
  * $custom_headers:   Tiêu đề tùy chỉnh thêm vào phần header của mail (Dạng: Khóa => Giá trị)
+ * 
+ * $lang:             Ngôn ngữ gửi mail, nếu rỗng sẽ là NV_LANG_DATA
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true, $custom_headers = [])
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true, $custom_headers = [], $lang = '')
 {
-    global $global_config;
-
-    if ($global_config['mailer_mode'] == 'no') {
-        return $testmode ? 'Mailing service has been turned off' : false;
-    }
+    global $global_config, $db, $crypt;
 
     $sm_parameters = [];
+    $sm_parameters['language'] = (empty($lang) or !in_array($lang, $global_config['setup_langs'], true)) ? NV_LANG_DATA : $lang;
+
+    $gconfigs = $global_config;
+    if ($lang != NV_LANG_DATA) {
+        $result = $db->query('SELECT lang, module, config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $lang . "' AND module='global'");
+        while ($row = $result->fetch()) {
+            if ($row['config_name'] == 'smtp_password') {
+                $row['config_value'] = $crypt->decrypt($row['config_value']);
+            }
+            if ($row['config_name'] == 'site_logo') {
+                if (empty($row['config_value'])) {
+                    $row['config_value'] = NV_ASSETS_DIR . '/images/logo.png';
+                }
+            }
+            $gconfigs[$row['config_name']] = $row['config_value'];
+        }
+    }
+
+    if ($gconfigs['mailer_mode'] == 'no') {
+        return $testmode ? 'Mailing service has been turned off' : false;
+    }
 
     if (empty($to)) {
         return $testmode ? 'No receiver' : false;
@@ -1327,7 +1359,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     $sm_parameters['from_name'] = $sm_parameters['from_address'] = $sm_parameters['reply_name'] = $sm_parameters['reply_address'] = '';
     // Xác định thông tin người gửi, người nhận từ giá trị truyền vào
     if (empty($from)) {
-        // $sm_parameters['reply_address'] = $global_config['site_email'];
+        // $sm_parameters['reply_address'] = $gconfigs['site_email'];
     } elseif (is_array($from)) {
         $sm_parameters['from_address'] = !empty($from[3]) ? $from[3] : (!empty($from['from_address']) ? $from['from_address'] : $sm_parameters['from_address']);
         $sm_parameters['from_name'] = !empty($from[2]) ? $from[2] : (!empty($from['from_name']) ? $from['from_name'] : $sm_parameters['from_name']);
@@ -1371,12 +1403,12 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
     $sm_parameters['files'] = !empty($files) ? array_map('trim', explode(',', $files)) : [];
 
     // Nếu gửi mail bằng hình thức riêng
-    if (isset($global_config['other_sendmail_method']) and function_exists($global_config['other_sendmail_method'])) {
-        return _otherMethodSendmail($sm_parameters);
+    if (isset($gconfigs['other_sendmail_method']) and function_exists($gconfigs['other_sendmail_method'])) {
+        return _otherMethodSendmail($gconfigs, $sm_parameters);
     }
 
     try {
-        $mail = new NukeViet\Core\Sendmail($global_config, NV_LANG_INTERFACE);
+        $mail = new NukeViet\Core\Sendmail($gconfigs, $sm_parameters['language']);
         // Có thêm khung HTML vào nội dung mail hay không
         $mail->setMailHtml($mailhtml);
 
@@ -1443,11 +1475,11 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             }
         }
 
-        nv_apply_hook('', 'sendmail_others_actions', [$global_config, $mail]);
+        nv_apply_hook('', 'sendmail_others_actions', [$gconfigs, $mail]);
 
         // Gửi mail
         if (!$mail->Send()) {
-            if (!$testmode and !empty($global_config['notify_email_error'])) {
+            if (!$testmode and !empty($gconfigs['notify_email_error'])) {
                 nv_insert_notification('settings', 'sendmail_failure', [
                     $sm_parameters['subject'],
                     implode(', ', $sm_parameters['to'])
@@ -1469,28 +1501,29 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
 /**
  * _otherMethodSendmail()
  *
- * @param array $sm_parameters
+ * @param array $gconfigs
+ * @param mixed $sm_parameters
  * @return mixed
  */
-function _otherMethodSendmail($sm_parameters)
+function _otherMethodSendmail($gconfigs, $sm_parameters)
 {
-    global $global_config, $sys_info;
+    global $sys_info;
 
-    empty($sm_parameters['from_name']) && $sm_parameters['from_name'] = $global_config['site_name'];
-    empty($sm_parameters['reply_name']) && $sm_parameters['reply_name'] = $global_config['site_name'];
+    empty($sm_parameters['from_name']) && $sm_parameters['from_name'] = $gconfigs['site_name'];
+    empty($sm_parameters['reply_name']) && $sm_parameters['reply_name'] = $gconfigs['site_name'];
 
     // Cố định người gửi người nhận hoặc chỉ định khi không có giá trị truyền vào
-    if (!empty($global_config['sender_name']) and (empty($sm_parameters['from_name']) or $global_config['force_sender'])) {
-        $sm_parameters['from_name'] = $global_config['sender_name'];
+    if (!empty($gconfigs['sender_name']) and (empty($sm_parameters['from_name']) or $gconfigs['force_sender'])) {
+        $sm_parameters['from_name'] = $gconfigs['sender_name'];
     }
-    if (!empty($global_config['reply_name']) and (empty($sm_parameters['reply_name']) or $global_config['force_reply'])) {
-        $sm_parameters['reply_name'] = $global_config['reply_name'];
+    if (!empty($gconfigs['reply_name']) and (empty($sm_parameters['reply_name']) or $gconfigs['force_reply'])) {
+        $sm_parameters['reply_name'] = $gconfigs['reply_name'];
     }
-    if (!empty($global_config['reply_email']) and (empty($sm_parameters['reply_address']) or $global_config['force_reply'])) {
-        $sm_parameters['reply_address'] = $global_config['reply_email'];
+    if (!empty($gconfigs['reply_email']) and (empty($sm_parameters['reply_address']) or $gconfigs['force_reply'])) {
+        $sm_parameters['reply_address'] = $gconfigs['reply_email'];
     }
-    if (!empty($global_config['sender_email']) and $global_config['force_sender']) {
-        $sm_parameters['from_address'] = $global_config['sender_email'];
+    if (!empty($gconfigs['sender_email']) and $gconfigs['force_sender']) {
+        $sm_parameters['from_address'] = $gconfigs['sender_email'];
     }
 
     $sm_parameters['reply'] = [];
@@ -1508,11 +1541,7 @@ function _otherMethodSendmail($sm_parameters)
     }
 
     if ($sm_parameters['mailhtml']) {
-        if (function_exists('nv_mailHTML')) {
-            $sm_parameters['message'] = nv_mailHTML($sm_parameters['subject'], $sm_parameters['message']);
-        } else {
-            $sm_parameters['message'] = mailAddHtml($sm_parameters['subject'], $sm_parameters['message']);
-        }
+        $sm_parameters['message'] = mailAddHtml($sm_parameters['subject'], $sm_parameters['message'], $gconfigs, $sm_parameters['language']);
         $sm_parameters['logo_add'] = true;
     }
     $sm_parameters['message'] = nv_url_rewrite($sm_parameters['message']);
@@ -1520,7 +1549,7 @@ function _otherMethodSendmail($sm_parameters)
     $sm_parameters['message'] = $optimizer->process(false);
     $sm_parameters['message'] = nv_unhtmlspecialchars($sm_parameters['message']);
 
-    return call_user_func($global_config['other_sendmail_method'], $sm_parameters);
+    return call_user_func($gconfigs['other_sendmail_method'], $sm_parameters);
 }
 
 /**
@@ -1539,8 +1568,9 @@ function _otherMethodSendmail($sm_parameters)
  * @param array        $bcc
  * @param bool         $mailhtml
  * @param array        $custom_headers
+ * @param string       $lang
  */
-function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true, $custom_headers = [])
+function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true, $custom_headers = [], $lang = '')
 {
     global $global_config;
 
@@ -1555,7 +1585,8 @@ function nv_sendmail_async($from, $to, $subject, $message, $files = '', $AddEmbe
         'cc' => $cc,
         'bcc' => $bcc,
         'mailhtml' => $mailhtml,
-        'custom_headers' => $custom_headers
+        'custom_headers' => $custom_headers,
+        'lang' => $lang
     ], JSON_UNESCAPED_UNICODE);
 
     $file_name = nv_genpass(8);
