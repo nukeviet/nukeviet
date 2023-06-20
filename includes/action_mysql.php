@@ -239,6 +239,7 @@ function nv_create_table_sys($lang)
          ('" . $lang . "', 'global', 'notify_email_error', '0'),
          ('" . $lang . "', 'global', 'dkim_included', 'sendmail,mail'),
          ('" . $lang . "', 'global', 'smime_included', 'sendmail,mail'),
+         ('" . $lang . "', 'global', 'mail_tpl', ''),
          ('" . $lang . "', 'seotools', 'prcservice', '')";
 
     $lang_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_setup_language')->fetchColumn() + 1;

@@ -581,3 +581,4 @@ $lang_module['antispam_law_warning'] = 'Afficher l\'avertissement concernant les
 $lang_module['antispam_law_content'] = 'Contenu de l\'avertissement concernant la loi anti-spam';
 $lang_module['antispam_law_placeholder'] = 'Exemple: lors de la soumission de données, je confirme que j\'ai été averti de la loi anti-spam';
 $lang_module['antispam_law_default'] = 'Lors de la soumission de données, je confirme que j\'ai été averti de la loi anti-spam';
+$lang_module['mail_tpl'] = 'Fichier de modèle de courrier';

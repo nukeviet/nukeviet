@@ -76,6 +76,19 @@
 
                     <li class="list-group-item">
                         <div class="form-group mb-0">
+                            <label class="col-sm-11 control-label hidden-xs"><strong>{LANG.mail_tpl}</strong></label>
+                            <div class="col-sm-13">
+                                <select name="mail_tpl" class="form-control" style="width: fit-content;">
+                                    <!-- BEGIN: mail_tpl -->
+                                    <option value="{MAIL_TPL.val}"{MAIL_TPL.sel}>{MAIL_TPL.name}</option>
+                                    <!-- END: mail_tpl -->
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="form-group mb-0">
                             <label class="col-sm-11 control-label hidden-xs"><strong>{LANG.notify_email_error}</strong></label>
                             <div class="col-sm-13">
                                 <label class="checkbox-inline">
