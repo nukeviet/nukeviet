@@ -118,15 +118,9 @@ if ($nv_Request->isset_request('q', 'get')) {
 $contents = search_main_theme($is_search, $search, $array_mod);
 
 $page_title = $module_info['site_title'];
-
-if (!empty($search['key'])) {
-    $page_title .= NV_TITLEBAR_DEFIS . $search['key'];
-
-    if ($search['page'] > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $search['page'];
-    }
+if ($search['page'] > 1) {
+    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $search['page'];
 }
-
 $key_words = $description = 'no';
 
 include NV_ROOTDIR . '/includes/header.php';
