@@ -86,12 +86,37 @@ if ($nv_Request->isset_request('psr', 'post')) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Change password request', 'userid ' . $userid, $admin_info['userid']);
 
+            $maillang = '';
+            if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true) and $row['language'] != NV_LANG_INTERFACE) {
+                $maillang = $row['language'];
+            } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
+                $maillang = NV_LANG_DATA;
+            }
+
+            $gconfigs = [
+                'site_name' => $global_config['site_name'],
+                'site_email' => $global_config['site_email']
+            ];
+            if (!empty($maillang)) {
+                $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+                $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+                while ($row = $result->fetch()) {
+                    $gconfigs[$row['config_name']] = $row['config_value'];
+                }
+
+                $lang_tmp = $lang_module;
+                $lang_module = [];
+                include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+            }
+
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
-            $pass_reset_request = $type == 2 ? $lang_module['pass_reset_request2_info'] : $lang_module['pass_reset_request1_info'];
             $subject = $type == 1 ? $lang_module['pass_reset_request_subject1'] : $lang_module['pass_reset_request_subject2'];
             $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-            $message = $type == 1 ? sprintf($lang_module['pass_reset_request_info1'], $full_name, $global_config['site_name'], $_url) : sprintf($lang_module['pass_reset_request_info2'], $full_name, $global_config['site_name'], $_url);
-            @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
+            $message = $type == 1 ? sprintf($lang_module['pass_reset_request_info1'], $full_name, $gconfigs['site_name'], $_url) : sprintf($lang_module['pass_reset_request_info2'], $full_name, $gconfigs['site_name'], $_url);
+            if (!empty($maillang)) {
+                $lang_module = $lang_tmp;
+            }
+            @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row['email'], $subject, $message, '', false, false, [], [], true, [], $maillang);
         }
         exit($lang_module['pass_reset_request_sent']);
     }
@@ -414,16 +439,38 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     // Gửi mail thông báo
     if (!empty($_user['adduser_email'])) {
+        $maillang = '';
+        if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true) and $row['language'] != NV_LANG_INTERFACE) {
+            $maillang = $row['language'];
+        } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
+            $maillang = NV_LANG_DATA;
+        }
+
+        $gconfigs = [
+            'site_name' => $global_config['site_name'],
+            'site_email' => $global_config['site_email']
+        ];
+        if (!empty($maillang)) {
+            $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+            $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+            while ($row = $result->fetch()) {
+                $gconfigs[$row['config_name']] = $row['config_value'];
+            }
+
+            $lang_module = [];
+            include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+        }
+
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
         $pass_reset_request = $_user['pass_reset_request'] == 2 ? $lang_module['pass_reset_request2_info'] : ($_user['pass_reset_request'] == 1 ? $lang_module['pass_reset_request1_info'] : '');
         $subject = $lang_module['adduser_register1'];
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-        $message = sprintf($lang_module['adduser_register_info2'], $full_name, $global_config['site_name'], $_url, $_user['username']);
+        $message = sprintf($lang_module['adduser_register_info2'], $full_name, $gconfigs['site_name'], $_url, $_user['username']);
         if (!empty($_user['password1'])) {
             $message .= sprintf($lang_module['adduser_register_info3'], $_user['password1']);
         }
-        $message .= sprintf($lang_module['adduser_register_info4'], $pass_reset_request, $global_config['site_name']);
-        @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $_user['email'], $subject, $message);
+        $message .= sprintf($lang_module['adduser_register_info4'], $pass_reset_request, $gconfigs['site_name']);
+        @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $_user['email'], $subject, $message, '', false, false, [], [], true, [], $maillang);
     }
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid']);

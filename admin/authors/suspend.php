@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -105,40 +105,49 @@ if ($allow_change) {
                 }
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['suspend' . $new_suspend] . ' ', ' Username : ' . $row_user['username'], $admin_info['userid']);
                 if (!empty($sendmail)) {
-                    $title = sprintf($lang_module['suspend_sendmail_title'], $global_config['site_name']);
-                    $my_sig = (!empty($admin_info['sig'])) ? $admin_info['sig'] : 'All the best';
-                    $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $global_config['site_email'];
+                    $maillang = '';
+                    if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true) and $row_user['language'] != NV_LANG_INTERFACE) {
+                        $maillang = $row_user['language'];
+                    } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
+                        $maillang = NV_LANG_DATA;
+                    }
+
+                    $gconfigs = [
+                        'site_name' => $global_config['site_name'],
+                        'site_email' => $global_config['site_email']
+                    ];
+                    if (!empty($maillang)) {
+                        $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+                        $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+                        while ($row = $result->fetch()) {
+                            $gconfigs[$row['config_name']] = $row['config_value'];
+                        }
+
+                        $lang_tmp = $lang_module;
+                        $lang_module = [];
+                        include NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php';
+                    }
+
+                    $title = sprintf($lang_module['suspend_sendmail_title'], $gconfigs['site_name']);
+                    $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $gconfigs['site_email'];
 
                     if ($new_suspend) {
-                        $message = sprintf($lang_module['suspend_sendmail_mess1'], $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $new_reason, $my_mail);
+                        $message = sprintf($lang_module['suspend_sendmail_mess1'], $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $new_reason, $my_mail);
                     } else {
-                        $message = sprintf($lang_module['suspend_sendmail_mess0'], $global_config['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $last_reason['info']);
+                        $message = sprintf($lang_module['suspend_sendmail_mess0'], $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $last_reason['info']);
                     }
 
                     $message = trim($message);
+                    $message = nv_nl2br($message, '<br />');
+                    $message .= '<br/><br/>' . (!empty($admin_info['sig']) ? $admin_info['sig'] : 'All the best');
+                    $message .= '<br/><br/>' . $admin_info['username'] . '<br/>' . $admin_info['position'] . '<br/>' . $my_mail;
 
-                    $mess = $message;
-                    $mess = nv_nl2br($mess, '<br />');
+                    $send = nv_sendmail([$admin_info['username'], $my_mail], $row_user['email'], $title, $message, '', false, false, [], [], true, [], $maillang);
 
-                    $xtpl = new XTemplate('message.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system');
-                    $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
-                    $xtpl->assign('SITE_NAME', $global_config['site_name']);
-                    $xtpl->assign('SITE_SLOGAN', $global_config['site_description']);
-                    $xtpl->assign('SITE_EMAIL', $global_config['site_email']);
-                    $xtpl->assign('SITE_FONE', $global_config['site_phone']);
-                    $xtpl->assign('SITE_URL', $global_config['site_url']);
-                    $xtpl->assign('TITLE', $title);
-                    $xtpl->assign('CONTENT', $mess);
-                    $xtpl->assign('AUTHOR_SIG', $my_sig);
-                    $xtpl->assign('AUTHOR_NAME', $admin_info['username']);
-                    $xtpl->assign('AUTHOR_POS', $admin_info['position']);
-                    $xtpl->assign('AUTHOR_EMAIL', $my_mail);
-                    $xtpl->parse('main');
+                    if (!empty($maillang)) {
+                        $lang_module = $lang_tmp;
+                    }
 
-                    $content = $xtpl->text('main');
-                    $from = [$admin_info['username'], $my_mail];
-                    $to = $row_user['email'];
-                    $send = nv_sendmail($from, $to, $title, $content);
                     if (!$send) {
                         $page_title = $lang_global['error_info_caption'];
                         $contents = $lang_global['error_sendmail_admin'] . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';

@@ -29,13 +29,13 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
             continue;
         }
 
-        $sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
+        $sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite, language FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
         $row = $db->query($sql)->fetch(3);
         if (empty($row)) {
             continue;
         }
 
-        list($group_id, $username, $first_name, $last_name, $email, $photo, $in_groups, $idsite) = $row;
+        list($group_id, $username, $first_name, $last_name, $email, $photo, $in_groups, $idsite, $userlang) = $row;
 
         if ($global_config['idsite'] > 0 and $idsite != $global_config['idsite']) {
             continue;
@@ -100,10 +100,35 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
             }
 
             if (sizeof($userids) < 5) {
+                $maillang = '';
+                if (!empty($userlang) and in_array($userlang, $global_config['setup_langs'], true) and $userlang != NV_LANG_INTERFACE) {
+                    $maillang = $userlang;
+                } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
+                    $maillang = NV_LANG_DATA;
+                }
+
+                $gconfigs = [
+                    'site_name' => $global_config['site_name'],
+                    'site_email' => $global_config['site_email']
+                ];
+                if (!empty($maillang)) {
+                    $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+                    $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+                    while ($row = $result->fetch()) {
+                        $gconfigs[$row['config_name']] = $row['config_value'];
+                    }
+
+                    $lang_tmp = $lang_module;
+                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+                }
+
                 $subject = $lang_module['delconfirm_email_title'];
-                $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name']);
+                $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $gconfigs['site_name']);
                 $message = nl2br($message);
-                nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
+                if (!empty($maillang)) {
+                    $lang_module = $lang_tmp;
+                }
+                nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $email, $subject, $message, '', false, false, [], [], true, [], $maillang);
             }
         }
     }
