@@ -46,7 +46,7 @@ if (($action == 'del_action' or $action == 'del_mail_action') and $nv_Request->i
             }
 
             $lang_module = [];
-            include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+            include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
         }
         $message = sprintf($lang_module['report_sendmail_content'], $global_config['site_name']);
         nv_sendmail_async('', $report_rows['post_email'], $lang_module['report_sendmail_title'], $message, '', false, false, [], [], true, [], $maillang);

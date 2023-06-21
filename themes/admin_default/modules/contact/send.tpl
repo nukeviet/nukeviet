@@ -11,6 +11,18 @@
                         </tr>
                     </tfoot>
                     <tbody>
+                        <!-- BEGIN: mail_lang -->
+                        <tr>
+                            <td class="text-nowrap" style="width:1%">{LANG.mail_language}</td>
+                            <td>
+                                <select name="mail_lang" class="form-control" style="width:fit-content">
+                                    <!-- BEGIN: loop -->
+                                    <option value="{MAIL_LANG.key}"{MAIL_LANG.sel}>{MAIL_LANG.name}</option>
+                                    <!-- END: loop -->
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- END: mail_lang -->
                         <tr>
                             <td class="text-nowrap" style="width:1%">{LANG.title_send_title}</td>
                             <td>

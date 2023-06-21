@@ -59,7 +59,7 @@ if ($nv_Request->isset_request('ajax', 'post')) {
 
                 $lang_tmp = $lang_module;
                 $lang_module = [];
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
             }
 
             while ($row = $result->fetch()) {

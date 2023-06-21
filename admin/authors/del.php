@@ -146,8 +146,10 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
 
         if ($sendmail) {
             $maillang = '';
-            if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true) and $row_user['language'] != NV_LANG_INTERFACE) {
-                $maillang = $row_user['language'];
+            if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true)) {
+                if ($row_user['language'] != NV_LANG_INTERFACE) {
+                    $maillang = $row_user['language'];
+                }
             } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
                 $maillang = NV_LANG_DATA;
             }

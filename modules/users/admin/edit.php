@@ -87,8 +87,10 @@ if ($nv_Request->isset_request('psr', 'post')) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Change password request', 'userid ' . $userid, $admin_info['userid']);
 
             $maillang = '';
-            if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true) and $row['language'] != NV_LANG_INTERFACE) {
-                $maillang = $row['language'];
+            if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true)) {
+                if ($row['language'] != NV_LANG_INTERFACE) {
+                    $maillang = $row['language'];
+                }
             } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
                 $maillang = NV_LANG_DATA;
             }
@@ -106,7 +108,7 @@ if ($nv_Request->isset_request('psr', 'post')) {
 
                 $lang_tmp = $lang_module;
                 $lang_module = [];
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
             }
 
             $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
@@ -440,8 +442,10 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     // Gửi mail thông báo
     if (!empty($_user['adduser_email'])) {
         $maillang = '';
-        if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true) and $row['language'] != NV_LANG_INTERFACE) {
-            $maillang = $row['language'];
+        if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true)) {
+            if ($row['language'] != NV_LANG_INTERFACE) {
+                $maillang = $row['language'];
+            }
         } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
             $maillang = NV_LANG_DATA;
         }
@@ -458,7 +462,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             }
 
             $lang_module = [];
-            include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+            include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
         }
 
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);

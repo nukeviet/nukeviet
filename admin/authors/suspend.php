@@ -106,8 +106,10 @@ if ($allow_change) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['suspend' . $new_suspend] . ' ', ' Username : ' . $row_user['username'], $admin_info['userid']);
                 if (!empty($sendmail)) {
                     $maillang = '';
-                    if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true) and $row_user['language'] != NV_LANG_INTERFACE) {
-                        $maillang = $row_user['language'];
+                    if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true)) {
+                        if ($row_user['language'] != NV_LANG_INTERFACE) {
+                            $maillang = $row_user['language'];
+                        }
                     } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
                         $maillang = NV_LANG_DATA;
                     }

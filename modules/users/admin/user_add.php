@@ -358,7 +358,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
             $lang_tmp = $lang_module;
             $lang_module = [];
-            include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+            include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
         }
 
         $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);

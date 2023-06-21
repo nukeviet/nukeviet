@@ -101,8 +101,10 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
 
             if (sizeof($userids) < 5) {
                 $maillang = '';
-                if (!empty($userlang) and in_array($userlang, $global_config['setup_langs'], true) and $userlang != NV_LANG_INTERFACE) {
-                    $maillang = $userlang;
+                if (!empty($userlang) and in_array($userlang, $global_config['setup_langs'], true)) {
+                    if ($userlang != NV_LANG_INTERFACE) {
+                        $maillang = $userlang;
+                    }
                 } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
                     $maillang = NV_LANG_DATA;
                 }
@@ -119,7 +121,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
                     }
 
                     $lang_tmp = $lang_module;
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
                 }
 
                 $subject = $lang_module['delconfirm_email_title'];

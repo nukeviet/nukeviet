@@ -451,7 +451,7 @@ if ($nv_Request->isset_request('userid', 'get')) {
 
             $lang_tmp = $lang_module;
             $lang_module = [];
-            include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php';
+            include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
         }
 
         $full_name = nv_show_name_user($post['first_name'], $post['last_name'], $post['username']);
