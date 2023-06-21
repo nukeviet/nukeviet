@@ -433,26 +433,48 @@ if ($nv_Request->isset_request('userid', 'get')) {
         nv_delete_notification(NV_LANG_DATA, $module_name, 'send_active_link_fail', $userid);
         nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('active_users'), 'userid: ' . $user_id . ' - username: ' . $post['username'], $admin_info['userid']);
 
-        $full_name = nv_show_name_user($post['first_name'], $post['last_name'], $post['username']);
-        $subject = $nv_Lang->getModule('adduser_register');
+        $maillang = '';
+        if (NV_LANG_DATA != NV_LANG_INTERFACE) {
+            $maillang = NV_LANG_DATA;
+        }
 
+        $full_name = nv_show_name_user($post['first_name'], $post['last_name'], $post['username']);
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
+        $gconfigs = [
+            'site_name' => $global_config['site_name'],
+            'site_email' => $global_config['site_email']
+        ];
+        if (!empty($maillang)) {
+            $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+            $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+            while ($row = $result->fetch()) {
+                $gconfigs[$row['config_name']] = $row['config_value'];
+            }
+
+            $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+        }
+
+        $pass_reset_request = $_user['pass_reset_request'] == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : ($_user['pass_reset_request'] == 1 ? $nv_Lang->getModule('pass_reset_request1_info') : '');
         if (!empty($userdata['openid_info'])) {
             if (!empty($password)) {
-                $message = $nv_Lang->getModule('adduser_register_openid_info_with_password', $full_name, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']), $post['username'], $password);
+                $mail_message = $nv_Lang->getModule('adduser_register_openid_info_with_password', $full_name, $gconfigs['site_name'], $_url, ucfirst($reg_attribs['server']), $post['username'], $password);
             } else {
-                $message = $nv_Lang->getModule('adduser_register_openid_info', $full_name, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+                $mail_message = $nv_Lang->getModule('adduser_register_openid_info', $full_name, $gconfigs['site_name'], $_url, ucfirst($reg_attribs['server']));
             }
         } else {
             if (!empty($password)) {
-                $message = $nv_Lang->getModule('adduser_register_info_with_password', $full_name, $global_config['site_name'], $_url, $post['username'], $password);
+                $mail_message = $nv_Lang->getModule('adduser_register_info_with_password', $full_name, $gconfigs['site_name'], $_url, $post['username'], $password);
             } else {
-                $message = $nv_Lang->getModule('admin_adduser_register_info', $full_name, $global_config['site_name'], $_url, $post['username']);
+                $mail_message = $nv_Lang->getModule('admin_adduser_register_info', $full_name, $gconfigs['site_name'], $_url, $post['username']);
             }
         }
 
-        if (!nv_apply_hook($module_name, 'admin_active_account', [$user_id, $post, $userdata, $subject, $message], false)) {
-            @nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $post['email'], $subject, $message);
+        if (!empty($maillang)) {
+            $nv_Lang->changeLang();
+        }
+
+        if (!nv_apply_hook($module_name, 'admin_active_account', [$user_id, $post, $userdata, $mail_subject, $mail_message], false)) {
+            @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $post['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
         }
         nv_jsonOutput([
             'status' => 'OK',

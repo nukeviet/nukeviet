@@ -64,6 +64,10 @@ if ($nv_Request->isset_request('save', 'post')) {
 
     $a = 0;
     $s = false;
+    $maillang = '';
+    if (NV_LANG_DATA != NV_LANG_INTERFACE) {
+        $maillang = NV_LANG_DATA;
+    }
     foreach ($post['email'] as $part => $emails) {
         if ($s) {
             sleep(2);
@@ -71,7 +75,7 @@ if ($nv_Request->isset_request('save', 'post')) {
         nv_sendmail_async([
             $admin_info['full_name'],
             $admin_info['email']
-        ], $emails, $post['title'], $post['mess_content']);
+        ], $emails, $post['title'], $post['mess_content'], '', false, false, [], [], true, [], $maillang);
         $s = true;
         ++$a;
         if ($a == 3) {

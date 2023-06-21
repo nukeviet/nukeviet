@@ -39,6 +39,24 @@ if ($nv_Request->isset_request('ajax', 'post')) {
         $result = $db->query($sql);
         $numrows = $result->rowCount();
         if ($numrows) {
+            $maillang = '';
+            if (NV_LANG_DATA != NV_LANG_INTERFACE) {
+                $maillang = NV_LANG_DATA;
+            }
+            $gconfigs = [
+                'site_name' => $global_config['site_name'],
+                'site_email' => $global_config['site_email']
+            ];
+            if (!empty($maillang)) {
+                $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+                $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+                while ($row = $result->fetch()) {
+                    $gconfigs[$row['config_name']] = $row['config_value'];
+                }
+
+                $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+            }
+
             while ($row = $result->fetch()) {
                 // Kiểm tra xem email đã tồn tại chưa nếu có xóa đi
                 if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email=' . $db->quote($row['email']))->fetchColumn()) {
@@ -50,10 +68,10 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                     $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
                     $_full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
 
-                    $subject = $nv_Lang->getModule('account_active');
+                    $mail_subject = $nv_Lang->getModule('account_active');
                     $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $row['checknum'], NV_MY_DOMAIN);
-                    $message = $nv_Lang->getModule('account_active_info', $_full_name, $global_config['site_name'], $_url, $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
-                    $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $subject, $message);
+                    $mail_message = $nv_Lang->getModule('account_active_info', $_full_name, $gconfigs['site_name'], $_url, $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                    $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
 
                     if ($checkSend) {
                         /*
@@ -65,6 +83,10 @@ if ($nv_Request->isset_request('ajax', 'post')) {
 
                     $respon['messages'][] = $row['email'] . ': ' . ($checkSend ? $nv_Lang->getModule('userwait_resend_ok') : $nv_Lang->getModule('userwait_resend_error'));
                 }
+            }
+
+            if (!empty($maillang)) {
+                $nv_Lang->changeLang();
             }
         }
 

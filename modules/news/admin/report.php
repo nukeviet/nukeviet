@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -30,8 +30,32 @@ if (($action == 'del_action' or $action == 'del_mail_action') and $nv_Request->i
     $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE id=' . $rid);
     nv_delete_notification(NV_LANG_DATA, $module_name, 'report', $rid);
     if ($action == 'del_mail_action' and !empty($report_rows['post_email'])) {
-        $message = $nv_Lang->getModule('report_sendmail_content', $global_config['site_name']);
-        nv_sendmail_async('', $report_rows['post_email'], $nv_Lang->getModule('report_sendmail_title'), $message);
+        $maillang = '';
+        if (NV_LANG_DATA != NV_LANG_INTERFACE) {
+            $maillang = NV_LANG_DATA;
+        }
+        $gconfigs = [
+            'site_name' => $global_config['site_name'],
+            'site_email' => $global_config['site_email']
+        ];
+        if (!empty($maillang)) {
+            $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+            $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+            while ($row = $result->fetch()) {
+                $gconfigs[$row['config_name']] = $row['config_value'];
+            }
+
+            $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+
+            $mail_subject = $nv_Lang->getModule('report_sendmail_title');
+            $mail_message = $nv_Lang->getModule('report_sendmail_content', $gconfigs['site_name']);
+
+            $nv_Lang->changeLang();
+        } else {
+            $mail_subject = $nv_Lang->getModule('report_sendmail_title');
+            $mail_message = $nv_Lang->getModule('report_sendmail_content', $gconfigs['site_name']);
+        }
+        nv_sendmail_async('', $report_rows['post_email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
     }
     nv_htmlOutput('OK');
 }

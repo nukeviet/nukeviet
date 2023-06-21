@@ -50,6 +50,10 @@ if (!empty($contact_allowed['reply'])) {
             'References' => md5('contact' . $id . $global_config['sitekey'])
         ];
 
+        $maillang = '';
+        if (NV_LANG_DATA != NV_LANG_INTERFACE) {
+            $maillang = NV_LANG_DATA;
+        }
         if ($is_reply) {
             $emaillist = [];
             $from = [];
@@ -97,7 +101,7 @@ if (!empty($contact_allowed['reply'])) {
                 }
             }
 
-            nv_sendmail_async($from, $row['sender_email'], 'Re:' . $row['title'], $mess_content, '', false, false, $cc, [], true, $custom_header);
+            nv_sendmail_async($from, $row['sender_email'], 'Re:' . $row['title'], $mess_content, '', false, false, $cc, [], true, $custom_header, $maillang);
             $mode = 1;
             $recipient = $row['sender_email'];
             $acc = implode(',', $acc);
@@ -118,7 +122,19 @@ if (!empty($contact_allowed['reply'])) {
                 return nv_check_valid_email($_email) == '';
             });
 
-            nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $_arr_mail, 'Fwd:' . $row['title'], $mess_content, '', false, false, [], [], true, $custom_header);
+            $gconfigs = [
+                'site_name' => $global_config['site_name'],
+                'site_email' => $global_config['site_email']
+            ];
+            if (!empty($maillang)) {
+                $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
+                $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
+                while ($row = $result->fetch()) {
+                    $gconfigs[$row['config_name']] = $row['config_value'];
+                }
+            }
+
+            nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $_arr_mail, 'Fwd:' . $row['title'], $mess_content, '', false, false, [], [], true, $custom_header, $maillang);
             $mode = 2;
             $recipient = $forward_to;
             $acc = '';
