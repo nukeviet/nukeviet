@@ -185,3 +185,4 @@ $lang_module['option_0'] = 'Non';
 $lang_module['option_1'] = 'Requis';
 $lang_module['option_2'] = 'Facultatif';
 $lang_module['department_parent'] = 'Appartenant au département';
+$lang_module['mail_language'] = 'Langue du courrier';

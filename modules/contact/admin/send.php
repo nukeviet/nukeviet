@@ -19,6 +19,7 @@ if (defined('NV_EDITOR')) {
 
 if ($nv_Request->isset_request('save', 'post')) {
     $post = [
+        'mail_lang' => $nv_Request->get_title('mail_lang', 'post', ''),
         'title' => $nv_Request->get_title('title', 'post', ''),
         'email' => $nv_Request->get_title('email', 'post', ''),
         'mess_content' => $nv_Request->get_editor('mess_content', '', NV_ALLOWED_HTML_TAGS)
@@ -65,9 +66,14 @@ if ($nv_Request->isset_request('save', 'post')) {
     $a = 0;
     $s = false;
     $maillang = '';
-    if (NV_LANG_DATA != NV_LANG_INTERFACE) {
+    if (!empty($post['mail_lang']) and in_array($post['mail_lang'], $global_config['setup_langs'], true)) {
+        if ($post['mail_lang'] != NV_LANG_INTERFACE) {
+            $maillang = $post['mail_lang'];
+        }
+    } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
         $maillang = NV_LANG_DATA;
     }
+
     foreach ($post['email'] as $part => $emails) {
         if ($s) {
             sleep(2);
@@ -105,6 +111,18 @@ $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('MESS_CONTENT', $mess_content);
+
+if (sizeof($global_config['setup_langs']) > 1) {
+    foreach ($global_config['setup_langs'] as $langkey) {
+        $xtpl->assign('MAIL_LANG', [
+            'key' => $langkey,
+            'sel' => $langkey == NV_LANG_DATA ? ' selected="selected"' : '',
+            'name' => $language_array[$langkey]['name']
+        ]);
+        $xtpl->parse('main.mail_lang.loop');
+    }
+    $xtpl->parse('main.mail_lang');
+}
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

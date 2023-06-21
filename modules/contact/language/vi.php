@@ -185,3 +185,4 @@ $lang_module['option_0'] = 'Không';
 $lang_module['option_1'] = 'Bắt buộc';
 $lang_module['option_2'] = 'Không bắt buộc';
 $lang_module['department_parent'] = 'Thuộc bộ phận';
+$lang_module['mail_language'] = 'Ngôn ngữ của thư';

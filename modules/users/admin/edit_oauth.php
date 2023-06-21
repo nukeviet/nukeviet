@@ -91,8 +91,10 @@ if (empty($array_oauth)) {
             // Gửi email thông báo
             if (!empty($global_users_config['admin_email'])) {
                 $maillang = '';
-                if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true) and $row['language'] != NV_LANG_INTERFACE) {
-                    $maillang = $row['language'];
+                if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true)) {
+                    if ($row['language'] != NV_LANG_INTERFACE) {
+                        $maillang = $row['language'];
+                    }
                 } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
                     $maillang = NV_LANG_DATA;
                 }
@@ -146,8 +148,10 @@ if (empty($array_oauth)) {
             // Gửi email thông báo
             if (!empty($global_users_config['admin_email'])) {
                 $maillang = '';
-                if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true) and $row['language'] != NV_LANG_INTERFACE) {
-                    $maillang = $row['language'];
+                if (!empty($row['language']) and in_array($row['language'], $global_config['setup_langs'], true)) {
+                    if ($row['language'] != NV_LANG_INTERFACE) {
+                        $maillang = $row['language'];
+                    }
                 } elseif (NV_LANG_DATA != NV_LANG_INTERFACE) {
                     $maillang = NV_LANG_DATA;
                 }
