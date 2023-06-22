@@ -25,7 +25,7 @@ if (isset($array_op[1])) {
     }
 }
 
-$stmt = $db_slave->prepare('SELECT tid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
+$stmt = $db_slave->prepare('SELECT tid, numnews, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias');
 $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
 $stmt->execute();
 $row = $stmt->fetch(3);
