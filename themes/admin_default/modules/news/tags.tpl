@@ -52,7 +52,7 @@
                 </tr>
                 <tr>
                     <td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-                    <td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input id="select-img-tag" type="button" value="Browse server" name="selectimg" class="btn btn-info"/></td>
+                    <td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input id="select-img-tag" type="button" value="Browse server" name="selectimg" class="btn btn-default"/></td>
                 </tr>
             </tbody>
         </table>
@@ -67,7 +67,7 @@
             <caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.add_multiple_tags}</caption>
             <tfoot>
                 <tr>
-                    <td class="text-center" colspan="2"><input class="btn btn-primary" name="submit2" type="submit" value="{LANG.save}" /></td>
+                    <td class="text-center" colspan="2"><input class="btn btn-info" name="submit2" type="submit" value="{GLANG.submit}" /></td>
                 </tr>
             </tfoot>
             <tbody>

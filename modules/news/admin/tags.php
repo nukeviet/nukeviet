@@ -140,12 +140,14 @@ if (!empty($savetag)) {
     $title = $nv_Request->get_textarea('mtitle', '', NV_ALLOWED_HTML_TAGS, true);
     $list_tag = explode('<br />', strip_tags($title, '<br>'));
     foreach ($list_tag as $tag_i) {
-        $sth = $db->prepare('INSERT IGNORE INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, keywords) VALUES (0, :title, :alias, :keywords)');
-        $sth->bindParam(':title', $tag_i, PDO::PARAM_STR);
-        $sth->bindParam(':alias', change_alias_tags($tag_i), PDO::PARAM_STR);
-        $sth->bindParam(':keywords', $tag_i, PDO::PARAM_STR);
-        $sth->execute();
-        nv_insert_logs(NV_LANG_DATA, $module_name, 'add_multil_tags', change_alias_tags($tag_i), $admin_info['userid']);
+        if (!empty($tag_i)) {
+            $sth = $db->prepare('INSERT IGNORE INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags (numnews, title, alias, keywords) VALUES (0, :title, :alias, :keywords)');
+            $sth->bindParam(':title', $tag_i, PDO::PARAM_STR);
+            $sth->bindParam(':alias', change_alias_tags($tag_i), PDO::PARAM_STR);
+            $sth->bindParam(':keywords', $tag_i, PDO::PARAM_STR);
+            $sth->execute();
+            nv_insert_logs(NV_LANG_DATA, $module_name, 'add_multil_tags', change_alias_tags($tag_i), $admin_info['userid']);
+        }
     }
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . ($incomplete ? '&incomplete=1' : ''));
 }
@@ -239,7 +241,7 @@ if (!empty($error)) {
     $xtpl->parse('main.error');
 }
 
-if (empty($rowcontent['alias'])) {
+if (empty($alias)) {
     $xtpl->parse('main.getalias');
 }
 
