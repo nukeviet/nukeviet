@@ -248,8 +248,13 @@ function login_validForm(a) {
             } else if (d.status == "2steprequire") {
                 $(".form-detail", a).hide(), $("#other_form").hide();
                 $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
-            } else {
+            } else if (d.status == "2step") {
+                $(a).removeAttr('data-captcha data-recaptcha2 data-recaptcha3');
                 $("input,button", a).prop("disabled", !1);
+                $('[data-toggle=validReset]', a).on('click', function(e) {
+                    e.preventDefault();
+                    location.reload()
+                });
                 $('.loginstep1, .loginstep2, .loginCaptcha', a).toggleClass('hidden');
             }
         }
@@ -584,8 +589,8 @@ $(function() {
 
     $('body').on('click', '[data-toggle=safe_deactivate_show][data-hide-obj][data-show-obj]', function(e) {
         e.preventDefault();
-        $($(this).data('hide-obj')).hide(0);
-        $($(this).data('show-obj')).fadeIn()
+        $($(this).data('show-obj')).hide(0);
+        $($(this).data('hide-obj')).fadeIn()
     });
 
     $('[data-toggle=addfilebtn]').on('click', function() {
