@@ -806,27 +806,31 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
+    $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
+    $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
 
-    unset($nv_seccode);
-    // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
-    if ($module_captcha == 'recaptcha') {
-        $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
-    }
-    // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
-    elseif ($module_captcha == 'captcha') {
-        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
-    }
+    if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER') or (empty($nv_totppin) and empty($nv_backupcodepin))) {
+        unset($nv_seccode);
+        // Xác định giá trị của captcha nhập vào nếu sử dụng reCaptcha
+        if ($module_captcha == 'recaptcha') {
+            $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        }
+        // Xác định giá trị của captcha nhập vào nếu sử dụng captcha hình
+        elseif ($module_captcha == 'captcha') {
+            $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        }
 
-    $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
-    // Kiểm tra tính hợp lệ của captcha nhập vào
-    $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
+        $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
+        // Kiểm tra tính hợp lệ của captcha nhập vào
+        $check_seccode = ($gfx_chk and isset($nv_seccode)) ? nv_capcha_txt($nv_seccode, $module_captcha) : true;
 
-    if (!$check_seccode) {
-        signin_result([
-            'status' => 'error',
-            'input' => '',
-            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
-        ]);
+        if (!$check_seccode) {
+            signin_result([
+                'status' => 'error',
+                'input' => '',
+                'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
+            ]);
+        }
     }
 
     if (empty($nv_username)) {
@@ -900,10 +904,15 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     }
 
     // Nếu cần đăng nhập 2 bước
-    if (!empty($row['active2step'])) {
-        $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
-        $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
-
+    if (empty($row['active2step'])) {
+        if ((!empty($nv_totppin) or !empty($nv_backupcodepin))) {
+            signin_result([
+                'status' => 'error',
+                'input' => '',
+                'mess' => 'Stop!!!'
+            ]);
+        }
+    } else {
         // Nếu cả mã từ app và mã dự phòng không được xác định
         if (empty($nv_totppin) and empty($nv_backupcodepin)) {
             $nv_Request->set_Session('users_dismiss_captcha', md5($nv_username));

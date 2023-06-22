@@ -296,15 +296,15 @@ function btnClickSubmit(event, form) {
     if (XSSsanitize) {
         formXSSsanitize(form)
     }
-    if ($(form).data('recaptcha3')) {
+    if ($(form).attr('data-recaptcha3')) {
         reCaptchaExecute(form, function() {
             $(form).submit()
         })
-    } else if ($(form).data('recaptcha2')) {
+    } else if ($(form).attr('data-recaptcha2')) {
         reCaptcha2Execute(form, function() {
             $(form).submit()
         })
-    } else if ($(form).data('captcha')) {
+    } else if ($(form).attr('data-captcha')) {
         captchaExecute(form, function() {
             $(form).submit()
         })
