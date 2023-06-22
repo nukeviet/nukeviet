@@ -522,13 +522,6 @@ if (!empty($admin_cookie)) {
 }
 
 // Dinh chi hoat dong cua site
-if (!defined('NV_IS_ADMIN')) {
-    $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', NV_LANG_DATA);
-    if (!in_array($site_lang, $global_config['allow_sitelangs'], true)) {
-        // Đình chỉ nếu ngôn ngữ chưa được kích hoạt ngoài site cho người dùng
-        $global_config['closed_site'] = 1;
-    }
-}
 if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     // Trong quá trình nâng cấp, đình chỉ nếu không là admin tối cao
     if (!defined('NV_ADMIN') and !defined('NV_IS_GODADMIN')) {
@@ -537,8 +530,10 @@ if ($nv_check_update and !defined('NV_IS_UPDATE')) {
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
     if (!empty($global_config['closed_site']) or ($global_config['idsite'] > 0 and !empty($global_config['closed_subsite']))) {
         nv_disable_site();
-    } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'], true)) {
-        nv_redirect_location(NV_BASE_SITEURL);
+    }
+    if (!in_array($nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', NV_LANG_DATA), $global_config['allow_sitelangs'], true) or !in_array(NV_LANG_DATA, $global_config['allow_sitelangs'], true)) {
+        // Chuyển hướng nếu ngôn ngữ chưa được kích hoạt ngoài site cho người dùng
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $global_config['site_lang']);
     }
 }
 unset($nv_check_update);
