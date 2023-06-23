@@ -534,7 +534,7 @@ function user_openid_login($attribs, $op_process)
     $xtpl->assign('PAGETITLE', $page_title);
 
     $op_process_count = count($op_process);
-
+    $first = array_key_first($op_process);
     if ($op_process_count > 1) {
         foreach ($op_process as $process => $val) {
             $xtpl->assign('ACTION', [
@@ -544,12 +544,16 @@ function user_openid_login($attribs, $op_process)
             $xtpl->parse('main.choose_action.option');
         }
         $xtpl->parse('main.choose_action');
+
+        $info = $lang_module['openid_note'];
+    } else {
+        $info = $lang_module['openid_' . $first . '_note'];
+    }
+    if (empty($reg_email) and str_contains($global_config['openid_processing'], 'auto') and !in_array('auto', $op_process, true) and !empty($global_config['allowuserreg'])) {
+        $info = $lang_module['openid_without_email_note'] . ' ' . $info;
     }
 
-    $first = array_keys($op_process);
-    $first = array_shift($first);
-    $info = $op_process_count > 1 ? $lang_module['openid_note'] : $lang_module['openid_' . $first . '_note'];
-    $xtpl->assign('INFO', $info);
+    $xtpl->assign('INFO', $info . ':');
 
     $xtpl->assign('REDIRECT', $nv_redirect);
 
