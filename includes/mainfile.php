@@ -32,7 +32,12 @@ require NV_ROOTDIR . '/includes/constants.php';
 if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php')) {
     require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 }
-require NV_ROOTDIR . '/vendor/autoload.php';
+
+// Vendor autoload
+require NV_ROOTDIR . '/includes/vendor/autoload.php';
+if (file_exists(NV_ROOTDIR . '/vendor/autoload.php')) {
+    require NV_ROOTDIR . '/vendor/autoload.php';
+}
 
 // Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
