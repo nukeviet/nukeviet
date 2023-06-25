@@ -24,34 +24,34 @@
 
 composer.lock
 #vendor test ignore 
-/vendor/**/demo/
-/vendor/**/example/
-/vendor/**/examples/
-/vendor/**/test/
-/vendor/**/tests/
-/vendor/**/Tests/
-/vendor/**/travis*
-/vendor/**/.travis.yml
-/vendor/**/.scrutinizer.yml
-/vendor/**/phpunit.xml*
-/vendor/**/phpunit.php
+/includes/vendor/**/demo/
+/includes/vendor/**/example/
+/includes/vendor/**/examples/
+/includes/vendor/**/test/
+/includes/vendor/**/tests/
+/includes/vendor/**/Tests/
+/includes/vendor/**/travis*
+/includes/vendor/**/.travis.yml
+/includes/vendor/**/.scrutinizer.yml
+/includes/vendor/**/phpunit.xml*
+/includes/vendor/**/phpunit.php
 
 #vendor docs ignore
-/vendor/**/doc/
-/vendor/**/docs/
-/vendor/**/readme*
-/vendor/**/README*
-/vendor/**/changelog*
-/vendor/**/CHANGELOG*
-/vendor/**/FAQ*
-/vendor/**/CONTRIBUTING*
-/vendor/**/HISTORY*
-/vendor/**/UPGRADING*
-/vendor/**/UPGRADE*
-/vendor/**/package*
-/vendor/**/phpunit.php
-/vendor/**/.gitignore
-/vendor/**/composer.*
+/includes/vendor/**/doc/
+/includes/vendor/**/docs/
+/includes/vendor/**/readme*
+/includes/vendor/**/README*
+/includes/vendor/**/changelog*
+/includes/vendor/**/CHANGELOG*
+/includes/vendor/**/FAQ*
+/includes/vendor/**/CONTRIBUTING*
+/includes/vendor/**/HISTORY*
+/includes/vendor/**/UPGRADING*
+/includes/vendor/**/UPGRADE*
+/includes/vendor/**/package*
+/includes/vendor/**/phpunit.php
+/includes/vendor/**/.gitignore
+/includes/vendor/**/composer.*
 
 # Ignore some uploads, assets dir
 /assets/download

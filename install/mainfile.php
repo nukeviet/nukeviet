@@ -41,7 +41,10 @@ define('NV_FILES_DIR', NV_ASSETS_DIR);
 define('NV_MOBILE_FILES_DIR', NV_ASSETS_DIR . '/mobile');
 
 // Vendor autoload
-require NV_ROOTDIR . '/vendor/autoload.php';
+require NV_ROOTDIR . '/includes/vendor/autoload.php';
+if (file_exists(NV_ROOTDIR . '/vendor/autoload.php')) {
+    require NV_ROOTDIR . '/vendor/autoload.php';
+}
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 $nv_Server = new NukeViet\Core\Server();
