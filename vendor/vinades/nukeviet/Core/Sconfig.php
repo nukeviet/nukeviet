@@ -299,7 +299,6 @@ class Sconfig
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.xml\$ /index.php?language=\$1&nv=SitemapIndex last;\n";
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.([a-zA-Z0-9\-]+)\.xml\$ /index.php?language=\$1&nv=\$2&op=sitemap last;\n";
         $config_contents .= $t . $t . "rewrite ^/sitemap\-([a-z]+)\.([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-]+)\.xml\$ /index.php?language=\$1&nv=\$2&op=sitemap/\$3 last;\n";
-        $config_contents .= $t . $t . "rewrite ^/(.*)\.rewrite\$ /sload.php?rewritesupport=nginx last;\n";
         $config_contents .= $t . $t . "if (!-e \$request_filename) {\n";
         $config_contents .= $t . $t . $t . 'rewrite ^/(.*)(' . $this->rewrite_exts . ")\$ /index.php;\n";
         $config_contents .= $t . $t . "}\n";
@@ -612,11 +611,6 @@ class Sconfig
         $rewrite_rule .= '</rule>';
 
         $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
-        $rewrite_rule .= "<match url=\"^(.*?)check\.rewrite$\" ignoreCase=\"false\" />";
-        $rewrite_rule .= '<action type="Rewrite" url="sload.php?rewritesupport=iis" appendQueryString="false" />';
-        $rewrite_rule .= '</rule>';
-
-        $rewrite_rule .= '<rule name="nv_rule_' . ++$rulename . '">';
         $rewrite_rule .= '<match url="(.*)(' . $this->rewrite_exts . ')$" ignoreCase="false" />';
         $rewrite_rule .= '<conditions logicalGrouping="MatchAll">';
         $rewrite_rule .= '<add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true" />';
@@ -673,9 +667,6 @@ class Sconfig
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap [L]\n";
         $rewrite_rule .= "  RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . '=$2&' . NV_NAME_VARIABLE . '=$3&' . NV_OP_VARIABLE . "=sitemap/$4 [L]\n";
-        $rewrite_rule .= "\n";
-
-        $rewrite_rule .= "  RewriteRule ^(.*?)check\.rewrite$ sload.php?rewritesupport=apache [L]\n";
         $rewrite_rule .= "\n";
 
         // Rewrite for other module's rule

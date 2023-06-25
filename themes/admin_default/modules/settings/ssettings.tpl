@@ -28,14 +28,6 @@
                 </li>
                 <!-- END: sconfig_file -->
             </ul>
-            <!-- BEGIN: tools -->
-            <div class="list-group" style="border-top:0">
-                <a class="list-group-item" style="border-top:0" href="#" data-toggle="server_config_by_settings" data-url="{FORM_ACTION}"><em class="fa fa-arrow-circle-right"></em>&nbsp;{LANG.server_configuration_by_settings}</a>
-                <!-- BEGIN: change_configs --><a class="list-group-item" href="#" data-toggle="change_configs_to_default" data-url="{FORM_ACTION}"><em class="fa fa-arrow-circle-right"></em>&nbsp;{LANG.change_configs_to_default}</a><!-- END: change_configs -->
-                <!-- BEGIN: change_rewrite --><a class="list-group-item" href="#" data-toggle="change_rewrite_to_default" data-url="{FORM_ACTION}"><em class="fa fa-arrow-circle-right"></em>&nbsp;{LANG.change_rewrite_to_default}</a><!-- END: change_rewrite -->
-                <!-- BEGIN: change_all --><a class="list-group-item" href="#" data-toggle="change_all_to_default" data-url="{FORM_ACTION}"><em class="fa fa-arrow-circle-right"></em>&nbsp;{LANG.change_all_to_default} ({LANG.change_all_to_default_note})</a><!-- END: change_all -->
-            </div>
-            <!-- END: tools -->
         </div>
     </div>
     <div class="panel panel-primary">
@@ -448,12 +440,46 @@
             </form>
         </div>
     </div>
+    <div class="panel panel-primary">
+        <a class="panel-heading collapsed" role="tab" id="sample_tab-heading" style="display: block;text-decoration:none" data-toggle="collapse" data-parent="#ssettings" href="#sample_tab" aria-expanded="false" aria-controls="sample_tab">
+            <i class="fa fa-file"></i> <strong>{LANG.sample_tab}</strong>
+        </a>
+        <div id="sample_tab" class="panel-collapse collapse" role="tabpanel" aria-labelledby="sample_tab-heading">
+            <div class="alert alert-warning" style="margin-bottom:0;border-radius:0">{LANG.server_configuration_by_settings_note}</div>
+            <form action="{FORM_ACTION}" method="post" class="form-horizontal" id="sample-form">
+                <div class="panel-body text-center">
+                    <div class="form-inline mb">
+                        <div class="form-group">
+                            <label for="rewrite_supporter">{LANG.rewrite_support}</label>
+                            <select name="rewrite_supporter" id="rewrite_supporter" class="form-control" style="width: fit-content;">
+                                <option value="rewrite_mode_apache" data-highlight-lang="language-apache">rewrite_mode_apache</option>
+                                <option value="rewrite_mode_iis" data-highlight-lang="language-xml">rewrite_mode_iis</option>
+                                <option value="nginx" data-highlight-lang="language-nginx">nginx</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" name="getSconfigBySettings" value="1" />
+                    <button type="submit" class="btn btn-primary">{LANG.server_configuration_by_settings}</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-<!-- BEGIN: rewrite_support -->
 <link rel="stylesheet" href="{ASSETS_STATIC_URL}/js/highlightjs/default.min.css">
 <script src="{ASSETS_STATIC_URL}/js/highlightjs/highlight.min.js"></script>
-<script src="{ASSETS_STATIC_URL}/js/highlightjs/lang/{HIGHLIGHT_LANG}.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/highlightjs/lang/apache.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/highlightjs/lang/xml.min.js"></script>
+<script src="{ASSETS_STATIC_URL}/js/highlightjs/lang/nginx.min.js"></script>
+<div class="modal fade" tabindex="-1" role="dialog" id="sDefaultModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <pre><code style="white-space: pre;padding: 0;background-color: transparent;"></code></pre>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" tabindex="-1" role="dialog" id="sConfigModal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -463,34 +489,4 @@
         </div>
     </div>
 </div>
-<div class="modal fade" tabindex="-1" role="dialog" id="sDefaultModal">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title"><strong>{LANG.server_configuration_by_settings_note}</strong></h3>
-            </div>
-            <div class="modal-body">
-                <pre><code class="language-{HIGHLIGHT_LANG}" style="white-space: pre;padding: 0;background-color: transparent;"></code></pre>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" tabindex="-1" role="dialog" id="sChangeModal">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title"><strong>{LANG.change_confirm}:</strong></h3>
-            </div>
-            <div class="modal-body">
-                <pre><code class="language-{HIGHLIGHT_LANG}" style="white-space: pre;padding: 0;background-color: transparent;"></code></pre>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary confirm" data-toggle="confirm_change" data-url="{FORM_ACTION}" data-change-type="">{LANG.confirm_change}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END: rewrite_support -->
 <!-- END: main -->

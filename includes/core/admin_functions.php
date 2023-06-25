@@ -399,13 +399,7 @@ function nv_check_rewrite_file()
 
         $htaccess = @file_get_contents(NV_ROOTDIR . '/.htaccess');
 
-        if (preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/is', $htaccess)) {
-            return true;
-        }
-
-        $_check_rewrite = @file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'check.rewrite');
-
-        return !empty($_check_rewrite) and $_check_rewrite == 'rewrite_mode_apache';
+        return preg_match('/\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end/is', $htaccess);
     }
 
     if ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
@@ -415,13 +409,7 @@ function nv_check_rewrite_file()
 
         $web_config = @file_get_contents(NV_ROOTDIR . '/web.config');
 
-        if (preg_match('/\<\!\-\-\s*nukeviet\_rewrite\_start\s*\-\-\>(.*)\<\!\-\-\s*nukeviet\_rewrite\_end\s*\-\-\>/is', $web_config)) {
-            return true;
-        }
-
-        $_check_rewrite = @file_get_contents(NV_MY_DOMAIN . NV_BASE_SITEURL . 'check.rewrite');
-
-        return !empty($_check_rewrite) and $_check_rewrite == 'rewrite_mode_iis';
+        return preg_match('/\<\!\-\-\s*nukeviet\_rewrite\_start\s*\-\-\>(.*)\<\!\-\-\s*nukeviet\_rewrite\_end\s*\-\-\>/is', $web_config);
     }
 
     return (bool) $global_config['check_rewrite_file'];

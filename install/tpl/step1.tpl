@@ -35,7 +35,7 @@
     $("#next_step").hide();
     var supports_rewrite = '';
     $.ajax({
-        url : '{BASE_SITEURL}check.rewrite',
+        url : '{BASE_SITEURL}install/check.rewrite',
         type : 'GET',
         success : function(theResponse) {
             if (theResponse == "rewrite_mode_apache" || theResponse == "rewrite_mode_iis" || theResponse == "nginx") {
