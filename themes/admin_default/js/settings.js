@@ -170,86 +170,25 @@ $(document).ready(function() {
             }
         })
     });
-    $('[data-toggle=server_config_by_settings]').on('click', function(e) {
+    $('#sample-form').on('submit', function(e) {
         e.preventDefault();
-        var url = $(this).data('url');
+        var url = $(this).data('url'),
+            data = $(this).serialize(),
+            rewrite_supporter = $('[name=rewrite_supporter]', this).val(),
+            lang = $('option[value=' + rewrite_supporter + ']', this).data('highlight-lang');
         $.ajax({
             type: 'POST',
             cache: !1,
             url: url,
-            data: 'getSconfigBySettings=1',
+            data: data,
             dataType: "html",
             success: function(b) {
-                $('#sDefaultModal .modal-body>pre>code').text(b);
+                $('#sDefaultModal .modal-body>pre>code').removeAttr('class').addClass(lang).text(b);
                 $('#sDefaultModal').modal('show')
             }
         })
     });
-    $('[data-toggle=change_configs_to_default]').on('click', function(e) {
-        e.preventDefault();
-        var url = $(this).data('url');
-        $.ajax({
-            type: 'POST',
-            cache: !1,
-            url: url,
-            data: 'changeConfigs=1',
-            dataType: "html",
-            success: function(b) {
-                $('#sChangeModal .modal-body>pre>code').text(b);
-                $('#sChangeModal .confirm').attr('data-change-type', 'changeConfigs');
-                $('#sChangeModal').modal('show')
-            }
-        })
-    });
-    $('[data-toggle=change_rewrite_to_default]').on('click', function(e) {
-        e.preventDefault();
-        var url = $(this).data('url');
-        $.ajax({
-            type: 'POST',
-            cache: !1,
-            url: url,
-            data: 'changeRewrite=1',
-            dataType: "html",
-            success: function(b) {
-                $('#sChangeModal .modal-body>pre>code').text(b);
-                $('#sChangeModal .confirm').attr('data-change-type', 'changeRewrite');
-                $('#sChangeModal').modal('show')
-            }
-        })
-    });
-    $('[data-toggle=change_all_to_default]').on('click', function(e) {
-        e.preventDefault();
-        var url = $(this).data('url');
-        $.ajax({
-            type: 'POST',
-            cache: !1,
-            url: url,
-            data: 'changeAll=1',
-            dataType: "html",
-            success: function(b) {
-                $('#sChangeModal .modal-body>pre>code').text(b);
-                $('#sChangeModal .confirm').attr('data-change-type', 'changeAll');
-                $('#sChangeModal').modal('show')
-            }
-        })
-    });
-    $('[data-toggle=confirm_change]').on('click', function(e) {
-        e.preventDefault();
-        var url = $(this).data('url'),
-            type = $(this).data('change-type');
-        $.ajax({
-            type: 'POST',
-            cache: !1,
-            url: url,
-            data: type + '=1&confirm=1',
-            dataType: "html",
-            success: function(b) {
-                alert(b);
-                window.location.href = url
-            }
-        })
-    });
-    $('#sConfigModal, #sDefaultModal, #sChangeModal').on('show.bs.modal', function(e) {
+    $('#sConfigModal, #sDefaultModal').on('show.bs.modal', function(e) {
         hljs.debugMode();
         hljs.highlightAll();
     });

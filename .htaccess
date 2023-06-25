@@ -152,8 +152,6 @@ ErrorDocument 504 /error.php?code=504
   RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
   RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
 
-  RewriteRule ^(.*?)check\.rewrite$ sload.php?rewritesupport=apache [L]
-
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule (.*)(/|\.html)$ index.php [L]

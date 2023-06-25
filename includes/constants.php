@@ -129,6 +129,10 @@ define('NV_FILEHEAD', "/**\n * NukeViet Content Management System\n * @version 4
 // Vui long khong thay doi gia tri nay
 define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');
 
+// Phương pháp hỗ trợ rewrite do người dùng khai báo,
+// Nó sẽ được gán cho biến $sys_info['supports_rewrite'] nếu hệ thông không thể tự xác định
+define('NV_MY_REWRITE_SUPPORTER', '');
+
 //Browser Names
 define('BROWSER_OPERA', 'Opera');
 define('BROWSER_OPERAMINI', 'Opera Mini');

@@ -269,98 +269,16 @@ if ($nv_Request->isset_request('getSconfigContents', 'post')) {
 
 // Lay noi dung cau hinh mac dinh theo thiet lap
 if ($nv_Request->isset_request('getSconfigBySettings', 'post')) {
+    $supporter = $nv_Request->get_title('rewrite_supporter', 'post', 'rewrite_mode_apache');
     $Sconfig = new NukeViet\Core\Sconfig($global_config);
 
     $contents = '';
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
+    if ($supporter == 'rewrite_mode_apache') {
         $contents .= $Sconfig->setApacheContents();
-    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
+    } elseif ($supporter == 'rewrite_mode_iis') {
         $contents .= $Sconfig->setIisContents();
-    } elseif ($sys_info['supports_rewrite'] == 'nginx') {
+    } elseif ($supporter == 'nginx') {
         $contents .= $Sconfig->setNginxContents();
-    }
-
-    nv_htmlOutput($contents);
-}
-
-// Chuyen phan cau hinh chung ve mac dinh theo thiet lap
-if ($nv_Request->isset_request('changeConfigs', 'post')) {
-    $confirm = (bool) $nv_Request->get_int('confirm', 'post', 0);
-
-    $contents = '';
-    if ($confirm) {
-        if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-            $save_config = nv_server_config_change();
-            $contents = $save_config[0] !== true ? $nv_Lang->getModule('changes_not_saved') : $nv_Lang->getModule('changes_saved');
-        }
-    } else {
-        $Sconfig = new NukeViet\Core\Sconfig($global_config);
-        if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-            $contents = $Sconfig->setApacheConfigs();
-        }
-    }
-    nv_htmlOutput($contents);
-}
-
-// Chuyen phan Rewrite ve mac dinh theo thiet lap
-if ($nv_Request->isset_request('changeRewrite', 'post')) {
-    $confirm = (bool) $nv_Request->get_int('confirm', 'post', 0);
-
-    $contents = '';
-    if ($confirm) {
-        if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache' or $sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
-            $save = nv_rewrite_change();
-            $contents = $save[0] !== true ? $nv_Lang->getModule('changes_not_saved') : $nv_Lang->getModule('changes_saved');
-        }
-    } else {
-        $Sconfig = new NukeViet\Core\Sconfig($global_config);
-        if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-            $contents = $Sconfig->setApacheRewrite();
-        } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
-            $cts = $Sconfig->setIisRewrite();
-
-            $doc = new \DOMDocument();
-            $doc->preserveWhiteSpace = false;
-            $doc->loadXML('<configuration><system.webServer><rewrite><rules/></rewrite></system.webServer></configuration>');
-
-            $xpath = new \DOMXPath($doc);
-            $xmlnodes = $xpath->query('/configuration/system.webServer/rewrite/rules');
-            $rules_node = $xmlnodes->item(0);
-            $config_fragment = $doc->createDocumentFragment();
-            $config_fragment->appendXML($cts);
-            $rules_node->appendChild($config_fragment);
-            $doc->formatOutput = true;
-            $cts = $doc->saveXML();
-            unset($matches);
-            preg_match("/[\s]*\<\!\-\-\s*NUKEVIET\_REWRITE\_START\s*\-\-\>(.*)\<\!\-\-\s*NUKEVIET\_REWRITE\_END\s*\-\-\>/si", $cts, $matches);
-            $contents = $matches[0];
-        }
-    }
-    nv_htmlOutput($contents);
-}
-
-// Chuyen tat ca ve mac dinh theo thiet lap
-if ($nv_Request->isset_request('changeAll', 'post')) {
-    $confirm = (bool) $nv_Request->get_int('confirm', 'post', 0);
-
-    $Sconfig = new NukeViet\Core\Sconfig($global_config);
-
-    $contents = '';
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-        $contents = $Sconfig->setApacheContents();
-    } elseif ($sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
-        $contents = $Sconfig->setIisContents();
-    }
-
-    if ($confirm) {
-        if (!empty($contents)) {
-            $md5_old_file = md5_file(NV_ROOTDIR . '/' . $sconfig_file);
-            $contents = (file_put_contents(NV_ROOTDIR . '/' . $sconfig_file, $contents, LOCK_EX) !== false) ? $nv_Lang->getModule('changes_saved') : $nv_Lang->getModule('changes_not_saved');
-            $md5_new_file = md5_file(NV_ROOTDIR . '/' . $sconfig_file);
-            if (strcmp($md5_new_file, $md5_old_file) !== 0) {
-                nv_insert_notification($module_name, 'server_config_file_changed', ['file' => $sconfig_file], 0, 0, 0, 1, 1);
-            }
-        }
     }
 
     nv_htmlOutput($contents);
@@ -429,15 +347,9 @@ if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss, $csrf))
 
     $posts = json_encode($posts,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-    $old_md5_file = md5_file($server_config_file);
     file_put_contents($server_config_file, $posts, LOCK_EX);
-    $new_md5_file = md5_file($server_config_file);
-    if (strcmp($new_md5_file, $old_md5_file) !== 0) {
-        nv_server_config_change();
-    }
     nv_jsonOutput([
-        'status' => 'OK',
-        'refresh' => true
+        'status' => 'OK'
     ]);
 }
 
@@ -481,18 +393,6 @@ if (!empty($sys_info['supports_rewrite'])) {
     if (!empty($info['sconfig_file'])) {
         $xtpl->parse('main.sconfig_file');
     }
-
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache') {
-        $xtpl->parse('main.tools.change_configs');
-    }
-
-    if ($sys_info['supports_rewrite'] == 'rewrite_mode_apache' or $sys_info['supports_rewrite'] == 'rewrite_mode_iis') {
-        $xtpl->parse('main.tools.change_rewrite');
-        $xtpl->parse('main.tools.change_all');
-    }
-
-    $xtpl->parse('main.tools');
-    $xtpl->parse('main.rewrite_support');
 }
 
 if ($sys_info['supports_rewrite'] != 'rewrite_mode_iis') {
