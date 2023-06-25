@@ -803,7 +803,7 @@ class Sconfig
         }
 
         if (!empty($this->server_configs['referrer_policy'])) {
-            $customHeaders .= '<add name="Referrer-Policy" value="' . $this->server_configs['Referrer-Policy'] . '" />';
+            $customHeaders .= '<add name="Referrer-Policy" value="' . $this->server_configs['referrer_policy'] . '" />';
         }
 
         if (!empty($staticContent) or !empty($customHeaders)) {

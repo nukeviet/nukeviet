@@ -98,9 +98,10 @@ function set_files($files, $type)
 
             return '';
         }, $val);
-        if (!empty($_val) and file_exists(NV_ROOTDIR . '/' . $_val)) {
+        if (!empty($_val)) {
             if ($type == 'dir') {
                 $test = is_dir(NV_ROOTDIR . '/' . $_val);
+                $_val == 'vendor' && $test = true;
             } else {
                 $test = file_exists(NV_ROOTDIR . '/' . $_val);
             }
