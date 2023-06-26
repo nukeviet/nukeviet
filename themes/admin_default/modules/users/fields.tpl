@@ -270,7 +270,7 @@
                 </tr>
             </tfoot>
             <!-- END: add_field_choice -->
-            <tbody>
+            <tbody class="uncheckRadio">
                 <!-- BEGIN: loop_field_choice -->
                 <tr class="text-center">
                     <td>{FIELD_CHOICES.number}</td>

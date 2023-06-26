@@ -240,7 +240,7 @@ $(document).ready(function() {
     $('body').on('click', '[type=submit]:not([name])', function(e) {
         var form = $(this).parents('form');
         if (!$('[name=submit]', form).length) {
-            btnClickSubmit(e,form)
+            btnClickSubmit(e, form)
         }
     });
 
@@ -265,24 +265,24 @@ $(document).ready(function() {
         var countdown = $('#countdown'),
             distance = parseInt(countdown.data('duration')),
             countdownObj = setInterval(function() {
-            distance = distance - 1000;
+                distance = distance - 1000;
 
-            var hours = Math.floor(distance / (1000 * 60 * 60)),
-                minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            if (minutes < 10) {
-                minutes = '0' + minutes
-            };
-            if (seconds < 10) {
-                seconds = '0' + seconds
-            };
-            countdown.text(hours + ':' + minutes + ':' + seconds)
+                var hours = Math.floor(distance / (1000 * 60 * 60)),
+                    minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                    seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                if (minutes < 10) {
+                    minutes = '0' + minutes
+                };
+                if (seconds < 10) {
+                    seconds = '0' + seconds
+                };
+                countdown.text(hours + ':' + minutes + ':' + seconds)
 
-            if (distance <= 0) {
-                clearInterval(countdownObj);
-                window.location.reload()
-            }
-        }, 1000);
+                if (distance <= 0) {
+                    clearInterval(countdownObj);
+                    window.location.reload()
+                }
+            }, 1000);
     };
 
     // checkAll
@@ -387,8 +387,16 @@ $(document).ready(function() {
     });
 
     // Không cho xuống dòng
-    $('body').on('input', '.nonewline', function () {
+    $('body').on('input', '.nonewline', function() {
         var val = $(this).val().replace(/\n$/gi, '');
         $(this).val(val.replace(/\s*\n\s*/gi, ' '))
     });
+
+    // uncheck khi click vào radio nếu radio đang ở trạng thái checked
+    $('body').on("click mousedown", 'input[type=radio].uncheckRadio, .uncheckRadio input[type=radio]', function() {
+        var c;
+        return function(i) {
+            c = "click" == i.type ? !c || (this.checked = !1) : this.checked
+        }
+    }());
 });

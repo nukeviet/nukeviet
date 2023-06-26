@@ -636,6 +636,14 @@ $(function() {
         var val = $(this).val().replace(/\n$/gi, '');
         $(this).val(val.replace(/\s*\n\s*/gi, ' '))
     });
+
+    // uncheck khi click vào radio nếu radio đang ở trạng thái checked
+    $('body').on("click mousedown", 'input[type=radio].uncheckRadio, .uncheckRadio input[type=radio]', function() {
+        var c;
+        return function(i) {
+            c = "click" == i.type ? !c || (this.checked = !1) : this.checked
+        }
+    }());
 });
 
 // Fix bootstrap multiple modal
