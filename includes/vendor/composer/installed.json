@@ -352,18 +352,62 @@
             "install-path": "../league/url"
         },
         {
-            "name": "phpmailer/phpmailer",
-            "version": "v6.6.5",
-            "version_normalized": "6.6.5.0",
+            "name": "pclzip/pclzip",
+            "version": "2.8.2",
+            "version_normalized": "2.8.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "8b6386d7417526d1ea4da9edb70b8352f7543627"
+                "url": "https://github.com/ivanlanin/pclzip.git",
+                "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/8b6386d7417526d1ea4da9edb70b8352f7543627",
-                "reference": "8b6386d7417526d1ea4da9edb70b8352f7543627",
+                "url": "https://api.github.com/repos/ivanlanin/pclzip/zipball/19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
+                "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
+                "shasum": ""
+            },
+            "time": "2014-06-05T11:42:24+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "pclzip.lib.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Vincent Blavet"
+                }
+            ],
+            "description": "A PHP library that offers compression and extraction functions for Zip formatted archives",
+            "homepage": "http://www.phpconcept.net/pclzip",
+            "keywords": [
+                "php",
+                "zip"
+            ],
+            "support": {
+                "issues": "https://github.com/ivanlanin/pclzip/issues",
+                "source": "https://github.com/ivanlanin/pclzip/tree/master"
+            },
+            "install-path": "../pclzip/pclzip"
+        },
+        {
+            "name": "phpmailer/phpmailer",
+            "version": "v6.8.0",
+            "version_normalized": "6.8.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPMailer/PHPMailer.git",
+                "reference": "df16b615e371d81fb79e506277faea67a1be18f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/df16b615e371d81fb79e506277faea67a1be18f1",
+                "reference": "df16b615e371d81fb79e506277faea67a1be18f1",
                 "shasum": ""
             },
             "require": {
@@ -373,24 +417,26 @@
                 "php": ">=5.5.0"
             },
             "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-                "doctrine/annotations": "^1.2",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+                "doctrine/annotations": "^1.2.6 || ^1.13.3",
                 "php-parallel-lint/php-console-highlighter": "^1.0.0",
                 "php-parallel-lint/php-parallel-lint": "^1.3.2",
                 "phpcompatibility/php-compatibility": "^9.3.5",
                 "roave/security-advisories": "dev-latest",
-                "squizlabs/php_codesniffer": "^3.6.2",
-                "yoast/phpunit-polyfills": "^1.0.0"
+                "squizlabs/php_codesniffer": "^3.7.1",
+                "yoast/phpunit-polyfills": "^1.0.4"
             },
             "suggest": {
                 "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
+                "ext-openssl": "Needed for secure SMTP sending and DKIM signing",
+                "greew/oauth2-azure-provider": "Needed for Microsoft Azure XOAUTH2 authentication",
                 "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
                 "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
                 "psr/log": "For optional PSR-3 debug logging",
                 "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
                 "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication"
             },
-            "time": "2022-10-07T12:23:10+00:00",
+            "time": "2023-03-06T14:43:22+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -422,7 +468,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.6.5"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.8.0"
             },
             "funding": [
                 {
@@ -431,6 +477,75 @@
                 }
             ],
             "install-path": "../phpmailer/phpmailer"
+        },
+        {
+            "name": "smarty/smarty",
+            "version": "v4.3.1",
+            "version_normalized": "4.3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smarty-php/smarty.git",
+                "reference": "e28cb0915b4e3749bf57d4ebae2984e25395cfe5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/e28cb0915b4e3749bf57d4ebae2984e25395cfe5",
+                "reference": "e28cb0915b4e3749bf57d4ebae2984e25395cfe5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5 || ^7.5",
+                "smarty/smarty-lexer": "^3.1"
+            },
+            "time": "2023-03-28T19:47:03+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "libs/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Monte Ohrt",
+                    "email": "monte@ohrt.com"
+                },
+                {
+                    "name": "Uwe Tews",
+                    "email": "uwe.tews@googlemail.com"
+                },
+                {
+                    "name": "Rodney Rehm",
+                    "email": "rodney.rehm@medialize.de"
+                },
+                {
+                    "name": "Simon Wisselink",
+                    "homepage": "https://www.iwink.nl/"
+                }
+            ],
+            "description": "Smarty - the compiling PHP template engine",
+            "homepage": "https://smarty-php.github.io/smarty/",
+            "keywords": [
+                "templating"
+            ],
+            "support": {
+                "forum": "https://github.com/smarty-php/smarty/discussions",
+                "issues": "https://github.com/smarty-php/smarty/issues",
+                "source": "https://github.com/smarty-php/smarty/tree/v4.3.1"
+            },
+            "install-path": "../smarty/smarty"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -517,17 +632,17 @@
         },
         {
             "name": "tecnickcom/tc-lib-barcode",
-            "version": "1.17.14",
-            "version_normalized": "1.17.14.0",
+            "version": "1.17.25",
+            "version_normalized": "1.17.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/tc-lib-barcode.git",
-                "reference": "4907ef1e384dbb7d3100c897925e7dc071a419a3"
+                "reference": "2b87f7c63dfd05000445a202c1779aeb9eb4549d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-barcode/zipball/4907ef1e384dbb7d3100c897925e7dc071a419a3",
-                "reference": "4907ef1e384dbb7d3100c897925e7dc071a419a3",
+                "url": "https://api.github.com/repos/tecnickcom/tc-lib-barcode/zipball/2b87f7c63dfd05000445a202c1779aeb9eb4549d",
+                "reference": "2b87f7c63dfd05000445a202c1779aeb9eb4549d",
                 "shasum": ""
             },
             "require": {
@@ -539,14 +654,14 @@
                 "tecnickcom/tc-lib-color": "^1.14"
             },
             "require-dev": {
-                "pdepend/pdepend": "2.10.2",
+                "pdepend/pdepend": "2.13.0",
                 "phploc/phploc": "7.0.2 || 6.0.2 || 5.0.0 || 4.0.1 || 3.0.1 || 2.1.5",
-                "phpmd/phpmd": "2.11.1",
-                "phpunit/phpunit": "9.5.11 || 8.5.13 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
+                "phpmd/phpmd": "2.13.0",
+                "phpunit/phpunit": "10.1.2 || 9.6.7 || 8.5.31 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
                 "sebastian/phpcpd": "6.0.3 || 5.0.2 || 4.1.0 || 3.0.1 || 2.0.4",
-                "squizlabs/php_codesniffer": "3.6.2 || 2.9.2"
+                "squizlabs/php_codesniffer": "3.7.2 || 2.9.2"
             },
-            "time": "2022-06-14T09:12:04+00:00",
+            "time": "2023-05-18T08:10:11+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -606,7 +721,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/tc-lib-barcode/issues",
-                "source": "https://github.com/tecnickcom/tc-lib-barcode/tree/1.17.14"
+                "source": "https://github.com/tecnickcom/tc-lib-barcode/tree/1.17.25"
             },
             "funding": [
                 {
@@ -618,17 +733,17 @@
         },
         {
             "name": "tecnickcom/tc-lib-color",
-            "version": "1.14.14",
-            "version_normalized": "1.14.14.0",
+            "version": "1.14.24",
+            "version_normalized": "1.14.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/tc-lib-color.git",
-                "reference": "f9e45c59496418227184626ad31e83470153c11f"
+                "reference": "6207533413f6edc3fea373d0e54041661d2bd905"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/f9e45c59496418227184626ad31e83470153c11f",
-                "reference": "f9e45c59496418227184626ad31e83470153c11f",
+                "url": "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/6207533413f6edc3fea373d0e54041661d2bd905",
+                "reference": "6207533413f6edc3fea373d0e54041661d2bd905",
                 "shasum": ""
             },
             "require": {
@@ -636,14 +751,14 @@
                 "php": ">=5.3"
             },
             "require-dev": {
-                "pdepend/pdepend": "2.10.2",
+                "pdepend/pdepend": "2.13.0",
                 "phploc/phploc": "7.0.2 || 6.0.2 || 5.0.0 || 4.0.1 || 3.0.1 || 2.1.5",
-                "phpmd/phpmd": "2.11.1",
-                "phpunit/phpunit": "9.5.11 || 8.5.13 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
+                "phpmd/phpmd": "2.13.0",
+                "phpunit/phpunit": "10.1.2 || 9.6.7 || 8.5.31 || 7.5.20 || 6.5.14 || 5.7.27 || 4.8.36",
                 "sebastian/phpcpd": "6.0.3 || 5.0.2 || 4.1.0 || 3.0.1 || 2.0.4",
-                "squizlabs/php_codesniffer": "3.6.2 || 2.9.2"
+                "squizlabs/php_codesniffer": "3.7.2 || 2.9.2"
             },
-            "time": "2022-06-14T09:09:40+00:00",
+            "time": "2023-05-18T08:09:02+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -680,7 +795,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/tc-lib-color/issues",
-                "source": "https://github.com/tecnickcom/tc-lib-color/tree/1.14.14"
+                "source": "https://github.com/tecnickcom/tc-lib-color/tree/1.14.24"
             },
             "funding": [
                 {
