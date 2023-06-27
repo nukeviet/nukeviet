@@ -64,15 +64,15 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         ),
         'NukeViet\\Uapi\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/includes/uapi',
+            0 => __DIR__ . '/../..' . '/uapi',
         ),
         'NukeViet\\Module\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/modules',
+            0 => __DIR__ . '/../..' . '/../modules',
         ),
         'NukeViet\\Api\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/includes/api',
+            0 => __DIR__ . '/../..' . '/api',
         ),
         'NukeViet\\' => 
         array (
