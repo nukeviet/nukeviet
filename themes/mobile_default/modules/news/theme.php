@@ -966,11 +966,11 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
  */
 function author_theme($author_info, $topic_array, $topic_other_array, $generate_page)
 {
-    global $lang_module, $module_info, $module_name, $module_config, $topicid;
+    global $lang_module, $module_info, $module_name, $module_config, $topicid, $page_title;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('TOPPIC_TITLE', $author_info['pseudonym']);
+    $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
     if (!empty($author_info['description'])) {
         $xtpl->assign('TOPPIC_DESCRIPTION', $author_info['description']);
