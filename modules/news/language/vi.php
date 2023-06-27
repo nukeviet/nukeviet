@@ -195,3 +195,4 @@ $lang_module['post_email'] = 'Email của bạn';
 $lang_module['post_email_note'] = 'Chúng tôi sẽ kiểm tra nội dung báo cáo lỗi của bạn. Vui lòng cung cấp email của bạn để chúng tôi có thể thông báo cho bạn khi có kết quả kiểm tra.';
 $lang_module['post_email_error'] = 'Vui lòng để trống hoặc khai báo email hợp lệ';
 $lang_module['table_of_contents'] = 'Mục lục';
+$lang_module['articles_by_other_authors'] = 'Bài viết của các tác giả khác';

@@ -279,7 +279,7 @@ while ($row = $result->fetch()) {
 }
 if (!empty($news_contents['author'])) {
     if (empty($module_config[$module_name]['hide_author'])) {
-        $authors[] = $news_contents['author'];
+        $authors[] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=author/guests">' . $news_contents['author'] . '</a>';
     }
     $schema_author[] = $news_contents['author'];
 }

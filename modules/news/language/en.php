@@ -193,3 +193,4 @@ $lang_module['post_email'] = 'Your email';
 $lang_module['post_email_note'] = 'We will check your bug report content. Please provide your email so we can notify you when the test results are available.';
 $lang_module['post_email_error'] = 'Please leave it blank or enter a valid email';
 $lang_module['table_of_contents'] = 'Table of contents';
+$lang_module['articles_by_other_authors'] = 'Articles by other authors';
