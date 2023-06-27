@@ -604,3 +604,4 @@ $lang_module['height'] = 'Chiều cao hình ảnh';
 $lang_module['length_title'] = 'Số ký tự tiêu đề tin chính';
 $lang_module['length_hometext'] = 'Số ký tự giới thiệu chính';
 $lang_module['length_othertitle'] = 'Số ký tự tiêu đề tin khác';
+$lang_module['articles_by_other_authors'] = 'Bài viết của các tác giả khác';

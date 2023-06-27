@@ -604,3 +604,4 @@ $lang_module['height'] = 'Image Hauteur';
 $lang_module['length_title'] = 'Nombre de caractères principaux du titre de l\'article';
 $lang_module['length_hometext'] = 'Nombre de caractère de la présentation';
 $lang_module['length_othertitle'] = 'Nombre de caractères de l\'autre titre de l\'article';
+$lang_module['articles_by_other_authors'] = 'Articles d\'autres auteurs';

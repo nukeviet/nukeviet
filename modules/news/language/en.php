@@ -604,3 +604,4 @@ $lang_module['height'] = 'Image Height';
 $lang_module['length_title'] = 'Number of main article title characters';
 $lang_module['length_hometext'] = 'Number of characters of Hometext';
 $lang_module['length_othertitle'] = 'Number of characters of other article title';
+$lang_module['articles_by_other_authors'] = 'Articles by other authors';

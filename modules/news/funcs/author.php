@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -18,22 +18,30 @@ if (empty($array_op)) {
 }
 $author_info = [];
 $author_info['alias'] = $array_op[1];
+$author_info['is_guest'] = ($author_info['alias'] == 'guests') ? true : false;
 $page = (isset($array_op[2]) and preg_match('/^page\-([0-9]+)$/', $array_op[2], $m)) ? (int) ($m[1]) : 1;
 
-$stmt = $db_slave->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
-$stmt->bindParam(':alias', $author_info['alias'], PDO::PARAM_STR);
-$stmt->execute();
-list($author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']) = $stmt->fetch(3);
-if (!$author_info['id']) {
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+if (!$author_info['is_guest']) {
+    $stmt = $db_slave->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
+    $stmt->bindParam(':alias', $author_info['alias'], PDO::PARAM_STR);
+    $stmt->execute();
+    list($author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']) = $stmt->fetch(3);
+    if (!$author_info['id']) {
+        nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
+    }
+
+    if (!empty($author_info['image'])) {
+        $author_info['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $author_info['image'];
+    }
+    $author_info['add_time_format'] = nv_date('d/m/Y', $author_info['add_time']);
+
+    $page_title = $author_info['pseudonym'];
+    $where = 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ')';
+} else {
+    $page_title = $nv_Lang->getModule('articles_by_other_authors');
+    $where = 'status=1 AND id NOT IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist)';
 }
 
-if (!empty($author_info['image'])) {
-    $author_info['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/authors/' . $author_info['image'];
-}
-$author_info['add_time_format'] = nv_date('d/m/Y', $author_info['add_time']);
-
-$page_title = $author_info['pseudonym'];
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $author_info['alias'];
 if ($page > 1) {
     $page_url .= '/page-' . $page;
@@ -44,7 +52,7 @@ $canonicalUrl = getCanonicalUrl($page_url, true);
 
 $array_mod_title[] = [
     'catid' => 0,
-    'title' => $author_info['pseudonym'],
+    'title' => $page_title,
     'link' => $base_url
 ];
 
@@ -55,7 +63,7 @@ $show_no_image = $module_config[$module_name]['show_no_image'];
 $db_slave->sqlreset()
     ->select('COUNT(*)')
     ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-    ->where('status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ')');
+    ->where($where);
 $num_items = $db_slave->query($db_slave->sql())
     ->fetchColumn();
 
@@ -87,7 +95,7 @@ if ($st_links > 0) {
     $db_slave->sqlreset()
         ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal, external_link')
         ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-        ->where('status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ') and publtime < ' . $end_publtime)
+        ->where($where . ' AND publtime < ' . $end_publtime)
         ->order($order_articles_by . ' DESC')
         ->limit($st_links);
     $result = $db_slave->query($db_slave->sql());
@@ -98,7 +106,7 @@ if ($st_links > 0) {
     unset($query, $row);
 }
 
-$generate_page = nv_alias_page($author_info['pseudonym'], $base_url, $num_items, $per_page, $page);
+$generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
 $contents = author_theme($author_info, $item_array, $item_array_other, $generate_page);
 
