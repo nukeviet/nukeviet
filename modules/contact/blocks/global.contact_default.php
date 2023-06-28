@@ -13,29 +13,6 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-if (!nv_function_exists('block_contact_default_parse_phone')) {
-    /**
-     * block_contact_default_parse_phone()
-     *
-     * @param mixed $phone
-     * @return array
-     */
-    function block_contact_default_parse_phone($phone)
-    {
-        $_phones = explode('|', nv_unhtmlspecialchars($phone));
-        $phones = [];
-        foreach ($_phones as $phone) {
-            if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $phone, $m)) {
-                $phones[] = [nv_htmlspecialchars($m[1]), $m[2]];
-            } else {
-                $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $phone))];
-            }
-        }
-
-        return $phones;
-    }
-}
-
 if (!nv_function_exists('nv_contact_default_info')) {
     /**
      * nv_contact_default_info()
@@ -87,7 +64,7 @@ if (!nv_function_exists('nv_contact_default_info')) {
             $xtpl->assign('DEPARTMENT', $default_department);
 
             if (!empty($default_department['phone'])) {
-                $default_department['phone'] = block_contact_default_parse_phone($default_department['phone']);
+                $default_department['phone'] = nv_parse_phone($default_department['phone']);
                 $items = [];
                 foreach ($default_department['phone'] as $num) {
                     if (count($num) == 2) {

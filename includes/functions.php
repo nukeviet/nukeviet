@@ -135,11 +135,8 @@ function nv_is_blocker_proxy($is_proxy, $proxy_blocker)
     if ($proxy_blocker == 2 and ($is_proxy == 'Strong' or $is_proxy == 'Mild')) {
         return true;
     }
-    if ($proxy_blocker == 3 and $is_proxy != 'No') {
-        return true;
-    }
 
-    return false;
+    return (bool) ($proxy_blocker == 3 and $is_proxy != 'No');
 }
 
 /**
@@ -740,12 +737,8 @@ function nv_user_in_groups($groups_view)
 
         return array_intersect($in_groups, $groups_view) != [];
     }
-    if (in_array(5, $groups_view, true)) {
-        // Guest
-        return true;
-    }
 
-    return false;
+    return (bool) (in_array(5, $groups_view, true));
 }
 
 /**
@@ -1238,7 +1231,7 @@ function nv_get_keywords($content, $keyword_limit = 20, $isArr = false)
 /**
  * mailAddHtml()
  * Thêm khung HTML vào nội dung mail
- * 
+ *
  * @param string $subject
  * @param string $body
  * @param array  $gconfigs
@@ -1251,10 +1244,10 @@ function mailAddHtml($subject, $body, $gconfigs, $lang)
 
     if ($lang != NV_LANG_DATA) {
         $lang_global = [];
-        include(NV_ROOTDIR . '/includes/language/' . $lang . '/global.php');
-        $maillang =  $lang_global;
+        include NV_ROOTDIR . '/includes/language/' . $lang . '/global.php';
+        $maillang = $lang_global;
     } else {
-        $maillang =  \NukeViet\Core\Language::$lang_global;
+        $maillang = \NukeViet\Core\Language::$lang_global;
     }
 
     $mail_tpl = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/mail.tpl';
@@ -1321,7 +1314,7 @@ function mailAddHtml($subject, $body, $gconfigs, $lang)
  * $mailhtml:         Xác định có thêm khung HTML vào nội dung thư hay không, mặc định true
  *
  * $custom_headers:   Tiêu đề tùy chỉnh thêm vào phần header của mail (Dạng: Khóa => Giá trị)
- * 
+ *
  * $lang:             Ngôn ngữ gửi mail, nếu rỗng sẽ là NV_LANG_DATA
  */
 function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false, $testmode = false, $cc = [], $bcc = [], $mailhtml = true, $custom_headers = [], $lang = '')
@@ -2191,11 +2184,7 @@ function is_localhost()
         return true;
     }
 
-    if (NV_SERVER_NAME == 'localhost' or substr(NV_SERVER_NAME, 0, 3) == '10.' or substr(NV_SERVER_NAME, 0, 7) == '192.168') {
-        return true;
-    }
-
-    return false;
+    return (bool) (NV_SERVER_NAME == 'localhost' or substr(NV_SERVER_NAME, 0, 3) == '10.' or substr(NV_SERVER_NAME, 0, 7) == '192.168');
 }
 
 /**
@@ -2578,11 +2567,8 @@ function nv_insert_logs($lang = '', $module_name = '', $name_key = '', $note_act
     $sth->bindParam(':note_action', $note_action, PDO::PARAM_STR, strlen($note_action));
     $sth->bindParam(':link_acess', $link_acess, PDO::PARAM_STR);
     $sth->bindParam(':userid', $userid, PDO::PARAM_INT);
-    if ($sth->execute()) {
-        return true;
-    }
 
-    return false;
+    return (bool) ($sth->execute());
 }
 
 /**
@@ -3142,7 +3128,7 @@ function post_async($url, $params = [], $headers = [])
     // $options[CURLOPT_STDERR] = fopen(NV_ROOTDIR . '/curl.txt', 'a+');
 
     $ch = curl_init($server_domain . $url);
-    curl_setopt_array($ch,$options);
+    curl_setopt_array($ch, $options);
     curl_exec($ch);
     curl_close($ch);
 }
@@ -3308,11 +3294,8 @@ function DKIM_verify($domain, $selector)
         $els2['p'] = str_split($els2['p'], 253);
         $els2['p'] = implode('', $els2['p']);
     }
-    if (!isset($els2['v']) or strcasecmp($els2['v'], 'dkim1') != 0 or !isset($els2['p']) or $els2['p'] != $publickey) {
-        return false;
-    }
 
-    return true;
+    return !(!isset($els2['v']) or strcasecmp($els2['v'], 'dkim1') != 0 or !isset($els2['p']) or $els2['p'] != $publickey);
 }
 
 /**
@@ -3575,4 +3558,29 @@ function csrf_check($csrf, $key)
     $expected = md5(NV_CHECK_SESSION . '_' . $key . '_' . $timestamp) . $timestamp;
 
     return hash_equals($expected, $csrf);
+}
+
+/**
+ * parse_phone()
+ *
+ * @param mixed $phone
+ * @return array
+ */
+function nv_parse_phone($phone)
+{
+    if (empty($phone)) {
+        return [];
+    }
+
+    $_phones = explode('|', nv_unhtmlspecialchars($phone));
+    $phones = [];
+    foreach ($_phones as $phone) {
+        if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $phone, $m)) {
+            $phones[] = [nv_htmlspecialchars($m[1]), $m[2]];
+        } else {
+            $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $phone))];
+        }
+    }
+
+    return $phones;
 }

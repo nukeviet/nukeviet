@@ -13,29 +13,6 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-if (!function_exists('block_supporter_parse_phone')) {
-    /**
-     * block_supporter_parse_phone()
-     *
-     * @param mixed $phone
-     * @return array
-     */
-    function block_supporter_parse_phone($phone)
-    {
-        $_phones = explode('|', nv_unhtmlspecialchars($phone));
-        $phones = [];
-        foreach ($_phones as $phone) {
-            if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $phone, $m)) {
-                $phones[] = [nv_htmlspecialchars($m[1]), $m[2]];
-            } else {
-                $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $phone))];
-            }
-        }
-
-        return $phones;
-    }
-}
-
 if (!function_exists('block_supporter_parse_others')) {
     /**
      * block_supporter_parse_others()
@@ -81,7 +58,7 @@ if (!function_exists('block_supporter_get_list')) {
             $supporter_list[$row['departmentid']][$row['id']] = [
                 'full_name' => $row['full_name'],
                 'image' => !empty($row['image']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'] : NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/supporter.svg',
-                'phone' => !empty($row['phone']) ? block_supporter_parse_phone($row['phone']) : [],
+                'phone' => !empty($row['phone']) ? nv_parse_phone($row['phone']) : [],
                 'email' => $row['email'],
                 'others' => block_supporter_parse_others($row['others'])
             ];
