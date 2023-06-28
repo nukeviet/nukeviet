@@ -16,27 +16,6 @@ if (!defined('NV_SYSTEM')) {
 define('NV_IS_MOD_CONTACT', true);
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
-/**
- * parse_phone()
- *
- * @param mixed $phone
- * @return array
- */
-function parse_phone($phone)
-{
-    $_phones = explode('|', nv_unhtmlspecialchars($phone));
-    $phones = [];
-    foreach ($_phones as $phone) {
-        if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $phone, $m)) {
-            $phones[] = [nv_htmlspecialchars($m[1]), $m[2]];
-        } else {
-            $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $phone))];
-        }
-    }
-
-    return $phones;
-}
-
 function parse_others($others)
 {
     if (!empty($others)) {
@@ -76,7 +55,7 @@ function get_department_list()
                 continue;
             }
             $department['image'] = !empty($department['image']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $department['image'] : '';
-            $department['phone'] = !empty($department['phone']) ? parse_phone($department['phone']) : [];
+            $department['phone'] = !empty($department['phone']) ? nv_parse_phone($department['phone']) : [];
             $department['email'] = !empty($department['email']) ? array_map('trim', explode(',', $department['email'])) : [];
             $department['others'] = parse_others($department['others']);
             if (!empty($department['cats'])) {
@@ -129,7 +108,7 @@ function get_supporter_list($departments)
         $supporter_list[$row['departmentid']][$row['id']] = [
             'full_name' => $row['full_name'],
             'image' => !empty($row['image']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_info['module_upload'] . '/' . $row['image'] : NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/supporter.svg',
-            'phone' => !empty($row['phone']) ? parse_phone($row['phone']) : [],
+            'phone' => !empty($row['phone']) ? nv_parse_phone($row['phone']) : [],
             'email' => $row['email'],
             'others' => parse_others($row['others'])
         ];

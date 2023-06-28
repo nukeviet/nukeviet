@@ -13,29 +13,6 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-if (!nv_function_exists('block_contact_department_parse_phone')) {
-    /**
-     * block_contact_department_parse_phone()
-     *
-     * @param mixed $phone
-     * @return array
-     */
-    function block_contact_department_parse_phone($phone)
-    {
-        $_phones = explode('|', nv_unhtmlspecialchars($phone));
-        $phones = [];
-        foreach ($_phones as $phone) {
-            if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $phone, $m)) {
-                $phones[] = [nv_htmlspecialchars($m[1]), $m[2]];
-            } else {
-                $phones[] = [nv_htmlspecialchars(preg_replace("/\[[^\]]*\]/", '', $phone))];
-            }
-        }
-
-        return $phones;
-    }
-}
-
 if (!nv_function_exists('nv_department_info')) {
     /**
      * nv_block_config_contact_department()
@@ -131,7 +108,7 @@ if (!nv_function_exists('nv_department_info')) {
         }
 
         if (!empty($row['phone'])) {
-            $row['phone'] = block_contact_department_parse_phone($row['phone']);
+            $row['phone'] = nv_parse_phone($row['phone']);
             $items = [];
             foreach ($row['phone'] as $num) {
                 if (count($num) == 2) {
