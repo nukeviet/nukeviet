@@ -988,7 +988,9 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 $nv_Request->unset_request('users_dismiss_captcha', 'session');
 
 if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
-    exit(nv_url_rewrite(user_login(true), true));
+    include NV_ROOTDIR . '/includes/header.php';
+    echo user_login(true);
+    include NV_ROOTDIR . '/includes/footer.php';
 }
 
 $page_title = $nv_Lang->getModule('login');
