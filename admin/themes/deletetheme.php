@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -44,8 +44,19 @@ try {
         $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();
 
-        $nv_Cache->delMod('themes');
-        $nv_Cache->delMod('modules');
+        if (in_array($theme, $global_config['array_user_allowed_theme'], true)) {
+            $array_user_allowed_theme = array_filter($global_config['array_user_allowed_theme'], function ($item) {
+                global $theme;
+
+                return (bool) ($item != $theme);
+            });
+            $array_user_allowed_theme = empty($array_user_allowed_theme) ? '' : json_encode(array_values($array_user_allowed_theme));
+            $sth = $db->prepare('UPDATE ' . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'user_allowed_theme' AND lang = '" . NV_LANG_DATA . "' AND module='global'");
+            $sth->bindParam(':config_value', $array_user_allowed_theme, PDO::PARAM_STR);
+            $sth->execute();
+        }
+
+        $nv_Cache->delAll();
 
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes');
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_blocks_weight');
