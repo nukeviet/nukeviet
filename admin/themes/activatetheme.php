@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -138,7 +138,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $data['dtime_type'] = $row['dtime_type'];
             $data['dtime_details'] = $row['dtime_details'];
             $data['groups_view'] = $row['groups_view'];
-            $data['config'] = (string) $row['config'];
+            $data['config'] = !empty($row['config']) ? (string) $row['config'] : '';
             $row['bid'] = $db->insert_id($_sql, 'bid', $data);
             if ($all_func) {
                 $array_funcid = $array_all_funcid;
