@@ -70,8 +70,12 @@ if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'post,get')) {
         // Thay đổi giao diện người dùng
         $theme = $nv_Request->get_title('theme', 'post,get', '');
         $tokend = $nv_Request->get_title('tokend', 'post,get', '');
-        if ($tokend === NV_CHECK_SESSION and in_array($theme, $global_config['array_user_allowed_theme'], true)) {
-            $nv_Request->set_Cookie('nv_u_theme_' . NV_LANG_DATA, $theme, NV_LIVE_COOKIE_TIME);
+        if ($tokend === NV_CHECK_SESSION) {
+            if (in_array($theme, $global_config['array_user_allowed_theme'], true)) {
+                $nv_Request->set_Cookie('nv_u_theme_' . NV_LANG_DATA, $theme, NV_LIVE_COOKIE_TIME);
+            } else {
+                $nv_Request->unset_request('nv_u_theme_' . NV_LANG_DATA, 'cookie');
+            }
         }
         $nv_BotManager->setPrivate();
         nv_htmlOutput('OK');
