@@ -5,6 +5,7 @@
         <!-- BEGIN: loop -->
         <option value="{USER_THEME.key}" {USER_THEME.selected}>{USER_THEME.title}</option>
         <!-- END: loop -->
+        <option value="">{GLANG.default_theme}</option>
     </select>
 </div>
 <!-- END: main -->
