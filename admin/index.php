@@ -193,4 +193,4 @@ if (preg_match($global_config['check_module'], $module_name)) {
     }
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+nv_error404();

@@ -14,7 +14,7 @@ if (!defined('NV_IS_MOD_NEWS')) {
 }
 
 if (empty($module_config[$module_name]['instant_articles_active'])) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_error404();
 }
 
 if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {

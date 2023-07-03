@@ -26,7 +26,7 @@ $blockredirect = $nv_Request->get_string('blockredirect', 'get');
 
 $selectthemes = $nv_Request->get_string('selectthemes', 'post,get', $global_config['site_theme']);
 if (!(preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_error404();
 }
 
 $dtime_types = ['regular', 'specific', 'daily', 'weekly', 'monthly', 'yearly'];
@@ -55,7 +55,7 @@ if ($row['bid'] > 0) {
     $row = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'])->fetch();
 
     if (empty($row)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_error404();
     } else {
         $row['dtime_details'] = json_decode($row['dtime_details'], true);
         $row_old = $row;

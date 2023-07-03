@@ -1084,7 +1084,7 @@ foreach ($data as $row) {
 // Hiển thị lịch sử sửa bài
 if ($loadhistory) {
     if (!$loadhistory_id) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_error404();
     }
 
     $maps_fields = [

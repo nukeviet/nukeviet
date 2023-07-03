@@ -246,6 +246,16 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
 }
 
 /**
+ * nv_error404()
+ */
+function nv_error404()
+{
+    global $lang_global;
+
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+}
+
+/**
  * nv_htmlOutput()
  *
  * @param string $html

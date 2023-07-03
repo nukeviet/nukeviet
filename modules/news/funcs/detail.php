@@ -61,11 +61,11 @@ if ($nv_Request->isset_request('pdf', 'get')) {
     $news_contents['files'] = explode(',', $news_contents['files']);
 
     if (!isset($news_contents['files'][$fileid])) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_error404();
     }
 
     if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $news_contents['files'][$fileid])) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+        nv_error404();
     }
 
     $file_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true) . '?download=1&id=' . $fileid;
@@ -233,7 +233,7 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
     $meta_property['article:section'] = $global_array_cat[$news_contents['catid']]['title'];
 } else {
     $nv_BotManager->setPrivate();
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_error404();
 }
 
 if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {

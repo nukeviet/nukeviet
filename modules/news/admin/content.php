@@ -328,7 +328,7 @@ if ($rowcontent['id'] == 0) {
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_histories WHERE new_id=' . $rowcontent['id'] . ' AND id=' . $restore_id;
         $restore_data = $db->query($sql)->fetch();
         if (empty($restore_data) or $restore_hash !== md5(NV_CHECK_SESSION . $admin_info['admin_id'] . $rowcontent['id'] . $restore_id . $restore_data['historytime'])) {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+            nv_error404();
         }
         unset($restore_data['id'], $restore_data['new_id'], $restore_data['admin_id'], $restore_data['changed_fields']);
 
