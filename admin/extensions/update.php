@@ -375,4 +375,4 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . NV_CHECK
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
+nv_error404();

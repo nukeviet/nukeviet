@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -178,7 +178,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Không cho truy cập trực tiếp vào /[lang]/[module-name]/sitemap/ chỉ truy cập vào /sitemap-[lang].[module-name].xml
             if ($op_file == 'sitemap' and (empty($module_info['sitemap']) or !preg_match('/\.' . nv_preg_quote($module_name) . '[a-zA-Z0-9\-\.]*\.xml/', $nv_Request->request_uri))) {
-                nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
+                nv_error404();
             }
 
             // Xac dinh quyen dieu hanh module
@@ -397,9 +397,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
             // Exit
             nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('site_info'), $nv_Lang->getGlobal('module_for_admin'), 404);
         } elseif (defined('NV_IS_USER') and !nv_user_in_groups($groups_view)) {
-            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
+            nv_error404();
         }
     }
 }
 
-nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
+nv_error404();

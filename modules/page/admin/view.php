@@ -22,6 +22,6 @@ if ($array['id'] > 0) {
     if (!empty($array['id'])) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $array['alias'] . $global_config['rewrite_exturl']);
     } else {
-        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
+        nv_error404();
     }
 }

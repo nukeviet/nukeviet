@@ -152,7 +152,7 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
         if ($phpsapi == 'cgi' || $phpsapi == 'fpm') {
             header('Status: ' . $error_code . ' ' . $info_content);
         } else {
-            $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
+            $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
             header($protocol . ' ' . $error_code . ' ' . $info_content);
         }
     }
@@ -243,6 +243,16 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
     include NV_ROOTDIR . '/includes/header.php';
     $xtpl->out('main');
     include NV_ROOTDIR . '/includes/footer.php';
+}
+
+/**
+ * nv_error404()
+ */
+function nv_error404()
+{
+    global $nv_Lang;
+
+    nv_error404();
 }
 
 /**
@@ -631,7 +641,7 @@ function nv_xmlSitemapIndex_generate()
         foreach ($global_config['allow_sitelangs'] as $lang) {
             $sql = 'SELECT m.title, m.module_file FROM ' . $db_config['prefix'] . '_' . $lang . '_modules m LEFT JOIN ' . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
-            while (list($modname, $modfile) = $result->fetch(3)) {
+            while ([$modname, $modfile] = $result->fetch(3)) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
                 foreach ($sitemaps as $filename) {
                     if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {

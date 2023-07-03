@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $area = $nv_Request->get_title('area', 'get', '');
 $return = $nv_Request->get_title('return', 'get,post', '');
 if (empty($area)) {
-    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
+    nv_error404();
 }
 
 $access_viewlist = empty($access_admin['access_viewlist'][$admin_info['level']]) ? false : true;
