@@ -246,7 +246,7 @@ define('NV_REDIS_TIMEOUT', 2.5);
 define('MANUALL_DEL_API_LOG', false); // Allow the super-admins to delete logs
 
 // Cokies names
-define('CURRENT_THEME_COOKIE_NAME', 'tm'); // Tên cookie chứa thông tin theme hiện tại
+define('CURRENT_THEMETYPE_COOKIE_NAME', 'tm'); // Tên cookie chứa thông tin kiểu theme hiện tại
 define('DATA_LANG_COOKIE_NAME', 'dlng'); // Tên cookie chứa thông tin ngôn ngữ data
 define('INT_LANG_COOKIE_NAME', 'ilng'); // Tên cookie chứa thông tin ngôn ngữ hiển thị
 define('U_LANG_COOKIE_NAME', 'ulng'); // Tên cookie chứa thông tin ngôn ngữ của người dùng

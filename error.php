@@ -17,10 +17,10 @@ define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), P
 require NV_ROOTDIR . '/includes/mainfile.php';
 
 // Xac dinh kieu giao dien mac dinh
-$global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
+$global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
 if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'], true)) {
     $global_config['current_theme_type'] = '';
-    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, '', NV_LIVE_COOKIE_TIME);
+    $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, '', NV_LIVE_COOKIE_TIME);
 }
 
 // Xac dinh giao dien chung
@@ -51,7 +51,7 @@ if ((($client_info['is_mobile'] and (empty($global_config['current_theme_type'])
 // Xac lap lai giao kieu giao dien hien tai
 if ($theme_type != $global_config['current_theme_type']) {
     $global_config['current_theme_type'] = $theme_type;
-    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
+    $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
 }
 unset($theme_type);
 
