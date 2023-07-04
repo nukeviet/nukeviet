@@ -136,7 +136,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 $nv_BotManager->setNoIndex()->printToHeaders();
                 $theme_type = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '', 1);
                 if (in_array($theme_type, $global_config['array_theme_type'], true)) {
-                    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
+                    $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
                 }
 
                 $nv_redirect = nv_get_redirect('get', true);
@@ -218,7 +218,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                     $global_config['current_theme_type'] = 'm';
                 } else {
                     $is_mobile = false;
-                    $global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
+                    $global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
                     $array_theme_type = array_flip($global_config['array_theme_type']);
                     unset($array_theme_type['m']);
                     if (!isset($array_theme_type[$global_config['current_theme_type']])) {
@@ -236,10 +236,10 @@ if (preg_match($global_config['check_module'], $module_name)) {
                  * - desktop: d
                  * - mobile: m
                  */
-                $global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
+                $global_config['current_theme_type'] = $nv_Request->get_string(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
                 if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'], true)) {
                     $global_config['current_theme_type'] = '';
-                    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, '', NV_LIVE_COOKIE_TIME);
+                    $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, '', NV_LIVE_COOKIE_TIME);
                 }
 
                 // Xac dinh giao dien chung
@@ -285,7 +285,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 // Xac lap lai giao kieu giao dien hien tai
                 if ($theme_type != $global_config['current_theme_type']) {
                     $global_config['current_theme_type'] = $theme_type;
-                    $nv_Request->set_Cookie(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
+                    $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
                 }
                 unset($theme_type);
             }

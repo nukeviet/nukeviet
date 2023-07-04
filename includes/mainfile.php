@@ -317,7 +317,7 @@ $client_info['client_os'] = [
 $is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
 if ($is_mobile_tablet != $nv_Request->get_string('is_mobile_tablet', 'session')) {
     $nv_Request->set_Session('is_mobile_tablet', $is_mobile_tablet);
-    $nv_Request->unset_request(CURRENT_THEME_COOKIE_NAME . NV_LANG_DATA, 'cookie');
+    $nv_Request->unset_request(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, 'cookie');
 }
 
 // Captcha
