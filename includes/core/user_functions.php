@@ -56,21 +56,20 @@ function is_current_url($url, $cmptype = 0)
         return true;
     }
 
-    if (strcasecmp($url, NV_BASE_SITEURL) !== 0) {
-        $current_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
-        if (
-            // Nếu URL hiện tại có chứa URL so sánh
-            ($cmptype == 2 and preg_match('#' . preg_quote($url, '#') . '#', $current_url)) or
-            // Nếu URL hiện tại bắt đầu chứa URL so sánh
-            ($cmptype == 1 and preg_match('#^' . preg_quote($url, '#') . '#', $current_url)) or
-            // Nếu URL hiện tại khớp hoàn toàn URL so sánh
-            (strcasecmp($url, $current_url) === 0)
-        ) {
-            return true;
-        }
+    if (strcasecmp($url, NV_BASE_SITEURL) === 0) {
+        return false;
     }
 
-    return false;
+    $current_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
+
+    return (bool) (
+        // Nếu URL hiện tại có chứa URL so sánh
+        ($cmptype == 2 and str_contains($current_url, $url)) or
+        // Nếu URL hiện tại bắt đầu chứa URL so sánh
+        ($cmptype == 1 and str_starts_with($current_url, $url)) or
+        // Nếu URL hiện tại khớp hoàn toàn URL so sánh
+        (strcasecmp($url, $current_url) === 0)
+    );
 }
 
 /**
@@ -282,21 +281,9 @@ function nv_blocks_content($sitecontent)
                 if (!empty($content) or defined('NV_IS_DRAG_BLOCK')) {
                     $xtpl = null;
                     $_row['template'] = empty($_row['template']) ? 'default' : $_row['template'];
-                    $_template = 'default';
-
-                    if (!empty($module_info['theme']) and file_exists(NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/layout');
-                        $_template = $module_info['theme'];
-                    } elseif (!empty($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
-                        $_template = $global_config['module_theme'];
-                    } elseif (!empty($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout');
-                        $_template = $global_config['site_theme'];
-                    } elseif (file_exists(NV_ROOTDIR . '/themes/default/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/default/layout');
-                    }
-                    if (!empty($xtpl)) {
+                    $_template = get_tpl_dir([(!empty($module_info['theme']) ? $module_info['theme'] : ''), (!empty($global_config['module_theme']) ? $global_config['module_theme'] : ''), $global_config['site_theme'], 'default'], '', '/layout/block.' . $_row['template'] . '.tpl');
+                    if (!empty($_template)) {
+                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $_template . '/layout');
                         $xtpl->assign('BLOCK_ID', $_row['bid']);
                         $xtpl->assign('BLOCK_TITLE', $_row['blockTitle']);
                         $xtpl->assign('BLOCK_CONTENT', $content);
@@ -977,14 +964,11 @@ function nv_admin_menu()
 {
     global $nv_Lang, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
 
-    if ($module_info['theme'] == $module_info['template'] and file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/system/admin_toolbar.tpl')) {
-        $block_theme = $module_info['template'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/admin_toolbar.tpl')) {
-        $block_theme = $global_config['site_theme'];
-    } else {
-        $block_theme = 'default';
+    $dir_basenames = [$global_config['site_theme']];
+    if ($module_info['theme'] == $module_info['template']) {
+        array_unshift($dir_basenames, $module_info['template']);
     }
-
+    $block_theme = get_tpl_dir($dir_basenames, 'default', '/system/admin_toolbar.tpl');
     $xtpl = new XTemplate('admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system');
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_ADMINDIR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);

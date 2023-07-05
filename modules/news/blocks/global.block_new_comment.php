@@ -86,11 +86,7 @@ if (!nv_function_exists('nv_comment_new')) {
             }
 
             $mod_file = $site_mods[$module]['module_file'];
-            if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $mod_file . '/block_new_comment.tpl')) {
-                $block_theme = $module_info['template'];
-            } else {
-                $block_theme = 'default';
-            }
+            $block_theme = get_tpl_dir($module_info['template'], 'default', '/modules/' . $mod_file . '/block_new_comment.tpl');
 
             $xtpl = new XTemplate('block_new_comment.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file);
             $xtpl->assign('TEMPLATE', $block_theme);

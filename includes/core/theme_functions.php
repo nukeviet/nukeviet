@@ -92,19 +92,13 @@ function nv_error_info()
         ]
     ];
 
-    if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/error_info.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
-        $image_path = NV_STATIC_URL . 'themes/' . $global_config['admin_theme'] . '/images/icons/';
-    } elseif (defined('NV_ADMIN')) {
-        $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
-        $image_path = NV_STATIC_URL . 'themes/admin_default/images/';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/error_info.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
-        $image_path = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/icons/';
+    if (defined('NV_ADMIN')) {
+        $tpl_dir = get_tpl_dir($global_config['admin_theme'], 'admin_default', '/system/error_info.tpl');
     } else {
-        $tpl_path = NV_ROOTDIR . '/themes/default/system';
-        $image_path = NV_STATIC_URL . 'themes/default/images/icons/';
+        $tpl_dir = get_tpl_dir($global_config['site_theme'], 'default', '/system/error_info.tpl');
     }
+    $tpl_path = NV_ROOTDIR . '/themes/' . $tpl_dir . '/system';
+    $image_path = NV_STATIC_URL . 'themes/' . $tpl_dir . '/images/icons/';
 
     $xtpl = new XTemplate('error_info.tpl', $tpl_path);
     $xtpl->assign('TPL_E_CAPTION', $nv_Lang->getGlobal('error_info_caption'));
@@ -182,23 +176,12 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
     }
 
     // Get theme
-    $template = '';
-    if (defined('NV_ADMIN') and !empty($global_config['admin_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
-        $template = $global_config['admin_theme'];
-    } elseif (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/admin_default/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
-        $template = 'admin_default';
-    } elseif (!empty($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system';
-        $template = $global_config['module_theme'];
-    } elseif (!empty($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
-        $template = $global_config['site_theme'];
+    if (defined('NV_ADMIN')) {
+        $template = get_tpl_dir((!empty($global_config['admin_theme']) ? $global_config['admin_theme'] : ''), 'admin_default', '/system/info_die.tpl');
     } else {
-        $tpl_path = NV_ROOTDIR . '/themes/default/system';
-        $template = 'default';
+        $template = get_tpl_dir([(!empty($global_config['module_theme']) ? $global_config['module_theme'] : ''), (!empty($global_config['site_theme']) ? $global_config['site_theme'] : '')], 'default', '/system/info_die.tpl');
     }
+    $tpl_path = NV_ROOTDIR . '/themes/' . $template . '/system';
 
     empty($global_config['site_url']) && $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
     empty($global_config['site_logo']) && $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
@@ -748,16 +731,12 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
 {
     global $global_config, $module_info, $page_title;
 
-    if (defined('NV_ADMIN') and file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/alert.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
-    } elseif (defined('NV_ADMIN')) {
-        $tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/alert.tpl')) {
-        $tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
+    if (defined('NV_ADMIN')) {
+        $template = get_tpl_dir($global_config['admin_theme'], 'admin_default', '/system/alert.tpl');
     } else {
-        $tpl_path = NV_ROOTDIR . '/themes/default/system';
+        $template = get_tpl_dir($global_config['site_theme'], 'default', '/system/alert.tpl');
     }
-
+    $tpl_path = NV_ROOTDIR . '/themes/' . $template . '/system';
     $xtpl = new XTemplate('alert.tpl', $tpl_path);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('LANG_BACK', $lang_back);
@@ -825,4 +804,33 @@ function nv_disable_site()
     }
 
     nv_info_die($nv_Lang->getGlobal('disable_site_title'), $nv_Lang->getGlobal('disable_site_title'), $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
+}
+
+/**
+ * get_tpl_dir()
+ *
+ * @param string|array  $dir_basenames
+ * @param string $default_dir_basename
+ * @param string $file
+ * @return string
+ */
+function get_tpl_dir($dir_basenames, $default_dir_basename, $file = '')
+{
+    if (!empty($file) and !str_starts_with($file, '/')) {
+        $file = '/' . $file;
+    }
+    if (!is_array($dir_basenames)) {
+        $dir_basenames = [$dir_basenames];
+    }
+    $dir_basenames = array_filter($dir_basenames);
+    $dir_basenames = array_unique($dir_basenames);
+    if (!empty($dir_basenames)) {
+        foreach ($dir_basenames as $dir_basename) {
+            if (file_exists(NV_ROOTDIR . '/themes/' . $dir_basename . $file)) {
+                return $dir_basename;
+            }
+        }
+    }
+
+    return $default_dir_basename;
 }

@@ -147,14 +147,7 @@ if (!nv_function_exists('nv_company_info')) {
     {
         global $global_config, $nv_Lang;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.company_info.tpl')) {
-            $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.company_info.tpl')) {
-            $block_theme = $global_config['site_theme'];
-        } else {
-            $block_theme = 'default';
-        }
-
+        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.company_info.tpl');
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('DATA', $block_config);

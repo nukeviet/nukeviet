@@ -327,9 +327,9 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
 {
     global $global_config, $module_data, $module_config, $admin_info, $user_info, $nv_Lang, $module_name;
 
-    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl') ? $global_config['module_theme'] : 'default';
-    $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/comment.css') ? $global_config['module_theme'] : 'default';
-    $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
+    $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/main.tpl');
+    $templateCSS = get_tpl_dir($global_config['module_theme'], 'default', '/css/comment.css');
+    $templateJS = get_tpl_dir($global_config['module_theme'], 'default', '/js/comment.js');
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
@@ -491,8 +491,8 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
     global $global_config, $module_config;
 
     if (!empty($comment_array['comment'])) {
-        $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
-        $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
+        $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/comment.tpl');
+        $templateJS = get_tpl_dir($global_config['module_theme'], 'default', '/js/comment.js');
 
         $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
         $xtpl->assign('TEMPLATE', $template);
@@ -576,8 +576,8 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allo
 {
     global $global_config, $module_file, $module_config;
 
-    $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl') ? $global_config['module_theme'] : 'default';
-    $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
+    $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/comment.tpl');
+    $templateJS = get_tpl_dir($global_config['module_theme'], 'default', '/js/comment.js');
 
     $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('TEMPLATE', $template);

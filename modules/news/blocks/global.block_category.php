@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -88,6 +88,43 @@ if (!nv_function_exists('nv_news_category')) {
     }
 
     /**
+     * nv_news_category_getdata()
+     *
+     * @param array $list
+     * @param int   $parentid
+     * @param array $block_config
+     * @return array
+     */
+    function nv_news_category_getdata($list, $parentid, $block_config)
+    {
+        global $module_name, $catid;
+
+        $menus = [];
+        foreach ($list as $row) {
+            if (in_array((int) $row['status'], [1, 2], true) and $row['parentid'] == $parentid) {
+                $row['title0'] = nv_clean60($row['title'], $block_config['title_length']);
+                $row['active'] = (bool) ($module_name == $block_config['module'] and !empty($catid) and $row['catid'] == $catid);
+                $row['sub'] = nv_news_category_getdata($list, $row['catid'], $block_config);
+                $row['expanded'] = false;
+                $row['collapsed'] = true;
+                if (!$row['active'] and !empty($row['sub'])) {
+                    foreach ($row['sub'] as $subrow) {
+                        if ($subrow['active']) {
+                            $row['active'] = true;
+                            $row['expanded'] = true;
+                            $row['collapsed'] = false;
+                            break;
+                        }
+                    }
+                }
+                $menus[] = $row;
+            }
+        }
+
+        return $menus;
+    }
+
+    /**
      * nv_news_category()
      *
      * @param array $block_config
@@ -95,46 +132,29 @@ if (!nv_function_exists('nv_news_category')) {
      */
     function nv_news_category($block_config)
     {
-        global $module_array_cat, $global_config, $module_name, $catid;
+        global $module_array_cat, $global_config, $nv_Lang;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_category.tpl')) {
-            $block_theme = $global_config['module_theme'];
-        } else {
-            $block_theme = 'default';
-        }
+        $menulist = nv_news_category_getdata($module_array_cat, $block_config['catid'], $block_config);
 
+        $block_theme = get_tpl_dir($global_config['module_theme'], 'default', '/modules/news/block_category.tpl');
         $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
 
-        if (!empty($module_array_cat)) {
-            $title_length = $block_config['title_length'];
+        if (!empty($menulist)) {
             $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
-            $xtpl->assign('BLOCK_ID', $block_config['bid']);
             $xtpl->assign('TEMPLATE', $block_theme);
             $xtpl->assign('MENUID', $block_config['bid']);
 
-            foreach ($module_array_cat as $cat) {
-                if (in_array((int) $cat['status'], [1, 2], true) and ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid']))) {
-                    $cat['title0'] = nv_clean60($cat['title'], $title_length);
-                    $active = ($module_name == $block_config['module'] and !empty($catid) and $cat['catid'] == $catid);
-                    $subcat = '';
-                    $subactive = false;
-                    if (!empty($cat['subcatid'])) {
-                        $subcat = nv_news_sub_category($cat['subcatid'], $title_length, $block_theme, $block_config, $cat['catid'], $subactive);
-                    }
-
-                    $cat['active'] = $active ? ' class="active"' : '';
-                    $cat['expanded'] = $subactive ? 'true' : 'false';
-                    $cat['collapsed'] = $subactive ? '' : ' collapsed';
-                    $xtpl->assign('CAT', $cat);
-
-                    if (!empty($subcat)) {
-                        $xtpl->assign('SUBCAT', $subcat);
-                        $xtpl->parse('main.cat.subcat');
-                    }
-                    $xtpl->parse('main.cat');
+            foreach ($menulist as $cat) {
+                $cat['active'] = $cat['active'] ? ' class="active"' : '';
+                $cat['expanded'] = $cat['expanded'] ? 'true' : 'false';
+                $cat['collapsed'] = $cat['collapsed'] ? ' collapsed' : ' ';
+                $xtpl->assign('CAT', $cat);
+                if (!empty($cat['sub'])) {
+                    $xtpl->assign('SUBCAT', nv_news_sub_category($cat['sub'], $block_theme, $block_config));
+                    $xtpl->parse('main.cat.subcat');
                 }
+                $xtpl->parse('main.cat');
             }
-
             $xtpl->parse('main');
 
             return $xtpl->text('main');
@@ -144,47 +164,31 @@ if (!nv_function_exists('nv_news_category')) {
     /**
      * nv_news_sub_category()
      *
-     * @param string $list_sub
-     * @param int    $title_length
+     * @param array  $list_sub
      * @param string $block_theme
-     * @param int    $parentid
+     * @param array  $block_config
      * @return string
      */
-    function nv_news_sub_category($list_sub, $title_length, $block_theme, $block_config, $parentid, &$active)
+    function nv_news_sub_category($list_sub, $block_theme, $block_config)
     {
-        global $module_array_cat, $module_name, $catid;
-
         if (empty($list_sub)) {
             return '';
         }
+
         $xtpl = new XTemplate('block_category.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
         $xtpl->assign('MENUID', $block_config['bid']);
-        $xtpl->assign('PARENTID', $parentid);
+        $xtpl->assign('PARENTID', $list_sub[0]['parentid']);
 
         $show = false;
-        $list = explode(',', $list_sub);
-        foreach ($list as $_catid) {
-            $subcat = $module_array_cat[$_catid];
-            $subcat['title0'] = nv_clean60($subcat['title'], $title_length);
-            $_active = ($module_name == $block_config['module'] and !empty($catid) and $subcat['catid'] == $catid);
-
-            $sub = '';
-            $subactive = false;
-            if (!empty($subcat['subcatid'])) {
-                $sub = nv_news_sub_category($subcat['subcatid'], $title_length, $block_theme, $block_config, $subcat['catid'], $subactive);
-            }
-
-            if (!$active) {
-                $active = $_active || $subactive;
-            }
-            !$show && $show = $_active || $subactive;
-            $subcat['active'] = $_active ? ' class="active"' : '';
-            $subcat['expanded'] = $subactive ? 'true' : 'false';
-            $subcat['collapsed'] = $subactive ? '' : ' collapsed';
+        foreach ($list_sub as $subcat) {
+            $subcat['active'] && $show = true;
+            $subcat['active'] = $subcat['active'] ? ' class="active"' : '';
+            $subcat['expanded'] = $subcat['expanded'] ? 'true' : 'false';
+            $subcat['collapsed'] = $subcat['collapsed'] ? ' collapsed' : '';
             $xtpl->assign('SUBCAT', $subcat);
 
-            if (!empty($sub)) {
-                $xtpl->assign('SUB', $sub);
+            if (!empty($subcat['sub'])) {
+                $xtpl->assign('SUB', nv_news_sub_category($subcat['sub'], $block_theme, $block_config));
                 $xtpl->parse('subcat.loop.sub');
             }
             $xtpl->parse('subcat.loop');
@@ -215,6 +219,7 @@ if (defined('NV_SYSTEM')) {
                 }
             }
         }
+
         $content = nv_news_category($block_config);
     }
 }

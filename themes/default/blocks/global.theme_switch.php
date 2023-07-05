@@ -28,14 +28,7 @@ if (!nv_function_exists('nv_block_theme_switch')) {
             return '';
         }
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.theme_switch.tpl')) {
-            $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.theme_switch.tpl')) {
-            $block_theme = $global_config['site_theme'];
-        } else {
-            $block_theme = 'default';
-        }
-
+        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.theme_switch.tpl');
         $xtpl = new XTemplate('global.theme_switch.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('BLOCK_THEME', $block_theme);

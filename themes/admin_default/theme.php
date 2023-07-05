@@ -72,25 +72,9 @@ function nv_admin_theme($contents, $head_site = 1)
 
     $dir_template = '';
 
-    if ($head_site == 1) {
-        $file_name_tpl = 'main.tpl';
-
-        if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/system/' . $file_name_tpl)) {
-            $dir_template = NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/system';
-        } else {
-            $dir_template = NV_ROOTDIR . '/themes/admin_default/system';
-            $admin_info['admin_theme'] = 'admin_default';
-        }
-    } else {
-        $file_name_tpl = 'content.tpl';
-
-        if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/system/' . $file_name_tpl)) {
-            $dir_template = NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/system';
-        } else {
-            $dir_template = NV_ROOTDIR . '/themes/admin_default/system';
-            $admin_info['admin_theme'] = 'admin_default';
-        }
-    }
+    $file_name_tpl = $head_site == 1 ? 'main.tpl' : 'content.tpl';
+    $admin_info['admin_theme'] = get_tpl_dir($admin_info['admin_theme'], 'admin_default', '/system/' . $file_name_tpl);
+    $dir_template = NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/system';
 
     $global_config['site_name'] = empty($global_config['site_name']) ? NV_SERVER_NAME : $global_config['site_name'];
     !isset($global_config['admin_XSSsanitize']) && $global_config['admin_XSSsanitize'] = 1;
@@ -122,11 +106,9 @@ function nv_admin_theme($contents, $head_site = 1)
         $xtpl->parse('main.passshow_button');
     }
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css')) {
-        $xtpl->assign('NV_CSS_MODULE_THEME', NV_STATIC_URL . 'themes/' . $admin_info['admin_theme'] . '/css/' . $module_file . '.css');
-        $xtpl->parse('main.css_module');
-    } elseif (file_exists(NV_ROOTDIR . '/themes/admin_default/css/' . $module_file . '.css')) {
-        $xtpl->assign('NV_CSS_MODULE_THEME', NV_STATIC_URL . 'themes/admin_default/css/' . $module_file . '.css');
+    $theme_tpl = get_tpl_dir([$admin_info['admin_theme'], 'admin_default'], '', '/css/' . $module_file . '.css');
+    if (!empty($theme_tpl)) {
+        $xtpl->assign('NV_CSS_MODULE_THEME', NV_STATIC_URL . 'themes/' . $theme_tpl . '/css/' . $module_file . '.css');
         $xtpl->parse('main.css_module');
     }
 
@@ -142,11 +124,9 @@ function nv_admin_theme($contents, $head_site = 1)
         $xtpl->parse('main.XSSsanitize');
     }
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $admin_info['admin_theme'] . '/js/' . $module_file . '.js')) {
-        $xtpl->assign('NV_JS_MODULE', NV_STATIC_URL . 'themes/' . $admin_info['admin_theme'] . '/js/' . $module_file . '.js');
-        $xtpl->parse('main.module_js');
-    } elseif (file_exists(NV_ROOTDIR . '/themes/admin_default/js/' . $module_file . '.js')) {
-        $xtpl->assign('NV_JS_MODULE', NV_STATIC_URL . 'themes/admin_default/js/' . $module_file . '.js');
+    $theme_tpl = get_tpl_dir([$admin_info['admin_theme'], 'admin_default'], '', '/js/' . $module_file . '.js');
+    if (!empty($theme_tpl)) {
+        $xtpl->assign('NV_JS_MODULE', NV_STATIC_URL . 'themes/' . $theme_tpl . '/js/' . $module_file . '.js');
         $xtpl->parse('main.module_js');
     }
 

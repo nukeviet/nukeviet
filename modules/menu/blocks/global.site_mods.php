@@ -85,14 +85,7 @@ if (!nv_function_exists('nv_menu_site_mods')) {
     {
         global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_name, $module_file, $module_data, $nv_Lang, $catid, $home, $op, $array_op;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
-            $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/global.bootstrap.tpl')) {
-            $block_theme = $global_config['site_theme'];
-        } else {
-            $block_theme = 'default';
-        }
-
+        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/menu/global.bootstrap.tpl');
         $xtpl = new XTemplate('global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('BLOCK_THEME', $block_theme);

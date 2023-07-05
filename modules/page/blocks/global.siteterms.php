@@ -103,14 +103,7 @@ $(function() {
         $term_queries = !empty($block_config['term_queries']) ? array_map('trim', explode('|', $block_config['term_queries'])) : [''];
 
         if (!empty($term_names)) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/page/block.siteterms.tpl')) {
-                $block_theme = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/page/block.siteterms.tpl')) {
-                $block_theme = $global_config['site_theme'];
-            } else {
-                $block_theme = 'default';
-            }
-
+            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.siteterms.tpl');
             $xtpl = new XTemplate('block.siteterms.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
 
             foreach ($term_names as $key => $name) {

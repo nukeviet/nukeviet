@@ -23,61 +23,53 @@ if (!nv_function_exists('nv_block_counter')) {
     {
         global $global_config, $db;
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/statistics/global.counter.tpl')) {
-            $block_theme = $global_config['module_theme'];
-        } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/statistics/global.counter.tpl')) {
-            $block_theme = $global_config['site_theme'];
-        } else {
-            $block_theme = 'default';
-        }
-
-        $xtpl = new XTemplate('global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics');
-
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('IMG_PATH', NV_STATIC_URL . 'themes/' . $block_theme . '/');
-
         $sql = 'SELECT c_type, c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE (c_type='day' AND c_val='" . date('d', NV_CURRENTTIME) . "') OR (c_type='month' AND c_val='" . date('M', NV_CURRENTTIME) . "') OR (c_type='total' AND c_val='hits')";
         $query = $db->query($sql);
+        $count_data = [];
         while (list($c_type, $c_count) = $query->fetch(3)) {
-            if ($c_type == 'day') {
-                $xtpl->assign('COUNT_DAY', number_format($c_count));
-            } elseif ($c_type == 'month') {
-                $xtpl->assign('COUNT_MONTH', number_format($c_count));
-            } elseif ($c_type == 'total') {
-                $xtpl->assign('COUNT_ALL', number_format($c_count));
-            }
+            $c_type == 'total' && $c_type = 'all';
+            $count_data[$c_type] = $c_count;
         }
 
         $sql = 'SELECT userid, username FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time >= ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME);
         $query = $db->query($sql);
 
-        $count_online = $users = $bots = $guests = 0;
+        $count_data['online'] = $count_data['users'] = $count_data['bots'] = $count_data['guests'] = 0;
         while ($row = $query->fetch()) {
-            ++$count_online;
+            ++$count_data['online'];
 
             if ($row['userid']) {
-                ++$users;
+                ++$count_data['users'];
             } elseif (preg_match('/^bot\:/', $row['username'])) {
-                ++$bots;
+                ++$count_data['bots'];
             } else {
-                ++$guests;
+                ++$count_data['guests'];
             }
         }
 
-        $xtpl->assign('COUNT_ONLINE', number_format($count_online));
+        $count_data = array_map(function($number) {
+            return !empty($number) ? number_format($number) : 0;
+        }, $count_data);
 
-        if ($users) {
-            $xtpl->assign('COUNT_USERS', number_format($users));
+        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/statistics/global.counter.tpl');
+        $xtpl = new XTemplate('global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics');
+
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
+        $xtpl->assign('IMG_PATH', NV_STATIC_URL . 'themes/' . $block_theme . '/');
+
+        foreach ($count_data as $key => $value) {
+            $xtpl->assign('COUNT_' . strtoupper($key), $value);
+        }
+
+        if ($count_data['users']) {
             $xtpl->parse('main.users');
         }
 
-        if ($bots) {
-            $xtpl->assign('COUNT_BOTS', number_format($bots));
+        if ($count_data['bots']) {
             $xtpl->parse('main.bots');
         }
 
-        if ($guests and $guests != $count_online) {
-            $xtpl->assign('COUNT_GUESTS', number_format($guests));
+        if ($count_data['guests'] and $count_data['guests'] != $count_data['online']) {
             $xtpl->parse('main.guests');
         }
 

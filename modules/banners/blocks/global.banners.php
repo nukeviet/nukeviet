@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -72,7 +72,7 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
      * nv_block_global_banners()
      *
      * @param array $block_config
-     * @return string
+     * @return string|void
      */
     function nv_block_global_banners($block_config)
     {
@@ -127,14 +127,7 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
             }
             unset($xml, $array_banners);
 
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/banners/global.banners.tpl')) {
-                $block_theme = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/banners/global.banners.tpl')) {
-                $block_theme = $global_config['site_theme'];
-            } else {
-                $block_theme = 'default';
-            }
-
+            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/banners/global.banners.tpl');
             $xtpl = new XTemplate('global.banners.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/banners');
 
             foreach ($array_banners_content as $banners) {

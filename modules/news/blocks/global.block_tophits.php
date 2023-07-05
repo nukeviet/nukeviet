@@ -176,27 +176,17 @@ if (!nv_function_exists('nv_news_block_tophits')) {
                 'imgurl' => $imgurl,
                 'width' => $blockwidth,
                 'hometext' => $hometext,
-                'external_link' => $external_link
+                'hometext_clean' => nv_clean60(strip_tags($hometext), $block_config['tooltip_length'], true),
+                'external_link' => $external_link,
+                'target_blank' => $external_link ? ' target="_blank"' : ''
             ];
         }
 
-        if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $mod_file . '/block_tophits.tpl')) {
-            $block_theme = $global_config['module_theme'];
-        } else {
-            $block_theme = 'default';
-        }
-
+        $block_theme = get_tpl_dir($global_config['module_theme'], 'default', '/modules/' . $mod_file . '/block_tophits.tpl');
         $xtpl = new XTemplate('block_tophits.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file);
         $xtpl->assign('TEMPLATE', $block_theme);
 
         foreach ($array_block_news as $array_news) {
-            $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
-            $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
-
-            if ($array_news['external_link']) {
-                $array_news['target_blank'] = 'target="_blank"';
-            }
-
             $xtpl->assign('blocknews', $array_news);
 
             if (!empty($array_news['imgurl'])) {
