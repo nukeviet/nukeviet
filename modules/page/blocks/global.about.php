@@ -69,14 +69,7 @@ if (!nv_function_exists('nv_message_page')) {
         }
 
         if ($is_show) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/page/block.about.tpl')) {
-                $block_theme = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/page/block.about.tpl')) {
-                $block_theme = $global_config['site_theme'];
-            } else {
-                $block_theme = 'default';
-            }
-
+            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.about.tpl');
             $xtpl = new XTemplate('block.about.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
             $xtpl->assign('LINK', $link);
             $xtpl->assign('TITLE', $title);

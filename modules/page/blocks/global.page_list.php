@@ -76,14 +76,7 @@ if (!nv_function_exists('nv_page_list')) {
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
         if (!empty($list)) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/page/block.page_list.tpl')) {
-                $block_theme = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/page/block.page_list.tpl')) {
-                $block_theme = $global_config['site_theme'];
-            } else {
-                $block_theme = 'default';
-            }
-
+            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.page_list.tpl');
             $xtpl = new XTemplate('block.page_list.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
 
             foreach ($list as $l) {

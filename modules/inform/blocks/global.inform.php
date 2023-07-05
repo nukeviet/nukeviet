@@ -21,21 +21,8 @@ if (!empty($global_config['inform_active']) and defined('NV_IS_USER') and !defin
     // Giới hạn block này chỉ thêm 1 lần duy nhất
     define('NV_IS_BLOCK_INFORM', true);
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/inform/block.inform.tpl')) {
-        $block_theme = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/inform/block.inform.tpl')) {
-        $block_theme = $global_config['site_theme'];
-    } else {
-        $block_theme = 'default';
-    }
-
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/block.inform.js')) {
-        $block_js = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/block.inform.js')) {
-        $block_js = $global_config['site_theme'];
-    } else {
-        $block_js = 'default';
-    }
+    $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/inform/block.inform.tpl');
+    $block_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/js/block.inform.js');
 
     $filters = [
         'all' => $lang_global['all'],

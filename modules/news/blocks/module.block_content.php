@@ -15,11 +15,7 @@ if (!defined('NV_IS_MOD_NEWS')) {
 
 global $global_config, $module_name, $module_info, $module_file, $lang_module, $client_info;
 
-if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/block_content.tpl')) {
-    $block_theme = $module_info['template'];
-} else {
-    $block_theme = 'default';
-}
+$block_theme = get_tpl_dir($module_info['template'], 'default', '/modules/' . $module_info['module_theme'] . '/block_content.tpl');
 $xtpl = new XTemplate('block_content.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module_file);
 $xtpl->assign('TEMPLATE', $block_theme);
 $xtpl->assign('LANG', $lang_module);

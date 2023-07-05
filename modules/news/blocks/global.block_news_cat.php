@@ -152,11 +152,7 @@ if (!nv_function_exists('nv_block_news_cat')) {
         $list = $nv_Cache->db($db->sql(), '', $module);
 
         if (!empty($list)) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_groups.tpl')) {
-                $block_theme = $global_config['module_theme'];
-            } else {
-                $block_theme = 'default';
-            }
+            $block_theme = get_tpl_dir($global_config['module_theme'], 'default', '/modules/news/block_groups.tpl');
 
             $xtpl = new XTemplate('block_groups.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
             $xtpl->assign('TEMPLATE', $block_theme);

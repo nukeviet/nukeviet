@@ -282,21 +282,9 @@ function nv_blocks_content($sitecontent)
                 if (!empty($content) or defined('NV_IS_DRAG_BLOCK')) {
                     $xtpl = null;
                     $_row['template'] = empty($_row['template']) ? 'default' : $_row['template'];
-                    $_template = 'default';
-
-                    if (!empty($module_info['theme']) and file_exists(NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/layout');
-                        $_template = $module_info['theme'];
-                    } elseif (!empty($global_config['module_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
-                        $_template = $global_config['module_theme'];
-                    } elseif (!empty($global_config['site_theme']) and file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout');
-                        $_template = $global_config['site_theme'];
-                    } elseif (file_exists(NV_ROOTDIR . '/themes/default/layout/block.' . $_row['template'] . '.tpl')) {
-                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/default/layout');
-                    }
-                    if (!empty($xtpl)) {
+                    $_template = get_tpl_dir([(!empty($module_info['theme']) ? $module_info['theme'] : ''), (!empty($global_config['module_theme']) ? $global_config['module_theme'] : ''), $global_config['site_theme'], 'default'], '', '/layout/block.' . $_row['template'] . '.tpl');
+                    if (!empty($_template)) {
+                        $xtpl = new XTemplate('block.' . $_row['template'] . '.tpl', NV_ROOTDIR . '/themes/' . $_template . '/layout');
                         $xtpl->assign('BLOCK_ID', $_row['bid']);
                         $xtpl->assign('BLOCK_TITLE', $_row['blockTitle']);
                         $xtpl->assign('BLOCK_CONTENT', $content);
@@ -977,13 +965,11 @@ function nv_admin_menu()
 {
     global $lang_global, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
 
-    if ($module_info['theme'] == $module_info['template'] and file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/system/admin_toolbar.tpl')) {
-        $block_theme = $module_info['template'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/admin_toolbar.tpl')) {
-        $block_theme = $global_config['site_theme'];
-    } else {
-        $block_theme = 'default';
+    $dir_basenames = [$global_config['site_theme']];
+    if ($module_info['theme'] == $module_info['template']) {
+        array_unshift($dir_basenames, $module_info['template']);
     }
+    $block_theme = get_tpl_dir($dir_basenames, 'default', '/system/admin_toolbar.tpl');
 
     $xtpl = new XTemplate('admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system');
     $xtpl->assign('GLANG', $lang_global);

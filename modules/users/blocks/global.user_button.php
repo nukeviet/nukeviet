@@ -18,27 +18,9 @@ global $site_mods, $client_info, $global_config, $module_file, $module_name, $us
 $content = '';
 
 if ($global_config['allowuserlogin']) {
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/users/block.user_button.tpl')) {
-        $block_theme = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/users/block.user_button.tpl')) {
-        $block_theme = $global_config['site_theme'];
-    } else {
-        $block_theme = 'default';
-    }
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/users.css')) {
-        $block_css = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/users.css')) {
-        $block_css = $global_config['site_theme'];
-    } else {
-        $block_css = '';
-    }
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/users.js')) {
-        $block_js = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/js/users.js')) {
-        $block_js = $global_config['site_theme'];
-    } else {
-        $block_js = 'default';
-    }
+    $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/users/block.user_button.tpl');
+    $block_css = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], '', '/css/users.css');
+    $block_js = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/js/users.js');
 
     $xtpl = new XTemplate('block.user_button.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
 

@@ -119,13 +119,7 @@ if (!nv_function_exists('nv_block_freecontent')) {
         $list = $nv_Cache->db($sql, 'id', $module);
 
         if (!empty($list)) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.free_content.tpl')) {
-                $block_theme = $global_config['module_theme'];
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.free_content.tpl')) {
-                $block_theme = $global_config['site_theme'];
-            } else {
-                $block_theme = 'default';
-            }
+            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $site_mods[$module]['module_file'] . '/block.free_content.tpl');
 
             $xtpl = new XTemplate('block.free_content.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
 

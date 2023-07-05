@@ -127,8 +127,7 @@ function nv_page_main_list($array_data, $generate_page)
 {
     global $lang_global, $module_upload, $module_info, $module_name;
 
-    $template = (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/main_list.tpl')) ? $module_info['template'] : 'default';
-
+    $template = get_tpl_dir($module_info['template'], 'default', '/modules/' . $module_info['module_theme'] . '/main_list.tpl');
     $xtpl = new XTemplate('main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('GLANG', $lang_global);
 

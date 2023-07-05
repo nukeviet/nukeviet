@@ -69,13 +69,7 @@ function nv_menu_blocks($block_config)
         }
     }
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl')) {
-        $block_theme = $global_config['module_theme'];
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl')) {
-        $block_theme = $global_config['site_theme'];
-    } else {
-        $block_theme = 'default';
-    }
+    $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/menu/' . $block_config['block_name'] . '.tpl');
 
     $xtpl = new XTemplate($block_config['block_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
     $xtpl->assign('LANG', $lang_global);

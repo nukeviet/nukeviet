@@ -88,13 +88,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
 
                 include NV_ROOTDIR . '/modules/' . $site_mods['voting']['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php';
 
-                if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods['voting']['module_file'] . '/global.voting.tpl')) {
-                    $block_theme = $global_config['module_theme'];
-                } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $site_mods['voting']['module_file'] . '/global.voting.tpl')) {
-                    $block_theme = $global_config['site_theme'];
-                } else {
-                    $block_theme = 'default';
-                }
+                $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $site_mods['voting']['module_file'] . '/global.voting.tpl');
 
                 $action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
 
