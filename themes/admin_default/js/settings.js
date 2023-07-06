@@ -775,12 +775,27 @@ $(document).ready(function() {
             types.push($(this).val());
         });
         if ($.inArray('m', types) !== -1) {
-            $('.mobile_theme-wrap, .switch_mobi_des-wrap', form).slideDown()
+            $('.mobile_theme-wrap', form).slideDown();
+            if ($('[name=mobile_theme]', form).val() != '') {
+                $('.switch_mobi_des-wrap', form).slideDown()
+            } else {
+                $('.switch_mobi_des-wrap', form).slideUp()
+            }
         } else {
-            $('.mobile_theme-wrap, .switch_mobi_des-wrap', form).slideUp()
+            $('.mobile_theme-wrap, .switch_mobi_des-wrap', form).slideUp();
         }
         if ($.inArray('r', types) === -1 && $.inArray('d', types) === -1) {
             $('[name^=theme_type][value=r]', form).prop('checked', true)
+        }
+    });
+
+    $('#site-settings [name=mobile_theme]').on('change', function() {
+        var form = $(this).parents('form');
+        if ($(this).val() != '') {
+            $('.switch_mobi_des-wrap', form).slideDown();
+        } else {
+            $('.switch_mobi_des-wrap', form).slideUp();
+            $('[name=switch_mobi_des]', form).prop('checked', false)
         }
     });
 
