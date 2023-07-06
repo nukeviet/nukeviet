@@ -1198,7 +1198,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
  */
 function author_theme($author_info, $topic_array, $topic_other_array, $generate_page)
 {
-    global $module_info, $module_name, $module_config, $topicid, $page_title;
+    global $module_info, $module_name, $module_config, $page_title;
 
     $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
@@ -1226,7 +1226,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
                 $xtpl->parse('main.topic.homethumb');
             }
 
-            if ($topicid and defined('NV_IS_MODADMIN')) {
+            if (defined('NV_IS_MODADMIN')) {
                 $xtpl->assign('ADMINLINK', nv_link_edit_page($topic_array_i['id']) . ' ' . nv_link_delete_page($topic_array_i['id']));
                 $xtpl->parse('main.topic.adminlink');
             }
