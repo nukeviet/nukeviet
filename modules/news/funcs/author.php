@@ -77,7 +77,7 @@ $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edit
 $result = $db_slave->query($db_slave->sql());
 while ($item = $result->fetch()) {
     $item['imghome'] = $item['imgmobile'] = '';
-    get_homeimgfile($item);
+    get_homeimgfile($item, 'src');
 
     $item['alt'] = !empty($item['homeimgalt']) ? $item['homeimgalt'] : $item['title'];
     $item['width'] = $module_config[$module_name]['homewidth'];
