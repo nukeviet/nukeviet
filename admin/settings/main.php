@@ -55,7 +55,7 @@ if ($nv_Request->get_string('checkss', 'post') == $checkss) {
     $array_config['site_theme'] = nv_substr($nv_Request->get_title('site_theme', 'post', '', 1), 0, 255);
     !in_array($array_config['site_theme'], $theme_array, true) && $array_config['site_theme'] = $global_config['site_theme'];
     $array_config['mobile_theme'] = nv_substr($nv_Request->get_title('mobile_theme', 'post', '', 1), 0, 255);
-    !in_array($array_config['mobile_theme'], $mobile_theme_array, true) && $array_config['mobile_theme'] = $global_config['mobile_theme'];
+    (!empty($array_config['mobile_theme']) and !in_array($array_config['mobile_theme'], $mobile_theme_array, true)) && $array_config['mobile_theme'] = $global_config['mobile_theme'];
     $array_config['switch_mobi_des'] = $nv_Request->get_int('switch_mobi_des', 'post', 0);
     $_array_theme_type = $nv_Request->get_typed_array('theme_type', 'post', 'title');
     $_array_theme_type = array_intersect($_array_theme_type, $array_theme_type);
@@ -231,6 +231,9 @@ if (!empty($mobile_theme_array)) {
 
 if (!(!empty($mobile_theme_array) and in_array('m', $global_config['array_theme_type'], true))) {
     $xtpl->parse('main.if_not_mobile_type');
+}
+
+if (!(!empty($mobile_theme_array) and in_array('m', $global_config['array_theme_type'], true)) or empty($global_config['mobile_theme'])) {
     $xtpl->parse('main.if_not_mobile_type2');
 }
 
