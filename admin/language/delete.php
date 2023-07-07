@@ -90,6 +90,7 @@ if ($nv_Request->get_string('checksess', 'get') == md5('deleteallfile' . NV_CHEC
             $contents = $lang_module['nv_lang_delete_error'];
         }
 
+        $nv_Cache->delMod('sys');
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid']);
 
         $xtpl = new XTemplate('delete.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

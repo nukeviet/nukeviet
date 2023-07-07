@@ -415,6 +415,8 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                 if (is_dir(NV_ROOTDIR . '/modules/' . $request['title'] . '/')) {
                     nv_deletefile(NV_ROOTDIR . '/modules/' . $request['title'] . '/', true);
                 }
+
+                $nv_Cache->delMod('sys');
             }
         } elseif ($row['type'] == 'theme') {
             $check_exit_mod = false;
@@ -463,6 +465,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                     $sth->execute();
                 }
                 $nv_Cache->delMod('themes');
+                $nv_Cache->delMod('sys');
 
                 $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes');
                 $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');

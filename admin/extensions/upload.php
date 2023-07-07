@@ -335,6 +335,8 @@ if ($nv_Request->isset_request('extract', 'get')) {
                                     $sth->execute();
                                 }
                             }
+
+                            $nv_Cache->delMod('sys');
                         }
                     }
                 }
@@ -460,7 +462,7 @@ if (empty($error)) {
             'modules',
             'uploads',
             'includes/plugin',
-            'vendor'
+            'includes/vendor'
         ],
         'forbidExt' => [
             'php',
