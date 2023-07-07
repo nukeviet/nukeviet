@@ -1074,16 +1074,17 @@ function theme_file_exists($file)
 
     $file = str_replace(NV_ROOTDIR . '/themes', '', $file);
     $file = trim($file, '/');
-    $path_parts = pathinfo($file);
-    if (!empty($path_parts['extension'])) {
-        $_dir = $path_parts['dirname'];
-        $_file = $path_parts['basename'];
-    } else {
-        $_dir = $path_parts['dirname'] . '/' . $path_parts['basename'];
-        $_file = '';
-    }
 
     if (!empty($themefilelist)) {
+        $path_parts = pathinfo($file);
+        if (!empty($path_parts['extension'])) {
+            $_dir = $path_parts['dirname'];
+            $_file = $path_parts['basename'];
+        } else {
+            $_dir = $path_parts['dirname'] . '/' . $path_parts['basename'];
+            $_file = '';
+        }
+
         if (empty($_file)) {
             return isset($themefilelist[$_dir]);
         }
@@ -1106,16 +1107,17 @@ function module_file_exists($file)
 
     $file = str_replace(NV_ROOTDIR . '/modules', '', $file);
     $file = trim($file, '/');
-    $path_parts = pathinfo($file);
-    if (!empty($path_parts['extension'])) {
-        $_dir = $path_parts['dirname'];
-        $_file = $path_parts['basename'];
-    } else {
-        $_dir = $path_parts['dirname'] . '/' . $path_parts['basename'];
-        $_file = '';
-    }
 
     if (!empty($modulefilelist)) {
+        $path_parts = pathinfo($file);
+        if (!empty($path_parts['extension'])) {
+            $_dir = $path_parts['dirname'];
+            $_file = $path_parts['basename'];
+        } else {
+            $_dir = $path_parts['dirname'] . '/' . $path_parts['basename'];
+            $_file = '';
+        }
+
         if (empty($_file)) {
             return isset($modulefilelist[$_dir]);
         }
