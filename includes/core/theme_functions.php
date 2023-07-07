@@ -806,32 +806,3 @@ function nv_disable_site()
 
     nv_info_die($lang_global['disable_site_title'], $lang_global['disable_site_title'], $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
 }
-
-/**
- * get_tpl_dir()
- *
- * @param string|array  $dir_basenames
- * @param string $default_dir_basename
- * @param string $file
- * @return string
- */
-function get_tpl_dir($dir_basenames, $default_dir_basename, $file = '')
-{
-    if (!empty($file) and !str_starts_with($file, '/')) {
-        $file = '/' . $file;
-    }
-    if (!is_array($dir_basenames)) {
-        $dir_basenames = [$dir_basenames];
-    }
-    $dir_basenames = array_filter($dir_basenames);
-    $dir_basenames = array_unique($dir_basenames);
-    if (!empty($dir_basenames)) {
-        foreach ($dir_basenames as $dir_basename) {
-            if (file_exists(NV_ROOTDIR . '/themes/' . $dir_basename . $file)) {
-                return $dir_basename;
-            }
-        }
-    }
-
-    return $default_dir_basename;
-}

@@ -38,7 +38,7 @@ $searchForm = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARI
 
 if (!empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
     $icon = $global_config['site_favicon'];
-} elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/favicon/favicon.ico')) {
+} elseif (theme_file_exists($global_config['module_theme'] . '/images/favicon/favicon.ico')) {
     $icon = 'themes/' . $global_config['module_theme'] . '/images/favicon/favicon.ico';
 } else {
     $icon = 'favicon.ico';

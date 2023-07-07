@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -114,9 +114,9 @@ function nv_scandir($directory, $pattern, $sorting_order = 0)
 
 /**
  * nv_get_mime_from_ini()
- * 
- * @param string $ext 
- * @return string 
+ *
+ * @param string $ext
+ * @return string
  */
 function nv_get_mime_from_ini($ext)
 {
@@ -627,11 +627,8 @@ function nv_copyfile($file, $newfile)
         }
     }
 
-    if (file_exists($newfile)) {
-        return true;
-    }
-
-    return false;
+    return (bool) (file_exists($newfile))
+    ;
 }
 
 /**
@@ -931,4 +928,200 @@ function nv_is_file($filepath, $folders = [])
     }
 
     return $file_exists > 0 ? true : false;
+}
+
+/**
+ * nv_scandirfile()
+ * Lấy danh sách các dir và file theo $pattern trong một thư mục nhất định
+ *
+ * @param mixed  $directory
+ * @param mixed  $pattern
+ * @param mixed  $files
+ * @param string $cut
+ */
+function nv_scandirfile($directory, $pattern, &$files, $cut = '')
+{
+    if (is_dir($directory)) {
+        !empty($cut) && $cut = str_replace(NV_ROOTDIR, '', $cut);
+        !empty($cut) && $cut = trim($cut, '/');
+        !empty($cut) && $cut = '/' . $cut;
+        $ab_directory = str_replace(NV_ROOTDIR . $cut, '', $directory);
+        $ab_directory = trim($ab_directory, '/');
+        $files[$ab_directory] = [];
+        if ($dh = opendir($directory)) {
+            $subdirs = [];
+            while (($file = readdir($dh)) !== false) {
+                if (!preg_match('/^\./', $file) and $file != 'index.html') {
+                    if (is_dir($directory . '/' . $file)) {
+                        $subdirs[] = $directory . '/' . $file;
+                        $files[$ab_directory . (!empty($ab_directory) ? '/' : '') . $file] = [];
+                    } else {
+                        if (!is_array($pattern)) {
+                            if (preg_match($pattern, $file)) {
+                                $files[$ab_directory][] = $file;
+                            }
+                        } else {
+                            foreach ($pattern as $p) {
+                                if (preg_match($p, $file)) {
+                                    $files[$ab_directory][] = $file;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            closedir($dh);
+            if (!empty($subdirs)) {
+                foreach ($subdirs as $subdir) {
+                    nv_scandirfile($subdir, $pattern, $files, $cut);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * get_tpl_dir()
+ *
+ * @param array|string $dir_basenames
+ * @param string       $default_dir_basename
+ * @param string       $file
+ * @return string
+ */
+function get_tpl_dir($dir_basenames, $default_dir_basename, $file = '')
+{
+    if (!empty($file)) {
+        $file = trim($file, '/');
+    }
+    if (!is_array($dir_basenames)) {
+        $dir_basenames = [$dir_basenames];
+    }
+    $dir_basenames = array_filter($dir_basenames);
+    $dir_basenames = array_unique($dir_basenames);
+    if (!empty($dir_basenames)) {
+        foreach ($dir_basenames as $dir_basename) {
+            if (theme_file_exists($dir_basename . '/' . $file)) {
+                return $dir_basename;
+            }
+        }
+    }
+
+    return $default_dir_basename;
+}
+
+/**
+ * get_theme_filelist()
+ *
+ * @return mixed
+ */
+function get_theme_filelist()
+{
+    global $nv_Cache;
+
+    $themefilelist = [];
+    $cache_file = NV_LANG_DATA . '_' . 'themefiles_' . NV_CACHE_PREFIX . '.cache';
+    if (NV_DEBUG and defined('NV_IS_ADMIN')) {
+        nv_scandirfile(NV_ROOTDIR . '/themes', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $themefilelist, 'themes');
+        $nv_Cache->setItem('sys', $cache_file, json_encode($themefilelist), 1800);
+    } else {
+        if (($cache = $nv_Cache->getItem('sys', $cache_file, 1800)) != false) {
+            $themefilelist = json_decode($cache, true);
+        } else {
+            nv_scandirfile(NV_ROOTDIR . '/themes', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $themefilelist, 'themes');
+            $nv_Cache->setItem('sys', $cache_file, json_encode($themefilelist), 1800);
+        }
+    }
+
+    return $themefilelist;
+}
+
+/**
+ * get_module_filelist()
+ *
+ * @return mixed
+ */
+function get_module_filelist()
+{
+    global $nv_Cache;
+
+    $modulefilelist = [];
+    $cache_file = NV_LANG_DATA . '_' . 'modulefiles_' . NV_CACHE_PREFIX . '.cache';
+    if (NV_DEBUG and defined('NV_IS_ADMIN')) {
+        nv_scandirfile(NV_ROOTDIR . '/modules', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $modulefilelist, 'modules');
+        $nv_Cache->setItem('sys', $cache_file, json_encode($modulefilelist), 1800);
+    } else {
+        if (($cache = $nv_Cache->getItem('sys', $cache_file, 1800)) != false) {
+            $modulefilelist = json_decode($cache, true);
+        } else {
+            nv_scandirfile(NV_ROOTDIR . '/modules', '/([a-zA-Z0-9\.\-\_]+)\.(php|ini|json|ttf|woff|woff2|tpl|js|css|gif|jpg|jpeg|png|webp|avg|ico|xsl)$/', $modulefilelist, 'modules');
+            $nv_Cache->setItem('sys', $cache_file, json_encode($modulefilelist), 1800);
+        }
+    }
+
+    return $modulefilelist;
+}
+
+/**
+ * theme_file_exists()
+ *
+ * @param string $file
+ * @return bool
+ */
+function theme_file_exists($file)
+{
+    global $themefilelist;
+
+    $file = str_replace(NV_ROOTDIR . '/themes', '', $file);
+    $file = trim($file, '/');
+    $path_parts = pathinfo($file);
+    if (!empty($path_parts['extension'])) {
+        $_dir = $path_parts['dirname'];
+        $_file = $path_parts['basename'];
+    } else {
+        $_dir = $path_parts['dirname'] . '/' . $path_parts['basename'];
+        $_file = '';
+    }
+
+    if (!empty($themefilelist)) {
+        if (empty($_file)) {
+            return isset($themefilelist[$_dir]);
+        }
+
+        return !empty($themefilelist[$_dir]) and in_array($_file, $themefilelist[$_dir], true);
+    }
+
+    return file_exists(NV_ROOTDIR . '/themes/' . $file);
+}
+
+/**
+ * module_file_exists()
+ *
+ * @param string $file
+ * @return bool
+ */
+function module_file_exists($file)
+{
+    global $modulefilelist;
+
+    $file = str_replace(NV_ROOTDIR . '/modules', '', $file);
+    $file = trim($file, '/');
+    $path_parts = pathinfo($file);
+    if (!empty($path_parts['extension'])) {
+        $_dir = $path_parts['dirname'];
+        $_file = $path_parts['basename'];
+    } else {
+        $_dir = $path_parts['dirname'] . '/' . $path_parts['basename'];
+        $_file = '';
+    }
+
+    if (!empty($modulefilelist)) {
+        if (empty($_file)) {
+            return isset($modulefilelist[$_dir]);
+        }
+
+        return !empty($modulefilelist[$_dir]) and in_array($_file, $modulefilelist[$_dir], true);
+    }
+
+    return file_exists(NV_ROOTDIR . '/modules/' . $file);
 }

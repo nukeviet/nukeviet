@@ -114,7 +114,7 @@ function validUserLog($array_user, $remember, $oauth_data, $current_mode = 0)
             } else {
                 $site_name = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name='site_name' AND lang='" . $lang . "' AND module='global'")->fetchColumn();
                 $lang_module_temp = $lang_module;
-                if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
+                if (module_file_exists($module_file . '/language/' . $lang . '.php')) {
                     include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
                 } else {
                     include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';

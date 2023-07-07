@@ -18,8 +18,8 @@ global $module_name, $site_mods, $global_config, $lang_global;
 $content = '';
 if ($module_name != $block_config['module'] and defined('NV_SYSTEM')) {
     $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/contact/block.contact_form.tpl');
-    $blockJs = file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/contact.js') ? $block_theme : 'default';
-    $blockCss = file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/css/contact.css') ? $block_theme : 'default';
+    $blockJs = theme_file_exists($block_theme . '/js/contact.js') ? $block_theme : 'default';
+    $blockCss = theme_file_exists($block_theme . '/css/contact.css') ? $block_theme : 'default';
 
     $xtpl = new XTemplate('block.contact_form.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/contact');
     $xtpl->assign('GLANG', $lang_global);

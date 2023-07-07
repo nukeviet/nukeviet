@@ -1066,7 +1066,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                     } else {
                         $group_title = $db->query('SELECT title FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id=' . $gid . " AND lang='" . $lang . "'")->fetchColumn();
                         $lang_module_temp = $lang_module;
-                        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
+                        if (module_file_exists($module_file . '/language/' . $lang . '.php')) {
                             include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
                         } else {
                             include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
@@ -1119,7 +1119,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
                         } else {
                             $group_title = $db->query('SELECT title FROM ' . NV_MOD_TABLE . '_groups_detail WHERE group_id=' . $gid . " AND lang='" . $lang . "'")->fetchColumn();
                             $lang_module_temp = $lang_module;
-                            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php')) {
+                            if (module_file_exists($module_file . '/language/' . $lang . '.php')) {
                                 include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $lang . '.php';
                             } else {
                                 include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';

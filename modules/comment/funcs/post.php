@@ -211,7 +211,7 @@ try {
 
         if ($status) {
             $mod_info = $site_mods[$module];
-            if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
+            if (module_file_exists($mod_info['module_file'] . '/comment.php')) {
                 $row = [];
                 $row['module'] = $module;
                 $row['id'] = $id;

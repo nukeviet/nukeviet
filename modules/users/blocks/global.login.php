@@ -39,7 +39,7 @@ if (!nv_function_exists('nv_block_login')) {
         $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/users/block.login.tpl');
 
         if ($mod_file != $module_file) {
-            if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php')) {
+            if (module_file_exists('users/language/' . NV_LANG_INTERFACE . '.php')) {
                 include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php';
             } else {
                 include NV_ROOTDIR . '/modules/users/language/vi.php';

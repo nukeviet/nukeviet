@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -208,15 +208,21 @@ if (preg_match($global_config['check_module'], $module_name)) {
                 }
             }
 
+            // Danh sách các file trong thư mục modules
+            $modulefilelist = get_module_filelist();
+
             // Ket noi ngon ngu cua module
-            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
+            if (module_file_exists($module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
+            } elseif (module_file_exists($module_file . '/language/en.php')) {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
             }
 
+            // Danh sách các file trong thư mục themes
+            $themefilelist = get_theme_filelist();
+
             // Xem trước giao diện
-            if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme'], true) and file_exists(NV_ROOTDIR . '/themes/' . $nv_preview_theme . '/theme.php')) {
+            if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme'], true) and theme_file_exists($nv_preview_theme . '/theme.php')) {
                 if (preg_match($global_config['check_theme_mobile'], $nv_preview_theme)) {
                     $is_mobile = true;
                     $global_config['current_theme_type'] = 'm';
@@ -271,13 +277,13 @@ if (preg_match($global_config['check_module'], $module_name)) {
                     $_theme = (!empty($module_info['theme'])) ? $module_info['theme'] : $global_config['site_theme'];
                     $_u_theme = $nv_Request->get_title('nv_u_theme_' . NV_LANG_DATA, 'cookie', '');
 
-                    if (in_array($_u_theme, $global_config['array_user_allowed_theme'], true) and file_exists(NV_ROOTDIR . '/themes/' . $_u_theme . '/theme.php')) {
+                    if (in_array($_u_theme, $global_config['array_user_allowed_theme'], true) and theme_file_exists($_u_theme . '/theme.php')) {
                         // Giao diện do người dùng chọn
                         $global_config['module_theme'] = $_u_theme;
                         $global_config['site_theme'] = $_u_theme;
-                    } elseif (!empty($_theme) and file_exists(NV_ROOTDIR . '/themes/' . $_theme . '/theme.php')) {
+                    } elseif (!empty($_theme) and theme_file_exists($_theme . '/theme.php')) {
                         $global_config['module_theme'] = $_theme;
-                    } elseif (file_exists(NV_ROOTDIR . '/themes/default/theme.php')) {
+                    } elseif (theme_file_exists('default/theme.php')) {
                         $global_config['module_theme'] = 'default';
                     } else {
                         trigger_error('Error! Does not exist themes default', 256);
@@ -346,32 +352,32 @@ if (preg_match($global_config['check_module'], $module_name)) {
             require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/theme.php';
 
             // Ket noi ngon ngu theo theme
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/' . NV_LANG_INTERFACE . '.php')) {
+            if (theme_file_exists($global_config['module_theme'] . '/language/' . NV_LANG_INTERFACE . '.php')) {
                 require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/' . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/en.php')) {
+            } elseif (theme_file_exists($global_config['module_theme'] . '/language/en.php')) {
                 require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/en.php';
             }
 
             // Xac dinh template module
             $module_info['template'] = $global_config['module_theme'];
-            if (!file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme'])) {
-                if (file_exists(NV_ROOTDIR . '/themes/default/modules/' . $module_info['module_theme'])) {
+            if (!theme_file_exists($global_config['module_theme'] . '/modules/' . $module_info['module_theme'])) {
+                if (theme_file_exists('default/modules/' . $module_info['module_theme'])) {
                     $module_info['template'] = 'default';
                 }
             }
 
             // Ket noi voi file functions.php, file chua cac function dung chung
             // cho ca module
-            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/functions.php')) {
+            if (module_file_exists($module_file . '/functions.php')) {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/functions.php';
             }
 
             // Xac dinh op file
             $op_file = $module_info['funcs'][$op]['func_name'];
 
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme'] . '/theme.php')) {
+            if (theme_file_exists($global_config['module_theme'] . '/modules/' . $module_info['module_theme'] . '/theme.php')) {
                 require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme'] . '/theme.php';
-            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/theme.php')) {
+            } elseif (module_file_exists($module_file . '/theme.php')) {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';
             }
 
@@ -380,7 +386,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             }
 
             // Ket noi voi cac op cua module de thuc hien
-            if ($is_mobile and file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/mobile/' . $op_file . '.php')) {
+            if ($is_mobile and module_file_exists($module_file . '/mobile/' . $op_file . '.php')) {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/mobile/' . $op_file . '.php';
             } else {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/funcs/' . $op_file . '.php';

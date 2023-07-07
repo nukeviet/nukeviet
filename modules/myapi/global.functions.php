@@ -63,19 +63,19 @@ function nv_get_api_actions($object)
     foreach ($sys_mods as $module_name => $module_info) {
         $module_file = $module_info['module_file'];
         $module_api_dir = $object == 'admin' ? 'Api' : 'uapi';
-        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/' . $module_api_dir)) {
+        if (module_file_exists($module_file . '/' . $module_api_dir)) {
             // Đọc ngôn ngữ tạm của module
             $lang_module = [];
             if ($object == 'admin') {
-                if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
+                if (module_file_exists($module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
                     include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-                } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php')) {
+                } elseif (module_file_exists($module_file . '/language/admin_en.php')) {
                     include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php';
                 }
             } else {
-                if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
+                if (module_file_exists($module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
                     include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-                } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php')) {
+                } elseif (module_file_exists($module_file . '/language/en.php')) {
                     include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
                 }
             }

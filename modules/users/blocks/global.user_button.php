@@ -25,7 +25,7 @@ if ($global_config['allowuserlogin']) {
     $xtpl = new XTemplate('block.user_button.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
 
     if ($site_mods[$block_config['module']]['module_file'] != $module_file) {
-        if (file_exists(NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php')) {
+        if (module_file_exists('users/language/' . NV_LANG_INTERFACE . '.php')) {
             include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php';
         } else {
             include NV_ROOTDIR . '/modules/users/language/vi.php';

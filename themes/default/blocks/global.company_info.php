@@ -27,7 +27,7 @@ if (!nv_function_exists('nv_company_info')) {
         global $lang_global, $selectthemes;
 
         // Find language file
-        if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php')) {
+        if (theme_file_exists($selectthemes . '/language/' . NV_LANG_INTERFACE . '.php')) {
             include NV_ROOTDIR . '/themes/' . $selectthemes . '/language/' . NV_LANG_INTERFACE . '.php';
         }
 
