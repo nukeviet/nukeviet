@@ -462,7 +462,7 @@ if (empty($error)) {
             'modules',
             'uploads',
             'includes/plugin',
-            'includes/vendor'
+            'vendor'
         ],
         'forbidExt' => [
             'php',
