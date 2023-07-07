@@ -271,9 +271,9 @@ function nv_blocks_content($sitecontent)
                 $content = '';
                 $blockID = 'nv' . $_key;
 
-                if ($_row['module'] == 'theme' and file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'])) {
+                if ($_row['module'] == 'theme' and theme_file_exists($global_config['module_theme'] . '/blocks/' . $_row['file_name'])) {
                     include NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'];
-                } elseif (isset($sys_mods[$_row['module']]['module_file']) and !empty($sys_mods[$_row['module']]['module_file']) and file_exists(NV_ROOTDIR . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'])) {
+                } elseif (isset($sys_mods[$_row['module']]['module_file']) and !empty($sys_mods[$_row['module']]['module_file']) and module_file_exists($sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'])) {
                     include NV_ROOTDIR . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'];
                 }
                 unset($block_config);
@@ -759,7 +759,7 @@ function nv_html_css($html = true)
 {
     global $module_info, $module_file;
 
-    if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css')) {
+    if (theme_file_exists($module_info['template'] . '/css/' . $module_info['module_theme'] . '.css')) {
         if ($html) {
             return '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_info['module_theme'] . '.css" type="text/css" />' . PHP_EOL;
         }
@@ -771,7 +771,7 @@ function nv_html_css($html = true)
             ]
         ];
     }
-    if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css')) {
+    if (theme_file_exists($module_info['template'] . '/css/' . $module_file . '.css')) {
         if ($html) {
             return '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $module_info['template'] . '/css/' . $module_file . '.css" type="text/css" />' . PHP_EOL;
         }
@@ -909,7 +909,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     }
 
     // module js
-    if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js')) {
+    if (theme_file_exists($module_info['template'] . '/js/' . $module_info['module_theme'] . '.js')) {
         $return[] = [
             'ext' => 1,
             'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_info['module_theme'] . '.js'
@@ -922,7 +922,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
                 'content' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js'
             ];
         } elseif ($default_js and (empty($fs) or !in_array(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.nojs', $fs, true))) {
-            if (file_exists(NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js')) {
+            if (theme_file_exists('default/js/' . $module_file . '.js')) {
                 $return[] = [
                     'ext' => 1,
                     'content' => NV_STATIC_URL . 'themes/default/js/' . $module_file . '.js'
@@ -1034,4 +1034,115 @@ function nv_groups_list_pub($mod_data = 'users')
     }
 
     return $groups;
+}
+
+/**
+ * fix_theme_configs()
+ * Xác định lại các biến toàn cục liên quan đến giao diện
+ *
+ * @param mixed $configs
+ * @return array
+ */
+function fix_theme_configs($configs)
+{
+    if (!in_array('r', $configs['array_theme_type'], true) and !in_array('d', $configs['array_theme_type'], true)) {
+        $configs['array_theme_type'][] = 'r';
+    }
+    !in_array('m', $configs['array_theme_type'], true) && $configs['mobile_theme'] = '';
+    empty($configs['mobile_theme']) && $configs['switch_mobi_des'] = 0;
+    if (empty($configs['switch_mobi_des']) and in_array('m', $configs['array_theme_type'], true)) {
+        $configs['array_theme_type'] = array_values(array_diff($configs['array_theme_type'], ['m']));
+    }
+
+    return [$configs['array_theme_type'], $configs['mobile_theme'], $configs['switch_mobi_des']];
+}
+
+/**
+ * set_theme_configs()
+ * Xác định kiểu theme hiện tại, theme của module và theme của site
+ *
+ * @param mixed $global_config
+ * @param bool  $is_mobile
+ * @param mixed $module_info
+ */
+function set_theme_configs(&$global_config, &$is_mobile, $module_info)
+{
+    global $nv_Request, $client_info;
+
+    $cookie_themetype = $nv_Request->get_string(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
+
+    if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme'], true) and theme_file_exists($nv_preview_theme . '/theme.php')) {
+        if (preg_match($global_config['check_theme_mobile'], $nv_preview_theme)) {
+            $is_mobile = true;
+            $global_config['current_theme_type'] = 'm';
+        } else {
+            $is_mobile = false;
+            $global_config['current_theme_type'] = $cookie_themetype ?: $global_config['array_theme_type'][0];
+            $array_theme_type = array_flip($global_config['array_theme_type']);
+            unset($array_theme_type['m']);
+            if (!isset($array_theme_type[$global_config['current_theme_type']])) {
+                $array_theme_type = array_flip($array_theme_type);
+                $global_config['current_theme_type'] = current($array_theme_type);
+            }
+        }
+        $global_config['module_theme'] = $global_config['site_theme'] = $nv_preview_theme;
+        unset($nv_preview_theme);
+    } else {
+        /*
+         * Xác định kiểu giao diện
+         * - responsive: r
+         * - desktop: d
+         * - mobile: m
+         */
+        $global_config['current_theme_type'] = $cookie_themetype ?: $global_config['array_theme_type'][0];
+        if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'], true)) {
+            $global_config['current_theme_type'] = '';
+            $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, '', NV_LIVE_COOKIE_TIME);
+        }
+
+        // Xac dinh giao dien chung
+        $is_mobile = false;
+        $theme_type = '';
+        $_theme_mobile = empty($module_info['mobile']) ? $global_config['mobile_theme'] : (($module_info['mobile'] == ':pcsite') ? $global_config['site_theme'] : (($module_info['mobile'] == ':pcmod') ? $module_info['theme'] : $module_info['mobile']));
+        if (
+            (
+                // Giao diện mobile tự động nhận diện dựa vào client
+                ($client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'], true)
+                    and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des'])))
+                // Giao diện mobile lấy từ chuyển đổi giao diện
+                or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))
+            )
+            and !empty($_theme_mobile) and theme_file_exists($_theme_mobile . '/theme.php')
+        ) {
+            $global_config['module_theme'] = $_theme_mobile;
+            $is_mobile = true;
+            $theme_type = 'm';
+        } else {
+            if (empty($global_config['current_theme_type']) and in_array('r', $global_config['array_theme_type'], true) and ($client_info['is_mobile'] or empty($_theme_mobile))) {
+                $global_config['current_theme_type'] = 'r';
+            }
+
+            $_theme = (!empty($module_info['theme'])) ? $module_info['theme'] : $global_config['site_theme'];
+            $_u_theme = $nv_Request->get_title('nv_u_theme_' . NV_LANG_DATA, 'cookie', '');
+
+            if (in_array($_u_theme, $global_config['array_user_allowed_theme'], true) and theme_file_exists($_u_theme . '/theme.php')) {
+                // Giao diện do người dùng chọn
+                $global_config['module_theme'] = $_u_theme;
+                $global_config['site_theme'] = $_u_theme;
+            } elseif (!empty($_theme) and theme_file_exists($_theme . '/theme.php')) {
+                $global_config['module_theme'] = $_theme;
+            } elseif (theme_file_exists('default/theme.php')) {
+                $global_config['module_theme'] = 'default';
+            } else {
+                trigger_error('Error! Does not exist themes default', 256);
+            }
+            $theme_type = $global_config['current_theme_type'];
+        }
+
+        // Xac lap lai giao kieu giao dien hien tai
+        if ($theme_type != $global_config['current_theme_type']) {
+            $global_config['current_theme_type'] = $theme_type;
+            $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
+        }
+    }
 }

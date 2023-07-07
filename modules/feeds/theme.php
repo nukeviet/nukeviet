@@ -26,7 +26,7 @@ function nv_get_rss_link($rss_contents, $type, $id = 0)
 
             $mod_file = $mod_info['module_file'];
             $mod_data = $mod_info['module_data'];
-            if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php')) {
+            if (module_file_exists($mod_file . '/rssdata.php')) {
                 $rssarray = [];
                 include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php';
                 if (!empty($rssarray)) {
@@ -68,7 +68,7 @@ function nv_rss_main_theme($rsscontents)
 
     $rss_array = [];
     foreach ($site_mods as $mod_name => $mod_info) {
-        if ($mod_info['rss'] == 1 and isset($mod_info['alias']['rss']) and file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/funcs/rss.php')) {
+        if ($mod_info['rss'] == 1 and isset($mod_info['alias']['rss']) and module_file_exists($mod_info['module_file'] . '/funcs/rss.php')) {
             $rss_array[$mod_name] = $mod_info;
         }
     }

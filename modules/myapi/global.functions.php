@@ -61,7 +61,7 @@ function nv_get_api_actions($object)
     foreach ($sys_mods as $module_name => $module_info) {
         $module_file = $module_info['module_file'];
         $module_api_dir = $object == 'admin' ? 'Api' : 'uapi';
-        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/' . $module_api_dir)) {
+        if (module_file_exists($module_file . '/' . $module_api_dir)) {
             // Đọc ngôn ngữ tạm của module
             if ($object == 'admin') {
                 $nv_Lang->loadModule($module_file, true, true);

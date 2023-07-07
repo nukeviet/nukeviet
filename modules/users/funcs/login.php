@@ -620,7 +620,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             }
         } else {
             $row = false;
-            $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+            $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and module_file_exists('users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
             require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
             $row = check_user_login($nv_username);
 
@@ -878,7 +878,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
 
     // đăng nhập qua hệ thống nukeviet
     $row = false;
-    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and module_file_exists('users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
     require NV_ROOTDIR . '/modules/users/methods/' . $method . '.php';
     $row = check_user_login($nv_username);
 

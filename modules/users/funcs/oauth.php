@@ -53,9 +53,9 @@ if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
         $global_config['avatar_height'] = $global_users_config['avatar_height'];
         if (defined('NV_IS_USER_FORUM') and $server != 'google-identity') {
             require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/oauth.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php')) {
+        } elseif (module_file_exists('users/login/oauth-' . $server . '.php')) {
             include NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php')) {
+        } elseif (module_file_exists('users/login/cas-' . $server . '.php')) {
             include NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php';
         }
     }

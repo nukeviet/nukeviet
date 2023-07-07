@@ -45,7 +45,7 @@ if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
             }
 
             $mod_info = $site_mods[$module];
-            if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
+            if (module_file_exists($mod_info['module_file'] . '/comment.php')) {
                 $row = [];
                 $row['module'] = $module;
                 $row['id'] = $id;

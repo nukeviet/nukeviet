@@ -386,7 +386,7 @@ function user_login($is_ajax = false)
         }
     }
 
-    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and module_file_exists('users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
     if ($nv_Lang->existsGlobal('login_name_type_' . $method)) {
         $nv_Lang->setGlobal('username_email', $nv_Lang->getGlobal('login_name_type_' . $method));
     } elseif ($nv_Lang->existsGlobal($method)) {
@@ -1411,7 +1411,7 @@ function user_welcome($array_field_config, $custom_fields)
     $_user_info['st_login'] = !empty($user_info['st_login']) ? $nv_Lang->getModule('yes') : $nv_Lang->getModule('no');
     $_user_info['active2step'] = !empty($user_info['active2step']) ? $nv_Lang->getGlobal('on') : $nv_Lang->getGlobal('off');
 
-    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and file_exists(NV_ROOTDIR . '/modules/users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
+    $method = (preg_match('/^([^0-9]+[a-z0-9\_]+)$/', $global_config['login_name_type']) and module_file_exists('users/methods/' . $global_config['login_name_type'] . '.php')) ? $global_config['login_name_type'] : 'username';
     $_user_info['login_name'] = $nv_Lang->existsGlobal('login_name_type_' . $method) ? $nv_Lang->getGlobal('login_name_type_' . $method) : $method;
     if ($global_config['lang_multi']) {
         $_user_info['langinterface'] = !empty($_user_info['language']) ? (!empty($language_array[$_user_info['language']]['name']) ? $language_array[$_user_info['language']]['name'] : $_user_info['language']) : $nv_Lang->getModule('bydatalang');

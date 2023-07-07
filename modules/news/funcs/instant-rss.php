@@ -135,7 +135,7 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
     }
 }
 
-if (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/rss.xsl')) {
+if (theme_file_exists($module_info['template'] . '/css/rss.xsl')) {
     $channel['xsltheme'] = $module_info['template'];
 }
 
