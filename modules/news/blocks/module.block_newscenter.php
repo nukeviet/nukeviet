@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -164,7 +164,8 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
      */
     function nv_news_block_newscenter($block_config)
     {
-        global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $db, $module_config, $module_info;
+        global $nv_Cache, $module_data, $module_name, $module_upload, $global_array_cat, $global_config, $db, $module_config, $module_info, $nv_Lang;
+
         $order_articles_by = ($module_config[$module_name]['order_articles']) ? 'weight' : 'publtime';
 
         $db->sqlreset()
@@ -179,64 +180,55 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
         }
 
         $list = $nv_Cache->db($db->sql(), 'id', $module_name);
+
         if (!empty($list)) {
-            $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-            $xtpl->assign('lang', \NukeViet\Core\Language::$lang_module);
-            $xtpl->assign('TEMPLATE', $module_info['template']);
+            $width = $block_config['width'] ?? 400;
+            $height = $block_config['height'] ?? 268;
 
-            $_first = true;
-            foreach ($list as $row) {
-                $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
-                $row['titleclean60'] = nv_clean60($row['title'], $block_config['length_title']);
+            $main_row = array_shift($list);
+            $main_row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$main_row['catid']]['alias'] . '/' . $main_row['alias'] . '-' . $main_row['id'] . $global_config['rewrite_exturl'];
+            $main_row['titleclean60'] = nv_clean60($main_row['title'], $block_config['length_title']);
+            $main_row['target_blank'] = $main_row['external_link'] ? 'target="_blank"' : '';
+            $main_row['width'] = $width;
+            if (!empty($main_row['homeimgfile']) and ($imginfo = nv_is_image(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $main_row['homeimgfile'])) != []) {
+                $image = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $main_row['homeimgfile'];
 
-                if ($row['external_link']) {
-                    $row['target_blank'] = 'target="_blank"';
-                }
-
-                if ($_first) {
-                    $_first = false;
-                    $width = isset($block_config['width']) ? $block_config['width'] : 400;
-                    $height = isset($block_config['height']) ? $block_config['height'] : 268;
-
-                    if ($row['homeimgfile'] != '' and ($imginfo = nv_is_image(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'])) != []) {
-                        $image = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
-
-                        if ($imginfo['width'] <= $width and $imginfo['height'] <= $height) {
-                            $row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
-                            $row['width'] = $imginfo['width'];
-                        } else {
-                            $basename = preg_replace('/(.*)(\.[a-z]+)$/i', $module_name . '_' . $row['id'] . '_\1_' . $width . '-' . $height . '\2', basename($image));
-                            if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename)) {
-                                $imginfo = nv_is_image(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename);
-                                $row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
-                                $row['width'] = $imginfo['width'];
-                            } else {
-                                $_image = new NukeViet\Files\Image($image, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-                                $_image->resizeXY($width, $height);
-                                $_image->save(NV_ROOTDIR . '/' . NV_TEMP_DIR, $basename);
-                                if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename)) {
-                                    $row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
-                                    $row['width'] = $_image->create_Image_info['width'];
-                                }
-                            }
-                        }
-                    } elseif (nv_is_url($row['homeimgfile'])) {
-                        $row['imgsource'] = $row['homeimgfile'];
-                        $row['width'] = $width;
-                    } elseif (!empty($module_config[$module_name]['show_no_image'])) {
-                        $row['imgsource'] = NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'];
-                        $row['width'] = $width;
-                    } else {
-                        $row['imgsource'] = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
-                        $row['width'] = $width;
-                    }
-
-                    if (!empty($block_config['length_hometext'])) {
-                        $row['hometext'] = nv_clean60(strip_tags($row['hometext']), $block_config['length_hometext']);
-                    }
-
-                    $xtpl->assign('main', $row);
+                if ($imginfo['width'] <= $width and $imginfo['height'] <= $height) {
+                    $main_row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $main_row['homeimgfile'];
+                    $main_row['width'] = $imginfo['width'];
                 } else {
+                    $basename = preg_replace('/(.*)(\.[a-z]+)$/i', $module_name . '_' . $main_row['id'] . '_\1_' . $width . '-' . $height . '\2', basename($image));
+                    if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename)) {
+                        $imginfo = nv_is_image(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename);
+                        $main_row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
+                        $main_row['width'] = $imginfo['width'];
+                    } else {
+                        $_image = new NukeViet\Files\Image($image, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                        $_image->resizeXY($width, $height);
+                        $_image->save(NV_ROOTDIR . '/' . NV_TEMP_DIR, $basename);
+                        if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename)) {
+                            $main_row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
+                            $main_row['width'] = $_image->create_Image_info['width'];
+                        }
+                    }
+                }
+            } elseif (nv_is_url($main_row['homeimgfile'])) {
+                $main_row['imgsource'] = $main_row['homeimgfile'];
+            } elseif (!empty($module_config[$module_name]['show_no_image'])) {
+                $main_row['imgsource'] = NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'];
+            } else {
+                $main_row['imgsource'] = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+            }
+
+            !empty($block_config['length_hometext']) && $main_row['hometext'] = nv_clean60(strip_tags($main_row['hometext']), $block_config['length_hometext']);
+
+            $other_rows = [];
+            if (!empty($list)) {
+                foreach ($list as $row) {
+                    $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
+                    $row['titleclean60'] = nv_clean60($row['title'], $block_config['length_title']);
+                    $row['target_blank'] = $row['external_link'] ? 'target="_blank"' : '';
+
                     if ($row['homeimgthumb'] == 1) {
                         $row['imgsource'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
                     } elseif ($row['homeimgthumb'] == 2) {
@@ -249,11 +241,19 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                         $row['imgsource'] = NV_STATIC_URL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
                     }
 
-                    if ($block_config['showtooltip']) {
-                        $row['hometext_clean'] = strip_tags($row['hometext']);
-                        $row['hometext_clean'] = nv_clean60($row['hometext_clean'], $block_config['tooltip_length'], true);
-                    }
+                    $row['hometext_clean'] = $block_config['showtooltip'] ? nv_clean60(strip_tags($row['hometext']), $block_config['tooltip_length'], true) : '';
                     $row['titleclean60'] = nv_clean60($row['title'], $block_config['length_othertitle']);
+                    $other_rows[] = $row;
+                }
+            }
+
+            $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+            $xtpl->assign('lang', \NukeViet\Core\Language::$lang_module);
+            $xtpl->assign('TEMPLATE', $module_info['template']);
+
+            $xtpl->assign('main', $main_row);
+            if (!empty($other_rows)) {
+                foreach ($other_rows as $row) {
                     $xtpl->assign('othernews', $row);
 
                     if ($block_config['showtooltip']) {
