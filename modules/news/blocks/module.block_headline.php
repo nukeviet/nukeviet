@@ -138,10 +138,11 @@ if (!nv_function_exists('nv_block_headline')) {
             $nv_Cache->setItem($module_name, $cache_file, $cache);
         }
 
-        $xtpl = new XTemplate('block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+        list($template, $dir) = get_module_tpl_dir('block_headline.tpl', true);
+        $xtpl = new XTemplate('block_headline.tpl', $dir);
 
         $xtpl->assign('PIX_IMG', ASSETS_STATIC_URL . '/images/pix.svg');
-        $xtpl->assign('TEMPLATE', $module_info['template']);
+        $xtpl->assign('TEMPLATE', $template);
         $xtpl->assign('TOOLTIP_POSITION', $block_config['tooltip_position']);
 
         $images = [];

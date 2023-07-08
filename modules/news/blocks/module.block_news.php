@@ -155,9 +155,9 @@ if (!nv_function_exists('nv_news_block_news')) {
             $nv_Cache->setItem($module, $cache_file, $cache);
         }
 
-        $block_theme = get_tpl_dir($module_info['template'], 'default', '/modules/news/block_news.tpl');
-        $xtpl = new XTemplate('block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
-        $xtpl->assign('TEMPLATE', $block_theme);
+        list($template, $dir) = get_module_tpl_dir('block_news.tpl', true);
+        $xtpl = new XTemplate('block_news.tpl', $dir);
+        $xtpl->assign('TEMPLATE', $template);
 
         foreach ($array_block_news as $array_news) {
             $newday = $array_news['publtime'] + (86400 * $array_news['newday']);

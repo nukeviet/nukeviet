@@ -247,9 +247,10 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
                 }
             }
 
-            $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+            list($template, $dir) = get_module_tpl_dir('block_newscenter.tpl', true);
+            $xtpl = new XTemplate('block_newscenter.tpl', $dir);
             $xtpl->assign('lang', \NukeViet\Core\Language::$lang_module);
-            $xtpl->assign('TEMPLATE', $module_info['template']);
+            $xtpl->assign('TEMPLATE', $template);
 
             $xtpl->assign('main', $main_row);
             if (!empty($other_rows)) {

@@ -28,7 +28,8 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
 {
     global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op, $nv_redirect, $global_array_genders, $global_users_config;
 
-    $xtpl = new XTemplate('register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('register.tpl', true);
+    $xtpl = new XTemplate('register.tpl', $dir);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
     $xtpl->assign('NICK_MINLENGTH', $global_config['nv_unickmin']);
     $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
@@ -37,7 +38,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CHECKSS', $checkss);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     if ($group_id != 0) {
         $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register/' . $group_id);
@@ -375,9 +376,11 @@ function user_login($is_ajax = false)
     global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op, $nv_header, $nv_redirect, $page_url;
 
     if ($is_ajax) {
-        $xtpl = new XTemplate('ajax_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
+        list($template, $dir) = get_module_tpl_dir('ajax_login.tpl', true);
+        $xtpl = new XTemplate('ajax_login.tpl', $dir);
     } else {
-        $xtpl = new XTemplate('login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
+        list($template, $dir) = get_module_tpl_dir('login.tpl', true);
+        $xtpl = new XTemplate('login.tpl', $dir);
     }
 
     if (defined('NV_OPENID_ALLOWED')) {
@@ -399,7 +402,7 @@ function user_login($is_ajax = false)
     $xtpl->assign('USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('CSRF', md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op));
 
     $array_gfx_chk = !empty($global_config['captcha_area']) ? explode(',', $global_config['captcha_area']) : [];
@@ -513,9 +516,9 @@ function user_login($is_ajax = false)
  */
 function user_openid_login($attribs, $op_process)
 {
-    global $module_info, $global_config, $nv_Lang, $module_name, $nv_redirect, $page_title;
+    global $global_config, $nv_Lang, $module_name, $nv_redirect, $page_title;
 
-    $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
+    $xtpl = new XTemplate('openid_login.tpl', get_module_tpl_dir('openid_login.tpl'));
 
     $reg_username = '';
     $reg_email = '';
@@ -604,7 +607,7 @@ function user_lostpass($data)
 {
     global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op, $nv_redirect;
 
-    $xtpl = new XTemplate('lostpass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('lostpass.tpl', get_module_tpl_dir('lostpass.tpl'));
 
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
@@ -674,7 +677,7 @@ function user_lostactivelink($data, $question)
 {
     global $module_info, $global_config, $nv_Lang, $module_name, $module_captcha, $op;
 
-    $xtpl = new XTemplate('lostactivelink.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('lostactivelink.tpl', get_module_tpl_dir('lostactivelink.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('DATA', $data);
@@ -747,7 +750,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 {
     global $module_info, $global_config, $nv_Lang, $module_name, $op, $global_array_genders, $is_custom_field, $user_info, $global_users_config, $group_lists, $group_id, $language_array;
 
-    $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('info.tpl', true);
+    $xtpl = new XTemplate('info.tpl', $dir);
 
     if (defined('ACCESS_EDITUS')) {
         $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $data['group_id'] . '/' . $data['userid']);
@@ -755,9 +759,9 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
     }
 
-    $xtpl->assign('AVATAR_DEFAULT', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
+    $xtpl->assign('AVATAR_DEFAULT', NV_STATIC_URL . 'themes/' . $template . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/src', true));
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
@@ -1006,7 +1010,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
             $assigns['server'] = $server;
             $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
             $assigns['title'] = ucfirst($server);
-            $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/' . $img . '.png';
+            $assigns['img_src'] = NV_STATIC_URL . 'themes/' . $template . '/images/' . $module_info['module_theme'] . '/' . $img . '.png';
             $assigns['img_width'] = $assigns['img_height'] = 24;
 
             $xtpl->assign('OPENID', $assigns);
@@ -1344,7 +1348,7 @@ function openid_callback($openid_info)
 {
     global $module_info;
 
-    $xtpl = new XTemplate('openid_callback.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('openid_callback.tpl', get_module_tpl_dir('openid_callback.tpl'));
     $xtpl->assign('OPIDRESULT', $openid_info);
 
     if (!empty($openid_info['client'])) {
@@ -1373,7 +1377,8 @@ function user_welcome($array_field_config, $custom_fields)
 {
     global $module_info, $global_config, $nv_Lang, $module_name, $user_info, $op, $language_array;
 
-    $xtpl = new XTemplate('userinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('userinfo.tpl', true);
+    $xtpl = new XTemplate('userinfo.tpl', $dir);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
@@ -1394,7 +1399,7 @@ function user_welcome($array_field_config, $custom_fields)
         ]);
     } else {
         $xtpl->assign('IMG', [
-            'src' => NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png',
+            'src' => NV_STATIC_URL . 'themes/' . $template . '/images/' . $module_info['module_theme'] . '/no_avatar.png',
             'title' => $nv_Lang->getModule('change_avatar')
         ]);
     }
@@ -1539,7 +1544,7 @@ function user_info_exit($info, $error = false)
 {
     global $module_info, $module_file;
 
-    $xtpl = new XTemplate('info_exit.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('info_exit.tpl', get_module_tpl_dir('info_exit.tpl'));
     $xtpl->assign('INFO', $info);
 
     if ($error) {
@@ -1564,7 +1569,7 @@ function openid_account_confirm($gfx_chk, $attribs, $user)
 {
     global $nv_Lang, $module_info, $module_name, $module_captcha, $nv_redirect, $global_config, $page_title;
 
-    $xtpl = new XTemplate('confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('confirm.tpl', get_module_tpl_dir('confirm.tpl'));
 
     $nv_Lang->setModule('openid_confirm_info', $nv_Lang->getModule('openid_confirm_info', ucwords($attribs['server']), $attribs['contact/email']));
 
@@ -1613,7 +1618,7 @@ function nv_memberslist_theme($users_array, $orderby, $sortby, $array_order_new,
 {
     global $module_info, $module_name, $global_config, $nv_Lang, $op;
 
-    $xtpl = new XTemplate('memberslist.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('memberslist.tpl', get_module_tpl_dir('memberslist.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     foreach ($array_order_new as $key => $link) {
@@ -1676,7 +1681,8 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields,
 {
     global $module_info, $nv_Lang, $module_name, $global_config, $op;
 
-    $xtpl = new XTemplate('viewdetailusers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('viewdetailusers.tpl', true);
+    $xtpl = new XTemplate('viewdetailusers.tpl', $dir);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
@@ -1686,7 +1692,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields,
     if (!empty($item['photo']) and file_exists(NV_ROOTDIR . '/' . $item['photo'])) {
         $xtpl->assign('SRC_IMG', NV_BASE_SITEURL . $item['photo']);
     } else {
-        $xtpl->assign('SRC_IMG', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
+        $xtpl->assign('SRC_IMG', NV_STATIC_URL . 'themes/' . $template . '/images/' . $module_info['module_theme'] . '/no_avatar.png');
     }
 
     $item['gender'] = ($item['gender'] == 'M') ? $nv_Lang->getModule('male') : ($item['gender'] == 'F' ? $nv_Lang->getModule('female') : $nv_Lang->getModule('na'));
@@ -1787,7 +1793,7 @@ function user_info_exit_redirect($info, $nv_redirect)
 {
     global $module_info;
 
-    $xtpl = new XTemplate('info_exit_redirect.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('info_exit_redirect.tpl', get_module_tpl_dir('info_exit_redirect.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('INFO', $info);
     $xtpl->assign('NV_REDIRECT', $nv_redirect);
@@ -1811,7 +1817,7 @@ function nv_avatar($array)
 {
     global $module_info, $module_name, $nv_Lang, $global_config;
 
-    $xtpl = new XTemplate('avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('avatar.tpl', get_module_tpl_dir('avatar.tpl'));
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('MODULE_FILE', $module_info['module_file']);
 
@@ -1866,7 +1872,7 @@ function safe_deactivate($data)
 {
     global $module_info, $module_name, $nv_Lang, $global_config, $op;
 
-    $xtpl = new XTemplate('safe.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('safe.tpl', get_module_tpl_dir('safe.tpl'));
     $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
@@ -1910,7 +1916,7 @@ function theme_changePass($pass_timeout, $pass_empty, $checkss)
 {
     global $module_info, $module_name, $nv_Lang, $global_config;
 
-    $xtpl = new XTemplate('changepass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('changepass.tpl', get_module_tpl_dir('changepass.tpl'));
     $xtpl->assign('CHANGEPASS_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/password');
     $xtpl->assign('URL_LOGOUT', defined('NV_IS_ADMIN') ? 'nv_admin_logout' : 'bt_logout');
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);

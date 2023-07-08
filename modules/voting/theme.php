@@ -23,7 +23,7 @@ function voting_result($voting)
 {
     global $module_info, $nv_Lang;
 
-    $xtpl = new XTemplate('result.voting.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('result.voting.tpl', get_module_tpl_dir('result.voting.tpl'));
     $xtpl->assign('PUBLTIME', $voting['pubtime']);
     $xtpl->assign('LANG', $voting['lang']);
     $xtpl->assign('VOTINGQUESTION', $voting['question']);

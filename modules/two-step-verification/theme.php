@@ -24,7 +24,7 @@ function nv_theme_info_2step($backupcodes, $autoshowcode)
 {
     global $module_info, $nv_Lang, $user_info, $module_name;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
@@ -80,7 +80,7 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
 {
     global $module_info, $module_name, $op, $global_config;
 
-    $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('config.tpl', get_module_tpl_dir('config.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
@@ -109,7 +109,7 @@ function nv_theme_confirm_password($is_pass_valid)
 {
     global $module_info, $nv_Lang, $op, $module_name;
 
-    $xtpl = new XTemplate('confirm_password.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('confirm_password.tpl', get_module_tpl_dir('confirm_password.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 

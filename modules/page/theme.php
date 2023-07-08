@@ -25,7 +25,8 @@ function nv_page_main($row, $ab_links, $content_comment)
 {
     global $module_name, $module_info, $meta_property, $client_info, $page_config, $global_config;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('main.tpl', true);
+    $xtpl = new XTemplate('main.tpl', $dir);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CONTENT', $row);
@@ -42,7 +43,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     } elseif (nv_is_url($row['image'])) {
         $xtpl->assign('SCHEMA_IMAGE', $row['image']);
     } else {
-        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/no_image.gif');
+        $xtpl->assign('SCHEMA_IMAGE', NV_BASE_SITEURL . 'themes/' . $template . '/images/no_image.gif');
     }
 
     if (!empty($row['description'])) {
@@ -127,8 +128,7 @@ function nv_page_main_list($array_data, $generate_page)
 {
     global $module_upload, $module_info, $module_name;
 
-    $template = get_tpl_dir($module_info['template'], 'default', '/modules/' . $module_info['module_theme'] . '/main_list.tpl');
-    $xtpl = new XTemplate('main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('main_list.tpl', get_module_tpl_dir('main_list.tpl'));
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($array_data)) {

@@ -28,7 +28,7 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
 {
     global $nv_Lang, $module_info, $module_name, $page_title;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CHECKSS', $checkss);
@@ -288,12 +288,12 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
 
     $array_content['phone_required'] = $array_content['sender_phone_required'] ? ' required' : '';
     $array_content['address_required'] = $array_content['sender_address_required'] ? ' required' : '';
-
-    $xtpl = new XTemplate('form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('form.tpl', true);
+    $xtpl = new XTemplate('form.tpl', $dir);
     $xtpl->assign('CONTENT', $array_content);
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
 
@@ -385,7 +385,7 @@ function contact_sendcontact($feedback, $departments, $sendinfo = true)
 {
     global $global_config, $module_info, $client_info;
 
-    $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('sendcontact.tpl', get_module_tpl_dir('sendcontact.tpl'));
     $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
     $xtpl->assign('SITE_URL', $global_config['site_url']);

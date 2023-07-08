@@ -1126,3 +1126,23 @@ function module_file_exists($file)
 
     return file_exists(NV_ROOTDIR . '/modules/' . $file);
 }
+
+/**
+ * get_module_tpl_dir()
+ *
+ * @param string $filename
+ * @param bool   $array
+ * @return array|string
+ */
+function get_module_tpl_dir($filename, $array = false)
+{
+    global $global_config, $module_info;
+
+    $template = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', 'modules/' . $module_info['module_theme'] . '/' . $filename);
+
+    if ($array) {
+        return [$template, NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_info['module_theme']];
+    }
+
+    return NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_info['module_theme'];
+}

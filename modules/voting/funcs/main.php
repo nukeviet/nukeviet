@@ -51,7 +51,7 @@ if (empty($vid)) {
     }
 
     if (!empty($allowed)) {
-        $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+        $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
         $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
         foreach ($allowed as $current_voting) {
