@@ -75,7 +75,6 @@ RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
 RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
 RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
 RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap/$4 [L]
-RewriteRule ^(.*?)check\.rewrite$ index.php?rewritesupport=apache [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*)(\/|\.html)$ index.php
