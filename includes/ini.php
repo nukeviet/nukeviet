@@ -151,7 +151,8 @@ function set_ini_file(&$sys_info)
         $sys_info['supports_rewrite'] = 'nginx';
     } elseif (strpos($_server_software[0], 'Apache') !== false and strpos(PHP_SAPI, 'cgi-fcgi') !== false) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
-    } elseif (!empty(NV_MY_REWRITE_SUPPORTER)) {
+    }
+    if (empty($sys_info['supports_rewrite']) and !empty(NV_MY_REWRITE_SUPPORTER)) {
         $sys_info['supports_rewrite'] = NV_MY_REWRITE_SUPPORTER;
     }
     $content_config .= "\$sys_info['supports_rewrite'] = " . (!empty($sys_info['supports_rewrite']) ? "'" . $sys_info['supports_rewrite'] . "'" : 'false') . ";\n";
