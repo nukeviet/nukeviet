@@ -24,7 +24,8 @@ if (!defined('NV_IS_MOD_NEWS')) {
 function viewcat_grid_new($array_catpage, $catid, $generate_page)
 {
     global $module_name, $lang_module, $module_upload, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
-    $xtpl = new XTemplate('viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+
+    $xtpl = new XTemplate('viewcat_grid.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -110,7 +111,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 {
     global $module_name, $lang_module, $module_upload, $module_config, $module_info, $global_array_cat;
 
-    $xtpl = new XTemplate('viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('viewcat_list.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
@@ -171,7 +172,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
     global $global_array_cat, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
-    $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('viewcat_page.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
@@ -282,7 +283,7 @@ function viewcat_top($array_catcontent, $generate_page)
 {
     global $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
-    $xtpl = new XTemplate('viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('viewcat_top.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
 
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -348,7 +349,7 @@ function viewsubcat_main($viewcat, $array_cat)
 {
     global $module_name, $global_array_cat, $lang_module, $module_info;
 
-    $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate($viewcat . '.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
 
     // Hien thi cac chu de con
@@ -435,7 +436,7 @@ function viewcat_two_column($array_content, $array_catpage)
 {
     global $module_name, $module_upload, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page;
 
-    $xtpl = new XTemplate('viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('viewcat_two_column.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
     if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
@@ -589,7 +590,9 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
 {
     global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $admin_info, $client_info;
 
-    $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $dir = str_replace(DIRECTORY_SEPARATOR, '/', __DIR__);
+    $template = pathinfo(realpath($dir . '/../../'),  PATHINFO_BASENAME);
+    $xtpl = new XTemplate('detail.tpl', $dir);
     $xtpl->assign('LANG_GLOBAL', $lang_global);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('LANG', $lang_module);
@@ -609,7 +612,7 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     } elseif (nv_is_url($news_contents['homeimgfile'])) {
         $xtpl->assign('SCHEMA_IMAGE', $news_contents['homeimgfile']);
     } else {
-        $xtpl->assign('SCHEMA_IMAGE', NV_STATIC_URL . 'themes/' . $module_info['template'] . '/images/no_image.gif');
+        $xtpl->assign('SCHEMA_IMAGE', NV_STATIC_URL . 'themes/' . $template . '/images/no_image.gif');
     }
 
     $news_contents['addtime'] = nv_date('d/m/Y h:i:s', $news_contents['addtime']);
@@ -876,7 +879,7 @@ function no_permission()
 {
     global $module_info, $lang_module;
 
-    $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('detail.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
 
     $xtpl->assign('NO_PERMISSION', $lang_module['no_permission']);
     $xtpl->parse('no_permission');
@@ -899,7 +902,7 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
 {
     global $lang_module, $module_info, $module_name, $module_config, $topicid;
 
-    $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('topic.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
@@ -968,7 +971,7 @@ function author_theme($author_info, $topic_array, $topic_other_array, $generate_
 {
     global $lang_module, $module_info, $module_name, $module_config, $topicid, $page_title;
 
-    $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('topic.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
@@ -1038,7 +1041,7 @@ function sendmail_themme($sendmail)
 {
     global $module_info, $global_config, $lang_module, $lang_global, $module_config, $module_name, $module_captcha;
 
-    $xtpl = new XTemplate('sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('sendmail.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('SENDMAIL', $sendmail);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
@@ -1088,7 +1091,7 @@ function news_print($result)
 {
     global $module_info, $lang_module;
 
-    $xtpl = new XTemplate('print.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('print.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('CONTENT', $result);
     $xtpl->assign('LANG', $lang_module);
 
@@ -1145,7 +1148,7 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
 {
     global $module_name, $module_info, $lang_module, $module_name;
 
-    $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('search.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
@@ -1192,7 +1195,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
 {
     global $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
 
-    $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('search.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('KEY', $key);
     $xtpl->assign('IMG_WIDTH', $module_config[$module_name]['homewidth']);
@@ -1290,7 +1293,7 @@ function content_refresh($data)
 {
     global $module_info;
 
-    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('content.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('DATA', $data);
     $xtpl->parse('mainrefresh');
 
@@ -1308,7 +1311,7 @@ function edit_author_info($data, $base_url)
 {
     global $module_name, $module_info, $op, $lang_module;
 
-    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('content.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;author_info=1');
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('BASE_URL', $base_url);
@@ -1336,7 +1339,7 @@ function content_add($rowcontent, $htmlbodyhtml, $catidList, $topicList, $post_s
 {
     global $global_config, $module_name, $module_info, $module_config, $lang_global, $lang_module, $module_captcha;
 
-    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('content.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('BASE_URL', $base_url);
@@ -1461,7 +1464,7 @@ function content_list($articles, $my_author_detail, $base_url, $generate_page)
 {
     global $module_name, $module_info, $module_config, $lang_global, $lang_module;
 
-    $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('content.tpl', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('BASE_URL', $base_url);
     $xtpl->assign('ADD_CONTENT_CHECK_SESSION', md5('0' . NV_CHECK_SESSION));

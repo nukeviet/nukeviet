@@ -23,10 +23,11 @@ function nv_theme_statistics_referer($cts)
 {
     global $module_info, $lang_global, $lang_module;
 
-    $xtpl = new XTemplate('referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('referer.tpl', true);
+    $xtpl = new XTemplate('referer.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     // Thống kê ngày của tháng
     $xtpl->assign('CTS', $cts);
@@ -48,10 +49,11 @@ function nv_theme_statistics_allreferers($host_list, $generate_page)
 {
     global $module_info, $lang_global, $lang_module;
 
-    $xtpl = new XTemplate('allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('allreferers.tpl', true);
+    $xtpl = new XTemplate('allreferers.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($host_list)) {
         foreach ($host_list as $value) {
@@ -85,10 +87,11 @@ function nv_theme_statistics_allbots($bot_list, $generate_page)
 {
     global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('allbots.tpl', true);
+    $xtpl = new XTemplate('allbots.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($bot_list)) {
         foreach ($bot_list as $value) {
@@ -122,10 +125,11 @@ function nv_theme_statistics_allos($os_list, $generate_page)
 {
     global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('allos.tpl', true);
+    $xtpl = new XTemplate('allos.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($os_list)) {
         foreach ($os_list as $value) {
@@ -159,10 +163,11 @@ function nv_theme_statistics_allbrowsers($browsers_list, $generate_page)
 {
     global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('allbrowsers.tpl', true);
+    $xtpl = new XTemplate('allbrowsers.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($browsers_list)) {
         foreach ($browsers_list as $value) {
@@ -196,10 +201,11 @@ function nv_theme_statistics_allcountries($countries_list, $generate_page)
 {
     global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('allcountries.tpl', true);
+    $xtpl = new XTemplate('allcountries.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($countries_list)) {
         foreach ($countries_list as $value) {
@@ -239,10 +245,11 @@ function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $c
 {
     global $module_info, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('main.tpl', true);
+    $xtpl = new XTemplate('main.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
 
     // Thống kê theo giờ trong ngày
     $xtpl->assign('CTSH', $ctsh);

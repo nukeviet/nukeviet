@@ -24,7 +24,7 @@ function nv_banner_theme_main($contents)
 {
     global $module_info, $lang_module, $lang_global, $manament;
 
-    $xtpl = new XTemplate('home.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('home.tpl', get_module_tpl_dir('home.tpl'));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
@@ -84,7 +84,7 @@ function nv_banner_theme_addads($global_array_uplans, $page_url)
 {
     global $global_config, $module_info, $module_captcha, $lang_global, $lang_module, $lang_array, $manament;
 
-    $xtpl = new XTemplate('addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('addads.tpl', get_module_tpl_dir('addads.tpl'));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('FORM_ACTION', $page_url);
@@ -129,7 +129,7 @@ function nv_banner_theme_stats($ads)
 {
     global $module_info, $lang_module, $lang_global, $manament;
 
-    $xtpl = new XTemplate('stats.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('stats.tpl', get_module_tpl_dir('stats.tpl'));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('MANAGEMENT', $manament);

@@ -20,7 +20,7 @@ function main_theme()
 {
     global $lang_global, $lang_module, $module_info, $module_name;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('PAGE_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -50,7 +50,7 @@ function user_getlist_theme($items, $generate_page, $filter, $page_url)
 {
     global $global_config, $lang_global, $lang_module, $module_info;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('PAGE_URL', nv_url_rewrite($page_url, true));
@@ -125,7 +125,7 @@ function getlist_theme($items, $generate_page, $group_id, $members)
 {
     global $lang_global, $lang_module, $module_info;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
@@ -176,10 +176,11 @@ function notifications_manager_theme($contents, $page_url, $filter, $checkss)
 {
     global $lang_global, $lang_module, $module_info;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    list($template, $dir) = get_module_tpl_dir('main.tpl', true);
+    $xtpl = new XTemplate('main.tpl', $dir);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('TEMPLATE', $module_info['template']);
+    $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('PAGE_CONTENT', $contents);
     $xtpl->assign('MANAGER_PAGE_URL', $page_url);
     $xtpl->assign('CHECKSS', $checkss);
@@ -209,7 +210,7 @@ function notification_action_theme($data, $page_url, $checkss)
 {
     global $global_config, $language_array, $lang_global, $lang_module, $module_info;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
+    $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('MANAGER_PAGE_URL', $page_url);
