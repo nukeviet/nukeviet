@@ -13,6 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
+use NukeViet\Client\Browser;
+
 /**
  * nv_create_submenu()
  */
@@ -749,7 +751,7 @@ function nv_html_site_rss($html = true)
  */
 function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
 {
-    global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info, $user_info;
+    global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info, $user_info, $browser;
 
     $safemode = defined('NV_IS_USER') ? $user_info['safemode'] : 0;
     $jsDef = 'var nv_base_siteurl="' . NV_BASE_SITEURL . '",nv_lang_data="' . NV_LANG_INTERFACE . '",nv_lang_interface="' . NV_LANG_INTERFACE . '",nv_name_variable="' . NV_NAME_VARIABLE . '",nv_fc_variable="' . NV_OP_VARIABLE . '",nv_lang_variable="' . NV_LANG_VARIABLE . '",nv_module_name="' . $module_name . '",nv_func_name="' . $op . '",nv_is_user=' . ((int) defined('NV_IS_USER')) . ', nv_my_ofs=' . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ',nv_my_abbr="' . nv_date('T', NV_CURRENTTIME) . '",nv_cookie_prefix="' . $global_config['cookie_prefix'] . '",nv_check_pass_mstime=' . (((int) ($global_config['user_check_pass_time']) - 62) * 1000) . ',nv_area_admin=0,nv_safemode=' . $safemode . ',theme_responsive=' . ((int) ($global_config['current_theme_type'] == 'r'));
@@ -787,7 +789,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
         if ($global_config['XSSsanitize']) {
             $return[] = [
                 'ext' => 1,
-                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/DOMPurify/purify.js'
+                'content' => NV_STATIC_URL . NV_ASSETS_DIR . '/js/DOMPurify/purify' . ($browser->isBrowser(Browser::BROWSER_IE) ? '2' : '3') . '.js'
             ];
         }
 
