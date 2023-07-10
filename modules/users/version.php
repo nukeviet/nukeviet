@@ -19,8 +19,8 @@ $module_version = [
     'submenu' => 'main,login,logout,register,lostpass,active,editinfo,lostactivelink,groups,memberlist',
     'is_sysmod' => 1,
     'virtual' => 1,
-    'version' => '4.5.03',
-    'date' => 'Saturday, December 24, 2022 4:00:00 PM GMT+07:00',
+    'version' => '4.5.04',
+    'date' => 'Friday, July 21, 2023 4:00:00 PM GMT+07:00',
     'author' => 'VINADES.,JSC <contact@vinades.vn>',
     'note' => ''
 ];
