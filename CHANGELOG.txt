@@ -1,5 +1,25 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.5.04
+- Update: CKEditor v4.22.1, PHPMailer v6.8.0, Jquery v3.7.0, DOMPurify 2.4.6 and 3.0.4
+- Improved check rewrite-support
+- Do not put search keywords in the page title
+- Block save config_ini for unknow domain
+- Fix redirect when check_rewrite_file = 0
+- Module news: add config to enable/disable the author display, fix save image for author, fix  error in tag function
+- Block indexing of search results page module news
+- Add config share cookie for subdomains
+- Fix Oauth login in embedded webview and SSO enable
+- Fix class Image, FTP on PHP 8.2
+- Restrict some permissions in the themes module
+- Fix image upload error if server doesn't have exif extension
+- Update the site closing function
+- Calculate and display the upload folder size
+- Block direct access to sitemap link
+- Add website capacity limit function
+- Fix class HTTP on php 8
+- Fix installation error on subfolder (#3537)
+
 NUKEVIET 4.5.03
 - Ckeditor 4.20.1, PHPMailer 6.7.1, Fix ckeditor 4.20.1, Jquery UI 1.13.2, Jquery 3.6.1, Chart.js v3.9.1, Jquery validate v1.19.5, DOMPurify 2.4.1
 - Fix rewrite obsolute (#3523)
