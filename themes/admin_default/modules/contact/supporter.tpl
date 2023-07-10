@@ -90,7 +90,7 @@
             <div class="input-group">
                 <input class="form-control" type="text" name="image" value="{SUPPORTER.image}" id="selectfile" />
                 <span class="input-group-btn">
-                    <button class="btn btn-default selectfile" data-area="selectfile" data-path="{MODULE_UPLOAD}" type="button">
+                    <button class="btn btn-default selectfile" data-toggle="selectfile" data-target="selectfile" data-path="{MODULE_UPLOAD}" data-type="image" type="button">
                         <em class="fa fa-folder-open-o fa-fix"></em>
                     </button>
                     <button class="btn btn-default help-show" type="button">
