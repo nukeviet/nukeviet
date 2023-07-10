@@ -37,7 +37,7 @@
         <script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/language/{NV_LANG_INTERFACE}{AUTO_MINIFIED}.js"></script>
         <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/global{AUTO_MINIFIED}.js"></script>
         <!-- BEGIN: XSSsanitize -->
-        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/DOMPurify/purify.js"></script>
+        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/DOMPurify/purify{PURIFY_VERSION}.js"></script>
         <!-- END: XSSsanitize -->
         <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/admin{AUTO_MINIFIED}.js"></script>
 
