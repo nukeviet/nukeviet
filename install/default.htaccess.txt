@@ -9,10 +9,22 @@ DirectoryIndex index.php index.html
 ServerSignature Off
 FileETag None
 
-RedirectMatch 404 ^/((.*/)?\.(.*)|(.*/)?composer\.json|(.*/)?web\.config|install/default\.(htaccess\.txt|web\.config\.txt|php)|includes/mainfile\.php|config\.php).*$
-RedirectMatch 404 ^/(data/ip6?|includes|install/tpl|vendor|assets/tpl|data/cache|data/certs|data/logs)/.*$
-RedirectMatch 404 ^/(admin)/.*/.*$
-RedirectMatch 404 ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php|pl|py|sh|sql\.gz|tpl|xml).*$
+<IfModule mod_rewrite.c>
+  <IfModule mod_env.c>
+    SetEnv HTTP_SUPPORT_REWRITE on
+  </IfModule>
+
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} /(\.(.*)|composer\.json|default\.(htaccess\.txt|web\.config\.txt|php)|mainfile\.php|web\.config|config\.php)$ [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(data/ip6?|includes|install/tpl|vendor|assets/tpl|data/cache|data/certs|data/logs)/.* [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(admin)/.*/.*$ [NC]
+  RewriteRule ^.* - [L,R=404]
+  RewriteCond %{REQUEST_URI} ^/(install/(css|images)|modules|themes|assets|data/config|data/tmp|uploads)/.*\.((j|a)spx?|(p|s)html|cgi|inc|ini|php|pl|py|sh|sql\.gz|tpl|xml)($|\?|\/) [NC]
+  RewriteRule ^.* - [L,R=404]
+</IfModule>
 
 ErrorDocument 400 /error.php?code=400
 ErrorDocument 403 /error.php?code=403
