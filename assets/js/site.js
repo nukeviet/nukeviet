@@ -296,6 +296,14 @@ function btnClickSubmit(event, form) {
     if (XSSsanitize) {
         formXSSsanitize(form)
     }
+    if ($(form).attr('data-precheck')) {
+        var preCheck = $(form).data('precheck');
+        if ('string' == typeof preCheck && "function" === typeof window[preCheck]) {
+            if (!window[preCheck](form)) {
+                return !1
+            }
+        }
+    }
     if ($(form).attr('data-recaptcha3')) {
         reCaptchaExecute(form, function() {
             $(form).submit()
