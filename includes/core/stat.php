@@ -43,12 +43,12 @@ function nv_stat_update()
     }
 
     $bot_name = ($client_info['is_bot'] and !empty($client_info['browser']['name'])) ? $client_info['browser']['name'] : '';
-    $browser = $client_info['browser']['key'];
-    if (strcasecmp($browser, 'unknown') === 0) {
+    $br = $client_info['browser']['key'];
+    if (strcasecmp($br, 'unknown') === 0) {
         if ($client_info['is_mobile']) {
-            $browser = 'Mobile';
+            $br = 'Mobile';
         } elseif (!empty($bot_name)) {
-            $browser = 'bots';
+            $br = 'bots';
         }
     }
 
@@ -66,7 +66,7 @@ function nv_stat_update()
         (c_type='country' AND c_val= :country)"
     );
     $sth->bindParam(':bot_name', $bot_name, PDO::PARAM_STR);
-    $sth->bindParam(':browser', $browser, PDO::PARAM_STR);
+    $sth->bindParam(':browser', $br, PDO::PARAM_STR);
     $sth->bindParam(':client_os', $client_info['client_os']['key'], PDO::PARAM_STR);
     $sth->bindParam(':country', $client_info['country'], PDO::PARAM_STR);
     $sth->execute();

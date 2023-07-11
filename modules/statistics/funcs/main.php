@@ -180,9 +180,9 @@ $result = $db->query($db->sql());
 
 $total = 0;
 $browsers_list = [];
-while (list($browser, $count, $last_visit) = $result->fetch(3)) {
-    $const = 'BROWSER_' . strtoupper($browser);
-    $name = $browser != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($browser)) : $nv_Lang->getGlobal('unknown');
+while (list($br, $count, $last_visit) = $result->fetch(3)) {
+    $const = 'BROWSER_' . strtoupper($br);
+    $name = $br != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($br)) : $nv_Lang->getGlobal('unknown');
     $browsers_list[] = [
         'name' => $name,
         'count' => $count,
