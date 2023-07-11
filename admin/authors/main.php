@@ -62,7 +62,7 @@ if ($numrows) {
         $last_agent = $row['last_agent'];
 
         $_browser = new NukeViet\Client\Browser($last_agent);
-        $browser = ['key' => $_browser->getBrowserKey(), 'name' => $_browser->getBrowser()];
+        $br = ['key' => $_browser->getBrowserKey(), 'name' => $_browser->getBrowser()];
         $os = ['key' => $_browser->getPlatformKey(), 'name' => $_browser->getPlatform()];
 
         $is_suspend = (int) ($row['is_suspend']);
@@ -178,7 +178,7 @@ if ($numrows) {
             $admins[$row['admin_id']]['options']['regtime'] = [$lang_module['regtime'], nv_date('l, d/m/Y H:i', $row['regdate'])];
             $admins[$row['admin_id']]['options']['last_login'] = [$lang_module['last_login'], $last_login];
             $admins[$row['admin_id']]['options']['last_ip'] = [$lang_module['last_ip'], $row['last_ip']];
-            $admins[$row['admin_id']]['options']['browser'] = [$lang_module['browser'], $browser['name']];
+            $admins[$row['admin_id']]['options']['browser'] = [$lang_module['browser'], $br['name']];
             $admins[$row['admin_id']]['options']['os'] = [$lang_module['os'], $os['name']];
         }
     }

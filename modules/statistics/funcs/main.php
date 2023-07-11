@@ -207,9 +207,9 @@ $result = $db->query($db->sql());
 $total = 0;
 $browsers_list = [];
 
-while (list($browser, $count, $last_visit) = $result->fetch(3)) {
+while (list($br, $count, $last_visit) = $result->fetch(3)) {
     $last_visit = !empty($last_visit) ? nv_date('l, d F Y H:i', $last_visit) : '';
-    $browsers_list[$browser] = [$count, $last_visit];
+    $browsers_list[$br] = [$count, $last_visit];
 
     $total = $total + $count;
 }
