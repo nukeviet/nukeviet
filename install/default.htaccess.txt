@@ -9,6 +9,10 @@
 ##################################################################################
 
 <IfModule mod_rewrite.c>
+  <IfModule mod_env.c>
+    SetEnv HTTP_SUPPORT_REWRITE on
+  </IfModule>
+
   RewriteEngine On
   RewriteBase /
   RewriteCond %{REQUEST_FILENAME} /(\.(.*)|composer\.json|default\.(htaccess\.txt|web\.config\.txt|php)|mainfile\.php|web\.config|config\.php)$ [NC]

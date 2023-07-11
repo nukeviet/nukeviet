@@ -534,6 +534,9 @@ function nv_server_config_change($array_config)
         $config_contents .= "#nukeviet_config_start //Please do not change the contents of the following lines\n";
         $config_contents .= "##################################################################################\n\n";
         $config_contents .= "<IfModule mod_rewrite.c>\n";
+        $config_contents .= "  <IfModule mod_env.c>\n";
+        $config_contents .= "    SetEnv HTTP_SUPPORT_REWRITE on\n";
+        $config_contents .= "  </IfModule>\n\n";
         $config_contents .= "  RewriteEngine On\n";
         $config_contents .= "  RewriteBase " . NV_BASE_SITEURL . "\n";
         $config_contents .= "  RewriteCond %{REQUEST_FILENAME} /(\.(.*)|composer\.json|default\.(htaccess\.txt|web\.config\.txt|php)|mainfile\.php|web\.config|config\.php)$ [NC]\n";
