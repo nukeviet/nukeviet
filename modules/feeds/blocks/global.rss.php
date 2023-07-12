@@ -27,7 +27,7 @@ if (!nv_function_exists('nv_block_data_config_rss')) {
 
         $return = '';
 
-        $html = '<input class="form-control" name="config_url" type="text" value="' . $nv_Lang->getModule('url') . '"/>';
+        $html = '<input class="form-control" name="config_url" type="text" value="' . $data_block['url'] . '"/>';
         $return .= '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('url') . ':</label><div class="col-sm-18">' . $html . '</div></div>';
 
         $html = "<select class=\"form-control\" name=\"config_number\">\n";

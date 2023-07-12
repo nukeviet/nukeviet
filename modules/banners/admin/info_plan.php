@@ -24,7 +24,7 @@ if (empty($row)) {
 
 $row['caption'] = $nv_Lang->getModule('info_plan_caption', $row['title']);
 $row['blang_format'] = !empty($row['blang']) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all');
-$row['form_format'] = $nv_Lang->existsModule('form_' . $row['form']) ? $nv_Lang->getModule('form_' . $row['form']] : $row['form');
+$row['form_format'] = $nv_Lang->existsModule('form_' . $row['form']) ? $nv_Lang->getModule('form_' . $row['form']) : $row['form'];
 $row['is_act'] = $row['act'] ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no');
 $row['require_image'] = $nv_Lang->getModule('require_image' . $row['require_image']);
 $row['uploadtype'] = str_replace(',', ', ', $row['uploadtype']);

@@ -140,7 +140,6 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
             $db_slave->order('a.cid DESC');
         }
         $result = $db_slave->query($db_slave->sql());
-        $comment_list_id_reply = [];
         while ($row = $result->fetch()) {
             $row['check_like'] = md5($row['cid'] . '_' . $session_id);
             $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';

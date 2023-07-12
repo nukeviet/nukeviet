@@ -21,7 +21,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
  */
 function department_fix_weight($skip_id = 0, $skip_weight = 0)
 {
-    global $db;
+    global $db, $nv_Cache, $module_name;
 
     $sql = 'SELECT id FROM ' . NV_MOD_TABLE . '_department WHERE id != ' . $skip_id . ' ORDER BY weight ASC';
     $result = $db->query($sql);
@@ -38,6 +38,7 @@ function department_fix_weight($skip_id = 0, $skip_weight = 0)
         $in = implode(',', array_keys($res));
         $when = implode(' ', $res);
         $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET weight = CASE ' . $when . ' ELSE weight END WHERE id in (' . $in . ')');
+        $nv_Cache->delMod($module_name);
     }
 }
 
