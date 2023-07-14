@@ -285,7 +285,7 @@ if ($nv_Request->isset_request('getSconfigBySettings', 'post')) {
     nv_htmlOutput($contents);
 }
 
-$page_title = $nv_Lang->getModule('ssettings');
+$page_title = $lang_module['ssettings'];
 $server_config_file = NV_ROOTDIR . '/' . NV_DATADIR . '/server_config.json';
 $server_configs = file_get_contents($server_config_file);
 $server_configs = json_decode($server_configs, true);
