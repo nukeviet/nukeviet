@@ -89,7 +89,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             $where .= ' AND (mtb.id=' . $id . ')';
             $db->sqlreset()
                 ->select('COUNT(*)')
-                ->from(NV_INFORM_GLOBALTABLE . 'AS mtb')
+                ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
                 ->where($where);
             $num_items = $db->query($db->sql())
                 ->fetchColumn();
