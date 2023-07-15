@@ -46,9 +46,9 @@
                         <!-- BEGIN: expired --><i class="fa fa-ban" title="{LANG.expired}"></i><!-- END: expired -->
                     </td>
                     <td style="width: 15%;vertical-align:middle">
-                        <!-- BEGIN: from_system -->{LANG.from_system}<!-- END: from_system -->
-                        <!-- BEGIN: from_group -->{LANG.from_group}<br/>{LANG.id} #{ITEM.sender_group}: <a href="{ITEM.sender_group_link}">{ITEM.sender_group_name}</a><!-- END: from_group -->
-                        <!-- BEGIN: from_admin -->{LANG.from_admin}<br/>{LANG.id} #{ITEM.sender_admin}: <a href="{ITEM.sender_admin_link}">{ITEM.sender_admin_name}</a><!-- END: from_admin -->
+                        <!-- BEGIN: from_system -->{LANG.admin_from_system}<!-- END: from_system -->
+                        <!-- BEGIN: from_group -->{LANG.admin_from_group}<br/>{LANG.id} #{ITEM.sender_group}: <a href="{ITEM.sender_group_link}">{ITEM.sender_group_name}</a><!-- END: from_group -->
+                        <!-- BEGIN: from_admin -->{LANG.admin_from_admin}<br/>{LANG.id} #{ITEM.sender_admin}: <a href="{ITEM.sender_admin_link}">{ITEM.sender_admin_name}</a><!-- END: from_admin -->
                     </td>
                     <td style="width: 20%;vertical-align:middle">
                         {ITEM.receiver_title}<!-- BEGIN: to_group -->: <!-- BEGIN: group --><a href="{GROUP.link}">{GROUP.name}</a><!-- BEGIN: comma -->, <!-- END: comma --><!-- END: group --><!-- END: to_group --><!-- BEGIN: to_user -->: <!-- BEGIN: user --><a href="#" data-toggle="viewUser" data-id="{LANG.id}: {USER.0}" data-username="{LANG.username}: {USER.1}" data-fullname="{LANG.fullname}: {USER.2}">{USER.2}</a><!-- BEGIN: comma -->, <!-- END: comma --><!-- END: user --><!-- END: to_user -->
