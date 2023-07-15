@@ -22,7 +22,7 @@ if ($global_config['allowuserlogin']) {
     $template_dir = 'themes/' . get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/users/' . $block_file_name);
 
     if ($site_mods[$block_config['module']]['module_file'] != $module_file) {
-        $css_dir = 'themes/' . get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], '', '/css/users.css');
+        $css_dir = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], '', '/css/users.css');
         if (!empty($css_dir)) {
             $my_head .= '<link rel="StyleSheet" href="' . NV_STATIC_URL . 'themes/' . $css_dir . '/css/users.css">';
         }
@@ -52,6 +52,8 @@ if ($global_config['allowuserlogin']) {
     $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (defined('NV_IS_USER')) {
+        $js_dir = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/js/users.js');
+        $xtpl->assign('BLOCK_JS', $js_dir);
         $xtpl->assign('URL_LOGOUT', defined('NV_IS_ADMIN') ? 'nv_admin_logout' : 'bt_logout');
         $xtpl->assign('MODULENAME', $module_info['custom_title']);
         $xtpl->assign('AVATA', $user_info['avata']);
