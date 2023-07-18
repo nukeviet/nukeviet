@@ -5,6 +5,7 @@
 <script type="text/javascript" src="{ASSETS_LANG_STATIC_URL}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
 
 <div class="well">
     <form action="{NV_BASE_ADMINURL}index.php" method="get">
@@ -145,6 +146,9 @@
                         <strong><em>{LANG.status_4}</em></strong>:
                         <!-- END: text -->
                         <a target="_blank" href="{ROW.link}" id="id_{ROW.id}" title="{ROW.title}">{ROW.title_clean}</a>
+                        <a role="button" class="btn btn-xs" data-clipboard-text="{ROW.link}">
+                            <i class="fa fa-copy" style="color:#333"></i>
+                        </a>
                     </td>
                     <td class="text-center">{ROW.publtime}</td>
                     <td>{ROW.author}</td>
@@ -229,6 +233,17 @@ $(function() {
     $('body').on('click', '[data-toggle=nv_del_content]', function(e) {
         e.preventDefault();
         nv_del_content($(this).data('id'), $(this).data('checkss'), $(this).data('adminurl'), $(this).data('detail'))
+    });
+
+    // Copy URL bài viết
+    var clipboard = new ClipboardJS('[data-clipboard-text]');
+    clipboard.on('success', function(e) {
+        $(e.trigger).on('hidden.bs.tooltip', function() {
+            setTimeout(function() {
+                $(e.trigger).tooltip('destroy');
+            })
+        }).tooltip({title: $(e.trigger).data('clipboard-text') + ' is copied to clipboard!', placement: 'top', container: 'body', trigger: 'hover focus', animation: false});
+        $(e.trigger).tooltip('show');
     });
 });
 </script>
