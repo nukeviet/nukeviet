@@ -133,10 +133,9 @@ if (!nv_function_exists('nv_news_block_newscenter')) {
      * nv_block_config_news_newscenter_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_news_newscenter_submit($module, $lang_block)
+    function nv_block_config_news_newscenter_submit($module)
     {
         global $nv_Request;
         $return = [];

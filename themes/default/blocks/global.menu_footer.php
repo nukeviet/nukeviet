@@ -19,7 +19,6 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
     function nv_menu_theme_default_footer_config($module, $data_block)
@@ -47,7 +46,6 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      * nv_menu_theme_default_footer_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
     function nv_menu_theme_default_footer_submit($module)
