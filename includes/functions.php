@@ -574,7 +574,7 @@ function nv_capcha_txt($seccode, $type = 'captcha')
 
     mt_srand(microtime(true) * 1000000);
     $maxran = 1000000;
-    $random = mt_rand(0, $maxran);
+    $random = random_int(0, $maxran);
 
     $seccode = strtoupper($seccode);
     $random_num = $nv_Request->get_string('random_num', 'session', 0);
@@ -604,19 +604,19 @@ function nv_genpass($length = 8, $type = 0)
     $_arr_m = [];
     $_arr_m[] = 0; // Chữ
     $_arr_m[] = 2; // 1. Số
-    $_arr_m[] = ($type == 2 or $type == 4) ? 3 : mt_rand(0, 2); // 2. Đặc biệt
-    $_arr_m[] = ($type == 3 or $type == 4) ? 1 : mt_rand(0, 2); // 3. HOA
+    $_arr_m[] = ($type == 2 or $type == 4) ? 3 : random_int(0, 2); // 2. Đặc biệt
+    $_arr_m[] = ($type == 3 or $type == 4) ? 1 : random_int(0, 2); // 3. HOA
 
     $length = $length - 4;
     for ($k = 0; $k < $length; ++$k) {
-        $_arr_m[] = ($type == 2 or $type == 4) ? mt_rand(0, 3) : mt_rand(0, 2);
+        $_arr_m[] = ($type == 2 or $type == 4) ? random_int(0, 3) : random_int(0, 2);
     }
 
     $pass = '';
     foreach ($_arr_m as $m) {
         $chars = $array_chars[$m];
         $max = strlen($chars) - 1;
-        $pass .= $chars[mt_rand(0, $max)];
+        $pass .= $chars[random_int(0, $max)];
     }
 
     return $pass;
@@ -938,7 +938,7 @@ function nv_monthname($i)
         $nv_Lang->getGlobal('december')
     ];
 
-    return isset($month_names[$i]) ? $month_names[$i] : '';
+    return $month_names[$i] ?? '';
 }
 
 /**
@@ -1285,6 +1285,7 @@ function mailAddHtml($subject, $body, $gconfigs, $lang)
  * @param array  $bcc
  * @param bool   $mailhtml
  * @param array  $custom_headers
+ * @param mixed  $lang
  * @return bool
  *
  * $from:             Nếu là string thì nó được hiểu là reply_address
@@ -1443,7 +1444,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
             } else {
                 !is_array($sm_parameters['reply_name']) && $sm_parameters['reply_name'] = [$sm_parameters['reply_name']];
                 foreach ($sm_parameters['reply_address'] as $_k => $_reply) {
-                    $mail->addReply($_reply, (isset($sm_parameters['reply_name'][$_k]) ? $sm_parameters['reply_name'][$_k] : ''));
+                    $mail->addReply($_reply, ($sm_parameters['reply_name'][$_k] ?? ''));
                 }
             }
         }
@@ -1528,7 +1529,7 @@ function _otherMethodSendmail($gconfigs, $sm_parameters)
                 $sm_parameters['reply_name']
             ];
             foreach ($sm_parameters['reply_address'] as $_k => $_reply) {
-                $sm_parameters['reply'][$_reply] = isset($sm_parameters['reply_name'][$_k]) ? $sm_parameters['reply_name'][$_k] : '';
+                $sm_parameters['reply'][$_reply] = $sm_parameters['reply_name'][$_k] ?? '';
             }
         }
     }
@@ -1633,9 +1634,9 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
 {
     global $nv_Lang, $theme_config;
 
-    $ul_class = isset($theme_config['pagination']['ul_class']) ? $theme_config['pagination']['ul_class'] : 'pagination';
-    $li_class = isset($theme_config['pagination']['li_class']) ? $theme_config['pagination']['li_class'] : 'page-item';
-    $a_class = isset($theme_config['pagination']['a_class']) ? $theme_config['pagination']['a_class'] : 'page-link';
+    $ul_class = $theme_config['pagination']['ul_class'] ?? 'pagination';
+    $li_class = $theme_config['pagination']['li_class'] ?? 'page-item';
+    $a_class = $theme_config['pagination']['a_class'] ?? 'page-link';
 
     $li_active_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'active"';
     $li_disabled_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'disabled"';
@@ -1746,9 +1747,9 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
 {
     global $nv_Lang, $theme_config;
 
-    $ul_class = isset($theme_config['pagination']['ul_class']) ? $theme_config['pagination']['ul_class'] : 'pagination';
-    $li_class = isset($theme_config['pagination']['li_class']) ? $theme_config['pagination']['li_class'] : 'page-item';
-    $a_class = isset($theme_config['pagination']['a_class']) ? $theme_config['pagination']['a_class'] : 'page-link';
+    $ul_class = $theme_config['pagination']['ul_class'] ?? 'pagination';
+    $li_class = $theme_config['pagination']['li_class'] ?? 'page-item';
+    $a_class = $theme_config['pagination']['a_class'] ?? 'page-link';
 
     $li_active_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'active"';
     $li_disabled_class = ' class="' . $li_class . (!empty($li_class) ? ' ' : '') . 'disabled"';
@@ -2123,7 +2124,7 @@ function nv_check_url($url, $isArray = false)
 
     if ($isArray) {
         $res['isvalid'] = true;
-        $res['code'] = isset($result['response']['code']) ? $result['response']['code'] : 0;
+        $res['code'] = $result['response']['code'] ?? 0;
         $res['message'] = 'OK';
 
         return $res;
@@ -3047,7 +3048,7 @@ function nv_set_authorization()
     if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
         $usr_pass = base64_decode(substr($auth_user, 6), true);
         if (!empty($usr_pass) and str_contains($usr_pass, ':')) {
-            list($auth_user, $auth_pw) = explode(':', $usr_pass);
+            [$auth_user, $auth_pw] = explode(':', $usr_pass);
         }
         unset($usr_pass);
     }

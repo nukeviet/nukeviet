@@ -1,0 +1,130 @@
+.vert-menu {
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    background-color: #0d6efd;
+    background-image: linear-gradient(to right, #9ec5fe 4px, #0d6efd 4px);
+    background-repeat: repeat-x
+}
+
+.vert-menu,
+.vert-menu ul {
+    padding: 0;
+    margin: 0;
+    list-style: none
+}
+
+.vert-menu li,
+.vert-menu a {
+    display: block;
+}
+
+.vert-menu a,
+.vert-menu a:hover {
+    color: #fff;
+    text-decoration: none
+}
+
+.vert-menu a {
+    padding: 10px 16px;
+    box-shadow: rgba(0, 0, 0, .15) 0 -1px 0
+}
+
+.vert-menu a:hover,
+.vert-menu a:focus,
+.vert-menu a:active {
+    background-image: linear-gradient(to right, #fd9c0d 4px, rgba(0, 0, 0, 0) 4px)
+}
+
+.vert-menu ul a {
+    color: #212529 !important;
+    background-color: #f8fbff;
+    box-shadow: #dbe9ff 0 -1px 0
+}
+
+.vert-menu ul a:hover,
+.vert-menu ul a:focus,
+.vert-menu ul a:active {
+    background-color: #e7f1ff
+}
+
+.vert-menu .active > a {
+    background-image: linear-gradient(to right, #fd9c0d 4px, rgba(0, 0, 0, 0) 4px)
+}
+
+.vert-menu ul ul a {
+    padding-left: 32px;
+    background-color: #fff
+}
+
+.vert-menu .arrow,
+.vert-menu .plus-minus,
+.vert-menu .plus-times {
+    float: right;
+    margin-top: -39px;
+    margin-right: 1px;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    width: 37px;
+    height: 37px;
+    line-height: 37px;
+    text-align: center;
+    background-color: transparent;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.vert-menu .arrow:hover,
+.vert-menu .plus-minus:hover,
+.vert-menu .plus-times:hover {
+    background-color: #569afe;
+    box-shadow: 0 0 0 1px #6ea8fe
+}
+
+.vert-menu ul .arrow,
+.vert-menu ul .plus-minus,
+.vert-menu ul .plus-times {
+    color: #212529
+}
+
+.vert-menu ul .arrow:hover,
+.vert-menu ul .plus-minus:hover,
+.vert-menu ul .plus-times:hover {
+    background-color: #e7f1ff;
+    box-shadow: 0 0 0 1px #dbe9ff
+}
+
+.vert-menu .arrow:before {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    content: ""
+}
+
+.vert-menu .arrow[aria-expanded=true]:before {
+    border-top: 0;
+    border-bottom: 4px dashed
+}
+
+.vert-menu .plus-minus:before {
+    content: "+"
+}
+
+.vert-menu .plus-minus[aria-expanded=true]:before {
+    content: "−"
+}
+
+.vert-menu .plus-times:before {
+    content: "+"
+}
+
+.vert-menu .plus-times[aria-expanded=true]:before {
+    transform: rotate(45deg);
+    margin-left: 3px
+}
