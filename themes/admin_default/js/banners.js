@@ -262,24 +262,6 @@ function nv_genpass() {
     return;
 }
 
-$.toggleShowPassword = function(options) {
-    var settings = $.extend({
-        field: "#password",
-        control: "#toggle_show_password"
-    }, options);
-
-    var control = $(settings.control);
-    var field = $(settings.field);
-
-    control.bind('click', function() {
-        if (control.is(':checked')) {
-            field.attr('type', 'text');
-        } else {
-            field.attr('type', 'password');
-        }
-    });
-};
-
 function find_User() {
     var name = $("#login_iavim").val();
     $.ajax({
