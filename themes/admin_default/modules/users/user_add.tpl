@@ -340,11 +340,6 @@
 </form>
 <script type="text/javascript">
     $(function() {
-        $.toggleShowPassword({
-            field: '#password2',
-            control: '#methods'
-        });
-
         $('[name="is_official"]').on('change', function() {
             var ctngroups = $('#ctn-list-groups');
             if (!ctngroups.length) {
