@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,15 +14,9 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 // Ket noi ngon ngu
-if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php')) {
-    require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php';
-} elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php')) {
-    require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php';
-} elseif (file_exists(NV_ROOTDIR . '/includes/language/en/admin_seotools.php')) {
-    require NV_ROOTDIR . '/includes/language/en/admin_seotools.php';
-}
+$nv_Lang->loadModule('seotools', true);
 
-$page_title = $lang_module['rpc'];
+$page_title = $nv_Lang->getModule('rpc');
 if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
     $id = $nv_Request->get_int('id', 'post,get', '');
     if ($id > 0) {
@@ -47,9 +41,9 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
 
                     $getdata = $nv_Request->get_int('getdata', 'post,get', '0');
                     if (empty($getdata)) {
-                        $page_title = $lang_module['rpc'] . ': ' . $news_contents['title'];
+                        $page_title = $nv_Lang->getModule('rpc') . ': ' . $news_contents['title'];
                         $xtpl = new XTemplate('rpc_ping.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/seotools');
-                        $xtpl->assign('LANG', $lang_module);
+                        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
                         $xtpl->assign('MODULE_NAME', $module_name);
                         $xtpl->assign('OP', $op);
                         $xtpl->assign('LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&getdata=1');
@@ -59,7 +53,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                             $xtpl->assign('SERVICE', [
                                 'id' => $key,
                                 'title' => $service[1],
-                                'icon' => (isset($service[3]) ? $service[3] : '')
+                                'icon' => ($service[3] ?? '')
                             ]);
 
                             if (isset($service[3]) and !empty($service[3])) {
@@ -84,7 +78,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         if (($timeout != 0) and ($timeout < 60)) {
                             $timeout = 60 - $timeout;
                             $timeout = nv_convertfromSec($timeout);
-                            $finish->nodeValue = 'glb|' . sprintf($lang_module['rpc_error_timeout'], $timeout);
+                            $finish->nodeValue = 'glb|' . $nv_Lang->getModule('rpc_error_timeout', $timeout);
                             $content = $xml2->saveXML();
                             @header('Content-Type: text/xml; charset=utf-8');
                             print_r($content);
@@ -161,13 +155,13 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         exit();
                     }
                 } else {
-                    $msg1 = $lang_module['content_saveok'];
-                    $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
+                    $msg1 = $nv_Lang->getModule('content_saveok');
+                    $msg2 = $nv_Lang->getModule('content_main') . ' ' . $module_info['custom_title'];
 
                     $contents .= '<div align="center">';
                     $contents .= '<strong>' . $msg1 . "</strong><br /><br />\n";
                     $contents .= '<img border="0" src="' . NV_STATIC_URL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
-                    $contents .= '<strong><a href="' . $nv_redirect2 . '">' . $lang_module['rpc_ping_page'] . '</a></strong>';
+                    $contents .= '<strong><a href="' . $nv_redirect2 . '">' . $nv_Lang->getModule('rpc_ping_page') . '</a></strong>';
                     $contents .= ' - <strong><a href="' . $nv_redirect . '">' . $msg2 . '</a></strong>';
                     $contents .= '</div>';
                     $contents .= '<meta http-equiv="refresh" content="3;url=' . $nv_redirect2 . '" />';

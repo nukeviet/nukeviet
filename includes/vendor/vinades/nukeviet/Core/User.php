@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -56,7 +56,7 @@ class User
 
         foreach ($keys as $key) {
             unset($matches);
-            if (preg_match('/^' . nv_preg_quote($cookie_prefix). '\_(ls([a-z0-9]{10})le)$/', $key, $matches)) {
+            if (preg_match('/^' . nv_preg_quote($cookie_prefix) . '\_(ls([a-z0-9]{10})le)$/', $key, $matches)) {
                 $nv_Request->unset_request($matches[1], 'cookie');
             }
         }
@@ -65,8 +65,8 @@ class User
 
     /**
      * get_userlogin_hash()
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function get_userlogin_hash()
     {

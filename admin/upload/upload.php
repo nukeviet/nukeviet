@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -31,15 +31,15 @@ $upload_info = [];
 $is_remote_upload = false;
 
 if (isset($check_allow_upload_dir['over_capacity'])) {
-    $error = $lang_module['over_capacity'];
+    $error = $nv_Lang->getModule('over_capacity');
 } elseif (!isset($check_allow_upload_dir['upload_file'])) {
-    $error = $lang_module['notlevel'];
+    $error = $nv_Lang->getModule('notlevel');
 } elseif (!isset($_FILES, $_FILES['upload'], $_FILES['upload']['tmp_name']) and !$nv_Request->isset_request('fileurl', 'post')) {
-    $error = $lang_module['uploadError1'];
+    $error = $nv_Lang->getModule('uploadError1');
 } elseif (!isset($_FILES) and !nv_is_url($nv_Request->get_string('fileurl', 'post,get'))) {
-    $error = $lang_module['uploadError2'];
+    $error = $nv_Lang->getModule('uploadError2');
 } elseif (isset($_FILES['upload']) and $global_config['upload_chunk_size'] > 0 and $chunk_upload['chunks'] > 0 and (empty($chunk_upload['name']) or empty($_FILES['upload']['name']) or ($chunk_upload['name'] != $_FILES['upload']['name'] and $_FILES['upload']['name'] != 'blob') or $chunk_upload['chunk'] >= $chunk_upload['chunks'])) {
-    $error = $lang_module['uploadError3'];
+    $error = $nv_Lang->getModule('uploadError3');
 } else {
     $type = $nv_Request->get_string('type', 'post,get');
 
@@ -59,7 +59,7 @@ if (isset($check_allow_upload_dir['over_capacity'])) {
     }
 
     $upload = new NukeViet\Files\Upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], [$sys_max_size, $sys_max_size_local], NV_MAX_WIDTH, NV_MAX_HEIGHT);
-    $upload->setLanguage($lang_global);
+    $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
 
     if (isset($_FILES['upload']['tmp_name']) and is_uploaded_file($_FILES['upload']['tmp_name'])) {
         // Upload Chunk (nhiều phần)
@@ -104,17 +104,17 @@ if (isset($check_allow_upload_dir['over_capacity'])) {
 
         if ($is_remote_upload and $upload_info['size'] > $sys_max_size) {
             nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename']);
-            $error = sprintf($lang_global['error_upload_max_user_size'], nv_convertfromBytes($sys_max_size));
+            $error = $nv_Lang->getGlobal('error_upload_max_user_size', nv_convertfromBytes($sys_max_size));
         } elseif ($upload_info['size'] > $sys_max_size_local) {
             nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename']);
-            $error = sprintf($lang_global['error_upload_max_user_size'], nv_convertfromBytes($sys_max_size_local));
+            $error = $nv_Lang->getGlobal('error_upload_max_user_size', nv_convertfromBytes($sys_max_size_local));
         } else {
             if ($upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][1] > NV_MAX_HEIGHT) {
                 nv_deletefile(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename']);
                 if ($upload_info['img_info'][0] > NV_MAX_WIDTH) {
-                    $error = sprintf($lang_global['error_upload_image_width'], NV_MAX_WIDTH);
+                    $error = $nv_Lang->getGlobal('error_upload_image_width', NV_MAX_WIDTH);
                 } else {
-                    $error = sprintf($lang_global['error_upload_image_height'], NV_MAX_HEIGHT);
+                    $error = $nv_Lang->getGlobal('error_upload_image_height', NV_MAX_HEIGHT);
                 }
             } else {
                 $autologomod = explode(',', $global_config['autologomod']);
@@ -240,7 +240,7 @@ if (!empty($error)) {
         nv_dirListRefreshSize();
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . '/' . $upload_info['basename'], $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_file'), $path . '/' . $upload_info['basename'], $admin_info['userid']);
 
     if ($editor == 'ckeditor') {
         if ($responseType == 'json') {
@@ -261,4 +261,4 @@ if (!empty($error)) {
         echo $upload_info['basename'];
     }
 }
-    // Upload chunk hoàn thành
+// Upload chunk hoàn thành

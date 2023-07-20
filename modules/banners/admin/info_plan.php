@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -22,13 +22,13 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$row['caption'] = sprintf($lang_module['info_plan_caption'], $row['title']);
-$row['blang_format'] = !empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'];
-$row['form_format'] = isset($lang_module['form_' . $row['form']]) ? $lang_module['form_' . $row['form']] : $row['form'];
-$row['is_act'] = $row['act'] ? $lang_global['yes'] : $lang_global['no'];
-$row['require_image'] = $lang_module['require_image' . $row['require_image']];
+$row['caption'] = $nv_Lang->getModule('info_plan_caption', $row['title']);
+$row['blang_format'] = !empty($row['blang']) ? $language_array[$row['blang']]['name'] : $nv_Lang->getModule('blang_all');
+$row['form_format'] = $nv_Lang->existsModule('form_' . $row['form']) ? $nv_Lang->getModule('form_' . $row['form']) : $row['form'];
+$row['is_act'] = $row['act'] ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no');
+$row['require_image'] = $nv_Lang->getModule('require_image' . $row['require_image']);
 $row['uploadtype'] = str_replace(',', ', ', $row['uploadtype']);
-$row['plan_exp_time'] = empty($row['exp_time']) ? $lang_module['plan_exp_time_nolimit'] : nv_convertfromSec($row['exp_time']);
+$row['plan_exp_time'] = empty($row['exp_time']) ? $nv_Lang->getModule('plan_exp_time_nolimit') : nv_convertfromSec($row['exp_time']);
 
 $groups_list = nv_groups_list();
 $uploadgroup = [];
@@ -43,8 +43,8 @@ if (!empty($row['uploadgroup'])) {
 $row['uploadgroup'] = implode(', ', $uploadgroup);
 
 $xtpl = new XTemplate('info_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('ROW', $row);
 $xtpl->assign('LOCATION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $id);
@@ -62,7 +62,7 @@ if (!empty($accordion) and in_array($accordion, ['list_act', 'list_queue', 'list
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['info_plan'];
+$page_title = $nv_Lang->getModule('info_plan');
 
 $set_active_op = 'plans_list';
 

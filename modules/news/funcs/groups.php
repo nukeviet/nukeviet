@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -27,13 +27,13 @@ if (isset($array_op[1])) {
     if (empty($row)) {
         nv_redirect_location($page_url);
     }
-    list($bid, $page_title, $alias, $image_group, $description, $key_words) = $row;
+    [$bid, $page_title, $alias, $image_group, $description, $key_words] = $row;
 
     $page_url .= '/' . $alias;
     $base_url = $page_url;
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
         $page_url .= '/page-' . $page;
     }
 
@@ -127,7 +127,7 @@ if (isset($array_op[1])) {
 
     $query_cat = $db_slave->query('SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC');
 
-    while (list($bid, $numberlink, $btitle, $balias) = $query_cat->fetch(3)) {
+    while ([$bid, $numberlink, $btitle, $balias] = $query_cat->fetch(3)) {
         $array_cat[$key] = [
             'catid' => $bid,
             'alias' => '',

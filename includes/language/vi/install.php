@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -123,7 +123,7 @@ $lang_module['success'] = 'Bạn đã cài đặt thành công!';
 $lang_module['congratulations'] = 'Xin chúc mừng!!! Bạn đã cài đặt thành công hệ thống Nukeviet. Bạn cần đăng nhập vào khu vực quản trị để tiến hành các bước cấu hình site.';
 $lang_module['notesupport'] = 'Mọi nhu cầu về hỗ trợ kỹ thuật xin liên hệ tại <a href="http://nukeviet.vn" target="_blank"><strong>diễn đàn Nukeviet.VN</strong></a>.';
 $lang_module['noteuploads'] = '<strong>Chú ý:</strong> Hãy <strong>CHMOD thư mục uploads</strong> trên webroot và các thư mục con nằm trong nó ở chế độ php có thể ghi file. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.';
-$lang_module['thanks'] = 'Xin cảm ơn và chúc thành công!';
+$lang_module['thanks'] = 'Lời cảm ơn';
 $lang_module['gohome'] = 'Xem trang chủ';
 $lang_module['goadmin'] = 'Đăng nhập trang quản trị';
 $lang_module['finish'] = 'Kết thúc';
@@ -137,7 +137,7 @@ $lang_module['answer_empty'] = 'Bạn chưa nhập câu Trả lời cho câu h�
 $lang_module['question_note'] = 'Hệ thống sẽ hỏi bạn câu hỏi bảo mật trong trường hợp bạn cần khôi phục mật khẩu khi bạn bị quên. Vì vậy hãy chọn câu hỏi mà nó có thể giúp bạn nhớ chính xác câu trả lời.';
 $lang_module['answer_question_note'] = 'Bạn hãy nhớ câu trả lời này để trả lời hệ thống.';
 $lang_module['lang_multi'] = 'Website đa ngôn ngữ';
-$lang_module['lang_multi_note'] = 'Nếu bạn có kế hoạch xây dựng site đa ngôn ngữ, bạn nên chọn tính năng này ';
+$lang_module['lang_multi_note'] = 'Nếu bạn có kế hoạch xây dựng site đa ngôn ngữ, bạn nên chọn tính năng này';
 $lang_module['dev_mode'] = 'Chế độ phát triển';
 $lang_module['dev_mode_note'] = 'Nếu bạn cài đặt với mục đích lập trình, kiểm tra lỗi, bạn nên chọn tính năng này';
 $lang_module['s2_winhost_info'] = 'Bạn đang sử dụng hosting chạy hệ điều hành Windows, chức năng CHMOD sẽ không hoạt động.';
@@ -266,14 +266,11 @@ $lang_module['dbcheck_error_files'] = 'Để cài đặt NukeViet với loại C
 $lang_module['dbcheck_error_driver'] = 'Lỗi: Hệ thống không hỗ trợ loại CSDL này. Vui lòng chọn loại khác';
 $lang_module['update_error_check_version_sys'] = 'Lỗi: Không thể kiểm tra phiên bản hệ thống';
 $lang_module['update_error_check_version_ext'] = 'Lỗi: Không thể kiểm tra phiên bản các ứng dụng';
-
-$lang_module['thanks'] = 'Lời cảm ơn';
 $lang_module['thanks_text'] = 'Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đồng hành cũng như đóng góp công sức của mình cho công cuộc phát triển NuKeViet từ trước cho đến nay, mong các bạn tiếp tục phát huy và luôn luôn ủng hộ cũng như tiếp tục chung tay xây dựng NuKeViet ngày càng lớn mạnh.';
 $lang_module['thanks_list_member_all'] = 'Danh sách thành viên:';
 $lang_module['thanks_list_member_other_version'] = 'Danh sách các thành viên đã đóng góp theo từng phiên bản';
 $lang_module['thanks_other_version'] = 'Phiên bản';
 $lang_module['is_unofficial_mode'] = 'Chú ý: Đây là phiên bản dùng để phát triển và thử nghiệm, bạn không nên sử dụng để làm website chính thức';
-
 $lang_module['spdata_name'] = 'Tên gói dữ liệu';
 $lang_module['spdata_compatible'] = 'Gói dữ liệu mẫu này tương thích';
 $lang_module['spdata_incompatible'] = 'Gói dữ liệu mẫu này được xây dựng ở thư mục %s, việc cài đặt site ở thư mục %s sẽ khiến một số link không chính xác';

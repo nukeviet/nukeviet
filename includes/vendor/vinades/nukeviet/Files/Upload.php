@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -141,7 +141,7 @@ class Upload
         $this->config['upload_checking_mode'] = defined('UPLOAD_CHECKING_MODE') ? UPLOAD_CHECKING_MODE : 'strong';
         $this->config['magic_path'] = $magic_path;
         if (!defined('NV_IS_GODADMIN')) {
-            $this->config['over_capacity'] = isset($global_config['over_capacity']) ? intval($global_config['over_capacity']) : 0;
+            $this->config['over_capacity'] = isset($global_config['over_capacity']) ? (int) ($global_config['over_capacity']) : 0;
         }
 
         $userAgents = [
@@ -187,7 +187,7 @@ class Upload
      */
     private function getextension($filename)
     {
-        if (strpos($filename, '.') === false) {
+        if (!str_contains($filename, '.')) {
             return '';
         }
         $filename = basename(strtolower($filename));
@@ -226,7 +226,7 @@ class Upload
                     continue;
                 }
 
-                list($key, $value) = explode('=', $line);
+                [$key, $value] = explode('=', $line);
                 $key = trim($key);
                 $value = trim($value);
                 $value = str_replace([
@@ -638,11 +638,9 @@ class Upload
         if ($svg and preg_match('#</*(applet|link|script|iframe|frame|frameset)[^>]*>#i', $txt)) {
             return false;
         }
-        if (preg_match("#<\?php(.*)\?>#ms", $txt)) {
-            return false;
-        }
 
-        return true;
+        return !(preg_match("#<\?php(.*)\?>#ms", $txt))
+        ;
     }
 
     /**
@@ -895,6 +893,7 @@ class Upload
         $return = [];
         if (!empty($this->config['over_capacity'])) {
             $return['error'] = $this->lang['error_upload_over_capacity'];
+
             return $return;
         }
         $return['error'] = $this->checkUploadBlob($userfile);
@@ -1084,7 +1083,7 @@ class Upload
         }
 
         //[port] => :80
-        $url_info['port'] = isset($url_info['port']) ? $url_info['port'] : 80;
+        $url_info['port'] ??= 80;
 
         //[login] => username:password@
         $url_info['login'] = '';
@@ -1112,7 +1111,7 @@ class Upload
         $url_info['query'] = (isset($url_info['query']) and !empty($url_info['query'])) ? '?' . $url_info['query'] : '';
 
         //[fragment] => bookmark
-        $url_info['fragment'] = isset($url_info['fragment']) ? $url_info['fragment'] : '';
+        $url_info['fragment'] ??= '';
 
         //[file] => page.php
         $url_info['file'] = explode('/', $url_info['path']);
@@ -1464,6 +1463,7 @@ class Upload
 
         if (!empty($this->config['over_capacity'])) {
             $return['error'] = $this->lang['error_upload_over_capacity'];
+
             return $return;
         }
         $this->url_info = $this->url_get_info($urlfile);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -33,9 +33,9 @@ if ($is_setactive and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $n
         if (empty($row)) {
             $level = 0;
             $sql = 'SELECT username, active, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
-            list($username, $active, $idsite) = $db->query($sql)->fetch(3);
+            [$username, $active, $idsite] = $db->query($sql)->fetch(3);
         } else {
-            list($level, $username, $active, $idsite) = $row;
+            [$level, $username, $active, $idsite] = $row;
             $level = (int) $level;
         }
 
@@ -55,7 +55,7 @@ if ($is_setactive and md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $n
             $sql = 'UPDATE ' . NV_MOD_TABLE . ' SET active=' . $active . ', last_update=' . NV_CURRENTTIME . ' WHERE userid=' . $userid;
             $result = $db->query($sql);
 
-            $note = ($active) ? $lang_module['active_users'] : $lang_module['unactive_users'];
+            $note = ($active) ? $nv_Lang->getModule('active_users') : $nv_Lang->getModule('unactive_users');
             nv_insert_logs(NV_LANG_DATA, $module_name, $note, 'userid: ' . $userid . ' - username: ' . $username, $admin_info['userid']);
         }
     }

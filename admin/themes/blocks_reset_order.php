@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -34,7 +34,7 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
     $sth->execute();
 
-    while (list($bid, $position) = $sth->fetch(3)) {
+    while ([$bid, $position] = $sth->fetch(3)) {
         if (in_array($position, $array_pos, true)) {
             $array_bid[$bid] = $position;
         } else {
@@ -47,7 +47,7 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
     $array_funcid = [];
     // Danh sach ID tat ca cac function co block trong he thong
     $result = $db->query('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
-    while (list($func_id_i) = $result->fetch(3)) {
+    while ([$func_id_i] = $result->fetch(3)) {
         $array_funcid[] = $func_id_i;
     }
 
@@ -55,7 +55,7 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         $func_list = [];
         // Cac fuction da them block
         $result = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid);
-        while (list($func_inlist) = $result->fetch(3)) {
+        while ([$func_inlist] = $result->fetch(3)) {
             $func_list[] = (int) $func_inlist;
         }
 
@@ -87,7 +87,7 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
     $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
     $sth->execute();
 
-    while (list($bid_i, $position, $weight) = $sth->fetch(3)) {
+    while ([$bid_i, $position, $weight] = $sth->fetch(3)) {
         $array_position[] = $position;
         $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i);
     }
@@ -106,7 +106,7 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
         $sth->bindParam(':position', $position, PDO::PARAM_STR);
         $sth->execute();
-        while (list($bid_i, $func_id_i) = $sth->fetch(3)) {
+        while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
             if ($func_id_i == $func_id_old) {
                 ++$weight;
             } else {
@@ -118,13 +118,13 @@ if (!empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
         }
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_weight'], 'reset position all block', $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_weight'), 'reset position all block', $admin_info['userid']);
     $nv_Cache->delMod('themes');
 
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
-    echo $lang_module['block_update_success'];
+    echo $nv_Lang->getModule('block_update_success');
 } else {
     echo 'ERROR';
 }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['oa_info'];
+$page_title = $nv_Lang->getModule('oa_info');
 
 if (!$zalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
@@ -103,8 +103,8 @@ if (empty($oa_info) or empty($oa_info['oa_id']) or $nv_Request->isset_request('o
 }
 
 $xtpl = new XTemplate('oa_info.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oa_info');
 
 if ($oa_info['oa_id'] != $global_config['zaloOfficialAccountID']) {
@@ -120,10 +120,10 @@ $keys = ['oa_id', 'name', 'category', 'description', 'address', 'hotline', 'is_v
 $oa_info = array_replace(array_flip($keys), $oa_info);
 foreach ($oa_info as $key => $val) {
     if ($key == 'is_verified' or !empty($val)) {
-        $key == 'is_verified' && $val = $lang_module['verify_status_' . $val];
+        $key == 'is_verified' && $val = $nv_Lang->getModule('verify_status_' . $val);
         $key == 'updatetime' && $val = nv_date('d/m/Y H:i', $val);
         $xtpl->assign('OA', [
-            'key' => !empty($lang_module[$key]) ? $lang_module[$key] : $key,
+            'key' => !empty($nv_Lang->getModule($key)) ? $nv_Lang->getModule($key) : $key,
             'val' => $val
         ]);
         if ($key == 'qrcode' and !empty($val)) {

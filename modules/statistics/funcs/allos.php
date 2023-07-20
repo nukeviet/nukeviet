@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,14 +13,14 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['os'];
+$page_title = $nv_Lang->getModule('os');
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $contents = '';
 
 $sql = 'SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os' AND c_count!=0";
 $result = $db->query($sql);
-list($num_items, $max) = $result->fetch(3);
+[$num_items, $max] = $result->fetch(3);
 
 if ($num_items) {
     $base_url = $page_url;
@@ -45,9 +45,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $os_list = [];
-    while (list($os, $count, $last_visit) = $result->fetch(3)) {
+    while ([$os, $count, $last_visit] = $result->fetch(3)) {
         $const = 'PLATFORM_' . strtoupper($os);
-        $name = $os != 'unknown' ? (defined($const) ? constant($const) : ucfirst($os)) : $lang_global['unknown'];
+        $name = $os != 'unknown' ? (defined($const) ? constant($const) : ucfirst($os)) : $nv_Lang->getGlobal('unknown');
 
         $os_list[] = [
             'name' => $name,
@@ -61,7 +61,7 @@ if ($num_items) {
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allos($os_list, $generate_page);

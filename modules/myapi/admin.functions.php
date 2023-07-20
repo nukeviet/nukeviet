@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -97,6 +97,7 @@ function checkRoleExist($id)
  * @param mixed $role_id
  * @param mixed $page
  * @param mixed $per_page
+ * @param mixed $for_admin
  * @return array
  */
 function getCredentialList($role_id, $for_admin, $page, $per_page)
@@ -135,5 +136,5 @@ function getCredentialList($role_id, $for_admin, $page, $per_page)
     return [$all_pages, $array];
 }
 
-list($array_api_actions, $array_api_keys, $array_api_cats) = nv_get_api_actions('admin');
-list($user_array_api_actions, $user_array_api_keys, $user_array_api_cats) = nv_get_api_actions('user');
+[$array_api_actions, $array_api_keys, $array_api_cats] = nv_get_api_actions('admin');
+[$user_array_api_actions, $user_array_api_keys, $user_array_api_cats] = nv_get_api_actions('user');

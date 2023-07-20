@@ -5,6 +5,8 @@
     });
 </script>
 <form id="check_database" action="{ACTIONFORM}" method="post">
+<input type="text" value="" id="__fake_username" style="display:none"/>
+<input type="password" value="" id="__fake_password" style="display:none"/>
 <table id="database_config" cellspacing="0" summary="{LANG.database}">
     <caption>{LANG.properties} <span class="highlight_red">*</span>
     {LANG.is_required}</caption>

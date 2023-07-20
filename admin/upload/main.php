@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['upload_manager'];
+$page_title = $nv_Lang->getModule('upload_manager');
 $contents = '';
 
 $path = (defined('NV_IS_SPADMIN')) ? '' : NV_UPLOADS_DIR;
@@ -44,7 +44,7 @@ if ($type != 'image') {
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 if ($popup) {
-    $lang_module['browse_file'] = $lang_global['browse_file'];
+    $nv_Lang->setModule('browse_file', $nv_Lang->getGlobal('browse_file'));
     $sys_max_size = $sys_max_size_local = min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size')));
     if ($global_config['nv_overflow_size'] > $sys_max_size and $global_config['upload_chunk_size'] > 0) {
         $sys_max_size_local = $global_config['nv_overflow_size'];
@@ -52,7 +52,7 @@ if ($popup) {
 
     $xtpl->assign('ADMIN_THEME', $global_config['module_theme']);
     $xtpl->assign('MODULE_NAME', $module_name);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('NV_MAX_SIZE_REMOTE', nv_convertfromBytes($sys_max_size));
     $xtpl->assign('NV_MAX_SIZE_LOCAL', nv_convertfromBytes($sys_max_size_local));
     $xtpl->assign('NV_MAX_SIZE_BYTES', $sys_max_size_local);

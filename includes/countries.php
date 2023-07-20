@@ -284,7 +284,7 @@ function nv_getCountry_from_file($ip)
             $ranges = [];
             include NV_ROOTDIR . '/' . NV_IP_DIR . '6/' . $numbers[0] . '.php';
             foreach ($ranges as $cidrnet => $country) {
-                list($net, $maskbits) = explode('/', $cidrnet);
+                [$net, $maskbits] = explode('/', $cidrnet);
                 $net = inet_pton($net);
                 $binarynet = inet_to_bits($net);
 

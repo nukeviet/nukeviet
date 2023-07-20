@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -128,21 +128,17 @@ $lang_module['block_weight'] = 'Đặt lại thứ tự block theo thứ tự nh
 $lang_module['block_weight_confirm'] = 'Việc này sẽ khiến thứ tự block theo function được đặt lại theo thứ tự nhóm block. Bạn chắc chắn đặt lại thứ tự block?';
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Thông báo: Các files tương tự như trong gói giao diện mà bạn đang cài đặt đã tồn tại trên máy chủ. Bạn chắc chắn muốn thực hiện tiếp quá trình cài đặt để ghi đè các file này?';
 $lang_module['autoinstall_theme_overwrite'] = 'Thực hiện';
-
 $lang_module['config'] = 'Thiết lập giao diện';
 $lang_module['config_not_exit'] = 'Giao diện %s không có chức năng cấu hình';
-
 $lang_module['show_device'] = 'Hiển thị trên thiết bị';
 $lang_module['show_device_1'] = 'Tất cả';
 $lang_module['show_device_2'] = 'Hiển thị di động';
 $lang_module['show_device_3'] = 'Hiển thị máy tính bảng';
 $lang_module['show_device_4'] = 'Các thiết bị khác';
-
 $lang_module['preview_theme_on'] = 'Cho phép xem trước';
 $lang_module['preview_theme_off'] = 'Hủy xem trước';
 $lang_module['preview_theme_link'] = 'Liên kết xem trước giao diện';
 $lang_module['preview_theme_link_copied'] = 'Liên kết đã được sao chép vào bộ nhớ tạm';
-
 $lang_module['settings'] = 'Cấu hình';
 $lang_module['settings_utheme'] = 'Thiết lập giao diện người dùng';
 $lang_module['settings_utheme_help'] = 'Người sử dụng có thể chuyển đổi giữa các giao diện bên dưới';

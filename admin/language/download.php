@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,7 +14,7 @@ if (!defined('NV_IS_FILE_LANG')) {
 }
 
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
-$page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
+$page_title = $language_array[$dirlang]['name'] . ': ' . $nv_Lang->getModule('nv_admin_read');
 
 if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CHECK_SESSION)) {
     if (preg_match('/^([a-z]{2})$/', $dirlang)) {
@@ -23,20 +23,6 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
         $err = 0;
 
         foreach ($dirs as $module) {
-            // Zip lang block
-            $files_lang_block = nv_scandir(NV_ROOTDIR . '/modules/' . $module . '/language', '/^block.(module|global)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '.php$/');
-
-            foreach ($files_lang_block as $file_lang_block) {
-                if (file_exists(NV_ROOTDIR . '/modules/' . $module . '/language/' . $file_lang_block)) {
-                    $allowfolder[] = NV_ROOTDIR . '/modules/' . $module . '/language/' . $file_lang_block;
-                }
-            }
-
-            // Lang module admin
-            if (file_exists(NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php')) {
-                $allowfolder[] = NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php';
-            }
-
             // Lang module site
             if (file_exists(NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php')) {
                 $allowfolder[] = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
@@ -72,16 +58,10 @@ if ($nv_Request->get_string('checksess', 'get') == md5('downloadallfile' . NV_CH
         if (file_exists(NV_ROOTDIR . '/themes/default/language/' . $dirlang . '.php')) {
             $allowfolder[] = NV_ROOTDIR . '/themes/default/language/' . $dirlang . '.php';
         }
-        if (file_exists(NV_ROOTDIR . '/themes/default/language/admin_' . $dirlang . '.php')) {
-            $allowfolder[] = NV_ROOTDIR . '/themes/default/language/admin_' . $dirlang . '.php';
-        }
 
         // Lang theme mobile_default
         if (file_exists(NV_ROOTDIR . '/themes/mobile_default/language/' . $dirlang . '.php')) {
             $allowfolder[] = NV_ROOTDIR . '/themes/mobile_default/language/' . $dirlang . '.php';
-        }
-        if (file_exists(NV_ROOTDIR . '/themes/mobile_default/language/admin_' . $dirlang . '.php')) {
-            $allowfolder[] = NV_ROOTDIR . '/themes/mobile_default/language/admin_' . $dirlang . '.php';
         }
 
         //package samples data

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['list'];
+$page_title = $nv_Lang->getModule('list');
 $array = [];
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY weight ASC';
@@ -25,13 +25,13 @@ if ($num < 1) {
 }
 
 $array_status = [
-    $lang_module['inactive'],
-    $lang_module['active']
+    $nv_Lang->getModule('inactive'),
+    $nv_Lang->getModule('active')
 ];
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $i = 0;
 foreach ($_rows as $row) {

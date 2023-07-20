@@ -25,7 +25,7 @@ if (!$author_info['is_guest']) {
     $stmt = $db_slave->prepare('SELECT id, uid, pseudonym, image, description, add_time, numnews FROM ' . NV_PREFIXLANG . '_' . $module_data . '_author WHERE alias= :alias AND active=1');
     $stmt->bindParam(':alias', $author_info['alias'], PDO::PARAM_STR);
     $stmt->execute();
-    list($author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']) = $stmt->fetch(3);
+    [$author_info['id'], $author_info['uid'], $author_info['pseudonym'], $author_info['image'], $author_info['description'], $author_info['add_time'], $author_info['numnews']] = $stmt->fetch(3);
     if (!$author_info['id']) {
         nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
     }
@@ -38,14 +38,14 @@ if (!$author_info['is_guest']) {
     $page_title = $author_info['pseudonym'];
     $where = 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ')';
 } else {
-    $page_title = $lang_module['articles_by_other_authors'];
+    $page_title = $nv_Lang->getModule('articles_by_other_authors');
     $where = 'status=1 AND id NOT IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist)';
 }
 
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $author_info['alias'];
 if ($page > 1) {
     $page_url .= '/page-' . $page;
-    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+    $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
 }
 
 $canonicalUrl = getCanonicalUrl($page_url, true);

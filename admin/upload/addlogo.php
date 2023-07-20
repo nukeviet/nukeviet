@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,27 +13,27 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['addlogo'];
+$page_title = $nv_Lang->getModule('addlogo');
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['delete_file'])) {
-    exit('ERROR#' . $lang_module['notlevel']);
+    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 $file = htmlspecialchars(trim($nv_Request->get_string('file', 'post,get')), ENT_QUOTES);
 $file = basename($file);
 
 if (empty($file) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $file, $path)) {
-    exit('ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file);
+    exit('ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $file);
 }
 
 if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x', 'post') and $nv_Request->isset_request('y', 'post')) {
     if (file_exists(NV_ROOTDIR . '/' . $global_config['upload_logo'])) {
         $upload_logo = NV_ROOTDIR . '/' . $global_config['upload_logo'];
     } else {
-        exit('ERROR#' . $lang_module['notlogo']);
+        exit('ERROR#' . $nv_Lang->getModule('notlogo'));
     }
 
     $config_logo = [];
@@ -78,7 +78,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
 
         exit('OK#' . basename($file));
     }
-    exit('ERROR#' . $lang_module['notlevel']);
+    exit('ERROR#' . $nv_Lang->getModule('notlevel'));
 }
 
 exit('ERROR#Error Access!!');

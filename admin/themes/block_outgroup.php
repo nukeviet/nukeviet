@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -55,10 +55,10 @@ if ($func_id > 0 and isset($row['bid']) and md5(NV_CHECK_SESSION . '_' . $bid) =
 
         $nv_Cache->delMod('themes');
 
-        echo $lang_module['block_front_outgroup_success'] . $new_bid;
+        echo $nv_Lang->getModule('block_front_outgroup_success') . $new_bid;
     } catch (PDOException $e) {
-        echo $lang_module['block_front_outgroup_error_update'];
+        echo $nv_Lang->getModule('block_front_outgroup_error_update');
     }
 } else {
-    echo $lang_module['block_front_outgroup_cancel'];
+    echo $nv_Lang->getModule('block_front_outgroup_cancel');
 }

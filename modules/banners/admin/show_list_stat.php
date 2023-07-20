@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -53,7 +53,7 @@ $day_min = ($current_month == $publ_month and $current_year == $publ_year) ? $pu
 $where = 'bid=' . $bid;
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show_list_stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
-$caption = sprintf($lang_module['show_list_stat1'], nv_monthname($data_month), $current_year);
+$caption = $nv_Lang->getModule('show_list_stat1', nv_monthname($data_month), $current_year);
 
 $data_ext = $data_val = '';
 
@@ -67,7 +67,7 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $minday = mktime(0, 0, 0, $data_month, $data_val, $current_year);
                 $where .= ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday;
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
-                $caption = sprintf($lang_module['show_list_stat2'], str_pad($data_val, 2, '0', STR_PAD_LEFT), nv_monthname($data_month), $current_year);
+                $caption = $nv_Lang->getModule('show_list_stat2', str_pad($data_val, 2, '0', STR_PAD_LEFT), nv_monthname($data_month), $current_year);
             }
             break;
         case 'country':
@@ -76,7 +76,7 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $data_val = $nv_Request->get_string('val', 'get');
                 $where .= ' AND click_country= ' . $db->quote($data_val);
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
-                $caption = sprintf($lang_module['show_list_stat3'], (isset($countries[$data_val]) ? $countries[$data_val][1] : $data_val), nv_monthname($data_month), $current_year);
+                $caption = $nv_Lang->getModule('show_list_stat3', (isset($countries[$data_val]) ? $countries[$data_val][1] : $data_val), nv_monthname($data_month), $current_year);
             }
             break;
         case 'browse':
@@ -85,7 +85,7 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $data_val = $nv_Request->get_string('val', 'get');
                 $where .= ' AND click_browse_name= ' . $db->quote($data_val);
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
-                $caption = sprintf($lang_module['show_list_stat4'], '{pattern}', nv_monthname($data_month), $current_year);
+                $caption = $nv_Lang->getModule('show_list_stat4', '{pattern}', nv_monthname($data_month), $current_year);
             }
             break;
         case 'os':
@@ -94,7 +94,7 @@ if (in_array($nv_Request->get_string('ext', 'get', 'no'), ['day', 'country', 'br
                 $data_val = $nv_Request->get_string('val', 'get');
                 $where .= ' AND click_os_name= ' . $db->quote($data_val);
                 $base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
-                $caption = sprintf($lang_module['show_list_stat5'], '{pattern}', nv_monthname($data_month), $current_year);
+                $caption = $nv_Lang->getModule('show_list_stat5', '{pattern}', nv_monthname($data_month), $current_year);
             }
             break;
     }
@@ -130,7 +130,7 @@ while ($row = $result->fetch()) {
     $contents['rows'][$a][] = isset($countries[$row['click_country']]) ? $countries[$row['click_country']][1] : $row['click_country'];
     $contents['rows'][$a][] = $row['click_browse_name'];
     $contents['rows'][$a][] = $row['click_os_name'];
-    $contents['rows'][$a][] = !empty($row['click_ref']) ? '<a href="' . $row['click_ref'] . '">' . $lang_module['select'] . '</a>' : '';
+    $contents['rows'][$a][] = !empty($row['click_ref']) ? '<a href="' . $row['click_ref'] . '">' . $nv_Lang->getModule('select') . '</a>' : '';
 
     if ($data_ext == 'browse' and empty($replacement)) {
         $replacement = $row['click_browse_name'];
@@ -146,7 +146,7 @@ if (!empty($replacement)) {
 }
 
 $contents['caption'] = $caption;
-$contents['thead'] = [$lang_module['click_date'], $lang_module['click_ip'], $lang_module['click_country'], $lang_module['click_browse'], $lang_module['click_os'], $lang_module['click_ref']];
+$contents['thead'] = [$nv_Lang->getModule('click_date'), $nv_Lang->getModule('click_ip'), $nv_Lang->getModule('click_country'), $nv_Lang->getModule('click_browse'), $nv_Lang->getModule('click_os'), $nv_Lang->getModule('click_ref')];
 $contents['generate_page'] = nv_generate_page($base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'statistic');
 
 $contents = nv_show_list_stat_theme($contents);

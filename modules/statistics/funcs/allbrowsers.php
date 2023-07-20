@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,20 +13,20 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['browser'];
+$page_title = $nv_Lang->getModule('browser');
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'];
 $contents = '';
 
 $sql = 'SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type='browser' AND c_count!=0";
 $result = $db->query($sql);
-list($num_items, $max) = $result->fetch(3);
+[$num_items, $max] = $result->fetch(3);
 
 if ($num_items) {
     $base_url = $page_url;
     $page = $nv_Request->get_int('page', 'get', 1);
     $per_page = 50;
-    
+
     if ($page > 1) {
         $page_url .= '&amp;page=' . $page;
     }
@@ -44,9 +44,9 @@ if ($num_items) {
     $result = $db->query($db->sql());
 
     $browsers_list = [];
-    while (list($br, $count, $last_visit) = $result->fetch(3)) {
+    while ([$br, $count, $last_visit] = $result->fetch(3)) {
         $const = 'BROWSER_' . strtoupper($br);
-        $name = $br != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($br)) : $lang_global['unknown'];
+        $name = $br != 'Unknown' ? (defined($const) ? constant($const) : ucfirst($br)) : $nv_Lang->getGlobal('unknown');
         $browsers_list[] = [
             'name' => $name,
             'count' => $count,
@@ -59,7 +59,7 @@ if ($num_items) {
     $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_theme_statistics_allbrowsers($browsers_list, $generate_page);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -36,7 +36,7 @@ $theme_config = [
  */
 function nv_site_theme($contents, $full = true)
 {
-    global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $my_head, $my_footer, $client_info, $module_config, $op, $drag_block, $opensearch_link, $custom_preloads;
+    global $home, $array_mod_title, $nv_Lang, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $my_head, $my_footer, $client_info, $module_config, $op, $drag_block, $opensearch_link, $custom_preloads;
 
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
@@ -58,7 +58,7 @@ function nv_site_theme($contents, $full = true)
     nv_apply_hook('', 'sector4');
 
     $xtpl = new XTemplate($layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('SITE_FAVICON', $site_favicon);
 
@@ -143,7 +143,7 @@ function nv_site_theme($contents, $full = true)
         }
 
         if (isset($config_theme['gfont']) and !empty($config_theme['gfont']) and isset($config_theme['gfont']['family']) and !empty($config_theme['gfont']['family'])) {
-            $subset = isset($config_theme['gfont']['subset']) ? $config_theme['gfont']['subset'] : '';
+            $subset = $config_theme['gfont']['subset'] ?? '';
             $gf = new NukeViet\Client\Gfonts(['fonts' => [$config_theme['gfont']], 'subset' => $subset], $client_info);
             $webFontFile = $gf->getUrlCss();
             array_unshift($html_links, ['rel' => 'StyleSheet', 'href' => $webFontFile]);
@@ -262,7 +262,7 @@ function nv_site_theme($contents, $full = true)
         // Statistics image
         $theme_stat_img = '';
         if ($global_config['statistic'] and isset($site_mods['statistics'])) {
-            $theme_stat_img .= '<a title="' . $lang_global['viewstats'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=statistics"><img alt="' . $lang_global['viewstats'] . '" src="' . NV_BASE_SITEURL . 'index.php?second=statimg&amp;p=' . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
+            $theme_stat_img .= '<a title="' . $nv_Lang->getGlobal('viewstats') . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=statistics"><img alt="' . $nv_Lang->getGlobal('viewstats') . '" src="' . NV_BASE_SITEURL . 'index.php?second=statimg&amp;p=' . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
         }
 
         $xtpl->assign('THEME_STAT_IMG', $theme_stat_img);
@@ -271,8 +271,8 @@ function nv_site_theme($contents, $full = true)
         if ($global_config['switch_mobi_des']) {
             foreach ($global_config['array_theme_type'] as $theme_type) {
                 $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
-                $xtpl->assign('STHEME_TITLE', $lang_global['theme_type_' . $theme_type]);
-                $xtpl->assign('STHEME_INFO', sprintf($lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type]));
+                $xtpl->assign('STHEME_TITLE', $nv_Lang->getGlobal('theme_type_' . $theme_type));
+                $xtpl->assign('STHEME_INFO', $nv_Lang->getGlobal('theme_type_chose', $nv_Lang->getGlobal('theme_type_' . $theme_type)));
 
                 if ($theme_type != $global_config['current_theme_type']) {
                     $xtpl->parse('main.theme_type.loop.other');
@@ -294,7 +294,7 @@ function nv_site_theme($contents, $full = true)
     }
 
     if ($global_config['cookie_notice_popup'] and !isset($_COOKIE[$global_config['cookie_prefix'] . '_cn'])) {
-        $xtpl->assign('COOKIE_NOTICE', sprintf($lang_global['cookie_notice'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteterms&amp;' . NV_OP_VARIABLE . '=privacy' . $global_config['rewrite_exturl']));
+        $xtpl->assign('COOKIE_NOTICE', $nv_Lang->getGlobal('cookie_notice', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteterms&amp;' . NV_OP_VARIABLE . '=privacy' . $global_config['rewrite_exturl']));
         $xtpl->parse('main.cookie_notice');
     }
 

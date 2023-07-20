@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['setting'];
+$page_title = $nv_Lang->getModule('setting');
 $array_config = [];
 if ($nv_Request->isset_request('save', 'post')) {
     $array_config['difftimeout'] = $nv_Request->get_int('difftimeout', 'post', 0);
@@ -37,8 +37,8 @@ $array_config = $module_config[$module_name];
 $array_config['difftimeout'] = round($array_config['difftimeout'] / 3600);
 
 $xtpl = new XTemplate('setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('DATA', $array_config);
 

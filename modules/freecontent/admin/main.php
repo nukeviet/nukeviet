@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['block_list'];
+$page_title = $nv_Lang->getModule('block_list');
 
 // Get block info
 if ($nv_Request->isset_request('getinfo', 'post')) {
@@ -79,7 +79,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (empty($data['title'])) {
         $error[] = [
             'name' => 'title',
-            'value' => $lang_module['block_title_error']
+            'value' => $nv_Lang->getModule('block_title_error')
         ];
     } else {
         if ($data['bid']) {
@@ -102,17 +102,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 }
 
                 $nv_Cache->delMod($module_name);
-                $message = $lang_module['save_success'];
+                $message = $nv_Lang->getModule('save_success');
             } else {
                 $error[] = [
                     'name' => '',
-                    'value' => $lang_module['error_save']
+                    'value' => $nv_Lang->getModule('error_save')
                 ];
             }
         } catch (PDOException $e) {
             $error[] = [
                 'name' => '',
-                'value' => $lang_module['error_save']
+                'value' => $nv_Lang->getModule('error_save')
             ];
         }
     }
@@ -126,8 +126,8 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
 // Write row
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks ORDER BY bid DESC';
 $array = $db->query($sql)->fetchAll();

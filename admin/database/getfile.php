@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -24,7 +24,7 @@ if ($global_config['idsite']) {
 $path_filename = NV_BASE_SITEURL . '/' . $log_dir . '/' . $filename;
 
 if (nv_is_file($path_filename, $log_dir) === true and $checkss == md5($filename . NV_CHECK_SESSION)) {
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename($filename), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('download'), 'File name: ' . basename($filename), $admin_info['userid']);
 
     //Download file
     $name = basename($path_filename);
@@ -38,8 +38,8 @@ if (nv_is_file($path_filename, $log_dir) === true and $checkss == md5($filename 
     $download->download_file();
     exit();
 }
-    $contents = 'File not exist !';
+$contents = 'File not exist !';
 
-    include NV_ROOTDIR . '/includes/header.php';
-    echo nv_admin_theme($contents);
-    include NV_ROOTDIR . '/includes/footer.php';
+include NV_ROOTDIR . '/includes/header.php';
+echo nv_admin_theme($contents);
+include NV_ROOTDIR . '/includes/footer.php';

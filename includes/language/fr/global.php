@@ -372,17 +372,14 @@ $lang_global['error_code_10'] = 'Demande HTTP par Curl échoué';
 $lang_global['error_code_11'] = 'Un erreur non-déterminé a eu lieu';
 $lang_global['error_valid_response'] = 'Les données retournées n\'est pas en bonne forme';
 $lang_global['myapis'] = 'Mes API';
-
 $lang_global['login_name_type_username'] = 'Nom d\'utilisateur';
 $lang_global['login_name_type_email'] = 'Email';
 $lang_global['login_name_type_email_username'] = 'Nom d\'utilisateur ou email';
-
 $lang_global['general_support'] = 'Support général';
 $lang_global['data_warning_content'] = 'Lors de la soumission de données, j\'accepte implicitement d\'autoriser le site Web à exploiter les informations personnelles que j\'ai déclarées.';
 $lang_global['antispam_warning_content'] = 'Lors de la soumission de données, je confirme que j\'ai été averti de la loi anti-spam.';
 $lang_global['data_warning_error'] = 'Vous devez confirmer l\'autorisation pour que le site Web exploite des informations personnelles';
 $lang_global['antispam_warning_error'] = 'Vous devez confirmer que vous avez été averti de la loi anti-spam';
-
 $lang_global['country_AD'] = 'Andorre';
 $lang_global['country_AE'] = 'Arabes Unis';
 $lang_global['country_AF'] = 'Afghanistan';
@@ -632,3 +629,5 @@ $lang_global['country_YU'] = 'Serbie-et-Monténégro';
 $lang_global['country_ZA'] = 'Afrique du Sud';
 $lang_global['country_ZM'] = 'Zambie';
 $lang_global['country_ZW'] = 'Zimbabwe';
+$lang_global['apply'] = '';
+$lang_global['custom_range'] = '';

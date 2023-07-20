@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -25,22 +25,14 @@ if (!defined('NV_IS_ADMIN') or !isset($admin_info) or empty($admin_info)) {
 
 // Khong cho xac dinh tu do cac variables
 $array_url_instruction = $select_options = [];
-
-if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php')) {
-    require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
-} elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php')) {
-    require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php';
-} elseif (file_exists(NV_ROOTDIR . '/includes/language/en/admin_global.php')) {
-    require NV_ROOTDIR . '/includes/language/en/admin_global.php';
-}
-
+$nv_Lang->loadGlobal(true);
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
 $admin_mods = [];
 $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC';
 $list = $nv_Cache->db($sql, '', 'authors');
 foreach ($list as $row) {
-    $row['custom_title'] = isset($lang_global[$row['lang_key']]) ? $lang_global[$row['lang_key']] : $row['module'];
+    $row['custom_title'] = $nv_Lang->existsGlobal($row['lang_key']) ? $nv_Lang->getGlobal($row['lang_key']) : $row['module'];
     $admin_mods[$row['module']] = $row;
 }
 if (!defined('NV_IS_GODADMIN') and empty($global_config['idsite'])) {
@@ -85,34 +77,23 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $module_data = $module_info['module_data'];
         $module_upload = $module_info['module_upload'];
 
+        //Ket noi ngon ngu cua module
+        $nv_Lang->loadModule($module_file);
+
         $include_functions = NV_ROOTDIR . '/modules/' . $module_file . '/admin.functions.php';
         $include_menu = NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
         $include_file = NV_ROOTDIR . '/modules/' . $module_file . '/admin/' . $op . '.php';
-
-        //Ket noi ngon ngu cua module
-        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php';
-        }
     } elseif (isset($admin_mods[$module_name])) {
         $module_info = $admin_mods[$module_name];
         if (md5($module_info['module'] . '#' . $module_info['act_1'] . '#' . $module_info['act_2'] . '#' . $module_info['act_3'] . '#' . $global_config['sitekey'])) {
             $module_upload = $module_file = $module_name;
+
+            // Ket noi voi file ngon ngu cua module
+            $nv_Lang->loadModule($module_file, true);
+
             $include_functions = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/functions.php';
             $include_menu = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/admin.menu.php';
             $include_file = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/' . $op . '.php';
-
-            // Ket noi voi file ngon ngu cua module
-            if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $module_file . '.php')) {
-                require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $module_file . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php')) {
-                require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/includes/language/en/admin_' . $module_file . '.php')) {
-                require NV_ROOTDIR . '/includes/language/en/admin_' . $module_file . '.php';
-            }
         }
     }
 
@@ -183,7 +164,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             require $include_file;
             exit();
         }
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func'], 404);
+        nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('admin_no_allow_func'), 404);
     } elseif (isset($site_mods[$module_name]) and $op == 'main') {
         $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=0 WHERE title= :module_name');
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);

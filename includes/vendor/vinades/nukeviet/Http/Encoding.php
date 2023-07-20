@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -83,7 +83,7 @@ class Encoding
             $flg = ord(substr($gzData, 3, 1));
             if ($flg > 0) {
                 if ($flg & 4) {
-                    list($xlen) = unpack('v', substr($gzData, $i, 2));
+                    [$xlen] = unpack('v', substr($gzData, $i, 2));
                     $i = $i + 2 + $xlen;
                 }
 
@@ -193,6 +193,6 @@ class Encoding
      */
     public static function is_available()
     {
-        return (function_exists('gzuncompress') or function_exists('gzdeflate') or function_exists('gzinflate'));
+        return function_exists('gzuncompress') or function_exists('gzdeflate') or function_exists('gzinflate');
     }
 }

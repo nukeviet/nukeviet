@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -29,7 +29,7 @@ if (defined('NV_IS_USER_FORUM')) {
  */
 function lost_pass_sendMail($row)
 {
-    global $db, $global_config, $lang_module, $module_name;
+    global $db, $global_config, $nv_Lang, $module_name;
 
     $passlostkey = (!empty($row['passlostkey']) and preg_match("/^([0-9]{10,15})\|([a-z0-9]{32})$/i", $row['passlostkey'], $matches)) ? [
         $matches[1],
@@ -51,17 +51,17 @@ function lost_pass_sendMail($row)
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $lang_module['lostpass_email_subject'] = sprintf($lang_module['lostpass_email_subject'], NV_MY_DOMAIN);
-        $message = sprintf($lang_module['lostpass_email_content'], $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
+        $nv_Lang->setModule('lostpass_email_subject', $nv_Lang->getModule('lostpass_email_subject', NV_MY_DOMAIN));
+        $message = $nv_Lang->getModule('lostpass_email_content', $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
         if (!nv_sendmail([
             $global_config['site_name'],
             $global_config['site_email']
-        ], $row['email'], $lang_module['lostpass_email_subject'], $message)) {
+        ], $row['email'], $nv_Lang->getModule('lostpass_email_subject'), $message)) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => '',
                 'step' => 'step1',
-                'mess' => $lang_module['lostpass_sendmail_error'],
+                'mess' => $nv_Lang->getModule('lostpass_sendmail_error'),
                 'redirect' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true)
             ]);
         }
@@ -114,7 +114,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => '',
             'step' => 'step1',
-            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
         ]);
     }
 
@@ -125,7 +125,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'userField',
             'step' => 'step1',
-            'mess' => $lang_module['lostpass_no_info1']
+            'mess' => $nv_Lang->getModule('lostpass_no_info1')
         ]);
     }
 
@@ -147,7 +147,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'userField',
             'step' => 'step1',
-            'mess' => $lang_module['lostpass_no_info2']
+            'mess' => $nv_Lang->getModule('lostpass_no_info2')
         ]);
     }
 
@@ -165,7 +165,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'ok',
             'input' => nv_url_rewrite($url, true),
             'step' => '',
-            'mess' => $lang_module['openid_lostpass_info']
+            'mess' => $nv_Lang->getModule('openid_lostpass_info')
         ]);
     }
 
@@ -181,7 +181,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'ok',
             'input' => nv_url_rewrite($url, true),
             'step' => '',
-            'mess' => $lang_module['lostpass_question_empty']
+            'mess' => $nv_Lang->getModule('lostpass_question_empty')
         ]);
     }
 
@@ -193,7 +193,7 @@ if ($checkss == $data['checkss']) {
                 'status' => 'answer',
                 'input' => 'answer',
                 'step' => 'step2',
-                'info' => '<p>' . $lang_module['lostpass_question'] . ':</p><strong>' . $row['question'] . '</strong>',
+                'info' => '<p>' . $nv_Lang->getModule('lostpass_question') . ':</p><strong>' . $row['question'] . '</strong>',
                 'mess' => ''
             ]);
         } else {
@@ -202,8 +202,8 @@ if ($checkss == $data['checkss']) {
                 'status' => 'verify',
                 'input' => 'verifykey',
                 'step' => 'step3',
-                'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
-                'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint)
+                'info' => $nv_Lang->getModule('lostpass_content_mess', $email_hint),
+                'mess' => $nv_Lang->getModule('lostpass_content_mess', $email_hint)
             ]);
         }
     }
@@ -215,8 +215,8 @@ if ($checkss == $data['checkss']) {
                 'status' => 'error',
                 'input' => 'answer',
                 'step' => 'step2',
-                'info' => '<p>' . $lang_module['lostpass_question'] . ':</p><strong>' . $row['question'] . '</strong>',
-                'mess' => $lang_module['answer_failed']
+                'info' => '<p>' . $nv_Lang->getModule('lostpass_question') . ':</p><strong>' . $row['question'] . '</strong>',
+                'mess' => $nv_Lang->getModule('answer_failed')
             ]);
         }
 
@@ -226,8 +226,8 @@ if ($checkss == $data['checkss']) {
                 'status' => 'verify',
                 'input' => 'verifykey',
                 'step' => 'step3',
-                'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
-                'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint)
+                'info' => $nv_Lang->getModule('lostpass_content_mess', $email_hint),
+                'mess' => $nv_Lang->getModule('lostpass_content_mess', $email_hint)
             ]);
         }
     }
@@ -246,8 +246,8 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
-            'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
-            'mess' => sprintf($lang_module['lostpass_content_mess'], $email_hint)
+            'info' => $nv_Lang->getModule('lostpass_content_mess', $email_hint),
+            'mess' => $nv_Lang->getModule('lostpass_content_mess', $email_hint)
         ]);
     }
 
@@ -256,8 +256,8 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'verifykey',
             'step' => 'step3',
-            'info' => sprintf($lang_module['lostpass_content_mess'], $email_hint),
-            'mess' => $lang_module['lostpass_active_error']
+            'info' => $nv_Lang->getModule('lostpass_content_mess', $email_hint),
+            'mess' => $nv_Lang->getModule('lostpass_active_error')
         ]);
     }
 
@@ -266,8 +266,8 @@ if ($checkss == $data['checkss']) {
             'status' => 'new_password',
             'input' => 'new_password',
             'step' => 'step4',
-            'info' => $lang_module['lostpass_newpass_mess'],
-            'mess' => $lang_module['lostpass_newpass_mess']
+            'info' => $nv_Lang->getModule('lostpass_newpass_mess'),
+            'mess' => $nv_Lang->getModule('lostpass_newpass_mess')
         ]);
     }
 
@@ -279,7 +279,7 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'new_password',
             'step' => 'step4',
-            'info' => $lang_module['lostpass_newpass_mess'],
+            'info' => $nv_Lang->getModule('lostpass_newpass_mess'),
             'mess' => $check_new_password
         ]);
     }
@@ -289,8 +289,8 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 're_password',
             'step' => 'step4',
-            'info' => $lang_module['lostpass_newpass_mess'],
-            'mess' => $lang_global['passwordsincorrect']
+            'info' => $nv_Lang->getModule('lostpass_newpass_mess'),
+            'mess' => $nv_Lang->getGlobal('passwordsincorrect')
         ]);
     }
 
@@ -299,8 +299,8 @@ if ($checkss == $data['checkss']) {
             'status' => 'error',
             'input' => 'new_password',
             'step' => 'step4',
-            'info' => $lang_module['lostpass_newpass_mess'],
-            'mess' => sprintf($lang_module['password_was_used'], $global_config['oldpass_num'])
+            'info' => $nv_Lang->getModule('lostpass_newpass_mess'),
+            'mess' => $nv_Lang->getModule('password_was_used', $global_config['oldpass_num'])
         ]);
     }
 
@@ -324,11 +324,11 @@ if ($checkss == $data['checkss']) {
         $name = array_filter($name);
         $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $message = sprintf($lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password);
+        $message = $nv_Lang->getModule('edit_mail_content', $name, $sitename, $nv_Lang->getGlobal('password'), $new_password);
         @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
-        ], $row['email'], $lang_module['edit_mail_subject'], $message);
+        ], $row['email'], $nv_Lang->getModule('edit_mail_subject'), $message);
     }
 
     $redirect = nv_redirect_decrypt($nv_redirect, true);
@@ -337,7 +337,7 @@ if ($checkss == $data['checkss']) {
         'status' => 'ok',
         'input' => $url,
         'step' => '',
-        'mess' => $lang_module['editinfo_ok']
+        'mess' => $nv_Lang->getModule('editinfo_ok')
     ]);
 }
 
@@ -347,7 +347,7 @@ if ($mailer_mode != 'smtp' and defined('NV_REGISTER_DOMAIN') and $global_config[
     nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
 }
 
-$page_title = $lang_module['lostpass_page_title'];
+$page_title = $nv_Lang->getModule('lostpass_page_title');
 $key_words = $module_info['keywords'];
 
 $canonicalUrl = getCanonicalUrl($page_url);

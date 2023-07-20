@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -61,6 +61,7 @@ if (!empty($global_config['unsign_vietwords'])) {
         global $db;
 
         $keyword = $db->regexpescape($keyword);
+
         return searchPatternByLang(nv_EncString($keyword));
     }
 }

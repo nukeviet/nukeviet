@@ -15,7 +15,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 
 if (!$sys_info['ftp_support']) {
     $xtpl = new XTemplate('ftp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $xtpl->parse('no_support');
     $contents = $xtpl->text('no_support');
@@ -35,7 +35,7 @@ if ($nv_Request->isset_request('autodetect', 'post')) {
     if (empty($ftp_server) or empty($ftp_user_name) or empty($ftp_user_pass)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['ftp_error_full']
+            'mess' => $nv_Lang->getModule('ftp_error_full')
         ]);
     }
 
@@ -55,7 +55,7 @@ if ($nv_Request->isset_request('autodetect', 'post')) {
         $ftp->close();
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => empty($ftp->error) ? $lang_module['ftp_error_detect_root'] : (string) $ftp->error
+            'mess' => empty($ftp->error) ? $nv_Lang->getModule('ftp_error_detect_root') : (string) $ftp->error
         ]);
     }
 
@@ -82,21 +82,21 @@ if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request
     if (empty($post['ftp_server'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['server_empty']
+            'mess' => $nv_Lang->getModule('server_empty')
         ]);
     }
 
     if (empty($post['ftp_user_name'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['username_empty']
+            'mess' => $nv_Lang->getModule('username_empty')
         ]);
     }
 
     if (empty($post['ftp_user_pass'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['password_empty']
+            'mess' => $nv_Lang->getModule('password_empty')
         ]);
     }
 
@@ -113,7 +113,7 @@ if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request
     if ($ftp->chdir($ftp_path) === false) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_global['ftp_error_path']
+            'mess' => $nv_Lang->getGlobal('ftp_error_path')
         ]);
     }
 
@@ -132,7 +132,7 @@ if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request
     if ($a !== sizeof($check_files)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_global['ftp_error_path']
+            'mess' => $nv_Lang->getGlobal('ftp_error_path')
         ]);
     }
 
@@ -155,7 +155,7 @@ if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request
     ]);
 }
 
-$page_title = $lang_module['ftp_config'];
+$page_title = $nv_Lang->getModule('ftp_config');
 $data = [
     'ftp_server' => $global_config['ftp_server'],
     'ftp_port' => $global_config['ftp_port'],
@@ -165,7 +165,7 @@ $data = [
 ];
 
 $xtpl = new XTemplate('ftp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);

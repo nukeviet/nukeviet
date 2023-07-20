@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -31,7 +31,7 @@ $sth->bindValue(':keywords', '%' . $q . '%', PDO::PARAM_STR);
 $sth->execute();
 
 $array_data = [];
-while (list($keywords) = $sth->fetch(3)) {
+while ([$keywords] = $sth->fetch(3)) {
     $keywords = explode(',', $keywords);
     foreach ($keywords as $_keyword) {
         $array_data[] = nv_unhtmlspecialchars(str_replace('-', ' ', $_keyword));
@@ -41,7 +41,7 @@ while (list($keywords) = $sth->fetch(3)) {
 if (sizeof($array_data) < 50) {
     if (file_exists(NV_ROOTDIR . '/includes/keywords/' . NV_LANG_DATA . '.php')) {
         $contents = file_get_contents(NV_ROOTDIR . '/includes/keywords/' . NV_LANG_DATA . '.php');
-        preg_match_all('/\'([^\']*' . nv_preg_quote($q). '[^\']*)\'/', $contents, $matches);
+        preg_match_all('/\'([^\']*' . nv_preg_quote($q) . '[^\']*)\'/', $contents, $matches);
         $array_data = array_merge($array_data, $matches[1]);
         $array_data = array_unique($array_data);
         $array_data = array_slice($array_data, 0, 50, true);

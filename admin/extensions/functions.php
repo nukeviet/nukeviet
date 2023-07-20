@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,7 +21,7 @@ $array_url_instruction['manage'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:man
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_extensions']
+    'custom_title' => $nv_Lang->getGlobal('mod_extensions')
 ];
 
 $allow_func = ['main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage'];
@@ -86,7 +86,6 @@ function nv_extensions_is_installed($type, $name, $version)
  * is_serialized_string()
  *
  * @param mixed $data
- * @return
  */
 function is_serialized_string($data)
 {
@@ -103,18 +102,15 @@ function is_serialized_string($data)
     if ($data[1] !== ':') {
         return false;
     }
-    if ($data[0] !== 'a') {
-        return false;
-    }
 
-    return true;
+    return !($data[0] !== 'a')
+    ;
 }
 
 /**
  * nv_get_cookies()
  *
  * @param bool $full
- * @return
  */
 function nv_get_cookies($full = false)
 {
@@ -207,13 +203,9 @@ function nv_store_cookies($cookies = [], $currCookies = [])
  * nv_check_ext_config_filecontent()
  *
  * @param mixed $extConfig
- * @return
  */
 function nv_check_ext_config_filecontent($extConfig)
 {
-    if (!isset($extConfig['extension']) or !isset($extConfig['author']) or !isset($extConfig['note']) or !isset($extConfig['extension']['id']) or !isset($extConfig['extension']['type']) or !isset($extConfig['extension']['name']) or !isset($extConfig['extension']['version']) or !isset($extConfig['author']['name']) or !isset($extConfig['author']['email']) or !isset($extConfig['note']['text'])) {
-        return false;
-    }
-
-    return true;
+    return !(!isset($extConfig['extension']) or !isset($extConfig['author']) or !isset($extConfig['note']) or !isset($extConfig['extension']['id']) or !isset($extConfig['extension']['type']) or !isset($extConfig['extension']['name']) or !isset($extConfig['extension']['version']) or !isset($extConfig['author']['name']) or !isset($extConfig['author']['email']) or !isset($extConfig['note']['text']))
+    ;
 }

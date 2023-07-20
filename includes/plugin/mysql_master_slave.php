@@ -1,9 +1,10 @@
 <?php
+
 /**
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -39,7 +40,7 @@ nv_add_hook($module_name, 'db_slave_connect', $priority, function ($vars) {
         return $db;
     }
 
-    $i = rand(1, sizeof($db_config['slave']));
+    $i = random_int(1, sizeof($db_config['slave']));
     $db_config_slave = $db_config['slave'][$i];
     $db_config_slave['dbname'] = $db_config['dbname'];
     $db_config_slave['dbtype'] = $db_config['dbtype'];

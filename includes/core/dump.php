@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -129,7 +129,7 @@ function nv_dump_save($params)
             $tables[$a]['limit'] = 1 + round(1048576 / ($item['avg_row_length'] + 1));
             $tables[$a]['numrow'] = $item['rows'];
             $tables[$a]['charset'] = (preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
-            $tables[$a]['type'] = isset($item['engine']) ? $item['engine'] : $item['t'];
+            $tables[$a]['type'] = $item['engine'] ?? $item['t'];
             ++$a;
             $dbsize += (int) ($item['data_length']) + (int) ($item['index_length']);
         }

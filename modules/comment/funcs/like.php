@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -15,14 +15,14 @@ if (!defined('NV_IS_MOD_COMMENT')) {
 
 $difftimeout = 360;
 
-$contents = 'ERR_' . $lang_module['comment_unsuccess'];
+$contents = 'ERR_' . $nv_Lang->getModule('comment_unsuccess');
 
 $cid = $nv_Request->get_int('cid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 
 if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
     if ($nv_Request->isset_request($module_data . '_like_' . $cid, 'cookie')) {
-        $contents = 'ERR_' . $lang_module['like_unsuccess'];
+        $contents = 'ERR_' . $nv_Lang->getModule('like_unsuccess');
     } else {
         $nv_Request->set_Cookie($module_data . '_like_' . $cid, 1, 86400);
 

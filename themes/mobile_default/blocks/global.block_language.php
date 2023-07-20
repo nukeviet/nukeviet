@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -22,12 +22,12 @@ if (!nv_function_exists('nv_block_language')) {
      */
     function nv_block_language($block_config)
     {
-        global $global_config, $lang_global, $language_array;
+        global $global_config, $nv_Lang, $language_array;
 
         $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.block_language.tpl');
         $xtpl = new XTemplate('global.block_language.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('SELECT_LANGUAGE', $lang_global['langsite']);
+        $xtpl->assign('SELECT_LANGUAGE', $nv_Lang->getGlobal('langsite'));
 
         // Multiple languages
         if ($global_config['lang_multi'] and sizeof($global_config['allow_sitelangs']) > 1) {

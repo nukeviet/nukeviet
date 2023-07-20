@@ -21,7 +21,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
  */
 function department_fix_weight($skip_id = 0, $skip_weight = 0)
 {
-    global $db;
+    global $db, $nv_Cache, $module_name;
 
     $sql = 'SELECT id FROM ' . NV_MOD_TABLE . '_department WHERE id != ' . $skip_id . ' ORDER BY weight ASC';
     $result = $db->query($sql);
@@ -38,6 +38,7 @@ function department_fix_weight($skip_id = 0, $skip_weight = 0)
         $in = implode(',', array_keys($res));
         $when = implode(' ', $res);
         $db->query('UPDATE ' . NV_MOD_TABLE . '_department SET weight = CASE ' . $when . ' ELSE weight END WHERE id in (' . $in . ')');
+        $nv_Cache->delMod($module_name);
     }
 }
 
@@ -101,14 +102,14 @@ if (defined('NV_IS_SPADMIN')) {
                 if (empty($post['full_name'])) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['err_part_row_title']
+                        'mess' => $nv_Lang->getModule('err_part_row_title')
                     ]);
                 }
 
                 if (empty($post['alias'])) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['error_alias']
+                        'mess' => $nv_Lang->getModule('error_alias')
                     ]);
                 }
 
@@ -253,8 +254,8 @@ if (defined('NV_IS_SPADMIN')) {
                 }
 
                 $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-                $xtpl->assign('LANG', $lang_module);
-                $xtpl->assign('GLANG', $lang_global);
+                $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+                $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
                 $xtpl->assign('FORM_ACTION', $page_url);
                 $xtpl->assign('DEPARTMENT', $department);
                 $xtpl->assign('MODULE_UPLOAD', NV_UPLOADS_DIR . '/' . $module_upload);
@@ -276,8 +277,8 @@ if (defined('NV_IS_SPADMIN')) {
                 foreach ($mod_admins as $admid => $admin_details) {
                     $admin_details['admid'] = $admid;
                     $admin_details['full_name'] = nv_show_name_user($admin_details['first_name'], $admin_details['last_name'], $admin_details['username']);
-                    $admin_details['suspend'] = $admin_details['is_suspend'] ? ' class="warning" title="' . $lang_global['admin_suspend'] . '"' : '';
-                    $admin_details['level_txt'] = $lang_global['level' . $admin_details['level']];
+                    $admin_details['suspend'] = $admin_details['is_suspend'] ? ' class="warning" title="' . $nv_Lang->getGlobal('admin_suspend') . '"' : '';
+                    $admin_details['level_txt'] = $nv_Lang->getGlobal('level' . $admin_details['level']);
                     $admin_details['view_level'] = ($admin_details['level'] === 1 or (!empty($department['admins']['view_level']) and in_array($admid, $department['admins']['view_level'], true))) ? ' checked="checked"' : '';
                     $admin_details['exec_level'] = ($admin_details['level'] === 1 or (!empty($department['admins']['exec_level']) and in_array($admid, $department['admins']['exec_level'], true))) ? ' checked="checked"' : '';
                     $admin_details['reply_level'] = ($admin_details['level'] === 1 or (!empty($department['admins']['reply_level']) and in_array($admid, $department['admins']['reply_level'], true))) ? ' checked="checked"' : '';
@@ -291,7 +292,7 @@ if (defined('NV_IS_SPADMIN')) {
                 $contents = $xtpl->text('content');
                 nv_jsonOutput([
                     'status' => 'OK',
-                    'title' => $id ? $lang_module['department_edit'] : $lang_module['department_add'],
+                    'title' => $id ? $nv_Lang->getModule('department_edit') : $nv_Lang->getModule('department_add'),
                     'content' => $contents
                 ]);
             }
@@ -398,7 +399,7 @@ if (defined('NV_IS_SPADMIN')) {
             if ($db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_supporter WHERE departmentid=' . $id)->fetchColumn()) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['department_delete_error']
+                    'mess' => $nv_Lang->getModule('department_delete_error')
                 ]);
             }
 
@@ -458,25 +459,25 @@ if ($nv_Request->isset_request('id', 'get')) {
         $department['admins'] = parse_admins($department['admins']);
         $department['your_authority'] = [];
         if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['view_level']) and in_array((int) $admin_info['userid'], $department['admins']['view_level'], true))) {
-            $department['your_authority'][] = $lang_module['admin_view_level'];
+            $department['your_authority'][] = $nv_Lang->getModule('admin_view_level');
         }
         if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['exec_level']) and in_array((int) $admin_info['userid'], $department['admins']['exec_level'], true))) {
-            $department['your_authority'][] = $lang_module['admin_exec_level'];
+            $department['your_authority'][] = $nv_Lang->getModule('admin_exec_level');
         }
         if (defined('NV_IS_SPADMIN') or (!empty($department['admins']['reply_level']) and in_array((int) $admin_info['userid'], $department['admins']['reply_level'], true))) {
-            $department['your_authority'][] = $lang_module['admin_reply_level'];
+            $department['your_authority'][] = $nv_Lang->getModule('admin_reply_level');
         }
         if (!empty($department['admins']['obt_level']) and in_array((int) $admin_info['userid'], $department['admins']['obt_level'], true)) {
-            $department['your_authority'][] = $lang_module['admin_obt_level'];
+            $department['your_authority'][] = $nv_Lang->getModule('admin_obt_level');
         }
-        $department['your_authority'] = !empty($department['your_authority']) ? '<ul><li>' . implode('</li><li>', $department['your_authority']) . '</li></ul>' : $lang_module['your_not_authority'];
+        $department['your_authority'] = !empty($department['your_authority']) ? '<ul><li>' . implode('</li><li>', $department['your_authority']) . '</li></ul>' : $nv_Lang->getModule('your_not_authority');
     } else {
-        $department['your_authority'] = $lang_module['your_not_authority'];
+        $department['your_authority'] = $nv_Lang->getModule('your_not_authority');
     }
 
     $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('DEPARTMENT', $department);
 
     if (!empty($department['image'])) {
@@ -521,8 +522,8 @@ if (empty($departments)) {
 }
 
 $xtpl = new XTemplate('department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('OP_URL', $page_url);
 
 $count = sizeof($departments);
@@ -551,7 +552,7 @@ foreach ($departments as $row) {
         $xtpl->parse('main.row.is_default');
     }
 
-    $array = [$lang_global['disable'], $lang_global['active'], $lang_module['department_no_home']];
+    $array = [$nv_Lang->getGlobal('disable'), $nv_Lang->getGlobal('active'), $nv_Lang->getModule('department_no_home')];
     if (defined('NV_IS_SPADMIN')) {
         foreach ($array as $key => $val) {
             $xtpl->assign('STATUS', [
@@ -591,7 +592,7 @@ if (defined('NV_IS_SPADMIN')) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['departments'];
+$page_title = $nv_Lang->getModule('departments');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -365,17 +365,28 @@ class Http extends Server
         $message = '';
 
         switch ($code) {
-            case 1: $message = 'A valid URL was not provided.'; break;
-            case 2: $message = 'User has blocked requests through HTTP.'; break;
-            case 3: $message = 'Destination directory for file streaming does not exist or is not writable.'; break;
-            case 4: $message = 'There are no HTTP transports available which can complete the requested request.'; break;
-            case 5: $message = 'Too many redirects.'; break;
-            case 6: $message = 'The SSL certificate for the host could not be verified.'; break;
-            case 7: $message = 'HTTP request failed.'; break;
-            case 8: $message = 'Could not open stream file.'; break;
-            case 9: $message = 'Failed to write request to temporary file.'; break;
-            case 10: $message = 'Could not open handle for fopen() to streamfile.'; break;
-            case 11: $message = 'HTTP Curl request failed.'; break;
+            case 1: $message = 'A valid URL was not provided.';
+                break;
+            case 2: $message = 'User has blocked requests through HTTP.';
+                break;
+            case 3: $message = 'Destination directory for file streaming does not exist or is not writable.';
+                break;
+            case 4: $message = 'There are no HTTP transports available which can complete the requested request.';
+                break;
+            case 5: $message = 'Too many redirects.';
+                break;
+            case 6: $message = 'The SSL certificate for the host could not be verified.';
+                break;
+            case 7: $message = 'HTTP request failed.';
+                break;
+            case 8: $message = 'Could not open stream file.';
+                break;
+            case 9: $message = 'Failed to write request to temporary file.';
+                break;
+            case 10: $message = 'Could not open handle for fopen() to streamfile.';
+                break;
+            case 11: $message = 'HTTP Curl request failed.';
+                break;
             default: $message = 'There are some unknow errors had been occurred.';
         }
 
@@ -525,7 +536,7 @@ class Http extends Server
         }
 
         // Check for a scheme
-        if (strpos($maybe_relative_path, '://') !== false) {
+        if (str_contains($maybe_relative_path, '://')) {
             return $maybe_relative_path;
         }
 
@@ -591,11 +602,7 @@ class Http extends Server
      */
     public static function is_error($resources)
     {
-        if (is_object($resources) and isset($resources->error) and empty($resources->error)) {
-            return false;
-        }
-
-        return true;
+        return !(is_object($resources) and isset($resources->error) and empty($resources->error));
     }
 
     /**
@@ -652,7 +659,7 @@ class Http extends Server
     {
         $res = explode("\r\n\r\n", $strResponse, 2);
 
-        return ['headers' => $res[0], 'body' => isset($res[1]) ? $res[1] : ''];
+        return ['headers' => $res[0], 'body' => $res[1] ?? ''];
     }
 
     /**
@@ -666,8 +673,8 @@ class Http extends Server
     {
         $newheaders = Http::parse_headers($headers);
         $response = [
-            'code' => isset($newheaders['code']) ? $newheaders['code'] : 0,
-            'message' => isset($newheaders['message']) ? $newheaders['message'] : ''
+            'code' => $newheaders['code'] ?? 0,
+            'message' => $newheaders['message'] ?? ''
         ];
 
         $cookies = [];
@@ -774,7 +781,7 @@ class Http extends Server
         // If a redirection has taken place, The headers for each page request may have been passed.
         // In this case, determine the final HTTP header and parse from there.
         for ($i = sizeof($header_text) - 1; $i >= 0; --$i) {
-            if (!empty($header_text[$i]) and strpos($header_text[$i], ':') === false) {
+            if (!empty($header_text[$i]) and !str_contains($header_text[$i], ':')) {
                 $header_text = array_splice($header_text, $i);
                 break;
             }

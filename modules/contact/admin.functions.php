@@ -48,7 +48,7 @@ require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
  */
 function nv_getAllowed()
 {
-    global $admin_info, $lang_module;
+    global $admin_info, $nv_Lang;
 
     $contact_allowed = [
         'view' => [],
@@ -58,10 +58,10 @@ function nv_getAllowed()
     ];
 
     if (defined('NV_IS_SPADMIN')) {
-        $contact_allowed['view'][0] = $lang_module['is_default'];
-        $contact_allowed['exec'][0] = $lang_module['is_default'];
-        $contact_allowed['reply'][0] = $lang_module['is_default'];
-        $contact_allowed['obt'][0] = $lang_module['is_default'];
+        $contact_allowed['view'][0] = $nv_Lang->getModule('is_default');
+        $contact_allowed['exec'][0] = $nv_Lang->getModule('is_default');
+        $contact_allowed['reply'][0] = $nv_Lang->getModule('is_default');
+        $contact_allowed['obt'][0] = $nv_Lang->getModule('is_default');
     }
 
     $departments = get_department_list();

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,7 +14,7 @@ if (!defined('NV_ADMIN')) {
 }
 
 if (defined('NV_IS_SPADMIN')) {
-    $submenu['thumbconfig'] = $lang_module['thumbconfig'];
-    $submenu['config'] = $lang_module['imgconfig'];
-    $submenu['uploadconfig'] = $lang_module['uploadconfig'];
+    $submenu['thumbconfig'] = $nv_Lang->getModule('thumbconfig');
+    $submenu['config'] = $nv_Lang->getModule('imgconfig');
+    $submenu['uploadconfig'] = $nv_Lang->getModule('uploadconfig');
 }

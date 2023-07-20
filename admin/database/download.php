@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -46,7 +46,7 @@ if ($checkss == NV_CHECK_SESSION) {
 
     $result = nv_dump_save($contents);
     if (!empty($result)) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename($contents['filename']), $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('download'), 'File name: ' . basename($contents['filename']), $admin_info['userid']);
 
         $content['mime'] = ($contents['savetype'] == 'gz') ? 'application/x-gzip' : 'text/x-sql';
         $contents['fname'] = $db->dbname . '.sql';

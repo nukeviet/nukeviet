@@ -58,21 +58,20 @@ function is_current_url($url, $cmptype = 0)
         return true;
     }
 
-    if (strcasecmp($url, NV_BASE_SITEURL) !== 0) {
-        $current_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
-        if (
-            // Nếu URL hiện tại có chứa URL so sánh
-            ($cmptype == 2 and preg_match('#' . preg_quote($url, '#') . '#', $current_url)) or
-            // Nếu URL hiện tại bắt đầu chứa URL so sánh
-            ($cmptype == 1 and preg_match('#^' . preg_quote($url, '#') . '#', $current_url)) or
-            // Nếu URL hiện tại khớp hoàn toàn URL so sánh
-            (strcasecmp($url, $current_url) === 0)
-        ) {
-            return true;
-        }
+    if (strcasecmp($url, NV_BASE_SITEURL) === 0) {
+        return false;
     }
 
-    return false;
+    $current_url = NV_BASE_SITEURL . str_replace($global_config['site_url'] . '/', '', $client_info['selfurl']);
+
+    return (bool) (
+        // Nếu URL hiện tại có chứa URL so sánh
+        ($cmptype == 2 and str_contains($current_url, $url)) or
+        // Nếu URL hiện tại bắt đầu chứa URL so sánh
+        ($cmptype == 1 and str_starts_with($current_url, $url)) or
+        // Nếu URL hiện tại khớp hoàn toàn URL so sánh
+        (strcasecmp($url, $current_url) === 0)
+    );
 }
 
 /**
@@ -83,7 +82,7 @@ function is_current_url($url, $cmptype = 0)
  */
 function nv_blocks_content($sitecontent)
 {
-    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $client_info, $theme_config_positions;
+    global $db, $nv_Cache, $module_info, $module_name, $op, $global_config, $nv_Lang, $sys_mods, $client_info, $theme_config_positions;
 
     $_posAllowed = [];
 
@@ -306,15 +305,15 @@ function nv_blocks_content($sitecontent)
 
                     if (defined('NV_IS_DRAG_BLOCK')) {
                         $act_class = $_row['act'] ? '' : ' act0';
-                        $act_title = $_row['act'] ? $lang_global['act_block'] : $lang_global['deact_block'];
+                        $act_title = $_row['act'] ? $nv_Lang->getGlobal('act_block') : $nv_Lang->getGlobal('deact_block');
                         $act_icon = $_row['act'] ? 'ic' : 'ic act0';
                         $checkss = md5(NV_CHECK_SESSION . '_' . $_row['bid']);
                         $content = '<div class="portlet" id="bl_' . ($_row['bid']) . '">
                              <div class="tool">
-                                 <a href="#" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="ic"></em></a>
-                                 <a href="#" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="ic"></em></a>
-                                 <a href="#" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $lang_global['act_block'] . '" data-deact="' . $lang_global['deact_block'] . '"><em class="' . $act_icon . '" data-act="ic" data-deact="ic act0"></em></a>
-                                 <a href="#" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="ic"></em></a>
+                                 <a href="#" class="block_content" name="' . $_row['bid'] . '" alt="' . $nv_Lang->getGlobal('edit_block') . '" title="' . $nv_Lang->getGlobal('edit_block') . '"><em class="ic"></em></a>
+                                 <a href="#" class="delblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('delete_block') . '" title="' . $nv_Lang->getGlobal('delete_block') . '"><em class="ic"></em></a>
+                                 <a href="#" class="actblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $nv_Lang->getGlobal('act_block') . '" data-deact="' . $nv_Lang->getGlobal('deact_block') . '"><em class="' . $act_icon . '" data-act="ic" data-deact="ic act0"></em></a>
+                                 <a href="#" class="outgroupblock" name="' . $_row['bid'] . '"  data-checkss="' . $checkss . '" alt="' . $nv_Lang->getGlobal('outgroup_block') . '" title="' . $nv_Lang->getGlobal('outgroup_block') . '"><em class="ic"></em></a>
                              </div>
                              <div class="blockct' . $act_class . '">' . $content . '</div>
                              </div>';
@@ -341,7 +340,7 @@ function nv_blocks_content($sitecontent)
                 ''
             ], $__pos);
             $_posReal[$__pos] = '<div class="column" data-id="' . $__pos_name . '" data-checkss="' . md5(NV_CHECK_SESSION . '_' . $__pos_name) . '">' . $_posReal[$__pos];
-            $_posReal[$__pos] .= '<a href="#" class="add block_content" id="' . $__pos . '" title="' . $lang_global['add_block'] . ' ' . $__pos_name . '" alt="' . $lang_global['add_block'] . '"><em class="ic"></em></a>';
+            $_posReal[$__pos] .= '<a href="#" class="add block_content" id="' . $__pos . '" title="' . $nv_Lang->getGlobal('add_block') . ' ' . $__pos_name . '" alt="' . $nv_Lang->getGlobal('add_block') . '"><em class="ic"></em></a>';
             $_posReal[$__pos] .= '</div>';
         }
     }
@@ -359,7 +358,7 @@ function nv_blocks_content($sitecontent)
  */
 function nv_html_meta_tags($html = true)
 {
-    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
+    global $global_config, $nv_Lang, $key_words, $description, $module_info, $home, $op, $page_title, $page_url, $meta_property, $nv_BotManager;
 
     $return = [];
 
@@ -466,8 +465,8 @@ function nv_html_meta_tags($html = true)
         $patters['/\{BASE\_SITEURL\}/'] = NV_BASE_SITEURL;
         $patters['/\{UPLOADS\_DIR\}/'] = NV_UPLOADS_DIR;
         $patters['/\{ASSETS\_DIR\}/'] = NV_ASSETS_DIR;
-        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
-        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
+        $patters['/\{CONTENT\-LANGUAGE\}/'] = $nv_Lang->getGlobal('Content_Language');
+        $patters['/\{LANGUAGE\}/'] = $nv_Lang->getGlobal('LanguageName');
         $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
         $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
         $mt = preg_replace(array_keys($patters), array_values($patters), $mt);
@@ -613,7 +612,7 @@ function nv_html_meta_tags($html = true)
  */
 function nv_html_links($html = true)
 {
-    global $canonicalUrl, $prevPage, $nextPage, $global_config, $lang_global;
+    global $canonicalUrl, $prevPage, $nextPage, $global_config, $nv_Lang;
 
     $return = [];
     if (!empty($canonicalUrl)) {
@@ -675,8 +674,8 @@ function nv_html_links($html = true)
         $patters['/\{BASE\_SITEURL\}/'] = NV_BASE_SITEURL;
         $patters['/\{UPLOADS\_DIR\}/'] = NV_UPLOADS_DIR;
         $patters['/\{ASSETS\_DIR\}/'] = NV_ASSETS_DIR;
-        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
-        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
+        $patters['/\{CONTENT\-LANGUAGE\}/'] = $nv_Lang->getGlobal('Content_Language');
+        $patters['/\{LANGUAGE\}/'] = $nv_Lang->getGlobal('LanguageName');
         $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
         $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
         $lt = preg_replace(array_keys($patters), array_values($patters), $lt);
@@ -837,7 +836,7 @@ function nv_html_site_rss($html = true)
  */
 function nv_html_site_js($html = true, $other_js = [], $language_js = true, $global_js = true, $default_js = true)
 {
-    global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info, $user_info, $browser;
+    global $global_config, $module_info, $module_name, $module_file, $nv_Lang, $op, $client_info, $user_info, $browser;
 
     $safemode = defined('NV_IS_USER') ? $user_info['safemode'] : 0;
     $jsDef = 'var nv_base_siteurl="' . NV_BASE_SITEURL . '",nv_assets_dir="' . NV_ASSETS_DIR . '",nv_lang_data="' . NV_LANG_INTERFACE . '",nv_lang_interface="' . NV_LANG_INTERFACE . '",nv_name_variable="' . NV_NAME_VARIABLE . '",nv_fc_variable="' . NV_OP_VARIABLE . '",nv_lang_variable="' . NV_LANG_VARIABLE . '",nv_module_name="' . $module_name . '",nv_func_name="' . $op . '",nv_is_user=' . ((int) defined('NV_IS_USER')) . ', nv_my_ofs=' . round(NV_SITE_TIMEZONE_OFFSET / 3600) . ',nv_my_abbr="' . nv_date('T', NV_CURRENTTIME) . '",nv_cookie_prefix="' . $global_config['cookie_prefix'] . '",nv_check_pass_mstime=' . (((int) ($global_config['user_check_pass_time']) - 62) * 1000) . ',nv_area_admin=0,nv_safemode=' . $safemode . ',theme_responsive=' . ((int) ($global_config['current_theme_type'] == 'r'));
@@ -846,7 +845,7 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
     }
 
     if (defined('NV_IS_DRAG_BLOCK')) {
-        $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
+        $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $nv_Lang->getGlobal('block_delete_confirm') . '",block_outgroup_confirm="' . $nv_Lang->getGlobal('block_outgroup_confirm') . '",blocks_saved="' . $nv_Lang->getGlobal('blocks_saved') . '",blocks_saved_error="' . $nv_Lang->getGlobal('blocks_saved_error') . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
     }
     $jsDef .= ',nv_recaptcha_ver=' . $global_config['recaptcha_ver'];
     $jsDef .= ',nv_recaptcha_sitekey="' . $global_config['recaptcha_sitekey'] . '"';
@@ -971,16 +970,15 @@ function nv_html_site_js($html = true, $other_js = [], $language_js = true, $glo
  */
 function nv_admin_menu()
 {
-    global $lang_global, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
+    global $nv_Lang, $admin_info, $module_info, $module_name, $global_config, $client_info, $db_config, $db, $nv_Cache;
 
     $dir_basenames = [$global_config['site_theme']];
     if ($module_info['theme'] == $module_info['template']) {
         array_unshift($dir_basenames, $module_info['template']);
     }
     $block_theme = get_tpl_dir($dir_basenames, 'default', '/system/admin_toolbar.tpl');
-
     $xtpl = new XTemplate('admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system');
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('NV_ADMINDIR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
     $xtpl->assign('URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id']);
     $xtpl->assign('TEMPLATE', $block_theme);
@@ -990,7 +988,7 @@ function nv_admin_menu()
         $list = $nv_Cache->db($sql, '', 'authors');
         if (!empty($list[0]['count'])) {
             $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
-            $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+            $lang_drag_block = ($new_drag_block) ? $nv_Lang->getGlobal('drag_block') : $nv_Lang->getGlobal('no_drag_block');
 
             $xtpl->assign('URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
             $xtpl->assign('LANG_DBLOCK', $lang_drag_block);
@@ -1044,4 +1042,115 @@ function nv_groups_list_pub($mod_data = 'users')
     }
 
     return $groups;
+}
+
+/**
+ * fix_theme_configs()
+ * Xác định lại các biến toàn cục liên quan đến giao diện
+ *
+ * @param mixed $configs
+ * @return array
+ */
+function fix_theme_configs($configs)
+{
+    if (!in_array('r', $configs['array_theme_type'], true) and !in_array('d', $configs['array_theme_type'], true)) {
+        $configs['array_theme_type'][] = 'r';
+    }
+    !in_array('m', $configs['array_theme_type'], true) && $configs['mobile_theme'] = '';
+    empty($configs['mobile_theme']) && $configs['switch_mobi_des'] = 0;
+    if (empty($configs['switch_mobi_des']) and in_array('m', $configs['array_theme_type'], true)) {
+        $configs['array_theme_type'] = array_values(array_diff($configs['array_theme_type'], ['m']));
+    }
+
+    return [$configs['array_theme_type'], $configs['mobile_theme'], $configs['switch_mobi_des']];
+}
+
+/**
+ * set_theme_configs()
+ * Xác định kiểu theme hiện tại, theme của module và theme của site
+ *
+ * @param mixed $global_config
+ * @param bool  $is_mobile
+ * @param mixed $module_info
+ */
+function set_theme_configs(&$global_config, &$is_mobile, $module_info)
+{
+    global $nv_Request, $client_info;
+
+    $cookie_themetype = $nv_Request->get_string(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, 'cookie', '');
+
+    if (($nv_preview_theme = $nv_Request->get_title('nv_preview_theme_' . NV_LANG_DATA, 'session', '')) != '' and in_array($nv_preview_theme, $global_config['array_preview_theme'], true) and theme_file_exists($nv_preview_theme . '/theme.php')) {
+        if (preg_match($global_config['check_theme_mobile'], $nv_preview_theme)) {
+            $is_mobile = true;
+            $global_config['current_theme_type'] = 'm';
+        } else {
+            $is_mobile = false;
+            $global_config['current_theme_type'] = $cookie_themetype ?: $global_config['array_theme_type'][0];
+            $array_theme_type = array_flip($global_config['array_theme_type']);
+            unset($array_theme_type['m']);
+            if (!isset($array_theme_type[$global_config['current_theme_type']])) {
+                $array_theme_type = array_flip($array_theme_type);
+                $global_config['current_theme_type'] = current($array_theme_type);
+            }
+        }
+        $global_config['module_theme'] = $global_config['site_theme'] = $nv_preview_theme;
+        unset($nv_preview_theme);
+    } else {
+        /*
+         * Xác định kiểu giao diện
+         * - responsive: r
+         * - desktop: d
+         * - mobile: m
+         */
+        $global_config['current_theme_type'] = $cookie_themetype ?: $global_config['array_theme_type'][0];
+        if (!in_array($global_config['current_theme_type'], $global_config['array_theme_type'], true)) {
+            $global_config['current_theme_type'] = '';
+            $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, '', NV_LIVE_COOKIE_TIME);
+        }
+
+        // Xac dinh giao dien chung
+        $is_mobile = false;
+        $theme_type = '';
+        $_theme_mobile = empty($module_info['mobile']) ? $global_config['mobile_theme'] : (($module_info['mobile'] == ':pcsite') ? $global_config['site_theme'] : (($module_info['mobile'] == ':pcmod') ? $module_info['theme'] : $module_info['mobile']));
+        if (
+            (
+                // Giao diện mobile tự động nhận diện dựa vào client
+                ($client_info['is_mobile'] and in_array('m', $global_config['array_theme_type'], true)
+                    and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des'])))
+                // Giao diện mobile lấy từ chuyển đổi giao diện
+                or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))
+            )
+            and !empty($_theme_mobile) and theme_file_exists($_theme_mobile . '/theme.php')
+        ) {
+            $global_config['module_theme'] = $_theme_mobile;
+            $is_mobile = true;
+            $theme_type = 'm';
+        } else {
+            if (empty($global_config['current_theme_type']) and in_array('r', $global_config['array_theme_type'], true) and ($client_info['is_mobile'] or empty($_theme_mobile))) {
+                $global_config['current_theme_type'] = 'r';
+            }
+
+            $_theme = (!empty($module_info['theme'])) ? $module_info['theme'] : $global_config['site_theme'];
+            $_u_theme = $nv_Request->get_title('nv_u_theme_' . NV_LANG_DATA, 'cookie', '');
+
+            if (in_array($_u_theme, $global_config['array_user_allowed_theme'], true) and theme_file_exists($_u_theme . '/theme.php')) {
+                // Giao diện do người dùng chọn
+                $global_config['module_theme'] = $_u_theme;
+                $global_config['site_theme'] = $_u_theme;
+            } elseif (!empty($_theme) and theme_file_exists($_theme . '/theme.php')) {
+                $global_config['module_theme'] = $_theme;
+            } elseif (theme_file_exists('default/theme.php')) {
+                $global_config['module_theme'] = 'default';
+            } else {
+                trigger_error('Error! Does not exist themes default', 256);
+            }
+            $theme_type = $global_config['current_theme_type'];
+        }
+
+        // Xac lap lai giao kieu giao dien hien tai
+        if ($theme_type != $global_config['current_theme_type']) {
+            $global_config['current_theme_type'] = $theme_type;
+            $nv_Request->set_Cookie(CURRENT_THEMETYPE_COOKIE_NAME . NV_LANG_DATA, $theme_type, NV_LIVE_COOKIE_TIME);
+        }
+    }
 }

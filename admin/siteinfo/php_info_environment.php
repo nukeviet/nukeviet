@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,15 +13,15 @@ if (!defined('NV_IS_FILE_SITEINFO')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['environment_php'];
+$page_title = $nv_Lang->getModule('environment_php');
 
 require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 
 $xtpl = new XTemplate('environment_php.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
 $array = phpinfo_array(16, 1);
-$caption = $lang_module['environment_php'];
-$thead = [$lang_module['variable'], $lang_module['value']];
+$caption = $nv_Lang->getModule('environment_php');
+$thead = [$nv_Lang->getModule('variable'), $nv_Lang->getModule('value')];
 
 if (!empty($array['Environment'])) {
     $xtpl->assign('CAPTION', $caption);

@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['setting'];
+$page_title = $nv_Lang->getModule('setting');
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
@@ -94,7 +94,7 @@ if (!empty($savesetting)) {
     if ($array_config['elas_use']) {
         $fp = fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
         if (!$fp) {
-            $error = $lang_module['error_elas_host_connect'];
+            $error = $nv_Lang->getModule('error_elas_host_connect');
         }
     }
 
@@ -129,8 +129,8 @@ if (!empty($savesetting)) {
 }
 
 $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -143,10 +143,10 @@ if (!empty($error)) {
 }
 
 $array_tooltip_position = [
-    'top' => $lang_module['showtooltip_position_top'],
-    'bottom' => $lang_module['showtooltip_position_bottom'],
-    'left' => $lang_module['showtooltip_position_left'],
-    'right' => $lang_module['showtooltip_position_right']
+    'top' => $nv_Lang->getModule('showtooltip_position_top'),
+    'bottom' => $nv_Lang->getModule('showtooltip_position_bottom'),
+    'left' => $nv_Lang->getModule('showtooltip_position_left'),
+    'right' => $nv_Lang->getModule('showtooltip_position_right')
 ];
 
 // Vi tri hien thi tooltip
@@ -205,7 +205,7 @@ foreach ($socialbuttons as $socialbutton) {
         'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons, true)) ? ' checked="checked"' : ''
     ];
     if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
-        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
+        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings">' . $nv_Lang->getModule('socialbutton_zalo_note') . '</a>)';
         $array['checked'] = ' disabled="disabled"';
     }
     $xtpl->assign('SOCIALBUTTON', $array);
@@ -216,7 +216,7 @@ foreach ($socialbuttons as $socialbutton) {
 for ($i = 0; $i <= 6; ++$i) {
     $xtpl->assign('RATING_POINT', [
         'key' => $i,
-        'title' => ($i == 6) ? $lang_module['no_allowed_rating'] : $i,
+        'title' => ($i == 6) ? $nv_Lang->getModule('no_allowed_rating') : $i,
         'selected' => $i == $module_config[$module_name]['allowed_rating_point'] ? ' selected="selected"' : ''
     ]);
     $xtpl->parse('main.allowed_rating_point');
@@ -268,7 +268,7 @@ $array_structure_image['username_Y_m'] = NV_UPLOADS_DIR . '/' . $module_upload .
 $array_structure_image['username_Ym_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y_m/d');
 $array_structure_image['username_Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date('Y/m/d');
 
-$structure_image_upload = isset($module_config[$module_name]['structure_upload']) ? $module_config[$module_name]['structure_upload'] : 'Ym';
+$structure_image_upload = $module_config[$module_name]['structure_upload'] ?? 'Ym';
 
 // Thu muc uploads
 foreach ($array_structure_image as $type => $dir) {
@@ -283,7 +283,7 @@ foreach ($array_structure_image as $type => $dir) {
 for ($i = 0; $i < 2; ++$i) {
     $xtpl->assign('ORDER_ARTICLES', [
         'key' => $i,
-        'title' => $lang_module['order_articles_' . $i],
+        'title' => $nv_Lang->getModule('order_articles_' . $i),
         'selected' => $i == $module_config[$module_name]['order_articles'] ? ' selected="selected"' : ''
     ]);
     $xtpl->parse('main.order_articles');
@@ -291,10 +291,10 @@ for ($i = 0; $i < 2; ++$i) {
 
 // Cau hinh hien thi nguon tin
 $array_config_source = [
-    0 => $lang_module['config_source_title'],
-    3 => $lang_module['config_source_link'],
-    1 => $lang_module['config_source_link_nofollow'],
-    2 => $lang_module['config_source_logo']
+    0 => $nv_Lang->getModule('config_source_title'),
+    3 => $nv_Lang->getModule('config_source_link'),
+    1 => $nv_Lang->getModule('config_source_link_nofollow'),
+    2 => $nv_Lang->getModule('config_source_logo')
 ];
 foreach ($array_config_source as $key => $val) {
     $xtpl->assign('CONFIG_SOURCE', [
@@ -306,9 +306,9 @@ foreach ($array_config_source as $key => $val) {
 }
 
 $array_imgposition = [
-    0 => $lang_module['imgposition_0'],
-    1 => $lang_module['imgposition_1'],
-    2 => $lang_module['imgposition_2']
+    0 => $nv_Lang->getModule('imgposition_0'),
+    1 => $nv_Lang->getModule('imgposition_1'),
+    2 => $nv_Lang->getModule('imgposition_2')
 ];
 
 // Position images
@@ -383,7 +383,7 @@ if (defined('NV_IS_ADMIN_FULL_MODULE') or !in_array('admins', $allow_func, true)
 
     $sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post ORDER BY group_id ASC';
     $result = $db->query($sql);
-    while (list($group_id, $addcontent, $postcontent, $editcontent, $delcontent) = $result->fetch(3)) {
+    while ([$group_id, $addcontent, $postcontent, $editcontent, $delcontent] = $result->fetch(3)) {
         if (isset($groups_list[$group_id])) {
             $array_post_data[$group_id] = [
                 'group_id' => $group_id,

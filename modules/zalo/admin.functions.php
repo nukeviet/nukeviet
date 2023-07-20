@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,7 +19,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_zalo']
+    'custom_title' => $nv_Lang->getGlobal('mod_zalo')
 ];
 
 $allow_func = [
@@ -54,10 +54,10 @@ while ($row = $result->fetch()) {
 
 /**
  * Kiểm tra có lưu file trên máy chủ của site hay không
- * 
+ *
  * if_store_on_server()
- * 
- * @return bool 
+ *
+ * @return bool
  */
 function if_store_on_server()
 {
@@ -90,13 +90,13 @@ function if_store_on_server()
 
 /**
  * Tạo tên file để lưu trên máy chủ của site
- * 
+ *
  * filename_create()
- * 
- * @param mixed $name 
- * @param mixed $ext 
- * @param mixed $dir 
- * @return string 
+ *
+ * @param mixed $name
+ * @param mixed $ext
+ * @param mixed $dir
+ * @return string
  */
 function filename_create($name, $ext, $dir)
 {
@@ -115,11 +115,11 @@ function filename_create($name, $ext, $dir)
 
 /**
  * Từ số điện thoại => Mã nước + số
- * 
+ *
  * parse_phone()
- * 
- * @param mixed $number 
- * @return array 
+ *
+ * @param mixed $number
+ * @return array
  */
 function parse_phone($number)
 {
@@ -155,11 +155,11 @@ function parse_phone($number)
 
 /**
  * Lưu Access Token mới vào CSDL
- * 
+ *
  * accessTokenUpdate()
- * 
- * @param mixed $result 
- * @throws PDOException 
+ *
+ * @param mixed $result
+ * @throws PDOException
  */
 function accessTokenUpdate($result)
 {
@@ -182,11 +182,11 @@ function accessTokenUpdate($result)
 
 /**
  * Lưu thông tin cập nhật của OA vào CSDL
- * 
+ *
  * OAInfoUpdate()
- * 
- * @param mixed $oa_info 
- * @throws PDOException 
+ *
+ * @param mixed $oa_info
+ * @throws PDOException
  */
 function OAInfoUpdate($oa_info)
 {
@@ -205,9 +205,8 @@ function OAInfoUpdate($oa_info)
 
 /**
  * Làm sạch thông tin OA trong CSDL
- * 
+ *
  * oa_truncate()
- * 
  */
 function oa_truncate()
 {
@@ -218,16 +217,16 @@ function oa_truncate()
 
 /**
  * Lấy Access Token
- * 
+ *
  * get_accesstoken()
- * 
- * @param mixed $accesstoken 
- * @param bool $isAjax 
- * @throws PDOException 
+ *
+ * @param mixed $accesstoken
+ * @param bool  $isAjax
+ * @throws PDOException
  */
 function get_accesstoken(&$accesstoken, $isAjax = false)
 {
-    global $zalo, $lang_module, $module_name;
+    global $zalo, $nv_Lang, $module_name;
 
     $get_accesstoken_info = $zalo->oa_accesstoken_info();
     if ($get_accesstoken_info['result'] == 'ok') {
@@ -239,21 +238,21 @@ function get_accesstoken(&$accesstoken, $isAjax = false)
         if ($isAjax) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['refresh_token_expired_note']
+                'mess' => $nv_Lang->getModule('refresh_token_expired_note')
             ]);
         } else {
-            info_redirect($lang_module['refresh_token_expired_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
+            info_redirect($nv_Lang->getModule('refresh_token_expired_note'), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
         }
     }
 }
 
 /**
  * Lấy mã tỉnh/thành phố trực thuộc TƯ
- * 
+ *
  * get_province_id()
- * 
- * @param mixed $name 
- * @return mixed 
+ *
+ * @param mixed $name
+ * @return mixed
  */
 function get_province_id($name)
 {
@@ -272,12 +271,12 @@ function get_province_id($name)
 
 /**
  * Lấy mã huyện/quận
- * 
+ *
  * get_district_id()
- * 
- * @param mixed $city_id 
- * @param mixed $district 
- * @return mixed 
+ *
+ * @param mixed $city_id
+ * @param mixed $district
+ * @return mixed
  */
 function get_district_id($city_id, $district)
 {
@@ -296,11 +295,11 @@ function get_district_id($city_id, $district)
 
 /**
  * Lấy danh sách huyện/quận
- * 
+ *
  * get_districts()
- * 
- * @param mixed $city_id 
- * @return string 
+ *
+ * @param mixed $city_id
+ * @return string
  */
 function get_districts($city_id)
 {
@@ -318,11 +317,11 @@ function get_districts($city_id)
 
 /**
  * Lấy danh sách người quan tâm chưa được cập nhật thông tin
- * 
+ *
  * get_followers_not_sync()
- * 
- * @param int $limit 
- * @return array 
+ *
+ * @param int $limit
+ * @return array
  */
 function get_followers_not_sync($limit = 0)
 {
@@ -344,12 +343,12 @@ function get_followers_not_sync($limit = 0)
 
 /**
  * Lưu thông tin của người quan tâm vào CSDL
- * 
+ *
  * follower_profile_save()
- * 
- * @param mixed $user_id 
- * @param mixed $follower_profile 
- * @throws PDOException 
+ *
+ * @param mixed $user_id
+ * @param mixed $follower_profile
+ * @throws PDOException
  */
 function follower_profile_save($user_id, $follower_profile)
 {
@@ -373,7 +372,7 @@ function follower_profile_save($user_id, $follower_profile)
     $row['notes_info'] = !empty($follower_profile['tags_and_notes_info']['notes']) ? implode(', ', $follower_profile['tags_and_notes_info']['notes']) : '';
     $row['name'] = !empty($follower_profile['shared_info']['name']) ? $follower_profile['shared_info']['name'] : '';
     if (!empty($follower_profile['shared_info']['phone'])) {
-        list($row['phone_code'], $row['phone_number']) = parse_phone($follower_profile['shared_info']['phone']);
+        [$row['phone_code'], $row['phone_number']] = parse_phone($follower_profile['shared_info']['phone']);
     } else {
         $row['phone_code'] = $row['phone_number'] = '';
     }
@@ -430,11 +429,11 @@ function follower_profile_save($user_id, $follower_profile)
 
 /**
  * Hiên thị thông tin và chuyển hướng
- * 
+ *
  * info_redirect()
- * 
- * @param mixed $mess 
- * @param mixed $redirect_url 
+ *
+ * @param mixed $mess
+ * @param mixed $redirect_url
  */
 function info_redirect($mess, $redirect_url)
 {
@@ -453,10 +452,10 @@ function info_redirect($mess, $redirect_url)
 
 /**
  * Lấy danh sách nhãn từ CSDL
- * 
+ *
  * get_tags()
- * 
- * @return array 
+ *
+ * @return array
  */
 function get_tags()
 {
@@ -473,11 +472,11 @@ function get_tags()
 
 /**
  * Ghi vào CSDL thông tin video đã được upload lên Zalo
- * 
+ *
  * video_add()
- * 
- * @param mixed $video 
- * @throws PDOException 
+ *
+ * @param mixed $video
+ * @throws PDOException
  */
 function video_add($video)
 {
@@ -502,12 +501,12 @@ function video_add($video)
 
 /**
  * Cập nhật thông tin video đã được upload lên Zalo
- * 
+ *
  * video_update()
- * 
- * @param mixed $id 
- * @param mixed $video 
- * @throws PDOException 
+ *
+ * @param mixed $id
+ * @param mixed $video
+ * @throws PDOException
  */
 function video_update($id, $video)
 {
@@ -529,14 +528,14 @@ function video_update($id, $video)
 
 /**
  * Lưu thông tin chỉnh sửa nội bộ video (Không cập nhật trên Zalo)
- * 
+ *
  * video_edit_save()
- * 
- * @param mixed $id 
- * @param mixed $view 
- * @param mixed $thumb 
- * @param mixed $description 
- * @throws PDOException 
+ *
+ * @param mixed $id
+ * @param mixed $view
+ * @param mixed $thumb
+ * @param mixed $description
+ * @throws PDOException
  */
 function video_edit_save($id, $view, $thumb, $description)
 {
@@ -553,10 +552,10 @@ function video_edit_save($id, $view, $thumb, $description)
 
 /**
  * Lấy danh sách các video đã upload lên Zalo
- * 
+ *
  * video_get_list()
- * 
- * @return array 
+ *
+ * @return array
  */
 function video_get_list()
 {
@@ -573,11 +572,11 @@ function video_get_list()
 
 /**
  * Lấy token của video đã upload lên Zalo
- * 
+ *
  * video_get_token()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function video_get_token($id)
 {
@@ -590,11 +589,11 @@ function video_get_token($id)
 
 /**
  * Kiểm tra sự tồn tại của video
- * 
+ *
  * video_check()
- * 
- * @param mixed $video_id 
- * @return mixed 
+ *
+ * @param mixed $video_id
+ * @return mixed
  */
 function video_check($video_id)
 {
@@ -607,10 +606,10 @@ function video_check($video_id)
 
 /**
  * Xóa video
- * 
+ *
  * video_delete()
- * 
- * @param mixed $id 
+ *
+ * @param mixed $id
  */
 function video_delete($id)
 {
@@ -621,15 +620,15 @@ function video_delete($id)
 
 /**
  * Lấy danh sách file/hình ảnh đã upload lên Zalo
- * 
+ *
  * get_upload()
- * 
- * @param mixed $type 
- * @return array 
+ *
+ * @param mixed $type
+ * @return array
  */
 function get_upload($type)
 {
-    global $db, $lang_module;
+    global $db, $nv_Lang;
 
     if (!empty($type)) {
         $result = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_upload WHERE type=' . $db->quote($type) . ' ORDER BY addtime ASC');
@@ -642,7 +641,7 @@ function get_upload($type)
         $exptime = $row['addtime'] + (604800 - 60);
         $row['addtime'] = nv_date('H:i d/m/Y', $row['addtime']);
         $row['exptime'] = nv_date('H:i d/m/Y', $exptime);
-        $row['type_name'] = $lang_module['type_' . $row['type']];
+        $row['type_name'] = $nv_Lang->getModule('type_' . $row['type']);
         $row['isexpired'] = ((NV_CURRENTTIME - (int) $row['addtime']) < 604800);
         $row['fullname'] = !empty($row['localfile']) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $row['localfile'] : '';
         $files[] = $row;
@@ -653,18 +652,18 @@ function get_upload($type)
 
 /**
  * Lưu thông tin file/hình ảnh đã upload lên Zalo
- * 
+ *
  * upload_save()
- * 
- * @param mixed $type 
- * @param mixed $file 
- * @param mixed $localfile 
- * @param mixed $extension 
- * @param mixed $width 
- * @param mixed $height 
- * @param mixed $zalo_id 
- * @param mixed $description 
- * @throws PDOException 
+ *
+ * @param mixed $type
+ * @param mixed $file
+ * @param mixed $localfile
+ * @param mixed $extension
+ * @param mixed $width
+ * @param mixed $height
+ * @param mixed $zalo_id
+ * @param mixed $description
+ * @throws PDOException
  */
 function upload_save($type, $file, $localfile, $extension, $width, $height, $zalo_id, $description)
 {
@@ -684,13 +683,13 @@ function upload_save($type, $file, $localfile, $extension, $width, $height, $zal
 
 /**
  * Cập nhật thông tin zalo_id của file/hình ảnh đã upload lên Zalo
- * 
+ *
  * upload_update()
- * 
- * @param mixed $id 
- * @param mixed $zalo_id 
- * @param mixed $addtime 
- * @throws PDOException 
+ *
+ * @param mixed $id
+ * @param mixed $zalo_id
+ * @param mixed $addtime
+ * @throws PDOException
  */
 function upload_update($id, $zalo_id, $addtime)
 {
@@ -703,10 +702,10 @@ function upload_update($id, $zalo_id, $addtime)
 
 /**
  * Xóa khỏi CSDL file/hình ảnh đã upload lên Zalo (chỉ nội bộ, không xóa file trực tiếp trên Zalo được)
- * 
+ *
  * upload_delete()
- * 
- * @param mixed $id 
+ *
+ * @param mixed $id
  */
 function upload_delete($id)
 {
@@ -717,12 +716,12 @@ function upload_delete($id)
 
 /**
  * Cập nhật thông tin mô tả file/hình ảnh (Nội bộ)
- * 
+ *
  * file_desc_update()
- * 
- * @param mixed $id 
- * @param mixed $description 
- * @throws PDOException 
+ *
+ * @param mixed $id
+ * @param mixed $description
+ * @throws PDOException
  */
 function file_desc_update($id, $description)
 {
@@ -735,11 +734,11 @@ function file_desc_update($id, $description)
 
 /**
  * Lấy thông tin file/hình ảnh đã upload lên Zalo
- * 
+ *
  * get_file_upload_info()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function get_file_upload_info($id)
 {
@@ -752,11 +751,11 @@ function get_file_upload_info($id)
 
 /**
  * Lấy đường dẫn lưu file/hình ảnh trên máy chủ của site
- * 
+ *
  * get_file_by_id()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function get_file_by_id($id)
 {
@@ -769,11 +768,11 @@ function get_file_by_id($id)
 
 /**
  * Lấy thông tin zalo_id của file/hình ảnh đã upload lên Zalo
- * 
+ *
  * get_zalo_id_by_id()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function get_zalo_id_by_id($id)
 {
@@ -786,11 +785,11 @@ function get_zalo_id_by_id($id)
 
 /**
  * Lấy danh sách nhãn được gán cho người quan tâm
- * 
+ *
  * get_follower_tags()
- * 
- * @param mixed $user_id 
- * @return array 
+ *
+ * @param mixed $user_id
+ * @return array
  */
 function get_follower_tags($user_id)
 {
@@ -807,10 +806,10 @@ function get_follower_tags($user_id)
 
 /**
  * Thêm nhãn mới
- * 
+ *
  * add_tag()
- * 
- * @param mixed $new_tag 
+ *
+ * @param mixed $new_tag
  */
 function add_tag($new_tag)
 {
@@ -822,12 +821,12 @@ function add_tag($new_tag)
 
 /**
  * Cập nhật thông tin nhãn
- * 
+ *
  * update_tag()
- * 
- * @param mixed $alias 
- * @param mixed $new_name 
- * @throws PDOException 
+ *
+ * @param mixed $alias
+ * @param mixed $new_name
+ * @throws PDOException
  */
 function update_tag($alias, $new_name)
 {
@@ -843,9 +842,9 @@ function update_tag($alias, $new_name)
 /**
  * Gán nhãn cho người quan tâm
  * add_follower_tag()
- * 
- * @param mixed $user_id 
- * @param mixed $post_tag 
+ *
+ * @param mixed $user_id
+ * @param mixed $post_tag
  */
 function add_follower_tag($user_id, $post_tag)
 {
@@ -857,10 +856,10 @@ function add_follower_tag($user_id, $post_tag)
 
 /**
  * Xóa toàn bộ nhãn của người quan tâm
- * 
+ *
  * remove_follower_alltags()
- * 
- * @param mixed $user_id 
+ *
+ * @param mixed $user_id
  */
 function remove_follower_alltags($user_id)
 {
@@ -871,11 +870,11 @@ function remove_follower_alltags($user_id)
 
 /**
  * Xóa 01 nhãn của người quan tâm
- * 
+ *
  * remove_follower_tag()
- * 
- * @param mixed $user_id 
- * @param mixed $tag_alias 
+ *
+ * @param mixed $user_id
+ * @param mixed $tag_alias
  */
 function remove_follower_tag($user_id, $tag_alias)
 {
@@ -886,10 +885,10 @@ function remove_follower_tag($user_id, $tag_alias)
 
 /**
  * Xóa nhãn
- * 
+ *
  * delete_tag()
- * 
- * @param mixed $tag_alias 
+ *
+ * @param mixed $tag_alias
  */
 function delete_tag($tag_alias)
 {
@@ -900,11 +899,11 @@ function delete_tag($tag_alias)
 
 /**
  * Kiểm tra số người quan tâm được gắn nhãn
- * 
+ *
  * get_user_count_by_tag()
- * 
- * @param mixed $tag 
- * @return mixed 
+ *
+ * @param mixed $tag
+ * @return mixed
  */
 function get_user_count_by_tag($tag)
 {
@@ -917,25 +916,25 @@ function get_user_count_by_tag($tag)
 
 /**
  * Hiển thị hội thoại
- * 
+ *
  * conversation_to_html()
- * 
- * @param mixed $contents 
- * @param mixed $user_id 
- * @return mixed 
+ *
+ * @param mixed $contents
+ * @param mixed $user_id
+ * @return mixed
  */
 function conversation_to_html($contents, $user_id)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $lang_global;
+    global $global_config, $module_name, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('conversation.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     $count = count($contents);
 
     if (empty($count)) {
-        return $lang_module['empty'];
+        return $nv_Lang->getModule('empty');
     }
 
     $oa_info = get_oa_info();
@@ -982,7 +981,7 @@ function conversation_to_html($contents, $user_id)
                 }
                 $message['title'] = $note['request_info']['title'];
                 $message['subtitle'] = $note['request_info']['subtitle'];
-                $message['message'] = $lang_module['info_request'];
+                $message['message'] = $nv_Lang->getModule('info_request');
             } elseif ($note['send_type'] == 'textlist') {
                 $message['links'] = $note['textlist'];
             } elseif ($note['send_type'] == 'btnlist') {
@@ -1087,19 +1086,19 @@ function conversation_to_html($contents, $user_id)
                     if (!empty($element['default_action'])) {
                         $content = '';
                         if ($element['default_action']['type'] == 'oa.open.url') {
-                            $content = $lang_module['url'] . ': ' . $element['default_action']['url'];
+                            $content = $nv_Lang->getModule('url') . ': ' . $element['default_action']['url'];
                         }
                         if ($element['default_action']['type'] == 'oa.query.show' or $element['default_action']['type'] == 'oa.query.hide') {
-                            $content = $lang_module['content'] . ': ' . $element['default_action']['payload'];
+                            $content = $nv_Lang->getModule('content') . ': ' . $element['default_action']['payload'];
                         }
                         if ($element['default_action']['type'] == 'oa.open.sms') {
-                            $content = $lang_module['content'] . ': ' . $element['default_action']['payload']['content'] . '; ' . $lang_module['phone'] . ': ' . $element['default_action']['payload']['phone_code'];
+                            $content = $nv_Lang->getModule('content') . ': ' . $element['default_action']['payload']['content'] . '; ' . $nv_Lang->getModule('phone') . ': ' . $element['default_action']['payload']['phone_code'];
                         }
                         if ($element['default_action']['type'] == 'oa.open.phone') {
-                            $content = $lang_module['phone'] . ': ' . $element['default_action']['payload']['phone_code'];
+                            $content = $nv_Lang->getModule('phone') . ': ' . $element['default_action']['payload']['phone_code'];
                         }
                         $xtpl->assign('ACTION', [
-                            'action_title' => $lang_module[str_replace('.', '_', $element['default_action']['type'])],
+                            'action_title' => $nv_Lang->getModule(str_replace('.', '_', $element['default_action']['type'])),
                             'action_content' => $content
                         ]);
                         $xtpl->parse('messages.message.links.element.action');
@@ -1122,18 +1121,18 @@ function conversation_to_html($contents, $user_id)
                 foreach ($buttons as $button) {
                     $content = '';
                     if ($button['type'] == 'oa.open.url') {
-                        $content = $lang_module['url'] . ': ' . $button['payload']['url'];
+                        $content = $nv_Lang->getModule('url') . ': ' . $button['payload']['url'];
                     }
                     if ($button['type'] == 'oa.query.show' or $button['type'] == 'oa.query.hide') {
-                        $content = $lang_module['content'] . ': ' . $button['payload'];
+                        $content = $nv_Lang->getModule('content') . ': ' . $button['payload'];
                     }
                     if ($button['type'] == 'oa.open.sms') {
-                        $content = $lang_module['content'] . ': ' . $button['payload']['content'] . '; ' . $lang_module['phone'] . ': ' . $button['payload']['phone_code'];
+                        $content = $nv_Lang->getModule('content') . ': ' . $button['payload']['content'] . '; ' . $nv_Lang->getModule('phone') . ': ' . $button['payload']['phone_code'];
                     }
                     if ($button['type'] == 'oa.open.phone') {
-                        $content = $lang_module['phone'] . ': ' . $button['payload']['phone_code'];
+                        $content = $nv_Lang->getModule('phone') . ': ' . $button['payload']['phone_code'];
                     }
-                    $button['action_title'] = $lang_module[str_replace('.', '_', $button['type'])];
+                    $button['action_title'] = $nv_Lang->getModule(str_replace('.', '_', $button['type']));
                     $button['action_content'] = $content;
                     $xtpl->assign('BTN', $button);
                     $xtpl->parse('messages.message.buttons.btn');
@@ -1171,12 +1170,12 @@ function conversation_to_html($contents, $user_id)
 
 /**
  * Lưu các hội thoại gần nhất của người quan tâm
- * 
+ *
  * save_last_conversation()
- * 
- * @param mixed $contents 
- * @param mixed $user_id 
- * @throws PDOException 
+ *
+ * @param mixed $contents
+ * @param mixed $user_id
+ * @throws PDOException
  */
 function save_last_conversation($contents, $user_id)
 {
@@ -1211,13 +1210,13 @@ function save_last_conversation($contents, $user_id)
 
 /**
  * Lưu tin nhắn từ OA đến người quan tâm
- * 
+ *
  * save_conversation()
- * 
- * @param mixed $user_id 
- * @param mixed $message_id 
- * @param mixed $note 
- * @throws PDOException 
+ *
+ * @param mixed $user_id
+ * @param mixed $message_id
+ * @param mixed $note
+ * @throws PDOException
  */
 function save_conversation($user_id, $message_id, $note)
 {
@@ -1242,11 +1241,11 @@ function save_conversation($user_id, $message_id, $note)
 
 /**
  * Lấy danh sách 50 hội thoại mới nhất liên quan đến người quan tâm
- * 
+ *
  * get_conversation()
- * 
- * @param mixed $user_id 
- * @return (bool|array)[] 
+ *
+ * @param mixed $user_id
+ * @return (array|bool)[]
  */
 function get_conversation($user_id)
 {
@@ -1273,11 +1272,11 @@ function get_conversation($user_id)
 
 /**
  * Lấy thông tin người quan tâm
- * 
+ *
  * get_follower_info()
- * 
- * @param mixed $user_id 
- * @return mixed 
+ *
+ * @param mixed $user_id
+ * @return mixed
  */
 function get_follower_info($user_id)
 {
@@ -1290,10 +1289,10 @@ function get_follower_info($user_id)
 
 /**
  * Lấy thông tin OA
- * 
+ *
  * get_oa_info()
- * 
- * @return mixed 
+ *
+ * @return mixed
  */
 function get_oa_info()
 {
@@ -1304,10 +1303,10 @@ function get_oa_info()
 
 /**
  * Lấy danh sách các hành động cho các sự kiện webhook của Zalo
- * 
+ *
  * get_webhook_actions()
- * 
- * @return array 
+ *
+ * @return array
  */
 function get_webhook_actions()
 {
@@ -1328,10 +1327,10 @@ function get_webhook_actions()
 /**
  * Lưu các hành động cho các sự kiện webhook của Zalo
  * webhook_actions_save()
- * 
- * @param mixed $action 
- * @param mixed $parameter 
- * @throws PDOException 
+ *
+ * @param mixed $action
+ * @param mixed $parameter
+ * @throws PDOException
  */
 function webhook_actions_save($action, $parameter)
 {
@@ -1352,10 +1351,10 @@ function webhook_actions_save($action, $parameter)
 
 /**
  * Lấy danh sách khóa lệnh
- * 
+ *
  * get_keyword_actions()
- * 
- * @return array 
+ *
+ * @return array
  */
 function get_keyword_actions()
 {
@@ -1377,11 +1376,11 @@ function get_keyword_actions()
 
 /**
  * Kiểm tra sự tồn tại của khóa lệnh
- * 
+ *
  * keyword_is_exists()
- * 
- * @param mixed $keyword 
- * @return bool 
+ *
+ * @param mixed $keyword
+ * @return bool
  */
 function keyword_is_exists($keyword)
 {
@@ -1396,14 +1395,14 @@ function keyword_is_exists($keyword)
 
 /**
  * Lưu các khóa lệnh
- * 
+ *
  * keyword_actions_save()
- * 
- * @param mixed $title 
- * @param mixed $keyword 
- * @param mixed $action 
- * @param mixed $parameter 
- * @throws PDOException 
+ *
+ * @param mixed $title
+ * @param mixed $keyword
+ * @param mixed $action
+ * @param mixed $parameter
+ * @throws PDOException
  */
 function keyword_actions_save($title, $keyword, $action, $parameter)
 {
@@ -1433,11 +1432,11 @@ function keyword_actions_save($title, $keyword, $action, $parameter)
 
 /**
  * Lấy danh sách các mẫu tin nhắn
- * 
+ *
  * template_getlist()
- * 
- * @param mixed $type 
- * @return array 
+ *
+ * @param mixed $type
+ * @return array
  */
 function template_getlist($type)
 {
@@ -1458,12 +1457,12 @@ function template_getlist($type)
 
 /**
  * Lưu mẫu tin nhắn
- * 
+ *
  * template_save()
- * 
- * @param mixed $type 
- * @param mixed $content 
- * @throws PDOException 
+ *
+ * @param mixed $type
+ * @param mixed $content
+ * @throws PDOException
  */
 function template_save($type, $content)
 {
@@ -1480,12 +1479,12 @@ function template_save($type, $content)
 
 /**
  * Cập nhật mẫu tin nhắn
- * 
+ *
  * template_update()
- * 
- * @param mixed $id 
- * @param mixed $content 
- * @throws PDOException 
+ *
+ * @param mixed $id
+ * @param mixed $content
+ * @throws PDOException
  */
 function template_update($id, $content)
 {
@@ -1499,10 +1498,10 @@ function template_update($id, $content)
 
 /**
  * Xóa mẫu tin nhắn
- * 
+ *
  * template_delete()
- * 
- * @param mixed $id 
+ *
+ * @param mixed $id
  */
 function template_delete($id)
 {
@@ -1513,11 +1512,11 @@ function template_delete($id)
 
 /**
  * Lấy thông tin mẫu tin nhắn
- * 
+ *
  * template_getinfo()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function template_getinfo($id)
 {
@@ -1537,10 +1536,10 @@ function template_getinfo($id)
 
 /**
  * Lấy danh sách bài viết
- * 
+ *
  * get_articles()
- * 
- * @return array 
+ *
+ * @return array
  */
 function get_articles()
 {
@@ -1559,10 +1558,10 @@ function get_articles()
 
 /**
  * Xóa bài viết
- * 
+ *
  * article_delete()
- * 
- * @param mixed $id 
+ *
+ * @param mixed $id
  */
 function article_delete($id)
 {
@@ -1573,11 +1572,11 @@ function article_delete($id)
 
 /**
  * Lấy thông tin bài viết
- * 
+ *
  * get_article_info()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function get_article_info($id)
 {
@@ -1596,11 +1595,11 @@ function get_article_info($id)
 
 /**
  * Lấy danh sách bài viết theo danh sách zalo_id
- * 
+ *
  * get_article_title_by_zalo_id()
- * 
- * @param mixed $ids 
- * @return array 
+ *
+ * @param mixed $ids
+ * @return array
  */
 function get_article_title_by_zalo_id($ids)
 {
@@ -1620,11 +1619,11 @@ function get_article_title_by_zalo_id($ids)
 
 /**
  * Lấy token của bài viết
- * 
+ *
  * get_article_token_by_id()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function get_article_token_by_id($id)
 {
@@ -1635,11 +1634,11 @@ function get_article_token_by_id($id)
 
 /**
  * Lấy zalo_id của bài viết
- * 
+ *
  * get_article_zalo_id()
- * 
- * @param mixed $id 
- * @return mixed 
+ *
+ * @param mixed $id
+ * @return mixed
  */
 function get_article_zalo_id($id)
 {
@@ -1650,12 +1649,12 @@ function get_article_zalo_id($id)
 
 /**
  * Cập nhật zalo_id của bài viết
- * 
+ *
  * zalo_id_update()
- * 
- * @param mixed $id 
- * @param mixed $zalo_id 
- * @throws PDOException 
+ *
+ * @param mixed $id
+ * @param mixed $zalo_id
+ * @throws PDOException
  */
 function zalo_id_update($id, $zalo_id)
 {
@@ -1669,11 +1668,11 @@ function zalo_id_update($id, $zalo_id)
 
 /**
  * Tạo nội dung bài viết trước khi gửi lên Zalo
- * 
+ *
  * article_body_create()
- * 
- * @param mixed $article_body 
- * @return string|false 
+ *
+ * @param mixed $article_body
+ * @return false|string
  */
 function article_body_create($article_body)
 {
@@ -1698,11 +1697,11 @@ function article_body_create($article_body)
 
 /**
  * Lưu bài viết sau khi gửi lên Zalo
- * 
+ *
  * save_article()
- * 
- * @param mixed $save_article 
- * @return mixed 
+ *
+ * @param mixed $save_article
+ * @return mixed
  */
 function save_article($save_article)
 {
@@ -1737,12 +1736,12 @@ function save_article($save_article)
 
 /**
  * Lưu bài viết sau khi cập nhật lên Zalo
- * 
+ *
  * update_article()
- * 
- * @param mixed $id 
- * @param mixed $save_article 
- * @throws PDOException 
+ *
+ * @param mixed $id
+ * @param mixed $save_article
+ * @throws PDOException
  */
 function update_article($id, $save_article)
 {
@@ -1791,10 +1790,10 @@ function update_article($id, $save_article)
 
 /**
  * Lấy danh sách bài viếstc hưa được cập nhật thông tin từ Zalo
- * 
+ *
  * get_article_not_sync()
- * 
- * @return array 
+ *
+ * @return array
  */
 function get_article_not_sync()
 {
@@ -1813,11 +1812,11 @@ function get_article_not_sync()
 
 /**
  * Kiểm tra sự tồn tại của người quan tâm
- * 
+ *
  * userExists()
- * 
- * @param mixed $user_id 
- * @return mixed 
+ *
+ * @param mixed $user_id
+ * @return mixed
  */
 function userExists($user_id)
 {
@@ -1830,12 +1829,12 @@ function userExists($user_id)
 
 /**
  * Kiểm tra sự tồn tại của tin nhắn
- * 
+ *
  * messExists()
- * 
- * @param mixed $message_id 
- * @param mixed $src 
- * @return mixed 
+ *
+ * @param mixed $message_id
+ * @param mixed $src
+ * @return mixed
  */
 function messExists($message_id, $src)
 {
@@ -1850,25 +1849,25 @@ function messExists($message_id, $src)
 
 /**
  * get_error_zalo_image()
- * 
- * @param mixed $mime 
- * @param mixed $size 
- * @return mixed 
+ *
+ * @param mixed $mime
+ * @param mixed $size
+ * @return mixed
  */
 function get_error_zalo_image($mime, $size)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     if (empty($mime)) {
-        return $lang_module['image_is_invalid'];
+        return $nv_Lang->getModule('image_is_invalid');
     }
 
     if (!preg_match('/^image\/(x\-)*(png|jpe?g)$/', $mime)) {
-        return $lang_module['extension_not_supported'];
+        return $nv_Lang->getModule('extension_not_supported');
     }
 
     if ($size > 1048576) {
-        return $lang_module['max_capacity_exceeded'];
+        return $nv_Lang->getModule('max_capacity_exceeded');
     }
 
     return '';
@@ -1876,19 +1875,19 @@ function get_error_zalo_image($mime, $size)
 
 /**
  * get_error_image()
- * 
- * @param mixed $image_url 
- * @return mixed 
+ *
+ * @param mixed $image_url
+ * @return mixed
  */
 function get_error_image($image_url)
 {
-    global $lang_module;
+    global $nv_Lang;
 
     $isURL = nv_is_url($image_url);
     $fromSite = nv_is_file($image_url, NV_UPLOADS_DIR . '/zalo');
 
     if (!$isURL and !$fromSite) {
-        return $lang_module['image_url_invalid'];
+        return $nv_Lang->getModule('image_url_invalid');
     }
 
     if ($isURL) {
@@ -1905,23 +1904,23 @@ function get_error_image($image_url)
 
 /**
  * zaloGetError()
- * 
- * @return mixed 
+ *
+ * @return mixed
  */
 function zaloGetError()
 {
-    global $zalo, $lang_module;
+    global $zalo, $nv_Lang;
 
     $error = $zalo->getError();
     $error_code = $zalo->getErrorCode();
-    if (!empty($lang_module[$error])) {
-        $error = $lang_module[$error];
+    if (!empty($nv_Lang->getModule($error))) {
+        $error = $nv_Lang->getModule($error);
     }
     if (!empty($error_code)) {
-        if (!empty($lang_module['error' . $error_code])) {
-            $error = $lang_module['error' . $error_code] . ' (' . $error . ')';
+        if (!empty($nv_Lang->getModule('error' . $error_code))) {
+            $error = $nv_Lang->getModule('error' . $error_code) . ' (' . $error . ')';
         } else {
-            $error = $lang_module['error_code'] . ' ' . $error_code . ' (' . $error . ')';
+            $error = $nv_Lang->getModule('error_code') . ' ' . $error_code . ' (' . $error . ')';
         }
     }
 
@@ -1930,22 +1929,22 @@ function zaloGetError()
 
 /**
  * Hiển thị danh sách các đơn vị hành chính Việt Nam
- * 
+ *
  * vnsubdivisions_to_html()
- * 
- * @param mixed $provinces 
- * @param mixed $data 
- * @param mixed $subdivParent 
- * @return string 
+ *
+ * @param mixed $provinces
+ * @param mixed $data
+ * @param mixed $subdivParent
+ * @return string
  */
 function vnsubdivisions_to_html($provinces, $data, $subdivParent)
 {
-    global $global_config, $op, $module_name, $module_file, $lang_global, $lang_module;
+    global $global_config, $op, $module_name, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('OP', $op);
     $xtpl->assign('PARENT', $subdivParent);
@@ -1954,7 +1953,7 @@ function vnsubdivisions_to_html($provinces, $data, $subdivParent)
         $xtpl->assign('PROVINCE', [
             'code' => $code,
             'sel' => $code == $subdivParent ? ' selected="selected"' : '',
-            'name' => sprintf($lang_module['vnsubdivisions_parent'], $names[0])
+            'name' => $nv_Lang->getModule('vnsubdivisions_parent', $names[0])
         ]);
         $xtpl->parse('vnsubdivisions_page.province');
     }
@@ -1988,19 +1987,19 @@ function vnsubdivisions_to_html($provinces, $data, $subdivParent)
 
 /**
  * Hiển thị danh sách các mã gọi của các quốc gia
- * 
+ *
  * callingcodes_to_html()
- * 
- * @param mixed $callingcodes 
- * @return string 
+ *
+ * @param mixed $callingcodes
+ * @return string
  */
 function callingcodes_to_html($callingcodes)
 {
-    global $global_config, $op, $module_name, $module_file, $lang_global, $lang_module;
+    global $global_config, $op, $module_name, $module_file, $nv_Lang;
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('OP', $op);
 
@@ -2013,7 +2012,7 @@ function callingcodes_to_html($callingcodes)
     foreach ($countries as $code => $callcodes) {
         $xtpl->assign('COUNTRY', [
             'code' => $code,
-            'name' => isset($lang_global['country_' . $code]) ? $lang_global['country_' . $code] : $code
+            'name' => $nv_Lang->existsGlobal('country_' . $code) ? $nv_Lang->getGlobal('country_' . $code) : $code
         ]);
 
         foreach ($callcodes as $callcode) {
@@ -2030,9 +2029,9 @@ function callingcodes_to_html($callingcodes)
 
 /**
  * DOMinnerHTML()
- * 
- * @param mixed $element 
- * @return string 
+ *
+ * @param mixed $element
+ * @return string
  */
 function DOMinnerHTML($element)
 {
@@ -2049,10 +2048,10 @@ function DOMinnerHTML($element)
 
 /**
  * Lấy thông tin thêm từ trang chủ của OA
- * 
+ *
  * parse_OA_info()
- * 
- * @return array 
+ *
+ * @return array
  */
 function parse_OA_info()
 {
@@ -2115,10 +2114,10 @@ function parse_OA_info()
 
 /**
  * oa_qrcode_create()
- * 
- * @return string|false 
- * @throws Exception 
- * @throws ColorException 
+ *
+ * @return false|string
+ * @throws Exception
+ * @throws ColorException
  */
 function oa_qrcode_create()
 {

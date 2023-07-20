@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,11 +21,11 @@ if (!nv_function_exists('nv_module_menu')) {
      */
     function nv_module_menu()
     {
-        global $global_config, $module_info, $lang_global, $module_name, $op, $user_info, $db, $site_mods;
+        global $global_config, $module_info, $nv_Lang, $module_name, $op, $user_info, $db, $site_mods;
 
         $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.module_menu.tpl');
         $xtpl = new XTemplate('global.module_menu.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('TEMPLATE', $block_theme);
 
         $_lis = $module_info['funcs'];
@@ -51,7 +51,7 @@ if (!nv_function_exists('nv_module_menu')) {
                         $xtpl->assign('LOOP', [
                             'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=myapi',
                             'active' => '',
-                            'title' => $lang_global['myapis']
+                            'title' => $nv_Lang->getGlobal('myapis')
                         ]);
                         $xtpl->parse('main.loop');
                     }

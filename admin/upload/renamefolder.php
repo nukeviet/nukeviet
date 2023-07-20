@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,26 +19,26 @@ $newname = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['rename_dir']) or $check_allow_upload_dir['rename_dir'] !== true) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 if (empty($path) or $path == NV_UPLOADS_DIR) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 if (empty($newname)) {
-    exit('ERROR_' . $lang_module['rename_nonamefolder']);
+    exit('ERROR_' . $nv_Lang->getModule('rename_nonamefolder'));
 }
 
 unset($matches);
 preg_match('/(.*)\/([a-z0-9\-\_]+)$/i', $path, $matches);
 if (!isset($matches) or empty($matches)) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 $newpath = $matches[1] . '/' . $newname;
 if (is_dir(NV_ROOTDIR . '/' . $newpath)) {
-    exit('ERROR_' . $lang_module['folder_exists']);
+    exit('ERROR_' . $nv_Lang->getModule('folder_exists'));
 }
 
 if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
@@ -52,10 +52,10 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
     }
 
     $result = $db->query('SELECT did, dirname FROM ' . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'");
-    while (list($did, $dirname) = $result->fetch(3)) {
+    while ([$did, $dirname] = $result->fetch(3)) {
         $dirname2 = str_replace(NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname);
         $result_file = $db->query('SELECT src, title FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did=' . $did . " AND type = 'image'");
-        while (list($src, $title) = $result_file->fetch(3)) {
+        while ([$src, $title] = $result_file->fetch(3)) {
             if ($action) {
                 $src2 = preg_replace('/^' . nv_preg_quote($dir_replace1) . '/', $dir_replace2, $src);
             } else {
@@ -66,8 +66,8 @@ if (rename(NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath)) {
         $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did);
     }
     nv_dirListRefreshSize();
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path . ' -> ' . $newpath, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('renamefolder'), $path . ' -> ' . $newpath, $admin_info['userid']);
     echo $newpath;
 } else {
-    exit('ERROR_' . $lang_module['rename_error_folder']);
+    exit('ERROR_' . $nv_Lang->getModule('rename_error_folder'));
 }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,10 +14,10 @@ if (!defined('NV_SYSTEM')) {
 }
 
 $lang_array = [
-    'vi' => $lang_module['addads_block_lang_vi'],
-    'en' => $lang_module['addads_block_lang_en'],
-    'ru' => $lang_module['addads_block_lang_ru'],
-    'zz' => $lang_module['addads_block_lang_zz']
+    'vi' => $nv_Lang->getModule('addads_block_lang_vi'),
+    'en' => $nv_Lang->getModule('addads_block_lang_en'),
+    'ru' => $nv_Lang->getModule('addads_block_lang_ru'),
+    'zz' => $nv_Lang->getModule('addads_block_lang_zz')
 ];
 
 $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE act=1 ORDER BY blang ASC';

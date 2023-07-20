@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -45,8 +45,8 @@ if ($sys_info['ini_set_support']) {
     ini_set('auto_detect_line_endings', 0);
 }
 
-$sys_info['php_required_min'] = '5.6.0';
-$sys_info['php_allowed_max'] = '8.2.9';
+$sys_info['php_required_min'] = '7.4.0';
+$sys_info['php_allowed_max'] = '8.3.0';
 $sys_info['php_version'] = PHP_VERSION;
 $sys_info['php_support'] = (version_compare($sys_info['php_version'], $sys_info['php_required_min']) >= 0 and version_compare($sys_info['php_version'], $sys_info['php_allowed_max']) <= 0) ? 1 : 0;
 $sys_info['opendir_support'] = (function_exists('opendir') and !in_array('opendir', $sys_info['disable_functions'], true)) ? 1 : 0;
@@ -79,7 +79,7 @@ if (function_exists('apache_get_modules')) {
     if (in_array('mod_rewrite', $apache_modules, true)) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
-} elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
+} elseif (str_contains($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS')) {
     if (isset($_SERVER['IIS_UrlRewriteModule']) and (php_sapi_name() == 'cgi-fcgi') and class_exists('DOMDocument')) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
     } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {

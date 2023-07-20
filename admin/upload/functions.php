@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -16,7 +16,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_upload']
+    'custom_title' => $nv_Lang->getGlobal('mod_upload')
 ];
 
 define('NV_IS_FILE_ADMIN', true);
@@ -64,14 +64,14 @@ function nv_check_allow_upload_dir($dir)
 
     if (defined('NV_CONFIG_DIR')) {
         if (NV_UPLOADS_DIR == $arr_dir[0] . '/' . $arr_dir[1]) {
-            $_dir_mod = isset($arr_dir[2]) ? $arr_dir[2] : '';
-            $_dir_mod_sub = isset($arr_dir[3]) ? $arr_dir[3] : '';
+            $_dir_mod = $arr_dir[2] ?? '';
+            $_dir_mod_sub = $arr_dir[3] ?? '';
         } else {
             return $level;
         }
     } elseif (in_array($arr_dir[0], $allow_upload_dir, true)) {
-        $_dir_mod = isset($arr_dir[1]) ? $arr_dir[1] : '';
-        $_dir_mod_sub = isset($arr_dir[2]) ? $arr_dir[2] : '';
+        $_dir_mod = $arr_dir[1] ?? '';
+        $_dir_mod_sub = $arr_dir[2] ?? '';
     } else {
         return $level;
     }
@@ -252,6 +252,7 @@ function nv_create_mobileModeImage($fileName, $replace = 0)
  * nv_get_viewImage()
  *
  * @param mixed $fileName
+ * @param mixed $refresh
  */
 function nv_get_viewImage($fileName, $refresh = 0)
 {
@@ -557,11 +558,11 @@ function nv_filesListRefresh($pathimg)
             }
 
             // Tính toán lại dung lượng thư mục
-            $sql = "SELECT SUM(filesize) FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did IN(
-                SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE
-                dirname=" . $db->quote($pathimg) . " OR dirname LIKE '" . $db->dblikeescape($pathimg . '/') . "%'
+            $sql = 'SELECT SUM(filesize) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did IN(
+                SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE
+                dirname=' . $db->quote($pathimg) . " OR dirname LIKE '" . $db->dblikeescape($pathimg . '/') . "%'
             )";
-            $total_size = floatval($db->query($sql)->fetchColumn());
+            $total_size = (float) ($db->query($sql)->fetchColumn());
 
             $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time=' . NV_CURRENTTIME . ', total_size=' . $total_size . ' WHERE did = ' . $did);
         }
@@ -585,11 +586,11 @@ function nv_dirListRefreshSize()
 
     foreach ($array_dirname as $dirname => $did) {
         // Tính toán lại dung lượng thư mục
-        $sql = "SELECT SUM(filesize) FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did IN(
-            SELECT did FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE
-            dirname=" . $db->quote($dirname) . " OR dirname LIKE '" . $db->dblikeescape($dirname . '/') . "%'
+        $sql = 'SELECT SUM(filesize) FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did IN(
+            SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE
+            dirname=' . $db->quote($dirname) . " OR dirname LIKE '" . $db->dblikeescape($dirname . '/') . "%'
         )";
-        $total_size = floatval($db->query($sql)->fetchColumn());
+        $total_size = (float) ($db->query($sql)->fetchColumn());
 
         $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET total_size=' . $total_size . ' WHERE did=' . (int) $did);
     }

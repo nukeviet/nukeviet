@@ -29,7 +29,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
 
     $global_config['site_theme'] = $selectthemes;
     $nv_Cache->delAll();
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_active'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_active') . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
     echo 'OK_' . $selectthemes;
 } elseif (!empty($selectthemes) and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
@@ -39,7 +39,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
     $sth->execute();
     $count = $sth->fetchColumn();
     if (empty($count)) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['config'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('config') . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
         // Thiết lập Layout
         $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini');
@@ -70,7 +70,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         $sth->execute();
 
         $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
-        while (list($func_id, $func_name, $func_custom_name, $in_module) = $fnresult->fetch(3)) {
+        while ([$func_id, $func_name, $func_custom_name, $in_module] = $fnresult->fetch(3)) {
             $layout_name = (isset($array_layout_func_default[$in_module][$func_name])) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
             $sth->bindParam(':func_id', $func_id, PDO::PARAM_INT);
             $sth->bindParam(':layout', $layout_name, PDO::PARAM_STR);
@@ -81,7 +81,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         // Thiết lập Block
         $array_all_funcid = [];
         $func_result = $db->query('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC');
-        while (list($func_id_i) = $func_result->fetch(3)) {
+        while ([$func_id_i] = $func_result->fetch(3)) {
             $array_all_funcid[] = $func_id_i;
         }
 
@@ -148,7 +148,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
                     $row['funcs'] = [$row['funcs']];
                 }
                 foreach ($row['funcs'] as $_funcs_list) {
-                    list($mod, $func_list) = explode(':', $_funcs_list);
+                    [$mod, $func_list] = explode(':', $_funcs_list);
                     if (isset($site_mods[$mod])) {
                         $func_array = explode(',', $func_list);
                         foreach ($site_mods[$mod]['funcs'] as $_tmp) {
@@ -174,5 +174,5 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
     }
     echo 'OK_' . $selectthemes;
 } else {
-    echo $lang_module['theme_created_activate_layout'];
+    echo $nv_Lang->getModule('theme_created_activate_layout');
 }

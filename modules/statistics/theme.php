@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,12 +21,10 @@ if (!defined('NV_IS_MOD_STATISTICS')) {
  */
 function nv_theme_statistics_referer($cts)
 {
-    global $module_info, $lang_global, $lang_module;
-
-    list($template, $dir) = get_module_tpl_dir('referer.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('referer.tpl', true);
     $xtpl = new XTemplate('referer.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
     // Thống kê ngày của tháng
@@ -43,16 +41,15 @@ function nv_theme_statistics_referer($cts)
  * @param int   $num_items
  * @param array $cts
  * @param mixed $host_list
+ * @param mixed $generate_page
  * @return string
  */
 function nv_theme_statistics_allreferers($host_list, $generate_page)
 {
-    global $module_info, $lang_global, $lang_module;
-
-    list($template, $dir) = get_module_tpl_dir('allreferers.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('allreferers.tpl', true);
     $xtpl = new XTemplate('allreferers.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($host_list)) {
@@ -85,12 +82,10 @@ function nv_theme_statistics_allreferers($host_list, $generate_page)
  */
 function nv_theme_statistics_allbots($bot_list, $generate_page)
 {
-    global $module_info, $lang_module, $lang_global;
-
-    list($template, $dir) = get_module_tpl_dir('allbots.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('allbots.tpl', true);
     $xtpl = new XTemplate('allbots.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($bot_list)) {
@@ -123,12 +118,10 @@ function nv_theme_statistics_allbots($bot_list, $generate_page)
  */
 function nv_theme_statistics_allos($os_list, $generate_page)
 {
-    global $module_info, $lang_module, $lang_global;
-
-    list($template, $dir) = get_module_tpl_dir('allos.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('allos.tpl', true);
     $xtpl = new XTemplate('allos.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($os_list)) {
@@ -161,12 +154,10 @@ function nv_theme_statistics_allos($os_list, $generate_page)
  */
 function nv_theme_statistics_allbrowsers($browsers_list, $generate_page)
 {
-    global $module_info, $lang_module, $lang_global;
-
-    list($template, $dir) = get_module_tpl_dir('allbrowsers.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('allbrowsers.tpl', true);
     $xtpl = new XTemplate('allbrowsers.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($browsers_list)) {
@@ -199,12 +190,10 @@ function nv_theme_statistics_allbrowsers($browsers_list, $generate_page)
  */
 function nv_theme_statistics_allcountries($countries_list, $generate_page)
 {
-    global $module_info, $lang_module, $lang_global;
-
-    list($template, $dir) = get_module_tpl_dir('allcountries.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('allcountries.tpl', true);
     $xtpl = new XTemplate('allcountries.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
     if (!empty($countries_list)) {
@@ -243,12 +232,10 @@ function nv_theme_statistics_allcountries($countries_list, $generate_page)
  */
 function nv_theme_statistics_main($ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh)
 {
-    global $module_info, $lang_module, $lang_global;
-
-    list($template, $dir) = get_module_tpl_dir('main.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('main.tpl', true);
     $xtpl = new XTemplate('main.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
 
     // Thống kê theo giờ trong ngày

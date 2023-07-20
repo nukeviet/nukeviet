@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -167,6 +167,7 @@ $sql_create_table[] = 'CREATE TABLE ' . NV_LANGUAGE_GLOBALTABLE . " (
   idfile mediumint(8) unsigned NOT NULL DEFAULT '0',
   langtype varchar(50) NOT NULL DEFAULT 'lang_module',
   lang_key varchar(50) NOT NULL,
+  weight SMALLINT(4) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   UNIQUE KEY filelang (idfile,lang_key,langtype)
 ) ENGINE=MyISAM";

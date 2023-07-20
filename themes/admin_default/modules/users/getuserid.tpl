@@ -28,7 +28,7 @@
                 </tfoot>
                 <tbody>
                     <tr>
-                        <td>{LANG.username}</td>
+                        <td>{GLANG.username}</td>
                         <td><input class="form-control fixwidthinput" type="text" name="username" value="" maxlength="100" /></td>
 
                         <td>{LANG.fullname}</td>
@@ -80,7 +80,7 @@
             <!-- BEGIN: order -->
             <tr>
                 <th><a class="{ODER_ID.class}" href="{ODER_ID.url}" title="">ID</a></th>
-                <th><a class="{ODER_USERNAME.class}" href="{ODER_USERNAME.url}" title="">{LANG.username}</a></th>
+                <th><a class="{ODER_USERNAME.class}" href="{ODER_USERNAME.url}" title="">{GLANG.username}</a></th>
                 <th><a class="{ODER_EMAIL.class}" href="{ODER_EMAIL.url}" title="">{LANG.email}</a></th>
                 <th><a class="{ODER_REGDATE.class}" href="{ODER_REGDATE.url}" title="">{LANG.regdate}</a></th>
                 <th class="text-center">{LANG.select}</th>
@@ -89,7 +89,7 @@
             <!-- BEGIN: no_order -->
             <tr>
                 <th>ID</th>
-                <th>{LANG.username}</th>
+                <th>{GLANG.username}</th>
                 <th>{LANG.email}</th>
                 <th>{LANG.regdate}</th>
                 <th class="text-center">{LANG.select}</th>

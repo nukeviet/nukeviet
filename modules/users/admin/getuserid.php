@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,13 +21,14 @@ if (empty($area)) {
 
 $access_viewlist = empty($access_admin['access_viewlist'][$admin_info['level']]) ? false : true;
 
-$page_title = $lang_module['pagetitle'];
+$page_title = $nv_Lang->getModule('pagetitle');
 $filtersql = $nv_Request->get_string('filtersql', 'get', '');
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$lang_module['fullname'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
-$xtpl->assign('LANG', $lang_module);
+$nv_Lang->setModule('fullname', $global_config['name_show'] == 0 ? $nv_Lang->getModule('lastname_firstname') : $nv_Lang->getModule('firstname_lastname'));
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('GLOBAL_CONFIG', $global_config);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('MODULE_FILE', $module_file);
@@ -275,21 +276,21 @@ if ($nv_Request->isset_request('save', 'get')) {
     echo $contents;
     include NV_ROOTDIR . '/includes/footer.php';
 } else {
-    $gender = isset($array['gender']) ? $array['gender'] : '';
+    $gender = $array['gender'] ?? '';
     $array['gender'] = [];
     $array['gender'][] = [
         'key' => '',
-        'title' => $lang_module['select_gender'],
+        'title' => $nv_Lang->getModule('select_gender'),
         'selected' => ('' == $gender) ? ' selected="selected"' : ''
     ];
     $array['gender'][] = [
         'key' => 'M',
-        'title' => $lang_module['select_gender_male'],
+        'title' => $nv_Lang->getModule('select_gender_male'),
         'selected' => ('M' == $gender) ? ' selected="selected"' : ''
     ];
     $array['gender'][] = [
         'key' => 'F',
-        'title' => $lang_module['select_gender_female'],
+        'title' => $nv_Lang->getModule('select_gender_female'),
         'selected' => ('F' == $gender) ? ' selected="selected"' : ''
     ];
 

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -65,7 +65,7 @@ if ($page_config['viewtype'] == 2) {
     }
 
     $rowdetail['number_add_time'] = $rowdetail['add_time'];
-    $rowdetail['number_edit_time'] = $rowdetail['edit_time'] ? $rowdetail['edit_time'] : $rowdetail['add_time'];
+    $rowdetail['number_edit_time'] = $rowdetail['edit_time'] ?: $rowdetail['add_time'];
     $rowdetail['add_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['add_time']);
     $rowdetail['edit_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['edit_time']);
     $rowdetail['link'] = $canonicalUrl;
@@ -170,7 +170,7 @@ if ($page_config['viewtype'] == 2) {
     $generate_page = nv_alias_page($page_title, $base_url, $num_items, $per_page, $page);
 
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     }
 
     $contents = nv_page_main_list($array_data, $generate_page);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -24,7 +24,7 @@ global $global_array_cat;
 $global_array_cat = [];
 $catid = 0;
 $parentid = 0;
-$alias_cat_url = isset($array_op[0]) ? $array_op[0] : '';
+$alias_cat_url = $array_op[0] ?? '';
 $array_mod_title = [];
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') ORDER BY sort ASC';
@@ -52,7 +52,7 @@ if ($nv_Request->isset_request('setDefaultVoice', 'post')) {
 
 // Thiết lập autoplay
 if ($nv_Request->isset_request('setAutoPlayVoice', 'post') and $nv_Request->get_title('setAutoPlayVoice', 'post', '') === NV_CHECK_SESSION) {
-    $setCookieVal = intval(!$nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false));
+    $setCookieVal = (int) (!$nv_Request->get_bool($module_file . '_autoplayvoice', 'cookie', false));
     $nv_Request->set_Cookie($module_file . '_autoplayvoice', $setCookieVal, NV_LIVE_COOKIE_TIME);
     nv_jsonOutput([
         'value' => $setCookieVal
@@ -118,7 +118,7 @@ if (!empty($array_op) and $op == 'main') {
     if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
         if ($catid == 0) {
             // Trang chủ
-            $contents = $lang_module['nocatpage'] . $array_op[0];
+            $contents = $nv_Lang->getModule('nocatpage') . $array_op[0];
             if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
                 $page = (int) (substr($array_op[0], 5));
             }

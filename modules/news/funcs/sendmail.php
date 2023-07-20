@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -27,7 +27,7 @@ foreach ($global_array_cat as $catid_i => $array_cat_i) {
 if ($id > 0 and $catid > 0) {
     $sql = 'SELECT id, title, alias, hometext FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id . ' AND status=1';
     $result = $db_slave->query($sql);
-    list($id, $title, $alias, $hometext) = $result->fetch(3);
+    [$id, $title, $alias, $hometext] = $result->fetch(3);
     if ($id > 0) {
         $checkss = $nv_Request->get_string('checkss', 'post', '');
         if ($checkss == md5($id . NV_CHECK_SESSION)) {
@@ -57,7 +57,7 @@ if ($id > 0 and $catid > 0) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'input' => '',
-                            'mess' => $lang_global['securitycodeincorrect']
+                            'mess' => $nv_Lang->getGlobal('securitycodeincorrect')
                         ]);
                     }
 
@@ -76,7 +76,7 @@ if ($id > 0 and $catid > 0) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'input' => 'your_name',
-                            'mess' => $lang_module['sendmail_err_name']
+                            'mess' => $nv_Lang->getModule('sendmail_err_name')
                         ]);
                     }
 
@@ -86,14 +86,14 @@ if ($id > 0 and $catid > 0) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'input' => 'data_permission_confirm',
-                            'mess' => $lang_global['data_warning_error']
+                            'mess' => $nv_Lang->getGlobal('data_warning_error')
                         ]);
                     }
                     if ($antispam_confirm === 0) {
                         nv_jsonOutput([
                             'status' => 'error',
                             'input' => 'antispam_confirm',
-                            'mess' => $lang_global['antispam_warning_error']
+                            'mess' => $nv_Lang->getGlobal('antispam_warning_error')
                         ]);
                     }
 
@@ -119,7 +119,7 @@ if ($id > 0 and $catid > 0) {
                         $timeout = ceil(($difftimeout - NV_CURRENTTIME + $timeout) / 60);
                         nv_jsonOutput([
                             'status' => 'OK',
-                            'mess' => sprintf($lang_module['sendmail_limit_sendmail'], $friend_email, $timeout)
+                            'mess' => $nv_Lang->getModule('sendmail_limit_sendmail', $friend_email, $timeout)
                         ]);
                     }
 
@@ -138,10 +138,10 @@ if ($id > 0 and $catid > 0) {
                         $hometext = nv_clean60(strip_tags(str_replace(["\r\n", "\r", "\n"], ' ', $hometext)), 300);
                     }
 
-                    $subject = sprintf($lang_module['sendmail_subject'], $your_name);
-                    $message = !empty($your_message) ? sprintf($lang_module['sendmail_welcome1'], $your_name, $title, $global_config['site_name'], $your_message) : sprintf($lang_module['sendmail_welcome'], $your_name, $title, $global_config['site_name']);
+                    $subject = $nv_Lang->getModule('sendmail_subject', $your_name);
+                    $message = !empty($your_message) ? $nv_Lang->getModule('sendmail_welcome1', $your_name, $title, $global_config['site_name'], $your_message) : $nv_Lang->getModule('sendmail_welcome', $your_name, $title, $global_config['site_name']);
                     $message .= '<br/>----------<br/><strong>' . $title . '</strong><br/>' . $hometext . '<br/><br/>';
-                    $message .= sprintf($lang_module['sendmail_welcome2'], $link);
+                    $message .= $nv_Lang->getModule('sendmail_welcome2', $link);
 
                     if (!empty($your_email)) {
                         $from = [
@@ -160,12 +160,12 @@ if ($id > 0 and $catid > 0) {
                         file_put_contents($dir . '/' . $logfile, '', LOCK_EX);
                         nv_jsonOutput([
                             'status' => 'OK',
-                            'mess' => sprintf($lang_module['sendmail_success'], $friend_email)
+                            'mess' => $nv_Lang->getModule('sendmail_success', $friend_email)
                         ]);
                     } else {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['sendmail_success_err']
+                            'mess' => $nv_Lang->getModule('sendmail_success_err')
                         ]);
                     }
                 }

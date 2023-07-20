@@ -140,7 +140,6 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
             $db_slave->order('a.cid DESC');
         }
         $result = $db_slave->query($db_slave->sql());
-        $comment_list_id_reply = [];
         while ($row = $result->fetch()) {
             $row['check_like'] = md5($row['cid'] . '_' . $session_id);
             $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';
@@ -170,17 +169,12 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
  */
 function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status_comment = '')
 {
-    global $module_config, $nv_Request, $lang_module_comment;
+    global $module_config, $nv_Request, $nv_Lang;
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (!empty($module) and isset($module_config[$module]['activecomm'])) {
         if (!empty($id) and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
-            if (module_file_exists('comment/language/' . NV_LANG_INTERFACE . '.php')) {
-                require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
-            } else {
-                require NV_ROOTDIR . '/modules/comment/language/en.php';
-            }
-            $lang_module_comment = $lang_module;
+            $nv_Lang->loadModule('Comment', false, true);
 
             $view_comm = nv_user_in_groups($module_config[$module]['view_comm']);
             if ($view_comm) {
@@ -208,7 +202,11 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
                     }
                 }
 
-                return nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment);
+                $contents = nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment);
+
+                $nv_Lang->changeLang();
+
+                return $contents;
             }
         }
     }
@@ -231,7 +229,7 @@ function nv_comment_load($module, $checkss, $area, $id, $allowed, $page, $status
  */
 function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $status_comment = '', $header = 1)
 {
-    global $module_config, $nv_Request, $lang_module_comment, $module_info, $global_config, $lang_global;
+    global $module_config, $nv_Request, $global_config, $nv_Lang;
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (!empty($module) and isset($module_config[$module]['activecomm'])) {
@@ -239,12 +237,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
             $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
             $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&comment_load=1&perpage=' . $per_page_comment;
 
-            if (module_file_exists('comment/language/' . NV_LANG_INTERFACE . '.php')) {
-                require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
-            } else {
-                require NV_ROOTDIR . '/modules/comment/language/en.php';
-            }
-            $lang_module_comment = $lang_module;
+            $nv_Lang->loadModule('Comment', false, true);
 
             // Kiểm tra quyền xem bình luận
             $form_login = [
@@ -268,10 +261,10 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                     $form_login['display'] = 1;
                     if (!isset($allowed_tmp['7'])) {
                         // Thành viên chính thức
-                        $form_login['groups'][0] = $lang_global['level4'];
+                        $form_login['groups'][0] = $nv_Lang->getGlobal('level4');
                     } else {
                         // Thành viên chính thức hoặc thành viên mới
-                        $form_login['groups'][0] = $lang_module_comment['user'];
+                        $form_login['groups'][0] = $nv_Lang->getModule('user');
                     }
                 } else {
                     $list_groups = array_intersect_key(nv_groups_list_pub(), $allowed_tmp);
@@ -310,7 +303,11 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 $comment = '';
             }
 
-            return nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $form_login, $header);
+            $contents = nv_theme_comment_module($module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $form_login, $header);
+
+            $nv_Lang->changeLang();
+
+            return $contents;
         }
 
         return '';

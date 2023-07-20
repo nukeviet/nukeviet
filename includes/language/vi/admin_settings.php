@@ -24,7 +24,6 @@ $lang_module['site_config'] = 'Cấu hình site';
 $lang_module['lang_site_config'] = 'Cấu hình site theo ngôn ngữ: %s';
 $lang_module['bots_config'] = 'Máy chủ tìm kiếm';
 $lang_module['ip_version'] = 'Loại IP';
-
 $lang_module['site_domain'] = 'Tên miền chính của site';
 $lang_module['sitename'] = 'Tên gọi của site';
 $lang_module['sitename_error'] = 'Lỗi: Tên gọi của site chưa được khai báo';
@@ -42,7 +41,6 @@ $lang_module['submit'] = 'Lưu cấu hình';
 $lang_module['err_writable'] = 'Lỗi hệ thống không ghi được file: %s. Bạn cần cấu hình server cho phép ghi file này.';
 $lang_module['err_supports_rewrite'] = 'Lỗi, Máy chủ của bạn không hỗ trợ module rewrite';
 $lang_module['err_save_sysconfig'] = 'Các thay đổi đã được lưu lại, tuy nhiên hệ thống không ghi được cấu hình ra file. Hãy cấp quyền ghi cho file %s, sau đó thực hiện lại';
-
 $lang_module['security'] = 'Thiết lập an ninh';
 $lang_module['flood_blocker'] = 'Chống tấn công ngập lụt';
 $lang_module['is_flood_blocker'] = 'Kích hoạt công cụ chống tấn công ngập lụt';
@@ -86,7 +84,6 @@ $lang_module['captcha_comm_1'] = 'Nếu không phải là người dùng';
 $lang_module['captcha_comm_2'] = 'Nếu không phải người quản lý bình luận';
 $lang_module['captcha_comm_3'] = 'Hiển thị trong mọi trường hợp';
 $lang_module['captcha_comm_select'] = 'Hãy chọn';
-
 $lang_module['mail_sender_name'] = 'Tên người gửi';
 $lang_module['mail_sender_name_default'] = 'Để trống hệ thống sẽ lấy từ giá trị được chỉ định (nếu có) hoặc tên site';
 $lang_module['mail_sender_email'] = 'Email người gửi';
@@ -181,7 +178,6 @@ $lang_module['cookie_SameSite_Empty'] = 'Phụ thuộc vào trình duyệt';
 $lang_module['cookie_SameSite_Lax'] = 'Cookie không được gửi theo các yêu cầu phụ đến trang web khác (ví dụ: tải hình ảnh), nhưng được gửi theo các yêu cầu đến trang web gốc';
 $lang_module['cookie_SameSite_Strict'] = 'Cookie sẽ chỉ được gửi theo yêu cầu được thực hiện trên cùng một miền và sẽ không được gửi theo yêu cầu đến các trang web của bên thứ ba';
 $lang_module['cookie_SameSite_None'] = 'Cookie sẽ được gửi trong tất cả các ngữ cảnh (Chỉ có tác dụng khi thuộc tính secure bật)';
-
 $lang_module['is_user_forum'] = 'Chuyển quản lý người dùng cho diễn đàn';
 $lang_module['banip'] = 'Quản lý IP cấm';
 $lang_module['end_time'] = 'Thời gian kết thúc';
@@ -204,7 +200,6 @@ $lang_module['ip_write_error'] = 'Lỗi: hệ thống không thể ghi file. Hã
 $lang_module['ip_add'] = 'Thêm IP';
 $lang_module['ip_edit'] = 'Sửa IP';
 $lang_module['noflood_ip_list'] = 'Các IP không chịu sự kiểm duyệt của công cụ chống tấn công ngập lụt';
-
 $lang_module['nv_admin_add'] = 'Thêm công việc';
 $lang_module['nv_admin_edit'] = 'Sửa công việc';
 $lang_module['nv_admin_del'] = 'Xóa công việc';
@@ -284,7 +279,6 @@ $lang_module['cdn_url'] = 'CDN cho các tệp tĩnh';
 $lang_module['assets_cdn'] = 'Sử dụng các file tĩnh có sẵn trên <a href="https://github.com/nukeviet/nukeviet" target="_blank">Kho mã nguồn NukeViet</a> kết hợp mạng CDN <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr</a>';
 $lang_module['assets_cdn_note'] = 'URL tương đối của các file <strong>js, css, svg, woff, woff2, ttf</strong> trong thư mục<strong> %s</strong> của site sẽ được thay thế bằng URL tuyệt đối đến các file tương ứng trên kho mã nguồn NukeViet (ví dụ, URL: <code>%s</code> sẽ được thay thế bằng: <code>%s</code>)';
 $lang_module['not_apply_to_localhost'] = 'Cấu hình này không có tác dụng trong môi trường localhost';
-
 $lang_module['plugin'] = 'Thiết lập Plugin';
 $lang_module['plugin_file'] = 'File thực thi';
 $lang_module['plugin_area'] = 'Hook';
@@ -311,18 +305,15 @@ $lang_module['plugin_choose_receive_module'] = 'Chọn module đích';
 $lang_module['plugin_log_weight'] = 'Thay đổi thứ tự plugin';
 $lang_module['plugin_log_del'] = 'Xóa plugin';
 $lang_module['plugin_log_integrate'] = 'Tích hợp mới plugin';
-
 $lang_module['notification_config'] = 'Cấu hình chức năng thông báo';
 $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt động mới';
 $lang_module['notification_autodel'] = 'Tự động xóa thông báo sau thời gian';
 $lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu không muốn tự động xóa';
 $lang_module['notification_day'] = 'ngày';
-
 $lang_module['is_login_blocker'] = 'Chặn đăng nhập sai nhiều lần';
 $lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa';
 $lang_module['login_time_tracking'] = 'trong';
 $lang_module['login_time_ban'] = 'Thời gian bị cấm đăng nhập';
-
 $lang_module['two_step_verification'] = 'Yêu cầu xác thực đăng nhập hai bước';
 $lang_module['two_step_verification0'] = 'Không yêu cầu';
 $lang_module['two_step_verification1'] = 'Tại khu vực quản trị';
@@ -332,9 +323,7 @@ $lang_module['two_step_verification_note'] = 'Chú ý: Cấu hình này áp dụ
 $lang_module['admin_2step_opt'] = 'Các phương thức xác nhận hai bước được phép trong quản trị';
 $lang_module['admin_2step_default'] = 'Phương thức xác nhận hai bước mặc định trong quản trị';
 $lang_module['admin_2step_appconfig'] = 'Thiết lập';
-
 $lang_module['site_phone'] = 'Số điện thoại của site';
-
 $lang_module['cors'] = 'Thiết lập Cross-Site';
 $lang_module['cors_exceptions'] = 'Không áp dụng chặn đối với các trường hợp sau';
 $lang_module['cors_site_restrict'] = 'Bảo vệ ngoài site';
@@ -397,10 +386,10 @@ $lang_module['DKIM_add_button'] = 'Thực hiện';
 $lang_module['DKIM_domain'] = 'Miền gửi thư';
 $lang_module['DKIM_domain_error'] = 'Lỗi: Miền gửi thư không đúng định dạng';
 $lang_module['DKIM_domain_exists'] = 'Miền gửi thư này đã có trên máy chủ';
+$lang_module['DKIM_created'] = 'Chữ ký số DKIM cho miền gửi thư %s đã được tạo. Bạn phải xác minh chữ ký DKIM này theo hướng dẫn trên trang tiếp theo.';
 $lang_module['DKIM_authentication'] = 'Chứng thực chữ ký số DKIM';
 $lang_module['dkim_included'] = 'Gửi kèm chữ ký số DKIM (nếu có) khi dùng phương thức';
 $lang_module['smime_included'] = 'Gửi kèm chứng chỉ S/MIME (nếu có) khi dùng phương thức';
-
 $lang_module['csp'] = 'Thiết lập CSP';
 $lang_module['csp_desc'] = 'Content-Security-Policy (CSP) là tên của tiêu đề phản hồi HTTP (HTTP response header) mà các trình duyệt hiện đại sử dụng để nâng cao tính bảo mật trang web. CSP cho phép bạn hạn chế việc sử dụng các tài nguyên như JavaScript, CSS hoặc bất kỳ thứ gì mà trình duyệt tải.';
 $lang_module['csp_details'] = 'Thông tin chi tiết';
@@ -434,13 +423,12 @@ $lang_module['csp_source_hosts_help'] = 'Mỗi giá trị một dòng';
 $lang_module['csp_source_none_confirm'] = 'Nếu tùy chọn này được bật, các tài nguyên khác của chỉ thị hiện tại sẽ bị vô hiệu hóa. Bạn đồng ý?';
 $lang_module['csp_source_hosts_note'] = 'Biểu thức máy chủ hợp lệ có thể bao gồm: http://*.example.com, mail.example.com:443, https://store.example.com, *.example.com, https://example.com:*';
 $lang_module['csp_source_value'] = 'Giá trị nguồn';
-
 $lang_module['rp'] = 'Thiết lập RP';
 $lang_module['rp_desc'] = 'Referrer-Policy (RP) là tên của tiêu đề HTTP (HTTP response header) mà các trình duyệt hiện đại sử dụng để kiểm soát lượng thông tin liên kết nguồn (được gửi qua header &quot;Referer&quot; đến trang đích).';
 $lang_module['rp_desc2'] = 'Các thông tin liên kết nguồn có thể được gửi:<ul><li>Origin: bao gồm scheme (ví dụ: http, https), host (ví dụ: nukeviet.vn) và port (ví dụ: 80, 443)</li><li>Path (đường dẫn tuyệt đối trên máy phục vụ, ví dụ: thumuc1/index.php)</li><li>Querystring (chuỗi truy vấn, ví dụ: ?name=ferret&color=purple)</li></ul>';
 $lang_module['rp_details'] = 'Thông tin chi tiết';
 $lang_module['rp_act'] = 'Kích hoạt RP';
-$lang_module['rp_no_referrer'] = 'Header &quot;Referer&quot; sẽ bị bỏ qua hoàn toàn. Không có thông tin về liên kết nguồn được gửi cùng với các yêu cầu.<br/>Chú ý: NukeViet không hỗ trợ chỉ thị này!';
+$lang_module['rp_no_referrer'] = 'Header &quot;Referer&quot; sẽ bị bỏ qua hoàn toàn. Không có thông tin về liên kết nguồn được gửi cùng với các yêu cầu.<br />Chú ý: NukeViet không hỗ trợ chỉ thị này!';
 $lang_module['rp_no_referrer_when_downgrade'] = 'Gửi origin, path và querystring của liên kết nguồn trong header &quot;Referer&quot; khi giao thức của trang đích giống hoặc bảo mật hơn trang nguồn (HTTP→HTTP, HTTP→HTTPS, HTTPS→HTTPS). Không gửi header &quot;Referer&quot; cho các yêu cầu đến các trang đích kém an toàn hơn (HTTPS→HTTP, HTTPS→file).';
 $lang_module['rp_origin'] = 'Chỉ gửi origin của liên kết nguồn trong header &quot;Referer&quot;. Ví dụ: với liên kết nguồn là https://example.com/page.html sẽ gửi header &quot;Referer&quot; là https://example.com/.';
 $lang_module['rp_origin_when_cross_origin'] = 'Gửi origin, path và querystring khi trang đích có cùng origin. Chỉ gửi origin đối với các trường hợp khác.';
@@ -477,7 +465,7 @@ $lang_module['XSSsanitize'] = 'Lọc các mã HTML nguy hiểm trước khi gử
 $lang_module['admin_XSSsanitize'] = 'Lọc các mã HTML nguy hiểm trước khi gửi biểu mẫu trong khu vực quản trị';
 $lang_module['ssettings'] = 'Tệp cấu hình máy chủ';
 $lang_module['ssettings_note'] = 'Hãy hết sức cẩn thận khi thay đổi các cài đặt bên dưới. Việc cấu hình đòi hỏi người quản trị phải có kiến thức cơ bản về quản trị máy chủ';
-$lang_module['general_settings'] = 'Cài đặt chung';
+$lang_module['general_settings'] = 'Các thiết lập chính';
 $lang_module['access_denied'] = 'Cấm truy cập';
 $lang_module['file_deny_access'] = 'Files cấm truy cập';
 $lang_module['dir_deny_access'] = 'Thư mục cấm truy cập';
@@ -568,7 +556,6 @@ $lang_module['value_copied'] = 'Giá trị đã được sao chép vào bộ nh�
 $lang_module['auto_acao'] = 'Thêm tiêu đề Access-Control-Allow-Origin';
 $lang_module['auto_acao_note'] = 'Khi truy vấn có kèm tiêu đề Origin với giá trị hợp lệ, hệ thống sẽ tự động trả lời bằng tiêu đề phản hồi Access-Control-Allow-Origin với giá trị bằng chính giá trị miền của Origin gửi đến';
 $lang_module['cookie_share'] = 'Chia sẻ cookie cho tên miền thứ cấp';
-$lang_module['general_settings'] = 'Các thiết lập chính';
 $lang_module['theme_settings'] = 'Các thiết lập giao diện';
 $lang_module['lang_rewrite_settings'] = 'Các thiết lập ngôn ngữ và tính năng định dạng URL';
 $lang_module['error_handler_settings'] = 'Các thiết lập xử lý lỗi';

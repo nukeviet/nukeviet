@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -46,8 +46,8 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_change_act_' . $mod) == $nv_Re
 
     $nv_Cache->delMod('modules');
 
-    $temp = ($act == 1) ? $lang_global['yes'] : $lang_global['no'];
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['activate'] . ' module "' . $mod . '"', $temp, $admin_info['userid']);
+    $temp = ($act == 1) ? $nv_Lang->getGlobal('yes') : $nv_Lang->getGlobal('no');
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('activate') . ' module "' . $mod . '"', $temp, $admin_info['userid']);
 }
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $mod;

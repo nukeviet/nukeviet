@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -34,7 +34,7 @@ if (!empty($_GET['code'])) {
                     'identity' => $result['id'],
                     'full_identity' => $crypt->hash($result['id']),
                     'email' => '',
-                    'name' => isset($result['name']) ? $result['name'] : '',
+                    'name' => $result['name'] ?? '',
                     'first_name' => '',
                     'last_name' => '',
                 ];

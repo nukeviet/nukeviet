@@ -22,15 +22,16 @@ if (!defined('NV_IS_MOD_CONTACT')) {
  * @param array  $cats
  * @param string $base_url
  * @param string $checkss
+ * @param mixed  $supporters
  * @return string
  */
 function contact_main_theme($array_content, $is_specific, $departments, $cats, $supporters, $base_url, $checkss)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $page_title;
+    global $nv_Lang, $module_info, $module_name, $page_title;
 
     $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CHECKSS', $checkss);
     $xtpl->assign('CONTENT', $array_content);
     $xtpl->assign('PAGE_TITLE', $page_title);
@@ -83,7 +84,7 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
                 }
                 $xtpl->assign('CD', [
                     'icon' => 'fa-phone',
-                    'name' => $lang_module['phone'],
+                    'name' => $nv_Lang->getModule('phone'),
                     'value' => implode(', ', $items)
                 ]);
                 $xtpl->parse('main.dep.cd');
@@ -91,7 +92,7 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
             if (!empty($dep['fax'])) {
                 $xtpl->assign('CD', [
                     'icon' => 'fa-fax',
-                    'name' => $lang_module['fax'],
+                    'name' => $nv_Lang->getModule('fax'),
                     'value' => $dep['fax']
                 ]);
                 $xtpl->parse('main.dep.cd');
@@ -103,7 +104,7 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
                 }
                 $xtpl->assign('CD', [
                     'icon' => 'fa-envelope',
-                    'name' => $lang_module['email'],
+                    'name' => $nv_Lang->getModule('email'),
                     'value' => implode(', ', $items)
                 ]);
                 $xtpl->parse('main.dep.cd');
@@ -186,7 +187,7 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
             }
             $xtpl->assign('CD', [
                 'icon' => 'fa-phone',
-                'name' => $lang_module['phone'],
+                'name' => $nv_Lang->getModule('phone'),
                 'value' => implode(', ', $items)
             ]);
             $xtpl->parse('main.supporter_block.supporter.cd');
@@ -194,7 +195,7 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
             if (!empty($supporter['email'])) {
                 $xtpl->assign('CD', [
                     'icon' => 'fa-envelope',
-                    'name' => $lang_module['email'],
+                    'name' => $nv_Lang->getModule('email'),
                     'value' => '<a href="' . $supporter['email'] . '">' . $supporter['email'] . '</a>'
                 ]);
                 $xtpl->parse('main.supporter_block.supporter.cd');
@@ -284,16 +285,15 @@ function contact_main_theme($array_content, $is_specific, $departments, $cats, $
  */
 function contact_form_theme($array_content, $departments, $cats, $base_url, $checkss)
 {
-    global $lang_global, $lang_module, $module_info, $global_config, $module_config, $module_name, $module_captcha;
+    global $nv_Lang, $module_info, $global_config, $module_config, $module_name, $module_captcha;
 
     $array_content['phone_required'] = $array_content['sender_phone_required'] ? ' required' : '';
     $array_content['address_required'] = $array_content['sender_address_required'] ? ' required' : '';
-
-    list($template, $dir) = get_module_tpl_dir('form.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('form.tpl', true);
     $xtpl = new XTemplate('form.tpl', $dir);
     $xtpl->assign('CONTENT', $array_content);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
@@ -309,7 +309,7 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
     // Nếu dùng reCaptcha v2
     elseif ($module_captcha == 'recaptcha' and $global_config['recaptcha_ver'] == 2) {
         $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode1'));
         $xtpl->parse('main.recaptcha');
     } elseif ($module_captcha == 'captcha') {
         $xtpl->parse('main.captcha');
@@ -324,7 +324,7 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
     $count = count($cats);
     if ($count) {
         foreach ($cats as $did => $cat) {
-            $cat[$did . '_other'] = $lang_module['other_cat'];
+            $cat[$did . '_other'] = $nv_Lang->getModule('other_cat');
             if ($count > 1) {
                 $xtpl->assign('CATNAME', $departments[$did]['full_name']);
                 foreach ($cat as $key => $value) {
@@ -358,12 +358,12 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
 
     if (!empty($global_config['data_warning']) or !empty($global_config['antispam_warning'])) {
         if (!empty($global_config['data_warning'])) {
-            $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $lang_global['data_warning_content']);
+            $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $nv_Lang->getGlobal('data_warning_content'));
             $xtpl->parse('main.confirm.data_sending');
         }
 
         if (!empty($global_config['antispam_warning'])) {
-            $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $lang_global['antispam_warning_content']);
+            $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $nv_Lang->getGlobal('antispam_warning_content'));
             $xtpl->parse('main.confirm.antispam');
         }
         $xtpl->parse('main.confirm');
@@ -384,10 +384,10 @@ function contact_form_theme($array_content, $departments, $cats, $base_url, $che
  */
 function contact_sendcontact($feedback, $departments, $sendinfo = true)
 {
-    global $global_config, $lang_module, $module_info, $client_info;
+    global $global_config, $module_info, $client_info;
 
     $xtpl = new XTemplate('sendcontact.tpl', get_module_tpl_dir('sendcontact.tpl'));
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
     $xtpl->assign('SITE_URL', $global_config['site_url']);
     $xtpl->assign('FULLNAME', $feedback['sender_name']);

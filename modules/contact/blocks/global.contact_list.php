@@ -22,17 +22,16 @@ if (!nv_function_exists('nv_contact_list_info')) {
      */
     function nv_contact_list_info($module)
     {
-        global $nv_Cache, $site_mods, $global_config, $lang_global;
+        global $nv_Cache, $site_mods, $global_config;
         if (isset($site_mods[$module])) {
             $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $site_mods[$module]['module_file'] . '/block.contact_list.tpl');
-
             $departments = $nv_Cache->db('SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department ORDER BY weight', 'id', $module);
             if (empty($departments)) {
                 return '';
             }
 
             $xtpl = new XTemplate('block.contact_list.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
-            $xtpl->assign('LANG', $lang_global);
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
             $xtpl->assign('TEMPLATE', $block_theme);
             $xtpl->assign('MODULE', $module);
 

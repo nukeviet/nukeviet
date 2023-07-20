@@ -58,7 +58,7 @@ class InformGroupGetInfo implements UiApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request, $nv_Lang;
 
         $module_name = Uapi::getModuleName();
         $module_info = Uapi::getModuleInfo();
@@ -74,7 +74,7 @@ class InformGroupGetInfo implements UiApi
         if (empty($group_id) or !in_array($group_id, $u_groups, true)) {
             return $this->result->setError()
                 ->setCode('5014')
-                ->setMessage($lang_module['group_not_defined'])
+                ->setMessage($nv_Lang->getModule('group_not_defined'))
                 ->getResult();
         }
 
@@ -82,7 +82,7 @@ class InformGroupGetInfo implements UiApi
         if (!$count) {
             return $this->result->setError()
                 ->setCode('5015')
-                ->setMessage($lang_module['not_group_manager'])
+                ->setMessage($nv_Lang->getModule('not_group_manager'))
                 ->getResult();
         }
 
@@ -94,7 +94,7 @@ class InformGroupGetInfo implements UiApi
         if (empty($postdata['id'])) {
             return $this->result->setError()
                 ->setCode('5003')
-                ->setMessage($lang_module['notification_not_exist'])
+                ->setMessage($nv_Lang->getModule('notification_not_exist'))
                 ->getResult();
         }
         $where .= ' AND (mtb.id=' . $postdata['id'] . ')';
@@ -108,7 +108,7 @@ class InformGroupGetInfo implements UiApi
         if (empty($data)) {
             return $this->result->setError()
                 ->setCode('5004')
-                ->setMessage($lang_module['notification_not_exist'])
+                ->setMessage($nv_Lang->getModule('notification_not_exist'))
                 ->getResult();
         }
 

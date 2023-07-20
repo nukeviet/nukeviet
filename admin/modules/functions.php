@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -16,7 +16,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_modules']
+    'custom_title' => $nv_Lang->getGlobal('mod_modules')
 ];
 
 define('NV_IS_FILE_MODULES', true);
@@ -31,7 +31,6 @@ $array_url_instruction['edit'] = 'https://wiki.nukeviet.vn/nukeviet4:admin:modul
  * nv_parse_vers()
  *
  * @param mixed $ver
- * @return
  */
 function nv_parse_vers($ver)
 {
@@ -40,8 +39,6 @@ function nv_parse_vers($ver)
 
 /**
  * nv_fix_module_weight()
- *
- * @return
  */
 function nv_fix_module_weight()
 {
@@ -63,7 +60,6 @@ function nv_fix_module_weight()
  * nv_fix_subweight()
  *
  * @param mixed $mod
- * @return
  */
 function nv_fix_subweight($mod)
 {
@@ -84,7 +80,6 @@ function nv_fix_subweight($mod)
  *
  * @param mixed $mod
  * @param int   $func_id
- * @return
  */
 function nv_setup_block_module($mod, $func_id = 0)
 {
@@ -109,7 +104,7 @@ function nv_setup_block_module($mod, $func_id = 0)
     $sth = $db->prepare('SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 AND in_module= :module ORDER BY subweight ASC');
     $sth->bindParam(':module', $mod, PDO::PARAM_STR);
     $sth->execute();
-    while (list($func_id_i) = $sth->fetch(3)) {
+    while ([$func_id_i] = $sth->fetch(3)) {
         if ($func_id == 0 or $func_id == $func_id_i) {
             $array_funcid[] = $func_id_i;
         }
@@ -143,7 +138,6 @@ function nv_setup_block_module($mod, $func_id = 0)
  * @param mixed $lang
  * @param mixed $module_name
  * @param int   $sample
- * @return
  */
 function nv_setup_data_module($lang, $module_name, $sample = 0)
 {
@@ -155,7 +149,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
     $sth->bindParam(':title', $module_name, PDO::PARAM_STR);
     $sth->execute();
 
-    list($module_file, $module_data, $module_upload, $module_theme) = $sth->fetch(3);
+    [$module_file, $module_data, $module_upload, $module_theme] = $sth->fetch(3);
 
     if (!empty($module_file)) {
         $module_version = [];
@@ -244,7 +238,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
             if (!empty($_layoutdefault)) {
                 $_layout_mod = explode(';', $_layoutdefault);
                 foreach ($_layout_mod as $_layout_fun) {
-                    list($layout_name, $_func) = explode(':', trim($_layout_fun));
+                    [$layout_name, $_func] = explode(':', trim($_layout_fun));
                     $arr_f = explode(',', trim($_func));
                     foreach ($arr_f as $f) {
                         if (!isset($array_layout_func_default[$module_name][$f])) {
@@ -385,15 +379,14 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
  * main_theme()
  *
  * @param mixed $contents
- * @return
  */
 function main_theme($contents)
 {
-    global $global_config, $module_file, $lang_global, $lang_module;
+    global $global_config, $module_file;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('CONTENT', $contents);
 
     $xtpl->parse('main');
@@ -409,15 +402,14 @@ function main_theme($contents)
  * @param mixed $deact_modules
  * @param mixed $bad_modules
  * @param mixed $weight_list
- * @return
  */
 function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weight_list)
 {
-    global $global_config, $module_file, $lang_global;
+    global $global_config, $module_file;
 
     $xtpl = new XTemplate('list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CAPTION', $contents['caption']);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($act_modules)) {
         foreach ($contents['thead'] as $thead) {
@@ -524,7 +516,6 @@ function list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weig
  * show_funcs_theme()
  *
  * @param mixed $contents
- * @return
  */
 function show_funcs_theme($contents)
 {
@@ -555,15 +546,14 @@ function show_funcs_theme($contents)
  * @param mixed $array_modules
  * @param mixed $array_virtual_head
  * @param mixed $array_virtual_modules
- * @return
  */
 function setup_modules($array_head, $array_modules, $array_virtual_head, $array_virtual_modules)
 {
-    global $global_config, $module_file, $lang_global, $lang_module;
+    global $global_config, $module_file;
 
     $xtpl = new XTemplate('setup_modules.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('CAPTION', $array_head['caption']);
 
     foreach ($array_head['head'] as $thead) {

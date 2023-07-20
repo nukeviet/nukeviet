@@ -89,8 +89,9 @@ function get_department_list()
 
 /**
  * get_supporter_list()
- * 
- * @return mixed 
+ *
+ * @return mixed
+ * @param mixed $departments
  */
 function get_supporter_list($departments)
 {

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -18,7 +18,7 @@ $checkss = $nv_Request->get_string('checkss', 'post');
 
 $contents = 'NO_' . $topicid;
 
-list($topicid, $image) = $db->query('SELECT topicid, image FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . (int) $topicid)->fetch(3);
+[$topicid, $image] = $db->query('SELECT topicid, image FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . (int) $topicid)->fetch(3);
 if ($topicid > 0) {
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_topic', 'topicid ' . $topicid, $admin_info['userid']);
     $check_del_topicid = false;
@@ -37,7 +37,7 @@ if ($topicid > 0) {
         }
         $check_del_topicid = true;
     } elseif ($check_rows > 0) {
-        $contents = 'ERR_ROWS_' . $topicid . '_' . md5($topicid . NV_CHECK_SESSION) . '_' . sprintf($lang_module['deltopic_msg_rows'], $check_rows);
+        $contents = 'ERR_ROWS_' . $topicid . '_' . md5($topicid . NV_CHECK_SESSION) . '_' . $nv_Lang->getModule('deltopic_msg_rows', $check_rows);
     } else {
         $check_del_topicid = true;
     }

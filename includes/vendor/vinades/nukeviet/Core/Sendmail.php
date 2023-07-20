@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -136,9 +136,9 @@ class Sendmail extends PHPMailer
 
     /**
      * setSender()
-     * 
-     * @param string $address 
-     * @param string $name 
+     *
+     * @param string $address
+     * @param string $name
      */
     public function setSender($address, $name = '')
     {
@@ -232,9 +232,9 @@ class Sendmail extends PHPMailer
 
     /**
      * _formatBody()
-     * 
-     * @param mixed $Body 
-     * @return string 
+     *
+     * @param mixed $Body
+     * @return string
      */
     private static function _formatBody($Body)
     {

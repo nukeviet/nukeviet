@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -17,7 +17,7 @@ if (!$zalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
-$page_title = $lang_module['tags'];
+$page_title = $nv_Lang->getModule('tags');
 $tags = get_tags(); // Danh sach cac tag
 
 // Sua ten nhan
@@ -26,14 +26,14 @@ if ($nv_Request->isset_request('edit', 'get') and $nv_Request->isset_request('al
     if (empty($tag_alias)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['no_tag_selected']
+            'mess' => $nv_Lang->getModule('no_tag_selected')
         ]);
     }
 
     if (empty($tags[$tag_alias])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['no_tag_selected']
+            'mess' => $nv_Lang->getModule('no_tag_selected')
         ]);
     }
 
@@ -41,7 +41,7 @@ if ($nv_Request->isset_request('edit', 'get') and $nv_Request->isset_request('al
     if (empty($new_name)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['new_tag_empty']
+            'mess' => $nv_Lang->getModule('new_tag_empty')
         ]);
     }
 
@@ -59,14 +59,14 @@ if ($nv_Request->isset_request('delete_tag,tag_alias', 'post')) {
     if (empty($tag_alias)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['no_tag_selected']
+            'mess' => $nv_Lang->getModule('no_tag_selected')
         ]);
     }
 
     if (empty($tags[$tag_alias])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['no_tag_selected']
+            'mess' => $nv_Lang->getModule('no_tag_selected')
         ]);
     }
 
@@ -74,7 +74,7 @@ if ($nv_Request->isset_request('delete_tag,tag_alias', 'post')) {
     if (!empty($user_count)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['tag_user_exists']
+            'mess' => $nv_Lang->getModule('tag_user_exists')
         ]);
     }
 
@@ -96,7 +96,7 @@ if ($nv_Request->isset_request('add_tag,new_tag', 'post')) {
     if (empty($new_tag)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['new_tag_empty']
+            'mess' => $nv_Lang->getModule('new_tag_empty')
         ]);
     }
 
@@ -104,14 +104,14 @@ if ($nv_Request->isset_request('add_tag,new_tag', 'post')) {
     if (strlen($alias) < 3) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['new_tag_empty']
+            'mess' => $nv_Lang->getModule('new_tag_empty')
         ]);
     }
 
     if (!empty($tags[$alias])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['tag_exists']
+            'mess' => $nv_Lang->getModule('tag_exists')
         ]);
     }
 
@@ -127,8 +127,8 @@ if ($nv_Request->isset_request('add_tag,new_tag', 'post')) {
 }
 
 $xtpl = new XTemplate('tags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tags');
 $xtpl->assign('TAG_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=followers');
 $xtpl->assign('EDIT_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tags&amp;edit=1');

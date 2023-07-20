@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -235,7 +235,7 @@ if ($nv_Request->isset_request('save', 'post')) {
 }
 
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $selectthemes . '/system');
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
 $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);

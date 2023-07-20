@@ -46,7 +46,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-nowrap" style="width:1%">{LANG.content}</td>
+                    <td class="text-nowrap" style="width:1%">{LANG.admin_content}</td>
                     <td>{DATA.bodytext}</td>
                 </tr>
             </tbody>

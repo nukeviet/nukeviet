@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_RSS_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['feeds_config'];
+$page_title = $nv_Lang->getModule('feeds_config');
 $feed_configs_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . $module_data . '_' . NV_LANG_DATA . '.json';
 
 if ($nv_Request->isset_request('save', 'post')) {
@@ -30,7 +30,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'rss_logo',
-                'mess' => $lang_module['file_not_found']
+                'mess' => $nv_Lang->getModule('file_not_found')
             ]);
         }
 
@@ -39,7 +39,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'rss_logo',
-                'mess' => $lang_module['file_not_found']
+                'mess' => $nv_Lang->getModule('file_not_found')
             ]);
         }
 
@@ -47,7 +47,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'rss_logo',
-                'mess' => $lang_module['rss_logo_error1']
+                'mess' => $nv_Lang->getModule('rss_logo_error1')
             ]);
         }
 
@@ -55,7 +55,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'rss_logo',
-                'mess' => $lang_module['rss_logo_error2']
+                'mess' => $nv_Lang->getModule('rss_logo_error2')
             ]);
         }
     }
@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'atom_logo',
-                'mess' => $lang_module['file_not_found']
+                'mess' => $nv_Lang->getModule('file_not_found')
             ]);
         }
 
@@ -76,7 +76,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'atom_logo',
-                'mess' => $lang_module['file_not_found']
+                'mess' => $nv_Lang->getModule('file_not_found')
             ]);
         }
 
@@ -84,7 +84,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'atom_logo',
-                'mess' => $lang_module['atom_logo_error1']
+                'mess' => $nv_Lang->getModule('atom_logo_error1')
             ]);
         }
 
@@ -92,7 +92,7 @@ if ($nv_Request->isset_request('save', 'post')) {
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'atom_logo',
-                'mess' => $lang_module['atom_logo_error2']
+                'mess' => $nv_Lang->getModule('atom_logo_error2')
             ]);
         }
     }
@@ -136,8 +136,8 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('DATA', $feed_configs);
 

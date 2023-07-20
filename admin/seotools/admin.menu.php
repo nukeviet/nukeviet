@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,16 +14,16 @@ if (!defined('NV_ADMIN')) {
 }
 
 if (defined('NV_IS_GODADMIN')) {
-    $submenu['sitemapPing'] = $lang_module['sitemapPing'];
-    $submenu['pagetitle'] = $lang_module['pagetitle'];
-    $submenu['metatags'] = $lang_module['metaTagsConfig'];
-    $submenu['linktags'] = $lang_module['linkTagsConfig'];
-    $submenu['robots'] = $lang_module['robots'];
+    $submenu['sitemapPing'] = $nv_Lang->getModule('sitemapPing');
+    $submenu['pagetitle'] = $nv_Lang->getModule('pagetitle');
+    $submenu['metatags'] = $nv_Lang->getModule('metaTagsConfig');
+    $submenu['linktags'] = $nv_Lang->getModule('linkTagsConfig');
+    $submenu['robots'] = $nv_Lang->getModule('robots');
     if (empty($global_config['idsite'])) {
-        $submenu['rpc'] = $lang_module['rpc_setting'];
+        $submenu['rpc'] = $nv_Lang->getModule('rpc_setting');
     }
-    $submenu['others'] = $lang_module['other_seo_tools'];
+    $submenu['others'] = $nv_Lang->getModule('other_seo_tools');
 } elseif (defined('NV_IS_SPADMIN') and $global_config['idsite']) {
-    $submenu['metatags'] = $lang_module['metaTagsConfig'];
-    $submenu['linktags'] = $lang_module['linkTagsConfig'];
+    $submenu['metatags'] = $nv_Lang->getModule('metaTagsConfig');
+    $submenu['linktags'] = $nv_Lang->getModule('linkTagsConfig');
 }

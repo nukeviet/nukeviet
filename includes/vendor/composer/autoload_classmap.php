@@ -7,5 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'PclZip' => $vendorDir . '/vinades/pclzip/pclzip.lib.php',
+    'PclZip' => $vendorDir . '/pclzip/pclzip/pclzip.lib.php',
 );

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -81,7 +81,7 @@ $lang_module['install_continue'] = 'Continue installation';
 $lang_module['install_cancel'] = 'Uninstalling';
 $lang_module['install_file_download'] = 'Download the installation file';
 $lang_module['install_check_require'] = 'Mandatory inspection applications';
-$lang_module['install_check_require_fail'] = 'For this application to work, you need to install the <strong>"%s"</strong> before. Click here to view information about the mandatory application';
+$lang_module['install_check_require_fail'] = 'For this application to work, you need to install the <strong>&quot;%s&quot;</strong> before. Click here to view information about the mandatory application';
 $lang_module['install_check_paid'] = 'Check payment';
 $lang_module['install_check_paid_await'] = 'This application is in process and awaiting payment is confirmed, the installation is blocked until the complete payment';
 $lang_module['install_check_paid_nologin'] = 'The system requires you to log Merchant Site to check the payment of application fees. Click here to login';
@@ -153,7 +153,7 @@ $lang_module['autoinstall_error_cfg_content'] = 'Application package is incomple
 $lang_module['autoinstall_error_cfg_type'] = 'Application Type Unknown';
 $lang_module['autoinstall_error_cfg_version'] = 'Application version is invalid';
 $lang_module['autoinstall_error_cfg_name'] = 'The application name by incorrect application of the regulation';
-$lang_module['autoinstall_error_mimetype'] = 'Warning: The system does not check the file type of the file follows. If the file to make sure it does not contain malicious code, click the button "Ignore warnings"';
+$lang_module['autoinstall_error_mimetype'] = 'Warning: The system does not check the file type of the file follows. If the file to make sure it does not contain malicious code, click the button &quot;Ignore warnings&quot;';
 $lang_module['autoinstall_error_mimetype_pass'] = 'Ignore warnings';
 $lang_module['autoinstall_note_invaild'] = 'Location not allowed';
 $lang_module['autoinstall_note_exists'] = 'The file already exists';

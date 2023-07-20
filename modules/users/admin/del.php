@@ -35,7 +35,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
             continue;
         }
 
-        list($group_id, $username, $first_name, $last_name, $email, $photo, $in_groups, $idsite, $userlang) = $row;
+        [$group_id, $username, $first_name, $last_name, $email, $photo, $in_groups, $idsite, $userlang] = $row;
 
         if ($global_config['idsite'] > 0 and $idsite != $global_config['idsite']) {
             continue;
@@ -43,7 +43,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
 
         $query = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id IN (1,2,3) AND userid=' . $userid);
         if ($query->fetchColumn()) {
-            $error = $lang_module['delete_group_system'];
+            $error = $nv_Lang->getModule('delete_group_system');
         } else {
             $userdelete = (!empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
 
@@ -120,17 +120,19 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
                         $gconfigs[$row['config_name']] = $row['config_value'];
                     }
 
-                    $lang_tmp = $lang_module;
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
+                    $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+
+                    $mail_subject = $nv_Lang->getModule('delconfirm_email_title');
+                    $mail_message = $nv_Lang->getModule('delconfirm_email_content', $userdelete, $gconfigs['site_name']);
+
+                    $nv_Lang->changeLang();
+                } else {
+                    $mail_subject = $nv_Lang->getModule('delconfirm_email_title');
+                    $mail_message = $nv_Lang->getModule('delconfirm_email_content', $userdelete, $gconfigs['site_name']);
                 }
 
-                $subject = $lang_module['delconfirm_email_title'];
-                $message = sprintf($lang_module['delconfirm_email_content'], $userdelete, $gconfigs['site_name']);
-                $message = nl2br($message);
-                if (!empty($maillang)) {
-                    $lang_module = $lang_tmp;
-                }
-                nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $email, $subject, $message, '', false, false, [], [], true, [], $maillang);
+                $mail_message = nl2br($mail_message);
+                nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $email, $mail_subject, $mail_message);
             }
         }
     }

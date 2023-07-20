@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -165,7 +165,6 @@ $lang_module['thumb_dir'] = 'Dossier';
 $lang_module['thumb_dir_default'] = 'Configuration par défaut';
 $lang_module['thumb_default_size_note'] = 'La taille maximale par défaut est de %d x %d pixels';
 $lang_module['thumb_dir_size_note'] = 'La taille maximale est de 1000 x 1000 pixels';
-
 $lang_module['search'] = 'Rechercher';
 $lang_module['order0'] = 'Mettre en ordre de date la plus récente';
 $lang_module['order1'] = 'Mettre en ordre de date la plus loin';

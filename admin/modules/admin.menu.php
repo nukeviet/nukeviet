@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,8 +13,8 @@ if (!defined('NV_ADMIN')) {
     exit('Stop!!!');
 }
 
-$submenu['setup'] = $lang_module['modules'];
-$submenu['vmodule'] = $lang_module['vmodule_add'];
+$submenu['setup'] = $nv_Lang->getModule('modules');
+$submenu['vmodule'] = $nv_Lang->getModule('vmodule_add');
 
 $allow_func = [
     'main',

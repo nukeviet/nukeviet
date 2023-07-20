@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_SEOTOOLS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['rpc_setting'];
+$page_title = $nv_Lang->getModule('rpc_setting');
 if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
     if ($nv_Request->isset_request('submitprcservice', 'post')) {
         $prcservice = $nv_Request->get_array('prcservice', 'post');
@@ -30,7 +30,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
     $prcservice = (!empty($prcservice)) ? explode(',', $prcservice) : [];
 
     $xtpl = new XTemplate('rpc_setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -48,7 +48,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
             'id' => $key,
             'title' => $service[1],
             'checked' => (!isset($module_config[$module_name]['prcservice']) or in_array($service[1], $prcservice, true)) ? 'checked="checked"' : '',
-            'icon' => (isset($service[3]) ? $service[3] : '')
+            'icon' => ($service[3] ?? '')
         ]);
         if (isset($service[3]) and !empty($service[3])) {
             $xtpl->parse('main.service.icon');

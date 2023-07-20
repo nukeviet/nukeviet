@@ -21,7 +21,7 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = $lang_module['user_2step_of'] . ' ' . $row['username'];
+$page_title = $nv_Lang->getModule('user_2step_of') . ' ' . $row['username'];
 
 $allow = false;
 
@@ -45,7 +45,7 @@ if (!$allow) {
 
 if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
     $xtpl = new XTemplate('user_safemode.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('SAFEMODE_DEACT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/safeshow');
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
@@ -57,11 +57,11 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
 }
 
 // Thêm vào menutop
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['userid']] = $lang_module['edit_title'];
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $row['userid']] = $lang_module['user_openid_mamager'];
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['userid']] = $nv_Lang->getModule('edit_title');
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_oauth&amp;userid=' . $row['userid']] = $nv_Lang->getModule('user_openid_mamager');
 
 $xtpl = new XTemplate('user_2step.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;userid=' . $row['userid']);
 
 if (empty($row['active2step'])) {
@@ -88,6 +88,7 @@ if (empty($row['active2step'])) {
                 $maillang = NV_LANG_DATA;
             }
 
+            $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, NV_MY_DOMAIN);
             $gconfigs = [
                 'site_name' => $global_config['site_name'],
                 'site_email' => $global_config['site_email']
@@ -99,16 +100,21 @@ if (empty($row['active2step'])) {
                     $gconfigs[$row['config_name']] = $row['config_value'];
                 }
 
-                $lang_module = [];
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
+                $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+
+                $mail_subject = $nv_Lang->getModule('security_alert');
+                $mail_message = $nv_Lang->getModule('security_alert_2stepoff', $row['username'], $url);
+
+                $nv_Lang->changeLang();
+            } else {
+                $mail_subject = $nv_Lang->getModule('security_alert');
+                $mail_message = $nv_Lang->getModule('security_alert_2stepoff', $row['username'], $url);
             }
 
-            $url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, NV_MY_DOMAIN);
-            $message = sprintf($lang_module['security_alert_2stepoff'], $row['username'], $url);
             nv_sendmail_async([
-                $gconfigs['site_name'],
-                $gconfigs['site_email']
-            ], $row['email'], $lang_module['security_alert'], $message, '', false, false, [], [], true, [], $maillang);
+                $global_config['site_name'],
+                $global_config['site_email']
+            ], $row['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_turnoff_user2step', 'userid ' . $row['userid'], $admin_info['userid']);
@@ -145,6 +151,7 @@ if (empty($row['active2step'])) {
                 $maillang = NV_LANG_DATA;
             }
 
+            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $gconfigs = [
                 'site_name' => $global_config['site_name'],
                 'site_email' => $global_config['site_email']
@@ -156,14 +163,18 @@ if (empty($row['active2step'])) {
                     $gconfigs[$row['config_name']] = $row['config_value'];
                 }
 
-                $lang_module = [];
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
+                $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+
+                $mail_subject = $nv_Lang->getModule('user_2step_newcodes');
+                $mail_message = $nv_Lang->getModule('user_2step_bodymail', $full_name, $gconfigs['site_name'], implode('<br />', $new_code));
+
+                $nv_Lang->changeLang();
+            } else {
+                $mail_subject = $nv_Lang->getModule('user_2step_newcodes');
+                $mail_message = $nv_Lang->getModule('user_2step_bodymail', $full_name, $gconfigs['site_name'], implode('<br />', $new_code));
             }
 
-            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
-            $subject = $lang_module['user_2step_newcodes'];
-            $message = sprintf($lang_module['user_2step_bodymail'], $full_name, $gconfigs['site_name'], implode('<br />', $new_code));
-            @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row['email'], $subject, $message, '', false, false, [], [], true, [], $maillang);
+            @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
         }
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_reset_user2step_codes', 'userid ' . $row['userid'], $admin_info['userid']);
@@ -176,7 +187,7 @@ if (empty($row['active2step'])) {
     $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $row['userid'];
     $result = $db->query($sql);
     while ($code = $result->fetch()) {
-        $code['status'] = $lang_module['user_2step_codes_s' . $code['is_used']];
+        $code['status'] = $nv_Lang->getModule('user_2step_codes_s' . $code['is_used']);
         $code['time_creat'] = $code['time_creat'] ? nv_date('H:i:s d/m/Y', $code['time_creat']) : '';
         $code['time_used'] = $code['time_used'] ? nv_date('H:i:s d/m/Y', $code['time_used']) : '';
         $xtpl->assign('CODE', $code);

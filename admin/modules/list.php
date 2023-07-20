@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -24,7 +24,7 @@ $result = $db->query($sql);
 
 $is_delCache = false;
 $act2 = [];
-while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
+while ([$m, $mod_file, $is_sys, $version] = $result->fetch(3)) {
     $new_modules[$m] = [
         'module_file' => $mod_file,
         'is_sys' => $is_sys,
@@ -89,8 +89,8 @@ while ($row = $result->fetch()) {
         "nv_chang_act('" . $row['title'] . "', '" . md5(NV_CHECK_SESSION . '_' . $module_name . '_change_act_' . $row['title']) . "');"
     ];
 
-    $mod['edit'] = [NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $lang_global['edit']];
-    $mod['del'] = ($row['is_sys'] == 0 or $row['title'] != $row['module_file']) ? ["nv_mod_del('" . $row['title'] . "', '" . md5(NV_CHECK_SESSION . '_' . $module_name . '_del_' . $row['title']) . "');", $lang_global['delete']] : [];
+    $mod['edit'] = [NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $nv_Lang->getGlobal('edit')];
+    $mod['del'] = ($row['is_sys'] == 0 or $row['title'] != $row['module_file']) ? ["nv_mod_del('" . $row['title'] . "', '" . md5(NV_CHECK_SESSION . '_' . $module_name . '_del_' . $row['title']) . "');", $nv_Lang->getGlobal('delete')] : [];
 
     if ($row['title'] == $global_config['site_home_module']) {
         $row['is_sys'] = 1;
@@ -112,8 +112,8 @@ if ($is_delCache) {
 }
 
 $contents = [];
-$contents['caption'] = [$lang_module['caption_actmod'], $lang_module['caption_deactmod'], $lang_module['caption_badmod'], $lang_module['caption_newmod']];
-$contents['thead'] = [$lang_module['weight'], $lang_module['module_name'], $lang_module['custom_title'], $lang_module['version'], $lang_global['activate'], $lang_global['actions']];
+$contents['caption'] = [$nv_Lang->getModule('caption_actmod'), $nv_Lang->getModule('caption_deactmod'), $nv_Lang->getModule('caption_badmod'), $nv_Lang->getModule('caption_newmod')];
+$contents['thead'] = [$nv_Lang->getModule('weight'), $nv_Lang->getModule('module_name'), $nv_Lang->getModule('custom_title'), $nv_Lang->getModule('version'), $nv_Lang->getGlobal('activate'), $nv_Lang->getGlobal('actions')];
 
 $contents = list_theme($contents, $act_modules, $deact_modules, $bad_modules, $weight_list);
 

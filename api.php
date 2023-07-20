@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -274,13 +274,7 @@ if ($adminLev) {
         Api::setModuleInfo($module_info);
 
         // Ngôn ngữ admin của module nếu API của module
-        if (file_exists(NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/admin_en.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/admin_en.php';
-        }
+        $nv_Lang->loadModule($module_info['module_file'], true);
     }
 
     // Thông tin Admin
@@ -289,13 +283,7 @@ if ($adminLev) {
     Api::setAdminName($credential_data['username']);
 
     // Ngôn ngữ Global
-    if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php')) {
-        require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
-    } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php')) {
-        require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php';
-    } elseif (file_exists(NV_ROOTDIR . '/includes/language/en/admin_global.php')) {
-        require NV_ROOTDIR . '/includes/language/en/admin_global.php';
-    }
+    $nv_Lang->loadGlobal(true);
 } else {
     // Thông tin User
     Uapi::setUserId($credential_data['userid']);
@@ -308,20 +296,14 @@ if ($adminLev) {
         Uapi::setModuleInfo($module_info);
 
         // Ngôn ngữ của module nếu API của module
-        if (file_exists(NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/' . NV_LANG_DATA . '.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/' . NV_LANG_DATA . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/en.php')) {
-            require NV_ROOTDIR . '/modules/' . $module_info['module_file'] . '/language/en.php';
-        }
+        $nv_Lang->loadModule($module_info['module_file']);
     }
 }
 
 // Kiểm tra flood blocker
 if (!empty($my_flood_rules)) {
     foreach ($my_flood_rules as $dt) {
-        list($flood_rules, $flood_role_id) = $dt;
+        [$flood_rules, $flood_role_id] = $dt;
         $flood_rules = json_decode($flood_rules, true);
 
         $select = [];

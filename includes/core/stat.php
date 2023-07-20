@@ -25,8 +25,8 @@ function nv_stat_update()
     $last_update = $db->query('SELECT c_count FROM ' . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'c_time' AND c_val= 'last'")->fetchColumn();
 
     NV_SITE_TIMEZONE_NAME != $global_config['statistics_timezone'] && date_default_timezone_set($global_config['statistics_timezone']);
-    list($last_year, $last_month, $last_day) = explode('|', date('Y|M|d', $last_update));
-    list($current_year, $current_month, $current_day, $current_hour, $current_week) = explode('|', date('Y|M|d|H|l', NV_CURRENTTIME));
+    [$last_year, $last_month, $last_day] = explode('|', date('Y|M|d', $last_update));
+    [$current_year, $current_month, $current_day, $current_hour, $current_week] = explode('|', date('Y|M|d|H|l', NV_CURRENTTIME));
     NV_SITE_TIMEZONE_NAME != $global_config['statistics_timezone'] && date_default_timezone_set(NV_SITE_TIMEZONE_NAME);
 
     if ($last_year != $current_year) {

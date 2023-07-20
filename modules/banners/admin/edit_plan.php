@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -66,15 +66,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 
     if (empty($title)) {
-        $error = $lang_module['title_empty'];
+        $error = $nv_Lang->getModule('title_empty');
     } elseif ($width < 50 or $height < 50) {
-        $error = $lang_module['size_incorrect'];
+        $error = $nv_Lang->getModule('size_incorrect');
     } else {
         if (!empty($description)) {
             $description = defined('NV_EDITOR') ? nv_nl2br($description, '') : nv_nl2br(nv_htmlspecialchars($description), '<br />');
         }
 
-        list($blang_old, $form_old) = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int) $id)->fetch(3);
+        [$blang_old, $form_old] = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE . '_plans WHERE id=' . (int) $id)->fetch(3);
 
         $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE . '_plans SET
             blang= :blang, title= :title, description= :description, form= :form, require_image= :require_image, width=' . $width . ', height=' . $height . ',
@@ -139,7 +139,7 @@ if (empty($height)) {
     $height = 50;
 }
 
-$info = (!empty($error)) ? $error : $lang_module['edit_plan_info'];
+$info = (!empty($error)) ? $error : $nv_Lang->getModule('edit_plan_info');
 $is_error = (!empty($error)) ? 1 : 0;
 
 $allow_langs = array_flip($global_config['allow_sitelangs']);
@@ -148,18 +148,18 @@ $allow_langs = array_intersect_key($language_array, $allow_langs);
 $contents = [];
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
-$contents['submit'] = $lang_module['edit_plan'];
+$contents['submit'] = $nv_Lang->getModule('edit_plan');
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id;
-$contents['title'] = [$lang_module['title'], 'title', $title, 255];
-$contents['blang'] = [$lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang];
-$contents['form'] = [$lang_module['form'], 'form', $forms, $form, $require_image];
-$contents['size'] = $lang_module['size'];
+$contents['title'] = [$nv_Lang->getModule('title'), 'title', $title, 255];
+$contents['blang'] = [$nv_Lang->getModule('blang'), 'blang', $nv_Lang->getModule('blang_all'), $allow_langs, $blang];
+$contents['form'] = [$nv_Lang->getModule('form'), 'form', $forms, $form, $require_image];
+$contents['size'] = $nv_Lang->getModule('size');
 $contents['require_image'] = $require_image;
-$contents['width'] = [$lang_module['width'], 'width', $width, 4];
-$contents['height'] = [$lang_module['height'], 'height', $height, 4];
-$contents['description'] = [$lang_module['description'], 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false];
+$contents['width'] = [$nv_Lang->getModule('width'), 'width', $width, 4];
+$contents['height'] = [$nv_Lang->getModule('height'), 'height', $height, 4];
+$contents['description'] = [$nv_Lang->getModule('description'), 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false];
 $contents['exp_time'] = $exp_time;
-$contents['exp_time_custom'] = $exp_time_custom ? $exp_time_custom : '';
+$contents['exp_time_custom'] = $exp_time_custom ?: '';
 $contents['uploadgroup'] = $uploadgroup;
 $contents['uploadtype'] = $uploadtype;
 
@@ -169,7 +169,7 @@ if (defined('NV_EDITOR')) {
 
 $contents = call_user_func('nv_edit_plan_theme', $contents, $array_uploadtype, $groups_list);
 
-$page_title = $lang_module['edit_plan'];
+$page_title = $nv_Lang->getModule('edit_plan');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

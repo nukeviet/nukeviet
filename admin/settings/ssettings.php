@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -285,7 +285,7 @@ if ($nv_Request->isset_request('getSconfigBySettings', 'post')) {
     nv_htmlOutput($contents);
 }
 
-$page_title = $lang_module['ssettings'];
+$page_title = $nv_Lang->getModule('ssettings');
 $server_config_file = NV_ROOTDIR . '/' . NV_DATADIR . '/server_config.json';
 $server_configs = file_get_contents($server_config_file);
 $server_configs = json_decode($server_configs, true);
@@ -346,7 +346,7 @@ if ($nv_Request->isset_request('save', 'post') and hash_equals($checkss, $csrf))
         'expires' => set_expires($nv_Request->get_title('font_expires', 'post', ''))
     ];
 
-    $posts = json_encode($posts,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    $posts = json_encode($posts, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
     file_put_contents($server_config_file, $posts, LOCK_EX);
     nv_jsonOutput([
@@ -383,7 +383,7 @@ $info = [
 
 $xtpl = new XTemplate('ssettings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('DATA', $server_configs);
 $xtpl->assign('CHECKSS', $checkss);
@@ -404,7 +404,7 @@ $deny_access_codes = [403, 404, 301];
 foreach ($deny_access_codes as $code) {
     $xtpl->assign('CODE', [
         'num' => $code,
-        'name' => $lang_module['deny_access_code_' . $code],
+        'name' => $nv_Lang->getModule('deny_access_code_' . $code),
         'sel' => ($code == $server_configs['deny_access_code']) ? ' selected="selected"' : ''
     ]);
     $xtpl->parse('main.deny_access_code');
@@ -414,7 +414,7 @@ $errors = [400, 403, 404, 405, 408, 500, 502, 503, 504];
 foreach ($errors as $code) {
     $xtpl->assign('EDOC', [
         'code' => $code,
-        'title' => $lang_module['error_pages_' . $code],
+        'title' => $nv_Lang->getModule('error_pages_' . $code),
         'val' => $server_configs['error_document'][$code]
     ]);
     $xtpl->parse('main.error_document');

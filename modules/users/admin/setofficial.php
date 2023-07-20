@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -38,7 +38,7 @@ if (!empty($row)) {
     }
     $row['in_groups'] = array_diff($row['in_groups'], [7]);
 
-    $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = ' . $row['group_id'] . ", in_groups='" . implode(',', $row['in_groups']) . "', last_update=" . NV_CURRENTTIME . " WHERE userid = " . $userid);
+    $db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = ' . $row['group_id'] . ", in_groups='" . implode(',', $row['in_groups']) . "', last_update=" . NV_CURRENTTIME . ' WHERE userid = ' . $userid);
     try {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
     } catch (PDOException $e) {

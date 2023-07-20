@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,4 +21,4 @@ if (!defined('NV_IS_USER')) {
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 $methods = ['password_verify', 'md5_verify'];
-list($user_array_api_actions, $user_array_api_keys, $user_array_api_cats) = nv_get_api_actions('user');
+[$user_array_api_actions, $user_array_api_keys, $user_array_api_cats] = nv_get_api_actions('user');

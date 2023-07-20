@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -22,7 +22,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
     $exp_array = [];
     $sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode(',', $id_array) . ')';
     $result = $db->query($sql);
-    while (list($id, $listcatid, $publtime, $exptime, $status) = $result->fetch(3)) {
+    while ([$id, $listcatid, $publtime, $exptime, $status] = $result->fetch(3)) {
         if (($exptime == 0 or $exptime > NV_CURRENTTIME) and $status != 4 and $status <= $global_code_defined['row_locked_status']) {
             $arr_catid = explode(',', $listcatid);
 

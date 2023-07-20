@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -33,7 +33,7 @@ $request['basever'] = $global_config['version'];
 $request['mode'] = 'download';
 
 if (empty($request['id']) or empty($request['fid']) or !isset($array['tid'])) {
-    $contents = 'ERR|' . $lang_module['download_error_preparam'];
+    $contents = 'ERR|' . $nv_Lang->getModule('download_error_preparam');
 } else {
     $filename = NV_TEMPNAM_PREFIX . 'auto_' . NV_CHECK_SESSION . '.zip';
 
@@ -59,7 +59,7 @@ if (empty($request['id']) or empty($request['fid']) or !isset($array['tid'])) {
     if (!empty(NukeViet\Http\Http::$error)) {
         $contents = 'ERR|' . nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['filename']) or !file_exists($array['filename']) or filesize($array['filename']) <= 0) {
-        $contents = 'ERR|' . $lang_module['download_error_save'];
+        $contents = 'ERR|' . $nv_Lang->getModule('download_error_save');
     } else {
         $contents = 'OK|' . $filename;
     }

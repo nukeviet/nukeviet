@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -29,7 +29,7 @@ if (empty($row)) {
 }
 
 $contents = '';
-$page_title = sprintf($lang_module['refererbysite'], $host);
+$page_title = $nv_Lang->getModule('refererbysite', $host);
 $key_words = $module_info['keywords'];
 $page_url = NV_BASE_MOD_URL . '&' . NV_OP_VARIABLE . '=' . $op . '&host=' . $host;
 $canonicalUrl = getCanonicalUrl($page_url, true, true);
@@ -37,18 +37,18 @@ $canonicalUrl = getCanonicalUrl($page_url, true, true);
 $cts = [];
 $cts['caption'] = $page_title;
 $cts['rows'] = [];
-$cts['rows']['Jan'] = ['fullname' => $lang_global['january'], 'count' => $row['month01']];
-$cts['rows']['Feb'] = ['fullname' => $lang_global['february'], 'count' => $row['month02']];
-$cts['rows']['Mar'] = ['fullname' => $lang_global['march'], 'count' => $row['month03']];
-$cts['rows']['Apr'] = ['fullname' => $lang_global['april'], 'count' => $row['month04']];
-$cts['rows']['May'] = ['fullname' => $lang_global['may'], 'count' => $row['month05']];
-$cts['rows']['Jun'] = ['fullname' => $lang_global['june'], 'count' => $row['month06']];
-$cts['rows']['Jul'] = ['fullname' => $lang_global['july'], 'count' => $row['month07']];
-$cts['rows']['Aug'] = ['fullname' => $lang_global['august'], 'count' => $row['month08']];
-$cts['rows']['Sep'] = ['fullname' => $lang_global['september'], 'count' => $row['month09']];
-$cts['rows']['Oct'] = ['fullname' => $lang_global['october'], 'count' => $row['month10']];
-$cts['rows']['Nov'] = ['fullname' => $lang_global['november'], 'count' => $row['month11']];
-$cts['rows']['Dec'] = ['fullname' => $lang_global['december'], 'count' => $row['month12']];
+$cts['rows']['Jan'] = ['fullname' => $nv_Lang->getGlobal('january'), 'count' => $row['month01']];
+$cts['rows']['Feb'] = ['fullname' => $nv_Lang->getGlobal('february'), 'count' => $row['month02']];
+$cts['rows']['Mar'] = ['fullname' => $nv_Lang->getGlobal('march'), 'count' => $row['month03']];
+$cts['rows']['Apr'] = ['fullname' => $nv_Lang->getGlobal('april'), 'count' => $row['month04']];
+$cts['rows']['May'] = ['fullname' => $nv_Lang->getGlobal('may'), 'count' => $row['month05']];
+$cts['rows']['Jun'] = ['fullname' => $nv_Lang->getGlobal('june'), 'count' => $row['month06']];
+$cts['rows']['Jul'] = ['fullname' => $nv_Lang->getGlobal('july'), 'count' => $row['month07']];
+$cts['rows']['Aug'] = ['fullname' => $nv_Lang->getGlobal('august'), 'count' => $row['month08']];
+$cts['rows']['Sep'] = ['fullname' => $nv_Lang->getGlobal('september'), 'count' => $row['month09']];
+$cts['rows']['Oct'] = ['fullname' => $nv_Lang->getGlobal('october'), 'count' => $row['month10']];
+$cts['rows']['Nov'] = ['fullname' => $nv_Lang->getGlobal('november'), 'count' => $row['month11']];
+$cts['rows']['Dec'] = ['fullname' => $nv_Lang->getGlobal('december'), 'count' => $row['month12']];
 
 $total = 0;
 $data_label = [];

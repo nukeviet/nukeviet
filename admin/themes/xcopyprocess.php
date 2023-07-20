@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -60,7 +60,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
             $bid = $db->insert_id($_sql, 'bid', $data);
 
             $result_weight = $db->query('SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $row['bid']);
-            while (list($func_id, $weight) = $result_weight->fetch(3)) {
+            while ([$func_id, $weight] = $result_weight->fetch(3)) {
                 $db->query('INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')');
             }
         }
@@ -69,10 +69,10 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_xcopyblock_' . $admin_info['us
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['xcopyblock'], $lang_module['xcopyblock_from'] . ' ' . $theme1 . ' ' . $lang_module['xcopyblock_to'] . ' ' . $theme2, $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('xcopyblock'), $nv_Lang->getModule('xcopyblock_from') . ' ' . $theme1 . ' ' . $nv_Lang->getModule('xcopyblock_to') . ' ' . $theme2, $admin_info['userid']);
     $nv_Cache->delMod('themes');
 
-    echo $lang_module['xcopyblock_success'];
+    echo $nv_Lang->getModule('xcopyblock_success');
 } else {
     exit('error request !');
 }

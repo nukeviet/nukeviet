@@ -64,14 +64,12 @@ $lang_module['extModeOther'] = 'Độc lập';
 $lang_module['extLink'] = 'Link tải về';
 $lang_module['extSupport'] = 'Website hỗ trợ';
 $lang_module['checkDate'] = 'Cập nhật vào';
-
 $lang_module['config'] = 'Cấu hình kiểm tra phiên bản';
 $lang_module['autocheckupdate'] = 'Bật tính năng kiểm tra phiên bản tự động';
 $lang_module['updatetime'] = 'Thời lượng để kiểm tra lại phiên bản';
 $lang_module['clearip_logs'] = 'Xóa ip logs';
 $lang_module['update_manual_delete'] = 'Hãy xóa thủ công.';
 $lang_module['error_unknow'] = 'Lỗi chưa xác định';
-
 $lang_module['get_update'] = 'Cập nhật hệ thống';
 $lang_module['get_update_error_file_download'] = 'Tải gói cập nhật thất bại';
 $lang_module['get_update_error_file_download1'] = 'Bạn có thể thử cách cập nhật khác theo hướng dẫn tại đây: <a href="%1$s" target="_blank">%1$s</a>';
@@ -82,7 +80,6 @@ $lang_module['get_update_error_movefile'] = 'Lỗi không thể di chuyển file
 $lang_module['get_update_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
 $lang_module['get_update_okunzip'] = 'Giải nén thành công, hệ thống sẽ chuyển trang trong giây lát';
 $lang_module['get_update_okunzip_link'] = 'Đến trang nâng cấp';
-
 $lang_module['global_statistics'] = 'Cấu hình thống kê';
 $lang_module['statistic'] = 'Kích hoạt tiện ích thống kê';
 $lang_module['statistics_timezone'] = 'Múi giờ dùng khi thống kê truy cập';

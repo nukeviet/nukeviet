@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -34,11 +34,11 @@ if ($nv_Request->isset_request('createAuth', 'post')) {
     if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['auth_method_select']
+            'mess' => $nv_Lang->getModule('auth_method_select')
         ]);
     }
 
-    list($ident, $secret) = createAuth($method);
+    [$ident, $secret] = createAuth($method);
     nv_jsonOutput([
         'status' => 'OK',
         'ident' => $ident,
@@ -52,14 +52,15 @@ if ($nv_Request->isset_request('ipsUpdate', 'post')) {
     if (empty($method) or !in_array($method, $methods, true)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['auth_method_select']
+            'mess' => $nv_Lang->getModule('auth_method_select')
         ]);
     }
     $api_ips = $nv_Request->get_title('ipsUpdate', 'post', '');
     $api_ips = array_map('trim', explode(',', $api_ips));
-    $api_ips = array_filter($api_ips, function($ip) {
+    $api_ips = array_filter($api_ips, function ($ip) {
         global $ips;
-        return ($ips->isIp4($ip) or $ips->isIp6($ip));
+
+        return $ips->isIp4($ip) or $ips->isIp6($ip);
     });
 
     $iplist = json_encode($api_ips);
@@ -76,7 +77,7 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     if (empty($role_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
@@ -84,14 +85,14 @@ if ($nv_Request->isset_request('changeActivate', 'post')) {
     if (empty($array_post)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
-    if ($array_post['role_object'] != 'user' or  $array_post['role_type'] != 'public') {
+    if ($array_post['role_object'] != 'user' or $array_post['role_type'] != 'public') {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_type_private_error']
+            'mess' => $nv_Lang->getModule('api_role_type_private_error')
         ]);
     }
 
@@ -119,14 +120,14 @@ if ($page > 1) {
 }
 $per_page = 30;
 
-list($roleCount, $roleList) = myApiRoleList($type, $page, $per_page);
+[$roleCount, $roleList] = myApiRoleList($type, $page, $per_page);
 // Không cho tùy ý đánh số page + xác định trang trước, trang sau
 betweenURLs($page, ceil($roleCount / $per_page), $base_url, '&amp;page=', $prevPage, $nextPage);
 $generate_page = nv_generate_page($base_url, $roleCount, $per_page, $page);
 
 $api_user = get_api_user();
 
-$page_title = $lang_module['main_title'];
+$page_title = $nv_Lang->getModule('main_title');
 $key_words = $module_info['keywords'];
 
 $canonicalUrl = getCanonicalUrl($page_url, true, true);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -30,9 +30,9 @@ class Cache
 
     /**
      * __construct()
-     * 
-     * @param mixed $Lang 
-     * @param mixed $Cache_Prefix 
+     *
+     * @param mixed $Lang
+     * @param mixed $Cache_Prefix
      */
     public function __construct($Lang, $Cache_Prefix)
     {
@@ -42,8 +42,8 @@ class Cache
 
     /**
      * setDb()
-     * 
-     * @param mixed $db 
+     *
+     * @param mixed $db
      */
     public function setDb($db)
     {
@@ -52,10 +52,10 @@ class Cache
 
     /**
      * getList()
-     * 
-     * @param mixed $sql 
-     * @param mixed $key 
-     * @return array|false 
+     *
+     * @param mixed $sql
+     * @param mixed $key
+     * @return array|false
      */
     protected function getList($sql, $key)
     {

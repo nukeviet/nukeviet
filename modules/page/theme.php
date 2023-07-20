@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,12 +23,12 @@ if (!defined('NV_IS_MOD_PAGE')) {
  */
 function nv_page_main($row, $ab_links, $content_comment)
 {
-    global $module_name, $lang_module, $lang_global, $module_info, $meta_property, $client_info, $page_config, $global_config;
+    global $module_name, $module_info, $meta_property, $client_info, $page_config, $global_config;
 
-    list($template, $dir) = get_module_tpl_dir('search.tpl', true);
+    [$template, $dir] = get_module_tpl_dir('main.tpl', true);
     $xtpl = new XTemplate('main.tpl', $dir);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CONTENT', $row);
 
     // Khai báo các tham số dữ liệu có cấu trúc
@@ -126,10 +126,10 @@ function nv_page_main($row, $ab_links, $content_comment)
  */
 function nv_page_main_list($array_data, $generate_page)
 {
-    global $lang_global, $module_upload, $module_info, $module_name;
+    global $module_upload, $module_info, $module_name;
 
     $xtpl = new XTemplate('main_list.tpl', get_module_tpl_dir('main_list.tpl'));
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($array_data)) {
         foreach ($array_data as $row) {

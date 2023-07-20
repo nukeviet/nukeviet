@@ -20,7 +20,7 @@ if (!defined('NV_MAINFILE')) {
  */
 function nv_error_info()
 {
-    global $lang_global, $global_config, $error_info;
+    global $nv_Lang, $global_config, $error_info;
 
     if (!defined('NV_IS_ADMIN')) {
         return '';
@@ -31,63 +31,63 @@ function nv_error_info()
 
     $errortype = [
         E_ERROR => [
-            $lang_global['error_error'],
+            $nv_Lang->getGlobal('error_error'),
             'bad.png'
         ],
         E_WARNING => [
-            $lang_global['error_warning'],
+            $nv_Lang->getGlobal('error_warning'),
             'warning.png'
         ],
         E_PARSE => [
-            $lang_global['error_error'],
+            $nv_Lang->getGlobal('error_error'),
             'bad.png'
         ],
         E_NOTICE => [
-            $lang_global['error_notice'],
+            $nv_Lang->getGlobal('error_notice'),
             'comment.png'
         ],
         E_CORE_ERROR => [
-            $lang_global['error_error'],
+            $nv_Lang->getGlobal('error_error'),
             'bad.png'
         ],
         E_CORE_WARNING => [
-            $lang_global['error_warning'],
+            $nv_Lang->getGlobal('error_warning'),
             'warning.png'
         ],
         E_COMPILE_ERROR => [
-            $lang_global['error_error'],
+            $nv_Lang->getGlobal('error_error'),
             'bad.png'
         ],
         E_COMPILE_WARNING => [
-            $lang_global['error_warning'],
+            $nv_Lang->getGlobal('error_warning'),
             'warning.png'
         ],
         E_USER_ERROR => [
-            $lang_global['error_error'],
+            $nv_Lang->getGlobal('error_error'),
             'bad.png'
         ],
         E_USER_WARNING => [
-            $lang_global['error_warning'],
+            $nv_Lang->getGlobal('error_warning'),
             'warning.png'
         ],
         E_USER_NOTICE => [
-            $lang_global['error_notice'],
+            $nv_Lang->getGlobal('error_notice'),
             'comment.png'
         ],
         E_STRICT => [
-            $lang_global['error_notice'],
+            $nv_Lang->getGlobal('error_notice'),
             'comment.png'
         ],
         E_RECOVERABLE_ERROR => [
-            $lang_global['error_error'],
+            $nv_Lang->getGlobal('error_error'),
             'bad.png'
         ],
         E_DEPRECATED => [
-            $lang_global['error_notice'],
+            $nv_Lang->getGlobal('error_notice'),
             'comment.png'
         ],
         E_USER_DEPRECATED => [
-            $lang_global['error_warning'],
+            $nv_Lang->getGlobal('error_warning'),
             'warning.png'
         ]
     ];
@@ -101,7 +101,7 @@ function nv_error_info()
     $image_path = NV_STATIC_URL . 'themes/' . $tpl_dir . '/images/icons/';
 
     $xtpl = new XTemplate('error_info.tpl', $tpl_path);
-    $xtpl->assign('TPL_E_CAPTION', $lang_global['error_info_caption']);
+    $xtpl->assign('TPL_E_CAPTION', $nv_Lang->getGlobal('error_info_caption'));
 
     $a = 0;
     foreach ($error_info as $key => $value) {
@@ -135,7 +135,7 @@ function nv_error_info()
  */
 function nv_info_die($page_title, $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '', $http_headers = [])
 {
-    global $lang_global, $global_config;
+    global $nv_Lang, $global_config;
 
     // https://www.php.net/manual/en/function.http-response-code.php#114996
     $php_work_response_codes = [200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 304, 305, 307, 308, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 422, 423, 424, 426, 428, 429, 431, 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, 511];
@@ -146,7 +146,7 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
         if ($phpsapi == 'cgi' || $phpsapi == 'fpm') {
             header('Status: ' . $error_code . ' ' . $info_content);
         } else {
-            $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
+            $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
             header($protocol . ' ' . $error_code . ' ' . $info_content);
         }
     }
@@ -190,7 +190,7 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
     $xtpl->assign('SITE_CHARSET', $global_config['site_charset']);
     $xtpl->assign('PAGE_TITLE', $page_title);
     $xtpl->assign('HOME_LINK', $global_config['site_url']);
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('SITE_NAME', empty($global_config['site_name']) ? '' : $global_config['site_name']);
 
@@ -206,12 +206,12 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
 
     if (defined('NV_IS_ADMIN') and !empty($admin_link)) {
         $xtpl->assign('ADMIN_LINK', $admin_link);
-        $xtpl->assign('GO_ADMINPAGE', empty($admin_title) ? $lang_global['admin_page'] : $admin_title);
+        $xtpl->assign('GO_ADMINPAGE', empty($admin_title) ? $nv_Lang->getGlobal('admin_page') : $admin_title);
         $xtpl->parse('main.adminlink');
     }
     if (!empty($site_link)) {
         $xtpl->assign('SITE_LINK', $site_link);
-        $xtpl->assign('GO_SITEPAGE', empty($site_title) ? $lang_global['go_homepage'] : $site_title);
+        $xtpl->assign('GO_SITEPAGE', empty($site_title) ? $nv_Lang->getGlobal('go_homepage') : $site_title);
         $xtpl->parse('main.sitelink');
     }
 
@@ -233,9 +233,9 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
  */
 function nv_error404()
 {
-    global $lang_global;
+    global $nv_Lang;
 
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 404);
 }
 
 /**
@@ -624,7 +624,7 @@ function nv_xmlSitemapIndex_generate()
         foreach ($global_config['allow_sitelangs'] as $lang) {
             $sql = 'SELECT m.title, m.module_file FROM ' . $db_config['prefix'] . '_' . $lang . '_modules m LEFT JOIN ' . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='6' AND m.sitemap=1 AND f.func_name = 'sitemap' ORDER BY m.weight, f.subweight";
             $result = $db->query($sql);
-            while (list($modname, $modfile) = $result->fetch(3)) {
+            while ([$modname, $modfile] = $result->fetch(3)) {
                 $sitemaps = nv_scandir(NV_ROOTDIR . '/modules/' . $modfile . '/funcs', '/^sitemap(.*?)\.php$/');
                 foreach ($sitemaps as $filename) {
                     if (preg_match('/^sitemap(\.*)([a-zA-Z0-9\-]*)\.php$/', $filename, $m)) {
@@ -729,7 +729,7 @@ function nv_css_setproperties($tag, $property_array)
  */
 function nv_theme_alert($message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5)
 {
-    global $global_config, $module_info, $lang_module, $page_title;
+    global $global_config, $module_info, $page_title;
 
     if (defined('NV_ADMIN')) {
         $template = get_tpl_dir($global_config['admin_theme'], 'admin_default', '/system/alert.tpl');
@@ -737,9 +737,8 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
         $template = get_tpl_dir($global_config['site_theme'], 'default', '/system/alert.tpl');
     }
     $tpl_path = NV_ROOTDIR . '/themes/' . $template . '/system';
-
     $xtpl = new XTemplate('alert.tpl', $tpl_path);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     $xtpl->assign('LANG_BACK', $lang_back);
     $xtpl->assign('CONTENT', $message_content);
 
@@ -785,9 +784,9 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
  */
 function nv_disable_site()
 {
-    global $global_config, $lang_global;
+    global $global_config, $nv_Lang;
 
-    $disable_site_content = $lang_global['disable_site_content'];
+    $disable_site_content = $nv_Lang->getGlobal('disable_site_content');
     $disable_site_headers = [];
     $disable_site_code = 200;
 
@@ -797,12 +796,12 @@ function nv_disable_site()
 
     $reopening_time = $global_config['closed_site'] > 0 ? $global_config['site_reopening_time'] : ((!empty($global_config['closed_subsite']) and $global_config['idsite'] > 0) ? $global_config['subsite_reopening_time'] : 0);
     if (!empty($reopening_time) and $reopening_time > NV_CURRENTTIME) {
-        $disable_site_content .= '<br/><br/>' . $lang_global['closed_site_reopening_time'] . ': ' . nv_date('d/m/Y H:i', $reopening_time);
+        $disable_site_content .= '<br/><br/>' . $nv_Lang->getGlobal('closed_site_reopening_time') . ': ' . nv_date('d/m/Y H:i', $reopening_time);
         $disable_site_headers = [
             'Retry-After: ' . gmdate('D, d M Y H:i:s', $reopening_time) . ' GMT'
         ];
         $disable_site_code = 503;
     }
 
-    nv_info_die($lang_global['disable_site_title'], $lang_global['disable_site_title'], $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
+    nv_info_die($nv_Lang->getGlobal('disable_site_title'), $nv_Lang->getGlobal('disable_site_title'), $disable_site_content, $disable_site_code, '', '', '', '', $disable_site_headers);
 }

@@ -43,7 +43,7 @@ function get_dkim_verified_list()
     return $dkim_verified_list;
 }
 
-$page_title = sprintf($lang_module['smtp_config_by_lang'], $language_array[NV_LANG_DATA]['name']);
+$page_title = $nv_Lang->getModule('smtp_config_by_lang', $language_array[NV_LANG_DATA]['name']);
 $smtp_encrypted_array = ['None', 'SSL', 'TLS'];
 $errormess = '';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
@@ -58,12 +58,12 @@ if ($nv_Request->isset_request('dkimlist', 'post')) {
     }
 
     $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
     foreach ($dkim_list as $num => $domain) {
         $is_verified = (!empty($dkim_verified_list) and in_array($domain, $dkim_verified_list, true));
         $xtpl->assign('DKIM', [
             'domain' => $domain,
-            'title' => $is_verified ? $lang_module['DKIM_verified'] : $lang_module['DKIM_unverified']
+            'title' => $is_verified ? $nv_Lang->getModule('DKIM_verified') : $nv_Lang->getModule('DKIM_unverified')
         ]);
 
         if ($is_verified) {
@@ -87,8 +87,8 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
     }
 
     $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('DOMAIN', $domain);
 
     $publickeyfile = NV_ROOTDIR . '/' . NV_CERTS_DIR . '/nv_dkim.' . $domain . '.public.pem';
@@ -105,7 +105,7 @@ if ($nv_Request->isset_request('dkimread, domain', 'post')) {
         $xtpl->parse('dkimread.verified');
         $xtpl->parse('dkimread.verified2');
     } else {
-        $xtpl->assign('VERIFY_NOTE', sprintf($lang_module['DKIM_verify_note'], $domain));
+        $xtpl->assign('VERIFY_NOTE', $nv_Lang->getModule('DKIM_verify_note', $domain));
         $xtpl->parse('dkimread.unverified');
         $xtpl->parse('dkimread.unverified2');
     }
@@ -131,14 +131,14 @@ if ($nv_Request->isset_request('dkimverify, domain', 'post')) {
         file_exists($verifiedkey) && @unlink($verifiedkey);
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['DKIM_unverified']
+            'mess' => $nv_Lang->getModule('DKIM_unverified')
         ]);
     }
 
     file_put_contents($verifiedkey, NV_CURRENTTIME, LOCK_EX);
     nv_jsonOutput([
         'status' => 'OK',
-        'mess' => $lang_module['DKIM_successfully_verified']
+        'mess' => $nv_Lang->getModule('DKIM_successfully_verified')
     ]);
 }
 
@@ -173,7 +173,7 @@ if ($nv_Request->isset_request('dkimadd', 'post') and $checkss == $nv_Request->g
     if (empty($domain)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['DKIM_domain_error']
+            'mess' => $nv_Lang->getModule('DKIM_domain_error')
         ]);
     }
 
@@ -183,7 +183,7 @@ if ($nv_Request->isset_request('dkimadd', 'post') and $checkss == $nv_Request->g
     if (file_exists($privatekeyfile) or file_exists($publickeyfile)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['DKIM_domain_exists']
+            'mess' => $nv_Lang->getModule('DKIM_domain_exists')
         ]);
     }
 
@@ -199,7 +199,7 @@ if ($nv_Request->isset_request('dkimadd', 'post') and $checkss == $nv_Request->g
     file_put_contents($publickeyfile, $pubKey['key']);
     nv_jsonOutput([
         'status' => 'OK',
-        'mess' => sprintf($lang_module['DKIM_created'], $domain)
+        'mess' => $nv_Lang->getModule('DKIM_created', $domain)
     ]);
 }
 
@@ -211,7 +211,7 @@ if ($nv_Request->isset_request('certlist', 'post')) {
     }
 
     $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
     foreach ($cert_list as $num => $email) {
         $xtpl->assign('CERT', [
@@ -235,8 +235,8 @@ if ($nv_Request->isset_request('smimeread, email', 'post')) {
     }
 
     $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('EMAIL', $email);
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
@@ -289,7 +289,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
     if (!empty($_FILES['pkcs12'])) {
         $passphrase = $nv_Request->get_string('passphrase', 'post', '');
         $upload = new NukeViet\Files\Upload(['certificate'], $global_config['forbid_extensions'], $global_config['forbid_mimes']);
-        $upload->setLanguage($lang_global);
+        $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
         $upload_info = $upload->save_file($_FILES['pkcs12'], NV_ROOTDIR . '/' . NV_CERTS_DIR, true);
 
         if (is_file($_FILES['pkcs12']['tmp_name'])) {
@@ -307,7 +307,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
             @unlink($upload_info['name']);
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['smime_pkcs12_ext_error']
+                'mess' => $nv_Lang->getModule('smime_pkcs12_ext_error')
             ]);
         }
 
@@ -315,7 +315,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
         if (!openssl_pkcs12_read(file_get_contents($upload_info['name']), $results, $passphrase) or empty($results['cert']) or empty($results['pkey'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['smime_pkcs12_cannot_be_read'] . ' (' . openssl_error_string() . ')'
+                'mess' => $nv_Lang->getModule('smime_pkcs12_cannot_be_read') . ' (' . openssl_error_string() . ')'
             ]);
         }
 
@@ -330,7 +330,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
         if (!$smimesign) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['smime_pkcs12_smimesign_error']
+                'mess' => $nv_Lang->getModule('smime_pkcs12_smimesign_error')
             ]);
         }
 
@@ -345,7 +345,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
             @unlink($upload_info['name']);
             nv_jsonOutput([
                 'status' => 'overwrite',
-                'mess' => $lang_module['smime_pkcs12_overwrite']
+                'mess' => $nv_Lang->getModule('smime_pkcs12_overwrite')
             ]);
         }
 
@@ -368,14 +368,14 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
     if (!preg_match('/(-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----)/si', $smime_certificate)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['smime_pkcs12_cannot_be_read']
+            'mess' => $nv_Lang->getModule('smime_pkcs12_cannot_be_read')
         ]);
     }
     $openSSLCertificate = openssl_x509_read($smime_certificate);
     if (!$openSSLCertificate) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['smime_pkcs12_cannot_be_read']
+            'mess' => $nv_Lang->getModule('smime_pkcs12_cannot_be_read')
         ]);
     }
     $certPriv = openssl_x509_parse($openSSLCertificate);
@@ -391,7 +391,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
     if (!$smimesign) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['smime_pkcs12_smimesign_error']
+            'mess' => $nv_Lang->getModule('smime_pkcs12_smimesign_error')
         ]);
     }
     $email = trim($certPriv['subject']['CN']);
@@ -411,7 +411,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
     if (file_exists($cert_crt) and !$overwrite) {
         nv_jsonOutput([
             'status' => 'overwrite',
-            'mess' => $lang_module['smime_pkcs12_overwrite']
+            'mess' => $nv_Lang->getModule('smime_pkcs12_overwrite')
         ]);
     }
 
@@ -420,7 +420,7 @@ if ($nv_Request->isset_request('smimeadd', 'post') and $checkss == $nv_Request->
     if (!$r) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['smime_private_key_cannot_be_read']
+            'mess' => $nv_Lang->getModule('smime_private_key_cannot_be_read')
         ]);
     }
 
@@ -491,15 +491,13 @@ if ($nv_Request->isset_request('smimedownload, email, passphrase', 'post')) {
 // Gửi thử email để kiểm tra
 if ($nv_Request->isset_request('submittest', 'post') and $checkss == $nv_Request->get_string('checkss', 'post')) {
     if (NV_LANG_DATA != NV_LANG_INTERFACE) {
-        $lang_tmp = $lang_module;
-        $lang_module = [];
-        include(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php');
-        $mail_subject = $lang_module['smtp_test_subject'];
-        $mail_message = $lang_module['smtp_test_message'];
-        $lang_module = $lang_tmp;
+        $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php', true);
+        $mail_subject = $nv_Lang->getModule('smtp_test_subject');
+        $mail_message = $nv_Lang->getModule('smtp_test_message');
+        $nv_Lang->changeLang();
     } else {
-        $mail_subject = $lang_module['smtp_test_subject'];
-        $mail_message = $lang_module['smtp_test_message'];
+        $mail_subject = $nv_Lang->getModule('smtp_test_subject');
+        $mail_message = $nv_Lang->getModule('smtp_test_message');
     }
     $check = nv_sendmail([
         $global_config['site_name'],
@@ -508,18 +506,18 @@ if ($nv_Request->isset_request('submittest', 'post') and $checkss == $nv_Request
     if (!empty($check)) {
         nv_htmlOutput($check);
     } else {
-        nv_htmlOutput($lang_module['smtp_test_success']);
+        nv_htmlOutput($nv_Lang->getModule('smtp_test_success'));
     }
 }
 
 $mail_tpl_opt = ['' => NV_ASSETS_DIR . '/tpl/mail.tpl'];
 $themelist = nv_scandir(NV_ROOTDIR . '/themes', '/^[a-zA-Z0-9\_]+$/');
 foreach ($themelist as $theme) {
-    if (file_exists(NV_ROOTDIR . '/themes/' . $theme .'/system/mail.tpl')) {
-        $mail_tpl_opt['themes/' . $theme .'/system/mail.tpl'] = 'themes/' . $theme .'/system/mail.tpl';
+    if (file_exists(NV_ROOTDIR . '/themes/' . $theme . '/system/mail.tpl')) {
+        $mail_tpl_opt['themes/' . $theme . '/system/mail.tpl'] = 'themes/' . $theme . '/system/mail.tpl';
     }
-    if (file_exists(NV_ROOTDIR . '/themes/' . $theme .'/system/mail_' . NV_LANG_DATA . '.tpl')) {
-        $mail_tpl_opt['themes/' . $theme .'/system/mail_' . NV_LANG_DATA . '.tpl'] = 'themes/' . $theme .'/system/mail_' . NV_LANG_DATA . '.tpl';
+    if (file_exists(NV_ROOTDIR . '/themes/' . $theme . '/system/mail_' . NV_LANG_DATA . '.tpl')) {
+        $mail_tpl_opt['themes/' . $theme . '/system/mail_' . NV_LANG_DATA . '.tpl'] = 'themes/' . $theme . '/system/mail_' . NV_LANG_DATA . '.tpl';
     }
 }
 $array_config = [];
@@ -581,7 +579,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
             if (!empty($array_phpmod) and !array_key_exists('openssl', $array_phpmod)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['smtp_error_openssl']
+                    'mess' => $nv_Lang->getModule('smtp_error_openssl')
                 ]);
             }
         }
@@ -590,7 +588,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'smtp_host',
-                'mess' => $lang_module['outgoing_error']
+                'mess' => $nv_Lang->getModule('outgoing_error')
             ]);
         }
 
@@ -598,7 +596,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'smtp_port',
-                'mess' => $lang_module['outgoing_port_error']
+                'mess' => $nv_Lang->getModule('outgoing_port_error')
             ]);
         }
 
@@ -606,7 +604,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'smtp_username',
-                'mess' => $lang_module['smtp_login_error']
+                'mess' => $nv_Lang->getModule('smtp_login_error')
             ]);
         }
 
@@ -614,7 +612,7 @@ if ($nv_Request->isset_request('submitsave', 'post') and $checkss == $nv_Request
             nv_jsonOutput([
                 'status' => 'error',
                 'input' => 'smtp_password',
-                'mess' => $lang_module['smtp_pass_error']
+                'mess' => $nv_Lang->getModule('smtp_pass_error')
             ]);
         }
     }
@@ -678,8 +676,8 @@ $d = $nv_Request->get_title('d', 'get', '');
 
 $xtpl = new XTemplate('smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);

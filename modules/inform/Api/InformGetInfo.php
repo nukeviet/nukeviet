@@ -64,7 +64,7 @@ class InformGetInfo implements IApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request, $nv_Lang;
 
         $module_name = Api::getModuleName();
         $module_info = Api::getModuleInfo();
@@ -84,7 +84,7 @@ class InformGetInfo implements IApi
         if (empty($postdata['id'])) {
             return $this->result->setError()
                 ->setCode('5003')
-                ->setMessage($lang_module['notification_not_exist'])
+                ->setMessage($nv_Lang->getModule('notification_not_exist'))
                 ->getResult();
         }
 
@@ -94,7 +94,7 @@ class InformGetInfo implements IApi
         if (empty($data)) {
             return $this->result->setError()
                 ->setCode('5004')
-                ->setMessage($lang_module['notification_not_exist'])
+                ->setMessage($nv_Lang->getModule('notification_not_exist'))
                 ->getResult();
         }
 

@@ -832,8 +832,8 @@ header.first-child {
     background: #137cbe;
     background-image: linear-gradient(60deg,
             #d8eaf8 0,
-            #d8eaf8 133px,
-            rgba(0, 0, 0, 0) 134px,
+            #d8eaf8 146px,
+            rgba(0, 0, 0, 0) 147px,
             rgba(0, 0, 0, 0) 100%);
     -webkit-transition: top 0.08s ease-in-out;
     transition: top 0.08s ease-in-out;

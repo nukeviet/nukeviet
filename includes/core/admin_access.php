@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -15,8 +15,6 @@ if (!defined('NV_MAINFILE')) {
 
 /**
  * nv_admin_checkip()
- *
- * @return
  */
 function nv_admin_checkip()
 {
@@ -52,8 +50,6 @@ function nv_admin_checkip()
 
 /**
  * nv_admin_checkfirewall()
- *
- * @return
  */
 function nv_admin_checkfirewall()
 {
@@ -93,7 +89,6 @@ function nv_admin_checkfirewall()
  * nv_admin_checkdata()
  *
  * @param mixed $adm_session_value
- * @return
  */
 function nv_admin_checkdata($adm_session_value)
 {
@@ -138,7 +133,7 @@ function nv_admin_checkdata($adm_session_value)
         $allow_files_type = [];
         $allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
     } else {
-        list($allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories) = explode('|', $admin_info['files_level']);
+        [$allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories] = explode('|', $admin_info['files_level']);
         $allow_files_type = !empty($allow_files_type) ? explode(',', $allow_files_type) : [];
         $allow_files_type2 = array_values(array_intersect($allow_files_type, $global_config['file_allowed_ext']));
         if ($allow_files_type != $allow_files_type2) {
@@ -262,7 +257,6 @@ function nv_admin_check_predata($adm_session_value)
 /**
  * Xóa dữ liệu đăng nhập của admin
  * nv_admin_logout()
- * 
  */
 function nv_admin_logout()
 {

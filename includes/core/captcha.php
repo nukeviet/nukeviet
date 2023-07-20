@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -15,7 +15,7 @@ if (!defined('NV_MAINFILE')) {
 
 mt_srand(microtime(true) * 1000000);
 $maxran = 1000000;
-$random_num = mt_rand(1, $maxran);
+$random_num = random_int(1, $maxran);
 
 $nv_Request->set_Session('random_num', $random_num);
 
@@ -30,23 +30,23 @@ imagefilledrectangle($image, 0, 0, NV_GFX_WIDTH, NV_GFX_HEIGHT, $bgc);
 $text_color = imagecolorallocate($image, 50, 50, 50);
 /* output each character */
 for ($l = 0; $l < 5; ++$l) {
-    $r = mt_rand(120, 255);
-    $g = mt_rand(120, 255);
-    $b = mt_rand(120, 255);
+    $r = random_int(120, 255);
+    $g = random_int(120, 255);
+    $b = random_int(120, 255);
     $color_elipse = imagecolorallocate($image, round($r * 0.90), round($g * 0.90), round($b * 0.90));
-    $cx = mt_rand(0, NV_GFX_WIDTH - NV_GFX_HEIGHT);
-    $cy = mt_rand(0, NV_GFX_WIDTH - NV_GFX_HEIGHT);
-    $rx = mt_rand(10, NV_GFX_WIDTH - NV_GFX_HEIGHT);
-    $ry = mt_rand(10, NV_GFX_WIDTH - NV_GFX_HEIGHT);
+    $cx = random_int(0, NV_GFX_WIDTH - NV_GFX_HEIGHT);
+    $cy = random_int(0, NV_GFX_WIDTH - NV_GFX_HEIGHT);
+    $rx = random_int(10, NV_GFX_WIDTH - NV_GFX_HEIGHT);
+    $ry = random_int(10, NV_GFX_WIDTH - NV_GFX_HEIGHT);
     imagefilledellipse($image, $cx, $cy, $rx, $ry, $color_elipse);
 }
 
-$r = mt_rand(0, 100);
-$g = mt_rand(0, 100);
-$b = mt_rand(0, 100);
+$r = random_int(0, 100);
+$g = random_int(0, 100);
+$b = random_int(0, 100);
 $text_color = imagecolorallocate($image, $r, $g, $b);
 
-$ff = mt_rand(1, 15);
+$ff = random_int(1, 15);
 $font = NV_ROOTDIR . '/includes/fonts/captcha/font' . $ff . '.ttf';
 
 if (file_exists($font) and nv_function_exists('imagettftext')) {

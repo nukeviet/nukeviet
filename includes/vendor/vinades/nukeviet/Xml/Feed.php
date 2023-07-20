@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -235,7 +235,7 @@ class Feed
             return false;
         }
 
-        list(, $channel_data['description']) = self::parse_description($channel_data['description'], $channel_data['rootdir'], $channel_data['domain']);
+        [, $channel_data['description']] = self::parse_description($channel_data['description'], $channel_data['rootdir'], $channel_data['domain']);
 
         $xml = new DOMDocument('1.0', 'UTF-8');
         $xml->preserveWhiteSpace = false;
@@ -319,7 +319,7 @@ class Feed
                         $item_author_node->appendChild($xml->createCDATASection(Site::unhtmlspecialchars($item_data['author'])));
                     }
                     if (!empty($item_data['description'])) {
-                        list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
+                        [$item_data['description_image'], $item_data['description']] = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
                         $item_description_node = $item_node->appendChild($xml->createElement('description'));
                         if (!empty($item_data['description_image'])) {
                             $item_data['description_image'] = self::make_external_url($item_data['description_image'], $channel_data['domain']);
@@ -393,7 +393,7 @@ class Feed
             $feed_link_node->setAttribute('type', 'text/html');
         }
         if (!empty($channel_data['description'])) {
-            list(, $channel_data['description']) = self::parse_description($channel_data['description'], $channel_data['rootdir'], $channel_data['domain']);
+            [, $channel_data['description']] = self::parse_description($channel_data['description'], $channel_data['rootdir'], $channel_data['domain']);
 
             $feed_subtitle_node = $feed_node->appendChild($xml->createElement('subtitle'));
             $feed_subtitle_node->setAttribute('type', 'html');
@@ -445,7 +445,7 @@ class Feed
                         $entry_author_name_node->appendChild($xml->createCDATASection(Site::unhtmlspecialchars($item_data['author'])));
                     }
                     if (!empty($item_data['description'])) {
-                        list($item_data['description_image'], $item_data['description']) = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
+                        [$item_data['description_image'], $item_data['description']] = self::parse_description($item_data['description'], $channel_data['rootdir'], $channel_data['domain']);
                         $entry_summary_node = $entry_node->appendChild($xml->createElement('summary'));
                         if (!empty($item_data['description_image'])) {
                             $item_data['description_image'] = self::make_external_url($item_data['description_image'], $channel_data['domain']);

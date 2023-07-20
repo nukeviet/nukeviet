@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -393,7 +393,7 @@ class Streams
             $match_against = preg_split('/,\s*/', $cert['extensions']['subjectAltName']);
 
             foreach ($match_against as $match) {
-                list($match_type, $match_host) = explode(':', $match);
+                [$match_type, $match_host] = explode(':', $match);
                 if ($host_type == strtolower(trim($match_type))) {
                     // IP: or DNS:
 

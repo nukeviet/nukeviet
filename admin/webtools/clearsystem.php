@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_WEBTOOLS')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['clearsystem'];
+$page_title = $nv_Lang->getModule('clearsystem');
 
 /**
  * nv_clear_files()
@@ -56,7 +56,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
         nv_htmlOutput('');
     }
 
-    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['clearsystem'], implode(', ', $deltype), $admin_info['userid']);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('clearsystem'), implode(', ', $deltype), $admin_info['userid']);
     clearstatcache();
 
     $contents = '';
@@ -137,17 +137,16 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
 $xtpl = new XTemplate('clearsystem.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('CHECKSS', $checkss);
 
 foreach ($clears as $clear) {
     $xtpl->assign('CLEAR', [
-        'title' => $lang_module[$clear],
+        'title' => $nv_Lang->getModule($clear),
         'value' => $clear
     ]);
     $xtpl->parse('main.clear');
 }
-
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

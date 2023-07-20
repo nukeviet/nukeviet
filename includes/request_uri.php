@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -50,7 +50,7 @@ $request_uri = urldecode($request_uri['path']);
 
 if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and preg_match('/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote($global_config['rewrite_exturl']) . '$/i', $request_uri, $matches)) {
     // Rewrite khi không có bất kỳ request lang hay nv
-    $_GET[NV_NAME_VARIABLE] = $global_config['rewrite_op_mod'] ? $global_config['rewrite_op_mod'] : 'page';
+    $_GET[NV_NAME_VARIABLE] = $global_config['rewrite_op_mod'] ?: 'page';
     $_GET[NV_OP_VARIABLE] = $matches[1];
 } elseif (preg_match('/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/\+]+)(' . nv_preg_quote($global_config['rewrite_endurl']) . '|' . nv_preg_quote($global_config['rewrite_exturl']) . ')$/i', $request_uri, $matches)) {
     // Kiểm tra rewrite dạng /vi/module/func...

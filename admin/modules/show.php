@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,7 +20,7 @@ if (!defined('NV_IS_FILE_MODULES')) {
  */
 function nv_show_funcs()
 {
-    global $nv_Cache, $db, $lang_global, $lang_module, $global_config, $site_mods, $nv_Request, $module_file;
+    global $nv_Cache, $db, $nv_Lang, $global_config, $site_mods, $nv_Request, $module_file;
 
     $mod = $nv_Request->get_title('mod', 'get', '');
 
@@ -213,14 +213,14 @@ function nv_show_funcs()
     }
 
     $xtpl = new XTemplate('aj_show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     foreach ($act_funcs as $funcs => $values) {
         if ($values['show_func']) {
             $values['func_name'] = $funcs;
             $values['in_submenu_checked'] = ($values['in_submenu']) ? 'checked="checked" ' : '';
             $values['disabled'] = (in_array($funcs, $arr_in_submenu, true)) ? '' : ' disabled';
-            $values['func_description_short'] = !empty($values['description']) ? nv_clean60($values['description'], 40) : $lang_module['empty'];
+            $values['func_description_short'] = !empty($values['description']) ? nv_clean60($values['description'], 40) : $nv_Lang->getModule('empty');
             $xtpl->assign('ROW', $values);
 
             foreach ($weight_list as $new_weight) {
@@ -273,7 +273,7 @@ if (empty($row)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
 }
 
-$page_title = sprintf($lang_module['funcs_list'], $row['custom_title']);
+$page_title = $nv_Lang->getModule('funcs_list', $row['custom_title']);
 
 $contents = [];
 

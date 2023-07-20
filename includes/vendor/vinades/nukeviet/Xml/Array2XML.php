@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -128,11 +128,7 @@ class Array2XML
         }
 
         if ($is_save) {
-            if ($this->xml->save($file) == 0) {
-                return false;
-            }
-
-            return true;
+            return !($this->xml->save($file) == 0);
         }
 
         return $this->xml->saveXML();

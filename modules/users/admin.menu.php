@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -32,13 +32,13 @@ $level = $admin_info['level'];
 
 // Quyền thêm tài khoản
 if (!empty($access_admin['access_addus'][$level])) {
-    $submenu['user_add'] = $lang_module['user_add'];
+    $submenu['user_add'] = $nv_Lang->getModule('user_add');
     $allow_func[] = 'user_add';
 }
 
 // Quyền kích hoạt tài khoản
 if (!empty($access_admin['access_waiting'][$level])) {
-    $submenu['user_waiting'] = $lang_module['member_wating'];
+    $submenu['user_waiting'] = $nv_Lang->getModule('member_wating');
     $allow_func[] = 'user_waiting';
     $allow_func[] = 'user_waiting_remail';
     $allow_func[] = 'setactive';
@@ -48,7 +48,7 @@ if (!empty($access_admin['access_waiting'][$level])) {
 // Quyền kiểm duyệt thông tin sửa
 if (!empty($access_admin['access_editcensor'][$level])) {
     if ($active_editinfo_censor) {
-        $submenu['editcensor'] = $lang_module['editcensor'];
+        $submenu['editcensor'] = $nv_Lang->getModule('editcensor');
     }
     $allow_func[] = 'editcensor';
 }
@@ -68,24 +68,24 @@ if (!empty($access_admin['access_delus'][$level])) {
 // Quyền quản lý nhóm
 $access['checked_passus'] = !empty($access_admin['access_passus'][$level]) ? ' checked="checked" ' : '';
 if (!empty($access_admin['access_groups'][$level])) {
-    $submenu['groups'] = $lang_global['mod_groups'];
+    $submenu['groups'] = $nv_Lang->getGlobal('mod_groups');
     $allow_func[] = 'groups';
 }
 
 if ($module_data == 'users' and isset($admin_mods['authors'])) {
-    $submenu['authors'] = $lang_global['mod_authors'];
+    $submenu['authors'] = $nv_Lang->getGlobal('mod_authors');
     $allow_func[] = 'authors';
 }
 
 if (defined('NV_IS_SPADMIN')) {
     if (!defined('NV_IS_USER_FORUM') and empty($global_config['idsite']) or $global_config['users_special']) {
-        $submenu['question'] = $lang_module['question'];
-        $submenu['siteterms'] = $lang_module['siteterms'];
-        $submenu['fields'] = $lang_module['fields'];
+        $submenu['question'] = $nv_Lang->getModule('question');
+        $submenu['siteterms'] = $nv_Lang->getModule('siteterms');
+        $submenu['fields'] = $nv_Lang->getModule('fields');
         $allow_func[] = 'question';
         $allow_func[] = 'siteterms';
         $allow_func[] = 'fields';
     }
-    $submenu['config'] = $lang_module['config'];
+    $submenu['config'] = $nv_Lang->getModule('config');
     $allow_func[] = 'config';
 }

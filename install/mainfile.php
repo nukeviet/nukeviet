@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -80,11 +80,11 @@ define('NV_CLIENT_IP', $client_info['ip']);
 
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
-$client_info['country'] = isset($_SERVER['GEOIP_COUNTRY_CODE']) ? $_SERVER['GEOIP_COUNTRY_CODE'] : nv_getCountry_from_cookie(NV_CLIENT_IP);
+$client_info['country'] = $_SERVER['GEOIP_COUNTRY_CODE'] ?? nv_getCountry_from_cookie(NV_CLIENT_IP);
 
 // Mui gio
 require NV_ROOTDIR . '/includes/timezone.php';
-define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
+define('NV_CURRENTTIME', $_SERVER['REQUEST_TIME'] ?? time());
 
 $global_config['log_errors_list'] = NV_LOG_ERRORS_LIST;
 $global_config['display_errors_list'] = NV_DISPLAY_ERRORS_LIST;
@@ -134,7 +134,9 @@ define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
+$nv_Lang = new \NukeViet\Core\Language();
+$nv_Lang->loadGlobal();
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 $global_config['cookie_path'] = $nv_Request->cookie_path;
 // vd: /ten_thu_muc_chua_site/

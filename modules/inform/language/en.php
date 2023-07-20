@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,8 +13,8 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
-$lang_translator['createdate'] = '17/10/2022, 17:00';
+$lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
+$lang_translator['createdate'] = '20/07/2023, 07:15';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
@@ -77,3 +77,36 @@ $lang_module['unspecified_action'] = 'Unspecified action';
 $lang_module['api_error_hash'] = 'Invalid hash code';
 $lang_module['default'] = 'Default';
 $lang_module['default_help'] = 'Default content will replace blank content of other languages';
+$lang_module['configs'] = 'Configuration';
+$lang_module['inform_from_generaladmin'] = 'Notifications sent from the system, user groups, or site administrators';
+$lang_module['inform_from_moduleadmin'] = 'Notifications sent from you';
+$lang_module['filter_system'] = 'Notifications from the system';
+$lang_module['filter_group'] = 'Notifications from the user groups';
+$lang_module['filter_admins'] = 'Notifications from the admins';
+$lang_module['filter_admin'] = 'Notifications from me';
+$lang_module['add_inform'] = 'Create notification';
+$lang_module['sender'] = 'Sender';
+$lang_module['admin_from_group'] = 'Notification from user group';
+$lang_module['admin_from_admin'] = 'Notification from admin';
+$lang_module['admin_from_system'] = 'Notification from system';
+$lang_module['to_group'] = 'To group';
+$lang_module['to_groups'] = 'To groups';
+$lang_module['to_users'] = 'To users';
+$lang_module['to_members'] = 'To group members';
+$lang_module['to_all'] = 'To all users';
+$lang_module['select_group'] = 'Select group';
+$lang_module['select_admin'] = 'Select administrator';
+$lang_module['type_some_letters'] = 'Type some letters to search users';
+$lang_module['please_enter'] = 'Please enter at least 3 characters';
+$lang_module['please_select_group'] = 'Please select a group as the notification sender';
+$lang_module['please_select_admin'] = 'Please select an administrator as the notification sender';
+$lang_module['please_select_receiver_group'] = 'Please select a group as a notification recipient';
+$lang_module['please_enter_user'] = 'Please specify user ID';
+$lang_module['user_not_exist'] = 'User does not exist';
+$lang_module['inform_active'] = 'Enable notifications';
+$lang_module['inform_default_exp'] = 'Default lifespan of notifications (in days)';
+$lang_module['inform_exp_del'] = 'Waiting time to delete expired notifications (in days)';
+$lang_module['inform_refresh_time'] = 'Waiting time to update new notification count (in seconds)';
+$lang_module['inform_max_characters'] = 'Number of characters of shortened notification';
+$lang_module['inform_numrows'] = 'Maximum number of notifications per impression';
+$lang_module['field_required'] = 'This field is required';

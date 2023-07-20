@@ -42,7 +42,7 @@ if (!empty($contact_allowed['reply'])) {
         if (trim(strip_tags($mess_content)) == '') {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['error_content']
+                'mess' => $nv_Lang->getModule('admin_error_content')
             ]);
         }
 
@@ -54,7 +54,6 @@ if (!empty($contact_allowed['reply'])) {
         if (NV_LANG_DATA != NV_LANG_INTERFACE) {
             $maillang = NV_LANG_DATA;
         }
-
         if ($is_reply) {
             $emaillist = [];
             $from = [];
@@ -106,13 +105,13 @@ if (!empty($contact_allowed['reply'])) {
             $mode = 1;
             $recipient = $row['sender_email'];
             $acc = implode(',', $acc);
-            $mess = $lang_module['send_suc_send_title'];
+            $mess = $nv_Lang->getModule('send_suc_send_title');
         } else {
             $forward_to = $nv_Request->get_string('email', 'post', '');
             if (empty($forward_to)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['error_mail_empty']
+                    'mess' => $nv_Lang->getModule('error_mail_empty')
                 ]);
             }
 
@@ -139,7 +138,7 @@ if (!empty($contact_allowed['reply'])) {
             $mode = 2;
             $recipient = $forward_to;
             $acc = '';
-            $mess = $lang_module['forwarded'];
+            $mess = $nv_Lang->getModule('forwarded');
         }
 
         $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_reply (id, reply_recipient, reply_cc, reply_content, reply_time, reply_aid) VALUES (' . $id . ', :reply_recipient, :reply_cc, :reply_content, ' . NV_CURRENTTIME . ', ' . $admin_info['admin_id'] . ')');
@@ -169,7 +168,7 @@ if (!empty($contact_allowed['exec'])) {
                 if (empty($send)) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['please_choose']
+                        'mess' => $nv_Lang->getModule('please_choose')
                     ]);
                 }
                 $sends = [$send];
@@ -185,7 +184,7 @@ if (!empty($contact_allowed['exec'])) {
                 $set = $mk ? 'is_read=1' : 'is_read=0, is_processed=0, processed_by=0, processed_time=0';
             } else {
                 $set = $mk ? 'is_read= 1, is_processed=1, processed_by=' . $admin_info['userid'] . ', processed_time=' . NV_CURRENTTIME : 'is_processed=0, processed_by= 0, processed_time=0';
-                nv_insert_logs(NV_LANG_DATA, $module_name, ($mk ? $lang_module['mark_as_processed'] : $lang_module['mark_as_unprocess']), 'ID: ' . $sends, $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, ($mk ? $nv_Lang->getModule('mark_as_processed') : $nv_Lang->getModule('mark_as_unprocess')), 'ID: ' . $sends, $admin_info['userid']);
             }
             $db->query('UPDATE ' . NV_MOD_TABLE . '_send SET ' . $set . ' WHERE id IN (' . $sends . ') AND ' . $db_deps);
             nv_jsonOutput([
@@ -285,15 +284,15 @@ if (!empty($contact_allowed['view'])) {
             $row['department'] = $departments[$row['cid']]['full_name'];
             $row['department_url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department&id=' . $row['cid'];
         } else {
-            $row['department'] = $lang_module['department_empty'];
+            $row['department'] = $nv_Lang->getModule('department_empty');
         }
 
         if ($row['is_processed']) {
             $row['mark_process'] = 'unprocess';
-            $row['mark_process_title'] = $lang_module['mark_as_unprocess'];
+            $row['mark_process_title'] = $nv_Lang->getModule('mark_as_unprocess');
         } else {
             $row['mark_process'] = 'processed';
-            $row['mark_process_title'] = $lang_module['mark_as_processed'];
+            $row['mark_process_title'] = $nv_Lang->getModule('mark_as_processed');
         }
 
         $row['auto_forward'] = !empty($row['auto_forward']) ? array_map('trim', explode(',', $row['auto_forward'])) : [];
@@ -336,8 +335,8 @@ if (!empty($contact_allowed['view'])) {
         }
 
         $xtpl = new XTemplate('view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('GLANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         $xtpl->assign('DATA', $row);
 
@@ -350,7 +349,7 @@ if (!empty($contact_allowed['view'])) {
         }
 
         if ($row['is_processed']) {
-            $processed_by_name = isset($admins[$row['processed_by']]) ? $admins[$row['processed_by']] : '';
+            $processed_by_name = $admins[$row['processed_by']] ?? '';
             $xtpl->assign('PROCESSED', [
                 'name' => $processed_by_name,
                 'url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $row['processed_by'],
@@ -369,7 +368,7 @@ if (!empty($contact_allowed['view'])) {
         if (!empty($row['sender_id'])) {
             $userinfo = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['sender_id'])->fetch();
             $userinfo['full_name'] = nv_show_name_user($userinfo['first_name'], $userinfo['last_name'], $userinfo['username']);
-            $userinfo['gender'] = $lang_module['user_gender_' . $userinfo['gender']];
+            $userinfo['gender'] = $nv_Lang->getModule('user_gender_' . $userinfo['gender']);
             $userinfo['birthday'] = !empty($userinfo['birthday']) ? date('d/m/Y', $userinfo['birthday']) : '';
             $userinfo['regdate'] = date('H:i d/m/Y', $userinfo['regdate']);
             $userinfo['last_login'] = date('H:i d/m/Y', $userinfo['last_login']);
@@ -407,7 +406,7 @@ if (!empty($contact_allowed['view'])) {
             $mess_content = '<br />';
             $mess_content .= '--------------------------------------------------------------------------------<br />';
             $forward_content = '<br />';
-            $forward_content .= '-----------------------' . $lang_module['forwarded'] . '-------------------------<br />';
+            $forward_content .= '-----------------------' . $nv_Lang->getModule('forwarded') . '-------------------------<br />';
             $_content = '<strong>From:</strong> ' . $row['sender_name'] . ' [mailto:' . $row['sender_email'] . ']<br />';
             $_content .= '<strong>Sent:</strong> ' . $send_time . '<br />';
             $_content .= '<strong>To:</strong> ' . $contact_allowed['view'][$row['cid']] . '<br />';
@@ -453,7 +452,7 @@ if (!empty($contact_allowed['view'])) {
             $admins = [];
             $replylist = [];
             while ($reply = $result->fetch()) {
-                $reply['type'] = $reply['reply_recipient'] != $row['sender_email'] ? $lang_module['forwarding_mail'] : $lang_module['reply_mail'];
+                $reply['type'] = $reply['reply_recipient'] != $row['sender_email'] ? $nv_Lang->getModule('forwarding_mail') : $nv_Lang->getModule('reply_mail');
                 $reply['time'] = date('H:i d/m/Y', $reply['reply_time']);
                 $reply['sender_url'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $reply['reply_aid'];
                 $reply['icon'] = $reply['reply_recipient'] != $row['sender_email'] ? 'fa-share' : 'fa-reply';
@@ -504,8 +503,8 @@ if (!empty($contact_allowed['view'])) {
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 
 if (!empty($contact_allowed['view'])) {
@@ -542,15 +541,15 @@ if (!empty($contact_allowed['view'])) {
 
         while ($row = $result->fetch()) {
             if ($row['is_processed']) {
-                $status = $lang_module['tt3_row_title'];
+                $status = $nv_Lang->getModule('tt3_row_title');
             } else {
                 if ($row['is_read'] != 1) {
-                    $status = $lang_module['row_new'];
+                    $status = $nv_Lang->getModule('row_new');
                 } else {
                     if ($row['is_reply']) {
-                        $status = $lang_module['tt2_row_title'];
+                        $status = $nv_Lang->getModule('tt2_row_title');
                     } else {
-                        $status = $lang_module['tt1_row_title'];
+                        $status = $nv_Lang->getModule('tt1_row_title');
                     }
                 }
             }

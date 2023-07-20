@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,7 +21,7 @@ namespace NukeViet\Http;
  * @access public
  */
 #[\AllowDynamicProperties]
- class Cookie
+class Cookie
 {
     /**
      * Cookie name.
@@ -70,7 +70,7 @@ namespace NukeViet\Http;
             $this->domain = $arrURL['host'];
         }
 
-        $this->path = isset($arrURL['path']) ? $arrURL['path'] : '/';
+        $this->path = $arrURL['path'] ?? '/';
 
         if ('/' != substr($this->path, -1)) {
             $this->path = dirname($this->path) . '/';
@@ -96,7 +96,7 @@ namespace NukeViet\Http;
                     continue;
                 }
 
-                list($key, $val) = strpos($pair, '=') ? explode('=', $pair) : [$pair, ''];
+                [$key, $val] = strpos($pair, '=') ? explode('=', $pair) : [$pair, ''];
                 $key = strtolower(trim($key));
 
                 if ($key == 'expires') {
@@ -144,12 +144,12 @@ namespace NukeViet\Http;
 
         // Get details on the URL we're thinking about sending to
         $url = parse_url($url);
-        $url['port'] = isset($url['port']) ? $url['port'] : ($url['scheme'] == 'https' ? 443 : 80);
-        $url['path'] = isset($url['path']) ? $url['path'] : '/';
+        $url['port'] = $url['port'] ?? ($url['scheme'] == 'https' ? 443 : 80);
+        $url['path'] ??= '/';
 
         // Values to use for comparison against the URL
-        $path = isset($this->path) ? $this->path : '/';
-        $port = isset($this->port) ? $this->port : null;
+        $path = $this->path ?? '/';
+        $port = $this->port ?? null;
         $domain = isset($this->domain) ? strtolower($this->domain) : strtolower($url['host']);
 
         if (stripos($domain, '.') === false) {
@@ -168,11 +168,8 @@ namespace NukeViet\Http;
         }
 
         // Path - request path must start with path restriction
-        if (substr($url['path'], 0, strlen($path)) != $path) {
-            return false;
-        }
-
-        return true;
+        return !(substr($url['path'], 0, strlen($path)) != $path)
+        ;
     }
 
     /**

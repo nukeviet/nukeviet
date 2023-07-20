@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -12,11 +12,11 @@
 if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
-$page_title = $lang_module['block'];
+$page_title = $nv_Lang->getModule('block');
 
 $error = '';
 $savecat = 0;
-list($bid, $title, $alias, $description, $image, $keywords) = [0, '', '', '', '', ''];
+[$bid, $title, $alias, $description, $image, $keywords] = [0, '', '', '', '', ''];
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
@@ -48,9 +48,9 @@ if (!empty($savecat)) {
     $is_exists = $sth->fetchColumn();
 
     if (empty($title)) {
-        $error = $lang_module['error_name'];
+        $error = $nv_Lang->getModule('error_name');
     } elseif ($is_exists) {
-        $error = $lang_module['errorexists'];
+        $error = $nv_Lang->getModule('errorexists');
     } elseif ($bid == 0) {
         $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat')->fetchColumn();
         $weight = (int) $weight + 1;
@@ -68,7 +68,7 @@ if (!empty($savecat)) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_blockcat', ' ', $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     } else {
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET title= :title, alias = :alias, description= :description, image= :image, keywords= :keywords, edit_time=' . NV_CURRENTTIME . ' WHERE bid =' . $bid);
@@ -81,23 +81,23 @@ if (!empty($savecat)) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_blockcat', 'blockid ' . $bid, $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
         } else {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     }
 }
 
 $bid = $nv_Request->get_int('bid', 'get', 0);
 if ($bid > 0) {
-    list($bid, $title, $alias, $description, $image, $keywords) = $db->query('SELECT bid, title, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat where bid=' . $bid)->fetch(3);
-    $lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
+    [$bid, $title, $alias, $description, $image, $keywords] = $db->query('SELECT bid, title, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat where bid=' . $bid)->fetch(3);
+    $nv_Lang->getModule('add_block_cat', $nv_Lang->getModule('edit_block_cat'));
 }
 
-$lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
-$lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 $xtpl = new XTemplate('groups.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,7 +14,7 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $sql = 'SELECT listcatid FROM ' . NV_PREFIXLANG . '_' . $mod_info['module_data'] . '_rows WHERE id=' . $row['id'];
-list($listcatid) = $db->query($sql)->fetch(3);
+[$listcatid] = $db->query($sql)->fetch(3);
 
 // Cap nhat lai so luong comment duoc kich hoat
 $array_catid = explode(',', $listcatid);

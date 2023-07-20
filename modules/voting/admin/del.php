@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -40,7 +40,7 @@ if ($vid > 0 and $checkss == md5($vid . NV_CHECK_SESSION)) {
 
         $contents = 'OK_' . $vid;
     } else {
-        $contents = 'ERR_' . $lang_module['voting_delete_unsuccess'];
+        $contents = 'ERR_' . $nv_Lang->getModule('voting_delete_unsuccess');
     }
 }
 

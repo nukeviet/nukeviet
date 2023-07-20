@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -25,7 +25,7 @@ if ($checksess == NV_CHECK_SESSION and file_exists(NV_ROOTDIR . '/install/update
         $check_del = nv_deletefile(NV_ROOTDIR . '/install/' . $_file);
 
         if ($check_del[0] == 0) {
-            $contents .= $check_del[1] . ' ' . $lang_module['update_manual_delete'];
+            $contents .= $check_del[1] . ' ' . $nv_Lang->getModule('update_manual_delete');
         }
     }
 
@@ -35,21 +35,21 @@ if ($checksess == NV_CHECK_SESSION and file_exists(NV_ROOTDIR . '/install/update
         $check_del = nv_deletefile(NV_ROOTDIR . '/install/' . $_file);
 
         if ($check_del[0] == 0) {
-            $contents .= $check_del[1] . ' ' . $lang_module['update_manual_delete'];
+            $contents .= $check_del[1] . ' ' . $nv_Lang->getModule('update_manual_delete');
         }
     }
 
     // Xoa file du lieu nang cap
     $check_delete_file = nv_deletefile(NV_ROOTDIR . '/install/update_data.php');
     if ($check_delete_file[0] == 0) {
-        $contents .= $check_delete_file[1] . ' ' . $lang_module['update_manual_delete'];
+        $contents .= $check_delete_file[1] . ' ' . $nv_Lang->getModule('update_manual_delete');
     }
 
     // Xoa thu muc file thay doi
     if (file_exists(NV_ROOTDIR . '/install/update')) {
         $check_delete_dir = nv_deletefile(NV_ROOTDIR . '/install/update', true);
         if ($check_delete_dir[0] == 0) {
-            $contents .= $check_delete_dir[1] . ' ' . $lang_module['update_manual_delete'];
+            $contents .= $check_delete_dir[1] . ' ' . $nv_Lang->getModule('update_manual_delete');
         }
     }
 
@@ -59,7 +59,7 @@ if ($checksess == NV_CHECK_SESSION and file_exists(NV_ROOTDIR . '/install/update
         $check_del = nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/' . $logsfile);
 
         if ($check_del[0] == 0) {
-            $contents .= $check_del[1] . ' ' . $lang_module['update_manual_delete'];
+            $contents .= $check_del[1] . ' ' . $nv_Lang->getModule('update_manual_delete');
         }
     }
 

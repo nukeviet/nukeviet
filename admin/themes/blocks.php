@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,7 +21,7 @@ if ($global_config['idsite']) {
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while (list($theme) = $result->fetch(3)) {
+        while ([$theme] = $result->fetch(3)) {
             $array_site_cat_theme[] = $theme;
         }
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
@@ -119,11 +119,11 @@ while ($row = $sth->fetch()) {
 }
 
 // Tiêu đề trang
-$page_title = $set_by_func ? sprintf($lang_module['theme'], nv_ucfirst($selectthemes)) . ' -> ' . $lang_module['blocks_by_funcs'] : sprintf($lang_module['theme'], nv_ucfirst($selectthemes)) . ' -> ' . $lang_module['blocks'];
+$page_title = $set_by_func ? $nv_Lang->getModule('theme', nv_ucfirst($selectthemes)) . ' -> ' . $nv_Lang->getModule('blocks_by_funcs') : $nv_Lang->getModule('theme', nv_ucfirst($selectthemes)) . ' -> ' . $nv_Lang->getModule('blocks');
 
 $xtpl = new XTemplate('blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('BLOCKREDIRECT', '');
 $xtpl->assign('CHECKSS', md5($selectthemes . NV_CHECK_SESSION));
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -133,7 +133,7 @@ $xtpl->assign('SELECTEDMODULE', $selectedmodule);
 
 // Xác đinh URL Kéo thả block
 $new_drag_block = $nv_Request->get_int('drag_block', 'session', 0) ? 0 : 1;
-$lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+$lang_drag_block = ($new_drag_block) ? $nv_Lang->getGlobal('drag_block') : $nv_Lang->getGlobal('no_drag_block');
 $url_dblock = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;drag_block=' . $new_drag_block;
 if (empty($new_drag_block)) {
     $url_dblock .= '&amp;nv_redirect=' . nv_redirect_encrypt($page_url);
@@ -146,7 +146,7 @@ foreach ($modlist as $key => $title) {
     $xtpl->assign('MODULE', [
         'key' => $key,
         'selected' => ($selectedmodule == $key) ? ' selected="selected"' : '',
-        'title' => nv_ucfirst(sprintf($lang_module['module'], $title))
+        'title' => nv_ucfirst($nv_Lang->getModule('module', $title))
     ]);
     $xtpl->parse('main.module');
 }
@@ -157,7 +157,7 @@ if ($set_by_func) {
         $xtpl->assign('FUNCTION', [
             'key' => $key,
             'selected' => ($func_id == $key) ? ' selected="selected"' : '',
-            'title' => nv_ucfirst(sprintf($lang_module['function'], $title))
+            'title' => nv_ucfirst($nv_Lang->getModule('function', $title))
         ]);
         $xtpl->parse('main.function.func');
     }
@@ -170,7 +170,7 @@ foreach ($blocklist as $row) {
     $row['module'] = ucfirst($row['module']);
     $row['order_func'] = $set_by_func ? 'order_func' : 'order';
     $row['checkss'] = md5(NV_CHECK_SESSION . '_' . $row['bid']);
-    $row['dtime_type_format'] = $lang_module['dtime_type_' . $row['dtime_type']];
+    $row['dtime_type_format'] = $nv_Lang->getModule('dtime_type_' . $row['dtime_type']);
     $xtpl->assign('ROW', $row);
 
     // Thứ tự block
@@ -218,7 +218,7 @@ foreach ($blocklist as $row) {
     } else {
         $result_func = $db->query('SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid']);
         $count = 0;
-        while (list($funcid_inlist, $func_inmodule, $funcname_inlist) = $result_func->fetch(3)) {
+        while ([$funcid_inlist, $func_inmodule, $funcname_inlist] = $result_func->fetch(3)) {
             $xtpl->assign('FUNCID_INLIST', $funcid_inlist);
             $xtpl->assign('FUNC_INMODULE', $func_inmodule);
             $xtpl->assign('FUNCNAME_INLIST', $funcname_inlist);
@@ -233,7 +233,7 @@ foreach ($blocklist as $row) {
         $xtpl->parse('main.loop.func_inmodule');
     }
 
-    $statuses = [$lang_module['act_0'], $lang_module['act_1']];
+    $statuses = [$nv_Lang->getModule('act_0'), $nv_Lang->getModule('act_1')];
     foreach ($statuses as $val => $name) {
         $xtpl->assign('STATUS', [
             'val' => $val,
@@ -251,7 +251,7 @@ for ($i = 1; $i <= 4; ++$i) {
     $xtpl->assign('ACTIVE_DEVICE', [
         'key' => $i,
         'checked' => (in_array($i, $active_device, true)) ? ' checked="checked"' : '',
-        'title' => $lang_module['show_device_' . $i]
+        'title' => $nv_Lang->getModule('show_device_' . $i)
     ]);
     $xtpl->parse('main.active_device');
 }

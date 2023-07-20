@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -17,7 +17,7 @@ $path = nv_check_path_upload($nv_Request->get_string('path', 'post'));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (!isset($check_allow_upload_dir['create_file'])) {
-    exit('ERROR_' . $lang_module['notlevel']);
+    exit('ERROR_' . $nv_Lang->getModule('notlevel'));
 }
 
 $width = $nv_Request->get_int('width', 'post');
@@ -68,7 +68,7 @@ if (isset($array_dirname[$path])) {
     nv_dirListRefreshSize();
 }
 
-nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['upload_createimage'], $path . '/' . $file, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('upload_createimage'), $path . '/' . $file, $admin_info['userid']);
 
 echo $file;
 exit();

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -38,7 +38,6 @@ $lang_module['searchEngineFailed'] = 'Lỗi link để ping';
 $lang_module['pingOK'] = 'Hệ thống đã gửi file Sitemap thành công. Việc này có thể được thực hiện lại sau 60 phút';
 $lang_module['submit'] = 'Thực hiện';
 $lang_module['weight'] = 'Stt';
-
 $lang_module['robots'] = 'Cấu hình file robots.txt';
 $lang_module['robots_number'] = 'Số thứ tự';
 $lang_module['robots_filename'] = 'Tên file';
@@ -47,7 +46,6 @@ $lang_module['robots_type_0'] = 'Cấm truy cập';
 $lang_module['robots_type_1'] = 'Không hiển thị trong file robots.txt';
 $lang_module['robots_type_2'] = 'Cho phép truy cập';
 $lang_module['robots_error_writable'] = 'Lỗi: Hệ thống không ghi được file robots.txt. Hãy tạo file robots.txt với nội dung bên dưới và đặt vào thư mục gốc của website';
-
 $lang_module['pagetitle2'] = 'Phương án hiển thị tag "title"';
 $lang_module['pagetitleNote'] = '<strong>Chấp nhận các biến:</strong><br /><br />- <strong>pagetitle</strong>: Tiêu đề trang được xác định trong từng trường hợp cụ thể,<br />- <strong>funcname</strong>: Tên function,<br />- <strong>modulename</strong>: Tên module,<br />- <strong>sitename</strong>: Tên của site';
 $lang_module['metaTagsGroupName'] = 'Kiểu Nhóm';
@@ -58,13 +56,10 @@ $lang_module['metaTagsContent'] = 'Nội dung';
 $lang_module['metaTagsOgp'] = 'Kích hoạt meta-tag Open Graph protocol';
 $lang_module['metaTagsOgpNote'] = 'Open Graph protocol là chuẩn dữ liệu được chia sẻ lên facebook. Xem chi tiết tại <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
 $lang_module['description_length'] = 'Số ký tự tối đa cho meta-tag Description';
-$lang_module['description_note'] = ' = 0 - không giới hạn số ký tự';
-$lang_module['private_site'] = 'Chặn các máy chủ tìm kiếm đánh chỉ mục website';
+$lang_module['description_note'] = 'Không hơn 1024 ký tự';
 $lang_module['metaTagsSettings'] = 'Cấu hình';
-
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Tên gọi ngoài site';
-
 $lang_module['rpc'] = 'Dịch vụ PING';
 $lang_module['rpc_setting'] = 'Cấu hình dịch vụ PING';
 $lang_module['rpc_error_timeout'] = 'Vui lòng đợi %s nữa để tiếp tục Ping';
@@ -86,8 +81,8 @@ $lang_module['rpc_message'] = 'Thông tin';
 $lang_module['rpc_ping'] = 'PING khi cập nhật dữ liệu';
 $lang_module['rpc_ping_page'] = 'PING bài viết';
 $lang_module['rpc_finish'] = 'Hoàn thành quá trình PING. Bạn có muốn chuyển về trang quản lý bài viết?';
-$lang_module['ogp_image'] = 'Hình ảnh mặc định cho thẻ Open Graph<br/>(kích thước tốt nhất: 1080px x 1080px)';
-
+$lang_module['private_site'] = 'Chặn các máy chủ tìm kiếm đánh chỉ mục website';
+$lang_module['ogp_image'] = 'Hình ảnh mặc định cho thẻ Open Graph<br />(kích thước tốt nhất: 1080px x 1080px)';
 $lang_module['linkTags_attribute'] = 'Thuộc tính';
 $lang_module['linkTags_value'] = 'Giá trị';
 $lang_module['linkTags_add_attribute'] = 'Thêm thuộc tính';
@@ -95,13 +90,11 @@ $lang_module['linkTags_rel_val_required'] = 'Bạn cần khai báo giá trị c�
 $lang_module['linkTags_add'] = 'Thêm thẻ link mới';
 $lang_module['linkTags_acceptVars'] = 'Các biến được chấp nhận trong giá trị thuộc tính';
 $lang_module['linkTags_del_confirm'] = 'Bạn thục sự muốn xoá?';
-
 $lang_module['add_opensearch_link'] = 'Kích hoạt thẻ link OpenSearch cho plugin tìm kiếm tại các khu vực';
 $lang_module['add_opensearch_link_all'] = 'Trên toàn site';
 $lang_module['ShortName'] = 'Tên ngắn gọn';
 $lang_module['Description'] = 'Mô tả';
 $lang_module['ShortName_note'] = 'Không hơn 16 ký tự';
-$lang_module['Description_note'] = 'Không hơn 1024 ký tự';
 $lang_module['other_seo_tools'] = 'Các công cụ SEO khác';
 $lang_module['add_sitelinks_search_box_schema'] = 'Thêm Hộp tìm kiếm liên kết trang web lên Google tìm kiếm';
 $lang_module['more_information'] = 'Tìm hiểu thêm';

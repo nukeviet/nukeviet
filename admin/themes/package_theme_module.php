@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -16,12 +16,12 @@ if (!defined('NV_IS_FILE_THEMES')) {
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $admin_info['userid']);
 
 $xtpl = new XTemplate('package_theme_module.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('CHECKSS', $checkss);
 
 if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isset_request('op', 'post')) {
-    $contents = $lang_module['package_noselect_module_theme'];
+    $contents = $nv_Lang->getModule('package_noselect_module_theme');
     $themename = $nv_Request->get_string('themename', 'post');
 
     if (preg_match($global_config['check_theme'], $themename) or preg_match($global_config['check_theme_mobile'], $themename)) {
@@ -60,7 +60,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
             $filesize = filesize($file_src);
             $file_name = basename($file_src);
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['package_theme_module'], 'file name : ' . $themename . '_' . $all_module_file . '.zip', $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('package_theme_module'), 'file name : ' . $themename . '_' . $all_module_file . '.zip', $admin_info['userid']);
 
             $linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $all_module_file . '.zip&amp;checkss=' . md5($file_name . NV_CHECK_SESSION) . '&amp;filename=' . $file_name;
 
@@ -113,7 +113,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post') and $nv_Request->isse
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 
-    $page_title = $lang_module['package_theme_module'];
+    $page_title = $nv_Lang->getModule('package_theme_module');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -12,12 +12,11 @@
 namespace NukeViet\Module\news\Shared;
 
 if (!defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    exit('Stop!!!');
 }
 
 /**
  * @author VINADES.,JSC <contact@vinades.vn>
- *
  */
 class Posts
 {

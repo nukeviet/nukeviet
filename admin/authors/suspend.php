@@ -63,7 +63,7 @@ if ($allow_change) {
         $clean_history = defined('NV_IS_GODADMIN') ? $nv_Request->get_int('clean_history', 'post', 0) : 0;
 
         if (!empty($new_suspend) and empty($new_reason)) {
-            $error = sprintf($lang_module['susp_reason_empty'], $row_user['username']);
+            $error = $nv_Lang->getModule('susp_reason_empty', $row_user['username']);
         } elseif ($checkss == $nv_Request->get_string('checkss', 'post')) {
             if ($new_suspend) {
                 if ($clean_history) {
@@ -103,7 +103,7 @@ if ($allow_change) {
                 if (empty($row_user['active'])) {
                     $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active= 1 WHERE userid=' . $admin_id);
                 }
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['suspend' . $new_suspend] . ' ', ' Username : ' . $row_user['username'], $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('suspend' . $new_suspend) . ' ', ' Username : ' . $row_user['username'], $admin_info['userid']);
                 if (!empty($sendmail)) {
                     $maillang = '';
                     if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true)) {
@@ -125,37 +125,39 @@ if ($allow_change) {
                             $gconfigs[$row['config_name']] = $row['config_value'];
                         }
 
-                        $lang_tmp = $lang_module;
-                        $lang_module = [];
-                        include NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php';
-                    }
+                        $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $gconfigs['site_email'];
 
-                    $title = sprintf($lang_module['suspend_sendmail_title'], $gconfigs['site_name']);
-                    $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $gconfigs['site_email'];
+                        $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php', true);
 
-                    if ($new_suspend) {
-                        $message = sprintf($lang_module['suspend_sendmail_mess1'], $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $new_reason, $my_mail);
+                        $mail_subject = $nv_Lang->getModule('suspend_sendmail_title', $gconfigs['site_name']);
+                        if ($new_suspend) {
+                            $mail_message = $nv_Lang->getModule('suspend_sendmail_mess1', $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $new_reason, $my_mail);
+                        } else {
+                            $mail_message = $nv_Lang->getModule('suspend_sendmail_mess0', $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $last_reason['info']);
+                        }
+
+                        $nv_Lang->changeLang();
                     } else {
-                        $message = sprintf($lang_module['suspend_sendmail_mess0'], $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $last_reason['info']);
+                        $my_mail = $admin_info['view_mail'] ? $admin_info['email'] : $gconfigs['site_email'];
+                        $mail_subject = $nv_Lang->getModule('suspend_sendmail_title', $gconfigs['site_name']);
+                        if ($new_suspend) {
+                            $mail_message = $nv_Lang->getModule('suspend_sendmail_mess1', $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $new_reason, $my_mail);
+                        } else {
+                            $mail_message = $nv_Lang->getModule('suspend_sendmail_mess0', $gconfigs['site_name'], nv_date('d/m/Y H:i', NV_CURRENTTIME), $last_reason['info']);
+                        }
                     }
 
-                    $message = trim($message);
-                    $message = nv_nl2br($message, '<br />');
-                    $message .= '<br/><br/>' . (!empty($admin_info['sig']) ? $admin_info['sig'] : 'All the best');
-                    $message .= '<br/><br/>' . $admin_info['username'] . '<br/>' . $admin_info['position'] . '<br/>' . $my_mail;
+                    $mail_message = trim($mail_message);
+                    $mail_message = nv_nl2br($mail_message, '<br />');
+                    $mail_message .= '<br/><br/>' . (!empty($admin_info['sig']) ? $admin_info['sig'] : 'All the best');
+                    $mail_message .= '<br/><br/>' . $admin_info['username'] . '<br/>' . $admin_info['position'] . '<br/>' . $my_mail;
 
-                    $send = nv_sendmail([$admin_info['username'], $my_mail], $row_user['email'], $title, $message, '', false, false, [], [], true, [], $maillang);
-
-                    if (!empty($maillang)) {
-                        $lang_module = $lang_tmp;
-                    }
-
+                    $send = nv_sendmail([$admin_info['username'], $my_mail], $row_user['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
                     if (!$send) {
-                        $page_title = $lang_global['error_info_caption'];
-                        $contents = $lang_global['error_sendmail_admin'] . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
+                        $page_title = $nv_Lang->getGlobal('error_info_caption');
 
                         include NV_ROOTDIR . '/includes/header.php';
-                        echo nv_admin_theme($contents);
+                        echo nv_admin_theme($nv_Lang->getGlobal('error_sendmail_admin') . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />');
                         include NV_ROOTDIR . '/includes/footer.php';
                     }
                 }
@@ -167,24 +169,24 @@ if ($allow_change) {
         $clean_history = $sendmail = 0;
     }
 
-    $contents['change_suspend']['new_suspend_caption'] = (!empty($error)) ? $error : $lang_module['chg_is_suspend' . $new_suspend];
+    $contents['change_suspend']['new_suspend_caption'] = (!empty($error)) ? $error : $nv_Lang->getModule('chg_is_suspend' . $new_suspend);
     $contents['change_suspend']['new_suspend_is_error'] = (!empty($error)) ? 1 : 0;
     $contents['change_suspend']['new_suspend_action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=suspend&amp;admin_id=' . $admin_id;
-    $contents['change_suspend']['sendmail'] = [$lang_module['suspend_sendmail'], $sendmail];
+    $contents['change_suspend']['sendmail'] = [$nv_Lang->getModule('suspend_sendmail'), $sendmail];
 
     if (!empty($new_suspend)) {
-        $contents['change_suspend']['new_reason'] = [$lang_module['suspend_reason'], $new_reason, 255];
+        $contents['change_suspend']['new_reason'] = [$nv_Lang->getModule('suspend_reason'), $new_reason, 255];
     }
     if (defined('NV_IS_GODADMIN')) {
         if (($new_suspend and !empty($susp_reason)) or (empty($new_suspend) and sizeof($susp_reason) >= 1)) {
-            $contents['change_suspend']['clean_history'] = [$lang_module['clean_history'], $clean_history];
+            $contents['change_suspend']['clean_history'] = [$nv_Lang->getModule('clean_history'), $clean_history];
         }
     }
-    $contents['change_suspend']['submit'] = $lang_module['suspend' . $new_suspend];
+    $contents['change_suspend']['submit'] = $nv_Lang->getModule('suspend' . $new_suspend);
 }
 
 if (empty($susp_reason)) {
-    $contents['suspend_info'] = [sprintf($lang_module['suspend_info_empty'], $row_user['username']), []];
+    $contents['suspend_info'] = [$nv_Lang->getModule('suspend_info_empty', $row_user['username']), []];
 } else {
     $inf = [];
     $ads = [];
@@ -208,18 +210,18 @@ if (empty($susp_reason)) {
     $result2->closeCursor();
 
     foreach ($susp_reason as $vals) {
-        $start = sprintf($lang_module['suspend_info'], nv_date('d/m/Y H:i', $vals['starttime']), $ads[$vals['start_admin']]);
+        $start = $nv_Lang->getModule('suspend_info', nv_date('d/m/Y H:i', $vals['starttime']), $ads[$vals['start_admin']]);
         $end = '';
         if (!empty($vals['endtime'])) {
-            $end = sprintf($lang_module['suspend_info'], nv_date('d/m/Y H:i', $vals['endtime']), $ads[$vals['end_admin']]);
+            $end = $nv_Lang->getModule('suspend_info', nv_date('d/m/Y H:i', $vals['endtime']), $ads[$vals['end_admin']]);
         }
         $inf[] = [$start, $end, $vals['info']];
     }
 
-    $contents['suspend_info'] = [sprintf($lang_module['suspend_info_yes'], $row_user['username']), $inf, $lang_module['suspend_start'], $lang_module['suspend_end'], $lang_module['suspend_reason']];
+    $contents['suspend_info'] = [$nv_Lang->getModule('suspend_info_yes', $row_user['username']), $inf, $nv_Lang->getModule('suspend_start'), $nv_Lang->getModule('suspend_end'), $nv_Lang->getModule('suspend_reason')];
 }
 
-$page_title = sprintf($lang_module['nv_admin_chg_suspend'], $row_user['username']);
+$page_title = $nv_Lang->getModule('nv_admin_chg_suspend', $row_user['username']);
 
 // Parse content
 $xtpl = new XTemplate('suspend.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

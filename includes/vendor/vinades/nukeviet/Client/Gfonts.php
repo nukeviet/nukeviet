@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -123,11 +123,7 @@ class Gfonts
         ];
         $result = $NV_Http->get($url, $args);
 
-        if (!empty(Http::$error) or $result['response']['code'] != 200 or empty($result['filename']) or !file_exists($result['filename']) or filesize($result['filename']) <= 0) {
-            return false;
-        }
-
-        return true;
+        return !(!empty(Http::$error) or $result['response']['code'] != 200 or empty($result['filename']) or !file_exists($result['filename']) or filesize($result['filename']) <= 0);
     }
 
     /**

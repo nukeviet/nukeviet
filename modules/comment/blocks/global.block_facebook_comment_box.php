@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,28 +19,29 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_config_facebook_comment_box_blocks($module, $data_block, $lang_block)
+    function nv_block_config_facebook_comment_box_blocks($module, $data_block)
     {
+        global $nv_Lang;
+
         $html = '';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['facebookappid'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('facebookappid') . ':</label>';
         $html .= '	<div class="col-sm-18"><input class="form-control" type="text" name="config_facebookappid" value="' . $data_block['facebookappid'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['width'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('width') . ':</label>';
         $html .= '	<div class="col-sm-18"><input class="form-control" type="text" name="config_width" value="' . $data_block['width'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= ' <label class="control-label col-sm-6">' . $lang_block['numpost'] . ':</label>';
+        $html .= ' <label class="control-label col-sm-6">' . $nv_Lang->getModule('numpost') . ':</label>';
         $html .= ' <div class="col-sm-18"><input class="form-control" type="text" name="config_numpost" value="' . $data_block['numpost'] . '"/></div>';
         $html .= '</div>';
 
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['scheme'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('scheme') . ':</label>';
         $html .= '	<div class="col-sm-9"> <select class="form-control" name="config_scheme"> ';
 
         $se1 = ($data_block['scheme'] == 'light') ? 'selected="selected"' : '';
@@ -60,10 +61,9 @@ if (!nv_function_exists('nv_facebook_comment_box_blocks')) {
      * nv_block_config_facebook_comment_box_blocks_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_facebook_comment_box_blocks_submit($module, $lang_block)
+    function nv_block_config_facebook_comment_box_blocks_submit($module)
     {
         global $nv_Request;
         $return = [];

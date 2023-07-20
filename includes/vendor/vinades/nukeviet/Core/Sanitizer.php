@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -220,11 +220,11 @@ class Sanitizer
 
             if (substr($currentTag, 0, 1) == '/') {
                 $isCloseTag = true;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower(substr($tagName, 1));
             } else {
                 $isCloseTag = false;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower($tagName);
             }
 
@@ -240,8 +240,8 @@ class Sanitizer
                 $openQuotes = strpos($fromSpace, '"');
                 $closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
 
-                if (strpos($fromSpace, '=') !== false) {
-                    if (($openQuotes !== false) and (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
+                if (str_contains($fromSpace, '=')) {
+                    if (($openQuotes !== false) and (str_contains(substr($fromSpace, ($openQuotes + 1)), '"'))) {
                         $attr = substr($fromSpace, 0, ($closeQuotes + 1));
                     } else {
                         $attr = substr($fromSpace, 0, $nextSpace);
@@ -291,6 +291,7 @@ class Sanitizer
      * Lọc các thuộc tính
      *
      * @param array $attrSet
+     * @param mixed $tagName
      * @return array
      */
     private function filterAttr($attrSet, $tagName)
@@ -308,7 +309,7 @@ class Sanitizer
             if (!$attrSet[$i]) {
                 continue;
             }
-            list($attrName, $attrContent) = array_map('trim', explode('=', trim($attrSet[$i]), 2));
+            [$attrName, $attrContent] = array_map('trim', explode('=', trim($attrSet[$i]), 2));
 
             $attrName = strtolower($attrName);
             if (!preg_match('/[a-z][a-z0-9\-]+/i', $attrName) or !in_array($attrName, $allowedAttributes, true) or preg_match('/^on/i', $attrName)) {
@@ -368,11 +369,7 @@ class Sanitizer
             return false;
         }
 
-        if (!empty($this->disableCommands) and preg_match('#(' . implode('|', $this->disableCommands) . ')(\s*)\((.*?)\)#si', $value)) {
-            return false;
-        }
-
-        return true;
+        return !(!empty($this->disableCommands) and preg_match('#(' . implode('|', $this->disableCommands) . ')(\s*)\((.*?)\)#si', $value));
     }
 
     /**

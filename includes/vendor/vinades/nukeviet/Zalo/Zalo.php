@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -367,7 +367,7 @@ class Zalo
         }
 
         $state = self::stateCreate(8);
-        list($code_verifier, $code_challenge) = self::codeVerifierCreate();
+        [$code_verifier, $code_challenge] = self::codeVerifierCreate();
         $url = ($level == 'oa' ? self::OA_PERMISSION_URL : self::PERMISSION_URL) . http_build_query([
             'app_id' => $this->app_id,
             'redirect_uri' => $redirect_uri,
@@ -726,6 +726,7 @@ class Zalo
      * @param mixed $accesstoken
      * @param mixed $user_id
      * @param mixed $tag
+     * @param mixed $tag_name
      */
     public function rmfollowerfromtag($accesstoken, $user_id, $tag_name)
     {
@@ -907,6 +908,7 @@ class Zalo
      * @param mixed $accesstoken
      * @param mixed $user_id
      * @param mixed $chat_text
+     * @param mixed $message_id
      * @return mixed
      */
     public function send_text($accesstoken, $user_id, $message_id, $chat_text)
@@ -937,6 +939,7 @@ class Zalo
      * @param mixed $user_id
      * @param mixed $chat_text
      * @param mixed $attachment
+     * @param mixed $message_id
      * @return mixed
      */
     public function send_sitephoto($accesstoken, $user_id, $message_id, $chat_text, $attachment)
@@ -967,6 +970,7 @@ class Zalo
      * @param mixed $user_id
      * @param mixed $chat_text
      * @param mixed $attachment_id
+     * @param mixed $message_id
      * @return mixed
      */
     public function send_zaloimage($accesstoken, $user_id, $message_id, $chat_text, $attachment_id)
@@ -996,6 +1000,7 @@ class Zalo
      * @param mixed $accesstoken
      * @param mixed $user_id
      * @param mixed $token
+     * @param mixed $message_id
      * @return mixed
      */
     public function send_zalofile($accesstoken, $user_id, $message_id, $token)
@@ -1027,6 +1032,7 @@ class Zalo
      * @param mixed $accesstoken
      * @param mixed $type
      * @param mixed $file
+     * @param mixed $cfile
      * @return mixed
      */
     public function upload($accesstoken, $type, $cfile)
@@ -1056,6 +1062,7 @@ class Zalo
      * @param mixed $accesstoken
      * @param mixed $user_id
      * @param mixed $request_info
+     * @param mixed $message_id
      * @return mixed
      */
     public function send_request_user_info($accesstoken, $user_id, $message_id, $request_info)
@@ -1085,6 +1092,7 @@ class Zalo
      * @param mixed $accesstoken
      * @param mixed $user_id
      * @param mixed $elements
+     * @param mixed $message_id
      * @return mixed
      */
     public function send_textlist($accesstoken, $user_id, $message_id, $elements)
@@ -1115,6 +1123,7 @@ class Zalo
      * @param mixed $user_id
      * @param mixed $text
      * @param mixed $btns
+     * @param mixed $message_id
      * @return mixed
      */
     public function send_btnlist($accesstoken, $user_id, $message_id, $text, $btns)

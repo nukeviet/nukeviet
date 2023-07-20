@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,7 +21,7 @@ if (!defined('NV_MAINFILE')) {
  */
 function nv_menu_blocks($block_config)
 {
-    global $nv_Cache, $global_config, $lang_global, $site_mods;
+    global $nv_Cache, $global_config, $site_mods;
 
     $list_cats = [];
     $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
@@ -70,9 +70,8 @@ function nv_menu_blocks($block_config)
     }
 
     $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/menu/' . $block_config['block_name'] . '.tpl');
-
     $xtpl = new XTemplate($block_config['block_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu');
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('BLOCK_THEME', $block_theme);
     $xtpl->assign('BLOCK_CONFIG', $block_config);
     $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);

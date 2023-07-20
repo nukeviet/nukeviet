@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -14,8 +14,8 @@ if (!defined('NV_MAINFILE')) {
 }
 
 $lang_translator['author'] = 'VINADES.,JSC <contact@vinades.vn>';
-$lang_translator['createdate'] = '31/07/2015, 16:30';
-$lang_translator['copyright'] = '@Copyright (C) 2009-2021 VINADES.,JSC. All rights reserved';
+$lang_translator['createdate'] = '20/07/2023, 07:15';
+$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
@@ -46,8 +46,7 @@ $lang_module['email_subject'] = 'Privacy notice';
 $lang_module['email_2step_on'] = 'Votre <strong>%4$s</strong> compte sur <a href="%5$s"><strong>%6$s</strong></a> vient d\'activer Two-Factor Authentication. Information:<br /><br />- Temps: <strong>%1$s</strong><br />- IP: <strong>%2$s</strong><br />- Navigateur: <strong>%3$s</strong><br /><br />Si c\'est vous, ignorez cet email. Si ce n\'est pas vous, votre compte est très probablement volé. Veuillez contacter l\'administrateur du site pour obtenir de l\'aide';
 $lang_module['email_2step_off'] = 'Votre <strong>%5$s</strong> compte sur <a href="%6$s"><strong>%7$s</strong></a> vient d\'activer Two-Factor Authentication. Information:<br /><br />- Temps: <strong>%1$s</strong><br />- IP: <strong>%2$s</strong><br />- Navigateur: <strong>%3$s</strong><br /><br />Si c\'est vous, ignorez cet email. Si ce n\'est pas vous, veuillez vérifier vos informations personnelles à l\'adresse <a href="%4$s">%4$s</a>';
 $lang_module['email_code_renew'] = 'Votre <strong>%5$s</strong> compte sur <a href="%6$s"><strong>%7$s</strong></a> vient de recréer le code de sauvegarde. Information:<br /><br />- Temps: <strong>%1$s</strong><br />- IP: <strong>%2$s</strong><br />- Navigateur: <strong>%3$s</strong><br /><br />Si c\'est vous, ignorez cet email. Si ce n\'est pas vous, veuillez vérifier vos informations personnelles à l\'adresse <a href="%4$s">%4$s</a>';
-
-$lang_module['change_2step_notvalid'] = 'Votre compte n\'a pas de mot de passe, donc l\'authentification en deux étapes ne peut pas être modifiée. Veuillez créer un mot de passe, puis revenir à cette page.<br/>Veuillez <a href="%s">cliquer ici</a> pour créer un mot de passe';
+$lang_module['change_2step_notvalid'] = 'Votre compte n\'a pas de mot de passe, donc l\'authentification en deux étapes ne peut pas être modifiée. Veuillez créer un mot de passe, puis revenir à cette page.<br />Veuillez <a href="%s">cliquer ici</a> pour créer un mot de passe';
 $lang_module['deactive_mess'] = 'Voulez-vous vraiment désactiver l\'authentification en deux étapes?';
 $lang_module['setup_2step'] = 'Configurer l\'authentification en deux étapes';
 $lang_module['forcedrelogin'] = 'Reconnexion forcée partout';

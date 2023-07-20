@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -148,7 +148,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
                     nv_save_file_config_global();
                 }
 
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule, '', $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('modules') . ' ' . $setmodule, '', $admin_info['userid']);
                 nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);
             }
         }
@@ -157,7 +157,7 @@ if (!empty($setmodule) and preg_match($global_config['check_module'], $setmodule
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
 }
 
-$page_title = $lang_module['modules'];
+$page_title = $nv_Lang->getModule('modules');
 $modules_exit = array_flip(nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']));
 $modules_data = [];
 
@@ -303,25 +303,25 @@ foreach ($modules_data as $row) {
 }
 
 $array_head = [
-    'caption' => $lang_module['module_sys'],
+    'caption' => $nv_Lang->getModule('module_sys'),
     'head' => [
-        $lang_module['weight'],
-        $lang_module['module_name'],
-        $lang_module['version'],
-        $lang_module['settime'],
-        $lang_module['author'],
+        $nv_Lang->getModule('weight'),
+        $nv_Lang->getModule('module_name'),
+        $nv_Lang->getModule('version'),
+        $nv_Lang->getModule('settime'),
+        $nv_Lang->getModule('author'),
         ''
     ]
 ];
 
 $array_virtual_head = [
-    'caption' => $lang_module['vmodule'],
+    'caption' => $nv_Lang->getModule('vmodule'),
     'head' => [
-        $lang_module['weight'],
-        $lang_module['module_name'],
-        $lang_module['vmodule_file'],
-        $lang_module['settime'],
-        $lang_module['vmodule_note'],
+        $nv_Lang->getModule('weight'),
+        $nv_Lang->getModule('module_name'),
+        $nv_Lang->getModule('vmodule_file'),
+        $nv_Lang->getModule('settime'),
+        $nv_Lang->getModule('vmodule_note'),
         ''
     ]
 ];

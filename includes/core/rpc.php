@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -22,7 +22,7 @@ if (!defined('NV_MAINFILE')) {
  */
 function nv_getRPC($url, $data)
 {
-    global $lang_module, $sys_info;
+    global $nv_Lang, $sys_info;
 
     $userAgents = ['Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1) Gecko/20090624 Firefox/3.5 (.NET CLR 3.5.30729)', 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)', 'Mozilla/4.8 [en] (Windows NT 6.0; U)', 'Opera/9.25 (Windows NT 6.0; U; en)'];
 
@@ -45,7 +45,7 @@ function nv_getRPC($url, $data)
     if (file_exists(NV_ROOTDIR . '/' . NV_DATADIR . '/proxies.php')) {
         include NV_ROOTDIR . '/' . NV_DATADIR . '/proxies.php';
         if (!empty($proxy)) {
-            $proxy = $proxy[rand(0, count($proxy) - 1)];
+            $proxy = $proxy[random_int(0, count($proxy) - 1)];
         }
     }
     if (nv_function_exists('fsockopen')) {
@@ -69,7 +69,7 @@ function nv_getRPC($url, $data)
                     $response .= fgets($fp, 64000);
                 }
                 fclose($fp);
-                list($header, $result) = preg_split("/\r?\n\r?\n/", $response, 2);
+                [$header, $result] = preg_split("/\r?\n\r?\n/", $response, 2);
 
                 unset($matches);
                 preg_match("/^HTTP\/[0-9\.]+\s+(\d+)\s+/", $header, $matches);
@@ -78,7 +78,7 @@ function nv_getRPC($url, $data)
                         return [2, trim(strip_tags($errstr . '(' . $errno . ')'))];
                     }
 
-                    return [3, $lang_module['rpc_error_unknown']];
+                    return [3, $nv_Lang->getModule('rpc_error_unknown')];
                 }
 
                 unset($matches1, $matches2);
@@ -86,13 +86,13 @@ function nv_getRPC($url, $data)
                     return [(int) $matches1[2], (string) $matches2[2]];
                 }
 
-                return [3, $lang_module['rpc_error_unknown']];
+                return [3, $nv_Lang->getModule('rpc_error_unknown')];
             }
         }
 
         $fp = @fsockopen($url_info['host'], $url_info['port'], $errno, $errstr, 10);
         if (!$fp) {
-            return [3, $lang_module['rpc_error_unknown']];
+            return [3, $nv_Lang->getModule('rpc_error_unknown')];
         }
 
         $http_request = 'POST ' . $url_info['path'] . $url_info['query'] . " HTTP/1.0\r\n";
@@ -107,7 +107,7 @@ function nv_getRPC($url, $data)
             $response .= fgets($fp, 64000);
         }
         fclose($fp);
-        list($header, $result) = preg_split("/\r?\n\r?\n/", $response, 2);
+        [$header, $result] = preg_split("/\r?\n\r?\n/", $response, 2);
 
         unset($matches);
         preg_match("/^HTTP\/[0-9\.]+\s+(\d+)\s+/", $header, $matches);
@@ -116,7 +116,7 @@ function nv_getRPC($url, $data)
                 return [2, trim(strip_tags($errstr . '(' . $errno . ')'))];
             }
 
-            return [3, $lang_module['rpc_error_unknown']];
+            return [3, $nv_Lang->getModule('rpc_error_unknown')];
         }
 
         unset($matches1, $matches2);
@@ -124,11 +124,11 @@ function nv_getRPC($url, $data)
             return [(int) $matches1[2], (string) $matches2[2]];
         }
 
-        return [3, $lang_module['rpc_error_unknown']];
+        return [3, $nv_Lang->getModule('rpc_error_unknown')];
     }
 
     if (!nv_function_exists('curl_init') or !nv_function_exists('curl_exec')) {
-        return [3, $lang_module['rpc_error_unknown']];
+        return [3, $nv_Lang->getModule('rpc_error_unknown')];
     }
 
     $header = ['Content-Type:text/xml', 'Host:' . $url_info['host'] . ':' . $url_info['port'], 'User-Agent:' . $agent, 'Content-length: ' . strlen($data)];
@@ -175,7 +175,7 @@ function nv_getRPC($url, $data)
         return [2, trim(strip_tags($result['ERR']))];
     }
 
-    return [3, $lang_module['rpc_error_unknown']];
+    return [3, $nv_Lang->getModule('rpc_error_unknown')];
 }
 
 /**

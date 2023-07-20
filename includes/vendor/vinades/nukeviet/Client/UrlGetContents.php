@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -26,8 +26,8 @@ use NukeViet\Site;
 class UrlGetContents
 {
     private $allow_methods = [];
-    static $user_agent = '';
-    static $open_basedir = false;
+    public static $user_agent = '';
+    public static $open_basedir = false;
     private $url_info = false;
     private $login = '';
     private $password = '';
@@ -272,7 +272,7 @@ class UrlGetContents
             return false;
         }
 
-        list($header, $result) = preg_split("/\r?\n\r?\n/", $result, 2);
+        [$header, $result] = preg_split("/\r?\n\r?\n/", $result, 2);
 
         $response = curl_getinfo($curlHandle);
 
@@ -401,7 +401,7 @@ class UrlGetContents
 
         @fclose($fp);
 
-        list($header, $result) = preg_split("/\r?\n\r?\n/", $response, 2);
+        [$header, $result] = preg_split("/\r?\n\r?\n/", $response, 2);
 
         if (preg_match('/^(Location:|URI:)[\s]*(.*?)$/m', $header, $matches) and $this->redirectCount <= 5) {
             ++$this->redirectCount;

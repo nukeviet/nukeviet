@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -69,7 +69,7 @@ if ($nv_Request->isset_request('save', 'post') and isset($site_mod_comm[$mod_nam
 }
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
 $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -112,7 +112,7 @@ if (!empty($mod_name)) {
     for ($i = 0; $i <= 2; ++$i) {
         $xtpl->assign('OPTION', [
             'key' => $i,
-            'title' => $lang_module['auto_postcomm_' . $i],
+            'title' => $nv_Lang->getModule('auto_postcomm_' . $i),
             'selected' => $i == $module_config[$mod_name]['auto_postcomm'] ? ' selected="selected"' : ''
         ]);
         $xtpl->parse('main.config.auto_postcomm');
@@ -125,7 +125,7 @@ if (!empty($mod_name)) {
     $xtpl->assign('OPTION', [
         'value' => -1,
         'checked' => in_array(-1, $array_allowed_comm, true) ? ' checked="checked"' : '',
-        'title' => $lang_module['allowed_comm_item']
+        'title' => $nv_Lang->getModule('allowed_comm_item')
     ]);
     $xtpl->parse('main.config.allowed_comm');
 
@@ -156,7 +156,7 @@ if (!empty($mod_name)) {
     for ($i = 0; $i <= 2; ++$i) {
         $xtpl->assign('OPTION', [
             'key' => $i,
-            'title' => $lang_module['sortcomm_' . $i],
+            'title' => $nv_Lang->getModule('sortcomm_' . $i),
             'selected' => $i == $module_config[$mod_name]['sortcomm'] ? ' selected="selected"' : ''
         ]);
         $xtpl->parse('main.config.sortcomm');
@@ -164,9 +164,9 @@ if (!empty($mod_name)) {
 
     $xtpl->parse('main.config');
 
-    $page_title = sprintf($lang_module['config_mod_name'], $site_mod_comm[$mod_name]['custom_title']);
+    $page_title = $nv_Lang->getModule('config_mod_name', $site_mod_comm[$mod_name]['custom_title']);
 } else {
-    $page_title = $lang_module['config'];
+    $page_title = $nv_Lang->getModule('config');
 
     $weight = 0;
     foreach ($site_mod_comm as $mod_name => $row_mod) {
@@ -176,7 +176,7 @@ if (!empty($mod_name)) {
         $array_view_comm = (!empty($module_config[$mod_name]['view_comm'])) ? explode(',', $module_config[$mod_name]['view_comm']) : [];
 
         if (in_array(-1, $array_allowed_comm, true)) {
-            $allowed_comm = $lang_module['allowed_comm_item'];
+            $allowed_comm = $nv_Lang->getModule('allowed_comm_item');
         } else {
             $allowed_comm = [];
             foreach ($array_allowed_comm as $_group_id) {
@@ -197,7 +197,7 @@ if (!empty($mod_name)) {
         $row['admin_title'] = $admin_title;
         $row['allowed_comm'] = $allowed_comm;
         $row['view_comm'] = $view_comm;
-        $row['auto_postcomm'] = $lang_module['auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']];
+        $row['auto_postcomm'] = $nv_Lang->getModule('auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']);
         $row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'circle-o';
         $row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'circle-o';
         $xtpl->assign('ROW', $row);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -50,7 +50,7 @@ $sth2->execute();
 
 $nv_Cache->delMod('modules');
 
-nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['weight'] . ' module: ' . $mod, $weight . ' -> ' . $new_weight, $admin_info['userid']);
+nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('weight') . ' module: ' . $mod, $weight . ' -> ' . $new_weight, $admin_info['userid']);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $mod;

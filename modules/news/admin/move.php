@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -17,7 +17,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
  * Khi di chuyển bài viết sẽ làm mất hoàn toàn các chuyên mục cũ dó đó nếu bài viết
  * đang bị đình chỉ thì chúng sẽ được trả lại trạng thái trước đó.
  */
-$page_title = $lang_module['move'];
+$page_title = $nv_Lang->getModule('move');
 
 $id_array = [];
 $listid = $nv_Request->get_string('listid', 'get,post', '');
@@ -42,7 +42,7 @@ if ($nv_Request->isset_request('idcheck', 'post')) {
         }
 
         $result = $db->query('SELECT id, listcatid, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id IN (' . implode(',', $id_array) . ')');
-        while (list($id, $listcatid_old, $status) = $result->fetch(3)) {
+        while ([$id, $listcatid_old, $status] = $result->fetch(3)) {
             // Xóa hết các chuyên mục cũ đi
             $array_catid_old = explode(',', $listcatid_old);
             foreach ($array_catid_old as $catid_i) {
@@ -81,13 +81,13 @@ $db->sqlreset()->select('id, title')->from(NV_PREFIXLANG . '_' . $module_data . 
 $result = $db->query($db->sql());
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
-while (list($id, $title) = $result->fetch(3)) {
+while ([$id, $title] = $result->fetch(3)) {
     $xtpl->assign('ROW', [
         'id' => $id,
         'title' => $title,

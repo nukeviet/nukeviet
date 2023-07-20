@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,22 +23,14 @@ use NukeViet\Client\Browser;
  */
 function nv_get_submenu($mod)
 {
-    global $module_name, $global_config, $admin_mods, $lang_global;
+    global $module_name, $global_config, $admin_mods, $nv_Lang;
 
     $submenu = [];
 
     if (file_exists(NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php')) {
-        // ket noi voi file ngon ngu cua module
-        if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php')) {
-            include NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php')) {
-            include NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php';
-        } elseif (file_exists(NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php')) {
-            include NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php';
-        }
-
+        $nv_Lang->loadModule($mod, true, true);
         include NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php';
-        unset($lang_module);
+        $nv_Lang->changeLang();
     }
 
     return $submenu;
@@ -52,7 +44,7 @@ function nv_get_submenu($mod)
  */
 function nv_get_submenu_mod($module_name)
 {
-    global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
+    global $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods, $nv_Lang;
 
     $submenu = [];
     if (isset($site_mods[$module_name])) {
@@ -60,17 +52,9 @@ function nv_get_submenu_mod($module_name)
         $module_file = $module_info['module_file'];
         $module_data = $module_info['module_data'];
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php')) {
-            // ket noi voi file ngon ngu cua module
-            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php')) {
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php';
-            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php')) {
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php';
-            }
-
+            $nv_Lang->loadModule($module_file, false, true);
             include NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
-            unset($lang_module);
+            $nv_Lang->changeLang();
         }
     }
 
@@ -86,7 +70,7 @@ function nv_get_submenu_mod($module_name)
  */
 function nv_admin_theme($contents, $head_site = 1)
 {
-    global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op, $client_info, $browser;
+    global $global_config, $nv_Lang, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op, $client_info, $browser;
 
     $dir_template = '';
 
@@ -102,13 +86,13 @@ function nv_admin_theme($contents, $head_site = 1)
         $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
     }
 
-    $admin_info['hello_admin1'] = !empty($admin_info['last_login']) ? sprintf($lang_global['hello_admin1'], date('H:i d/m/Y', $admin_info['last_login']), $admin_info['last_ip']) : '';
-    $admin_info['hello_admin2'] = sprintf($lang_global['hello_admin2'], date('H:i d/m/Y', $admin_info['current_login']), $admin_info['current_ip']);
+    $admin_info['hello_admin1'] = !empty($admin_info['last_login']) ? $nv_Lang->getGlobal('hello_admin1', date('H:i d/m/Y', $admin_info['last_login']), $admin_info['last_ip']) : '';
+    $admin_info['hello_admin2'] = $nv_Lang->getGlobal('hello_admin2', date('H:i d/m/Y', $admin_info['current_login']), $admin_info['current_ip']);
 
     $xtpl = new XTemplate($file_name_tpl, $dir_template);
     $xtpl->assign('NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ');
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
-    $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . NV_TITLEBAR_DEFIS . $lang_global['admin_page'] . NV_TITLEBAR_DEFIS . $module_info['custom_title']);
+    $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('admin_page') . NV_TITLEBAR_DEFIS . $module_info['custom_title']);
     $xtpl->assign('SITE_DESCRIPTION', empty($global_config['site_description']) ? $page_title : $global_config['site_description']);
     $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['admin_check_pass_time']) - 62) * 1000);
     $xtpl->assign('NV_XSS_SANITIZE', ($global_config['admin_XSSsanitize'] ? 1 : 0));
@@ -116,7 +100,7 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('MODULE_FILE', $module_file);
     $xtpl->assign('NV_ADMIN_THEME', $admin_info['admin_theme']);
     $xtpl->assign('NV_SAFEMODE', $admin_info['safemode']);
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('SITE_FAVICON', $site_favicon);
     $xtpl->assign('ADMIN', $admin_info);
 
@@ -150,10 +134,10 @@ function nv_admin_theme($contents, $head_site = 1)
     }
 
     if ($head_site == 1) {
-        $xtpl->assign('NV_GO_CLIENTSECTOR', $lang_global['go_clientsector']);
+        $xtpl->assign('NV_GO_CLIENTSECTOR', $nv_Lang->getGlobal('go_clientsector'));
         $lang_site = (!empty($site_mods)) ? NV_LANG_DATA : $global_config['site_lang'];
         $xtpl->assign('NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_site);
-        $xtpl->assign('NV_LOGOUT', $lang_global['admin_logout_title']);
+        $xtpl->assign('NV_LOGOUT', $nv_Lang->getGlobal('admin_logout_title'));
         $xtpl->assign('NV_GO_ALL_NOTIFICATION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=notification');
 
         if (!empty($array_lang_admin)) {
@@ -287,7 +271,7 @@ function nv_admin_theme($contents, $head_site = 1)
     }
 
     if (!empty($select_options)) {
-        $xtpl->assign('PLEASE_SELECT', $lang_global['please_select']);
+        $xtpl->assign('PLEASE_SELECT', $nv_Lang->getGlobal('please_select'));
 
         foreach ($select_options as $value => $link) {
             $xtpl->assign('SELECT_NAME', $link);
@@ -298,12 +282,12 @@ function nv_admin_theme($contents, $head_site = 1)
         $xtpl->parse('main.select_option');
     }
     if (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
-        $xtpl->assign('NV_GO_CLIENTMOD', $lang_global['go_clientmod']);
+        $xtpl->assign('NV_GO_CLIENTMOD', $nv_Lang->getGlobal('go_clientmod'));
         $xtpl->parse('main.site_mods');
     }
 
     if (isset($array_url_instruction[$op])) {
-        $xtpl->assign('NV_INSTRUCTION', $lang_global['go_instrucion']);
+        $xtpl->assign('NV_INSTRUCTION', $nv_Lang->getGlobal('go_instrucion'));
         $xtpl->assign('NV_URL_INSTRUCTION', $array_url_instruction[$op]);
         $xtpl->parse('main.url_instruction');
     }
@@ -344,7 +328,7 @@ function nv_admin_theme($contents, $head_site = 1)
 
     $xtpl->assign('THEME_ERROR_INFO', nv_error_info());
     $xtpl->assign('MODULE_CONTENT', $contents);
-    $xtpl->assign('NV_COPYRIGHT', sprintf($lang_global['copyright'], $global_config['site_name']));
+    $xtpl->assign('NV_COPYRIGHT', $nv_Lang->getGlobal('copyright', $global_config['site_name']));
 
     if (defined('CKEDITOR')) {
         $xtpl->parse('main.ckeditor');

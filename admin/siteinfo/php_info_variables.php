@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,8 +20,8 @@ $array = phpinfo_array(32, 1);
 if (!empty($array['PHP Variables'])) {
     $xtpl = new XTemplate('variables_php.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-    $caption = $lang_module['variables_php'];
-    $thead = [$lang_module['variable'], $lang_module['value']];
+    $caption = $nv_Lang->getModule('variables_php');
+    $thead = [$nv_Lang->getModule('variable'), $nv_Lang->getModule('value')];
 
     $xtpl->assign('CAPTION', $caption);
     $xtpl->assign('THEAD0', $thead[0]);
@@ -51,7 +51,7 @@ if (!empty($array['PHP Variables'])) {
     $contents = $xtpl->text('main');
 }
 
-$page_title = $lang_module['variables_php'];
+$page_title = $nv_Lang->getModule('variables_php');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

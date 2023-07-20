@@ -20,7 +20,7 @@ if ($nv_Request->isset_request('nv_genpass', 'post')) {
 }
 
 $showheader = $nv_Request->get_int('showheader', 'post,get', 1);
-$page_title = $lang_module['user_add'];
+$page_title = $nv_Lang->getModule('user_add');
 
 if ($global_config['max_user_number'] > 0) {
     $sql = 'SELECT count(*) FROM ' . NV_MOD_TABLE;
@@ -29,7 +29,7 @@ if ($global_config['max_user_number'] > 0) {
     }
     $user_number = $db->query($sql)->fetchColumn();
     if ($user_number >= $global_config['max_user_number']) {
-        $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+        $contents = $nv_Lang->getGlobal('limit_user_number', $global_config['max_user_number']);
         include NV_ROOTDIR . '/includes/header.php';
         echo nv_admin_theme($contents, $showheader);
         include NV_ROOTDIR . '/includes/footer.php';
@@ -101,7 +101,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
-            'mess' => sprintf($lang_module['account_deny_name'], $_user['username'])
+            'mess' => $nv_Lang->getModule('account_deny_name', $_user['username'])
         ]);
     }
 
@@ -115,7 +115,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
-            'mess' => $lang_module['edit_error_username_exist']
+            'mess' => $nv_Lang->getModule('edit_error_username_exist')
         ]);
     }
 
@@ -128,7 +128,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'username',
-            'mess' => $lang_module['edit_error_username_exist']
+            'mess' => $nv_Lang->getModule('edit_error_username_exist')
         ]);
     }
 
@@ -151,7 +151,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ]);
     }
 
@@ -164,7 +164,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ]);
     }
 
@@ -177,7 +177,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'email',
-            'mess' => $lang_module['edit_error_email_exist']
+            'mess' => $nv_Lang->getModule('edit_error_email_exist')
         ]);
     }
 
@@ -193,7 +193,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'password1',
-            'mess' => $lang_module['edit_error_password']
+            'mess' => $nv_Lang->getModule('edit_error_password')
         ]);
     }
 
@@ -285,7 +285,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => '',
-            'mess' => $lang_module['edit_add_error']
+            'mess' => $nv_Lang->getModule('edit_add_error')
         ]);
     }
 
@@ -345,6 +345,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $maillang = NV_LANG_DATA;
         }
 
+        $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
+        $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
         $gconfigs = [
             'site_name' => $global_config['site_name'],
             'site_email' => $global_config['site_email']
@@ -356,20 +358,20 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $gconfigs[$row['config_name']] = $row['config_value'];
             }
 
-            $lang_tmp = $lang_module;
-            $lang_module = [];
-            include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
+            $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+
+            $pass_reset_request = $_user['pass_reset_request'] == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : ($_user['pass_reset_request'] == 1 ? $nv_Lang->getModule('pass_reset_request1_info') : '');
+            $mail_subject = $nv_Lang->getModule('adduser_register');
+            $mail_message = $nv_Lang->getModule('adduser_register_info1', $full_name, $gconfigs['site_name'], $_url, $_user['username'], $_user['password1'], $pass_reset_request);
+
+            $nv_Lang->changeLang();
+        } else {
+            $pass_reset_request = $_user['pass_reset_request'] == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : ($_user['pass_reset_request'] == 1 ? $nv_Lang->getModule('pass_reset_request1_info') : '');
+            $mail_subject = $nv_Lang->getModule('adduser_register');
+            $mail_message = $nv_Lang->getModule('adduser_register_info1', $full_name, $gconfigs['site_name'], $_url, $_user['username'], $_user['password1'], $pass_reset_request);
         }
 
-        $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
-        $pass_reset_request = $_user['pass_reset_request'] == 2 ? $lang_module['pass_reset_request2_info'] : ($_user['pass_reset_request'] == 1 ? $lang_module['pass_reset_request1_info'] : '');
-        $subject = $lang_module['adduser_register'];
-        $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-        $message = sprintf($lang_module['adduser_register_info1'], $full_name, $gconfigs['site_name'], $_url, $_user['username'], $_user['password1'], $pass_reset_request);
-        if (!empty($maillang)) {
-            $lang_module = $lang_tmp;
-        }
-        @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $_user['email'], $subject, $message, '', false, false, [], [], true, [], $maillang);
+        @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $_user['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
     }
 
     nv_jsonOutput([
@@ -377,7 +379,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         'input' => '',
         'username' => $_user['username'],
         'admin_add' => (isset($admin_mods['authors']) and defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and ($global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0))) ? 'yes' : 'no',
-        'mess' => sprintf($lang_module['admin_add'], $_user['username']),
+        'mess' => $nv_Lang->getModule('admin_add', $_user['username']),
         'nv_redirect' => $nv_redirect != '' ? nv_redirect_decrypt($nv_redirect) . '&userid=' . $userid : ''
     ]);
 }
@@ -388,17 +390,17 @@ if ($nv_Request->isset_request('initdata', 'post')) {
     $_initdata = json_decode($crypt->decrypt($_initdata, NV_CHECK_SESSION), true);
     $initdata = is_array($_initdata) ? $_initdata : [];
 }
-$_user['email'] = isset($initdata['email']) ? $initdata['email'] : '';
-$_user['first_name'] = isset($initdata['first_name']) ? $initdata['first_name'] : '';
-$_user['last_name'] = isset($initdata['last_name']) ? $initdata['last_name'] : '';
-$_user['username'] = isset($initdata['username']) ? $initdata['username'] : '';
-$_user['question'] = isset($initdata['question']) ? $initdata['question'] : '';
-$_user['answer'] = isset($initdata['answer']) ? $initdata['answer'] : '';
-$_user['gender'] = isset($initdata['gender']) ? $initdata['gender'] : '';
-$_user['sig'] = isset($initdata['sig']) ? $initdata['sig'] : '';
-$_user['birthday'] = isset($initdata['birthday']) ? $initdata['birthday'] : '';
-$_user['password1'] = isset($initdata['password1']) ? $initdata['password1'] : '';
-$_user['password2'] = isset($initdata['password2']) ? $initdata['password2'] : '';
+$_user['email'] = $initdata['email'] ?? '';
+$_user['first_name'] = $initdata['first_name'] ?? '';
+$_user['last_name'] = $initdata['last_name'] ?? '';
+$_user['username'] = $initdata['username'] ?? '';
+$_user['question'] = $initdata['question'] ?? '';
+$_user['answer'] = $initdata['answer'] ?? '';
+$_user['gender'] = $initdata['gender'] ?? '';
+$_user['sig'] = $initdata['sig'] ?? '';
+$_user['birthday'] = $initdata['birthday'] ?? '';
+$_user['password1'] = $initdata['password1'] ?? '';
+$_user['password2'] = $initdata['password2'] ?? '';
 $_user['pass_reset_request'] = isset($initdata['pass_reset_request']) ? (int) $initdata['pass_reset_request'] : 1;
 
 $_user['view_mail'] = 0;
@@ -421,8 +423,8 @@ if (!empty($groups_list)) {
 }
 
 $xtpl = new XTemplate('user_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $_user);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_add');
 
@@ -440,7 +442,7 @@ if (defined('NV_IS_USER_FORUM')) {
         $xtpl->assign('PASSRESET', [
             'num' => $i,
             'sel' => $i == $_user['pass_reset_request'] ? ' selected="selected"' : '',
-            'title' => $lang_module['pass_reset_request' . $i]
+            'title' => $nv_Lang->getModule('pass_reset_request' . $i)
         ]);
         $xtpl->parse('main.edit_user.pass_reset_request');
     }
@@ -463,16 +465,16 @@ if (defined('NV_IS_USER_FORUM')) {
         // Value luôn là giá trị mặc định
         if (!empty($row['field_choices'])) {
             if ($row['field_type'] == 'date') {
-                $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : (($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value']);
+                $row['value'] = $initdata[$row['field']] ?? (($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value']);
             } elseif ($row['field_type'] == 'number') {
-                $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : $row['default_value'];
+                $row['value'] = $initdata[$row['field']] ?? $row['default_value'];
             } else {
                 $temp = array_keys($row['field_choices']);
-                $tempkey = isset($initdata[$row['field']]) ? $initdata[$row['field']] : (int) ($row['default_value']) - 1;
+                $tempkey = $initdata[$row['field']] ?? (int) ($row['default_value']) - 1;
                 $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
             }
         } else {
-            $row['value'] = isset($initdata[$row['field']]) ? $initdata[$row['field']] : get_value_by_lang($row['default_value']);
+            $row['value'] = $initdata[$row['field']] ?? get_value_by_lang($row['default_value']);
         }
 
         $row['required'] = ($row['required']) ? 'required' : '';

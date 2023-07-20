@@ -19,10 +19,11 @@ if (!defined('NV_MAINFILE')) {
  * trong thư mục api của hệ thống hoặc Api của module
  *
  * @return array
+ * @param mixed $object
  */
 function nv_get_api_actions($object)
 {
-    global $lang_module, $sys_mods;
+    global $nv_Lang, $sys_mods;
 
     $array_keys = $array_cats = $array_apis = ['' => []];
 
@@ -37,8 +38,8 @@ function nv_get_api_actions($object)
             $class_namespaces = 'NukeViet\\' . $class_dir . '\\' . $class_name;
             if (nv_class_exists($class_namespaces)) {
                 $class_cat = $class_namespaces::getCat();
-                $cat_title = !empty($lang_module['api_' . $class_cat]) ? $lang_module['api_' . $class_cat] : $class_cat;
-                $api_title = !empty($lang_module['api_' . $class_cat . '_' . $class_name]) ? $lang_module['api_' . $class_cat . '_' . $class_name] : $class_cat . '_' . $class_name;
+                $cat_title = !empty($nv_Lang->getModule('api_' . $class_cat)) ? $nv_Lang->getModule('api_' . $class_cat) : $class_cat;
+                $api_title = !empty($nv_Lang->getModule('api_' . $class_cat . '_' . $class_name)) ? $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name) : $class_cat . '_' . $class_name;
                 !isset($array_apis[''][$class_cat]) && $array_apis[''][$class_cat] = [
                     'title' => $cat_title,
                     'apis' => []
@@ -57,27 +58,16 @@ function nv_get_api_actions($object)
         }
     }
 
-    $lang_module_backup = $lang_module;
-
     // Các API của module cung cấp
     foreach ($sys_mods as $module_name => $module_info) {
         $module_file = $module_info['module_file'];
         $module_api_dir = $object == 'admin' ? 'Api' : 'uapi';
         if (module_file_exists($module_file . '/' . $module_api_dir)) {
             // Đọc ngôn ngữ tạm của module
-            $lang_module = [];
             if ($object == 'admin') {
-                if (module_file_exists($module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-                } elseif (module_file_exists($module_file . '/language/admin_en.php')) {
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php';
-                }
+                $nv_Lang->loadModule($module_file, true, true);
             } else {
-                if (module_file_exists($module_file . '/language/' . NV_LANG_INTERFACE . '.php')) {
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/' . NV_LANG_INTERFACE . '.php';
-                } elseif (module_file_exists($module_file . '/language/en.php')) {
-                    include NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
-                }
+                $nv_Lang->loadModule($module_file, false, true);
             }
 
             // Lấy các API
@@ -89,8 +79,8 @@ function nv_get_api_actions($object)
                     $class_namespaces = 'NukeViet\\Module\\' . $module_file . '\\' . $module_api_dir . '\\' . $class_name;
                     if (nv_class_exists($class_namespaces)) {
                         $class_cat = $class_namespaces::getCat();
-                        $cat_title = (!empty($class_cat) and !empty($lang_module['api_' . $class_cat])) ? $lang_module['api_' . $class_cat] : $class_cat;
-                        $api_title = (!empty($class_cat) and !empty($lang_module['api_' . $class_cat . '_' . $class_name])) ? $lang_module['api_' . $class_cat . '_' . $class_name] : (!empty($lang_module['api_' . $class_name]) ? $lang_module['api_' . $class_name] : $class_name);
+                        $cat_title = (!empty($class_cat) and !empty($nv_Lang->getModule('api_' . $class_cat))) ? $nv_Lang->getModule('api_' . $class_cat) : $class_cat;
+                        $api_title = (!empty($class_cat) and !empty($nv_Lang->getModule('api_' . $class_cat . '_' . $class_name))) ? $nv_Lang->getModule('api_' . $class_cat . '_' . $class_name) : (!empty($nv_Lang->getModule('api_' . $class_name)) ? $nv_Lang->getModule('api_' . $class_name) : $class_name);
 
                         // Xác định cây thư mục
                         !isset($array_apis[$module_name]) && $array_apis[$module_name] = [];
@@ -117,10 +107,9 @@ function nv_get_api_actions($object)
                     }
                 }
             }
+            $nv_Lang->changeLang();
         }
     }
-
-    $lang_module = $lang_module_backup;
 
     return [$array_apis, $array_keys, $array_cats];
 }
@@ -134,7 +123,7 @@ function nv_get_api_actions($object)
  */
 function parseRole($row)
 {
-    global $lang_module, $array_api_cats, $user_array_api_cats, $global_config;
+    global $nv_Lang, $array_api_cats, $user_array_api_cats, $global_config;
 
     $row['role_data'] = !empty($row['role_data']) ? json_decode($row['role_data'], true) : [];
     $cats = $row['role_object'] == 'admin' ? $array_api_cats : $user_array_api_cats;
@@ -159,7 +148,7 @@ function parseRole($row)
                 $row['apis'][''][$cat['key']]['apis'][$api_cmd] = $cat['api_title'];
                 ++$row['apitotal'];
             } else {
-                $row['api_doesnt_exist'][] = $api_cmd . ' (' . $lang_module['api_of_system'] . ')';
+                $row['api_doesnt_exist'][] = $api_cmd . ' (' . $nv_Lang->getModule('api_of_system') . ')';
             }
         }
     }

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -72,7 +72,7 @@ if (defined('NV_IS_ADMIN')) {
                             } else {
                                 $user_info['valid_question'] = true;
                             }
-                            $user_info['current_mode'] = isset($user_cookie['current_mode']) ? $user_cookie['current_mode'] : 0;
+                            $user_info['current_mode'] = $user_cookie['current_mode'] ?? 0;
 
                             unset($user_info['checknum'], $user_info['password'], $user_info['question'], $user_info['answer'], $check_in_groups);
 

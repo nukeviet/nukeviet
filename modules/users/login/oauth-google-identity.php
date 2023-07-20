@@ -91,23 +91,23 @@ if ($nv_Request->isset_request('credential', 'post')) {
             $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
             $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
             $stmt->execute();
-            list($user_id, $op_email, $user_active, $safemode) = $stmt->fetch(3);
+            [$user_id, $op_email, $user_active, $safemode] = $stmt->fetch(3);
         } else {
-            list($user_id, $op_email, $user_active, $safemode) = $custom_method;
+            [$user_id, $op_email, $user_active, $safemode] = $custom_method;
         }
 
         if ($user_id) {
             if ($safemode == 1) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['safe_deactivate_openidlogin']
+                    'mess' => $nv_Lang->getModule('safe_deactivate_openidlogin')
                 ]);
             }
 
             if (!$user_active) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['login_no_active']
+                    'mess' => $nv_Lang->getModule('login_no_active')
                 ]);
             }
 
@@ -125,7 +125,7 @@ if ($nv_Request->isset_request('credential', 'post')) {
             nv_jsonOutput([
                 'redirect' => nv_redirect_decrypt($nv_redirect),
                 'status' => 'success',
-                'mess' => $lang_module['login_ok']
+                'mess' => $nv_Lang->getModule('login_ok')
             ]);
         }
     }

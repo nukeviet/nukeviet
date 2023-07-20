@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -327,7 +327,7 @@ class Curl
         $response['redirect_url'] = $url != $args['origin_url'] ? $url : '';
         $response['redirect_count'] = $args['redirect_count'];
         $response['code'] = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        $response['message'] = isset(Http::$http_response_status_codes[$response['code']]) ? Http::$http_response_status_codes[$response['code']] : $response['code'];
+        $response['message'] = Http::$http_response_status_codes[$response['code']] ?? $response['code'];
 
         curl_close($handle);
 

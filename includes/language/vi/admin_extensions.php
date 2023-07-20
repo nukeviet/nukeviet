@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -24,9 +24,7 @@ $lang_module['popular'] = 'Ứng dụng phổ biến nhất';
 $lang_module['featured'] = 'Ứng dụng khuyên dùng';
 $lang_module['downloaded'] = 'Ứng dụng đã tải';
 $lang_module['favorites'] = 'Ứng dụng đã đánh dấu';
-
 $lang_module['empty_response'] = 'Không có bất kỳ dữ liệu nào phù hợp với yêu cầu này.';
-
 $lang_module['extname'] = 'Tên ứng dụng';
 $lang_module['author'] = 'Tác giả';
 $lang_module['detail'] = 'Chi tiết';
@@ -50,30 +48,24 @@ $lang_module['license'] = 'Giấy phép';
 $lang_module['download'] = 'Tải xuống';
 $lang_module['download_note'] = 'Sử dụng đường dẫn này để tải xuống máy tính cá nhân';
 $lang_module['install_note'] = 'Sử dụng đường dẫn này để cài đặt trực tiếp';
-
 $lang_module['file_name'] = 'Tên file';
 $lang_module['file_version'] = 'Phiên bản';
-
 $lang_module['types_0'] = 'Không rõ';
 $lang_module['types_1'] = 'Modules';
 $lang_module['types_2'] = 'Themes';
 $lang_module['types_3'] = 'Blocks';
 $lang_module['types_4'] = 'Cronjobs';
 $lang_module['types_5'] = 'Khác';
-
 $lang_module['file_type_0'] = 'Không rõ';
 $lang_module['file_type_1'] = 'File cài đặt';
 $lang_module['file_type_2'] = 'File hướng dẫn';
 $lang_module['file_type_3'] = 'Loại file khác';
-
 $lang_module['search_key'] = 'Nhập từ khóa';
 $lang_module['search_go'] = 'Tìm';
-
-$lang_module['detail_title'] = 'Chi tiết ứng dụng &quot;%s&quot;';
+$lang_module['detail_title'] = 'Chi tiết ứng dụng "%s"';
 $lang_module['detail_empty_documentation'] = 'Ứng dụng này không có hướng dẫn';
 $lang_module['detail_empty_images'] = 'Ứng dụng này không có ảnh minh họa';
-
-$lang_module['install_title'] = 'Cài đặt ứng dụng &quot;%s&quot;';
+$lang_module['install_title'] = 'Cài đặt ứng dụng "%s"';
 $lang_module['install_getfile'] = 'Tìm kiếm phiên bản thích hợp';
 $lang_module['install_getfile_error'] = 'Không có phiên bản nào thích hợp';
 $lang_module['install_check_compatible'] = 'Kiểm tra tính tương thích';
@@ -94,16 +86,13 @@ $lang_module['install_check_paid'] = 'Kiểm tra thanh toán';
 $lang_module['install_check_paid_await'] = 'Ứng dụng này đang trong quá trình thanh toán và đang chờ được xác nhận. Việc cài đặt bị chặn cho đến khi hoàn tất thanh toán';
 $lang_module['install_check_paid_nologin'] = 'Hệ thống yêu cầu bạn đăng nhập Merchant Site để kiểm tra việc thanh toán ứng dụng. Nhấp vào đây để đăng nhập';
 $lang_module['install_check_paid_unpaid'] = 'Ứng dụng này có phí. Bạn cần mua ứng dụng trước khi có thể cài đặt. Nhấp vào đây để mua.';
-
 $lang_module['download_error_preparam'] = 'Lỗi: Thiếu thông tin cần thiết';
 $lang_module['download_error_save'] = 'Lỗi: Lưu file thất bại';
 $lang_module['download_ok'] = 'Tải file thành công! Bạn đang được chuyển đến trang cài đặt...';
-
 $lang_module['login_pagetitle'] = 'Đăng nhập Merchant Site';
 $lang_module['login_require'] = 'Chức năng này yêu cầu bạn phải đăng nhập. Nhấp <a href="%s">vào đây</a> để đăng nhập';
 $lang_module['login_creat_merchant'] = 'Nếu chưa có tài khoản, hãy click <a href="http://nukeviet.vn/store/merchant/manager/">vào đây</a> để tạo';
 $lang_module['login_success'] = 'Đăng nhập thành công!';
-
 $lang_module['extUpd'] = 'Nâng cấp ứng dụng';
 $lang_module['extUpdCheck'] = 'Kiểm tra gói nâng cấp';
 $lang_module['extUpdCheckSuccess'] = 'Có thể nâng cấp';
@@ -116,7 +105,6 @@ $lang_module['extUpdUnpaid'] = 'Chưa thanh toán';
 $lang_module['extUpdInvalid'] = 'Không hợp lệ';
 $lang_module['extUpdInvalidNote'] = 'Dữ liệu không hợp lệ';
 $lang_module['extUpdErrorDownload'] = 'Lỗi tải gói nâng cấp';
-
 $lang_module['get_update_error_file_download'] = 'Tải gói cập nhật thất bại';
 $lang_module['get_update_ok'] = 'Gói nâng cấp an toàn. Hãy nhấp <a href="%s">vào đây</a> để tiến hành giải nén gói nâng cấp';
 $lang_module['get_update_warning'] = 'Gói nâng cấp này có thể gây nguy hại đến website của bạn khi có bất kỳ lỗi nào xảy ra. Bạn nên sao lưu toàn bộ website trước khi thực hiện. Hãy nhấp <a href="%s">vào đây</a> để tiến hành giải nén gói nâng cấp';
@@ -125,7 +113,6 @@ $lang_module['get_update_error_movefile'] = 'Lỗi: không thể di chuyển fil
 $lang_module['get_update_cantunzip'] = 'Lỗi: không thể giải nén. Hãy kiểm tra lại việc CHMOD các thư mục';
 $lang_module['get_update_okunzip'] = 'Giải nén thành công!';
 $lang_module['get_update_okunzip_link'] = 'Đến trang nâng cấp';
-
 $lang_module['manage'] = 'Quản lý ứng dụng';
 $lang_module['extType_module'] = 'Module';
 $lang_module['extType_block'] = 'Block';
@@ -134,12 +121,10 @@ $lang_module['extType_cronjob'] = 'Tiến trình tự động';
 $lang_module['extType_other'] = 'Khác';
 $lang_module['extType_sys'] = 'Hệ thống';
 $lang_module['extType_admin'] = 'Phần quản trị';
-
 $lang_module['install_package'] = 'Cài đặt gói ứng dụng';
 $lang_module['install_submit'] = 'Tải lên';
 $lang_module['install_error_filetype'] = 'Lỗi: File cài đặt phải có định dạng zip hoặc gz';
 $lang_module['install_error_nofile'] = 'Lỗi: Chưa chọn file tải lên';
-
 $lang_module['autoinstall_install'] = 'Cài đặt ứng dụng';
 $lang_module['autoinstall_nomethod'] = 'Chưa xác định phương thức thực hiện';
 $lang_module['autoinstall_uploadedfile'] = 'Thông tin ứng dụng được tải lên';
@@ -172,9 +157,7 @@ $lang_module['autoinstall_error_mimetype'] = 'Cảnh báo: Hệ thống không k
 $lang_module['autoinstall_error_mimetype_pass'] = 'Bỏ qua cảnh báo';
 $lang_module['autoinstall_note_invaild'] = 'Vị trí không được phép';
 $lang_module['autoinstall_note_exists'] = 'Tệp tin đã tồn tại';
-
 $lang_module['package'] = 'Đóng gói ứng dụng';
-
 $lang_module['delele_ext_confirm'] = 'Bạn có chắc chắn xóa ứng dụng này? Việc này sẽ không thể hoàn tác';
 $lang_module['delele_ext_theme_note_module'] = 'Bạn không thể xóa giao diện vì nó đang được sử dụng cho module: %s. Vui lòng cấu hình lại module đó trước.';
 $lang_module['delele_ext_success'] = 'Đã xóa thành công ứng dụng ra khỏi hệ thống!';

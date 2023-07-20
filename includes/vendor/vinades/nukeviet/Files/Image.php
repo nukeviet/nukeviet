@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -167,6 +167,7 @@ class Image
 
     /**
      * set_memory_limit()
+     * @param mixed $fileinfo
      */
     private static function set_memory_limit($fileinfo)
     {
@@ -238,6 +239,8 @@ class Image
      * check_file()
      *
      * @return string
+     * @param mixed $fileinfo
+     * @param mixed $filename
      */
     private static function check_file($fileinfo, $filename)
     {
@@ -1033,9 +1036,9 @@ class Image
 
     /**
      * base64data()
-     * 
-     * @param int $quality 
-     * @return (int|false|string)[]|void 
+     *
+     * @param int $quality
+     * @return (false|int|string)[]|void
      */
     public function base64data($quality = 100)
     {
@@ -1090,11 +1093,11 @@ class Image
 
     /**
      * createFilename()
-     * 
-     * @param mixed $path 
-     * @param mixed $name 
-     * @param string $ext 
-     * @return string 
+     *
+     * @param mixed  $path
+     * @param mixed  $name
+     * @param string $ext
+     * @return string
      */
     public static function createFilename($name, $ext = '')
     {
@@ -1167,9 +1170,9 @@ class Image
 
     /**
      * webpConvert()
-     * 
-     * @param mixed $newFullName 
-     * @param int $quality 
+     *
+     * @param mixed $newFullName
+     * @param int   $quality
      */
     public function webpConvert($newFullName)
     {

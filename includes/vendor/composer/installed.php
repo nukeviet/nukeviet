@@ -1,16 +1,25 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '4.4.01',
-    'version' => '4.4.01.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
-    'name' => 'nukeviet/nukeviet',
+    'reference' => '589d87570f137ae3fc7eadc605c3850b4a7ddc05',
+    'name' => '__root__',
   ),
   'versions' => 
   array (
+    '__root__' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '589d87570f137ae3fc7eadc605c3850b4a7ddc05',
+    ),
     'and/oauth' => 
     array (
       'pretty_version' => 'dev-master',
@@ -57,23 +66,23 @@
       ),
       'reference' => '1ae2c3ce29a7c5438339ff6388225844e6479da8',
     ),
-    'nukeviet/nukeviet' => 
+    'pclzip/pclzip' => 
     array (
-      'pretty_version' => '4.4.01',
-      'version' => '4.4.01.0',
+      'pretty_version' => '2.8.2',
+      'version' => '2.8.2.0',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => '19dd1de9d3f5fc4d7d70175b4c344dee329f45fd',
     ),
     'phpmailer/phpmailer' => 
     array (
-      'pretty_version' => 'v6.6.5',
-      'version' => '6.6.5.0',
+      'pretty_version' => 'v6.8.0',
+      'version' => '6.8.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8b6386d7417526d1ea4da9edb70b8352f7543627',
+      'reference' => 'df16b615e371d81fb79e506277faea67a1be18f1',
     ),
     'symfony/polyfill-mbstring' => 
     array (
@@ -86,21 +95,21 @@
     ),
     'tecnickcom/tc-lib-barcode' => 
     array (
-      'pretty_version' => '1.17.14',
-      'version' => '1.17.14.0',
+      'pretty_version' => '1.17.25',
+      'version' => '1.17.25.0',
       'aliases' => 
       array (
       ),
-      'reference' => '4907ef1e384dbb7d3100c897925e7dc071a419a3',
+      'reference' => '2b87f7c63dfd05000445a202c1779aeb9eb4549d',
     ),
     'tecnickcom/tc-lib-color' => 
     array (
-      'pretty_version' => '1.14.14',
-      'version' => '1.14.14.0',
+      'pretty_version' => '1.14.24',
+      'version' => '1.14.24.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f9e45c59496418227184626ad31e83470153c11f',
+      'reference' => '6207533413f6edc3fea373d0e54041661d2bd905',
     ),
     'true/punycode' => 
     array (

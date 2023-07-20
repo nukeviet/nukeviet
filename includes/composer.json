@@ -1,12 +1,13 @@
 {
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.4.0",
         "ext-mbstring": "*",
         "ext-gd": "*",
         "ext-json": "*",
         "ext-xml": "*",
         "ext-session": "*",
         "and/oauth": "^0.7-dev",
+        "pclzip/pclzip" : "^2.8",
         "tecnickcom/tc-lib-barcode": "^1.15",
         "symfony/polyfill-mbstring": "<1.19.0",
         "true/punycode": "^2.1",
@@ -18,9 +19,6 @@
             "NukeViet\\Api\\" : "api",
             "NukeViet\\Uapi\\" : "uapi",
             "NukeViet\\Module\\" : "../modules"
-        },
-        "classmap" : [
-            "vendor/vinades/pclzip/pclzip.lib.php"
-        ]
+        }
     }
 }

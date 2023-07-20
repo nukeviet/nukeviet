@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -58,7 +58,7 @@ if ($nv_Request->isset_request('getlist,type', 'get')) {
 
     if ($offset < $total) {
         $xtpl = new XTemplate('article.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
         $xtpl->assign('GETLIST_LINK', $page_url . '&amp;getlist=1&amp;type=' . $type . '&amp;offset=' . $offset);
         $xtpl->parse('wait_getlist');
         $contents = $xtpl->text('wait_getlist');
@@ -93,7 +93,7 @@ if ($nv_Request->isset_request('delete,id', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['article_not_selected']
+            'mess' => $nv_Lang->getModule('article_not_selected')
         ]);
     }
 
@@ -101,7 +101,7 @@ if ($nv_Request->isset_request('delete,id', 'post')) {
     if (empty($article_info)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['article_not_selected']
+            'mess' => $nv_Lang->getModule('article_not_selected')
         ]);
     }
 
@@ -131,7 +131,7 @@ if ($nv_Request->isset_request('sync,id', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['article_not_selected']
+            'mess' => $nv_Lang->getModule('article_not_selected')
         ]);
     }
 
@@ -139,7 +139,7 @@ if ($nv_Request->isset_request('sync,id', 'post')) {
     if (empty($article_info)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['article_not_selected']
+            'mess' => $nv_Lang->getModule('article_not_selected')
         ]);
     }
 
@@ -166,7 +166,7 @@ if ($nv_Request->isset_request('get_zalo_id,id', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['article_not_selected']
+            'mess' => $nv_Lang->getModule('article_not_selected')
         ]);
     }
 
@@ -174,7 +174,7 @@ if ($nv_Request->isset_request('get_zalo_id,id', 'post')) {
     if (empty($token)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['article_not_selected']
+            'mess' => $nv_Lang->getModule('article_not_selected')
         ]);
     }
 
@@ -197,44 +197,44 @@ if ($nv_Request->isset_request('get_zalo_id,id', 'post')) {
 }
 
 $article_types = [
-    'normal' => $lang_module['article_normal'],
-    'video' => $lang_module['article_video']
+    'normal' => $nv_Lang->getModule('article_normal'),
+    'video' => $nv_Lang->getModule('article_video')
 ];
 
 $cover_types = [
-    'photo' => $lang_module['cover_type_photo'],
-    'video' => $lang_module['cover_type_video']
+    'photo' => $nv_Lang->getModule('cover_type_photo'),
+    'video' => $nv_Lang->getModule('cover_type_video')
 ];
 
 $cover_view_types = [
-    'horizontal' => $lang_module['video_view_horizontal'],
-    'vertical' => $lang_module['video_view_vertical'],
-    'square' => $lang_module['video_view_square']
+    'horizontal' => $nv_Lang->getModule('video_view_horizontal'),
+    'vertical' => $nv_Lang->getModule('video_view_vertical'),
+    'square' => $nv_Lang->getModule('video_view_square')
 ];
 
 $body_types = [
-    'text' => $lang_module['body_type_text'],
-    'image' => $lang_module['body_type_image'],
-    'video' => $lang_module['body_type_video'],
-    'product' => $lang_module['body_type_product']
+    'text' => $nv_Lang->getModule('body_type_text'),
+    'image' => $nv_Lang->getModule('body_type_image'),
+    'video' => $nv_Lang->getModule('body_type_video'),
+    'product' => $nv_Lang->getModule('body_type_product')
 ];
 
 $body_video_types = [
-    'url' => $lang_module['body_video_url'],
-    'id' => $lang_module['body_video_id']
+    'url' => $nv_Lang->getModule('body_video_url'),
+    'id' => $nv_Lang->getModule('body_video_id')
 ];
 
 $article_status_types = [
-    'show' => $lang_module['show'],
-    'hide' => $lang_module['hide']
+    'show' => $nv_Lang->getModule('show'),
+    'hide' => $nv_Lang->getModule('hide')
 ];
 
 $article_comment_types = [
-    'show' => $lang_module['show'],
-    'hide' => $lang_module['hide']
+    'show' => $nv_Lang->getModule('show'),
+    'hide' => $nv_Lang->getModule('hide')
 ];
 
-$page_title = $lang_module['article'];
+$page_title = $nv_Lang->getModule('article');
 $popup = $nv_Request->get_bool('popup', 'get', false);
 if (!empty($popup)) {
     $base_url .= '&amp;popup=1';
@@ -258,14 +258,14 @@ $action = $nv_Request->get_title('action', 'get', '');
 ($action != 'add' and $action != 'edit') && $action = '';
 
 if (!empty($type)) {
-    $page_title = $lang_module['article_' . $type . '_list'];
+    $page_title = $nv_Lang->getModule('article_' . $type . '_list');
     $action != 'edit' && $base_url .= '&amp;type=' . $type;
 }
 
 $list_url = $base_url;
 
 if (!empty($action)) {
-    $page_title = $lang_module['article_' . $action];
+    $page_title = $nv_Lang->getModule('article_' . $action);
     $base_url .= '&amp;action=' . $action;
 
     $article = [
@@ -326,7 +326,7 @@ if ($action == 'add' or $action == 'edit') {
                 'status' => 'error',
                 'body_id' => '',
                 'input' => 'title',
-                'mess' => $lang_module['title_error']
+                'mess' => $nv_Lang->getModule('title_error')
             ]);
         }
 
@@ -338,7 +338,7 @@ if ($action == 'add' or $action == 'edit') {
                 'status' => 'error',
                 'body_id' => '',
                 'input' => 'description',
-                'mess' => $lang_module['description_empty']
+                'mess' => $nv_Lang->getModule('description_empty')
             ]);
         }
 
@@ -349,7 +349,7 @@ if ($action == 'add' or $action == 'edit') {
                     'status' => 'error',
                     'body_id' => '',
                     'input' => 'author',
-                    'mess' => $lang_module['author_empty']
+                    'mess' => $nv_Lang->getModule('author_empty')
                 ]);
             }
 
@@ -364,7 +364,7 @@ if ($action == 'add' or $action == 'edit') {
                         'status' => 'error',
                         'body_id' => '',
                         'input' => 'cover_photo_url',
-                        'mess' => $lang_module['cover_photo_url_empty']
+                        'mess' => $nv_Lang->getModule('cover_photo_url_empty')
                     ]);
                 }
 
@@ -374,7 +374,7 @@ if ($action == 'add' or $action == 'edit') {
                             'status' => 'error',
                             'body_id' => '',
                             'input' => 'cover_photo_url',
-                            'mess' => $lang_module['image_from_localhost']
+                            'mess' => $nv_Lang->getModule('image_from_localhost')
                         ]);
                     }
 
@@ -383,7 +383,7 @@ if ($action == 'add' or $action == 'edit') {
                             'status' => 'error',
                             'body_id' => '',
                             'input' => 'cover_photo_url',
-                            'mess' => $lang_module['cover_photo_url_empty']
+                            'mess' => $nv_Lang->getModule('cover_photo_url_empty')
                         ]);
                     }
 
@@ -396,7 +396,7 @@ if ($action == 'add' or $action == 'edit') {
                         'status' => 'error',
                         'body_id' => '',
                         'input' => 'cover_video_id',
-                        'mess' => $lang_module['cover_video_id_empty']
+                        'mess' => $nv_Lang->getModule('cover_video_id_empty')
                     ]);
                 }
 
@@ -405,7 +405,7 @@ if ($action == 'add' or $action == 'edit') {
                         'status' => 'error',
                         'body_id' => '',
                         'input' => 'cover_video_id',
-                        'mess' => $lang_module['cover_video_id_empty']
+                        'mess' => $nv_Lang->getModule('cover_video_id_empty')
                     ]);
                 }
 
@@ -448,7 +448,7 @@ if ($action == 'add' or $action == 'edit') {
                             'status' => 'error',
                             'body_id' => $body,
                             'input' => 'body_content',
-                            'mess' => $lang_module['body_content_empty']
+                            'mess' => $nv_Lang->getModule('body_content_empty')
                         ]);
                     }
                     $save_article['body'][] = [
@@ -461,7 +461,7 @@ if ($action == 'add' or $action == 'edit') {
                             'status' => 'error',
                             'body_id' => $body,
                             'input' => 'body_photo_url',
-                            'mess' => $lang_module['body_photo_url_empty']
+                            'mess' => $nv_Lang->getModule('body_photo_url_empty')
                         ]);
                     }
 
@@ -471,7 +471,7 @@ if ($action == 'add' or $action == 'edit') {
                                 'status' => 'error',
                                 'body_id' => $body,
                                 'input' => 'body_photo_url',
-                                'mess' => $lang_module['image_from_localhost']
+                                'mess' => $nv_Lang->getModule('image_from_localhost')
                             ]);
                         }
 
@@ -480,7 +480,7 @@ if ($action == 'add' or $action == 'edit') {
                                 'status' => 'error',
                                 'body_id' => $body,
                                 'input' => 'body_photo_url',
-                                'mess' => $lang_module['body_photo_url_empty']
+                                'mess' => $nv_Lang->getModule('body_photo_url_empty')
                             ]);
                         }
 
@@ -497,7 +497,7 @@ if ($action == 'add' or $action == 'edit') {
                             'status' => 'error',
                             'body_id' => $body,
                             'input' => 'body_video_content',
-                            'mess' => $lang_module['body_video_content_empty']
+                            'mess' => $nv_Lang->getModule('body_video_content_empty')
                         ]);
                     }
 
@@ -507,7 +507,7 @@ if ($action == 'add' or $action == 'edit') {
                                 'status' => 'error',
                                 'body_id' => $body,
                                 'input' => 'body_video_content',
-                                'mess' => $lang_module['body_video_content_empty']
+                                'mess' => $nv_Lang->getModule('body_video_content_empty')
                             ]);
                         }
                     } else {
@@ -516,7 +516,7 @@ if ($action == 'add' or $action == 'edit') {
                                 'status' => 'error',
                                 'body_id' => $body,
                                 'input' => 'body_video_content',
-                                'mess' => $lang_module['body_video_content_empty']
+                                'mess' => $nv_Lang->getModule('body_video_content_empty')
                             ]);
                         }
                     }
@@ -527,7 +527,7 @@ if ($action == 'add' or $action == 'edit') {
                             'status' => 'error',
                             'body_id' => $body,
                             'input' => 'body_thumb',
-                            'mess' => $lang_module['body_thumb_empty']
+                            'mess' => $nv_Lang->getModule('body_thumb_empty')
                         ]);
                     }
                     if (!nv_is_url($thumb)) {
@@ -536,7 +536,7 @@ if ($action == 'add' or $action == 'edit') {
                                 'status' => 'error',
                                 'body_id' => $body,
                                 'input' => 'body_thumb',
-                                'mess' => $lang_module['image_from_localhost']
+                                'mess' => $nv_Lang->getModule('image_from_localhost')
                             ]);
                         }
 
@@ -545,7 +545,7 @@ if ($action == 'add' or $action == 'edit') {
                                 'status' => 'error',
                                 'body_id' => $body,
                                 'input' => 'body_thumb',
-                                'mess' => $lang_module['body_thumb_empty']
+                                'mess' => $nv_Lang->getModule('body_thumb_empty')
                             ]);
                         }
 
@@ -571,7 +571,7 @@ if ($action == 'add' or $action == 'edit') {
                             'status' => 'error',
                             'body_id' => $body,
                             'input' => 'body_product_id',
-                            'mess' => $lang_module['body_product_id_empty']
+                            'mess' => $nv_Lang->getModule('body_product_id_empty')
                         ]);
                     }
 
@@ -588,7 +588,7 @@ if ($action == 'add' or $action == 'edit') {
                     'status' => 'error',
                     'body_id' => '',
                     'input' => 'video_id',
-                    'mess' => $lang_module['video_id_empty']
+                    'mess' => $nv_Lang->getModule('video_id_empty')
                 ]);
             }
 
@@ -598,7 +598,7 @@ if ($action == 'add' or $action == 'edit') {
                     'status' => 'error',
                     'body_id' => '',
                     'input' => 'video_avatar',
-                    'mess' => $lang_module['video_avatar_empty']
+                    'mess' => $nv_Lang->getModule('video_avatar_empty')
                 ]);
             }
 
@@ -608,7 +608,7 @@ if ($action == 'add' or $action == 'edit') {
                         'status' => 'error',
                         'body_id' => '',
                         'input' => 'video_avatar',
-                        'mess' => $lang_module['image_from_localhost']
+                        'mess' => $nv_Lang->getModule('image_from_localhost')
                     ]);
                 }
 
@@ -617,7 +617,7 @@ if ($action == 'add' or $action == 'edit') {
                         'status' => 'error',
                         'body_id' => '',
                         'input' => 'video_avatar',
-                        'mess' => $lang_module['video_avatar_empty']
+                        'mess' => $nv_Lang->getModule('video_avatar_empty')
                     ]);
                 }
 
@@ -676,8 +676,8 @@ if ($action == 'add' or $action == 'edit') {
     }
 
     $xtpl = new XTemplate('article.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('FORM_ACTION', $base_url);
     $xtpl->assign('LIST_LINK', $list_url);
     $xtpl->assign('COVER_VIDEO_GET_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=video&amp;popup=1&amp;idfield=cover_video_id&amp;viewfield=cover_view');
@@ -849,8 +849,8 @@ $result = $db->query($db->sql());
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
 
 $xtpl = new XTemplate('article.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', $page_url);
 $xtpl->assign('ADD_LINK', $base_url . '&amp;action=add');
 $xtpl->assign('IDFIELD', $idfield);
@@ -879,7 +879,7 @@ if ($num_items) {
 
     while ($row = $result->fetch()) {
         $row['create_date_format'] = nv_date('d/m/Y H:i', $row['create_date']);
-        $row['type_format'] = $lang_module['article_' . $row['type']];
+        $row['type_format'] = $nv_Lang->getModule('article_' . $row['type']);
         $row['zalo_url'] = !empty($row['zalo_id']) ? 'https://rd.zapps.vn/' . ($row['type'] == 'normal' ? 'detail' : 'video') . '/' . $global_config['zaloOfficialAccountID'] . '?id=' . $row['zalo_id'] . '&pageId=' . $global_config['zaloOfficialAccountID'] : '';
         $xtpl->assign('ARTICLE', $row);
 
@@ -894,7 +894,7 @@ if ($num_items) {
             $xtpl->parse('main.isArticles.article.get_zalo_id');
 
             empty($get_zalo_id) && $get_zalo_id = [
-                'note' => sprintf($lang_module['get_zalo_id_note'], $row['title'], nv_convertfromSec($remainder)),
+                'note' => $nv_Lang->getModule('get_zalo_id_note', $row['title'], nv_convertfromSec($remainder)),
                 'id' => $row['id']
             ];
         } else {

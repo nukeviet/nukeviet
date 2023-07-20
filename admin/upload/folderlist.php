@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -51,7 +51,7 @@ function nv_set_dir_class($array)
 /**
  * @param string $dir
  * @param string $currentpath
- * @param array $array_folders
+ * @param array  $array_folders
  * @return string
  */
 function viewdirtree($dir, $currentpath, $array_folders)
@@ -117,8 +117,8 @@ $data['titlepath'] = $path;
 
 $array_folders = [];
 if (!empty($global_config['show_folder_size'])) {
-    $sql = "SELECT dirname, total_size FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE
-    dirname=" . $db->quote($path) . " OR dirname LIKE '" . $db->dblikeescape($path . '/') . "%'";
+    $sql = 'SELECT dirname, total_size FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE
+    dirname=' . $db->quote($path) . " OR dirname LIKE '" . $db->dblikeescape($path . '/') . "%'";
     $result = $db->query($sql);
     while ($row = $result->fetch()) {
         $array_folders[$row['dirname']] = $row['total_size'];

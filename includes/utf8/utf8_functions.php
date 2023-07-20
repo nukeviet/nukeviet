@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -298,7 +298,7 @@ function nv_clean60($string, $num = 60, $specialchars = true)
 
     $len = nv_strlen($string);
     if ($num and $num < $len) {
-        if (strpos($string, ' ') === false) {
+        if (!str_contains($string, ' ')) {
             $string = nv_substr($string, 0, $num);
         } else {
             while (ord(nv_substr($string, $num, 1)) != 32) {

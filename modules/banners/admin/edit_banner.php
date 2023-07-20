@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -27,7 +27,7 @@ $file_mime = $row['file_mime'];
 $width = $row['width'];
 $height = $row['height'];
 $imageforswf = $row['imageforswf'];
-$page_title = $lang_module['edit_banner'];
+$page_title = $nv_Lang->getModule('edit_banner');
 
 $contents = [];
 $contents['upload_blocked'] = '';
@@ -38,7 +38,7 @@ if (preg_match('/images/', NV_ALLOW_FILES_TYPE)) {
 }
 
 if (empty($contents['file_allowed_ext'])) {
-    $contents['upload_blocked'] = $lang_module['upload_blocked'];
+    $contents['upload_blocked'] = $nv_Lang->getModule('admin_upload_blocked');
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme(nv_edit_banner_theme($contents));
@@ -50,7 +50,7 @@ $result = $db->query($sql);
 
 $plans = $require_image = $plans_exp = [];
 while ($pl_row = $result->fetch()) {
-    $plans[$pl_row['id']] = $pl_row['title'] . ' (' . (!empty($pl_row['blang']) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all']) . ')';
+    $plans[$pl_row['id']] = $pl_row['title'] . ' (' . (!empty($pl_row['blang']) ? $language_array[$pl_row['blang']]['name'] : $nv_Lang->getModule('blang_all')) . ')';
     $require_image[$pl_row['id']] = $pl_row['require_image'];
     $plans_exp[$pl_row['id']] = $pl_row['exp_time'];
 }
@@ -102,7 +102,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $sth->bindParam(':username', $assign_user, PDO::PARAM_STR);
         $sth->execute();
         if ($sth->rowCount() != 1) {
-            $error_assign_user = sprintf($lang_module['assign_to_user_err'], $assign_user);
+            $error_assign_user = $nv_Lang->getModule('assign_to_user_err', $assign_user);
         } else {
             $assign_user_id = $sth->fetchColumn();
         }
@@ -114,7 +114,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     if (isset($_FILES['banner']) and is_uploaded_file($_FILES['banner']['tmp_name'])) {
         $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-        $upload->setLanguage($lang_global);
+        $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
         $upload_info = $upload->save_file($_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
         @unlink($_FILES['banner']['tmp_name']);
 
@@ -140,7 +140,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
     if (isset($_FILES['imageforswf']) and is_uploaded_file($_FILES['imageforswf']['tmp_name'])) {
         $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-        $upload->setLanguage($lang_global);
+        $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
         $upload_info = $upload->save_file($_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
         @unlink($_FILES['imageforswf']['tmp_name']);
 
@@ -155,19 +155,19 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 
     if (empty($title)) {
-        $error = $lang_module['title_empty'];
+        $error = $nv_Lang->getModule('title_empty');
     } elseif (empty($pid) or !isset($plans[$pid])) {
-        $error = $lang_module['plan_not_selected'];
+        $error = $nv_Lang->getModule('plan_not_selected');
     } elseif (!empty($error_assign_user)) {
         $error = $error_assign_user;
     } elseif ($array_require_image[0]['require_image'] == 1 and (empty($file_name) or $file_name == 'no_image')) {
-        $error = $lang_module['file_upload_empty'];
+        $error = $nv_Lang->getModule('file_upload_empty');
     } elseif (!$click_url_allow) {
-        $error = $lang_module['click_url_invalid'];
+        $error = $nv_Lang->getModule('click_url_invalid');
     } elseif (empty($error)) {
         if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
             $publtime = mktime($publ_date_h, $publ_date_m, 0, $m[2], $m[1], $m[3]);
-        // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
+            // Cho tạo thoải mái thời gian, nếu lùi về sau thì đánh dấu là hết hạn để đó khi nào cần thì sửa lại có gì phải cấm
             //if ($publtime < $row['add_time']) {
             //    $publtime = $row['add_time'];
             //}
@@ -295,19 +295,19 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 }
 
-$contents['info'] = (!empty($error)) ? $error : $lang_module['edit_banner_info'];
+$contents['info'] = (!empty($error)) ? $error : $nv_Lang->getModule('edit_banner_info');
 $contents['is_error'] = (!empty($error)) ? 1 : 0;
 $contents['file_allowed_ext'] = implode(', ', $contents['file_allowed_ext']);
-$contents['submit'] = $lang_module['edit_banner'];
+$contents['submit'] = $nv_Lang->getModule('edit_banner');
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id;
 $contents['title'] = [
-    $lang_module['title'],
+    $nv_Lang->getModule('title'),
     'title',
     $title,
     255
 ];
 $contents['plan'] = [
-    $lang_module['in_plan'],
+    $nv_Lang->getModule('in_plan'),
     'pid',
     $plans,
     $pid,
@@ -320,14 +320,14 @@ $imageforswf = (!empty($imageforswf)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' .
 
 if ($file_ext != 'no_image') {
     $contents['file_name'] = [
-        $lang_module['file_name'],
+        $nv_Lang->getModule('file_name'),
         NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name,
         'class="open_modal_image"',
         NV_STATIC_URL . NV_ASSETS_DIR . '/images/ico_' . $file_ext . '.gif',
-        $lang_global['show_picture'],
+        $nv_Lang->getGlobal('show_picture'),
     ];
 } else {
-    $contents['file_name'] = [$lang_module['file_name'], ''];
+    $contents['file_name'] = [$nv_Lang->getModule('file_name'), ''];
 }
 $contents['imageforswf'] = [
     $imageforswf,
@@ -335,40 +335,40 @@ $contents['imageforswf'] = [
 ];
 
 $contents['upload'] = [
-    sprintf($lang_module['re_upload'], $contents['file_allowed_ext']),
+    $nv_Lang->getModule('re_upload', $contents['file_allowed_ext']),
     'banner',
-    $lang_module['imageforswf'],
+    $nv_Lang->getModule('imageforswf'),
     'imageforswf'
 ];
 $contents['file_alt'] = [
-    $lang_module['file_alt'],
+    $nv_Lang->getModule('file_alt'),
     'file_alt',
     $file_alt,
     255
 ];
 $contents['click_url'] = [
-    $lang_module['click_url'],
+    $nv_Lang->getModule('click_url'),
     'click_url',
     $click_url,
     255
 ];
 
 $contents['target'] = [
-    $lang_module['target'],
+    $nv_Lang->getModule('target'),
     'target',
     $targets,
     $target
 ];
 
 $contents['publ_date'] = [
-    $lang_module['publ_date'],
+    $nv_Lang->getModule('publ_date'),
     'publ_date',
     $publ_date,
     $publ_date_h,
     $publ_date_m
 ];
 $contents['exp_date'] = [
-    $lang_module['exp_date'],
+    $nv_Lang->getModule('exp_date'),
     'exp_date',
     $exp_date,
     $exp_date_h,

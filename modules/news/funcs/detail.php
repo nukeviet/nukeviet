@@ -27,7 +27,7 @@ $news_contents = $query->fetch();
 
 if (empty($news_contents)) {
     $redirect = '<meta http-equiv="Refresh" content="3;URL=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect, 404);
+    nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content') . $redirect, 404);
 }
 
 $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, voicedata, keywords, sourcetext, files, layout_func, imgposition, copyright, allowed_send, allowed_print, allowed_save, auto_nav, group_view FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
@@ -196,13 +196,13 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
         foreach ($files as $file_id => $file) {
             $is_localfile = (!nv_is_url($file));
             $basename = basename($file);
-            $file_title = $is_localfile ? $basename : $lang_module['click_to_download'];
+            $file_title = $is_localfile ? $basename : $nv_Lang->getModule('click_to_download');
             $news_contents['files'][$file_id] = [
                 'is_localfile' => $is_localfile,
                 'title' => $file_title,
                 'key' => md5($file_id . $file_title),
                 'ext' => nv_getextension($basename),
-                'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
+                'titledown' => $nv_Lang->getModule('download') . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                 'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
                 'url' => $is_localfile ? ($page_url . '&amp;download=1&amp;id=' . $file_id) : $file
             ];
@@ -237,7 +237,7 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
 }
 
 if (defined('NV_IS_MODADMIN') and $news_contents['status'] != 1) {
-    $alert = sprintf($lang_module['status_alert'], $lang_module['status_' . $news_contents['status']]);
+    $alert = $nv_Lang->getModule('status_alert', $nv_Lang->getModule('status_' . $news_contents['status']));
     $my_footer .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . ">alert('" . $alert . "')</script>";
     $news_contents['allowed_send'] = 0;
     $module_config[$module_name]['socialbutton'] = 0;
@@ -251,7 +251,7 @@ $news_contents['source'] = '';
 if ($news_contents['sourceid']) {
     $sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
     $result = $db_slave->query($sql);
-    list($sourcetext, $source_link, $source_logo) = $result->fetch(3);
+    [$sourcetext, $source_link, $source_logo] = $result->fetch(3);
     unset($sql, $result);
     if ($module_config[$module_name]['config_source'] == 0) {
         $news_contents['source'] = $sourcetext; // Hiển thị tiêu đề nguồn tin
@@ -350,7 +350,7 @@ if ($st_links > 0) {
 
 $topic_array = [];
 if ($news_contents['topicid'] > 0 & $st_links > 0) {
-    list($topic_title, $topic_alias) = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
+    [$topic_title, $topic_alias] = $db_slave->query('SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'])->fetch(3);
 
     $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
@@ -405,39 +405,39 @@ if ($news_contents['allowed_rating']) {
     } else {
         $news_contents['disablerating'] = 0;
     }
-    $news_contents['stringrating'] = sprintf($lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating']);
+    $news_contents['stringrating'] = $nv_Lang->getModule('stringrating', $news_contents['total_rating'], $news_contents['click_rating']);
     $news_contents['numberrating'] = ($news_contents['click_rating'] > 0) ? round($news_contents['total_rating'] / $news_contents['click_rating'], 1) : 0;
     $news_contents['numberrating_star'] = ($news_contents['click_rating'] > 0) ? round($news_contents['total_rating'] / $news_contents['click_rating']) : 0;
     $news_contents['stars'] = [
         [
             'val' => '1',
-            'title' => $lang_module['star_verypoor'],
+            'title' => $nv_Lang->getModule('star_verypoor'),
             'checked' => 1 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
         ],
         [
             'val' => '2',
-            'title' => $lang_module['star_poor'],
+            'title' => $nv_Lang->getModule('star_poor'),
             'checked' => 2 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
         ],
         [
             'val' => '3',
-            'title' => $lang_module['star_ok'],
+            'title' => $nv_Lang->getModule('star_ok'),
             'checked' => 3 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
         ],
         [
             'val' => '4',
-            'title' => $lang_module['star_good'],
+            'title' => $nv_Lang->getModule('star_good'),
             'checked' => 4 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
         ],
         [
             'val' => '5',
-            'title' => $lang_module['star_verygood'],
+            'title' => $nv_Lang->getModule('star_verygood'),
             'checked' => 5 == $news_contents['numberrating_star'] ? ' checked="checked"' : ''
         ]
     ];
 }
 
-list($post_username, $post_first_name, $post_last_name) = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
+[$post_username, $post_first_name, $post_last_name] = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
 $news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
 empty($news_contents['schema_author']) && $news_contents['schema_author'] = $news_contents['post_name'];
 

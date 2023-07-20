@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,15 +13,15 @@ if (!defined('NV_IS_FILE_THEMES')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['theme_manager'];
+$page_title = $nv_Lang->getModule('theme_manager');
 
 if (!empty($restrict_access)) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=config');
 }
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
@@ -35,7 +35,7 @@ $errorconfig = [];
 $array_site_theme = [];
 $array_site_cat_theme = [];
 $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-while (list($theme) = $result->fetch(3)) {
+while ([$theme] = $result->fetch(3)) {
     $array_site_theme[] = $theme;
 }
 if ($global_config['idsite']) {
@@ -59,14 +59,14 @@ if ($nv_Request->isset_request('togglepreviewtheme', 'post')) {
         $array['status'] = 'SUCCESS';
         if (in_array($theme, $array_allow_preview, true)) {
             $array['mode'] = 'disable';
-            $array['spantext'] = $lang_module['preview_theme_on'];
+            $array['spantext'] = $nv_Lang->getModule('preview_theme_on');
             $array_allow_preview = array_flip($array_allow_preview);
             unset($array_allow_preview[$theme]);
             $array_allow_preview = array_flip($array_allow_preview);
         } else {
             $array_allow_preview[] = $theme;
             $array['mode'] = 'enable';
-            $array['spantext'] = $lang_module['preview_theme_off'];
+            $array['spantext'] = $nv_Lang->getModule('preview_theme_off');
             $array['link'] = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $theme . '&checksum=' . md5(NV_LANG_DATA . $theme . $global_config['sitekey']), NV_MY_DOMAIN);
         }
         $array_allow_preview = implode(',', array_intersect($array_allow_preview, $theme_list));
@@ -139,12 +139,12 @@ foreach ($theme_list as $value) {
             if (in_array($value, $array_allow_preview, true)) {
                 $xtpl->assign('SHOW_PREVIEW1', '');
                 $xtpl->assign('SHOW_PREVIEW2', '');
-                $xtpl->assign('TEXT_PREVIEW', $lang_module['preview_theme_off']);
+                $xtpl->assign('TEXT_PREVIEW', $nv_Lang->getModule('preview_theme_off'));
                 $xtpl->assign('LINK_PREVIEW', urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=nv-preview-theme&theme=' . $value . '&checksum=' . md5(NV_LANG_DATA . $value . $global_config['sitekey']), NV_MY_DOMAIN));
             } else {
                 $xtpl->assign('SHOW_PREVIEW1', ' hidden');
                 $xtpl->assign('SHOW_PREVIEW2', ' style="display: none;"');
-                $xtpl->assign('TEXT_PREVIEW', $lang_module['preview_theme_on']);
+                $xtpl->assign('TEXT_PREVIEW', $nv_Lang->getModule('preview_theme_on'));
                 $xtpl->assign('LINK_PREVIEW', '');
             }
 

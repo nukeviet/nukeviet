@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -18,9 +18,9 @@ if (!$zalo->isValid()) {
 }
 
 $types = [
-    'image' => $lang_module['type_image'],
-    'gif' => $lang_module['type_gif'],
-    'file' => $lang_module['type_file']
+    'image' => $nv_Lang->getModule('type_image'),
+    'gif' => $nv_Lang->getModule('type_gif'),
+    'file' => $nv_Lang->getModule('type_file')
 ];
 
 $max_sizes = [
@@ -35,7 +35,7 @@ if ($nv_Request->isset_request('preview,id', 'get')) {
     if (empty($image_id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
@@ -43,13 +43,13 @@ if ($nv_Request->isset_request('preview,id', 'get')) {
     if (empty($image_info)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
     $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
     if (!empty($image_info['localfile'])) {
         $image_info['localfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $image_info['localfile'];
@@ -108,7 +108,7 @@ if ($nv_Request->isset_request('file_delete,id', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
@@ -126,7 +126,7 @@ if ($nv_Request->isset_request('renewal,id', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
@@ -134,7 +134,7 @@ if ($nv_Request->isset_request('renewal,id', 'post')) {
     if (empty($fileinfo)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['file_not_selected']
+            'mess' => $nv_Lang->getModule('file_not_selected')
         ]);
     }
 
@@ -174,7 +174,7 @@ if ($nv_Request->isset_request('zalo_upload', 'get')) {
             //$sys_max_size = nv_convertfromBytes(min($global_config['nv_max_size'], nv_converttoBytes(ini_get('upload_max_filesize')), nv_converttoBytes(ini_get('post_max_size'))));
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['file_empty']
+                'mess' => $nv_Lang->getModule('file_empty')
             ]);
         }
 
@@ -182,7 +182,7 @@ if ($nv_Request->isset_request('zalo_upload', 'get')) {
             @unlink($_FILES['file']['tmp_name']);
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['type_empty']
+                'mess' => $nv_Lang->getModule('type_empty')
             ]);
         }
 
@@ -209,7 +209,7 @@ if ($nv_Request->isset_request('zalo_upload', 'get')) {
             nv_deletefile($file_fullname);
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['type_' . $type . '_invalid']
+                'mess' => $nv_Lang->getModule('type_' . $type . '_invalid')
             ]);
         }
 
@@ -218,7 +218,7 @@ if ($nv_Request->isset_request('zalo_upload', 'get')) {
             nv_deletefile($file_fullname);
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['type_' . $type . '_exceedlimit']
+                'mess' => $nv_Lang->getModule('type_' . $type . '_exceedlimit')
             ]);
         }
 
@@ -250,7 +250,7 @@ if ($nv_Request->isset_request('zalo_upload', 'get')) {
         if (empty($type) or !isset($types[$type])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['type_empty']
+                'mess' => $nv_Lang->getModule('type_empty')
             ]);
         }
 
@@ -275,7 +275,7 @@ if ($nv_Request->isset_request('zalo_upload', 'get')) {
     ]);
 }
 
-$page_title = $lang_module['upload'];
+$page_title = $nv_Lang->getModule('upload');
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload';
 $popup = $nv_Request->get_bool('popup', 'get', false);
 if ($popup) {
@@ -297,8 +297,8 @@ if (!empty($type)) {
 }
 
 $xtpl = new XTemplate('upload.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload');
 $xtpl->assign('FORM_UPLOAD_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload&zalo_upload=1');
 

@@ -22,7 +22,7 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $module_file, $user_info, $lang_global, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config, $my_head, $page_url, $nv_redirect;
+        global $client_info, $global_config, $module_name, $module_file, $user_info, $nv_Lang, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config, $my_head, $page_url, $nv_redirect;
 
         $content = '';
         $module = $block_config['module'];
@@ -37,21 +37,16 @@ if (!nv_function_exists('nv_block_login')) {
         }
 
         $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/users/block.login.tpl');
-
-        if ($mod_file != $module_file) {
-            if (module_file_exists('users/language/' . NV_LANG_INTERFACE . '.php')) {
-                include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_INTERFACE . '.php';
-            } else {
-                include NV_ROOTDIR . '/modules/users/language/vi.php';
-            }
-        } else {
-            global $lang_module;
-        }
-
         $xtpl = new XTemplate('block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users');
 
-        $xtpl->assign('GLANG', $lang_global);
-        $xtpl->assign('LANG', $lang_module);
+        if ($mod_file != $module_file) {
+            $nv_Lang->loadModule('users', false, true);
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
+        } else {
+            $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+        }
+
+        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('BLOCKID', $blockID);
 
         if (defined('NV_IS_USER')) {
@@ -66,7 +61,7 @@ if (!nv_function_exists('nv_block_login')) {
             $xtpl->assign('MODULENAME', $module_info['custom_title']);
             $xtpl->assign('AVATA', $avata);
             $xtpl->assign('USER', $user_info);
-            $xtpl->assign('WELCOME', defined('NV_IS_ADMIN') ? $lang_global['admin_account'] : $lang_global['your_account']);
+            $xtpl->assign('WELCOME', defined('NV_IS_ADMIN') ? $nv_Lang->getGlobal('admin_account') : $nv_Lang->getGlobal('your_account'));
             $xtpl->assign('LEVEL', defined('NV_IS_ADMIN') ? $admin_info['level'] : 'user');
             $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '');
             $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=');
@@ -81,7 +76,7 @@ if (!nv_function_exists('nv_block_login')) {
 
             if (defined('NV_IS_ADMIN')) {
                 $new_drag_block = (defined('NV_IS_DRAG_BLOCK')) ? 0 : 1;
-                $lang_drag_block = ($new_drag_block) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+                $lang_drag_block = ($new_drag_block) ? $nv_Lang->getGlobal('drag_block') : $nv_Lang->getGlobal('no_drag_block');
 
                 $xtpl->assign('NV_ADMINDIR', NV_ADMINDIR);
                 $xtpl->assign('URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block);
@@ -108,6 +103,10 @@ if (!nv_function_exists('nv_block_login')) {
 
             $xtpl->parse('main');
             $content = $xtpl->text('main');
+        }
+
+        if ($mod_file != $module_file) {
+            $nv_Lang->changeLang();
         }
 
         return $content;

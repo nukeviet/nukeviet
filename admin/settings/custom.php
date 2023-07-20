@@ -58,8 +58,8 @@ $custom_configs = !empty($custom_configs) ? json_decode($custom_configs, true) :
 $xtpl = new XTemplate('custom.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('CHECKSS', $checkss);
 
@@ -76,7 +76,7 @@ foreach ($custom_configs as $key => $vals) {
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = sprintf($lang_module['custom_configs'], $language_array[NV_LANG_DATA]['name']);
+$page_title = $nv_Lang->getModule('custom_configs', $language_array[NV_LANG_DATA]['name']);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

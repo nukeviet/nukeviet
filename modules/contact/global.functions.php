@@ -17,9 +17,9 @@ define('NV_MOD_TABLE', NV_PREFIXLANG . '_' . $module_data);
 
 /**
  * parse_admins()
- * 
- * @param mixed $admin_list 
- * @return mixed 
+ *
+ * @param mixed $admin_list
+ * @return mixed
  */
 function parse_admins($admin_list)
 {

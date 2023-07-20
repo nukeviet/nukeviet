@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,11 +20,11 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
     $sth = $db->prepare('SELECT is_sys, basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'');
     $sth->bindParam(':title', $modname, PDO::PARAM_STR);
     $sth->execute();
-    list($is_sys, $module_file) = $sth->fetch(3);
+    [$is_sys, $module_file] = $sth->fetch(3);
 
     if ((int) $is_sys != 1) {
         $contents = 'OK_' . $modname;
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['delete'] . ' module "' . $modname . '"', '', $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getGlobal('delete') . ' module "' . $modname . '"', '', $admin_info['userid']);
 
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
             $module_name_action = $module_name;
@@ -98,7 +98,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
         $check_exit_mod = false;
 
         $result = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1');
-        while (list($lang_i) = $result->fetch(3)) {
+        while ([$lang_i] = $result->fetch(3)) {
             $sth = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE title= :module');
             $sth->bindParam(':module', $modname, PDO::PARAM_STR);
             $sth->execute();
@@ -125,7 +125,7 @@ if (!empty($modname) and preg_match($global_config['check_module'], $modname) an
             $sth->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $modname, PDO::PARAM_STR);
             $sth->bindValue(':dirnamelike', NV_UPLOADS_DIR . '/' . $modname . '/%', PDO::PARAM_STR);
             $sth->execute();
-            while (list($did) = $sth->fetch(3)) {
+            while ([$did] = $sth->fetch(3)) {
                 $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did);
                 $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did);
             }

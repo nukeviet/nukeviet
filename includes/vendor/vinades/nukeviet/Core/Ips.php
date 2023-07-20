@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -258,8 +258,8 @@ class Ips
             return -1;
         }
 
-        if (strpos($ip, '/') !== false) {
-            list($address, $netmask) = explode('/', $ip, 2);
+        if (str_contains($ip, '/')) {
+            [$address, $netmask] = explode('/', $ip, 2);
 
             if ($netmask === '0') {
                 return (bool) unpack('n*', inet_pton($address));

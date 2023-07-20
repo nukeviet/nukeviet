@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -21,7 +21,7 @@ if (!defined('NV_IS_MOD_VOTING')) {
  */
 function voting_result($voting)
 {
-    global $module_info, $lang_module;
+    global $module_info, $nv_Lang;
 
     $xtpl = new XTemplate('result.voting.tpl', get_module_tpl_dir('result.voting.tpl'));
     $xtpl->assign('PUBLTIME', $voting['pubtime']);
@@ -58,7 +58,7 @@ function voting_result($voting)
             $xtpl->assign('ID', $a);
             $xtpl->assign('WIDTH', $width);
             $xtpl->assign('TOTAL', $voting['total']);
-            $xtpl->assign('TOTAL_TITLE', sprintf($lang_module['voting_total2'], $voting['pubtime']));
+            $xtpl->assign('TOTAL_TITLE', $nv_Lang->getModule('voting_total2', $voting['pubtime']));
             if ($voting_i['title']) {
                 $xtpl->parse('main.result');
             }

@@ -15,9 +15,9 @@ if (!defined('NV_IS_MOD_USER') and !defined('NV_ADMIN')) {
 
 /**
  * check_user_login()
- * 
- * @param string $username 
- * @return mixed 
+ *
+ * @param string $username
+ * @return mixed
  */
 function check_user_login($username)
 {
@@ -31,9 +31,9 @@ function check_user_login($username)
 
 /**
  * check_admin_login()
- * 
- * @param string $username 
- * @return mixed 
+ *
+ * @param string $username
+ * @return mixed
  */
 function check_admin_login($username)
 {

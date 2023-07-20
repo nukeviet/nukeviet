@@ -17,35 +17,40 @@ if (!defined('NV_IS_API_MOD')) {
  * main_theme()
  *
  * @return string
+ * @param mixed $type
+ * @param mixed $roleCount
+ * @param mixed $roleList
+ * @param mixed $api_user
+ * @param mixed $generate_page
  */
 function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
 {
-    global $lang_global, $lang_module, $module_info, $module_name, $site_mods, $global_config, $language_array;
+    global $nv_Lang, $module_info, $module_name, $site_mods, $global_config, $language_array;
 
     $page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
     $xtpl = new XTemplate('main.tpl', get_module_tpl_dir('main.tpl'));
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('PAGE_URL', $page_url);
     $xtpl->assign('TYPE_PUBLIC', [
         'active' => $type == 'public' ? 'active' : '',
         'url' => $page_url,
-        'name' => $lang_module['api_role_type_public2']
+        'name' => $nv_Lang->getModule('api_role_type_public2')
     ]);
     $xtpl->assign('TYPE_PRIVATE', [
         'active' => $type == 'private' ? 'active' : '',
         'url' => $page_url . '&amp;type=private',
-        'name' => $lang_module['api_role_type_private2']
+        'name' => $nv_Lang->getModule('api_role_type_private2')
     ]);
 
     $methods = [
-        'password_verify' => $lang_module['auth_method_password_verify'],
-        'md5_verify' => $lang_module['auth_method_md5_verify']
+        'password_verify' => $nv_Lang->getModule('auth_method_password_verify'),
+        'md5_verify' => $nv_Lang->getModule('auth_method_md5_verify')
     ];
 
     foreach ($methods as $key => $name) {
-        $method = isset($api_user[$key]) ? $api_user[$key] : [];
+        $method = $api_user[$key] ?? [];
         $method['key'] = $key;
         $method['name'] = $name;
         $xtpl->assign('METHOD', $method);
@@ -67,12 +72,12 @@ function main_theme($type, $roleCount, $roleList, $api_user, $generate_page)
         $xtpl->parse('main.role_empty');
     } else {
         foreach ($roleList as $role) {
-            $role['status'] = !empty($role['status']) ? $lang_module['active'] : $lang_module['inactive'];
+            $role['status'] = !empty($role['status']) ? $nv_Lang->getModule('active') : $nv_Lang->getModule('inactive');
             $role['credential_status'] = (int) $role['credential_status'];
-            $role['credential_status_format'] = $role['credential_status'] === 1 ? $lang_module['activated'] : ($role['credential_status'] === 0 ? $lang_module['suspended'] : $lang_module['not_activated']);
+            $role['credential_status_format'] = $role['credential_status'] === 1 ? $nv_Lang->getModule('activated') : ($role['credential_status'] === 0 ? $nv_Lang->getModule('suspended') : $nv_Lang->getModule('not_activated'));
             $role['credential_addtime'] = $role['credential_addtime'] > 0 ? nv_date('d/m/Y H:i', $role['credential_addtime']) : '';
-            $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_date('d/m/Y H:i', $role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $lang_module['indefinitely'] : '');
-            $role['credential_quota'] = $role['credential_quota'] > 0 ? number_format($role['credential_quota'], 0, '', '.') : ($role['credential_quota'] == 0 ? $lang_module['no_quota'] : '');
+            $role['credential_endtime'] = $role['credential_endtime'] > 0 ? nv_date('d/m/Y H:i', $role['credential_endtime']) : ($role['credential_endtime'] == 0 ? $nv_Lang->getModule('indefinitely') : '');
+            $role['credential_quota'] = $role['credential_quota'] > 0 ? number_format($role['credential_quota'], 0, '', '.') : ($role['credential_quota'] == 0 ? $nv_Lang->getModule('no_quota') : '');
             $role['credential_access_count'] = $role['credential_access_count'] >= 0 ? $role['credential_access_count'] : '';
             $role['credential_last_access'] = $role['credential_last_access'] > 0 ? nv_date('d/m/Y H:i', $role['credential_last_access']) : '';
             $xtpl->assign('ROLE', $role);

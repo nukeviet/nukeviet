@@ -25,10 +25,10 @@ if (defined('ACCESS_ADDUS')) {
 
 // Ngung dang ki thanh vien
 if (!$global_config['allowuserreg']) {
-    $page_title = $lang_module['register'];
+    $page_title = $nv_Lang->getModule('register');
     $key_words = $module_info['keywords'];
 
-    $contents = user_info_exit($lang_module['no_allowuserreg']);
+    $contents = user_info_exit($nv_Lang->getModule('no_allowuserreg'));
     $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
 
     $canonicalUrl = getCanonicalUrl($page_url);
@@ -48,7 +48,7 @@ if ($global_config['max_user_number'] > 0) {
         if (defined('NV_REGISTER_DOMAIN')) {
             nv_redirect_location(NV_REGISTER_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
         } else {
-            $contents = sprintf($lang_global['limit_user_number'], $global_config['max_user_number']);
+            $contents = $nv_Lang->getGlobal('limit_user_number', $global_config['max_user_number']);
             $contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
 
             $canonicalUrl = getCanonicalUrl($page_url);
@@ -146,12 +146,12 @@ if ($nv_Request->isset_request('checkLogin', 'post') and $checkss == $array_regi
 }
 
 if (defined('NV_IS_USER') and defined('ACCESS_ADDUS')) {
-    $lang_module['register'] = $lang_module['add_users'];
-    $lang_module['info'] = $lang_module['info_user'];
+    $nv_Lang->setModule('register', $nv_Lang->getModule('add_users'));
+    $nv_Lang->setModule('info', $nv_Lang->getModule('info_user'));
 }
 
 // Dang ky thong thuong
-$page_title = $lang_module['register'];
+$page_title = $nv_Lang->getModule('register');
 $key_words = $module_info['keywords'];
 
 $array_field_config = [];
@@ -170,7 +170,7 @@ while ($row_field = $result_field->fetch()) {
             $query .= ' ORDER BY ' . $row_field['sql_choices'][4] . ' ' . $row_field['sql_choices'][5];
         }
         $result = $db->query($query);
-        while (list($key, $val) = $result->fetch(3)) {
+        while ([$key, $val] = $result->fetch(3)) {
             $row_field['field_choices'][$key] = $val;
         }
     }
@@ -226,7 +226,7 @@ if ($checkss == $array_register['checkss']) {
         reg_result([
             'status' => 'error',
             'input' => '',
-            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
         ]);
     }
 
@@ -258,7 +258,7 @@ if ($checkss == $array_register['checkss']) {
         reg_result([
             'status' => 'error',
             'input' => 're_password',
-            'mess' => $lang_global['passwordsincorrect']
+            'mess' => $nv_Lang->getGlobal('passwordsincorrect')
         ]);
     }
 
@@ -266,7 +266,7 @@ if ($checkss == $array_register['checkss']) {
         reg_result([
             'status' => 'error',
             'input' => 'agreecheck',
-            'mess' => $lang_global['agreecheck_empty']
+            'mess' => $nv_Lang->getGlobal('agreecheck_empty')
         ]);
     }
 
@@ -329,25 +329,25 @@ if ($checkss == $array_register['checkss']) {
             reg_result([
                 'status' => 'error',
                 'input' => '',
-                'mess' => $lang_module['err_no_save_account']
+                'mess' => $nv_Lang->getModule('err_no_save_account')
             ]);
         } else {
             if ($global_config['allowuserreg'] == 2) {
-                $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
+                $register_active_time = $global_users_config['register_active_time'] ?? 86400;
                 $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
-                $subject = $lang_module['account_active'];
+                $subject = $nv_Lang->getModule('account_active');
                 $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, NV_MY_DOMAIN);
-                $message = sprintf($lang_module['account_active_info'], $_full_name, $global_config['site_name'], $_url, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                $message = $nv_Lang->getModule('account_active_info', $_full_name, $global_config['site_name'], $_url, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                 $send = nv_sendmail([
                     $global_config['site_name'],
                     $global_config['site_email']
                 ], $array_register['email'], $subject, $message);
 
                 if ($send) {
-                    $info = $lang_module['account_active_mess'];
+                    $info = $nv_Lang->getModule('account_active_mess');
                 } else {
-                    $info = $lang_module['account_active_mess_error_mail'];
+                    $info = $nv_Lang->getModule('account_active_mess_error_mail');
 
                     // Thêm thông báo vào hệ thống
                     $access_admin = unserialize($global_users_config['access_admin']);
@@ -363,7 +363,7 @@ if ($checkss == $array_register['checkss']) {
                     }
                 }
             } else {
-                $info = $lang_module['account_register_to_admin'];
+                $info = $nv_Lang->getModule('account_register_to_admin');
                 nv_insert_notification($module_name, 'contact_new', [
                     'title' => $array_register['username']
                 ], $userid, 0, 0, 1);
@@ -430,7 +430,7 @@ if ($checkss == $array_register['checkss']) {
             reg_result([
                 'status' => 'error',
                 'input' => '',
-                'mess' => $lang_module['err_no_save_account']
+                'mess' => $nv_Lang->getModule('err_no_save_account')
             ]);
         } else {
             $query_field['userid'] = $userid;
@@ -445,9 +445,9 @@ if ($checkss == $array_register['checkss']) {
             }
 
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
-            $subject = $lang_module['account_register'];
+            $subject = $nv_Lang->getModule('account_register');
             $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-            $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username'], $array_register['email']);
+            $message = $nv_Lang->getModule('account_register_info', $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username'], $array_register['email']);
             nv_sendmail_async([
                 $global_config['site_name'],
                 $global_config['site_email']
@@ -487,7 +487,7 @@ if ($checkss == $array_register['checkss']) {
             reg_result([
                 'status' => 'ok',
                 'input' => nv_url_rewrite($url, true),
-                'mess' => $lang_module['register_ok']
+                'mess' => $nv_Lang->getModule('register_ok')
             ]);
         }
     }

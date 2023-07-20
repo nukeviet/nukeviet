@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,21 +19,20 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_data_config_banners($module, $data_block, $lang_block)
+    function nv_block_data_config_banners($module, $data_block)
     {
-        global $db, $language_array;
+        global $db, $language_array, $nv_Lang;
 
         $html = "<select name=\"config_idplanbanner\" class=\"form-control\">\n";
-        $html .= '<option value="">' . $lang_block['idplanbanner'] . "</option>\n";
+        $html .= '<option value="">' . $nv_Lang->getModule('idplanbanner') . "</option>\n";
         $query = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE . "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
         $result = $db->query($query);
 
         while ($row_bpn = $result->fetch()) {
             $value = $row_bpn['title'] . ' (';
-            $value .= ((!empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $lang_block['blang_all']) . ', ';
+            $value .= ((!empty($row_bpn['blang']) and isset($language_array[$row_bpn['blang']])) ? $language_array[$row_bpn['blang']]['name'] : $nv_Lang->getModule('blang_all')) . ', ';
             $value .= $row_bpn['form'] . ', ';
             $value .= $row_bpn['width'] . 'x' . $row_bpn['height'] . 'px';
             $value .= ')';
@@ -44,26 +43,26 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
 
         $html .= "</select>\n";
 
-        return '<div class="form-group"><label class="control-label col-sm-6">' . $lang_block['idplanbanner'] . ':</label><div class="col-sm-9">' . $html . '</div></div>';
+        return '<div class="form-group"><label class="control-label col-sm-6">' . $nv_Lang->getModule('idplanbanner') . ':</label><div class="col-sm-9">' . $html . '</div></div>';
     }
 
     /**
      * nv_block_data_config_banners_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_data_config_banners_submit($module, $lang_block)
+    function nv_block_data_config_banners_submit($module)
     {
-        global $nv_Request;
+        global $nv_Request, $nv_Lang;
+
         $return = [];
         $return['error'] = [];
         $return['config'] = [];
         $return['config']['idplanbanner'] = $nv_Request->get_int('config_idplanbanner', 'post', 0);
 
         if (empty($return['config']['idplanbanner'])) {
-            $return['error'][] = $lang_block['idplanbanner'];
+            $return['error'][] = $nv_Lang->getModule('idplanbanner');
         }
 
         return $return;
@@ -73,7 +72,7 @@ if (!nv_function_exists('nv_block_data_config_banners')) {
      * nv_block_global_banners()
      *
      * @param array $block_config
-     * @return string
+     * @return string|void
      */
     function nv_block_global_banners($block_config)
     {

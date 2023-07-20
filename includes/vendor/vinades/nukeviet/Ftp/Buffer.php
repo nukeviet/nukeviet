@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -115,7 +115,7 @@ class Buffer extends \stdClass
                     return true;
                 }
 
-                    return false;
+                return false;
                 break;
             case SEEK_CUR:
                 if ($offset >= 0) {
@@ -124,7 +124,7 @@ class Buffer extends \stdClass
                     return true;
                 }
 
-                    return false;
+                return false;
                 break;
             case SEEK_END:
                 if (strlen($GLOBALS[$this->varname]) + $offset >= 0) {
@@ -133,7 +133,7 @@ class Buffer extends \stdClass
                     return true;
                 }
 
-                    return false;
+                return false;
                 break;
             default:
                 return false;

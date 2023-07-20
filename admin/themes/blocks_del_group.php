@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,7 +23,7 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
     $array_expression = [];
     $result = $db->query('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . implode(',', $array_bid) . ')');
 
-    while (list($bid_i, $theme_i, $position_i) = $result->fetch(3)) {
+    while ([$bid_i, $theme_i, $position_i] = $result->fetch(3)) {
         $array_expression[$theme_i][$position_i][] = $bid_i;
     }
 
@@ -38,7 +38,7 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
                 $sth->bindParam(':theme', $theme_i, PDO::PARAM_STR);
                 $sth->bindParam(':position', $position, PDO::PARAM_STR);
                 $sth->execute();
-                while (list($bid_i) = $sth->fetch(3)) {
+                while ([$bid_i] = $sth->fetch(3)) {
                     ++$weight;
                     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i);
                 }
@@ -50,7 +50,7 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
                 $sth->bindParam(':theme', $theme_i, PDO::PARAM_STR);
                 $sth->bindParam(':position', $position, PDO::PARAM_STR);
                 $sth->execute();
-                while (list($bid_i, $func_id_i) = $sth->fetch(3)) {
+                while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
                     if ($func_id_i == $func_id_old) {
                         ++$weight;
                     } else {
@@ -70,4 +70,4 @@ if (!empty($array_bid) and md5($selectthemes . NV_CHECK_SESSION) == $nv_Request-
     }
 }
 
-echo $lang_module['block_delete_success'];
+echo $nv_Lang->getModule('block_delete_success');

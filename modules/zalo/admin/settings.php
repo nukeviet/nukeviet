@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -123,7 +123,7 @@ if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
     if (!empty($parent) and !isset($provinces[$parent])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['vnsubdivisions_error']
+            'mess' => $nv_Lang->getModule('vnsubdivisions_error')
         ]);
     }
 
@@ -134,7 +134,7 @@ if ($nv_Request->isset_request('vnsubdivisionsSave, parent', 'post')) {
         if (empty($name)) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['vnsubdivisions_title_empty']
+                'mess' => $nv_Lang->getModule('vnsubdivisions_title_empty')
             ]);
         }
 
@@ -355,16 +355,16 @@ if (!empty($subdiv_parent) and !isset($provinces[$subdiv_parent])) {
 
 $global_config['zaloWebhookIPs_format'] = !empty($zaloWebhookIPs) ? implode("\n", $zaloWebhookIPs) : '';
 
-$lang_module['access_token_copy_note'] = sprintf($lang_module['access_token_copy_note'], 'https://developers.zalo.me/tools/explorer/' . $global_config['zaloAppID'], 'https://developers.zalo.me/docs/api/official-account-api/xac-thuc-va-uy-quyen/cach-2-xac-thuc-voi-cong-cu-api-explorer/phuong-thuc-lay-access-token-su-dung-cong-cu-api-explorer-post-5004');
-$lang_module['zalowebhook_ip_check_note'] = sprintf($lang_module['zalowebhook_ip_check_note'], 'https://developers.zalo.me/app/' . $global_config['zaloAppID'] . '/webhook');
+$nv_Lang->setModule('access_token_copy_note', $nv_Lang->getModule('access_token_copy_note', 'https://developers.zalo.me/tools/explorer/' . $global_config['zaloAppID'], 'https://developers.zalo.me/docs/api/official-account-api/xac-thuc-va-uy-quyen/cach-2-xac-thuc-voi-cong-cu-api-explorer/phuong-thuc-lay-access-token-su-dung-cong-cu-api-explorer-post-5004'));
+$nv_Lang->setModule('zalowebhook_ip_check_note', $nv_Lang->getModule('zalowebhook_ip_check_note', 'https://developers.zalo.me/app/' . $global_config['zaloAppID'] . '/webhook'));
 
 $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
-$lang_module['oa_create_note'] = sprintf($lang_module['oa_create_note'], 'https://oa.zalo.me/manage/oa?option=create', 'https://oa.zalo.me/manage/oa');
-$lang_module['app_note'] = sprintf($lang_module['app_note'], 'https://developers.zalo.me/createapp', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php', NV_MY_DOMAIN, NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php');
-$lang_module['webhook_note'] = sprintf($lang_module['webhook_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=plugin', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_SITEURL . '?zalo=' . $global_config['zaloAppID']);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$nv_Lang->setModule('oa_create_note', $nv_Lang->getModule('oa_create_note', 'https://oa.zalo.me/manage/oa?option=create', 'https://oa.zalo.me/manage/oa'));
+$nv_Lang->setModule('app_note', $nv_Lang->getModule('app_note', 'https://developers.zalo.me/createapp', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php', NV_MY_DOMAIN, NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php', NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php'));
+$nv_Lang->setModule('webhook_note', $nv_Lang->getModule('webhook_note', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=settings&amp;' . NV_OP_VARIABLE . '=plugin', 'https://developers.zalo.me/apps', NV_MY_DOMAIN . NV_BASE_SITEURL . '?zalo=' . $global_config['zaloAppID']));
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('DATA', $global_config);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('PAGE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
@@ -419,32 +419,32 @@ $check = [
         'required' => $norm_format,
         'current' => $upload_max_filesize_format,
         'suitable' => $upload_max_filesize_suitable,
-        'suitable_info' => $upload_max_filesize_suitable ? $lang_module['suitable'] : $lang_module['notsuitable'],
-        'recommendation' => $upload_max_filesize_suitable ? '' : $lang_module['upload_max_filesize_not_suitable']
+        'suitable_info' => $upload_max_filesize_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
+        'recommendation' => $upload_max_filesize_suitable ? '' : $nv_Lang->getModule('upload_max_filesize_not_suitable')
     ],
     'post_max_size' => [
         'key' => 'post_max_size',
         'required' => $norm_format,
         'current' => $post_max_size_format,
         'suitable' => $post_max_size_suitable,
-        'suitable_info' => $post_max_size_suitable ? $lang_module['suitable'] : $lang_module['notsuitable'],
-        'recommendation' => $post_max_size_suitable ? '' : $lang_module['post_max_size_not_suitable']
+        'suitable_info' => $post_max_size_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
+        'recommendation' => $post_max_size_suitable ? '' : $nv_Lang->getModule('post_max_size_not_suitable')
     ],
     'nv_max_size' => [
-        'key' => $lang_module['nv_max_size'],
+        'key' => $nv_Lang->getModule('nv_max_size'),
         'required' => $norm_format,
         'current' => $nv_max_size_format,
         'suitable' => $nv_max_size_suitable,
-        'suitable_info' => $nv_max_size_suitable ? $lang_module['suitable'] : $lang_module['notsuitable'],
-        'recommendation' => $nv_max_size_suitable ? '' : sprintf($lang_module['nv_max_size_not_suitable'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=uploadconfig')
+        'suitable_info' => $nv_max_size_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
+        'recommendation' => $nv_max_size_suitable ? '' : $nv_Lang->getModule('nv_max_size_not_suitable', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=uploadconfig')
     ],
     'file_allowed_ext' => [
-        'key' => $lang_module['file_allowed_ext'],
+        'key' => $nv_Lang->getModule('file_allowed_ext'),
         'required' => implode(', ', $allow_files),
         'current' => implode(', ', $file_allowed_ext_current),
         'suitable' => $file_allowed_ext_suitable,
-        'suitable_info' => $file_allowed_ext_suitable ? $lang_module['suitable'] : $lang_module['notsuitable'],
-        'recommendation' => $file_allowed_ext_suitable ? '' : sprintf($lang_module['file_allowed_ext_not_suitable'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=uploadconfig')
+        'suitable_info' => $file_allowed_ext_suitable ? $nv_Lang->getModule('suitable') : $nv_Lang->getModule('notsuitable'),
+        'recommendation' => $file_allowed_ext_suitable ? '' : $nv_Lang->getModule('file_allowed_ext_not_suitable', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=upload&' . NV_OP_VARIABLE . '=uploadconfig')
     ]
 ];
 
@@ -474,7 +474,7 @@ if (!empty($action) and in_array($action, ['general_settings', 'webhook_setup', 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
-$page_title = $lang_module['settings'];
+$page_title = $nv_Lang->getModule('settings');
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

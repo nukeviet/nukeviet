@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -195,11 +195,11 @@ class InstantArticles
 
             if (substr($currentTag, 0, 1) == '/') {
                 $isCloseTag = true;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower(substr($tagName, 1));
             } else {
                 $isCloseTag = false;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower($tagName);
             }
 
@@ -216,8 +216,8 @@ class InstantArticles
                 $openQuotes = strpos($fromSpace, '"');
                 $closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
 
-                if (strpos($fromSpace, '=') !== false) {
-                    if (($openQuotes !== false) and (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
+                if (str_contains($fromSpace, '=')) {
+                    if (($openQuotes !== false) and (str_contains(substr($fromSpace, ($openQuotes + 1)), '"'))) {
                         $attr = substr($fromSpace, 0, ($closeQuotes + 1));
                     } else {
                         $attr = substr($fromSpace, 0, $nextSpace);
@@ -316,11 +316,11 @@ class InstantArticles
 
             if (substr($currentTag, 0, 1) == '/') {
                 $isCloseTag = true;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower(substr($tagName, 1));
             } else {
                 $isCloseTag = false;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower($tagName);
             }
 
@@ -336,8 +336,8 @@ class InstantArticles
                 $openQuotes = strpos($fromSpace, '"');
                 $closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
 
-                if (strpos($fromSpace, '=') !== false) {
-                    if (($openQuotes !== false) and (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
+                if (str_contains($fromSpace, '=')) {
+                    if (($openQuotes !== false) and (str_contains(substr($fromSpace, ($openQuotes + 1)), '"'))) {
                         $attr = substr($fromSpace, 0, ($closeQuotes + 1));
                     } else {
                         $attr = substr($fromSpace, 0, $nextSpace);

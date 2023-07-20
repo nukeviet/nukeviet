@@ -61,11 +61,11 @@ if (
     $manager_user_2step = true;
 }
 
-$page_title = $lang_module['2step_manager'] . ': ' . $row_user['username'];
+$page_title = $nv_Lang->getModule('2step_manager') . ': ' . $row_user['username'];
 
 $xtpl = new XTemplate('2step.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors');
-$xtpl->assign('GLANG', $lang_global);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('USERID', $row['admin_id']);
 $xtpl->assign('TOKEND', NV_CHECK_SESSION);
 
@@ -97,13 +97,13 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
 
         if (!empty($_GET['code']) and empty($error)) {
             if (empty($attribs)) {
-                $error = $lang_global['admin_oauth_error_getdata'];
+                $error = $nv_Lang->getGlobal('admin_oauth_error_getdata');
             } else {
                 // Kiểm tra trùng
                 $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_oauth WHERE oauth_uid=' . $db->quote($attribs['full_identity']) . '
                 AND admin_id=' . $row['admin_id'] . ' AND oauth_server=' . $db->quote($opt);
                 if ($db->query($sql)->fetch()) {
-                    $error = $lang_module['2step_error_oauth_exists'];
+                    $error = $nv_Lang->getModule('2step_error_oauth_exists');
                 }
             }
 
@@ -116,9 +116,10 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
                     ' . $db->quote($attribs['email']) . ', ' . $db->quote($attribs['identity']) . ', ' . NV_CURRENTTIME . '
                 )';
                 if (!$db->insert_id($sql, 'id')) {
-                    $error = $lang_global['admin_oauth_error_savenew'];
+                    $error = $nv_Lang->getGlobal('admin_oauth_error_savenew');
                 } else {
                     $oauthid = !empty($attribs['email']) ? $attribs['email'] : $attribs['identity'];
+
                     $maillang = '';
                     if (!empty($row_user['language']) and in_array($row_user['language'], $global_config['setup_langs'], true)) {
                         if ($row_user['language'] != NV_LANG_INTERFACE) {
@@ -138,13 +139,16 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
                         while ($row = $result->fetch()) {
                             $gconfigs[$row['config_name']] = $row['config_value'];
                         }
-
-                        $lang_module = [];
-                        include NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php';
+                        $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php', true);
+                        $mail_subject = $nv_Lang->getModule('2step_oauth_add_mail_subject');
+                        $mail_message = $nv_Lang->getModule('2step_oauth_add_mail_content', $row_user['first_name'], $gconfigs['site_name'], $oauthid, ucfirst($opt));
+                        $nv_Lang->changeLang();
+                    } else {
+                        $mail_subject = $nv_Lang->getModule('2step_oauth_add_mail_subject');
+                        $mail_message = $nv_Lang->getModule('2step_oauth_add_mail_content', $row_user['first_name'], $gconfigs['site_name'], $oauthid, ucfirst($opt));
                     }
 
-                    $message = sprintf($lang_module['2step_oauth_add_mail_content'], $row_user['first_name'], $gconfigs['site_name'], $oauthid, ucfirst($opt));
-                    nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row_user['email'], $lang_module['2step_oauth_add_mail_subject'], $message, '', false, false, [], [], true, [], $maillang);
+                    nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row_user['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
 
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_ADD_OAUTH', $opt . ': ' . $oauthid, $admin_info['userid']);
                     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
@@ -217,13 +221,16 @@ if ($nv_Request->get_title('delall', 'post', '') === NV_CHECK_SESSION) {
         while ($row = $result->fetch()) {
             $gconfigs[$row['config_name']] = $row['config_value'];
         }
-
-        $lang_module = [];
-        include NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php';
+        $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php', true);
+        $mail_subject = $nv_Lang->getModule('2step_oauth_del_mail_subject');
+        $mail_message = $nv_Lang->getModule('2step_oauth_dels_mail_content', $row_user['first_name'], $gconfigs['site_name'], $list_for_mail);
+        $nv_Lang->changeLang();
+    } else {
+        $mail_subject = $nv_Lang->getModule('2step_oauth_del_mail_subject');
+        $mail_message = $nv_Lang->getModule('2step_oauth_dels_mail_content', $row_user['first_name'], $gconfigs['site_name'], $list_for_mail);
     }
 
-    $message = sprintf($lang_module['2step_oauth_dels_mail_content'], $row_user['first_name'], $gconfigs['site_name'], $list_for_mail);
-    nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row_user['email'], $lang_module['2step_oauth_del_mail_subject'], $message);
+    nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row_user['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_TRUNCATE_OAUTH', 'AID ' . $row['admin_id'], $admin_info['userid']);
     nv_htmlOutput('OK');
@@ -264,13 +271,16 @@ if ($nv_Request->get_title('del', 'post', '') === NV_CHECK_SESSION) {
         while ($row = $result->fetch()) {
             $gconfigs[$row['config_name']] = $row['config_value'];
         }
-
-        $lang_module = [];
-        include NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php';
+        $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php', true);
+        $mail_subject = $nv_Lang->getModule('2step_oauth_del_mail_subject');
+        $mail_message = $nv_Lang->getModule('2step_oauth_del_mail_content', $row_user['first_name'], $gconfigs['site_name'], $oauthid, ucfirst($array_oauth[$id]['oauth_server']));
+        $nv_Lang->changeLang();
+    } else {
+        $mail_subject = $nv_Lang->getModule('2step_oauth_del_mail_subject');
+        $mail_message = $nv_Lang->getModule('2step_oauth_del_mail_content', $row_user['first_name'], $gconfigs['site_name'], $oauthid, ucfirst($array_oauth[$id]['oauth_server']));
     }
 
-    $message = sprintf($lang_module['2step_oauth_del_mail_content'], $row_user['first_name'], $gconfigs['site_name'], $oauthid, ucfirst($array_oauth[$id]['oauth_server']));
-    nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row_user['email'], $lang_module['2step_oauth_del_mail_subject'], $message, '', false, false, [], [], true, [], $maillang);
+    nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row_user['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'LOG_DELETE_OAUTH', 'AID ' . $row['admin_id'] . ': ' . $array_oauth[$id]['oauth_server'] . '|' . $array_oauth[$id]['oauth_email'], $admin_info['userid']);
     nv_htmlOutput('OK');

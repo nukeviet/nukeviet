@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -25,11 +25,7 @@ if (!nv_function_exists('nv_message_page')) {
         global $nv_Cache, $global_config, $site_mods, $db_slave, $module_name;
         $module = $block_config['module'];
 
-        if (!isset($site_mods[$module])) {
-            return '';
-        }
-
-        if ($module_name == $module) {
+        if (!isset($site_mods[$module]) or $module_name == $module) {
             return '';
         }
 
@@ -40,7 +36,7 @@ if (!nv_function_exists('nv_message_page')) {
         $cache_files = nv_scandir(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module, $pattern);
 
         if (($count = sizeof($cache_files)) >= 1) {
-            $num = rand(1, $count);
+            $num = random_int(1, $count);
             --$num;
             $cache_file = $cache_files[$num];
 
@@ -68,17 +64,19 @@ if (!nv_function_exists('nv_message_page')) {
             }
         }
 
-        if ($is_show) {
-            $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.about.tpl');
-            $xtpl = new XTemplate('block.about.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
-            $xtpl->assign('LINK', $link);
-            $xtpl->assign('TITLE', $title);
-            $xtpl->assign('BODYTEXT', $bodytext);
-
-            $xtpl->parse('main');
-
-            return $xtpl->text('main');
+        if (!$is_show) {
+            return '';
         }
+
+        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/page/block.about.tpl');
+        $xtpl = new XTemplate('block.about.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page');
+        $xtpl->assign('LINK', $link);
+        $xtpl->assign('TITLE', $title);
+        $xtpl->assign('BODYTEXT', $bodytext);
+
+        $xtpl->parse('main');
+
+        return $xtpl->text('main');
 
         return '';
     }

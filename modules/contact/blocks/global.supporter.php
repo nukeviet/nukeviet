@@ -40,6 +40,8 @@ if (!function_exists('block_supporter_get_list')) {
      * block_supporter_get_list()
      *
      * @return mixed
+     * @param mixed $module
+     * @param mixed $departments
      */
     function block_supporter_get_list($module, $departments)
     {
@@ -94,7 +96,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
      */
     function nv_contact_supporter($module)
     {
-        global $nv_Cache, $site_mods, $global_config, $lang_global, $module_name;
+        global $nv_Cache, $site_mods, $global_config, $nv_Lang, $module_name;
 
         if (!isset($site_mods[$module])) {
             return '';
@@ -112,9 +114,8 @@ if (!nv_function_exists('nv_contact_supporter')) {
         }
 
         $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/modules/' . $site_mods[$module]['module_file'] . '/block.supporter.tpl');
-
         $xtpl = new XTemplate('block.supporter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('TEMPLATE', $block_theme);
         $xtpl->assign('MODULE', $module);
         $active = false;
@@ -123,7 +124,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
                 $dep = [
                     'id' => 0,
                     'sel' => !$active ? ' selected="selected"' : '',
-                    'full_name' => $lang_global['general_support']
+                    'full_name' => $nv_Lang->getGlobal('general_support')
                 ];
             } else {
                 $dep = $departments[$depid];
@@ -151,7 +152,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
                 }
                 $xtpl->assign('CD', [
                     'icon' => 'fa-phone',
-                    'name' => $lang_global['phonenumber'],
+                    'name' => $nv_Lang->getGlobal('phonenumber'),
                     'value' => implode(', ', $items)
                 ]);
                 $xtpl->parse('main.deps_content.supporter.cd');
@@ -159,7 +160,7 @@ if (!nv_function_exists('nv_contact_supporter')) {
                 if (!empty($supporter['email'])) {
                     $xtpl->assign('CD', [
                         'icon' => 'fa-envelope',
-                        'name' => $lang_global['email'],
+                        'name' => $nv_Lang->getGlobal('email'),
                         'value' => '<a href="' . $supporter['email'] . '">' . $supporter['email'] . '</a>'
                     ]);
                     $xtpl->parse('main.deps_content.supporter.cd');

@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 // Sắp xếp dạng cây các API
 function apiTrees($role_object, $array_post, $lang)
 {
-    global $site_mods, $lang_module, $array_api_actions, $user_array_api_actions;
+    global $site_mods, $nv_Lang, $array_api_actions, $user_array_api_actions;
 
     $total_api_enabled = 0;
     $array_api_trees = [];
@@ -30,7 +30,7 @@ function apiTrees($role_object, $array_post, $lang)
             'active' => false,
             'total_api' => 0,
             'key' => $keysysmodule,
-            'name' => $keysysmodule ? $site_mods[$keysysmodule]['custom_title'] : $lang_module['api_of_system'],
+            'name' => $keysysmodule ? $site_mods[$keysysmodule]['custom_title'] : $nv_Lang->getModule('api_of_system'),
             'subs' => []
         ];
 
@@ -105,13 +105,13 @@ function apiTrees($role_object, $array_post, $lang)
 // Lấy nội dung HTML của cây APIs
 function apicheck($role_object, $array_post, $lang)
 {
-    global $global_config, $lang_module, $lang_global, $module_file;
+    global $global_config, $module_file;
 
-    list($array_api_trees, $array_api_contents, $total_api_enabled) = apiTrees($role_object, $array_post, $lang);
+    [$array_api_trees, $array_api_contents, $total_api_enabled] = apiTrees($role_object, $array_post, $lang);
 
     $xtpl = new XTemplate('roles.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TOTAL_API_ENABLED', $total_api_enabled);
     $xtpl->assign('TOTAL_API_CHECKED', $total_api_enabled ? ' checked' : '');
 
@@ -180,7 +180,7 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     if (empty($id)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
@@ -188,7 +188,7 @@ if ($nv_Request->isset_request('changeStatus', 'post')) {
     if (empty($array_post)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['api_role_select']
+            'mess' => $nv_Lang->getModule('api_role_select')
         ]);
     }
 
@@ -225,8 +225,8 @@ if ($nv_Request->isset_request('roledel', 'post')) {
 
 $page_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 $xtpl = new XTemplate('roles.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('PAGE_URL', $page_url);
 $xtpl->assign('ADD_API_ROLE_URL', $page_url . '&amp;action=role');
 
@@ -290,7 +290,7 @@ if ($action == 'role') {
         if (empty($data['role_title'])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['api_roles_error_title']
+                'mess' => $nv_Lang->getModule('api_roles_error_title')
             ]);
         }
 
@@ -299,7 +299,7 @@ if ($action == 'role') {
         if ($exists) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['api_roles_error_exists']
+                'mess' => $nv_Lang->getModule('api_roles_error_exists')
             ]);
         }
 
@@ -312,7 +312,7 @@ if ($action == 'role') {
                     if (!empty($data['log_period']) and $interval > $data['log_period'] * 60) {
                         nv_jsonOutput([
                             'status' => 'error',
-                            'mess' => $lang_module['flood_interval_error']
+                            'mess' => $nv_Lang->getModule('flood_interval_error')
                         ]);
                     }
 
@@ -349,7 +349,7 @@ if ($action == 'role') {
         if (empty($data['role_data']['sys']) and empty($data['role_data'][$lg])) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['api_roles_error_role']
+                'mess' => $nv_Lang->getModule('api_roles_error_role')
             ]);
         }
 
@@ -419,7 +419,7 @@ if ($action == 'role') {
     $array_post['role_object_user_checked'] = $array_post['role_object'] == 'user' ? ' checked="checked"' : '';
     $array_post['log_period'] = !empty($array_post['log_period']) ? round($array_post['log_period'] / 3600) : '';
 
-    $page_title = $isAdd ? $lang_module['add_role'] : $lang_module['edit_role'];
+    $page_title = $isAdd ? $nv_Lang->getModule('add_role') : $nv_Lang->getModule('edit_role');
     $page_url .= '&action=role&lg=' . $lg;
 
     $xtpl->assign('FORM_ACTION', $page_url);
@@ -437,13 +437,13 @@ if ($action == 'role') {
     }
 
     $saveopts = [
-        '1' => sprintf($lang_module['saveopt1'], $language_array[$lg]['name']),
-        '2' => $lang_module['saveopt2']
+        '1' => $nv_Lang->getModule('saveopt1', $language_array[$lg]['name']),
+        '2' => $nv_Lang->getModule('saveopt2')
     ];
     if (sizeof($global_config['setup_langs']) > 1) {
         foreach ($global_config['setup_langs'] as $_lg) {
             if ($_lg != $lg) {
-                $saveopts[$_lg] = sprintf($lang_module['saveopt3'], $language_array[$lg]['name'], $language_array[$_lg]['name']);
+                $saveopts[$_lg] = $nv_Lang->getModule('saveopt3', $language_array[$lg]['name'], $language_array[$_lg]['name']);
             }
         }
     }
@@ -474,13 +474,13 @@ $object = $nv_Request->get_title('object', 'get', '');
 (!empty($object) and !in_array($object, ['admin', 'user'], true)) && $object = '';
 !empty($object) && $base_url .= '&object=' . $object;
 
-list($all_pages, $rolelist) = getRoleList($type, $object, $page, $per_page);
+[$all_pages, $rolelist] = getRoleList($type, $object, $page, $per_page);
 $generate_page = nv_generate_page($base_url, $all_pages, $per_page, $page);
 
-$page_title = $lang_module['role_management'];
+$page_title = $nv_Lang->getModule('role_management');
 
 if (empty($global_config['remote_api_access'])) {
-    $xtpl->assign('REMOTE_API_OFF', sprintf($lang_module['api_remote_off'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=config'));
+    $xtpl->assign('REMOTE_API_OFF', $nv_Lang->getModule('api_remote_off', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=config'));
     $xtpl->parse('main.remote_api_off');
 }
 
@@ -489,7 +489,7 @@ foreach ($types as $key) {
     $xtpl->assign('TYPE', [
         'key' => $key,
         'sel' => $key == $type ? ' selected="selected"' : '',
-        'name' => $lang_module['api_role_type_' . $key]
+        'name' => $nv_Lang->getModule('api_role_type_' . $key)
     ]);
     $xtpl->parse('main.role_type');
 }
@@ -499,7 +499,7 @@ foreach ($objects as $key) {
     $xtpl->assign('OBJECT', [
         'key' => $key,
         'sel' => $key == $object ? ' selected="selected"' : '',
-        'name' => $lang_module['api_role_object_' . $key]
+        'name' => $nv_Lang->getModule('api_role_object_' . $key)
     ]);
     $xtpl->parse('main.role_object');
 }
@@ -510,8 +510,8 @@ if (empty($rolelist)) {
     foreach ($rolelist as $role) {
         $xtpl->assign('ROLE', [
             'title' => $role['role_title'],
-            'type' => $lang_module['api_role_type_' . $role['role_type']],
-            'object' => $lang_module['api_role_object_' . $role['role_object']],
+            'type' => $nv_Lang->getModule('api_role_type_' . $role['role_type']),
+            'object' => $nv_Lang->getModule('api_role_object_' . $role['role_object']),
             'addtime' => nv_date('d/m/Y H:i', $role['addtime']),
             'edittime' => $role['edittime'] ? nv_date('d/m/Y H:i', $role['edittime']) : '',
             'id' => $role['role_id']
@@ -567,7 +567,7 @@ if (empty($rolelist)) {
             $xtpl->parse('main.role_list.loop.tabcontent_forlang');
         }
 
-        $sts = [$lang_module['inactive'], $lang_module['active']];
+        $sts = [$nv_Lang->getModule('inactive'), $nv_Lang->getModule('active')];
         foreach ($sts as $k => $v) {
             $xtpl->assign('STATUS', [
                 'val' => $k,

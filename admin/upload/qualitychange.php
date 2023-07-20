@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,7 +19,7 @@ $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 if (!isset($check_allow_upload_dir['move_file'])) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'ERROR#' . $lang_module['notlevel']
+        'mess' => 'ERROR#' . $nv_Lang->getModule('notlevel')
     ]);
 }
 
@@ -29,7 +29,7 @@ $img = basename($img);
 if (empty($img) or !nv_is_file(NV_BASE_SITEURL . $path . '/' . $img, $path)) {
     nv_jsonOutput([
         'status' => 'error',
-        'mess' => 'ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $img
+        'mess' => 'ERROR#' . $nv_Lang->getModule('errorNotSelectFile') . NV_ROOTDIR . '/' . $path . '/' . $img
     ]);
 }
 
@@ -39,7 +39,7 @@ $quality = $nv_Request->get_int('quality', 'post', 0);
 $fimage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $img, NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
 if ($nv_Request->isset_request('preview', 'post')) {
-    list($data, $length) = $fimage->base64data($quality);
+    [$data, $length] = $fimage->base64data($quality);
     nv_jsonOutput([
         'status' => 'OK',
         'imgdata' => $data,

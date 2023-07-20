@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['mng'];
+$page_title = $nv_Lang->getModule('mng');
 
 // Get content info
 if ($nv_Request->isset_request('getinfo', 'post')) {
@@ -146,7 +146,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
         'status' => !$message ? 'success' : 'error',
         'message' => $message,
         'responCode' => $status,
-        'responText' => $lang_module['content_status_' . $status]
+        'responText' => $nv_Lang->getModule('content_status_' . $status)
     ]);
 }
 
@@ -183,7 +183,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     if (empty($data['title'])) {
         $error[] = [
             'name' => 'title',
-            'value' => $lang_module['content_title_error']
+            'value' => $nv_Lang->getModule('content_title_error')
         ];
     }
 
@@ -243,17 +243,17 @@ if ($nv_Request->isset_request('submit', 'post')) {
 
                 $nv_Cache->delMod('settings');
                 $nv_Cache->delMod($module_name);
-                $message = $lang_module['save_success'];
+                $message = $nv_Lang->getModule('save_success');
             } else {
                 $error[] = [
                     'name' => '',
-                    'value' => $lang_module['error_save']
+                    'value' => $nv_Lang->getModule('error_save')
                 ];
             }
         } catch (PDOException $e) {
             $error[] = [
                 'name' => '',
-                'value' => $lang_module['error_save']
+                'value' => $nv_Lang->getModule('error_save')
             ];
         }
     }

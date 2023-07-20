@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -33,9 +33,9 @@ if (!function_exists('array_key_first')) {
     /**
      * array_key_first()
      * Xuất ra key đầu tiền của mảng
-     * 
-     * @param mixed $array 
-     * @return string|int|null|void 
+     *
+     * @param mixed $array
+     * @return int|string|void|null
      */
     function array_key_first($array)
     {
@@ -54,9 +54,9 @@ if (!function_exists('array_key_last')) {
     /**
      * array_key_last()
      * Xuất ra key cuối cùng của mảng
-     * 
-     * @param mixed $array 
-     * @return int|string|null 
+     *
+     * @param mixed $array
+     * @return int|string|null
      */
     function array_key_last($array)
     {

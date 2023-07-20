@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['userwait_resend_email'];
+$page_title = $nv_Lang->getModule('userwait_resend_email');
 $set_active_op = 'user_waiting';
 $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $op . '_' . $set_active_op);
 if ($nv_Request->isset_request('ajax', 'post')) {
@@ -43,9 +43,6 @@ if ($nv_Request->isset_request('ajax', 'post')) {
             if (NV_LANG_DATA != NV_LANG_INTERFACE) {
                 $maillang = NV_LANG_DATA;
             }
-
-            $userwait_resend_ok = $lang_module['userwait_resend_ok'];
-            $userwait_resend_error = $lang_module['userwait_resend_error'];
             $gconfigs = [
                 'site_name' => $global_config['site_name'],
                 'site_email' => $global_config['site_email']
@@ -57,26 +54,24 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                     $gconfigs[$row['config_name']] = $row['config_value'];
                 }
 
-                $lang_tmp = $lang_module;
-                $lang_module = [];
-                include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . $maillang . '.php';
+                $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
             }
 
             while ($row = $result->fetch()) {
                 // Kiểm tra xem email đã tồn tại chưa nếu có xóa đi
                 if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email=' . $db->quote($row['email']))->fetchColumn()) {
-                    $respon['messages'][] = $row['email'] . ': ' . $lang_module['userwait_resend_delete'];
+                    $respon['messages'][] = $row['email'] . ': ' . $nv_Lang->getModule('userwait_resend_delete');
                     if (!in_array((int) $row['userid'], $useriddel, true)) {
                         $useriddel[] = (int) $row['userid'];
                     }
                 } else {
-                    $register_active_time = isset($global_users_config['register_active_time']) ? $global_users_config['register_active_time'] : 86400;
+                    $register_active_time = $global_users_config['register_active_time'] ?? 86400;
                     $_full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
 
-                    $subject = $lang_module['account_active'];
+                    $mail_subject = $nv_Lang->getModule('account_active');
                     $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $row['checknum'], NV_MY_DOMAIN);
-                    $message = sprintf($lang_module['account_active_info'], $_full_name, $gconfigs['site_name'], $_url, $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
-                    $checkSend = nv_sendmail([$gconfigs['site_name'], $gconfigs['site_email']], $row['email'], $subject, $message, '', false, false, [], [], true, [], $maillang);
+                    $mail_message = $nv_Lang->getModule('account_active_info', $_full_name, $gconfigs['site_name'], $_url, $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                    $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
 
                     if ($checkSend) {
                         /*
@@ -86,12 +81,12 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                         $db->query('UPDATE ' . NV_MOD_TABLE . '_reg SET regdate=' . NV_CURRENTTIME . ' WHERE userid=' . $row['userid']);
                     }
 
-                    $respon['messages'][] = $row['email'] . ': ' . ($checkSend ? $userwait_resend_ok : $userwait_resend_error);
+                    $respon['messages'][] = $row['email'] . ': ' . ($checkSend ? $nv_Lang->getModule('userwait_resend_ok') : $nv_Lang->getModule('userwait_resend_error'));
                 }
             }
 
             if (!empty($maillang)) {
-                $lang_module = $lang_tmp;
+                $nv_Lang->changeLang();
             }
         }
 
@@ -120,8 +115,8 @@ if ($nv_Request->isset_request('ajax', 'post')) {
 }
 
 $xtpl = new XTemplate('user_waiting_remail.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('TOKEND', $checkss);
 
 $xtpl->parse('main');

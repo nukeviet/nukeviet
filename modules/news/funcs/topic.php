@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -37,13 +37,13 @@ if (!empty($alias)) {
     if (!$row) {
         nv_redirect_location($page_url);
     }
-    list($topicid, $topictitle, $alias, $topic_image, $description, $key_words) = $row;
+    [$topicid, $topictitle, $alias, $topic_image, $description, $key_words] = $row;
 
     $page_title = $topictitle;
     $page_url .= '/' . $alias;
     $base_url = $page_url;
     if ($page > 1) {
-        $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+        $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
         $page_url .= '/page-' . $page;
     }
 

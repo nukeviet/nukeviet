@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,19 +19,18 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_menu_theme_default_footer_config($module, $data_block, $lang_block)
+    function nv_menu_theme_default_footer_config($module, $data_block)
     {
-        global $site_mods;
+        global $site_mods, $nv_Lang;
 
         if (empty($data_block['module_in_menu']) or !is_array($data_block['module_in_menu'])) {
             $data_block['module_in_menu'] = [];
         }
 
         $html = '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['module_in_menu'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('module_in_menu') . ':</label>';
         $html .= '<div class="col-sm-18">';
         foreach ($site_mods as $modname => $modvalues) {
             $checked = in_array($modname, $data_block['module_in_menu'], true) ? ' checked="checked"' : '';
@@ -47,10 +46,9 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      * nv_menu_theme_default_footer_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_menu_theme_default_footer_submit($module, $lang_block)
+    function nv_menu_theme_default_footer_submit($module)
     {
         global $nv_Request;
         $return = [];
@@ -68,11 +66,11 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      */
     function nv_menu_theme_default_footer($block_config)
     {
-        global $global_config, $site_mods, $lang_global;
+        global $global_config, $site_mods;
 
         $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.menu_footer.tpl');
         $xtpl = new XTemplate('global.menu_footer.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
         $xtpl->assign('BLOCK_THEME', $block_theme);
         $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
 

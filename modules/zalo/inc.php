@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -239,7 +239,7 @@ function webhook_handle($data)
     } elseif ($data['event_name'] == 'user_submit_info') {
         $phone_code = $phone_number = '';
         if (!empty($data['info']['phone'])) {
-            list($phone_code, $phone_number) = parse_phone($data['info']['phone']);
+            [$phone_code, $phone_number] = parse_phone($data['info']['phone']);
         }
         $address = !empty($data['info']['address']) ? $data['info']['address'] : '';
         if (!empty($data['info']['ward'])) {

@@ -16,7 +16,7 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td><strong>{LANG.account}</strong></td>
+                    <td><strong>{GLANG.username}</strong></td>
                     <td> <span class="text-danger">(*)</span> </td>
                     <td><input class="required form-control" value="{DATA.username}" name="username" id="username_iavim" style="width: 300px" /></td>
                 </tr>
@@ -212,7 +212,7 @@
                                 <span class="input-group-addon"> <em class="fa fa-trash-o fa-fix fa-pointer" onclick="$('#avatar').val('');">&nbsp;</em> </span>
                                 <input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly" />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" id="btn_upload">
+                                    <button class="btn btn-default" type="button" id="btn_upload" data-url="{AVATAR_URL}">
                                         <em class="fa fa-folder-open-o fa-fix">&nbsp;</em>
                                     </button>
                                 </span>

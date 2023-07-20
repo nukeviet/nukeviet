@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -64,7 +64,7 @@ class InformGetList implements IApi
      */
     public function execute()
     {
-        global $db, $nv_Request, $lang_module;
+        global $db, $nv_Request;
 
         $module_name = Api::getModuleName();
         $module_info = Api::getModuleInfo();

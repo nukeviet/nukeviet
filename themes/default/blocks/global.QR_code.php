@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -22,11 +22,11 @@ if (!nv_function_exists('nv_block_qr_code')) {
      */
     function nv_block_qr_code($block_config)
     {
-        global $page_title, $global_config, $page_url, $module_name, $home, $op, $lang_global;
+        global $page_title, $global_config, $page_url, $module_name, $home, $op;
 
         $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.QR_code.tpl');
         $xtpl = new XTemplate('global.QR_code.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', $lang_global);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
 
         if (empty($page_url)) {
             if ($home) {
@@ -43,7 +43,7 @@ if (!nv_function_exists('nv_block_qr_code')) {
 
         str_starts_with($current_page_url, NV_MY_DOMAIN) && $current_page_url = substr($current_page_url, strlen(NV_MY_DOMAIN));
         $block_config['selfurl'] = urlRewriteWithDomain($current_page_url, NV_MY_DOMAIN);
-        $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ? $page_title : $global_config['site_name']));
+        $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ?: $global_config['site_name']));
         $xtpl->assign('QRCODE', $block_config);
 
         $xtpl->parse('main');

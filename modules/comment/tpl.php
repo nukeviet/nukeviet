@@ -29,15 +29,15 @@ if (!defined('NV_MAINFILE')) {
  */
 function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $form_login, $header = 1)
 {
-    global $global_config, $module_data, $module_config, $admin_info, $user_info, $lang_global, $lang_module_comment;
+    global $global_config, $module_data, $module_config, $admin_info, $user_info, $nv_Lang, $module_name;
 
     $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/main.tpl');
     $templateCSS = get_tpl_dir($global_config['module_theme'], 'default', '/css/comment.css');
     $templateJS = get_tpl_dir($global_config['module_theme'], 'default', '/js/comment.js');
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
-    $xtpl->assign('LANG', $lang_module_comment);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('TEMPLATE_CSS', $templateCSS);
     $xtpl->assign('TEMPLATE_JS', $templateJS);
@@ -60,7 +60,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     for ($i = 0; $i <= 2; ++$i) {
         $xtpl->assign('OPTION', [
             'key' => $i,
-            'title' => $lang_module_comment['sortcomm_' . $i],
+            'title' => $nv_Lang->getModule('sortcomm_' . $i),
             'selected' => ($i == $sortcomm) ? ' selected="selected"' : ''
         ]);
 
@@ -139,7 +139,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
                 $xtpl->assign('GFX_NUM', -1);
                 $xtpl->parse('main.allowed_comm.recaptcha');
             } elseif ($captcha_type == 'captcha') {
-                $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+                $xtpl->assign('N_CAPTCHA', $nv_Lang->getGlobal('securitycode'));
                 $xtpl->parse('main.allowed_comm.captcha');
             } else {
                 $xtpl->assign('GFX_NUM', 0);
@@ -150,12 +150,12 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
 
         if (!empty($global_config['data_warning']) or !empty($global_config['antispam_warning'])) {
             if (!empty($global_config['data_warning'])) {
-                $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $lang_global['data_warning_content']);
+                $xtpl->assign('DATA_USAGE_CONFIRM', !empty($global_config['data_warning_content']) ? $global_config['data_warning_content'] : $nv_Lang->getGlobal('data_warning_content'));
                 $xtpl->parse('main.allowed_comm.confirm.data_sending');
             }
 
             if (!empty($global_config['antispam_warning'])) {
-                $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $lang_global['antispam_warning_content']);
+                $xtpl->assign('ANTISPAM_CONFIRM', !empty($global_config['antispam_warning_content']) ? $global_config['antispam_warning_content'] : $nv_Lang->getGlobal('antispam_warning_content'));
                 $xtpl->parse('main.allowed_comm.confirm.antispam');
             }
             $xtpl->parse('main.allowed_comm.confirm');
@@ -165,11 +165,11 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     } elseif ($form_login['display']) {
         if ($form_login['mode'] == 'direct') {
             // Thành viên đăng nhập trực tiếp
-            $xtpl->assign('LOGIN_MESSAGE', sprintf($lang_module_comment['comment_login'], $form_login['groups'][0]));
+            $xtpl->assign('LOGIN_MESSAGE', $nv_Lang->getModule('comment_login', $form_login['groups'][0]));
             $xtpl->parse('main.form_login.message_login');
         } else {
             // Tham gia nhóm để bình luận
-            $xtpl->assign('LANG_REG_GROUPS', sprintf($lang_module_comment['comment_register_groups'], implode(', ', $form_login['groups']), $form_login['link']));
+            $xtpl->assign('LANG_REG_GROUPS', $nv_Lang->getModule('comment_register_groups', implode(', ', $form_login['groups']), $form_login['link']));
             $xtpl->parse('main.form_login.message_register_group');
         }
         $xtpl->parse('main.form_login');
@@ -192,7 +192,7 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
  */
 function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_comm, $status_comment)
 {
-    global $global_config, $module_config, $lang_module_comment;
+    global $global_config, $module_config;
 
     if (!empty($comment_array['comment'])) {
         $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/comment.tpl');
@@ -200,7 +200,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
 
         $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
         $xtpl->assign('TEMPLATE', $template);
-        $xtpl->assign('LANG', $lang_module_comment);
+        $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
         $xtpl->assign('TEMPLATE_JS', $templateJS);
 
         if (!empty($status_comment)) {
@@ -278,7 +278,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete, $allowed_co
  */
 function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allowed_comm)
 {
-    global $global_config, $module_config, $lang_module_comment;
+    global $global_config, $module_file, $module_config;
 
     $template = get_tpl_dir($global_config['module_theme'], 'default', '/modules/comment/comment.tpl');
     $templateJS = get_tpl_dir($global_config['module_theme'], 'default', '/js/comment.js');
@@ -286,7 +286,7 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete, $allo
     $xtpl = new XTemplate('comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('TEMPLATE', $template);
     $xtpl->assign('TEMPLATE_JS', $templateJS);
-    $xtpl->assign('LANG', $lang_module_comment);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$tmplang_module);
 
     $viewuser = nv_user_in_groups($global_config['whoviewuser']);
 

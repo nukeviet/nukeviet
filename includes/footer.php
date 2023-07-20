@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,10 +13,9 @@ if ((!defined('NV_SYSTEM') and !defined('NV_ADMIN')) or !defined('NV_MAINFILE'))
     exit('Stop!!!');
 }
 
-unset($lang_module, $language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
+unset($language_array, $nv_parse_ini_timezone, $countries, $module_info, $site_mods);
 
-// Không xóa biến $lang_global khỏi dòng gọi global bởi vì footer.php có thể được include từ trong function
-global $db, $nv_Request, $headers, $lang_global, $global_config, $sys_info, $nv_BotManager, $custom_preloads;
+global $db, $nv_Request, $headers, $nv_Lang, $global_config, $sys_info, $nv_BotManager, $custom_preloads;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -27,11 +26,11 @@ if (!defined('NV_IS_AJAX')) {
     $contents = $optimizer->process(true, $custom_preloads);
     $optimizer->headerPreload($headers);
     if (defined('NV_IS_SPADMIN')) {
-        $contents = str_replace('[MEMORY_TIME_USAGE]', sprintf($lang_global['memory_time_usage'], nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
+        $contents = str_replace('[MEMORY_TIME_USAGE]', $nv_Lang->getGlobal('memory_time_usage', nv_convertfromBytes(memory_get_usage()), number_format((microtime(true) - NV_START_TIME), 3, '.', '')), $contents);
     }
 }
 
-list($contents, $headers) = nv_apply_hook('', 'change_site_buffer', [$global_config, [$contents, $headers]], [$contents, $headers]);
+[$contents, $headers] = nv_apply_hook('', 'change_site_buffer', [$global_config, [$contents, $headers]], [$contents, $headers]);
 // Hook sector 3
 nv_apply_hook('', 'sector3');
 
@@ -103,7 +102,7 @@ foreach ($html_headers as $key => $value) {
     }
 }
 
-unset($lang_global, $global_config, $client_info);
+unset($global_config, $client_info);
 
 echo $contents;
 exit(0);

@@ -54,14 +54,14 @@ if (defined('SSO_CLIENT_DOMAIN')) {
     if (!empty($sso_client)) {
         if (!in_array($sso_client, $allowed_client_origin, true)) {
             // 406 Not Acceptable
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 406);
+            nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_title'), $nv_Lang->getGlobal('error_404_content'), 406);
         }
         $nv_Request->set_Session('sso_client_' . $module_data, $sso_client);
         // Xử lý nếu client đã đăng nhập rồi mà submit vào đây nữa
         if (defined('NV_IS_USER')) {
             opidr_login([
                 'status' => 'success',
-                'mess' => $lang_module['login_ok']
+                'mess' => $nv_Lang->getModule('login_ok')
             ]);
         }
     }
@@ -127,7 +127,7 @@ function create_username_from_email($email)
  */
 function set_reg_attribs($attribs, $username)
 {
-    global $crypt, $global_config, $module_upload, $lang_global;
+    global $crypt, $global_config, $module_upload;
 
     $reg_attribs = [];
     $reg_attribs['server'] = $attribs['server'];
@@ -160,7 +160,7 @@ function set_reg_attribs($attribs, $username)
             $upload = new NukeViet\Files\Upload([
                 'images'
             ], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-            $upload->setLanguage($lang_global);
+            $upload->setLanguage(\NukeViet\Core\Language::$lang_global);
 
             $upload_info = $upload->save_urlfile($reg_attribs['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false);
 
@@ -199,10 +199,10 @@ function set_reg_attribs($attribs, $username)
  */
 function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs)
 {
-    global $db, $nv_Cache, $global_config, $global_users_config, $lang_module, $module_name;
+    global $db, $nv_Cache, $global_config, $global_users_config, $nv_Lang, $module_name;
 
     $reg_attribs = set_reg_attribs($attribs, $reg_username);
-    $current_mode = isset($attribs['current_mode']) ? $attribs['current_mode'] : 1;
+    $current_mode = $attribs['current_mode'] ?? 1;
 
     /*
      * Neu dang ky moi va cho dang ky khong can kich hoat hoac kich hoat qua email (allowuserreg = 1, 2)
@@ -243,7 +243,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         if (!$userid) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_module['err_no_save_account']
+                'mess' => $nv_Lang->getModule('err_no_save_account')
             ]);
         }
 
@@ -281,9 +281,9 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
             nv_user_register_callback($userid);
         }
 
-        $subject = $lang_module['account_register'];
+        $subject = $nv_Lang->getModule('account_register');
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-        $message = sprintf($lang_module['account_register_openid_info'], $reg_attribs['first_name'], $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+        $message = $nv_Lang->getModule('account_register_openid_info', $reg_attribs['first_name'], $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
         nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
@@ -301,7 +301,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
 
             opidr_login([
                 'status' => 'success',
-                'mess' => $lang_module['login_ok']
+                'mess' => $nv_Lang->getModule('login_ok')
             ]);
         }
     }
@@ -348,7 +348,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
         if (!$userid) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_module['err_no_save_account']
+                'mess' => $nv_Lang->getModule('err_no_save_account')
             ]);
         }
 
@@ -356,7 +356,7 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
 
         opidr_login([
             'status' => 'success',
-            'mess' => $lang_module['account_register_to_admin']
+            'mess' => $nv_Lang->getModule('account_register_to_admin')
         ]);
     }
 }
@@ -377,39 +377,39 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if (empty($attribs) or $attribs['server'] != $server) {
         opidr_login([
             'status' => 'error',
-            'mess' => $lang_module['logged_in_failed']
+            'mess' => $nv_Lang->getModule('logged_in_failed')
         ]);
     }
 
     if ($attribs['result'] == 'cancel') {
         opidr_login([
             'status' => 'error',
-            'mess' => $lang_module['canceled_authentication']
+            'mess' => $nv_Lang->getModule('canceled_authentication')
         ]);
     }
 
     if ($attribs['result'] == 'notlogin') {
         opidr_login([
             'status' => 'error',
-            'mess' => $lang_module['not_logged_in']
+            'mess' => $nv_Lang->getModule('not_logged_in')
         ]);
     }
 
-    $email = isset($attribs['contact/email']) ? $attribs['contact/email'] : '';
+    $email = $attribs['contact/email'] ?? '';
     if (!empty($email)) {
         $check_email = nv_check_valid_email($email, true);
         $email = $check_email[1];
         if (!empty($check_email[0])) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_module['logged_no_email']
+                'mess' => $nv_Lang->getModule('logged_no_email')
             ]);
         }
     }
     $opid = $crypt->hash($attribs['id']);
-    $current_mode = isset($attribs['current_mode']) ? $attribs['current_mode'] : 1;
+    $current_mode = $attribs['current_mode'] ?? 1;
 
-    $page_title = $lang_global['openid_login'] . ' ' . ucwords(str_replace('-', ' ', $server));
+    $page_title = $nv_Lang->getGlobal('openid_login') . ' ' . ucwords(str_replace('-', ' ', $server));
 
     /**
      * Oauth này đã có trong CSDL
@@ -422,20 +422,20 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->execute();
 
-    list($user_id, $op_email, $user_active, $safemode) = $stmt->fetch(3);
+    [$user_id, $op_email, $user_active, $safemode] = $stmt->fetch(3);
 
     if ($user_id) {
         if ($safemode == 1) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_module['safe_deactivate_openidlogin']
+                'mess' => $nv_Lang->getModule('safe_deactivate_openidlogin')
             ]);
         }
 
         if (!$user_active) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_module['login_no_active']
+                'mess' => $nv_Lang->getModule('login_no_active')
             ]);
         }
 
@@ -452,7 +452,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         opidr_login([
             'status' => 'success',
-            'mess' => $lang_module['login_ok']
+            'mess' => $nv_Lang->getModule('login_ok')
         ]);
     }
 
@@ -469,14 +469,14 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             if ($nv_row['safemode'] == 1) {
                 opidr_login([
                     'status' => 'error',
-                    'mess' => $lang_module['safe_deactivate_openidreg']
+                    'mess' => $nv_Lang->getModule('safe_deactivate_openidreg')
                 ]);
             }
 
             if (!$nv_row['active']) {
                 opidr_login([
                     'status' => 'error',
-                    'mess' => $lang_module['login_no_active']
+                    'mess' => $nv_Lang->getModule('login_no_active')
                 ]);
             }
 
@@ -510,18 +510,18 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                         if (!empty($error)) {
                             opidr_login([
                                 'status' => 'error',
-                                'mess' => $lang_module['openid_confirm_failed']
+                                'mess' => $nv_Lang->getModule('openid_confirm_failed')
                             ]);
                         }
                     } elseif (!$check_seccode) {
                         opidr_login([
                             'status' => 'error',
-                            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+                            'mess' => ($global_config['ucaptcha_type'] == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
                         ]);
                     } elseif (!$crypt->validate_password($password, $nv_row['password'])) {
                         opidr_login([
                             'status' => 'error',
-                            'mess' => $lang_module['openid_confirm_failed']
+                            'mess' => $nv_Lang->getModule('openid_confirm_failed')
                         ]);
                     }
                 } else {
@@ -555,7 +555,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
                 opidr_login([
                     'status' => 'success',
-                    'mess' => $lang_module['login_ok']
+                    'mess' => $nv_Lang->getModule('login_ok')
                 ]);
             }
         }
@@ -578,7 +578,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if (empty($op_process)) {
         opidr_login([
             'status' => 'error',
-            'mess' => $lang_module['openid_not_found']
+            'mess' => $nv_Lang->getModule('openid_not_found')
         ]);
     }
 
@@ -598,14 +598,14 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (empty($nv_username)) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_global['username_empty']
+                'mess' => $nv_Lang->getGlobal('username_empty')
             ]);
         }
 
         if (empty($nv_password)) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_global['password_empty']
+                'mess' => $nv_Lang->getGlobal('password_empty')
             ]);
         }
 
@@ -627,21 +627,21 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             if (empty($row) or !$crypt->validate_password($nv_password, $row['password'])) {
                 opidr_login([
                     'status' => 'error',
-                    'mess' => $lang_global['loginincorrect']
+                    'mess' => $nv_Lang->getGlobal('loginincorrect')
                 ]);
             }
 
             if ($row['safemode'] == 1) {
                 opidr_login([
                     'status' => 'error',
-                    'mess' => $lang_module['safe_deactivate_openidreg']
+                    'mess' => $nv_Lang->getModule('safe_deactivate_openidreg')
                 ]);
             }
 
             if (!$row['active']) {
                 opidr_login([
                     'status' => 'error',
-                    'mess' => $lang_global['login_no_active']
+                    'mess' => $nv_Lang->getGlobal('login_no_active')
                 ]);
             }
 
@@ -657,7 +657,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         opidr_login([
             'status' => 'success',
-            'mess' => $lang_module['login_ok']
+            'mess' => $nv_Lang->getModule('login_ok')
         ]);
     }
 
@@ -686,7 +686,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (!empty($sess_verify['code']) and ($pas = 300 - NV_CURRENTTIME + (int) $sess_verify['time']) > 0) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => sprintf($lang_module['verifykey_issend'], ceil($pas / 60))
+                'mess' => $nv_Lang->getModule('verifykey_issend', ceil($pas / 60))
             ]);
         }
 
@@ -695,22 +695,22 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $nv_Request->set_Session($md5_reg_email, $sess_verify);
 
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $message = sprintf($lang_module['verify_email_mess'], $reg_email, $verikey, $sitename);
+        $message = $nv_Lang->getModule('verify_email_mess', $reg_email, $verikey, $sitename);
         $send = @nv_sendmail([
             $global_config['site_name'],
             $global_config['site_email']
-        ], $reg_email, $lang_module['verify_email_title'], $message);
+        ], $reg_email, $nv_Lang->getModule('verify_email_title'), $message);
 
         if (!$send) {
             nv_jsonOutput([
                 'status' => 'error',
-                'mess' => $lang_module['verify_email_sent_error']
+                'mess' => $nv_Lang->getModule('verify_email_sent_error')
             ]);
         }
 
         nv_jsonOutput([
             'status' => 'ok',
-            'mess' => $lang_module['verify_email_sent']
+            'mess' => $nv_Lang->getModule('verify_email_sent')
         ]);
     }
 
@@ -748,7 +748,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             if (empty($verify_code) or md5($verify_code) != $sess_verify['code']) {
                 opidr_login([
                     'status' => 'error',
-                    'mess' => $lang_module['verify_mail_error']
+                    'mess' => $nv_Lang->getModule('verify_mail_error')
                 ]);
             }
 
@@ -770,7 +770,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if ($reg_password != $reg_repassword) {
             opidr_login([
                 'status' => 'error',
-                'mess' => $lang_global['passwordsincorrect']
+                'mess' => $nv_Lang->getGlobal('passwordsincorrect')
             ]);
         }
 
@@ -828,7 +828,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             signin_result([
                 'status' => 'error',
                 'input' => '',
-                'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+                'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
             ]);
         }
     }
@@ -837,7 +837,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         signin_result([
             'status' => 'error',
             'input' => 'nv_login',
-            'mess' => $lang_global['username_empty']
+            'mess' => $nv_Lang->getGlobal('username_empty')
         ]);
     }
 
@@ -845,7 +845,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         signin_result([
             'status' => 'error',
             'input' => '',
-            'mess' => sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end))
+            'mess' => $nv_Lang->getGlobal('userlogin_blocked', $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end))
         ]);
     }
 
@@ -853,7 +853,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         signin_result([
             'status' => 'error',
             'input' => 'nv_password',
-            'mess' => $lang_global['password_empty']
+            'mess' => $nv_Lang->getGlobal('password_empty')
         ]);
     }
 
@@ -872,7 +872,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         signin_result([
             'status' => 'ok',
             'input' => '',
-            'mess' => $lang_module['login_ok']
+            'mess' => $nv_Lang->getModule('login_ok')
         ]);
     }
 
@@ -890,7 +890,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         signin_result([
             'status' => 'error',
             'input' => '',
-            'mess' => $lang_global['loginincorrect']
+            'mess' => $nv_Lang->getGlobal('loginincorrect')
         ]);
     }
 
@@ -899,7 +899,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
         signin_result([
             'status' => 'error',
             'input' => '',
-            'mess' => $lang_module['login_no_active']
+            'mess' => $nv_Lang->getModule('login_no_active')
         ]);
     }
 
@@ -929,7 +929,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             signin_result([
                 'status' => 'error',
                 'input' => 'nv_totppin',
-                'mess' => $lang_global['2teplogin_error_opt']
+                'mess' => $nv_Lang->getGlobal('2teplogin_error_opt')
             ]);
         }
 
@@ -944,7 +944,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
                 signin_result([
                     'status' => 'error',
                     'input' => 'nv_backupcodepin',
-                    'mess' => $lang_global['2teplogin_error_backup']
+                    'mess' => $nv_Lang->getGlobal('2teplogin_error_backup')
                 ]);
             }
 
@@ -963,7 +963,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     if (empty($row['active2step'])) {
         $_2step_require = in_array((int) $global_config['two_step_verification'], [2, 3], true);
         if (!$_2step_require) {
-            list(, $_2step_require) = nv_user_groups($row['in_groups'], true);
+            [, $_2step_require] = nv_user_groups($row['in_groups'], true);
         }
         if ($_2step_require) {
             if (empty($nv_redirect)) {
@@ -972,7 +972,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             signin_result([
                 'status' => '2steprequire',
                 'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup&nv_redirect=' . $nv_redirect, true),
-                'mess' => $lang_global['2teplogin_require']
+                'mess' => $nv_Lang->getGlobal('2teplogin_require')
             ]);
         }
     }
@@ -981,7 +981,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     signin_result([
         'status' => 'ok',
         'input' => '',
-        'mess' => $lang_module['login_ok']
+        'mess' => $nv_Lang->getModule('login_ok')
     ]);
 }
 
@@ -993,7 +993,7 @@ if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$page_title = $lang_module['login'];
+$page_title = $nv_Lang->getModule('login');
 $key_words = $module_info['keywords'];
 
 $canonicalUrl = getCanonicalUrl($page_url);

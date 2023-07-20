@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -19,29 +19,29 @@ if (!nv_function_exists('nv_news_block_tophits')) {
      *
      * @param string $module
      * @param array  $data_block
-     * @param array  $lang_block
      * @return string
      */
-    function nv_block_config_tophits_blocks($module, $data_block, $lang_block)
+    function nv_block_config_tophits_blocks($module, $data_block)
     {
-        global $nv_Cache, $site_mods;
+        global $nv_Cache, $site_mods, $nv_Lang;
+
         $tooltip_position = [
-            'top' => $lang_block['tooltip_position_top'],
-            'bottom' => $lang_block['tooltip_position_bottom'],
-            'left' => $lang_block['tooltip_position_left'],
-            'right' => $lang_block['tooltip_position_right']
+            'top' => $nv_Lang->getModule('tooltip_position_top'),
+            'bottom' => $nv_Lang->getModule('tooltip_position_bottom'),
+            'left' => $nv_Lang->getModule('tooltip_position_left'),
+            'right' => $nv_Lang->getModule('tooltip_position_right')
         ];
         $html = '';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['number_day'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('number_day') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_number_day" class="form-control w100" size="5" value="' . $data_block['number_day'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '	<label class="control-label col-sm-6">' . $lang_block['numrow'] . ':</label>';
+        $html .= '	<label class="control-label col-sm-6">' . $nv_Lang->getModule('numrow') . ':</label>';
         $html .= '	<div class="col-sm-18"><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['showtooltip'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('showtooltip') . ':</label>';
         $html .= '<div class="col-sm-18">';
         $html .= '<div class="row">';
         $html .= '<div class="col-sm-4">';
@@ -50,7 +50,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group margin-bottom-sm">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_position'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getModule('tooltip_position') . '</div>';
         $html .= '<select name="config_tooltip_position" class="form-control">';
 
         foreach ($tooltip_position as $key => $value) {
@@ -62,7 +62,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $html .= '</div>';
         $html .= '<div class="col-sm-10">';
         $html .= '<div class="input-group">';
-        $html .= '<div class="input-group-addon">' . $lang_block['tooltip_length'] . '</div>';
+        $html .= '<div class="input-group-addon">' . $nv_Lang->getModule('tooltip_length') . '</div>';
         $html .= '<input type="text" class="form-control" name="config_tooltip_length" value="' . $data_block['tooltip_length'] . '"/>';
         $html .= '</div>';
         $html .= '</div>';
@@ -71,7 +71,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $html .= '</div>';
         $html .= '</div>';
         $html .= '<div class="form-group">';
-        $html .= '<label class="control-label col-sm-6">' . $lang_block['nocatid'] . ':</label>';
+        $html .= '<label class="control-label col-sm-6">' . $nv_Lang->getModule('nocatid') . ':</label>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
         $list = $nv_Cache->db($sql, '', $module);
         $html .= '<div class="col-sm-18">';
@@ -102,10 +102,9 @@ if (!nv_function_exists('nv_news_block_tophits')) {
      * nv_block_config_tophits_blocks_submit()
      *
      * @param string $module
-     * @param array  $lang_block
      * @return array
      */
-    function nv_block_config_tophits_blocks_submit($module, $lang_block)
+    function nv_block_config_tophits_blocks_submit($module)
     {
         global $nv_Request;
         $return = [];
@@ -152,7 +151,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         }
 
         $result = $db_slave->query($db_slave->sql());
-        while (list($id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
+        while ([$id, $catid, $publtime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link] = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 $imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
@@ -177,23 +176,17 @@ if (!nv_function_exists('nv_news_block_tophits')) {
                 'imgurl' => $imgurl,
                 'width' => $blockwidth,
                 'hometext' => $hometext,
-                'external_link' => $external_link
+                'hometext_clean' => nv_clean60(strip_tags($hometext), $block_config['tooltip_length'], true),
+                'external_link' => $external_link,
+                'target_blank' => $external_link ? ' target="_blank"' : ''
             ];
         }
 
         $block_theme = get_tpl_dir($global_config['module_theme'], 'default', '/modules/' . $mod_file . '/block_tophits.tpl');
-
         $xtpl = new XTemplate('block_tophits.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file);
         $xtpl->assign('TEMPLATE', $block_theme);
 
         foreach ($array_block_news as $array_news) {
-            $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
-            $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
-
-            if ($array_news['external_link']) {
-                $array_news['target_blank'] = 'target="_blank"';
-            }
-
             $xtpl->assign('blocknews', $array_news);
 
             if (!empty($array_news['imgurl'])) {

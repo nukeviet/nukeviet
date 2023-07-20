@@ -20,10 +20,10 @@ define('NV_MAINFILE', true);
 
 // Thoi gian bat dau phien lam viec
 define('NV_START_TIME', microtime(true));
-define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
+define('NV_CURRENTTIME', $_SERVER['REQUEST_TIME'] ?? time());
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = $nv_hooks = $nv_plugins = $custom_preloads = $user_cookie = $themefilelist = $modulefilelist = [];
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = $loadScript = $headers = $theme_config = $nv_hooks = $nv_plugins = $custom_preloads = $user_cookie = [];
 $page_title = $key_words = $page_url = $canonicalUrl = $prevPage = $nextPage = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -213,7 +213,8 @@ defined('NV_SYSTEM') && $user_cookie = NukeViet\Core\User::get_userlogin_hash();
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
-require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
+$nv_Lang = new \NukeViet\Core\Language();
+$nv_Lang->loadGlobal();
 require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/functions.php';
 
 // Class ma hoa du lieu
@@ -326,7 +327,7 @@ define('GFX_HEIGHT', NV_GFX_HEIGHT);
 define('GFX_NUM', NV_GFX_NUM);
 define('GFX_MAXLENGTH', NV_GFX_NUM);
 define('CAPTCHA_REFR_SRC', NV_STATIC_URL . NV_ASSETS_DIR . '/images/refresh.png');
-define('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+define('CAPTCHA_REFRESH', $nv_Lang->getGlobal('captcharefresh'));
 if ($nv_Request->isset_request('scaptcha', 'get')) {
     require NV_ROOTDIR . '/includes/core/captcha.php';
 }
@@ -449,7 +450,7 @@ $global_config['array_user_allowed_theme'] = empty($global_config['user_allowed_
 
 define('NV_MAIN_DOMAIN', (!empty($global_config['site_domain']) and in_array($global_config['site_domain'], $global_config['my_domains'], true)) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
-$global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
+!empty($global_config['smtp_password']) && $global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }

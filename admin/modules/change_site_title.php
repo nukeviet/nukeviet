@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -47,8 +47,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 }
 
 nv_jsonOutput([
-    'label' => sprintf($lang_module['change_func_sitetitle'], $row['func_title'], $row['mod_custom_title']),
-    'title' => $lang_module['site_title'],
+    'label' => $nv_Lang->getModule('change_func_sitetitle', $row['func_title'], $row['mod_custom_title']),
+    'title' => $nv_Lang->getModule('site_title'),
     'value' => $row['func_site_title'],
     'maxlength' => 255,
     'type' => 'change_site_title',

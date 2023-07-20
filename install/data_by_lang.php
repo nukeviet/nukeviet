@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -949,19 +949,19 @@ foreach ($installMods as $mod_name => $vals) {
     ++$weight;
     $_vals = [
         $mod_name,
-        isset($vals['module_file']) ? $vals['module_file'] : $mod_name,
-        isset($vals['module_data']) ? $vals['module_data'] : $mod_name,
-        isset($vals['module_upload']) ? $vals['module_upload'] : $mod_name,
-        isset($vals['module_theme']) ? $vals['module_theme'] : $mod_name,
-        isset($vals['custom_title']) ? $vals['custom_title'] : ucwords($mod_name),
-        isset($vals['admin_title']) ? $vals['admin_title'] : '',
+        $vals['module_file'] ?? $mod_name,
+        $vals['module_data'] ?? $mod_name,
+        $vals['module_upload'] ?? $mod_name,
+        $vals['module_theme'] ?? $mod_name,
+        $vals['custom_title'] ?? ucwords($mod_name),
+        $vals['admin_title'] ?? '',
         NV_CURRENTTIME,
         !empty($vals['main_file']) ? 1 : 0,
         !empty($vals['admin_file']) ? 1 : 0,
         '',
         '',
         '',
-        isset($vals['keywords']) ? $vals['keywords'] : '',
+        $vals['keywords'] ?? '',
         $vals['groups_view'],
         $weight,
         1,
@@ -1006,8 +1006,8 @@ foreach ($installMods as $mod_name => $vals) {
             $_vals = [
                 $func_id,
                 $func_name,
-                isset($func_vals['alias']) ? $func_vals['alias'] : $func_name,
-                isset($func_vals['func_custom_name']) ? $func_vals['func_custom_name'] : ucwords($func_name),
+                $func_vals['alias'] ?? $func_name,
+                $func_vals['func_custom_name'] ?? ucwords($func_name),
                 $mod_name,
                 $show_func,
                 !empty($func_vals['in_submenu']) ? 1 : 0,
@@ -1120,7 +1120,7 @@ $db->query('UPDATE ' . $db_config['prefix'] . '_config SET config_value = ' . $d
 file_put_contents(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $lang_data . '.txt', $install_lang['disable_site_content'], LOCK_EX);
 
 $result = $db->query('SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC');
-while (list($id, $run_func) = $result->fetch(3)) {
+while ([$id, $run_func] = $result->fetch(3)) {
     $cron_name = (isset($install_lang['cron'][$run_func])) ? $install_lang['cron'][$run_func] : $run_func;
     $db->query('UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote($cron_name) . ' WHERE id=' . $id);
 }

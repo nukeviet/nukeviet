@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -16,7 +16,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN'
 $menu_top = [
     'title' => $module_name,
     'module_file' => '',
-    'custom_title' => $lang_global['mod_database']
+    'custom_title' => $nv_Lang->getGlobal('mod_database')
 ];
 
 $allow_func = [
@@ -47,7 +47,7 @@ $array_url_instruction['sampledata'] = 'https://wiki.nukeviet.vn/nukeviet4:admin
  */
 function nv_show_tables()
 {
-    global $db, $db_config, $lang_module, $module_name;
+    global $db, $db_config, $nv_Lang, $module_name;
 
     $tables = [];
 
@@ -93,36 +93,36 @@ function nv_show_tables()
     $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
     $contents['op'] = [
-        'download' => $lang_module['download'],
-        'savefile' => $lang_module['savefile'],
-        'optimize' => $lang_module['optimize']
+        'download' => $nv_Lang->getModule('download'),
+        'savefile' => $nv_Lang->getModule('savefile'),
+        'optimize' => $nv_Lang->getModule('optimize')
     ];
 
     $contents['op_name'] = NV_OP_VARIABLE;
     $contents['type'] = [
-        'all' => $lang_module['download_all'],
-        'str' => $lang_module['download_str']
+        'all' => $nv_Lang->getModule('download_all'),
+        'str' => $nv_Lang->getModule('download_str')
     ];
     $contents['type_name'] = 'type';
     $contents['ext'] = [
-        'sql' => $lang_module['ext_sql'],
-        'gz' => $lang_module['ext_gz']
+        'sql' => $nv_Lang->getModule('ext_sql'),
+        'gz' => $nv_Lang->getModule('ext_gz')
     ];
     $contents['ext_name'] = 'ext';
-    $contents['submit'] = $lang_module['submit'];
-    $contents['captions']['tables_info'] = sprintf($lang_module['tables_info'], $db->dbname);
+    $contents['submit'] = $nv_Lang->getModule('submit');
+    $contents['captions']['tables_info'] = $nv_Lang->getModule('tables_info', $db->dbname);
 
     $contents['columns'] = [
-        $lang_module['table_name'],
-        $lang_module['table_size'],
-        $lang_module['table_max_size'],
-        $lang_module['table_datafree'],
-        $lang_module['table_numrow'],
-        $lang_module['table_charset'],
-        $lang_module['table_type'],
-        $lang_module['table_auto_increment'],
-        $lang_module['table_create_time'],
-        $lang_module['table_update_time']
+        $nv_Lang->getModule('table_name'),
+        $nv_Lang->getModule('table_size'),
+        $nv_Lang->getModule('table_max_size'),
+        $nv_Lang->getModule('table_datafree'),
+        $nv_Lang->getModule('table_numrow'),
+        $nv_Lang->getModule('table_charset'),
+        $nv_Lang->getModule('table_type'),
+        $nv_Lang->getModule('table_auto_increment'),
+        $nv_Lang->getModule('table_create_time'),
+        $nv_Lang->getModule('table_update_time')
     ];
 
     foreach ($tables as $key => $values) {
@@ -131,7 +131,7 @@ function nv_show_tables()
         $contents['rows'][$key] = $values;
     }
 
-    $contents['third'] = sprintf($lang_module['third'], $db_tables_count, $db_size, $db_totalfree);
+    $contents['third'] = $nv_Lang->getModule('third', $db_tables_count, $db_size, $db_totalfree);
 
     $contents = nv_show_tables_theme($contents);
 
@@ -145,7 +145,6 @@ function nv_show_tables()
  *
  * @param mixed  $tab
  * @param string $type
- * @return
  */
 function nv_highlight_string($tab, $type = 'sql')
 {
@@ -168,7 +167,7 @@ function nv_highlight_string($tab, $type = 'sql')
  */
 function nv_show_tab()
 {
-    global $db, $db_config, $module_name, $page_title, $lang_module, $nv_Request;
+    global $db, $db_config, $module_name, $page_title, $nv_Lang, $nv_Request;
 
     $tab = $nv_Request->get_title('tab', 'get');
 
@@ -197,70 +196,70 @@ function nv_show_tab()
 
     $tablename = substr($item['name'], strlen($db_config['prefix']) + 1);
     $contents = [];
-    $contents['table']['caption'] = sprintf($lang_module['table_caption'], $tablename);
+    $contents['table']['caption'] = $nv_Lang->getModule('table_caption', $tablename);
     $contents['table']['info']['name'] = [
-        $lang_module['table_name'],
+        $nv_Lang->getModule('table_name'),
         $tablename
     ];
     $contents['table']['info']['engine'] = [
-        $lang_module['table_type'],
+        $nv_Lang->getModule('table_type'),
         ((isset($item['engine'])) ? $item['engine'] : $item['type'])
     ];
     $contents['table']['info']['row_format'] = [
-        $lang_module['row_format'],
+        $nv_Lang->getModule('row_format'),
         $item['row_format']
     ];
     $contents['table']['info']['data_length'] = [
-        $lang_module['table_size'],
+        $nv_Lang->getModule('table_size'),
         nv_convertfromBytes((int) ($item['data_length']) + (int) ($item['index_length']))
     ];
     $contents['table']['info']['max_data_length'] = [
-        $lang_module['table_max_size'],
+        $nv_Lang->getModule('table_max_size'),
         (!empty($item['max_data_length']) ? nv_convertfromBytes((float) ($item['max_data_length'])) : 'n/a')
     ];
     $contents['table']['info']['data_free'] = [
-        $lang_module['table_datafree'],
+        $nv_Lang->getModule('table_datafree'),
         (!empty($item['data_free']) ? nv_convertfromBytes((int) ($item['data_free'])) : 0)
     ];
     $contents['table']['info']['rows'] = [
-        $lang_module['table_numrow'],
+        $nv_Lang->getModule('table_numrow'),
         $item['rows']
     ];
     $contents['table']['info']['auto_increment'] = [
-        $lang_module['table_auto_increment'],
+        $nv_Lang->getModule('table_auto_increment'),
         ((isset($item['auto_increment'])) ? (int) ($item['auto_increment']) : 'n/a')
     ];
     $contents['table']['info']['create_time'] = [
-        $lang_module['table_create_time'],
+        $nv_Lang->getModule('table_create_time'),
         (!empty($item['create_time']) ? date('H:i:s d/m/Y', strtotime($item['create_time'])) : 'n/a')
     ];
     $contents['table']['info']['update_time'] = [
-        $lang_module['table_update_time'],
+        $nv_Lang->getModule('table_update_time'),
         (!empty($item['update_time']) ? date('H:i:s d/m/Y', strtotime($item['update_time'])) : 'n/a')
     ];
     $contents['table']['info']['check_time'] = [
-        $lang_module['table_check_time'],
+        $nv_Lang->getModule('table_check_time'),
         (!empty($item['check_time']) ? date('H:i:s d/m/Y', strtotime($item['check_time'])) : 'n/a')
     ];
     $contents['table']['info']['collation'] = [
-        $lang_module['table_charset'],
+        $nv_Lang->getModule('table_charset'),
         ((!empty($item['collation']) and preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '')
     ];
 
     $contents['table']['show'] = nv_highlight_string($tab, 'php');
     $contents['table']['show_lang'] = [
-        $lang_module['php_code'],
-        $lang_module['sql_code']
+        $nv_Lang->getModule('php_code'),
+        $nv_Lang->getModule('sql_code')
     ];
 
-    $contents['table']['row']['caption'] = sprintf($lang_module['table_row_caption'], $tablename);
+    $contents['table']['row']['caption'] = $nv_Lang->getModule('table_row_caption', $tablename);
     $contents['table']['row']['columns'] = [
-        $lang_module['field_name'],
-        $lang_module['field_type'],
-        $lang_module['field_null'],
-        $lang_module['field_key'],
-        $lang_module['field_default'],
-        $lang_module['field_extra']
+        $nv_Lang->getModule('field_name'),
+        $nv_Lang->getModule('field_type'),
+        $nv_Lang->getModule('field_null'),
+        $nv_Lang->getModule('field_key'),
+        $nv_Lang->getModule('field_default'),
+        $nv_Lang->getModule('field_extra')
     ];
 
     $contents['table']['row']['detail'] = [];
@@ -273,7 +272,7 @@ function nv_show_tab()
 
     $contents = nv_show_tab_theme($contents);
 
-    $page_title = sprintf($lang_module['nv_show_tab'], $tablename);
+    $page_title = $nv_Lang->getModule('nv_show_tab', $tablename);
 
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
@@ -284,7 +283,6 @@ function nv_show_tab()
  * main_theme()
  *
  * @param mixed $contents
- * @return
  */
 function main_theme($contents)
 {
@@ -310,7 +308,6 @@ function main_theme($contents)
  * nv_show_tables_theme()
  *
  * @param mixed $contents
- * @return
  */
 function nv_show_tables_theme($contents)
 {
@@ -378,7 +375,6 @@ function nv_show_tables_theme($contents)
  * nv_show_tab_theme()
  *
  * @param mixed $contents
- * @return
  */
 function nv_show_tab_theme($contents)
 {

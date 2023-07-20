@@ -554,7 +554,7 @@ class Request
                 $tmp = [];
                 $base = $this->referer;
                 if (isset($ref['query']) and !empty($ref['query'])) {
-                    list($base, $query_string) = explode('?', $this->referer);
+                    [$base, $query_string] = explode('?', $this->referer);
                     parse_str($query_string, $parameters);
                     foreach ($parameters as $key => $value) {
                         if (preg_match('/^[a-zA-Z\_][a-zA-Z0-9\_]*$/', $key)) {
@@ -821,11 +821,11 @@ class Request
 
             if (substr($currentTag, 0, 1) == '/') {
                 $isCloseTag = true;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower(substr($tagName, 1));
             } else {
                 $isCloseTag = false;
-                list($tagName) = explode(' ', $currentTag);
+                [$tagName] = explode(' ', $currentTag);
                 $tagName = strtolower($tagName);
             }
 
@@ -842,8 +842,8 @@ class Request
                 $openQuotes = strpos($fromSpace, '"');
                 $closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
 
-                if (strpos($fromSpace, '=') !== false) {
-                    if (($openQuotes !== false) and (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
+                if (str_contains($fromSpace, '=')) {
+                    if (($openQuotes !== false) and (str_contains(substr($fromSpace, ($openQuotes + 1)), '"'))) {
                         $attr = substr($fromSpace, 0, ($closeQuotes + 1));
                     } else {
                         $attr = substr($fromSpace, 0, $nextSpace);
@@ -1362,11 +1362,8 @@ class Request
                 }
             }
         }
-        if (!empty($names)) {
-            return false;
-        }
 
-        return true;
+        return !(!empty($names));
     }
 
     /**

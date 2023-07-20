@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['question'];
+$page_title = $nv_Lang->getModule('question');
 
 // Sua cau hoi
 if ($nv_Request->isset_request('edit', 'post')) {
@@ -33,7 +33,7 @@ if ($nv_Request->isset_request('edit', 'post')) {
 
     $stmt->bindParam(':title', $title, PDO::PARAM_STR, strlen($title));
     if ($stmt->execute()) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['savequestion'], 'id: ' . $qid . '; ' . $title);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('savequestion'), 'id: ' . $qid . '; ' . $title);
         exit('OK');
     }
     exit('NO');
@@ -60,7 +60,7 @@ if ($nv_Request->isset_request('add', 'post')) {
     $data_insert = [];
     $data_insert['title'] = $title;
     if ($db->insert_id($_sql, 'qid', $data_insert)) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addquestion'], $title);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('addquestion'), $title);
         exit('OK');
     }
     exit('NO' . $_sql);
@@ -105,12 +105,12 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
 
-    list($qid, $title) = $db->query('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid)->fetch(3);
+    [$qid, $title] = $db->query('SELECT qid, title FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid)->fetch(3);
 
     if ($qid) {
         $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_question WHERE qid=' . $qid;
         if ($db->exec($sql)) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['deletequestion'], 'id: ' . $qid . '; ' . $title);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('deletequestion'), 'id: ' . $qid . '; ' . $title);
 
             // fix weight question
             $sql = 'SELECT qid FROM ' . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
@@ -129,8 +129,8 @@ if ($nv_Request->isset_request('del', 'post')) {
 }
 
 $xtpl = new XTemplate('question.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 
 // Danh sach cau hoi
 if ($nv_Request->isset_request('qlist', 'post')) {

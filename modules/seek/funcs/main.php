@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -71,7 +71,7 @@ if ($nv_Request->isset_request('q', 'get')) {
 
     if ($search['len_key'] < NV_MIN_SEARCH_LENGTH) {
         $search['is_error'] = true;
-        $search['errorInfo'] = sprintf($lang_module['searchQueryError'], NV_MIN_SEARCH_LENGTH);
+        $search['errorInfo'] = $nv_Lang->getModule('searchQueryError', NV_MIN_SEARCH_LENGTH);
     } else {
         if (!empty($search['mod']) and isset($array_mod[$search['mod']])) {
             $mods = [
@@ -110,7 +110,7 @@ if ($nv_Request->isset_request('q', 'get')) {
         }
 
         if (empty($search['content'])) {
-            $search['content'] = $lang_module['search_none'];
+            $search['content'] = $nv_Lang->getModule('search_none');
         }
     }
 }
@@ -119,7 +119,7 @@ $contents = search_main_theme($is_search, $search, $array_mod);
 
 $page_title = $module_info['site_title'];
 if ($search['page'] > 1) {
-    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $search['page'];
+    $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $search['page'];
 }
 $key_words = $description = 'no';
 

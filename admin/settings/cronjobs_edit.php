@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -47,11 +47,11 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     }
 
     if (empty($cron_name)) {
-        $error = $lang_module['cron_name_empty'];
+        $error = $nv_Lang->getModule('cron_name_empty');
     } elseif (!empty($run_file) and !nv_is_file(NV_BASE_SITEURL . 'includes/cronjobs/' . $run_file, 'includes/cronjobs')) {
-        $error = $lang_module['file_not_exist'];
+        $error = $nv_Lang->getModule('file_not_exist');
     } elseif (empty($run_func) or !preg_match($global_config['check_cron'], $run_func)) {
-        $error = $lang_module['func_name_invalid'];
+        $error = $nv_Lang->getModule('func_name_invalid');
     } else {
         if (!empty($run_file) and preg_match('/^([a-zA-Z0-9\-\_\.]+)\.php$/', $run_file) and file_exists(NV_ROOTDIR . '/includes/cronjobs/' . $run_file)) {
             if (!defined('NV_IS_CRON')) {
@@ -61,7 +61,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
 
         if (!nv_function_exists($run_func)) {
-            $error = $lang_module['func_name_not_exist'];
+            $error = $nv_Lang->getModule('func_name_not_exist');
         } else {
             if (!empty($params)) {
                 $params = explode(',', $params);
@@ -94,30 +94,30 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     $del = (int) ($row['del']);
     $inter_val_type = (int) ($row['inter_val_type']);
     $start_time = $row['start_time'];
-    list($min, $hour) = array_map('trim', explode(',', date('i,G', $row['start_time'])));
+    [$min, $hour] = array_map('trim', explode(',', date('i,G', $row['start_time'])));
 }
 
 $contents = [];
 $contents['is_error'] = !empty($error) ? 1 : 0;
-$contents['title'] = !empty($error) ? $error : $lang_module['nv_admin_edit_title'];
+$contents['title'] = !empty($error) ? $error : $nv_Lang->getModule('nv_admin_edit_title');
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
-$contents['cron_name'] = [$lang_module['cron_name'], $cron_name, 100];
+$contents['cron_name'] = [$nv_Lang->getModule('cron_name'), $cron_name, 100];
 
 $filelist = nv_scandir(NV_ROOTDIR . '/includes/cronjobs', '/^([a-zA-Z0-9\_\.]+)\.php$/');
-$contents['run_file'] = [$lang_module['run_file'], $lang_module['file_none'], $filelist, $run_file, $lang_module['run_file_info']];
-$contents['run_func'] = [$lang_module['run_func'], $run_func, 255, $lang_module['run_func_info']];
-$contents['params'] = [$lang_module['params'], $params, 255, $lang_module['params_info']];
-$contents['start_time'] = [$lang_module['start_time'], $lang_module['day'], date('d/m/Y', $start_time)];
-$contents['min'] = [$lang_module['min'], $min];
-$contents['hour'] = [$lang_module['hour'], $hour];
-$contents['interval'] = [$lang_module['interval'], $interval, 11, $lang_module['min'], $lang_module['interval_info']];
-$contents['del'] = [$lang_module['is_del'], $del];
+$contents['run_file'] = [$nv_Lang->getModule('run_file'), $nv_Lang->getModule('file_none'), $filelist, $run_file, $nv_Lang->getModule('run_file_info')];
+$contents['run_func'] = [$nv_Lang->getModule('run_func'), $run_func, 255, $nv_Lang->getModule('run_func_info')];
+$contents['params'] = [$nv_Lang->getModule('params'), $params, 255, $nv_Lang->getModule('params_info')];
+$contents['start_time'] = [$nv_Lang->getModule('start_time'), $nv_Lang->getModule('day'), date('d/m/Y', $start_time)];
+$contents['min'] = [$nv_Lang->getModule('min'), $min];
+$contents['hour'] = [$nv_Lang->getModule('hour'), $hour];
+$contents['interval'] = [$nv_Lang->getModule('interval'), $interval, 11, $nv_Lang->getModule('min'), $nv_Lang->getModule('interval_info')];
+$contents['del'] = [$nv_Lang->getModule('is_del'), $del];
 $contents['inter_val_type'] = $inter_val_type;
-$contents['submit'] = $lang_global['save'];
+$contents['submit'] = $nv_Lang->getGlobal('save');
 $contents['checkss'] = $checkss;
 $contents = nv_admin_add_theme($contents);
 
-$page_title = $lang_global['mod_cronjobs'] . ' -> ' . $lang_module['nv_admin_edit'];
+$page_title = $nv_Lang->getGlobal('mod_cronjobs') . ' -> ' . $nv_Lang->getModule('nv_admin_edit');
 $set_active_op = 'cronjobs';
 
 include NV_ROOTDIR . '/includes/header.php';

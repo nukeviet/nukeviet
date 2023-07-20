@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['config'];
+$page_title = $nv_Lang->getModule('config');
 
 $array_config = [];
 $socialbuttons = ['facebook', 'twitter', 'zalo'];
@@ -55,21 +55,21 @@ $array_config['alias_lower'] = 1;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query($sql);
-while (list($c_config_name, $c_config_value) = $result->fetch(3)) {
+while ([$c_config_name, $c_config_value] = $result->fetch(3)) {
     $array_config[$c_config_name] = $c_config_value;
 }
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' : '');
 $xtpl->assign('COPY_PAGE', $array_config['copy_page'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $array_config['alias_lower'] ? ' checked="checked"' : '');
 
 $view_array = [
-    $lang_module['config_view_type_0'],
-    $lang_module['config_view_type_1'],
-    $lang_module['config_view_type_2']
+    $nv_Lang->getModule('config_view_type_0'),
+    $nv_Lang->getModule('config_view_type_1'),
+    $nv_Lang->getModule('config_view_type_2')
 ];
 foreach ($view_array as $key => $title) {
     $xtpl->assign('VIEWTYPE', [
@@ -106,7 +106,7 @@ foreach ($socialbuttons as $socialbutton) {
         'checked' => (!empty($my_socialbuttons) and in_array($socialbutton, $my_socialbuttons, true)) ? ' checked="checked"' : ''
     ];
     if ($socialbutton == 'zalo' and empty($global_config['zaloOfficialAccountID'])) {
-        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings">' . $lang_module['socialbutton_zalo_note'] . '</a>)';
+        $array['title'] .= ' (<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=zalo&amp;' . NV_OP_VARIABLE . '=settings">' . $nv_Lang->getModule('socialbutton_zalo_note') . '</a>)';
         $array['checked'] = ' disabled="disabled"';
     }
     $xtpl->assign('SOCIALBUTTON', $array);

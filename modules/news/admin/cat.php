@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['categories'];
+$page_title = $nv_Lang->getModule('categories');
 
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
@@ -22,7 +22,7 @@ if (defined('NV_EDITOR')) {
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 $error = $admins = '';
 $savecat = 0;
-list($catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured, $ad_block_cat) = [
+[$catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured, $ad_block_cat] = [
     0,
     0,
     '',
@@ -64,10 +64,10 @@ if ($catid > 0 and isset($global_array_cat[$catid])) {
         }
     }
 
-    $caption = $lang_module['edit_cat'];
+    $caption = $nv_Lang->getModule('edit_cat');
     $array_in_cat = GetCatidInParent($catid);
 } else {
-    $caption = $lang_module['add_cat'];
+    $caption = $nv_Lang->getModule('add_cat');
     $array_in_cat = [];
 }
 
@@ -174,10 +174,10 @@ if (!empty($savecat)) {
             }
 
             $nv_Cache->delMod($module_name);
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['add_cat'], $title, $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('add_cat'), $title, $admin_info['userid']);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
         } else {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     } elseif ($catid > 0 and $title != '') {
         $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription,featured=:featured, ad_block_cat=:ad_block_cat, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid);
@@ -208,7 +208,7 @@ if (!empty($savecat)) {
                 $db->query($sql);
 
                 nv_fix_cat_order();
-                nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('edit_cat'), $title, $admin_info['userid']);
             }
 
             if (in_array('1', $check_ad_block_cat, true)) {
@@ -221,10 +221,10 @@ if (!empty($savecat)) {
             $nv_Cache->delMod($module_name);
             nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
         } else {
-            $error = $lang_module['errorsave'];
+            $error = $nv_Lang->getModule('errorsave');
         }
     } else {
-        $error = $lang_module['error_name'];
+        $error = $nv_Lang->getModule('error_name');
     }
 }
 
@@ -237,7 +237,7 @@ if (!empty($ad_block_cat)) {
 }
 $array_cat_list = [];
 if (defined('NV_IS_ADMIN_MODULE')) {
-    $array_cat_list[0] = $lang_module['cat_sub_sl'];
+    $array_cat_list[0] = $nv_Lang->getModule('cat_sub_sl');
 }
 foreach ($global_array_cat as $catid_i => $array_value) {
     $lev_i = $array_value['lev'];
@@ -278,8 +278,8 @@ if (!empty($array_cat_list)) {
 
     $ad_block_cats = [];
     $ad_block_list = [
-        1 => $lang_module['ad_block_top'],
-        2 => $lang_module['ad_block_bot']
+        1 => $nv_Lang->getModule('ad_block_top'),
+        2 => $nv_Lang->getModule('ad_block_bot')
     ];
     foreach ($ad_block_list as $ad_block_id => $ad_block_tl) {
         $ad_block_cats[] = [
@@ -290,8 +290,8 @@ if (!empty($array_cat_list)) {
     }
 }
 
-$lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
-$lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
+$nv_Lang->setGlobal('title_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 65));
+$nv_Lang->setGlobal('description_suggest_max', $nv_Lang->getGlobal('length_suggest_max', 160));
 
 if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image)) {
     $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
@@ -299,8 +299,8 @@ if (!empty($image) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . 
 }
 
 $xtpl = new XTemplate('cat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -323,7 +323,7 @@ for ($i = 0; $i <= 2; ++$i) {
     $data = [
         'value' => $i,
         'selected' => ($viewdescription == $i) ? ' checked="checked"' : '',
-        'title' => $lang_module['viewdescription_' . $i]
+        'title' => $nv_Lang->getModule('viewdescription_' . $i)
     ];
     $xtpl->assign('VIEWDESCRIPTION', $data);
     $xtpl->parse('main.content.viewdescription');

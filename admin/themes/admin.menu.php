@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -15,16 +15,16 @@ if (!defined('NV_ADMIN')) {
 
 $restrict_access = (!empty($global_config['restrict_access']) and $global_config['idsite'] > 0);
 
-$submenu['config'] = $lang_module['config'];
+$submenu['config'] = $nv_Lang->getModule('config');
 $allow_func = [
     'main',
     'config',
 ];
 
 if (!$restrict_access) {
-    $submenu['setuplayout'] = $lang_module['setup_layout'];
-    $submenu['blocks'] = $lang_module['blocks'];
-    $submenu['xcopyblock'] = $lang_module['xcopyblock'];
+    $submenu['setuplayout'] = $nv_Lang->getModule('setup_layout');
+    $submenu['blocks'] = $nv_Lang->getModule('blocks');
+    $submenu['xcopyblock'] = $nv_Lang->getModule('xcopyblock');
 
     $allow_func = array_merge($allow_func, [
         'deletetheme',
@@ -52,11 +52,11 @@ if (!$restrict_access) {
 }
 
 if (defined('NV_IS_GODADMIN')) {
-    $submenu['package_theme_module'] = $lang_module['package_theme_module'];
+    $submenu['package_theme_module'] = $nv_Lang->getModule('package_theme_module');
     $allow_func[] = 'package_theme_module';
     $allow_func[] = 'getfile';
 }
 
 if (!$restrict_access) {
-    $submenu['settings'] = $lang_module['settings'];
+    $submenu['settings'] = $nv_Lang->getModule('settings');
 }

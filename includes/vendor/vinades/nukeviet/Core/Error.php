@@ -101,16 +101,16 @@ class Error
     public function __construct($config)
     {
         $this->cfg = [
-            'log_errors_list' => self::parse_error_num((int) (isset($config['log_errors_list']) ? $config['log_errors_list'] : self::LOG_ERROR_LIST_DEFAULT)),
-            'display_errors_list' => self::parse_error_num((int) (isset($config['display_errors_list']) ? $config['display_errors_list'] : self::DISPLAY_ERROR_LIST_DEFAULT)),
-            'send_errors_list' => self::parse_error_num((int) (isset($config['send_errors_list']) ? $config['send_errors_list'] : self::SEND_ERROR_LIST_DEFAULT)),
+            'log_errors_list' => self::parse_error_num((int) ($config['log_errors_list'] ?? self::LOG_ERROR_LIST_DEFAULT)),
+            'display_errors_list' => self::parse_error_num((int) ($config['display_errors_list'] ?? self::DISPLAY_ERROR_LIST_DEFAULT)),
+            'send_errors_list' => self::parse_error_num((int) ($config['send_errors_list'] ?? self::SEND_ERROR_LIST_DEFAULT)),
             'error_send_mail' => !empty($config['error_send_email']) ? (string) $config['error_send_email'] : '',
             'error_set_logs' => isset($config['error_set_logs']) ? (bool) $config['error_set_logs'] : true,
             'error_log_filename' => (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) ? $config['error_log_filename'] : self::LOG_FILE_NAME_DEFAULT,
             'notice_log_filename' => (isset($config['notice_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['notice_log_filename'])) ? $config['notice_log_filename'] : self::LOG_NOTICE_FILE_NAME_DEFAULT,
             'error_log_fileext' => (isset($config['error_log_fileext']) and preg_match('/[a-z]+/i', $config['error_log_fileext'])) ? $config['error_log_fileext'] : self::LOG_FILE_EXT_DEFAULT
         ];
-        $this->cfg = array_merge($this->cfg, $this->get_error_log_path((string) (isset($config['error_log_path']) ? $config['error_log_path'] : self::ERROR_LOG_PATH_DEFAULT)));
+        $this->cfg = array_merge($this->cfg, $this->get_error_log_path((string) ($config['error_log_path'] ?? self::ERROR_LOG_PATH_DEFAULT)));
 
         $this->cl = [
             'day' => gmdate('Y-m-d', NV_CURRENTTIME), // Prefix của file log, Lấy cố định GMT, không theo múi giờ
@@ -197,9 +197,9 @@ class Error
 
     /**
      * format_str()
-     * 
-     * @param mixed $str 
-     * @return string|string[]|null 
+     *
+     * @param mixed $str
+     * @return string|string[]|null
      */
     private static function format_str($str)
     {
@@ -212,8 +212,8 @@ class Error
 
     /**
      * _log_content()
-     * 
-     * @return string 
+     *
+     * @return string
      */
     private function _log_content()
     {
@@ -263,7 +263,7 @@ class Error
         $error_file = $this->cfg['error_log_256'] . '/' . $error_code . '.' . $this->cfg['error_log_fileext'];
 
         if ($this->cfg['error_set_logs'] and !file_exists($error_file)) {
-            $content = json_encode($this->_log_content(),JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            $content = json_encode($this->_log_content(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             file_put_contents($error_file, $content, FILE_APPEND);
         }
 
@@ -322,7 +322,7 @@ class Error
             $content['backtrace'] = $trace;
         }
 
-        $content = json_encode($content,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $content = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $content .= "\n";
 
         $content .= self::LOG_DELIMITER . "\n";
@@ -335,7 +335,7 @@ class Error
      */
     private function _send()
     {
-        $content = json_encode($this->_log_content(),JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $content = json_encode($this->_log_content(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $content .= self::LOG_DELIMITER . "\n";
         $error_log_file = $this->cfg['error_log_path'] . '/sendmail.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
@@ -407,7 +407,7 @@ class Error
         $this->errstr = self::format_str($errstr);
         !empty($errfile) && $this->errfile = self::format_str($errfile);
         !empty($errline) && $this->errline = $errline;
-        $this->errid = md5(($this->errfile ? $this->errfile : '') . ($this->errline ? $this->errline : '') . $this->errno);
+        $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
 
         if (!in_array($this->errid, self::$unreported_errors, true)) {
             $this->log_control();
@@ -436,7 +436,7 @@ class Error
             $this->errstr = $error['message'];
             $this->errfile = $error['file'];
             $this->errline = $error['line'];
-            $this->errid = md5(($this->errfile ? $this->errfile : '') . ($this->errline ? $this->errline : '') . $this->errno);
+            $this->errid = md5(($this->errfile ?: '') . ($this->errline ?: '') . $this->errno);
 
             foreach ($this->track_fatal_error as $track_fatal) {
                 if ($track_fatal['file'] == $file) {

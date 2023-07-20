@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -16,13 +16,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 $catid = $nv_Request->get_int('catid', 'post', 0);
 $contents = 'NO_' . $catid;
 
-list($catid, $parentid, $title) = $db->query('SELECT catid, parentid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid)->fetch(3);
+[$catid, $parentid, $title] = $db->query('SELECT catid, parentid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid)->fetch(3);
 if ($catid > 0) {
     if ((defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1))) {
         $delallcheckss = $nv_Request->get_string('delallcheckss', 'post', '');
         $check_parentid = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $catid)->fetchColumn();
         if ((int) $check_parentid > 0) {
-            $contents = 'ERR_CAT_' . sprintf($lang_module['delcat_msg_cat'], $check_parentid);
+            $contents = 'ERR_CAT_' . $nv_Lang->getModule('delcat_msg_cat', $check_parentid);
         } else {
             $check_rows = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid)->fetchColumn();
             if ((int) $check_rows > 0) {
@@ -35,7 +35,7 @@ if ($catid > 0) {
                         $result = $db->query($sql);
                         $array_cat_list = [];
                         $array_cat_list[0] = '&nbsp;';
-                        while (list($catid_i, $title_i, $lev_i) = $result->fetch(3)) {
+                        while ([$catid_i, $title_i, $lev_i] = $result->fetch(3)) {
                             $xtitle_i = '';
                             if ($lev_i > 0) {
                                 $xtitle_i .= '&nbsp;&nbsp;&nbsp;|';
@@ -49,8 +49,8 @@ if ($catid > 0) {
                         }
 
                         $xtpl = new XTemplate('del_cat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-                        $xtpl->assign('LANG', $lang_module);
-                        $xtpl->assign('GLANG', $lang_global);
+                        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+                        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
                         $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
                         $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
                         $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -59,7 +59,7 @@ if ($catid > 0) {
                         $xtpl->assign('CATID', $catid);
                         $xtpl->assign('DELALLCHECKSS', $delallcheckss);
 
-                        $xtpl->assign('TITLE', sprintf($lang_module['delcat_msg_rows_select'], $title, $check_rows));
+                        $xtpl->assign('TITLE', $nv_Lang->getModule('delcat_msg_rows_select', $title, $check_rows));
 
                         foreach ($array_cat_list as $catid_i => $title_i) {
                             $xtpl->assign('CATIDNEWS', [
@@ -73,7 +73,7 @@ if ($catid > 0) {
                         $contents = $xtpl->text('main');
                     } elseif (!empty($delcatandrows)) {
                         $weight_min = 0;
-                        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['delcatandrows'], $title, $admin_info['userid']);
+                        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delcatandrows'), $title, $admin_info['userid']);
 
                         $sql = $db->query('SELECT id, catid, listcatid, weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' ORDER BY weight DESC');
                         while ($row = $sql->fetch()) {
@@ -112,9 +112,9 @@ if ($catid > 0) {
                          * vẫn đang bị đình chỉ, do đó phải kiểm tra sau khi di chuyển có còn ở trong
                          * chuyên mục bị đình chỉ không nếu không mới trả lại status ban đầu
                          */
-                        list($catidnews, $newstitle) = $db->query('SELECT catid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') AND catid =' . $catidnews)->fetch(3);
+                        [$catidnews, $newstitle] = $db->query('SELECT catid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE status IN(' . implode(',', $global_code_defined['cat_visible_status']) . ') AND catid =' . $catidnews)->fetch(3);
                         if ($catidnews > 0) {
-                            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['move'], $title . ' --> ' . $newstitle, $admin_info['userid']);
+                            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('move'), $title . ' --> ' . $newstitle, $admin_info['userid']);
 
                             $array_cat_locked = [];
                             foreach ($global_array_cat as $catid_i => $array_value) {
@@ -166,7 +166,7 @@ if ($catid > 0) {
                         }
                     }
                 } else {
-                    $contents = 'ERR_ROWS_' . $catid . '_' . md5($catid . NV_CHECK_SESSION) . '_' . sprintf($lang_module['delcat_msg_rows'], $check_rows);
+                    $contents = 'ERR_ROWS_' . $catid . '_' . md5($catid . NV_CHECK_SESSION) . '_' . $nv_Lang->getModule('delcat_msg_rows', $check_rows);
                 }
             }
         }
@@ -174,7 +174,7 @@ if ($catid > 0) {
             if ($delallcheckss == md5($catid . NV_CHECK_SESSION)) {
                 $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE catid=' . $catid;
                 if ($db->exec($sql)) {
-                    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['delcatandrows'], $title, $admin_info['userid']);
+                    nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('delcatandrows'), $title, $admin_info['userid']);
                     nv_fix_cat_order();
                     $db->query('DROP TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid);
                     $contents = 'OK_' . $parentid;
@@ -186,7 +186,7 @@ if ($catid > 0) {
             }
         }
     } else {
-        $contents = 'ERR_CAT_' . $lang_module['delcat_msg_cat_permissions'];
+        $contents = 'ERR_CAT_' . $nv_Lang->getModule('delcat_msg_cat_permissions');
     }
 }
 

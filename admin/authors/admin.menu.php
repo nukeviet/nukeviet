@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -25,13 +25,13 @@ if (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config['s
     $allow_func[] = 'suspend';
     $allow_func[] = 'del';
     $allow_func[] = 'users';
-    $submenu['add'] = $lang_module['menuadd'];
-    $submenu['users'] = $lang_module['users'];
+    $submenu['add'] = $nv_Lang->getModule('menuadd');
+    $submenu['users'] = $nv_Lang->getModule('users');
 }
 
 if (defined('NV_IS_GODADMIN')) {
-    $submenu['module'] = $lang_module['module_admin'];
-    $submenu['config'] = $lang_module['config'];
+    $submenu['module'] = $nv_Lang->getModule('module_admin');
+    $submenu['config'] = $nv_Lang->getModule('config');
     $allow_func[] = 'module';
     $allow_func[] = 'config';
 }

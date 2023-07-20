@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,14 +13,14 @@ if (!defined('NV_IS_FILE_LANG')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['countries'];
+$page_title = $nv_Lang->getModule('countries');
 
 $array_lang_setup = [];
-$array_lang_setup[] = ['', $lang_module['site_lang']];
+$array_lang_setup[] = ['', $nv_Lang->getModule('site_lang')];
 
 $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $result = $db->query($sql);
-while (list($lang_i) = $result->fetch(3)) {
+while ([$lang_i] = $result->fetch(3)) {
     if (in_array($lang_i, $global_config['allow_sitelangs'], true)) {
         $array_lang_setup[$lang_i] = [$lang_i, $language_array[$lang_i]['name']];
     }
@@ -53,13 +53,13 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('LANG', $lang_module);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 
 $nb = 0;
 foreach ($countries as $key => $value) {
     $xtpl->assign('NB', ++$nb);
     $xtpl->assign('LANG_KEY', $key);
-    $xtpl->assign('LANG_NAME', $value[1]);
+    $xtpl->assign('LANG_NAME', $nv_Lang->existsGlobal('country_' . $key) ? $nv_Lang->getGlobal('country_' . $key) : $value[1]);
 
     foreach ($array_lang_setup as $data_name) {
         $data_key = $data_name[0];

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -24,9 +24,9 @@ $allow_func = ['main', 'blocks'];
 
 // Loai lien ket
 $type_target = [];
-$type_target[1] = $lang_module['type_target1'];
-$type_target[2] = $lang_module['type_target2'];
-$type_target[3] = $lang_module['type_target3'];
+$type_target[1] = $nv_Lang->getModule('type_target1');
+$type_target[2] = $nv_Lang->getModule('type_target2');
+$type_target[3] = $nv_Lang->getModule('type_target3');
 
 /**
  * nv_list_menu()
@@ -129,7 +129,7 @@ function nv_menu_del_sub($id, $parentid)
         foreach ($subitem as $id) {
             $sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
 
-            list($parentid) = $db->query($sql)->fetch(3);
+            [$parentid] = $db->query($sql)->fetch(3);
             nv_menu_del_sub($id, $parentid);
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid']);
         }

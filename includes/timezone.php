@@ -88,7 +88,7 @@ if (!defined('NV_CLIENT_TIMEZONE_NAME') and isset($_COOKIE[$global_config['cooki
 $site_timezone = $global_config['site_timezone'] == 'byCountry' ? (!empty($countries[$client_info['country']][2]) ? $countries[$client_info['country']][2] : '') : $global_config['site_timezone'];
 
 if ($site_timezone == '') {
-    $site_timezone = defined('NV_CLIENT_TIMEZONE_NAME') ? NV_CLIENT_TIMEZONE_NAME : ((isset($global_config['statistics_timezone']) ? $global_config['statistics_timezone'] : ''));
+    $site_timezone = defined('NV_CLIENT_TIMEZONE_NAME') ? NV_CLIENT_TIMEZONE_NAME : (($global_config['statistics_timezone'] ?? ''));
     if ($site_timezone == '') {
         $site_timezone = 'Asia/Ho_Chi_Minh';
     }

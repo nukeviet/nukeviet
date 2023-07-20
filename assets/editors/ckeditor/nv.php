@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -135,8 +135,8 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
 
     if ($customtoolbar == 'User') {
         $replaces[] = "format_tags:'p;div;h2;h3;h4;h5;h6'";
-        $replaces[] = "forcePasteAsPlainText:true";
-        $allowed_html_tags = ['b','blockquote','br','div','em','h2','h3','h4','h5','h6','i','li','p','span','strong','s','u','ul','ol'];
+        $replaces[] = 'forcePasteAsPlainText:true';
+        $allowed_html_tags = ['b', 'blockquote', 'br', 'div', 'em', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'li', 'p', 'span', 'strong', 's', 'u', 'ul', 'ol'];
     } else {
         $allowed_html_tags = $global_config['allowed_html_tags'];
     }

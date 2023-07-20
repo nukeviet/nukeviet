@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -39,7 +39,7 @@ if ($nv_Request->isset_request('opensearch', 'post') and $checkss == $nv_Request
     $description = $nv_Request->get_typed_array('description', 'post', 'title', []);
     $config_value = [];
     if (!empty($opensearch_link)) {
-        foreach($opensearch_link as $ol) {
+        foreach ($opensearch_link as $ol) {
             if (!empty($shortname[$ol])) {
                 $config_value[$ol] = [$shortname[$ol], $description[$ol]];
             }
@@ -67,7 +67,7 @@ if ($nv_Request->isset_request('add', 'post') and $checkss == $nv_Request->get_s
     if ($rel_key === false or empty($values[$rel_key])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['linkTags_rel_val_required']
+            'mess' => $nv_Lang->getModule('linkTags_rel_val_required')
         ]);
     }
 
@@ -119,11 +119,11 @@ if ($nv_Request->isset_request('del,key', 'post') and $checkss == $nv_Request->g
     exit();
 }
 
-$page_title = $lang_module['linkTagsConfig'];
+$page_title = $nv_Lang->getModule('linkTagsConfig');
 
 $xtpl = new XTemplate('linktags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -135,8 +135,8 @@ $acceptVars = [
     '<code>{BASE_SITEURL}</code> (' . NV_BASE_SITEURL . ')',
     '<code>{UPLOADS_DIR}</code> (' . NV_UPLOADS_DIR . ')',
     '<code>{ASSETS_DIR}</code> (' . NV_ASSETS_DIR . ')',
-    '<code>{CONTENT-LANGUAGE}</code> (' . $lang_global['Content_Language'] . ')',
-    '<code>{LANGUAGE}</code> (' . $lang_global['LanguageName'] . ')',
+    '<code>{CONTENT-LANGUAGE}</code> (' . $nv_Lang->getGlobal('Content_Language') . ')',
+    '<code>{LANGUAGE}</code> (' . $nv_Lang->getGlobal('LanguageName') . ')',
     '<code>{SITE_NAME}</code> (' . $global_config['site_name'] . ')',
     '<code>{SITE_EMAIL}</code> (' . $global_config['site_email'] . ')'
 ];
@@ -179,7 +179,7 @@ if (!empty($global_config['opensearch_link'])) {
 $xtpl->assign('OPENSEARCH', [
     'val' => 'site',
     'checked' => isset($opensearch_link['site']) ? ' checked="checked"' : '',
-    'title' => $lang_module['add_opensearch_link_all'],
+    'title' => $nv_Lang->getModule('add_opensearch_link_all'),
     'shortname' => isset($opensearch_link['site']) ? $opensearch_link['site'][0] : '',
     'description' => isset($opensearch_link['site']) ? $opensearch_link['site'][1] : ''
 ]);

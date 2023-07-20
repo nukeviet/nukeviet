@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -33,13 +33,13 @@ if ($nv_Request->isset_request('module', 'post')) {
         $sth = $db->prepare('SELECT module_file FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title= :title');
         $sth->bindParam(':title', $modulename, PDO::PARAM_STR);
         $sth->execute();
-        list($module_file) = $sth->fetch(3);
+        [$module_file] = $sth->fetch(3);
 
         if (empty($module_file)) {
             $sth = $db->prepare('SELECT basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
             $sth->bindParam(':title', $modulename, PDO::PARAM_STR);
             $sth->execute();
-            list($module_file) = $sth->fetch(3);
+            [$module_file] = $sth->fetch(3);
 
             if (empty($module_file) and file_exists(NV_ROOTDIR . '/modules/' . $modulename . '/version.php')) {
                 $module_file = $modulename;
@@ -48,16 +48,16 @@ if ($nv_Request->isset_request('module', 'post')) {
 
         if (!empty($module_file)) {
             $contents['status'] = 'success';
-            $contents['message'][0] = $lang_module['reinstall_note1'];
+            $contents['message'][0] = $nv_Lang->getModule('reinstall_note1');
 
             // Kiểm tra
             if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php')) {
-                $contents['message'][1] = $lang_module['reinstall_note2'];
-                $contents['message'][2] = $lang_module['reinstall_note3'];
+                $contents['message'][1] = $nv_Lang->getModule('reinstall_note2');
+                $contents['message'][2] = $nv_Lang->getModule('reinstall_note3');
                 $contents['code'] = 1;
             } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
-                $contents['message'][1] = $lang_module['reinstall_note2'];
-                $contents['message'][2] = $lang_module['reinstall_note4'];
+                $contents['message'][1] = $nv_Lang->getModule('reinstall_note2');
+                $contents['message'][2] = $nv_Lang->getModule('reinstall_note4');
                 $contents['code'] = 1;
             }
 
@@ -78,13 +78,13 @@ if ($nv_Request->isset_request('module', 'post')) {
                         $contents['hookfiles'][$hook] = [];
 
                         if (empty($require_module)) {
-                            $contents['hookmgs'][$hook] = sprintf($lang_module['select_hook_sys'], $hook);
+                            $contents['hookmgs'][$hook] = $nv_Lang->getModule('select_hook_sys', $hook);
                             $contents['hookfiles'][$hook][] = [
                                 'title' => '',
-                                'custom_title' => $lang_global['system']
+                                'custom_title' => $nv_Lang->getGlobal('system')
                             ];
                         } else {
-                            $contents['hookmgs'][$hook] = sprintf($lang_module['select_hook_module'], $hook);
+                            $contents['hookmgs'][$hook] = $nv_Lang->getModule('select_hook_module', $hook);
                             foreach ($sys_mods as $module => $mod) {
                                 if ($mod['module_file'] == $require_module) {
                                     $contents['hookfiles'][$hook][] = [
@@ -101,7 +101,7 @@ if ($nv_Request->isset_request('module', 'post')) {
                     }
 
                     if (!empty($missing_modules)) {
-                        $contents['hookerror'] = sprintf($lang_module['error_no_hook_module'], implode(', ', $missing_modules));
+                        $contents['hookerror'] = $nv_Lang->getModule('error_no_hook_module', implode(', ', $missing_modules));
                     }
                 }
             }

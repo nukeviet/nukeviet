@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -13,13 +13,13 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
-$page_title = $lang_module['block'];
+$page_title = $nv_Lang->getModule('block');
 
 $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db_slave->query($sql);
 
 $array_block = [];
-while (list($bid_i, $title_i) = $result->fetch(3)) {
+while ([$bid_i, $title_i] = $result->fetch(3)) {
     $bid_i = (int) $bid_i;
     $array_block[$bid_i] = $title_i;
 }
@@ -47,7 +47,7 @@ if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_s
     $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid;
     $result = $db_slave->query($sql);
     $_id_array_exit = [];
-    while (list($_id) = $result->fetch(3)) {
+    while ([$_id] = $result->fetch(3)) {
         $_id_array_exit[] = (int) $_id;
     }
 
@@ -85,8 +85,8 @@ foreach ($array_block as $xbid => $blockname) {
 }
 
 $xtpl = new XTemplate('block.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
@@ -97,7 +97,7 @@ $listid = $nv_Request->get_string('listid', 'get', '');
 if ($listid == '' and $bid) {
     $xtpl->assign('BLOCK_LIST', nv_show_block_list($bid));
 } else {
-    $page_title = $lang_module['addtoblock'];
+    $page_title = $nv_Lang->getModule('addtoblock');
     $id_array = array_map('intval', explode(',', $listid));
 
     $db_slave->sqlreset()
@@ -108,7 +108,7 @@ if ($listid == '' and $bid) {
 
     $result = $db_slave->query($db_slave->sql());
 
-    while (list($id, $title) = $result->fetch(3)) {
+    while ([$id, $title] = $result->fetch(3)) {
         $xtpl->assign('ROW', [
             'checked' => in_array((int) $id, $id_array, true) ? ' checked="checked"' : '',
             'title' => $title,

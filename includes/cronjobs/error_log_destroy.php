@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -33,7 +33,7 @@ function cron_auto_del_error_log()
     $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/old';
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
-            if (preg_match("/^([0-9]{2})\-([0-9]{2})-([0-9]{4})\_(" . $error_log_filename . "|" . $notice_log_filename . ")\.(" . $error_log_fileext . ')$/', $file, $m)) {
+            if (preg_match("/^([0-9]{2})\-([0-9]{2})-([0-9]{4})\_(" . $error_log_filename . '|' . $notice_log_filename . ")\.(" . $error_log_fileext . ')$/', $file, $m)) {
                 $old_day_mktime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
                 if ($old_day_mktime + 864000 < $day_mktime) {
                     if (!@unlink($dir . '/' . $file)) {
@@ -49,7 +49,7 @@ function cron_auto_del_error_log()
     $dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs';
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
-            if (preg_match("/^([0-9]{2})\-([0-9]{2})-([0-9]{4})\_(" . $error_log_filename . "|" . $notice_log_filename . ")\.(" . $error_log_fileext . ')$/', $file, $m)) {
+            if (preg_match("/^([0-9]{2})\-([0-9]{2})-([0-9]{4})\_(" . $error_log_filename . '|' . $notice_log_filename . ")\.(" . $error_log_fileext . ')$/', $file, $m)) {
                 $old_day_mktime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
                 if ($old_day_mktime != $day_mktime) {
                     @rename($dir . '/' . $file, $dir . '/old/' . $file);

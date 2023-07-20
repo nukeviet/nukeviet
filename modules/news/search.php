@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -51,7 +51,7 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
 
         $sql_cat = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_cat';
         $re_cat = $db_slave->query($sql_cat);
-        while (list($catid, $alias) = $re_cat->fetch(3)) {
+        while ([$catid, $alias] = $re_cat->fetch(3)) {
             $array_cat_alias[$catid] = $alias;
         }
         $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
@@ -82,7 +82,7 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
 
         $sql_cat = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_cat';
         $re_cat = $db_slave->query($sql_cat);
-        while (list($catid, $alias) = $re_cat->fetch(3)) {
+        while ([$catid, $alias] = $re_cat->fetch(3)) {
             $array_cat_alias[$catid] = $alias;
         }
 
@@ -93,7 +93,7 @@ if ($module_config[$m_values['module_name']]['elas_use'] == 1) {
             ->limit($limit)
             ->offset(($page - 1) * $limit);
         $result = $db_slave->query($db_slave->sql());
-        while (list($id, $tilterow, $alias, $catid, $hometext, $bodytext) = $result->fetch(3)) {
+        while ([$id, $tilterow, $alias, $catid, $hometext, $bodytext] = $result->fetch(3)) {
             $content = strip_tags($hometext, 'br') . strip_tags($bodytext);
             $url = $link . $array_cat_alias[$catid] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
             $result_array[] = [

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -411,7 +411,7 @@ if (empty($contents)) {
 }
 
 if ($page > 1) {
-    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+    $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
     $description .= ' ' . $page;
 }
 

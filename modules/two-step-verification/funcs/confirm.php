@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -58,7 +58,7 @@ if ($tokend_confirm_password != $tokend) {
             nv_json_result([
                 'status' => 'error',
                 'input' => '',
-                'mess' => sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end))
+                'mess' => $nv_Lang->getGlobal('userlogin_blocked', $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end))
             ]);
         }
 
@@ -81,7 +81,7 @@ if ($tokend_confirm_password != $tokend) {
         nv_json_result([
             'status' => 'error',
             'input' => 'password',
-            'mess' => $lang_global['incorrect_password']
+            'mess' => $nv_Lang->getGlobal('incorrect_password')
         ]);
     }
 

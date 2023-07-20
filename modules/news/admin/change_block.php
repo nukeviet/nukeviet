@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -31,7 +31,7 @@ if ($bid > 0) {
         nv_news_fix_block($bid);
         $content = 'OK_' . $bid;
     } elseif ($id > 0) {
-        list($bid, $id) = $db->query('SELECT bid, id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . (int) $bid . ' AND id=' . (int) $id)->fetch(3);
+        [$bid, $id] = $db->query('SELECT bid, id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . (int) $bid . ' AND id=' . (int) $id)->fetch(3);
         if ($bid > 0 and $id > 0) {
             if ($mod == 'weight' and $new_vid > 0) {
                 $query = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id!=' . $id . ' ORDER BY weight ASC';

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -79,7 +79,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     if (!isset($array_file_name[1])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['block_error_nsblock']
+            'mess' => $nv_Lang->getModule('block_error_nsblock')
         ]);
     }
 
@@ -94,34 +94,20 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         preg_match($global_config['check_block_module'], $row['file_name'], $matches);
     }
 
-    $path_file_php = $path_file_ini = $path_file_lang = '';
+    $path_file_php = $path_file_ini = $block_type = $block_dir = '';
     if ($module == 'theme' and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name) and file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini')) {
         $path_file_php = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name;
         $path_file_ini = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
-
-        $_pfl = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_';
-        if (file_exists($_pfl . NV_LANG_INTERFACE . '.php')) {
-            $path_file_lang = $_pfl . NV_LANG_INTERFACE . '.php';
-        } elseif (file_exists($_pfl . NV_LANG_DATA . '.php')) {
-            $path_file_lang = $_pfl . NV_LANG_DATA . '.php';
-        } elseif (file_exists($_pfl . 'en.php')) {
-            $path_file_lang = $_pfl . 'en.php';
-        }
+        $block_type = 'theme';
+        $block_dir = $selectthemes;
     } elseif (isset($site_mods[$module])) {
         $mod_file = $site_mods[$module]['module_file'];
 
         if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name) and file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini')) {
             $path_file_php = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name;
             $path_file_ini = NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
-
-            $_pfl = NV_ROOTDIR . '/modules/' . $mod_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_';
-            if (file_exists($_pfl . NV_LANG_INTERFACE . '.php')) {
-                $path_file_lang = $_pfl . NV_LANG_INTERFACE . '.php';
-            } elseif (file_exists($_pfl . NV_LANG_DATA . '.php')) {
-                $path_file_lang = $_pfl . NV_LANG_DATA . '.php';
-            } elseif (file_exists($_pfl . 'en.php')) {
-                $path_file_lang = $_pfl . 'en.php';
-            }
+            $block_type = 'module';
+            $block_dir = $mod_file;
         }
     }
 
@@ -257,7 +243,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     if ($row['dtime_type'] != 'regular' and empty($row['dtime_details'])) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['invalid_display_time']
+            'mess' => $nv_Lang->getModule('invalid_display_time')
         ]);
     }
     if (!empty($row['dtime_details'])) {
@@ -281,7 +267,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
     if (empty($all_func) and empty($array_funcid_post)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $lang_module['block_no_func']
+            'mess' => $nv_Lang->getModule('block_no_func')
         ]);
     }
 
@@ -308,15 +294,16 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 // Neu ton tai function de xay dung cau truc cau hinh block
                 include_once $path_file_php;
 
-                if (nv_function_exists($submit_function)) {
-                    $lang_block = [];
-                    // Ngon ngu cua block
+                if (nv_function_exists($submit_function) and ($block_type == 'module' or $block_type == 'theme')) {
+                    if ($block_type == 'module') {
+                        $nv_Lang->loadModule($block_dir, false, true);
+                    } elseif ($block_type == 'theme') {
+                        $nv_Lang->loadTheme($block_dir, true);
+                    }
 
-                    if (!empty($path_file_lang)) {
-                        require $path_file_lang;
-                    } else {
-                        $xmllanguage = $xml->xpath('language');
-                        $language = (empty($xmllanguage)) ? [] : (array) $xmllanguage[0];
+                    $xmllanguage = $xml->xpath('language');
+                    if (!empty($xmllanguage)) {
+                        $language = (array) $xmllanguage[0];
 
                         if (isset($language[NV_LANG_INTERFACE])) {
                             $lang_block = (array) $language[NV_LANG_INTERFACE];
@@ -329,10 +316,15 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                             $key = array_keys($language);
                             $lang_block = array_combine($key, $key);
                         }
+
+                        $nv_Lang->setModule($lang_block, '', true);
                     }
 
                     // Goi ham xu ly hien thi block
-                    $array_config = call_user_func($submit_function, $module, $lang_block);
+                    $array_config = call_user_func($submit_function, $module);
+
+                    // Xóa lang tạm giải phóng bộ nhớ
+                    $nv_Lang->changeLang();
 
                     if (!empty($array_config['config'])) {
                         $row['config'] = serialize($array_config['config']);
@@ -398,7 +390,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $sth->bindParam(':theme', $row_old['theme'], PDO::PARAM_STR);
             $sth->bindParam(':position', $row_old['position'], PDO::PARAM_STR);
             $sth->execute();
-            while (list($bid_i, $func_id_i) = $sth->fetch(3)) {
+            while ([$bid_i, $func_id_i] = $sth->fetch(3)) {
                 if ($func_id_i == $func_id_old) {
                     ++$weight;
                 } else {
@@ -438,7 +430,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
             $data['config'] = $row['config'];
             $row['bid'] = $db->insert_id($_sql, 'bid', $data);
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_add'), 'Name : ' . $row['title'], $admin_info['userid']);
         } else {
             $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET
                     module=:module,
@@ -473,14 +465,14 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
                 $nv_Cache->delMod($module);
             }
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_edit'], 'Name : ' . $row['title'], $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('block_edit'), 'Name : ' . $row['title'], $admin_info['userid']);
         }
 
         if (!empty($row['bid'])) {
             $func_list = [];
             $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
 
-            while (list($func_inlist) = $result_func->fetch(3)) {
+            while ([$func_inlist] = $result_func->fetch(3)) {
                 $func_list[] = $func_inlist;
             }
 
@@ -513,32 +505,32 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
 
     nv_jsonOutput([
         'status' => 'OK',
-        'mess' => $is_add ? $lang_module['block_add_success'] : $lang_module['block_update_success'],
+        'mess' => $is_add ? $nv_Lang->getModule('block_add_success') : $nv_Lang->getModule('block_update_success'),
         'redirect' => !empty($blockredirect) ? nv_redirect_decrypt($blockredirect) : ''
     ]);
 }
 
 $xtpl = new XTemplate('block_content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
-$xtpl->assign('LANG', $lang_module);
-$xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+$xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('PAGE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selectthemes=' . $selectthemes . (!empty($blockredirect) ? '&amp;=blockredirect' . $blockredirect : ''));
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('THEME', sprintf($lang_module['theme'], ucfirst($selectthemes)));
-$xtpl->assign('PAGE_TITLE', $row['bid'] != 0 ? $lang_module['block_edit'] : $lang_module['block_add']);
+$xtpl->assign('THEME', $nv_Lang->getModule('theme', ucfirst($selectthemes)));
+$xtpl->assign('PAGE_TITLE', $row['bid'] != 0 ? $nv_Lang->getModule('block_edit') : $nv_Lang->getModule('block_add'));
 
 $groups_view = array_map('intval', explode(',', $row['groups_view']));
 
 $sql = 'SELECT func_id, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY in_module ASC, subweight ASC';
 $func_result = $db->query($sql);
 $aray_mod_func = [];
-while (list($id_i, $func_custom_name_i, $in_module_i) = $func_result->fetch(3)) {
+while ([$id_i, $func_custom_name_i, $in_module_i] = $func_result->fetch(3)) {
     $aray_mod_func[$in_module_i][] = ['id' => $id_i, 'func_custom_name' => $func_custom_name_i];
 }
 
 // Load position file
-$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content'], 404);
+$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($nv_Lang->getGlobal('error_404_title'), $nv_Lang->getModule('block_error_fileconfig_title'), $nv_Lang->getModule('block_error_fileconfig_content'), 404);
 $xmlpositions = $xml->xpath('positions');
 $positions = $xmlpositions[0]->position;
 
@@ -563,7 +555,7 @@ foreach ($dtime_types as $key) {
     $xtpl->assign('DTIME_TYPE', [
         'key' => $key,
         'sel' => $key == $row['dtime_type'] ? ' selected="selected"' : '',
-        'title' => $lang_module['dtime_type_' . $key]
+        'title' => $nv_Lang->getModule('dtime_type_' . $key)
     ]);
     $xtpl->parse('main.dtime_type');
 }
@@ -596,7 +588,8 @@ for ($i = 1; $i <= 4; ++$i) {
     $xtpl->assign('ACTIVE_DEVICE', [
         'key' => $i,
         'checked' => (in_array($i, $active_device, true)) ? ' checked="checked"' : '',
-        'title' => $lang_module['show_device_' . $i]]);
+        'title' => $nv_Lang->getModule('show_device_' . $i)
+    ]);
     $xtpl->parse('main.active_device');
 }
 
@@ -618,12 +611,12 @@ foreach ($groups_list as $group_id => $grtl) {
 
 if ($row['bid'] != 0) {// Tach ra va tao nhom moi
     $blocks_num = $db->query('SELECT COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'])->fetchColumn();
-    $xtpl->assign('BLOCKS_NUM', sprintf($lang_module['block_groupbl'], $row['bid'], $blocks_num));
+    $xtpl->assign('BLOCKS_NUM', $nv_Lang->getModule('block_groupbl', $row['bid'], $blocks_num));
 
     $xtpl->parse('main.edit');
 }
 
-$add_block_module = [1 => $lang_module['add_block_all_module'], 0 => $lang_module['add_block_select_module']];
+$add_block_module = [1 => $nv_Lang->getModule('add_block_all_module'), 0 => $nv_Lang->getModule('add_block_select_module')];
 
 $i = 1;
 foreach ($add_block_module as $b_key => $b_value) {
@@ -645,14 +638,14 @@ $func_list = [];
 
 if ($row['bid']) {
     $result_func = $db->query('SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
-    while (list($func_inlist) = $result_func->fetch(3)) {
+    while ([$func_inlist] = $result_func->fetch(3)) {
         $func_list[] = $func_inlist;
     }
 }
 
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . (!NV_DEBUG ? ' WHERE act = 1' : '') . ' ORDER BY weight ASC';
 $result = $db->query($sql);
-while (list($m_title, $m_custom_title) = $result->fetch(3)) {
+while ([$m_title, $m_custom_title] = $result->fetch(3)) {
     if (isset($aray_mod_func[$m_title]) and sizeof($aray_mod_func[$m_title]) > 0) {
         $i = 0;
         foreach ($aray_mod_func[$m_title] as $aray_mod_func_i) {
@@ -678,7 +671,7 @@ while (list($m_title, $m_custom_title) = $result->fetch(3)) {
     }
 }
 
-$page_title = '&nbsp;&nbsp;' . $lang_module['blocks'] . ': Theme ' . $selectthemes;
+$page_title = '&nbsp;&nbsp;' . $nv_Lang->getModule('blocks') . ': Theme ' . $selectthemes;
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

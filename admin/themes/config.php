@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -20,7 +20,7 @@ if ($global_config['idsite']) {
     if (!empty($theme)) {
         $array_site_cat_theme = explode(',', $theme);
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while (list($theme) = $result->fetch(3)) {
+        while ([$theme] = $result->fetch(3)) {
             $array_site_cat_theme[] = $theme;
         }
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
@@ -45,21 +45,15 @@ if ($selectthemes_old != $selectthemes) {
 
 if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php')) {
     // Connect with file language interface configuration
-    if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_INTERFACE . '.php')) {
-        require NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_INTERFACE . '.php';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_DATA . '.php')) {
-        require NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_' . NV_LANG_DATA . '.php';
-    } elseif (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_en.php')) {
-        require NV_ROOTDIR . '/themes/' . $selectthemes . '/language/admin_en.php';
-    }
+    $nv_Lang->loadTheme($selectthemes);
 
     // Connect with file theme configuration
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config.php';
 } else {
-    $contents = '<h2 class="center vcenter" style="margin: 50px;">' . sprintf($lang_module['config_not_exit'], $selectthemes) . '</h2>';
+    $contents = '<h2 class="center vcenter" style="margin: 50px;">' . $nv_Lang->getModule('config_not_exit', $selectthemes) . '</h2>';
 }
 
-$page_title = $lang_module['config'] . ':' . $selectthemes;
+$page_title = $nv_Lang->getModule('config') . ':' . $selectthemes;
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -26,7 +26,7 @@ if ($num_items) {
         ->limit($limit)
         ->offset(($page - 1) * $limit);
     $result = $db_slave->query($db_slave->sql());
-    while (list($id, $tilterow, $alias, $description, $content) = $result->fetch(3)) {
+    while ([$id, $tilterow, $alias, $description, $content] = $result->fetch(3)) {
         $result_array[] = [
             'link' => $link . $alias . $global_config['rewrite_exturl'],
             'title' => BoldKeywordInStr($tilterow, $key, $logic),

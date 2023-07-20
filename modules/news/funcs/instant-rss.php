@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -26,7 +26,7 @@ if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
         if (php_sapi_name() !== 'cgi-fcgi') {
             header('status: 401 Unauthorized');
         }
-        nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_module['insrss_not_auth'], 401);
+        nv_info_die($global_config['site_description'], $nv_Lang->getGlobal('site_info'), $nv_Lang->getModule('insrss_not_auth'), 401);
     }
 }
 
@@ -71,7 +71,7 @@ if (!empty($catid)) {
 $cacheFile = NV_LANG_DATA . '_instantrss' . $catid . '_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 60 * (int) ($module_config[$module_file]['instant_articles_livetime']);
 
-$FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
+$FBIA = new \NukeViet\Facebook\InstantArticles(\NukeViet\Core\Language::$lang_module);
 
 if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
     $items = unserialize($cache);

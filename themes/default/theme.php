@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2022 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -36,13 +36,13 @@ $theme_config = [
  */
 function nv_site_theme($contents, $full = true)
 {
-    global $home, $array_mod_title, $lang_global, $global_config, $site_mods, $module_name, $module_info, $op_file, $my_head, $my_footer, $client_info, $module_config, $op, $opensearch_link, $custom_preloads;
+    global $home, $array_mod_title, $nv_Lang, $global_config, $site_mods, $module_name, $module_info, $op_file, $my_head, $my_footer, $client_info, $module_config, $op, $opensearch_link, $custom_preloads;
 
     // Determine tpl file, check exists tpl file
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
     if (!theme_file_exists($global_config['module_theme'] . '/layout/' . $layout_file)) {
-        nv_info_die($lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content']);
+        nv_info_die($nv_Lang->getGlobal('error_layout_title'), $nv_Lang->getGlobal('error_layout_title'), $nv_Lang->getGlobal('error_layout_content'));
     }
 
     if (isset($global_config['sitetimestamp'])) {
@@ -58,12 +58,12 @@ function nv_site_theme($contents, $full = true)
     nv_apply_hook('', 'sector4');
 
     $xtpl = new XTemplate($layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout');
-    $xtpl->assign('LANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
 
     $xtpl->assign('NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ');
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
-    $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . NV_TITLEBAR_DEFIS . $lang_global['admin_page'] . NV_TITLEBAR_DEFIS . $module_info['custom_title']);
+    $xtpl->assign('NV_SITE_TITLE', $global_config['site_name'] . NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('admin_page') . NV_TITLEBAR_DEFIS . $module_info['custom_title']);
     $xtpl->assign('SITE_DESCRIPTION', $global_config['site_description']);
     $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['user_check_pass_time']) - 62) * 1000);
     $xtpl->assign('MODULE_NAME', $module_name);
@@ -190,7 +190,7 @@ function nv_site_theme($contents, $full = true)
         }
 
         if (isset($config_theme['gfont']) and !empty($config_theme['gfont']) and isset($config_theme['gfont']['family']) and !empty($config_theme['gfont']['family'])) {
-            $subset = isset($config_theme['gfont']['subset']) ? $config_theme['gfont']['subset'] : '';
+            $subset = $config_theme['gfont']['subset'] ?? '';
             $gf = new NukeViet\Client\Gfonts([
                 'fonts' => [
                     $config_theme['gfont']
@@ -351,7 +351,7 @@ function nv_site_theme($contents, $full = true)
         // Statistics image
         $theme_stat_img = '';
         if ($global_config['statistic'] and isset($site_mods['statistics'])) {
-            $theme_stat_img .= '<a title="' . $lang_global['viewstats'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=statistics"><img alt="' . $lang_global['viewstats'] . '" src="' . NV_BASE_SITEURL . 'index.php?second=statimg&amp;p=' . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
+            $theme_stat_img .= '<a title="' . $nv_Lang->getGlobal('viewstats') . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=statistics"><img alt="' . $nv_Lang->getGlobal('viewstats') . '" src="' . NV_BASE_SITEURL . 'index.php?second=statimg&amp;p=' . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
         }
 
         $xtpl->assign('THEME_STAT_IMG', $theme_stat_img);
@@ -374,8 +374,8 @@ function nv_site_theme($contents, $full = true)
             $current_theme_type = (isset($global_config['current_theme_type']) and !empty($global_config['current_theme_type']) and in_array($global_config['current_theme_type'], array_keys($icons), true)) ? $global_config['current_theme_type'] : 'd';
             foreach ($array_theme_type as $theme_type) {
                 $xtpl->assign('STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']));
-                $xtpl->assign('STHEME_TITLE', $lang_global['theme_type_' . $theme_type]);
-                $xtpl->assign('STHEME_INFO', sprintf($lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type]));
+                $xtpl->assign('STHEME_TITLE', $nv_Lang->getGlobal('theme_type_' . $theme_type));
+                $xtpl->assign('STHEME_INFO', $nv_Lang->getGlobal('theme_type_chose', $nv_Lang->getGlobal('theme_type_' . $theme_type)));
                 $xtpl->assign('STHEME_ICON', $icons[$theme_type]);
 
                 if ($theme_type == $current_theme_type) {
@@ -396,7 +396,7 @@ function nv_site_theme($contents, $full = true)
     }
 
     if ($global_config['cookie_notice_popup'] and !isset($_COOKIE[$global_config['cookie_prefix'] . '_cn'])) {
-        $xtpl->assign('COOKIE_NOTICE', sprintf($lang_global['cookie_notice'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteterms&amp;' . NV_OP_VARIABLE . '=privacy' . $global_config['rewrite_exturl']));
+        $xtpl->assign('COOKIE_NOTICE', $nv_Lang->getGlobal('cookie_notice', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteterms&amp;' . NV_OP_VARIABLE . '=privacy' . $global_config['rewrite_exturl']));
         $xtpl->parse('main.cookie_notice');
     }
 

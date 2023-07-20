@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -216,7 +216,7 @@ class Database extends PDO
         //'type' => 'string|integer
         if ($this->dbtype == 'mysql') {
             if ($type == 'integer') {
-                $length = $length ? $length : 2147483647;
+                $length = $length ?: 2147483647;
                 if ($length <= 127) {
                     $type = 'TINYINT';
                 } elseif ($length <= 32767) {
@@ -229,7 +229,7 @@ class Database extends PDO
                     $type = 'BIGINT';
                 }
             } else {
-                $length = $length ? $length : 65535;
+                $length = $length ?: 65535;
                 if ($length <= 255) {
                     $type = 'VARCHAR(' . $length . ')';
                 } elseif ($length <= 65535) {
@@ -257,7 +257,7 @@ class Database extends PDO
             }
         } elseif ($this->dbtype == 'oci') {
             if ($type == 'integer') {
-                $length = $length ? $length : 2147483647;
+                $length = $length ?: 2147483647;
                 if ($length <= 127) {
                     $type = 'NUMBER(3,0)';
                 } elseif ($length <= 32767) {
@@ -270,7 +270,7 @@ class Database extends PDO
                     $type = 'NUMBER(22,0)';
                 }
             } else {
-                $length = $length ? $length : 65535;
+                $length = $length ?: 65535;
                 if ($length <= 4000) {
                     $type = 'VARCHAR2(' . $length . ' CHAR)';
                 } else {
@@ -324,17 +324,17 @@ class Database extends PDO
 
     /**
      * regexpescape()
-     * 
-     * @param mixed $value 
-     * @return string|array|null 
+     *
+     * @param mixed $value
+     * @return array|string|null
      */
     public function regexpescape($value)
     {
         if (is_array($value)) {
             $value = array_map([$this, __FUNCTION__], $value);
         } else {
-            $value = preg_replace('/([.*?+\[\]{}^$|(\)])/','\\\\\1',$value);
-            $value = preg_replace('/(\\\[.*?+\[\]{}^$|(\)\\\])/','\\\\\1',$value);
+            $value = preg_replace('/([.*?+\[\]{}^$|(\)])/', '\\\\\1', $value);
+            $value = preg_replace('/(\\\[.*?+\[\]{}^$|(\)\\\])/', '\\\\\1', $value);
         }
 
         return $value;

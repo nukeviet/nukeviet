@@ -82,7 +82,7 @@
                     </colgroup>
                     <tbody>
                         <tr>
-                            <td>{LANG.account} <span class="text-danger">(*)</span></td>
+                            <td>{GLANG.username} <span class="text-danger">(*)</span></td>
                             <td><input type="text" class="form-control required" value="{DATA.username}" name="username" id="username_iavim" maxlength="{NV_UNICKMAX}" /></td>
                         </tr>
                         <tr>

@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -27,7 +27,7 @@ function GetSourceNews($sourceid)
         $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
         $re = $db_slave->query($sql);
 
-        if (list($title) = $re->fetch(3)) {
+        if ([$title] = $re->fetch(3)) {
             return $title;
         }
     }
@@ -169,7 +169,7 @@ if ($is_search) {
 }
 
 $array_cat_search = [];
-$array_cat_search[0]['title'] = $lang_module['search_all'];
+$array_cat_search[0]['title'] = $nv_Lang->getModule('search_all');
 foreach ($global_array_cat as $arr_cat_i) {
     $array_cat_search[$arr_cat_i['catid']] = [
         'catid' => $arr_cat_i['catid'],
@@ -182,11 +182,11 @@ $contents = call_user_func('search_theme', $key, $choose, $date_array, $array_ca
 $where = '';
 $tbl_src = '';
 if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
-    // $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $lang_module['empty_data_search'] . '\')})</script>';
+    // $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $nv_Lang->getModule('empty_data_search') . '\')})</script>';
 } elseif (!empty($key) and nv_strlen($key) < NV_MIN_SEARCH_LENGTH) {
-    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . sprintf($lang_module['search_word_short'], NV_MIN_SEARCH_LENGTH) . '\')})</script>';
+    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $nv_Lang->getModule('search_word_short', NV_MIN_SEARCH_LENGTH) . '\')})</script>';
 } elseif (!empty($catid) and !isset($array_cat_search[$catid])) {
-    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $lang_module['search_catid_error'] . '\')})</script>';
+    $contents .= '<script' . (defined('NV_SCRIPT_NONCE') ? ' nonce="' . NV_SCRIPT_NONCE . '"' : '') . '>$(function(){alert(\'' . $nv_Lang->getModule('search_catid_error') . '\')})</script>';
 } else {
     $dbkey = $db_slave->dblikeescape($key);
     $dbkeyhtml = $db_slave->dblikeescape($keyhtml);
@@ -504,7 +504,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $array_content = [];
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
-        while (list($id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
+        while ([$id, $title, $alias, $catid, $hometext, $bodyhtml, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link] = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -556,9 +556,9 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     $contents .= search_result_theme($key, $numRecord, $per_page, $page, $array_content, $catid, $internal_authors);
 }
 
-$page_title = $lang_module['search_title'];
+$page_title = $nv_Lang->getModule('search_title');
 if ($page > 2) {
-    $page_title .= NV_TITLEBAR_DEFIS . $lang_global['page'] . ' ' . $page;
+    $page_title .= NV_TITLEBAR_DEFIS . $nv_Lang->getGlobal('page') . ' ' . $page;
 }
 $page_title .= NV_TITLEBAR_DEFIS . $module_info['custom_title'];
 $key_words = $description = 'no';

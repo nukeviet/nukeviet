@@ -56,7 +56,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
         $sth->execute();
 
         $data = [];
-        while (list($userid, $username, $email, $first_name, $last_name) = $sth->fetch(3)) {
+        while ([$userid, $username, $email, $first_name, $last_name] = $sth->fetch(3)) {
             $full_name = $global_config['name_show'] ? [$first_name, $last_name] : [$last_name, $first_name];
             $full_name = array_filter($full_name);
             $data[] = [
@@ -148,7 +148,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if (nv_strlen($postdata['message'][$postdata['isdef']]) < 3) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => sprintf($lang_module['please_enter_content'], $language_array[$postdata['isdef']]['name'])
+                    'mess' => $nv_Lang->getModule('please_enter_content', $language_array[$postdata['isdef']]['name'])
                 ]);
             }
 
@@ -157,7 +157,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
                 if (!empty($link) and !nv_is_url($link, true)) {
                     nv_jsonOutput([
                         'status' => 'error',
-                        'mess' => $lang_module['please_enter_valid_link']
+                        'mess' => $nv_Lang->getModule('please_enter_valid_link')
                     ]);
                 }
                 if (!empty($link) and $lang != $postdata['isdef']) {
@@ -170,7 +170,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if ($other_link and empty($postdata['link'][$postdata['isdef']])) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_default_link']
+                    'mess' => $nv_Lang->getModule('please_enter_default_link')
                 ]);
             }
 
@@ -178,7 +178,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if (!preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['add_time'], $add_time_array)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_valid_add_time']
+                    'mess' => $nv_Lang->getModule('please_enter_valid_add_time')
                 ]);
             }
 
@@ -186,7 +186,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
             if (!empty($postdata['exp_time']) and !preg_match('/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $postdata['exp_time'], $exp_time_array)) {
                 nv_jsonOutput([
                     'status' => 'error',
-                    'mess' => $lang_module['please_enter_valid_exp_time']
+                    'mess' => $nv_Lang->getModule('please_enter_valid_exp_time')
                 ]);
             }
 
@@ -279,9 +279,9 @@ if ($nv_Request->isset_request('manager', 'get')) {
             }
         }
 
-        list($data['add_time'], $data['add_hour'], $data['add_min']) = explode('|', date('d/m/Y|H|i', $data['add_time']));
+        [$data['add_time'], $data['add_hour'], $data['add_min']] = explode('|', date('d/m/Y|H|i', $data['add_time']));
         if (!empty($data['exp_time'])) {
-            list($data['exp_time'], $data['exp_hour'], $data['exp_min']) = explode('|', date('d/m/Y|H|i', $data['exp_time']));
+            [$data['exp_time'], $data['exp_hour'], $data['exp_min']] = explode('|', date('d/m/Y|H|i', $data['exp_time']));
         } else {
             $data['exp_time'] = '';
             $data['exp_hour'] = $data['exp_min'] = -1;
@@ -372,10 +372,10 @@ if ($nv_Request->isset_request('manager', 'get')) {
         if (!empty($row['exp_time'])) {
             $row['exp_time_format'] = nv_date('d.m.y H:i', $row['exp_time']);
             if ($row['exp_time'] < NV_CURRENTTIME) {
-                $row['exp_time_format'] .= '<br/>' . $lang_module['to_be_removed'] . '<br/>' . (nv_date('d.m.y H:i', ($row['exp_time'] + $global_config['inform_exp_del'])));
+                $row['exp_time_format'] .= '<br/>' . $nv_Lang->getModule('to_be_removed') . '<br/>' . (nv_date('d.m.y H:i', ($row['exp_time'] + $global_config['inform_exp_del'])));
             }
         } else {
-            $row['exp_time_format'] = $lang_module['unlimited'];
+            $row['exp_time_format'] = $nv_Lang->getModule('unlimited');
         }
 
         if ($row['add_time'] > NV_CURRENTTIME) {
@@ -516,7 +516,7 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
     }
     $per_page = defined('NV_IS_AJAX') ? $global_config['inform_numrows'] : 20;
 
-    list ($num_items, $items, $count) = nv_apply_hook($module_name, 'get_list_inform', [
+    [$num_items, $items, $count] = nv_apply_hook($module_name, 'get_list_inform', [
         $user_info,
         $filter,
         $page,
@@ -535,9 +535,9 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
         }
 
         $db->sqlreset()
-        ->select('COUNT(*)')
-        ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
-        ->where($where);
+            ->select('COUNT(*)')
+            ->from(NV_INFORM_GLOBALTABLE . ' AS mtb')
+            ->where($where);
 
         $num_items = $db->query($db->sql())->fetchColumn();
         if ($num_items) {
@@ -546,10 +546,10 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
         }
 
         $db->select('mtb.id, mtb.sender_role, mtb.sender_group, mtb.sender_admin, mtb.message, mtb.link, mtb.add_time, IFNULL(jtb.shown_time, 0) AS shown_time, IFNULL(jtb.viewed_time, 0) AS viewed_time, IFNULL(jtb.favorite_time, 0) AS favorite_time')
-        ->join('LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = ' . $user_info['userid'] . ')')
-        ->order('mtb.add_time DESC')
-        ->limit($per_page)
-        ->offset(($page - 1) * $per_page);
+            ->join('LEFT JOIN ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS jtb ON (jtb.pid = mtb.id AND jtb.userid = ' . $user_info['userid'] . ')')
+            ->order('mtb.add_time DESC')
+            ->limit($per_page)
+            ->offset(($page - 1) * $per_page);
         $result = $db->query($db->sql());
 
         $items = [];
@@ -597,13 +597,13 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
             }
 
             if ($row['sender_role'] == 'group') {
-                $title = sprintf($lang_module['from_group'], $grouplist[$row['sender_group']]);
+                $title = $nv_Lang->getModule('from_group', $grouplist[$row['sender_group']]);
                 $row['sender_avatar'] = 'group';
             } elseif ($row['sender_role'] == 'admin' and !empty($adminlist[$row['sender_admin']])) {
-                $title = sprintf($lang_module['from_admin'], $adminlist[$row['sender_admin']]);
+                $title = $nv_Lang->getModule('from_admin', $adminlist[$row['sender_admin']]);
                 $row['sender_avatar'] = 'admin';
             } else {
-                $title = sprintf($lang_module['from_system'], $global_config['site_name']);
+                $title = $nv_Lang->getModule('from_system', $global_config['site_name']);
                 $row['sender_avatar'] = 'system';
             }
             $row['title'] = $title;

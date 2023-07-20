@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -88,12 +88,12 @@ if ($ext == 'country') {
 
         if (!empty($unknown)) {
             $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
-            $cts[$key][0] = $lang_module['unknown'];
+            $cts[$key][0] = $nv_Lang->getModule('unknown');
             $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
             $cts[$key][2] = $unknown;
         }
     }
-    $caption = sprintf($lang_module['info_stat_bycountry_caption'], nv_monthname($data_month), $current_year);
+    $caption = $nv_Lang->getModule('info_stat_bycountry_caption', nv_monthname($data_month), $current_year);
 } elseif ($ext == 'browse') {
     $sql = 'SELECT click_browse_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_country DESC';
 
@@ -120,12 +120,12 @@ if ($ext == 'country') {
     }
     if (!empty($unknown)) {
         $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
-        $cts[$key][0] = $lang_module['unknown'];
+        $cts[$key][0] = $nv_Lang->getModule('unknown');
         $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
         $cts[$key][2] = $unknown;
     }
 
-    $caption = sprintf($lang_module['info_stat_bybrowse_caption'], nv_monthname($data_month), $current_year);
+    $caption = $nv_Lang->getModule('info_stat_bybrowse_caption', nv_monthname($data_month), $current_year);
 } elseif ($ext == 'os') {
     $sql = 'SELECT click_os_name FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_os_name DESC';
     $result = $db->query($sql);
@@ -165,12 +165,12 @@ if ($ext == 'country') {
 
     if (!empty($unknown)) {
         $key = 'nv_show_list_stat(' . $id . ',' . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
-        $cts[$key][0] = $lang_module['unknown'];
+        $cts[$key][0] = $nv_Lang->getModule('unknown');
         $cts[$key][1] = ($sum > 0) ? round($unknown * 100 / $sum) : 0;
         $cts[$key][2] = $unknown;
     }
 
-    $caption = sprintf($lang_module['info_stat_byos_caption'], nv_monthname($data_month), $current_year);
+    $caption = $nv_Lang->getModule('info_stat_byos_caption', nv_monthname($data_month), $current_year);
 } else {
     $sql = 'SELECT click_time FROM ' . NV_BANNERS_GLOBALTABLE . '_click WHERE bid=' . $id . ' AND click_time>=' . $minday . ' AND click_time<=' . $maxday . ' ORDER BY click_time DESC';
     $result = $db->query($sql);
@@ -186,14 +186,14 @@ if ($ext == 'country') {
     }
 
     for ($i = $day_max; $i >= $day_min; --$i) {
-        $c = isset($bd[$i]) ? $bd[$i] : 0;
+        $c = $bd[$i] ?? 0;
         $key = isset($bd[$i]) ? 'nv_show_list_stat(' . $id . ',' . $data_month . ",'day','" . $i . "','statistic',0);" : $i;
         $cts[$key][0] = str_pad($i, 2, '0', STR_PAD_LEFT) . ' ' . nv_date('F Y', $time);
         $cts[$key][1] = ($sum > 0) ? round(($c * 100) / $sum, 1) : 0;
         $cts[$key][2] = $c;
     }
 
-    $caption = sprintf($lang_module['info_stat_byday_caption'], nv_monthname($data_month), $current_year);
+    $caption = $nv_Lang->getModule('info_stat_byday_caption', nv_monthname($data_month), $current_year);
 }
 
 $contents = nv_show_stat_theme([$caption, $sum, $cts]);

@@ -14,7 +14,7 @@ if (!defined('NV_IS_MOD_CONTACT')) {
 }
 
 // Danh sach cac bo phan
-list($departments, $departments_by_alias) = get_department_list();
+[$departments, $departments_by_alias] = get_department_list();
 $is_specific = false; // Xem bộ phận cụ thể
 $categories = []; // Danh sách các chủ đề của bộ phận
 $default = 0; // ID của bộ phận mặc định
@@ -64,8 +64,8 @@ if (!defined('NV_IS_MODADMIN') and empty($module_config[$module_name]['sendcopym
 if (defined('NV_IS_USER')) {
     $feedback['sender_name'] = !empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
     $feedback['sender_email'] = $user_info['email'];
-    $feedback['sender_phone'] = isset($user_info['phone']) ? $user_info['phone'] : '';
-    $feedback['sender_address'] = isset($user_info['address']) ? $user_info['address'] : '';
+    $feedback['sender_phone'] = $user_info['phone'] ?? '';
+    $feedback['sender_address'] = $user_info['address'] ?? '';
 }
 
 // Nhận phản hồi
@@ -110,7 +110,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => '',
-            'mess' => ($module_captcha == 'recaptcha') ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']
+            'mess' => ($module_captcha == 'recaptcha') ? $nv_Lang->getGlobal('securitycodeincorrect1') : $nv_Lang->getGlobal('securitycodeincorrect')
         ]);
     }
 
@@ -119,7 +119,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'ftitle',
-            'mess' => $lang_module['error_title']
+            'mess' => $nv_Lang->getModule('error_title')
         ]);
     }
 
@@ -132,7 +132,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fname',
-            'mess' => $lang_module['error_fullname']
+            'mess' => $nv_Lang->getModule('error_fullname')
         ]);
     }
 
@@ -151,7 +151,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fphone',
-            'mess' => $lang_module['phone_error']
+            'mess' => $nv_Lang->getModule('phone_error')
         ]);
     }
 
@@ -160,7 +160,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fphone',
-            'mess' => $lang_module['address_error']
+            'mess' => $nv_Lang->getModule('address_error')
         ]);
     }
 
@@ -169,7 +169,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'fcon',
-            'mess' => $lang_module['error_content']
+            'mess' => $nv_Lang->getModule('error_content')
         ]);
     }
 
@@ -179,7 +179,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'data_permission_confirm',
-            'mess' => $lang_global['data_warning_error']
+            'mess' => $nv_Lang->getGlobal('data_warning_error')
         ]);
     }
 
@@ -187,7 +187,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'error',
             'input' => 'antispam_confirm',
-            'mess' => $lang_global['antispam_warning_error']
+            'mess' => $nv_Lang->getGlobal('antispam_warning_error')
         ]);
     }
 
@@ -283,14 +283,14 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         nv_jsonOutput([
             'status' => 'success',
             'input' => '',
-            'mess' => $lang_module['sendcontactok']
+            'mess' => $nv_Lang->getModule('sendcontactok')
         ]);
     }
 
     nv_jsonOutput([
         'status' => 'error',
         'input' => '',
-        'mess' => $lang_module['sendcontactfailed']
+        'mess' => $nv_Lang->getModule('sendcontactfailed')
     ]);
 }
 

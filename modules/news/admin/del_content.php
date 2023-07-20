@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -31,7 +31,7 @@ if (!empty($del_array)) {
     $result = $db->query($sql);
     $del_array = $no_del_array = [];
     $artitle = [];
-    while (list($id, $listcatid, $post_id, $title, $alias, $status, $weight) = $result->fetch(3)) {
+    while ([$id, $listcatid, $post_id, $title, $alias, $status, $weight] = $result->fetch(3)) {
         $check_permission = false;
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission = true;
@@ -70,10 +70,10 @@ if (!empty($del_array)) {
     }
     $count = sizeof($del_array);
     if ($count) {
-        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['permissions_del_content'], implode(', ', $artitle), $admin_info['userid']);
+        nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('permissions_del_content'), implode(', ', $artitle), $admin_info['userid']);
     }
     if (!empty($no_del_array)) {
-        $contents = 'ERR_' . $lang_module['error_no_del_content_id'] . ': ' . implode(', ', $no_del_array);
+        $contents = 'ERR_' . $nv_Lang->getModule('error_no_del_content_id') . ': ' . implode(', ', $no_del_array);
     }
 
     nv_fix_weight_content($weight_min);

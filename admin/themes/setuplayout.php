@@ -4,7 +4,7 @@
  * NukeViet Content Management System
  * @version 4.x
  * @author VINADES.,JSC <contact@vinades.vn>
- * @copyright (C) 2009-2021 VINADES.,JSC. All rights reserved
+ * @copyright (C) 2009-2023 VINADES.,JSC. All rights reserved
  * @license GNU/GPL version 2 or any later version
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
@@ -23,7 +23,7 @@ if ($global_config['idsite']) {
         $array_site_cat_theme = explode(',', $theme);
 
         $result = $db->query('SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0');
-        while (list($theme) = $result->fetch(3)) {
+        while ([$theme] = $result->fetch(3)) {
             $array_site_cat_theme[] = $theme;
         }
         $theme_array = array_intersect($theme_array, $array_site_cat_theme);
@@ -78,7 +78,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
         }
     }
 
-    $page_title = $lang_module['setup_layout'] . ':' . $selectthemes;
+    $page_title = $nv_Lang->getModule('setup_layout') . ':' . $selectthemes;
     $checkss = md5(NV_CHECK_SESSION . '_' . $module_name . '_' . $selectthemes . '_' . $admin_info['userid']);
     $xtpl = new XTemplate('setuplayout.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
@@ -86,13 +86,13 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('OP', $op);
-    $xtpl->assign('LANG', $lang_module);
-    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
     $xtpl->assign('CHECKSS', $checkss);
 
     if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         if ($nv_Request->isset_request('save', 'post') and $nv_Request->isset_request('func', 'post')) {
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['setup_layout'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
+            nv_insert_logs(NV_LANG_DATA, $module_name, $nv_Lang->getModule('setup_layout') . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
             $func_arr_save = $nv_Request->get_array('func', 'post');
 
@@ -137,7 +137,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     $sth = $db->prepare('SELECT func_id, layout FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme');
     $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
     $sth->execute();
-    while (list($func_id, $layout) = $sth->fetch(3)) {
+    while ([$func_id, $layout] = $sth->fetch(3)) {
         $array_layout_func_data[$func_id] = $layout;
     }
 
@@ -161,7 +161,7 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
 
     $array_layout_func = [];
     $fnresult = $db->query('SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC');
-    while (list($func_id, $func_name, $func_custom_name, $in_module) = $fnresult->fetch(3)) {
+    while ([$func_id, $func_name, $func_custom_name, $in_module] = $fnresult->fetch(3)) {
         if (isset($array_layout_func_data[$func_id]) and !empty($array_layout_func_data[$func_id])) {
             $layout_name = $array_layout_func_data[$func_id];
 
