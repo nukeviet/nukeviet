@@ -1470,18 +1470,25 @@ function user_welcome($array_field_config, $custom_fields)
                     $result = explode(',', $custom_fields[$row['field']]);
                     $value = [];
                     foreach ($result as $item) {
-                        if (isset($row['field_choices'][$item][NV_LANG_DATA])) {
-                            $value[] = $row['field_choices'][$item][NV_LANG_DATA];
-                        } elseif (!empty($item)) {
-                            $value[] = $item;
+                        $_val = $item;
+                        if (isset($row['field_choices'][$item])) {
+                            if (is_string($row['field_choices'][$item])) {
+                                $_val = $row['field_choices'][$item];
+                            } elseif(is_array($row['field_choices'][$item]) and isset($row['field_choices'][$item][NV_LANG_DATA])) {
+                                $_val = $row['field_choices'][$item][NV_LANG_DATA];
+                            }
                         }
+                        $value[] = $_val;
                     }
                     $value = empty($value) ? '' : implode('<br />', $value);
                 } elseif ($question_type == 'multiselect' or $question_type == 'select' or $question_type == 'radio') {
-                    if (isset($row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA])) {
-                        $value = $row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA];
-                    } else {
-                        $value = $custom_fields[$row['field']];
+                    $value = $custom_fields[$row['field']];
+                    if (isset($row['field_choices'][$custom_fields[$row['field']]])) {
+                        if (is_string($row['field_choices'][$custom_fields[$row['field']]])) {
+                            $value = $row['field_choices'][$custom_fields[$row['field']]];
+                        } elseif(is_array($row['field_choices'][$custom_fields[$row['field']]]) and isset($row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA])) {
+                            $value = $row['field_choices'][$custom_fields[$row['field']]][NV_LANG_DATA];
+                        }
                     }
                 } elseif ($question_type == 'file') {
                     $value = $custom_fields[$row['field']];
