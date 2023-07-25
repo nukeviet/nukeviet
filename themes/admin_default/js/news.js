@@ -388,11 +388,10 @@ $(function() {
     // Content: Add file
     $('body').on('click', '[data-toggle=add_file]', function() {
         var item = $(this).parents('.item'),
-            new_item = item.clone();
-        nv_num_files++;
-        new_id = 'file_' + nv_num_files;
+            new_item = item.clone(),
+            new_id = 'file_' + nv_randomPassword(12);
         $('[name^=files]', new_item).val('').attr('id', new_id);
-        $('[data-toggle=selectimg]', new_item).attr('data-target', new_id);
+        $('[data-toggle=selectfile]', new_item).attr('data-target', new_id);
         item.after(new_item)
     });
 
