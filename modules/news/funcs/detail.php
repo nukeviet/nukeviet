@@ -195,13 +195,14 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
 
         foreach ($files as $file_id => $file) {
             $is_localfile = (!nv_is_url($file));
-            $basename = basename($file);
-            $file_title = $is_localfile ? $basename : $nv_Lang->getModule('click_to_download');
+            $path_parts = pathinfo(strtolower($file));
+            $file_title = $is_localfile ? $path_parts['basename'] : $nv_Lang->getModule('click_to_download');
             $news_contents['files'][$file_id] = [
                 'is_localfile' => $is_localfile,
                 'title' => $file_title,
                 'key' => md5($file_id . $file_title),
-                'ext' => nv_getextension($basename),
+                'ext' => $path_parts['extension'],
+                'filename' => $path_parts['filename'],
                 'titledown' => $nv_Lang->getModule('download') . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                 'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,
                 'url' => $is_localfile ? ($page_url . '&amp;download=1&amp;id=' . $file_id) : $file
