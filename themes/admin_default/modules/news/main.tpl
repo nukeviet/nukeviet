@@ -111,6 +111,12 @@
     </form>
 </div>
 
+<div class="col-xs-12 col-md-24">
+    <div class="form-group text-right">
+        <a id="news-excel-export" class="btn btn-primary" onclick="export_excel()">{LANG.export}</a>
+    </div>
+</div>
+
 <form class="navbar-form" name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
@@ -210,6 +216,35 @@
 </div>
 <!-- END: generate_page -->
 <script type="text/javascript">
+function export_excel() {
+    let url = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&export=1'
+    let request = new XMLHttpRequest();
+    request.open('POST', url, true);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    request.responseType = 'blob';
+
+    request.onload = function(e) {
+        if (this.status === 200) {
+            var blob = this.response;
+            if(window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveBlob(blob, fileName);
+            }
+            else{
+                var downloadLink = window.document.createElement('a');
+                var contentTypeHeader = request.getResponseHeader("Content-Type");
+                downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
+                downloadLink.download = 'nukeviet_news.xlsx';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+        }else{
+            alert('{LANG.error_export}');
+        }
+    };
+    request.send();
+}
+
 $(function() {
     $( "#order_articles" ).dialog({
         autoOpen: false,

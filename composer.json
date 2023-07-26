@@ -46,6 +46,7 @@
         "tecnickcom/tc-lib-barcode" : "^1.15",
         "symfony/polyfill-mbstring": "<1.19.0",
         "true/punycode" : "^2.1",
-        "phpmailer/phpmailer": "^6.8"
+        "phpmailer/phpmailer": "^6.8",
+        "phpoffice/phpspreadsheet": "^1.29"
     }
 }

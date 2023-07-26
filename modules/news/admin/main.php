@@ -13,6 +13,11 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     exit('Stop!!!');
 }
 
+require NV_ROOTDIR . '/vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $page_title = $lang_module['content_list'];
 $stype = $nv_Request->get_string('stype', 'get', '-');
 $sstatus = $nv_Request->get_int('sstatus', 'get', -1);
@@ -23,6 +28,42 @@ $num_items = $nv_Request->get_int('num_items', 'get', 0);
 $search_type_date = $nv_Request->get_title('type_date', 'get', 'addtime');
 $search_time_from = $nv_Request->get_title('search_time_from', 'get', '');
 $search_time_to = $nv_Request->get_title('search_time_to', 'get', '');
+
+if ($nv_Request->isset_request('export', 'get,post')) {
+    $sql = 'SELECT title, publtime, author, hitstotal, total_rating, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows ORDER BY publtime DESC';
+    $result_news = $db->query($sql)->fetchAll();
+
+    $spreadsheet = new Spreadsheet();
+    $activeWorksheet = $spreadsheet->getActiveSheet();
+
+    $activeWorksheet->setCellValue('A1', '#');
+    $activeWorksheet->setCellValue('B1', 'Title');
+    $activeWorksheet->setCellValue('C1', 'Author');
+    $activeWorksheet->setCellValue('D1', 'Publtime');
+    $activeWorksheet->setCellValue('E1', 'View');
+    $activeWorksheet->setCellValue('F1', 'Rating');
+    $activeWorksheet->setCellValue('G1', 'Status');
+
+    $rowCount = 2;
+    foreach ($result_news as $key => $value) 
+    {
+        $activeWorksheet->setCellValue('A'.$rowCount, $rowCount-1); 
+        $activeWorksheet->setCellValue('B'.$rowCount, $value['title']);
+        $activeWorksheet->setCellValue('C'.$rowCount, $value['author']);
+        $activeWorksheet->setCellValue('D'.$rowCount, nv_date('H/i d/m/Y', $value['publtime']));
+        $activeWorksheet->setCellValue('E'.$rowCount, $value['hitstotal']);
+        $activeWorksheet->setCellValue('F'.$rowCount, $value['total_rating']);
+        $activeWorksheet->setCellValue('G'.$rowCount, $lang_module['status_'.$value['status']]);
+        $rowCount++;
+    }
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8');
+    header('Content-Disposition: attachment;');
+    header('Cache-Control: max-age=0');
+
+    $writer = new Xlsx($spreadsheet);
+    $writer->save('php://output');
+}
 
 if ($per_page < 1 or $per_page > 500) {
     $per_page = 50;
