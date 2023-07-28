@@ -148,6 +148,8 @@ function nv_aleditor($textareaname, $width = '100%', $height = '450px', $val = '
         $replaces[] = "allowedContent:'" . implode(';', $allowedContent) . "'";
     }
 
+    $replaces[] = 'codeSnippet_languages:{apache: "Apache", bash: "Bash", css: "CSS", html: "HTML", ini: "INI", js: "JavaScript", json: "JSON", nginx: "Nginx", php: "PHP", sql: "SQL", xhtml: "XHTML", xml: "XML"}';
+
     $replaces[] = "disallowedContent:'script; *[on*,action,background,codebase,dynsrc,lowsrc,allownetworking,allowscriptaccess,fscommand,seeksegmenttime]'";
     $return .= "<script>CKEDITOR.replace( '" . $module_data . '_' . $textareaid . "', {" . implode(',', $replaces) . '});</script>';
 
