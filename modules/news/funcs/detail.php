@@ -201,7 +201,7 @@ if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_conten
                 'is_localfile' => $is_localfile,
                 'title' => $file_title,
                 'key' => md5($file_id . $file_title),
-                'ext' => $path_parts['extension'],
+                'ext' => !empty($path_parts['extension']) ? $path_parts['extension'] : '',
                 'filename' => $path_parts['filename'],
                 'titledown' => $nv_Lang->getModule('download') . ' ' . (count($files) > 1 ? $file_id + 1 : ''),
                 'src' => NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $file,

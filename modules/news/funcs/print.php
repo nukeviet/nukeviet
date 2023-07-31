@@ -62,7 +62,7 @@ if ($id > 0 and $catid > 0) {
             'bodytext' => $content['bodytext'],
             'copyright' => $content['copyright'],
             'copyvalue' => $module_config[$module_name]['copyright'],
-            'link' => $canonicalUrl,
+            'link' => urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], NV_MY_DOMAIN),
             'contact' => $global_config['site_email'],
             'author' => $content['author'],
             'source' => $sourcetext
@@ -112,7 +112,7 @@ if ($id > 0 and $catid > 0) {
         $page_title = $content['title'];
         $contents = call_user_func('news_print', $result);
         include NV_ROOTDIR . '/includes/header.php';
-        echo nv_site_theme($contents, false);
+        echo nv_site_theme($contents, false, true);
         include NV_ROOTDIR . '/includes/footer.php';
     }
 }
