@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '589d87570f137ae3fc7eadc605c3850b4a7ddc05',
+    'reference' => '5a8c03b41a5572e3469519e02075b2ede16a6704',
     'name' => '__root__',
   ),
   'versions' => 
@@ -44,7 +44,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '589d87570f137ae3fc7eadc605c3850b4a7ddc05',
+      'reference' => '5a8c03b41a5572e3469519e02075b2ede16a6704',
     ),
     'and/oauth' => 
     array (
@@ -110,6 +110,15 @@ private static $installed = array (
       ),
       'reference' => 'df16b615e371d81fb79e506277faea67a1be18f1',
     ),
+    'smarty/smarty' => 
+    array (
+      'pretty_version' => 'v4.3.2',
+      'version' => '4.3.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '1d9cda2be34fd6edb74924684260636fd0b89288',
+    ),
     'symfony/polyfill-mbstring' => 
     array (
       'pretty_version' => 'v1.18.1',
@@ -136,6 +145,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '6207533413f6edc3fea373d0e54041661d2bd905',
+    ),
+    'tecnickcom/tcpdf' => 
+    array (
+      'pretty_version' => '6.6.2',
+      'version' => '6.6.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e3cffc9bcbc76e89e167e9eb0bbda0cab7518459',
     ),
     'true/punycode' => 
     array (

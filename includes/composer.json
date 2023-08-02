@@ -11,7 +11,9 @@
         "tecnickcom/tc-lib-barcode": "^1.15",
         "symfony/polyfill-mbstring": "<1.19.0",
         "true/punycode": "^2.1",
-        "phpmailer/phpmailer": "^6.1"
+        "phpmailer/phpmailer": "^6.1",
+        "smarty/smarty": "^4.3",
+        "tecnickcom/tcpdf": "6.6.2"
     },
     "autoload" : {
         "psr-4" : {
