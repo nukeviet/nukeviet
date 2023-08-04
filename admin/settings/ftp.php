@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('ftp_server', 'post') and $checkss == $nv_Request
         ]);
     }
 
-    $check_files = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
+    $check_files = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes'];
     $list_files = $ftp->listDetail($ftp_path, 'all');
 
     $a = 0;

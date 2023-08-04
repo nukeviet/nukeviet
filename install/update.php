@@ -1536,7 +1536,7 @@ if ($nv_update_config['step'] == 1) {
                 $ftp->close();
                 exit('ERROR|' . (string) $ftp->error);
             }
-            $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor'];
+            $list_valid = [NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes'];
 
             $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
