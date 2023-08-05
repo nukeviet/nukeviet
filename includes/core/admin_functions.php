@@ -412,6 +412,10 @@ function nv_check_rewrite_file()
         return preg_match('/\<\!\-\-\s*nukeviet\_rewrite\_start\s*\-\-\>(.*)\<\!\-\-\s*nukeviet\_rewrite\_end\s*\-\-\>/is', $web_config);
     }
 
+    if ($sys_info['supports_rewrite'] == 'nginx') {
+        return true;
+    }
+
     return (bool) $global_config['check_rewrite_file'];
 }
 
