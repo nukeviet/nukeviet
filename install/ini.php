@@ -75,16 +75,22 @@ $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv
 $sys_info['supports_rewrite'] = false;
 if (function_exists('apache_get_modules')) {
     $apache_modules = apache_get_modules();
-
     if (in_array('mod_rewrite', $apache_modules, true)) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
-} elseif (str_contains($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS')) {
-    if (isset($_SERVER['IIS_UrlRewriteModule']) and (php_sapi_name() == 'cgi-fcgi') and class_exists('DOMDocument')) {
+} elseif (str_contains($_server_software[0], 'Microsoft-IIS') and $_server_software[1] >= 7) {
+    if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument') and !in_array('DOMDocument', $sys_info['disable_classes'], true)) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
-    } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
-        $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
+} elseif (str_contains($_server_software[0], 'nginx')) {
+    $sys_info['supports_rewrite'] = 'nginx';
+} elseif (str_contains($_server_software[0], 'Apache') and str_contains(PHP_SAPI, 'cgi-fcgi')) {
+    $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+} elseif (isset($_SERVER['HTTP_SUPPORT_REWRITE'])) {
+    $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
+}
+if (empty($sys_info['supports_rewrite']) and !empty(NV_MY_REWRITE_SUPPORTER)) {
+    $sys_info['supports_rewrite'] = NV_MY_REWRITE_SUPPORTER;
 }
 
 if (!((extension_loaded('sockets') and defined('AF_INET6')) or @inet_pton('::1'))) {
