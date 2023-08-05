@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5a8c03b41a5572e3469519e02075b2ede16a6704',
+    'reference' => 'eb497ae61cc046b765dc82cd3b88ba4a3ff0f79f',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5a8c03b41a5572e3469519e02075b2ede16a6704',
+      'reference' => 'eb497ae61cc046b765dc82cd3b88ba4a3ff0f79f',
     ),
     'and/oauth' => 
     array (
@@ -119,15 +119,6 @@
       array (
       ),
       'reference' => '6207533413f6edc3fea373d0e54041661d2bd905',
-    ),
-    'tecnickcom/tcpdf' => 
-    array (
-      'pretty_version' => '6.6.2',
-      'version' => '6.6.2.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'e3cffc9bcbc76e89e167e9eb0bbda0cab7518459',
     ),
     'true/punycode' => 
     array (
