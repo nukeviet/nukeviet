@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'eb497ae61cc046b765dc82cd3b88ba4a3ff0f79f',
+    'reference' => 'b0398acd77f15c5bdccde20270d0795e0d7a185c',
     'name' => '__root__',
   ),
   'versions' => 
@@ -44,7 +44,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'eb497ae61cc046b765dc82cd3b88ba4a3ff0f79f',
+      'reference' => 'b0398acd77f15c5bdccde20270d0795e0d7a185c',
     ),
     'and/oauth' => 
     array (
@@ -112,21 +112,22 @@ private static $installed = array (
     ),
     'smarty/smarty' => 
     array (
-      'pretty_version' => 'v4.3.2',
-      'version' => '4.3.2.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
+        0 => '5.0.x-dev',
       ),
-      'reference' => '1d9cda2be34fd6edb74924684260636fd0b89288',
+      'reference' => '052fee3a3054eb3b1d699ef0935a54838d218095',
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.18.1',
-      'version' => '1.18.1.0',
+      'pretty_version' => 'v1.27.0',
+      'version' => '1.27.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'a6977d63bf9a0ad4c65cd352709e230876f9904a',
+      'reference' => '8ad114f6b39e2c98a8b0e3bd907732c207c2b534',
     ),
     'tecnickcom/tc-lib-barcode' => 
     array (

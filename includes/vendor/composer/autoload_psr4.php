@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'TrueBV\\' => array($vendorDir . '/true/punycode/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Smarty\\' => array($vendorDir . '/smarty/smarty/src'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'OAuth\\' => array($vendorDir . '/and/oauth/src'),
     'NukeViet\\Uapi\\' => array($baseDir . '/uapi'),
