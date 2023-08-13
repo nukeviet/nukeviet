@@ -1120,8 +1120,9 @@ class Image
      * @param string $path
      * @param string $newname
      * @param int    $quality
+     * @param int    $newtype
      */
-    public function save($path, $newname = '', $quality = 100)
+    public function save($path, $newname = '', $quality = 100, $newtype = 0)
     {
         if (empty($this->error)) {
             if ($this->is_destroy) {
@@ -1145,19 +1146,29 @@ class Image
                 $newname = self::createFilename($newname);
                 $newname = $path . '/' . $newname;
 
-                if ($this->create_Image_info['type'] == IMAGETYPE_GIF) {
+                empty($newtype) && $newtype = $this->create_Image_info['type'];
+
+                if ($newtype == IMAGETYPE_GIF) {
                     imagegif($this->createImage, $newname);
-                } elseif ($this->create_Image_info['type'] == IMAGETYPE_JPEG) {
-                    imagejpeg($this->createImage, $newname, $quality);
-                } elseif ($this->create_Image_info['type'] == IMAGETYPE_PNG) {
+                } elseif ($newtype == IMAGETYPE_JPEG) {
+                    if ($this->create_Image_info['type'] == IMAGETYPE_PNG) {
+                        $output = imagecreatetruecolor($this->create_Image_info['width'], $this->create_Image_info['height']);
+                        $white = imagecolorallocate($output,  255, 255, 255);
+                        imagefilledrectangle($output, 0, 0, $this->create_Image_info['width'], $this->create_Image_info['height'], $white);
+                        imagecopy($output, $this->createImage, 0, 0, 0, 0, $this->create_Image_info['width'], $this->create_Image_info['height']);
+                        imagejpeg($output, $newname, $quality);
+                    } else {
+                        imagejpeg($this->createImage, $newname, $quality);
+                    }
+                } elseif ($newtype == IMAGETYPE_PNG) {
                     $quality = round(($quality / 100) * 10);
                     $quality < 1 && $quality = 1;
                     $quality > 10 && $quality = 10;
                     $quality = 10 - $quality;
                     imagepng($this->createImage, $newname, $quality);
-                } elseif ($this->create_Image_info['type'] == IMAGETYPE_BMP) {
+                } elseif ($newtype == IMAGETYPE_BMP) {
                     file_put_contents($newname, $this->GD2BMPstring($this->createImage));
-                } elseif (defined('IMAGETYPE_WEBP') and $this->create_Image_info['type'] == IMAGETYPE_WEBP) {
+                } elseif (defined('IMAGETYPE_WEBP') and $newtype == IMAGETYPE_WEBP) {
                     imagewebp($this->createImage, $newname, $quality);
                 }
 
