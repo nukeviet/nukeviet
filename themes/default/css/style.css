@@ -2446,6 +2446,42 @@ button.close {
             rgba(0, 0, 0, 0) 4px);
 }
 
+/* Ver_menu */
+#ver_menu a {
+    display: block;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+    background-color: #f5f5f5;
+    color: #333;
+    text-decoration: none;
+    margin: 0;
+    padding: 9px 10px 9px 20px;
+}
+
+#ver_menu a.sub_normal {
+    background-color: #fff;
+}
+
+#ver_menu a.current {
+    color: #fff;
+    background-color: #428bca;
+}
+
+#ver_menu a.sub_current {
+    font-weight: bold;
+}
+
+#ver_menu a:hover,
+#ver_menu a:focus,
+#ver_menu a.current,
+#ver_menu a.sub_current {
+    text-decoration: none;
+    background-image: linear-gradient(to right,
+        #333 4px,
+        rgba(0, 0, 0, 0.05) 4px);
+}
+
 .calendar-icon {
     background-image: url(../../../assets/images/calendar.jpg);
     background-position: right 6px center;

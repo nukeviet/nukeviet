@@ -16,27 +16,6 @@ if (!defined('NV_MAINFILE')) {
 use NukeViet\Client\Browser;
 
 /**
- * nv_create_submenu()
- */
-function nv_create_submenu()
-{
-    global $nv_vertical_menu, $module_name, $module_info, $op;
-
-    foreach ($module_info['funcs'] as $key => $values) {
-        if (!empty($values['in_submenu'])) {
-            $func_custom_name = trim(!empty($values['func_custom_name']) ? $values['func_custom_name'] : $key);
-            $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . ($key != 'main' ? '&amp;' . NV_OP_VARIABLE . '=' . $key : '');
-            $act = $key == $op ? 1 : 0;
-            $nv_vertical_menu[] = [
-                $func_custom_name,
-                $link,
-                $act
-            ];
-        }
-    }
-}
-
-/**
  * is_current_url()
  * Kiểm tra URL có phải là URL của trạng hiện tại hay không
  *

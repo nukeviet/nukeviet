@@ -321,10 +321,6 @@ if (theme_file_exists($global_config['module_theme'] . '/modules/' . $module_inf
     require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';
 }
 
-if (!defined('NV_IS_AJAX')) {
-    nv_create_submenu();
-}
-
 // Ket noi voi cac op cua module de thuc hien
 if ($is_mobile and module_file_exists($module_file . '/mobile/' . $op_file . '.php')) {
     require NV_ROOTDIR . '/modules/' . $module_file . '/mobile/' . $op_file . '.php';

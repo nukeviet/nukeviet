@@ -98,3 +98,5 @@ $lang_module['no_submenu'] = 'Il n\'y a pas de sous-menu';
 $lang_module['no'] = 'Non';
 $lang_module['multi_delete'] = 'Supprimer les menus sélectionnés';
 $lang_module['select_menu_block'] = 'Sélectionner le bloc de menu';
+$lang_module['module_display'] = 'Les modules sont affichés';
+$lang_module['menu_note_auto'] = 'Remarque: Ce bloc obtient automatiquement le menu';

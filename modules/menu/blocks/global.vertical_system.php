@@ -39,18 +39,29 @@ if (defined('NV_SYSTEM')) {
 
     $content = '';
 
-    if (!empty($nv_vertical_menu)) {
-        $content .= "<div id=\"ver_menu\">\n";
+    foreach ($module_info['funcs'] as $key => $values) {
+        if (!empty($values['in_submenu'])) {
+            $func_custom_name = trim(!empty($values['func_custom_name']) ? $values['func_custom_name'] : $key);
+            $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . ($key != 'main' ? '&amp;' . NV_OP_VARIABLE . '=' . $key : '');
+            $act = $key == $op ? ' class="current"' : '';
+            $content .= '<a href="' . $link . '"' . $act . '>' . $func_custom_name . "</a>\n";
+        }
+    }
 
+    if (!empty($nv_vertical_menu)) {
         foreach ($nv_vertical_menu as $menu) {
-            $content .= ($menu[2]) ? '<a href="' . $menu[1] . '" class="current">' . $menu[0] . "</a>\n" : '<a href="' . $menu[1] . '">' . $menu[0] . "</a>\n";
+            $act = $menu[2] ? ' class="current"' : '';
+            $content .= '<a href="' . $menu[1] . '"' . $act . '>' . $menu[0] . "</a>\n";
             if (!empty($menu['submenu'])) {
                 foreach ($menu['submenu'] as $sub_menu) {
-                    $content .= ($sub_menu[2]) ? '<a href="' . $sub_menu[1] . '" class="sub_current">' . $sub_menu[0] . "</a>\n" : '<a href="' . $sub_menu[1] . '" class="sub_normal">' . $sub_menu[0] . "</a>\n";
+                    $act = $sub_menu[2] ? ' class="sub_current"' : ' class="sub_normal"';
+                    $content .= '<a href="' . $sub_menu[1] . '"' . $act . '>' . $sub_menu[0] . "</a>\n";
                 }
             }
         }
+    }
 
-        $content .= "</div>\n";
+    if (!empty($content)) {
+        $content = "<div id=\"ver_menu\">\n" . $content . "</div>\n";
     }
 }
