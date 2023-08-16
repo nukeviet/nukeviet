@@ -176,11 +176,14 @@ function nv_info_die($page_title, $info_title, $info_content, $error_code = 200,
     }
 
     // Get theme
+    $dir_basenames = [];
     if (defined('NV_ADMIN')) {
-        $template = get_tpl_dir((!empty($global_config['admin_theme']) ? $global_config['admin_theme'] : ''), 'admin_default', '/system/info_die.tpl');
-    } else {
-        $template = get_tpl_dir([(!empty($global_config['module_theme']) ? $global_config['module_theme'] : ''), (!empty($global_config['site_theme']) ? $global_config['site_theme'] : '')], 'default', '/system/info_die.tpl');
+        !empty($global_config['admin_theme']) && $dir_basenames[] = $global_config['admin_theme'];
+        $dir_basenames[] = 'admin_default';
     }
+    !empty($global_config['module_theme']) && $dir_basenames[] = $global_config['module_theme'];
+    !empty($global_config['site_theme']) && $dir_basenames[] = $global_config['site_theme'];
+    $template = get_tpl_dir($dir_basenames, 'default', '/system/info_die.tpl');
     $tpl_path = NV_ROOTDIR . '/themes/' . $template . '/system';
 
     empty($global_config['site_url']) && $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $global_config['my_domains'][0] . NV_SERVER_PORT;
