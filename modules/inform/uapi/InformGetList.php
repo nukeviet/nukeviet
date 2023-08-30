@@ -66,9 +66,9 @@ class InformGetList implements UiApi
         $module_file = $module_info['module_file'];
         $user_id = Uapi::getUserId();
         $user_groups = Uapi::getUserGroups();
-        $u_groups = array_values(array_unique(array_filter(array_map(function ($gr) {
+        $u_groups = array_unique(array_filter(array_map(function ($gr) {
             return $gr >= 10 ? (int) $gr : 0;
-        }, $user_groups))));
+        }, $user_groups)));
 
         $page = $nv_Request->get_int('page', 'post', 1);
         $per_page = $nv_Request->get_int('per_page', 'post', 20);
@@ -78,12 +78,7 @@ class InformGetList implements UiApi
         $where = [];
         $where[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
         if (!empty($u_groups)) {
-            $wh = [];
-            foreach ($u_groups as $gr) {
-                $wh[] = 'FIND_IN_SET(' . $gr . ', mtb.receiver_grs)';
-            }
-            $wh = implode(' OR ', $wh);
-            $where[] = "(mtb.receiver_grs != '' AND (" . $wh . '))';
+            $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . implode('|', $u_groups) . "),'))";
         }
         $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(" . $user_id . ', mtb.receiver_ids))';
         $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= ' . NV_CURRENTTIME . ') AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . ')';
@@ -94,13 +89,13 @@ class InformGetList implements UiApi
         }
 
         if ($filter == 'unviewed') {
-            $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND (exc.viewed_time != 0 OR exc.hidden_time != 0))';
+            $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND (exc.viewed_time != 0 OR exc.hidden_time != 0))';
         } elseif ($filter == 'favorite') {
-            $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND (exc.favorite_time != 0 AND exc.hidden_time = 0))';
+            $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND (exc.favorite_time != 0 AND exc.hidden_time = 0))';
         } elseif ($filter == 'hidden') {
-            $where .= ' AND EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND exc.hidden_time != 0)';
+            $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND exc.hidden_time != 0)';
         } else {
-            $where .= ' AND NOT EXISTS (SELECT 1 FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND exc.hidden_time != 0)';
+            $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE exc.pid = mtb.id AND exc.userid = ' . $user_id . ' AND exc.hidden_time != 0)';
         }
         $db->sqlreset()
             ->select('COUNT(*)')

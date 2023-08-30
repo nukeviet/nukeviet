@@ -284,10 +284,11 @@ $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_
     UNIQUE KEY field (field)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_info (
+$sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_info (
     userid mediumint(8) unsigned NOT NULL,
+    inform CHAR(30) NOT NULL DEFAULT '',
     PRIMARY KEY (userid)
-) ENGINE=MyISAM';
+) ENGINE=MyISAM";
 
 $sql_create_module[] = 'CREATE TABLE IF NOT EXISTS ' . $db_config['prefix'] . '_' . $module_data . "_edit (
     userid mediumint(8) unsigned NOT NULL,

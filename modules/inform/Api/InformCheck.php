@@ -85,20 +85,15 @@ class InformCheck implements IApi
 
         $array_groups = explode(',', $user['in_groups']);
         $array_groups[] = $user['group_id'];
-        $array_groups = array_values(array_unique(array_filter(array_map(function ($gr) {
+        $array_groups = array_unique(array_filter(array_map(function ($gr) {
             return $gr >= 10 ? (int) $gr : 0;
-        }, $array_groups))));
+        }, $array_groups)));
 
         $where = [];
         $where[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
 
         if (!empty($array_groups)) {
-            $wh = [];
-            foreach ($array_groups as $gr) {
-                $wh[] = 'FIND_IN_SET(' . $gr . ', mtb.receiver_grs)';
-            }
-            $wh = implode(' OR ', $wh);
-            $where[] = "(mtb.receiver_grs != '' AND (" . $wh . '))';
+            $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . implode('|', $array_groups) . "),'))";
         }
 
         $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(" . $userid . ', mtb.receiver_ids))';
@@ -109,7 +104,7 @@ class InformCheck implements IApi
             $where .= " AND (mtb.sender_role != 'group')";
         }
 
-        $where .= ' AND NOT EXISTS (SELECT * FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $userid . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
+        $where .= ' AND mtb.id NOT IN (SELECT exc.pid FROM ' . NV_INFORM_STATUS_GLOBALTABLE . ' AS exc WHERE (exc.pid = mtb.id AND exc.userid = ' . $userid . ') AND (exc.shown_time != 0 OR exc.hidden_time != 0))';
         $sql = 'SELECT COUNT(mtb.id) FROM ' . NV_INFORM_GLOBALTABLE . ' AS mtb WHERE ' . $where;
         $count = (int) $db->query($sql)->fetchColumn();
 

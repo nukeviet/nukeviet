@@ -18,9 +18,9 @@ if (empty($global_config['inform_active']) or !defined('NV_IS_USER')) {
 }
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-$u_groups = array_values(array_unique(array_filter(array_map(function ($gr) {
+$u_groups = array_unique(array_filter(array_map(function ($gr) {
     return $gr >= 10 ? (int) $gr : 0;
-}, $user_info['in_groups']))));
+}, $user_info['in_groups'])));
 
 // Khu vực quản lý thông báo của trưởng nhóm
 if ($nv_Request->isset_request('manager', 'get')) {
@@ -405,12 +405,7 @@ if ($nv_Request->isset_request('manager', 'get')) {
 $where = [];
 $where[] = "(mtb.receiver_grs = '' AND mtb.receiver_ids = '')";
 if (!empty($u_groups)) {
-    $wh = [];
-    foreach ($u_groups as $gr) {
-        $wh[] = 'FIND_IN_SET(' . $gr . ', mtb.receiver_grs)';
-    }
-    $wh = implode(' OR ', $wh);
-    $where[] = "(mtb.receiver_grs != '' AND (" . $wh . '))';
+    $where[] = "(mtb.receiver_grs != '' AND (CONCAT(',', mtb.receiver_grs, ',') REGEXP ',(" . implode('|', $u_groups) . "),'))";
 }
 $where[] = "(mtb.receiver_ids != '' AND FIND_IN_SET(" . $user_info['userid'] . ', mtb.receiver_ids))';
 $where = '(' . implode(' OR ', $where) . ') AND (mtb.add_time <= ' . NV_CURRENTTIME . ') AND (mtb.exp_time = 0 OR mtb.exp_time > ' . NV_CURRENTTIME . ')';
@@ -619,6 +614,7 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
                     $db->query('UPDATE ' . NV_INFORM_STATUS_GLOBALTABLE . ' SET shown_time = ' . NV_CURRENTTIME . ' WHERE pid=' . $id . ' AND userid=' . $user_info['userid']);
                 }
             }
+            $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . "_info SET inform='' WHERE userid=" . $user_info['userid']);
         }
 
         $count = count($notshown);
