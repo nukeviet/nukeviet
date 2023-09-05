@@ -6,9 +6,13 @@
     <div class="col-sm-16 col-md-14 col-lg-12">
         <div class="d-flex">
             <select class="form-control" id="errorfile" data-url="{PAGE_URL}">
-                <!-- BEGIN: error_file -->
-                <option value="{ERRORFILE.val}" {ERRORFILE.sel}>{ERRORFILE.name}</option>
-                <!-- END: error_file -->
+                <!-- BEGIN: error_type -->
+                <optgroup label="{OPTGROUP}">
+                    <!-- BEGIN: error_file -->
+                    <option value="{ERRORFILE.val}" {ERRORFILE.sel}>{ERRORFILE.name}</option>
+                    <!-- END: error_file -->
+                </optgroup>
+                <!-- END: error_type -->
             </select>
             <select class="form-control" id="display-mode" data-url="{PAGE_URL}" style="width: fit-content;margin-left:5px">
                 <!-- BEGIN: display_mode -->

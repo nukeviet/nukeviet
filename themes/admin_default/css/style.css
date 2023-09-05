@@ -1270,3 +1270,8 @@ div.radio [type='radio'] {
 .admin-info .dropdown-menu > li > a {
     background-color: #202020;
 }
+
+select.form-control > optgroup {
+    background-color: #666;
+    color: #fff;
+}

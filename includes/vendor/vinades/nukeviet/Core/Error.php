@@ -110,7 +110,7 @@ class Error
             'notice_log_filename' => (isset($config['notice_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['notice_log_filename'])) ? $config['notice_log_filename'] : self::LOG_NOTICE_FILE_NAME_DEFAULT,
             'error_log_fileext' => (isset($config['error_log_fileext']) and preg_match('/[a-z]+/i', $config['error_log_fileext'])) ? $config['error_log_fileext'] : self::LOG_FILE_EXT_DEFAULT
         ];
-        $this->cfg = array_merge($this->cfg, $this->get_error_log_path((string) ($config['error_log_path'] ?? self::ERROR_LOG_PATH_DEFAULT)));
+        $this->cfg = array_merge($this->cfg, self::get_error_log_path((string) ($config['error_log_path'] ?? self::ERROR_LOG_PATH_DEFAULT)));
 
         $this->cl = [
             'day' => gmdate('Y-m-d', NV_CURRENTTIME), // Prefix của file log, Lấy cố định GMT, không theo múi giờ
@@ -159,6 +159,10 @@ class Error
             @mkdir($log_path . '/tmp');
             @mkdir($log_path . '/errors256');
             @mkdir($log_path . '/old');
+            @file_put_contents($log_path . '/index.html', '');
+            @file_put_contents($log_path . '/tmp/index.html', '');
+            @file_put_contents($log_path . '/errors256/index.html', '');
+            @file_put_contents($log_path . '/old/index.html', '');
         }
 
         return [
@@ -260,7 +264,7 @@ class Error
     private function info_die()
     {
         $error_code = md5($this->errid . '-' . $this->cl['month'] . '-' . $this->cl['ip']);
-        $error_file = $this->cfg['error_log_256'] . '/' . $error_code . '.' . $this->cfg['error_log_fileext'];
+        $error_file = $this->cfg['error_log_256'] . '/' . $this->cl['month'] . '_' . $error_code . '.' . $this->cfg['error_log_fileext'];
 
         if ($this->cfg['error_set_logs'] and !file_exists($error_file)) {
             $content = json_encode($this->_log_content(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -325,9 +329,8 @@ class Error
         $content = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $content .= "\n";
 
-        $content .= self::LOG_DELIMITER . "\n";
         $error_log_file = in_array($this->errno, [E_WARNING, E_NOTICE, E_CORE_WARNING, E_COMPILE_WARNING, E_USER_WARNING, E_USER_NOTICE, E_DEPRECATED, E_USER_DEPRECATED], true) ? $this->cfg['notice_log_filename'] : $this->cfg['error_log_filename'];
-        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . $error_log_file . '.' . $this->cfg['error_log_fileext'];
+        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . $error_log_file . '_' . $this->errid . '.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
     }
 
@@ -336,7 +339,7 @@ class Error
      */
     private function _send()
     {
-        $content = json_encode($this->_log_content(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $content = json_encode($this->_log_content(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
         $content .= self::LOG_DELIMITER . "\n";
         $error_log_file = $this->cfg['error_log_path'] . '/sendmail.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
