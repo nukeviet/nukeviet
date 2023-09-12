@@ -22,6 +22,10 @@ CKEDITOR.editorConfig = function( config ) {
     config.toolbarStartupExpanded = false;
     config.resize_minHeight = 100;
     config.resize_maxHeight = 600;
+    config.iframe_attributes = {
+        sandbox: 'allow-scripts allow-same-origin',
+        allow: 'autoplay'
+    }
     // Default setting.
 
     config.toolbarGroups = [
