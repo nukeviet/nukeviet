@@ -78,13 +78,13 @@ if (function_exists('apache_get_modules')) {
     if (in_array('mod_rewrite', $apache_modules, true)) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
-} elseif (str_contains($_server_software[0], 'Microsoft-IIS') and $_server_software[1] >= 7) {
+} elseif (stripos($_server_software[0], 'Microsoft-IIS') !== false and $_server_software[1] >= 7) {
     if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument') and !in_array('DOMDocument', $sys_info['disable_classes'], true)) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
     }
-} elseif (str_contains($_server_software[0], 'nginx')) {
+} elseif (stripos($_server_software[0], 'nginx') !== false) {
     $sys_info['supports_rewrite'] = 'nginx';
-} elseif (str_contains($_server_software[0], 'Apache') and str_contains(PHP_SAPI, 'cgi-fcgi')) {
+} elseif (stripos($_server_software[0], 'Apache') !== false and stripos(PHP_SAPI, 'cgi-fcgi') !== false) {
     $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
 } elseif (isset($_SERVER['HTTP_SUPPORT_REWRITE'])) {
     $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
