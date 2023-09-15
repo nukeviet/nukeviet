@@ -4,18 +4,17 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
+class ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f
 {
     public static $files = array (
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'c15d4a1253e33e055d05e547c61dcb71' => __DIR__ . '/..' . '/smarty/smarty/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'T' => 
-        array (
-            'TrueBV\\' => 7,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -23,11 +22,9 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         ),
         'P' => 
         array (
+            'Psr\\Http\\Message\\' => 17,
+            'Psr\\Http\\Client\\' => 16,
             'PHPMailer\\PHPMailer\\' => 20,
-        ),
-        'O' => 
-        array (
-            'OAuth\\' => 6,
         ),
         'N' => 
         array (
@@ -38,7 +35,13 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         ),
         'L' => 
         array (
-            'League\\Url\\' => 11,
+            'League\\OAuth2\\Client\\' => 21,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
         ),
         'C' => 
         array (
@@ -48,10 +51,6 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
     );
 
     public static $prefixDirsPsr4 = array (
-        'TrueBV\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/true/punycode/src',
-        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
@@ -60,13 +59,18 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         array (
             0 => __DIR__ . '/..' . '/smarty/smarty/src',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+        ),
+        'Psr\\Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-        ),
-        'OAuth\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/and/oauth/src',
         ),
         'NukeViet\\Uapi\\' => 
         array (
@@ -84,9 +88,21 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         array (
             0 => __DIR__ . '/..' . '/vinades/nukeviet',
         ),
-        'League\\Url\\' => 
+        'League\\OAuth2\\Client\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/url/src',
+            0 => __DIR__ . '/..' . '/league/oauth2-client/src',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
         'Com\\Tecnick\\Color\\' => 
         array (
@@ -98,39 +114,17 @@ class ComposerStaticInit261687c3e3cd870899aff0ad8589f210
         ),
     );
 
-    public static $prefixesPsr0 = array (
-        'G' => 
-        array (
-            'Gregwar\\Image' => 
-            array (
-                0 => __DIR__ . '/..' . '/gregwar/image',
-            ),
-            'Gregwar\\Cache' => 
-            array (
-                0 => __DIR__ . '/..' . '/gregwar/cache',
-            ),
-        ),
-        'B' => 
-        array (
-            'Buzz' => 
-            array (
-                0 => __DIR__ . '/..' . '/kriswallsmith/buzz/lib',
-            ),
-        ),
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'PclZip' => __DIR__ . '/..' . '/pclzip/pclzip/pclzip.lib.php',
+        'PclZip' => __DIR__ . '/..' . '/vinades/pclzip/pclzip.lib.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit261687c3e3cd870899aff0ad8589f210::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f::$classMap;
 
         }, null, ClassLoader::class);
     }
