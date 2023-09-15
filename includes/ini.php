@@ -325,7 +325,7 @@ function set_ini_file(&$sys_info)
 
     if (file_put_contents($config_ini_file, $content_config . "\n", LOCK_EX)) {
         $url = NV_BASE_SITEURL . 'index.php';
-        !str_starts_with($url, NV_MY_DOMAIN) && $url = NV_MY_DOMAIN . $url;
+        stripos($url, NV_MY_DOMAIN) !== 0 && $url = NV_MY_DOMAIN . $url;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
