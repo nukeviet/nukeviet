@@ -13,35 +13,46 @@ if (!defined('NV_ADMIN_2STEP_OAUTH')) {
     exit('Stop!!!');
 }
 
+use NukeViet\OAuth\OAuth2\Facebook;
+
 // $opt biến này có từ file gọi
+$provider = new Facebook([
+    'clientId' => $global_config['facebook_client_id'],
+    'clientSecret' => $global_config['facebook_client_secret'],
+    'redirectUri' => NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=facebook',
+    'graphApiVersion' => Facebook::API_VERSION
+]);
 
-use OAuth\Common\Consumer\Credentials;
-use OAuth\Common\Storage\Session;
-use OAuth\ServiceFactory;
+// Chuyển hướng đến trang đăng nhập Facebook
+if (!$nv_Request->isset_request('code', 'get')) {
+    $authorizationUrl = $provider->getAuthorizationUrl();
+    $nv_Request->set_Session('oauth2state', $provider->getState());
+    nv_redirect_location($authorizationUrl);
+}
 
-$storage = new Session();
-$serviceFactory = new ServiceFactory();
-$credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=facebook');
-$facebookService = $serviceFactory->createService('facebook', $credentials, $storage, ['email']);
-
-if (!empty($_GET['code'])) {
+// Kiểm tra CSRF
+if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
+    $nv_Request->unset_request('oauth2state', 'session');
+    $error = 'Invalid state!';
+} else {
     try {
-        $facebookService->requestAccessToken($_GET['code']);
-        $result = json_decode($facebookService->request('/me?fields=id,name,email,first_name,last_name'), true);
-        if (isset($result['id'])) {
-            $attribs = [
-                'identity' => $result['id'],
-                'full_identity' => $crypt->hash($result['id']),
-                'email' => $result['email'] ?? '',
-                'name' => $result['name'] ?? '',
-                'first_name' => $result['first_name'] ?? '',
-                'last_name' => $result['last_name'] ?? '',
-            ];
-        }
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $nv_Request->get_title('code', 'get', '')
+        ]);
+        /**
+         *
+         * @var \NukeViet\OAuth\OAuth2\FacebookUser $ownerDetails
+         */
+        $ownerDetails = $provider->getResourceOwner($token);
+        $attribs = [
+            'identity' => $ownerDetails->getId(),
+            'full_identity' => $crypt->hash($ownerDetails->getId()),
+            'email' => $ownerDetails->getEmail(),
+            'name' => $ownerDetails->getName(),
+            'first_name' => $ownerDetails->getFirstName(),
+            'last_name' => $ownerDetails->getLastName()
+        ];
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
-} else {
-    $url = $facebookService->getAuthorizationUri();
-    nv_redirect_location($url);
 }
