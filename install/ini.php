@@ -72,6 +72,7 @@ if (!$sys_info['openssl_support']) {
 $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv_support'] ? 'iconv' : 'php');
 
 //Kiem tra ho tro rewrite
+$_server_software = explode('/', $_SERVER['SERVER_SOFTWARE']);
 $sys_info['supports_rewrite'] = false;
 if (function_exists('apache_get_modules')) {
     $apache_modules = apache_get_modules();
