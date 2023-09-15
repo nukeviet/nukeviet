@@ -18,6 +18,10 @@ CKEDITOR.editorConfig = function( config ) {
     config.youtube_privacy = false;
     config.youtube_autoplay = true;
     config.codeSnippet_theme = 'github';
+    config.iframe_attributes = {
+        sandbox: 'allow-scripts allow-same-origin',
+        allow: 'autoplay'
+    };
     // Default setting.
 
     config.toolbarGroups = [
