@@ -6,13 +6,12 @@
         "ext-json": "*",
         "ext-xml": "*",
         "ext-session": "*",
-        "and/oauth": "^0.7-dev",
-        "pclzip/pclzip" : "^2.8",
-        "tecnickcom/tc-lib-barcode": "^1.15",
-        "symfony/polyfill-mbstring": "^1.27",
-        "true/punycode": "^2.1",
-        "phpmailer/phpmailer": "^6.1",
-        "smarty/smarty": "dev-master"
+        "ext-bcmath": "*",
+        "smarty/smarty": "dev-master",
+        "tecnickcom/tc-lib-barcode": "^1.17",
+        "phpmailer/phpmailer": "^6.8",
+        "symfony/deprecation-contracts": "v2.5.2",
+        "league/oauth2-client": "^2.7"
     },
     "autoload" : {
         "psr-4" : {
@@ -20,6 +19,9 @@
             "NukeViet\\Api\\" : "api",
             "NukeViet\\Uapi\\" : "uapi",
             "NukeViet\\Module\\" : "../modules"
-        }
+        },
+        "classmap" : [
+            "vendor/vinades/pclzip/pclzip.lib.php"
+        ]
     }
 }

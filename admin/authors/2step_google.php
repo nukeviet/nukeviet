@@ -13,43 +13,45 @@ if (!defined('NV_ADMIN_2STEP_OAUTH')) {
     exit('Stop!!!');
 }
 
+use NukeViet\OAuth\OAuth2\Google;
+
 // $opt biến này có từ file gọi
+$provider = new Google([
+    'clientId' => $global_config['google_client_id'],
+    'clientSecret' => $global_config['google_client_secret'],
+    'redirectUri' => NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=google',
+]);
 
-use OAuth\Common\Consumer\Credentials;
-use OAuth\Common\Storage\Session;
-use OAuth\ServiceFactory;
+// Chuyển hướng đến trang đăng nhập Google
+if (!$nv_Request->isset_request('code', 'get')) {
+    $authorizationUrl = $provider->getAuthorizationUrl();
+    $nv_Request->set_Session('oauth2state', $provider->getState());
+    nv_redirect_location($authorizationUrl);
+}
 
-$storage = new Session();
-$serviceFactory = new ServiceFactory();
-$credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=2step&auth=google');
-$googleService = $serviceFactory->createService('google', $credentials, $storage, ['userinfo_email', 'userinfo_profile']);
-
-if (!empty($_GET['code'])) {
+// Kiểm tra CSRF
+if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
+    $nv_Request->unset_request('oauth2state', 'session');
+    $error = 'Invalid state!';
+} else {
     try {
-        $googleService->requestAccessToken($_GET['code']);
-        $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-
-        if (is_array($result) and !empty($result['id']) and !empty($result['email'])) {
-            $result['email'] = nv_check_valid_email($result['email'], true);
-            if (!empty($result['email'][0])) {
-                // Kiểm tra email hợp lệ
-                $error = $nv_Lang->getGlobal('admin_oauth_error_email');
-            } else {
-                // Thành công
-                $attribs = [
-                    'identity' => $result['id'],
-                    'full_identity' => $crypt->hash($result['id']),
-                    'email' => $result['email'][1],
-                    'name' => $result['name'] ?? '',
-                    'first_name' => $result['given_name'] ?? '',
-                    'last_name' => $result['family_name'] ?? '',
-                ];
-            }
-        }
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $nv_Request->get_title('code', 'get', '')
+        ]);
+        /**
+         *
+         * @var \NukeViet\OAuth\OAuth2\GoogleUser $ownerDetails
+         */
+        $ownerDetails = $provider->getResourceOwner($token);
+        $attribs = [
+            'identity' => $ownerDetails->getId(),
+            'full_identity' => $crypt->hash($ownerDetails->getId()),
+            'email' => $ownerDetails->getEmail(),
+            'name' => $ownerDetails->getName(),
+            'first_name' => $ownerDetails->getFirstName(),
+            'last_name' => $ownerDetails->getLastName()
+        ];
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
-} else {
-    $url = $googleService->getAuthorizationUri();
-    nv_redirect_location($url);
 }

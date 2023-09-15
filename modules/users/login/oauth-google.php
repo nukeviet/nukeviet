@@ -13,64 +13,68 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
-use OAuth\Common\Consumer\Credentials;
-use OAuth\Common\Storage\Session;
+use NukeViet\OAuth\OAuth2\Google;
 
-// Session storage
-$storage = new Session();
-
-$serviceFactory = new \OAuth\ServiceFactory();
-
-// Setup the credentials for the requests
-$credentials = new Credentials($global_config['google_client_id'], $global_config['google_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=google');
-
-// Instantiate the Google service using the credentials, http client and storage mechanism for the token
-$googleService = $serviceFactory->createService('google', $credentials, $storage, [
-    'userinfo_email',
-    'userinfo_profile'
+$provider = new Google([
+    'clientId' => $global_config['google_client_id'],
+    'clientSecret' => $global_config['google_client_secret'],
+    'redirectUri' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=google',
 ]);
 
-if (!empty($_GET['code'])) {
-    // This was a callback request from google, get the token
-    $googleService->requestAccessToken($_GET['code']);
+// Chuyển hướng đến trang đăng nhập Google
+if (!$nv_Request->isset_request('code', 'get')) {
+    $authorizationUrl = $provider->getAuthorizationUrl();
+    $nv_Request->set_Session('oauth2state', $provider->getState());
+    nv_redirect_location($authorizationUrl);
+}
 
-    // Send a request with it
-    $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-
-    if (isset($result['email'])) {
+// Kiểm tra CSRF
+if ($nv_Request->get_title('state', 'get', '') !== $nv_Request->get_title('oauth2state', 'session', '')) {
+    $nv_Request->unset_request('oauth2state', 'session');
+    $nv_Request->unset_request('openid_attribs', 'session');
+    $attribs = ['result' => 'notlogin'];
+} else {
+    try {
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $nv_Request->get_title('code', 'get', '')
+        ]);
+        /**
+         *
+         * @var \NukeViet\OAuth\OAuth2\GoogleUser $ownerDetails
+         */
+        $ownerDetails = $provider->getResourceOwner($token);
         $attribs = [
-            'identity' => empty($result['link']) ? $result['id'] : $result['link'],
+            'identity' => $ownerDetails->getId(),
             'result' => 'is_res',
-            'id' => $result['id'],
-            'contact/email' => $result['email'],
-            'namePerson/first' => empty($result['family_name']) ? '' : $result['family_name'],
-            'namePerson/last' => empty($result['given_name']) ? '' : $result['given_name'],
-            'namePerson' => $result['name'],
-            'person/gender' => empty($result['gender']) ? '' : $result['gender'],
+            'id' => $ownerDetails->getId(),
+            'contact/email' => $ownerDetails->getEmail(),
+            'namePerson/first' => $ownerDetails->getFirstName(),
+            'namePerson/last' => $ownerDetails->getLastName(),
+            'namePerson' => $ownerDetails->getName(),
+            'person/gender' => '', // Google không cung cấp giới tính
             'server' => $server,
-            'picture_url' => $result['picture'],
+            'picture_url' => $ownerDetails->getAvatar(),
             'picture_mode' => 0, // 0: Remote picture
             'current_mode' => 3
         ];
-    } else {
+    } catch (Exception $e) {
         $attribs = ['result' => 'notlogin'];
+        trigger_error($e->getMessage());
     }
-    $nv_Request->set_Session('openid_attribs', serialize($attribs));
-
-    $op_redirect = (defined('NV_IS_USER')) ? 'editinfo/openid' : 'login';
-    $nv_redirect_session = $nv_Request->get_title('nv_redirect_' . $module_data, 'session', '');
-    $nv_redirect = '';
-    if (!empty($nv_redirect_session) and nv_redirect_decrypt($nv_redirect_session) != '') {
-        $nv_redirect = $nv_redirect_session;
-    }
-    if (!empty($nv_redirect)) {
-        $nv_redirect = '&nv_redirect=' . $nv_redirect;
-    }
-    $nv_redirect .= '&t=' . NV_CURRENTTIME;
-
-    $nv_Request->unset_request('nv_redirect_' . $module_data, 'session');
-    nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
-} else {
-    $url = $googleService->getAuthorizationUri();
-    nv_redirect_location($url);
 }
+
+$nv_Request->set_Session('openid_attribs', serialize($attribs));
+
+$op_redirect = (defined('NV_IS_USER')) ? 'editinfo/openid' : 'login';
+$nv_redirect_session = $nv_Request->get_title('nv_redirect_' . $module_data, 'session', '');
+$nv_redirect = '';
+if (!empty($nv_redirect_session) and nv_redirect_decrypt($nv_redirect_session) != '') {
+    $nv_redirect = $nv_redirect_session;
+}
+if (!empty($nv_redirect)) {
+    $nv_redirect = '&nv_redirect=' . $nv_redirect;
+}
+$nv_redirect .= '&t=' . NV_CURRENTTIME;
+
+$nv_Request->unset_request('nv_redirect_' . $module_data, 'session');
+nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
