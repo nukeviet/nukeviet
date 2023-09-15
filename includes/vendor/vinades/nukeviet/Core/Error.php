@@ -330,7 +330,7 @@ class Error
         $content .= "\n";
 
         $error_log_file = in_array($this->errno, [E_WARNING, E_NOTICE, E_CORE_WARNING, E_COMPILE_WARNING, E_USER_WARNING, E_USER_NOTICE, E_DEPRECATED, E_USER_DEPRECATED], true) ? $this->cfg['notice_log_filename'] : $this->cfg['error_log_filename'];
-        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . $error_log_file . '_' . $this->errid . '.' . $this->cfg['error_log_fileext'];
+        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . $error_log_file . '.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
     }
 
