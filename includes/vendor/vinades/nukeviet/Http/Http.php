@@ -12,9 +12,8 @@
 namespace NukeViet\Http;
 
 use NukeViet\Core\Server;
-use NukeViet\Site;
-use TrueBV\Punycode;
 use ValueError;
+use Symfony\Polyfill\Intl\Idn\Idn;
 
 /**
  * NukeViet\Http\Http
@@ -745,15 +744,10 @@ class Http extends Server
             if (function_exists('idn_to_ascii')) {
                 $domain = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
             } else {
-                $Punycode = new Punycode();
-                try {
-                    $domain = $Punycode->encode($domain);
-                } catch (\Exception $e) {
-                    $domain = '';
-                }
+                $domain = Idn::idn_to_ascii($domain, Idn::IDNA_DEFAULT, Idn::INTL_IDNA_VARIANT_UTS46);
             }
 
-            if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain)) {
+            if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', (string) $domain)) {
                 return $domain;
             }
         }
