@@ -9,7 +9,7 @@ $(function() {
     var $receiver_ids = $('#receiver_ids', formObj).select2({
         ajax: {
             type: 'POST',
-            cache: !1,
+            cache: false,
             url: ajax_url,
             dataType: 'json',
             delay: 250,
@@ -37,8 +37,7 @@ $(function() {
                         more: (params.page * 30) < data.total_count
                     }
                 };
-            },
-            cache: true
+            }
         },
         escapeMarkup: function(markup) {
             return markup;
