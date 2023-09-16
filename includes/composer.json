@@ -11,7 +11,8 @@
         "tecnickcom/tc-lib-barcode": "^1.17",
         "phpmailer/phpmailer": "^6.8",
         "symfony/deprecation-contracts": "v2.5.2",
-        "league/oauth2-client": "^2.7"
+        "league/oauth2-client": "^2.7",
+        "symfony/polyfill-intl-idn": "^1.28"
     },
     "autoload" : {
         "psr-4" : {
