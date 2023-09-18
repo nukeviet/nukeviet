@@ -272,7 +272,7 @@ if (!empty($news_contents['author'])) {
     $schema_author[] = $news_contents['author'];
 }
 $news_contents['author'] = !empty($authors) ? implode(', ', $authors) : '';
-$news_contents['schema_author'] = !empty($schema_author) ? implode(', ', $schema_author) : $news_contents['post_name'];
+$news_contents['schema_author'] = !empty($schema_author) ? implode(', ', $schema_author) : '';
 
 $news_contents['number_publtime'] = $news_contents['publtime'];
 $news_contents['publtime'] = nv_date('l - d/m/Y H:i', $news_contents['publtime']);
@@ -453,6 +453,7 @@ if ($news_contents['allowed_rating']) {
 
 list($post_username, $post_first_name, $post_last_name) = $db_slave->query('SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'])->fetch(3);
 $news_contents['post_name'] = nv_show_name_user($post_first_name, $post_last_name, $post_username);
+empty($news_contents['schema_author']) && $news_contents['schema_author'] = $news_contents['post_name'];
 
 $array_keyword = [];
 $key_words = [];
