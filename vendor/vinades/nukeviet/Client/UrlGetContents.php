@@ -108,7 +108,7 @@ class UrlGetContents
                 'Mozilla/4.8 [en] (Windows NT 6.0; U)',
                 'Opera/9.25 (Windows NT 6.0; U; en)'
             ];
-            srand((float) microtime() * 10000000);
+            mt_srand(microtime(true) * 1000000);
             $rand = array_rand($userAgents);
             $agent = $userAgents[$rand];
 

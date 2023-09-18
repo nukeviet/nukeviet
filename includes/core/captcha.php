@@ -13,7 +13,7 @@ if (!defined('NV_MAINFILE')) {
     exit('Stop!!!');
 }
 
-mt_srand((float) microtime() * 1000000);
+mt_srand(microtime(true) * 1000000);
 $maxran = 1000000;
 $random_num = mt_rand(1, $maxran);
 
