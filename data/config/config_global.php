@@ -67,6 +67,7 @@ $global_config['dump_backup_ext'] = 'gz';
 $global_config['dump_interval'] = 1;
 $global_config['end_url_variables'] = [];
 $global_config['error_send_email'] = 'admin@nukeviet.vn';
+$global_config['error_separate_file'] = 0;
 $global_config['error_set_logs'] = 1;
 $global_config['file_allowed_ext'] = ['adobe','archives','audio','documents','images','real','video'];
 $global_config['forbid_extensions'] = ['htm','html','htmls','js','php','php3','php4','php5','phtml','inc'];

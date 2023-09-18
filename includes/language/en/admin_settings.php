@@ -143,6 +143,7 @@ $lang_module['site_banner'] = 'Site\'s banner';
 $lang_module['site_favicon'] = 'Site\'s favicon';
 $lang_module['site_email'] = 'Site\'s email';
 $lang_module['error_set_logs'] = 'Error logging';
+$lang_module['error_separate_file'] = 'Log each error to a separate file';
 $lang_module['error_send_email'] = 'Email receiving error notices';
 $lang_module['lang_multi'] = 'Activate multi-language';
 $lang_module['lang_geo'] = 'Enable the definition of language according to country';

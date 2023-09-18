@@ -37,7 +37,7 @@ clearstatcache();
 if ($dh = opendir($dir)) {
     while (($file = readdir($dh)) !== false) {
         unset($matches);
-        if (preg_match('/^(\d{4}\-\d{2}\-\d{2})\_(' . nv_preg_quote($error_log_filename) . '|' . nv_preg_quote($notice_log_filename) . ')\_([a-z0-9]{32})\.' . nv_preg_quote($logext) . '$/', $file, $matches)) {
+        if (preg_match('/^(\d{4}\-\d{2}\-\d{2})\_(' . nv_preg_quote($error_log_filename) . '|' . nv_preg_quote($notice_log_filename) . ')([^\.]*)\.' . nv_preg_quote($logext) . '$/', $file, $matches)) {
             $filemtime = filemtime($dir . '/' . $file);
             $filelist[$file] = $filemtime;
             if ($matches[2] == $error_log_filename) {

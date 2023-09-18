@@ -35,7 +35,7 @@ function cron_auto_del_error_log()
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
             unset($m);
-            if (preg_match("/^(\d{4})\-(\d{2})\-(\d{2})\_(" . $error_log_filename . '|' . $notice_log_filename . ")\_([a-z0-9]{32})\.(" . $error_log_fileext . ')$/', $file, $m)) {
+            if (preg_match("/^(\d{4})\-(\d{2})\-(\d{2})\_(" . $error_log_filename . '|' . $notice_log_filename . ")([^\.]*)\.(" . $error_log_fileext . ')$/', $file, $m)) {
                 $old_day_mktime = mktime(0, 0, 0, $m[2], $m[3], $m[1]);
                 if ($old_day_mktime + 864000 < $day_mktime) {
                     if (!@unlink($dir . '/' . $file)) {
@@ -52,7 +52,7 @@ function cron_auto_del_error_log()
     if ($dh = opendir($dir)) {
         while (($file = readdir($dh)) !== false) {
             unset($m);
-            if (preg_match("/^(\d{4})\-(\d{2})\-(\d{2})\_(" . $error_log_filename . '|' . $notice_log_filename . ")\_([a-z0-9]{32})\.(" . $error_log_fileext . ')$/', $file, $m)) {
+            if (preg_match("/^(\d{4})\-(\d{2})\-(\d{2})\_(" . $error_log_filename . '|' . $notice_log_filename . ")([^\.]*)\.(" . $error_log_fileext . ')$/', $file, $m)) {
                 $old_day_mktime = mktime(0, 0, 0, $m[2], $m[3], $m[1]);
                 if ($old_day_mktime != $day_mktime) {
                     @rename($dir . '/' . $file, $dir . '/old/' . $file);

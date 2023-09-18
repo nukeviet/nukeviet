@@ -143,6 +143,7 @@ $lang_module['site_banner'] = 'Banner của site';
 $lang_module['site_favicon'] = 'Favicon của site';
 $lang_module['site_email'] = 'Email của site';
 $lang_module['error_set_logs'] = 'Ghi nhật ký lỗi';
+$lang_module['error_separate_file'] = 'Ghi mỗi lỗi vào một tệp riêng';
 $lang_module['error_send_email'] = 'Email nhận thông báo lỗi';
 $lang_module['lang_multi'] = 'Kích hoạt chế độ đa ngôn ngữ';
 $lang_module['lang_geo'] = 'Bật nhận dạng ngôn ngữ theo quốc gia';

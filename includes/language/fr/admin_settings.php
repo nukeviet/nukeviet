@@ -143,6 +143,7 @@ $lang_module['site_banner'] = 'Nom du fichier bannière';
 $lang_module['site_favicon'] = 'Nom du fichier favicon';
 $lang_module['site_email'] = 'E-mail du site';
 $lang_module['error_set_logs'] = 'Journalisation des erreurs';
+$lang_module['error_separate_file'] = 'Enregistrer chaque erreur dans un fichier séparé';
 $lang_module['error_send_email'] = 'E-mail recevant les notifications d\'erreurs';
 $lang_module['lang_multi'] = 'Activer le multi-langage';
 $lang_module['lang_geo'] = 'Activer la définition de langue selon pays';

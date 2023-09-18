@@ -186,6 +186,7 @@ if ($checkss == $nv_Request->get_string('checkss', 'post')) {
         }
 
         $array_config_global['error_set_logs'] = $nv_Request->get_int('error_set_logs', 'post', 0);
+        $array_config_global['error_separate_file'] = $nv_Request->get_int('error_separate_file', 'post', 0);
         $error_send_email = nv_substr($nv_Request->get_title('error_send_email', 'post', '', 1), 0, 255);
         $check = nv_check_valid_email($error_send_email, true);
         if ($check[0] == '') {
@@ -301,6 +302,7 @@ if (defined('NV_IS_GODADMIN')) {
     $xtpl->assign('CHECKED_LANG_MULTI', ($array_config_global['lang_multi']) ? ' checked="checked"' : '');
     $xtpl->assign('CHECKED_NOTIFI_ACTIVE', ($array_config_global['notification_active']) ? ' checked="checked"' : '');
     $xtpl->assign('CHECKED_ERROR_SET_LOGS', ($array_config_global['error_set_logs']) ? ' checked="checked"' : '');
+    $xtpl->assign('CHECKED_ERROR_SEPARATE_FILE', ($array_config_global['error_separate_file']) ? ' checked="checked"' : '');
     $xtpl->assign('CHECKED_REWRITE_ENABLE', ($array_config_global['rewrite_enable'] == 1) ? ' checked ' : '');
     $xtpl->assign('CHECKED_REWRITE_OPTIONAL', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '');
     $xtpl->assign('STATIC_NOQUERYSTRING_CHECKED', ($array_config_global['static_noquerystring'] == 1) ? ' checked ' : '');

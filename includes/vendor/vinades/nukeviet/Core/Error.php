@@ -106,6 +106,7 @@ class Error
             'send_errors_list' => self::parse_error_num((int) ($config['send_errors_list'] ?? self::SEND_ERROR_LIST_DEFAULT)),
             'error_send_mail' => !empty($config['error_send_email']) ? (string) $config['error_send_email'] : '',
             'error_set_logs' => isset($config['error_set_logs']) ? (bool) $config['error_set_logs'] : true,
+            'error_separate_file' => isset($config['error_separate_file']) ? (bool) $config['error_separate_file'] : false,
             'error_log_filename' => (isset($config['error_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['error_log_filename'])) ? $config['error_log_filename'] : self::LOG_FILE_NAME_DEFAULT,
             'notice_log_filename' => (isset($config['notice_log_filename']) and preg_match('/[a-z0-9\_]+/i', $config['notice_log_filename'])) ? $config['notice_log_filename'] : self::LOG_NOTICE_FILE_NAME_DEFAULT,
             'error_log_fileext' => (isset($config['error_log_fileext']) and preg_match('/[a-z]+/i', $config['error_log_fileext'])) ? $config['error_log_fileext'] : self::LOG_FILE_EXT_DEFAULT
@@ -328,9 +329,16 @@ class Error
 
         $content = json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $content .= "\n";
+        if (!$this->cfg['error_separate_file']) {
+            $content .= self::LOG_DELIMITER . "\n";
+        }
 
         $error_log_file = in_array($this->errno, [E_WARNING, E_NOTICE, E_CORE_WARNING, E_COMPILE_WARNING, E_USER_WARNING, E_USER_NOTICE, E_DEPRECATED, E_USER_DEPRECATED], true) ? $this->cfg['notice_log_filename'] : $this->cfg['error_log_filename'];
-        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . $error_log_file . '.' . $this->cfg['error_log_fileext'];
+        $error_log_file = $this->cfg['error_log_path'] . '/' . $this->cl['day'] . '_' . $error_log_file;
+        if ($this->cfg['error_separate_file']) {
+            $error_log_file .= '_' . $this->errid;
+        }
+        $error_log_file .= '.' . $this->cfg['error_log_fileext'];
         error_log($content, 3, $error_log_file);
     }
 
