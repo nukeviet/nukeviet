@@ -583,7 +583,7 @@ function nv_capcha_txt($seccode)
         }
         return false;
     } else {
-        mt_srand((float) microtime() * 1000000);
+        mt_srand(microtime(true) * 1000000);
         $maxran = 1000000;
         $random = mt_rand(0, $maxran);
 
@@ -2119,7 +2119,7 @@ function nv_check_url($url, $isTriggerError = true, $is_200 = 0)
 
         $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
-        srand((float) microtime() * 10000000);
+        mt_srand(microtime(true) * 1000000);
         $rand = array_rand($userAgents);
         $agent = $userAgents[$rand];
         $curl = curl_init($url);
