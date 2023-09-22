@@ -293,6 +293,9 @@ if (($cache = $nv_Cache->getItem('themes', $cache_file)) != false) {
     }
 }
 
+// Xac dinh op file
+$op_file = $module_info['funcs'][$op]['func_name'];
+
 require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/theme.php';
 
 // Ket noi ngon ngu theo theme
@@ -311,9 +314,6 @@ if (!theme_file_exists($global_config['module_theme'] . '/modules/' . $module_in
 if (module_file_exists($module_file . '/functions.php')) {
     require NV_ROOTDIR . '/modules/' . $module_file . '/functions.php';
 }
-
-// Xac dinh op file
-$op_file = $module_info['funcs'][$op]['func_name'];
 
 if (theme_file_exists($global_config['module_theme'] . '/modules/' . $module_info['module_theme'] . '/theme.php')) {
     require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme'] . '/theme.php';
