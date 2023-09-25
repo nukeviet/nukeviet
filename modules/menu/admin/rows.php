@@ -214,7 +214,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
         $post['image'] = '';
     }
 
-    if (!empty($post['link']) and !nv_is_url($post['link'], true)) {
+    if (!empty($post['link']) and !nv_is_url($post['link'], true) and !preg_match('/^\#[a-zA-Z0-9\-\_]*$/', $post['link'])) {
         $post['link'] = '';
     }
 
