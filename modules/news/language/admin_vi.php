@@ -60,6 +60,7 @@ $lang_module['error_name'] = 'Lỗi:Bạn cần nhập Tiêu đề';
 $lang_module['weight'] = 'Vị trí';
 $lang_module['numsubcat'] = 'Số chuyên mục con';
 $lang_module['numlinks'] = 'Số liên kết';
+$lang_module['numresults'] = 'Số kết quả';
 $lang_module['numcomments'] = 'Số bình luận';
 $lang_module['numtags'] = 'Số tags';
 $lang_module['newday'] = 'Icon tin mới (ngày)';

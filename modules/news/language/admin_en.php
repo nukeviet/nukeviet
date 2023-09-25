@@ -61,6 +61,7 @@ $lang_module['error_name'] = 'Error: Please add title';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Number of sub-categories';
 $lang_module['numlinks'] = 'Number of link';
+$lang_module['numresults'] = 'Number of results';
 $lang_module['numcomments'] = 'Number comments';
 $lang_module['numtags'] = 'Number tags';
 $lang_module['newday'] = 'Show new icon (day)';
