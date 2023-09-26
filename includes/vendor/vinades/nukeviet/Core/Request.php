@@ -1587,7 +1587,7 @@ class Request
      * get_typed_array()
      *
      * @param string      $name
-     * @param strig|null  $mode
+     * @param string|null  $mode
      * @param string|null $type
      * @param mixed|null  $default
      * @param bool        $specialchars
