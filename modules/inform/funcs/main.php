@@ -605,6 +605,7 @@ if (defined('NV_IS_AJAX') or $nv_Request->isset_request('ajax', 'get')) {
 
             $items[$row['id']] = $row;
         }
+        $items = nv_apply_hook($module_name, 'inform_get_list_after', [$items, $filter, $page, $per_page], $items);
 
         if (!empty($notshown)) {
             foreach ($notshown as $id) {
