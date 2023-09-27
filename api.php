@@ -273,8 +273,8 @@ if ($adminLev) {
         Api::setModuleName($api_request['module']);
         Api::setModuleInfo($module_info);
 
-        // Ngôn ngữ admin của module nếu API của module
-        $nv_Lang->loadModule($module_info['module_file'], true);
+        // Ngôn ngữ của module nếu API của module
+        $nv_Lang->loadModule($module_info['module_file']);
     }
 
     // Thông tin Admin
