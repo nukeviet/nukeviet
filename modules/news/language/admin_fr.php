@@ -61,6 +61,7 @@ $lang_module['error_name'] = 'Erreur: Manque de titre';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Nombre de sous-catégories';
 $lang_module['numlinks'] = 'Nombre de liens';
+$lang_module['numresults'] = 'Nombre de résultats';
 $lang_module['numcomments'] = 'Nombre de commentaire';
 $lang_module['numtags'] = 'Nombre de tags';
 $lang_module['newday'] = 'Icone des nouvelles (par jour)';

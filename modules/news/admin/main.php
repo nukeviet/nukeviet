@@ -1017,6 +1017,11 @@ if (!empty($data) and !empty($module_config[$module_name]['active_history'])) {
     }
 }
 
+if ($num_items > 0) {
+    $xtpl->assign('NUMRESULTS', number_format($num_items, 0, ',', '.'));
+    $xtpl->parse('main.numresults');
+}
+
 $url_copy = '';
 $loadhistory = $nv_Request->get_absint('loadhistory', 'get', 0);
 $loadhistory_id = 0;
