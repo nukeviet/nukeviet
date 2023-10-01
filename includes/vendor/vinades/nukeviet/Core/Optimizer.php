@@ -23,8 +23,6 @@ namespace NukeViet\Core;
 class Optimizer
 {
     private $_content;
-    private $_conditon = [];
-    private $_condCount = 0;
     private $_meta = [];
     private $_title = '<title></title>';
     private $_style = [];
@@ -32,7 +30,8 @@ class Optimizer
     private $_cssLinks = [];
     private $_jsMatches = [];
     private $_htmlforFooter = '';
-    private $_jsCount = 0;
+    private $_inlineContents = [];
+    private $_inlineContentsCount = 0;
     private $base_siteurl;
     private $eol = "\r\n";
     private $is_http2 = false;
@@ -67,68 +66,52 @@ class Optimizer
      */
     public function process($jquery = true, $custom_preloads = [])
     {
-        $conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
-        $this->_content = preg_replace_callback($conditionRegex, [$this, 'conditionCallback'], $this->_content);
-
         $_jsSrc = [];
         $_linkHref = [];
         $_preload = '';
+        $_jsAfter = '';
 
-        if (!empty($custom_preloads)) {
-            foreach ($custom_preloads as $custom_preload) {
-                if (!empty($custom_preload['as']) and !empty($custom_preload['href'])) {
-                    if ($this->is_http2 and $this->resource_preload === 1) {
+        // Tài nguyên tải trước
+        if (!empty($custom_preloads) and $this->resource_preload) {
+            if ($this->resource_preload === 1) {
+                foreach ($custom_preloads as $custom_preload) {
+                    if (!empty($custom_preload['as']) and !empty($custom_preload['href'])) {
                         $this->headerPreloadItems[$custom_preload['href']] = '<' . $custom_preload['href'] . '>; rel=preload; as=' . $custom_preload['as'] . (!empty($custom_preload['type']) ? '; type=' . $custom_preload['type'] : '') . (!empty($custom_preload['crossorigin']) ? '; crossorigin' : '');
-                    } elseif ($this->resource_preload === 2) {
+                    }
+                }
+            } elseif ($this->resource_preload === 2) {
+                foreach ($custom_preloads as $custom_preload) {
+                    if (!empty($custom_preload['as']) and !empty($custom_preload['href'])) {
                         $_preload .= '<link rel="preload" as="' . $custom_preload['as'] . '" href="' . $custom_preload['href'] . '"' . (!empty($custom_preload['type']) ? ' type="' . $custom_preload['type'] . '"' : '') . (!empty($custom_preload['crossorigin']) ? ' crossorigin' : '') . '>' . $this->eol;
                     }
                 }
             }
         }
 
-        // Xác định biến này để chỉ xuất cứng jquery nếu như Buffer là toàn trang, đảm bảo không lỗi khi load ajax lại xuất tiếp jquery ra.
+        // Load Jquery-script đầu tiên nếu buffer là toàn trang
         $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
-        if ($_isFullBuffer and $jquery) {
-            $_jsAfter = '<script src="' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js"></script>' . $this->eol;
-            if ($this->is_http2 and $this->resource_preload === 1) {
-                $this->headerPreloadItems[ASSETS_STATIC_URL . '/js/jquery/jquery.min.js'] = '<' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js>; rel=preload; as=script';
-            } elseif ($this->resource_preload === 2) {
-                $_preload .= '<link rel="preload" as="script" href="' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js" type="text/javascript">' . $this->eol;
-            }
-        } else {
-            $_jsAfter = '';
-        }
-
         if (preg_match("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $this->_content, $matches)) {
             $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", '', $this->_content);
-            if ($jquery and $_isFullBuffer) {
-                $_jsAfter = $matches[0] . $this->eol;
-                if ($this->is_http2 and $this->resource_preload === 1) {
-                    $this->headerPreloadItems[$matches[1]] = '<' . $matches[1] . '>; rel=preload; as=script';
-                } elseif ($this->resource_preload === 2) {
-                    $_preload .= '<link rel="preload" as="script" href="' . $matches[1] . '" type="text/javascript">' . $this->eol;
-                }
-            }
+            ($_isFullBuffer and $jquery) && $this->_jsMatches[] = $matches[0];
+        } else {
+            ($_isFullBuffer and $jquery) && $this->_jsMatches[] = '<script src="' . ASSETS_STATIC_URL . '/js/jquery/jquery.min.js"></script>';
         }
 
-        $jsRegex = "/<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
-        $this->_content = preg_replace_callback($jsRegex, [$this, 'jsCallback'], $this->_content);
-
-        $htmlRegex = "/<\!--\s*START\s+FORFOOTER\s*-->(.*?)<\!--\s*END\s+FORFOOTER\s*-->/is";
-        if (preg_match_all($htmlRegex, $this->_content, $htmlMatches)) {
-            $this->_htmlforFooter = implode($this->eol, $htmlMatches[1]);
-            $this->_content = preg_replace($htmlRegex, '', $this->_content);
-        }
+        // Thay thế tạm thời HTML-conductions [if...]...[endif]
+        $this->_content = preg_replace_callback("/<\!--\[if([^\]]+)\].*?\[endif\]-->/is", [$this, 'conditionCallback'], $this->_content);
+        // Thay thế tạm thời js-inline
+        $this->_content = preg_replace_callback('/<script([^>]*)data\-show\=["|\']inline["|\']([^>]*)>((?:(?!<\/script>).)*?)<\s*\/\s*script\s*>/smix', [$this, 'inlinejsCallback'], $this->_content);
 
         $this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = [];
         $this->_meta['charset'] = '';
 
-        $regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
+        $regex = "/<(meta)\s([^>]*)\s*>|<(title)>\s*([^<]*)\s*<\/title>|<(link)\s([^>]*)\s*>|<(style)[^>]*>\s*([^\<]*)\s*<\/style>|<\s*\b(script)\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
         $matches = $matches2 = [];
-        if (preg_match_all($regex, $this->_content, $matches)) {
-            foreach ($matches[0] as $tag) {
-                if (preg_match('/^<meta/', $tag)) {
-                    preg_match_all("/([a-zA-Z\-\_]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2);
+        if (preg_match_all($regex, $this->_content, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $ele) {
+                // Xác định các meta-tags
+                if ($ele[1] == 'meta' and !empty($ele[2])) {
+                    preg_match_all("/([a-zA-Z\-\_]+)\s*=\s*[\"|']([^\"']+)/is", $ele[2], $matches2);
                     if (!empty($matches2)) {
                         $combine = array_combine($matches2[1], $matches2[2]);
                         if (array_key_exists('http-equiv', $combine)) {
@@ -141,28 +124,44 @@ class Optimizer
                             $this->_meta['other'][] = [$matches2[1], $matches2[2]];
                         }
                     }
-                } elseif (preg_match("/^<title>[^<]+<\/title>/is", $tag)) {
-                    $this->_title = $tag;
-                } elseif (preg_match("/^<style[^>]*>([^<]*)<\/style>/is", $tag, $matches2)) {
-                    $this->_style[] = $matches2[1];
-                } elseif (preg_match('/^<link/', $tag)) {
-                    preg_match_all("/([a-zA-Z]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2);
+                }
+                // Xác định tag title
+                elseif ($ele[3] == 'title' and !empty($ele[4])) {
+                    $this->_title = '<title>' . $ele[4] . '</title>';
+                }
+                // Xác định tag link
+                elseif ($ele[5] == 'link' and !empty($ele[6])) {
+                    preg_match_all("/([a-zA-Z]+)\s*=\s*[\"|']([^\"']+)/is", $ele[6], $matches2);
                     $combine = array_combine($matches2[1], $matches2[2]);
                     if (isset($combine['rel']) and preg_match('/stylesheet/is', $combine['rel'])) {
-                        $this->_cssLinks[] = $tag;
+                        $this->_cssLinks[] = $ele[0];
                     } else {
-                        $this->_links[] = $tag;
+                        $this->_links[] = $ele[0];
                     }
+                }
+                // Xác định css-inline
+                elseif ($ele[7] == 'style' and !empty($ele[8])) {
+                    $this->_style[] = $ele[8];
+                }
+                // Xác định mã js
+                else {
+                    $this->_jsMatches[] = $ele[0];
                 }
             }
 
             $this->_content = preg_replace($regex, '', $this->_content);
         }
 
-        if (!empty($this->_conditon)) {
-            foreach ($this->_conditon as $key => $value) {
-                $this->_content = preg_replace("/\{\|condition\_" . $key . "\|\}/", $value, $this->_content);
-            }
+        // Đưa block HTML được đánh dấu bằng <!-- START FORFOOTER -->...<!-- END FORFOOTER --> xuống dưới trang
+        $htmlRegex = "/<\!--\s*START\s+FORFOOTER\s*-->(.*?)<\!--\s*END\s+FORFOOTER\s*-->/is";
+        if (preg_match_all($htmlRegex, $this->_content, $htmlMatches)) {
+            $this->_htmlforFooter = implode($this->eol, $htmlMatches[1]);
+            $this->_content = preg_replace($htmlRegex, '', $this->_content);
+        }
+
+        // Trả về nội dung của các js-inline hoặc HTML-conductions [if...]...[endif]
+        if (!empty($this->_inlineContents)) {
+            $this->_content = preg_replace(array_keys($this->_inlineContents), array_values($this->_inlineContents), $this->_content);
         }
 
         $meta = [];
@@ -187,44 +186,25 @@ class Optimizer
         }
 
         if (!empty($this->_jsMatches)) {
-            foreach ($this->_jsMatches as $key => $value) {
-                if (preg_match("/(<\s*\bscript\b[^>]+)src\s*=\s*([\"|'])([^\"']+)([\"|'][^>]*>[\s\r\n\t]*<\s*\/\s*script\s*>)/is", $value, $matches2)) {
+            foreach ($this->_jsMatches as $value) {
+                if (preg_match("/<\s*\bscript\b[^>]+src\s*=\s*[\"|']\s*([^\"']+)\s*[\"|'][^>]*>[\s\r\n\t]*<\s*\/\s*script\s*>/is", $value, $matches2)) {
                     // Chi cho phep ket noi 1 lan doi voi 1 file JS
-                    $external = trim($matches2[3]);
-                    if (!empty($external)) {
-                        if (!in_array($external, $_jsSrc, true)) {
-                            $_jsSrc[] = $external;
-                            $matches3 = $matches4 = [];
-                            $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
-                            $integrity = preg_match("/integrity\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches4) ? $matches4[1] : '';
-                            if ($this->is_http2 and $this->resource_preload === 1) {
-                                $this->headerPreloadItems[$external] = '<' . $external . '>; rel=preload; as=script' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
-                            } elseif ($this->resource_preload === 2) {
-                                $_preload .= '<link rel="preload" as="script" href="' . $external . '" type="text/javascript"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
-                            }
-                            $_jsAfter .= $value . $this->eol;
-                            $value = '';
-                        } else {
-                            $value = '';
+                    if (!in_array($matches2[1], $_jsSrc, true)) {
+                        $_jsSrc[] = $matches2[1];
+                        $matches3 = $matches4 = [];
+                        $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
+                        $integrity = preg_match("/integrity\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches4) ? $matches4[1] : '';
+                        if ($this->resource_preload === 1) {
+                            $this->headerPreloadItems[$matches2[1]] = '<' . $matches2[1] . '>; rel=preload; as=script' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
+                        } elseif ($this->resource_preload === 2) {
+                            $_preload .= '<link rel="preload" as="script" href="' . $matches2[1] . '" type="text/javascript"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
                         }
-                    } else {
-                        $value = '';
-                    }
-                } elseif (preg_match("/<\s*\bscript\b([^>]*)>(.*?)<\s*\/\s*script\s*>/is", $value, $matches2)) {
-                    $internal = trim($matches2[2]);
-                    if (!empty($internal) and (empty($matches2[1]) or !preg_match("/^([^\W]*)$/is", $matches2[1]))) {
                         $_jsAfter .= $value . $this->eol;
-                        $value = '';
-                    } else {
-                        $value = '';
                     }
-                } else {
-                    $value = '';
-                }
-
-                $this->_content = preg_replace("/\{\|js\_" . $key . "\|\}/", $this->eol . $value, $this->_content);
-                if (!empty($this->_htmlforFooter)) {
-                    $this->_htmlforFooter = preg_replace("/\{\|js\_" . $key . "\|\}/", $this->eol . $value, $this->_htmlforFooter);
+                } elseif (preg_match("/<\s*\bscript\b([^>]*)>[\s\r\n\t]*(.+)[\s\r\n\t]*<\s*\/\s*script\s*>/is", $value, $matches2)) {
+                    if (empty($matches2[1]) or !preg_match("/^([^\W]*)$/is", $matches2[1])) {
+                        $_jsAfter .= $value . $this->eol;
+                    }
                 }
             }
         }
@@ -240,7 +220,7 @@ class Optimizer
                             $matches3 = $matches4 = [];
                             $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
                             $integrity = preg_match("/integrity\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches4) ? $matches4[1] : '';
-                            if ($this->is_http2 and $this->resource_preload === 1) {
+                            if ($this->resource_preload === 1) {
                                 $this->headerPreloadItems[$external] = '<' . $external . '>; rel=preload; as=style' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
                             } elseif ($this->resource_preload === 2) {
                                 $_preload .= '<link rel="preload" as="style" href="' . $external . '" type="text/css"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
@@ -271,7 +251,7 @@ class Optimizer
             $head .= '<style>' . implode($this->eol, $this->_style) . '</style>' . $this->eol;
         }
 
-        if (preg_match('/\<head\>/', $this->_content)) {
+        if (str_contains($this->_content, '<head>')) {
             $head = '<head>' . $this->eol . $this->_title . $this->eol . $head;
             $this->_content = trim(preg_replace('/<head>/i', $head, $this->_content, 1));
         } else {
@@ -289,6 +269,7 @@ class Optimizer
             }
             $this->_content = $this->_content . $this->eol . $_jsAfter;
         }
+
         $this->_content = str_replace("\r\n", "\n", $this->_content);
 
         return preg_replace("/\n([\t\n\s]+)\n/", "\n", $this->_content);
@@ -314,28 +295,25 @@ class Optimizer
      */
     private function conditionCallback($matches)
     {
-        $this->_conditon[] = $matches[0];
-        $num = $this->_condCount;
-        ++$this->_condCount;
+        $num = $this->_inlineContentsCount;
+        $this->_inlineContents['/\{\|condition\_' . $num . '\|\}/'] = $matches[0];
+        ++$this->_inlineContentsCount;
 
         return '{|condition_' . $num . '|}';
     }
 
     /**
-     * jsCallback()
+     * inlinejsCallback()
      *
      * @param array $matches
      * @return string
      */
-    private function jsCallback($matches)
+    private function inlinejsCallback($matches)
     {
-        if (preg_match('/<\s*\bscript\b([^>]*)data\-show\=["|\']inline["|\']([^>]*)>(.*)$/isu', $matches[0], $m)) {
-            return '<script' . rtrim($m[1]) . $m[2] . '>' . $m[3];
-        }
-        $this->_jsMatches[] = $matches[0];
-        $num = $this->_jsCount;
-        ++$this->_jsCount;
+        $num = $this->_inlineContentsCount;
+        $this->_inlineContents['/\{\|jsinline\_' . $num . '\|\}/'] = '<script' . rtrim($matches[1]) . $matches[2] . '>' . $matches[3] . '</script>';
+        ++$this->_inlineContentsCount;
 
-        return '{|js_' . $num . '|}';
+        return '{|jsinline_' . $num . '|}';
     }
 }
