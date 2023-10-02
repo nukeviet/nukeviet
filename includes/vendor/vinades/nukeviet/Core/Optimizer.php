@@ -89,7 +89,7 @@ class Optimizer
         }
 
         // Load Jquery-script đầu tiên nếu buffer là toàn trang
-        $_isFullBuffer = preg_match('/\<\/body\>/', $this->_content);
+        $_isFullBuffer = str_contains($this->_content, '</body>');
         if (preg_match("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $this->_content, $matches)) {
             $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", '', $this->_content);
             ($_isFullBuffer and $jquery) && $this->_jsMatches[] = $matches[0];
@@ -211,20 +211,17 @@ class Optimizer
 
         if (!empty($this->_cssLinks)) {
             foreach ($this->_cssLinks as $value) {
-                if (preg_match("/(<\s*\blink\b[^>]+)href\s*=\s*([\"|'])([^\"']+)([\"|'][^>]*>)/is", $value, $matches2)) {
+                if (preg_match("/(<\s*\blink\b[^>]+)href\s*=\s*([\"|'])\s*([^\"']+)\s*([\"|'][^>]*>)/is", $value, $matches2)) {
                     // Chi cho phep ket noi 1 lan doi voi 1 file CSS
-                    $external = trim($matches2[3]);
-                    if (!empty($external)) {
-                        if (!in_array($external, $_linkHref, true)) {
-                            $_linkHref[] = $external;
-                            $matches3 = $matches4 = [];
-                            $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
-                            $integrity = preg_match("/integrity\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches4) ? $matches4[1] : '';
-                            if ($this->resource_preload === 1) {
-                                $this->headerPreloadItems[$external] = '<' . $external . '>; rel=preload; as=style' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
-                            } elseif ($this->resource_preload === 2) {
-                                $_preload .= '<link rel="preload" as="style" href="' . $external . '" type="text/css"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
-                            }
+                    if (!in_array($matches2[3], $_linkHref, true)) {
+                        $_linkHref[] = $matches2[3];
+                        $matches3 = $matches4 = [];
+                        $crossorigin = preg_match("/crossorigin\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches3) ? $matches3[1] : '';
+                        $integrity = preg_match("/integrity\s*=\s*[\"|']([^\"']+)[\"|']/is", $value, $matches4) ? $matches4[1] : '';
+                        if ($this->resource_preload === 1) {
+                            $this->headerPreloadItems[$matches2[3]] = '<' . $matches2[3] . '>; rel=preload; as=style' . (!empty($crossorigin) ? '; crossorigin=' . $crossorigin : '') . (!empty($integrity) ? '; integrity=' . $integrity : '');
+                        } elseif ($this->resource_preload === 2) {
+                            $_preload .= '<link rel="preload" as="style" href="' . $matches2[3] . '" type="text/css"' . (!empty($crossorigin) ? ' crossorigin="' . $crossorigin . '"' : '') . (!empty($integrity) ? ' integrity="' . $integrity . '"' : '') . '>' . $this->eol;
                         }
                     }
                 }
@@ -270,9 +267,7 @@ class Optimizer
             $this->_content = $this->_content . $this->eol . $_jsAfter;
         }
 
-        $this->_content = str_replace("\r\n", "\n", $this->_content);
-
-        return preg_replace("/\n([\t\n\s]+)\n/", "\n", $this->_content);
+        return preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $this->_content);
     }
 
     /**
