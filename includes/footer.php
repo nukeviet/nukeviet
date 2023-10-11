@@ -96,7 +96,7 @@ foreach ($html_headers as $key => $value) {
         }
 
         foreach ($value as $val) {
-            $replace = ($key != 'link') ? true : false;
+            $replace = ($_key != 'link') ? true : false;
             header($key . ': ' . $val, $replace);
         }
     }
