@@ -301,7 +301,7 @@ function nv_htmlOutput($html, $type = 'html')
         }
 
         foreach ($value as $val) {
-            $replace = ($key != 'link') ? true : false;
+            $replace = ($_key != 'link') ? true : false;
             header($key . ': ' . $val, $replace);
         }
     }
