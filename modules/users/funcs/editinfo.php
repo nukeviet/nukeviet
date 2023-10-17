@@ -212,6 +212,11 @@ function opidr($openid_info)
             'status' => 'error',
             'mess' => $nv_Lang->getModule('email_is_exists')
         ];
+    } elseif ($openid_info == 7) {
+        $openid_info = [
+            'status' => 'error',
+            'mess' => $nv_Lang->getModule('openid_is_wrongdata')
+        ];
     } else {
         $openid_info = [
             'status' => 'success',
@@ -479,6 +484,10 @@ if (in_array('openid', $types, true) and $nv_Request->isset_request('server', 'g
 
     $attribs = $nv_Request->get_string('openid_attribs', 'session', '');
     $attribs = !empty($attribs) ? unserialize($attribs) : [];
+    if (empty($attribs) or empty($attribs['id'])) {
+        opidr(7);
+        exit();
+    }
 
     $email = $attribs['contact/email'] ?? '';
     $check_email = nv_check_valid_email($email, true);

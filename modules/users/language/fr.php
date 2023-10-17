@@ -205,6 +205,7 @@ $lang_module['question_empty_note'] = 'Attention: vous n\'avez pas donné la que
 $lang_module['change_name_info'] = 'Attention: C\'est la seule fois où vous pouvez changer l\'identifiant. Cette fonctionnalité sera désactivée pour la prochaine connexion. Cliquez <a href="%s">ici</a> pour changer';
 $lang_module['openid_del'] = 'Déconnecter';
 $lang_module['openid_is_exists'] = 'Malheureusement, ce compte tiers est déjà utilisé. Essayez de choisir un autre fournisseur';
+$lang_module['openid_is_wrongdata'] = 'Les données sont incorrectes, veuillez réessayer';
 $lang_module['openid_add_new'] = 'Connecter un compte tiers à votre compte';
 $lang_module['email_is_exists'] = 'Malheureusement, l\'e-mail de ce compte tiers est déjà utilisé. Veuillez choisir un autre fournisseur';
 $lang_module['error_update_users_info'] = 'Désolé: Le système n\'arrive pas à mettre à jour vos informations, contactez-vous à l\'administration du site pour avoir le guide';
