@@ -205,6 +205,7 @@ $lang_module['question_empty_note'] = 'Chú ý: Bạn chưa khai báo câu hỏi
 $lang_module['change_name_info'] = 'Chú ý: Đây là lần duy nhất bạn có quyền thay đổi bí danh. Chức năng này sẽ bị tắt kể từ lần đăng nhập sau. Hãy click <a href="%s">vào đây</a> để thay đổi';
 $lang_module['openid_del'] = 'Ngắt kết nối';
 $lang_module['openid_is_exists'] = 'Rất tiếc là tài khoản bên thứ ba này đã được sử dụng. Hãy thử chọn một nhà cung cấp khác';
+$lang_module['openid_is_wrongdata'] = 'Dữ liệu không đúng, xin vui lòng thử lại';
 $lang_module['openid_add_new'] = 'Kết nối tài khoản bên thứ ba vào tài khoản của bạn';
 $lang_module['email_is_exists'] = 'Rất tiếc là email của tài khoản bên thứ ba này đã được sử dụng. Hãy chọn một nhà cung cấp khác';
 $lang_module['error_update_users_info'] = 'Rất tiếc là hệ thống không thể cập nhật thông tin người dùng của bạn. Vui lòng liên hệ với quản trị site để được hướng dẫn.';

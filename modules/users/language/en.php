@@ -205,6 +205,7 @@ $lang_module['question_empty_note'] = 'Warnning: You can\'t using lost password 
 $lang_module['change_name_info'] = 'Warnning: You can change your username only one. This feature will disable on next login. Please click <a href="%s">here</a> to change';
 $lang_module['openid_del'] = 'Disconnect';
 $lang_module['openid_is_exists'] = 'Unfortunately this third party account is already in use. Try choosing another provider';
+$lang_module['openid_is_wrongdata'] = 'The data is incorrect, please try again';
 $lang_module['openid_add_new'] = 'Connect a third-party account to yours';
 $lang_module['email_is_exists'] = 'Unfortunately, this third-party account\'s email is already in use. Please choose another supplier';
 $lang_module['error_update_users_info'] = 'Error: System cannot update your user infomation, please contact site admin.';
