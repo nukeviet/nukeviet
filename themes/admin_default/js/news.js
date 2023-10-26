@@ -268,6 +268,31 @@ function nv_main_action(oForm, checkss, msgnocheck) {
     }
 }
 
+function nv_main_action_excel(formId, checkss, msgnocheck) {
+    var form =  document.getElementById(formId);
+    var fa = form['idcheck[]'];
+    var listid = '';
+    console.log(form, 'fa', fa)
+    if (fa.length) {
+        for (var i = 0; i < fa.length; i++) {
+            if (fa[i].checked) {
+                listid = listid + fa[i].value + ',';
+            }
+        }
+    } else {
+        if (fa.checked) {
+            listid = listid + fa.value + ',';
+        }
+    }
+
+    if (listid != '') {
+        var action = 'download_excel';
+        window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + action + '&listid=' + listid + '&checkss=' + checkss;
+    } else {
+        alert(msgnocheck);
+    }
+}
+
 function nv_del_content(id, checkss, base_adminurl, detail) {
     if (confirm(nv_is_del_confirm[0])) {
         $.post(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {

@@ -110,10 +110,13 @@
         <label><em>{LANG.search_note}</em></label>
     </form>
 </div>
+<div>
+    <input type="button" class="btn btn-primary" onclick="nv_main_action_excel('news_list', '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{LANG.btn_download_excel}" />
+</div>
 <div class="text-right">
     <p>{LANG.numresults}: <strong class="text-danger">{NUMRESULTS}</strong></p>
 </div>
-<form class="navbar-form" name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
+<form class="navbar-form" id="news_list" name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead>

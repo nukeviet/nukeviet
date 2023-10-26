@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Process.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,8 +16,8 @@
 
 namespace Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Data;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Data;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Sequence
@@ -27,7 +28,7 @@ use \Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Data;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -75,10 +76,10 @@ abstract class Sequence extends \Com\Tecnick\Barcode\Type\Square
     protected function getErrorCorrection($codewords, $ecl)
     {
         // get error correction coefficients
-        $ecc = Data::$rsfactors[$ecl];
+        $ecc = Data::RS_FACTORS[$ecl];
         // number of error correction factors
         $eclsize = (2 << $ecl);
-        // maximum index for $rsfactors[$ecl]
+        // maximum index for RS_FACTORS[$ecl]
         $eclmaxid = ($eclsize - 1);
         // initialize array of error correction codewords
         $ecw = array_fill(0, $eclsize, 0);
@@ -126,7 +127,8 @@ abstract class Sequence extends \Com\Tecnick\Barcode\Type\Square
                 $prevtxtseq = substr($prevseq, $txtoffset, ($txtseq[1] - $txtoffset));
                 if (strlen($prevtxtseq) > 0) {
                     // add BYTE sequence
-                    if ((strlen($prevtxtseq) == 1)
+                    if (
+                        (strlen($prevtxtseq) == 1)
                         && ((count($sequence_array) > 0)
                         && ($sequence_array[(count($sequence_array) - 1)][0] == 900))
                     ) {
@@ -151,7 +153,7 @@ abstract class Sequence extends \Com\Tecnick\Barcode\Type\Square
      *
      * @param string $code Data to process
      *
-     * @return bidimensional array containing characters and classification
+     * @return array
      */
     protected function getInputSequences($code)
     {

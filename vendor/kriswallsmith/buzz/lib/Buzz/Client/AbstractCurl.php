@@ -2,11 +2,17 @@
 
 namespace Buzz\Client;
 
+use Buzz\Converter\HeaderConverter;
+use Buzz\Converter\RequestConverter;
+use Buzz\Converter\ResponseConverter;
 use Buzz\Message\Form\FormRequestInterface;
 use Buzz\Message\Form\FormUploadInterface;
 use Buzz\Message\MessageInterface;
-use Buzz\Message\RequestInterface;
+use Buzz\Message\RequestInterface as BuzzRequestInterface;
 use Buzz\Exception\ClientException;
+use Buzz\Message\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Base client class with helpers for working with cURL.
@@ -52,9 +58,13 @@ abstract class AbstractCurl extends AbstractClient
      * @param resource         $curl     A cURL resource
      * @param string           $raw      The raw response string
      * @param MessageInterface $response The response object
+     *
+     * @deprecated Will be removed in 1.0. Use createResponse instead.
      */
     protected static function populateResponse($curl, $raw, MessageInterface $response)
     {
+        @trigger_error('AbstractCurl::populateResponse() is deprecated. Use AbstractCurl::createResponse instead.', E_USER_DEPRECATED);
+
         // fixes bug https://sourceforge.net/p/curl/bugs/1204/
         $version = curl_version();
         if (version_compare($version['version'], '7.30.0', '<')) {
@@ -68,96 +78,84 @@ abstract class AbstractCurl extends AbstractClient
     }
 
     /**
+     * @param $curl
+     * @param $raw
+     * @return ResponseInterface
+     */
+    protected function createResponse($curl, $raw)
+    {
+        // fixes bug https://sourceforge.net/p/curl/bugs/1204/
+        $version = curl_version();
+        if (version_compare($version['version'], '7.30.0', '<')) {
+            $pos = strlen($raw) - curl_getinfo($curl, CURLINFO_SIZE_DOWNLOAD);
+        } else {
+            $pos = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        }
+
+        // TODO rewrite me to avoid using BuzzResponse
+        $response = new Response();
+        $response->setHeaders(static::getLastHeaders(rtrim(substr($raw, 0, $pos))));
+        $response->setContent(strlen($raw) > $pos ? substr($raw, $pos) : '');
+
+        $response = ResponseConverter::psr7($response);
+
+        return $response;
+    }
+
+    /**
      * Sets options on a cURL resource based on a request.
+     *
+     * @param resource         $curl    A cURL resource
+     * @param RequestInterface $request A request object
      */
     private static function setOptionsFromRequest($curl, RequestInterface $request)
     {
         $options = array(
             CURLOPT_HTTP_VERSION  => $request->getProtocolVersion() == 1.0 ? CURL_HTTP_VERSION_1_0 : CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => $request->getMethod(),
-            CURLOPT_URL           => $request->getHost().$request->getResource(),
-            CURLOPT_HTTPHEADER    => $request->getHeaders(),
+            CURLOPT_URL           => $request->getUri()->__toString(),
+            CURLOPT_HTTPHEADER    => HeaderConverter::toBuzzHeaders($request->getHeaders()),
         );
 
         switch ($request->getMethod()) {
-            case RequestInterface::METHOD_HEAD:
+            case BuzzRequestInterface::METHOD_HEAD:
                 $options[CURLOPT_NOBODY] = true;
                 break;
 
-            case RequestInterface::METHOD_GET:
+            case BuzzRequestInterface::METHOD_GET:
                 $options[CURLOPT_HTTPGET] = true;
                 break;
 
-            case RequestInterface::METHOD_POST:
-            case RequestInterface::METHOD_PUT:
-            case RequestInterface::METHOD_DELETE:
-            case RequestInterface::METHOD_PATCH:
-            case RequestInterface::METHOD_OPTIONS:
-                $options[CURLOPT_POSTFIELDS] = $fields = static::getPostFields($request);
+            case BuzzRequestInterface::METHOD_POST:
+            case BuzzRequestInterface::METHOD_PUT:
+            case BuzzRequestInterface::METHOD_DELETE:
+            case BuzzRequestInterface::METHOD_PATCH:
+            case BuzzRequestInterface::METHOD_OPTIONS:
+                $body = $request->getBody();
+                $bodySize = $body->getSize();
+                if ($bodySize !== 0) {
+                    if ($body->isSeekable()) {
+                        $body->rewind();
+                    }
 
-                // remove the content-type header
-                if (is_array($fields)) {
-                    $options[CURLOPT_HTTPHEADER] = array_filter($options[CURLOPT_HTTPHEADER], function($header) {
-                        return 0 !== stripos($header, 'Content-Type: ');
-                    });
+                    // Message has non empty body.
+                    if (null === $bodySize || $bodySize > 1024 * 1024) {
+                        // Avoid full loading large or unknown size body into memory
+                        $options[CURLOPT_UPLOAD] = true;
+                        if (null !== $bodySize) {
+                            $options[CURLOPT_INFILESIZE] = $bodySize;
+                        }
+                        $options[CURLOPT_READFUNCTION] = function ($ch, $fd, $length) use ($body) {
+                            return $body->read($length);
+                        };
+                    } else {
+                        // Small body can be loaded into memory
+                        $options[CURLOPT_POSTFIELDS] = (string) $body;
+                    }
                 }
-
-                break;
         }
 
         curl_setopt_array($curl, $options);
-    }
-
-    /**
-     * Returns a value for the CURLOPT_POSTFIELDS option.
-     *
-     * @return string|array A post fields value
-     */
-    private static function getPostFields(RequestInterface $request)
-    {
-        if (!$request instanceof FormRequestInterface) {
-            return $request->getContent();
-        }
-
-        $fields = $request->getFields();
-        $multipart = false;
-
-        foreach ($fields as $name => $value) {
-            if (!$value instanceof FormUploadInterface) {
-                continue;
-            }
-
-            if (!$file = $value->getFile()) {
-                return $request->getContent();
-            }
-
-            $multipart = true;
-
-            if (version_compare(PHP_VERSION, '5.5', '>=')) {
-                $curlFile = new \CURLFile($file);
-                if ($contentType = $value->getContentType()) {
-                    $curlFile->setMimeType($contentType);
-                }
-
-                if (basename($file) != $value->getFilename()) {
-                    $curlFile->setPostFilename($value->getFilename());
-                }
-
-                $fields[$name] = $curlFile;
-            } else {
-                // replace value with upload string
-                $fields[$name] = '@'.$file;
-
-                if ($contentType = $value->getContentType()) {
-                    $fields[$name] .= ';type='.$contentType;
-                }
-                if (basename($file) != $value->getFilename()) {
-                    $fields[$name] .= ';filename='.$value->getFilename();
-                }
-            }
-        }
-
-        return $multipart ? $fields : http_build_query($fields, '', '&');
     }
 
     /**
@@ -202,9 +200,14 @@ abstract class AbstractCurl extends AbstractClient
 
     /**
      * Prepares a cURL resource to send a request.
+     *
+     * @param $curl
+     * @param RequestInterface $request
+     * @param array $options
      */
-    protected function prepare($curl, RequestInterface $request, array $options = array())
+    protected function prepare($curl, $request, array $options = array())
     {
+        $request = RequestConverter::psr7($request);
         static::setOptionsFromRequest($curl, $request);
 
         // apply settings from client

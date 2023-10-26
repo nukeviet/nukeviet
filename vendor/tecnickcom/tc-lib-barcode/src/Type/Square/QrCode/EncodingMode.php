@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EncodingMode.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,8 +16,8 @@
 
 namespace Com\Tecnick\Barcode\Type\Square\QrCode;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Barcode\Type\Square\QrCode\Data;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Type\Square\QrCode\Data;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\QrCode\EncodingMode
@@ -25,7 +26,7 @@ use \Com\Tecnick\Barcode\Type\Square\QrCode\Data;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -42,13 +43,13 @@ abstract class EncodingMode extends \Com\Tecnick\Barcode\Type\Square\QrCode\Inpu
     public function getEncodingMode($data, $pos)
     {
         if (!isset($data[$pos])) {
-            return Data::$encodingModes['NL'];
+            return Data::ENC_MODES['NL'];
         }
         if ($this->isDigitAt($data, $pos)) {
-            return Data::$encodingModes['NM'];
+            return Data::ENC_MODES['NM'];
         }
         if ($this->isAlphanumericAt($data, $pos)) {
-            return Data::$encodingModes['AN'];
+            return Data::ENC_MODES['AN'];
         }
         return $this->getEncodingModeKj($data, $pos);
     }
@@ -63,13 +64,13 @@ abstract class EncodingMode extends \Com\Tecnick\Barcode\Type\Square\QrCode\Inpu
      */
     protected function getEncodingModeKj($data, $pos)
     {
-        if (($this->hint == Data::$encodingModes['KJ']) && isset($data[($pos + 1)])) {
+        if (($this->hint == Data::ENC_MODES['KJ']) && isset($data[($pos + 1)])) {
             $word = ((ord($data[$pos]) << 8) | ord($data[($pos + 1)]));
             if ((($word >= 0x8140) && ($word <= 0x9ffc)) || (($word >= 0xe040) && ($word <= 0xebbf))) {
-                return Data::$encodingModes['KJ'];
+                return Data::ENC_MODES['KJ'];
             }
         }
-        return Data::$encodingModes['8B'];
+        return Data::ENC_MODES['8B'];
     }
 
     /**
@@ -105,41 +106,6 @@ abstract class EncodingMode extends \Com\Tecnick\Barcode\Type\Square\QrCode\Inpu
     }
 
     /**
-     * Look up the alphabet-numeric conversion table (see JIS X0510:2004, pp.19)
-     *
-     * @param int $chr Character value
-     *
-     * @return value
-     */
-    public function lookAnTable($chr)
-    {
-        return (($chr > 127) ? -1 : Data::$anTable[$chr]);
-    }
-
-    /**
-     * Return the size of length indicator for the mode and version
-     *
-     * @param int $mode Encoding mode
-     * @param int $version Version
-     *
-     * @return int the size of the appropriate length indicator (bits).
-     */
-    public function getLengthIndicator($mode)
-    {
-        if ($mode == Data::$encodingModes['ST']) {
-            return 0;
-        }
-        if ($this->version <= 9) {
-            $len = 0;
-        } elseif ($this->version <= 26) {
-            $len = 1;
-        } else {
-            $len = 2;
-        }
-        return Data::$lengthTableBits[$mode][$len];
-    }
-
-    /**
      * Append one bitstream to another
      *
      * @param array $bitstream Original bitstream
@@ -170,7 +136,7 @@ abstract class EncodingMode extends \Com\Tecnick\Barcode\Type\Square\QrCode\Inpu
     protected function appendNum($bitstream, $bits, $num)
     {
         if ($bits == 0) {
-            return 0;
+            return array();
         }
         return $this->appendBitstream($bitstream, $this->newFromNum($bits, $num));
     }
@@ -187,7 +153,7 @@ abstract class EncodingMode extends \Com\Tecnick\Barcode\Type\Square\QrCode\Inpu
     protected function appendBytes($bitstream, $size, $data)
     {
         if ($size == 0) {
-            return 0;
+            return array();
         }
         return $this->appendBitstream($bitstream, $this->newFromBytes($size, $data));
     }

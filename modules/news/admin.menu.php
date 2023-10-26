@@ -82,7 +82,8 @@ $allow_func = [
     'alias_tag',
     'topicajax',
     'sourceajax',
-    'tagsajax'
+    'tagsajax',
+    'download_excel'
 ];
 
 if (!isset($site_mods['cms'])) {
