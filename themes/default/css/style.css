@@ -906,6 +906,7 @@ a.btn {
     border-style:solid;
     border-color:#dcdcdc #dcdcdc #dcdcdc transparent;
     left:-1em;
+    padding-right: 1px;
 }
 
 .breadcrumbs a:hover:before {
@@ -927,6 +928,7 @@ a.btn {
     border-left-style: solid;
     border-left-color: #dcdcdc;
     right:-1em;
+    padding-left: 1px;
 }
 
 .breadcrumbs a:hover:after, .show-subs-breadcrumbs:hover:after {
