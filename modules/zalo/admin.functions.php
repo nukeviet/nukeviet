@@ -42,7 +42,7 @@ unset($page_title, $select_options);
 
 define('NV_IS_FILE_ZALO', true);
 define('NV_MOD_TABLE', $db_config['prefix'] . '_' . $module_data);
-$zalo = new NukeViet\Zalo\Zalo($global_config);
+$myZalo = new NukeViet\Zalo\MyZalo($global_config);
 
 $module_configs = [];
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_settings ORDER by type, skey';
@@ -226,9 +226,9 @@ function oa_truncate()
  */
 function get_accesstoken(&$accesstoken, $isAjax = false)
 {
-    global $zalo, $nv_Lang, $module_name;
+    global $myZalo, $nv_Lang, $module_name;
 
-    $get_accesstoken_info = $zalo->oa_accesstoken_info();
+    $get_accesstoken_info = $myZalo->oa_accesstoken_info();
     if ($get_accesstoken_info['result'] == 'ok') {
         $accesstoken = $get_accesstoken_info['access_token'];
     } elseif ($get_accesstoken_info['result'] == 'update') {
@@ -1909,10 +1909,10 @@ function get_error_image($image_url)
  */
 function zaloGetError()
 {
-    global $zalo, $nv_Lang;
+    global $myZalo, $nv_Lang;
 
-    $error = $zalo->getError();
-    $error_code = $zalo->getErrorCode();
+    $error = $myZalo->getError();
+    $error_code = $myZalo->getErrorCode();
     if (!empty($nv_Lang->getModule($error))) {
         $error = $nv_Lang->getModule($error);
     }

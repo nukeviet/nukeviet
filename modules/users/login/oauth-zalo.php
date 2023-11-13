@@ -13,21 +13,21 @@ if (!defined('NV_IS_MOD_USER')) {
     exit('Stop!!!');
 }
 
-$zalo = new NukeViet\Zalo\Zalo($global_config);
+$myZalo = new NukeViet\Zalo\MyZalo($global_config);
 
 if ($nv_Request->isset_request('code', 'get')) {
     $authorization_code = $nv_Request->get_string('code', 'get', '');
     $code_verifier = $nv_Request->get_string('code_verifier', 'session', '');
     $nv_Request->unset_request('code_verifier', 'session');
 
-    $result = $zalo->accesstokenGet($authorization_code, $code_verifier);
+    $result = $myZalo->accesstokenGet($authorization_code, $code_verifier);
     if (empty($result)) {
-        $err = $zalo->getError();
+        $err = $myZalo->getError();
         $nv_Lang->existsModule($err) && $err = $nv_Lang->getModule($err);
         exit($err);
     }
 
-    $result = $zalo->getUserInfo($result['access_token']);
+    $result = $myZalo->getUserInfo($result['access_token']);
     if (isset($result['id'])) {
         $attribs = [
             'identity' => $result['id'],
@@ -63,7 +63,7 @@ if ($nv_Request->isset_request('code', 'get')) {
     nv_redirect_location(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
 }
 
-$result = $zalo->permissionURLCreate(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=zalo', 'user');
+$result = $myZalo->permissionURLCreate(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=zalo', 'user');
 if (empty($result['code_verifier']) or empty($result['permission_url'])) {
     exit('permission_url_error');
 }

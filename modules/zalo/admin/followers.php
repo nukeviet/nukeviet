@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
-if (!$zalo->isValid()) {
+if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
@@ -348,7 +348,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
 
     // Neu dinh kem hinh tu site hoac internet
     if (in_array($attachment_type, ['site', 'internet'], true)) {
-        $result = $zalo->send_sitephoto($accesstoken, $user_id, $message_id, $chat_text, $attachment);
+        $result = $myZalo->send_sitephoto($accesstoken, $user_id, $message_id, $chat_text, $attachment);
         $note = [
             'send_type' => $attachment_type,
             'type' => 'photo',
@@ -358,7 +358,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     }
     // Neu dinh kem hinh tu zalo
     elseif ($attachment_type == 'zalo') {
-        $result = $zalo->send_zaloimage($accesstoken, $user_id, $message_id, $chat_text, $zalo_id);
+        $result = $myZalo->send_zaloimage($accesstoken, $user_id, $message_id, $chat_text, $zalo_id);
         $note = [
             'send_type' => $attachment_type,
             'type' => 'photo',
@@ -368,7 +368,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     }
     // Neu dinh kem file tu zalo
     elseif ($attachment_type == 'file') {
-        $result = $zalo->send_zalofile($accesstoken, $user_id, $message_id, $zalo_id);
+        $result = $myZalo->send_zalofile($accesstoken, $user_id, $message_id, $zalo_id);
         $note = [
             'send_type' => $attachment_type,
             'type' => 'file',
@@ -377,7 +377,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     }
     // Neu gui yeu cau cung cap thong tin
     elseif ($attachment_type == 'request') {
-        $result = $zalo->send_request_user_info($accesstoken, $user_id, $message_id, $request_info);
+        $result = $myZalo->send_request_user_info($accesstoken, $user_id, $message_id, $request_info);
         $note = [
             'send_type' => $attachment_type,
             'type' => 'request',
@@ -386,7 +386,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     }
     // Neu gui textlist
     elseif ($attachment_type == 'textlist') {
-        $result = $zalo->send_textlist($accesstoken, $user_id, $message_id, $elements);
+        $result = $myZalo->send_textlist($accesstoken, $user_id, $message_id, $elements);
         $note = [
             'send_type' => $attachment_type,
             'type' => 'links',
@@ -395,7 +395,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     }
     // Neu gui btnlist
     elseif ($attachment_type == 'btnlist') {
-        $result = $zalo->send_btnlist($accesstoken, $user_id, $message_id, $btnlist['text'], $buttons);
+        $result = $myZalo->send_btnlist($accesstoken, $user_id, $message_id, $btnlist['text'], $buttons);
         $note = [
             'send_type' => $attachment_type,
             'type' => 'buttons',
@@ -405,7 +405,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     }
     // Neu dang van ban thuan
     elseif ($attachment_type == 'plaintext') {
-        $result = $zalo->send_text($accesstoken, $user_id, $message_id, $chat_text);
+        $result = $myZalo->send_text($accesstoken, $user_id, $message_id, $chat_text);
         $note = [
             'send_type' => $attachment_type,
             'type' => 'text',
@@ -423,7 +423,7 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
     save_conversation($user_id, $result['data']['message_id'], json_encode($note, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
     $contents = [];
-    $result = $zalo->conversation($accesstoken, $user_id, 0, 10);
+    $result = $myZalo->conversation($accesstoken, $user_id, 0, 10);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -496,7 +496,7 @@ if ($nv_Request->isset_request('remove_ftag,user_id,tag_alias', 'post')) {
 
     get_accesstoken($accesstoken, true);
 
-    $result = $zalo->rmfollowerfromtag($accesstoken, $user_id, $tag_alias);
+    $result = $myZalo->rmfollowerfromtag($accesstoken, $user_id, $tag_alias);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -504,7 +504,7 @@ if ($nv_Request->isset_request('remove_ftag,user_id,tag_alias', 'post')) {
         ]);
     }
 
-    $follower_profile = $zalo->get_follower_profile($accesstoken, $user_id);
+    $follower_profile = $myZalo->get_follower_profile($accesstoken, $user_id);
     if (empty($follower_profile)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -572,7 +572,7 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
 
     get_accesstoken($accesstoken, true);
 
-    $result = $zalo->tagfollower($accesstoken, $user_id, $post_tag);
+    $result = $myZalo->tagfollower($accesstoken, $user_id, $post_tag);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -584,7 +584,7 @@ if ($nv_Request->isset_request('add_follower_tag,user_id', 'post')) {
         add_tag($new_tag);
     }
 
-    $follower_profile = $zalo->get_follower_profile($accesstoken, $user_id);
+    $follower_profile = $myZalo->get_follower_profile($accesstoken, $user_id);
     if (empty($follower_profile)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -646,11 +646,11 @@ if ($nv_Request->isset_request('change_profile,user_id', 'post')) {
     $data['phone'] = substr($data['phone_code'], 2) . $data['phone_number'];
     unset($data['phone_code'], $data['phone_number']);
     get_accesstoken($accesstoken);
-    $result = $zalo->updatefollowerinfo($accesstoken, $data);
+    $result = $myZalo->updatefollowerinfo($accesstoken, $data);
     if (empty($result)) {
         info_redirect(zaloGetError(), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&user_id=' . $data['user_id'] . '&action=edit_fi');
     }
-    $follower_profile = $zalo->get_follower_profile($accesstoken, $user_id);
+    $follower_profile = $myZalo->get_follower_profile($accesstoken, $user_id);
     if (empty($follower_profile)) {
         info_redirect(zaloGetError(), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=followers&user_id=' . $data['user_id'] . '&action=edit_fi');
     }
@@ -680,7 +680,7 @@ if ($nv_Request->isset_request('get_follower_profile,user_id', 'post')) {
     }
 
     get_accesstoken($accesstoken);
-    $follower_profile = $zalo->get_follower_profile($accesstoken, $user_id);
+    $follower_profile = $myZalo->get_follower_profile($accesstoken, $user_id);
     if (empty($follower_profile)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -705,7 +705,7 @@ if ($nv_Request->isset_request('getfollowersProfile', 'get')) {
 
     foreach ($not_sync as $user_id) {
         get_accesstoken($accesstoken);
-        $follower_profile = $zalo->get_follower_profile($accesstoken, $user_id);
+        $follower_profile = $myZalo->get_follower_profile($accesstoken, $user_id);
         if (empty($follower_profile)) {
             $contents = zaloGetError();
             include NV_ROOTDIR . '/includes/header.php';
@@ -729,7 +729,7 @@ if ($nv_Request->isset_request('getfollowers', 'get')) {
         'count' => 50,
         'tag_name' => ''
     ];
-    $result = $zalo->get_followers($accesstoken, $data);
+    $result = $myZalo->get_followers($accesstoken, $data);
     if (empty($result)) {
         $contents = zaloGetError();
         include NV_ROOTDIR . '/includes/header.php';

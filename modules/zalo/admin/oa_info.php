@@ -15,14 +15,14 @@ if (!defined('NV_IS_FILE_ZALO')) {
 
 $page_title = $nv_Lang->getModule('oa_info');
 
-if (!$zalo->isValid()) {
+if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
 // Lay thong tin QUOTA tin nhan chu dong
 if ($nv_Request->isset_request('get_proactive_messages_quota', 'post')) {
     get_accesstoken($accesstoken, true);
-    $result = $zalo->getquota($accesstoken);
+    $result = $myZalo->getquota($accesstoken);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -46,7 +46,7 @@ if ($nv_Request->isset_request('code, oa_id', 'get')) {
     $code_verifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
     $nv_Request->unset_request('oa_code_verifier', 'session');
 
-    $result = $zalo->oa_accesstoken_new($authorization_code, $oa_id, $code_verifier);
+    $result = $myZalo->oa_accesstoken_new($authorization_code, $oa_id, $code_verifier);
     if (empty($result)) {
         $contents = zaloGetError();
         include NV_ROOTDIR . '/includes/header.php';
@@ -63,7 +63,7 @@ $oa_info = get_oa_info();
 
 // Nếu empty $oa_info hoặc không có $oa_info['oa_id'] => lấy thông tin về
 if (empty($oa_info) or empty($oa_info['oa_id']) or $nv_Request->isset_request('oa_info_update', 'post')) {
-    $get_accesstoken_info = $zalo->oa_accesstoken_info($client_info['selfurl']);
+    $get_accesstoken_info = $myZalo->oa_accesstoken_info($client_info['selfurl']);
     if ($get_accesstoken_info['result'] == 'ok') {
         $accesstoken = $get_accesstoken_info['access_token'];
     } elseif ($get_accesstoken_info['result'] == 'update') {
@@ -79,7 +79,7 @@ if (empty($oa_info) or empty($oa_info['oa_id']) or $nv_Request->isset_request('o
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
-    $result = $zalo->get_oa_info($accesstoken);
+    $result = $myZalo->get_oa_info($accesstoken);
     if (empty($result)) {
         $contents = zaloGetError();
         include NV_ROOTDIR . '/includes/header.php';

@@ -14,7 +14,7 @@ namespace NukeViet\Zalo;
 use NukeViet\Http\Curl;
 
 /**
- * NukeViet\Zalo\Zalo
+ * NukeViet\Zalo\MyZalo
  *
  * @package NukeViet\Zalo
  * @author VINADES.,JSC <contact@vinades.vn>
@@ -22,7 +22,7 @@ use NukeViet\Http\Curl;
  * @version 4.5.00
  * @access public
  */
-class Zalo
+class MyZalo
 {
     const ERROR_OA_ID_EMPTY = 'oa_id_empty';
     const ERROR_REDIRECT_URI_EMPTY = 'redirect_uri_empty';

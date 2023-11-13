@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
-if (!$zalo->isValid()) {
+if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
@@ -112,7 +112,7 @@ if ($nv_Request->isset_request('check,id', 'post')) {
     }
 
     get_accesstoken($accesstoken, true);
-    $result = $zalo->video_verify($accesstoken, $token);
+    $result = $myZalo->video_verify($accesstoken, $token);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -186,7 +186,7 @@ if ($nv_Request->isset_request('add', 'post')) {
     ];
 
     get_accesstoken($accesstoken, true);
-    $result = $zalo->video_verify($accesstoken, $token);
+    $result = $myZalo->video_verify($accesstoken, $token);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -196,7 +196,7 @@ if ($nv_Request->isset_request('add', 'post')) {
 
     if ('1' != (string) $result['data']['status']) {
         sleep(5);
-        $result = $zalo->video_verify($accesstoken, $token);
+        $result = $myZalo->video_verify($accesstoken, $token);
         if (empty($result)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -223,7 +223,7 @@ $xtpl = new XTemplate('video.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
 $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
 $xtpl->assign('FORM_ACTION', $base_url);
-$xtpl->assign('ZALO_URL', $zalo::VIDEOUPLOAD_URL);
+$xtpl->assign('ZALO_URL', $myZalo::VIDEOUPLOAD_URL);
 $xtpl->assign('DEL_LINK', $base_url);
 $xtpl->assign('IDFIELD', $idfield);
 $xtpl->assign('VIEWFIELD', $viewfield);

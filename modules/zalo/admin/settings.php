@@ -16,7 +16,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
 $zaloWebhookIPs = !empty($global_config['zaloWebhookIPs']) ? $global_config['zaloWebhookIPs'] : [];
 
 if ($nv_Request->get_string('func', 'get', '') == 'access_token_create') {
-    $result = $zalo->oa_accesstoken_create(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings&func=accesstoken');
+    $result = $myZalo->oa_accesstoken_create(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings&func=accesstoken');
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if (empty($result)) {
@@ -47,7 +47,7 @@ if ($nv_Request->get_string('func', 'get', '') == 'accesstoken' and $nv_Request-
     $code_verifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
     $nv_Request->unset_request('oa_code_verifier', 'session');
 
-    $result = $zalo->oa_accesstoken_new($authorization_code, $oa_id, $code_verifier);
+    $result = $myZalo->oa_accesstoken_new($authorization_code, $oa_id, $code_verifier);
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if (empty($result)) {

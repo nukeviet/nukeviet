@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
-if (!$zalo->isValid()) {
+if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
@@ -143,11 +143,11 @@ if ($nv_Request->isset_request('renewal,id', 'post')) {
     $cfile = new CURLFile($file_fullname, $mime, $fileinfo['file']);
 
     get_accesstoken($accesstoken, true);
-    $result = $zalo->upload($accesstoken, $fileinfo['type'], $cfile);
+    $result = $myZalo->upload($accesstoken, $fileinfo['type'], $cfile);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
-            'mess' => $zalo->getError()
+            'mess' => $myZalo->getError()
         ]);
     }
 
@@ -330,7 +330,7 @@ if (!$popup) {
             'key' => $key,
             'accept' => ($key == 'gif') ? '.gif' : ($key == 'file' ? '.pdf,.doc,.docx' : '.jpg,.jpeg,.png'),
             'maxsize' => $max_sizes[$key],
-            'url' => $zalo::UPLOAD_URL . $key,
+            'url' => $myZalo::UPLOAD_URL . $key,
             'sel' => (!empty($type) and $key == $type) ? ' selected="selected"' : '',
             'name' => $name
         ]);
@@ -342,7 +342,7 @@ if (!$popup) {
     $xtpl->parse('main.popup2');
 
     $xtpl->assign('TYPE', $type);
-    $xtpl->assign('ZALO_URL', $zalo::UPLOAD_URL . $type);
+    $xtpl->assign('ZALO_URL', $myZalo::UPLOAD_URL . $type);
     $xtpl->parse('main.type_hide');
 }
 

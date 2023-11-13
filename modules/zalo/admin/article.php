@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
-if (!$zalo->isValid()) {
+if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
@@ -32,7 +32,7 @@ if ($nv_Request->isset_request('getlist,type', 'get')) {
 
     $limit = 10;
     get_accesstoken($accesstoken);
-    $result = $zalo->get_articlelist($accesstoken, $offset, $limit, $type);
+    $result = $myZalo->get_articlelist($accesstoken, $offset, $limit, $type);
     if (empty($result)) {
         $contents = zaloGetError();
         include NV_ROOTDIR . '/includes/header.php';
@@ -72,7 +72,7 @@ if ($nv_Request->isset_request('getlist,type', 'get')) {
     if (!empty($not_sync)) {
         foreach ($not_sync as $id => $zalo_id) {
             get_accesstoken($accesstoken);
-            $result = $zalo->article_getdetail($accesstoken, $zalo_id);
+            $result = $myZalo->article_getdetail($accesstoken, $zalo_id);
             if (empty($result)) {
                 $contents = zaloGetError();
                 include NV_ROOTDIR . '/includes/header.php';
@@ -108,7 +108,7 @@ if ($nv_Request->isset_request('delete,id', 'post')) {
     if (!empty($article_info['zalo_id'])) {
         get_accesstoken($accesstoken, true);
 
-        $result = $zalo->delete_article($accesstoken, $article_info['zalo_id']);
+        $result = $myZalo->delete_article($accesstoken, $article_info['zalo_id']);
         if (empty($result)) {
             nv_jsonOutput([
                 'status' => 'error',
@@ -144,7 +144,7 @@ if ($nv_Request->isset_request('sync,id', 'post')) {
     }
 
     get_accesstoken($accesstoken, true);
-    $result = $zalo->article_getdetail($accesstoken, $article_info['zalo_id']);
+    $result = $myZalo->article_getdetail($accesstoken, $article_info['zalo_id']);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -180,7 +180,7 @@ if ($nv_Request->isset_request('get_zalo_id,id', 'post')) {
 
     get_accesstoken($accesstoken, true);
 
-    $result = $zalo->get_article_id($accesstoken, $token);
+    $result = $myZalo->get_article_id($accesstoken, $token);
     if (empty($result)) {
         nv_jsonOutput([
             'status' => 'error',
@@ -628,7 +628,7 @@ if ($action == 'add' or $action == 'edit') {
         get_accesstoken($accesstoken, true);
 
         if ($action == 'add') {
-            $result = $zalo->article_create($accesstoken, $save_article);
+            $result = $myZalo->article_create($accesstoken, $save_article);
             if (empty($result)) {
                 nv_jsonOutput([
                     'status' => 'error',
@@ -639,13 +639,13 @@ if ($action == 'add' or $action == 'edit') {
             $save_article = ['token' => $result['data']['token']] + $save_article;
             $id = save_article($save_article);
             sleep(3);
-            $result = $zalo->get_article_id($accesstoken, $result['data']['token']);
+            $result = $myZalo->get_article_id($accesstoken, $result['data']['token']);
             if (!empty($result['data']['id'])) {
                 zalo_id_update($id, $result['data']['id']);
             }
         } else {
             $save_article = ['id' => $article['zalo_id']] + $save_article;
-            $result = $zalo->article_update($accesstoken, $save_article);
+            $result = $myZalo->article_update($accesstoken, $save_article);
             if (empty($result)) {
                 nv_jsonOutput([
                     'status' => 'error',

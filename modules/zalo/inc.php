@@ -338,9 +338,9 @@ function get_accesstoken()
 {
     global $global_config;
 
-    $zalo = new NukeViet\Zalo\Zalo($global_config);
+    $myZalo = new NukeViet\Zalo\MyZalo($global_config);
 
-    $get_accesstoken_info = $zalo->oa_accesstoken_info();
+    $get_accesstoken_info = $myZalo->oa_accesstoken_info();
     if ($get_accesstoken_info['result'] == 'ok') {
         return $get_accesstoken_info['access_token'];
     }
@@ -367,9 +367,9 @@ function last_conversation_update($accesstoken, $user_id)
 {
     global $db, $global_config;
 
-    $zalo = new NukeViet\Zalo\Zalo($global_config);
+    $myZalo = new NukeViet\Zalo\MyZalo($global_config);
 
-    $result = $zalo->conversation($accesstoken, $user_id, 0, 10);
+    $result = $myZalo->conversation($accesstoken, $user_id, 0, 10);
     if (!empty($result)) {
         $sth = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . "_conversation 
         (message_id, user_id, src, time, type, message, links, thumb, url, description, location, note) VALUES 
@@ -442,8 +442,8 @@ function sent_text_message($template_id, $user_id, $message_id)
 
     $accesstoken = get_accesstoken();
     if (!empty($accesstoken) and (!empty($user_id) or !empty($message_id))) {
-        $zalo = new NukeViet\Zalo\Zalo($global_config);
-        $result = $zalo->send_text($accesstoken, $user_id, $message_id, $content);
+        $myZalo = new NukeViet\Zalo\MyZalo($global_config);
+        $result = $myZalo->send_text($accesstoken, $user_id, $message_id, $content);
         if (!empty($result)) {
             save_conversation($user_id, $result['data']['message_id'], json_encode([
                 'send_type' => 'plaintext',
@@ -480,8 +480,8 @@ function sent_image_message($fileid, $user_id, $message_id)
 
     $accesstoken = get_accesstoken();
     if (!empty($accesstoken) and (!empty($user_id) or !empty($message_id))) {
-        $zalo = new NukeViet\Zalo\Zalo($global_config);
-        $result = $zalo->send_zaloimage($accesstoken, $user_id, $message_id, $row['description'], $row['zalo_id']);
+        $myZalo = new NukeViet\Zalo\MyZalo($global_config);
+        $result = $myZalo->send_zaloimage($accesstoken, $user_id, $message_id, $row['description'], $row['zalo_id']);
         if (!empty($result)) {
             save_conversation($user_id, $result['data']['message_id'], json_encode([
                 'send_type' => 'zalo',
@@ -519,8 +519,8 @@ function sent_file_message($fileid, $user_id, $message_id)
 
     $accesstoken = get_accesstoken();
     if (!empty($accesstoken) and (!empty($user_id) or !empty($message_id))) {
-        $zalo = new NukeViet\Zalo\Zalo($global_config);
-        $result = $zalo->send_zalofile($accesstoken, $user_id, $message_id, $row['zalo_id']);
+        $myZalo = new NukeViet\Zalo\MyZalo($global_config);
+        $result = $myZalo->send_zalofile($accesstoken, $user_id, $message_id, $row['zalo_id']);
         if (!empty($result)) {
             save_conversation($user_id, $result['data']['message_id'], json_encode([
                 'send_type' => 'file',
@@ -664,8 +664,8 @@ function sent_textlist_message($template_id, $user_id, $message_id)
 
     $accesstoken = get_accesstoken();
     if (!empty($accesstoken) and (!empty($user_id) or !empty($message_id))) {
-        $zalo = new NukeViet\Zalo\Zalo($global_config);
-        $result = $zalo->send_textlist($accesstoken, $user_id, $message_id, $elements);
+        $myZalo = new NukeViet\Zalo\MyZalo($global_config);
+        $result = $myZalo->send_textlist($accesstoken, $user_id, $message_id, $elements);
         if (!empty($result)) {
             save_conversation($user_id, $result['data']['message_id'], json_encode([
                 'send_type' => 'textlist',
@@ -747,8 +747,8 @@ function sent_btnlist_message($template_id, $user_id, $message_id)
 
     $accesstoken = get_accesstoken();
     if (!empty($accesstoken) and (!empty($user_id) or !empty($message_id))) {
-        $zalo = new NukeViet\Zalo\Zalo($global_config);
-        $result = $zalo->send_btnlist($accesstoken, $user_id, $message_id, $content['text'], $buttons);
+        $myZalo = new NukeViet\Zalo\MyZalo($global_config);
+        $result = $myZalo->send_btnlist($accesstoken, $user_id, $message_id, $content['text'], $buttons);
         if (!empty($result)) {
             save_conversation($user_id, $result['data']['message_id'], json_encode([
                 'send_type' => 'btnlist',

@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN_ACTIVE_2STEP_OAUTH')) {
     exit('Stop!!!');
 }
 
-$zalo = new NukeViet\Zalo\Zalo($global_config);
+$myZalo = new NukeViet\Zalo\MyZalo($global_config);
 
 if (!empty($_GET['code'])) {
     try {
@@ -21,13 +21,13 @@ if (!empty($_GET['code'])) {
         $code_verifier = $_SESSION['admin_code_verifier'];
         unset($_SESSION['admin_code_verifier']);
 
-        $result = $zalo->accesstokenGet($authorization_code, $code_verifier);
+        $result = $myZalo->accesstokenGet($authorization_code, $code_verifier);
         if (empty($result)) {
-            $error = $zalo->getError();
+            $error = $myZalo->getError();
         } else {
-            $result = $zalo->getUserInfo($result['access_token']);
+            $result = $myZalo->getUserInfo($result['access_token']);
             if (empty($result['id'])) {
-                $error = $zalo->getError();
+                $error = $myZalo->getError();
             } else {
                 // Thành công
                 $attribs = [
@@ -44,7 +44,7 @@ if (!empty($_GET['code'])) {
         $error = $e->getMessage();
     }
 } else {
-    $result = $zalo->permissionURLCreate(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?auth=zalo', 'user');
+    $result = $myZalo->permissionURLCreate(NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?auth=zalo', 'user');
     if (empty($result['code_verifier']) or empty($result['permission_url'])) {
         exit('permission_url_error');
     }

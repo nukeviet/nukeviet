@@ -13,7 +13,7 @@ if (!defined('NV_IS_FILE_ZALO')) {
     exit('Stop!!!');
 }
 
-if (!$zalo->isValid()) {
+if (!$myZalo->isValid()) {
     nv_redirect_location(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=settings');
 }
 
@@ -80,7 +80,7 @@ if ($nv_Request->isset_request('delete_tag,tag_alias', 'post')) {
 
     get_accesstoken($accesstoken, true);
 
-    $result = $zalo->rmtag($accesstoken, $tag_alias);
+    $result = $myZalo->rmtag($accesstoken, $tag_alias);
 
     delete_tag($tag_alias);
 
