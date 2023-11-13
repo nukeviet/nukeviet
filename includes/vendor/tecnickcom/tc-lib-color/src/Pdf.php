@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Pdf.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Color
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-color
  *
@@ -15,9 +16,7 @@
 
 namespace Com\Tecnick\Color;
 
-use \Com\Tecnick\Color\Exception as ColorException;
-use \Com\Tecnick\Color\Web;
-use \Com\Tecnick\Color\Spot;
+use Com\Tecnick\Color\Exception as ColorException;
 
 /**
  * Com\Tecnick\Color\Pdf
@@ -28,7 +27,7 @@ use \Com\Tecnick\Color\Spot;
  * @category    Library
  * @package     Color
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-color
  */
@@ -74,7 +73,7 @@ class Pdf extends \Com\Tecnick\Color\Spot
     public function getJsColorString($color)
     {
         if (in_array($color, self::$jscolor)) {
-            return 'color.'.$color;
+            return 'color.' . $color;
         }
         try {
             if (($colobj = $this->getColorObj($color)) !== null) {
@@ -84,15 +83,13 @@ class Pdf extends \Com\Tecnick\Color\Spot
             assert(true); // noop
         }
         // default transparent color
-        return 'color.'.self::$jscolor[0];
+        return 'color.' . self::$jscolor[0];
     }
 
     /**
      * Returns a color object from an HTML, CSS or Spot color representation.
      *
      * @param string $color HTML, CSS or Spot color to parse
-     *
-     * @return object or null in case of error or if the color is not found
      */
     public function getColorObject($color)
     {
@@ -127,7 +124,7 @@ class Pdf extends \Com\Tecnick\Color\Spot
             if ($stroke) {
                 $tint = strtoupper($tint);
             }
-            return sprintf('/CS%d %s'."\n", $col['i'], $tint);
+            return sprintf('/CS%d %s' . "\n", $col['i'], $tint);
         } catch (ColorException $e) {
             assert(true); // noop
         }

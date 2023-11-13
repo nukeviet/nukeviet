@@ -18,6 +18,10 @@ class ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Z' => 
+        array (
+            'Zalo\\' => 5,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php72\\' => 23,
@@ -57,6 +61,10 @@ class ComposerStaticInitc9c15c1354161bfabc370743d4a6d93f
     );
 
     public static $prefixDirsPsr4 = array (
+        'Zalo\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zaloplatform/zalo-php-sdk/src',
+        ),
         'Symfony\\Polyfill\\Php72\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php72',

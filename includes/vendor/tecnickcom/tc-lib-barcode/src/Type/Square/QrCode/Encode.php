@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Encode.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,8 +16,8 @@
 
 namespace Com\Tecnick\Barcode\Type\Square\QrCode;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Barcode\Type\Square\QrCode\Data;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Type\Square\QrCode\Data;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\QrCode\Encode
@@ -25,7 +26,7 @@ use \Com\Tecnick\Barcode\Type\Square\QrCode\Data;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -47,21 +48,21 @@ abstract class Encode extends \Com\Tecnick\Barcode\Type\Square\QrCode\EncodingMo
         $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, $val);
         $inputitem['bstream'] = $this->appendNum(
             $inputitem['bstream'],
-            $this->getLengthIndicator(Data::$encodingModes['NM'], $version),
+            $this->getLengthIndicator(Data::ENC_MODES['NM'], $version),
             $inputitem['size']
         );
-        for ($i=0; $i < $words; ++$i) {
-            $val  = (ord($inputitem['data'][$i*3  ]) - ord('0')) * 100;
-            $val += (ord($inputitem['data'][$i*3+1]) - ord('0')) * 10;
-            $val += (ord($inputitem['data'][$i*3+2]) - ord('0'));
+        for ($i = 0; $i < $words; ++$i) {
+            $val  = (ord($inputitem['data'][$i * 3  ]) - ord('0')) * 100;
+            $val += (ord($inputitem['data'][$i * 3 + 1]) - ord('0')) * 10;
+            $val += (ord($inputitem['data'][$i * 3 + 2]) - ord('0'));
             $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 10, $val);
         }
         if ($inputitem['size'] - $words * 3 == 1) {
-            $val = ord($inputitem['data'][$words*3]) - ord('0');
+            $val = ord($inputitem['data'][$words * 3]) - ord('0');
             $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, $val);
         } elseif (($inputitem['size'] - ($words * 3)) == 2) {
-            $val  = (ord($inputitem['data'][$words*3  ]) - ord('0')) * 10;
-            $val += (ord($inputitem['data'][$words*3+1]) - ord('0'));
+            $val  = (ord($inputitem['data'][$words * 3  ]) - ord('0')) * 10;
+            $val += (ord($inputitem['data'][$words * 3 + 1]) - ord('0'));
             $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 7, $val);
         }
         return $inputitem;
@@ -82,12 +83,12 @@ abstract class Encode extends \Com\Tecnick\Barcode\Type\Square\QrCode\EncodingMo
         $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, 0x02);
         $inputitem['bstream'] = $this->appendNum(
             $inputitem['bstream'],
-            $this->getLengthIndicator(Data::$encodingModes['AN'], $version),
+            $this->getLengthIndicator(Data::ENC_MODES['AN'], $version),
             $inputitem['size']
         );
         for ($idx = 0; $idx < $words; ++$idx) {
             $val  = (int)($this->lookAnTable(ord($inputitem['data'][($idx * 2)])) * 45);
-            $val += (int)($this->lookAnTable(ord($inputitem['data'][($idx * 2)+1])));
+            $val += (int)($this->lookAnTable(ord($inputitem['data'][($idx * 2) + 1])));
             $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 11, $val);
         }
         if ($inputitem['size'] & 1) {
@@ -111,7 +112,7 @@ abstract class Encode extends \Com\Tecnick\Barcode\Type\Square\QrCode\EncodingMo
         $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, 0x4);
         $inputitem['bstream'] = $this->appendNum(
             $inputitem['bstream'],
-            $this->getLengthIndicator(Data::$encodingModes['8B'], $version),
+            $this->getLengthIndicator(Data::ENC_MODES['8B'], $version),
             $inputitem['size']
         );
         for ($idx = 0; $idx < $inputitem['size']; ++$idx) {
@@ -134,7 +135,7 @@ abstract class Encode extends \Com\Tecnick\Barcode\Type\Square\QrCode\EncodingMo
         $inputitem['bstream'] = $this->appendNum($inputitem['bstream'], 4, 0x8);
         $inputitem['bstream'] = $this->appendNum(
             $inputitem['bstream'],
-            $this->getLengthIndicator(Data::$encodingModes['KJ'], $version),
+            $this->getLengthIndicator(Data::ENC_MODES['KJ'], $version),
             (int)($inputitem['size'] / 2)
         );
         for ($idx = 0; $idx < $inputitem['size']; $idx += 2) {

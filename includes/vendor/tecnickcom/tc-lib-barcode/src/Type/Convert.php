@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Convert.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,8 +16,7 @@
 
 namespace Com\Tecnick\Barcode\Type;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Color\Exception as ColorException;
+use Com\Tecnick\Color\Model\Rgb as Color;
 
 /**
  * Com\Tecnick\Barcode\Type\Convert
@@ -27,16 +27,123 @@ use \Com\Tecnick\Color\Exception as ColorException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 abstract class Convert
 {
     /**
+     * Barcode type (linear or square)
+     *
+     * @var string
+     */
+    protected $type = '';
+
+    /**
+     * Barcode format
+     *
+     * @var string
+     */
+    protected $format = '';
+
+    /**
+     * Array containing extra parameters for the specified barcode type
+     *
+     * @var array
+     */
+    protected $params;
+
+    /**
+     * Code to convert (barcode content)
+     *
+     * @var string
+     */
+    protected $code = '';
+
+    /**
+     * Resulting code after applying checksum etc.
+     *
+     * @var string
+     */
+    protected $extcode = '';
+
+    /**
+     * Total number of columns
+     *
+     * @var int
+     */
+    protected $ncols = 0;
+
+    /**
+     * Total number of rows
+     *
+     * @var int
+     */
+    protected $nrows = 1;
+
+    /**
+     * Array containing the position and dimensions of each barcode bar
+     * (x, y, width, height)
+     *
+     * @var array
+     */
+    protected $bars = array();
+
+    /**
+     * Barcode width
+     *
+     * @var int
+     */
+    protected $width;
+
+    /**
+     * Barcode height
+     *
+     * @var int
+     */
+    protected $height;
+
+    /**
+     * Additional padding to add around the barcode (top, right, bottom, left) in user units.
+     * A negative value indicates the multiplication factor for each row or column.
+     *
+     * @var array
+     */
+    protected $padding = array('T' => 0, 'R' => 0, 'B' => 0, 'L' => 0);
+
+    /**
+     * Ratio between the barcode width and the number of rows
+     *
+     * @var float
+     */
+    protected $width_ratio;
+
+    /**
+     * Ratio between the barcode height and the number of columns
+     *
+     * @var float
+     */
+    protected $height_ratio;
+
+    /**
+     * Foreground Color object
+     *
+     * @var Color
+     */
+    protected $color_obj;
+
+    /**
+     * Backgorund Color object
+     *
+     * @var Color
+     */
+    protected $bg_color_obj;
+
+    /**
      * Import a binary sequence of comma-separated 01 strings
      *
-     * @param string $code Code to process
+     * @param array|string $code Code to process
      */
     protected function processBinarySequence($code)
     {
@@ -61,7 +168,7 @@ abstract class Convert
         }
         $hex = array();
         while ($number > 0) {
-            array_push($hex, strtoupper(dechex(bcmod($number, '16'))));
+            array_push($hex, strtoupper((string)dechex((int)bcmod($number, '16'))));
             $number = bcdiv($number, '16', 0);
         }
         $hex = array_reverse($hex);
@@ -77,12 +184,12 @@ abstract class Convert
      */
     protected function convertHexToDec($hex)
     {
-        $dec = 0;
-        $bitval = 1;
+        $dec = '0';
+        $bitval = '1';
         $len = strlen($hex);
         for ($pos = ($len - 1); $pos >= 0; --$pos) {
-            $dec = bcadd($dec, bcmul(hexdec($hex[$pos]), $bitval));
-            $bitval = bcmul($bitval, 16);
+            $dec = bcadd($dec, bcmul((string)hexdec($hex[$pos]), $bitval));
+            $bitval = bcmul($bitval, '16');
         }
         return $dec;
     }
@@ -141,7 +248,7 @@ abstract class Convert
     /**
      * Get the adjusted rectangular coordinates (x1,y1,x2,y2) for the specified bar
      *
-     * @param array Raw bar coordinates
+     * @param array $bar Raw bar coordinates
      *
      * @return array Bar coordinates
      */
@@ -158,7 +265,7 @@ abstract class Convert
     /**
      * Get the adjusted rectangular coordinates (x,y,w,h) for the specified bar
      *
-     * @param array Raw bar coordinates
+     * @param array $bar Raw bar coordinates
      *
      * @return array Bar coordinates
      */

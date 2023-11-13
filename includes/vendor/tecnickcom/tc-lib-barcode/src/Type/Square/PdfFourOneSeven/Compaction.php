@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Process.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,8 +16,8 @@
 
 namespace Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Data;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Data;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Compaction
@@ -27,7 +28,7 @@ use \Com\Tecnick\Barcode\Type\Square\PdfFourOneSeven\Data;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -47,8 +48,9 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
     protected function processTextCompactionSub(&$txtarr, &$submode, $sub, $code, $key, $idx, $codelen)
     {
         // $sub is the new submode
-        if (((($idx + 1) == $codelen) || ((($idx + 1) < $codelen)
-            && (array_search(ord($code[($idx + 1)]), Data::$textsubmodes[$submode]) !== false)))
+        if (
+            ((($idx + 1) == $codelen) || ((($idx + 1) < $codelen)
+            && (array_search(ord($code[($idx + 1)]), Data::TEXT_SUB_MODES[$submode]) !== false)))
             && (($sub == 3) || (($sub == 0) && ($submode == 1)))
         ) {
             // shift (temporary change only for this char)
@@ -61,7 +63,7 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
             }
         } else {
             // latch
-            $txtarr = array_merge($txtarr, Data::$textlatch[''.$submode.$sub]);
+            $txtarr = array_merge($txtarr, Data::TEXT_LATCH['' . $submode . $sub]);
             // set new submode
             $submode = $sub;
         }
@@ -74,8 +76,6 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
      *
      * @param string  $code      Data to compact
      * @param string  $codewords Codewords
-     *
-     * @return array of codewords
      */
     protected function processTextCompaction($code, &$codewords)
     {
@@ -84,14 +84,14 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
         $codelen = strlen($code);
         for ($idx = 0; $idx < $codelen; ++$idx) {
             $chval = ord($code[$idx]);
-            if (($key = array_search($chval, Data::$textsubmodes[$submode])) !== false) {
+            if (($key = array_search($chval, Data::TEXT_SUB_MODES[$submode])) !== false) {
                 // we are on the same sub-mode
                 $txtarr[] = $key;
             } else {
                 // the sub-mode is changed
                 for ($sub = 0; $sub < 4; ++$sub) {
                     // search new sub-mode
-                    if (($sub != $submode) && (($key = array_search($chval, Data::$textsubmodes[$sub])) !== false)) {
+                    if (($sub != $submode) && (($key = array_search($chval, Data::TEXT_SUB_MODES[$sub])) !== false)) {
                         $this->processTextCompactionSub($txtarr, $submode, $sub, $code, $key, $idx, $codelen);
                         break;
                     }
@@ -115,8 +115,6 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
      *
      * @param string  $code      Data to compact
      * @param string  $codewords Codewords
-     *
-     * @return array of codewords
      */
     protected function processByteCompaction($code, &$codewords)
     {
@@ -130,12 +128,12 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
                 $sublen = strlen($code);
             }
             if ($sublen == 6) {
-                $tdg = bcmul(''.ord($code[0]), '1099511627776');
-                $tdg = bcadd($tdg, bcmul(''.ord($code[1]), '4294967296'));
-                $tdg = bcadd($tdg, bcmul(''.ord($code[2]), '16777216'));
-                $tdg = bcadd($tdg, bcmul(''.ord($code[3]), '65536'));
-                $tdg = bcadd($tdg, bcmul(''.ord($code[4]), '256'));
-                $tdg = bcadd($tdg, ''.ord($code[5]));
+                $tdg = bcmul('' . ord($code[0]), '1099511627776');
+                $tdg = bcadd($tdg, bcmul('' . ord($code[1]), '4294967296'));
+                $tdg = bcadd($tdg, bcmul('' . ord($code[2]), '16777216'));
+                $tdg = bcadd($tdg, bcmul('' . ord($code[3]), '65536'));
+                $tdg = bcadd($tdg, bcmul('' . ord($code[4]), '256'));
+                $tdg = bcadd($tdg, '' . ord($code[5]));
                 // tmp array for the 6 bytes block
                 $cw6 = array();
                 for ($idx = 0; $idx < 5; ++$idx) {
@@ -160,8 +158,6 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
      *
      * @param string  $code      Data to compact
      * @param string  $codewords Codewords
-     *
-     * @return array of codewords
      */
     protected function processNumericCompaction($code, &$codewords)
     {
@@ -171,7 +167,7 @@ abstract class Compaction extends \Com\Tecnick\Barcode\Type\Square\PdfFourOneSev
                 $rest = substr($code, 44);
                 $code = substr($code, 0, 44);
             }
-            $tdg = '1'.$code;
+            $tdg = '1' . $code;
             do {
                 $ddg = bcmod($tdg, '900');
                 $tdg = bcdiv($tdg, '900');

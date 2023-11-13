@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Web.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Color
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-color
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Color;
 
-use \Com\Tecnick\Color\Exception as ColorException;
+use Com\Tecnick\Color\Exception as ColorException;
 
 /**
  * Com\Tecnick\Color\Web
@@ -26,7 +27,7 @@ use \Com\Tecnick\Color\Exception as ColorException;
  * @category    Library
  * @package     Color
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2015-2015 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2015-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-color
  */
@@ -216,7 +217,7 @@ class Web extends \Com\Tecnick\Color\Css
             $name = substr($name, ($dotpos + 1));
         }
         if (empty(self::$webhex[$name])) {
-            throw new ColorException('unable to find the color hex for the name: '.$name);
+            throw new ColorException('unable to find the color hex for the name: ' . $name);
         }
         return self::$webhex[$name];
     }
@@ -234,7 +235,7 @@ class Web extends \Com\Tecnick\Color\Css
     {
         $name = array_search($this->extractHexCode($hex), self::$webhex, true);
         if ($name === false) {
-            throw new ColorException('unable to find the color name for the hex code: '.$hex);
+            throw new ColorException('unable to find the color name for the hex code: ' . $hex);
         }
         return $name;
     }
@@ -251,16 +252,16 @@ class Web extends \Com\Tecnick\Color\Css
     public function extractHexCode($hex)
     {
         if (preg_match('/^[#]?([0-9a-f]{3,8})$/', strtolower($hex), $match) !== 1) {
-            throw new ColorException('unable to extract the color hash: '.$hex);
+            throw new ColorException('unable to extract the color hash: ' . $hex);
         }
         $hex = $match[1];
         switch (strlen($hex)) {
             case 3:
-                return $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2].'ff';
+                return $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2] . 'ff';
             case 4:
-                return $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2].$hex[3].$hex[3];
+                return $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
             case 6:
-                return $hex.'ff';
+                return $hex . 'ff';
         }
         return $hex;
     }
@@ -269,8 +270,6 @@ class Web extends \Com\Tecnick\Color\Css
      * Get the RGB color object from hexadecimal hash
      *
      * @param string $hex hexadecimal color hash (i.e. #RGB, #RGBA, #RRGGBB, #RRGGBBAA)
-     *
-     * @return array with keys ('red', 'green', 'blue', 'alpha')
      *
      * @throws ColorException if the color is not found
      */
@@ -321,8 +320,8 @@ class Web extends \Com\Tecnick\Color\Css
     /**
      * Get the normalized integer value from [0..$max] to [0..1]
      *
-     * @param float $value Value to convert
-     * @param int   $max   Max input value
+     * @param string $value Value to convert
+     * @param int    $max   Max input value
      *
      * @return float value [0..1]
      */
@@ -338,8 +337,6 @@ class Web extends \Com\Tecnick\Color\Css
      * Parse the input color string and return the correspondent color Object
      *
      * @param string $color String containing web color definition
-     *
-     * @return \Com\Tecnick\Color\Model or null in case of transparent color
      *
      * @throws ColorException in case of error
      */

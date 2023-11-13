@@ -12,7 +12,8 @@
         "phpmailer/phpmailer": "^6.8",
         "symfony/deprecation-contracts": "v2.5.2",
         "league/oauth2-client": "^2.7",
-        "symfony/polyfill-intl-idn": "^1.28"
+        "symfony/polyfill-intl-idn": "^1.28",
+        "zaloplatform/zalo-php-sdk": "*"
     },
     "autoload" : {
         "psr-4" : {

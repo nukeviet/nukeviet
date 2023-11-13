@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Mask.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,9 +16,9 @@
 
 namespace Com\Tecnick\Barcode\Type\Square\QrCode;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
-use \Com\Tecnick\Barcode\Type\Square\QrCode\Data;
-use \Com\Tecnick\Barcode\Type\Square\QrCode\Spec;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Type\Square\QrCode\Data;
+use Com\Tecnick\Barcode\Type\Square\QrCode\Spec;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\QrCode\Mask
@@ -26,7 +27,7 @@ use \Com\Tecnick\Barcode\Type\Square\QrCode\Spec;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
@@ -36,7 +37,7 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
      * If false, checks all masks available,
      * otherwise the value indicates the number of masks to be checked, mask id are random
      *
-     * @var int
+     * @var bool
      */
     protected $qr_find_from_random = false;
 
@@ -103,7 +104,7 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
         $this->qr_find_from_random = (bool)$random_mask;
         $this->qr_find_best_mask = (bool)$best_mask;
         $this->qr_default_mask = intval($default_mask);
-        $this->spc = new Spec;
+        $this->spc = new Spec();
     }
 
     /**
@@ -176,7 +177,7 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
     protected function writeFormatInformation($width, &$frame, $maskNo, $level)
     {
         $blacks = 0;
-        $spec = new Spec;
+        $spec = new Spec();
         $format =  $spec->getFormatInfo($maskNo, $level);
         for ($idx = 0; $idx < 8; ++$idx) {
             if ($format & 1) {
@@ -212,15 +213,16 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
     }
 
     /**
-     * Evaluate Symbol
+     * Evaluate Symbol and returns demerit value.
      *
      * @param int   $width Width
      * @param array $frame Frame
      *
-     * @return int demerit
+     * @return int
      */
     protected function evaluateSymbol($width, $frame)
     {
+        $frameY = $frameYM = $frame[0];
         for ($ypos = 0; $ypos < $width; ++$ypos) {
             $frameY = $frame[$ypos];
             if ($ypos > 0) {
@@ -228,8 +230,8 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
             } else {
                 $frameYM = $frameY;
             }
-            $demerit = $this->evaluateSymbolB($ypos, $width, $frameY, $frameYM);
         }
+        $demerit = $this->evaluateSymbolB($ypos, $width, $frameY, $frameYM);
         for ($xpos = 0; $xpos < $width; ++$xpos) {
             $head = 0;
             $this->runLength[0] = 1;
@@ -329,10 +331,12 @@ abstract class Mask extends \Com\Tecnick\Barcode\Type\Square\QrCode\MaskNum
     protected function calcN1N3delta($length, $idx)
     {
         $fact = (int)($this->runLength[$idx] / 3);
-        if (($this->runLength[($idx - 2)] == $fact)
+        if (
+            ($this->runLength[($idx - 2)] == $fact)
             && ($this->runLength[($idx - 1)] == $fact)
             && ($this->runLength[($idx + 1)] == $fact)
-            && ($this->runLength[($idx + 2)] == $fact)) {
+            && ($this->runLength[($idx + 2)] == $fact)
+        ) {
             if (($this->runLength[($idx - 3)] < 0) || ($this->runLength[($idx - 3)] >= (4 * $fact))) {
                 return Data::N3;
             } elseif ((($idx + 3) >= $length) || ($this->runLength[($idx + 3)] >= (4 * $fact))) {

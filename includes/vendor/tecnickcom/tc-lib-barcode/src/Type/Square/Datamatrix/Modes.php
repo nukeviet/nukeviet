@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Modes.php
  *
@@ -6,7 +7,7 @@
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Barcode\Type\Square\Datamatrix;
 
-use \Com\Tecnick\Barcode\Exception as BarcodeException;
+use Com\Tecnick\Barcode\Exception as BarcodeException;
 
 /**
  * Com\Tecnick\Barcode\Type\Square\Datamatrix\Modes
@@ -26,19 +27,33 @@ use \Com\Tecnick\Barcode\Exception as BarcodeException;
  * @category    Library
  * @package     Barcode
  * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2010-2016 Nicola Asuni - Tecnick.com LTD
+ * @copyright   2010-2023 Nicola Asuni - Tecnick.com LTD
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-barcode
  */
 abstract class Modes extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\Placement
 {
     /**
+     * Store last used encoding for data codewords.
+     *
+     * @var int
+     */
+    public $last_enc;
+
+    /**
+     * Datamatrix shape key (S=square, R=rectangular)
+     *
+     * @var string
+     */
+    public $shape;
+
+    /**
      * Return the 253-state codeword
      *
      * @param int $cdwpad Pad codeword.
      * @param int $cdwpos Number of data codewords from the beginning of encoded data.
      *
-     * @return pad codeword
+     * @return int
      */
     public function get253StateCodeword($cdwpad, $cdwpos)
     {
@@ -196,7 +211,7 @@ abstract class Modes extends \Com\Tecnick\Barcode\Type\Square\Datamatrix\Placeme
     protected function getMaxDataCodewords($numcw)
     {
         $mdc = 0;
-        foreach (Data::$symbattr[$this->shape] as $matrix) {
+        foreach (Data::SYMBATTR[$this->shape] as $matrix) {
             if ($matrix[11] >= $numcw) {
                 $mdc = $matrix[11];
                 break;
