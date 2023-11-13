@@ -127,6 +127,8 @@ class Server
             if ($original_port !== false) {
                 if ($original_port != 80 and $original_port != 443) {
                     $original_port = ':' . $original_port;
+                } else {
+                    $original_port = '';
                 }
                 $this->original_port = $original_port;
             }
