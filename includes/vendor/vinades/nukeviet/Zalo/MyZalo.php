@@ -285,20 +285,6 @@ class MyZalo
     }
 
     /**
-     * accesstoken_new_result()
-     *
-     * @param mixed $url
-     * @param mixed $args
-     * @return array|false
-     */
-    private function accesstoken_new_result($url, $args)
-    {
-        $response = self::getResponse($url, $args);
-
-        return $this->get_json_response($response, ['access_token', 'refresh_token']);
-    }
-
-    /**
      * Lấy access token từ refresh token
      * oa_accesstoken_from_refreshtoken()
      *
@@ -391,40 +377,13 @@ class MyZalo
     }
 
     /**
-     * oa_accesstoken_new()
-     *
-     * @param mixed $code_verifier
-     * @return array|false
-     */
-    public function oa_accesstoken_new($code_verifier)
-    {
-        if (!$this->preCheckValid()) {
-            return false;
-        }
-
-        try {
-            $helper = $this->zalo->getRedirectLoginHelper();
-            $zaloToken = $helper->getZaloTokenByOA($code_verifier);
-
-            return [
-                'access_token' => $zaloToken->getAccessToken(),
-                'refresh_token' => $zaloToken->getRefreshToken(),
-                'expire_time' => $zaloToken->getAccessTokenExpiresAt()->getTimestamp()
-            ];
-        } catch (ZaloSDKException $e) {
-            $this->error = $e->getMessage();
-
-            return false;
-        }
-    }
-
-    /**
      * accesstokenGet()
      *
      * @param mixed $code_verifier
+     * @param string $level
      * @return array|false
      */
-    public function accesstokenGet($code_verifier)
+    public function accesstokenGet($code_verifier, $level = 'oa')
     {
         if (!$this->preCheckValid()) {
             return false;
@@ -432,7 +391,7 @@ class MyZalo
 
         try {
             $helper = $this->zalo->getRedirectLoginHelper();
-            $zaloToken = $helper->getZaloToken($code_verifier);
+            $zaloToken = $level == 'oa' ? $helper->getZaloTokenByOA($code_verifier) : $helper->getZaloToken($code_verifier);
 
             return [
                 'access_token' => $zaloToken->getAccessToken(),

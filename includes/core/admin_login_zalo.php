@@ -20,7 +20,7 @@ if (!empty($_GET['code'])) {
         $code_verifier = $_SESSION['admin_code_verifier'];
         unset($_SESSION['admin_code_verifier']);
 
-        $result = $myZalo->accesstokenGet($code_verifier);
+        $result = $myZalo->accesstokenGet($code_verifier, 'user');
         if (empty($result)) {
             $error = $myZalo->getError();
         } else {

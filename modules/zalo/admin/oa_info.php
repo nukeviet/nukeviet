@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('code, oa_id', 'get')) {
     $code_verifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
     $nv_Request->unset_request('oa_code_verifier', 'session');
 
-    $result = $myZalo->oa_accesstoken_new($code_verifier);
+    $result = $myZalo->accesstokenGet($code_verifier, 'user');
     if (empty($result)) {
         $contents = zaloGetError();
         include NV_ROOTDIR . '/includes/header.php';

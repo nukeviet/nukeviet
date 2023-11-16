@@ -45,7 +45,7 @@ if ($nv_Request->get_string('func', 'get', '') == 'accesstoken' and $nv_Request-
     $codeVerifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
     $nv_Request->unset_request('oa_code_verifier', 'session');
 
-    $result = $myZalo->oa_accesstoken_new($codeVerifier);
+    $result = $myZalo->accesstokenGet($codeVerifier);
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if (empty($result)) {

@@ -19,7 +19,7 @@ if ($nv_Request->isset_request('code', 'get')) {
     $code_verifier = $nv_Request->get_string('code_verifier', 'session', '');
     $nv_Request->unset_request('code_verifier', 'session');
 
-    $result = $myZalo->accesstokenGet($code_verifier);
+    $result = $myZalo->accesstokenGet($code_verifier, 'user');
 
     if (empty($result)) {
         $err = $myZalo->getError();
