@@ -407,7 +407,7 @@ class MyZalo
 
     /**
      * Truy xuất thông tin cơ bản của người dùng Zalo đã cấp quyền cho ứng dụng
-     * https://developers.zalo.me/docs/api/social-api/tai-lieu/thong-tin-ten-anh-dai-dien-post-28
+     * https://developers.zalo.me/docs/social-api/tai-lieu/thong-tin-ten-anh-dai-dien
      *
      * getUserInfo()
      *
@@ -421,19 +421,19 @@ class MyZalo
         }
 
         try {
-            $params = ['fields' => 'id,name,picture'];
+            $params = ['fields' => 'id,name,picture.type(normal)'];
             $response = $this->zalo->get(ZaloEndPoint::API_GRAPH_ME, $accesstoken, $params);
             $result = $response->getDecodedBody();
             if (empty($result)) {
                 $this->error = self::ERROR_NOT_RESPONSE;
-    
+
                 return false;
             }
 
             if (!empty($result['error'])) {
                 $this->error = $result['message'];
                 $this->error_code = $result['error'];
-    
+
                 return false;
             }
 
@@ -444,7 +444,7 @@ class MyZalo
                 'birthday' => '',
                 'picture' => $result['picture']['data']['url']
             ];
-            
+
         } catch (ZaloSDKException $e) {
             $this->error = $e->getMessage();
 
@@ -454,6 +454,7 @@ class MyZalo
 
     /**
      * Lấy thông tin Official Account
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-oa/lay-thong-tin-zalo-official-account
      *
      * @param mixed $accesstoken
      * @return mixed
@@ -510,7 +511,7 @@ class MyZalo
 
     /**
      * Lấy danh sách người quan tâm
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/lay-danh-sach-nguoi-quan-tam-post-5133
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-nguoi-dung/lay-danh-sach-khach-hang-quan-tam-oa
      *
      * get_followers()
      *
@@ -553,8 +554,8 @@ class MyZalo
     }
 
     /**
-     * Lấy thông tin người quan tâm
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/lay-thong-tin-nguoi-quan-tam-post-5129
+     * Lấy thông tin người quan tâm cụ thể
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-nguoi-dung/lay-thong-tin-khach-hang-quan-tam-oa
      *
      * get_follower_profile()
      *
@@ -578,7 +579,7 @@ class MyZalo
 
     /**
      * Cập nhật thông tin người quan tâm
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/cap-nhat-thong-tin-nguoi-quan-tam-post-5125
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-nguoi-dung/cap-nhat-thong-tin-khach-hang-quan-tam-oa
      *
      * updatefollowerinfo()
      *
@@ -599,6 +600,7 @@ class MyZalo
 
     /**
      * Gắn nhãn người quan tâm
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-nguoi-dung/gan-nhan-khach-hang
      *
      * @param mixed $accesstoken
      * @param mixed $user_id
@@ -622,6 +624,7 @@ class MyZalo
 
     /**
      * Gỡ nhãn khỏi người quan tâm
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-nguoi-dung/go-nhan-khach-hang
      *
      * @param mixed $accesstoken
      * @param mixed $user_id
@@ -645,7 +648,7 @@ class MyZalo
 
     /**
      * Lấy danh sách nhãn
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/quan-ly-nhan-post-5119
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-nguoi-dung/lay-danh-sach-nhan
      *
      * @param mixed $accesstoken
      * @return mixed
@@ -663,7 +666,7 @@ class MyZalo
 
     /**
      * Xóa nhãn
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/quan-ly-nhan-post-5119
+     * https://developers.zalo.me/docs/official-account/quan-ly/quan-ly-thong-tin-nguoi-dung/xoa-nhan
      *
      * @param mixed $accesstoken
      * @param mixed $tag_name
@@ -682,8 +685,8 @@ class MyZalo
     }
 
     /**
-     * Lấy danh sách các hội thoại với người quan tâm
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-tin-nhan-nguoi-quan-tam/lay-danh-sach-cac-hoi-thoai-voi-nguoi-quan-tam-post-5140
+     * Lấy thông tin Tin nhắn trong một hội thoại
+     * https://developers.zalo.me/docs/official-account/tin-nhan/quan-ly-tin-nhan/lay-thong-tin-tin-nhan-trong-mot-hoi-thoai
      *
      * @param mixed $accesstoken
      * @param mixed $user_id
@@ -714,8 +717,8 @@ class MyZalo
     }
 
     /**
-     * Lấy danh sách các hội thoại gần nhất
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-tin-nhan-nguoi-quan-tam/lay-danh-sach-cac-hoi-thoai-gan-nhat-post-5144
+     * Lấy thông tin Tin nhắn gần nhất
+     * https://developers.zalo.me/docs/official-account/tin-nhan/quan-ly-tin-nhan/lay-thong-tin-tin-nhan-gan-nhat
      *
      * listrecentchat()
      *
@@ -770,8 +773,8 @@ class MyZalo
     }
 
     /**
-     * Gửi thông báo văn bản
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-van-ban-post-5072
+     * Gửi tin Tư vấn dạng văn bản
+     * https://developers.zalo.me/docs/official-account/tin-nhan/tin-tu-van/gui-tin-tu-van-dang-van-ban
      *
      * send_text()
      *
@@ -803,8 +806,8 @@ class MyZalo
     }
 
     /**
-     * Gửi thông báo đính kèm ảnh mới
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-theo-mau-dinh-kem-anh-post-5068
+     * Gửi tin Tư vấn đính kèm ảnh
+     * https://developers.zalo.me/docs/official-account/tin-nhan/tin-tu-van/gui-tin-tu-van-dinh-kem-anh
      *
      * send_sitephoto()
      *
@@ -836,8 +839,8 @@ class MyZalo
     }
 
     /**
-     * Gửi thông báo theo mẫu đính kèm ảnh đã upload lên zalo trước đó
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-theo-mau-dinh-kem-anh-post-5068
+     * Gửi tin Tư vấn đính kèm ảnh đã upload lên zalo trước đó
+     * https://developers.zalo.me/docs/official-account/tin-nhan/tin-tu-van/gui-tin-tu-van-dinh-kem-anh
      *
      * send_zaloimage()
      *
@@ -869,8 +872,8 @@ class MyZalo
     }
 
     /**
-     * Gửi thông báo đính kèm file
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-dinh-kem-file-post-5049
+     * Gửi tin Tư vấn đính kèm file
+     * https://developers.zalo.me/docs/official-account/tin-nhan/tin-tu-van/gui-tin-tu-van-dinh-kem-file
      *
      * send_zalofile()
      *
@@ -931,8 +934,8 @@ class MyZalo
     }
 
     /**
-     * Gửi thông báo theo mẫu yêu cầu thông tin người dùng
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-theo-mau-yeu-cau-thong-tin-nguoi-dung-post-5055
+     * Gửi tin Tư vấn theo mẫu yêu cầu thông tin người dùng
+     * https://developers.zalo.me/docs/official-account/tin-nhan/tin-tu-van/gui-tin-tu-van-theo-mau-yeu-cau-thong-tin-nguoi-dung
      *
      * send_request_user_info()
      *
@@ -985,8 +988,8 @@ class MyZalo
     }
 
     /**
-     * Tạo bài viết
-     * https://developers.zalo.me/docs/api/article-api/api/tao-bai-viet-post-2756
+     * Tạo Nội dung dạng Bài viết
+     * https://developers.zalo.me/docs/official-account/noi-dung/noi-dung-dang-bai-viet/
      *
      * article_create()
      *
@@ -1027,8 +1030,8 @@ class MyZalo
     }
 
     /**
-     * Xóa bài viết
-     * https://developers.zalo.me/docs/api/article-api/api/xoa-bai-viet-post-2927
+     * Xóa nội dung dạng bài viết
+     * https://developers.zalo.me/docs/official-account/noi-dung/noi-dung-dang-bai-viet/xoa-noi-dung-dang-bai-viet
      *
      * delete_article()
      *
@@ -1048,8 +1051,8 @@ class MyZalo
     }
 
     /**
-     * Cập nhật bài viết
-     * https://developers.zalo.me/docs/api/article-api/api/cap-nhat-bai-viet-post-2925
+     * Cập nhật nội dung
+     * https://developers.zalo.me/docs/official-account/noi-dung/noi-dung-dang-bai-viet/cap-nhat-noi-dung
      *
      * article_update()
      *
@@ -1069,8 +1072,8 @@ class MyZalo
     }
 
     /**
-     * Lấy chi tiết của bài viết
-     * https://developers.zalo.me/docs/api/article-api/api/lay-chi-tiet-cua-bai-viet-post-2936
+     * Lấy chi tiết của nội dung dạng bài viết
+     * https://developers.zalo.me/docs/official-account/noi-dung/noi-dung-dang-bai-viet/lay-chi-tiet-cua-noi-dung-dang-bai-viet
      *
      * article_getdetail()
      *
@@ -1092,8 +1095,8 @@ class MyZalo
     }
 
     /**
-     * Lấy danh sách bài viết
-     * https://developers.zalo.me/docs/api/article-api/api/lay-danh-sach-bai-viet-post-2930
+     * Lấy danh sách nội dung dạng bài viết
+     * https://developers.zalo.me/docs/official-account/noi-dung/noi-dung-dang-bai-viet/lay-danh-sach-noi-dung-dang-bai-viet
      *
      * get_articlelist()
      *
