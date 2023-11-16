@@ -7,6 +7,9 @@
  * @see https://github.com/nukeviet The NukeViet CMS GitHub project
  */
 
+.vertical-align-middle {
+    vertical-align: middle !important;
+}
 .tag {
     display: inline-block;
     background-color: #fff;

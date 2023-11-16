@@ -11,6 +11,10 @@
 
 namespace NukeViet\Zalo;
 
+use Zalo\Zalo;
+use Zalo\ZaloEndPoint;
+use Zalo\Builder\MessageBuilder;
+use Zalo\Exceptions\ZaloSDKException;
 use NukeViet\Http\Curl;
 
 /**
@@ -33,21 +37,8 @@ class MyZalo
     const ERROR_OA_ID_INCORRECT = 'oa_id_incorrect';
     const ERROR_REFRESH_TOKEN_EXP = 'refresh_token_expired';
 
-    const PERMISSION_URL = 'https://oauth.zaloapp.com/v4/permission?';
-    const OA_PERMISSION_URL = 'https://oauth.zaloapp.com/v4/oa/permission?';
-    const OA_GET_ACCESSTOKEN_URL = 'https://oauth.zaloapp.com/v4/oa/access_token';
-    const OA_GET_OAINFO_URL = 'https://openapi.zalo.me/v2.0/oa/getoa';
-    const OA_GET_FOLLOWERS_URL = 'https://openapi.zalo.me/v2.0/oa/getfollowers?';
-    const OA_GET_FOLLOWER_PROFILE_URL = 'https://openapi.zalo.me/v2.0/oa/getprofile?';
     const OA_UPDATE_FOLLOWERINFO_URL = 'https://openapi.zalo.me/v2.0/oa/updatefollowerinfo';
-    const OA_TAGFOLLOWER_URL = 'https://openapi.zalo.me/v2.0/oa/tag/tagfollower';
-    const OA_RMFOLLOWERFROMTAG_URL = 'https://openapi.zalo.me/v2.0/oa/tag/rmfollowerfromtag';
-    const OA_GETTAGSOFOA_URL = 'https://openapi.zalo.me/v2.0/oa/tag/gettagsofoa';
-    const OA_RMTAG_URL = 'https://openapi.zalo.me/v2.0/oa/tag/rmtag';
-    const CONVERSATION_URL = 'https://openapi.zalo.me/v2.0/oa/conversation?';
-    const LISTRECENTCHAT_URL = 'https://openapi.zalo.me/v2.0/oa/listrecentchat?';
     const QUOTA_MESSAGE_URL = 'https://openapi.zalo.me/v2.0/oa/quota/message';
-    const MESSAGE_SEND_URL = 'https://openapi.zalo.me/v2.0/oa/message';
     const UPLOAD_URL = 'https://openapi.zalo.me/v2.0/oa/upload/';
     const VIDEOUPLOAD_URL = 'https://openapi.zalo.me/v2.0/article/upload_video/preparevideo';
     const VIDEOUPLOAD_VERIFY_URL = 'https://openapi.zalo.me/v2.0/article/upload_video/verify';
@@ -71,6 +62,8 @@ class MyZalo
     private $error = '';
     private $error_code = '';
 
+    public $zalo;
+
     /**
      * __construct()
      *
@@ -84,6 +77,11 @@ class MyZalo
         $this->oa_access_token = $configs['zaloOAAccessToken'];
         $this->oa_refresh_token = $configs['zaloOARefreshToken'];
         $this->oa_access_token_time = (int) $configs['zaloOAAccessTokenTime'];
+
+        $this->zalo = new Zalo([
+            'app_id' => $this->app_id,
+            'app_secret' => $this->app_secret_key
+        ]);
     }
 
     /**
@@ -138,16 +136,6 @@ class MyZalo
     }
 
     /**
-     * getCodeVerifier()
-     *
-     * @return mixed
-     */
-    public function getCodeVerifier()
-    {
-        return $this->code_verifier;
-    }
-
-    /**
      * isValid()
      *
      * @return true
@@ -176,7 +164,7 @@ class MyZalo
      */
     public static function accessToken_isExp($accessTokenTime)
     {
-        return (NV_CURRENTTIME - $accessTokenTime) > 3600; // 1 hour
+        return (NV_CURRENTTIME - $accessTokenTime) > 90000; // 25 hour
     }
 
     /**
@@ -316,7 +304,7 @@ class MyZalo
      *
      * @param string $refreshtoken
      * @param int    $accessTokenTime
-     * @return array|false
+     * @return array
      */
     private function oa_accesstoken_from_refreshtoken($refreshtoken, $accessTokenTime)
     {
@@ -332,19 +320,15 @@ class MyZalo
             return false;
         }
 
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'secret_key' => $this->app_secret_key
-            ],
-            'body' => http_build_query([
-                'refresh_token' => $refreshtoken,
-                'app_id' => $this->app_id,
-                'grant_type' => 'refresh_token'
-            ])
-        ];
+        $oAuth2Client = $this->zalo->getOAuth2Client();
+        $result = (array) $oAuth2Client->getZaloTokenFromRefreshTokenByOA($refreshtoken);
+        $prefix = chr(0).'*'.chr(0);
 
-        return $this->accesstoken_new_result(self::OA_GET_ACCESSTOKEN_URL, $args);
+        return [
+            'access_token' => $result[$prefix. 'accessToken'],
+            'refresh_token' => $result[$prefix. 'refreshToken'],
+            'expire_time' => $result[$prefix. 'accessTokenExpiresAt']->getTimestamp()
+        ];
     }
 
     /**
@@ -368,12 +352,12 @@ class MyZalo
 
         $state = self::stateCreate(8);
         [$code_verifier, $code_challenge] = self::codeVerifierCreate();
-        $url = ($level == 'oa' ? self::OA_PERMISSION_URL : self::PERMISSION_URL) . http_build_query([
-            'app_id' => $this->app_id,
-            'redirect_uri' => $redirect_uri,
-            'code_challenge' => $code_challenge,
-            'state' => $state
-        ]);
+        $helper = $this->zalo->getRedirectLoginHelper();
+        if ($level == 'oa') {
+            $url = $helper->getLoginUrlByOA($redirect_uri, $code_challenge, $state);
+        } else {
+            $url = $helper->getLoginUrl($redirect_uri, $code_challenge, $state);
+        }
 
         return [
             'code_verifier' => $code_verifier,
@@ -394,49 +378,44 @@ class MyZalo
         if (!$this->preCheckValid()) {
             return false;
         }
-        empty($refreshtoken) && $refreshtoken = $this->oa_refresh_token;
-        empty($accesstoken_time) && $accesstoken_time = $this->oa_access_token_time;
-        $result = $this->oa_accesstoken_from_refreshtoken($refreshtoken, $accesstoken_time);
-        if (!empty($result)) {
-            return $result;
-        }
 
-        return $this->permissionURLCreate($redirect_uri, 'oa');
+        try {
+            empty($refreshtoken) && $refreshtoken = $this->oa_refresh_token;
+            empty($accesstoken_time) && $accesstoken_time = $this->oa_access_token_time;
+            $result = $this->oa_accesstoken_from_refreshtoken($refreshtoken, $accesstoken_time);
+
+            return $result;
+        } catch (ZaloSDKException $e) {
+            return $this->permissionURLCreate($redirect_uri, 'oa');
+        }
     }
 
     /**
      * oa_accesstoken_new()
      *
-     * @param mixed $authorization_code
-     * @param mixed $oa_id
      * @param mixed $code_verifier
      * @return array|false
      */
-    public function oa_accesstoken_new($authorization_code, $oa_id, $code_verifier)
+    public function oa_accesstoken_new($code_verifier)
     {
         if (!$this->preCheckValid()) {
             return false;
         }
-        if ($oa_id != $this->oa_id) {
-            $this->error = self::ERROR_OA_ID_INCORRECT;
+
+        try {
+            $helper = $this->zalo->getRedirectLoginHelper();
+            $zaloToken = $helper->getZaloTokenByOA($code_verifier);
+
+            return [
+                'access_token' => $zaloToken->getAccessToken(),
+                'refresh_token' => $zaloToken->getRefreshToken(),
+                'expire_time' => $zaloToken->getAccessTokenExpiresAt()->getTimestamp()
+            ];
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
 
             return false;
         }
-
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'secret_key' => $this->app_secret_key
-            ],
-            'body' => http_build_query([
-                'code' => $authorization_code,
-                'app_id' => $this->app_id,
-                'grant_type' => 'authorization_code',
-                'code_verifier' => $code_verifier
-            ])
-        ];
-
-        return $this->accesstoken_new_result(self::OA_GET_ACCESSTOKEN_URL, $args);
     }
 
     /**
@@ -521,24 +500,19 @@ class MyZalo
 
     /**
      * Lấy thông tin Official Account
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/lay-thong-tin-official-account-post-5135
      *
      * @param mixed $accesstoken
      * @return mixed
      */
     public function get_oa_info($accesstoken)
     {
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
-
-        $response = self::getResponse(self::OA_GET_OAINFO_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_PROFILE, $accesstoken, []);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -613,22 +587,15 @@ class MyZalo
             unset($_data['tag_name']);
         }
 
-        $_data = json_encode($_data);
+        $data = ['data' => json_encode($_data)];
 
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
-        $url = self::OA_GET_FOLLOWERS_URL . http_build_query([
-            'data' => $_data
-        ]);
-
-        $response = self::getResponse($url, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_LIST_FOLLOWER, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -643,26 +610,16 @@ class MyZalo
      */
     public function get_follower_profile($accesstoken, $user_id)
     {
-        $_data = [
+        $data = ['data' => json_encode([
             'user_id' => $user_id
-        ];
-        $_data = json_encode($_data);
-
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
-
-        $url = self::OA_GET_FOLLOWER_PROFILE_URL . http_build_query([
-            'data' => $_data
-        ]);
-
-        $response = self::getResponse($url, $args);
-
-        return $this->get_json_response($response);
+        ])];
+        try {
+            $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_USER_PROFILE, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -677,23 +634,17 @@ class MyZalo
      */
     public function updatefollowerinfo($accesstoken, $data)
     {
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode($data)
-        ];
-
-        $response = self::getResponse(self::OA_UPDATE_FOLLOWERINFO_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(self::OA_UPDATE_FOLLOWERINFO_URL, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
      * Gắn nhãn người quan tâm
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/quan-ly-nhan-post-5119
      *
      * @param mixed $accesstoken
      * @param mixed $user_id
@@ -702,26 +653,21 @@ class MyZalo
      */
     public function tagfollower($accesstoken, $user_id, $tag_name)
     {
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode([
-                'user_id' => $user_id,
-                'tag_name' => $tag_name
-            ])
+        $data = [
+            'user_id' => $user_id,
+            'tag_name' => $tag_name
         ];
-
-        $response = self::getResponse(self::OA_TAGFOLLOWER_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(ZaloEndpoint::API_OA_TAG_USER, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
      * Gỡ nhãn khỏi người quan tâm
-     * https://developers.zalo.me/docs/api/official-account-api/quan-ly-thong-tin-official-account/quan-ly-nhan-post-5119
      *
      * @param mixed $accesstoken
      * @param mixed $user_id
@@ -730,21 +676,17 @@ class MyZalo
      */
     public function rmfollowerfromtag($accesstoken, $user_id, $tag_name)
     {
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode([
-                'user_id' => $user_id,
-                'tag_name' => $tag_name
-            ])
+        $data = [
+            'user_id' => $user_id,
+            'tag_name' => $tag_name
         ];
-
-        $response = self::getResponse(self::OA_RMFOLLOWERFROMTAG_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(ZaloEndPoint::API_OA_REMOVE_USER_FROM_TAG, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -756,17 +698,13 @@ class MyZalo
      */
     public function gettagsofoa($accesstoken)
     {
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
-
-        $response = self::getResponse(self::OA_GETTAGSOFOA_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_LIST_TAG, $accesstoken, []);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -779,20 +717,14 @@ class MyZalo
      */
     public function rmtag($accesstoken, $tag_name)
     {
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode([
-                'tag_name' => $tag_name
-            ])
-        ];
-
-        $response = self::getResponse(self::OA_RMTAG_URL, $args);
-
-        return $this->get_json_response($response);
+        $data = ['tag_name' => $tag_name];
+        try {
+            $response = $this->zalo->post(ZaloEndPoint::API_OA_REMOVE_TAG, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -812,27 +744,19 @@ class MyZalo
             $count = 10;
         }
 
-        $data = json_encode([
+        $data = ['data' => json_encode([
             'user_id' => $user_id,
             'offset' => $offset,
             'count' => $count
-        ]);
+        ])];
 
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
-
-        $url = self::CONVERSATION_URL . http_build_query([
-            'data' => $data
-        ]);
-
-        $response = self::getResponse($url, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_CONVERSATION, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -853,31 +777,23 @@ class MyZalo
             $count = 10;
         }
 
-        $data = json_encode([
+        $data = ['data' => json_encode([
             'offset' => $offset,
             'count' => $count
-        ]);
+        ])];
 
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
-
-        $url = self::LISTRECENTCHAT_URL . http_build_query([
-            'data' => $data
-        ]);
-
-        $response = self::getResponse($url, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->get(ZaloEndPoint::API_OA_GET_LIST_RECENT_CHAT, $accesstoken, $data);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
      * Lấy thông tin quota lệnh chủ động miễn phí
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/lay-thong-tin-quota-lenh-chu-dong-mien-phi-post-5149
+     * Không có trong Zalo SDK
      *
      * getquota()
      *
@@ -913,24 +829,27 @@ class MyZalo
      */
     public function send_text($accesstoken, $user_id, $message_id, $chat_text)
     {
-        $recipient = !empty($message_id) ? '"message_id":"' . $message_id . '"' : '"user_id":"' . $user_id . '"';
+        $msgBuilder = new MessageBuilder(MessageBuilder::MSG_TYPE_TXT);
+        $msgBuilder->withUserId($user_id);
+        $msgBuilder->withText($chat_text);
 
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => '{"recipient":{' . $recipient . '},"message":{"text":"' . self::format_text($chat_text) . '"}}'
-        ];
+        if (!empty($message_id)) {
+            $msgBuilder->withQuoteMessage($message_id);
+        }
 
-        $response = self::getResponse(self::MESSAGE_SEND_URL, $args);
+        $msgText = $msgBuilder->build();
 
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(ZaloEndPoint::API_OA_SEND_CONSULTATION_MESSAGE_V3, $accesstoken, $msgText);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
-     * Gửi thông báo theo mẫu đính kèm ảnh mới
+     * Gửi thông báo đính kèm ảnh mới
      * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-theo-mau-dinh-kem-anh-post-5068
      *
      * send_sitephoto()
@@ -944,20 +863,22 @@ class MyZalo
      */
     public function send_sitephoto($accesstoken, $user_id, $message_id, $chat_text, $attachment)
     {
-        $recipient = !empty($message_id) ? '"message_id":"' . $message_id . '"' : '"user_id":"' . $user_id . '"';
+        $msgBuilder = new MessageBuilder(MessageBuilder::MSG_TYPE_MEDIA);
+        $msgBuilder->withUserId($user_id);
+        $msgBuilder->withText($chat_text);
+        if (!empty($message_id)) {
+            $msgBuilder->withQuoteMessage($message_id);
+        }
+        $msgBuilder->withMediaUrl($attachment);
+        $msgImage = $msgBuilder->build();
 
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => '{"recipient":{' . $recipient . '},"message":{"text":"' . self::format_text($chat_text) . '","attachment":{"type":"template","payload":{"template_type":"media","elements":[{"media_type":"image","url":"' . $attachment . '"}]}}}}'
-        ];
-
-        $response = self::getResponse(self::MESSAGE_SEND_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(ZaloEndPoint::API_OA_SEND_CONSULTATION_MESSAGE_V3, $accesstoken, $msgImage);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -975,20 +896,22 @@ class MyZalo
      */
     public function send_zaloimage($accesstoken, $user_id, $message_id, $chat_text, $attachment_id)
     {
-        $recipient = !empty($message_id) ? '"message_id":"' . $message_id . '"' : '"user_id":"' . $user_id . '"';
+        $msgBuilder = new MessageBuilder(MessageBuilder::MSG_TYPE_MEDIA);
+        $msgBuilder->withUserId($user_id);
+        $msgBuilder->withText($chat_text);
+        if (!empty($message_id)) {
+            $msgBuilder->withQuoteMessage($message_id);
+        }
+        $msgBuilder->withAttachment($attachment_id);
+        $msgImage = $msgBuilder->build();
 
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => '{"recipient":{' . $recipient . '},"message":{"text":"' . self::format_text($chat_text) . '","attachment":{"type":"template","payload":{"template_type":"media","elements":[{"media_type":"image","attachment_id":"' . $attachment_id . '"}]}}}}'
-        ];
-
-        $response = self::getResponse(self::MESSAGE_SEND_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(ZaloEndPoint::API_OA_SEND_CONSULTATION_MESSAGE_V3, $accesstoken, $msgImage);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1005,20 +928,20 @@ class MyZalo
      */
     public function send_zalofile($accesstoken, $user_id, $message_id, $token)
     {
-        $recipient = !empty($message_id) ? '"message_id":"' . $message_id . '"' : '"user_id":"' . $user_id . '"';
-
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => '{"recipient":{' . $recipient . '},"message":{"attachment":{"type":"file","payload":{"token":"' . $token . '"}}}}'
-        ];
-
-        $response = self::getResponse(self::MESSAGE_SEND_URL, $args);
-
-        return $this->get_json_response($response);
+        $msgBuilder = new MessageBuilder(MessageBuilder::MSG_TYPE_FILE);
+        $msgBuilder->withUserId($user_id);
+        if (!empty($message_id)) {
+            $msgBuilder->withQuoteMessage($message_id);
+        }
+        $msgBuilder->withFileToken($token);
+        $msgFile = $msgBuilder->build();
+        try {
+            $response = $this->zalo->post(ZaloEndPoint::API_OA_SEND_CONSULTATION_MESSAGE_V3, $accesstoken, $msgFile);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1067,82 +990,18 @@ class MyZalo
      */
     public function send_request_user_info($accesstoken, $user_id, $message_id, $request_info)
     {
-        $recipient = !empty($message_id) ? '"message_id":"' . $message_id . '"' : '"user_id":"' . $user_id . '"';
+        $msgBuilder = new MessageBuilder(MessageBuilder::MSG_TYPE_REQUEST_USER_INFO);
+        $msgBuilder->withUserId($user_id);
+        $msgBuilder->addElement($request_info);
+        $msgText = $msgBuilder->build();
 
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => '{"recipient":{' . $recipient . '},"message":{"attachment":{"type":"template","payload":{"template_type":"request_user_info","elements":[{"title":"' . $request_info['title'] . '","subtitle":"' . $request_info['subtitle'] . '","image_url":"' . $request_info['image_url'] . '"}]}}}}'
-        ];
-
-        $response = self::getResponse(self::MESSAGE_SEND_URL, $args);
-
-        return $this->get_json_response($response);
-    }
-
-    /**
-     * Gửi thông báo theo mẫu đính kèm danh sách dạng text
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-theo-mau-dinh-kem-danh-sach-post-5064
-     *
-     * send_textlist()
-     *
-     * @param mixed $accesstoken
-     * @param mixed $user_id
-     * @param mixed $elements
-     * @param mixed $message_id
-     * @return mixed
-     */
-    public function send_textlist($accesstoken, $user_id, $message_id, $elements)
-    {
-        $recipient = !empty($message_id) ? '"message_id":"' . $message_id . '"' : '"user_id":"' . $user_id . '"';
-        $elements = json_encode($elements, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => '{"recipient":{' . $recipient . '},"message":{"attachment":{"type":"template","payload":{"template_type":"list","elements": ' . $elements . '}}}}'
-        ];
-
-        $response = self::getResponse(self::MESSAGE_SEND_URL, $args);
-
-        return $this->get_json_response($response);
-    }
-
-    /**
-     * Gửi thông báo theo mẫu đính kèm danh sách dạng button
-     * https://developers.zalo.me/docs/api/official-account-api/gui-tin-va-thong-bao-qua-oa/gui-thong-bao-theo-mau-dinh-kem-danh-sach-post-5064
-     *
-     * send_btnlist()
-     *
-     * @param mixed $accesstoken
-     * @param mixed $user_id
-     * @param mixed $text
-     * @param mixed $btns
-     * @param mixed $message_id
-     * @return mixed
-     */
-    public function send_btnlist($accesstoken, $user_id, $message_id, $text, $btns)
-    {
-        $recipient = !empty($message_id) ? '"message_id":"' . $message_id . '"' : '"user_id":"' . $user_id . '"';
-        $btns = json_encode($btns, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => '{"recipient":{' . $recipient . '},"message":{"text":"' . $text . '","attachment":{"type":"template","payload":{"buttons":' . $btns . '}}}}'
-        ];
-
-        $response = self::getResponse(self::MESSAGE_SEND_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(ZaloEndPoint::API_OA_SEND_CONSULTATION_MESSAGE_V3, $accesstoken, $msgText);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1183,18 +1042,13 @@ class MyZalo
      */
     public function article_create($accesstoken, $save_article)
     {
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode($save_article)
-        ];
-
-        $response = self::getResponse(self::ARTICLE_CREATE_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(self::ARTICLE_CREATE_URL, $accesstoken, $save_article);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1209,20 +1063,13 @@ class MyZalo
      */
     public function get_article_id($accesstoken, $token)
     {
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode([
-                'token' => $token
-            ])
-        ];
-
-        $response = self::getResponse(self::ARTICLE_GETID_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(self::ARTICLE_GETID_URL, $accesstoken, ['token' => $token]);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1237,20 +1084,13 @@ class MyZalo
      */
     public function delete_article($accesstoken, $zalo_id)
     {
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode([
-                'id' => $zalo_id
-            ])
-        ];
-
-        $response = self::getResponse(self::ARTICLE_REMOVE_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(self::ARTICLE_REMOVE_URL, $accesstoken, ['id' => $zalo_id]);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1265,25 +1105,13 @@ class MyZalo
      */
     public function article_update($accesstoken, $save_article)
     {
-        /*if ($save_article['type'] == 'video') {
-            $url = self::ARTICLE_VIDEO_UPDATE_URL;
-            unset($save_article['type']);
-        } else {
-            $url = self::ARTICLE_UPDATE_URL;
-        }*/
-
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ],
-            'body' => json_encode($save_article)
-        ];
-
-        $response = self::getResponse(self::ARTICLE_UPDATE_URL, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->post(self::ARTICLE_UPDATE_URL, $accesstoken, $save_article);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1298,17 +1126,15 @@ class MyZalo
      */
     public function article_getdetail($accesstoken, $zalo_id)
     {
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
+        $url = self::ARTICLE_GETDETAIL_URL . '?id=' . $zalo_id;
 
-        $response = self::getResponse(self::ARTICLE_GETDETAIL_URL . '?id=' . $zalo_id, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->get($url, $accesstoken, []);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -1325,16 +1151,14 @@ class MyZalo
      */
     public function get_articlelist($accesstoken, $offset, $limit, $type)
     {
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => $accesstoken
-            ]
-        ];
+        $url = self::ARTICLE_GETLIST_URL . 'offset=' . $offset . '&limit=' . $limit . '&type=' . $type;
 
-        $response = self::getResponse(self::ARTICLE_GETLIST_URL . 'offset=' . $offset . '&limit=' . $limit . '&type=' . $type, $args);
-
-        return $this->get_json_response($response);
+        try {
+            $response = $this->zalo->get($url, $accesstoken, []);
+            return $response->getDecodedBody();
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 }

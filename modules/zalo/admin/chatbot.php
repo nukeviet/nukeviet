@@ -44,9 +44,7 @@ $events = [
 $user_orient_actions = [
     'sent_text_message',
     'sent_image_message',
-    'sent_file_message',
-    'sent_textlist_message',
-    'sent_btnlist_message'
+    'sent_file_message'
 ];
 
 //change_alias
@@ -146,14 +144,6 @@ if (!$popup) {
                         $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload&amp;type=file&amp;popup=1&amp;idfield=parameter_' . $event;
                         $view_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload&amp;preview=1&amp;id=';
                         break;
-                    case 'sent_textlist_message':
-                        $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=textlist&amp;popup=1&amp;idfield=parameter_' . $event;
-                        $view_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;preview=1&amp;id=';
-                        break;
-                    case 'sent_btnlist_message':
-                        $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=btnlist&amp;popup=1&amp;idfield=parameter_' . $event;
-                        $view_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;preview=1&amp;id=';
-                        break;
                 }
 
                 $xtpl->assign('ACTION', [
@@ -204,14 +194,6 @@ foreach ($keyword_actions as $i => $action) {
             case 'sent_file_message':
                 $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload&amp;type=file&amp;popup=1&amp;idfield=par_' . $i;
                 $view_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload&amp;preview=1&amp;id=';
-                break;
-            case 'sent_textlist_message':
-                $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=textlist&amp;popup=1&amp;idfield=par_' . $i;
-                $view_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;preview=1&amp;id=';
-                break;
-            case 'sent_btnlist_message':
-                $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=btnlist&amp;popup=1&amp;idfield=par_' . $i;
-                $view_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;preview=1&amp;id=';
                 break;
         }
 

@@ -35,18 +35,6 @@
                                 <a href="{ZALO_HOMEPAGE}" target="_blank">{ZALO_HOMEPAGE}</a>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="text-nowrap">{LANG.invitation_to_follow}</td>
-                            <td>
-                                <a href="{FOLLOW_URL}" target="_blank">{FOLLOW_URL}</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-nowrap">{LANG.info_request_link}</td>
-                            <td>
-                                <a href="{INFO_REQUEST_URL}" target="_blank">{INFO_REQUEST_URL}</a>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

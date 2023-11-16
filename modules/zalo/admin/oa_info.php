@@ -41,12 +41,10 @@ if ($nv_Request->isset_request('oa_clear', 'post')) {
 
 // Lay thong tin token gui ve tu zalo
 if ($nv_Request->isset_request('code, oa_id', 'get')) {
-    $authorization_code = $nv_Request->get_string('code', 'get', '');
-    $oa_id = $nv_Request->get_string('oa_id', 'get', '');
     $code_verifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
     $nv_Request->unset_request('oa_code_verifier', 'session');
 
-    $result = $myZalo->oa_accesstoken_new($authorization_code, $oa_id, $code_verifier);
+    $result = $myZalo->oa_accesstoken_new($code_verifier);
     if (empty($result)) {
         $contents = zaloGetError();
         include NV_ROOTDIR . '/includes/header.php';
@@ -88,11 +86,11 @@ if (empty($oa_info) or empty($oa_info['oa_id']) or $nv_Request->isset_request('o
     }
 
     $oa_info = $result['data'];
-    $oa_info = $oa_info + parse_OA_info();
+    $oa_info = $oa_info;
     if (empty($oa_info['qrcode'])) {
         $qrcode = oa_qrcode_create();
         if (!empty($qrcode)) {
-            $oa_info['qrcode'] = NV_MY_DOMAIN . $qrcode;
+            $oa_info['qrcode'] = $qrcode;
         }
     }
 
@@ -116,12 +114,14 @@ if ($oa_info['oa_id'] != $global_config['zaloOfficialAccountID']) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$keys = ['oa_id', 'name', 'category', 'description', 'address', 'hotline', 'is_verified', 'avatar', 'cover', 'qrcode'];
+$keys = ['oa_id', 'name', 'description', 'is_verified', 'oa_type', 'cate_name', 'num_follower', 'avatar', 'cover', 'qrcode', 'package_name', 'package_valid_through_date', 'linked_zca'];
 $oa_info = array_replace(array_flip($keys), $oa_info);
 foreach ($oa_info as $key => $val) {
     if ($key == 'is_verified' or !empty($val)) {
         $key == 'is_verified' && $val = $nv_Lang->getModule('verify_status_' . $val);
         $key == 'updatetime' && $val = nv_date('d/m/Y H:i', $val);
+        $key == 'oa_type' && $val = $nv_Lang->getModule('oa_type_' . $val);
+        $key == 'qrcode' && $val = NV_MY_DOMAIN . NV_BASE_SITEURL . $val;
         $xtpl->assign('OA', [
             'key' => !empty($nv_Lang->getModule($key)) ? $nv_Lang->getModule($key) : $key,
             'val' => $val
@@ -140,8 +140,6 @@ foreach ($oa_info as $key => $val) {
 }
 
 $xtpl->assign('ZALO_HOMEPAGE', 'https://zalo.me/' . $global_config['zaloOfficialAccountID']);
-$xtpl->assign('FOLLOW_URL', 'https://zalo.me/' . $global_config['zaloOfficialAccountID'] . '?src=qr&f=1');
-$xtpl->assign('INFO_REQUEST_URL', 'https://oa.zalo.me/reqinfo?oa=' . $global_config['zaloOfficialAccountID']);
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

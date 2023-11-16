@@ -25,7 +25,6 @@
                 <th>{LANG.user_id}</th>
                 <th>{LANG.user_id_by_app}</th>
                 <th>{LANG.display_name}</th>
-                <th class="text-nowrap text-center">{LANG.user_gender}</th>
                 <th class="text-nowrap text-center">{LANG.updatetime}</th>
                 <th></th>
             </tr>
@@ -33,12 +32,12 @@
         <tbody>
             <!-- BEGIN: follower -->
             <tr class="follower" data-user-id="{FOLLOWER.user_id}">
-                <td class="text-nowrap" style="width:5%"><a class="btn btn-default btn-block" href="{FORM_ACTION}&amp;user_id={FOLLOWER.user_id}">{FOLLOWER.user_id}</span></td>
-                <td class="user_id_by_app">{FOLLOWER.user_id_by_app}</td>
-                <td class="display_name">{FOLLOWER.display_name}</td>
-                <td class="text-nowrap text-right user_gender" style="width:5%">{FOLLOWER.user_gender}</td>
-                <td class="text-nowrap text-right updatetime_format" style="width:5%">{FOLLOWER.updatetime_format}</td>
-                <td class="text-nowrap text-right" style="width:5%">
+                <td class="text-nowrap vertical-align-middle" style="width:5%"><a class="btn btn-default btn-block" href="{FORM_ACTION}&amp;user_id={FOLLOWER.user_id}">{FOLLOWER.user_id}</span></td>
+                <td class="user_id_by_app vertical-align-middle">{FOLLOWER.user_id_by_app}</td>
+                <td class="display_name vertical-align-middle">{FOLLOWER.display_name}</td>
+                <td class="text-nowrap text-right updatetime_format vertical-align-middle" style="width:5%">{FOLLOWER.updatetime_format}</td>
+                <td class="text-nowrap text-right vertical-align-middle" style="width:5%">
+                    <a role="button" class="btn btn-primary" href="{FORM_ACTION}&amp;user_id={FOLLOWER.user_id}">{LANG.details}</a>
                     <button type="button" class="btn btn-primary" data-toggle="follower_getprofile">{LANG.getprofile}</button>
                 </td>
             </tr>
@@ -47,7 +46,7 @@
         <!-- BEGIN: generate_page -->
         <tfoot>
             <tr>
-                <td colspan="5" class="text-center">
+                <td colspan="4" class="text-center">
                     {GENERATE_PAGE}
                 </td>
             </tr>
@@ -256,8 +255,6 @@
                                         <option value="internet">{LANG.internet_attachment}</option>
                                         <option value="zalo" data-url="{POPUP_URL}">{LANG.zalo_attachment}</option>
                                         <option value="file" data-url="{POPUP_FILE_URL}">{LANG.file_attachment}</option>
-                                        <option value="textlist" data-url="{POPUP_TEXTLIST_URL}">{LANG.textlist_attachment}</option>
-                                        <option value="btnlist" data-url="{POPUP_BTNLIST_URL}">{LANG.btnlist_attachment}</option>
                                         <!-- BEGIN: for_verified_OA --><option value="request" data-url="{POPUP_REQUEST_URL}">{LANG.request_attachment}</option><!-- END: for_verified_OA -->
                                     </select>
                                 </div>

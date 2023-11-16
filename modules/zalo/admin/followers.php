@@ -89,13 +89,11 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         ]);
     }
 
-    if (in_array($attachment_type, ['site', 'internet', 'zalo', 'file', 'request', 'textlist', 'btnlist'], true)) {
+    if (in_array($attachment_type, ['site', 'internet', 'zalo', 'file', 'request'], true)) {
         if (empty($attachment)) {
             $mess = $nv_Lang->getModule('attachment_empty');
             if ($attachment_type == 'request') {
                 $mess = $nv_Lang->getModule('request_not_selected');
-            } elseif ($attachment_type == 'textlist' or $attachment_type == 'btnlist') {
-                $mess = $nv_Lang->getModule('template_not_selected');
             }
             nv_jsonOutput([
                 'status' => 'error',
@@ -174,172 +172,6 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
         }
     }
 
-    if ($attachment_type == 'textlist') {
-        $textlist = template_getinfo((int) $attachment);
-        unset($textlist['type']);
-        if (empty($textlist)) {
-            nv_jsonOutput([
-                'status' => 'error',
-                'mess' => $nv_Lang->getModule('template_not_selected')
-            ]);
-        }
-
-        $elements = [];
-        $elements0 = array_shift($textlist);
-        if (!nv_is_url($elements0['image_url'])) {
-            if ($is_localhost) {
-                nv_jsonOutput([
-                    'status' => 'error',
-                    'mess' => $nv_Lang->getModule('image_from_localhost')
-                ]);
-            }
-
-            $elements0['image_url'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $elements0['image_url'];
-        }
-        $elements[0] = [
-            'title' => $elements0['title'],
-            'subtitle' => $elements0['subtitle'],
-            'image_url' => $elements0['image_url']
-        ];
-        if (!empty($elements0['default_action'])) {
-            if ($elements0['default_action'] == 'query_keyword') {
-                $elements0['default_action'] = 'query_hide';
-                $elements0['content'] = $elements0['keyword'];
-            }
-            $elements[0]['default_action'] = [
-                'type' => 'oa.' . str_replace('_', '.', $elements0['default_action'])
-            ];
-            if ($elements0['default_action'] == 'open_url') {
-                $elements[0]['default_action']['url'] = $elements0['url'];
-            } elseif ($elements0['default_action'] == 'query_show' or $elements0['default_action'] == 'query_hide') {
-                $elements[0]['default_action']['payload'] = $elements0['content'];
-            } elseif ($elements0['default_action'] == 'open_sms') {
-                $elements[0]['default_action']['payload'] = [
-                    'content' => $elements0['content'],
-                    'phone_code' => '+' . substr($elements0['phone_code'], 2) . $elements0['phone_number']
-                ];
-            } elseif ($elements0['default_action'] == 'open_phone') {
-                $elements[0]['default_action']['payload'] = [
-                    'phone_code' => '+' . substr($elements0['phone_code'], 2) . $elements0['phone_number']
-                ];
-            }
-        }
-
-        $elements[0] = (object) $elements[0];
-
-        foreach ($textlist as $key => $list) {
-            if (!empty($list['title']) and !empty($list['image_url']) and !empty($list['default_action'])) {
-                $_element = [];
-                $_element['title'] = $list['title'];
-                if (!empty($list['subtitle'])) {
-                    $_element['subtitle'] = $list['subtitle'];
-                }
-
-                if ($list['default_action'] == 'query_keyword') {
-                    $list['default_action'] = 'query_hide';
-                    $list['content'] = $list['keyword'];
-                }
-
-                $_element['default_action'] = [
-                    'type' => 'oa.' . str_replace('_', '.', $list['default_action'])
-                ];
-                if ($list['default_action'] == 'open_url') {
-                    if (empty($list['url'])) {
-                        continue;
-                    }
-                    $_element['default_action']['url'] = $list['url'];
-                } elseif ($list['default_action'] == 'query_show' or $list['default_action'] == 'query_hide') {
-                    if (empty($list['content'])) {
-                        continue;
-                    }
-                    $_element['default_action']['payload'] = $list['content'];
-                } elseif ($list['default_action'] == 'open_sms') {
-                    if (empty($list['content']) or empty($list['phone_number'])) {
-                        continue;
-                    }
-                    $_element['default_action']['payload'] = [
-                        'content' => $list['content'],
-                        'phone_code' => '+' . substr($list['phone_code'], 2) . $list['phone_number']
-                    ];
-                } elseif ($list['default_action'] == 'open_phone') {
-                    if (empty($list['phone_number'])) {
-                        continue;
-                    }
-                    $_element['default_action']['payload'] = [
-                        'phone_code' => '+' . substr($list['phone_code'], 2) . $list['phone_number']
-                    ];
-                }
-
-                if (!nv_is_url($list['image_url'])) {
-                    if ($is_localhost) {
-                        nv_jsonOutput([
-                            'status' => 'error',
-                            'mess' => $nv_Lang->getModule('image_from_localhost')
-                        ]);
-                    }
-
-                    $list['image_url'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $list['image_url'];
-                }
-                $_element['image_url'] = $list['image_url'];
-                $elements[] = $_element;
-            }
-        }
-    }
-
-    if ($attachment_type == 'btnlist') {
-        $btnlist = template_getinfo((int) $attachment);
-        unset($btnlist['type']);
-        if (empty($btnlist)) {
-            nv_jsonOutput([
-                'status' => 'error',
-                'mess' => $nv_Lang->getModule('template_not_selected')
-            ]);
-        }
-
-        $buttons = [];
-        foreach ($btnlist['buttons'] as $key => $list) {
-            if (!empty($list['title']) and !empty($list['type'])) {
-                if ($list['type'] == 'query_keyword') {
-                    $list['type'] = 'query_hide';
-                    $list['content'] = $list['keyword'];
-                }
-
-                $_btn = [];
-                $_btn['title'] = $list['title'];
-                $_btn['type'] = 'oa.' . str_replace('_', '.', $list['type']);
-                if ($list['type'] == 'open_url') {
-                    if (empty($list['url'])) {
-                        continue;
-                    }
-                    $_btn['payload'] = [
-                        'url' => $list['url']
-                    ];
-                } elseif ($list['type'] == 'query_show' or $list['type'] == 'query_hide') {
-                    if (empty($list['content'])) {
-                        continue;
-                    }
-                    $_btn['payload'] = $list['content'];
-                } elseif ($list['type'] == 'open_sms') {
-                    if (empty($list['content']) or empty($list['phone_number'])) {
-                        continue;
-                    }
-                    $_btn['payload'] = [
-                        'content' => $list['content'],
-                        'phone_code' => '+' . substr($list['phone_code'], 2) . $list['phone_number']
-                    ];
-                } elseif ($list['type'] == 'open_phone') {
-                    if (empty($list['phone_number'])) {
-                        continue;
-                    }
-                    $_btn['payload'] = [
-                        'phone_code' => '+' . substr($list['phone_code'], 2) . $list['phone_number']
-                    ];
-                }
-                $buttons[] = $_btn;
-            }
-        }
-    }
-
     if ($attachment_type == 'site') {
         $attachment = NV_MY_DOMAIN . preg_replace('/\s/', '%20', $attachment);
     }
@@ -382,25 +214,6 @@ if ($nv_Request->isset_request('send_text,user_id,message_id,chat_text', 'post')
             'send_type' => $attachment_type,
             'type' => 'request',
             'request_info' => $request_info
-        ];
-    }
-    // Neu gui textlist
-    elseif ($attachment_type == 'textlist') {
-        $result = $myZalo->send_textlist($accesstoken, $user_id, $message_id, $elements);
-        $note = [
-            'send_type' => $attachment_type,
-            'type' => 'links',
-            'textlist' => $elements
-        ];
-    }
-    // Neu gui btnlist
-    elseif ($attachment_type == 'btnlist') {
-        $result = $myZalo->send_btnlist($accesstoken, $user_id, $message_id, $btnlist['text'], $buttons);
-        $note = [
-            'send_type' => $attachment_type,
-            'type' => 'buttons',
-            'message' => $btnlist['text'],
-            'buttons' => $buttons
         ];
     }
     // Neu dang van ban thuan
@@ -631,10 +444,10 @@ if ($nv_Request->isset_request('change_profile,user_id', 'post')) {
 
     require_once NV_ROOTDIR . '/' . NV_DATADIR . '/vnsubdivisions.php';
     if (!empty($_city_id) and !empty($provinces[$_city_id])) {
-        $data['city_id'] = $_city_id;
+        $data['city_id'] = (int) $_city_id;
 
         if (!empty($_district_id) and !empty($districts[$_city_id][$_district_id])) {
-            $data['district_id'] = $_district_id;
+            $data['district_id'] = (int) $_district_id;
         }
     }
 
@@ -791,8 +604,6 @@ if ($nv_Request->isset_request('user_id', 'get')) {
     $xtpl->assign('POPUP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload&amp;type=image&amp;popup=1&amp;idfield=attachment&amp;textfield=chat_text');
     $xtpl->assign('POPUP_FILE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload&amp;type=file&amp;popup=1&amp;idfield=attachment&amp;textfield=chat_text&amp;clfield=chat_submit');
     $xtpl->assign('POPUP_REQUEST_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=request&amp;popup=1&amp;idfield=attachment&amp;clfield=chat_submit');
-    $xtpl->assign('POPUP_TEXTLIST_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=textlist&amp;popup=1&amp;idfield=attachment&amp;clfield=chat_submit');
-    $xtpl->assign('POPUP_BTNLIST_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=btnlist&amp;popup=1&amp;idfield=attachment&amp;clfield=chat_submit');
     $xtpl->assign('POPUP_PLAINTEXT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=templates&amp;type=plaintext&amp;popup=1&amp;idfield=chat_text');
 
     require_once NV_ROOTDIR . '/' . NV_DATADIR . '/callingcodes.php';
@@ -801,10 +612,11 @@ if ($nv_Request->isset_request('user_id', 'get')) {
 
     foreach ($row as $key => $val) {
         if (!in_array($key, ['app_id', 'isfollow', 'weight', 'is_sync'], true)) {
-            if (empty($val)) {
+            if ($key != 'is_sensitive' && empty($val)) {
                 continue;
             }
-            $key == 'user_gender' && $val = $nv_Lang->getModule('user_gender_' . $val);
+            $key == 'user_gender' && $val = (in_array((int) $val, [1,2], true) ? $nv_Lang->getModule('user_gender_' . $val) : '');
+            $key == 'is_sensitive' && $val = $nv_Lang->getModule('is_sensitive_' . $val);
             $key == 'updatetime' && $val = nv_date('d/m/Y H:i', $val);
             $key == 'user_id_by_app' && $key = $nv_Lang->getModule($key) . '<br/>' . $row['app_id'];
             $key == 'phone_code' && $val = $callingcodes[$val][1] . ' +' . $callingcodes[$val][0];
@@ -1004,7 +816,7 @@ if (!empty($tags)) {
 
 if ($followers_count) {
     foreach ($followers as $follower) {
-        $follower['user_gender'] = $follower['user_gender'] != '' ? $nv_Lang->getModule('user_gender_' . $follower['user_gender']) : '';
+        $follower['user_gender'] = (in_array((int) $follower['user_gender'], [1,2], true) ? $nv_Lang->getModule('user_gender_' . $follower['user_gender']) : '');
         $follower['updatetime_format'] = nv_date('d/m/Y H:i', $follower['updatetime']);
         $xtpl->assign('FOLLOWER', $follower);
         $xtpl->parse('main.isFollowers.follower');

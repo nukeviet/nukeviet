@@ -96,7 +96,7 @@ class OAuth2Client
             'state' => $state
         ];
 
-        return static::BASE_AUTHORIZATION_URL . '/' . static::DEFAULT_OAUTH_VERSION . '/permission?' . http_build_query($params, null, $separator);
+        return static::BASE_AUTHORIZATION_URL . '/' . static::DEFAULT_OAUTH_VERSION . '/permission?' . http_build_query($params, '', $separator);
     }
 
     /**
@@ -118,7 +118,7 @@ class OAuth2Client
             'state' => $state
         ];
 
-        return static::BASE_AUTHORIZATION_URL . '/' . static::DEFAULT_OAUTH_VERSION . '/oa/permission?' . http_build_query($params, null, $separator);
+        return static::BASE_AUTHORIZATION_URL . '/' . static::DEFAULT_OAUTH_VERSION . '/oa/permission?' . http_build_query($params, '', $separator);
     }
 
     /**

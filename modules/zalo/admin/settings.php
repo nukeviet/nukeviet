@@ -42,12 +42,10 @@ if ($nv_Request->get_string('func', 'get', '') == 'access_token_create') {
 }
 
 if ($nv_Request->get_string('func', 'get', '') == 'accesstoken' and $nv_Request->isset_request('code, oa_id', 'get')) {
-    $authorization_code = $nv_Request->get_string('code', 'get', '');
-    $oa_id = $nv_Request->get_string('oa_id', 'get', '');
-    $code_verifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
+    $codeVerifier = $nv_Request->get_string('oa_code_verifier', 'session', '');
     $nv_Request->unset_request('oa_code_verifier', 'session');
 
-    $result = $myZalo->oa_accesstoken_new($authorization_code, $oa_id, $code_verifier);
+    $result = $myZalo->oa_accesstoken_new($codeVerifier);
 
     $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     if (empty($result)) {

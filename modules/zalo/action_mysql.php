@@ -72,6 +72,7 @@ $sql_create_module[] = 'CREATE TABLE ' . $db_config['prefix'] . "_zalo_followers
  app_id CHAR(30) NOT NULL,
  user_id_by_app CHAR(30) NOT NULL DEFAULT '',
  display_name VARCHAR(250) NOT NULL DEFAULT '',
+ is_sensitive TINYINT(1) NOT NULL DEFAULT '0',
  avatar120 VARCHAR(250) NOT NULL DEFAULT '',
  avatar240 VARCHAR(250) NOT NULL DEFAULT '',
  user_gender CHAR(1) NOT NULL DEFAULT '',

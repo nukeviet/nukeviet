@@ -368,6 +368,8 @@ function follower_profile_save($user_id, $follower_profile)
     isset($follower_profile['user_gender']) && $row['user_gender'] = (int) $follower_profile['user_gender'];
     !empty($follower_profile['user_id_by_app']) && $row['user_id_by_app'] = $follower_profile['user_id_by_app'];
     !empty($follower_profile['display_name']) && $row['display_name'] = $follower_profile['display_name'];
+    $row['is_sensitive'] = (!$follower_profile['is_sensitive'] or $follower_profile['is_sensitive'] == 'false') ? 0 : 1;
+
     $row['tags_info'] = !empty($follower_profile['tags_and_notes_info']['tag_names']) ? implode(', ', $follower_profile['tags_and_notes_info']['tag_names']) : '';
     $row['notes_info'] = !empty($follower_profile['tags_and_notes_info']['notes']) ? implode(', ', $follower_profile['tags_and_notes_info']['notes']) : '';
     $row['name'] = !empty($follower_profile['shared_info']['name']) ? $follower_profile['shared_info']['name'] : '';
@@ -384,6 +386,7 @@ function follower_profile_save($user_id, $follower_profile)
         app_id = ' . $db->quote($global_config['zaloAppID']) . ',
         user_id_by_app = :user_id_by_app,
         display_name = :display_name,
+        is_sensitive = :is_sensitive,
         avatar120 = :avatar120,
         avatar240 = :avatar240,
         user_gender = :user_gender,
@@ -401,6 +404,7 @@ function follower_profile_save($user_id, $follower_profile)
         WHERE user_id = ' . $db->quote($user_id));
     $sth->bindParam(':user_id_by_app', $row['user_id_by_app'], PDO::PARAM_STR);
     $sth->bindParam(':display_name', $row['display_name'], PDO::PARAM_STR);
+    $sth->bindParam(':is_sensitive', $row['is_sensitive'], PDO::PARAM_INT);
     $sth->bindParam(':avatar120', $row['avatar120'], PDO::PARAM_STR);
     $sth->bindParam(':avatar240', $row['avatar240'], PDO::PARAM_STR);
     $sth->bindParam(':user_gender', $row['user_gender'], PDO::PARAM_STR);
@@ -972,7 +976,10 @@ function conversation_to_html($contents, $user_id)
                     $message['ext'] = nv_getextension($file);
                 }
             } elseif ($note['send_type'] == 'request') {
-                if (nv_is_url($note['request_info']['image_url'])) {
+                $message['type'] = 'text';
+                $message['message'] = $nv_Lang->getModule('request_attachment');
+                $message['isAutoMess'] = true;
+                /*if (nv_is_url($note['request_info']['image_url'])) {
                     $message['url'] = $note['request_info']['image_url'];
                 } elseif (file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/zalo/' . $note['request_info']['image_url'])) {
                     $message['url'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/zalo/' . $note['request_info']['image_url'];
@@ -981,12 +988,7 @@ function conversation_to_html($contents, $user_id)
                 }
                 $message['title'] = $note['request_info']['title'];
                 $message['subtitle'] = $note['request_info']['subtitle'];
-                $message['message'] = $nv_Lang->getModule('info_request');
-            } elseif ($note['send_type'] == 'textlist') {
-                $message['links'] = $note['textlist'];
-            } elseif ($note['send_type'] == 'btnlist') {
-                $message['message'] = $note['message'];
-                $message['links'] = $note['buttons'];
+                $message['message'] = $nv_Lang->getModule('info_request');*/
             }
         }
 
@@ -1015,7 +1017,9 @@ function conversation_to_html($contents, $user_id)
 
         unset($matches);
         $isAutoMess = false;
-        if ($message['type'] == 'text' and preg_match('/^query\:[0-9]+\:[^\:]+:(.+)$/', $message['message'], $matches)) {
+        if ($message['isAutoMess']) {
+            $isAutoMess = true;
+        } elseif ($message['type'] == 'text' and preg_match('/^query\:[0-9]+\:[^\:]+:(.+)$/', $message['message'], $matches)) {
             $message['message'] = $matches[1];
             $isAutoMess = true;
         }
@@ -2047,72 +2051,6 @@ function DOMinnerHTML($element)
 }
 
 /**
- * Lấy thông tin thêm từ trang chủ của OA
- *
- * parse_OA_info()
- *
- * @return array
- */
-function parse_OA_info()
-{
-    global $global_config;
-
-    $info = [];
-
-    $contents = @file_get_contents('https://oa.zalo.me/' . $global_config['zaloOfficialAccountID']);
-    if (!empty($contents)) {
-        $dom = new DOMDocument('1.0', 'UTF-8');
-        libxml_use_internal_errors(true);
-        if ($dom->loadHTML($contents)) {
-            $xpath = new DOMXPath($dom);
-            $nodeList = $xpath->query('//div[@class="oa-info-wrapper"]/div[@class="desc-more"]');
-            if ($nodeList->length > 0) {
-                foreach ($nodeList as $node) {
-                    $dom_i = new DOMDocument();
-                    if ($dom_i->loadHTML(DOMinnerHTML($node))) {
-                        $xpath_i = new DOMXPath($dom_i);
-                        $nodeLis_i = $xpath_i->query('//*[@class="label"]');
-                        if ($nodeLis_i->length) {
-                            $skey = trim(html_entity_decode(DOMinnerHTML($nodeLis_i[0]), ENT_QUOTES, 'UTF-8'));
-                            $skey = strtolower(change_alias($skey));
-                            $nodeLis_byid = $xpath_i->query('//*[@id="fullDesc"]');
-                            $nodeLis_byclass = $xpath_i->query('//*[contains(@class, "ctn-label")]');
-                            if ($nodeLis_byid->length) {
-                                $info['description'] = trim(html_entity_decode($nodeLis_byid->item(0)->getAttribute('value'), ENT_QUOTES, 'UTF-8'));
-                            } elseif ($nodeLis_byclass->length) {
-                                switch ($skey) {
-                                    case 'dia-chi':
-                                        $k = 'address';
-                                        break;
-                                    case 'danh-muc':
-                                        $k = 'category';
-                                        break;
-                                    default:
-                                        $k = $skey;
-                                }
-                                $info[$k] = trim(html_entity_decode($nodeLis_byclass->item(0)->nodeValue, ENT_QUOTES, 'UTF-8'));
-                            }
-                        }
-                    }
-                }
-            }
-
-            $nodeList = $xpath->query('//div[@class="qrcode"]/img');
-            if ($nodeList->length) {
-                $info['qrcode'] = trim($nodeList->item(0)->getAttribute('src'));
-            }
-        }
-    }
-
-    if (!empty($info['hotline'])) {
-        $info['hotline'] = parse_phone($info['hotline']);
-        $info['hotline'] = substr($info['hotline'][0], 2) . $info['hotline'][1];
-    }
-
-    return $info;
-}
-
-/**
  * oa_qrcode_create()
  *
  * @return false|string
@@ -2136,7 +2074,7 @@ function oa_qrcode_create()
     )->setBackgroundColor('white');
     $data = $bobj->getPngData();
     if (@file_put_contents(NV_ROOTDIR . '/' . $qrcode_file, $data, LOCK_EX)) {
-        return NV_BASE_SITEURL . $qrcode_file;
+        return $qrcode_file;
     }
 
     return false;

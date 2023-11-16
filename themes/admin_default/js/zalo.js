@@ -787,7 +787,7 @@ $(function() {
             $('#attachment').val('').prop('readonly', true);
             $('#chat_text').prop('readonly', false);
             $('[data-toggle=add_attachment]').trigger('click')
-        } else if (type == 'file' || type == 'request' || type == 'textlist' || type == 'btnlist') {
+        } else if (type == 'file' || type == 'request') {
             $('[data-toggle=add_attachment]').prop('disabled', false);
             $('#attachment').val('').prop('readonly', true);
             $('#chat_text').val('').prop('readonly', true);
@@ -812,7 +812,7 @@ $(function() {
         var type = $('[data-toggle=change_attachment_type]').val();
         if (type == 'site') {
             nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=attachment&alt=&path=" + encodeURIComponent($(this).data('upload-dir')) + "&type=image&currentpath=" + encodeURIComponent($(this).data('upload-dir')), "Attachment", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-        } else if (type == 'zalo' || type == 'file' || type == 'request' || type == 'textlist' || type == 'btnlist') {
+        } else if (type == 'zalo' || type == 'file' || type == 'request') {
             var url = $('[data-toggle=change_attachment_type] option:selected').data('url');
             nv_open_browse(url, "Attachment", 500, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         }
@@ -825,8 +825,10 @@ $(function() {
 
     $('#chat-box').on('submit', function(e) {
         e.preventDefault();
-        var url = $(this).attr('action')
-        data = $(this).serialize();
+        var that = $(this),
+            url = that.attr('action'),
+            data = that.serialize();
+        $('input,button,select,textarea', that).prop('disabled', true);
         $.ajax({
             type: 'POST',
             cache: !1,
@@ -834,9 +836,10 @@ $(function() {
             data: data,
             dataType: "json",
             success: function(b) {
-                if (b.status != "success") {
+                $('input,button,select,textarea', that).prop('disabled', false);
+                if (b.status == "error") {
                     alert(b.mess);
-                } else {
+                } else if (b.status == 'success') {
                     $('#attachment, #chat_text').val('');
                     $('#chat_text').prop('readonly', false);
                     $('[name=attachment_type]').val('plaintext');
