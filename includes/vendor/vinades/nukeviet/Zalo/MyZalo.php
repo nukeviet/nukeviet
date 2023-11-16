@@ -421,29 +421,29 @@ class MyZalo
     /**
      * accesstokenGet()
      *
-     * @param mixed $authorization_code
      * @param mixed $code_verifier
      * @return array|false
      */
-    public function accesstokenGet($authorization_code, $code_verifier)
+    public function accesstokenGet($code_verifier)
     {
         if (!$this->preCheckValid()) {
             return false;
         }
-        $args = [
-            'method' => 'POST',
-            'headers' => [
-                'secret_key' => $this->app_secret_key
-            ],
-            'body' => http_build_query([
-                'code' => $authorization_code,
-                'app_id' => $this->app_id,
-                'grant_type' => 'authorization_code',
-                'code_verifier' => $code_verifier
-            ])
-        ];
 
-        return $this->accesstoken_new_result(self::GET_ACCESSTOKEN_URL, $args);
+        try {
+            $helper = $this->zalo->getRedirectLoginHelper();
+            $zaloToken = $helper->getZaloToken($code_verifier);
+
+            return [
+                'access_token' => $zaloToken->getAccessToken(),
+                'refresh_token' => $zaloToken->getRefreshToken(),
+                'expire_time' => $zaloToken->getAccessTokenExpiresAt()->getTimestamp()
+            ];
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
+
+            return false;
+        }
     }
 
     /**
@@ -460,42 +460,37 @@ class MyZalo
         if (!$this->preCheckValid()) {
             return false;
         }
-        $args = [
-            'method' => 'GET',
-            'headers' => [
-                'access_token' => $accesstoken
-            ]
-        ];
 
-        $url = self::GET_USERINO_URL . 'fields=id,birthday,name,gender,picture';
-        $response = self::getResponse($url, $args);
-        if (empty($response['body'])) {
-            $this->error = self::ERROR_NOT_RESPONSE;
+        try {
+            $params = ['fields' => 'id,name,picture'];
+            $response = $this->zalo->get(ZaloEndPoint::API_GRAPH_ME, $accesstoken, $params);
+            $result = $response->getDecodedBody();
+            if (empty($result)) {
+                $this->error = self::ERROR_NOT_RESPONSE;
+    
+                return false;
+            }
+
+            if (!empty($result['error'])) {
+                $this->error = $result['message'];
+                $this->error_code = $result['error'];
+    
+                return false;
+            }
+
+            return [
+                'id' => $result['id'],
+                'name' => $result['name'],
+                'gender' => '',
+                'birthday' => '',
+                'picture' => $result['picture']['data']['url']
+            ];
+            
+        } catch (ZaloSDKException $e) {
+            $this->error = $e->getMessage();
 
             return false;
         }
-
-        $response = json_decode($response['body'], true);
-        if (empty($response)) {
-            $this->error = self::ERROR_NOT_RESPONSE;
-
-            return false;
-        }
-
-        if (!empty($response['error'])) {
-            $this->error = $response['message'];
-            $this->error_code = $response['error'];
-
-            return false;
-        }
-
-        return [
-            'id' => $response['id'],
-            'name' => $response['name'],
-            'gender' => $response['gender'],
-            'birthday' => $response['birthday'],
-            'picture' => $response['picture']['data']['url']
-        ];
     }
 
     /**

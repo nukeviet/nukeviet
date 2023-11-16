@@ -16,11 +16,11 @@ if (!defined('NV_IS_MOD_USER')) {
 $myZalo = new NukeViet\Zalo\MyZalo($global_config);
 
 if ($nv_Request->isset_request('code', 'get')) {
-    $authorization_code = $nv_Request->get_string('code', 'get', '');
     $code_verifier = $nv_Request->get_string('code_verifier', 'session', '');
     $nv_Request->unset_request('code_verifier', 'session');
 
-    $result = $myZalo->accesstokenGet($authorization_code, $code_verifier);
+    $result = $myZalo->accesstokenGet($code_verifier);
+
     if (empty($result)) {
         $err = $myZalo->getError();
         $nv_Lang->existsModule($err) && $err = $nv_Lang->getModule($err);
@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('code', 'get')) {
             'namePerson/first' => '',
             'namePerson/last' => '',
             'namePerson' => $result['name'],
-            'person/gender' => $result['gender'],
+            'person/gender' => '',
             'server' => $server,
             'picture_url' => $result['picture'],
             'picture_mode' => 0, // 0: Remote picture
