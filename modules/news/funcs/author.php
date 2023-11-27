@@ -39,7 +39,7 @@ if (!$author_info['is_guest']) {
     $where = 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist WHERE aid=' . $author_info['id'] . ')';
 } else {
     $page_title = $nv_Lang->getModule('articles_by_other_authors');
-    $where = 'status=1 AND id NOT IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_authorlist)';
+    $where = "status=1 AND author!=''";
 }
 
 $page_url = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=author/' . $author_info['alias'];
