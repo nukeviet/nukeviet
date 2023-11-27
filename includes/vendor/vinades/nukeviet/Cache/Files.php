@@ -26,6 +26,8 @@ class Files extends Cache
 
     private $_Current_Time = 0;
 
+    private $expiredfiles = 0;
+
     /**
      * __construct()
      *
@@ -126,7 +128,13 @@ class Files extends Cache
             return false;
         }
 
-        if ($ttl > 0 and ($this->_Current_Time - filemtime($fullname)) > $ttl) {
+        if($ttl > 0) {
+            $ttl += rand(1, 10);
+        }
+
+        if ($ttl > 0 and (($this->_Current_Time - filemtime($fullname)) > $ttl) and $this->expiredfiles < 5) {
+            ++$this->expiredfiles;
+
             return false;
         }
 
