@@ -74,7 +74,7 @@ function locationReplace(url) {
 
 function formXSSsanitize(form) {
     $(form).find("input, textarea").not(":submit, :reset, :image, :file, :disabled").not('[data-sanitize-ignore]').each(function(e) {
-        $(this).val(DOMPurify.sanitize($(this).val(), {}))
+        $(this).val(DOMPurify.sanitize($(this).val(), {ALLOWED_TAGS: nv_whitelisted_tags, ADD_ATTR: nv_whitelisted_attr}))
     })
 }
 
