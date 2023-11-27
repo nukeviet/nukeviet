@@ -89,6 +89,11 @@ function nv_admin_theme($contents, $head_site = 1)
     $admin_info['hello_admin1'] = !empty($admin_info['last_login']) ? $nv_Lang->getGlobal('hello_admin1', date('H:i d/m/Y', $admin_info['last_login']), $admin_info['last_ip']) : '';
     $admin_info['hello_admin2'] = $nv_Lang->getGlobal('hello_admin2', date('H:i d/m/Y', $admin_info['current_login']), $admin_info['current_ip']);
 
+    $whitelisted_attr = ['target'];
+    if (!empty($global_config['allowed_html_tags']) and in_array('iframe', $global_config['allowed_html_tags'])) {
+        $whitelisted_attr[] = 'frameborder';
+        $whitelisted_attr[] = 'allowfullscreen';
+    }
     $xtpl = new XTemplate($file_name_tpl, $dir_template);
     $xtpl->assign('NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ');
     $xtpl->assign('NV_SITE_NAME', $global_config['site_name']);
@@ -96,6 +101,8 @@ function nv_admin_theme($contents, $head_site = 1)
     $xtpl->assign('SITE_DESCRIPTION', empty($global_config['site_description']) ? $page_title : $global_config['site_description']);
     $xtpl->assign('NV_CHECK_PASS_MSTIME', ((int) ($global_config['admin_check_pass_time']) - 62) * 1000);
     $xtpl->assign('NV_XSS_SANITIZE', ($global_config['admin_XSSsanitize'] ? 1 : 0));
+    $xtpl->assign('NV_WHITELISTED_TAGS', !empty($global_config['allowed_html_tags']) ? "['" . implode("', '", $global_config['allowed_html_tags']) . "']" : '');
+    $xtpl->assign('NV_WHITELISTED_ATTR', "['" . implode("', '", $whitelisted_attr). "']");
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('MODULE_FILE', $module_file);
     $xtpl->assign('NV_ADMIN_THEME', $admin_info['admin_theme']);
