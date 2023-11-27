@@ -30,7 +30,9 @@
                  nv_check_pass_mstime = '{NV_CHECK_PASS_MSTIME}',
                  nv_safemode = {NV_SAFEMODE},
                  nv_area_admin = 1,
-                 XSSsanitize = {NV_XSS_SANITIZE};
+                 XSSsanitize = {NV_XSS_SANITIZE},
+                 nv_whitelisted_tags = {NV_WHITELISTED_TAGS},
+                 nv_whitelisted_attr = {NV_WHITELISTED_ATTR};
         </script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_INTERFACE}.js"></script>
