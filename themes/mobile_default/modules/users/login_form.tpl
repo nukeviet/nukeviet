@@ -38,6 +38,10 @@
             </div>
         </div>
 
+        <div class="form-group text-center cant_do_2step hidden">
+            <label class="check-box small"><input type="checkbox" name="cant_do_2step" id="cant_do_2step" value="1" style="margin-top:0"> {GLANG.cant_do_2step}</label>
+        </div>
+
         <div class="text-center margin-bottom-lg">
             <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->

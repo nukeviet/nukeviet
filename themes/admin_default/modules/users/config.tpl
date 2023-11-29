@@ -318,6 +318,10 @@
                         <!-- END: openid_processing -->
                     </td>
                 </tr>
+                <tr>
+                    <td>{LANG.remove_2step_method}</td>
+                    <td><input name="remove_2step_method" value="1" type="checkbox"{DATA.remove_2step_method} /></td>
+                </tr>
                 <!-- BEGIN: deny_config -->
                 <tr>
                     <td>{LANG.deny_email}</td>

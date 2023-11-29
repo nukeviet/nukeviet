@@ -808,6 +808,7 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
+    $cant_do_2step = $nv_Request->get_bool('cant_do_2step', 'post', false);
 
     if (defined('NV_IS_USER_FORUM') or defined('SSO_SERVER') or (empty($nv_totppin) and empty($nv_backupcodepin))) {
         unset($nv_seccode);
@@ -913,6 +914,15 @@ if ($nv_Request->isset_request('_csrf, nv_login', 'post')) {
             ]);
         }
     } else {
+        // Nếu có xác nhận không thể xác thực 2 bước
+        if ($cant_do_2step) {
+            $nv_Request->set_Session('cant_do_2step', $row['userid'] . '.' . NV_CURRENTTIME . '.0.');
+            signin_result([
+                'status' => 'remove2step',
+                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=r2s' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''), true),
+                'mess' => $nv_Lang->getGlobal('remove2step_info')
+            ]);
+        }
         // Nếu cả mã từ app và mã dự phòng không được xác định
         if (empty($nv_totppin) and empty($nv_backupcodepin)) {
             $nv_Request->set_Session('users_dismiss_captcha', md5($nv_username));

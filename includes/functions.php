@@ -2686,7 +2686,8 @@ function nv_site_mods($lang = '')
                     'main',
                     'login',
                     'register',
-                    'lostpass'
+                    'lostpass',
+                    'r2s'
                 ];
                 if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1) {
                     $user_ops[] = 'lostactivelink';

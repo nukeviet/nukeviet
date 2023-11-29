@@ -248,6 +248,8 @@ function login_validForm(a) {
             } else if (d.status == "2steprequire") {
                 $(".form-detail", a).hide(), $("#other_form").hide();
                 $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
+            } else if (d.status == 'remove2step') {
+                window.location.href = d.input
             } else if (d.status == "2step") {
                 $(a).removeAttr('data-captcha data-recaptcha2 data-recaptcha3');
                 $("input,button", a).prop("disabled", !1);
@@ -255,7 +257,14 @@ function login_validForm(a) {
                     e.preventDefault();
                     location.reload()
                 });
-                $('.loginstep1, .loginstep2, .loginCaptcha', a).toggleClass('hidden');
+                $('[name=cant_do_2step]', a).on('change', function() {
+                    if ($(this).is(':checked')) {
+                        $('.loginstep2,.loginstep3', a).addClass('hidden');
+                    } else {
+                        $('.loginstep2', a).removeClass('hidden');
+                    }
+                });
+                $('.loginstep1, .loginstep2, .cant_do_2step, .loginCaptcha', a).toggleClass('hidden');
             }
         }
     }));
@@ -382,6 +391,65 @@ function lostpass_validForm(a) {
         });
     }
     return !1;
+}
+
+function remove2step_submit(a) {
+    $(".has-error", a).removeClass("has-error");
+    var c = 0,
+        b = [];
+    $(a).find(".required").each(function() {
+        $(this).val(trim(strip_tags($(this).val())));
+        if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+    });
+    c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button").prop("disabled", !0), $.ajax({
+        type: b.type,
+        cache: !1,
+        url: b.url,
+        data: b.data,
+        dataType: "json",
+        success: function(d) {
+            if (d.status == "error") {
+                if ("undefined" != typeof d.redirect && "" != d.redirect) {
+                    $(".nv-info", a).html('<a href="' + d.redirect + '">' + d.mess + '<span class="load-bar"></span></a>').removeClass("error").removeClass("info").addClass("success").show();
+                    $(".form-detail", a).hide();
+                    setTimeout(function() {
+                        window.location.href = d.redirect
+                    }, 5E3)
+                } else {
+                    $("input,button", a).not("[type=submit]").prop("disabled", !1);
+                    $(".tooltip-current", a).removeClass("tooltip-current");
+                    ("" != d.input && $("[name=\"" + d.input + "\"]:visible", a).length) ? $(a).find("[name=\"" + d.input + "\"]:visible").each(function() {
+                        $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
+                        validErrorShow(this)
+                    }): $(".nv-info", a).html(d.mess).removeClass("success").removeClass("info").addClass("error").show();
+                    setTimeout(function() {
+                        $("[type=submit]", a).prop("disabled", !1)
+                    }, 1E3)
+                }
+            } else if (d.status == "OK") {
+                $(".nv-info", a).html('<a href="' + d.redirect + '">' + d.mess + '<span class="load-bar"></span></a>').removeClass("error").removeClass("info").addClass("success").show();
+                $(".form-detail", a).hide();
+                setTimeout(function() {
+                    window.location.href = d.redirect
+                }, 5E3)
+            } else if (d.status == "failed") {
+                $(".nv-info", a).html('<a href="' + d.redirect + '">' + d.mess + '<span class="load-bar"></span></a>').removeClass("success").removeClass("info").addClass("error").show();
+                $(".form-detail", a).hide();
+                setTimeout(function() {
+                    window.location.href = d.redirect
+                }, 5E3)
+            } else if (d.status == "step2") {
+                $('[name=email_sent]', a).val(1);
+                $("input,button", a).not("[type=submit]").prop("disabled", !1);
+                $(".step1", a).hide(), $(".step2", a).show();
+                $(".nv-info", a).html(d.mess).removeClass("error").removeClass("success").addClass("info").show();
+                setTimeout(function() {
+                    $("[type=submit]", a).prop("disabled", !1)
+                }, 1E3)
+            }
+        }
+    }));
+    return !1
 }
 
 function changemail_validForm(a) {
@@ -514,6 +582,11 @@ $(function() {
     $('body').on('submit', '[data-toggle=edit_group_submit][data-old]', function(e) {
         e.preventDefault();
         return edit_group_submit(this, $(this).data('old'))
+    });
+
+    $('body').on('submit', '#remove2step', function(e) {
+        e.preventDefault();
+        return remove2step_submit(this)
     });
 
     $('body').on('click', '[data-toggle=validReset]', function(e) {

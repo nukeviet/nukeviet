@@ -1960,3 +1960,20 @@ function theme_changePass($pass_timeout, $pass_empty, $checkss)
 
     return $xtpl->text('main');
 }
+
+function user_r2s($data, $page_url)
+{
+    $xtpl = new XTemplate('r2s.tpl', get_module_tpl_dir('r2s.tpl'));
+    $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_module);
+    $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
+    $xtpl->assign('FORM_ACTION', $page_url);
+    $xtpl->assign('DATA', $data);
+
+    if (!empty($data['question'])) {
+        $xtpl->parse('main.sec_question');
+    }
+
+    $xtpl->parse('main');
+
+    return $xtpl->text('main');
+}

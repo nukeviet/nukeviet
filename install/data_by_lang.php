@@ -158,6 +158,13 @@ $installMods['users'] = [
             'theme_mobile' => 'main'
         ],
         'lostactivelink' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['lostactivelink'],
+            'show_func' => 1,
+            'theme_default' => 'left-main',
+            'theme_mobile' => 'main'
+        ],
+        'r2s' => [
+            'func_custom_name' => $install_lang['modfuncs']['users']['r2s'],
             'show_func' => 1,
             'theme_default' => 'left-main',
             'theme_mobile' => 'main'
@@ -619,6 +626,7 @@ $blockGroups = [
                         'lostpass',
                         'active',
                         'lostactivelink',
+                        'r2s',
                         'editinfo',
                         'memberlist',
                         'groups',
