@@ -116,7 +116,7 @@ $install_lang['groups']['NukeViet-Admins-desc'] = 'Nhóm những người quản
 $install_lang['groups']['NukeViet-Programmers-desc'] = 'Nhóm Lập trình viên hệ thống NukeViet';
 
 $install_lang['vinades_fullname'] = 'Công ty cổ phần phát triển nguồn mở Việt Nam';
-$install_lang['vinades_address'] = 'Phòng 1706 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội';
+$install_lang['vinades_address'] = 'Tầng 6, tòa nhà Sông Đà, 131 Trần Phú, Văn Quán, Hà Đông, Hà Nội';
 $install_lang['nukeviet_description'] = 'Chia sẻ thành công, kết nối đam mê';
 $install_lang['disable_site_content'] = 'Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!';
 
