@@ -1604,6 +1604,46 @@ a.btn {
     transform: translate(-50%, -50%);
 }
 
+.social_btns {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.social_btns li:not(:last-child) {
+    display: inline-block;
+}
+
+.social_btns li:not(:last-child) {
+    margin-right: 10px;
+}
+
+.social_btns li a {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-color: #428bca;
+    color: #dcdcdc !important;
+    font-size: 16px;
+    border-radius: 3px;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.social_btns li a:hover {
+    background-color: var(--hover-color,#ff6600);
+    color: #fff !important;
+}
+
+.social_btns li a i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 /* Body */
 
 #body {

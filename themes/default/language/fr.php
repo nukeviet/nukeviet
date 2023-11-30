@@ -69,3 +69,7 @@ $lang_module['module_in_menu'] = 'Les modules affichent sur le menu';
 $lang_module['save'] = 'Sauvegardez la configuration';
 $lang_module['exp'] = 'exemple';
 $lang_module['gfont_note'] = 'Choisir le font au: <a href="https://www.google.com/fonts" target="_blank" rel="nofollow">https://www.google.com/fonts</a>';
+$lang_module['social_name'] = 'Nom du réseau social';
+$lang_module['social_url'] = 'URL vers la page du réseau social';
+$lang_module['social_icon'] = 'Classe d\'icône';
+$lang_module['social_color'] = 'Couleur du logo';
