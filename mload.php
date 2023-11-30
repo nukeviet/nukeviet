@@ -16,6 +16,7 @@ define('NV_MOD_LOAD', true);
 define('NV_ROOTDIR', pathinfo(str_replace(DIRECTORY_SEPARATOR, '/', __FILE__), PATHINFO_DIRNAME));
 
 require NV_ROOTDIR . '/includes/mainfile.php';
+$modulefilelist = get_module_filelist();
 
 $module_name = $nv_Request->get_string(NV_NAME_VARIABLE, 'post,get');
 $op = $nv_Request->get_string(NV_OP_VARIABLE, 'post,get');
@@ -67,7 +68,7 @@ $array_op = [];
 $nv_Lang->loadModule($module_file);
 
 // Kết nối với file functions.php của module
-if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/functions.php')) {
+if (module_file_exists($module_file . '/functions.php')) {
     require NV_ROOTDIR . '/modules/' . $module_file . '/functions.php';
 }
 
