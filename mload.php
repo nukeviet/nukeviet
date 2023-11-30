@@ -42,13 +42,15 @@ if (!preg_match($global_config['check_op'], $op)) {
     exit('FUNCTION_NOT_FOUND');
 }
 
-$other_file = false;
-if (!isset($module_info['funcs'][$op])) {
-    if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/load/' . $op . '.php')) {
-        $other_file = true;
-    } else {
-        exit('FUNCTION_NOT_FOUND');
-    }
+if (isset($module_info['funcs'][$op])) {
+    $op_file = $module_info['funcs'][$op]['func_name'];
+    $full_op_file = $module_file . '/funcs/' . $op_file . '.php';
+} else {
+    $op_file = $op;
+    $full_op_file = $module_file . '/load/' . $op_file . '.php';
+}
+if (!module_file_exists($full_op_file)) {
+    exit('FUNCTION_NOT_FOUND');
 }
 
 // Xác định có là user hay không
@@ -70,8 +72,4 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/functions.php')) {
 }
 
 // Kết nối đến file (function) của biến $op
-if (!$other_file) {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/funcs/' . $op . '.php';
-} else {
-    require NV_ROOTDIR . '/modules/' . $module_file . '/load/' . $op . '.php';
-}
+require NV_ROOTDIR . '/modules/' . $full_op_file;
