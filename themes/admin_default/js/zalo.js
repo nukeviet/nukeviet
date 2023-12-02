@@ -525,7 +525,6 @@ $(function() {
                                 url: url,
                                 enctype: 'multipart/form-data',
                                 data: data,
-                                cache: false,
                                 processData: false,
                                 contentType: false,
                                 dataType: "json",
