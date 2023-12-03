@@ -119,7 +119,12 @@
                     <tr>
                         <td><strong>{LANG.auto_nav}</strong></td>
                         <td>
-                            <input type="checkbox" value="1" name="auto_nav"{AUTO_NAV}/> {LANG.auto_nav_note}
+                            <select name="auto_nav" class="form-control mb">
+                                <!-- BEGIN: auto_nav -->
+                                <option value="{AUTO_NAV.val}"{AUTO_NAV.sel}>{AUTO_NAV.name}</option>
+                                <!-- END: auto_nav -->
+                            </select>
+                            <div>{LANG.auto_nav_note}</div>
                         </td>
                     </tr>
                     <tr>

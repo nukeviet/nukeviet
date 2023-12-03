@@ -661,7 +661,7 @@ if ($is_submit_form) {
     $rowcontent['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
 
     // Tự động tạo mục lục
-    $rowcontent['auto_nav'] = (int) $nv_Request->get_bool('auto_nav', 'post', false);
+    $rowcontent['auto_nav'] = $nv_Request->get_int('auto_nav', 'post', 0);
 
     $rowcontent['titlesite'] = $nv_Request->get_title('titlesite', 'post', '');
     $rowcontent['description'] = $nv_Request->get_title('description', 'post', '');
@@ -1605,7 +1605,14 @@ $xtpl->assign('allowed_save_checked', $allowed_save_checked);
 $instant_active_checked = ($rowcontent['instant_active']) ? ' checked="checked"' : '';
 $xtpl->assign('instant_active_checked', $instant_active_checked);
 $xtpl->assign('instant_creatauto_checked', empty($rowcontent['instant_creatauto']) ? '' : ' checked="checked"');
-$xtpl->assign('AUTO_NAV', $rowcontent['auto_nav'] ? ' checked="checked"' : '');
+for ($i = 0; $i < 4; ++$i) {
+    $xtpl->assign('AUTO_NAV', [
+        'val' => $i,
+        'sel' => $i == $rowcontent['auto_nav'] ? ' selected="selected"' : '',
+        'name' => $nv_Lang->getModule('auto_nav' . $i)
+    ]);
+    $xtpl->parse('main.auto_nav');
+}
 
 $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);

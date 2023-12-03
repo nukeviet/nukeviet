@@ -515,18 +515,22 @@ if (!empty($news_contents['auto_nav']) and !empty($news_contents['bodyhtml'])) {
     $y = 0;
     foreach ($xpath->query('//h2 | //h3') as $node) {
         if (!empty($node->textContent)) {
+            $location = nv_url_rewrite($page_url, true);
+            $location = NV_MY_DOMAIN . $location . ((str_contains($location, '?') ? '&' : '?') . 'ml=');
             if ($node->tagName == 'h2') {
                 ++$y;
                 ++$i;
                 $attrid = $idname . $i;
                 $node->setAttribute('data-id', $attrid);
-                $news_contents['navigation'][$y]['item'] = [$node->textContent, $attrid];
+                $news_contents['navigation'][$y]['item'] = [$node->textContent, $attrid, $location . $attrid];
+                $node->prepend('<div class="btns"><button type="button" class="gonav"><em class="fa fa-chevron-up fa-fw"></em></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><em class="fa fa-files-o fa-fw"></em></button></div>');
             } elseif ($y) {
                 ++$i;
                 $attrid = $idname . $i;
                 $node->setAttribute('data-id', $attrid);
                 !isset($news_contents['navigation'][$y]['subitems']) && $news_contents['navigation'][$y]['subitems'] = [];
-                $news_contents['navigation'][$y]['subitems'][] = [$node->textContent, $attrid];
+                $news_contents['navigation'][$y]['subitems'][] = [$node->textContent, $attrid, $location . $attrid];
+                $node->prepend('<div class="btns"><button type="button" class="gonav"><em class="fa fa-chevron-up fa-fw"></em></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><em class="fa fa-files-o fa-fw"></em></button></div>');
             }
         }
     }

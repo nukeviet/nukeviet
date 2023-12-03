@@ -217,18 +217,35 @@ $(window).on("resize", function() {
 
 $(document).ready(function() {
     // Mục lục bài viết
-    $('a[data-scroll-to]').on('click', function(e) {
-        e.preventDefault;
-        var id = $(this).data('scroll-to');
-        $("html, body").animate({
-            scrollTop: $('[data-id=' + id + ']').offset().top
-        }, 800);
-    });
-    $('h2[data-id], h3[data-id]').on('click', function() {
-        $("html, body").animate({
-            scrollTop: $('#navigation').offset().top
-        }, 800);
-    });
+    if ($('#navigation').length) {
+        $('a[data-scroll-to]').on('click', function(e) {
+            e.preventDefault;
+            var id = $(this).data('scroll-to');
+            $("html, body").animate({
+                scrollTop: $('[data-id=' + id + ']').offset().top
+            }, 800);
+        });
+        $('h2[data-id] button.gonav, h3[data-id] button.gonav').on('click', function() {
+            $("html, body").animate({
+                scrollTop: $('#navigation').offset().top
+            }, 800);
+        });
+        var clipboard = new ClipboardJS('[data-clipboard-text]');
+        clipboard.on('success', function(e) {
+            $(e.trigger).on('hidden.bs.tooltip', function() {
+                setTimeout(function() {
+                    $(e.trigger).tooltip('destroy');
+                })
+            }).tooltip({title: 'Link is copied to clipboard!', placement: 'top', container: 'body', trigger: 'hover focus', animation: false});
+            $(e.trigger).tooltip('show');
+        });
+        var match = /[\?\&]ml\=([a-zA-Z0-9\-]+)/i.exec(window.location);
+        if (match != null && match[1] && $('[data-id="' + match[1] + '"]').length) {
+            $("html, body").animate({
+                scrollTop: $('[data-id=' + match[1] + ']').offset().top
+            }, 800);
+        }
+    }
 
     // Xem file đính kèm
     $('[data-toggle="collapsefile"]').each(function() {

@@ -529,14 +529,33 @@ label:hover ~ .rating:not(.disabled) input:checked ~ label {
 
 ol.navigation {
     list-style-type: upper-roman;
-    padding-left:10px;
-    margin-left:10px;
+    padding-left:15px;
+    margin-left:0;
+    margin-bottom: 0;
+}
+
+.auto_nav2 ol.navigation {
+    list-style-type:disc !important;
+}
+
+.auto_nav3 ol.navigation {
+    list-style-type:none !important;
+    padding-left:0 !important;
 }
 
 ol.sub-navigation {
     list-style-type: decimal;
-    padding-left:20px;
+    padding-left:15px;
     margin-top: 7px;
+}
+
+.auto_nav2 ol.sub-navigation {
+    list-style-type:circle !important;
+}
+
+.auto_nav3 ol.sub-navigation {
+    list-style-type:none !important;
+    padding-left:0 !important;
 }
 
 ol.navigation a {
@@ -553,7 +572,38 @@ ol.navigation li:not(:last-child) {
 }
 
 h2[data-id], h3[data-id] {
+    margin-top: 15px !important;
+    margin-bottom: 12px !important;
+}
+
+h2[data-id] .btns, h3[data-id] .btns {
+    float: right;
+    margin-left: 4px;
+}
+
+h2[data-id] button, h3[data-id] button {
+    border: 0;
+    padding: 0;
     cursor: pointer;
+    background: 0 0;
+    appearance: none;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .2;
+}
+
+h2[data-id] button:not(:last-child), h3[data-id] button:not(:last-child) {
+    margin-right: 4px;
+}
+
+h2[data-id] button:hover,
+h2[data-id] button:focus,
+h3[data-id] button:hover,
+h3[data-id] button:focus {
+    opacity: 1;
 }
 
 /* Responsive news */

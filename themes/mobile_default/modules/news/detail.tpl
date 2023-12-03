@@ -90,7 +90,8 @@
         <!-- END: imgfull -->
         <!-- END: showhometext -->
         <!-- BEGIN: navigation -->
-        <div id="navigation" class="navigation-cont">
+        <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
+        <div id="navigation" class="navigation-cont auto_nav{DETAIL.auto_nav}">
             <div class="navigation-head">
                 <em class="fa fa-list-ol"></em> {LANG.table_of_contents}
             </div>
@@ -98,12 +99,12 @@
                 <ol class="navigation">
                     <!-- BEGIN: navigation_item -->
                     <li>
-                        <a href="#" data-scroll-to="{NAVIGATION.1}">{NAVIGATION.0}</a>
+                        <a href="#" data-scroll-to="{NAVIGATION.1}" data-location="{NAVIGATION.2}">{NAVIGATION.0}</a>
                         <!-- BEGIN: sub_navigation -->
                         <ol class="sub-navigation">
                             <!-- BEGIN: sub_navigation_item -->
                             <li>
-                                <a href="#" data-scroll-to="{SUBNAVIGATION.1}">{SUBNAVIGATION.0}</a>
+                                <a href="#" data-scroll-to="{SUBNAVIGATION.1}" data-location="{SUBNAVIGATION.2}">{SUBNAVIGATION.0}</a>
                             </li>
                             <!-- END: sub_navigation_item -->
                         </ol>
