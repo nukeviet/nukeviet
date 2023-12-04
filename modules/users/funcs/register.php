@@ -334,11 +334,11 @@ if ($checkss == $array_register['checkss']) {
         } else {
             if ($global_config['allowuserreg'] == 2) {
                 $register_active_time = $global_users_config['register_active_time'] ?? 86400;
-                $_full_name = nv_show_name_user($array_register['first_name'], $array_register['last_name'], $array_register['username']);
 
                 $subject = $nv_Lang->getModule('account_active');
                 $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, NV_MY_DOMAIN);
-                $message = $nv_Lang->getModule('account_active_info', $_full_name, $global_config['site_name'], $_url, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                $greeting = greeting_for_user_create($data_insert['username'], $data_insert['first_name'], $data_insert['last_name'], $data_insert['gender']);
+                $message = $nv_Lang->getModule('account_active_info', $greeting, $global_config['site_name'], $_url, $array_register['username'], $array_register['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                 $send = nv_sendmail([
                     $global_config['site_name'],
                     $global_config['site_email']
@@ -447,7 +447,8 @@ if ($checkss == $array_register['checkss']) {
             $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
             $subject = $nv_Lang->getModule('account_register');
             $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-            $message = $nv_Lang->getModule('account_register_info', $array_register['first_name'], $global_config['site_name'], $_url, $array_register['username'], $array_register['email']);
+            $greeting = greeting_for_user_create($array_register['username'], $array_register['first_name'], $array_register['last_name'], $array_register['gender']);
+            $message = $nv_Lang->getModule('account_register_info', $greeting, $global_config['site_name'], $_url, $array_register['username'], $array_register['email']);
             nv_sendmail_async([
                 $global_config['site_name'],
                 $global_config['site_email']

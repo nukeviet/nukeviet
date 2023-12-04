@@ -96,7 +96,7 @@ if ($nv_Request->isset_request('psr', 'post')) {
             }
 
             $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+            $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
             $gconfigs = [
                 'site_name' => $global_config['site_name'],
                 'site_email' => $global_config['site_email']
@@ -111,12 +111,12 @@ if ($nv_Request->isset_request('psr', 'post')) {
                 $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
 
                 $mail_subject = $type == 1 ? $nv_Lang->getModule('pass_reset_request_subject1') : $nv_Lang->getModule('pass_reset_request_subject2');
-                $mail_message = $type == 1 ? $nv_Lang->getModule('pass_reset_request_info1', $full_name, $gconfigs['site_name'], $_url) : $nv_Lang->getModule('pass_reset_request_info2', $full_name, $gconfigs['site_name'], $_url);
+                $mail_message = $type == 1 ? $nv_Lang->getModule('pass_reset_request_info1', $greeting, $gconfigs['site_name'], $_url) : $nv_Lang->getModule('pass_reset_request_info2', $greeting, $gconfigs['site_name'], $_url);
 
                 $nv_Lang->changeLang();
             } else {
                 $mail_subject = $type == 1 ? $nv_Lang->getModule('pass_reset_request_subject1') : $nv_Lang->getModule('pass_reset_request_subject2');
-                $mail_message = $type == 1 ? $nv_Lang->getModule('pass_reset_request_info1', $full_name, $gconfigs['site_name'], $_url) : $nv_Lang->getModule('pass_reset_request_info2', $full_name, $gconfigs['site_name'], $_url);
+                $mail_message = $type == 1 ? $nv_Lang->getModule('pass_reset_request_info1', $greeting, $gconfigs['site_name'], $_url) : $nv_Lang->getModule('pass_reset_request_info2', $greeting, $gconfigs['site_name'], $_url);
             }
 
             @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
@@ -451,7 +451,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $maillang = NV_LANG_DATA;
         }
 
-        $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
+        $greeting = greeting_for_user_create($_user['username'], $_user['first_name'], $_user['last_name'], $_user['gender']);
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
         $gconfigs = [
             'site_name' => $global_config['site_name'],
@@ -468,7 +468,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
             $pass_reset_request = $_user['pass_reset_request'] == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : ($_user['pass_reset_request'] == 1 ? $nv_Lang->getModule('pass_reset_request1_info') : '');
             $mail_subject = $nv_Lang->getModule('adduser_register1');
-            $mail_message = $nv_Lang->getModule('adduser_register_info2', $full_name, $gconfigs['site_name'], $_url, $_user['username']);
+            $mail_message = $nv_Lang->getModule('adduser_register_info2', $greeting, $gconfigs['site_name'], $_url, $_user['username']);
             if (!empty($_user['password1'])) {
                 $mail_message .= $nv_Lang->getModule('adduser_register_info3', $_user['password1']);
             }
@@ -478,7 +478,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         } else {
             $pass_reset_request = $_user['pass_reset_request'] == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : ($_user['pass_reset_request'] == 1 ? $nv_Lang->getModule('pass_reset_request1_info') : '');
             $mail_subject = $nv_Lang->getModule('adduser_register1');
-            $mail_message = $nv_Lang->getModule('adduser_register_info2', $full_name, $gconfigs['site_name'], $_url, $_user['username']);
+            $mail_message = $nv_Lang->getModule('adduser_register_info2', $greeting, $gconfigs['site_name'], $_url, $_user['username']);
             if (!empty($_user['password1'])) {
                 $mail_message .= $nv_Lang->getModule('adduser_register_info3', $_user['password1']);
             }

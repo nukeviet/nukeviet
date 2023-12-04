@@ -283,7 +283,8 @@ function new_openid_user_save($reg_username, $reg_email, $reg_password, $attribs
 
         $subject = $nv_Lang->getModule('account_register');
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
-        $message = $nv_Lang->getModule('account_register_openid_info', $reg_attribs['first_name'], $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
+        $greeting = greeting_for_user_create($data_insert['username'], $data_insert['first_name'], $data_insert['last_name'], $data_insert['gender']);
+        $message = $nv_Lang->getModule('account_register_openid_info', $greeting, $global_config['site_name'], $_url, ucfirst($reg_attribs['server']));
         nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']

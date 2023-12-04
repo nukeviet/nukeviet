@@ -845,6 +845,29 @@ function nv_show_name_user($first_name, $last_name, $user_name = '')
 }
 
 /**
+ * greeting_for_user_create()
+ * Function tạo lời chào trong email
+ *
+ * @param string $first_name
+ * @param string $last_name
+ * @param string $user_name
+ * @param string $gender
+ * @return string
+ */
+function greeting_for_user_create($user_name, $first_name, $last_name = '', $gender = '')
+{
+    global $nv_Lang;
+
+    if ($gender == 'M' or $gender == 'F') {
+        $name = $nv_Lang->getGlobal('greeting_title_' . $gender, nv_show_name_user($first_name, $last_name, $user_name));
+    } else {
+        $name = $nv_Lang->getGlobal('greeting_title', nv_show_name_user($first_name, $last_name, $user_name));
+    }
+
+    return $nv_Lang->getGlobal('greeting_for_user', $name, $user_name);
+}
+
+/**
  * nv_date()
  *
  * @param string $format

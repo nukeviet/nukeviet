@@ -120,7 +120,8 @@ if ($checkss == $data['checkss']) {
 
                             $subject = $nv_Lang->getModule('lostactive_mailtitle');
                             $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, NV_MY_DOMAIN);
-                            $message = $nv_Lang->getModule('lostactive_active_info', $row['first_name'], $global_config['site_name'], $_url, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
+                            $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
+                            $message = $nv_Lang->getModule('lostactive_active_info', $greeting, $global_config['site_name'], $_url, $row['username'], $row['email'], $password_new, nv_date('H:i d/m/Y', $row['regdate'] + 86400));
                             $ok = nv_sendmail([
                                 $global_config['site_name'],
                                 $global_config['site_email']

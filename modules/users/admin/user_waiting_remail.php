@@ -66,11 +66,11 @@ if ($nv_Request->isset_request('ajax', 'post')) {
                     }
                 } else {
                     $register_active_time = $global_users_config['register_active_time'] ?? 86400;
-                    $_full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
 
                     $mail_subject = $nv_Lang->getModule('account_active');
                     $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $row['checknum'], NV_MY_DOMAIN);
-                    $mail_message = $nv_Lang->getModule('account_active_info', $_full_name, $gconfigs['site_name'], $_url, $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
+                    $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
+                    $mail_message = $nv_Lang->getModule('account_active_info', $greeting, $gconfigs['site_name'], $_url, $row['username'], $row['email'], nv_date('H:i d/m/Y', NV_CURRENTTIME + $register_active_time));
                     $checkSend = nv_sendmail([$global_config['site_name'], $global_config['site_email']], $row['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);
 
                     if ($checkSend) {

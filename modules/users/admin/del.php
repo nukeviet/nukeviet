@@ -29,13 +29,13 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
             continue;
         }
 
-        $sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite, language FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
+        $sql = 'SELECT group_id, username, first_name, last_name, gender, email, photo, in_groups, idsite, language FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
         $row = $db->query($sql)->fetch(3);
         if (empty($row)) {
             continue;
         }
 
-        [$group_id, $username, $first_name, $last_name, $email, $photo, $in_groups, $idsite, $userlang] = $row;
+        [$group_id, $username, $first_name, $last_name, $gender, $email, $photo, $in_groups, $idsite, $userlang] = $row;
 
         if ($global_config['idsite'] > 0 and $idsite != $global_config['idsite']) {
             continue;
@@ -45,7 +45,7 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
         if ($query->fetchColumn()) {
             $error = $nv_Lang->getModule('delete_group_system');
         } else {
-            $userdelete = (!empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
+            $greeting = greeting_for_user_create($username, $first_name, $last_name, $gender);
 
             $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
             if (!$result) {
@@ -123,12 +123,12 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
                     $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
 
                     $mail_subject = $nv_Lang->getModule('delconfirm_email_title');
-                    $mail_message = $nv_Lang->getModule('delconfirm_email_content', $userdelete, $gconfigs['site_name']);
+                    $mail_message = $nv_Lang->getModule('delconfirm_email_content', $greeting, $gconfigs['site_name']);
 
                     $nv_Lang->changeLang();
                 } else {
                     $mail_subject = $nv_Lang->getModule('delconfirm_email_title');
-                    $mail_message = $nv_Lang->getModule('delconfirm_email_content', $userdelete, $gconfigs['site_name']);
+                    $mail_message = $nv_Lang->getModule('delconfirm_email_content', $greeting, $gconfigs['site_name']);
                 }
 
                 $mail_message = nl2br($mail_message);

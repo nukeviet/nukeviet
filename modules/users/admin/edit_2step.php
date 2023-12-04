@@ -152,7 +152,7 @@ if (empty($row['active2step'])) {
                 $maillang = NV_LANG_DATA;
             }
 
-            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+            $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
             $gconfigs = [
                 'site_name' => $global_config['site_name'],
                 'site_email' => $global_config['site_email']
@@ -167,12 +167,12 @@ if (empty($row['active2step'])) {
                 $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
 
                 $mail_subject = $nv_Lang->getModule('user_2step_newcodes');
-                $mail_message = $nv_Lang->getModule('user_2step_bodymail', $full_name, $gconfigs['site_name'], implode('<br />', $new_code));
+                $mail_message = $nv_Lang->getModule('user_2step_bodymail', $greeting, $gconfigs['site_name'], implode('<br />', $new_code));
 
                 $nv_Lang->changeLang();
             } else {
                 $mail_subject = $nv_Lang->getModule('user_2step_newcodes');
-                $mail_message = $nv_Lang->getModule('user_2step_bodymail', $full_name, $gconfigs['site_name'], implode('<br />', $new_code));
+                $mail_message = $nv_Lang->getModule('user_2step_bodymail', $greeting, $gconfigs['site_name'], implode('<br />', $new_code));
             }
 
             @nv_sendmail_async([$gconfigs['site_name'], $gconfigs['site_email']], $row['email'], $mail_subject, $mail_message, '', false, false, [], [], true, [], $maillang);

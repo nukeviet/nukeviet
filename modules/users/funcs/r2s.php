@@ -135,10 +135,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         }
     }
 
+    $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
     if (!$email_sent) {
         $key = strtoupper(nv_genpass(10));
         $nv_Request->set_Session('cant_do_2step', $uid . '.' . $createtime . '.' . $count . '.' . $key);
-        $message = $nv_Lang->getModule('remove_2step_verifykey_content', $row['username'], $global_config['site_name'], $key);
+        $message = $nv_Lang->getModule('remove_2step_verifykey_content', $greeting, $global_config['site_name'], $key);
         @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']
@@ -180,7 +181,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $uid);
         $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
 
-        $message = $nv_Lang->getModule('remove_2step_content', $row['username'], $global_config['site_name']);
+        $message = $nv_Lang->getModule('remove_2step_content', $greeting, $global_config['site_name']);
         @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']

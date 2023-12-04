@@ -41,18 +41,10 @@ function lost_pass_sendMail($row)
         $pa = NV_CURRENTTIME + 3600;
         $passlostkey = $pa . '|' . $passlostkey;
 
-        $name = $global_config['name_show'] ? [
-            $row['first_name'],
-            $row['last_name']
-        ] : [
-            $row['last_name'],
-            $row['first_name']
-        ];
-        $name = array_filter($name);
-        $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
         $nv_Lang->setModule('lostpass_email_subject', $nv_Lang->getModule('lostpass_email_subject', NV_MY_DOMAIN));
-        $message = $nv_Lang->getModule('lostpass_email_content', $name, $sitename, $key, nv_date('H:i d/m/Y', $pa));
+        $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
+        $message = $nv_Lang->getModule('lostpass_email_content', $greeting, $sitename, $key, nv_date('H:i d/m/Y', $pa));
         if (!nv_sendmail([
             $global_config['site_name'],
             $global_config['site_email']
@@ -314,17 +306,9 @@ if ($checkss == $data['checkss']) {
     nv_apply_hook($module_name, 'user_lostpass_success', [$row, $new_password]);
 
     if ($global_config['send_pass']) {
-        $name = $global_config['name_show'] ? [
-            $row['first_name'],
-            $row['last_name']
-        ] : [
-            $row['last_name'],
-            $row['first_name']
-        ];
-        $name = array_filter($name);
-        $name = implode(' ', $name);
         $sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
-        $message = $nv_Lang->getModule('edit_mail_content', $name, $sitename, $nv_Lang->getGlobal('password'), $new_password);
+        $greeting = greeting_for_user_create($row['username'], $row['first_name'], $row['last_name'], $row['gender']);
+        $message = $nv_Lang->getModule('edit_mail_content', $greeting, $sitename, $nv_Lang->getGlobal('password'), $new_password);
         @nv_sendmail_async([
             $global_config['site_name'],
             $global_config['site_email']

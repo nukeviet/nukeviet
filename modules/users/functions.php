@@ -284,13 +284,13 @@ function nv_del_user($userid)
 {
     global $db, $global_config, $module_name, $user_info, $nv_Lang;
 
-    $sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
+    $sql = 'SELECT group_id, username, first_name, last_name, gender, email, photo, in_groups, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
     $row = $db->query($sql)->fetch(3);
     if (empty($row)) {
         $return = 0;
     }
 
-    [$group_id, $username, $first_name, $last_name, $email, $photo, $in_groups, $idsite] = $row;
+    [$group_id, $username, $first_name, $last_name, $gender, $email, $photo, $in_groups, $idsite] = $row;
 
     if ($global_config['idsite'] > 0 and $idsite != $global_config['idsite']) {
         return 0;
@@ -300,7 +300,6 @@ function nv_del_user($userid)
     if ($query->fetchColumn()) {
         return 0;
     }
-    $userdelete = (!empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
 
     $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
     if (!$result) {
@@ -322,7 +321,8 @@ function nv_del_user($userid)
     }
 
     $subject = $nv_Lang->getModule('delconfirm_email_title');
-    $message = $nv_Lang->getModule('delconfirm_email_content', $userdelete, $global_config['site_name']);
+    $greeting = greeting_for_user_create($username, $first_name, $last_name, $gender);
+    $message = $nv_Lang->getModule('delconfirm_email_content', $greeting, $global_config['site_name']);
     $message = nl2br($message);
     nv_sendmail_async([$global_config['site_name'], $global_config['site_email']], $email, $subject, $message);
 
