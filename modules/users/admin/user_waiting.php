@@ -438,13 +438,14 @@ if ($nv_Request->isset_request('userid', 'get')) {
             $maillang = NV_LANG_DATA;
         }
 
-        $greeting = greeting_for_user_create($post['username'], $post['first_name'], $post['last_name'], $post['gender']);
         $_url = urlRewriteWithDomain(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, NV_MY_DOMAIN);
         $gconfigs = [
             'site_name' => $global_config['site_name'],
             'site_email' => $global_config['site_email']
         ];
         if (!empty($maillang)) {
+            $greeting = greeting_for_user_create($post['username'], $post['first_name'], $post['last_name'], $post['gender'], $maillang);
+
             $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
             $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
             while ($row = $result->fetch()) {
@@ -452,6 +453,8 @@ if ($nv_Request->isset_request('userid', 'get')) {
             }
 
             $nv_Lang->loadFile(NV_ROOTDIR . '/modules/' . $module_file . '/language/' . $maillang . '.php', true);
+        } else {
+            $greeting = greeting_for_user_create($post['username'], $post['first_name'], $post['last_name'], $post['gender']);
         }
 
         $pass_reset_request = $_user['pass_reset_request'] == 2 ? $nv_Lang->getModule('pass_reset_request2_info') : ($_user['pass_reset_request'] == 1 ? $nv_Lang->getModule('pass_reset_request1_info') : '');

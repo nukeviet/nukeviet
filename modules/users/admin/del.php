@@ -45,8 +45,6 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
         if ($query->fetchColumn()) {
             $error = $nv_Lang->getModule('delete_group_system');
         } else {
-            $greeting = greeting_for_user_create($username, $first_name, $last_name, $gender);
-
             $result = $db->exec('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
             if (!$result) {
                 continue;
@@ -114,6 +112,8 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
                     'site_email' => $global_config['site_email']
                 ];
                 if (!empty($maillang)) {
+                    $greeting = greeting_for_user_create($username, $first_name, $last_name, $gender, $maillang);
+
                     $in = "'" . implode("', '", array_keys($gconfigs)) . "'";
                     $result = $db->query('SELECT config_name, config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . $maillang . "' AND module='global' AND config_name IN (" . $in . ')');
                     while ($row = $result->fetch()) {
@@ -127,6 +127,8 @@ if (md5(NV_CHECK_SESSION . '_' . $module_name . '_main') == $nv_Request->get_str
 
                     $nv_Lang->changeLang();
                 } else {
+                    $greeting = greeting_for_user_create($username, $first_name, $last_name, $gender);
+
                     $mail_subject = $nv_Lang->getModule('delconfirm_email_title');
                     $mail_message = $nv_Lang->getModule('delconfirm_email_content', $greeting, $gconfigs['site_name']);
                 }

@@ -832,13 +832,20 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
  * @param string $first_name
  * @param string $last_name
  * @param string $user_name
+ * @param string $lang
  * @return string
  */
-function nv_show_name_user($first_name, $last_name, $user_name = '')
+function nv_show_name_user($first_name, $last_name, $user_name = '', $lang = '')
 {
-    global $global_config;
+    global $global_config, $db;
 
-    $full_name = ($global_config['name_show']) ? $first_name . ' ' . $last_name : $last_name . ' ' . $first_name;
+    if (!empty($lang) and $lang != NV_LANG_DATA) {
+        $name_show = $db->query('SELECT config_value FROM ' . NV_CONFIG_GLOBALTABLE . " WHERE config_name='name_show' AND lang='" . $lang . "' AND module='global'")->fetchColumn();
+    } else {
+        $name_show = $global_config['name_show'];
+    }
+
+    $full_name = $name_show ? $first_name . ' ' . $last_name : $last_name . ' ' . $first_name;
     $full_name = trim($full_name);
 
     return empty($full_name) ? $user_name : $full_name;
@@ -852,16 +859,17 @@ function nv_show_name_user($first_name, $last_name, $user_name = '')
  * @param string $last_name
  * @param string $user_name
  * @param string $gender
+ * @param string $lang
  * @return string
  */
-function greeting_for_user_create($user_name, $first_name, $last_name = '', $gender = '')
+function greeting_for_user_create($user_name, $first_name, $last_name = '', $gender = '', $lang = '')
 {
     global $nv_Lang;
 
     if ($gender == 'M' or $gender == 'F') {
-        $name = $nv_Lang->getGlobal('greeting_title_' . $gender, nv_show_name_user($first_name, $last_name, $user_name));
+        $name = $nv_Lang->getGlobal('greeting_title_' . $gender, nv_show_name_user($first_name, $last_name, $user_name, $lang));
     } else {
-        $name = $nv_Lang->getGlobal('greeting_title', nv_show_name_user($first_name, $last_name, $user_name));
+        $name = $nv_Lang->getGlobal('greeting_title', nv_show_name_user($first_name, $last_name, $user_name, $lang));
     }
 
     return $nv_Lang->getGlobal('greeting_for_user', $name, $user_name);

@@ -141,7 +141,7 @@ if ($row['admin_id'] == $admin_info['admin_id']) {
                         }
                         $nv_Lang->loadFile(NV_ROOTDIR . '/includes/language/' . $maillang . '/admin_' . $module_file . '.php', true);
                         $mail_subject = $nv_Lang->getModule('2step_oauth_add_mail_subject');
-                        $greeting = greeting_for_user_create($row_user['username'], $row_user['first_name'], $row_user['last_name'], $row_user['gender']);
+                        $greeting = greeting_for_user_create($row_user['username'], $row_user['first_name'], $row_user['last_name'], $row_user['gender'], $maillang);
                         $mail_message = $nv_Lang->getModule('2step_oauth_add_mail_content', $greeting, $gconfigs['site_name'], $oauthid, ucfirst($opt));
                         $nv_Lang->changeLang();
                     } else {
