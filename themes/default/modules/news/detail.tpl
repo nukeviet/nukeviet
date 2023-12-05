@@ -120,7 +120,7 @@
         <!-- END: showhometext -->
         <!-- BEGIN: navigation -->
         <script type="text/javascript" src="{ASSETS_STATIC_URL}/js/clipboard/clipboard.min.js"></script>
-        <div id="navigation" class="navigation-cont auto_nav{DETAIL.auto_nav}">
+        <div id="navigation" class="navigation-cont auto_nav{DETAIL.auto_nav}" data-copied="{LANG.link_copied}">
             <div class="navigation-head">
                 <em class="fa fa-list-ol"></em> {LANG.table_of_contents}
             </div>

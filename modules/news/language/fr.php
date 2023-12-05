@@ -611,3 +611,6 @@ $lang_module['admin_search_title'] = 'Titre';
 $lang_module['admin_imgposition_1'] = 'Montré à gauche de l\'introduction';
 $lang_module['tags_manage'] = 'Gestion des tags';
 $lang_module['about'] = 'À propos de';
+$lang_module['copy_link'] = 'Copier le lien';
+$lang_module['link_copied'] = 'Lien copié dans le presse-papier';
+$lang_module['go_menu'] = 'Aller à la table des matières de l\'article';

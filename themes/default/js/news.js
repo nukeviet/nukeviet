@@ -236,7 +236,7 @@ $(document).ready(function() {
                 setTimeout(function() {
                     $(e.trigger).tooltip('destroy');
                 })
-            }).tooltip({title: 'Link is copied to clipboard!', placement: 'top', container: 'body', trigger: 'hover focus', animation: false});
+            }).tooltip({title: $('#navigation').data('copied'), placement: 'top', container: 'body', trigger: 'hover focus', animation: false});
             $(e.trigger).tooltip('show');
         });
         var match = /[\?\&]ml\=([a-zA-Z0-9\-]+)/i.exec(window.location);

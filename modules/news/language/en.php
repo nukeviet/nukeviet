@@ -611,3 +611,6 @@ $lang_module['admin_topic_sl'] = 'Choose a topic or fill it out yourself';
 $lang_module['admin_imgposition_1'] = 'Shown to the left of the introduction';
 $lang_module['tags_manage'] = 'Tags manage';
 $lang_module['about'] = 'About';
+$lang_module['copy_link'] = 'Copy link';
+$lang_module['link_copied'] = 'Link copied to clipboard';
+$lang_module['go_menu'] = 'Go to article table of contents';

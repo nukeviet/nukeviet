@@ -523,14 +523,14 @@ if (!empty($news_contents['auto_nav']) and !empty($news_contents['bodyhtml'])) {
                 $attrid = $idname . $i;
                 $node->setAttribute('data-id', $attrid);
                 $news_contents['navigation'][$y]['item'] = [$node->textContent, $attrid, $location . $attrid];
-                $node->prepend('<div class="btns"><button type="button" class="gonav"><em class="fa fa-chevron-up fa-fw"></em></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><em class="fa fa-files-o fa-fw"></em></button></div>');
+                $node->prepend('<div class="btns"><button type="button" class="gonav" title="' . $nv_Lang->getModule('go_menu') . '"><em class="fa fa-chevron-up fa-fw"></em></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><em class="fa fa-files-o fa-fw" title="' . $nv_Lang->getModule('copy_link') . '"></em></button></div>');
             } elseif ($y) {
                 ++$i;
                 $attrid = $idname . $i;
                 $node->setAttribute('data-id', $attrid);
                 !isset($news_contents['navigation'][$y]['subitems']) && $news_contents['navigation'][$y]['subitems'] = [];
                 $news_contents['navigation'][$y]['subitems'][] = [$node->textContent, $attrid, $location . $attrid];
-                $node->prepend('<div class="btns"><button type="button" class="gonav"><em class="fa fa-chevron-up fa-fw"></em></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><em class="fa fa-files-o fa-fw"></em></button></div>');
+                $node->prepend('<div class="btns"><button type="button" class="gonav" title="' . $nv_Lang->getModule('go_menu') . '"><em class="fa fa-chevron-up fa-fw"></em></button><button type="button" class="copylink" data-clipboard-text="' . $location . $attrid . '"><em class="fa fa-files-o fa-fw" title="' . $nv_Lang->getModule('copy_link') . '"></em></button></div>');
             }
         }
     }

@@ -611,3 +611,6 @@ $lang_module['admin_search_title'] = 'Tiêu đề';
 $lang_module['admin_imgposition_1'] = 'Hiển thị bên trái phần mở đầu';
 $lang_module['tags_manage'] = 'Quản lý Tags';
 $lang_module['about'] = 'Về';
+$lang_module['copy_link'] = 'Sao chép liên kết';
+$lang_module['link_copied'] = 'Đã sao chép liên kết vào bảng nhớ tạm';
+$lang_module['go_menu'] = 'Mục lục bài viết';
