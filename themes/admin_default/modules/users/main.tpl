@@ -10,7 +10,7 @@
         <form action="{FORM_ACTION}" method="get">
             <input name="{NV_NAME_VARIABLE}" type="hidden" value="{MODULE_NAME}" />
             <div class="row">
-                <div class="col-xs-12 col-md-5  col-md-offset-2">
+                <div class="col-xs-12 col-md-5 col-md-offset-2">
                     <div class="form-group">
                         <input class="form-control" type="text" name="value" value="{SEARCH_VALUE}" id="f_value" placeholder="{LANG.search_key}" />
                     </div>
@@ -45,7 +45,16 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-5 col-md-offset-5 col-lg-offset-6">
+                <div class="col-xs-12 col-md-5 col-md-offset-2">
+                    <div class="form-group">
+                        <select class="form-control" name="active2step">
+                            <!-- BEGIN: active2step -->
+                            <option value="{ACTIVE2STEP.val}"{ACTIVE2STEP.sel}>{ACTIVE2STEP.name}</option>
+                            <!-- END: active2step -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-5">
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" class="form-control" value="{REG_TIME_FROM}" name="reg_from" id="reg_time_from" placeholder="{LANG.reg_time_from}">
@@ -69,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-24 col-md-4 col-lg-3">
+                <div class="col-xs-24 col-md-5">
                     <div class="form-group text-center">
                         <input class="btn btn-primary btn-block" type="submit" value="{LANG.submit}" />
                     </div>

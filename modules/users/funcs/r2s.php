@@ -162,6 +162,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $nv_Request->unset_request('cant_do_2step', 'session');
 
     if (empty($global_config['remove_2step_method']) or empty($row['question'])) {
+        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET active2step=2 WHERE userid=' . $uid);
         // Thêm thông báo vào hệ thống
         $access_admin = unserialize($global_users_config['access_admin']);
         if (isset($access_admin['access_editus'])) {

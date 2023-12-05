@@ -124,17 +124,30 @@ if (!empty($selgroup) and $selgroup != 6) {
     $base_url .= '&amp;group=' . $selgroup;
 }
 
+//active2step
+$active2step = $nv_Request->get_title('active2step', 'post,get', '');
+if ($active2step == 'disabled') {
+    $_arr_where[] = 'tb1.active2step = 0';
+    $base_url .= '&amp;active2step=disabled';
+} elseif ($active2step == 'enabled') {
+    $_arr_where[] = 'tb1.active2step > 0';
+    $base_url .= '&amp;active2step=enabled';
+} elseif ($active2step == 'request') {
+    $_arr_where[] = 'tb1.active2step = 2';
+    $base_url .= '&amp;active2step=request';
+}
+
 $reg_from = $nv_Request->get_title('reg_from', 'post,get', '');
 unset($m);
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $reg_from, $m)) {
-    $_arr_where[] = 'regdate >= ' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
+    $_arr_where[] = 'tb1.regdate >= ' . mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     $base_url .= '&amp;reg_from=' . $reg_from;
 }
 
 $reg_to = $nv_Request->get_title('reg_to', 'post,get', '');
 unset($m);
 if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $reg_to, $m)) {
-    $_arr_where[] = 'regdate <= ' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
+    $_arr_where[] = 'tb1.regdate <= ' . mktime(23, 59, 59, $m[2], $m[1], $m[3]);
     $base_url .= '&amp;reg_to=' . $reg_to;
 }
 
@@ -338,6 +351,21 @@ while ($group = $result->fetch()) {
     $group['title'] = ($group['group_id'] < 10) ? $nv_Lang->getGlobal('level' . $group['group_id']) : $group['title'];
     $xtpl->assign('GROUP', $group);
     $xtpl->parse('main.group');
+}
+
+$active2steps = [
+    '' => $nv_Lang->getModule('active2step_status'),
+    'disabled' => $nv_Lang->getModule('active2step_status0'),
+    'enabled' => $nv_Lang->getModule('active2step_status1'),
+    'request' => $nv_Lang->getModule('active2step_status2')
+];
+foreach ($active2steps as $k => $v) {
+    $xtpl->assign('ACTIVE2STEP', [
+        'val' => $k,
+        'sel' => (!empty($active2step) and $active2step == $k) ? ' selected="selected"' : '',
+        'name' => $v
+    ]);
+    $xtpl->parse('main.active2step');
 }
 
 $xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');

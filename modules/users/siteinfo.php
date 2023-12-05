@@ -26,12 +26,15 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
 } else {
     if ($global_config['idsite'] > 0) {
         $site_condition = ' WHERE idsite=' . $global_config['idsite'];
+        $active2step_request_condition = $site_condition . ' AND active2step=2';
     } else {
         $site_condition = '';
+        $active2step_request_condition = ' WHERE active2step=2';
     }
     $_arr_siteinfo['number_user'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . $site_condition)->fetchColumn();
     $_arr_siteinfo['number_user_reg'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_reg' . $site_condition)->fetchColumn();
     $_arr_siteinfo['number_user_edit'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_edit')->fetchColumn();
+    $_arr_siteinfo['number_active2step_request'] = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . $active2step_request_condition)->fetchColumn();
 
     $access_admin = $db->query('SELECT content FROM ' . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
     $access_admin = unserialize($access_admin);
@@ -97,4 +100,13 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
             ];
         }
     }
+}
+
+// Số yêu cầu tắt xác thực 2 bước
+if (!empty($_arr_siteinfo['number_active2step_request'])) {
+    $pendinginfo[] = [
+        'key' => $nv_Lang->getModule('active2step_status2'),
+        'value' => number_format($_arr_siteinfo['number_active2step_request']),
+        'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;active2step=request'
+    ];
 }

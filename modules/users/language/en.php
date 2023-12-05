@@ -913,3 +913,7 @@ $lang_module['remove_2step_content'] = '%1$s<br /><br />At your request, we have
 $lang_module['remove_2step_success'] = 'Successfully turned off 2-step verification. Please log in again';
 $lang_module['remove_2step_send'] = 'Your request to turn off 2-step verification has been sent to the site administrator. We will respond to your request as soon as possible.';
 $lang_module['remove_2step_request'] = 'Account %s sent a request to turn off 2-step verification';
+$lang_module['active2step_status'] = '2-step verification status';
+$lang_module['active2step_status0'] = '2-step verification is not enabled';
+$lang_module['active2step_status1'] = '2-step verification enabled';
+$lang_module['active2step_status2'] = 'Request to disable 2-step verification';

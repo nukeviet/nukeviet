@@ -913,3 +913,7 @@ $lang_module['remove_2step_content'] = '%1$s<br /><br />À votre demande, nous a
 $lang_module['remove_2step_success'] = 'La vérification en deux étapes a bien été désactivée. Veuillez vous reconnecter';
 $lang_module['remove_2step_send'] = 'Votre demande de désactivation de la vérification en 2 étapes a été envoyée à l\'administrateur du site. Nous répondrons à votre demande dans les plus brefs délais.';
 $lang_module['remove_2step_request'] = 'Le compte %s a envoyé une demande pour désactiver la vérification en deux étapes';
+$lang_module['active2step_status'] = 'Statut de vérification en 2 étapes';
+$lang_module['active2step_status0'] = 'La vérification en deux étapes n\'est pas activée';
+$lang_module['active2step_status1'] = 'Vérification en deux étapes activée';
+$lang_module['active2step_status2'] = 'Demande de désactivation de la vérification en deux étapes';

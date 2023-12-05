@@ -913,3 +913,7 @@ $lang_module['remove_2step_content'] = '%1$s<br /><br />Theo yêu cầu của b�
 $lang_module['remove_2step_success'] = 'Tắt xác thực 2 bước thành công. Vui lòng đăng nhập lại';
 $lang_module['remove_2step_send'] = 'Yêu cầu tắt xác thực 2 bước của bạn đã được gửi quản trị site. Chúng tôi sẽ phản hồi yêu cầu của bạn trong thời gian sớm nhất.';
 $lang_module['remove_2step_request'] = 'Tài khoản %s gửi yêu cầu tắt xác thực 2 bước';
+$lang_module['active2step_status'] = 'Trạng thái xác thực 2 bước';
+$lang_module['active2step_status0'] = 'Chưa kích hoạt xác thực 2 bước';
+$lang_module['active2step_status1'] = 'Đã kích hoạt xác thực 2 bước';
+$lang_module['active2step_status2'] = 'Đã gửi yêu cầu tắt xác thực 2 bước';
