@@ -480,7 +480,7 @@ $company['company_licensenumber'] = '';
 $company['company_responsibility'] = '';
 $company['company_showmap'] = 1;
 $company['company_mapurl'] = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d427.01613794022035!2d105.78849184070538!3d20.979995366268337!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac93055e2f2f%3A0x91f4b423089193dd!2zQ8O0bmcgdHkgQ-G7lSBwaOG6p24gUGjDoXQgdHJp4buDbiBOZ3Xhu5NuIG3hu58gVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1701239622249!5m2!1svi!2s';
-$company['company_phone'] = '+84-24-85872007[+842485872007]|+84-904762534[+84904762534]';
+$company['company_phone'] = '+84-24-85872007[+842485872007]';
 $company['company_fax'] = '+84-24-35500914';
 $company['company_email'] = 'contact@vinades.vn';
 $company['company_website'] = 'http://vinades.vn';
