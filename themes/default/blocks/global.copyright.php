@@ -75,40 +75,17 @@ if (!nv_function_exists('nv_copyright_info')) {
      */
     function nv_copyright_info($block_config)
     {
-        global $global_config;
+        global $global_config, $nv_Lang;
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.copyright.tpl');
-        $xtpl = new XTemplate('global.copyright.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
+        empty($block_config['copyright_by']) && $block_config['copyright_by'] = $global_config['site_name'];
+        empty($block_config['copyright_url']) && $block_config['copyright_url'] = 'http://' . $global_config['my_domains'][0];
 
-        if (empty($block_config['copyright_by'])) {
-            $block_config['copyright_by'] = $global_config['site_name'];
-        }
-        if (empty($block_config['copyright_url'])) {
-            $block_config['copyright_url'] = 'http://' . $global_config['my_domains'][0];
-        }
+        $stpl = new \NukeViet\Template\NVSmarty();
+        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->assign('LANG', $nv_Lang);
+        $stpl->assign('DATA', $block_config);
 
-        $xtpl->assign('DATA', $block_config);
-        $xtpl->parse('main.copyright_by.copyright_url');
-        $xtpl->parse('main.copyright_by.copyright_url2');
-        $xtpl->parse('main.copyright_by');
-
-        if (!empty($block_config['design_by'])) {
-            if (!empty($block_config['design_url'])) {
-                $xtpl->parse('main.design_by.design_url');
-                $xtpl->parse('main.design_by.design_url2');
-            }
-            $xtpl->parse('main.design_by');
-        }
-        if (!empty($block_config['siteterms_url'])) {
-            $xtpl->parse('main.siteterms_url');
-        }
-        if (defined('NV_IS_SPADMIN')) {
-            $xtpl->parse('main.memory_time_usage');
-        }
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
+        return $stpl->fetch('global.copyright.tpl');
     }
 }
 

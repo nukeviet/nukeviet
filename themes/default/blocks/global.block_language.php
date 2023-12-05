@@ -24,30 +24,23 @@ if (!nv_function_exists('nv_block_language')) {
     {
         global $global_config, $nv_Lang, $language_array;
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.block_language.tpl');
-        $xtpl = new XTemplate('global.block_language.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('SELECT_LANGUAGE', $nv_Lang->getGlobal('langsite'));
-
         // Multiple languages
+        $langs = [];
         if ($global_config['lang_multi'] and sizeof($global_config['allow_sitelangs']) > 1) {
             foreach ($global_config['allow_sitelangs'] as $lang_i) {
-                $xtpl->assign('LANGSITENAME', $language_array[$lang_i]['name']);
-                $xtpl->assign('LANGSITEURL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i);
-
-                if (NV_LANG_DATA != $lang_i) {
-                    $xtpl->parse('main.language.langitem');
-                } else {
-                    $xtpl->parse('main.language.langcuritem');
-                }
+                $langs[] = [
+                    'name' => $language_array[$lang_i]['name'],
+                    'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i,
+                    'sel' => $lang_i == NV_LANG_DATA ? true : false
+                ];
             }
-
-            $xtpl->parse('main.language');
         }
 
-        $xtpl->parse('main');
-
-        return $xtpl->text('main');
+        $stpl = new \NukeViet\Template\NVSmarty();
+        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->assign('LANG', $nv_Lang);
+        $stpl->assign('LANGS', $langs);
+        return $stpl->fetch('global.block_language.tpl');
     }
 }
 

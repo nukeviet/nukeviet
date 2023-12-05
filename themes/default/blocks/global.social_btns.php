@@ -93,7 +93,7 @@ if (!nv_function_exists('nv_menu_theme_social_btns')) {
      */
     function nv_menu_theme_social_btns($block_config)
     {
-        global $global_config;
+        global $global_config, $nv_Lang;
 
         if (empty($block_config['name'])) {
             return '';
@@ -114,21 +114,22 @@ if (!nv_function_exists('nv_menu_theme_social_btns')) {
         $block_config['icon'][] = 'fa fa-rss';
         $block_config['color'][] = 'ff9900';
 
+        $socials = [];
         foreach ($block_config['name'] as $key => $name) {
-            $xtpl->assign('DATA', [
+            $socials[] = [
                 'name' => $name,
                 'url' => $block_config['url'][$key],
                 'icon' => !empty($block_config['icon'][$key]) ? $block_config['icon'][$key] : 'fa fa-share-alt',
                 'color' => !empty($block_config['color'][$key]) ? $block_config['color'][$key] : 'ff6600'
-            ]);
-            if ($name != 'feeds') {
-                $xtpl->parse('main.item.target');
-            }
-            $xtpl->parse('main.item');
+            ];
         }
-        $xtpl->parse('main');
 
-        return $xtpl->text('main');
+        $stpl = new \NukeViet\Template\NVSmarty();
+        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->assign('LANG', $nv_Lang);
+        $stpl->assign('SOCIALS', $socials);
+
+        return $stpl->fetch('global.social_btns.tpl');
     }
 }
 

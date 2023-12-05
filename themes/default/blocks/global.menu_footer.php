@@ -66,26 +66,22 @@ if (!nv_function_exists('nv_menu_theme_default_footer')) {
      */
     function nv_menu_theme_default_footer($block_config)
     {
-        global $global_config, $site_mods;
+        global $site_mods;
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.menu_footer.tpl');
-        $xtpl = new XTemplate('global.menu_footer.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-
-        $a = 0;
+        $menus = [];
         foreach ($site_mods as $modname => $modvalues) {
             if (in_array($modname, $block_config['module_in_menu'], true) and !empty($modvalues['funcs'])) {
-                $_array_menu = ['title' => $modvalues['custom_title'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname];
-                $xtpl->assign('FOOTER_MENU', $_array_menu);
-                $xtpl->parse('main.footer_menu');
-                ++$a;
+                $menus[] = [
+                    'title' => $modvalues['custom_title'],
+                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname
+                ];
             }
         }
-        $xtpl->parse('main');
+        $stpl = new \NukeViet\Template\NVSmarty();
+        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->assign('MENU', $menus);
 
-        return $xtpl->text('main');
+        return $stpl->fetch('global.menu_footer.tpl');
     }
 }
 

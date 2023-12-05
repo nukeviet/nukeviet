@@ -22,31 +22,29 @@ if (!nv_function_exists('nv_block_theme_switch')) {
      */
     function nv_block_theme_switch($block_config)
     {
-        global $global_config;
+        global $global_config, $nv_Lang;
 
-        if (empty($global_config['array_user_allowed_theme'])) {
+        if (empty($global_config['array_user_allowed_theme']) or sizeof($global_config['array_user_allowed_theme']) < 2) {
             return '';
         }
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.theme_switch.tpl');
-        $xtpl = new XTemplate('global.theme_switch.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('GLANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('CONFIG', $block_config);
-        $xtpl->assign('TOKEND', NV_CHECK_SESSION);
-
+        $themes = [];
         foreach ($global_config['array_user_allowed_theme'] as $theme) {
-            $xtpl->assign('USER_THEME', [
+            $themes[] = [
                 'key' => $theme,
-                'title' => $theme,
-                'selected' => $theme == $global_config['site_theme'] ? ' selected="selected"' : '',
-            ]);
-            $xtpl->parse('main.loop');
+                'title' => ucfirst($theme),
+                'sel' => $theme == $global_config['site_theme'] ? true : false
+            ];
         }
 
-        $xtpl->parse('main');
+        $stpl = new \NukeViet\Template\NVSmarty();
+        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->assign('LANG', $nv_Lang);
+        $stpl->assign('CONFIG', $block_config);
+        $stpl->assign('TOKEND', NV_CHECK_SESSION);
+        $stpl->assign('THEMES', $themes);
 
-        return $xtpl->text('main');
+        return $stpl->fetch('global.theme_switch.tpl');
     }
 }
 

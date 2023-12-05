@@ -24,10 +24,6 @@ if (!nv_function_exists('nv_block_qr_code')) {
     {
         global $page_title, $global_config, $page_url, $module_name, $home, $op;
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.QR_code.tpl');
-        $xtpl = new XTemplate('global.QR_code.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-
         if (empty($page_url)) {
             if ($home) {
                 $current_page_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
@@ -44,11 +40,12 @@ if (!nv_function_exists('nv_block_qr_code')) {
         str_starts_with($current_page_url, NV_MY_DOMAIN) && $current_page_url = substr($current_page_url, strlen(NV_MY_DOMAIN));
         $block_config['selfurl'] = urlRewriteWithDomain($current_page_url, NV_MY_DOMAIN);
         $block_config['title'] = 'QR-Code: ' . str_replace('"', '&quot;', ($page_title ?: $global_config['site_name']));
-        $xtpl->assign('QRCODE', $block_config);
 
-        $xtpl->parse('main');
+        $stpl = new \NukeViet\Template\NVSmarty();
+        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->assign('QRCODE', $block_config);
 
-        return $xtpl->text('main');
+        return $stpl->fetch('global.QR_code.tpl');
     }
 }
 

@@ -67,29 +67,48 @@ if (!nv_function_exists('nv_menu_theme_social')) {
      */
     function nv_menu_theme_social($block_config)
     {
-        global $global_config, $site_mods;
+        global $site_mods, $nv_Lang;
 
-        $block_theme = get_tpl_dir([$global_config['module_theme'], $global_config['site_theme']], 'default', '/blocks/global.social.tpl');
-        $xtpl = new XTemplate('global.social.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
-        $xtpl->assign('LANG', \NukeViet\Core\Language::$lang_global);
-        $xtpl->assign('BLOCK_THEME', $block_theme);
-        $xtpl->assign('DATA', $block_config);
+        $socials = [];
         if (!empty($block_config['facebook'])) {
-            $xtpl->parse('main.facebook');
+            $socials[] = [
+                'href' => $block_config['facebook'],
+                'title' => 'Facebook',
+                'icon' => 'facebook',
+                'target_blank' => true
+            ];
         }
         if (!empty($block_config['youtube'])) {
-            $xtpl->parse('main.youtube');
+            $socials[] = [
+                'href' => $block_config['youtube'],
+                'title' => 'Youtube',
+                'icon' => 'youtube',
+                'target_blank' => true
+            ];
         }
         if (!empty($block_config['twitter'])) {
-            $xtpl->parse('main.twitter');
+            $socials[] = [
+                'href' => $block_config['twitter'],
+                'title' => 'Twitter',
+                'icon' => 'twitter',
+                'target_blank' => true
+            ];
         }
         if (isset($site_mods['feeds'])) {
-            $xtpl->assign('FEEDS_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=feeds');
-            $xtpl->parse('main.feeds');
+            $socials[] = [
+                'href' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=feeds',
+                'title' => 'Feeds',
+                'icon' => 'rss',
+                'target_blank' => false
+            ];
         }
-        $xtpl->parse('main');
 
-        return $xtpl->text('main');
+        $stpl = new \NukeViet\Template\NVSmarty();
+        $stpl->setTemplateDir(str_replace(DIRECTORY_SEPARATOR, '/', __DIR__));
+        $stpl->assign('LANG', $nv_Lang);
+        $stpl->assign('SOCIALS', $socials);
+
+        return $stpl->fetch('global.social.tpl');
     }
 }
 
