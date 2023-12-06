@@ -160,35 +160,38 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     }
 
     $nv_Request->unset_request('cant_do_2step', 'session');
+    $info = nv_apply_hook($module_name, 'user_remove_2step', [$row, $global_users_config, $greeting]);
 
-    if (empty($global_config['remove_2step_method']) or empty($row['question'])) {
-        $db->query('UPDATE ' . NV_MOD_TABLE . ' SET active2step=2 WHERE userid=' . $uid);
-        // Thêm thông báo vào hệ thống
-        $access_admin = unserialize($global_users_config['access_admin']);
-        if (isset($access_admin['access_editus'])) {
-            for ($i = 1; $i <= 3; ++$i) {
-                if (!empty($access_admin['access_editus'][$i])) {
-                    $admin_view_allowed = $i == 3 ? 0 : $i;
-                    nv_insert_notification($module_name, 'remove_2step_request', [
-                        'title' => $row['username'],
-                        'uid' => $row['userid']
-                    ], $uid, 0, 0, 1, $admin_view_allowed, 1);
+    if (is_null($info)) {
+        if (empty($global_config['remove_2step_method']) or empty($row['question'])) {
+            $db->query('UPDATE ' . NV_MOD_TABLE . ' SET active2step=2 WHERE userid=' . $uid);
+            // Thêm thông báo vào hệ thống
+            $access_admin = unserialize($global_users_config['access_admin']);
+            if (isset($access_admin['access_editus'])) {
+                for ($i = 1; $i <= 3; ++$i) {
+                    if (!empty($access_admin['access_editus'][$i])) {
+                        $admin_view_allowed = $i == 3 ? 0 : $i;
+                        nv_insert_notification($module_name, 'remove_2step_request', [
+                            'title' => $row['username'],
+                            'uid' => $row['userid']
+                        ], $uid, 0, 0, 1, $admin_view_allowed, 1);
+                    }
                 }
             }
+
+            $info = $nv_Lang->getModule('remove_2step_send');
+        } else {
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $uid);
+            $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
+
+            $message = $nv_Lang->getModule('remove_2step_content', $greeting, $global_config['site_name']);
+            @nv_sendmail_async([
+                $global_config['site_name'],
+                $global_config['site_email']
+            ], $row['email'], $nv_Lang->getModule('remove_2step_subject'), $message);
+
+            $info = $nv_Lang->getModule('remove_2step_success');
         }
-
-        $info = $nv_Lang->getModule('remove_2step_send');
-    } else {
-        $db->query('DELETE FROM ' . NV_MOD_TABLE . '_backupcodes WHERE userid=' . $uid);
-        $db->query('UPDATE ' . NV_MOD_TABLE . " SET active2step=0, secretkey='', last_update=" . NV_CURRENTTIME . ' WHERE userid=' . $uid);
-
-        $message = $nv_Lang->getModule('remove_2step_content', $greeting, $global_config['site_name']);
-        @nv_sendmail_async([
-            $global_config['site_name'],
-            $global_config['site_email']
-        ], $row['email'], $nv_Lang->getModule('remove_2step_subject'), $message);
-
-        $info = $nv_Lang->getModule('remove_2step_success');
     }
 
     nv_jsonOutput([
