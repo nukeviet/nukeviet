@@ -3111,6 +3111,7 @@ function post_async($url, $params = [], $headers = [])
     }
 
     $headers['Referer'] = NV_MY_DOMAIN;
+    empty($headers['User-Agent']) && $headers['User-Agent'] = NUKEVIET_USER_AGENT;
 
     $server_ip = nv_getenv('SERVER_ADDR');
     if (!empty($server_ip)) {

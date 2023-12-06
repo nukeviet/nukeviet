@@ -98,6 +98,7 @@ define('SYSTEM_CACHEDIR', NV_CACHEDIR);
 define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
 define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 define('NV_GROUPSDETAIL_GLOBALTABLE', $db_config['prefix'] . '_users_groups_detail');
+define('NUKEVIET_USER_AGENT', 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5($global_config['sitekey']));
 
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
@@ -292,7 +293,7 @@ if (NV_USER_AGENT == 'none' and NV_ANTI_AGENT) {
 }
 
 // xac dinh co phai User_Agent cua NukeViet hay khong
-if (NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5($global_config['sitekey'])) {
+if (NV_USER_AGENT == NUKEVIET_USER_AGENT) {
     define('NV_IS_MY_USER_AGENT', true);
 }
 
