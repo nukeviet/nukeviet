@@ -105,7 +105,6 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
         }
 
         $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $admin_id);
-        $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_api_credential WHERE admin_id = ' . $admin_id);
 
         if ($action_account == 1) {
             $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id);
@@ -122,9 +121,31 @@ if ($nv_Request->get_title('checkss', 'post') == $checkss) {
             if (!empty($row_user['photo']) and is_file(NV_ROOTDIR . '/' . $row_user['photo'])) {
                 @nv_deletefile(NV_ROOTDIR . '/' . $row_user['photo']);
             }
+            // Xóa API
+            $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE userid=' . $admin_id);
         }
 
         if ($action_account != 2) {
+            // Xóa API cho admin
+            $db->sqlreset()
+                ->select('COUNT(*)')
+                ->from($db_config['prefix'] . '_api_role_credential tb1')
+                ->join('INNER JOIN ' . $db_config['prefix'] . '_api_role tb2 ON (tb2.role_id =tb1.role_id)')
+                ->where('tb1.userid = ' . $admin_id . " AND tb2.role_object='admin'");
+            $count = $db->query($db->sql())
+                ->fetchColumn();
+            if ($count) {
+                $db->select('tb1.id');
+                $result = $db->query($db->sql());
+                $credential_ids = [];
+                while ($row = $result->fetch()) {
+                    $credential_ids[] = $row['id'];
+                }
+
+                $credential_ids = implode(', ', $credential_ids);
+                $db->query('DELETE FROM ' . $db_config['prefix'] . '_api_role_credential WHERE id IN (' . $credential_ids . ') AND userid=' . $admin_id);
+            }
+
             nv_groups_del_user($row['lev'], $admin_id);
 
             // Cập nhật lại nhóm nếu không xóa tài khoản
