@@ -302,6 +302,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 }
             }
 
+            nv_save_file_config_global();
+
             nv_jsonOutput([
                 'status' => 'OK',
                 'mess' => $nv_Lang->getModule('nv_data_setup_ok'),
@@ -373,6 +375,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/disable_site_content.' . $deletekeylang . '.txt');
 
         $nv_Cache->delAll();
+
+        nv_save_file_config_global();
 
         nv_htmlOutput('OK');
     }
